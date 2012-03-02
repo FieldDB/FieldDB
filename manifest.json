@@ -1,1 +1,12 @@
-asdfadsfsdadfa
+{
+  "name": "Drag and Drop FieldLinguistics",
+  "version": "1.0",
+  "description": "Transcription Tools",
+  "app": {
+    "launch": {
+      "local_path": "public/view/main.html"
+    }
+  },
+  "offline_enabled": true
+  
+}
