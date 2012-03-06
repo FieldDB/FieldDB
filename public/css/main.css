@@ -1,4 +1,16 @@
 #drop_zone {
 padding: 10px;
-border: 1px solid #CCC;
+
+width: 500;
+float: left;
+}
+
+#dataentry_zone {
+	float: left;
+	
+	width: 500;
+}
+#container {
+     
+       overflow: hidden;
 }

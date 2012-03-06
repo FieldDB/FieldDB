@@ -1,5 +1,8 @@
 <script>
-  function handleFileSelect(evt) {
+  
+
+
+   function handleFileSelect(evt) {
     evt.stopPropagation();
     evt.preventDefault();
 
