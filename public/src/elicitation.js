@@ -1,4 +1,4 @@
-<script>
+
   
 
 
@@ -19,6 +19,32 @@
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
   }
 
+
+function DoPreview()
+{
+  var filename = document.form1.filesent.value;
+  var Img = new Image();
+  if (navigator.appName == "Netscape")
+  {
+    alert("Previews do not work in Netscape.");
+  }
+  else
+  {
+    Img.src = filename;
+    document.images[0].src = Img.src;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
   function handleDragOver(evt) {
     evt.stopPropagation();
     evt.preventDefault();
@@ -29,4 +55,4 @@
   var dropZone = document.getElementById('drop_zone');
   dropZone.addEventListener('dragover', handleDragOver, false);
   dropZone.addEventListener('drop', handleFileSelect, false);
-</script>
+
