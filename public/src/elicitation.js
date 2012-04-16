@@ -1,58 +1,29 @@
+/* Credits: Stu Nicholls */
+/* URL: http://www.stunicholls.com/menu/pro_dropdown_2/stuHover.js */
 
-  
-
-
-   function handleFileSelect(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-
-    var files = evt.dataTransfer.files; // FileList object.
-
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                  f.size, ' bytes, last modified: ',
-                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
+stuHover = function() {
+  var cssRule;
+  var newSelector;
+  for (var i = 0; i < document.styleSheets.length; i++)
+    for (var x = 0; x < document.styleSheets[i].rules.length ; x++)
+      {
+      cssRule = document.styleSheets[i].rules[x];
+      if (cssRule.selectorText.indexOf("LI:hover") >= 0)
+      {
+         newSelector = cssRule.selectorText.replace(/LI:hover/gi, "LI.iehover");
+        document.styleSheets[i].addRule(newSelector , cssRule.style.cssText);
+      }
     }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-  }
-
-
-function DoPreview()
-{
-  var filename = document.form1.filesent.value;
-  var Img = new Image();
-  if (navigator.appName == "Netscape")
-  {
-    alert("Previews do not work in Netscape.");
-  }
-  else
-  {
-    Img.src = filename;
-    document.images[0].src = Img.src;
+  var getElm = document.getElementById("nav").getElementsByTagName("LI");
+  for (var i=0; i<getElm.length; i++) {
+    getElm[i].onmouseover=function() {
+      this.className+=" iehover";
+    }
+    getElm[i].onmouseout=function() {
+      this.className=this.className.replace(new RegExp(" iehover\\b"), "");
+    }
   }
 }
+if (window.attachEvent) window.attachEvent("onload", stuHover);
 
-
-
-
-
-
-
-
-
-
-
-  function handleDragOver(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-  }
-
-  // Setup the dnd listeners.
-  var dropZone = document.getElementById('drop_zone');
-  dropZone.addEventListener('dragover', handleDragOver, false);
-  dropZone.addEventListener('drop', handleFileSelect, false);
 
