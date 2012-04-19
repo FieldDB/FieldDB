@@ -1,0 +1,18 @@
+{
+  "name": "Drag and Drop FieldLinguistics",
+  "version": "1.0",
+  "description": "Transcription Tools",
+  "app": {
+    "launch": {
+      "local_path": "view/main.html"
+    }
+  },
+  "offline_enabled": true,
+
+   "icons": { 
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png" 
+  }
+  
+}

@@ -27,7 +27,7 @@ if(h){
 +"    <ul>"
 +"      <li><a href=./export.html >CSV</a></li>"
 +"      <li><a href=./export.html >Wiki</a></li>"
-+"      <li><a href=./export.html >Latex</a></li>"
++"      <li><a href=./Latex.html >Latex</a></li>"
 +""
 +"    </ul>"
 +""
