@@ -1,8 +1,10 @@
-var h = document.getElementById("navigation");
-if(h){
- h.innerHTML =  "<div id='navigation'>"
-
-+"  <ul class='menu'>"
+var renderNavigation = function(divid){
+    var h = document.getElementById(divid);
+    if(!h){
+        return;
+    }
+    h.innerHTML  =
+"  <ul class='menu'>"
  +"<h1>Drag and Drop Field Linguistics</h1>"
 
 
@@ -36,5 +38,5 @@ if(h){
 +""
 +"  </ul>"
 +""
-+"</div>"
-}
++"</div>";
+};
