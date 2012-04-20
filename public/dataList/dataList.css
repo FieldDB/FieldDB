@@ -1,4 +1,18 @@
 .dataList{
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: black;
+    width:100%;
+    height:100%;
+}
+.even{
+     background-color: #ccddee;
+     color: black;
+     padding:.5em;
+    width:100%;
+ }
+.odd{
+    background-color: #def;
+    color: black;
+    padding:.5em;
+    width:100%;
 }

@@ -1,10 +1,6 @@
-<style type="text/css">
-    #navigation {font-size:0.75em; width:150px;}
-    #navigation ul {margin:0; padding:0;}
-    #navigation li {list-style: none;}
-
-</style>
-
+#navigation {font-size:0.75em; width:150px;}
+#navigation ul {margin:0; padding:0;}
+#navigation li {list-style: none;}
 
 .menu,
 .menu ul,
@@ -19,7 +15,7 @@
 .menu {
 	height: 130px;
 	width: 1030px;
-    background-color: 336699;
+    background-color: #336699;
 
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;

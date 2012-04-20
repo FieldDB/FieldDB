@@ -1,11 +1,11 @@
 body
 {
-background-color: FFFFCC	;
+background-color: #FFFFCC	;
 }
 
 header
 {
-	background-color: 336699;
+	background-color: #336699;
 	padding: 0;
 	margin: 0;
 }
@@ -28,8 +28,22 @@ a{
 	a:hover,
 	a:active{ text-decoration: underline; }
 
+.main{
+    width:100%;
+    height:100%;
+    clear:both;
+}
+.side{
+    width:30%;
+    height:100%;
+    float:left;
+}
 
-
+.contents{
+    width:70%;
+    height:100%;
+    float:right;
+}
 #wrapperL {
 	padding: 10px;
     width: 400px;
