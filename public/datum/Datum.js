@@ -13,7 +13,8 @@ Datum.render = function(divid){
     if(!d){
         return;
     }
-    d.innerHTML  ="hi";
+
+    d.innerHTML  ="<iframe src='https://docs.google.com/spreadsheet/embeddedform?formkey=dEVnZG9fRDBzQWVkRXFPeTI1MENkTHc6MQ'width='710'></iframe>";
 };
 
 //TODO

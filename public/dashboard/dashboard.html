@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="dashboard.css">
     <link rel="stylesheet" type="text/css" href="/navigation/menu.css">
     <link rel="stylesheet" type="text/css" href="/dataList/dataList.css">
+    <link rel="stylesheet" type="text/css" href="/datum/datum.css">
 </head>
 <body>
 
@@ -15,13 +16,15 @@
              <div class="dataList" id="dataList">
             </div>
         </div>
-        <div class="contents"></div>
+        <div class="Datum" id="Datum"></div>
     </div>
 
     <script type="text/javascript" charset="utf-8" src="/navigation/navigation.js"></script>
     <script type="text/javascript" charset="utf-8" src="/dataList/DataList.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/datum/Datum.js"></script>
 
     <script type="text/javascript">
+        Datum.render("Datum");
         renderNavigation("navigation");
         DataList.render("dataList");
     </script>
