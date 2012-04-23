@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="dashboard.css">
+    <link rel="stylesheet" type="text/css" href="/navigation/menu.css">
+    <link rel="stylesheet" type="text/css" href="/dataList/dataList.css">
+</head>
+<body>
+
+    <div class="navigation" id="navigation"></div>
+
+    <div class="main">
+        <div class="side">
+             <div class="dataList" id="dataList">
+            </div>
+        </div>
+        <div class="contents"></div>
+    </div>
+
+    <script type="text/javascript" charset="utf-8" src="/navigation/navigation.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/dataList/DataList.js"></script>
+
+    <script type="text/javascript">
+        renderNavigation("navigation");
+        DataList.render("dataList");
+    </script>
+
+</body>
+</html>

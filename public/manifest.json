@@ -4,7 +4,7 @@
   "description": "Transcription Tools",
   "app": {
     "launch": {
-      "local_path": "index.html"
+      "local_path": "./dashboard/dashboard.html"
     }
   },
   "offline_enabled": true,
