@@ -13,7 +13,7 @@ Datum.render = function(divid){
     if(!d){
         return;
     }
-    d.innerHTML  ="hi";
+    d.innerHTML  ='<iframe src="https://docs.google.com/spreadsheet/embeddedform?formkey=dEVnZG9fRDBzQWVkRXFPeTI1MENkTHc6MQ" width="1030" height="937" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>';
 };
 
 //TODO
@@ -42,6 +42,6 @@ Datum.export= function(){
 
 };
 
-Datum.sync()= function(){
+Datum.sync = function(){
 
 }

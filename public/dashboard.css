@@ -27,7 +27,14 @@ a{
 }
 	a:hover,
 	a:active{ text-decoration: underline; }
+.navigation{
+    width:100%;
+    background-color: #336699;
 
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
 .main{
     width:100%;
     height:100%;

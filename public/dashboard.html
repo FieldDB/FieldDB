@@ -17,14 +17,19 @@
 
         </div>
     </div>
-    <div class="contents"></div>
+    <div class="contents">
+        <div class="Datum" id = "datumDiv">
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" charset="utf-8" src="./navigation/navigation.js"></script>
 <script type="text/javascript" charset="utf-8" src="./dataList/DataList.js"></script>
+<script type="text/javascript" charset="utf-8" src="./datum/Datum.js"></script>
 <script type="text/javascript">
     renderNavigation("navigation");
     DataList.render("dataList");
+    Datum.render("datumDiv");
 </script>
 </body>
 </html>
