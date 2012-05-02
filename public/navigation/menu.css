@@ -1,7 +1,9 @@
 #navigation {font-size:0.75em; width:150px;}
 #navigation ul {margin:0; padding:0;}
 #navigation li {list-style: none;}
-
+#search{
+    float: right;
+}
 .menu,
 .menu ul,
 .menu li,

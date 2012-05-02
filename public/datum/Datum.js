@@ -13,11 +13,29 @@ Datum.render = function(divid){
     if(!d){
         return;
     }
-    d.innerHTML  ='<iframe src="https://docs.google.com/spreadsheet/embeddedform?formkey=dEVnZG9fRDBzQWVkRXFPeTI1MENkTHc6MQ" width="1030" height="937" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>';
+
+    d.innerHTML  ="<div id = 'wrapperL'>"
+    +"		<div id ='drop'>"
+        +"		<h3>Drop Audio Here!</h3>"
+        +"		</div>"
+    +""
+    +"		<div id= 'leftArrow'><img src='./../datum/arrowL.png'  /></div>"
+    +"	</div>"
+        +""
+        +"	<div id = 'wrapperR'>	"
+        +"			<div  id= 'rightArrow'><img src='./../datum/arrowR.png'  /></div>"
+        +""
+        +""
+        +"			<div id = 'latex'>"
+        +"			<a href='#' class='classname'>LaTeX it!</a>"
+        +"			</div>"
+        +"	</div>"
+      +"<iframe src='https://docs.google.com/spreadsheet/embeddedform?formkey=dEVnZG9fRDBzQWVkRXFPeTI1MENkTHc6MQ'width='710' height='500'></iframe>";
 };
 
 //TODO
 
+/*
 Datum.update = function(){
 
 };
@@ -44,4 +62,4 @@ Datum.export= function(){
 
 Datum.sync = function(){
 
-}
+}*/
