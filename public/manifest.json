@@ -1,7 +1,7 @@
 {
   "name": "Drag and Drop FieldLinguistics",
-  "version": "1.1",
-  "description": "Transcription Tools",
+  "version": "1.2",
+  "description": "Collaborative Data Entry, like Word/LaTeX but more structured, online, offline, anywhere.",
   "app": {
     "launch": {
       "local_path": "./dashboard/dashboard.html"
