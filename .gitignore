@@ -30,9 +30,6 @@ target
 *.gz
 *.iso
 *.jar
-!android-gdata-1.30.0.jar
-!bursaq-goto.jar
-!libGoogleAnalytics.jar
 *.rar
 *.tar
 *.zip
@@ -45,7 +42,7 @@ target
 
 # OS generated files #
 ######################
-.DS_Store?
+.DS_Store
 ehthumbs.db
 Icon?
 Thumbs.db
