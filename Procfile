@@ -1,1 +1,1 @@
-web: node assets/webappserver.js
+web: node webappserver.js
