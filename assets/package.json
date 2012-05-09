@@ -1,0 +1,9 @@
+{
+  "name": "FieldLinguistics in the Cloud",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "latest"
+    ,"underscore": "latest"
+    ,"paperboy": "latest"
+  }
+}
