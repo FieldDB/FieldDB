@@ -1,5 +1,5 @@
 {
-  "name": "FieldLinguistics in the Cloud",
+  "name": "FieldLinguisticsInTheCloud",
   "version": "0.0.1",
   "dependencies": {
     "express": "latest"
