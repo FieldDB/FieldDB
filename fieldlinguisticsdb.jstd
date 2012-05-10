@@ -1,0 +1,3 @@
+load:
+  - public/offlineapp/*.js
+  - tests/offlineapp/*.js

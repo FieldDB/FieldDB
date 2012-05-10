@@ -3,7 +3,7 @@
  * 
  */
 
-var App = App || {};
+var App = App || function() {};
 App.prototype.androidApp =  navigator.userAgent.indexOf("InstalledAndroidApp") > -1;
 App.prototype.chromeApp = window.location.href.indexOf("chrome-extension") > -1;
-App.prototype.onlineOnly = ! this.isAndroid() && ! this.isChromeExtension();
+App.prototype.onlineOnly = ! this.androidApp && ! this.chromeApp;
