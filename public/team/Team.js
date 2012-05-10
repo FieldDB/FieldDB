@@ -15,7 +15,7 @@ var Team = Backbone.Model.extend({
    initialize: function() {
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
-      }
+      });
 
       // TODO Set up any other bindings (i.e. what to do when certain Events 
       //      happen). Example:
