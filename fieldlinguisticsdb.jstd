@@ -1,9 +1,13 @@
 load:
 
-  - libs/*.js
+  - libs/jquery-1.7.2.js
+  - libs/underscore.js
+  - libs/backbone.js
 
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
+  
+  - public/preference/*.js
   
   - public/user/*.js
   - tests/user/*.js
