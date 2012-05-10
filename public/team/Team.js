@@ -9,6 +9,10 @@ var Team = Backbone.Model.extend({
       // someAttribute: 5,
       // someAttribute2: 'Hello world',
       // someAttribute3: []
+	   teamid: "",
+	   teamname: "",
+	   researchinterest: "",
+	   users: [],
    },
 
    // This is the constructor. It is called whenever you make a new Team.
@@ -16,6 +20,7 @@ var Team = Backbone.Model.extend({
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
       });
+      
 
       // TODO Set up any other bindings (i.e. what to do when certain Events 
       //      happen). Example:

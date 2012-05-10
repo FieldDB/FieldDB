@@ -5,8 +5,9 @@ load:
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
   
-  - public/user/*.js
-  - tests/user/*.js
+  - public/comment/*.js
+  - tests/comment/*.js
+  
 
  
   
