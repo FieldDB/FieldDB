@@ -1,5 +1,7 @@
 load:
-  - public/libs/*.js
+  - public/libs/jquery.js
+  - public/libs/underscore.js
+  - public/libs/backbone.js
 
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
