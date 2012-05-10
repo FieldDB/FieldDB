@@ -66,7 +66,7 @@ var User = Backbone.Model.extend({
    //      Example:
    // ,
    // addOne: function() {
-   //    this.someAttribute++;
+   //    this.get("someAttribute");
    // }
 });
 
