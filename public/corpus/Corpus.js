@@ -49,3 +49,12 @@ Corpus.prototype.merge = function(){
 Corpus.prototype.diff = function(){
 	debug("Showing the user the diffs between their version of the corpus and the remote version.");
 };
+
+Corpus.prototype.createSample = function(){
+	this.name = "Sample Quechua Corpus";
+	this.description = "This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.";
+	this.remote = "git@github.com:iLanguage/SampleFieldLinguisticsCorpus.git";
+	this.localFolder= "SampleFieldLinguisticsCorpus";
+};
+
+
