@@ -55,13 +55,13 @@ var User = Backbone.Model.extend({
       //    return "Must use positive numbers";
       // }
    }
-   ,subtitle: function() {
-	       if(this.isTeam) {
-	    	   return this.affiliation;
-	       } else {
-	    	   return this.firstname + " " + this.lastname;
-	       }
-	    }
+   ,subtitle: function () {
+       if(this.isTeam) {
+    	   return this.affiliation;
+       } else {
+    	   return this.get("firstname") + " " + this.get("lastname");
+       }
+    }
    // TODO Add any other methods that will manipulate the User attributes.
    //      Example:
    // ,
