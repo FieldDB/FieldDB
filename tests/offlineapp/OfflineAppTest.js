@@ -1,4 +1,4 @@
-
+//Testing to see where the app is running, if it is installed on android, installed in chrome or if it is a web widget.
 TestCase("OfflineAppTest", {
     "test as Chrome extension": function() {
         var app = new App();

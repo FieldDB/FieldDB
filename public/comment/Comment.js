@@ -1,5 +1,6 @@
 // TODO Describe the Comment model.
 //      What does it represent in real life?
+
 //      What are its attributes?
 
 var Comment = Backbone.Model.extend({
@@ -9,14 +10,17 @@ var Comment = Backbone.Model.extend({
       // someAttribute: 5,
       // someAttribute2: 'Hello world',
       // someAttribute3: []
+	   text: "", 
+	   userid: "",
+	   
    },
 
    // This is the constructor. It is called whenever you make a new Comment.
    initialize: function() {
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
-      }
-
+      });
+      this.timestamp = Date.now();
       // TODO Set up any other bindings (i.e. what to do when certain Events 
       //      happen). Example:
       // this.bind("change:someAttribute", function() {
