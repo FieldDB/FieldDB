@@ -1,10 +1,9 @@
 load:
-
-  - libs/*.js
-
+  - libs/jquery.js
+  - libs/underscore.js
+  - libs/backbone.js
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
-  
   - public/user/*.js
   - tests/user/*.js
 
