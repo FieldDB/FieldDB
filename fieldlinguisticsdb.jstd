@@ -1,13 +1,18 @@
 load:
-
-  - libs/*.js
+  - public/libs/*.js
 
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
   
+
   - public/comment/*.js
   - tests/comment/*.js
   
+
+  - public/preference/*.js
+  
+  - public/user/*.js
+  - tests/user/*.js
 
  
   
