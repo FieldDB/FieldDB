@@ -11,7 +11,7 @@ TestCase("UserTest", {
     var u = new User();
     u.set("firstname", "Ed"); 
     u.set("lastname", "Sapir");
-    assertEquals("Bill Sapir", u.subtitle());
+    assertEquals("Ed Sapir", u.subtitle());
 }
 
 ,"test for login": function() {
