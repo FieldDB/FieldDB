@@ -14,7 +14,23 @@ TestCase("UserTest", {
     assertEquals("Ed Sapir", u.subtitle());
 }
 
-,"test for login": function() {
+,"test for login good username bad password": function() {
+    
+    var u = new User();
+    u.set("username", "esapir"); 
+    u.set("password", "wharf");
+    assertFalse( u.login("esapir" , "hypothesis" ));
+}
+
+,"test for login bad username any password": function() {
+    
+    var u = new User();
+    u.set("username", "esapir"); 
+    u.set("password", "wharf");
+    assertFalse( u.login("essapir" , "wharf" ));
+}
+
+,"test for login good username good password": function() {
     
     var u = new User();
     u.set("username", "esapir"); 

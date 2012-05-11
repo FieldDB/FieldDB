@@ -56,13 +56,19 @@ var User = Backbone.Model.extend({
       // }
    }
    
-	,login: function() {
-		 if((this.firstname + this.lastname), true) {
-	    	   return this.get("username") + " " + this.get("password");
-	       }
-	    }
-		
-   
+
+   ,
+   login : function(username, password) {
+	   if (this.get("username") == username) {
+		   if (this.get("password") == password) {
+			   return true;
+
+		   }
+		   
+	   }
+	   return false;  
+   }
+
    ,subtitle: function () {
        if(this.isTeam) {
     	   return this.affiliation;
