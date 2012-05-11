@@ -11,5 +11,7 @@ load:
   - public/user/*.js
   - tests/user/*.js
 
+  - tests/team/*.js
+  
  
   

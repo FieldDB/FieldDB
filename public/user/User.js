@@ -70,8 +70,8 @@ var User = Backbone.Model.extend({
    }
 
    ,subtitle: function () {
-       if(this.isTeam) {
-    	   return this.affiliation;
+       if(this.get("isTeam")) {
+    	   			return this.get("affiliation");
        } else {
     	   return this.get("firstname") + " " + this.get("lastname");
        }
@@ -83,6 +83,5 @@ var User = Backbone.Model.extend({
    //    this.get("someAttribute");
    // }
 });
-
 
 
