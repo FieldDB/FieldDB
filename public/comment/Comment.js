@@ -2,13 +2,14 @@ var Comment = Backbone.Model.extend(
 /** @lends Comment.prototype */
 {
    /**
-    * @class Describe the Comment model here.
+    * @class Comments allow users to collaborate between each other and take note of important things, issues to be fixed, etc. These can appear on datum, sessions
+    * corpora, and dataLists. Comments can also be edited and removed. 
     *
     * @property {String} text Describe text here.
     * @property {Number} userid Describe userid here.
     * @property {Date} timestamp Describe timestamp here.
     *
-    * @description Describe the initialize function here.
+    * @description Initialize function has a timestamp and a userid and waits until text is entered.
     *
     * @extends Backbone.Model
     * @constructs
@@ -17,7 +18,8 @@ var Comment = Backbone.Model.extend(
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
       });
-      this.timestamp = Date.now();
+      this.set("timestamp", Date.now());
+      this.set("userid" , window.userid);
       // TODO Set up any other bindings (i.e. what to do when certain Events 
       //      happen). Example:
       // this.bind("change:someAttribute", function() {
@@ -28,10 +30,6 @@ var Comment = Backbone.Model.extend(
 
    // This is an list of attributes and their default values
    defaults: {
-      // TODO set up attributes and their defaults. Example:
-      // someAttribute: 5,
-      // someAttribute2: 'Hello world',
-      // someAttribute3: []
       text: "", 
       userid: ""
    },
@@ -53,6 +51,23 @@ var Comment = Backbone.Model.extend(
       // if (attributes.someAttribute <= 0) {
       //    return "Must use positive numbers";
       // }
+   }
+
+   /**
+    * The remove function removes a comment.
+    */
+   ,    remove: function() {
+	  
+   }
+   
+   /**
+    * The edit function allows users to edit a comment.
+    * 
+    * @param {String} newtext Takes new text and replaces old one.
+    * 
+    */
+   ,    edit: function(newtext) {
+	   this.set("text", newtext); 
    }
 
    // TODO Add any other methods that will manipulate the Comment attributes. Example:
