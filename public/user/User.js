@@ -61,6 +61,7 @@ var User = Backbone.Model.extend({
    login : function(username, password) {
 	   if (this.get("username") == username) {
 		   if (this.get("password") == password) {
+			   window.userid = username; 
 			   return true;
 
 		   }
