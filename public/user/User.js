@@ -15,7 +15,7 @@ var User = Backbone.Model.extend({
 	   email : "",
 	   firstname : "", 
 	   lastname : "",
-	   isTeam : false, 
+	   isTeam : false,  
 	   gravatar : "http://imgs.abduzeedo.com/files/best_week/coderdojo-octocat3.jpeg",
 	   researchInterest : "",
 	   affiliation : "",
@@ -55,6 +55,14 @@ var User = Backbone.Model.extend({
       //    return "Must use positive numbers";
       // }
    }
+   
+	,login: function() {
+		 if((this.firstname + this.lastname), true) {
+	    	   return this.get("username") + " " + this.get("password");
+	       }
+	    }
+		
+   
    ,subtitle: function () {
        if(this.isTeam) {
     	   return this.affiliation;
