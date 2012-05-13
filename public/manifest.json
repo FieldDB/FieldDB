@@ -4,7 +4,7 @@
   "description": "Collaborative Data Entry, like Word/LaTeX but more structured, online, offline, anywhere.",
   "app": {
     "launch": {
-      "local_path": "./dashboard/dashboard.html"
+      "local_path": "index.html"
     }
   },
   "offline_enabled": true,
