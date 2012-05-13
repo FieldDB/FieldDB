@@ -1,7 +1,7 @@
 (function() {
 	var specs = [];
 
-	describe("Episode model", function() {
+	describe("Backbone Episode model", function() {
 		it("should expose an attribute", function() {
 
 			var episode = new Backbone.Model({
