@@ -18,6 +18,8 @@ load:
   - public/player/*.js
   - tests/JasmineTest.js
   
+  - tests/sinon.js
+  - tests/SinonTest.js
   
   
   
