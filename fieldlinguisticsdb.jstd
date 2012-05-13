@@ -2,21 +2,24 @@ load:
   - public/libs/jquery.js
   - public/libs/underscore.js
   - public/libs/backbone.js
+  - tests/jasmine.js
   - tests/sinon.js
-
+  - tests/JQueryTest.js
+  - tests/BackboneTest.js
+  - public/player/*.js
+  - tests/JasmineTest.js
+  
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
-  
   - public/preference/*.js
-  
   - public/user/*.js
   - tests/user/*.js
-  
-  - tests/JQueryTest.js
-  - tests/SinonTest.js
-  - tests/BackboneTest.js
-
   - tests/team/*.js
+  
+  
+  
+  
+  
   
  
   
