@@ -2,6 +2,7 @@ load:
   - public/libs/jquery.js
   - public/libs/underscore.js
   - public/libs/backbone.js
+  - tests/sinon.js
 
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
@@ -10,6 +11,10 @@ load:
   
   - public/user/*.js
   - tests/user/*.js
+  
+  - tests/JQueryTest.js
+  - tests/SinonTest.js
+  - tests/BackboneTest.js
 
  
   
