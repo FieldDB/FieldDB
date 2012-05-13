@@ -7,24 +7,53 @@
 	var specs = [];
 
 	describe("Sinon spy on Backbone Episode model", function() {
-		it("should fire a callback when 'foo' is triggered", function() {
-			// Create an anonymous spy
-			var spy = sinon.spy();
-
-			// Create a new Backbone 'Episode' model
-			var episode = new Backbone.Model({
-				title : "Hollywood - Part 2"
+//		it("should fire a callback when 'foo' is triggered", function() {
+//			// Create an anonymous spy
+//			var spy = sinon.spy();
+//
+//			// Create a new Backbone 'Episode' model
+//			var episode = new Backbone.Model({
+//				title : "Hollywood - Part 2",
+//				url: "/episodes/1"
+//			});
+//
+//			// Call the anonymous spy method when 'foo' is triggered
+//			episode.bind('foo', spy);
+//
+//			// Trigger the foo event
+//			episode.trigger('foo');
+//			// Expect that the spy was called at least once
+//			expect(spy.called).toBeTruthy();
+//		});
+		it("should make the correct server request", function() {
+			  
+			  var Episode = Backbone.Model.extend({
+				    initialize: function() {
+				        this.on('all', function(e) { console.log(this.get('name') + " event: " + e); });
+				    }
+				    ,defaults:{
+				        title: "Hollywood - Part 2"
+				    }
+				    ,url:"/episodes/1"
+			  });
+			  
+			  var episode = new Episode();
+			  // Spy on jQuery's ajax method
+			  jQuery.ajax.restore();
+			  var spy = sinon.spy(jQuery, 'ajax');
+			  
+			  // Save the model
+			  episode.save();
+			  
+			  // Spy was called
+			  expect(spy).toHaveBeenCalled();
+			  // Check url property of first argument
+//			  expect(spy.getCall(0).args[0].url)
+//			    .toEqual("/episodes/1");
+			  
+			  // Restore jQuery.ajax to normal
+			  jQuery.ajax.restore();
 			});
-
-			// Call the anonymous spy method when 'foo' is triggered
-			episode.bind('foo', spy);
-
-			// Trigger the foo event
-			episode.trigger('foo');
-
-			// Expect that the spy was called at least once
-			expect(spy.called).toBeTruthy();
-		});
 	});
 
 })();
