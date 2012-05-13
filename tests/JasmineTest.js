@@ -1,4 +1,17 @@
-describe("Player", function() {
+
+beforeEach(function() {
+  this.addMatchers({
+    toBePlaying: function(expectedSong) {
+      var player = this.actual;
+      return player.currentlyPlayingSong === expectedSong && 
+             player.isPlaying;
+    }
+  });
+});
+
+
+describe("Jasmine Test Player", function() {
+
   var player;
   var song;
 
