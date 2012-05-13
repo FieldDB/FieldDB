@@ -16,5 +16,7 @@ load:
   - tests/SinonTest.js
   - tests/BackboneTest.js
 
+  - tests/team/*.js
+  
  
   

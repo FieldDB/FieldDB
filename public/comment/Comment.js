@@ -1,21 +1,18 @@
-// TODO Describe the Comment model.
-//      What does it represent in real life?
-
-//      What are its attributes?
-
-var Comment = Backbone.Model.extend({
-   // This is an list of attributes and their default values
-   defaults: {
-      // TODO set up attributes and their defaults. Example:
-      // someAttribute: 5,
-      // someAttribute2: 'Hello world',
-      // someAttribute3: []
-	   text: "", 
-	   userid: "",
-	   
-   },
-
-   // This is the constructor. It is called whenever you make a new Comment.
+var Comment = Backbone.Model.extend(
+/** @lends Comment.prototype */
+{
+   /**
+    * @class Describe the Comment model here.
+    *
+    * @property {String} text Describe text here.
+    * @property {Number} userid Describe userid here.
+    * @property {Date} timestamp Describe timestamp here.
+    *
+    * @description Describe the initialize function here.
+    *
+    * @extends Backbone.Model
+    * @constructs
+    */
    initialize: function() {
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
@@ -29,22 +26,44 @@ var Comment = Backbone.Model.extend({
 
    },
 
-   // This is used to validate any changes to the model. It is called whenever
-   // comment.set('someAttribute', __) is called, but before the changes are
-   // actually made to someAttribute.
+   // This is an list of attributes and their default values
+   defaults: {
+      // TODO set up attributes and their defaults. Example:
+      // someAttribute: 5,
+      // someAttribute2: 'Hello world',
+      // someAttribute3: []
+      text: "", 
+      userid: ""
+   },
+
+   /**
+    * Describe the validation here.
+    *
+    * @param {Object} attributes The set of attributes to validate.
+    *
+    * @returns {String} The validation error, if there is one. Otherwise, doesn't
+    * return anything.
+    */
    validate: function(attributes) {
-      // TODO Validation on the attributes. Returning a String counts as an error.
-      //      Example:
+      // This is used to validate any changes to the model. It is called whenever
+      // comment.set('someAttribute', __) is called, but before the changes are
+      // actually made to someAttribute.
+
+      // TODO Validation on the attributes. Returning a String counts as an error. Example:
       // if (attributes.someAttribute <= 0) {
       //    return "Must use positive numbers";
       // }
    }
 
-   // TODO Add any other methods that will manipulate the Comment attributes.
-   //      Example:
-   // ,
-   // addOne: function() {
-   //    this.someAttribute++;
-   // }
+   // TODO Add any other methods that will manipulate the Comment attributes. Example:
+   //   ,
+   //   /**
+   //    * Describe the addOne function here.
+   //    * 
+   //    * @returns {Number} Describe the return value here.
+   //    */
+   //   addOne: function() {
+   //      return this.someAttribute++;
+   //   }
 });
 
