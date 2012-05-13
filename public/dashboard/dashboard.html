@@ -1,94 +1,36 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="dashboard.css">
-    <link rel="stylesheet" type="text/css" href="/navigation/menu.css">
-    <link rel="stylesheet" type="text/css" href="/dataList/dataList.css">
-    <link rel="stylesheet" type="text/css" href="/datum/datum.css">
+<title></title>
+<link rel="stylesheet" type="text/css" href="./dashboard.css">
+<link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
+<link rel="stylesheet" type="text/css"
+	href="./../data_list/dataList.css">
+<link rel="stylesheet" type="text/css" href="./../datum/datum.css">
 </head>
-<body>
+<body class="llama">
 
-    <div class="navigation" id="navigation"></div>
-
-<div id="images">
-
-<a href="./../tests.html">Tests</a>
-
-<hr/>
-
-
-<p>The main dashboard can be very cluttered: have a team feed, multiple data entries, and the drop down quick search (a la spotlight), This one is the Llama skin:</p>
-<img src="/images/user_interface_design_gimp-main_dashboard_llama_skin.png" alt="llama skin"/>
-<p>The data entry page could be much less cluttered, here is an example of the three dots extended:</p>
-<img src="/images/user_interface_design_gimp_less_cluttered.png" alt="leaf skin"/>
+	<div class="navigationcontainer">
+		<div class="navigation widget" id="navigation">Menu</div>
+	</div>
+	<div class="main">
+		<div class="leftside widget" id="leftside">Activity Feed</div>
+		<div class="content widget" id="content">Datum (one or many)</div>
+		<div class="rightside widget" id="rightside">Data List/Search</div>
+		
+	</div>
 
 
-<img src="/images/user_interface_design_gimp-main_dashboard_leaf_skin.png" alt="leaf skin"/>
-<img src="/images/user_interface_design_gimp-main_dashboard_light_skin.png" alt="light skin"/>
-<img src="/images/user_interface_design_gimp-main_dashboard_dark_skin.png" alt="dark skin"/>
+	<script type="text/javascript" charset="utf-8"
+		src="./../navigation/navigation.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="./../data_list/DataList.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="./../datum/Datum.js"></script>
 
-
-
-<img src="/images/dashboard.jpeg" alt="general layout"/>
-<p>General Layout-- each component (newsfeed, list, and datum entry page can be moved and minimized)</p>
-<img src="/images/navigation.jpeg" alt="added search bar and preferences"/>
-<p>The menu bar now has a search bar and preferences.</p>
-<img src="/images/dataDropdown.jpeg" alt="slight change in the menu options"/>
-<p>In addition, there is a new dropdown menu for data.</p>
-
-<img src="/images/search.jpeg" alt="search bar expands down into the list view"/>
-<p>Search bar expands down into the list view.</p>
-<img src="/images/listView.jpeg" alt="check boxes and datum menu"/>
-<p>The list view will have check boxes and datum Menu bar.</p>
-
-<img src="/images/datumMenu.jpeg" alt="this bar will only appear when you mouse over"/>
-<p>This is the datum menu bar.  It will only appear when you mouse over</p>
-<img src="/images/datumView.jpeg" alt=""/>
-<img src="/images/ipaKeyboard.jpeg" alt="appears when you mouse over"/>
-<p>There will be a little keyboard button underneath the phonetic and orthography lines.  In addition, we will give users the option of typing in TIPA that will automatically insert the correct character.</p>
-<img src="/images/advancedSearch.jpeg" alt="exactly like the datum page"/>
-<p>The advanced search will look exactly like datum page.</p>
-
-<img src="/images/newsFeed.jpeg" alt="gives team notificaitons"/>
-<p>The News Feed gives team notifications.</p>
-
-<img src="/images/datumPreferences.jpeg" alt="accessed from the wrench"/>
-<p>These preferences will be accessed from wrench.</p>
-
-<img src="/images/userPref.jpeg" alt="various preferences with permissions"/>
-<p>Here are other various preferences and permissions.</p>
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-    <div class="main">
-        <div class="side">
-             <div class="dataList" id="dataList">
-            </div>
-        </div>
-        <div class="Datum" id="Datum"></div>
-    </div>
-
-    <script type="text/javascript" charset="utf-8" src="/navigation/navigation.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/dataList/DataList.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/datum/Datum.js"></script>
-
-   <!-- <script type="text/javascript">
-        Datum.render("Datum");
-        renderNavigation("navigation");
-        DataList.render("dataList");
-    </script>  -->
+	<script type="text/javascript">
+        
+    </script>
 
 </body>
 </html>
