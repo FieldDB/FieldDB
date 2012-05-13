@@ -7,80 +7,54 @@
 	var specs = [];
 
 	describe("Sinon spy on Backbone Episode model", function() {
-//		it("should fire a callback when 'foo' is triggered", function() {
-//			// Create an anonymous spy
-//			var spy = sinon.spy();
-//
-//			// Create a new Backbone 'Episode' model
-//			var episode = new Backbone.Model({
-//				title : "Hollywood - Part 2",
-//				url: "/episodes/1"
-//			});
-//
-//			// Call the anonymous spy method when 'foo' is triggered
-//			episode.bind('foo', spy);
-//
-//			// Trigger the foo event
-//			episode.trigger('foo');
-//			// Expect that the spy was called at least once
-//			expect(spy.called).toBeTruthy();
-//		});
-		it("should make the correct server request", function() {
-			  
-			  var episode = new Backbone.Model({
-			    title: "Hollywood - Part 2",
-			    url: "/episodes/1"
-			  });
-			  episode.url ="/episodes/1";
-			  // Spy on jQuery's ajax method
-			  jQuery.ajax.restore();
-			  var spy = sinon.spy(jQuery, 'ajax');
-			  
-			  // Save the model
-			  episode.save();
-			  
-			  // Spy was called
-//			  expect(spy).toHaveBeenCalled();
-			  // Check url property of first argument
-			  expect(spy.getCall(0).args[0].url)
-			    .toEqual("/episodes/1");
-			  
-			  // Restore jQuery.ajax to normal
-			  jQuery.ajax.restore();
+		beforeEach(function() {
+			this.server = sinon.fakeServer.create();
+		});
+
+		afterEach(function() {
+			this.server.restore();
+		});
+
+		it("should fire the change event", function() {
+			
+			var Episode = Backbone.Model.extend({
+				  url: function() {
+				    return "/episode/" + this.id;
+				  }
+				});
+			
+			var callback = sinon.spy();
+
+			// Set how the fake server will respond
+			// This reads: a GET request for /episode/123 
+			// will return a 200 response of type 
+			// application/json with the given JSON response body
+			this.server.respondWith("GET", "/episode/123", [ 200, {
+				"Content-Type" : "application/json"
+			}, '{"id":123,"title":"Hollywood - Part 2"}' ]);
+
+			var episode = new Episode({
+				id : 123
 			});
+
+			// Bind to the change event on the model
+			episode.bind('change', callback);
+
+			// makes an ajax request to the server
+			episode.fetch();
+
+			// Fake server responds to the request
+			this.server.respond();
+
+			// Expect that the spy was called with the new model
+			expect(callback.called).toBeTruthy();
+			expect(callback.getCall(0).args[0].attributes).toEqual({
+				id : 123,
+				title : "Hollywood - Part 2"
+			});
+
+		});
+
 	});
 
 })();
-/*
- * Fake server: http://msdn.microsoft.com/en-us/magazine//gg649850.aspx
- * 
- * var blog = { posts : {},
- * 
- * getPost : function(id, callback, errback) { if (this.posts[id]) { typeof
- * callback == "function" && callback(posts[id]); return; }
- * 
- * jQuery.ajax({ url : "/posts/" + id, type : "get", dataType : "json",
- * 
- * success : function(data, status, xhr) { this.posts[id] = data; typeof
- * callback == "function" && callback(data); },
- * 
- * errback : function(xhr, status, exception) { typeof callback == "function" &&
- * errback(status); } }); },
- * 
- * savePost : function(blogPost, callback, errback) { // ... } };
- * TestCase("BlogPostServiceTest", sinon.testCase({ setUp : function() {
- * this.server.respondWith("GET", "/posts/312", [ 200, { "Content-Type" :
- * "application/json" }, '{"title":"Unit test your
- * JavaScript","author":"Christian Johansen"' + ',"text":"..."}' ]); },
- * 
- * "test should call callback with parsed data from server" : function() { var
- * blogPost;
- * 
- * blog.getPost(312, function(post) { blogPost = post; });
- * 
- * this.server.respond();
- * 
- * assertEquals({ title : "Unit test your JavaScript", author : "Christian
- * Johansen", text : "..." }, blogPost); } }));
- * 
- */
