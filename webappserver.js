@@ -1,22 +1,16 @@
-var http = require("http");
-var url = require("url");
+var express = require('express');
+var fs = require('fs');
+var _ = require('underscore');
+var app = express.createServer(express.logger());
 
-function start(route, handle) {
-  function onRequest(request, response) {
-    var pathname = url.parse(request.url).pathname;
-    console.log("Request for " + pathname + " received.");
-    route(handle, pathname, response, request);
-  }
+app.get('/',function(req,res){ 
+ 	res.redirect('/dashboard/dashboard.html');
+});
 
-  http.createServer(onRequest).listen(8888);
-  console.log("Server has started.");
-}
+app.use(express.static(__dirname + '/public'));
 
-exports.start = start;
-
-
-
-
-
-
+var port = process.env.PORT || 3001;
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});
 
