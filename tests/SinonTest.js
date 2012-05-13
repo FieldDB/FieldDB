@@ -27,17 +27,11 @@
 //		});
 		it("should make the correct server request", function() {
 			  
-			  var Episode = Backbone.Model.extend({
-				    initialize: function() {
-				        this.on('all', function(e) { console.log(this.get('name') + " event: " + e); });
-				    }
-				    ,defaults:{
-				        title: "Hollywood - Part 2"
-				    }
-				    ,url:"/episodes/1"
+			  var episode = new Backbone.Model({
+			    title: "Hollywood - Part 2",
+			    url: "/episodes/1"
 			  });
-			  
-			  var episode = new Episode();
+			  episode.url ="/episodes/1";
 			  // Spy on jQuery's ajax method
 			  jQuery.ajax.restore();
 			  var spy = sinon.spy(jQuery, 'ajax');
@@ -46,10 +40,10 @@
 			  episode.save();
 			  
 			  // Spy was called
-			  expect(spy).toHaveBeenCalled();
+//			  expect(spy).toHaveBeenCalled();
 			  // Check url property of first argument
-//			  expect(spy.getCall(0).args[0].url)
-//			    .toEqual("/episodes/1");
+			  expect(spy.getCall(0).args[0].url)
+			    .toEqual("/episodes/1");
 			  
 			  // Restore jQuery.ajax to normal
 			  jQuery.ajax.restore();
