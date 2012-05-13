@@ -14,6 +14,7 @@ load:
   - tests/user/*.js
   - tests/team/*.js
   
+  - tests/BackboneTest.js
   
   
   
