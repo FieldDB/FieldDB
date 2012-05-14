@@ -1,25 +1,20 @@
-var Datum = Backbone.Model.extend({
-   // This is an list of attributes and their default values
-   defaults: {
-      // TODO set up attributes and their defaults. Example:
-      // someAttribute: 5,
-      // someAttribute2: 'Hello world',
-      // someAttribute3: []
-       
-
-      //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-       utterance : "",
-       gloss : "",
-       translation : "",
-       
-       //not sure if this goes in default, but we need a way to link up the datum with the data from its parent, the session.
-       sessionID : 0,
-       
-       //Preferences are where we'll have things like the extra fields the user wants.
-       prefs : new Preference()
-   },
-
-   // This is the constructor. It is called whenever you make a new User.
+var Datum = Backbone.Model.extend(
+/** @lends Datum.prototype */
+{
+   /**
+    * @class <TODO Describe the Datum model here.>
+    *
+    * @property {String} utterance <TODO Describe utterance here>
+    * @property {String} gloss <TODO Describe gloss here>
+    * @property {String} translation <TODO Describe translation here>
+    * @property {Number} sessionID <TODO Describe sessionID here>
+    * @property {Perference} prefs <TODO Describe prefs here>
+    *
+    * @description <TODO OPTIONAL Describe the initialize function here.>
+    *
+    * @extends Backbone.Model
+    * @constructs
+    */
    initialize: function() {
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
@@ -32,10 +27,28 @@ var Datum = Backbone.Model.extend({
       // });
      
    },
+   
+   defaults: {
+      //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
+       utterance : "",
+       gloss : "",
+       translation : "",
+       
+       //not sure if this goes in default, but we need a way to link up the datum with the data from its parent, the session.
+       sessionID : 0,
+       
+       //Preferences are where we'll have things like the extra fields the user wants.
+       prefs : new Preference()
+   },
 
-   // This is used to validate any changes to the model. It is called whenever
-   // user.set('someAttribute', __) is called, but before the changes are
-   // actually made to someAttribute.
+   /**
+    * <TODO Describe the validation here.>
+    *
+    * @param {Object} attributes The set of attributes to validate.
+    *
+    * @returns {String} The validation error, if there is one. Otherwise, doesn't
+    * return anything.
+    */
    validate: function(attributes) {
       // TODO Validation on the attributes. Returning a String counts as an error.
       //      Example:
@@ -43,74 +56,34 @@ var Datum = Backbone.Model.extend({
       //    return "Must use positive numbers";
       // }
    },
-   subtitle: function () {
-
-
-
-   //I'm a little confused about this method....is this different from preferences?
-   // TODO Add any other methods that will manipulate the User attributes.
-   //      Example:
-   // ,
-   // addOne: function() {
-   //    this.someAttribute++;
-   // }
+   
+   /**
+    * <TODO Describe the subtitle function here.>
+    */
+   subtitle: function() {
+   },
+   
+   /**
+    * <TODO Describe the laTeXiT function here.>
+    */
+   laTeXiT: function() {
+   },
+   
+   /**
+    * <TODO Describe the addAudio function here.>
+    */
+   addAudio: function() {
+   },
+   
+   /**
+    * <TODO Describe the exportDatum function here.>
+    */
+   exportDatum: function() {
+   },
+   
+   /**
+    * <TODO Describe the syncDatum function here.>
+    */
+   syncDatum: function() {
+   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Created with JetBrains WebStorm.
- * User: mdotedot
- * Date: 12-04-20
- * Time: 1:26 PM
- * To change this template use File | Settings | File Templates.
- */
-
-/*
-
-//TODO
-If we're using backbone, does this mean that we won't be using these functions anymore?? 
-
-var Datum = Datum || {};
-
-Datum.render = function(divid){
-           
-};
-
-Datum.update = function(){
-
-};
-
-Datum.create = function(){
-
-};
-
-Datum.delete = function(){
-
-};
-
-Datum.laTeXiT = function(){
-
-};
-
-Datum.addAudio= function(){
-
-};
-
-Datum.export= function(){
-
-};
-
-Datum.sync = function(){
-
-}*/
