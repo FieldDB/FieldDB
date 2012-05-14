@@ -22,6 +22,12 @@ load:
   - tests/SinonTest.js
   
   
+  - public/import/*.js
+  - tests/import/*.js
+  
+  - public/corpus/*.js
+  - tests/corpus/*.js
+  
   
   
  
