@@ -14,11 +14,26 @@ var Corpus = Backbone.Collection
 			 * regardless of how it is really stored on the disk.
 			 * 
 			 * 
-			 * @property {String} text Describe text here.
-			 * @property {Number} userid Describe userid here.
-			 * @property {Date} timestamp Describe timestamp here.
+			 * @property {String} name This is used to refer to the corpus, and
+			 *           what appears in the url on the main website eg
+			 *           http://fieldlinguist.com/Sapir/SampleFieldLinguisticsCorpus
+			 * @property {String} description This is a short description that
+			 *           appears on the corpus details page
+			 * @property {String} remote The git url of the remote eg:
+			 *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
+			 * @property {String} localFolder The local url of the corpus on
+			 *           android/node eg: Sapir/SampleFieldLinguisticsCorpus
+			 * @property {Array} changedDatumList This array contains a list of
+			 *           the datum that have been changed and need to be synced
+			 * @property {Array} originalImportFiles This array contains a list
+			 *           of the original source files which will be put into
+			 *           version control with the corpus. This is used so that
+			 *           the user can go back to their original files:eg
+			 *           sample_elan.eaf
 			 * 
-			 * @description Describe the initialize function here.
+			 * @description The initialize function probably checks to see if
+			 *              the corpus is new or existing and brings it down to
+			 *              the user's client.
 			 * 
 			 * @extends Backbone.Model
 			 * @constructs
