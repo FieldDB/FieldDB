@@ -4,29 +4,37 @@
 <title></title>
 <link rel="stylesheet" type="text/css" href="./dashboard.css">
 <link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
-<link rel="stylesheet" type="text/css"
-	href="./../data_list/dataList.css">
+<link rel="stylesheet" type="text/css" href="./../data_list/dataList.css">
 <link rel="stylesheet" type="text/css" href="./../datum/datum.css">
+<script src="./../libs/jquery.js"></script>
+<script src="./../libs/underscore.js"></script>
+<script src="./../libs/backbone.js"></script>
 </head>
 <body class="llama">
 
 	<div class="navigationcontainer">
 		<div class="navigation widget" id="navigation">Menu</div>
 	</div>
+	<div id="status" style="color:#ffcc00"></div>
 	<div class="main">
 		<div class="leftside widget" id="leftside">Activity Feed</div>
 		<div class="content widget" id="content">Datum (one or many)</div>
 		<div class="rightside widget" id="rightside">Data List/Search</div>
 		
 	</div>
-
-
+	
+	<script type="text/javascript" charset="utf-8"
+		src="./../libs/Utils.js"></script>
 	<script type="text/javascript" charset="utf-8"
 		src="./../navigation/navigation.js"></script>
 	<script type="text/javascript" charset="utf-8"
 		src="./../data_list/DataList.js"></script>
 	<script type="text/javascript" charset="utf-8"
 		src="./../datum/Datum.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="./DragAndDropable.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="./../import/Import.js"></script>
 
 	<script type="text/javascript">
         
