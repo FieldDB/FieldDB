@@ -25,7 +25,11 @@ var Import = Backbone.Model.extend(
 					f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
 							: 'n/a', '</li>');
 		}
-		document.getElementById('status').innerHTML += '<ul>' + output.join('') + '</ul>';
+		this.el = document.getElementById('status');
+		if( this.el == null){
+			this.el = document.createElement("div");
+		}
+		this.el.innerHTML += '<ul>' + output.join('') + '</ul>';
 		
 		this.on('all', function(e) {
 			debug("Import event: " + e);
