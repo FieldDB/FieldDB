@@ -1,5 +1,5 @@
 var Import = Backbone.Model.extend(
-/** @lends Comment.prototype */
+/** @lends Import.prototype */
 {
 	/**
 	 * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus. 
