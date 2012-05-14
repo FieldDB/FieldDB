@@ -21,6 +21,7 @@ load:
   - tests/sinon.js
   - tests/SinonTest.js
   
+  - public/libs/Utils.js
   
   - public/import/*.js
   - tests/import/*.js
