@@ -29,6 +29,24 @@
 		});
 
 	});
+	describe("Import Template", function() {
+	      
+	    beforeEach(function() {
+	      var d = document.createElement("div");
+	      d.setAttribute("id","status");
+	      document.body.appendChild(d);
+//	      d.appendChild(this.view.render().el);
+	    });
+	      
+	    it("has more than one column", function() {
+	    	expect(true).toBeTruthy();
+	    });
+
+	    it("has the filename as the title", function() {
+	    	expect(true).toBeTruthy();
+	    });
+	      
+	  });
 	
 //	describe("Import routes", function() {
 //		  beforeEach(function() {
