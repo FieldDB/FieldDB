@@ -31,6 +31,3 @@ var DashboardView = Backbone.View.extend(
       debug("Clicked a widget");
    }
 });
-
-
-var Dashboard = new DashboardView();
