@@ -48,7 +48,6 @@ var User = Backbone.Model.extend(
       // someAttribute2: 'Hello world',
       // someAttribute3: []
 	   username : "",
-	   id : "",
 	   password : "",
 	   email : "",
 	   firstname : "", 
