@@ -55,7 +55,7 @@ var DashboardRouter = Backbone.Router.extend(
     * Displays the dashboard view of the given corpusName, if one was given. 
     * Or the blank dashboard view, otherwise.
     * 
-    * @param {String} corpusName (Optional)
+    * @param {String} corpusName (Optional) The name of the corpus to display.
     */
    showDashboard: function(corpusName) {  
       debug("In showDashboard: " + corpusName);
