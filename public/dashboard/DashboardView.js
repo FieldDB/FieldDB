@@ -20,9 +20,15 @@ var DashboardView = Backbone.View.extend(
     * Add a datum to the screen.
     */
    addOneDatum: function() {
-   	  debug("Clicked addOneDatum");
+      debug("Clicked addOneDatum");
    	  
-   	  var datum = new Datum({utterance: "Hello World!"});
+   	  // Create the new Datum to be added
+      var datum = new Datum({utterance: "Hello World!"});
+      
+      // Add it to the global list of Datum
+      datumList.add(datum);
+      
+      // Render it as a DatumView
       var view = new DatumView({model: datum});
       this.$("#content").append(view.render().el);
    }
