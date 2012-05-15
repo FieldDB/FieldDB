@@ -17,8 +17,16 @@ body {
 	opacity: 0.4;
 	margin: 0.5em;
 	padding: 0.5em;
-	filter: alpha(opacity =   40); /* For IE8 and earlier */
+	filter: alpha(opacity=40); /* For IE8 and earlier */
 	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.datum {
+	background: white;
+	margin: 0.5em;
+	padding: 0.5em;
+	color: black;
 	border-radius: 5px;
 }
 

@@ -4,7 +4,7 @@ var DashboardView = Backbone.View.extend(
    /**
     * @class The main layout of the program.
     *
-    * @extends Backbone.Model
+    * @extends Backbone.View
     * @constructs
     */
    initialize: function() {
@@ -13,21 +13,17 @@ var DashboardView = Backbone.View.extend(
    el: $('#app'),
    
    events: {
-   	"click .widget": "handleWidget",
-   	"click": "handleClick"
+   	"click": "addOneDatum"
    },
    
    /**
-    * Output text
+    * Add a datum to the screen.
     */
-   handleClick: function() {
-      debug("Clicked outside any widget");
-   },
-   
-   /**
-    * Output text
-    */
-   handleWidget: function() {
-      debug("Clicked a widget");
+   addOneDatum: function() {
+   	  debug("Clicked addOneDatum");
+   	  
+   	  var datum = new Datum({utterance: "Hello World!"});
+      var view = new DatumView({model: datum});
+      this.$("#content").append(view.render().el);
    }
 });
