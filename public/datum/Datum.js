@@ -29,11 +29,11 @@ var Datum = Backbone.Model.extend(
    
    defaults: {
       //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-       attestation : "",
+       utterance : "",
+       //as far as I know, attestation is not a word linguists generally use.
        gloss : "",
        translation : "",
        
-       //not sure if this goes in default, but we need a way to link up the datum with the data from its parent, the session.
        sessionID : 0,
        
        //Preferences are where we'll have things like the extra fields the user wants.
@@ -49,6 +49,7 @@ var Datum = Backbone.Model.extend(
     * return anything.
     */
    validate: function(attributes) {
+      //I'm not sure what this function is supposed to do for this particular model, honestly, the use should be able to put in wahtever they want in the fields.    
       // TODO Validation on the attributes. Returning a String counts as an error.
       //      Example:
       // if (attributes.someAttribute <= 0) {
@@ -56,35 +57,61 @@ var Datum = Backbone.Model.extend(
       // }
    },
    
-   /**
-    * <TODO Describe the subtitle function here.>
-    */
-   subtitle: function() {
+   //the following functions correspond the menu bar below the datum
+
+
+
+    /**
+    * <The status function will allow users to mark the status of a given datum, i.e. checked or needs verification.>
+   */
+   status: function() {
    },
    
    /**
-    * <TODO Describe the laTeXiT function here.>
+    * <The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  >
     */
    laTeXiT: function() {
    },
    
    /**
-    * <TODO Describe the addAudio function here.>
+    * <The addAudio function is a drop box in which the user can drag an audio file and link it to the relevant datum.>
     */
    addAudio: function() {
    },
    
-   /**
-    * <TODO Describe the exportDatum function here.>
+ /**
+    * <The playDatum function appears when the audio has already been added and allows the user to play the associated audio file.>
     */
-   exportDatum: function() {
+    
+   playDatum: function() {
+   }
+
+
+   /**
+    * <The copyDatum function copies all datum fields to the clipboard.>
+    */
+   copyDatum: function() {
    },
    
    /**
-    * <TODO Describe the syncDatum function here.>
+    * <The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. >
     */
-   syncDatum: function() {
+   starDatum: function() {
    }
+
+
+    /**
+    <The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.>
+    */
+   duplicateDatum: function() {
+   },
+ /**
+    * <The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. >
+    */
+   starDatum: function() {
+   }
+
+
 });
 
 
