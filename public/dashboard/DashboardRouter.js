@@ -11,9 +11,11 @@ var DashboardRouter = Backbone.Router.extend(
    },
    
    routes: {
-      ":corpusName/datum/:id": "showExtendedDatum",
-      ":corpusName/datalist/:id": "showExtendedDataList",
-      ":corpusName": "showDashboard",
+      "corpus/:corpusName/datum/:id": "showExtendedDatum",
+      "corpus/:corpusName/datalist/:id": "showExtendedDataList",
+      "corpus/:corpusName/search": "showExtendedSearch",
+      "corpus/:corpusName": "showDashboard",
+      "user/:userName": "showUserProfile",
       "": "showDashboard"
    },
       
@@ -38,6 +40,16 @@ var DashboardRouter = Backbone.Router.extend(
    showExtendedDataList: function(corpusName, dataListId) {
       debug("In showExtendedDataList: " + corpusName + " *** " + dataListId);
    },
+   
+   /**
+    * Display the extended view of search within the corpus specified by the 
+    * given corpusName.
+    * 
+    * @param {String} corpusName The name of the corpus to search in.
+    */
+   showExtendedSearch: function(corpusName) {
+      debug("In showExtendedSearch: " + corpusName);
+   },
       
    /**
     * Displays the dashboard view of the given corpusName, if one was given. 
@@ -47,5 +59,14 @@ var DashboardRouter = Backbone.Router.extend(
     */
    showDashboard: function(corpusName) {  
       debug("In showDashboard: " + corpusName);
+   },
+   
+   /**
+    * Displays the profile of the user specified by the given userName.
+    *  
+    * @param {String} userName The username of the user whose profile to display.
+    */
+   showUserProfile: function(userName) {
+   	  debug("In showUserProfile: " + userName);
    }
 });
