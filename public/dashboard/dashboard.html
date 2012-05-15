@@ -10,7 +10,7 @@
 <script src="./../libs/underscore.js"></script>
 <script src="./../libs/backbone.js"></script>
 </head>
-<body class="llama">
+<body id="app" class="llama">
 
 	<div class="navigationcontainer">
 		<div class="navigation widget" id="navigation">Menu</div>
@@ -35,10 +35,13 @@
 		src="./DragAndDropable.js"></script>
 	<script type="text/javascript" charset="utf-8"
 		src="./../import/Import.js"></script>
-
-	<script type="text/javascript">
-        
-    </script>
+	<script type="text/javascript" charset="utf-8"
+		src="DashboardView.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		// Initialize the DashboardView
+		var dashboard = new DashboardView();
+	</script>
 
 </body>
 </html>

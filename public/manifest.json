@@ -1,6 +1,6 @@
 {
   "name": "Drag and Drop FieldLinguistics",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "Collaborative Data Entry, like Word/LaTeX but more structured, online, offline, anywhere. http://tools.fieldlinguist.com",
   "app": {
     "launch": {
