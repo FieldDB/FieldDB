@@ -17,30 +17,30 @@
 	</div>
 	<div id="status" style="color:#ffcc00"></div>
 	<div class="main">
-		<div class="leftside widget" id="leftside">Activity Feed</div>
-		<div class="content widget" id="content">Datum (one or many)</div>
-		<div class="rightside widget" id="rightside">Data List/Search</div>
+		<div id="leftside" class="leftside widget">Activity Feed</div>
+		<div id="content" class="content widget"></div>
+		<div id="rightside" class="rightside widget">Data List/Search</div>
 		
 	</div>
 	
-	<script type="text/javascript" charset="utf-8"
-		src="./../libs/Utils.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../navigation/navigation.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../data_list/DataList.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../datum/Datum.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./DragAndDropable.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../import/Import.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="DashboardView.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../libs/Utils.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../libs/handlebars-1.0.0.beta.6.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../navigation/navigation.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../data_list/DataList.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../datum/Datum.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../datum/DatumView.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./DragAndDropable.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../import/Import.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./DashboardView.js"></script>
 	
 	<script type="text/javascript" charset="utf-8">
 		// Initialize the DashboardView
 		var dashboard = new DashboardView();
+	</script>
+	
+	<!-- Templates -->
+	<script id="datum-template" type="text/x-handlebars-template">
+		<div class="datum">Utterance: {{utterance}}</div>
 	</script>
 
 </body>
