@@ -66,7 +66,7 @@ var User = Backbone.Model.extend(
 	   sessionHistory : [],
 	   activityHistory : [],
 	   //Preferences are where we'll have things like background/skin options.
-	   prefs : new Preference()
+	   prefs : new Preference(),
 	   permissions : new Permission()
    },
 
