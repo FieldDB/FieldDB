@@ -54,10 +54,15 @@
 	<script type="text/javascript" charset="utf-8" src="./DragAndDropable.js"></script>
 	<script type="text/javascript" charset="utf-8" src="./../import/Import.js"></script>
 	<script type="text/javascript" charset="utf-8" src="./DashboardView.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./DashboardRouter.js"></script>
 	
 	<script type="text/javascript" charset="utf-8">
 		// Initialize the DashboardView
 		var dashboard = new DashboardView();
+        
+        // Initialize the DashboardRouter and start listening for URL changes
+        var router = new DashboardRouter();
+        Backbone.history.start();
 		
 		// Initialize our list of Datum
         var datumList = new DatumCollection();
