@@ -2,17 +2,15 @@ var Datum = Backbone.Model.extend(
 /** @lends Datum.prototype */
 {
    /**
-    * @class <TODO Describe the Datum model here.>
+    * @class <The Datum widget is the place where all linguistic data is entered; one at a time.   >
     *
-    * @property {String} attestation <TODO Describe attestation here>
-    * @property {String} gloss <TODO Describe gloss here>
-    * @property {String} translation <TODO Describe translation here>
-    * @property {Number} sessionId <TODO Describe sessionId here>
-    * @property {Perference} prefs <TODO Describe prefs here>
-    * @property {String} corpusName The name of the associated corpus.
+    * @property {String} utterance <The utterance field generally corresponds to the first line in linguistic examples that can either be written in the language's orthography or a romanization of the language. An additional field can be added if the language has a non-roman script.>
+    * @property {String} gloss <The gloss field corresponds to the gloss line in linguistic examples where the morphological details of the words are displayed. >
+    * @property {String} translation <The translation field corresponds to the third line in linguistic examples where in general an English translation.  An additional field can be added if translations into other languages is needed. >
+    * @property {Number} sessionID <The session ID corresponds to the number assigned to the session in which the datum is being placed.  The session will contain details such as date, language, informant etc.>
+    * @property {Perference} prefs <The preferences correspond to the user's preset of chosen fields, which may extend beyond the standard three.>
     *
-    * @description <TODO OPTIONAL Describe the initialize function here.>
-    *
+    * @description <The initialize function brings up the datum widget in small view with one set of datum fields.  However, the datum widget can contain more than datum field set and can also be viewed in full screen mode.
     * @extends Backbone.Model
     * @constructs
     */
@@ -31,17 +29,15 @@ var Datum = Backbone.Model.extend(
    
    defaults: {
       //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-       attestation: "",
-       gloss: "",
-       translation: "",
+       attestation : "",
+       gloss : "",
+       translation : "",
        
        //not sure if this goes in default, but we need a way to link up the datum with the data from its parent, the session.
-       sessionId: 0,
+       sessionID : 0,
        
        //Preferences are where we'll have things like the extra fields the user wants.
-       prefs: new Preference(),
-       
-       corpusName: "defaultCorpus"
+       prefs : new Preference()
    },
 
    /**
