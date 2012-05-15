@@ -12,7 +12,22 @@
 	
 	<!-- Templates -->
 	<script id="datum-template" type="text/x-handlebars-template">
-		<div class="datum">Utterance: {{utterance}}</div>
+		<div class="datum">
+			<ul>
+				<li>
+					<div class="datum-title">Utterance:</div>
+					<div class="datum-entry">{{utterance}}</div>
+				</li>
+				<li>
+					<div class="datum-title">Gloss:</div>
+					<div class="datum-entry">{{gloss}}</div>
+				</li>
+				<li>
+					<div class="datum-title">Translation:</div>
+					<div class="datum-entry">{{translation}}</div>
+				</li>
+			</ul>
+		</div>
 	</script>
 	<!-- END Templates -->
 </head>
@@ -24,7 +39,7 @@
 	<div id="status" style="color:#ffcc00"></div>
 	<div class="main">
 		<div id="leftside" class="leftside widget">Activity Feed</div>
-		<div id="content" class="content widget"></div>
+		<div id="content" class="content"></div>
 		<div id="rightside" class="rightside widget">Data List/Search</div>
 		
 	</div>
