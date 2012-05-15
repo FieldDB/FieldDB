@@ -13,6 +13,7 @@ load:
   - tests/user/*.js
   - tests/team/*.js
   
+  
   - tests/BackboneTest.js
   
   - public/player/*.js
@@ -28,6 +29,9 @@ load:
   
   - public/corpus/*.js
   - tests/corpus/*.js
+  
+  - public/bot/*.js
+  - tests/bot/*.js
   
   
   
