@@ -1,51 +1,26 @@
-// TODO Describe the Team model.
-//      What does it represent in real life?
-//      What are its attributes?
+   var Team = Backbone.Collection.extend({
+        model: User
+    });
+    
+    var t1 = new User({ teamid: "123", teamname: "OMC" });
+    var t2 = new User({ teamid: "456", teamname: "ABC" });
+    var t3 = new User({ teamid: "789", teamname: "DEF" });
+    
+   var myTeam = new Team([ t1 , t2, t3]);
+    console.log( myTeam.models );
+    
 
-var Team = Backbone.Model.extend({
-   // This is an list of attributes and their default values
-   defaults: {
-      // TODO set up attributes and their defaults. Example:
-      // someAttribute: 5,
-      // someAttribute2: 'Hello world',
-      // someAttribute3: []
-	   teamid: "",
-	   teamname: "",
-	   researchinterest: "",
-	   users: [],
-   },
 
-   // This is the constructor. It is called whenever you make a new Team.
-   initialize: function() {
-      this.bind('error', function(model, error) {
-         // TODO Handle validation errors
-      });
-      
 
-      // TODO Set up any other bindings (i.e. what to do when certain Events 
-      //      happen). Example:
-      // this.bind("change:someAttribute", function() {
-      //    console.log("We just changed someAttribute");
-      // });
 
-   },
 
-   // This is used to validate any changes to the model. It is called whenever
-   // team.set('someAttribute', __) is called, but before the changes are
-   // actually made to someAttribute.
-   validate: function(attributes) {
-      // TODO Validation on the attributes. Returning a String counts as an error.
-      //      Example:
-      // if (attributes.someAttribute <= 0) {
-      //    return "Must use positive numbers";
-      // }
-   }
+// var Teammate = User.extend({
+//	initialize: function(attributes) {
+//		Teammate.__super__.initialize.call(this, attributes);
+//		 this.set("teamid" , ""),
+//		 this.set("teamname" , "");
+//	   }
+//    });
+    
 
-   // TODO Add any other methods that will manipulate the Team attributes.
-   //      Example:
-   // ,
-   // addOne: function() {
-   //    this.someAttribute++;
-   // }
-});
-
+    
