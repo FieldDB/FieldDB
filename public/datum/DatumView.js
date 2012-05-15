@@ -14,10 +14,10 @@ var DatumView = Backbone.View.extend(
    
    classname: "datum",
    
+   template: Handlebars.compile($("#datum-template").html()),
+   
    render: function() {
-      var template = Handlebars.compile($("#datum-template").html());
-      
-      $(this.el).html(template(this.model.toJSON()));
+      $(this.el).html(this.template(this.model.toJSON()));
       return this;
    }
 });

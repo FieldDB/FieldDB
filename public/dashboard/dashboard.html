@@ -1,14 +1,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title></title>
-<link rel="stylesheet" type="text/css" href="./dashboard.css">
-<link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
-<link rel="stylesheet" type="text/css" href="./../data_list/dataList.css">
-<link rel="stylesheet" type="text/css" href="./../datum/datum.css">
-<script src="./../libs/jquery.js"></script>
-<script src="./../libs/underscore.js"></script>
-<script src="./../libs/backbone.js"></script>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="./dashboard.css">
+	<link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
+	<link rel="stylesheet" type="text/css" href="./../data_list/dataList.css">
+	<link rel="stylesheet" type="text/css" href="./../datum/datum.css">
+	<script src="./../libs/jquery.js"></script>
+	<script src="./../libs/underscore.js"></script>
+	<script src="./../libs/backbone.js"></script>
+	
+	<!-- Templates -->
+	<script id="datum-template" type="text/x-handlebars-template">
+		<div class="datum">Utterance: {{utterance}}</div>
+	</script>
+	<!-- END Templates -->
 </head>
 <body id="app" class="llama">
 
@@ -41,11 +47,5 @@
 		// Initialize our list of Datum
         var datumList = new DatumCollection();
 	</script>
-	
-	<!-- Templates -->
-	<script id="datum-template" type="text/x-handlebars-template">
-		<div class="datum">Utterance: {{utterance}}</div>
-	</script>
-
 </body>
 </html>
