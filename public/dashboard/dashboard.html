@@ -1,14 +1,35 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title></title>
-<link rel="stylesheet" type="text/css" href="./dashboard.css">
-<link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
-<link rel="stylesheet" type="text/css" href="./../data_list/dataList.css">
-<link rel="stylesheet" type="text/css" href="./../datum/datum.css">
-<script src="./../libs/jquery.js"></script>
-<script src="./../libs/underscore.js"></script>
-<script src="./../libs/backbone.js"></script>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="./dashboard.css">
+	<link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
+	<link rel="stylesheet" type="text/css" href="./../data_list/dataList.css">
+	<link rel="stylesheet" type="text/css" href="./../datum/datum.css">
+	<script src="./../libs/jquery.js"></script>
+	<script src="./../libs/underscore.js"></script>
+	<script src="./../libs/backbone.js"></script>
+	
+	<!-- Templates -->
+	<script id="datum-template" type="text/x-handlebars-template">
+		<div class="datum">
+			<ul>
+				<li>
+					<div class="datum-title">Attestation:</div>
+					<div class="datum-entry">{{attestation}}</div>
+				</li>
+				<li>
+					<div class="datum-title">Gloss:</div>
+					<div class="datum-entry">{{gloss}}</div>
+				</li>
+				<li>
+					<div class="datum-title">Translation:</div>
+					<div class="datum-entry">{{translation}}</div>
+				</li>
+			</ul>
+		</div>
+	</script>
+	<!-- END Templates -->
 </head>
 <body id="app" class="llama">
 
@@ -17,31 +38,34 @@
 	</div>
 	<div id="status" style="color:#ffcc00"></div>
 	<div class="main">
-		<div class="leftside widget" id="leftside">Activity Feed</div>
-		<div class="content widget" id="content">Datum (one or many)</div>
-		<div class="rightside widget" id="rightside">Data List/Search</div>
+		<div id="leftside" class="leftside widget">Activity Feed</div>
+		<div id="content" class="content"></div>
+		<div id="rightside" class="rightside widget">Data List/Search</div>
 		
 	</div>
 	
-	<script type="text/javascript" charset="utf-8"
-		src="./../libs/Utils.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../navigation/navigation.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../data_list/DataList.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../datum/Datum.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./DragAndDropable.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="./../import/Import.js"></script>
-	<script type="text/javascript" charset="utf-8"
-		src="DashboardView.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../libs/Utils.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../libs/handlebars-1.0.0.beta.6.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../navigation/navigation.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../data_list/DataList.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../datum/Datum.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../datum/DatumView.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../datum/DatumCollection.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./DragAndDropable.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./../import/Import.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./DashboardView.js"></script>
+	<script type="text/javascript" charset="utf-8" src="./DashboardRouter.js"></script>
 	
 	<script type="text/javascript" charset="utf-8">
 		// Initialize the DashboardView
 		var dashboard = new DashboardView();
+        
+        // Initialize the DashboardRouter and start listening for URL changes
+        var router = new DashboardRouter();
+        Backbone.history.start();
+		
+		// Initialize our list of Datum
+        var datumList = new DatumCollection();
 	</script>
-
 </body>
 </html>

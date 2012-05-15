@@ -13,11 +13,20 @@ body {
 .widget {
 	width: 100%;
 	height: 100%;
-	background: black;
-	opacity: 0.4;
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.4);
 	margin: 0.5em;
 	padding: 0.5em;
-	filter: alpha(opacity =   40); /* For IE8 and earlier */
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.datum {
+	background: black;
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.4);
+	margin: 0.5em;
+	padding: 0.5em;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
@@ -51,6 +60,10 @@ a {
 
 a:hover,a:active {
 	text-decoration: underline;
+}
+
+ul {
+	list-style-type: none;
 }
 
 .navigationcontainer {
