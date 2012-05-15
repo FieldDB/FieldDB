@@ -7,8 +7,9 @@ var Datum = Backbone.Model.extend(
     * @property {String} attestation <TODO Describe attestation here>
     * @property {String} gloss <TODO Describe gloss here>
     * @property {String} translation <TODO Describe translation here>
-    * @property {Number} sessionID <TODO Describe sessionID here>
+    * @property {Number} sessionId <TODO Describe sessionId here>
     * @property {Perference} prefs <TODO Describe prefs here>
+    * @property {String} corpusName The name of the associated corpus.
     *
     * @description <TODO OPTIONAL Describe the initialize function here.>
     *
@@ -30,15 +31,17 @@ var Datum = Backbone.Model.extend(
    
    defaults: {
       //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-       attestation : "",
-       gloss : "",
-       translation : "",
+       attestation: "",
+       gloss: "",
+       translation: "",
        
        //not sure if this goes in default, but we need a way to link up the datum with the data from its parent, the session.
-       sessionID : 0,
+       sessionId: 0,
        
        //Preferences are where we'll have things like the extra fields the user wants.
-       prefs : new Preference()
+       prefs: new Preference(),
+       
+       corpusName: "defaultCorpus"
    },
 
    /**
