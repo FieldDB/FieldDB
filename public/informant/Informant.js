@@ -33,9 +33,9 @@ var Informant = User.extend(
 
 	initialize: function(attributes) {
 		Informant.__super__.initialize.call(this, attributes);
-		 this.set("birthDate" , ""),
-		 this.set("language" , ""),
-		 this.set("dialect" , "")
+		 this.set("birthDate" , "");
+		 this.set("language" , "");
+		 this.set("dialect" , "");
 	   }
 	
 	
