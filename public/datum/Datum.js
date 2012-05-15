@@ -4,7 +4,7 @@ var Datum = Backbone.Model.extend(
    /**
     * @class <TODO Describe the Datum model here.>
     *
-    * @property {String} utterance <TODO Describe utterance here>
+    * @property {String} attestation <TODO Describe attestation here>
     * @property {String} gloss <TODO Describe gloss here>
     * @property {String} translation <TODO Describe translation here>
     * @property {Number} sessionID <TODO Describe sessionID here>
@@ -30,7 +30,7 @@ var Datum = Backbone.Model.extend(
    
    defaults: {
       //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-       utterance : "",
+       attestation : "",
        gloss : "",
        translation : "",
        
