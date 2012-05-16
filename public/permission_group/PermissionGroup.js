@@ -11,17 +11,16 @@ var Team = Backbone.Collection.extend(
 /**
  * @class A permission group is a collection of users and a collection 
  * of permissions. 
+ * @extends Backbone.Collection
+ * @constructs
  * 
- * 
- */
-	
-	
-        model: User, 
-        
+ */  
         initialize: function() {
   	      this.bind('error', function(model, error) {
   	         // TODO Handle validation errors
   	      });
+
+          model: User
         }
     });
 //    
