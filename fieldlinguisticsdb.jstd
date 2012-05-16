@@ -1,12 +1,17 @@
-load:
-  - tests/jasmine/lib/jasmine/*.js
-  - tests/jasmine/src/*.js
-  
-  - public/libs/require.js
-  
-  - public/libs/Utils.js
-  - tests/dashboard/*.js
-  
-  - tests/sinon.js
-  - tests/SinonTest.js
-  
+load: 
+ - tests/jasmine/jasmine.js
+ - tests/jasmine/jasmineAdapter.js
+ - public/libs/require.js
+ - tests/require/HelloWorld.js
+ - public/libs/Utils.js
+
+test: 
+ - tests/require/HelloWorld-spec.js
+ - tests/dashboard/*.js
+ 
+plugin: 
+ - name: "coverage" 
+   jar: "tools/JsTestDriver/coverage-1.3.4.b.jar" 
+   module: "com.google.jstestdriver.coverage.CoverageModule"
+ 
+timeout: 90
