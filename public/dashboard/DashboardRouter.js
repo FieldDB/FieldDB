@@ -28,6 +28,12 @@ var DashboardRouter = Backbone.Router.extend(
     */
    showExtendedDatum: function(corpusName, datumId) {
    	  debug("In showExtendedDatum: " + corpusName + " *** " + datumId);
+   	  
+   	  $("#dashboard-view").hide();
+   	  $("#extended-datum-view").show();
+   	  $("#extended-datalist-view").hide();
+   	  $("#extended-search-view").hide();
+   	  $("#user-profile-view").hide();
    },
       
    /**
@@ -39,6 +45,12 @@ var DashboardRouter = Backbone.Router.extend(
     */
    showExtendedDataList: function(corpusName, dataListId) {
       debug("In showExtendedDataList: " + corpusName + " *** " + dataListId);
+      
+ 	  $("#dashboard-view").hide();
+   	  $("#extended-datum-view").hide();
+   	  $("#extended-datalist-view").show();
+   	  $("#extended-search-view").hide();
+   	  $("#user-profile-view").hide();
    },
    
    /**
@@ -49,6 +61,12 @@ var DashboardRouter = Backbone.Router.extend(
     */
    showExtendedSearch: function(corpusName) {
       debug("In showExtendedSearch: " + corpusName);
+      
+ 	  $("#dashboard-view").hide();
+   	  $("#extended-datum-view").hide();
+   	  $("#extended-datalist-view").hide();
+   	  $("#extended-search-view").show();
+   	  $("#user-profile-view").hide();
    },
       
    /**
@@ -59,6 +77,12 @@ var DashboardRouter = Backbone.Router.extend(
     */
    showDashboard: function(corpusName) {  
       debug("In showDashboard: " + corpusName);
+      
+   	  $("#dashboard-view").show();
+   	  $("#extended-datum-view").hide();
+   	  $("#extended-datalist-view").hide();
+   	  $("#extended-search-view").hide();
+   	  $("#user-profile-view").hide();
    },
    
    /**
@@ -68,5 +92,11 @@ var DashboardRouter = Backbone.Router.extend(
     */
    showUserProfile: function(userName) {
    	  debug("In showUserProfile: " + userName);
+   	  
+   	  $("#dashboard-view").hide();
+   	  $("#extended-datum-view").hide();
+   	  $("#extended-datalist-view").hide();
+   	  $("#extended-search-view").hide();
+   	  $("#user-profile-view").show();
    }
 });

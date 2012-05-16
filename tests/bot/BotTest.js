@@ -1,16 +1,21 @@
 (function() {
 	var specs = [];
 
-	describe("testbot", function() {
+	describe("Test Bot", function() {
 		it("should create a bot", function() {
 			var b = new Bot();
-//			var isaBot = b instanceof User;
-			expect(true).toBeTruthy();
+			var isaBot = b instanceof Bot;
+			var isaUser = b instanceof User;
+			expect(isaBot && isaUser).toBeTruthy();
 
 		});
 		it("should create multiple bots", function() {
+			var  bots = [];
+			bots.push(new Bot());
+			bots.push(new Bot());
+			bots.push(new Bot());
 			
-			expect(true).toBeTruthy();
+			expect(bots.length == 3).toBeTruthy();
 			
 
 		});
