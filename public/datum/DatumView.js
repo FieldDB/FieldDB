@@ -1,8 +1,9 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "datum/Datum"
-], function(Backbone, Handlebars, Datum) {
+    "datum/Datum",
+    "text!datum/datum.handlebars"
+], function(Backbone, Handlebars, Datum, datumTemplate) {
     var DatumView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -19,7 +20,7 @@ define([
 
         classname : "datum",
 
-        template: Handlebars.compile($("#datum-template").html()),
+        template: Handlebars.compile(datumTemplate),
 
         render : function() {
             $(this.el).html(this.template(this.model.toJSON()));
