@@ -36,6 +36,9 @@ var Datum = Backbone.Model.extend(
        //as far as I know, attestation is not a word linguists generally use. cesine: I agree, it was the word that Alan Yu had in his database so i figured they probably debated it a bit and setted with something since utterance implies spoken... but maybe we can stick to utterance. 
        gloss : "",
        translation : "",
+
+       //While it will not look like a field, it will essentially be a place where the user can click and add tags and then they will appear in little bubbles.
+       grammaticalTags: "",
        
        sessionID : 0,
        status : new DatumStatus(),
@@ -60,91 +63,13 @@ var Datum = Backbone.Model.extend(
       // }
    },
    
-   //the following functions correspond the menu bar below the datum
 
-
-
-    /**
-    * <The status function will allow users to mark the status of a given datum, i.e. checked or needs verification.>
-   */
-   status: function() {
-   },
-   
-   /**
-    * <The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  >
-    */
-   laTeXiT: function() {
-   },
-   
-   /**
-    * <The addAudio function is a drop box in which the user can drag an audio file and link it to the relevant datum.>
-    */
-   addAudio: function() {
-   },
-   
- /**
-    * <The playDatum function appears when the audio has already been added and allows the user to play the associated audio file.>
-    */
-    
-   playDatum: function() {
-   },
-
-
-   /**
-    * <The copyDatum function copies all datum fields to the clipboard.>
-    */
-   copyDatum: function() {
-   },
-   
-   /**
-    * <The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. >
-    */
-   starDatum: function() {
-   },
-
-
-    /**
-    <The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.>
-    */
-   duplicateDatum: function() {
-   },
- /**
-    * <The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. >
-    */
-   starDatum: function() {
-   }
 
 
 });
 
 
-model = new Backbone.Model({
-    data:[
-        { text: "Google", href: "http://google.com" },
-        { text: "Facebook", href: "http://facebook.com" },
-        { text: "Youtube", href: "http://youtube.com" }
-    ]
-});
- 
-var View = Backbone.View.extend({
-    initialize: function () {
-        this.template = $('#list-template').children();
-    },
-    el: '#container',
-    events: {
-        "click button": "render"
-    },
-    render: function() {
-        var data = this.model.get('data');
-       
-        for (var i=0, l=data.length; i<l; i++) {
-            var li = this.template.clone().find('a').attr('href', data[i].href).text(data[i].text).end();
-            this.$el.find('ul').append(li);
-        }
-    }
-});
- 
-var view = new View({ model: model });
+
 
 
 
