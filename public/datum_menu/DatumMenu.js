@@ -2,10 +2,10 @@ var DatumMenu = Backbone.Model.extend(
 /** @lends DatumMenu.prototype */
 {
    /**
-    * @class <The DatumMenu is a set of functions that are associated with an individual datum.  This menu appears on the datum widget in addition to the list view where the user can apply Datum functions (such as star) in bulk. >
+    * @class The DatumMenu is a set of functions that are associated with an individual datum.  This menu appears on the datum widget in addition to the list view where the user can apply Datum functions (such as star) in bulk. 
     *
     *
-    * @description <The initialize function brings up the menu.>
+    * @description The initialize function brings up the menu.
     * @extends Backbone.Model
     * @constructs
     */
