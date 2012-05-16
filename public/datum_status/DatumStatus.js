@@ -1,5 +1,5 @@
-var Datum = Backbone.Model.extend(
-/** @lends Datum.prototype */
+var DatumStatus = Backbone.Model.extend(
+/** @lends DatumStatus.prototype */
 {
    /**
     * @class The datum status lets the fieldlinguists assign their own status categoriest o data (ie check with informant, check with x, checked, checked and wrong, hidden, deleted, whatever status they decide.
