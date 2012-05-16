@@ -34,19 +34,19 @@ var DatumMenu = Backbone.Model.extend(
    },
    
    /**
-    * <The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  >
+    * The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  
     */
    laTeXiT: function() {
    },
    
    /**
-    * <The addAudio function is a drop box in which the user can drag an audio file and link it to the relevant datum.>
+    * The addAudio function is a drop box in which the user can drag an audio file and link it to the relevant datum.
     */
    addAudio: function() {
    },
    
  /**
-    * <The playDatum function appears when the audio has already been added and allows the user to play the associated audio file.>
+    * The playDatum function appears when the audio has already been added and allows the user to play the associated audio file.
     */
     
    playDatum: function() {
@@ -54,19 +54,19 @@ var DatumMenu = Backbone.Model.extend(
 
 
    /**
-    * <The copyDatum function copies all datum fields to the clipboard.>
+    * The copyDatum function copies all datum fields to the clipboard.
     */
    copyDatum: function() {
    },
    
    /**
-    * <The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. >
+    * The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. 
     */
    starDatum: function() {
    },
 
     /**
-    <The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.>
+    The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.
     */
    duplicateDatum: function() {
    },
