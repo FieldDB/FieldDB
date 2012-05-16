@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="./../navigation/menu.css">
 	<link rel="stylesheet" type="text/css" href="./../data_list/dataList.css">
 	<link rel="stylesheet" type="text/css" href="./../datum/datum.css">
+	<!-- END Stylesheets -->
 	
 	<!-- Templates -->
 	<script id="datum-template" type="text/x-handlebars-template">
@@ -30,6 +31,10 @@
 		</div>
 	</script>
 	<!-- END Templates -->
+	
+	<!-- Javascript -->
+	<script type="text/javascript" src="../libs/require.js" data-main="../main.js"></script>
+	<!-- END Javascript -->
 </head>
 <body id="app" class="llama">
 	
@@ -65,36 +70,5 @@
 	<div id="user-profile-view" class="page">>
 		<div class="centercontent widget">User Profile</div>
 	</div>
-	
-	<!-- Import javascript libraries -->
-	<script type="text/javascript" charset="utf-8" src="./../libs/handlebars-1.0.0.beta.6.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../libs/jquery.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../libs/underscore.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../libs/backbone.js"></script>
-	
-	<!-- Import all our javascript files -->
-	<script type="text/javascript" charset="utf-8" src="./../libs/Utils.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../navigation/navigation.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../data_list/DataList.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../datum/Datum.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../datum/DatumView.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../datum/DatumCollection.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./DragAndDropable.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./../import/Import.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./DashboardView.js"></script>
-	<script type="text/javascript" charset="utf-8" src="./DashboardRouter.js"></script>
-	
-	<!-- Global initializations -->
-	<script type="text/javascript" charset="utf-8">
-		// Initialize the DashboardView
-		var dashboard = new DashboardView();
-        
-        // Initialize the DashboardRouter and start listening for URL changes
-        var router = new DashboardRouter();
-        Backbone.history.start();
-		
-		// Initialize our list of Datum
-        var datumList = new DatumCollection();
-	</script>
 </body>
 </html>
