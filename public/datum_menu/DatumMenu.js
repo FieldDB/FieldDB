@@ -28,7 +28,7 @@ var DatumMenu = Backbone.Model.extend(
 
 
     /**
-    * <The status function will allow users to mark the status of a given datum, i.e. checked or needs verification.>
+    * The status function will allow users to mark the status of a given datum, i.e. checked or needs verification.
    */
    status: function() {
    },
