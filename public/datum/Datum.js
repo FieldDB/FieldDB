@@ -2,18 +2,16 @@ var Datum = Backbone.Model.extend(
 /** @lends Datum.prototype */
 {
    /**
-    * @class <The Datum widget is the place where all linguistic data is entered; one at a time.   > 
+    * @class The Datum widget is the place where all linguistic data is entered; one at a time. 
     * 
-    * @mecathcart, what's with all the <> ?? im pretty sure it breaks your documentation, there  is nothing showing up in the docs:
-    * http://redmine.ilanguage.ca:8080/job/Drag-and-Drop-FieldLinguistics/javadoc/symbols/Datum.html
     *
-    * @property {String} utterance <The utterance field generally corresponds to the first line in linguistic examples that can either be written in the language's orthography or a romanization of the language. An additional field can be added if the language has a non-roman script.>
-    * @property {String} gloss <The gloss field corresponds to the gloss line in linguistic examples where the morphological details of the words are displayed. >
-    * @property {String} translation <The translation field corresponds to the third line in linguistic examples where in general an English translation.  An additional field can be added if translations into other languages is needed. >
-    * @property {Number} sessionID <The session ID corresponds to the number assigned to the session in which the datum is being placed.  The session will contain details such as date, language, informant etc.>
-    * @property {Perference} prefs <The preferences correspond to the user's preset of chosen fields, which may extend beyond the standard three.>
+    * @property {String} utterance The utterance field generally corresponds to the first line in linguistic examples that can either be written in the language's orthography or a romanization of the language. An additional field can be added if the language has a non-roman script.
+    * @property {String} gloss The gloss field corresponds to the gloss line in linguistic examples where the morphological details of the words are displayed. 
+    * @property {String} translation The translation field corresponds to the third line in linguistic examples where in general an English translation.  An additional field can be added if translations into other languages is needed. 
+    * @property {Number} sessionID The session ID corresponds to the number assigned to the session in which the datum is being placed.  The session will contain details such as date, language, informant etc.
+    * @property {Perference} prefs The preferences correspond to the user's preset of chosen fields, which may extend beyond the standard three.
     *
-    * @description <The initialize function brings up the datum widget in small view with one set of datum fields.  However, the datum widget can contain more than datum field set and can also be viewed in full screen mode.
+    * @description The initialize function brings up the datum widget in small view with one set of datum fields.  However, the datum widget can contain more than datum field set and can also be viewed in full screen mode.
     * @extends Backbone.Model
     * @constructs
     */
