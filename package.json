@@ -6,6 +6,6 @@
     ,"underscore": "latest"
     ,"paperboy": "latest"
     ,"passport": "latest"
-		,"passport-local": "latest"
+    ,"passport-local": "latest"
   }
 }
