@@ -13,7 +13,7 @@ var DashboardView = Backbone.View.extend(
    el: $('#app'),
    
    events: {
-   	"click": "addOneDatum"
+   	"click #dashboard-view": "addOneDatum"
    },
    
    /**
@@ -23,7 +23,7 @@ var DashboardView = Backbone.View.extend(
       debug("Clicked addOneDatum");
    	  
    	  // Create the new Datum to be added
-      var datum = new Datum({utterance: "Hello World!"});
+      var datum = new Datum({attestation: "Hello World!"});
       
       // Add it to the global list of Datum
       datumList.add(datum);
