@@ -72,7 +72,7 @@ define([
    },
 
    /**
-    * TODO Describe the validation here.
+    * Validation functions will verify that the session ID is unique and that the informant,users, and teams are all correspond to people in the system.
     *
     * @param {Object} attributes The set of attributes to validate.
     *
