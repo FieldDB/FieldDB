@@ -2,6 +2,7 @@
 require.config({
     paths : {
         "use" : "libs/use",
+        "text" : "libs/text",
         "jquery" : "libs/jquery",
         "underscore" : "libs/underscore",
         "backbone" : "libs/backbone",
