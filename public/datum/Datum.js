@@ -1,9 +1,11 @@
 define([
     "use!backbone",
     "datum_status/DatumStatus",
+    "datum_menu/DatumMenu"
+    "datum_tag/DatumTag"
     "preference/Preference",
     "session/Session"
-], function(Backbone, DatumStatus, Preference, Session) {
+], function(Backbone, DatumStatus, DatumMenu, DatumTag, Preference, Session) {
     var Datum = Backbone.Model.extend(
     /** @lends Datum.prototype */
     {
