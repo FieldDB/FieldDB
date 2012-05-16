@@ -1,9 +1,4 @@
-// A permission group is a collection of users and a collection 
-// of permissions. 
-
-
-
-var Team = Backbone.Collection.extend(
+var PermissionGroup = Backbone.Collection.extend(
 		
 /** @lends PermissionGroup.prototype  */
 		
@@ -14,9 +9,8 @@ var Team = Backbone.Collection.extend(
  * 
  * 
  */
-	
-	
-        model: User, 
+
+	model: User, 
         
         initialize: function() {
   	      this.bind('error', function(model, error) {
@@ -25,12 +19,12 @@ var Team = Backbone.Collection.extend(
         }
     });
 //    
-    var t1 = new User({ teamid: "123", teamname: "OMC" });
-    var t2 = new User({ teamid: "456", teamname: "ABC" });
-    var t3 = new User({ teamid: "789", teamname: "DEF" });
+    var g1 = new User({ permission1: "read", permission2: "write" });
+    var g2 = new User({ permission1: "read" });
+    var g3 = new User({ permission1: "read", permission2: "write", permission3: "admin" });
     
-   var myTeam = new Team([t1, t2, t3]);
-    console.log( myTeam.models	);
+   var myPermissionGroup = new PermissionGroup([g1, g2, g3]);
+    console.log( myPermissionGroup.models	);
     
 
 
