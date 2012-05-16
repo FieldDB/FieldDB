@@ -1,8 +1,8 @@
 define([
     "use!backbone",
     "datum_status/DatumStatus",
-    "datum_menu/DatumMenu"
-    "datum_tag/DatumTag"
+    "datum_menu/DatumMenu",
+    "datum_tag/DatumTag",
     "preference/Preference",
     "session/Session"
 ], function(Backbone, DatumStatus, DatumMenu, DatumTag, Preference, Session) {
