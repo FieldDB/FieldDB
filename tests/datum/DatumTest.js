@@ -1,6 +1,6 @@
 require([
     "datum/Datum"
-], function(User) {
+], function(Datum) {
 	(function() {
 		var specs = [];
 
