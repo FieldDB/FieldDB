@@ -1,6 +1,8 @@
 define([
-    "use!backbone"
-], function(Backbone) {
+    "use!backbone",
+    "datum_status/DatumStatus",
+    "preference/Preference"
+], function(Backbone, DatumStatus, Preference) {
     var Datum = Backbone.Model.extend(
     /** @lends Datum.prototype */
     {
@@ -24,6 +26,7 @@ define([
          *      number assigned to the session in which the datum is being 
          *      placed.  The session will contain details such as date, 
          *      language, informant etc.
+         * @property {DatumStation} status TODO Describe status here.
          * @property {Perference} prefs The preferences correspond to the 
          *      user's preset of chosen fields, which may extend beyond the 
          *      standard three.
@@ -60,9 +63,9 @@ define([
             grammaticalTags : "",
 
             sessionID : 0,
-            //status : new DatumStatus(),
+            status : new DatumStatus(),
             //Preferences are where we'll have things like the extra fields the user wants. TODO this is an abmigous use of the prefernce class, which was originally supposed to be user preferences like skins?
-            //prefs : new Preference()
+            prefs : new Preference()
         },
 
         /**
