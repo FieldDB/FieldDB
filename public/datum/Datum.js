@@ -2,7 +2,10 @@ var Datum = Backbone.Model.extend(
 /** @lends Datum.prototype */
 {
    /**
-    * @class <The Datum widget is the place where all linguistic data is entered; one at a time.   >
+    * @class <The Datum widget is the place where all linguistic data is entered; one at a time.   > 
+    * 
+    * @mecathcart, what's with all the <> ?? im pretty sure it breaks your documentation, there  is nothing showing up in the docs:
+    * http://redmine.ilanguage.ca:8080/job/Drag-and-Drop-FieldLinguistics/javadoc/symbols/Datum.html
     *
     * @property {String} utterance <The utterance field generally corresponds to the first line in linguistic examples that can either be written in the language's orthography or a romanization of the language. An additional field can be added if the language has a non-roman script.>
     * @property {String} gloss <The gloss field corresponds to the gloss line in linguistic examples where the morphological details of the words are displayed. >
@@ -18,7 +21,7 @@ var Datum = Backbone.Model.extend(
       this.bind('error', function(model, error) {
          // TODO Handle validation errors
       });
-
+      
       // TODO Set up any other bindings (i.e. what to do when certain Events 
       //      happen). Example:
       // this.bind("change:someAttribute", function() {
@@ -30,13 +33,13 @@ var Datum = Backbone.Model.extend(
    defaults: {
       //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
        utterance : "",
-       //as far as I know, attestation is not a word linguists generally use.
+       //as far as I know, attestation is not a word linguists generally use. cesine: I agree, it was the word that Alan Yu had in his database so i figured they probably debated it a bit and setted with something since utterance implies spoken... but maybe we can stick to utterance. 
        gloss : "",
        translation : "",
        
        sessionID : 0,
-       
-       //Preferences are where we'll have things like the extra fields the user wants.
+       status : new DatumStatus(),
+       //Preferences are where we'll have things like the extra fields the user wants. TODO this is an abmigous use of the prefernce class, which was originally supposed to be user preferences like skins?
        prefs : new Preference()
    },
 
