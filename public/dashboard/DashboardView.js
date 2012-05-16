@@ -13,7 +13,7 @@ var DashboardView = Backbone.View.extend(
    el: $('#app'),
    
    events: {
-   	"click": "addOneDatum"
+   	"click #dashboard-view": "addOneDatum"
    },
    
    /**
