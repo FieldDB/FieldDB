@@ -6,28 +6,37 @@ load:
   - public/libs/underscore.js
   - public/libs/backbone.js
 
+
+  - tests/sinon.js
+  - tests/SinonTest.js
+  
+  - public/libs/Utils.js
+  
   - public/offlineapp/*.js
   - tests/offlineapp/*.js
   - public/preference/*.js
+  - public/permission/*.js
+  
+  - public/user_generic/*.js
   - public/user/*.js
   - tests/user/*.js
   - tests/team/*.js
+  
   
   - tests/BackboneTest.js
   
   - public/player/*.js
   - tests/JasmineTest.js
   
-  - tests/sinon.js
-  - tests/SinonTest.js
-  
-  - public/libs/Utils.js
   
   - public/import/*.js
   - tests/import/*.js
   
   - public/corpus/*.js
   - tests/corpus/*.js
+  
+  - public/bot/*.js
+  - tests/bot/*.js
   
   
   
