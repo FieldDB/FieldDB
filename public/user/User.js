@@ -51,8 +51,6 @@ var User = UserGeneric.extend(
    /** 
     * The login function checks username, password, and the combination of the two. 
     */
-
-
    login: function(username, password) {
 	   if (this.get("username") == username) {
 		   if (this.get("password") == password) {
