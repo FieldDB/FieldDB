@@ -1,6 +1,6 @@
-define("Comment",[ "use!backbone", 
-         ], 
-         function(Backbone) {
+define("comment/Comment", [ 
+    "use!backbone", 
+], function(Backbone) {
   var Comment = Backbone.Model.extend(
 
       /** @lends Comment.prototype */

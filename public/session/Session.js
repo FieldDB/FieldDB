@@ -1,11 +1,8 @@
-define("Session",
-    [
+define("session/Session", [
     "use!backbone",
     "team/Team",
     "user/User",
     "informant/Informant"
-
-
 ], function(Backbone,Team,User,Informant) {
 
     var Session = Backbone.Model.extend(
