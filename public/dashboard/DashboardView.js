@@ -25,7 +25,7 @@ define([
         * Add a datum to the screen.
         */
        addOneDatum: function() {
-          debug("Clicked addOneDatum");
+          (new Utils()).debug("Clicked addOneDatum");
        	  
        	  // Create the new Datum to be added
           var datum = new Datum({attestation: "Hello World!"});
