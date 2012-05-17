@@ -1,4 +1,4 @@
-define([ "use!backbone" ], function(Backbone) {
+define("Utils", function() {
 	/**
 	 * @class Utils provides a number of utility functions which are handy
 	 *        around the app.
@@ -7,13 +7,13 @@ define([ "use!backbone" ], function(Backbone) {
 	 * 
 	 * @constructs
 	 */
-	var Utils = function() {
-		debugMode = true;
+	return function Utils() {
+		this.debugMode = true;
 		/**
 		 * Console logs out, if not on Internet Explorer. Only logs out if
 		 * debugMode is true.
 		 */
-		debug = function(message) {
+		this.debug = function(message) {
 			if (navigator.appName == 'Microsoft Internet Explorer') {
 				return;
 			}
@@ -30,7 +30,7 @@ define([ "use!backbone" ], function(Backbone) {
 		 * 
 		 * @returns {Boolean} true if using offline Android
 		 */
-		androidApp = function() {
+		this.androidApp = function() {
 			return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
 		};
 		/**
@@ -38,7 +38,7 @@ define([ "use!backbone" ], function(Backbone) {
 		 * 
 		 * @returns {Boolean} true if using a Chrome Extension
 		 */
-		chromeApp = function() {
+		this.chromeApp = function() {
 			return window.location.href.indexOf("chrome-extension") > -1;
 		};
 		/**
@@ -48,10 +48,8 @@ define([ "use!backbone" ], function(Backbone) {
 		 * @returns {Boolean} true if not on offline Android or on a Chrome
 		 *          Extension
 		 */
-		onlineOnly = function() {
-			return !androidApp() && !chromeApp();
+		this.onlineOnly = function() {
+			return !this.androidApp() && !this.chromeApp();
 		};
 	};
-
-	return Utils;
 });
