@@ -17,6 +17,8 @@ define([
         * @extends Backbone.Model
         * @constructs
         */
+        initialize: function() {
+        },
     	defaults: {
     	      statuses: ["Checked","To be checked","Deleted"],
     	      active: 0,
