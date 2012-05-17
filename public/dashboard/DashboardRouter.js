@@ -1,7 +1,7 @@
-define("DashboardRouter",
-    ["use!backbone",
-    "./../../libs/Utils.js"
-], function(Backbone) {
+define("dashboard/DashboardRouter", [
+    "use!backbone",
+    "libs/Utils"
+], function(Backbone, Utils) {
     var DashboardRouter = Backbone.Router.extend(
     /** @lends DashboardRouter.prototype */
     {

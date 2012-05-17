@@ -1,5 +1,5 @@
-define("ImportView", [ "use!backbone"
-
+define("import/ImportView", [ 
+    "use!backbone"
 ], function(Backbone) {
   var ImportView = Backbone.View.extend({
     tagName : "div",

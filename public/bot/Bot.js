@@ -1,7 +1,7 @@
-define("Bot",
-    [ "use!backbone", 
-         "user/User" ], 
-    function(Backbone, User) {
+define("bot/Bot", [ 
+    "use!backbone", 
+    "user/User" 
+], function(Backbone, User) {
   var Bot = User.extend(
 
       /** @lends Bot.prototype */
