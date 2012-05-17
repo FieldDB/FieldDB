@@ -1,4 +1,4 @@
-require(["HelloWorld"], function (HelloWorld) {
+require(["require/HelloWorld"], function (HelloWorld) {
 	
 	describe("HelloWorldTest", function () {
 		it("should return hello world!", function () {
