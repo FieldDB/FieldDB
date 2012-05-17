@@ -1,4 +1,4 @@
-define("Informant",
+define("informant/Informant",
     [ "use!backbone", "user/User" ]
 , function(Backbone, User) {
   var Informant = User.extend(
