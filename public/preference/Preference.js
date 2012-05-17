@@ -1,4 +1,4 @@
-define([ 
+define("Preference",[ 
         "use!backbone" 
         ], function(Backbone) {
   var Preference = Backbone.Model.extend(

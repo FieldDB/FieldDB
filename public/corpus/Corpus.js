@@ -1,4 +1,9 @@
-var Corpus = Backbone.Collection
+define("Corpus",
+    [ "use!backbone"
+         
+], 
+function(Backbone) {
+         var Corpus = Backbone.Collection
 		.extend(
 		/** @lends Corpus.prototype */
 		{
@@ -85,3 +90,5 @@ var Corpus = Backbone.Collection
 			}
 
 		});
+         return Corpus;
+});

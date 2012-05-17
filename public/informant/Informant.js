@@ -1,4 +1,4 @@
-define([ "use!backbone", "user/User" ], function(Backbone, User) {
+define("Informant",[ "use!backbone", "user/User" ], function(Backbone, User) {
   var Informant = User.extend(
 
   /** @lends Informant.prototype */

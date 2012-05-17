@@ -1,4 +1,5 @@
-define([
+define("User",
+    [
         "use!backbone",
         "user_generic/UserGeneric"
         ], function(Backbone, UserGeneric) {

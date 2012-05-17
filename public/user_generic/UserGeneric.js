@@ -1,4 +1,4 @@
-define(
+define("UserGeneric",
     [ "use!backbone", "preference/Preference" ],
     function(Backbone, Preference) {
       var UserGeneric = Backbone.Model
