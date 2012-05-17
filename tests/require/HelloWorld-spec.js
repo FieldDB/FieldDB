@@ -1,6 +1,6 @@
 require(["HelloWorld"], function (HelloWorld) {
 	
-	describe("HelloWorldTest", function () {
+	describe("Require js test", function () {
 		it("should return hello world!", function () {
 			expect(HelloWorld()).toEqual("hello world!");
 		});
