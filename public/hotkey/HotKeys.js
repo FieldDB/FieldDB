@@ -3,7 +3,7 @@ define("HotKeys",
 
       ], 
       function(Backbone) {
-  var HotKeys = HotKey.Collection.extend(
+  var HotKeys = Backbone.Collection.extend(
 
       /** @lends HotKeys.prototype  */
 
