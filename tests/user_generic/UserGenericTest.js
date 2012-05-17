@@ -1,10 +1,10 @@
 
 (function() {
   var specs = [];
-  var UserGeneric = require("UserGeneric");
+//  
   describe("UserGeneric", function() {
     it("should expose an attribute", function() {
-
+      //var UserGeneric = require("UserGeneric");
       var episode = new Backbone.Model({
         title : "Hollywood - Part 2"
       });

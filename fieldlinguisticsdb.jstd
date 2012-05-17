@@ -6,11 +6,15 @@ load:
  - public/libs/jquery.js
  - public/libs/underscore.js
  - public/libs/backbone.js
-
+ 
  - public/libs/Utils.js
-
+ - public/preference/*.js
+ - public/permission/*.js
+ - public/user_generic/*.js
+ - public/user/*.js
 test: 
  - tests/require/HelloWorld-spec.js
  - tests/dashboard/*.js
+ - tests/sinon.js
+ - tests/user_generic/*.js
  
-timeout: 90
