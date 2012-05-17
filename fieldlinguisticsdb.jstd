@@ -3,6 +3,10 @@ load:
  - tests/jasmine/jasmineAdapter.js
  - public/libs/require.js
  - tests/require/HelloWorld.js
+ - public/libs/jquery.js
+ - public/libs/underscore.js
+ - public/libs/backbone.js
+
  - public/libs/Utils.js
 
 test: 
