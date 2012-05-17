@@ -21,8 +21,6 @@ var UserGeneric = Backbone.Model
 			 *           corpora (eg. passives; data to be checked week etc).
 			 * @property {Preference} prefs This is where we'll have things like
 			 *           background/skin.
-			 * @property {Permission} permissions This is where permissions are
-			 *           specified (eg. read only; add/edit data etc.)
 			 * 
 			 * @description The initialize function probably checks to see if
 			 *              the user is existing or new and creates a new
@@ -62,8 +60,8 @@ var UserGeneric = Backbone.Model
 				dataLists : [],
 				// Preferences are where we'll have things like background/skin
 				// options.
-				prefs : new Preference(),
-				permissions : new Permission()
+				prefs : new Preference()
+				
 			},
 
 			/**
