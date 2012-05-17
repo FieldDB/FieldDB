@@ -1,4 +1,5 @@
-define("HelloWorld", function () {
+define("require/HelloWorld", [
+], function () {
 
   return function () {
     return "hello world!";

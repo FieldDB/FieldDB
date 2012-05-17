@@ -1,4 +1,5 @@
-define("Utils", function() {
+define("libs/Utils", [
+], function() {
 	/**
 	 * @class Utils provides a number of utility functions which are handy
 	 *        around the app.

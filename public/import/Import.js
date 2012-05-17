@@ -1,8 +1,6 @@
-define("Import",
-    [ "use!backbone"
-
-      ], 
-      function(Backbone) {
+define("import/Import", [ 
+    "use!backbone"
+], function(Backbone) {
   var Import = Backbone.Model.extend(
 
       /** @lends Import.prototype */

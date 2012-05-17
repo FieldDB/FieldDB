@@ -1,6 +1,6 @@
-define("DatumTag",[
+define("datum_tag/DatumTag", [
     "use!backbone"
-  ], function(Backbone) {
+], function(Backbone) {
 
     var DatumTag = Backbone.Model.extend(
       /** @lends DatumTag.prototype */

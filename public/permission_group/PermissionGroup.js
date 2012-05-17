@@ -1,8 +1,6 @@
-define("PermissionGroup",
-    [ "use!backbone"
-
-      ], 
-      function(Backbone) {
+define("permission_group/PermissionGroup", [ 
+    "use!backbone"
+], function(Backbone) {
   var PermissionGroup = Backbone.Collection.extend(
 
       /** @lends PermissionGroup.prototype  */
