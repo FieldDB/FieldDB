@@ -18,7 +18,7 @@ var Import = Backbone.Model.extend(
 	initialize : function() {
 		var output = [];
 		var files = this.get("files");
-		debug(files);
+		(new Utils()).debug(files);
 		for ( var i = 0, f; f = files[i]; i++) {
 			output.push('<li><strong>', escape(f.name), '</strong> (', f.type
 					|| 'n/a', ') - ', f.size, ' bytes, last modified: ',
@@ -32,7 +32,7 @@ var Import = Backbone.Model.extend(
 		status.innerHTML += '<ul>' + output.join('') + '</ul>';
 		
 		this.on('all', function(e) {
-			debug("Import event: " + e);
+			(new Utils()).debug("Import event: " + e);
 		});
 	},
 

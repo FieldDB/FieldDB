@@ -39,10 +39,10 @@ var Corpus = Backbone.Collection
 			 * @constructs
 			 */
 			initialize : function() {
-				debug("Initializing the corpus with the paramaters passed in.");
+				(new Utils()).debug("Initializing the corpus with the paramaters passed in.");
 				// http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
 				// this.on('all', function(e) {
-				// debug(this.get('name') + " event: " + e);
+				// (new Utils()).debug(this.get('name') + " event: " + e);
 				// });
 
 			},
@@ -54,28 +54,28 @@ var Corpus = Backbone.Collection
 				changedDatumList : []
 			},
 			insertDatum : function(datum) {
-				debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
+				(new Utils()).debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
 						+ JSON.stringify(datum));
 				datum.id = this.autoincrement;
 				this.changedDatumList.push(datum);
 				this.autoincrement++;
 			},
 			updateDatum : function(datum) {
-				debug("Telling the corpus that this datum has changed "
+				(new Utils()).debug("Telling the corpus that this datum has changed "
 						+ JSON.stringify(datum));
 				this.changedDatumList.push(datum);
 			},
 			push : function() {
-				debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
+				(new Utils()).debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
 			},
 			pull : function() {
-				debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
+				(new Utils()).debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
 			},
 			merge : function() {
-				debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
+				(new Utils()).debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
 			},
 			diff : function() {
-				debug("Showing the user the diffs between their version of the corpus and the remote version.");
+				(new Utils()).debug("Showing the user the diffs between their version of the corpus and the remote version.");
 			},
 			createSample : function() {
 				this.name = "Sample Quechua Corpus";
