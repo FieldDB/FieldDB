@@ -1,4 +1,5 @@
-define([
+define("DatumCollection",
+    [
     "use!backbone",
     "datum/Datum"
 ], function(Backbone, Datum) {

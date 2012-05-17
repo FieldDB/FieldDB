@@ -1,4 +1,5 @@
-define([
+define("DatumMenu",
+    [
     "use!backbone",
     
     
