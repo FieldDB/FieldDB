@@ -1,4 +1,4 @@
-require(["Utils"], function(Utils) {
+require(["libs/Utils"], function(Utils) {
 	//Testing to see where the app is running, if it is installed on android, installed in chrome or if it is a web widget.
 	describe("Offline App", function() {
 		it("should not be a Chrome extension", function() {

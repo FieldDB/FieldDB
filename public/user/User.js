@@ -1,8 +1,7 @@
-define("User",
-    [
-        "use!backbone",
-        "user_generic/UserGeneric"
-        ], function(Backbone, UserGeneric) {
+define("user/User", [
+    "use!backbone",
+    "user_generic/UserGeneric"
+], function(Backbone, UserGeneric) {
   var User = UserGeneric.extend(
       /** @lends User.prototype */
       {

@@ -1,9 +1,9 @@
-define("DashboardView",
-    [
+define("dashboard/DashboardView", [
     "use!backbone",
     "datum/Datum",
-    "datum/DatumView"
-], function(Backbone, Datum, DatumView) {
+    "datum/DatumView",
+    "libs/Utils"
+], function(Backbone, Datum, DatumView, Utils) {
     var DashboardView = Backbone.View.extend(
     /** @lends DashboardView.prototype */
     {
@@ -29,10 +29,12 @@ define("DashboardView",
           (new Utils()).debug("Clicked addOneDatum");
        	  
        	  // Create the new Datum to be added
-          var datum = new Datum({attestation: "Hello World!"});
+          // var datum = new Datum({attestation: "Hello World!"});
           
           // Add it to the global list of Datum
-          datumList.add(datum);
+          // datumList.add(datum);
+          
+          datumList.create({attestation: "Hello World!"});
           
           // Render it as a DatumView
           var view = new DatumView({model: datum});

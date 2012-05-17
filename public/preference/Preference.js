@@ -1,6 +1,6 @@
-define("Preference",[ 
-        "use!backbone" 
-        ], function(Backbone) {
+define("preference/Preference", [ 
+    "use!backbone" 
+], function(Backbone) {
   var Preference = Backbone.Model.extend(
       /** @lends Preference.prototype */
       {
