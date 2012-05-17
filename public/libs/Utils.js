@@ -18,7 +18,7 @@ define("libs/Utils", [
 			if (navigator.appName == 'Microsoft Internet Explorer') {
 				return;
 			}
-			if (debugMode) {
+			if (this.debugMode) {
 				console.log(message);
 			}
 		};
