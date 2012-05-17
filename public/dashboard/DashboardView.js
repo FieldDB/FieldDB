@@ -1,8 +1,9 @@
 define("dashboard/DashboardView", [
     "use!backbone",
     "datum/Datum",
-    "datum/DatumView"
-], function(Backbone, Datum, DatumView) {
+    "datum/DatumView",
+    "libs/Utils"
+], function(Backbone, Datum, DatumView, Utils) {
     var DashboardView = Backbone.View.extend(
     /** @lends DashboardView.prototype */
     {
