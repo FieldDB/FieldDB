@@ -1,4 +1,5 @@
-define([
+define("DashboardView",
+    [
     "use!backbone",
     "datum/Datum",
     "datum/DatumView"
