@@ -1,4 +1,4 @@
-define([
+define("DatumStatus",[
     "use!backbone"
 ], function(Backbone) {
     var DatumStatus = Backbone.Model.extend(

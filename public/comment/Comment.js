@@ -1,4 +1,4 @@
-define([ "use!backbone", 
+define("Comment",[ "use!backbone", 
          ], 
          function(Backbone) {
   var Comment = Backbone.Model.extend(

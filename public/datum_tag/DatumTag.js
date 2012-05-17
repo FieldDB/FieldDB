@@ -1,4 +1,4 @@
-define([
+define("DatumTag",[
     "use!backbone"
   ], function(Backbone) {
 

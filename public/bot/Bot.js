@@ -1,4 +1,5 @@
-define([ "use!backbone", 
+define("Bot",
+    [ "use!backbone", 
          "user/User" ], 
     function(Backbone, User) {
   var Bot = User.extend(
