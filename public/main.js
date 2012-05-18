@@ -37,7 +37,6 @@ require([
 
     // Initialize the DashboardRouter and start listening for URL changes
     window.router = new DashboardRouter();
-    Backbone.history.start();
 
     // Initialize our list of Datum
     window.datumList = new DatumCollection(); 
