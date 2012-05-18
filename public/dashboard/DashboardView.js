@@ -5,9 +5,11 @@ define("dashboard/DashboardView", [
     "datum_status/DatumStatus",
     "datum_status/DatumStatusView",
     "libs/Utils",
+    "navigation/Navigation",
+    "navigation/NavigationView",
     "activity_feed/ActivityFeedItem",
     "activity_feed/ActivityFeedItemView"
-], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Utils, ActivityFeedItem, ActivityFeedItemView) {
+], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Utils, Navigation, NavigationView, ActivityFeedItem, ActivityFeedItemView) {
     var DashboardView = Backbone.View.extend(
     /** @lends DashboardView.prototype */
     {
@@ -18,6 +20,14 @@ define("dashboard/DashboardView", [
         * @constructs
         */
        initialize: function() {
+    	   (new Utils()).debug("Clicked addOneDatum");
+        	  
+        	  // Create the new Datum to be added
+           var navigation = new Navigation();
+           
+           // Render it as a NavigationView
+           var view = new NavigationView({model: navigation});
+           this.$("#navigation").append(view.render().el);
        },
        
        el: $('#app'),

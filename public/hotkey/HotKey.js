@@ -1,5 +1,5 @@
-define("hotkey/HotKey",
-    [ "use!backbone"],
+define("hotkey/HotKey", 
+		["use!backbone"] ,
     function(Backbone) {
       var HotKey = Backbone.Model
       .extend(

@@ -5,7 +5,7 @@ define("preference/Preference", [
       /** @lends Preference.prototype */
       {
         /**
-         * @class Hold preferences for users like the skin of teh app
+         * @class Hold preferences for users like the skin of the app
          * 
          * @extends Backbone.Model
          * @constructs
