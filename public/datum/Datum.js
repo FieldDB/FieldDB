@@ -29,7 +29,8 @@ define("datum/Datum", [
          *      number assigned to the session in which the datum is being 
          *      placed.  The session will contain details such as date, 
          *      language, informant etc.
-         * @property {DatumStation} status TODO Describe status here.
+         * @property {DatumStatus} status When a datum is created, it can be 
+         * tagged with a status, such as 'to be checked with an informant'. 
          * @property {Perference} prefs The preferences correspond to the 
          *      user's preset of chosen fields, which may extend beyond the 
          *      standard three.

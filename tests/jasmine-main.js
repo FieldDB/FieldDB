@@ -38,12 +38,20 @@ require([
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.updateInterval = 1000;
 
-        var reporter = new jasmine.TrivialReporter();
-
-        jasmineEnv.addReporter(reporter);
+        // Decent HTML output for local testing
+        var trivialReporter = new jasmine.TrivialReporter();
+        jasmineEnv.addReporter(trivialReporter);
+        
+        // JUnit-formatted output for Jenkins
+        var junitReporter = new jasmine.JUnitXmlReporter();
+        jasmineEnv.addReporter(junitReporter);
+        
+        // Output to console.log, just to make sure multiple reporters work
+        var consoleReporter = new jasmine.ConsoleReporter();
+        jasmineEnv.addReporter(consoleReporter);
 
         jasmineEnv.specFilter = function(spec) {
-            return reporter.specFilter(spec);
+            return trivialReporter.specFilter(spec);
         };
 
         var currentWindowOnload = window.onload;
