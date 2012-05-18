@@ -1,8 +1,14 @@
-define("permission/Permission", [
-], function () {
-
-  return function () {
-    return {};
-  };
-
+define([
+    "use!backbone"
+], function (Backbone) {
+    var Permission = Backbone.Model.extend({
+        intialize: function() {
+            
+        },
+        defaults: {
+            type: "r"
+        }
+    });
+    
+    return Permission;
 });
