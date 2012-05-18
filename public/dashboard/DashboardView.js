@@ -2,8 +2,10 @@ define("dashboard/DashboardView", [
     "use!backbone",
     "datum/Datum",
     "datum/DatumView",
+    "datum_status/DatumStatus",
+    "datum_status/DatumStatusView",
     "libs/Utils"
-], function(Backbone, Datum, DatumView, Utils) {
+], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Utils) {
     var DashboardView = Backbone.View.extend(
     /** @lends DashboardView.prototype */
     {
@@ -19,8 +21,9 @@ define("dashboard/DashboardView", [
        el: $('#app'),
        
        events: {
-       	"click #dashboard-view": "addOneDatum"
+       	"click #dashboard-view": "addOneDatum"	
        },
+           
        
        /**
         * Add a datum to the screen.
