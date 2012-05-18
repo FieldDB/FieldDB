@@ -20,7 +20,21 @@ define("datum_status/DatumStatus", [
         initialize: function() {
         },
     	defaults: {
-    	      statuses: ["Checked","To be checked","Deleted"],
+//    	      statuses: ["Checked","To be checked","Deleted"],
+    	     
+    	      statuses: [{
+    	          id: 1,
+    	          label: 'Checked'
+    	          
+    	      }, {
+    	          id: 2,
+    	          label: 'To be checked',
+    	          selected: true 
+    	      }, {
+    	          id: 3,
+    	          label: 'Deleted'
+    	      }], 
+    	      
     	      active: 0,
     	      defaultStatus: 0
     	   },
