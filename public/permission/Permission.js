@@ -1,1 +1,8 @@
-var Permission = function() {};
+define("permission/Permission", [
+], function () {
+
+  return function () {
+    return {};
+  };
+
+});

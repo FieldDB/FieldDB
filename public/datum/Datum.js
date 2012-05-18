@@ -1,4 +1,4 @@
-define([
+define("datum/Datum", [
     "use!backbone",
     "datum_status/DatumStatus",
     "datum_menu/DatumMenu",

@@ -1,8 +1,6 @@
-define([
+define("datum_menu/DatumMenu", [
     "use!backbone",
-    
-    
-  ], function(Backbone) {
+], function(Backbone) {
     
       var DatumMenu = Backbone.Model.extend(
       /** @lends DatumMenu.prototype */
