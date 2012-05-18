@@ -1,4 +1,4 @@
-define([
+define("datum/DatumView", [
     "use!backbone", 
     "use!handlebars", 
     "datum/Datum",

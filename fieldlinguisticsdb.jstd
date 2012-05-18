@@ -1,44 +1,16 @@
-load:
-  - tests/jasmine/lib/jasmine/*.js
-  - tests/jasmine/src/*.js
-  
-  - public/libs/jquery.js
-  - public/libs/underscore.js
-  - public/libs/backbone.js
+load: 
+ - tests/jasmine/jasmine.js
+ - tests/jasmine/jasmineAdapter.js
+ - public/libs/require.js
+ - tests/require/HelloWorld.js
+ - public/libs/jquery.js
+ - public/libs/underscore.js
+ - public/libs/backbone.js
 
+ - public/libs/Utils.js
 
-  - tests/sinon.js
-  - tests/SinonTest.js
-  
-  - public/libs/Utils.js
-  
-  - public/offlineapp/*.js
-  - tests/offlineapp/*.js
-  - public/preference/*.js
-  - public/permission/*.js
-  
-  - public/user_generic/*.js
-  - public/user/*.js
-  - tests/user/*.js
-  - tests/team/*.js
-  
-  
-  - tests/BackboneTest.js
-  
-  - public/player/*.js
-  - tests/JasmineTest.js
-  
-  
-  - public/import/*.js
-  - tests/import/*.js
-  
-  - public/corpus/*.js
-  - tests/corpus/*.js
-  
-  - public/bot/*.js
-  - tests/bot/*.js
-  
-  
-  
+test: 
+ - tests/require/HelloWorld-spec.js
+ - tests/dashboard/*.js
  
-  
+timeout: 90

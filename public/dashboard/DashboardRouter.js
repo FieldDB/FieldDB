@@ -1,7 +1,7 @@
-define([
+define("dashboard/DashboardRouter", [
     "use!backbone",
-    "./../../libs/Utils.js"
-], function(Backbone) {
+    "libs/Utils"
+], function(Backbone, Utils) {
     var DashboardRouter = Backbone.Router.extend(
     /** @lends DashboardRouter.prototype */
     {
@@ -31,7 +31,7 @@ define([
         * @param {Number} datumId The ID of the datum within the corpus.
         */
        showExtendedDatum: function(corpusName, datumId) {
-       	  debug("In showExtendedDatum: " + corpusName + " *** " + datumId);
+       	  (new Utils()).debug("In showExtendedDatum: " + corpusName + " *** " + datumId);
        	  
        	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").show();
@@ -48,7 +48,7 @@ define([
         * @param {Number} dataListId The ID of the datalist within the corpus.
         */
        showExtendedDataList: function(corpusName, dataListId) {
-          debug("In showExtendedDataList: " + corpusName + " *** " + dataListId);
+          (new Utils()).debug("In showExtendedDataList: " + corpusName + " *** " + dataListId);
           
      	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").hide();
@@ -64,7 +64,7 @@ define([
         * @param {String} corpusName The name of the corpus to search in.
         */
        showExtendedSearch: function(corpusName) {
-          debug("In showExtendedSearch: " + corpusName);
+          (new Utils()).debug("In showExtendedSearch: " + corpusName);
           
      	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").hide();
@@ -80,7 +80,7 @@ define([
         * @param {String} corpusName (Optional) The name of the corpus to display.
         */
        showDashboard: function(corpusName) {  
-          debug("In showDashboard: " + corpusName);
+          (new Utils()).debug("In showDashboard: " + corpusName);
           
        	  $("#dashboard-view").show();
        	  $("#extended-datum-view").hide();
@@ -95,7 +95,7 @@ define([
         * @param {String} userName The username of the user whose profile to display.
         */
        showUserProfile: function(userName) {
-       	  debug("In showUserProfile: " + userName);
+       	  (new Utils()).debug("In showUserProfile: " + userName);
        	  
        	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").hide();
