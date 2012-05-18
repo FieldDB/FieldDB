@@ -1,5 +1,7 @@
 // Set the RequireJS configuration
 require.config({
+    baseUrl: "./../public",
+    
     paths : {
         "use" : "libs/use",
         "text" : "libs/text",
