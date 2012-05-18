@@ -30,8 +30,10 @@ require.config({
 require([
     "dashboard/DashboardView", 
     "dashboard/DashboardRouter", 
-    "datum/DatumCollection"
-], function(DashboardView, DashboardRouter, DatumCollection) {
+    "datum/DatumCollection",
+    "activity_feed/ActivityFeed",
+    "user/User"
+], function(DashboardView, DashboardRouter, DatumCollection, ActivityFeed, User) {
     // Initialize the DashboardView
     window.dashboard = new DashboardView();
 
@@ -40,4 +42,11 @@ require([
 
     // Initialize our list of Datum
     window.datumList = new DatumCollection(); 
+    
+    //Initialize the user
+    window.user = new User();
+    
+    //Initialize our list of activities
+    window.activityFeed = new ActivityFeed();
+    
 });
