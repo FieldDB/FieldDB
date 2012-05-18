@@ -13,6 +13,9 @@ define("user/User", [
          * @property {String} lastname This is user's last name 
          * @property {Boolean} isTeam The default for this is set false
          * @property {Array} teams This is a list of teams a user belongs to.  
+         * @property {Array} sessionHistory 
+         * @property {Array} activityHistory    
+         * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)   
 
          * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
          * 
