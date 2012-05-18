@@ -1,25 +1,3 @@
-
-var PermissionGroup = Backbone.Collection.extend(
-		
-/** @lends PermissionGroup.prototype  */
-		
-{
-/**
- * @class A permission group has a collection of users and a collection 
- * of permissions. 
- * @extends Backbone.Collection
- * @constructs
- * 
- * 
- */
-
-	model: User.
-	
-	
-        
-
- 
-
 define("permission_group/PermissionGroup", [ 
     "use!backbone"
 ], function(Backbone) {
@@ -31,10 +9,10 @@ define("permission_group/PermissionGroup", [
         /**
          * @class A permission group is a collection of users and a collection 
          * of permissions. 
-         * // A permission group is a collection of users and a collection 
-// of permissions. 
-
-         * @extends Backbone.Collection
+         * 
+         * @description  
+         *  
+         * @extends User.Collection
          * @constructs
          * 
          */  
@@ -48,17 +26,22 @@ define("permission_group/PermissionGroup", [
         }
 
     });
+  
+  return PermissionGroup; 
+  
+}); 
+
 //    
-    var g1 = new User({ permission1: "read", permission2: "write" });
-    var g2 = new User({ permission1: "read" });
-    var g3 = new User({ permission1: "read", permission2: "write", permission3: "admin" });
-    
-   var myPermissionGroup = new PermissionGroup([g1, g2, g3]);
-    console.log( myPermissionGroup.models	);
-    
-
-      });
-
+//    var g1 = new User({ permission1: "read", permission2: "write" });
+//    var g2 = new User({ permission1: "read" });
+//    var g3 = new User({ permission1: "read", permission2: "write", permission3: "admin" });
+//    
+//   var myPermissionGroup = new PermissionGroup([g1, g2, g3]);
+//    console.log( myPermissionGroup.models	);
+//    
+//
+//      });
+//
 //var t1 = new User({ teamid: "123", teamname: "OMC" });
 //var t2 = new User({ teamid: "456", teamname: "ABC" });
 //var t3 = new User({ teamid: "789", teamname: "DEF" });
