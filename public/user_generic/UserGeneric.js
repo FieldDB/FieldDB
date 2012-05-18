@@ -18,6 +18,7 @@ define("user_generic/UserGeneric", [
              * @property {String} researchInterest This is user's field of
              *           interest (eg. semantics etc)
              * @property {String} affiliation This is user's affiliation
+             * @property {String} researchInterest This is user's research interest
              * @property {Array} corpora Corpora are projects, they are a
              *           complete collection of datum. A user is associated with
              *           projects/corpora.
