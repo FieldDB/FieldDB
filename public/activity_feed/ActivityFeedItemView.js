@@ -25,6 +25,9 @@ define("activity_feed/ActivityFeedItemView", [
         usertemplate: Handlebars.compile(userTemplate),
         template: Handlebars.compile(activityFeedItemTemplate),
         render : function() {
+        	if (window.user == null){
+        		return;
+        	}
         	Handlebars.registerPartial("user", this.usertemplate(this.user.toJSON()) );
         	$(this.el).html(this.template(this.model.toJSON()));
             return this;
