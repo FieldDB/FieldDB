@@ -24,20 +24,27 @@
 		</div>
 		<div id="status" style="color:#ffcc00"></div>
 		<div class="main">
-			<div id="leftside" class="leftside widget">Activity Feed
-			<p></p>
-			<form action="/login" method="post">
-          <div>
-            <label>Username:</label> <br/><input type="text" name="username" value="sapir" /><br />
-          </div>
-          <div>
-            <label>Password:</label> <br/><input type="password" name="password" value="wharf"/>
-          </div>
-          <div>
-            <input type="submit" value="Log In" />
-          </div>
-        </form>
+			<div id="leftside" class="leftside widget">
+			<div id="login">
+					<form action="/login" method="post">
+						<div>
+							<label>Username:</label> <br />
+							<input type="text" name="username" value="sapir" /><br />
+						</div>
+						<div>
+							<label>Password:</label> <br />
+							<input type="password" name="password" value="wharf" />
+						</div>
+						<div>
+							<input type="submit" value="Log In" />
+						</div>
+					</form>
+				</div>
         <div id="activity_feed">
+        <div class="activity_feed_title">
+		      <input onclick="" type="button" class="inactive_activity_button " value="Your Activity"/>
+		      <input onclick="" type="button" class="activity_button" value="Team Activity"/>
+		    </div>
         </div>
 			
 			</div>
