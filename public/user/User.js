@@ -30,8 +30,14 @@ define("user/User", [
             User.__super__.initialize.call(this, attributes);
           this.set("subtitle",this.subtitle());
           this.set("teams" , []);
+          if(this.get("firstname") == undefined){
+        	  this.set("firstname","");
+          }
+          if(this.get("lastname") == undefined){
+        	  this.set("lastname","");
+          }
         }, 
-
+        
         /** 
          * Describe the validation here. 
          * 
@@ -69,6 +75,12 @@ define("user/User", [
          * The subtitle function returns user's first and last names. 
          */
         subtitle: function () {
+        	if(this.get("firstname") == undefined){
+          	  this.set("firstname","");
+            }
+            if(this.get("lastname") == undefined){
+          	  this.set("lastname","");
+            }
           return this.get("firstname") + " " + this.get("lastname");
         }
       });
