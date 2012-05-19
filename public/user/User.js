@@ -11,7 +11,6 @@ define("user/User", [
          * 
          * @property {String} firstname This is user's first name 
          * @property {String} lastname This is user's last name 
-         * @property {Boolean} isTeam The default for this is set false
          * @property {Array} teams This is a list of teams a user belongs to.  
          * @property {Array} sessionHistory 
          * @property {Array} activityHistory    
@@ -27,13 +26,9 @@ define("user/User", [
         initialize: function(attributes) {
           User.__super__.initialize.call(this, attributes);
           this.set("firstname" , ""),
-          this.set("lastname" , ""),
-          this.set("isTeam" , false),
+          this.set("lastname" , "")
           this.set("teams" , []);
         }, 
-
-
-
 
         /** 
          * Describe the validation here. 
@@ -69,25 +64,11 @@ define("user/User", [
 
 
         /**
-         * The subtitle function checks if a user belongs to a team. If yes, returns user's 
-         * affiliation. If no, returns user's first and last names. 
+         * The subtitle function returns user's first and last names. 
          */
-
         subtitle: function () {
-          if(this.get("isTeam")) {
-            return this.get("affiliation");
-          } else {
-            return this.get("firstname") + " " + this.get("lastname");
-          }
-        },
-
-
-        // TODO Add any other methods that will manipulate the User attributes.
-        //      Example:
-        // ,
-        // addOne: function() {
-        //    this.get("someAttribute");
-        // }
+          return this.get("firstname") + " " + this.get("lastname");
+        }
       });
 
 

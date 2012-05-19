@@ -7,8 +7,8 @@ define("bot/Bot", [
       /** @lends Bot.prototype */
       {
         /**
-         * @class A bot is a type of user . It has the same information as a user.
-         *        It crawls around the database and cleans it. It also has
+         * @class A bot is a type of user. It has the same information as a user, except it isnt a human, its a "bot."
+         *        It crawls around the database and cleans it, or does other handy tasks. It also has
          *        permissions about the level of access to the data (read only,
          *        add/edit).
          * 

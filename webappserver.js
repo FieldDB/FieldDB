@@ -5,7 +5,7 @@ var express = require('express')
   
 
 var users = [
-    { id: 1, username: 'sapir', password: 'warf', email: 'bob@example.com' }
+    { id: 1, username: 'sapir', password: 'wharf', email: 'bob@example.com' }
   , { id: 2, username: 'joe', password: 'birthday', email: 'joe@example.com' }
 ];
 
