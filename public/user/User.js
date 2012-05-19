@@ -24,9 +24,11 @@ define("user/User", [
 
         // This is the constructor. It is called whenever you make a new User.
         initialize: function(attributes) {
-          User.__super__.initialize.call(this, attributes);
-          this.set("firstname" , ""),
-          this.set("lastname" , "")
+//        	this.set("firstname" , ""), //setting these here makes it impossible to set them using attributes ie: 
+//            this.set("lastname" , "") //new User({"username":"sapir","password":"wharf","firstname":"Ed","lastname":"Sapir"});
+            
+            User.__super__.initialize.call(this, attributes);
+          this.set("subtitle",this.subtitle());
           this.set("teams" , []);
         }, 
 

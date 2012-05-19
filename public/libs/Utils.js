@@ -52,5 +52,18 @@ define("libs/Utils", [
 		this.onlineOnly = function() {
 			return !this.androidApp() && !this.chromeApp();
 		};
+		
+		this.hasClass = function(ele,cls) {
+			return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+		};
+		this.addClass = function(ele,cls) {
+			if (!this.hasClass(ele,cls)) ele.className += " "+cls;
+		};
+		this.removeClass = function(ele,cls) {
+			if (this.hasClass(ele,cls)) {
+				var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)','g');
+				ele.className=ele.className.replace(reg,' ');
+			}
+		};
 	};
 });

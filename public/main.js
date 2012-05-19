@@ -32,9 +32,11 @@ require([
     "dashboard/DashboardRouter", 
     "datum/DatumCollection",
     "activity_feed/ActivityFeed",
-    "user/User"
-], function(DashboardView, DashboardRouter, DatumCollection, ActivityFeed, User) {
-    // Initialize the DashboardView
+    "user/User",
+    "libs/Utils"
+], function(DashboardView, DashboardRouter, DatumCollection, ActivityFeed, User, Utils) {
+   var Utils = new Utils();
+	// Initialize the DashboardView
     window.dashboard = new DashboardView();
 
     // Initialize the DashboardRouter and start listening for URL changes
@@ -44,7 +46,11 @@ require([
     window.datumList = new DatumCollection(); 
     
     //Initialize the user
-    window.user = new User();
+    window.user = new User({"username":"sapir","password":"wharf","firstname":"Ed","lastname":"Sapir"});
+    if(localStorage.getItem("user")){
+    	Utils.addClass(document.getElementById("login"), "hidden");
+    	window.user = new User(JSON.parse(localStorage.getItem("user")) );
+    }
     
     //Initialize our list of activities
     window.activityFeed = new ActivityFeed();
