@@ -4,7 +4,7 @@ define("lexicon/Lexicon",
 	
 	var Lexicon = Backbone.Model.extend(
 			
-	/** @lends Lexicon.prototype */ https://www.facebook.com/media/set/?set=a.10150432327741487.355970.692686486&type=3
+	/** @lends Lexicon.prototype */ 
 			
 	{
 		/** 
