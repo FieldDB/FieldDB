@@ -53,10 +53,11 @@ define("user_generic/UserGeneric", [
               username : "",
               password : "",
               email : "",
-              gravatar : "http://imgs.abduzeedo.com/files/best_week/coderdojo-octocat3.jpeg",
+              gravatar : "./../user/user_gravatar.png",
               researchInterest : "",
               affiliation : "",
               description : "",
+              subtile : "",
               // Corpora are projects. They are a complete collection of
               // datum.
               corpora : [],
