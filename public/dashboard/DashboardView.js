@@ -44,7 +44,7 @@ define("dashboard/DashboardView", [
           (new Utils()).debug("Clicked addOneDatum");
        	  
        	  // Create the new Datum to be added
-          var datum = new Datum({attestation: "Hello World!"});
+          var datum = new Datum({utterance: "Hello World!"});
           
           // Add it to the global list of Datum
           datumList.add(datum);
