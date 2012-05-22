@@ -1,8 +1,7 @@
 require([
     "datum_tag/DatumTag"
 ], function(DatumTag) {
-	(function() {
-		var specs = [];
+	
 
 		describe("Test DatumTagGeneric", function() {
 			it("should give a datum datum tag", function() {
@@ -13,5 +12,5 @@ require([
 			});
 
 
-	})();
+	});
 });

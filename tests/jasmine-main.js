@@ -31,7 +31,9 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-    "../tests/permission/PermissionTest"
+    "../tests/datumMenu/DatumMenuTest"
+ //   "../tests/datum/DatumTest"
+   // "../tests/permission/PermissionTest"
 //    "../tests/informant/InformantTest"
 ], function() {
     // Standard Jasmine initialization

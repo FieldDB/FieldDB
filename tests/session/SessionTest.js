@@ -1,9 +1,7 @@
 require([
     "session/Session"
 ], function(Session) {
-	(function() {
-		var specs = [];
-
+	
 		describe("Test SessionGeneric", function() {
 			it("should assign a sessionID", function() {
 				var d = new Session();
@@ -71,5 +69,5 @@ require([
 
 			});		
 
-	})();
+	});
 });

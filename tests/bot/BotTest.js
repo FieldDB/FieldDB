@@ -1,8 +1,7 @@
 require([
     "bot/Bot"
 ], function(Bot) {
-    (function() {
-    	var specs = [];
+    
     
     	describe("Test Bot", function() {
     		it("should create a bot", function() {
@@ -26,5 +25,5 @@ require([
     	});
     
     	
-    })();
+    });
 });

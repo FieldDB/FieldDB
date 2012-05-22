@@ -1,6 +1,4 @@
 
-(function() {
-	var specs = [];
 
 	describe("GitHub Corpus", function() {
 		it("should be able to import from GitHub repository", function() {
@@ -34,4 +32,4 @@
 
 		});
 	});
-})();
+});
