@@ -3,7 +3,7 @@ var htmlrunner,
     page,
     fs;
 
-phantom.injectJs("lib/utils/core.js")
+phantom.injectJs("phantomjs-jasminexml-example/utils/core.js")
 
 if ( phantom.args.length !== 2 ) {
     console.log("Usage: phantom_test_runner.js HTML_RUNNER RESULT_DIR");
