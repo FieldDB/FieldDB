@@ -35,12 +35,12 @@
 							<input type="password" id="password" name="password" value="wharf" />
 						</div>
 						<div>
-							<input type="button" id="login_button" class="button" value="Log In" onclick="login()"/>
+							<input type="button" id="login_button" class="button" value="Log In" onclick="app.auth.login()"/>
 						</div>
 					
 				</div>
 				<div id="logout" class="hidden">
-				  <input type="button" onclick="logout()" class="button" value="Logout"/>
+				  <input type="button" onclick="app.auth.logout()" class="button" value="Logout"/>
 				</div>
         <div id="activity_feed">
         <div class="activity_feed_title">
