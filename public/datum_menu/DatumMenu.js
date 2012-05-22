@@ -1,6 +1,8 @@
 define("datum_menu/DatumMenu", [
     "use!backbone",
-], function(Backbone) {
+	"datum/Datum",
+	"data_list/DataList"
+], function(Backbone,Datum,DataList) {
     
       var DatumMenu = Backbone.Model.extend(
       /** @lends DatumMenu.prototype */
@@ -17,7 +19,7 @@ define("datum_menu/DatumMenu", [
           */
     	
        defaults: {
-    	   datum: null,
+    	   datum: "",
     	   dataList: null
     	   
        },
@@ -66,6 +68,7 @@ define("datum_menu/DatumMenu", [
         * The addAudio function is a drop box in which the user can drag an audio file and link it to the relevant datum.
         */
        addAudio: function() {
+    	   return true;
        },
        
      /**
@@ -73,25 +76,30 @@ define("datum_menu/DatumMenu", [
         */
         
        playDatum: function() {
+    	   return true;
        },
 
        /**
         * The copyDatum function copies all datum fields to the clipboard.
         */
        copyDatum: function() {
+    	   return "";
        },
        
        /**
         * The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. 
         */
        starDatum: function() {
+    	   return true;
        },
 
         /**
         The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.
         */
        duplicateDatum: function() {
-       },
+    	   var datum = new Datum();
+    	   return datum;
+       }
 
     });
     return DatumMenu;
