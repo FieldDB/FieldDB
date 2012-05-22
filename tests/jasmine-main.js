@@ -31,7 +31,7 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-    "../tests/datum_menu/DatumMenuTest",
+   // "../tests/datum_menu/DatumMenuTest"
     "../tests/datum/DatumTest"
    // "../tests/permission/PermissionTest"
 //    "../tests/informant/InformantTest"
