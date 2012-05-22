@@ -1,4 +1,4 @@
-define("dashboard/DashboardView", [
+define("app/AppView", [
     "use!backbone",
     "datum/Datum",
     "datum/DatumView",
@@ -10,8 +10,8 @@ define("dashboard/DashboardView", [
     "activity_feed/ActivityFeedItem",
     "activity_feed/ActivityFeedItemView"
 ], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Utils, Navigation, NavigationView, ActivityFeedItem, ActivityFeedItemView) {
-    var DashboardView = Backbone.View.extend(
-    /** @lends DashboardView.prototype */
+    var AppView = Backbone.View.extend(
+    /** @lends AppView.prototype */
     {
        /**
         * @class The main layout of the program.
@@ -62,5 +62,5 @@ define("dashboard/DashboardView", [
        }
     });
 
-    return DashboardView;
+    return AppView;
 });
