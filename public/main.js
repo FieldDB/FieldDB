@@ -71,10 +71,6 @@ require([
     	Utils.removeClass(document.getElementById("logout"), "hidden");
     	
     };
-    if (Utils.chromeApp()){
-    	var l = document.getElementById("login_button");
-    	l.setAttribute("type","button");
-    	l.setAttribute("onclick","login(event)");
-    }
+    
     
 });
