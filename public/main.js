@@ -28,34 +28,7 @@ require.config({
 
 // Initialization
 require([
-    "app/AppView", 
-    "app/AppRouter", 
-    "datum/DatumCollection",
-    "activity_feed/ActivityFeed",
-    "user/User",
-    "authentication/Authentication",
-    "libs/Utils"
-], function(AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils) {
-	window.Utils = new Utils();
-	// Initialize the AppView
-    window.app = new AppView();
-
-    // Initialize the AppRouter and start listening for URL changes
-    window.router = new AppRouter();
-    Backbone.history.start();
-
-    // Initialize our list of Datum
-    window.datumList = new DatumCollection(); 
-    
-    //Initialize the user from local storage, or sign in as the default: Sapir so they can see the data.
-    window.auth = new Authentication();
-    window.auth.authenticatePreviousUser();
-    
-    //Initialize our list of activities
-    window.activityFeed = new ActivityFeed();
-    
-    window.login = window.auth.login;
-    window.logout = window.auth.logout;
-    
-    
+    "app/App"
+], function(App) {
+	window.app = new App();
 });
