@@ -4,7 +4,7 @@
   "description": "Collaborative Data Entry, like Word/LaTeX but more structured, online, offline, anywhere. http://tools.fieldlinguist.com",
   "app": {
     "launch": {
-      "local_path": "index.html"
+      "local_path": "dev.html"
     }
   },
   "offline_enabled": true,
