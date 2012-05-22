@@ -31,15 +31,17 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-   // "../tests/datum_menu/DatumMenuTest"
-    "../tests/datum/DatumTest"
+    "../tests/datum_menu/DatumMenuTest"
+    //"../tests/data_list/DataListTest",
+    //"../tests/datum/DatumTest"
    // "../tests/permission/PermissionTest"
 //    "../tests/informant/InformantTest"
 ], function() {
     // Standard Jasmine initialization
     (function() {
         var jasmineEnv = jasmine.getEnv();
-        jasmineEnv.updateInterval = 1000;
+        jasmineEnv.up  
+        dateInterval = 1000;
 
         // Decent HTML output for local testing
         var trivialReporter = new jasmine.TrivialReporter();
