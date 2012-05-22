@@ -15,23 +15,23 @@ define( [
             this.bind('error', function(model, error) {
                 console.log("Error in Authentication  : "+ error);
             });
-
+            this.authenticatePreviousUser();
         },
 
         defaults : {
         	
         },
         logout : function(){
-        	Utils.removeClass(document.getElementById("login"), "hidden");
-        	Utils.addClass(document.getElementById("logout"), "hidden");
+        	$("#logout").hide();
+         	$("#login").show();
         	window.user = null;
         	localStorage.removeItem("user");
         },
         login : function(){
         	window.user = new User({"username": document.getElementById("username").value,"password": document.getElementById("password").value});
         	localStorage.setItem("user",JSON.stringify(user.toJSON()) );
-        	Utils.addClass(document.getElementById("login"), "hidden");
-        	Utils.removeClass(document.getElementById("logout"), "hidden");
+        	$("#logout").show();
+         	$("#login").hide();
         	
         },
         authenticatePreviousUser : function(){
@@ -41,8 +41,8 @@ define( [
             }else{
             	localStorage.setItem("user",JSON.stringify(user.toJSON() ));
             }
-            Utils.addClass(document.getElementById("login"), "hidden");
-        	Utils.removeClass(document.getElementById("logout"), "hidden");
+            $("#logout").show();
+         	$("#login").hide();
         	
         }
         

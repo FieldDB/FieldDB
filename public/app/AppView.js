@@ -47,7 +47,7 @@ define("app/AppView", [
           var datum = new Datum({utterance: "Hello World!"});
           
           // Add it to the global list of Datum
-          datumList.add(datum);
+          app.datumList.add(datum);
           //datumList.create({attestation: "Hello World!"});
           
           // Render it as a DatumView
@@ -55,7 +55,7 @@ define("app/AppView", [
           this.$("#content").append(view.render().el);
 
           var action = new ActivityFeedItem();
-          activityFeed.add(action);
+          app.activityFeed.add(action);
          // Render an activity in the activity feed
           var v = new ActivityFeedItemView({model: action});
           this.$("#activity_feed").append(v.render().el);

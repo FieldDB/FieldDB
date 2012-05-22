@@ -6,8 +6,10 @@ define("app/App", [
     "activity_feed/ActivityFeed",
     "user/User",
     "authentication/Authentication",
-    "libs/Utils"
-], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils) {
+    "libs/Utils",
+    "corpus/Corpus",
+    "import/Import"
+], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils, Corpus, Import) {
     var App = Backbone.Model.extend(
     /** @lends App.prototype */
     {
@@ -22,30 +24,30 @@ define("app/App", [
                 console.log("Error in Activity Feed Item: "+ error);
             });
             window.Utils = new Utils();
-        	// Initialize the AppView
-            window.app = new AppView();
-
-            // Initialize the AppRouter and start listening for URL changes
-            window.router = new AppRouter();
+        	
             Backbone.history.start();
 
             // Initialize our list of Datum
             window.datumList = new DatumCollection(); 
             
-            //Initialize the user from local storage, or sign in as the default: Sapir so they can see the data.
-            window.auth = new Authentication();
-            window.auth.authenticatePreviousUser();
-            
-            //Initialize our list of activities
-            window.activityFeed = new ActivityFeed();
-            
-            window.login = window.auth.login;
-            window.logout = window.auth.logout;
+            window.login = this.auth.login;
+            window.logout = this.auth.logout;
         },
 
         defaults : {
-        	
-        }
+        
+        },
+        auth: new Authentication(),
+    	user: new User(), //has preferences (skins, colors etc), has hotkeys
+    	corpus: new Corpus(), //has search, has datalists, has teams with permissions, has confidentiality_encryption, has datum (which have sessions), (datalists have export)
+    	datumList: new DatumCollection(), //TODO remove this later and use corpus instead
+    	import: new Import(),
+    	activityFeed: new ActivityFeed(),
+    	view: new AppView(),
+    	router: new AppRouter()
+//    	lexicon: new Lexicon() //has indexes
+//    	nav: new Navigation()
+//    	glosser: new Glosser() 
 
     });
 
