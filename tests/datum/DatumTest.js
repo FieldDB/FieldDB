@@ -1,8 +1,8 @@
 require([
     "datum/Datum"
 ], function(Datum) {
-	(function() {
-		var specs = [];
+	//(function() {
+		//var specs = [];
 
 		describe("Test DatumGeneric", function() {
 			it("should set the utterance", function() {
@@ -24,10 +24,10 @@ require([
 				var d = new Datum();
 				d.set("utterance", "tusunayawan");
 				d.set("gloss", "dance-IMP-1OM-3SG");
-				d.set("translation","I feel like dancing.")
-				expect("I feel like dancing" == d.get("translation")).toBeTruthy();
+				d.set("translation","I feel like dancing.");
+				expect("I feel like dancing." == d.get("translation")).toBeTruthy();
 
 			});
 
-	})();
+	});
 });

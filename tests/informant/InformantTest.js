@@ -1,8 +1,7 @@
 require([
     "informant/Informant"
 ], function(Informant) {
-    (function() {
-    	var specs = [];
+   
     
     	describe("Test Informant", function() {
     		it("should create an informant", function() {
@@ -26,5 +25,5 @@ require([
     	});
     
     	
-    })();
+    });
 });

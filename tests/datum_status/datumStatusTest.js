@@ -1,8 +1,7 @@
 require([
     "datum_status/DatumStatus"
 ], function(DatumStatus) {
-	(function() {
-		var specs = [];
+	
 
 		describe("Test DatumStatusGeneric", function() {
 			it("should give a datum_status", function() {
@@ -13,5 +12,5 @@ require([
 			});
 
 
-	})();
+	});
 });
