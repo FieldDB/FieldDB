@@ -1,6 +1,38 @@
 /*
  * This widget script is based off of the Twitter Widget script released under the Apache 2.0 license.
  * 
+ * Client Code:
+ * 
+ * <script charset="utf-8" type="text/javascript" src="http://widgets.fieldlinguist.com/widget/search.js"></script><script type="text/javascript">// <![CDATA[
+    new Fieldlinguist.Widget({
+      version: 2,
+      type: 'search',
+      search: '#corpus2141',
+      interval: 30000,
+      title: 'Data Search',
+      subject: '',
+      width: 250,
+      height: 300,
+      theme: {
+        shell: {
+          background: '#Fc8',
+          color: '#ffffff'
+        },
+        tweets: {
+          background: '#333333',
+          color: '#ffffff',
+          links: '#Fc8'
+        }
+      },
+      features: {
+        scrollbar: false,
+        loop: true,
+        live: true,
+        behavior: 'default'
+      }
+    }).render().start();
+// ]]></script>
+ * 
  * twitter-text-js 1.4.10
  *
  * Copyright 2011 Twitter, Inc.
