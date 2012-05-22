@@ -3,9 +3,9 @@ define("datum/Datum", [
     "datum_status/DatumStatus",
     "datum_menu/DatumMenu",
     "datum_tag/DatumTag",
-    "extra_field/ExtraField",
+    "datum_field/DatumField",
     "session/Session"
-], function(Backbone, DatumStatus, DatumMenu, DatumTag, ExtraField, Session) {
+], function(Backbone, DatumStatus, DatumMenu, DatumTag, DatumField, Session) {
     var Datum = Backbone.Model.extend(
     /** @lends Datum.prototype */
     {
@@ -31,7 +31,7 @@ define("datum/Datum", [
          *      language, informant etc.
          * @property {DatumStatus} status When a datum is created, it can be 
          * tagged with a status, such as 'to be checked with an informant'. 
-         * @property {ExtraField} extraField The extra fields correspond to the 
+         * @property {DatumField} DatumField The extra fields correspond to the 
          *      user's preset of chosen fields, which may extend beyond the 
          *      standard three.
          *
@@ -58,16 +58,16 @@ define("datum/Datum", [
 
         defaults : {
             //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-            utterance : "",
-            gloss : "",
-            translation : "",
+            utterance : "tusunayawan",
+            gloss : "dance-IMP-1OM-3SG",
+            translation : "I feel like dancing.",
 
             //While it will not look like a field, it will essentially be a place where the user can click and add tags and then they will appear in little bubbles.
-            grammaticalTags : "",
+            grammaticalTags : "impulsative",
 
             sessionID : 0,
             status : new DatumStatus(),
-            extraField : new ExtraField()
+            DatumField : new DatumField()
         },
 
         /**
