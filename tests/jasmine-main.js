@@ -46,12 +46,8 @@ require([
         jasmineEnv.addReporter(trivialReporter);
         
         // JUnit-formatted output for Jenkins
-        var junitReporter = new jasmine.JUnitXmlReporter();
+        var junitReporter = new jasmine.PhantomJSReporter();
         jasmineEnv.addReporter(junitReporter);
-        
-        // Output to console.log, just to make sure multiple reporters work
-        var consoleReporter = new jasmine.ConsoleReporter();
-        jasmineEnv.addReporter(consoleReporter);
 
         jasmineEnv.specFilter = function(spec) {
             return trivialReporter.specFilter(spec);
