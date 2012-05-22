@@ -3,7 +3,7 @@ define("activity_feed/ActivityFeed", [ "use!backbone"
 
 ], function(Backbone, ActivityFeedItem) {
 	var ActivityFeed = Backbone.Collection.extend(
-	/** @lends DatumCollection.prototype */
+	/** @lends ActivityFeed.prototype */
 	{
 		/**
 		 * @class A collection of Activities.
