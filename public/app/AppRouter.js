@@ -1,9 +1,9 @@
-define("dashboard/DashboardRouter", [
+define("app/AppRouter", [
     "use!backbone",
     "libs/Utils"
 ], function(Backbone, Utils) {
-    var DashboardRouter = Backbone.Router.extend(
-    /** @lends DashboardRouter.prototype */
+    var AppRouter = Backbone.Router.extend(
+    /** @lends AppRouter.prototype */
     {
        /**
         * @class Routes URLs to different dashboard layouts and data.
@@ -105,5 +105,5 @@ define("dashboard/DashboardRouter", [
        }
     });
     
-    return DashboardRouter;
+    return AppRouter;
 });
