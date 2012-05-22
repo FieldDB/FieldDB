@@ -1,9 +1,7 @@
 require([
     "user/User"
 ], function(User) {
-    (function() {
-    	var specs = [];
-    
+   
     	describe("Test UserGeneric", function() {
     		it("should set user's first name", function() {
     			var u = new User();
@@ -42,5 +40,5 @@ require([
     		});
     	});
     
-    })();
+    });
 });
