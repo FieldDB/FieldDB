@@ -7,7 +7,7 @@ define("activity_feed/ActivityFeedItemView", [
     "activity_feed/ActivityFeedItem"
 ], function(Backbone, Handlebars, activityFeedItemTemplate, User, userTemplate, ActivityFeedItem) {
     var ActivityFeedItemView = Backbone.View.extend(
-    /** @lends UserView.prototype */
+    /** @lends ActivityFeedItemView.prototype */
     {
         /**
          * @class The layout of a single ActivityFeedItem. This view is used in the activity feeds.
