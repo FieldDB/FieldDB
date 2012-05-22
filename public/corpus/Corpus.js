@@ -1,6 +1,7 @@
 define("corpus/Corpus", [ 
-    "use!backbone"
-], function(Backbone) {
+    "use!backbone",
+    "libs/Utils"
+], function(Backbone,Utils) {
   var Corpus = Backbone.Collection
   .extend(
       /** @lends Corpus.prototype */
