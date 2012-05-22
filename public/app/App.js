@@ -23,15 +23,12 @@ define("app/App", [
             this.bind('error', function(model, error) {
                 console.log("Error in Activity Feed Item: "+ error);
             });
-            window.Utils = new Utils();
-        	
-            Backbone.history.start();
-
-            // Initialize our list of Datum
-            window.datumList = new DatumCollection(); 
             
-            window.login = this.auth.login;
-            window.logout = this.auth.logout;
+            // Make our Utils globally available.
+            window.Utilities = new Utils();
+        	
+        	// Start the Router
+            Backbone.history.start();
         },
 
         defaults : {
@@ -41,7 +38,7 @@ define("app/App", [
     	user: new User(), //has preferences (skins, colors etc), has hotkeys
     	corpus: new Corpus(), //has search, has datalists, has teams with permissions, has confidentiality_encryption, has datum (which have sessions), (datalists have export)
     	datumList: new DatumCollection(), //TODO remove this later and use corpus instead
-    	import: new Import(),
+    	importer: new Import(),
     	activityFeed: new ActivityFeed(),
     	view: new AppView(),
     	router: new AppRouter()
