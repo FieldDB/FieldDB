@@ -31,7 +31,7 @@ define("datum/Datum", [
          *      language, informant etc.
          * @property {DatumStatus} status When a datum is created, it can be 
          * tagged with a status, such as 'to be checked with an informant'. 
-         * @property {Perference} prefs The preferences correspond to the 
+         * @property {ExtraFields} extraFields The extra fields correspond to the 
          *      user's preset of chosen fields, which may extend beyond the 
          *      standard three.
          *
@@ -69,7 +69,7 @@ define("datum/Datum", [
             sessionID : 0,
             status : new DatumStatus(),
             //Preferences are where we'll have things like the extra fields the user wants. TODO this is an abmigous use of the prefernce class, which was originally supposed to be user preferences like skins?
-            prefs : new Preference()
+            extraField : new ExtraField()
         },
 
         /**
