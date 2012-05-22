@@ -4,9 +4,9 @@ define("data_list/DataList", [
     "datum_status/DatumStatus",
     "datum_menu/DatumMenu",
     "datum_tag/DatumTag",
-    "extra_field/ExtraField",
+    "datum_field/DatumField",
     "session/Session"
-], function(Backbone, Datum, DatumStatus, DatumMenu, DatumTag, ExtraField, Session) {
+], function(Backbone, Datum, DatumStatus, DatumMenu, DatumTag, DatumField, Session) {
     var DataList = Backbone.Model.extend(
     /** @lends DataList.prototype */
     {
@@ -67,8 +67,7 @@ define("data_list/DataList", [
 
             sessionID : 0,
             status : new DatumStatus(),
-            //Preferences are where we'll have things like the extra fields the user wants. TODO this is an abmigous use of the prefernce class, which was originally supposed to be user preferences like skins?
-            extraField : new ExtraField()
+           
         },
 
         /**

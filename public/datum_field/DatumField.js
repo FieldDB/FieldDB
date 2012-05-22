@@ -1,7 +1,7 @@
-define("extra_field/ExtraField", [ 
+define("datum_field/DatumField", [ 
     "use!backbone" 
 ], function(Backbone) {
-  var ExtraField = Backbone.Model.extend(
+  var DatumField = Backbone.Model.extend(
       /** @lends Preference.prototype */
       {
         /**
@@ -14,5 +14,5 @@ define("extra_field/ExtraField", [
         }
       });
 
-  return ExtraField;
+  return DatumField;
 });
