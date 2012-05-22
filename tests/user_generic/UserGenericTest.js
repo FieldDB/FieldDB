@@ -1,7 +1,4 @@
-
-(function() {
-  var specs = [];
-//  
+ 
   describe("UserGeneric", function() {
     it("should expose an attribute", function() {
       //var UserGeneric = require("UserGeneric");
@@ -11,5 +8,3 @@
       expect(episode.get("title")).toEqual("Hollywood - Part 2");
     });
   });
-
-})();

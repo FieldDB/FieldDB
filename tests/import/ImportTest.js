@@ -1,5 +1,4 @@
-(function() {
-	var specs = [];
+
 
 	describe("Import CSV", function() {
 		it("should detect drag and drop", function() {
@@ -65,4 +64,4 @@
 //		    expect(this.routeSpy).toHaveBeenCalledWith();
 //		  });
 //		});
-})();
+});
