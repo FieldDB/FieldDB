@@ -7,12 +7,21 @@ define("datum_menu/DatumMenu", [
     {
        /**
         * @class The DatumMenu is a set of functions that are associated with an individual datum.  This menu appears on the datum widget in addition to the list view where the user can apply Datum functions (such as star) in bulk. 
-        *
+        * @property {Datum} datum This datum menu is attached to this datum if this is null then it is not attached to a datum.
+        * @property {DataList} dataList This datum menu is attached to this dataList if this is null then it is not attached to a dataList.
         *
         * @description The initialize function brings up the menu.
         * @extends Backbone.Model
         * @constructs
+       
           */
+    	
+       defaults: {
+    	   datum: null,
+    	   dataList: null
+    	   
+       },
+       
        initialize: function() {
           this.bind('error', function(model, error) {
              // TODO Handle validation errors
@@ -30,17 +39,27 @@ define("datum_menu/DatumMenu", [
        //the following functions correspond the menu bar below the datum
 
 
-
-        /**
-        * The status function will allow users to mark the status of a given datum.
-       */
-       status: function() {
-       },
        
+      /**
+       * The isAttachToDatum method determines whether the DatumMenu is initialized under a single datum or not.
+       * @return {boolean} true if attached to a datum and false if not.
+       */ 
+       isAttachedToDatum: function(){
+    	   return true;
+       },
+       /**
+        * The isAttachToDataList method determines whether the DatumMenu is initialized under a data list or not.
+        * @return {boolean} true if attached to a data list and false if not.
+        */ 
+        isAttachedToDataList: function(){
+     	   return true;
+        },
        /**
         * The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  
         */
        laTeXiT: function() {
+    	   return "";
+       
        },
        
        /**

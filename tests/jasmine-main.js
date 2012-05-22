@@ -31,8 +31,8 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-    "../tests/datumMenu/DatumMenuTest"
- //   "../tests/datum/DatumTest"
+   // "../tests/datum_menu/DatumMenuTest"
+    "../tests/datum/DatumTest"
    // "../tests/permission/PermissionTest"
 //    "../tests/informant/InformantTest"
 ], function() {
@@ -46,12 +46,8 @@ require([
         jasmineEnv.addReporter(trivialReporter);
         
         // JUnit-formatted output for Jenkins
-        var junitReporter = new jasmine.JUnitXmlReporter();
+        var junitReporter = new jasmine.PhantomJSReporter();
         jasmineEnv.addReporter(junitReporter);
-        
-        // Output to console.log, just to make sure multiple reporters work
-        var consoleReporter = new jasmine.ConsoleReporter();
-        jasmineEnv.addReporter(consoleReporter);
 
         jasmineEnv.specFilter = function(spec) {
             return trivialReporter.specFilter(spec);
