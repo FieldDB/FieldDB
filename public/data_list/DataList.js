@@ -4,9 +4,9 @@ define("data_list/DataList", [
     "datum_status/DatumStatus",
     "datum_menu/DatumMenu",
     "datum_tag/DatumTag",
-    "preference/Preference",
+    "extra_field/ExtraField",
     "session/Session"
-], function(Backbone, Datum, DatumStatus, DatumMenu, DatumTag, Preference, Session) {
+], function(Backbone, Datum, DatumStatus, DatumMenu, DatumTag, ExtraField, Session) {
     var DataList = Backbone.Model.extend(
     /** @lends DataList.prototype */
     {
@@ -31,7 +31,7 @@ define("data_list/DataList", [
          *      language, informant etc.
          * @property {DatumStatus} status When a datum is created, it can be 
          * tagged with a status, such as 'to be checked with an informant'. 
-         * @property {ExtraFields} extraFields The extra fields correspond to the 
+         * @property {ExtraField} extraField The extra fields correspond to the 
          *      user's preset of chosen fields, which may extend beyond the 
          *      standard three.
          *
@@ -59,7 +59,6 @@ define("data_list/DataList", [
         defaults : {
             //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
             utterance : "",
-            //as far as I know, attestation is not a word linguists generally use. cesine: I agree, it was the word that Alan Yu had in his database so i figured they probably debated it a bit and setted with something since utterance implies spoken... but maybe we can stick to utterance.
             gloss : "",
             translation : "",
 
@@ -69,7 +68,7 @@ define("data_list/DataList", [
             sessionID : 0,
             status : new DatumStatus(),
             //Preferences are where we'll have things like the extra fields the user wants. TODO this is an abmigous use of the prefernce class, which was originally supposed to be user preferences like skins?
-            extraFields : new ExtraField()
+            extraField : new ExtraField()
         },
 
         /**
