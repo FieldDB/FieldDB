@@ -28,20 +28,20 @@ require.config({
 
 // Initialization
 require([
-    "dashboard/DashboardView", 
-    "dashboard/DashboardRouter", 
+    "app/AppView", 
+    "app/AppRouter", 
     "datum/DatumCollection",
     "activity_feed/ActivityFeed",
     "user/User",
     "authentication/Authentication",
     "libs/Utils"
-], function(DashboardView, DashboardRouter, DatumCollection, ActivityFeed, User, Authentication, Utils) {
+], function(AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils) {
 	window.Utils = new Utils();
-	// Initialize the DashboardView
-    window.dashboard = new DashboardView();
+	// Initialize the AppView
+    window.app = new AppView();
 
-    // Initialize the DashboardRouter and start listening for URL changes
-    window.router = new DashboardRouter();
+    // Initialize the AppRouter and start listening for URL changes
+    window.router = new AppRouter();
     Backbone.history.start();
 
     // Initialize our list of Datum
