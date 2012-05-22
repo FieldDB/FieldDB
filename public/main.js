@@ -54,8 +54,8 @@ require([
     //Initialize our list of activities
     window.activityFeed = new ActivityFeed();
     
-    logout = window.auth.login;
-    logout = window.auth.logout;
+    window.login = window.auth.login;
+    window.logout = window.auth.logout;
     
     
 });
