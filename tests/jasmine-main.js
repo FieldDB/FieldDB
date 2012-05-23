@@ -31,28 +31,30 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
+
     "../tests/datum_menu/DatumMenuTest",
-    "../tests/user_generic/UserGenericTest"
- //   "../tests/datum/DatumTest"
-   // "../tests/permission/PermissionTest"
+    "../tests/user_generic/UserGenericTest",
+ //   "../tests/datum/DatumTest",
+   // "../tests/permission/PermissionTest",
+    "../tests/datum_menu/DatumMenuTest",
+   //"../tests/data_list/DataListTest",
+   // "../tests/datum/DatumTest",
+  //  "../tests/permission/PermissionTest",
 //    "../tests/informant/InformantTest"
 ], function() {
     // Standard Jasmine initialization
     (function() {
         var jasmineEnv = jasmine.getEnv();
-        jasmineEnv.updateInterval = 1000;
+        jasmineEnv.up  
+        dateInterval = 1000;
 
         // Decent HTML output for local testing
         var trivialReporter = new jasmine.TrivialReporter();
         jasmineEnv.addReporter(trivialReporter);
         
         // JUnit-formatted output for Jenkins
-        var junitReporter = new jasmine.JUnitXmlReporter();
+        var junitReporter = new jasmine.PhantomJSReporter();
         jasmineEnv.addReporter(junitReporter);
-        
-        // Output to console.log, just to make sure multiple reporters work
-        var consoleReporter = new jasmine.ConsoleReporter();
-        jasmineEnv.addReporter(consoleReporter);
 
         jasmineEnv.specFilter = function(spec) {
             return trivialReporter.specFilter(spec);

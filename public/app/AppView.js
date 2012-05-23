@@ -1,4 +1,4 @@
-define("dashboard/DashboardView", [
+define("app/AppView", [
     "use!backbone",
     "datum/Datum",
     "datum/DatumView",
@@ -10,8 +10,8 @@ define("dashboard/DashboardView", [
     "activity_feed/ActivityFeedItem",
     "activity_feed/ActivityFeedItemView"
 ], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Utils, Navigation, NavigationView, ActivityFeedItem, ActivityFeedItemView) {
-    var DashboardView = Backbone.View.extend(
-    /** @lends DashboardView.prototype */
+    var AppView = Backbone.View.extend(
+    /** @lends AppView.prototype */
     {
        /**
         * @class The main layout of the program.
@@ -47,7 +47,7 @@ define("dashboard/DashboardView", [
           var datum = new Datum({utterance: "Hello World!"});
           
           // Add it to the global list of Datum
-          datumList.add(datum);
+          app.datumList.add(datum);
           //datumList.create({attestation: "Hello World!"});
           
           // Render it as a DatumView
@@ -55,12 +55,12 @@ define("dashboard/DashboardView", [
           this.$("#content").append(view.render().el);
 
           var action = new ActivityFeedItem();
-          activityFeed.add(action);
+          app.activityFeed.add(action);
          // Render an activity in the activity feed
           var v = new ActivityFeedItemView({model: action});
           this.$("#activity_feed").append(v.render().el);
        }
     });
 
-    return DashboardView;
+    return AppView;
 });
