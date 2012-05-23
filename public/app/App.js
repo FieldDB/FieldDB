@@ -8,8 +8,9 @@ define("app/App", [
     "authentication/Authentication",
     "libs/Utils",
     "corpus/Corpus",
-    "import/Import"
-], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils, Corpus, Import) {
+    "import/Import",
+    "lexicon/Lexicon"
+], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils, Corpus, Import, Lexicon) {
     var App = Backbone.Model.extend(
     /** @lends App.prototype */
     {
@@ -74,7 +75,7 @@ define("app/App", [
         defaults : {
         	corpus: new Corpus("corpus"), 
 //        	glosser: new Glosser(lexicon),
-//    		lexicon: new Lexicon(""), //has indexes, stored in local storage
+    		lexicon: new Lexicon(""), //has indexes, stored in local storage
         	user: new User("user") //has preferences (skins, colors etc), has hotkeys
         },
         activityFeed: new ActivityFeed("activity_feed"),
