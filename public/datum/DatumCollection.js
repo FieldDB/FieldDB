@@ -19,3 +19,6 @@ define("datum/DatumCollection", [
     
     return DatumCollection;
 });
+
+//var datumCollection = new DatumCollection(datum);
+//datumCollection.add(datum);

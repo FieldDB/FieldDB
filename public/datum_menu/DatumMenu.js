@@ -16,14 +16,7 @@ define("datum_menu/DatumMenu", [
         * @extends Backbone.Model
         * @constructs
        
-          */
-    	
-       defaults: {
-    	   datum: "",
-    	   dataList: null
-    	   
-       },
-       
+          */ 
        initialize: function() {
           this.bind('error', function(model, error) {
              // TODO Handle validation errors
@@ -40,7 +33,11 @@ define("datum_menu/DatumMenu", [
        
        //the following functions correspond the menu bar below the datum
 
-
+       defaults: {
+    	   datum: "",
+    	   dataList: null
+    	   
+       },
        
       /**
        * The isAttachToDatum method determines whether the DatumMenu is initialized under a single datum or not.

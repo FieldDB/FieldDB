@@ -1,85 +1,72 @@
-"5/7/2010","Noqata qan qaparinaywanki.","me.acc you.nom yell.des.2sg.1om","`I feel like yelling at you.’","","","Impulsatives Person agreement","Seberina","Cusco Quechua"
-"5/7/2010","Suwanayki Josefina","steal.1-2 Josefina.nom","","Even tho I checked steal to have object marking, I think that naya pattern doesn’t work because it is ditransitive","","Impulsative","Seberina","Cusco Quechua"
-"5/7/2010","#suwanyaysunki","3-2OM","decir una duda, tal vez querer robar","","","Impulsative","Seberina","Cusco Quechua"
-"5/7/2010","*Payta suwanayan monikita","he.acc steal.naya.3sg little animal.acc","He feels like stealing the little animal","","","Impulsative","Seberina","Cusco Quechua"
-"5/7/2010","Payta suwanaywaran chei obejeta","he.acc steal.des.1ob.pst.3sg that sheep.acc","`He feels like stealing that sheep’","why first person object marking?","","Impulsative","Seberina","Cusco Quechua"
-"5/7/2010","Victorta noqata qaparinaywani","Victor.acc me.acc yell.des.??","`I feel like yelling at Victor’","wani isn’t anything, maybe I meant wan","","impulsative person agreement","Seberina","Cusco Quechua"
-"5/7/2010","Erqekunata noqanchis qaparinaywanchis.","child.pl.acc 1pl.incl yell.des.3sg.1plOM","`We feel like yelling at the children’","backwards agreement","","Impulsative person agreement","Seberina","Cusco Quechua"
-"5/7/2010","Erqekunata noqayku qaparinaywanku.","child.pl.acc 1pl.ex yell.des.3pl.1plexOM","`We feel like yelling at the children.’","backwards agreement","","Impulsative person agreement","Seberina","Cusco Quechua"
-"5/7/2010","Erqe qankuna qaparinaywankichis","child you.pl yell.des.3sg.2plOM","`You guys feel like yelling at the child.’","no case marking?","","Impulsative Person agreement","Seberina","Cusco Quechua"
-"5/7/2010","Qanta erqe qaparinaysunkichis","you.acc child.nom yell.des.3pl.2plOM","`You feel like yelling at the child.’","pl marking??","","Impulsative Person agreement","Seberina","Cusco Quechua"
-"5/7/2010","Noqata payta qaparinaywanku","I.acc he.acc yell.des.3pl.1sgOM","`I feel like yelling at him.’","but its plural agreement","","Impulsative Person agreement","Ricardo","Cusco Quechua"
-"5/7/2010","*Noqata qaparinaykuni.","I.acc yell.des.refl.1sg","`I feel like yelling at myself.’","bad with reflexive!!","","Impulsative Person agreement reflexive","Ricardo","Cusco Quechua"
-"5/7/2010","*Noqata qanta qaparinaywanki.","me.acc you.acc yell.des.2sg.1sgOM","`I feel like yelling at you.’","Seberina accepted this","","Impulsative Person agreement","Ricardo","Cusco Quechua"
-"5/7/2010","Noqatawan qantawan qaprinaywanchis.","me.acc.with you.acc.with yell.des.3sg.1pl.inclOM","`We feel like yelling at each other.’","","","Impulsative Person agreement reciprocal","Ricardo","Cusco Quechua"
-"5/7/2010","*Noqata pay qaparinaywan.","me.acc he.hom yell.des.3sg.1sgOM","`I feel like yelling at him.’","Seberina accepted something similar","","Impulsative Person agreement ","Ricardo","Cusco Quechua"
-"5/7/2010","Noqata pay qapariyta munawan.","me.acc him.nom yell.acc want.3sg.1sgOM","`I feel like yelling at him.’","acc marking with want","","Periphrastic Impuslative ","Ricardo","Cusco Quechua"
-"5/7/2010","*Noqata qankuna qaprinaywanchis","me.acc you.pl yell.des.3sg.1sgOM","`I feel like yelling at you all.’","of course its wrong, it should be wankichis","","Impulsative Person Agreement","Ricardo","Cusco Quechua"
-"5/7/2010","Noqata paykuna qaprinaywanku","me.acc he.pl.nom yell.3pl.1sgOM","`I feel like yelling at them.’","this looks better","","Impulsative Person Agreement","Ricardo","Cusco Quechua"
-"5/7/2010","Qanta noqata qaparinayayki.","you.acc me.acc yell.des.1sg.2sgOM","`You feel like yelling at me.’","","","Impulsative Person Agreement","Ricardo","Cusco Quechua"
-"5/7/2010","Qanta qaparinaykunki","you.acc yell.des.refl.2sg","`You feel like yelling at yourself.’","Ricardo said this was very natural, yet he rejected the first person reciprocal","","Impulsative Person Agreement Reflexive","Ricardo","Cusco Quechua"
-"5/7/2010","Qanta pay qaparinaysunki.","you.acc he.nom yell.des.3sg.2plOM","`You feel like yelling at him.’","I think Seberina rejected this one","","Impulsative Person Agreement ","Ricardo","Cusco Quechua"
-"5/7/2010","Qanta noqayku paqarinaykiku","you.acc me.pl.ex. yell.des.1pl.ex.2sgOM","`You feel like yelling at us’","","","Impulsative Person Agreement ","Ricardo","Cusco Quechua"
-"5/7/2010","*Qanta Qankuna paqarinaykunkichis","you.acc you.pl.nom yell.des.refl.2pl","`You feel like yelling at you all.’","","","Impulsative Person Agreement Reflexive","Ricardo","Cusco Quechua"
-"5/7/2010","Qanta paykuna qaparinwanku.","you.acc he.pl.nom yell.3pl.2sgOM","`You feel like yelling at them.’","","","Impulsative Person Agreement ","Ricardo","Cusco Quechua"
-"5/10/2010","Hoq kutis wayrawan Intiwan rimashas qaku, maqensha aswan kallpayoq kanman.","","","","","Story","Magda","Cusco Quechua"
-"5/12/2010","Victor(ta) tusunayan","Victor.acc dance.des.3sg","`Victor feels like dancing.’","acc not obligatory","","case marking","Seberina","Cusco Quechua"
-"5/12/2010","Qoniynaywan t’antata","heat.des.1OB bread.acc","`I feel like heating up the bread’","I’m surprised there is no caus marker","","causative verb","Seberina","Cusco Quechua"
-"5/12/2010","Ruphanaywan t’antata","burn.des.1OB bread.acc","`I feel like burning the bread.’","again no caus marker...","","causative verb","Seberina","Cusco Quechua"
-"5/12/2010","Wananaywan ruphayta t’antata","jamas.des.1OM burn.acc bread.acc","`I feel like never burning the bread.’","this is an interesting verb...","","verb class","Seberina","Cusco Quechua"
-"5\10\2010","plus naya 1sg","spanish","seberina's correction","quechua 3sg","","Grammatical name"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywan","yo canto","","takin","","presente simple"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywashan","yo estoy cantando","","takishan","","presente progresivo"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywaran","yo cantaba","","takiran","","pasado imperfecto"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywasharan","yo estaba cantando","","takisharan","","pasado imperfecto progresivo"," Seberina"," Cusco Quechua"
-"5\10\2010","*takinaywanqa ","yo cantare","","takinqa","Correct Form: takinaywanmi","futuro simple"," Seberina"," Cusco Quechua"
-"5\10\2010","*taknaywashanqa","yo estare cantado","","takinshanqa","Correct Form: takinaywashanmi","futuro progresivo"," Seberina"," Cusco Quechua"
-"5\10\2010","*takinaywamunqanya","yo habre cantando","","takiramunqanya","Correct Form:takinaywa","futuro perfecto"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywaramusanqanya","yo habre estado cantando","","takiramusanqanya","","futuro perfecto progresivo"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywaramun","yo he cantado","","takiramun","","pasado perfecto"," Seberina"," Cusco Quechua"
-"5\10\2010","takinaywamusharan","yo he estado cantando","","takiramusharan","","pasado perfecto progresivo"," Seberina"," Cusco Quechua"
-"5/10/2010","Llank’anaywan","work.des.1OM","`I feel like working.’","","","Verbal Restrictions Unergative","Seberina","Cusco Quechua"
-"5/10/2010","punqota allchanaywan ","door.acc fix.des.1OM","`I feel like fixing the door.’","","","verbal restrictions resultative","Seberina","Cusco Quechua"
-"5/10/2010","Hallpanaywan ","chew coca.des.1OM","`I feel like chewing coca.’","","","verbal restrictions unergative","Seberina","Cusco Quechua"
-"5/10/2010","*P’achakunaywan","dress.refl.des.1OM","`I feel like dressing myself.’","","","Verbal Restrictions Reflexives","Seberina","Cusco Quechua"
-"5/10/2010","Noqanchis qawanakunaysanchis","we.incl criticize.recr.1plOM.1pl","`We feel like criticizing each other.’","","","Verbal restrictions reciprocal","Seberina","Cusco Quechua"
-"5/10/2010","Nayach’anaywan","comb.des.1OM","`I feel like combing’","no ku","","Verbal Restrictions Reflexive","Seberina","Cusco Quechua"
-"5/10/2010","Kichanaywan punqota","open.des.1OM door.acc","`I feel like opening the door.’","","","Verbal restrictions Causative","Seberina","Cusco Quechua"
-"5/10/2010","Wesq’anaywan (punqota)","close.des.1OM door.acc","`I feel like closing the door.’","all arguments are understood","","Verbal restrictions Causative","Seberina","Cusco Quechua"
-"5/10/2010","wanyunaywan","die.des.1OM","`I feel like dying.’","","","Verbal restrictions Unaccusative","Seberina","Cusco Quechua"
-"5/10/2010","p’akinaywan punqota","break.des.1OM door.acc","`I feel like breaking the door.’","","","Verbal restrictions Resultative","Seberina","Cusco Quechua"
-"5/10/2010","*kausanaywan","live.des.1OM","`I feel like living.’","","","Verbal restrictions unaccusative","Seberina","Cusco Quechua"
-"5/10/2010","chayanaywan","arrive.des.1OM","`I feel like arriving.’","","","Verbal restrictions unaccusative","Seberina","Cusco Quechua"
-"5/10/2010","*paranayan","rain.des.3sg","`It feels like its going to rain.’","paranay munashan","","Verbal restrictions weather predicate","Seberina","Cusco Quechua"
-"5/10/2010","wesq’ani *(punqota)","close.1sg door.acc","`I close the door.’","cannot drop object","","object dropping","Seberina","Cusco Quechua"
-"5/10/2010","Hanllarinaywan","yawn.des.1OM","`I feel like yawning.’","","","Verbal restrictions bodily functions","Seberina","Cusco Quechua"
-"5/10/2010","Uhunaywanshan","cough.des.1OM","`I feel like coughing.’","","","Verbal restrictions bodily functions","Seberina","Cusco Quechua"
-"5/10/2010","Aqtunaywan","vomit.des.1OM","`I feel like vomiting’","","","Verbal restrictions bodily functions","Seberina","Cusco Quechua"
-"5/18/2010","taqsakunayawan","wash.refl.des.1OM.3sg","tengo ganas de lavar el cabello","","","impulsative verbal restriction","Magda","Cusco Quechua"
-"5\18\2010","Qhepakunaywan","stay.des.1OM","`I feel like staying.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Hamunaywan","come.des.1OM","`I feel like coming.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Haykunaywan","enter.des.1OM","`I feel like entering.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Lloqsinaywan","go.out.des.1OM","`I feel like going out.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Urmanaywan","descend.des.1OM","`I feel like going down.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Kusikunaywan","become.happy.des.1OM","`I feel like getting happy.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Qonqanaywan","forget.des.1OM","`I feel like forgetting.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Rinaywan","go.des.1OM","`I feel like going.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata anchata tusunaywan","I.acc alot dance.des.1OM","`I feel like dancing a lot.'","","","ambiguous"," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata pisillata tusunaywan","I.acc little dance.des.1OM","`I feel like dancing a lot.'","","","ambiguous"," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata pisilla anchata tusunaywan","I.acc little alot dance.des.1OM","`I kinda feel like dancing a lot.' *`I really feel like dancing a little.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata ancha pisillata tusunaywan","I.acc alot little dance.des.1OM"," `I really feel like dancing a little.' *I kinda feel like dancing a lot.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata yapamanta llank'anaywan","I.acc again work.des.1OM","`I feel like working again.'","","","ambiguous"," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata yapamanta Laresman purinaywan","I.acc again Lares.to walk.des.1OM","ambiguous","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Qaynap'unchaw lloqsinaywaran","Yesterday go.out.des.1OM","`Yesterday, I felt like going out.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Qaynap'unchaw lloqsinaywaran khunan p'unchaw*(paq)","Yesterday go.out.des.1OM now day.for","`Yesterday, I felt like going out for today.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Noqata hapischawa chulle","I.acc get a cold","`I got a cold.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Yuyapi noqata punyunaywan.","intensionally I.acc sleep.des.1OM","`I feel like sleeping on purpose.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Manan yuyaypichu noqata punyunaywan.","no intentionally.not I.acc sleep.des.1OM","`I don't feel like falling asleep on purpose.'","","",""," Ricardo"," Cusco Quechua"
-"5\18\2010","Manan noqata llank'anaywanchu","no I.acc work.des.1OM.not","`I don't feel like working.' `I feel like not working.'","","",""," Ricardo"," Cusco Quechua"
-"","","","","","","","",""
-"5/21/2010","Noqata rayqawan","I.acc hungry.1OM","`I am hungry.’"," ","","Lexical Experiencer","Lucia","Cusco Quechua"
-"5/21/2010","Qanta rayqasunki","you.acc hungry.2OM","`You are hungry.’","","","Lexical Experiencers","Lucia","Cusco Quechua"
-"5/21/2010","Pay rayqachikun","he hungry.?","He is hungry","one option","","Lexical Experiencer","Lucia","Cusco Quechua"
-"5/21/2010","Payta rayqan","he.acc hungry.3OB","He is hungry","second option","","Lexical Experiencers","Lucia","Cusco Quechua"
-"5/21/2010","Jaunpa much'asqami kani.","Juan.gen kiss.pass.? be.1sg.","`I was kissed by John.’","","","Passive (Adjectival)","Lucia","Cusco Quechua"
-"5/21/2010","*Juanpa much'asqami kanaywan.","Juan.gen kiss.pass.? be.des.1OM","`I feel like being kissed by Juan.’","","","Passive Impulsative","Lucia","Cusco Quechua"
+5/7/2010,Noqata qan qaparinaywanki.,Noqa-ta qan qapari-nay-wanki,me-ACC you-NOM yell-DES-2SG.1OM,`I feel like yelling at you.’,,,Impulsatives Person agreement,Seberina,Cusco Quechua
+5/7/2010,Suwanayki Josefina,Suwa-nay-ki Josefina,steal.1-2 Josefina-NOM,,"Even tho I checked steal to have object marking, I think that naya pattern doesn’t work because it is ditransitive",,Impulsative,Seberina,Cusco Quechua
+5/7/2010,#suwanyaysunki,suwa-nay-ay-sunki,3-2OM,"decir una duda, tal vez querer robar",,,Impulsative,Seberina,Cusco Quechua
+5/7/2010,*Payta suwanayan monikita,Pay-ta suwa-naya-n moniki-ta,he-ACC steal.naya.3SG little animal-ACC,He feels like stealing the little animal,,,Impulsative,Seberina,Cusco Quechua
+5/7/2010,Payta suwanaywaran chei obejeta,Pay-ta suwa-nay-wa-ra-n chei obeje-ta,he-ACC steal-DES-1ob.pst.3SG that sheep-ACC,`He feels like stealing that sheep’,why first person object marking?,,Impulsative,Seberina,Cusco Quechua
+5/7/2010,Victorta noqata qaparinaywani,Victor-ta noqa-ta qapari-nay-wa-ni,Victor-ACC me-ACC yell-DES-??,`I feel like yelling at Victor’,"wani isn’t anything, maybe I meant wan",,impulsative person agreement,Seberina,Cusco Quechua
+5/7/2010,Erqekunata noqanchis qaparinaywanchis.,Erqe-kuna-ta noqa-nchis qapari-nay-wanchis,child-PL-ACC 1PL.incl yell-DES-3SG.1PLOM,`We feel like yelling at the children’,backwards agreement,,Impulsative person agreement,Seberina,Cusco Quechua
+5/7/2010,Erqekunata noqayku qaparinaywanku.,Erqe-kuna-ta noqa-yku qapari-nay-wanku,child-PL-ACC 1PL.ex yell-DES-3PL.1PLexOM,`We feel like yelling at the children.’,backwards agreement,,Impulsative person agreement,Seberina,Cusco Quechua
+5/7/2010,Erqe qankuna qaparinaywankichis,Erqe qan-kuna qapari-nay-wankichis,child you-PL yell-DES-3SG.2PLOM,`You guys feel like yelling at the child.’,no case marking?,,Impulsative Person agreement,Seberina,Cusco Quechua
+5/7/2010,Qanta erqe qaparinaysunkichis,Qan-ta erqe qapari-nay-sunkichis,you-ACC child-NOM yell-DES-3PL.2PLOM,`You feel like yelling at the child.’,PL marking??,,Impulsative Person agreement,Seberina,Cusco Quechua
+5/7/2010,Noqata payta qaparinaywanku,Noqa-ta pay-ta qapari-nay-wanku,I-ACC he-ACC yell-DES-3PL.1SGOM,`I feel like yelling at him.’,but its PLural agreement,,Impulsative Person agreement,Ricardo,Cusco Quechua
+5/7/2010,*Noqata qaparinaykuni.,Noqa-ta qapari-nay-kuni,I-ACC yell-DES-refl.1SG,`I feel like yelling at myself.’,bad with reflexive!!,,Impulsative Person agreement reflexive,Ricardo,Cusco Quechua
+5/7/2010,*Noqata qanta qaparinaywanki.,Noqa-ta qan-ta qapari-nay-wanki,me-ACC you-ACC yell-DES-2SG.1SGOM,`I feel like yelling at you.’,Seberina accepted this,,Impulsative Person agreement,Ricardo,Cusco Quechua
+5/7/2010,Noqatawan qantawan qaprinaywanchis.,Noqa-ta-wan qan-ta-wan qapri-nay-wanchis,me-ACC.with you-ACC.with yell-DES-3SG.1PL.inclOM,`We feel like yelling at each other.’,,,Impulsative Person agreement reciprocal,Ricardo,Cusco Quechua
+5/7/2010,*Noqata pay qaparinaywan.,Noqa-ta pay qapari-nay-wan,me-ACC he.hOM yell-DES-3SG.1SGOM,`I feel like yelling at him.’,Seberina accepted sOMething similar,,Impulsative Person agreement ,Ricardo,Cusco Quechua
+5/7/2010,Noqata pay qapariyta munawan.,Noqa-ta pay qapari-yta muna-wan,me-ACC him-NOM yell-ACC want.3SG.1SGOM,`I feel like yelling at him.’,acc marking with want,,Periphrastic Impuslative ,Ricardo,Cusco Quechua
+5/7/2010,*Noqata qankuna qaprinaywanchis,Noqa-ta qan-kuna qapri-nay-wanchis,me-ACC you-PL yell-DES-3SG.1SGOM,`I feel like yelling at you all.’,"of course its wrong, it should be wankichis",,Impulsative Person Agreement,Ricardo,Cusco Quechua
+5/7/2010,Noqata paykuna qaprinaywanku,Noqa-ta pay-kuna qapri-nay-wanku,me-ACC he-PL-NOM yell.3PL.1SGOM,`I feel like yelling at them.’,this looks better,,Impulsative Person Agreement,Ricardo,Cusco Quechua
+5/7/2010,Qanta noqata qaparinayayki.,Qan-ta noqa-ta qapari-naya-yki,you-ACC me-ACC yell-DES-1SG.2SGOM,`You feel like yelling at me.’,,,Impulsative Person Agreement,Ricardo,Cusco Quechua
+5/7/2010,Qanta qaparinaykunki,Qan-ta qapari-nay-kunki,you-ACC yell-DES-refl.2SG,`You feel like yelling at yourself.’,"Ricardo said this was very natural, yet he rejected the first person reciprocal",,Impulsative Person Agreement Reflexive,Ricardo,Cusco Quechua
+5/7/2010,Qanta pay qaparinaysunki.,Qan-ta pay qapari-nay-sunki,you-ACC he-NOM yell-DES-3SG.2PLOM,`You feel like yelling at him.’,I think Seberina rejected this one,,Impulsative Person Agreement ,Ricardo,Cusco Quechua
+5/7/2010,Qanta noqayku paqarinaykiku,Qan-ta noqa-yku paqari-nay-kiku,you-ACC me-PL.ex. yell-DES-1PL.ex.2SGOM,`You feel like yelling at us’,,,Impulsative Person Agreement ,Ricardo,Cusco Quechua
+5/7/2010,*Qanta Qankuna paqarinaykunkichis,Qan-ta qan-kuna paqari-nay-kunkichis,you-ACC you-PL-NOM yell-DES-refl.2PL,`You feel like yelling at you all.’,,,Impulsative Person Agreement Reflexive,Ricardo,Cusco Quechua
+5/7/2010,Qanta paykuna qaparinwanku.,Qan-ta pay-kuna qapari-nay-wanku,you-ACC he-PL-NOM yell.3PL.2SGOM,`You feel like yelling at them.’,,,Impulsative Person Agreement ,Ricardo,Cusco Quechua
+5/12/2010,Victor(ta) tusunayan,Victor-(ta) tusu-naya-n,Victor-ACC dance-DES-3SG,`Victor feels like dancing.’,acc not obligatory,,case marking,Seberina,Cusco Quechua
+5/12/2010,Qoniynaywan t’antata,Qoniy-nay-wa-n t’anta-ta,heat-DES-1OB bread-ACC,`I feel like heating up the bread’,I’m surprised there is no caus marker,,causative verb,Seberina,Cusco Quechua
+5/12/2010,Ruphanaywan t’antata,Rupha-nay-wa-n t’anta-ta,burn-DES-1OB bread-ACC,`I feel like burning the bread.’,again no caus marker...,,causative verb,Seberina,Cusco Quechua
+5/12/2010,Wananaywan ruphayta t’antata,Wana-nay-wa-n rupha-y-ta t’anta-ta,jamas-DES-1OM-3SG burn-ACC bread-ACC,`I feel like never burning the bread.’,this is an interesting verb...,,verb class,Seberina,Cusco Quechua
+5/10/2010,Llank’anaywan,Llank’a-nay-wa-n,work-DES-1OM-3SG,`I feel like working.’,,,Verbal Restrictions Unergative,Seberina,Cusco Quechua
+5/10/2010,punqota allchanaywan ,punqo-ta allcha-nay-wa-n ,door-ACC fix-DES-1OM-3SG,`I feel like fixing the door.’,,,verbal restrictions resultative,Seberina,Cusco Quechua
+5/10/2010,Hallpanaywan ,Hall-pa-nay-wa-n ,chew coca-DES-1OM-3SG,`I feel like chewing coca.’,,,verbal restrictions unergative,Seberina,Cusco Quechua
+5/10/2010,*P’achakunaywan,P’acha-ku-nay-wa-n,dress.refl-DES-1OM-3SG,`I feel like dressing myself.’,,,Verbal Restrictions Reflexives,Seberina,Cusco Quechua
+5/10/2010,Noqanchis qawanakunaysanchis,Noqa-nchis qawa-na-ku-nay-sanchis,we.incl criticize.recr.1PLOM.1PL,`We feel like criticizing each other.’,,,Verbal restrictions reciprocal,Seberina,Cusco Quechua
+5/10/2010,Nayach’anaywan,Nayach’a-nay-wa-n,cOMb-DES-1OM-3SG,`I feel like cOMbing’,no ku,,Verbal Restrictions Reflexive,Seberina,Cusco Quechua
+5/10/2010,Kichanaywan punqota,Kicha-nay-wa-n punqo-ta,open-DES-1OM-3SG door-ACC,`I feel like opening the door.’,,,Verbal restrictions Causative,Seberina,Cusco Quechua
+5/10/2010,Wesq’anaywan (punqota),Wesq’a-nay-wa-n (punqo-ta),close-DES-1OM-3SG door-ACC,`I feel like closing the door.’,all arguments are understood,,Verbal restrictions Causative,Seberina,Cusco Quechua
+5/10/2010,wanyunaywan,Wanyu-nay-wa-n,die-DES-1OM-3SG,`I feel like dying.’,,,Verbal restrictions Unaccusative,Seberina,Cusco Quechua
+5/10/2010,p’akinaywan punqota,p’aki-nay-wa-n punqo-ta,break-DES-1OM-3SG door-ACC,`I feel like breaking the door.’,,,Verbal restrictions Resultative,Seberina,Cusco Quechua
+5/10/2010,*kausanaywan,kausa-nay-wa-n,live-DES-1OM-3SG,`I feel like living.’,,,Verbal restrictions unaccusative,Seberina,Cusco Quechua
+5/10/2010,chayanaywan,Chaya-nay-wa-n,arrive-DES-1OM-3SG,`I feel like arriving.’,,,Verbal restrictions unaccusative,Seberina,Cusco Quechua
+5/10/2010,*paranayan,para-naya-n,rain-DES-3SG,`It feels like its going to rain.’,paranay munashan,,Verbal restrictions weather predicate,Seberina,Cusco Quechua
+5/10/2010,wesq’ani *(punqota),wesq’a-ni (punqo-ta),close.1SG door-ACC,`I close the door.’,cannot drop object,,object dropping,Seberina,Cusco Quechua
+5/10/2010,Hanllarinaywan,Hanllari-nay-wan,yawn-DES-1OM-3SG,`I feel like yawning.’,,,Verbal restrictions bodily functions,Seberina,Cusco Quechua
+5/10/2010,Uhunaywanshan,Uhu-nay-wa-sha-n,cough-DES-1OM-3SG,`I feel like coughing.’,,,Verbal restrictions bodily functions,Seberina,Cusco Quechua
+5/10/2010,Aqtunaywan,Aqtu-nay-wa-n,vOMit-DES-1OM-3SG,`I feel like vOMiting’,,,Verbal restrictions bodily functions,Seberina,Cusco Quechua
+5/18/2010,taqsakunayawan,Taqsa-ku-naya-wa-n,wash.refl-DES-1OM-3SG.3SG,tengo ganas de lavar el cabello,,,impulsative verbal restriction,Magda,Cusco Quechua
+5\18\2010,Qhepakunaywan,Qhepa-ku-nay-wa-n,stay-DES-1OM-3SG,`I feel like staying.',,,, Ricardo, Cusco Quechua
+5\18\2010,Hamunaywan,Hamu-nay-wa-n,cOMe-DES-1OM-3SG,`I feel like cOMing.',,,, Ricardo, Cusco Quechua
+5\18\2010,Haykunaywan,Hay-ku-nay-wa-n,enter-DES-1OM-3SG,`I feel like entering.',,,, Ricardo, Cusco Quechua
+5\18\2010,Lloqsinaywan,Lloqsi-nay-wa-n,go.out-DES-1OM-3SG,`I feel like going out.',,,, Ricardo, Cusco Quechua
+5\18\2010,Urmanaywan,Urma-nay-wa-n,descend-DES-1OM-3SG,`I feel like going down.',,,, Ricardo, Cusco Quechua
+5\18\2010,Kusikunaywan,Kusi-ku-nay-wa-n,becOMe.happy-DES-1OM-3SG,`I feel like getting happy.',,,, Ricardo, Cusco Quechua
+5\18\2010,Qonqanaywan,Qonqa-nay-wa-n,forget-DES-1OM-3SG,`I feel like forgetting.',,,, Ricardo, Cusco Quechua
+5\18\2010,Rinaywan,Ri-nay-wa-n,go-DES-1OM-3SG,`I feel like going.',,,, Ricardo, Cusco Quechua
+5\18\2010,Noqata anchata tusunaywan,Noqa-ta ancha-ta tusu-nay-wa-n,I-ACC alot dance-DES-1OM-3SG,`I feel like dancing a lot.',,,ambiguous, Ricardo, Cusco Quechua
+5\18\2010,Noqata pisillata tusunaywan,Noqa-ta pisi-lla-ta tusu-nay-wa-n,I-ACC little dance-DES-1OM-3SG,`I feel like dancing a lot.',,,ambiguous, Ricardo, Cusco Quechua
+5\18\2010,Noqata pisilla anchata tusunaywan,Noqa-ta pis-illa ancha-ta tusu-nay-wa-n,I-ACC little alot dance-DES-1OM-3SG,`I kinda feel like dancing a lot.' *`I really feel like dancing a little.',,,, Ricardo, Cusco Quechua
+5\18\2010,Noqata ancha pisillata tusunaywan,Noqa-ta ancha pisilla-ta tusu-nay-wa-n,I-ACC alot little dance-DES-1OM-3SG, `I really feel like dancing a little.' *I kinda feel like dancing a lot.',,,, Ricardo, Cusco Quechua
+5\18\2010,Noqata yapamanta llank'anaywan,Noqa-ta yapaman-ta llank'a-nay-wa-n,I-ACC again work-DES-1OM-3SG,`I feel like working again.',,,ambiguous, Ricardo, Cusco Quechua
+5\18\2010,Noqata yapamanta Laresman purinaywan,Noqa-ta yapaman-ta Lares-man puri-nay-wa-n,I-ACC again Lares.to walk-DES-1OM-3SG,ambiguous,,,, Ricardo, Cusco Quechua
+5\18\2010,Qaynap'unchaw lloqsinaywaran,Qaynap'unchaw lloqsi-nay-wa-ra-n,Yesterday go.out-DES-1OM-3SG,"`Yesterday, I felt like going out.'",,,, Ricardo, Cusco Quechua
+5\18\2010,Qaynap'unchaw lloqsinaywaran khunan p'unchaw*(paq),Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw(paq),Yesterday go.out-DES-1OM-3SG now day.for,"`Yesterday, I felt like going out for today.'",,,, Ricardo, Cusco Quechua
+5\18\2010,Noqata hapischawa chulle,Noqa-ta hapischawa chulle,I-ACC get a cold,`I got a cold.',,,, Ricardo, Cusco Quechua
+5\18\2010,Yuyapi noqata punyunaywan.,Yuyapi noqa-ta punyu-nay-wa-n,intensionally I-ACC sleep-DES-1OM-3SG,`I feel like sleeping on purpose.',,,, Ricardo, Cusco Quechua
+5\18\2010,Manan yuyaypichu noqata punyunaywan.,Manan yuyaypi-chu noqa-ta punyu-nay-wa-n,no intentionally.not I-ACC sleep-DES-1OM-3SG,`I don't feel like falling asleep on purpose.',,,, Ricardo, Cusco Quechua
+5\18\2010,Manan noqata llank'anaywanchu,Manan noqa-ta llank'a-nay-wa-n-chu,no I-ACC work-DES-1OM-3SG.not,`I don't feel like working.' `I feel like not working.',,,, Ricardo, Cusco Quechua
+5/21/2010,Noqata rayqawan,Noqa-ta rayqa-wa-n,I-ACC hungry.1OM,`I am hungry.’, ,,Lexical Experiencer,Lucia,Cusco Quechua
+5/21/2010,Qanta rayqasunki,Qan-ta rayqa-sunki,you-ACC hungry.2OM,`You are hungry.’,,,Lexical Experiencers,Lucia,Cusco Quechua
+5/21/2010,Pay rayqachikun,Pay rayqa-chi-ku-n,he hungry-CAUS-REFL-3SG,He is hungry,one option,,Lexical Experiencer,Lucia,Cusco Quechua
+5/21/2010,Payta rayqan,Pay-ta rayqa-n,he-ACC hungry.3OB,He is hungry,second option,,Lexical Experiencers,Lucia,Cusco Quechua
+5/21/2010,Jaunpa much'asqami kani.,Jaunpa much'a-sqa-mi ka-ni,Juan.gen kiss.pass.? be.1SG.,`I was kissed by John.’,,,Passive (Adjectival),Lucia,Cusco Quechua
+5/21/2010,*Juanpa much'asqami kanaywan.,Juanpa much'a-sqa-mi ka-nay-wa-n,Juan.gen kiss.pass.? be-DES-1OM-3SG,`I feel like being kissed by Juan.’,,,Passive Impulsative,Lucia,Cusco Quechua
