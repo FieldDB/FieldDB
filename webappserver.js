@@ -92,13 +92,6 @@ app.configure(function() {
 });
 
 
-
-app.get('/',function(req,res){ 
- 	res.redirect('/dashboard/dashboard.html');
-});
-
-
-
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
 });
