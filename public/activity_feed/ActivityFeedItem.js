@@ -3,7 +3,7 @@ define("activity_feed/ActivityFeedItem", [
     "user/User"
 ], function(Backbone, DatumStatus, DatumMenu, DatumTag, Preference, Session) {
     var ActivityFeedItem = Backbone.Model.extend(
-    /** @lends Datum.prototype */
+    /** @lends ActivityFeedItem.prototype */
     {
         /**
          * @class The Activity Feed Item 
