@@ -27,13 +27,44 @@ define("lexicon/Lexicon",
 			 */
 	
 		initialize : function(){
-			this.findWords();
-			this.findMorphemes();
-			this.findGlosses();
-			this.findTranslations();
+			if(this.get("wordsIndex").length >0 &&
+					this.get("morphemesIndex").length &&
+//					this.get("allomorphsIndex").length &&
+					this.get("glossesIndex").length &&
+					this.get("translationsIndex").length
+					){
+				//If the lexicon is already built, then don't build it.
+				
+			}else{
+				this.clearLexiconLocalStorage();
+				this.findWords();
+				this.findMorphemes();
+				this.findGlosses();
+				this.findTranslations();
+			}
+			
 			
 		},
 		defaults: {
+			wordsIndex: JSON.parse(localStorage.getItem("wordsIndex")) || [],
+			morphemesIndex: JSON.parse(localStorage.getItem("morphemesIndex")) || [],
+			allomorphsIndex: JSON.parse(localStorage.getItem("allomorphsIndex")) || [],
+			glossesIndex: JSON.parse(localStorage.getItem("glossesIndex")) || [],
+			translationsIndex: JSON.parse(localStorage.getItem("translationsIndex")) || []
+		},
+		clearLexiconLocalStorage: function(){
+			for(i in this.get("wordsIndex")){
+				localStorage.removeItem(this.get("wordsIndex")[i]);
+			}
+			for(i in this.get("morphemesIndex")){
+				localStorage.removeItem(this.get("morphemesIndex")[i]);
+			}
+			for(i in this.get("glossesIndex")){
+				localStorage.removeItem(this.get("glossesIndex")[i]);
+			}
+			for(i in this.get("translationsIndex")){
+				localStorage.removeItem(this.get("translationsIndex")[i]);
+			}
 		},
 		findWords: function(text){
 			if(!text){
@@ -44,7 +75,8 @@ define("lexicon/Lexicon",
 				var key = words[w]+"|ortho";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]}
+					value = {value: "", data: [w]};
+					this.get("wordsIndex").push(key);
 				}else{
 					value = JSON.parse(value);
 					if ( value.data.indexOf(w) == -1 ){
@@ -53,6 +85,7 @@ define("lexicon/Lexicon",
 				}
 				localStorage.setItem(key,JSON.stringify(value));
 			}
+			localStorage.setItem("wordsIndex",JSON.stringify(this.get("wordsIndex")));
 		}
 		,
 		findMorphemes: function(text){
@@ -64,7 +97,8 @@ define("lexicon/Lexicon",
 				var key = morphemes[w]+"|morpheme";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]}
+					value = {value: "", data: [w]};
+					this.get("morphemesIndex").push(key);
 				}else{
 					value = JSON.parse(value);
 					if ( value.data.indexOf(w) == -1 ){
@@ -73,6 +107,7 @@ define("lexicon/Lexicon",
 				}
 				localStorage.setItem(key,JSON.stringify(value));
 			}
+			localStorage.setItem("morphemesIndex", JSON.stringify(this.get("morphemesIndex")));
 		},
 		findGlosses: function(text){
 			if(!text){
@@ -83,7 +118,8 @@ define("lexicon/Lexicon",
 				var key = glosses[w]+"|gloss";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]}
+					value = {value: "", data: [w]};
+					this.get("glossesIndex").push(key);
 				}else{
 					value = JSON.parse(value);
 					if ( value.data.indexOf(w) == -1 ){
@@ -92,6 +128,7 @@ define("lexicon/Lexicon",
 				}
 				localStorage.setItem(key,JSON.stringify(value));
 			}
+			localStorage.setItem("glossesIndex",JSON.stringify(this.get("glossesIndex")));
 		},
 		findTranslations: function(text){
 			if(!text){
@@ -103,6 +140,7 @@ define("lexicon/Lexicon",
 				var value = localStorage.getItem(key);
 				if ( value == null){
 					value = {value: "", data: [w]}
+					this.get("translationsIndex").push(key);
 				}else{
 					value = JSON.parse(value);
 					if ( value.data.indexOf(w) == -1 ){
@@ -111,6 +149,7 @@ define("lexicon/Lexicon",
 				}
 				localStorage.setItem(key,JSON.stringify(value));
 			}
+			localStorage.setItem("translationsIndex",JSON.stringify(this.get("translationsIndex")));
 		}
 	
 	}); 
