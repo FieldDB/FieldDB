@@ -29,13 +29,13 @@ define("datum/DatumView", [
         datstattemplate: Handlebars.compile(datum_statusTemplate),
         
         //I attempted to put in a partial for datum menu unsuccessfully.
-       // template: Handlebars.comple(datumTemplate),
-       // datummenu: new DatumMenu(),
-       // datmentemplate: Handlebars.compile(datum_menuTemplate),
+        template: Handlebars.compile(datumTemplate),
+        datummenu: new DatumMenu(),
+        datmentemplate: Handlebars.compile(datum_menuTemplate),
         
         render : function() {
         	Handlebars.registerPartial("datum_status", this.datstattemplate(this.datumstatus.toJSON()) );
-        //	Handlebars.registerPartial("datum_menu", this.datmentemplate(this.datummenu.toJSON()) );
+        	Handlebars.registerPartial("datum_menu", this.datmentemplate(this.datummenu.toJSON()) );
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
         }
