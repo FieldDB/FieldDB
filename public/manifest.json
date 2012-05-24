@@ -8,7 +8,9 @@
     }
   },
   "offline_enabled": true,
-
+  "permissions": [
+    "unlimitedStorage"
+  ],
    "icons": { 
     "16": "icon16.png",
     "48": "icon48.png",
