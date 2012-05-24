@@ -48,7 +48,7 @@ define("app/AppView", [
           
           // Add it to the global list of Datum
           app.datumList.add(datum);
-          //datumList.create({attestation: "Hello World!"});
+          app.datumList.create({attestation: "Hello World!"});
           
           // Render it as a DatumView
           var view = new DatumView({model: datum});

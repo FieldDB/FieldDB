@@ -14,11 +14,10 @@ define("datum/DatumCollection", [
        initialize: function() {
        },
        
-       model: Datum
+       model: Datum,
+       
+       url : "anything",
     });
     
     return DatumCollection;
 });
-
-//var datumCollection = new DatumCollection(datum);
-//datumCollection.add(datum);
