@@ -33,7 +33,7 @@ require([
     "app/App"
 ], function(Backbone, App) {
     // CouchDB configuration
-    Backbone.couch_connector.config.base_url = "http://localhost:5984"
+    Backbone.couch_connector.config.base_url = "https://trisapeace.iriscouch.com"
     Backbone.couch_connector.config.db_name = "datum_test";
     // If set to true, the connector will listen to the changes feed
     // and will provide your models with real time remote updates.
