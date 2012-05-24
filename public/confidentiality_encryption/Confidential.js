@@ -23,6 +23,8 @@ define("confidentiality_encryption/Confidential",
 			 * Information Processing Standard (FIPS). It was selected after a
 			 * 5-year process where 15 competing designs were evaluated.
 			 * 
+			 * <a href="http://code.google.com/p/crypto-js/">More information on CryptoJS</a>
+			 * 
 			 * @description
 			 * 
 			 * @extends Backbone.Model
