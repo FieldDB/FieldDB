@@ -27,17 +27,13 @@ define("lexicon/Lexicon",
 			 */
 	
 		initialize : function(){
-//			this.findWords();
-//			this.findMorphemes();
-//			this.findGlosses();
-//			this.findTranslations();
+			this.findWords();
+			this.findMorphemes();
+			this.findGlosses();
+			this.findTranslations();
 			
 		},
 		defaults: {
-		  words: new LexiconNodes(),
-		  morphemes: new  LexiconNodes(),
-		  glosses: new LexiconNodes(),
-		  translations: new LexiconNodes(),
 		},
 		findWords: function(text){
 			if(!text){
@@ -45,7 +41,17 @@ define("lexicon/Lexicon",
 			}
 			words = text.toLowerCase().replace(/[,.*#()\n]/g," ").replace(/ +/g," ").split(" ");
 			for (w in words){
-				this.get("words").push(new LexiconNode({key: words[w]+"|ortho"}));
+				var key = words[w]+"|ortho";
+				var value = localStorage.getItem(key);
+				if ( value == null){
+					value = {value: "", data: [w]}
+				}else{
+					value = JSON.parse(value);
+					if ( value.data.indexOf(w) == -1 ){
+						value.data.push(w);
+					}
+				}
+				localStorage.setItem(key,JSON.stringify(value));
 			}
 		}
 		,
@@ -55,7 +61,17 @@ define("lexicon/Lexicon",
 			}
 			morphemes = text.toLowerCase().replace(/[,.*#()\n-]/g," ").replace(/ +/g," ").split(" ");
 			for (w in morphemes){
-				this.get("morphemes").push(new LexiconNode({key: morphemes[w]+"|morpheme"}));
+				var key = morphemes[w]+"|morpheme";
+				var value = localStorage.getItem(key);
+				if ( value == null){
+					value = {value: "", data: [w]}
+				}else{
+					value = JSON.parse(value);
+					if ( value.data.indexOf(w) == -1 ){
+						value.data.push(w);
+					}
+				}
+				localStorage.setItem(key,JSON.stringify(value));
 			}
 		},
 		findGlosses: function(text){
@@ -64,7 +80,17 @@ define("lexicon/Lexicon",
 			}
 			glosses = text.toLowerCase().replace(/[,.*#()\n-]/g," ").replace(/ +/g," ").split(" ");
 			for (w in glosses){
-				this.get("glosses").push(new LexiconNode({key: glosses[w]+"|gloss"}));
+				var key = glosses[w]+"|gloss";
+				var value = localStorage.getItem(key);
+				if ( value == null){
+					value = {value: "", data: [w]}
+				}else{
+					value = JSON.parse(value);
+					if ( value.data.indexOf(w) == -1 ){
+						value.data.push(w);
+					}
+				}
+				localStorage.setItem(key,JSON.stringify(value));
 			}
 		},
 		findTranslations: function(text){
@@ -73,7 +99,17 @@ define("lexicon/Lexicon",
 			}
 			translations = text.toLowerCase().replace(/[,.*#()\n`'’]/g," ").replace(/ +/g," ").split(" ");
 			for (w in translations){
-				this.get("translations").push(new LexiconNode({key: translations[w]+"|transl"}));
+				var key = translations[w]+"|transl";
+				var value = localStorage.getItem(key);
+				if ( value == null){
+					value = {value: "", data: [w]}
+				}else{
+					value = JSON.parse(value);
+					if ( value.data.indexOf(w) == -1 ){
+						value.data.push(w);
+					}
+				}
+				localStorage.setItem(key,JSON.stringify(value));
 			}
 		}
 	
