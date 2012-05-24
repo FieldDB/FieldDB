@@ -1,7 +1,8 @@
 define("corpus/Corpus", [ 
     "use!backbone",
-    "libs/Utils"
-], function(Backbone,Utils) {
+    "libs/Utils",
+    "confidentiality_encryption/Confidential"
+], function(Backbone,Utils, Confidential) {
   var Corpus = Backbone.Collection
   .extend(
       /** @lends Corpus.prototype */
@@ -55,7 +56,8 @@ define("corpus/Corpus", [
           description : "",
           remote : "",
           localFolder : "",
-          changedDatumList : []
+          changedDatumList : [],
+          confidential : new Confidential()
         },
         insertDatum : function(datum) {
           (new Utils()).debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
