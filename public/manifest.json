@@ -9,7 +9,8 @@
   },
   "offline_enabled": true,
   "permissions": [
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "<all_urls>"
   ],
    "icons": { 
     "16": "icon16.png",
