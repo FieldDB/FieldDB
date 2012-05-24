@@ -34,7 +34,9 @@
  *  }
  *]</code></pre>
  */
-(function($) {
+require([
+    "jquery"
+], function($) {
 
   $.couch = $.couch || {};
   /** @lends $.couch */
@@ -676,6 +678,7 @@
           });
         },
 
+
         /**
          * Save a list of documents
          * @see <a href="http://techzone.couchbase.com/sites/default/files/
@@ -1094,4 +1097,4 @@
     return obj !== null ? JSON.stringify(obj) : null;
   }
 
-})(jQuery);
+});
