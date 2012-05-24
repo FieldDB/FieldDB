@@ -1,3 +1,6 @@
+# Ignore natural lib 
+public/libs/natural/
+
 .wav
 audio_stimuli
 
