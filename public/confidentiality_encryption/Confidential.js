@@ -40,9 +40,12 @@ define("confidentiality_encryption/Confidential",
 			var decryptedMessage = this.decrypt(encryptedMessage);
 			console.log("decrypted:"+ decryptedMessage );
 			
+			if(this.get("secretkey") == "This should be a top secret pass phrase."){
+				this.set("secretkey", this.secretKeyGenerator() );
+			}
 		},
 		defaults: {
-			secretkey: "Secret pass phrase"
+			secretkey: "This should be a top secret pass phrase." 
 		},
 		/**
 		 * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64 encoding so that it looks like a string, and can be saved as a string in the corpus. 
@@ -67,8 +70,17 @@ define("confidentiality_encryption/Confidential",
 			//decode base64
 			encrypted = atob(encrypted);
 			return    CryptoJS.AES.decrypt(encrypted, this.get("secretkey")).toString(CryptoJS.enc.Utf8) ;
+		},
+		/**
+		 * The secretkeygenerator uses a "GUID" like generation to create a string for the secret key.
+		 * @returns {String} a string which is likely unique, in the format of a Globally Unique ID (GUID)
+		 */
+		secretKeyGenerator: function() {
+		    var S4 = function() {
+		       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+		    };
+		    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 		}
-	
 	}); 
 	
 	return Confidential; 
