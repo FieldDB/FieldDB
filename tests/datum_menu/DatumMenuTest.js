@@ -4,8 +4,6 @@ require([
     "data_list/DataList",
     "datum_field/DatumField"
 ], function(DatumMenu,Datum,DataList,DatumField) {
-	
-
 		describe("Test DatumMenu", function() {
 			it("should initialize the DatumMenu", function() {
 				var dm = new DatumMenu();
