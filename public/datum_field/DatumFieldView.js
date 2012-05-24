@@ -3,7 +3,7 @@ define("datum_field/DatumFieldView", [
     "use!handlebars", 
     "datum_field/DatumField",
     "text!datum_field/datum_field.handlebars"
-], function(Backbone, Handlebars, DatumField, datum_FieldTemplate) {
+], function(Backbone, Handlebars, DatumField, datum_fieldTemplate) {
     var DatumFieldView = Backbone.View.extend(
     /** @lends DatumFieldView.prototype */
     {
