@@ -631,9 +631,9 @@ if (!window.twttr) {
 		module.exports = twttr.txt
 	}
 }());
-TWTR = window.TWTR || {};
+Fieldlinguist = window.Fieldlinguist || {};
 (function() {
-	if (TWTR && TWTR.Widget) {
+	if (Fieldlinguist && Fieldlinguist.Widget) {
 		return
 	}
 	function H(K, N, J) {
@@ -702,7 +702,7 @@ TWTR = window.TWTR || {};
 			J._animate.call(J)
 		}, 15)
 	};
-	TWTR.Widget = function(J) {
+	Fieldlinguist.Widget = function(J) {
 		this.init(J)
 	};
 	(function() {
@@ -997,7 +997,7 @@ TWTR = window.TWTR || {};
 			return X.txt.autoLinkUsernamesOrLists(X.txt.autoLinkUrlsCustom(
 					X.txt.autoLinkHashtags(n, m), options_links), m)
 		};
-		TWTR.Widget.ify = {
+		Fieldlinguist.Widget.ify = {
 			autoLink : function(m) {
 				options = {
 					extraHtml : "target=_blank",
@@ -1143,8 +1143,8 @@ TWTR = window.TWTR || {};
 		}
 		S._tweetCount = 0;
 		X.loadStyleSheet = function(o, n) {
-			if (!TWTR.Widget.loadingStyleSheet) {
-				TWTR.Widget.loadingStyleSheet = true;
+			if (!Fieldlinguist.Widget.loadingStyleSheet) {
+				Fieldlinguist.Widget.loadingStyleSheet = true;
 				var m = document.createElement("link");
 				m.href = o;
 				m.rel = "stylesheet";
@@ -1155,7 +1155,7 @@ TWTR = window.TWTR || {};
 					if (q == "relative") {
 						clearInterval(p);
 						p = null;
-						TWTR.Widget.hasLoadedStyleSheet = true
+						Fieldlinguist.Widget.hasLoadedStyleSheet = true
 					}
 				}, 50)
 			}
@@ -1185,18 +1185,18 @@ TWTR = window.TWTR || {};
 				}
 			}
 		})();
-		TWTR.Widget.isLoaded = false;
-		TWTR.Widget.loadingStyleSheet = false;
-		TWTR.Widget.hasLoadedStyleSheet = false;
-		TWTR.Widget.WIDGET_NUMBER = 0;
-		TWTR.Widget.REFRESH_MIN = 6000;
-		TWTR.Widget.ENTITY_RANGE = 100;
-		TWTR.Widget.ENTITY_PERCENTAGE = 100;
-		TWTR.Widget.matches = {
+		Fieldlinguist.Widget.isLoaded = false;
+		Fieldlinguist.Widget.loadingStyleSheet = false;
+		Fieldlinguist.Widget.hasLoadedStyleSheet = false;
+		Fieldlinguist.Widget.WIDGET_NUMBER = 0;
+		Fieldlinguist.Widget.REFRESH_MIN = 6000;
+		Fieldlinguist.Widget.ENTITY_RANGE = 100;
+		Fieldlinguist.Widget.ENTITY_PERCENTAGE = 100;
+		Fieldlinguist.Widget.matches = {
 			mentions : /^@[a-zA-Z0-9_]{1,20}\b/,
 			any_mentions : /\b@[a-zA-Z0-9_]{1,20}\b/
 		};
-		TWTR.Widget.jsonP = function(n, p) {
+		Fieldlinguist.Widget.jsonP = function(n, p) {
 			var m = document.createElement("script");
 			var o = document.getElementsByTagName("head")[0];
 			m.type = "text/javascript";
@@ -1205,13 +1205,13 @@ TWTR = window.TWTR || {};
 			p(m);
 			return m
 		};
-		TWTR.Widget.randomNumber = function(m) {
+		Fieldlinguist.Widget.randomNumber = function(m) {
 			r = Math.floor(Math.random() * m);
 			return r
 		};
-		TWTR.Widget.SHOW_ENTITIES = TWTR.Widget
-				.randomNumber(TWTR.Widget.ENTITY_RANGE) <= TWTR.Widget.ENTITY_PERCENTAGE;
-		TWTR.Widget.prototype = function() {
+		Fieldlinguist.Widget.SHOW_ENTITIES = Fieldlinguist.Widget
+				.randomNumber(Fieldlinguist.Widget.ENTITY_RANGE) <= Fieldlinguist.Widget.ENTITY_PERCENTAGE;
+		Fieldlinguist.Widget.prototype = function() {
 			var s = window.twttr || {};
 			var t = V ? "https://" : "http://";
 			var q = "twitter.com";
@@ -1224,12 +1224,12 @@ TWTR = window.TWTR || {};
 			return {
 				init : function(x) {
 					var w = this;
-					this._widgetNumber = ++TWTR.Widget.WIDGET_NUMBER;
-					TWTR.Widget["receiveCallback_" + this._widgetNumber] = function(
+					this._widgetNumber = ++Fieldlinguist.Widget.WIDGET_NUMBER;
+					Fieldlinguist.Widget["receiveCallback_" + this._widgetNumber] = function(
 							y) {
 						w._prePlay.call(w, y)
 					};
-					this._cb = "TWTR.Widget.receiveCallback_"
+					this._cb = "Fieldlinguist.Widget.receiveCallback_"
 							+ this._widgetNumber;
 					this.opts = x;
 					this._base = n;
@@ -1252,7 +1252,7 @@ TWTR = window.TWTR || {};
 					this.tweets = 0;
 					this.setDimensions(x.width, x.height);
 					this.interval = x.interval ? Math.max(x.interval,
-							TWTR.Widget.REFRESH_MIN) : TWTR.Widget.REFRESH_MIN;
+							Fieldlinguist.Widget.REFRESH_MIN) : Fieldlinguist.Widget.REFRESH_MIN;
 					this.format = "json";
 					this.rpp = x.rpp || 50;
 					this.subject = x.subject || "";
@@ -1269,7 +1269,7 @@ TWTR = window.TWTR || {};
 					if (x.id) {
 						h.add(this.widgetEl, "twtr-widget")
 					}
-					if (x.version >= 2 && !TWTR.Widget.hasLoadedStyleSheet) {
+					if (x.version >= 2 && !Fieldlinguist.Widget.hasLoadedStyleSheet) {
 						if (x.creator) {
 							s.loadStyleSheet("/stylesheets/widgets/widget.css",
 									this.widgetEl)
@@ -1549,7 +1549,7 @@ TWTR = window.TWTR || {};
 					return this
 				},
 				_includeEntities : function(w) {
-					if (TWTR.Widget.SHOW_ENTITIES) {
+					if (Fieldlinguist.Widget.SHOW_ENTITIES) {
 						return w + "&include_entities=true"
 					}
 					return w
@@ -1624,7 +1624,7 @@ TWTR = window.TWTR || {};
 				},
 				render : function() {
 					var y = this;
-					if (!TWTR.Widget.hasLoadedStyleSheet) {
+					if (!Fieldlinguist.Widget.hasLoadedStyleSheet) {
 						window.setTimeout(function() {
 							y.render.call(y)
 						}, 50);
@@ -1807,7 +1807,7 @@ TWTR = window.TWTR || {};
 					return this
 				},
 				_createTweet : function(w) {
-					w.tweet = TWTR.Widget.ify.autoLink(w);
+					w.tweet = Fieldlinguist.Widget.ify.autoLink(w);
 					w.timestamp = w.created_at;
 					w.created_at = this._isRelativeTime ? R(w.created_at)
 							: Y(w.created_at);
@@ -1833,7 +1833,7 @@ TWTR = window.TWTR || {};
 						w.newResults = false;
 						w.decay()
 					}, this.jsonMaxRequestTimeOut);
-					TWTR.Widget.jsonP(w.url, function(x) {
+					Fieldlinguist.Widget.jsonP(w.url, function(x) {
 						w.scriptElement = x
 					})
 				},
