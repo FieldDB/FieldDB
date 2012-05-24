@@ -6,7 +6,8 @@ require.config({
         "jquery" : "libs/jquery",
         "underscore" : "libs/underscore",
         "backbone" : "libs/backbone",
-        "handlebars" : "libs/handlebars-1.0.0.beta.6"
+        "handlebars" : "libs/handlebars-1.0.0.beta.6",
+        "crypto" : "libs/Crypto_AES"
     },
     use : {
         "underscore" : {
@@ -22,6 +23,9 @@ require.config({
         
         "handlebars" : {
             attach: "Handlebars"
+        },
+        "crypto" :{
+        	attach: "CryptoJS"
         }
     }
 });
