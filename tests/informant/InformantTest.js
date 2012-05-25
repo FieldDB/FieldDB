@@ -12,18 +12,16 @@ require([
     
     		});
     		it("should create multiple informants", function() {
-    			var  informants = [];
+    			var  informants = {};
     			informants.push(new Informant());
     			informants.push(new Informant());
     			informants.push(new Informant());
     			
     			expect(informants.length == 3).toBeTruthy();
     			
-    
     		});
     
     	});
     
     	
     });
-});
