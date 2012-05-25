@@ -16,7 +16,7 @@ define("datum_status/DatumStatusView", [
         initialize : function() {
         },
 
-        model : DatumStatus,
+     //  model : DatumStatus,
 
         classname : "datum_status",
 

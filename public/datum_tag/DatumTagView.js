@@ -3,7 +3,7 @@ define("datum_tag/DatumTagView", [
     "use!handlebars", 
     "datum_tag/DatumTag",
     "text!datum_tag/datum_tag.handlebars"
-], function(Backbone, Handlebars, DatumTag, datum_TagTemplate) {
+], function(Backbone, Handlebars, DatumTag, datum_tagTemplate) {
     var DatumTagView = Backbone.View.extend(
     /** @lends DatumTagView.prototype */
     {
@@ -16,7 +16,7 @@ define("datum_tag/DatumTagView", [
         initialize : function() {
         },
 
-        model : DatumTag,
+        //model : DatumTag,
 
         classname : "datum_tag",
 
