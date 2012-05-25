@@ -1,7 +1,7 @@
 define("app/AppRouter", [
     "use!backbone",
     "libs/Utils"
-], function(Backbone, Utils) {
+], function(Backbone) {
     var AppRouter = Backbone.Router.extend(
     /** @lends AppRouter.prototype */
     {
@@ -31,7 +31,7 @@ define("app/AppRouter", [
         * @param {Number} datumId The ID of the datum within the corpus.
         */
        showExtendedDatum: function(corpusName, datumId) {
-       	  (new Utils()).debug("In showExtendedDatum: " + corpusName + " *** " + datumId);
+       	  Utils.debug("In showExtendedDatum: " + corpusName + " *** " + datumId);
        	  
        	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").show();
@@ -48,7 +48,7 @@ define("app/AppRouter", [
         * @param {Number} dataListId The ID of the datalist within the corpus.
         */
        showExtendedDataList: function(corpusName, dataListId) {
-          (new Utils()).debug("In showExtendedDataList: " + corpusName + " *** " + dataListId);
+          Utils.debug("In showExtendedDataList: " + corpusName + " *** " + dataListId);
           
      	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").hide();
@@ -64,7 +64,7 @@ define("app/AppRouter", [
         * @param {String} corpusName The name of the corpus to search in.
         */
        showExtendedSearch: function(corpusName) {
-          (new Utils()).debug("In showExtendedSearch: " + corpusName);
+          Utils.debug("In showExtendedSearch: " + corpusName);
           
      	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").hide();
@@ -80,7 +80,7 @@ define("app/AppRouter", [
         * @param {String} corpusName (Optional) The name of the corpus to display.
         */
        showDashboard: function(corpusName) {  
-          (new Utils()).debug("In showDashboard: " + corpusName);
+          Utils.debug("In showDashboard: " + corpusName);
           
        	  $("#dashboard-view").show();
        	  $("#extended-datum-view").hide();
@@ -95,7 +95,7 @@ define("app/AppRouter", [
         * @param {String} userName The username of the user whose profile to display.
         */
        showUserProfile: function(userName) {
-       	  (new Utils()).debug("In showUserProfile: " + userName);
+       	  Utils.debug("In showUserProfile: " + userName);
        	  
        	  $("#dashboard-view").hide();
        	  $("#extended-datum-view").hide();

@@ -6,11 +6,10 @@ define("app/App", [
     "activity_feed/ActivityFeed",
     "user/User",
     "authentication/Authentication",
-    "libs/Utils",
     "corpus/Corpus",
     "import/Import",
     "lexicon/Lexicon"
-], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Utils, Corpus, Import, Lexicon) {
+], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Corpus, Import, Lexicon) {
     var App = Backbone.Model.extend(
     /** @lends App.prototype */
     {
@@ -65,9 +64,6 @@ define("app/App", [
             this.bind('error', function(model, error) {
                 console.log("Error in Activity Feed Item: "+ error);
             });
-            
-            // Make our Utils globally available.
-            window.Utilities = new Utils();
         	
         	// Start the Router
             Backbone.history.start();
