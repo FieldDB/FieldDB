@@ -4,8 +4,6 @@ require.config({
     
     paths : {
         "use" : "libs/use",
-   //     "jasmine-jquery-spec": "jasmine-jquery-spec",
-        "sinon":"./tests/sinon",
         "text" : "libs/text",
         "jquery" : "libs/jquery",
         "underscore" : "libs/underscore",
