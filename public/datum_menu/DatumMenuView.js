@@ -21,6 +21,7 @@ define("datum_menu/DatumMenuView", [
 
         },
         id: 'datum_menu',
+       // model: DatumMenu,
 
         className : "datum_menu",
 
@@ -30,12 +31,10 @@ define("datum_menu/DatumMenuView", [
         	
         },
        
-        
         render : function() {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
-        },
-        
+        }, 
         /**
          * The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. 
          */

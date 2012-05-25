@@ -1,15 +1,19 @@
 require([
 	"datum_menu/DatumMenuView", 
+	"datum_menu/DatumMenu",
 	"../tests/sinon"
-], function(DatumMenuView) {
+], function(DatumMenuView,DatumMenu) {
 
 	describe("DatumMenuView", function() {
 
-		beforeEach(function() {
-			this.view = new DatumMenuView();
-		});
+		
 
 		describe("Instantiation", function() {
+			
+			beforeEach(function() {
+				this.view = new DatumMenuView();
+
+			});
 
 			it("should create a div element", function() {
 				expect(this.view.el.nodeName).toEqual("DIV");
@@ -23,27 +27,21 @@ require([
 
 		});
 
-		//		  beforeEach(function() {
-		//			  this.datumMenuView = new Backbone.View();
-		//			  this.datumMenuRenderSpy = sinon.spy(this.datumMenuView, "render");
-		//			});
-		//
-		//		  it("should render each DatumMenu view", function() {
-		//			  expect(this.datumMenuView.render).toHaveBeenCalledThrice();
-		//			});
-
-		describe("NewDatumView", function() {
-			beforeEach(function() {
-				this.view = new DatumMenuView();
-				this.view.render();
-			});
-
-			it("should #star is clicked, it should trigger the starDatum method", function() {
-				var clickSpy = sinon.spy(this.view, 'starDatum');
-				$("#star").click();
-				expect(clickSpy).toHaveBeenCalled();
-			});
-		});
+//		describe("NewDatumMenuView", function() {
+//			beforeEach(function() {
+//				//this.clickSpy = sinon.spy(DatumMenuView.prototype, 'starDatum');
+//				this.view = new DatumMenuView({model: new DatumMenu()});
+//				this.view.render();
+//			});
+//
+//			it("should #star is clicked, it should trigger the starDatum method", function() {
+//				var clickSpy = sinon.spy(this.view, 'starDatum');
+//				//$("#star").click();
+//				this.view.$('#star').click();
+//				//$('#star', this.view.el).click();
+//				expect(clickSpy).toHaveBeenCalled();
+//			});
+//		});
 
 	});
 
