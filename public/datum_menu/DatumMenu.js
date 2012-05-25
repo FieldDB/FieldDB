@@ -83,12 +83,7 @@ define("datum_menu/DatumMenu", [
     	   return "";
        },
        
-       /**
-        * The starDatum function allows the user bookmark favorite data.  Adds an additional way for user's to search data without a single search term.  For instance, if the user wants to keep track of the data used in their thesis, or data that's good for their analsysis. 
-        */
-       starDatum: function() {
-    	   return true;
-       },
+      
 
         /**
         The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.
