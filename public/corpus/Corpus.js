@@ -1,8 +1,8 @@
 define("corpus/Corpus", [ 
     "use!backbone",
-    "libs/Utils",
-    "confidentiality_encryption/Confidential"
-], function(Backbone,Utils, Confidential) {
+    "confidentiality_encryption/Confidential",
+    "libs/Utils"
+], function(Backbone, Confidential) {
   var Corpus = Backbone.Collection
   .extend(
       /** @lends Corpus.prototype */
@@ -44,10 +44,10 @@ define("corpus/Corpus", [
          * @constructs
          */
         initialize : function() {
-          (new Utils()).debug("Initializing the corpus with the paramaters passed in.");
+          Utils.debug("Initializing the corpus with the paramaters passed in.");
           // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
           // this.on('all', function(e) {
-          // (new Utils()).debug(this.get('name') + " event: " + e);
+          // Utils.debug(this.get('name') + " event: " + e);
           // });
 
         },
@@ -60,28 +60,28 @@ define("corpus/Corpus", [
           confidential : new Confidential()
         },
         insertDatum : function(datum) {
-          (new Utils()).debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
+          Utils.debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
               + JSON.stringify(datum));
           datum.id = this.autoincrement;
           this.changedDatumList.push(datum);
           this.autoincrement++;
         },
         updateDatum : function(datum) {
-          (new Utils()).debug("Telling the corpus that this datum has changed "
+          Utils.debug("Telling the corpus that this datum has changed "
               + JSON.stringify(datum));
           this.changedDatumList.push(datum);
         },
         push : function() {
-          (new Utils()).debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
+          Utils.debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
         },
         pull : function() {
-          (new Utils()).debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
+          Utils.debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
         },
         merge : function() {
-          (new Utils()).debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
+          Utils.debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
         },
         diff : function() {
-          (new Utils()).debug("Showing the user the diffs between their version of the corpus and the remote version.");
+          Utils.debug("Showing the user the diffs between their version of the corpus and the remote version.");
         },
         createSample : function() {
           this.name = "Sample Quechua Corpus";
