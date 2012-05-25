@@ -1,1 +1,75 @@
-This app aims to replace Word/LaTeX files for fieldlinguistics, not other existing databases. The app runs offline on Android Tablets, offline on the Chrome Store, and online on the web. The widgets can embedded individually in to any website (example data lists, data entry widgets, data search widgets, team activity feeds etc), allowing anyone to open their data if they so choose. The app is OpenSource under the Apache 2.0 license which means you can run it on your department's server, or your server, and even edit the code to make it better.
+Welcome to the FieldLinguistics Database Project!
+
+# Description
+
+The FieldLinguistics Database Project is aimed at providing fieldlinguists with an app where they can enter and store linguistic data, customized to the needs of fieldlinguists. 
+
+Out in the field with no internet? The application is suitable for offline use. In a field methods class collaborating with other linguists? The application is designed to make data syncable and sharable with your team members. Recording your data? Drag and drop the audio file with the datum, or record it directly into the datum if you are using the Android app. Need to compute the semantic composition? You can add a field with the semantic details in lambda calculus. There are many more features, in a very simple and intuitive interface, designed for linguists, by linguists with software engineering experience.
+
+# How to install
+* [Android Market/Google Play](https://play.google.com/store/search?q=fieldlinguistics&c=apps)
+* [Chrome Store](https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm?utm_source=chrome-ntp-icon)
+* [Online](http://fieldlinguist.com)
+
+# Functional Requirements
+
+Functional requirements put simply are buttons and features that do something for the user. 
+
+* The system shall **allow for data entry** like all other fieldlinguistics databases.
+* The system shall allow **drag and drop audio** to attach audio to your data.
+* The system shall **insert IPA and special symbols**
+* The system shall **support Hotkeys** and keyboard short-cuts for common tasks.
+* The system shall **import .csv**
+* The system shall **import ELAN**
+
+
+# Non-Functional Requirements
+
+Non-functional requirements put simply are overarching considerations which affect the software architecture. Non-functional requirements are where most existing field linguistics/corpus linguistics database applications fall short.
+
+* The system shall be **user friendly**.
+* The system shall be **cute** so that the users feel like entering data, instead of procrastinating.
+* The system shall be **designed for search** as this is one of the most important tasks that a fieldlinguist needs to do. The search needs go far beyond traditional string matches and database indexes. We need to see data in context, and the search must attempt to make this possible. 
+* The system shall be **OpenData enabled.** Corpora often contain sensitive information, informant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. The system shall encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user must log in and use their password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the app. 
+* The system shall work **offine.** Running a webapp offline has important consequences for how data is stored, and how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the app in a Chrome Extension (which has permission to have unlimited storage) the user will be able to have a significant portion of their data at their finger tips, whether in the Metro, in the field, in a park or in a country where wifi is not common, which is commonly the case for where we do our field work.
+* The system shall run on **Mac, Linux, Windows** computers. By providing the app as installable Chrome Extensions, the app will run on all platforms, Mac, Linux and Windows, as well as Chrome Books. 
+* The system shall be **OpenSource**. Being OpenSource allows departments to install and customize the database app for their needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub allows linguists with scripting/programming experience to contribute back to the software to make it more customized to their needs and their language typologies or linguistics research areas.
+* The system shall store data in **Unicode**. Encoding problems and loosing our data should be behind us in the days of unicode, however many existing fieldlinguistics databases were built in programming languages that didn't support unicode, so the unicode support is dangerously fragile.
+* The system shall be **simple**. The system is not designed to replace advanced field linguistics databases, or corpus linguistics databases. It is designed to replace Word Documents or LaTeX documents, which is a very common way fieldlinguists store data because it requires no training, doesn't require a complicated set-up for data categories,  and takes no time to add new categories.
+* The system shall be **theory free**. The system will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data, however the system will make it possible for the team to set their own categories and thus tie the specific theoretical constructs they are investigating to their data. This is a different approach to many corpus databases which are motivated by typologies and language counting which place a large data-entry burden on the user, rather than letting the user gradually constrain their data entry conventions over time.
+* The system shall be **collaborative** The system shall have users and teams, and permissions for corpora which will ensure that data can be safely shared and edited by multiple users.  The corpus will be versioned so that users can track changes and revert mistakes.
+* The system shall run on **touch devices** Touch tablets are one of the easiest tools to carry to the field, they have a long battery life, they can play videos or show images for the informant to elicit complicated contexts (such as quantification and scope), they permit recording audio and video and direct publishing to YouTube or other service. Android tablets are particularly easy to program and integrate the microphone directly into the database. 
+* The system shall be **smart** The system shall try to guess what users do most often, and automate the process for them. Most importantly, predictable glossing information should be automated.
+
+
+# Team
+* Alan Bale (McGill, Concordia)
+* M.E. Cathcart (iLanguage Lab LTD)
+* Gina Cook (iLanguage Lab LTD)
+* Jessica Coon (McGill)
+* Theresa Deering (iLanguage Lab LTD)
+* Yuliya Manyakina (Concordia)
+* Hisako Noguchi (Concordia)
+* Robert Henderson (UC Santa Cruz)
+
+
+# References 
+* [[Similar Software for Fieldlinguistics]]
+* [[Similar Software for sharing data]]
+* [[Software which can be used for the Auto Glosser Module]]
+ 
+# Software Documentation
+
+[[Software Design Document]]
+
+* [Module Documentation](http://redmine.ilanguage.ca:8080/job/Drag-and-Drop-FieldLinguistics/javadoc/?)
+* [Module Tests](https://github.com/mecathcart/Drag-and-Drop-FieldLinguistics/tree/master/tests)
+
+[[Software Requirements Specification]]
+
+# Funding
+We have some small funding TBA
+
+# License 
+
+This project is released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license, which is an very non-restrictive open source license which basically says you can adapt the software to any use you see fit.
