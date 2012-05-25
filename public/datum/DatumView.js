@@ -6,9 +6,14 @@ define("datum/DatumView", [
     "text!datum_status/datum_status.handlebars",
     "text!datum_menu/datum_menu.handlebars",
     "datum_status/DatumStatus",
+    "datum_status/DatumStatusView",
     "datum_menu/DatumMenu",
-    "datum_menu/DatumMenuView"
-], function(Backbone, Handlebars, Datum, datumTemplate, datum_statusTemplate,datum_menuTemplate, DatumStatus,DatumMenu,DatumMenuView) {
+    "datum_menu/DatumMenuView",
+    "datum_tag/DatumTag",
+    "datum_tag/DatumTagView",
+    "datum_field/DatumField",
+    "datum_field/DatumFieldView"
+], function(Backbone, Handlebars, Datum, datumTemplate, datum_statusTemplate,datum_menuTemplate, DatumStatus,DatumStatusView, DatumMenu,DatumMenuView,DatumTag, DatumTagView, DatumField, DatumFieldView) {
     var DatumView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -26,18 +31,21 @@ define("datum/DatumView", [
         classname : "datum",
 
         template: Handlebars.compile(datumTemplate),
-        datumstatus: new DatumStatus(),
-        datstattemplate: Handlebars.compile(datum_statusTemplate),
         
-        //I attempted to put in a partial for datum menu unsuccessfully.
+        statusview: new DatumStatusView({model: new DatumStatus()}),    
         menuview: new DatumMenuView({model: new DatumMenu()}),
+        tagview: new DatumTagView({model: new DatumTag()}),
+        fieldview: new DatumFieldView({model: new DatumField()}),
+
+
         
         render : function() {
-        	Handlebars.registerPartial("datum_status", this.datstattemplate(this.datumstatus.toJSON()) );
-        	//this is where i was!! 
+        	Handlebars.registerPartial("datum_status", this.statusview.template(this.statusview.model.toJSON()) );
         	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
+        	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
+        	Handlebars.registerPartial("datum_field", this.fieldview.template(this.fieldview.model.toJSON()) );
 
-        	//Handlebars.registerPartial("datum_menu", this.menuview.get("template")(this.menuview.get("model").toJSON()) );
+
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
         }

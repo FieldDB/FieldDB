@@ -16,7 +16,7 @@ define("datum_field/DatumFieldView", [
         initialize : function() {
         },
 
-        model : DatumField,
+       // model : DatumField,
 
         classname : "datum_field",
 
