@@ -4,6 +4,8 @@ require.config({
     
     paths : {
         "use" : "libs/use",
+   //     "jasmine-jquery-spec": "jasmine-jquery-spec",
+        "sinon":"./tests/sinon",
         "text" : "libs/text",
         "jquery" : "libs/jquery",
         "underscore" : "libs/underscore",
@@ -35,16 +37,16 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-   "../tests/confidentiality_encryption/ConfidentialTest",
-   "../tests/datum_menu/DatumMenuTest",
-   "../tests/user_generic/UserGenericTest",
+//   "../tests/confidentiality_encryption/ConfidentialTest",
+ //  "../tests/datum_menu/DatumMenuTest",
+ //  "../tests/user_generic/UserGenericTest",
 //    "../tests/permission/PermissionTest",
-    "../tests/datum/DatumCollectionTest",
-   "../tests/data_list/DataListTest",
-    "../tests/datum/DatumTest",
-    "../tests/informant/InformantTest",
+ //   "../tests/datum/DatumCollectionTest",
+//   "../tests/data_list/DataListTest",
+//    "../tests/datum/DatumTest",
+ //   "../tests/informant/InformantTest",
  //   "../tests/dashboard/DashboardTest",
-  //  "../tests/datum_menu/DatumMenuViewTest"
+    "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
     // Standard Jasmine initialization
     (function() {
