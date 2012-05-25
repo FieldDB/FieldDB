@@ -42,7 +42,7 @@ define("app/AppView", [
 		 * Add a datum to the screen.
 		 */
 		addOneDatum : function() {
-			(new Utils()).debug("Clicked addOneDatum");
+			Utils.debug("Clicked addOneDatum");
 
 			// Create the new Datum to be added
 			var datum = new Datum({
