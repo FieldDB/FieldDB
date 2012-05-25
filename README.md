@@ -9,7 +9,7 @@ Out in the field with no internet? The application is suitable for offline use. 
 # How to Use
 
 #### Online:
-* [Online](http://fieldlinguist.com)
+* [http://tools.fieldlinguist.com](http://tools.fieldlinguist.com)
 
 #### Offline:
 * [Chrome Store](https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm?utm_source=chrome-ntp-icon)
