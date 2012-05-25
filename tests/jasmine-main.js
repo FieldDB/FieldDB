@@ -43,7 +43,7 @@ require([
    "../tests/data_list/DataListTest",
     "../tests/datum/DatumTest",
     "../tests/informant/InformantTest",
-    "../tests/dashboard/DashboardTest",
+ //   "../tests/dashboard/DashboardTest",
   //  "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
     // Standard Jasmine initialization
