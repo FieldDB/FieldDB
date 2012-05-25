@@ -15,20 +15,21 @@ define("datum_menu/DatumMenuView", [
          */
         initialize : function() {
           //  this.el.click(_.bind( this, 'starDatum'));
-          //  _.bindAll( this, 'render', 'addTask');
+            _.bindAll( this, 'render', 'starDatum');
 
 
 
         },
+        id: 'datum_menu',
 
-        classname : "datum_menu",
+        className : "datum_menu",
 
         template: Handlebars.compile(datum_menuTemplate),
         events:{
         	"click #star": "starDatum"
         	
         },
-     
+       
         
         render : function() {
             $(this.el).html(this.template(this.model.toJSON()));
