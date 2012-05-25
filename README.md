@@ -13,18 +13,18 @@ Out in the field with no internet? The application is suitable for offline use. 
 
 
 # Team
-* Alan Bale (McGill, Concordia)
-* M.E. Cathcart (iLanguage Lab LTD)
-* Gina Cook (iLanguage Lab LTD)
-* Jessica Coon (McGill)
-* Theresa Deering (iLanguage Lab LTD)
-* Yuliya Manyakina (Concordia)
-* Hisako Noguchi (Concordia)
-* Robert Henderson (UC Santa Cruz)
+* [Alan Bale](http://linguistics.concordia.ca/bale/) (McGill, Concordia)
+* [M.E. Cathcart](http://udel.edu/~mdotedot/) (iLanguage Lab LTD)
+* [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab LTD)
+* [Jessica Coon](http://people.linguistics.mcgill.ca/~jessica/Welcome.html) (McGill)
+* [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab LTD)
+* [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Concordia)
+* [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
+* [Robert Henderson](http://rhenderson.org/) (UC Santa Cruz)
 
 
 # References 
-See Wiki for References, Softare Documentation and 
+See [Wiki](https://github.com/mecathcart/Drag-and-Drop-FieldLinguistics/wiki) for References, Software Design Docs and Software Requirements Specification 
 
 # Funding
 We have some small funding TBA
@@ -35,9 +35,9 @@ This project is released under the [Apache 2.0](http://www.apache.org/licenses/L
 
 # How to Contribute
 
-* Signup for a GitHub account (GitHub is free for OpenSource)
-* Click on the "Fork" button to create your own copy
-* Follow the GitHub Help Tutorials for how to install and use Git on your computer
-* Edit the code on your computer, and push to your origin (git push origin master)
+* [Signup for a GitHub account](https://github.com/signup/free) (GitHub is free for OpenSource)
+* Click on the "Fork" button to create your own copy.
+* [Follow the 4 GitHub Help Tutorials](http://help.github.com/) for how to install and use Git on your computer.
+* Edit the code on your computer, and push to your origin (git push origin master).
 * Click on the "Pull Request" button, and leave us a note about what you changed. 
 * Feel the glow :) 
