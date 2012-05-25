@@ -1,0 +1,19 @@
+{
+  "name": "Drag and Drop FieldLinguistics Tests",
+  "version": "1.0",
+  "description": "A way for the developers to test the Drag and Drop FieldLinguistics App",
+  "app": {
+    "launch": {
+      "local_path": "./tests/jasmine.html"
+    }
+  },
+  "offline_enabled": true,
+  "permissions": [
+    "unlimitedStorage",
+    "<all_urls>"
+  ],
+   "icons": { 
+
+  }
+  
+}
