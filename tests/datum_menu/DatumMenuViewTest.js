@@ -1,9 +1,10 @@
 require([
-	"datum_menu/DatumMenuView", 
-	"datum_menu/DatumMenu",
-	"sinon"
+	"use!sinon",
+	"datum_menu/DatumMenu", 
+	"datum_menu/DatumMenuView"
 	
-], function(DatumMenuView, DatumMenu, sinon) {
+	
+], function(sinon, DatumMenu, DatumMenuView) {
 
 	describe("DatumMenuView", function() {
 
@@ -34,13 +35,13 @@ require([
 			});
 
 			it("should #star is clicked, it should trigger the starDatum method", function() {
-				if(sinon != null){
-					var clickSpy = sinon.spy(this.view, 'starDatum');
+//				if(sinon != null){
+					var clickSpy =  sinon.spy(this.view, 'starDatum');
 					//$("#star").click();
 					this.view.$('#star').click();
 					//$('#star', this.view.el).click();
 					expect(clickSpy).toHaveBeenCalled();
-				}
+//				}
 			});
 		});
 
