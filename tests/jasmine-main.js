@@ -10,6 +10,7 @@ require.config({
         "backbone" : "libs/backbone",
         "handlebars" : "libs/handlebars-1.0.0.beta.6",
         "crypto" : "libs/Crypto_AES",
+        "sinon" : "./../tests/sinon"
     },
     use : {
         "underscore" : {
@@ -22,12 +23,14 @@ require.config({
                 return Backbone;
             }
         },
-
         "handlebars" : {
             attach : "Handlebars"
         },
         "crypto" :{
         	attach: "CryptoJS"
+        },
+        "sinon" :{
+        	attach: "sinon"
         }
     }
 });
