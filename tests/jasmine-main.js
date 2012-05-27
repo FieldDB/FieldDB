@@ -16,10 +16,13 @@ require.config({
         "underscore" : {
             attach : "_"
         },
+        "sinon" :{
+        	attach: "sinon"
+        },
 
         "backbone" : {
-            deps : ["use!underscore", "jquery"],
-            attach : function(_, $) {
+            deps : ["use!underscore", "jquery", "sinon"],
+            attach : function(_, $, sinon) {
                 return Backbone;
             }
         },
@@ -28,9 +31,6 @@ require.config({
         },
         "crypto" :{
         	attach: "CryptoJS"
-        },
-        "sinon" :{
-        	attach: "sinon"
         }
     }
 });
