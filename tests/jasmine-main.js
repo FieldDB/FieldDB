@@ -10,19 +10,22 @@ require.config({
         "backbone" : "libs/backbone",
         "handlebars" : "libs/handlebars-1.0.0.beta.6",
         "crypto" : "libs/Crypto_AES",
+        "sinon" : "./../tests/sinon"
     },
     use : {
         "underscore" : {
             attach : "_"
         },
+        "sinon" :{
+        	attach: "sinon"
+        },
 
         "backbone" : {
-            deps : ["use!underscore", "jquery"],
-            attach : function(_, $) {
+            deps : ["use!underscore", "jquery", "sinon"],
+            attach : function(_, $, sinon) {
                 return Backbone;
             }
         },
-
         "handlebars" : {
             attach : "Handlebars"
         },
@@ -35,6 +38,7 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
+
 //   "../tests/confidentiality_encryption/ConfidentialTest",
  //  "../tests/datum_menu/DatumMenuTest",
    "../tests/user_generic/UserGenericTest",
@@ -44,12 +48,28 @@ require([
 //    "../tests/datum/DatumTest",
     "../tests/informant/InformantTest",
  //   "../tests/dashboard/DashboardTest",
+
+   "../tests/confidentiality_encryption/ConfidentialTest",
+   "../tests/datum_menu/DatumMenuTest",
+   "../tests/user_generic/UserGenericTest",
+    "../tests/permission/PermissionTest",
+    "../tests/datum/DatumCollectionTest",
+//   "../tests/data_list/DataListTest",
+    "../tests/datum/DatumTest",
+    "../tests/informant/InformantTest",
+    "../tests/authentication/AuthenticationTest",
+    "../tests/activity_feed/ActivityFeedTest",
+    "../tests/activity_feed/ActivityFeedViewTest",
+    "../tests/lexicon/LexiconTest",
+//    "../tests/dashboard/DashboardTest",
+    "../tests/SinonTest",
+
     "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
     // Standard Jasmine initialization
     (function() {
         var jasmineEnv = jasmine.getEnv();
-        jasmineEnv.up  
+        jasmineEnv.up  ,
         dateInterval = 1000;
 
         // Decent HTML output for local testing
