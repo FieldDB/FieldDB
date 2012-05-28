@@ -46,4 +46,5 @@ require([
     Backbone.couch_connector.config.global_changes = false;
 
     window.app = new App();
+    
 });
