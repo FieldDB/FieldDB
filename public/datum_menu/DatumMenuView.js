@@ -15,16 +15,11 @@ define("datum_menu/DatumMenuView", [
          */
         initialize : function() {
           //  this.el.click(_.bind( this, 'starDatum'));
-            _.bindAll( this, 'render', 'starDatum');
-
-
+//            _.bindAll( this, 'render', 'starDatum');
 
         },
-        id: 'datum_menu',
-       // model: DatumMenu,
-
+        model: DatumMenu,
         className : "datum_menu",
-
         template: Handlebars.compile(datum_menuTemplate),
         events:{
         	"click #star": "starDatum"
@@ -32,7 +27,8 @@ define("datum_menu/DatumMenuView", [
         },
        
         render : function() {
-            $(this.el).html(this.template(this.model.toJSON()));
+        	var amenu = new DatumMenu();
+            $(this.el).html(this.template(amenu.toJSON()));
             return this;
         }, 
         /**
