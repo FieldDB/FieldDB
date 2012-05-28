@@ -1,4 +1,4 @@
-define("activity_feed/ActivityFeed", [ "use!backbone"
+define( [ "use!backbone"
                         , "activity_feed/ActivityFeedItem"
 
 ], function(Backbone, ActivityFeedItem) {
