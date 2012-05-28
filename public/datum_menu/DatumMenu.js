@@ -34,8 +34,8 @@ define("datum_menu/DatumMenu", [
        //the following functions correspond the menu bar below the datum
 
        defaults: {
-    	   datum: "",
-    	   dataList: null
+    	   datum: "",//new Datum(), //TODO there is a circular dependancy where datum requires data menu, and data menu requires datum... the fact that this is not a datum is also why the DatumMenuView is probably failing when it needs to call toJSON
+    	   dataList: ""// new DataList()
        },
        
       /**
