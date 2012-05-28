@@ -1,6 +1,7 @@
 require([
-    "informant/Informant"
-], function(Informant) {
+    "informant/Informant",
+    "user/User"
+], function(Informant,User) {
    
     
     	describe("Test Informant", function() {
@@ -8,11 +9,11 @@ require([
     			var i = new Informant();
     			var isaninformant = i instanceof Informant;
     			var isaUser = i instanceof User;
-    			expect(isanInformant && isaUser).toBeTruthy();
+    			expect(isaninformant && isaUser).toBeTruthy();
     
     		});
     		it("should create multiple informants", function() {
-    			var  informants = {};
+    			var  informants = [];
     			informants.push(new Informant());
     			informants.push(new Informant());
     			informants.push(new Informant());
