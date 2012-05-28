@@ -46,7 +46,8 @@ require([
 //   "../tests/data_list/DataListTest",
     "../tests/datum/DatumTest",
     "../tests/informant/InformantTest",
-    "../tests/dashboard/DashboardTest",
+    "../tests/authentication/AuthenticationTest",
+//    "../tests/dashboard/DashboardTest",
     "../tests/SinonTest",
     "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
