@@ -2,13 +2,13 @@ require([
     "user/User"
 ], function(User) {
    
-    	describe("Test UserGeneric", function() {
+    	describe("Test User", function() {
     		it("should set user's first name", function() {
     			var u = new User();
     			u.set("firstname", "Bill");
     			expect("Bill" == u.get("firstname")).toBeTruthy();
     		});
-    		it("should should have a subtitle constisting of firstname lastname ", function() {
+    		it("should have a subtitle constisting of firstname lastname ", function() {
     			var u = new User();
     			u.set("firstname", "Ed");
     			u.set("lastname", "Sapir");
