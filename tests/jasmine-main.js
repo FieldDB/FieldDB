@@ -38,22 +38,22 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-//   "../tests/confidentiality_encryption/ConfidentialTest",
- //  "../tests/datum_menu/DatumMenuTest",
- //  "../tests/user_generic/UserGenericTest",
-//    "../tests/permission/PermissionTest",
- //   "../tests/datum/DatumCollectionTest",
+   "../tests/confidentiality_encryption/ConfidentialTest",
+   "../tests/datum_menu/DatumMenuTest",
+   "../tests/user_generic/UserGenericTest",
+    "../tests/permission/PermissionTest",
+    "../tests/datum/DatumCollectionTest",
 //   "../tests/data_list/DataListTest",
-//    "../tests/datum/DatumTest",
- //   "../tests/informant/InformantTest",
- //   "../tests/dashboard/DashboardTest",
+    "../tests/datum/DatumTest",
+    "../tests/informant/InformantTest",
+    "../tests/dashboard/DashboardTest",
     "../tests/SinonTest",
     "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
     // Standard Jasmine initialization
     (function() {
         var jasmineEnv = jasmine.getEnv();
-        jasmineEnv.up  
+        jasmineEnv.up  ,
         dateInterval = 1000;
 
         // Decent HTML output for local testing
