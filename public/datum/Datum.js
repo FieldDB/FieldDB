@@ -3,9 +3,9 @@ define("datum/Datum", [
     "datum_status/DatumStatus",
     "datum_menu/DatumMenu",
     "datum_tag/DatumTag",
-    "preference/Preference",
+    "datum_field/DatumField",
     "session/Session"
-], function(Backbone, DatumStatus, DatumMenu, DatumTag, Preference, Session) {
+], function(Backbone, DatumStatus, DatumMenu, DatumTag, DatumField, Session) {
     var Datum = Backbone.Model.extend(
     /** @lends Datum.prototype */
     {
@@ -29,8 +29,9 @@ define("datum/Datum", [
          *      number assigned to the session in which the datum is being 
          *      placed.  The session will contain details such as date, 
          *      language, informant etc.
-         * @property {DatumStation} status TODO Describe status here.
-         * @property {Perference} prefs The preferences correspond to the 
+         * @property {DatumStatus} status When a datum is created, it can be 
+         * tagged with a status, such as 'to be checked with an informant'. 
+         * @property {DatumField} DatumField The extra fields correspond to the 
          *      user's preset of chosen fields, which may extend beyond the 
          *      standard three.
          *
@@ -57,18 +58,16 @@ define("datum/Datum", [
 
         defaults : {
             //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-            utterance : "",
-            //as far as I know, attestation is not a word linguists generally use. cesine: I agree, it was the word that Alan Yu had in his database so i figured they probably debated it a bit and setted with something since utterance implies spoken... but maybe we can stick to utterance.
-            gloss : "",
-            translation : "",
+            utterance : "tusunayawan",
+            gloss : "dance-IMP-1OM-3SG",
+            translation : "I feel like dancing.",
 
             //While it will not look like a field, it will essentially be a place where the user can click and add tags and then they will appear in little bubbles.
-            grammaticalTags : "",
+            grammaticalTags : "impulsative",
 
             sessionID : 0,
             status : new DatumStatus(),
-            //Preferences are where we'll have things like the extra fields the user wants. TODO this is an abmigous use of the prefernce class, which was originally supposed to be user preferences like skins?
-            prefs : new Preference()
+            DatumField : new DatumField()
         },
 
         /**

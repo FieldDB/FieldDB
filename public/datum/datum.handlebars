@@ -2,8 +2,8 @@
     <a href="#corpus/{{corpusName}}/datum/{{sessionId}}">Click to expand</a>
     <ul>
         <li>
-            <div class="datum-title">Attestation:</div>
-            <div class="datum-entry">{{attestation}}</div>
+            <div class="datum-title">Utterance:</div>
+            <div class="datum-entry">{{utterance}}</div>
         </li>
         <li>
             <div class="datum-title">Gloss:</div>
@@ -14,4 +14,7 @@
             <div class="datum-entry">{{translation}}</div>
         </li>
     </ul>
+    {{> datum_status}}
+    {{> datum_menu}}
+    {{> datum_tag}}
 </div>

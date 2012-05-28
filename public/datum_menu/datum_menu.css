@@ -1,0 +1,16 @@
+#dropZone{
+	border: dashed;
+	border-color: white;
+	height: 20px;
+	width: 130px;
+	text-align: center;	
+	float: right;
+}
+
+#button{
+	
+}
+
+.menuB{
+	background-color: transparent;
+}

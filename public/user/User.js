@@ -11,8 +11,10 @@ define("user/User", [
          * 
          * @property {String} firstname This is user's first name 
          * @property {String} lastname This is user's last name 
-         * @property {Boolean} isTeam The default for this is set false
          * @property {Array} teams This is a list of teams a user belongs to.  
+         * @property {Array} sessionHistory 
+         * @property {Array} activityHistory    
+         * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)   
 
          * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
          * 
@@ -22,16 +24,20 @@ define("user/User", [
 
         // This is the constructor. It is called whenever you make a new User.
         initialize: function(attributes) {
-          User.__super__.initialize.call(this, attributes);
-          this.set("firstname" , ""),
-          this.set("lastname" , ""),
-          this.set("isTeam" , false),
+//        	this.set("firstname" , ""), //setting these here makes it impossible to set them using attributes ie: 
+//            this.set("lastname" , "") //new User({"username":"sapir","password":"wharf","firstname":"Ed","lastname":"Sapir"});
+            
+            User.__super__.initialize.call(this, attributes);
+          this.set("subtitle",this.subtitle());
           this.set("teams" , []);
+          if(this.get("firstname") == undefined){
+        	  this.set("firstname","");
+          }
+          if(this.get("lastname") == undefined){
+        	  this.set("lastname","");
+          }
         }, 
-
-
-
-
+        
         /** 
          * Describe the validation here. 
          * 
@@ -66,25 +72,17 @@ define("user/User", [
 
 
         /**
-         * The subtitle function checks if a user belongs to a team. If yes, returns user's 
-         * affiliation. If no, returns user's first and last names. 
+         * The subtitle function returns user's first and last names. 
          */
-
         subtitle: function () {
-          if(this.get("isTeam")) {
-            return this.get("affiliation");
-          } else {
-            return this.get("firstname") + " " + this.get("lastname");
-          }
-        },
-
-
-        // TODO Add any other methods that will manipulate the User attributes.
-        //      Example:
-        // ,
-        // addOne: function() {
-        //    this.get("someAttribute");
-        // }
+        	if(this.get("firstname") == undefined){
+          	  this.set("firstname","");
+            }
+            if(this.get("lastname") == undefined){
+          	  this.set("lastname","");
+            }
+          return this.get("firstname") + " " + this.get("lastname");
+        }
       });
 
 
