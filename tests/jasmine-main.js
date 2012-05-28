@@ -38,6 +38,18 @@ require.config({
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
+
+//   "../tests/confidentiality_encryption/ConfidentialTest",
+ //  "../tests/datum_menu/DatumMenuTest",
+   "../tests/user_generic/UserGenericTest",
+   "../tests/user/UserTest",
+//    "../tests/permission/PermissionTest",
+ //   "../tests/datum/DatumCollectionTest",
+//   "../tests/data_list/DataListTest",
+//    "../tests/datum/DatumTest",
+    "../tests/informant/InformantTest",
+ //   "../tests/dashboard/DashboardTest",
+
    "../tests/confidentiality_encryption/ConfidentialTest",
    "../tests/datum_menu/DatumMenuTest",
    "../tests/user_generic/UserGenericTest",
@@ -52,6 +64,7 @@ require([
     "../tests/lexicon/LexiconTest",
 //    "../tests/dashboard/DashboardTest",
     "../tests/SinonTest",
+
     "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
     // Standard Jasmine initialization
