@@ -42,7 +42,7 @@ require([
  //   "../tests/datum/DatumCollectionTest",
 //   "../tests/data_list/DataListTest",
 //    "../tests/datum/DatumTest",
- //   "../tests/informant/InformantTest",
+    "../tests/informant/InformantTest",
  //   "../tests/dashboard/DashboardTest",
     "../tests/datum_menu/DatumMenuViewTest"
 ], function() {
