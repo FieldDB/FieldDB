@@ -60,23 +60,23 @@ require([
       });
   
     
-    it("should CORPUS", function() {
+    it("should set default corpora", function() {
         //var UserGeneric = require("UserGeneric");
         var u = new UserGeneric();
-        expect(u.get("email")).toEqual("");
+        expect(u.get("corpora")).toEqual([]);
       });
   
-    it("should DataList", function() {
+    it("should set default dataList", function() {
         //var UserGeneric = require("UserGeneric");
         var u = new UserGeneric();
-        expect(u.get("email")).toEqual("");
+        expect(u.get("dataLists")).toEqual([]);
       });
   
     
-    it("should set PREFs", function() {
+    it("should set default prefs", function() {
         //var UserGeneric = require("UserGeneric");
         var u = new UserGeneric();
-        expect(u.get("email")).toEqual("");
+        expect(u.get("prefs")).toBeTruthy;
       });
   
     

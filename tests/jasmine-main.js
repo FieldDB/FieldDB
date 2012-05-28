@@ -37,7 +37,7 @@ require([
     // Put all your tests here. Otherwise they won't run
 //   "../tests/confidentiality_encryption/ConfidentialTest",
  //  "../tests/datum_menu/DatumMenuTest",
- //  "../tests/user_generic/UserGenericTest",
+   "../tests/user_generic/UserGenericTest",
 //    "../tests/permission/PermissionTest",
  //   "../tests/datum/DatumCollectionTest",
 //   "../tests/data_list/DataListTest",
