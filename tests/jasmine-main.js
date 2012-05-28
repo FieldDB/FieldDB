@@ -47,6 +47,8 @@ require([
     "../tests/datum/DatumTest",
     "../tests/informant/InformantTest",
     "../tests/authentication/AuthenticationTest",
+    "../tests/activity_feed/ActivityFeedTest",
+    "../tests/activity_feed/ActivityFeedViewTest",
 //    "../tests/dashboard/DashboardTest",
     "../tests/SinonTest",
     "../tests/datum_menu/DatumMenuViewTest"
