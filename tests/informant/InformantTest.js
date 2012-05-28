@@ -7,9 +7,9 @@ require([
     	describe("Test Informant", function() {
     		it("should create an informant", function() {
     			var i = new Informant();
-    			var isaninformant = i instanceof Informant;
+    			var isanInformant = i instanceof Informant;
     			var isaUser = i instanceof User;
-    			expect(isaninformant && isaUser).toBeTruthy();
+    			expect(isanInformant && isaUser).toBeTruthy();
     
     		});
     		it("should create multiple informants", function() {

@@ -57,7 +57,7 @@ define("user_generic/UserGeneric", [
               researchInterest : "",
               affiliation : "",
               description : "",
-              subtile : "",
+              subtitle : "",
               // Corpora are projects. They are a complete collection of
               // datum.
               corpora : [],
