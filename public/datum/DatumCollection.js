@@ -14,7 +14,9 @@ define("datum/DatumCollection", [
        initialize: function() {
        },
        
-       model: Datum
+       model: Datum,
+       
+       url : "anything",
     });
     
     return DatumCollection;

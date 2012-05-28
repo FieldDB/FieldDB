@@ -5,7 +5,7 @@ var express = require('express')
   
 
 var users = [
-    { id: 1, username: 'sapir', password: 'warf', email: 'bob@example.com' }
+    { id: 1, username: 'sapir', password: 'wharf', email: 'bob@example.com' }
   , { id: 2, username: 'joe', password: 'birthday', email: 'joe@example.com' }
 ];
 
@@ -90,13 +90,6 @@ app.configure(function() {
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
-
-
-
-app.get('/',function(req,res){ 
- 	res.redirect('/dashboard/dashboard.html');
-});
-
 
 
 app.get('/account', ensureAuthenticated, function(req, res){

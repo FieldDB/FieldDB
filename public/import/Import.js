@@ -1,5 +1,6 @@
 define("import/Import", [ 
-    "use!backbone"
+    "use!backbone",
+    "libs/Utils"
 ], function(Backbone) {
   var Import = Backbone.Model.extend(
 
@@ -22,7 +23,7 @@ define("import/Import", [
         initialize : function() {
           var output = [];
           var files = this.get("files");
-          (new Utils()).debug(files);
+          Utils.debug(files);
           for ( var i = 0, f; f = files[i]; i++) {
             output.push('<li><strong>', escape(f.name), '</strong> (', f.type
                 || 'n/a', ') - ', f.size, ' bytes, last modified: ',
@@ -36,7 +37,7 @@ define("import/Import", [
           status.innerHTML += '<ul>' + output.join('') + '</ul>';
 
           this.on('all', function(e) {
-            (new Utils()).debug("Import event: " + e);
+            Utils.debug("Import event: " + e);
           });
         },
 

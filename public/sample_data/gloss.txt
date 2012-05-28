@@ -1,0 +1,73 @@
+me-ACC you-NOM yell-DES-2SG.1OM
+steal.1-2 Josefina-NOM
+3-2OM
+he-ACC steal.naya.3SG little animal-ACC
+he-ACC steal-DES-1ob.pst.3SG that sheep-ACC
+Victor-ACC me-ACC yell-DES-??
+child-PL-ACC 1PL.incl yell-DES-3SG.1PLOM
+child-PL-ACC 1PL.ex yell-DES-3PL.1PLexOM
+child you-PL yell-DES-3SG.2PLOM
+you-ACC child-NOM yell-DES-3PL.2PLOM
+I-ACC he-ACC yell-DES-3PL.1SGOM
+I-ACC yell-DES-refl.1SG
+me-ACC you-ACC yell-DES-2SG.1SGOM
+me-ACC.with you-ACC.with yell-DES-3SG.1PL.inclOM
+me-ACC he.hOM yell-DES-3SG.1SGOM
+me-ACC him-NOM yell-ACC want.3SG.1SGOM
+me-ACC you-PL yell-DES-3SG.1SGOM
+me-ACC he-PL-NOM yell.3PL.1SGOM
+you-ACC me-ACC yell-DES-1SG.2SGOM
+you-ACC yell-DES-refl.2SG
+you-ACC he-NOM yell-DES-3SG.2PLOM
+you-ACC me-PL.ex. yell-DES-1PL.ex.2SGOM
+you-ACC you-PL-NOM yell-DES-refl.2PL
+you-ACC he-PL-NOM yell.3PL.2SGOM
+Victor-ACC dance-DES-3SG
+heat-DES-1OB bread-ACC
+burn-DES-1OB bread-ACC
+jamas-DES-1OM-3SG burn-ACC bread-ACC
+work-DES-1OM-3SG
+door-ACC fix-DES-1OM-3SG
+chew coca-DES-1OM-3SG
+dress.refl-DES-1OM-3SG
+we.incl criticize.recr.1PLOM.1PL
+cOMb-DES-1OM-3SG
+open-DES-1OM-3SG door-ACC
+close-DES-1OM-3SG door-ACC
+die-DES-1OM-3SG
+break-DES-1OM-3SG door-ACC
+live-DES-1OM-3SG
+arrive-DES-1OM-3SG
+rain-DES-3SG
+close.1SG door-ACC
+yawn-DES-1OM-3SG
+cough-DES-1OM-3SG
+vOMit-DES-1OM-3SG
+wash.refl-DES-1OM-3SG.3SG
+stay-DES-1OM-3SG
+cOMe-DES-1OM-3SG
+enter-DES-1OM-3SG
+go.out-DES-1OM-3SG
+descend-DES-1OM-3SG
+becOMe.happy-DES-1OM-3SG
+forget-DES-1OM-3SG
+go-DES-1OM-3SG
+I-ACC alot dance-DES-1OM-3SG
+I-ACC little dance-DES-1OM-3SG
+I-ACC little alot dance-DES-1OM-3SG
+I-ACC alot little dance-DES-1OM-3SG
+I-ACC again work-DES-1OM-3SG
+I-ACC again Lares.to walk-DES-1OM-3SG
+Yesterday go.out-DES-1OM-3SG
+Yesterday go.out-DES-1OM-3SG now day.for
+I-ACC get a cold
+intensionally I-ACC sleep-DES-1OM-3SG
+no intentionally.not I-ACC sleep-DES-1OM-3SG
+no I-ACC work-DES-1OM-3SG.not
+I-ACC hungry.1OM
+you-ACC hungry.2OM
+he hungry-CAUS-REFL-3SG
+he-ACC hungry.3OB
+Juan.gen kiss.pass.? be.1SG.
+Juan.gen kiss.pass.? be-DES-1OM-3SG
+

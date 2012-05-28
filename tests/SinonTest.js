@@ -2,10 +2,10 @@
  * 
  * Spies are functions that keep track of how and often they were called, and what values were returned. This is phenomenally useful in asynchronous and event-driven applications as you can send a spy function off to keep track of what’s going on inside your methods, even if those methods are anonymous or closed off from direct inspection.
  */
-
-(function() {
-	var specs = [];
-
+require([
+         "use!backbone",
+         "../tests/sinon"
+         ], function(Backbone) {
 	describe("Sinon spy on Backbone Episode model", function() {
 		beforeEach(function() {
 			this.server = sinon.fakeServer.create();
@@ -14,15 +14,40 @@
 		afterEach(function() {
 			this.server.restore();
 		});
+		it("should fire a callback when 'foo' is triggered", function() {
+			var Episode = Backbone.Model.extend({
+				url: function() {
+					return "/episode/" + this.id;
+				}
+			});
+
+
+			// Create an anonymous spy
+			var spy = sinon.spy();
+
+			// Create a new Backbone 'Episode' model
+			var episode = new Episode({
+				title: "Hollywood - Part 2"
+			});
+
+			// Call the anonymous spy method when 'foo' is triggered
+			episode.bind('foo', spy); 
+
+			// Trigger the foo event
+			episode.trigger('foo'); 
+
+			// Expect that the spy was called at least once
+			expect(spy.called).toBeTruthy(); 
+		});
 
 		it("should fire the change event", function() {
-			
+
 			var Episode = Backbone.Model.extend({
-				  url: function() {
-				    return "/episode/" + this.id;
-				  }
-				});
-			
+				url: function() {
+					return "/episode/" + this.id;
+				}
+			});
+
 			var callback = sinon.spy();
 
 			// Set how the fake server will respond
@@ -57,4 +82,4 @@
 
 	});
 
-})();
+});
