@@ -42,8 +42,6 @@ define("lexicon/Lexicon",
 				this.findGlosses();
 				this.findTranslations();
 			}
-			
-			
 		},
 		defaults: {
 			wordsIndex: JSON.parse(localStorage.getItem("wordsIndex")) || [],
@@ -66,6 +64,12 @@ define("lexicon/Lexicon",
 				localStorage.removeItem(this.get("translationsIndex")[i]);
 			}
 		},
+		addEdge: function(start, end){
+			var startNode = JSON.parse(localStorage.getItem("start"));
+			if(value != null && startNode.value.indexOf(end) == -1){
+				startNode.value.push(end);
+			}
+		},
 		findWords: function(text){
 			if(!text){
 				text = orthography;
@@ -75,7 +79,7 @@ define("lexicon/Lexicon",
 				var key = words[w]+"|ortho";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]};
+					value = {value: [], data: [w]};
 					this.get("wordsIndex").push(key);
 				}else{
 					value = JSON.parse(value);
@@ -97,7 +101,7 @@ define("lexicon/Lexicon",
 				var key = morphemes[w]+"|morpheme";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]};
+					value = {value: [], data: [w]};
 					this.get("morphemesIndex").push(key);
 				}else{
 					value = JSON.parse(value);
@@ -118,7 +122,7 @@ define("lexicon/Lexicon",
 				var key = glosses[w]+"|gloss";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]};
+					value = {value: [], data: [w]};
 					this.get("glossesIndex").push(key);
 				}else{
 					value = JSON.parse(value);
@@ -139,7 +143,7 @@ define("lexicon/Lexicon",
 				var key = translations[w]+"|transl";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: "", data: [w]}
+					value = {value: [], data: [w]}
 					this.get("translationsIndex").push(key);
 				}else{
 					value = JSON.parse(value);

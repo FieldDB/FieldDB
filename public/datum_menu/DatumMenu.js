@@ -36,7 +36,6 @@ define("datum_menu/DatumMenu", [
        defaults: {
     	   datum: "",
     	   dataList: null
-    	   
        },
        
       /**

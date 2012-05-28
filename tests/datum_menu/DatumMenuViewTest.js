@@ -1,12 +1,10 @@
 require([
-	"datum_menu/DatumMenuView", 
-	"datum_menu/DatumMenu",
-	"../tests/sinon"
-], function(DatumMenuView,DatumMenu) {
+	"use!sinon",
+	"datum_menu/DatumMenu", 
+	"datum_menu/DatumMenuView"
+], function(sinon, DatumMenu, DatumMenuView) {
 
 	describe("DatumMenuView", function() {
-
-		
 
 		describe("Instantiation", function() {
 			
@@ -27,21 +25,37 @@ require([
 
 		});
 
-//		describe("NewDatumMenuView", function() {
-//			beforeEach(function() {
-//				//this.clickSpy = sinon.spy(DatumMenuView.prototype, 'starDatum');
-//				this.view = new DatumMenuView({model: new DatumMenu()});
-//				this.view.render();
-//			});
-//
-//			it("should #star is clicked, it should trigger the starDatum method", function() {
-//				var clickSpy = sinon.spy(this.view, 'starDatum');
-//				//$("#star").click();
-//				this.view.$('#star').click();
-//				//$('#star', this.view.el).click();
-//				expect(clickSpy).toHaveBeenCalled();
-//			});
-//		});
+		describe("NewDatumMenuView", function() {
+			beforeEach(function() {
+				//this.clickSpy = sinon.spy(DatumMenuView.prototype, 'starDatum');
+				
+			});
+			it("it should trigger the starDatum method", function() {
+				if(sinon != null){
+					var menu = new DatumMenuView();
+					menu.render();
+					
+					var clickSpy =  sinon.spy();
+					menu.bind('starDatum', clickSpy);
+					menu.trigger('starDatum'); 
+					expect(clickSpy.called).toBeTruthy();
+				}
+			});
+			it("it should trigger the starDatum method when the #star is clicked", function() {
+				if(sinon != null){
+					var menu = new DatumMenuView();
+					menu.render();
+					var clickSpy =  sinon.spy(menu, 'starDatum');
+//					$('#star').click();
+					
+					menu.trigger('starDatum'); 
+//					expect(clickSpy).toHaveBeenCalled();
+				
+				}
+			});
+			
+			
+		});
 
 	});
 
