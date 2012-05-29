@@ -33,6 +33,15 @@ define("app/AppView", [
 			});
 			this.$("#navigation").append(view.render().el);
 			
+			var datalistview = new DataList();
+//			app.dataList.add(datalistview); we can't have this because datalist view is not a collection
+//			 Render datalist view
+			var d = new DataListView({
+				model : datalistview
+			});
+			this.$("#rightside").append(d.render().el);
+			
+			
 		},
 
 		el : $('#app'),
@@ -72,14 +81,7 @@ define("app/AppView", [
 			});
 			this.$("#activity_feed").append(v.render().el);
 			
-			var datalistview = new DataList();
-//			app.dataList.add(datalistview);
-//			 Render datalist view
-			var d = new DataListView({
-				model : datalistview
-			});
-			this.$("#rightside").append(d.render().el);
-			
+
 			
 		}
 	});
