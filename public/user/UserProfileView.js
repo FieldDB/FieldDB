@@ -18,10 +18,12 @@ define("user/UserProfileView", [
         initialize : function() {
         },
 
-        model : UserView,
+        model : User,
         classname : "user_profile",
+        usertemplate: Handlebars.compile(userTemplate),
         template: Handlebars.compile(user_profileTemplate),
         render : function() {
+        	Handlebars.registerPartial("user", this.usertemplate(this.model.toJSON()) );
         	$(this.el).html(this.template(this.model.toJSON()));
             return this;
         }
