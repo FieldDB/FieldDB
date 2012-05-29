@@ -52,11 +52,11 @@ define("user_generic/UserGeneric", [
               // someAttribute3: []
               username : "",
               password : "",
-              email : "",
+              email : "esapir@email.com",
               gravatar : "./../user/user_gravatar.png",
-              researchInterest : "",
-              affiliation : "",
-              description : "",
+              researchInterest : "Field Work",
+              affiliation : "Yale",
+              description : "I like linguistics.",
               subtitle : "",
               // Corpora are projects. They are a complete collection of
               // datum.
