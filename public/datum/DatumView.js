@@ -3,8 +3,6 @@ define("datum/DatumView", [
     "use!handlebars", 
     "datum/Datum",
     "text!datum/datum.handlebars",
-    "text!datum_status/datum_status.handlebars",
-    "text!datum_menu/datum_menu.handlebars",
     "datum_status/DatumStatus",
     "datum_status/DatumStatusView",
     "datum_menu/DatumMenu",
@@ -13,7 +11,7 @@ define("datum/DatumView", [
     "datum_tag/DatumTagView",
     "datum_field/DatumField",
     "datum_field/DatumFieldView"
-], function(Backbone, Handlebars, Datum, datumTemplate, datum_statusTemplate,datum_menuTemplate, DatumStatus,DatumStatusView, DatumMenu,DatumMenuView,DatumTag, DatumTagView, DatumField, DatumFieldView) {
+], function(Backbone, Handlebars, Datum, datumTemplate, DatumStatus,DatumStatusView, DatumMenu,DatumMenuView,DatumTag, DatumTagView, DatumField, DatumFieldView) {
     var DatumView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -24,6 +22,12 @@ define("datum/DatumView", [
          * @constructs
          */
         initialize : function() {
+        	this.statusview = new DatumStatusView({model: this.model.get("status")});
+            this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
+            this.tagview = new DatumTagView({model: this.model.get("datumTag")});
+            this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
+
+
         },
 
         model : Datum,
@@ -32,10 +36,10 @@ define("datum/DatumView", [
 
         template: Handlebars.compile(datumTemplate),
         
-        statusview: new DatumStatusView({model: new DatumStatus()}),    
-        menuview: new DatumMenuView({model: new DatumMenu()}),
-        tagview: new DatumTagView({model: new DatumTag()}),
-        fieldview: new DatumFieldView({model: new DatumField()}),
+        statusview: null,  
+        menuview: null,
+        tagview: null,
+        fieldview: null,
 
 
         
