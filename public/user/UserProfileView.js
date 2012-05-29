@@ -2,7 +2,7 @@ define("user/UserProfileView", [
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
-    "text!user_profile.handlebars"
+    "text!user/user_profile.handlebars",
     "user/User",
     "user/UserView"
 ], function(Backbone, Handlebars, userTemplate, user_profileTemplate, User, UserView) {
@@ -18,11 +18,19 @@ define("user/UserProfileView", [
         initialize : function() {
         },
 
-        model : UserView,
+        model : User,
         classname : "user_profile",
+        user: window.user,
         template: Handlebars.compile(user_profileTemplate),
+        usertemplate: Handlebars.compile(userTemplate),
         render : function() {
-        	$(this.el).html(this.template(this.model.toJSON()));
+        	if (window.user == null){
+        		return;
+        	}
+        	var u = new User();
+        	console.log(u);
+        	Handlebars.registerPartial("user", this.usertemplate(u.toJSON()) );
+        	$(this.el).html(this.template(u.toJSON()));
             return this;
         }
     });
