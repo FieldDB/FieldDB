@@ -50,13 +50,13 @@ define("user_generic/UserGeneric", [
               // someAttribute: 5,
               // someAttribute2: 'Hello world',
               // someAttribute3: []
-              username : "",
-              password : "",
-              email : "",
+              username : "sapir",
+              password : "wharf",
+              email : "sapir@yale.edu",
               gravatar : "./../user/user_gravatar.png",
               researchInterest : "",
-              affiliation : "",
-              description : "",
+              affiliation : "Yale",
+              description : "A friendly guy.",
               subtitle : "",
               // Corpora are projects. They are a complete collection of
               // datum.

@@ -1,7 +1,9 @@
 define("app/AppRouter", [
     "use!backbone",
+    "user/User",
+    "user/UserProfileView",
     "libs/Utils"
-], function(Backbone) {
+], function(Backbone, User, UserProfileView) {
     var AppRouter = Backbone.Router.extend(
     /** @lends AppRouter.prototype */
     {
@@ -102,6 +104,11 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").show();
+       // Render a user profile into the div
+			var view = new UserProfileView({
+				model : User
+			});
+			$("#user-profile-view").append(view.render().el);
        }
     });
     

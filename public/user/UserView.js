@@ -2,8 +2,9 @@ define("user/UserView", [
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
-    "user/User"
-], function(Backbone, Handlebars, userTemplate, User) {
+    "user/User",
+    "user/UserProfileView"
+], function(Backbone, Handlebars, userTemplate, User, UserProfileView) {
     var UserView = Backbone.View.extend(
     /** @lends UserView.prototype */
     {
@@ -22,7 +23,25 @@ define("user/UserView", [
         render : function() {
         	$(this.el).html(this.template(this.model.toJSON()));
             return this;
-        }
+        }, 
+        
+        events : {
+			"click #grav" : "openUserProfile"
+		},
+        
+		openUserProfile : function() {
+			Utils.debug("Clicked openUserProfile");
+
+			// Create 
+			var userProfileView = new UserProfileView({
+				model : this.model, 
+				
+				el : $('#user-profile-view'),
+			});
+			
+			userProfileView.render();
+		
+		}
     });
 
     return UserView;
