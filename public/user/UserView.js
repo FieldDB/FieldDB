@@ -23,25 +23,9 @@ define("user/UserView", [
         render : function() {
         	$(this.el).html(this.template(this.model.toJSON()));
             return this;
-        }, 
+        } 
         
-        events : {
-			"click #grav" : "openUserProfile"
-		},
         
-		openUserProfile : function() {
-			Utils.debug("Clicked openUserProfile");
-
-			// Create 
-			var userProfileView = new UserProfileView({
-				model : this.model, 
-				
-				el : $('#user-profile-view'),
-			});
-			
-			userProfileView.render();
-		
-		}
     });
 
     return UserView;
