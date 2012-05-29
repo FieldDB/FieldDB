@@ -67,7 +67,9 @@ define("datum/Datum", [
 
             sessionID : 0,
             status : new DatumStatus(),
-            DatumField : new DatumField()
+            datumMenu: new DatumMenu(),
+            datumField : new DatumField(),
+            datumTag : new DatumTag()
         },
 
         /**
