@@ -22,16 +22,6 @@ define("session/Session", [
         * @property {String} goal The goal is the particular linguistic goal that the researcher was pursuing during that session.
 
 
-
-
-
-
-
-
-
-
-
-
    
       * @description The initialize function brings up a page in which the user can fill out the details corresponding to the session.  These details will be linked to each datum submitted in the session. 
       * @extends Backbone.Model
@@ -56,7 +46,7 @@ define("session/Session", [
         //The sessionID is an automatically generated number.   
          sessionID : 0,
          
-         user: "",
+         user: "Edward Sapir",
          team: "",
          informant: "",
 
