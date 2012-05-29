@@ -50,6 +50,7 @@ define("user_generic/UserGeneric", [
               // someAttribute: 5,
               // someAttribute2: 'Hello world',
               // someAttribute3: []
+
               username : "",
               password : "",
               email : "esapir@email.com",

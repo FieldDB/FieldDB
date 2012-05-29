@@ -1,9 +1,13 @@
-define("app/AppRouter", [
-    "use!backbone", 
+define("app/AppRouter", [ 
+    "use!backbone",
     "user/User",
     "user/UserProfileView",
+    "datum/Datum",
+    "datum/DatumView",
     "libs/Utils"
-], function(Backbone, User, UserProfileView) {
+],
+ function(Backbone, User, UserProfileView, Datum, DatumView) {
+
     var AppRouter = Backbone.Router.extend(
     /** @lends AppRouter.prototype */
     {
@@ -22,7 +26,7 @@ define("app/AppRouter", [
           "corpus/:corpusName/search": "showExtendedSearch",
           "corpus/:corpusName": "showDashboard",
           "user/:userName": "showUserProfile",
-          "": "showDashboard"
+          "": "showDashboard",
        },
           
        /**
@@ -40,6 +44,14 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
+       	  
+       	  
+       	  var datumView = new DatumView({model: new Datum()});
+       	  $("#extended-datum-view").append(datumView.render().el);
+
+       	  
+       	  
+       
        },
           
        /**
@@ -104,6 +116,7 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").show();
+
        	  
 
        	  // Create 
@@ -114,8 +127,15 @@ define("app/AppRouter", [
        	  });
 
        	  userProfileView.render();
-       }
+
+       // Render a user profile into the div
+			var view = new UserProfileView({
+				model : User,  
+			});
+			$("#user-profile-view").append(view.render().el);
+
+       }    
     });
     
-    return AppRouter;
+    return AppRouter; 
 });

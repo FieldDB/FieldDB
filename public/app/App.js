@@ -2,14 +2,14 @@ define("app/App", [
     "use!backbone",
     "app/AppView", 
     "app/AppRouter", 
-    "datum/DatumCollection",
+    "datum/Datums",
     "activity_feed/ActivityFeed",
     "user/User",
     "authentication/Authentication",
     "corpus/Corpus",
     "import/Import",
     "lexicon/Lexicon"
-], function(Backbone, AppView, AppRouter, DatumCollection, ActivityFeed, User, Authentication, Corpus, Import, Lexicon) {
+], function(Backbone, AppView, AppRouter, Datums, ActivityFeed, User, Authentication, Corpus, Import, Lexicon) {
     var App = Backbone.Model.extend(
     /** @lends App.prototype */
     {
@@ -79,7 +79,7 @@ define("app/App", [
         importer: new Import(),
         view: new AppView(),
     	router: new AppRouter(),
-    	datumList: new DatumCollection() //TODO remove this later and use corpus instead
+    	datumList: new Datums() //TODO remove this later and use corpus instead
 //      nav: new Navigation(),
 //    	search: new Search("global_search")
     });
