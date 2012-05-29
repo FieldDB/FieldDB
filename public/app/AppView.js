@@ -31,41 +31,40 @@ define("app/AppView", [
 			});
 			this.$("#navigation").append(view.render().el);
 			
-			this.addOneDatum();
 		},
 
 		el : $('#app'),
 
-//		events : {
-//			"click #dashboard-view" : "addOneDatum"
-//		},
+		events : {
+			"click #dashboard-view" : "addOneDatum"
+		},
 
 		/**
 		 * Add a datum to the screen.
 		 */
 		addOneDatum : function() {
 			Utils.debug("Clicked addOneDatum");
-//
-//			// Create the new Datum to be added
-//			var datum = new Datum({
-//				utterance : "Hello World!"
-//			});
-//
-//			// Add it to the global list of Datum
-//			app.datumList.add(datum);
-//			app.datumList.create({
-//				attestation : "Hello World!"
-//			});
-//
-//			// Render it as a DatumView
-//			var view = new DatumView({
-//				model : datum
-//			});
-//			this.$("#content").append(view.render().el);
+
+			// Create the new Datum to be added
+			var datum = new Datum({
+				utterance : "Hello World!"
+			});
+
+			// Add it to the global list of Datum
+			app.datumList.add(datum);
+			app.datumList.create({
+				attestation : "Hello World!"
+			});
+
+			// Render it as a DatumView
+			var view = new DatumView({
+				model : datum
+			});
+			this.$("#content").append(view.render().el);
 
 			var action = new ActivityFeedItem();
-//			app.activityFeed.add(action);
-			// Render an activity in the activity feed
+			app.activityFeed.add(action);
+//			 Render an activity in the activity feed
 			var v = new ActivityFeedItemView({
 				model : action
 			});

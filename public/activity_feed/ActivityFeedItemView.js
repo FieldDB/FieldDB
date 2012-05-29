@@ -3,9 +3,10 @@ define("activity_feed/ActivityFeedItemView", [
     "use!handlebars", 
     "text!activity_feed/activityFeedItem.handlebars",
     "user/User",
+    "user/UserProfileView",
     "text!user/user.handlebars",
     "activity_feed/ActivityFeedItem"
-], function(Backbone, Handlebars, activityFeedItemTemplate, User, userTemplate, ActivityFeedItem) {
+], function(Backbone, Handlebars, activityFeedItemTemplate, User, UserProfileView, userTemplate, ActivityFeedItem) {
     var ActivityFeedItemView = Backbone.View.extend(
     /** @lends ActivityFeedItemView.prototype */
     {
@@ -31,7 +32,25 @@ define("activity_feed/ActivityFeedItemView", [
         	Handlebars.registerPartial("user", this.usertemplate(this.user.toJSON()) );
         	$(this.el).html(this.template(this.model.toJSON()));
             return this;
-        }
+        },
+        
+        events : {
+			"click .grav" : "openUserProfile"
+		},
+        
+		openUserProfile : function() {
+			Utils.debug("Clicked openUserProfile");
+
+			// Create 
+			var userProfileView = new UserProfileView({
+				model : this.model, 
+				
+				el : $('#user-profile-view'),
+			});
+			
+			userProfileView.render();
+		
+		}
     });
 
     return ActivityFeedItemView;

@@ -2,7 +2,7 @@ define("user/UserProfileView", [
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
-    "text!user_profile.handlebars"
+    "text!user/user_profile.handlebars",
     "user/User",
     "user/UserView"
 ], function(Backbone, Handlebars, userTemplate, user_profileTemplate, User, UserView) {
