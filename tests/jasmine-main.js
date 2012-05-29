@@ -39,15 +39,6 @@ require.config({
 require([
     // Put all your tests here. Otherwise they won't run
 
-//   "../tests/confidentiality_encryption/ConfidentialTest",
- //  "../tests/datum_menu/DatumMenuTest",
-//   "../tests/user_generic/UserGenericTest",
-//    "../tests/permission/PermissionTest",
- //   "../tests/datum/DatumCollectionTest",
-//   "../tests/data_list/DataListTest",
-//    "../tests/datum/DatumTest",
-//    "../tests/informant/InformantTest",
- //   "../tests/dashboard/DashboardTest",
 
    "../tests/confidentiality_encryption/ConfidentialTest",
    "../tests/datum_menu/DatumMenuTest",
@@ -55,14 +46,14 @@ require([
    "../tests/user/UserTest",
    "../tests/permission/PermissionTest",
     "../tests/datum/DatumCollectionTest",
-//   "../tests/data_list/DataListTest",
+   "../tests/data_list/DataListTest",
     "../tests/datum/DatumTest",
     "../tests/informant/InformantTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/activity_feed/ActivityFeedTest",
     "../tests/activity_feed/ActivityFeedViewTest",
     "../tests/lexicon/LexiconTest",
-//    "../tests/dashboard/DashboardTest",
+    "../tests/dashboard/DashboardTest",
     "../tests/SinonTest",
 
     "../tests/datum_menu/DatumMenuViewTest"
