@@ -2,8 +2,10 @@ define("app/AppRouter", [
     "use!backbone",
     "user/User",
     "user/UserProfileView",
+    "datum/Datum",
+    "datum/DatumView",
     "libs/Utils"
-], function(Backbone, User, UserProfileView) {
+], function(Backbone, User, UserProfileView,Datum,DatumView) {
     var AppRouter = Backbone.Router.extend(
     /** @lends AppRouter.prototype */
     {
@@ -40,6 +42,14 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
+       	  
+       	  
+       	  var datumView = new DatumView({model: new Datum()});
+       	  $("#extended-datum-view").append(datumView.render().el);
+
+       	  
+       	  
+       
        },
           
        /**
