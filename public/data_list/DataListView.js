@@ -1,10 +1,10 @@
 define("data_list/DataListView", [
     "use!backbone", 
-    "use!handlebars", 
+    "use!handlebars",
     "datum/Datum",
-    "data_list/DataList"
-    
-], function(Backbone, Handlebars, Datum, DataList) {
+    "data_list/DataList",
+    "text!data_list/data_list.handlebars"
+], function(Backbone, Handlebars, Datum, DataList, data_listTemplate) {
     var DataListView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -18,13 +18,13 @@ define("data_list/DataListView", [
         },
 
         model : DataList,
-
         classname : "dataList",
-
-        
+        template: Handlebars.compile(data_listTemplate),
         render : function() {
-        	
-        }
+        	$(this.el).html(this.template(this.model.toJSON()));
+            return this;
+        } 
+        
     });
 
     return DataListView;
