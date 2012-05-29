@@ -2,8 +2,9 @@ define("data_list/DataListView", [
     "use!backbone", 
     "use!handlebars", 
     "datum/Datum",
-   
-], function(Backbone, Handlebars, Datum) {
+    "data_list/DataList"
+    
+], function(Backbone, Handlebars, Datum, DataList) {
     var DataListView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
