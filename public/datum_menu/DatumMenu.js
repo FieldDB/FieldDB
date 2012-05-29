@@ -34,24 +34,11 @@ define("datum_menu/DatumMenu", [
        //the following functions correspond the menu bar below the datum
 
        defaults: {
-    	   datum: "",//new Datum(), //TODO there is a circular dependancy where datum requires data menu, and data menu requires datum... the fact that this is not a datum is also why the DatumMenuView is probably failing when it needs to call toJSON
-    	   dataList: ""// new DataList()
+    	 //  datum: "",//new Datum(), //TODO there is a circular dependancy where datum requires data menu, and data menu requires datum... the fact that this is not a datum is also why the DatumMenuView is probably failing when it needs to call toJSON
+    	 //  dataList: ""// new DataList()
        },
        
-      /**
-       * The isAttachToDatum method determines whether the DatumMenu is initialized under a single datum or not.
-       * @return {boolean} true if attached to a datum and false if not.
-       */ 
-       isAttachedToDatum: function(){
-    	   return true;
-       },
-       /**
-        * The isAttachToDataList method determines whether the DatumMenu is initialized under a data list or not.
-        * @return {boolean} true if attached to a data list and false if not.
-        */ 
-        isAttachedToDataList: function(){
-     	   return true;
-        },
+     
        /**
         * The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  
         */
