@@ -23,7 +23,6 @@ define("user/UserProfileView", [
         usertemplate: Handlebars.compile(userTemplate),
         user: window.user,
         template: Handlebars.compile(user_profileTemplate),
-        usertemplate: Handlebars.compile(userTemplate),
         render : function() {
 
         	Handlebars.registerPartial("user", this.usertemplate(this.model.toJSON()) );
@@ -34,8 +33,6 @@ define("user/UserProfileView", [
         	}
         	var u = new User();
         	console.log(u);
-        	Handlebars.registerPartial("user", this.usertemplate(u.toJSON()) );
-        	$(this.el).html(this.template(u.toJSON()));
 
             return this;
         }
