@@ -1,11 +1,11 @@
 define("session/SessionView", [
     "use!backbone", 
     "use!handlebars", 
-    "datum_session/Session",
+    "session/Session",
     "text!session/session.handlebars"
 ], function(Backbone, Handlebars, Session, sessionTemplate) {
     var SessionView = Backbone.View.extend(
-    /** @lends DatumFieldView.prototype */
+    /** @lends SessionView.prototype */
     {
         /**
          * @class Session View

@@ -18,36 +18,15 @@ define("datum_field/DatumField", [
           
 //      	      fields: 
       	     
-      	      fields: [{
-      	          id: 1,
-      	          label: 'Script'
-      	          
-	      	      }, {
-	      	      id: 2,
-	      	      label: 'Context',
-	      	      selected: true 
-	      	      
-	      	      }, {
-	      	      id: 3,
-	      	      label: 'Semantic Denotation'
-	      	    	  
-	      	      }, {
-	    	      id: 4,
-	    	      label: 'IPA'
-	    	    	  
-	    	      },{
-		          id: 5,
-		          label: 'Segmentation'
-		        	  
-		          },{
-		          id: 6,
-		          label: 'Other'
-		          } ], 
-      	      
-      	      active: 0,
-      	      defaultStatus: 0
-      	   },
-
+        	
+        	script: "",
+        	context: "",
+        	semanticDenotation: "",
+        	ipa: "",
+        	segmentation: "tusu-naya-wa-n",
+        	other: "",
+        	
+        }
        });
   
 
