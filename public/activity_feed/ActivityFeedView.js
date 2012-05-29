@@ -2,7 +2,7 @@ define( [
     "use!backbone", 
     "use!handlebars",
     "activity_feed/ActivityFeed"
-], function(Backbone, Handlebars, ActivityFeed) {
+], function(Backbone, Handlebars, ActivityFeed,activity_feedTemplate) {
     var ActivityFeedView = Backbone.View.extend(
     /** @lends ActivityFeedView.prototype */
     {
@@ -17,6 +17,13 @@ define( [
 
         model : ActivityFeed,
         classname : "activity_feed",
+        template: Handlebars.compile(activity_feedTemplate),
+        
+        render : function() {
+            $(this.el).html(this.template(this.model.toJSON()));
+            return this;
+        }
+
         
     });
 
