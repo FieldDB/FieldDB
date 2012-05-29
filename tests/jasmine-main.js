@@ -45,7 +45,7 @@ require([
    "../tests/user_generic/UserGenericTest",
    "../tests/user/UserTest",
    "../tests/permission/PermissionTest",
-    "../tests/datum/DatumCollectionTest",
+    "../tests/datum/DatumsTest",
    "../tests/data_list/DataListTest",
     "../tests/datum/DatumTest",
     "../tests/informant/InformantTest",
