@@ -53,7 +53,7 @@ define("app/AppView", [
 			// Add it to the global list of Datum
 			app.datumList.add(datum);
 			app.datumList.create({
-				attestation : "Hello World!"
+				utterance : "Hello World!"
 			});
 
 			// Render it as a DatumView

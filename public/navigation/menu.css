@@ -1,4 +1,39 @@
-.navigation{
+#navigation{
 	width: 100%;
 	height: 3em;
+}
+
+#navigation ul
+{margin:0px; padding:0px;}
+
+#navigation ul li
+{
+display:inline;
+height:30px;
+float:left;
+list-style:none;
+margin-left:15px;
+position:relative;
+	
+}
+
+#navigation li ul
+{
+margin:0px;
+padding:0px;
+display:none;
+position:absolute;
+}
+
+#navigation li:hover ul
+{
+display:block;
+width:160px;
+}
+
+#navigation li li
+{
+list-style:none;
+display:list-item;
+width:100%;
 }
