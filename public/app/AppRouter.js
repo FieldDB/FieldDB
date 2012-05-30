@@ -78,12 +78,14 @@ define("app/AppRouter", [
        	  
        	  
        	  var datumView = new DatumView({model: new Datum()});
-       	  $("#extended-datum-view").append(datumView.render().el);
        	  var sID = datumView.model.get("sessionID");
-       	  console.log(sID);
+       	  //console.log(sID);
        	  if(sID === 0){
-       		  var yale = new Corpus({name: "yale"});
+       		  var yale = new Corpus();
        		  this.showNewSession(yale, 12);
+       	  }else{
+           	  $("#extended-datum-view").append(datumView.render().el);
+
        	  }
        	  
        	  
