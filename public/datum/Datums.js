@@ -1,6 +1,7 @@
 define("datum/Datums", [
     "use!backbone",
-    "datum/Datum"
+    "datum/Datum",
+    "libs/Utils"
 ], function(Backbone, Datum) {
     var Datums = Backbone.Collection.extend(
     /** @lends Datums.prototype */
@@ -16,7 +17,7 @@ define("datum/Datums", [
        
        model: Datum,
        
-       url : "anything",
+       pouch: Backbone.sync.pouch(Utils.pouchUrl)
     });
     
     return Datums;

@@ -4,7 +4,8 @@ define("datum/Datum", [
     "datum_menu/DatumMenu",
     "datum_tag/DatumTag",
     "datum_field/DatumField",
-    "session/Session"
+    "session/Session",
+    "libs/Utils"
 ], function(Backbone, DatumStatus, DatumMenu, DatumTag, DatumField, Session) {
     var Datum = Backbone.Model.extend(
     /** @lends Datum.prototype */
@@ -88,6 +89,8 @@ define("datum/Datum", [
             //    return "Must use positive numbers";
             // }
         },
+        
+        pouch: Backbone.sync.pouch(Utils.pouchUrl)
     });
 
     return Datum;
