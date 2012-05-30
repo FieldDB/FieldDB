@@ -26,7 +26,7 @@ define("datum/DatumView", [
             this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
             this.tagview = new DatumTagView({model: this.model.get("datumTag")});
             this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
-
+         
 
         },
 
@@ -40,9 +40,12 @@ define("datum/DatumView", [
         menuview: null,
         tagview: null,
         fieldview: null,
-
-
         
+        events:{
+        	"click #new": "newDatum"
+        	
+        },
+
         render : function() {
         	Handlebars.registerPartial("datum_status", this.statusview.template(this.statusview.model.toJSON()) );
         	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
@@ -52,7 +55,31 @@ define("datum/DatumView", [
 
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
-        }
+        },
+        
+        newDatum: function() {
+        	/* First, we build a new datum model, 
+        	 * this datum model then asks if it belongs to a session
+        	 * if it belongs to a session it goes ahead and renders a new datum
+        	 * if it does not belong to a session, it builds a new session and renders a new session view.
+        	 * after the new session is sent to pouch, then a new datumview can be rendered.
+             */
+        	
+//        	var newDatum = new DatumView({model: new Datum()});
+//         	$("#extended-datum-view").append(newDatum.render().el);
+//         	var sID = this.newDatum.get("sessionID");
+//         	console.log(sID);
+//      	
+//         	if(newDatum.sessionID == 0){
+//         		var newSession = new SessionView({model: new Session()});
+//             	$("#new-session-view").append(newSession.render().el);
+//
+//         	}
+        	
+      	  console.log("I'm a new datum!");
+      	  return true;
+         }
+        
     });
 
     return DatumView;

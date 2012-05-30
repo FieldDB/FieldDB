@@ -6,10 +6,11 @@ define("app/AppRouter", [
     "datum/DatumView",
     "session/Session",
     "session/SessionView",
+    "corpus/Corpus",
     "libs/Utils"
     
 ],
- function(Backbone, User, UserProfileView, Datum, DatumView,Session,SessionView) {
+ function(Backbone, User, UserProfileView, Datum, DatumView,Session,SessionView, Corpus) {
 
     var AppRouter = Backbone.Router.extend(
     /** @lends AppRouter.prototype */
@@ -32,7 +33,31 @@ define("app/AppRouter", [
           "user/:userName": "showUserProfile",
           "": "showDashboard",
        },
-          
+      
+       /**
+        * Displays the extended view of the session specified by the given 
+        * corpusName and the given datumId.
+        * 
+        * @param {String} corpusName The name of the corpus this datum is from.
+        * @param {Number} sessionId The ID of the session within the corpus.
+        */
+       showNewSession: function(corpusName, sessionId) {
+        	  Utils.debug("In showExtendedSession: " + corpusName + " *** " + sessionId);
+        	  
+        	  $("#dashboard-view").hide();
+        	  $("#extended-datum-view").hide();
+        	  $("#extended-datalist-view").hide();
+        	  $("#extended-search-view").hide();
+        	  $("#user-profile-view").hide();
+        	  $("#new-session-view").show();
+
+        	  var sessionView = new SessionView({model: new Session()});
+        	  $("#new-session-view").append(sessionView.render().el);
+
+        },
+       
+       
+       
        /**
         * Displays the extended view of the datum specified by the given 
         * corpusName and the given datumId.
@@ -54,37 +79,19 @@ define("app/AppRouter", [
        	  
        	  var datumView = new DatumView({model: new Datum()});
        	  $("#extended-datum-view").append(datumView.render().el);
-
+       	  var sID = datumView.model.get("sessionID");
+       	  console.log(sID);
+       	  if(sID === 0){
+       		  var yale = new Corpus({name: "yale"});
+       		  this.showNewSession(yale, 12);
+       	  }
        	  
        	  
        
        },
        
        
-       /**
-        * Displays the extended view of the session specified by the given 
-        * corpusName and the given datumId.
-        * 
-        * @param {String} corpusName The name of the corpus this datum is from.
-        * @param {Number} sessionId The ID of the session within the corpus.
-        */
-       showNewSession: function(corpusName, sessionId) {
-        	  Utils.debug("In showExtendedSession: " + corpusName + " *** " + sessionId);
-        	  
-        	  $("#dashboard-view").hide();
-        	  $("#extended-datum-view").hide();
-        	  $("#extended-datalist-view").hide();
-        	  $("#extended-search-view").hide();
-        	  $("#user-profile-view").hide();
-        	  $("#new-session-view").show();
-
-        	  
-        	  
-        	  var sessionView = new SessionView({model: new Session()});
-        	  $("#new-session-view").append(sessionView.render().el);
-
-   
-        },
+      
         
        
        
