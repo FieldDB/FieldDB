@@ -25,7 +25,7 @@ define("app/AppRouter", [
        
        routes: {
           "corpus/:corpusName/datum/:id": "showExtendedDatum",
-          "corpus/:corpusName/session/:id": "showExtendedSession",
+          "corpus/:corpusName/session/:id": "showNewSession",
           "corpus/:corpusName/datalist/:id": "showExtendedDataList",
           "corpus/:corpusName/search": "showExtendedSearch",
           "corpus/:corpusName": "showDashboard",
@@ -48,7 +48,7 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
-    	  $("#extended-session-view").hide();
+    	  $("#new-session-view").hide();
 
        	  
        	  
@@ -68,7 +68,7 @@ define("app/AppRouter", [
         * @param {String} corpusName The name of the corpus this datum is from.
         * @param {Number} sessionId The ID of the session within the corpus.
         */
-       showExtendedSession: function(corpusName, sessionId) {
+       showNewSession: function(corpusName, sessionId) {
         	  Utils.debug("In showExtendedSession: " + corpusName + " *** " + sessionId);
         	  
         	  $("#dashboard-view").hide();
@@ -76,12 +76,12 @@ define("app/AppRouter", [
         	  $("#extended-datalist-view").hide();
         	  $("#extended-search-view").hide();
         	  $("#user-profile-view").hide();
-        	  $("#extended-session-view").show();
+        	  $("#new-session-view").show();
 
         	  
         	  
         	  var sessionView = new SessionView({model: new Session()});
-        	  $("#extended-session-view").append(sessionView.render().el);
+        	  $("#new-session-view").append(sessionView.render().el);
 
    
         },
@@ -106,7 +106,7 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").show();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
-    	  $("#extended-session-view").hide();
+    	  $("#new-session-view").hide();
 
        },
        
@@ -124,7 +124,7 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").show();
        	  $("#user-profile-view").hide();
-    	  $("#extended-session-view").hide();
+    	  $("#new-session-view").hide();
 
        },
           
@@ -142,7 +142,7 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
-    	  $("#extended-session-view").hide();
+    	  $("#new-session-view").hide();
 
        },
        
@@ -159,7 +159,7 @@ define("app/AppRouter", [
        	  $("#extended-datalist-view").hide();
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").show();
-       	  $("#extended-session-view").hide();
+       	  $("#new-session-view").hide();
 ;
 
        	  
