@@ -50,8 +50,8 @@ define("session/Session", [
          team: "",
          informant: "",
 
-         language: "",
-         languageFamily: "",
+         language: "Tlingit",
+         languageFamily: "Na-Dene",
          dialect: "",
          //allow users to insert date that data was retrieved (maybe prior to time of data entry)
          date: "",
