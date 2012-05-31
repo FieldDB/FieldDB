@@ -8,7 +8,7 @@ define("data_list/DataListView", [
     "data_list_title/DataListTitle",
     "data_list_title/DataListTitleView",
     "datum_menu/DatumMenu",
-    "datum_menu/DatumMenuView",
+    "datum_menu/DatumMenuView"
 
  //   "search/Search"
 ], function(Backbone, Handlebars, Datum, DataList, data_list_viewTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView, DatumMenu,DatumMenuView) {
@@ -25,7 +25,7 @@ define("data_list/DataListView", [
   //      	this.searchview = new Search({model: this.model.get("search")});
        //     this.listview = new DataList({model: this.model.get("dataList")});
     //        this.titleview = new DataListTitleView({model: this.model.get("dataListTitle")});
-            this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
+//            this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
 
         },
 
@@ -37,7 +37,7 @@ define("data_list/DataListView", [
       //  searchsview: null,  
        //listview: null,
  //       titleview: null,
-        menuview: null,
+        menuview: DatumMenuView,
         
         
         render : function() {
