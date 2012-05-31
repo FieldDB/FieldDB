@@ -27,8 +27,7 @@ define("datum_menu/DatumMenuView", [
         },
        
         render : function() {
-        	var amenu = new DatumMenu();
-            $(this.el).html(this.template(amenu.toJSON()));
+            $(this.el).html(this.template(this.model.toJSON()));
             return this;
         }, 
         
