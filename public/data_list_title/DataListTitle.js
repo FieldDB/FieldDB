@@ -3,15 +3,22 @@ define("data_list_title/DataListTitle", [
 ], function(Backbone) {
 
     var DataListTitle = Backbone.Model.extend(
-      /** @lends DatumTag.prototype */
+      /** @lends DataListTitle.prototype */
       {
-       /**
-        * @class The DatumTag allows the user to label data with grammatical tags i.e. passive, causative.  This is useful for searches.  
-        *
-        * 
-        * @description The initialize function brings up a field in which the user can enter tags.
-        * @constructs
-        */
+    	  /**
+           * @class DataListTitle is a title, a date and a short description attached 
+           * 		 to a particular data list a user creates, for example, "LING380 
+           *        Handout 6; antipassive examples". DataListTitle can be exported 
+           *        together with the data list it is attached to. 
+           *   
+           *
+           * @description The initialize function probably creates the link to
+           * 			   a data list, or checks if a link to a data list is 
+           * 			   established.  
+           * 
+           * @extends Backbone.Model
+           * @constructs
+           */
      initialize: function() {
         this.bind('error', function(model, error) {
            // TODO Handle validation errors
@@ -25,12 +32,18 @@ define("data_list_title/DataListTitle", [
        
      },
      
-     defaults: {
-    	  title : "NELS handout",
-          dateCreated : "May 29, 2012",
-          description : "some useful examples",
      
-     },
+     
+ 	defaults: {
+// 	   DataListTitle consists of three attributes: data list title, date created, description. THe default value for 
+//			for each is an empty string 
+ 		
+ 		dataListTitle : "LING380 Handout 6",
+ 		dateCreated : "May 30, 2012",
+ 		description : "antipassive examples"	
+ 			
+ 	   },
+    
 
      /**
       * <TODO Describe the validation here.>
@@ -53,6 +66,7 @@ define("data_list_title/DataListTitle", [
       });
 
     return DataListTitle;
+
 });
 
 

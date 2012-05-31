@@ -4,11 +4,12 @@ define("data_list_title/DataListTitleView", [
     "data_list_title/DataListTitle",
     "text!data_list_title/data_list_title.handlebars"
 ], function(Backbone, Handlebars, DataListTitle, data_list_titleTemplate) {
+
     var DataListTitleView = Backbone.View.extend(
-    /** @lends DatumTagView.prototype */
+    /** @lends DatumListTitleView.prototype */
     {
         /**
-         * @class Datum Tags
+         * @class DataListTitle  
          *
          * @extends Backbone.View
          * @constructs
@@ -16,7 +17,8 @@ define("data_list_title/DataListTitleView", [
         initialize : function() {
         },
 
-        //model : DatumTag,
+
+        model : DataListTitle,
 
         classname : "data_list_title",
 

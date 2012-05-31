@@ -3,16 +3,15 @@ define("data_list/DataListView", [
     "use!handlebars",
     "datum/Datum",
     "data_list/DataList",
-    "text!data_list/data_list.handlebars",
+    "text!data_list/data_list_view.handlebars",
     "text!data_list_title/data_list_title.handlebars",
     "data_list_title/DataListTitle",
     "data_list_title/DataListTitleView",
-    "text!datum_menu/datum_menu.handlebars",
     "datum_menu/DatumMenu",
     "datum_menu/DatumMenuView",
 
  //   "search/Search"
-], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView,datum_menuTemplate, DatumMenu,DatumMenuView) {
+], function(Backbone, Handlebars, Datum, DataList, data_list_viewTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView, DatumMenu,DatumMenuView) {
     var DataListView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -25,19 +24,19 @@ define("data_list/DataListView", [
         initialize : function() {
   //      	this.searchview = new Search({model: this.model.get("search")});
        //     this.listview = new DataList({model: this.model.get("dataList")});
-            this.titleview = new DataListTitleView({model: this.model.get("DataListTitle")});
+    //        this.titleview = new DataListTitleView({model: this.model.get("dataListTitle")});
             this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
 
         },
 
         model : DataList,
         classname : "dataList",
-        template: Handlebars.compile(data_listTemplate),
+        template: Handlebars.compile(data_list_viewTemplate),
         
         
       //  searchsview: null,  
        //listview: null,
-        titleview: null,
+ //       titleview: null,
         menuview: null,
         
         
@@ -45,7 +44,7 @@ define("data_list/DataListView", [
         	
 //        	Handlebars.registerPartial("search", this.statusview.template(this.statusview.model.toJSON()) );
 //        	Handlebars.registerPartial("list", this.tagview.template(this.tagview.model.toJSON()) );
-        	Handlebars.registerPartial("data_list_title", this.titleview.template(this.titleview.model.toJSON()) );
+   //     	Handlebars.registerPartial("data_list_title", this.titleview.template(this.titleview.model.toJSON()) );
         	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
         	
         	
