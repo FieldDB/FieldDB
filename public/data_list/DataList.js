@@ -36,7 +36,9 @@ define("data_list/DataList", [
 
         defaults : {
             //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-          
+            title : "NELS handout",
+            dateCreated : "May 29, 2012",
+            description : "some useful examples"
         },
         /**
          * <TODO Describe the validation here.>
