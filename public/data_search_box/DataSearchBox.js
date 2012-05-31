@@ -1,6 +1,7 @@
 define("data_search_box/DataSearchBox", [
     "use!backbone",
     "datum/Datum"
+  //"corpus/Corpus"
 ], function(Backbone,Datum) {
     var DataSearchBox = Backbone.Model.extend(
     /** @lends DataSearchBox.prototype */
