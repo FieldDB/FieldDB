@@ -1,14 +1,14 @@
-define("datum_search_box/DataSearchBoxView", [
+define("data_list_title/DataListTitleView", [
     "use!backbone", 
     "use!handlebars", 
-    "data_search_box/DataSearchBox",
-    "text!data_search_box/data_search_box.handlebars"
-], function(Backbone, Handlebars, DataSearchBox, data_search_boxTemplate) {
+    "data_list_title/DataListTitle",
+    "text!data_list_title/data_list_title.handlebars"
+], function(Backbone, Handlebars, DataListTitle, data_list_titleTemplate) {
     var DataSearchBoxView = Backbone.View.extend(
     /** @lends DatumFieldView.prototype */
     {
         /**
-         * @class Data Search Box
+         * @class Data List Title
          *
          * @extends Backbone.View
          * @constructs
@@ -16,11 +16,11 @@ define("datum_search_box/DataSearchBoxView", [
         initialize : function() {
         },
 
-       // model : DataSearchBox,
+       // model : DataListTitle,
 
-        classname : "data_search_box",
+        classname : "data_list_title",
 
-        template: Handlebars.compile(data_search_boxTemplate),
+        template: Handlebars.compile(data_list_titleTemplate),
         	
         render : function() {
             $(this.el).html(this.template(this.model.toJSON()));
@@ -28,5 +28,5 @@ define("datum_search_box/DataSearchBoxView", [
         }
     });
 
-    return DataSearchBoxView;
+    return DataListTitleView;
 }); 
