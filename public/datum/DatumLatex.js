@@ -2,9 +2,10 @@ define("datum_latex/DatumLatex", [
     "use!backbone",
     "datum/Datum"
   //"corpus/Corpus"
+  //"search/Search"  
 ], function(Backbone,Datum) {
     var DatumLatex = Datum.Model.extend(
-    /** @lends DataListTitle.prototype */
+    /** @lends Data.prototype */
     {
        /**
         * @class DatumLatex shows up as an item in the Data List as a result of  
@@ -15,22 +16,16 @@ define("datum_latex/DatumLatex", [
         *          
         *   
         *
-        * @description The initialize function probably creates the link to
-        * 			   a data list, or checks if a link to a data list is 
-        * 			   established.  
+        * @description The initialize function probably creates a link to Search. 
         * 
         * @extends Backbone.Model
         * @constructs
         */
-        initialize: function() {
+        initialize: function(attributes) {
+            DatumLatex.__super__.initialize.call(this, attributes);
         },
+        
     	defaults: {
-//    	   DataListTitle consists of three attributes: data list title, date created, description. THe default value for 
-//			for each is an empty string 
-    		
-    		dataListTitle : "LING380 Handout 6"
-    		dateCreated : "May 30, 2012"
-    		description : "antipassive examples"	
     			
     	   },
     	  
@@ -40,5 +35,5 @@ define("datum_latex/DatumLatex", [
            }
     });
     
-    return DataListTitle;
+    return DatumLatex;
 });
