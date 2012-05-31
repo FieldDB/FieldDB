@@ -1,5 +1,11 @@
-define("serarch/Search", 
-		["use!Backbone"], 
+define("serarch/Search", [
+    "use!Backbone",
+//    "corpus/Corpus",
+//    "datum/Datum",
+//    "datum_tag/DatumTag",
+//    "datum_status/DatumStatus",
+//    "data_list/DataList"
+   ], 
 		function(Backbone){
 	
 	var Search = Backbone.Model.extend(
@@ -8,9 +14,12 @@ define("serarch/Search",
 			
 		{
 			/** 
-			 * @class Search progressively searches a corpus and updates a search view as a user type in the search box.
-			 *        It highlights search keywords in the list view.  
+			 * @class Search progressively searches a corpus and updates a 
+			 *        search/data list view as a user types keywords in the 
+			 *        search box. BOth eintersective and union search is 
+			 *        possible. It highlights search keywords in the list view.  
 			 * 
+			 * @property {String} searchKeywords 
 			 * @property {Datum} 
 			 * @property {DataList} 
 			 * @property {DatumTag} 
@@ -18,7 +27,8 @@ define("serarch/Search",
 			 * 
 			 * 
 			 * 
-			 * @description 
+			 * @description The initialize function probably creates a link to 
+			 *              a corpus, or checks if a link is established. 
 			 * 
 			 * @extends Backbone.Model 
 			 * 
@@ -26,10 +36,17 @@ define("serarch/Search",
 			 * 
 			 */
 
-			initialize : function() {
-				
+			initialize : function() {		
 			}, 
-		
+			
+			defaults: {
+//            Default searchKeywords is a null string		
+				searchKeywords : "passive" 
+			}, 
+			
+	    	validate : function(attributes) {
+
+	           }
 		
 		});
 	
