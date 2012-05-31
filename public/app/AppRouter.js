@@ -114,6 +114,9 @@ define("app/AppRouter", [
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
     	  $("#new-session-view").hide();
+    	  
+    	  
+    	  
 
        },
        
