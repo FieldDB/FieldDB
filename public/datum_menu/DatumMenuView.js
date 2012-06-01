@@ -14,9 +14,7 @@ define("datum_menu/DatumMenuView", [
          * @constructs
          */
         initialize : function() {
-          //  this.el.click(_.bind( this, 'starDatum'));
-//           _.bindAll( this, 'render', 'starDatum');
-
+         
         },
         model: DatumMenu,
         className : "datum_menu",

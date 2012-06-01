@@ -33,11 +33,11 @@ define("app/AppView", [
 			});
 			this.$("#navigation").append(view.render().el);
 			
-			var datalistview = new DataList();
+			var datalist = new DataList();
 //			app.dataList.add(datalistview); we can't have this because datalist view is not a collection
 //			 Render datalist view
 			var d = new DataListView({
-				model : datalistview
+				model: datalist
 			});
 			this.$("#rightside").append(d.render().el);
 			
