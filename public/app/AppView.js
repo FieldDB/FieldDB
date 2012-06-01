@@ -60,12 +60,10 @@ define("app/AppView", [
 			var datum = new Datum({
 				utterance : "Hello World!"
 			});
+			datum.save();
 
 			// Add it to the global list of Datum
 			app.datumList.add(datum);
-			app.datumList.create({
-				utterance : "Hello World!"
-			});
 
 			// Render it as a DatumView
 			var view = new DatumView({

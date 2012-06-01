@@ -67,6 +67,11 @@ define("app/App", [
         	
         	// Start the Router
             Backbone.history.start();
+            
+            // Populate datumList from Pouch
+            //TODO remove this later and use corpus instead
+            this.datumList = new Datums();
+            this.datumList.fetch();
         },
         defaults : {
         	corpus: new Corpus("corpus"), 
@@ -78,8 +83,7 @@ define("app/App", [
         auth: new Authentication("authentication"),
         importer: new Import(),
         view: new AppView(),
-    	router: new AppRouter(),
-    	datumList: new Datums() //TODO remove this later and use corpus instead
+    	router: new AppRouter()
 //      nav: new Navigation(),
 //    	search: new Search("global_search")
     });
