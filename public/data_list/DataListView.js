@@ -4,13 +4,13 @@ define("data_list/DataListView", [
     "datum/Datum",
     "data_list/DataList",
     "text!data_list/data_list.handlebars",
-//    "text!data_list_title/data_list_title.handlebars",
-//    "data_list_title/DataListTitle",
-//    "data_list_title/DataListTitleView",
+    "text!data_list_title/data_list_title.handlebars",
+    "data_list_title/DataListTitle",
+    "data_list_title/DataListTitleView",
     "datum_menu/DatumMenu",
     "datum_menu/DatumMenuView",
- //   "search/Search",
- //   "search/SearchView"
+    "search/Search",
+    "search/SearchView"
  //   added "search/Search"
 ], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, data_list_titleTemplate, DataListTitle, 
 		DataListTitleView, DatumMenu, DatumMenuView, Search, SearchView) {
@@ -44,7 +44,7 @@ define("data_list/DataListView", [
  //       titleview: null,
 
         //added searchview
-   //    searchview: SearchView, 
+       searchview: SearchView, 
         
         menuview: DatumMenuView,
         
