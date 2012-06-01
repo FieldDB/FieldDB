@@ -5,7 +5,7 @@ define("data_list/DataListView", [
     "data_list/DataList",
     "text!data_list/data_list.handlebars",
     "datum_menu/DatumMenu",
-    "datum_menu/DatumMenuView"
+    "datum_menu/DatumMenuView",
     "text!data_list/data_list_view.handlebars",
     "text!data_list_title/data_list_title.handlebars",
     "data_list_title/DataListTitle",
