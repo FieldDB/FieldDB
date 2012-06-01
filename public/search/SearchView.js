@@ -16,7 +16,7 @@ define("search/SearchView", [
         initialize : function() {
         },
 
-       // model : Search,
+        model : Search,
 
         classname : "search",
 
