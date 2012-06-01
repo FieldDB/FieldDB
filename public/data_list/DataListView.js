@@ -4,9 +4,6 @@ define("data_list/DataListView", [
     "datum/Datum",
     "data_list/DataList",
     "text!data_list/data_list.handlebars",
-    "datum_menu/DatumMenu",
-    "datum_menu/DatumMenuView"
-    "text!data_list/data_list_view.handlebars",
     "text!data_list_title/data_list_title.handlebars",
     "data_list_title/DataListTitle",
     "data_list_title/DataListTitleView",
@@ -14,7 +11,7 @@ define("data_list/DataListView", [
     "datum_menu/DatumMenuView",
 
  //   "search/Search"
-], function(Backbone, Handlebars, Datum, DataList, data_list_viewTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView, DatumMenu,DatumMenuView) {
+], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView, DatumMenu,DatumMenuView) {
     var DataListView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -25,39 +22,18 @@ define("data_list/DataListView", [
          * @constructs
          */
         initialize : function() {
-        //	var datumMenu = new DatumMenu();
-//            this.menuview = new DatumMenuView({model: new DatumMenu()});
-  //      	this.searchview = new Search({model: this.model.get("search")});
-       //     this.listview = new DataList({model: this.model.get("dataList")});
-    //        this.titleview = new DataListTitleView({model: this.model.get("dataListTitle")});
-            this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
-
+       
         },
 
         model : DataList,
-        classname : "dataList",
+        classname : "data_list",
         template: Handlebars.compile(data_listTemplate),
         
         menuview: DatumMenuView,
 
+       
         render : function() {
-          
-        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
-        template: Handlebars.compile(data_list_viewTemplate),
-        
-        
-      //  searchsview: null,  
-       //listview: null,
- //       titleview: null,
-        menuview: null,
-        
-        
-        render : function() {
-        	
-//        	Handlebars.registerPartial("search", this.statusview.template(this.statusview.model.toJSON()) );
-//        	Handlebars.registerPartial("list", this.tagview.template(this.tagview.model.toJSON()) );
-   //     	Handlebars.registerPartial("data_list_title", this.titleview.template(this.titleview.model.toJSON()) );
-        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
+//        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
         	
         	
         	$(this.el).html(this.template(this.model.toJSON()));
