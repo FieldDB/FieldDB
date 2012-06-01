@@ -1,4 +1,4 @@
-define("serarch/Search", [
+define("search/Search", [
     "use!Backbone",
 //    "corpus/Corpus",
 //    "datum/Datum",
