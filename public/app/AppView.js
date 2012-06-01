@@ -33,11 +33,11 @@ define("app/AppView", [
 			});
 			this.$("#navigation").append(view.render().el);
 			
-			var datalistview = new DataList();
+			var datalist = new DataList();
 //			app.dataList.add(datalistview); we can't have this because datalist view is not a collection
 //			 Render datalist view
 			var d = new DataListView({
-				model : datalistview
+				model: datalist
 			});
 			this.$("#rightside").append(d.render().el);
 			
@@ -57,15 +57,11 @@ define("app/AppView", [
 			Utils.debug("Clicked addOneDatum");
 
 			// Create the new Datum to be added
-			var datum = new Datum({
-				utterance : "Hello World!"
-			});
+			var datum = new Datum();
 
 			// Add it to the global list of Datum
 			app.datumList.add(datum);
-			app.datumList.create({
-				utterance : "Hello World!"
-			});
+			app.datumList.create();
 
 			// Render it as a DatumView
 			var view = new DatumView({
