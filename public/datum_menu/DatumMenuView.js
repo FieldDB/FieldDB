@@ -15,14 +15,14 @@ define("datum_menu/DatumMenuView", [
          */
         initialize : function() {
           //  this.el.click(_.bind( this, 'starDatum'));
-//            _.bindAll( this, 'render', 'starDatum');
+//           _.bindAll( this, 'render', 'starDatum');
 
         },
         model: DatumMenu,
         className : "datum_menu",
         template: Handlebars.compile(datum_menuTemplate),
         events:{
-        	"click #star": "starDatum"
+        	"click .star": "starDatum"
         	
         },
        
