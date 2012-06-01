@@ -3,8 +3,15 @@ define("data_list/DataListView", [
     "use!handlebars",
     "datum/Datum",
     "data_list/DataList",
-    "text!data_list/data_list.handlebars"
-], function(Backbone, Handlebars, Datum, DataList, data_listTemplate) {
+    "text!data_list/data_list.handlebars",
+    "text!data_list_title/data_list_title.handlebars",
+    "data_list_title/DataListTitle",
+    "data_list_title/DataListTitleView",
+    "datum_menu/DatumMenu",
+    "datum_menu/DatumMenuView"
+
+ //   "search/Search"
+], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView, DatumMenu,DatumMenuView) {
     var DataListView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -15,12 +22,20 @@ define("data_list/DataListView", [
          * @constructs
          */
         initialize : function() {
+       
         },
 
         model : DataList,
-        classname : "dataList",
+        classname : "data_list",
         template: Handlebars.compile(data_listTemplate),
+        
+        menuview: DatumMenuView,
+
+       
         render : function() {
+//        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
+        	
+        	
         	$(this.el).html(this.template(this.model.toJSON()));
             return this;
         } 
