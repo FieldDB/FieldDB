@@ -4,14 +4,14 @@ define("data_list/DataListView", [
     "datum/Datum",
     "data_list/DataList",
     "text!data_list/data_list.handlebars",
-    "text!data_list_title/data_list_title.handlebars",
-    "data_list_title/DataListTitle",
-    "data_list_title/DataListTitleView",
+//    "text!data_list_title/data_list_title.handlebars",
+//    "data_list_title/DataListTitle",
+//    "data_list_title/DataListTitleView",
     "datum_menu/DatumMenu",
     "datum_menu/DatumMenuView"
 
  //   "search/Search"
-], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, data_list_titleTemplate, DataListTitle, DataListTitleView, DatumMenu,DatumMenuView) {
+], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, DatumMenu,DatumMenuView) {
     var DataListView = Backbone.View.extend(
     /** @lends DatumView.prototype */
     {
@@ -32,7 +32,7 @@ define("data_list/DataListView", [
 
         model : DataList,
         classname : "dataList",
-        template: Handlebars.compile(data_list_viewTemplate),
+        template: Handlebars.compile(data_listTemplate),
         
         
       //  searchsview: null,  
@@ -40,20 +40,9 @@ define("data_list/DataListView", [
  //       titleview: null,
         menuview: DatumMenuView,
         
-
-       
-       
-
-        model : DataList,
-        classname : "data_list",
-        template: Handlebars.compile(data_listTemplate),
-
-        
-        menuview: DatumMenuView,
-
        
         render : function() {
-//        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
+        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
         	
         	
         	$(this.el).html(this.template(this.model.toJSON()));
