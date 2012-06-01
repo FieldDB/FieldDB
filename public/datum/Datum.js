@@ -59,6 +59,7 @@ define("datum/Datum", [
         defaults : {
             //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
             utterance : "tusunayawan",
+            morphemes: "tusa-naya-wa-n",
             gloss : "dance-IMP-1OM-3SG",
             translation : "I feel like dancing.",
 

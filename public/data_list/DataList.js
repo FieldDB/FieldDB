@@ -1,12 +1,7 @@
 define("data_list/DataList", [
     "use!backbone",
-    "datum/Datum",
-    "datum_status/DatumStatus",
-    "datum_menu/DatumMenu",
-    "datum_tag/DatumTag",
-    "datum_field/DatumField",
-    "session/Session"
-], function(Backbone, Datum, DatumStatus, DatumMenu, DatumTag, DatumField, Session) {
+    "datum/Datum"
+], function(Backbone, Datum) {
     var DataList = Backbone.Model.extend(
     /** @lends DataList.prototype */
     {
