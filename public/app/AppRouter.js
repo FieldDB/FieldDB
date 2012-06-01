@@ -31,6 +31,7 @@ define("app/AppRouter", [
           "corpus/:corpusName/search": "showExtendedSearch",
           "corpus/:corpusName": "showDashboard",
           "user/:userName": "showUserProfile",
+          "user/:userName/prefs": "showUserPreferences",
           "": "showDashboard",
        },
       
@@ -116,6 +117,9 @@ define("app/AppRouter", [
        	  $("#extended-search-view").hide();
        	  $("#user-profile-view").hide();
     	  $("#new-session-view").hide();
+    	  
+    	  
+    	  
 
        },
        
@@ -188,7 +192,43 @@ define("app/AppRouter", [
 			});
 			$("#user-profile-view").append(view.render().el);
 
-       }    
+       },
+       
+       
+       /**
+        * Displays the profile of the user specified by the given userName.
+        *  
+        * @param {String} userName The username of the user whose profile to display.
+        */
+       showUserPreferences: function(userName) {
+       	  Utils.debug("In showUserProfile: " + userName);
+       	  
+       	  $("#dashboard-view").hide();
+       	  $("#extended-datum-view").hide();
+       	  $("#extended-datalist-view").hide();
+       	  $("#extended-search-view").hide();
+       	  $("#user-profile-view").show();
+       	  $("#new-session-view").hide();
+;
+
+       	  
+
+       	  // Create 
+       	  var userProfileView = new UserProfileView({
+       		  model : new User(), 
+
+       		  el : $('#user-profile-view'),
+       	  });
+
+       	  userProfileView.render();
+
+       // Render a user profile into the div
+			var view = new UserProfileView({
+				model : User,  
+			});
+			$("#user-profile-view").append(view.render().el);
+
+       }
     });
     
     return AppRouter; 
