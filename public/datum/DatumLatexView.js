@@ -8,11 +8,11 @@ define("datum/DatumLatexView", [
     /** @lends DatumLatexView.prototype */
     {
         /**
-         * @class DatumLatex shows up as an item in the Data List as a result of  
-        *        search. As a default a DatumLatex item has three fields (utterance, 
-        *        gloss, translation) showing up in the Data List. Morphemes are 
-        *        aligned with corresponding gloss as in Latex, but this is not a 
-        *        true Latex format (just looking like Latex). 
+         * @class DatumLatex is an item in the Data List showing up as a result of  
+        *        search. It has four core fields (topline, morpheme segmentation, 
+        *        gloss, translation). Morphemes are aligned with corresponding gloss 
+        *        as in Latex, but this is not a true Latex format (just looking like 
+        *        Latex). 
          *
          * @extends Backbone.View
          * @constructs
