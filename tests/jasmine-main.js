@@ -53,9 +53,7 @@ require([
     "../tests/activity_feed/ActivityFeedViewTest",
     "../tests/lexicon/LexiconTest",
  //   "../tests/dashboard/DashboardTest",
-    "../tests/SinonTest",
-
-    "../tests/datum_menu/DatumMenuViewTest"
+    "../tests/SinonTest"
 ], function() {
     // Standard Jasmine initialization
     (function() {
