@@ -1,6 +1,6 @@
 define([ "use!backbone","use!handlebars", "authentication/AuthenticationView",
-    "corpus/CorpusView", "search/SearchView", "app/App","text!app/app.handlebars", "libs/Utils" ], function(
-    Backbone, Handlebars, AuthenticationView, CorpusView, SearchView, App, appTemplate) {
+    "corpus/CorpusView", "search/SearchView", "app/App","app/AppRouter", "text!app/app.handlebars", "libs/Utils" ], function(
+    Backbone, Handlebars, AuthenticationView, CorpusView, SearchView, App,AppRouter, appTemplate) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
   {
@@ -15,7 +15,15 @@ define([ "use!backbone","use!handlebars", "authentication/AuthenticationView",
      * @constructs
      */
     initialize : function() {
+      this.corpusView = new CorpusView({model: this.model.get("corpus"), el: $('#corpus')});
+      console.log("Corpus title" + this.model.get("corpus").get("name") );
+      
       this.render();
+      $("#corpus").append(this.corpusView.render().el);
+      this.router = new AppRouter();
+      
+      // Start the Router
+      Backbone.history.start();
     },
 
     el : $('#app_view'),
@@ -26,10 +34,14 @@ define([ "use!backbone","use!handlebars", "authentication/AuthenticationView",
     model: App,
     template : Handlebars.compile(appTemplate),
     classname: "app_view",
+    router: AppRouter,
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
       return this;
     },
+    
+    corpusView: CorpusView
+    
     
   });
 

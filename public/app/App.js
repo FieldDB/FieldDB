@@ -1,7 +1,7 @@
-define([ "use!backbone", "app/AppRouter",
+define([ "use!backbone", 
     "authentication/Authentication", "corpus/Corpus", "search/Search"
 
-], function(Backbone, AppRouter, Authentication, Corpus, Search) {
+], function(Backbone, Authentication, Corpus, Search) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
   {
@@ -35,17 +35,16 @@ define([ "use!backbone", "app/AppRouter",
       this.bind('error', function(model, error) {
         console.log("Error in App: " + error);
       });
-
-      // Start the Router
-      Backbone.history.start();
+      this.set("corpus", new Corpus());
+     
     },
     defaults : {
-      corpus : new Corpus("corpus"),
+      corpus : new Corpus(),
 
     },
 
     auth : new Authentication("authentication"),
-    router : new AppRouter(),
+    
     search : new Search("global_search")
   });
 
