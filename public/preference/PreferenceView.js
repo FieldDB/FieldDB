@@ -19,7 +19,7 @@ define([
 
         model : Preference,
      //make model name: JS/CSS class name
-        hotkeyview: HotKeyConfigView
+        hotkeyview: HotKeyConfigView,
 
         classname : "preference",
 
@@ -31,7 +31,7 @@ define([
         	
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
-        }
+        }	
         
         
     });

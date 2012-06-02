@@ -1,10 +1,5 @@
 define("search/Search", [
-    "use!Backbone",
-//    "corpus/Corpus",
-//    "datum/Datum",
-//    "datum_tag/DatumTag",
-//    "datum_status/DatumStatus",
-//    "data_list/DataList"
+    "use!Backbone"
    ], 
 		function(Backbone){
 	

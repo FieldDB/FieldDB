@@ -52,7 +52,7 @@ require([
     "../tests/activity_feed/ActivityFeedTest",
     "../tests/activity_feed/ActivityFeedViewTest",
     "../tests/lexicon/LexiconTest",
- //   "../tests/dashboard/DashboardTest",
+    "../tests/dashboard/DashboardTest",
     "../tests/SinonTest"
 ], function() {
     // Standard Jasmine initialization

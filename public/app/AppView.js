@@ -37,7 +37,11 @@ define("app/AppView", [
 //			app.dataList.add(datalistview); we can't have this because datalist view is not a collection
 //			 Render datalist view
 			var d = new DataListView({
+
+				
+
 				model: datalist
+
 			});
 			this.$("#rightside").append(d.render().el);
 			

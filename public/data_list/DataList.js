@@ -37,8 +37,11 @@ define("data_list/DataList", [
             title : "NELS handout",
             dateCreated : "May 29, 2012",
             description : "some useful examples"
+
+
 //            datumMenu : null
           
+
         },
         /**
          * <TODO Describe the validation here.>
