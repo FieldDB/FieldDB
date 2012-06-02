@@ -35,6 +35,13 @@ define("corpus/Corpus", [
          *           version control with the corpus. This is used so that
          *           the user can go back to their original files:eg
          *           sample_elan.eaf
+         *           
+          * @property {Glosser} glosser The glosser listens to
+     *           orthography/utterence lines and attempts to guess the
+     *           gloss.
+     * @property {Lexicon} lexicon The lexicon is a list of morphemes,
+     *           allomorphs and glosses which are used to index datum, and
+     *           also to gloss datum.
          * 
          * @description The initialize function probably checks to see if
          *              the corpus is new or existing and brings it down to

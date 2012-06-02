@@ -1,0 +1,94 @@
+  <!-- The layout of the dashboard page -->
+  <div id="dashboard-view" class="page">
+    <div class="navigationcontainer">
+      <div class="navigation widget" id="navigation">
+        <font size="6">
+
+          <nav>
+            <ul>
+              <li>New
+
+                <ul>
+                  <li><a href="#corpus/Yale/datum/12"> Datum </a></li>
+                  <li><a href="#corpus/Yale/session/12"> Session </a></li>
+                </ul>
+              </li>
+              <li>View</li>
+              <li>Data</li>
+            </ul>
+
+
+          </nav>
+        </font>
+
+      </div>
+    </div>
+    <div id="status" style="color: #ffcc00"></div>
+    <div class="main">
+      <div id="leftside" class="leftside widget">
+        <div id="user"></div>
+        <div id="authentication">
+          <div id="login">
+            <div>
+              <label>Username:</label> <br /> <input type="text" id="username"
+                name="username" value="sapir" /><br />
+            </div>
+            <div>
+              <label>Password:</label> <br /> <input type="password"
+                id="password" name="password" value="wharf" />
+            </div>
+            <div>
+              <input type="button" id="login_button" class="button"
+                value="Log In" onclick="app.auth.login()" />
+            </div>
+          </div>
+          <div id="logout" class="hidden">
+            <input type="button" onclick="app.auth.logout()" class="button"
+              value="Logout" />
+          </div>
+        </div>
+        <div id="activity_feed">
+          <div class="activity_feed_title">
+            <input onclick="" type="button" class="inactive_activity button "
+              value="Your Activity" /> <input onclick="" type="button"
+              class="activity button" value="Team Activity" />
+          </div>
+        </div>
+
+      </div>
+      <div id="content" class="content">
+        <div id="corpus"></div>
+      </div>
+      <div id="rightside" class="rightside widget"></div>
+    </div>
+  </div>
+
+  <!-- The layout of the fullscreen datum page -->
+  <div id="fullscreen-datum-view" class="page centercontent widget">
+    <div>Fullscreen Datum View</div>
+  </div>
+
+  <!-- The layout of the fullscreen data list page -->
+  <div id="fullscreen-datalist-view" class="page centercontent widget">
+    <div>Fullscreen Data List View</div>
+  </div>
+
+  <!-- The layout of the fullscreen search page -->
+  <div id="fullscreen-search-view" class="page centercontent widget">
+    <div>Fullscreen Search View</div>
+  </div>
+
+  <!-- The layout of the user profile page -->
+
+  <div id="user-profile-view" class="page widget centercontent">
+    <div>User Profile</div>
+  </div>
+
+  <div id="user-preferences-view" class="page widget centercontent">
+    <div>User Preferences</div>
+  </div>
+
+  <!-- The layout of the new session page -->
+  <div id="new-session-view" class="page centercontent widget">
+    <div>New Session</div>
+  </div>
