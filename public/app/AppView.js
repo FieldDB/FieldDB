@@ -6,12 +6,10 @@ define("app/AppView", [
 	"datum_status/DatumStatusView", 
 	"navigation/Navigation", 
 	"navigation/NavigationView", 
-	"activity_feed/ActivityFeedItem", 
-	"activity_feed/ActivityFeedItemView",
 	"data_list/DataList",
 	"data_list/DataListView",
 	"libs/Utils"
-], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Navigation, NavigationView, ActivityFeedItem, ActivityFeedItemView, DataList, DataListView) {
+], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Navigation, NavigationView, DataList, DataListView) {
 	var AppView = Backbone.View.extend(
 	/** @lends AppView.prototype */
 	{
@@ -73,14 +71,7 @@ define("app/AppView", [
 			});
 			this.$("#content").append(view.render().el);
 
-			var action = new ActivityFeedItem();
-			app.activityFeed.add(action);
-//			 Render an activity in the activity feed
-			var v = new ActivityFeedItemView({
-				model : action
-			});
-			this.$("#activity_feed").append(v.render().el);
-			
+	
 
 			
 		}
