@@ -35,8 +35,9 @@ require.config({
 // Initialization
 require([
     "use!backbone",
-    "app/App"
-], function(Backbone, App) {
+    "app/App",
+    "app/AppView"
+], function(Backbone, App,AppView) {
     // CouchDB configuration
     Backbone.couch_connector.config.base_url = "https://trisapeace.iriscouch.com"
     Backbone.couch_connector.config.db_name = "datum_test";
@@ -46,5 +47,6 @@ require([
     Backbone.couch_connector.config.global_changes = false;
 
     window.app = new App();
+    window.appView = new AppView({model: window.app});
     
 });

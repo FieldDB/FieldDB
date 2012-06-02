@@ -37,8 +37,8 @@ define("session/SessionView", [
         addDatum : function(){
         	console.log("yay!");
       	    var datumView = new DatumView({model: new Datum()});
-         	$("#extended-datum-view").append(datumView.render().el);
-         	$("#extended-datum-view").show();
+         	$("#fullscreen-datum-view").append(datumView.render().el);
+         	$("#fullscreen-datum-view").show();
 
         	return true;
         }

@@ -1,4 +1,4 @@
-define("search/SearchView", [
+define( [
     "use!backbone", 
     "use!handlebars", 
     "search/Search",

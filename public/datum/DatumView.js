@@ -64,7 +64,7 @@ define("datum/DatumView", [
              */
         	
 //        	var newDatum = new DatumView({model: new Datum()});
-//         	$("#extended-datum-view").append(newDatum.render().el);
+//         	$("#fullscreen-datum-view").append(newDatum.render().el);
 //         	var sID = this.newDatum.get("sessionID");
 //         	console.log(sID);
 //      	
