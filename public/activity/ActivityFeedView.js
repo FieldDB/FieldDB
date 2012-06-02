@@ -15,7 +15,7 @@ define([ "use!backbone", "use!handlebars", "activity/ActivityFeed" ],
 
         model : ActivityFeed,
         classname : "activity_feed",
-        template : Handlebars.compile(Template),
+        template : Handlebars.compile(activity_feedTemplate),
 
         render : function() {
           $(this.el).html(this.template(this.model.toJSON()));

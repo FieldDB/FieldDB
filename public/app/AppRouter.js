@@ -53,6 +53,8 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
       $("#new-session-view").show();
+      $("#user-preferences-view").hide();
+
 
       var sessionView = new SessionView({
         model : new Session()
@@ -79,6 +81,8 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
+      $("#user-preferences-view").hide();
+
 
       var datumView = new DatumView({
         model : new Datum()
@@ -114,6 +118,8 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
+      $("#user-preferences-view").hide();
+
 
       var datalist = new DataList();
       // app.dataList.add(datalistview); we can't have this because datalist
@@ -145,6 +151,8 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").show();
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
+      $("#user-preferences-view").hide();
+
 
     },
 
@@ -164,6 +172,8 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
+      $("#user-preferences-view").hide();
+
 
     },
 
@@ -182,6 +192,8 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").show();
       $("#new-session-view").hide();
+      $("#user-preferences-view").hide();
+
 
      // Create
       var userProfileView = new UserProfileView({
