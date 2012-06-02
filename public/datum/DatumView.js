@@ -51,8 +51,6 @@ define("datum/DatumView", [
         	Handlebars.registerPartial("datum_menu", this.menuview.template(this.model.toJSON()) );
         	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
         	Handlebars.registerPartial("datum_field", this.fieldview.template(this.model.toJSON()) );
-
-
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
         },
