@@ -3,13 +3,12 @@ define("app/App", [
     "app/AppView", 
     "app/AppRouter", 
     "datum/Datums",
-    "activity_feed/ActivityFeed",
     "user/User",
     "authentication/Authentication",
     "corpus/Corpus",
     "import/Import",
     "lexicon/Lexicon"
-], function(Backbone, AppView, AppRouter, Datums, ActivityFeed, User, Authentication, Corpus, Import, Lexicon) {
+], function(Backbone, AppView, AppRouter, Datums, User, Authentication, Corpus, Import, Lexicon) {
     var App = Backbone.Model.extend(
     /** @lends App.prototype */
     {
@@ -74,7 +73,6 @@ define("app/App", [
     		lexicon: new Lexicon(""), //has indexes, stored in local storage
         	user: new User("user") //has preferences (skins, colors etc), has hotkeys
         },
-        activityFeed: new ActivityFeed("activity_feed"),
         auth: new Authentication("authentication"),
         importer: new Import(),
         view: new AppView(),
