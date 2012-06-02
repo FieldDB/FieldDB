@@ -1,6 +1,6 @@
 define([ "use!backbone", "user/User" ], function(Backbone, User) {
   var Activity = Backbone.Model.extend(
-  /** @lends ActivityFeedItem.prototype */
+  /** @lends Activity.prototype */
   {
     /**
      * @class The Activity is a record of the user's activity during one
@@ -21,7 +21,7 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
       verb : "added",
       directobject : "an entry",
       indirectobject : "with Informant-SJ",
-      context : "via Android/ Chrome App"  
+      context : "via Android/ Offline Chrome App"  
     }
 
   });
