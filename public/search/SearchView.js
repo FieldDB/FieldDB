@@ -15,9 +15,9 @@ define([ "use!backbone", "use!handlebars", "search/Search",
       this.on('all', function(e) {
         this.render();
       });
-      this.model.on('all', function(e){
-        this.render();
-      })
+//      this.model.on('all', function(e){
+//        this.render();
+//      })
       this.render();
     },
     events : {
