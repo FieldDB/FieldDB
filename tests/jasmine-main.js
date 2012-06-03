@@ -1,40 +1,44 @@
 // Set the RequireJS configuration
+
 require.config({
-    baseUrl: "./../public",
-    
-    paths : {
-        "use" : "libs/use",
-        "text" : "libs/text",
-        "jquery" : "libs/jquery",
-        "underscore" : "libs/underscore",
-        "backbone" : "libs/backbone",
-        "handlebars" : "libs/handlebars-1.0.0.beta.6",
-        "crypto" : "libs/Crypto_AES",
-        "sinon" : "./../tests/sinon"
-    },
-    use : {
-        "underscore" : {
-            attach : "_"
-        },
-        "sinon" :{
-        	attach: "sinon"
-        },
+  baseUrl: "./../public",
+  
+  paths : {
+      "use" : "libs/use",
+      "text" : "libs/text",
+      "jquery" : "libs/jquery",
+      "underscore" : "libs/underscore",
+      "backbone" : "libs/backbone",
+      "handlebars" : "libs/handlebars-1.0.0.beta.6",
+      "paginator" : "libs/backbone.paginator",
+      "crypto" : "libs/Crypto_AES",
+      "jquery.couch" : "libs/jquery.couch"
+  },
+  use : {
+      "underscore" : {
+          attach : "_"
+      },
 
-        "backbone" : {
-            deps : ["use!underscore", "jquery", "sinon"],
-            attach : function(_, $, sinon) {
-                return Backbone;
-            }
-        },
-        "handlebars" : {
-            attach : "Handlebars"
-        },
-        "crypto" :{
-        	attach: "CryptoJS"
-        }
-    }
+      "backbone" : {
+          deps : ["use!underscore", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+          attach : function(_, $) {
+              return Backbone;
+          }
+      },
+
+      "handlebars" : {
+          attach: "Handlebars"
+      },
+      
+      "crypto" :{
+        attach: "CryptoJS"
+      },
+      "paginator":{
+        deps : ["use!underscore", "use!backbone", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+        attach: "Paginator"
+      }
+  }
 });
-
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
@@ -51,7 +55,7 @@ require([
     "../tests/authentication/AuthenticationTest",
     "../tests/lexicon/LexiconTest",
     "../tests/dashboard/DashboardTest",
-    "../tests/SinonTest",
+//    "../tests/SinonTest",
     "../tests/activity/ActivityTest",
 ], function() {
     // Standard Jasmine initialization

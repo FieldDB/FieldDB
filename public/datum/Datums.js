@@ -17,7 +17,7 @@ define([
 
       // As usual, let's specify the model to be used
       // with this collection
-      model: Backbone.Model.extend({}),
+      model: Datum,
 
       // Next, we're going to map the parameters supported by
       // your API or backend data service back to attributes
