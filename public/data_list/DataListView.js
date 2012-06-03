@@ -1,63 +1,63 @@
-define("data_list/DataListView", [
-    "use!backbone", 
-    "use!handlebars",
-    "datum/Datum",
-    "data_list/DataList",
-    "text!data_list/data_list.handlebars",
-    "text!data_list_title/data_list_title.handlebars",
-    "data_list_title/DataListTitle",
-    "data_list_title/DataListTitleView",
-    "datum_menu/DatumMenu",
-    "datum_menu/DatumMenuView"
-//    "search/Search",
-//    "search/SearchView"
- //   added "search/Search"
-], function(Backbone, Handlebars, Datum, DataList, data_listTemplate, data_list_titleTemplate, DataListTitle, 
-		DataListTitleView, DatumMenu, DatumMenuView) {
+define( [ "use!backbone", 
+          "use!handlebars",
+          "datum/Datum",
+          "data_list/DataList",
+          "text!data_list/data_list.handlebars"
+], function(
+    Backbone, 
+    Handlebars, 
+    Datum, 
+    DataList, 
+    data_listTemplate) {
 
-    var DataListView = Backbone.View.extend(
-    /** @lends DatumView.prototype */
-    {
-        /**
-         * @class A list of datum that are returned as a search result.  It will have check-boxes on the side and a datum menu on the bottom.   
-         *
-         * @extends Backbone.View
-         * @constructs
-         */
-        initialize : function() {
+  var DataListView = Backbone.View.extend(
+  /** @lends DataList.prototype */
+  {
+    /**
+     * @class A list of datum that are returned as a search result. It will have
+     *        check-boxes on the side and a datum menu on the bottom.
+     *        
+     *        This class is based off of the Infinite paginator by Addy Osmani's AppView
+     * 
+     * @extends Backbone.View
+     * @constructs
+     */
 
-  //      	this.searchview = new Search({model: this.model.get("search")});
-       //     this.listview = new DataList({model: this.model.get("dataList")});
-    //        this.titleview = new DataListTitleView({model: this.model.get("dataListTitle")});
-//            this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
+    initialize : function() {
 
-        },
+//      var tags = this.collection;
+//
+//      tags.on('add', this.addOne, this);
+//      tags.on('reset', this.addAll, this);
+//      tags.on('all', this.render, this);
+//
+//      tags.pager();
 
-        model : DataList,
-        classname : "dataList",
-        template: Handlebars.compile(data_listTemplate),
-        
+    },
+    
+    el : '#data_list',
+    model : DataList,
+    classname : "dataList",
+    template : Handlebars.compile(data_listTemplate),
 
-        
-      //  searchsview: null,  
-       //listview: null,
- //       titleview: null,
+   
 
-        //added searchview
-//       searchview: SearchView, 
-        
-        menuview: DatumMenuView,
-        
-       
-        render : function() {
-//        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
-        	
-        	
-        	$(this.el).html(this.template(this.model.toJSON()));
-            return this;
-        }
-        
-    });
+    addAll : function() {
+      this.collection.each(this.addOne);
+    },
 
-    return DataListView;
-}); 
+    addOne : function(item) {
+      var view = new views.ResultView({
+        model :  Backbone.Model.extend({})
+      });
+      $('#data_list_content').append(view.render().el);
+    },
+
+    render : function() {
+      $(this.el).html(this.template(this.model.toJSON()));
+      return this;
+    }
+  });
+
+  return DataListView;
+});
