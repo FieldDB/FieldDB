@@ -24,7 +24,7 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
     },
 
     routes : {
-      "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
+      "corpus/:corpusName/datum/:id" : "showNewDatum",
       "corpus/:corpusName/session/:id" : "showNewSession",
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
@@ -47,12 +47,13 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
 
-      $("#dashboard-view").hide();
+      $("#dashboard-view").show();
+      $("#corpus").hide();
+      $("#session").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
-      $("#new-session-view").show();
       $("#user-preferences-view").hide();
 
 
@@ -171,7 +172,7 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
-      $("#new-session-view").hide();
+      $("#session").hide();
       $("#user-preferences-view").hide();
 
 

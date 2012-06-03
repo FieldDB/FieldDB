@@ -21,7 +21,7 @@ define("session/SessionView", [
         model : Session,
 
         classname : "session",
-
+        el: '#session',
         template: Handlebars.compile(sessionTemplate),
         events:{
         	"click #done": "addDatum" 
