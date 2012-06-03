@@ -110,6 +110,8 @@ define(
 
                 })
               });
+              this.datums = new Datums();
+              this.datumsView = new DatumsView({model: this.datums});
 
               this.render();
             }
