@@ -63,7 +63,7 @@ define("corpus/Corpus", [
           description : "",
           changedDatumList : [],
           confidential :  Confidential
-        },
+        }
 //        ,
 //        insertDatum : function(datum) {
 //          Utils.debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "

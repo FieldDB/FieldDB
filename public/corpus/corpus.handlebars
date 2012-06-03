@@ -1,1 +1,36 @@
-<div>Corpus: {{name}}</div>
+<div style="float:left;">
+  Corpus:<br/> {{name}}
+</div>
+<div style="float:left;">
+ <nav>
+            <ul>
+              <li>New
+                <ul>
+                  <li><input type="button" class="new_datum" value="New Datum"/></li>
+                  <li><input type="button" class="new_session" value="New Session"/></li>
+                </ul>
+              </li> 
+              <li> View 
+                <ul>
+                  <li><input type="button" class="show_data_lists" value="Data Lists"/></li>
+                  <li><input type="button" class="show_corpus_details" value="Corpus"/></li>
+                  <li><input type="button" class="show_sessions" value="Sessions"/></li>
+                  <li><input type="button" class="show_permissions" value="Teams"/></li>
+                  <li><input type="button" class="show_corpora" value="Corpora"/></li>
+                </ul>
+              </li>
+              <li> Data
+                <ul>
+                  <li><input type="button" class="import" value="Import"/> </li>
+                  <li><input type="button" class="export" value="Export"/> </li>
+                </ul>
+              </li>
+            </ul>   
+
+          </nav>
+</div>
+
+
+<div style="float:left;">
+  {{> session}}
+</div>
