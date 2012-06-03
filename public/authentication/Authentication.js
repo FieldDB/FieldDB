@@ -22,7 +22,7 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
       this.on('all', function(e) {
         Utils.debug("Authentication, "+ this.get('username') + " event: " + JSON.stringify(e));
       });
-      this.authenticatePreviousUser();
+      
     },
 
     defaults : {
@@ -40,27 +40,16 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
     },
     login : function(usrname, pass) {
       console.log("Trying to login as: "+usrname);
-      this.set("user", new User({
-        "username" :  usrname,
-        "password" : pass
-      }));
+      this.get("user").set("username",usrname);
+      this.get("user").set("password",pass);
+      
       this.set("username",usrname);
       localStorage.setItem("username",usrname);
 //      localStorage.setItem("user", JSON.stringify(this.get("user").toJSON()));
       
-    },
-    
-    authenticatePreviousUser : function() {
-      if (localStorage.getItem("user")) {
-        var u = JSON.parse(localStorage.getItem("user"));
-        this.set("user", new User(u));
-        this.set("username",u.username);
-        $("#logout").show();
-        $("#login").hide();
-      }
-
     }
-
+    
+    
   });
 
   return Authentication;
