@@ -9,16 +9,21 @@ body {
 .llama {
 	background-image: url('llama.jpg');
 }
+
 nav {
-	font-size: 1.7em;
+	font-size: 1.5em;
+	padding: 0em 1em 1em 0em;
 }
+
 .page {
 	width: 100%;
 	height: 100%;
 }
-.search{
-	float:right;
+
+.search {
+	float: right;
 }
+
 .widget {
 	width: 100%;
 	height: 100%;
@@ -78,6 +83,43 @@ ul {
 	width: 1260px;
 }
 
+#navigation {
+	width: 100%;
+	height: 3em;
+}
+
+#navigation ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+#navigation ul li {
+	display: inline;
+	height: 30px;
+	float: left;
+	list-style: none;
+	margin-left: 15px;
+	position: relative;
+}
+
+#navigation li ul {
+	margin: 0px;
+	padding: 0px;
+	display: none;
+	position: absolute;
+}
+
+#navigation li:hover ul {
+	display: block;
+	width: 160px;
+}
+
+#navigation li li {
+	list-style: none;
+	display: list-item;
+	width: 100%;
+}
+
 .main {
 	width: 100%;
 	height: 100%;
@@ -113,19 +155,34 @@ ul {
 	font-size: 0.75em;
 }
 
+.date {
+	color: #343298;
+}
+
+.goal {
+	color: #53edf4;
+}
+
 .subtitle {
+	color: #fbef9f;
+}
+
+.informant {
 	color: #fbef9f;
 }
 
 .activity_direct_object,.activity_indirect_object {
 	font-size: 0.75em;
 }
-.authentication{
-	float:right;
+
+.authentication {
+	float: right;
 }
-.authentication div{
-	float:left;
+
+.authentication div {
+	float: left;
 }
+
 .user {
 	padding: 2px;
 	margin: 2px;
@@ -136,13 +193,16 @@ ul {
 	-moz-box-shadow: 0 0 6px #f8b635;
 	-webkit-box-shadow: 0 0 6px #f8b635;*/
 }
-.authentication .user img{
+
+.authentication .user img {
 	height: 40px;
 	width: 40px;
 }
-.authentication .user .username{
+
+.authentication .user .username {
 	display: none;
 }
+
 .activity_feed_title {
 	background-color: #eaa623;
 	text-align: center;
@@ -150,7 +210,7 @@ ul {
 	padding: 0.15em;
 }
 
-button, .button {
+button,.button,input[type="button"] {
 	color: #fff;
 	background-color: #f8b635;
 	border: 1px solid #fcd857;
