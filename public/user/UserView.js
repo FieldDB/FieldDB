@@ -58,7 +58,26 @@ define(
                 "prefs" : {},
                 "teams" : []
               };
+            },
+            loadPublic : function(){
+              this.model.attributes = {
+                  "username" : "public",
+                  "password" : "",
+                  "email" : "",
+                  "firstname" : "Anonymous",
+                  "lastname" : "User",
+                  "gravatar" : "./../user/public_gravatar.png",
+                  "researchInterest" : "",
+                  "affiliation" : "",
+                  "description" : "",
+                  "subtitle" : "",
+                  "corpora" : [],
+                  "dataLists" : [],
+                  "prefs" : {},
+                  "teams" : []
+                };
             }
+            
 
           });
 
