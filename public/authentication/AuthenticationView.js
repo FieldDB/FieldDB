@@ -45,6 +45,7 @@ define([
       } else {
         localStorage.setItem("user", JSON.stringify(this.model.get("user").toJSON()));
       }
+      this.render();
       $("#logout").show();
       $("#login").hide();
 

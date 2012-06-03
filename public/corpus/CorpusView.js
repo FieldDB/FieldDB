@@ -33,6 +33,11 @@ define([ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
         console.log("\tCorpus model was undefined.");
       }
       return this; 
+    },
+    loadSample : function() {
+      this.model.set("name","Sample Quechua Corpus");
+      this.model.set("description","This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.");
+      this.render();
     }
 
   });

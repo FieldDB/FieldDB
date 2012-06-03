@@ -39,6 +39,7 @@ define([ "use!backbone", "use!handlebars", "search/Search",
     loadSample : function(){
       this.model.set("searchKeywords","naya");
       console.log("Changing search keyword: "+ this.model.get("searchKeywords"));
+      this.render();
     }
   });
 
