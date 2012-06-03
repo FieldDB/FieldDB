@@ -1,5 +1,41 @@
-define([ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
-    "corpus/Corpus" ], function(Backbone, Handlebars, corpusTemplate, Corpus) {
+define([ "use!backbone", 
+         "use!handlebars", 
+         "text!corpus/corpus.handlebars",
+         "corpus/Corpus",
+         "session/Sessions",
+         "session/SessionView",
+         "session/SessionsView",
+         "datum/Datums",
+         "datum/DatumsView",
+         "data_list/DataLists",
+         "data_list/DataListView",
+         "data_list/DataListsView",
+         "permission/Permissions",
+         "permission/PermissionView",
+         "permission/PermissionsView",
+         "lexicon/Lexicon",
+         "lexicon/LexiconView",
+         "glosser/Glosser",
+         "glosser/GlosserView"], function(
+             Backbone, 
+             Handlebars, 
+             corpusTemplate, 
+             Corpus,
+             Sessions,
+             SessionView,
+             SessionsView,
+             Datums,
+             DatumsView,
+             DataLists,
+             DataListView,
+             DataListsView,
+             Permissions,
+             PermissionView,
+             PermissionsView,
+             Lexicon,
+             LexiconView,
+             Glosser,
+             GlosserView) {
   var CorpusView = Backbone.View.extend(
   /** @lends CorpusView.prototype */
   {
@@ -18,13 +54,34 @@ define([ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
       this.render();
     },
     events : {
-      "click" : "render",
       "change" : "render"
     },
     model : Corpus,
     template : Handlebars.compile(corpusTemplate),
     el : '#corpus',
-
+    
+    sessions: Sessions,
+    sessionView : SessionView,
+    sessionsView: SessionsView,
+    
+    datums: Datums,
+    //DatumView will be show using 1 page in a paginated datumsview
+    datumsView : DatumsView,
+    
+    dataLists: DataLists,
+    dataListView: DataListView,
+    dataListsView: DataListsView,
+    
+    permissions: Permissions,
+    permissionView: PermissionView,
+    permissionsView: PermissionsView,
+    
+    lexicon: Lexicon,
+    lexicon: LexiconView,
+   
+    glosser: Glosser,
+    glosser: GlosserView,
+    
     render : function() {
       if(this.model != undefined){
         $(this.el).html(this.template(this.model.toJSON()));

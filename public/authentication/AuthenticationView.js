@@ -21,7 +21,6 @@ define([ "use!backbone", "use!handlebars",
 
     },
     events : {
-//      "change" : "render",
       "click .logout" : "logout",
       "click .login" : "login"
     },
