@@ -29,9 +29,9 @@ define( [
         'click .serverhowmany a': 'changeCount'
 
       },
-collection: Datums,
+      collection: Datums,
       tagName: 'aside',
-
+      collection: Datums,
       template: _.template($('#tmpServerPagination').html()),
 
       initialize: function () {
