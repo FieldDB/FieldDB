@@ -21,11 +21,12 @@ define([
      * @constructs
      */
     initialize : function() {
+      this.authenticatePreviousUser();
       this.on('all', function(e) {
         this.render();
       });
       this.model.bind('change', this.render);
-      this.render();
+      
     },
     events : {
       "change" : "render",
@@ -33,10 +34,12 @@ define([
       "click .login": "login"
     },
     model : Authentication,
+    userView: UserView,
     template : Handlebars.compile(authTemplate),
     el : '#authentication',
     render : function() {
       if(this.model != undefined){
+        Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()) );
         $(this.el).html(this.template(this.model.toJSON()));
         console.log("\trendering login: "+ this.model.get("username"));
       }else{
@@ -57,23 +60,30 @@ define([
       $("#login").hide();
     },
     loadSample : function() {
-      this.model.set("user", new User({
-        "username" : "sapir",
-        "password" : "wharf",
-        "firstname" : "Ed",
-        "lastname" : "Sapir"
-      }));
-      this.model.set("username","sapir");
-      if (localStorage.getItem("user")) {
-        this.model.set("user", new User(JSON.parse(localStorage.getItem("user"))));
-      } else {
-        localStorage.setItem("user", JSON.stringify(this.model.get("user").toJSON()));
-      }
+      this.userView.loadSample();
+      this.model.set("username",this.model.get("user").get("username"));
       this.render();
       $("#logout").show();
       $("#login").hide();
-
+    },
+    authenticatePreviousUser : function() {
+      if (localStorage.getItem("user")) {
+        var u = JSON.parse(localStorage.getItem("user"));
+        u = new User(u);
+        this.model.set("user", u);
+        this.model.set("username",u.username);
+        this.userView.model = u;
+        this.render();
+        $("#logout").show();
+        $("#login").hide();
+      }else{
+        this.model.set("user", new User());
+        console.log("No previous user.");
+      }
+      this.userView = new UserView({model: this.model.get("user")});
+      
     }
+
 
   });
 

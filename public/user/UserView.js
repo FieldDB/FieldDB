@@ -15,15 +15,33 @@ define("user/UserView", [
          * @constructs
          */
         initialize : function() {
+          this.on('all', function(e) {
+            this.render();
+          });
+          this.model.bind('change', this.render);
+          this.render();
         },
 
         model : User,
         classname : "user",
         template: Handlebars.compile(userTemplate),
         render : function() {
-        	$(this.el).html(this.template(this.model.toJSON()));
+          if(this.model != undefined){
+            $(this.el).html(this.template(this.model.toJSON()));
+            console.log("\trendering user: " + this.model.get("username"));
+          }else{
+            console.log("\tUser model was undefined.");
+          }
+        	
             return this;
-        } 
+        },
+        loadSample: function(){
+          this.model.attributes=
+          {"username" : "sapir",
+          "password" : "wharf",
+          "firstname" : "Ed",
+          "lastname" : "Sapir"};
+        }
         
         
     });
