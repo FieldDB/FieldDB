@@ -1,6 +1,6 @@
 body {
 	background-color: #FFFFCC;
-	width: 1500px;
+	width: 1300px;
 	height: 1010px;
 	margin: auto;
 	color: white;
@@ -9,7 +9,9 @@ body {
 .llama {
 	background-image: url('llama.jpg');
 }
-
+nav {
+	font-size: 1.7em;
+}
 .page {
 	width: 100%;
 	height: 100%;
@@ -18,7 +20,6 @@ body {
 .widget {
 	width: 100%;
 	height: 100%;
-	background: rgb(0, 0, 0);
 	background: rgba(0, 0, 0, 0.4);
 	margin: 0.5em;
 	padding: 0.5em;
@@ -72,7 +73,7 @@ ul {
 }
 
 .navigationcontainer {
-	width: 1460px;
+	width: 1260px;
 }
 
 .main {
@@ -117,7 +118,12 @@ ul {
 .activity_direct_object,.activity_indirect_object {
 	font-size: 0.75em;
 }
-
+.authentication{
+	float:right;
+}
+.authentication div{
+	float:left;
+}
 .user {
 	padding: 2px;
 	margin: 2px;

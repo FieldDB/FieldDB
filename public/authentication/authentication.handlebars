@@ -1,0 +1,19 @@
+  <div id="login">
+    <div>
+      <label>Username:</label>  <input type="text" id="username"
+        name="username" value="sapir" />
+    </div>
+    <div>
+      <label>Password:</label>  <input type="password" id="password"
+        name="password" value="wharf" />
+    </div>
+    <div>
+      <input type="button" id="login_button" class="button" value="Log In"
+        onclick="app.auth.login()" />
+    </div>
+  </div>
+  <div id="logout" class="hidden">
+    {{username}}
+    <input type="button" onclick="app.auth.logout()" class="button"
+      value="Logout" />
+  </div>

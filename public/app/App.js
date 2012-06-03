@@ -48,10 +48,20 @@ define([ "use!backbone",
     },
     defaults : {
       corpus : Corpus,
-      user : ""
+      username : ""
     },
     auth :  Authentication,
-    search :  Search
+    search :  Search,
+    loadSample : function(){
+      var c = new Corpus();
+      c.loadSample();
+      this.set("corpus",c);
+      
+      var u = new Authentication();
+      u.loadSample();
+      this.auth  = u;
+      
+    }
   });
 
   return App;
