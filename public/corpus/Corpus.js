@@ -55,7 +55,8 @@ define("corpus/Corpus", [
            this.on('all', function(e) {
              Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
            });
-
+          
+         
         },
         defaults : {
           name : "",

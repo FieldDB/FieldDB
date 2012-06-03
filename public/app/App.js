@@ -44,6 +44,8 @@ define([ "use!backbone", "authentication/Authentication", "corpus/Corpus",
         this.set("corpus", new Corpus());
         console.log("\tUsing new corpus.");
       }
+      this.auth = new Authentication();
+      this.search = new Search();
 
     },
     defaults : {
@@ -60,10 +62,8 @@ define([ "use!backbone", "authentication/Authentication", "corpus/Corpus",
     loadSample : function() {
       this.get("corpus").loadSample();
 
-      var u = new Authentication();
-      u.loadSample();
-      this.auth = u;
-
+      this.auth.loadSample();
+      this.search.loadSample();
     }
   });
 
