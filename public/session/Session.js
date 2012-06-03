@@ -1,8 +1,7 @@
 define("session/Session", [
     "use!backbone",
-    "team/Team",
     "user/User",
-    "informant/Informant"
+    "user/Informant"
 ], function(Backbone,Team,User,Informant) {
 
     var Session = Backbone.Model.extend(
@@ -28,16 +27,7 @@ define("session/Session", [
       * @constructs
       */
      initialize: function() {
-        this.bind('error', function(model, error) {
-           // TODO Handle validation errors
-        });
-
-        // TODO Set up any other bindings (i.e. what to do when certain Events 
-        //      happen). Example:
-        // this.bind("change:someAttribute", function() {
-        //    console.log("We just changed someAttribute");
-        // });
-       
+        
      },
      
      defaults: {
@@ -46,19 +36,18 @@ define("session/Session", [
         //The sessionID is an automatically generated number.   
          sessionID : 0,
          
-         user: "Edward Sapir",
-         team: "",
+         user: "User",
          informant: "",
 
-         language: "Tlingit",
-         languageFamily: "Na-Dene",
+         language: "Language",
+         languageFamily: "Family",
          dialect: "",
          //allow users to insert date that data was retrieved (maybe prior to time of data entry)
-         date: "",
+         date: (new Date()).toLocaleString(),
          goal: ""
          
      },
-
+     
      /**
       * Validation functions will verify that the session ID is unique and that the informant,users, and teams are all correspond to people in the system.
       *

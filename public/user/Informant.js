@@ -1,4 +1,4 @@
-define("informant/Informant", [ 
+define( [ 
     "use!backbone", 
     "user/User" 
 ], function(Backbone,User) {

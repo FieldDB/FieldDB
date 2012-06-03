@@ -4,8 +4,10 @@ define("session/SessionView", [
     "session/Session",
     "text!session/session.handlebars",
     "datum/Datum",
-    "datum/DatumView"
-], function(Backbone, Handlebars, Session, sessionTemplate, Datum, DatumView) {
+    "datum/DatumView",
+    "user/Users",
+    "user/UsersView"
+], function(Backbone, Handlebars, Session, sessionTemplate, Datum, DatumView, Users, UsersView) {
     var SessionView = Backbone.View.extend(
     /** @lends SessionView.prototype */
     {
@@ -16,6 +18,8 @@ define("session/SessionView", [
          * @constructs
          */
         initialize : function() {
+          this.users = new Users();
+          usersView = new UsersView({model: this.users});
         },
 
         model : Session,
@@ -23,24 +27,18 @@ define("session/SessionView", [
         classname : "session",
         el: '#session',
         template: Handlebars.compile(sessionTemplate),
+        usersView: UsersView,
+        users: Users,
         events:{
-        	"click #done": "addDatum" 
+//        	"click #done": "addDatum" 
         	
         },
-
-        	
         render : function() {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
         },
-        
-        addDatum : function(){
-        	console.log("yay!");
-      	    var datumView = new DatumView({model: new Datum()});
-         	$("#fullscreen-datum-view").append(datumView.render().el);
-         	$("#fullscreen-datum-view").show();
-
-        	return true;
+        loadSample: function(){
+          
         }
         
     });
