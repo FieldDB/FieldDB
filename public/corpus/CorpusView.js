@@ -2,13 +2,13 @@ define(
     [ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
         "corpus/Corpus", "session/Session", "session/Sessions",
         "session/SessionView", "session/SessionsView", "datum/Datums",
-        "datum/DatumsView", "data_list/DataLists", "data_list/DataListView",
+        "datum/DatumsView", "data_list/DataList", "data_list/DataLists", "data_list/DataListView",
         "data_list/DataListsView", "permission/Permissions",
         "permission/PermissionView", "permission/PermissionsView",
         "lexicon/Lexicon", "lexicon/LexiconView", "glosser/Glosser",
         "glosser/GlosserView" ],
     function(Backbone, Handlebars, corpusTemplate, Corpus, Session, Sessions,
-        SessionView, SessionsView, Datums, DatumsView, DataLists, DataListView,
+        SessionView, SessionsView, Datums, DatumsView, DataList, DataLists, DataListView,
         DataListsView, Permissions, PermissionView, PermissionsView, Lexicon,
         LexiconView, Glosser, GlosserView) {
       var CorpusView = Backbone.View
@@ -112,8 +112,10 @@ define(
               });
               this.datums = new Datums();
               this.datumsView = new DatumsView({model: this.datums});
-
+              this.dataListView = new DataListView({model: new DataList({model: this.datumsView}) });
+              
               this.render();
+              this.dataListView.render();
             }
 
           });

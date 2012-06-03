@@ -7,6 +7,7 @@ require.config({
         "underscore" : "libs/underscore",
         "backbone" : "libs/backbone",
         "handlebars" : "libs/handlebars-1.0.0.beta.6",
+        "paginator" : "libs/backbone.paginator",
         "crypto" : "libs/Crypto_AES",
         "jquery.couch" : "libs/jquery.couch"
     },
@@ -28,6 +29,10 @@ require.config({
         
         "crypto" :{
         	attach: "CryptoJS"
+        },
+        "paginator":{
+          deps : ["use!underscore", "use!backbone", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+          attach: "Paginator"
         }
     }
 });
