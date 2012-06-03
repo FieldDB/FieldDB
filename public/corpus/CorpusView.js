@@ -1,5 +1,5 @@
 define([ "use!backbone","use!handlebars", "text!corpus/corpus.handlebars", "corpus/Corpus" ],
-    function(Backbone,Handlebars, corpusTemplate, Corpus) {
+    function(Backbone, Handlebars, corpusTemplate, Corpus) {
       var CorpusView = Backbone.View.extend(
       /** @lends CorpusView.prototype */
       {
@@ -11,15 +11,16 @@ define([ "use!backbone","use!handlebars", "text!corpus/corpus.handlebars", "corp
          */
         
         initialize : function() {
+          this.bind('change', this.render, this);
           this.render();
         },
        model: Corpus,
        template : Handlebars.compile(corpusTemplate),
-   //    el : '#corpus',
+       el : '#corpus',
 
        render: function(){
          $(this.el).html(this.template(this.model.toJSON()));
-         console.log("rendering corpus");
+         console.log("rendering corpus: " +this.model.get("name"));
          return this;
        }
       

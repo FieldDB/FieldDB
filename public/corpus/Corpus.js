@@ -51,20 +51,19 @@ define("corpus/Corpus", [
          * @constructs
          */
         initialize : function() {
-          Utils.debug("Initializing the corpus with the paramaters passed in.");
           // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
-          // this.on('all', function(e) {
-          // Utils.debug(this.get('name') + " event: " + e);
-          // });
+           this.on('all', function(e) {
+             Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
+           });
 
         },
         defaults : {
-          name : "Yale Corpus",
+          name : "",
           description : "",
           remote : "",
           localFolder : "",
           changedDatumList : [],
-          confidential : new Confidential()
+          confidential :  Confidential
         }
 //        ,
 //        insertDatum : function(datum) {
