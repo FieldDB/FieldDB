@@ -1,3 +1,4 @@
+  
   <div id="login">
     <div>
       <label>Username:</label>  <input type="text" id="username"
@@ -13,7 +14,9 @@
     </div>
   </div>
   <div id="logout" class="hidden">
-    {{username}}
+  
+  {{> user}}
+  
     <input type="button"  class="logout button"
       value="Logout" />
   </div>

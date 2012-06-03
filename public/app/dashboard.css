@@ -130,13 +130,19 @@ ul {
 	padding: 2px;
 	margin: 2px;
 	text-align: center;
-	border: 1px solid #fcd857;
+	/*border: 1px solid #fcd857;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-box-shadow: 0 0 6px #f8b635;
-	-webkit-box-shadow: 0 0 6px #f8b635;
+	-webkit-box-shadow: 0 0 6px #f8b635;*/
 }
-
+.authentication .user img{
+	height: 40px;
+	width: 40px;
+}
+.authentication .user .username{
+	display: none;
+}
 .activity_feed_title {
 	background-color: #eaa623;
 	text-align: center;

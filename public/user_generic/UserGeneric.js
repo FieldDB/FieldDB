@@ -50,11 +50,11 @@ define([ "use!backbone", "preference/Preference" ], function(Backbone,
 
       username : "",
       password : "",
-      email : "esapir@email.com",
+      email : "",
       gravatar : "./../user/user_gravatar.png",
       researchInterest : "Field Work",
-      affiliation : "Yale",
-      description : "I like linguistics.",
+      affiliation : "",
+      description : "",
       subtitle : "",
       // Corpora are projects. They are a complete collection of
       // datum.
