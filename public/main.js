@@ -64,6 +64,6 @@ require([
     }
     window.appView = new AppView({model: a}); 
     window.app = a;
-    window.app.loadSample();
+    window.appView.loadSample();
     
 });

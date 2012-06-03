@@ -19,6 +19,9 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
       this.bind('error', function(model, error) {
         console.log("Error in Authentication  : " + error);
       });
+      this.on('all', function(e) {
+        Utils.debug(this.get('username') + " event: " + JSON.stringify(e));
+      });
       this.authenticatePreviousUser();
     },
 
@@ -47,23 +50,7 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
       $("#logout").show();
       $("#login").hide();
     },
-    loadSample : function() {
-      this.set("user", new User({
-        "username" : "sapir",
-        "password" : "wharf",
-        "firstname" : "Ed",
-        "lastname" : "Sapir"
-      }));
-      this.set("username","sapir");
-      if (localStorage.getItem("user")) {
-        this.set("user", new User(JSON.parse(localStorage.getItem("user"))));
-      } else {
-        localStorage.setItem("user", JSON.stringify(this.get("user").toJSON()));
-      }
-      $("#logout").show();
-      $("#login").hide();
-
-    },
+    
     authenticatePreviousUser : function() {
       if (localStorage.getItem("user")) {
         var u = JSON.parse(localStorage.getItem("user"));

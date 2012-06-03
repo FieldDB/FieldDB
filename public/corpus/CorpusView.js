@@ -11,12 +11,10 @@ define([ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
      */
 
     initialize : function() {
-//      if(this.model != undefined){
-//        this.model.bind("change", this.render);
-//      }
       this.on('all', function(e) {
         this.render();
       });
+      this.model.bind('change', this.render);
       this.render();
     },
     events : {
@@ -28,9 +26,13 @@ define([ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
     el : '#corpus',
 
     render : function() {
-      $(this.el).html(this.template(this.model.toJSON()));
-      console.log("\trendering corpus: " + this.model.get("name"));
-      return this;
+      if(this.model != undefined){
+        $(this.el).html(this.template(this.model.toJSON()));
+        console.log("\trendering corpus: " + this.model.get("name"));
+      }else{
+        console.log("\tCorpus model was undefined.");
+      }
+      return this; 
     }
 
   });
