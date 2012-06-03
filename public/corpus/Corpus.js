@@ -89,11 +89,7 @@ define("corpus/Corpus", [
 //        diff : function() {
 //          Utils.debug("Showing the user the diffs between their version of the corpus and the remote version.");
 //        },
-        loadSample : function() {
-          this.set("name","Sample Quechua Corpus");
-          this.set("description","This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.");
-          
-        }
+        
 
       });
   return Corpus;

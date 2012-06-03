@@ -72,9 +72,10 @@ define([ "use!backbone",
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      this.model.get("corpus").loadSample();
+      this.corpusView.loadSample();
       this.authView.loadSample();
       this.searchView.loadSample();
+      
     }
 
   });
