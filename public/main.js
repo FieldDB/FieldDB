@@ -46,7 +46,23 @@ require([
     // But in this case we enable the changes feed for each Collection on our own.
     Backbone.couch_connector.config.global_changes = false;
 
-    window.app = new App();
-    window.appView = new AppView({model: window.app});
+    
+    window.app = {};
+    app.collections = {};
+    app.models = {};
+    app.views = {};
+    app.mixins = {};
+    
+    var a = localStorage.getItem("app");
+    if (a){
+      console.log("Loading app from localStorage");
+      a = JSON.parse(a);
+      a = new App(a); 
+    }else{
+      console.log("Loading fresh app");
+      a = new App();
+    }
+    window.appView = new AppView({model: a}); 
+    window.app = a;
     
 });

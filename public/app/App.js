@@ -6,6 +6,7 @@ define([ "use!backbone",
   /** @lends App.prototype */
   {
     /**
+     *
      * @class The App handles the reinitialization and loading of the app
      *        depending on which platform (Android, Chrome, web) the app is
      *        running, who is logged in etc.
@@ -35,17 +36,22 @@ define([ "use!backbone",
       this.bind('error', function(model, error) {
         console.log("Error in App: " + error);
       });
-      this.set("corpus", new Corpus());
+      //If read in a stringified corpus, turn it into a corpus
+      if ( this.get("corpus").description != null ){
+        console.log("\tUsing corpus from existing app.");
+        this.set("corpus", new Corpus( this.get("corpus") ));
+      }else{
+        this.set("corpus", new Corpus());
+        console.log("\tUsing new corpus.");
+      }
      
     },
     defaults : {
-      corpus : new Corpus(),
-
+      corpus : Corpus,
+      user : ""
     },
-
-    auth : new Authentication("authentication"),
-    
-    search : new Search("global_search")
+    auth :  Authentication,
+    search :  Search
   });
 
   return App;
