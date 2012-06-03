@@ -1,4 +1,4 @@
-define("team/Team",
+define(
 		["use!backbone"],
 		function(Backbone){
 	var Team = Backbone.Collection.extend(

@@ -1,4 +1,4 @@
-define("bot/Bot", [ 
+define( [ 
     "use!backbone", 
     "user/User" 
 ], function(Backbone, User) {

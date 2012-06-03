@@ -41,13 +41,13 @@ require([
 
 
    "../tests/confidentiality_encryption/ConfidentialTest",
-   "../tests/user_generic/UserGenericTest",
+//   "../tests/user_generic/UserGenericTest",
    "../tests/user/UserTest",
    "../tests/permission/PermissionTest",
     "../tests/datum/DatumsTest",
    "../tests/data_list/DataListTest",
     "../tests/datum/DatumTest",
-    "../tests/informant/InformantTest",
+//    "../tests/informant/InformantTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/lexicon/LexiconTest",
     "../tests/dashboard/DashboardTest",
