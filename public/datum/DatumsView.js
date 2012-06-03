@@ -1,17 +1,14 @@
-define("datum/DatumsView", [
+define( [
     "use!backbone", 
     "use!handlebars", 
-    "datum/Datums"
-], function(Backbone, Handlebars, Datums) {
-    var SearchView = Backbone.View.extend(
-    /** @lends DatumLatexView.prototype */
+    "datum/Datums",
+    "text!/datum/datum_latex.handlebars"
+], function(Backbone, Handlebars, Datums, datum_latexTemplate) {
+    var DatumsView = Backbone.View.extend(
+    /** @lends DatumsView.prototype */
     {
         /**
-         * @class DatumLatex shows up as an item in the Data List as a result of  
-        *        search. As a default a DatumLatex item has three fields (utterance, 
-        *        gloss, translation) showing up in the Data List. Morphemes are 
-        *        aligned with corresponding gloss as in Latex, but this is not a 
-        *        true Latex format (just looking like Latex). 
+         * @class 
          *
          * @extends Backbone.View
          * @constructs
@@ -31,5 +28,5 @@ define("datum/DatumsView", [
         }
     });
 
-    return DatumLatexView;
+    return DatumsView;
 }); 
