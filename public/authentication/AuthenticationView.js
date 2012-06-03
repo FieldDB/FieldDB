@@ -21,7 +21,7 @@ define([ "use!backbone", "use!handlebars",
 
     },
     events : {
-      "change" : "render",
+//      "change" : "render",
       "click .logout" : "logout",
       "click .login" : "login"
     },
@@ -36,7 +36,7 @@ define([ "use!backbone", "use!handlebars",
         $(this.el).html(this.template(this.model.toJSON()));
         console.log("\trendering login: " + this.model.get("username"));
       } else {
-        console.log("\tLogin model was undefined.");
+        console.log("\tAuthentication model was undefined.");
       }
       return this;
     },
@@ -75,15 +75,23 @@ define([ "use!backbone", "use!handlebars",
     /**
      * Authenticate accepts a username and password, creates a simple user, and
      * passes that user to the authentication module for real authentication
-     * agaist a server or local database. The Authenticate function also sends a
+     * against a server or local database. The Authenticate function also sends a
      * callback which will render views once the authentication server has
      * responded. If the authentication result is null, it can flash an error to
-     * the user and then logs in as public yet leaves the login div visible.
+     * the user and then logs in as public.
      * 
      * @param username
      * @param password
      */
     authenticate : function(username, password) {
+      if (username == "public") {
+        this.authenticateAsPublic();
+        return;
+      }
+      if (username == "sapir"){
+        this.loadSample();
+        return;
+      }
       var tempuser = new User();
       tempuser.set("username", username);
       tempuser.set("password", password);
@@ -97,21 +105,16 @@ define([ "use!backbone", "use!handlebars",
         }
         self.userView.model = u;
         self.model.set("user", u);
-        self.model.set("username", u.username);
+        self.model.set("username", u.get("username"));
 
-        localStorage.setItem("username", username);
+        localStorage.setItem("username", u.get("username"));
         localStorage.setItem("user", JSON
-            .stringify(self.model.get("user").toJSON()));
+            .stringify(u.toJSON()));
         self.render();
         $("#logout").show();
         $("#login").hide();
       });
       
-      if (username == "public") {
-        $("#login").show();
-        $("#logout").hide();
-        
-      }
 
     },
     /**
@@ -120,7 +123,18 @@ define([ "use!backbone", "use!handlebars",
      * of the "public" user etc.
      */
     authenticateAsPublic : function() {
-      this.authenticate("public", "");
+      this.userView.loadPublic();
+      u = this.userView.model;
+      this.model.set("user", u);
+      this.model.set("username", u.get("username"));
+      
+      localStorage.setItem("username", u.get("username"));
+      localStorage.setItem("user", JSON
+          .stringify(u.toJSON()));
+      this.render();
+      $("#logout").hide();
+      $("#login").show();
+   
     },
     /**
      * AuthenticatePreviousUser is intended to be called on page load, it looks
