@@ -8,14 +8,11 @@ define( [ "use!backbone" ], function(Backbone) {
     /** 
      * @class Search progressively searches a corpus and updates a 
      *        search/data list view as a user types keywords in the 
-     *        search box. BOth eintersective and union search is 
+     *        search box. Both intersection and union search is 
      *        possible. It highlights search keywords in the list view.  
      * 
      * @property {String} searchKeywords 
-     * @property {Datum} 
      * @property {DataList} 
-     * @property {DatumTag} 
-     * @property {Corpus} 
      * 
      * 
      * 
@@ -30,14 +27,22 @@ define( [ "use!backbone" ], function(Backbone) {
 
     initialize : function() {
     },
-
+    events : {
+      "blur" : "saveKeyword"
+    },
     defaults : {
-      //            Default searchKeywords is a null string		
-      searchKeywords : "passive"
+      searchKeywords : ""
     },
 
     validate : function(attributes) {
 
+    },
+    loadSample : function(){
+      this.set("searchKeywords","naya");
+      console.log("Changing search keyword");
+    },
+    saveKeyword: function(){
+      this.set("searchKeywords","hihi");
     }
 
   });

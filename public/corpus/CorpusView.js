@@ -11,6 +11,12 @@ define([ "use!backbone", "use!handlebars", "text!corpus/corpus.handlebars",
      */
 
     initialize : function() {
+//      if(this.model != undefined){
+//        this.model.bind("change", this.render);
+//      }
+      this.on('all', function(e) {
+        this.render();
+      });
       this.render();
     },
     events : {

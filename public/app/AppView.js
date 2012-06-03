@@ -1,6 +1,6 @@
 define([ "use!backbone","use!handlebars", "authentication/Authentication", "authentication/AuthenticationView", "corpus/Corpus",
-    "corpus/CorpusView", "search/SearchView", "app/App","app/AppRouter", "text!app/app.handlebars", "libs/Utils" ], function(
-    Backbone, Handlebars, Authentication, AuthenticationView, Corpus, CorpusView, SearchView, App,AppRouter, appTemplate) {
+    "corpus/CorpusView", "search/SearchView", "app/App","app/AppRouter", "text!app/app.handlebars", "search/Search", "search/SearchView", "libs/Utils" ], function(
+    Backbone, Handlebars, Authentication, AuthenticationView, Corpus, CorpusView, SearchView, App,AppRouter, appTemplate, Search, SearchView) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
   {
@@ -24,6 +24,7 @@ define([ "use!backbone","use!handlebars", "authentication/Authentication", "auth
       
       this.corpusView = new CorpusView({ model: this.model.get("corpus") });
       this.authView = new AuthenticationView( {model: new Authentication() } ) ;
+      this.searchView = new SearchView( {model: new Search() } ) ;
       
     },
 
@@ -38,7 +39,8 @@ define([ "use!backbone","use!handlebars", "authentication/Authentication", "auth
     },
     
     corpusView: CorpusView,
-    authView: AuthenticationView
+    authView: AuthenticationView,
+    searchView: SearchView
     
     
   });
