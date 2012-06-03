@@ -24,7 +24,7 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
 
     defaults : {
       user : User,
-      username: ""
+      username: localStorage.getItem("username")
     },
     authenticate: function(username){
       this.set("user",new User());
