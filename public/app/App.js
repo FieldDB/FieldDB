@@ -44,27 +44,14 @@ define([ "use!backbone", "authentication/Authentication", "corpus/Corpus",
         this.set("corpus", new Corpus());
         console.log("\tUsing new corpus.");
       }
-      this.auth = new Authentication();
-      this.search = new Search();
 
     },
     defaults : {
       corpus : Corpus,
       username : localStorage.getItem("username"),
       sessionid : localStorage.getItem("sessionid")
-    },
-    auth : Authentication,
-    search : Search,
-    /**
-     * This function triggers a sample app to load so that new users can play
-     * around and get a feel for the app by seeing the data in context.
-     */
-    loadSample : function() {
-      this.get("corpus").loadSample();
-
-      this.auth.loadSample();
-      this.search.loadSample();
     }
+    
   });
 
   return App;

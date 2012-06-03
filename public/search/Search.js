@@ -26,10 +26,11 @@ define( [ "use!backbone" ], function(Backbone) {
      */
 
     initialize : function() {
+      this.on('all', function(e) {
+        Utils.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
+      });
     },
-    events : {
-      "blur" : "saveKeyword"
-    },
+    
     defaults : {
       searchKeywords : ""
     },
@@ -37,10 +38,7 @@ define( [ "use!backbone" ], function(Backbone) {
     validate : function(attributes) {
 
     },
-    loadSample : function(){
-      this.set("searchKeywords","naya");
-      console.log("Changing search keyword");
-    },
+    
     saveKeyword: function(){
       this.set("searchKeywords","hihi");
     }
