@@ -1,5 +1,10 @@
-define([ "use!backbone", "datum/Datum" ], function(
-    Backbone, Datum) {
+define([ 
+    "use!backbone", 
+    "datum/Datum" 
+], function(
+    Backbone, 
+    Datum
+) {
   var DataList = Backbone.Model.extend(
   /** @lends DataList.prototype */
   {
