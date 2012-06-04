@@ -1,4 +1,11 @@
-define([ "use!backbone", "user/User" ], function(Backbone, User) {
+define([
+    "use!backbone", 
+    "user/User",
+    "libs/Utils" 
+], function(
+    Backbone, 
+    User
+) {
   var Authentication = Backbone.Model.extend(
   /** @lends Authentication.prototype */
   {
@@ -17,21 +24,22 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
      */
     initialize : function() {
       this.bind('error', function(model, error) {
-        console.log("Error in Authentication  : " + error);
+        Utils.debug("Error in Authentication  : " + error);
       });
+      
       this.on('all', function(e) {
         Utils.debug("Authentication, " + this.get('username') + " event: "
             + JSON.stringify(e));
       });
-
     },
 
     defaults : {
       user : User,
       username : localStorage.getItem("username")
     },
-    staleAuthentication: false
-    ,
+
+    staleAuthentication: false,
+    
     /**
      * Contacts local or remote server to verify the username and password
      * provided in the user object. Upon success, calls the callback with the
@@ -41,16 +49,15 @@ define([ "use!backbone", "user/User" ], function(Backbone, User) {
      * @param callback A callback to call upon sucess.
      */
     authenticate : function(user, callback) {
-      // TODO actually check to see if its truely a user, locally or on server
+      // TODO actually check to see if its truly a user, locally or on server
       var success = true;
       
-      if(success){
+      if (success) {
         callback(user);
-      }else{
+      } else {
         callback(null);
       }
     }
-
   });
 
   return Authentication;
