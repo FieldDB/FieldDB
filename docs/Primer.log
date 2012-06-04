@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  4 JUN 2012 13:50
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  4 JUN 2012 15:10
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -165,7 +165,11 @@ Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 (/usr/local/texlive/2011/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
-)) (./Primer.aux)
+)) (./Primer.aux
+
+LaTeX Warning: Label `tab:label' multiply defined.
+
+)
 \openout1 = `Primer.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -182,8 +186,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 16.
 LaTeX Font Info:    Try loading font information for T3+cmr on input line 16.
-
-(/usr/local/texlive/2011/texmf-dist/tex/latex/tipa/t3cmr.fd
+ (/usr/local/texlive/2011/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
 LaTeX Font Info:    ... okay on input line 16.
@@ -258,27 +261,35 @@ Overfull \hbox (6.34354pt too wide) in paragraph at lines 79--80
  Mat-sumoto, S. Moriyama.
  []
 
-[4] (./Primer.aux)
+
+Overfull \hbox (579.52475pt too wide) in paragraph at lines 122--149
+[][] 
+ []
+
+[4] [5] (./Primer.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 2317 strings out of 493633
- 27508 string characters out of 3143378
- 73280 words of memory out of 3000000
- 5602 multiletter control sequences out of 15000+200000
- 27911 words of font info for 53 fonts, out of 3000000 for 9000
+ 2335 strings out of 493633
+ 27757 string characters out of 3143378
+ 82280 words of memory out of 3000000
+ 5620 multiletter control sequences out of 15000+200000
+ 35655 words of font info for 69 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 34i,4n,23p,1064b,196s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 34i,7n,23p,1064b,202s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
 xlive/2011/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2
 011/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on Primer.pdf (4 pages, 59062 bytes).
+Output written on Primer.pdf (5 pages, 61540 bytes).
 PDF statistics:
- 30 PDF objects out of 1000 (max. 8388607)
- 20 compressed objects within 1 object stream
+ 33 PDF objects out of 1000 (max. 8388607)
+ 22 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
