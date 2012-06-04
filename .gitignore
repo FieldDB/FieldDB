@@ -19,6 +19,7 @@ gen
 # LaTeX output #
 ################
 *.dvi
+*.log
 *.aux
 *.toc
 *.bbl
@@ -31,7 +32,7 @@ gen
 *.ind
 *.ist
 *.ps
-
+*(busy)
 
 # Compiled source #
 ###################
