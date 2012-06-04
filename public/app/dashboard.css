@@ -1,6 +1,6 @@
 body {
 	background-color: #FFFFCC;
-	width: 1500px;
+	width: 1300px;
 	height: 1010px;
 	margin: auto;
 	color: white;
@@ -10,15 +10,23 @@ body {
 	background-image: url('llama.jpg');
 }
 
+nav {
+	font-size: 1.5em;
+	padding: 0em 1em 1em 0em;
+}
+
 .page {
 	width: 100%;
 	height: 100%;
 }
 
+.search {
+	float: right;
+}
+
 .widget {
 	width: 100%;
 	height: 100%;
-	background: rgb(0, 0, 0);
 	background: rgba(0, 0, 0, 0.4);
 	margin: 0.5em;
 	padding: 0.5em;
@@ -72,7 +80,44 @@ ul {
 }
 
 .navigationcontainer {
-	width: 1460px;
+	width: 1260px;
+}
+
+#navigation {
+	width: 100%;
+	height: 3em;
+}
+
+#navigation ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+#navigation ul li {
+	display: inline;
+	height: 30px;
+	float: left;
+	list-style: none;
+	margin-left: 15px;
+	position: relative;
+}
+
+#navigation li ul {
+	margin: 0px;
+	padding: 0px;
+	display: none;
+	position: absolute;
+}
+
+#navigation li:hover ul {
+	display: block;
+	width: 160px;
+}
+
+#navigation li li {
+	list-style: none;
+	display: list-item;
+	width: 100%;
 }
 
 .main {
@@ -92,14 +137,14 @@ ul {
 	height: 100%;
 	float: left;
 }
-
+/*
 .centercontent {
 	width: 700px;
 	height: 100%;
 	margin: 0px auto;
 }
-
-.content {
+*/
+.centercontent {
 	width: 700px;
 	height: 100%;
 	float: left;
@@ -110,7 +155,19 @@ ul {
 	font-size: 0.75em;
 }
 
+.date {
+	color: #343298;
+}
+
+.goal {
+	color: #53edf4;
+}
+
 .subtitle {
+	color: #fbef9f;
+}
+
+.informant {
 	color: #fbef9f;
 }
 
@@ -118,15 +175,32 @@ ul {
 	font-size: 0.75em;
 }
 
+.authentication {
+	float: right;
+}
+
+.authentication div {
+	float: left;
+}
+
 .user {
 	padding: 2px;
 	margin: 2px;
 	text-align: center;
-	border: 1px solid #fcd857;
+	/*border: 1px solid #fcd857;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-box-shadow: 0 0 6px #f8b635;
-	-webkit-box-shadow: 0 0 6px #f8b635;
+	-webkit-box-shadow: 0 0 6px #f8b635;*/
+}
+
+.authentication .user img {
+	height: 40px;
+	width: 40px;
+}
+
+.authentication .user .username {
+	display: none;
 }
 
 .activity_feed_title {
@@ -136,7 +210,7 @@ ul {
 	padding: 0.15em;
 }
 
-.button {
+button,.button,input[type="button"] {
 	color: #fff;
 	background-color: #f8b635;
 	border: 1px solid #fcd857;

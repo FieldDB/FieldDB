@@ -1,6 +1,6 @@
 define("user/User", [
     "use!backbone",
-    "user_generic/UserGeneric"
+    "user/UserGeneric"
 ], function(Backbone, UserGeneric) {
   var User = UserGeneric.extend(
       /** @lends User.prototype */
@@ -38,6 +38,7 @@ define("user/User", [
           }
         }, 
         
+        
         /** 
          * Describe the validation here. 
          * 
@@ -60,15 +61,15 @@ define("user/User", [
         /** 
          * The login function checks username, password, and the combination of the two. 
          */
-        login: function(username, password) {
-          if (this.get("username") == username) {
-            if (this.get("password") == password) {
-              window.userid = username; 
-              return true;	   
-            }
-          }
-          return false;  
-        },
+//        login: function(username, password) {
+//          if (this.get("username") == username) {
+//            if (this.get("password") == password) {
+//              window.userid = username; 
+//              return true;	   
+//            }
+//          }
+//          return false;  
+//        },
 
 
         /**

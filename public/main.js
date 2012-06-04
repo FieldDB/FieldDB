@@ -7,6 +7,7 @@ require.config({
         "underscore" : "libs/underscore",
         "backbone" : "libs/backbone",
         "handlebars" : "libs/handlebars-1.0.0.beta.6",
+        "paginator" : "libs/backbone.paginator",
         "crypto" : "libs/Crypto_AES",
         "jquery.couch" : "libs/jquery.couch"
     },
@@ -28,6 +29,10 @@ require.config({
         
         "crypto" :{
         	attach: "CryptoJS"
+        },
+        "paginator":{
+          deps : ["use!underscore", "use!backbone", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+          attach: "Paginator"
         }
     }
 });
@@ -35,8 +40,9 @@ require.config({
 // Initialization
 require([
     "use!backbone",
-    "app/App"
-], function(Backbone, App) {
+    "app/App",
+    "app/AppView"
+], function(Backbone, App,AppView) {
     // CouchDB configuration
     Backbone.couch_connector.config.base_url = "https://trisapeace.iriscouch.com"
     Backbone.couch_connector.config.db_name = "datum_test";
@@ -45,6 +51,24 @@ require([
     // But in this case we enable the changes feed for each Collection on our own.
     Backbone.couch_connector.config.global_changes = false;
 
-    window.app = new App();
+    
+    window.app = {};
+    app.collections = {};
+    app.models = {};
+    app.views = {};
+    app.mixins = {};
+    
+    var a = localStorage.getItem("app");
+    if (a){
+      console.log("Loading app from localStorage");
+      a = JSON.parse(a);
+      a = new App(a); 
+    }else{
+      console.log("Loading fresh app");
+      a = new App();
+    }
+    window.appView = new AppView({model: a}); 
+    window.app = a;
+    window.appView.loadSample();
     
 });
