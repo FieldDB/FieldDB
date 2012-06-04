@@ -78,7 +78,7 @@ define([
       "change" : "render",
 //              "click .new_datum" : "newDatum",
 //              "click .new_session" : "newSession",
-//              "click .show_data_lists" : "showDataLists",
+      "click .show_data_lists" : "showDataLists",
 //              "click .show_corpus_details" : "showCorpusDetails",
 //              "click .show_sessions" : "showSessions",
 //              "click .show_permissions" : "showPermissions",
@@ -180,6 +180,13 @@ define([
           Utils.debug(err);
         });
       });
+    },
+    
+    /**
+     * For testing. Navigates to a single DatumView for testing PouchDB.
+     */
+    showDataLists : function() {
+      app.router.navigate("corpus/c/datum/34", true);
     }
   });
 
