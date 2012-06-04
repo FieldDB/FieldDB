@@ -186,7 +186,7 @@ define([
      * For testing. Navigates to a single DatumView for testing PouchDB.
      */
     showDataLists : function() {
-      app.router.navigate("corpus/c/datum/34", true);
+      app.router.navigate("corpus/c/datum/33EE7A7F-45DF-40FD-B847-D46185A2AE0D", true);
     }
   });
 

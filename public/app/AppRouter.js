@@ -91,6 +91,19 @@ define([
     showFullscreenDatum : function(corpusName, datumId) {
       Utils.debug("In showFullscreenDatum: " + corpusName + " *** " + datumId);
 
+      // Update the display
+      $("#fullscreen-datum-view").append(appView.fullScreenDatumView.render().el);
+      
+      // Change the id of the fullscreen datum view's Datum to be the given datumId
+      appView.fullScreenDatumView.model.id = datumId;
+      
+      // Fetch the Datum's attributes from the PouchDB
+      appView.fullScreenDatumView.model.fetch({
+        success : appView.fullScreenDatumView.render
+      });
+
+      
+      // Display the fullscreen datum view and hide all the other views
       $("#dashboard-view").hide();
       $("#fullscreen-datum-view").show();
       $("#fullscreen-datalist-view").hide();
@@ -98,13 +111,6 @@ define([
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
-      
-      // TODO 
-      // Get the Datum with id = datumId
-      // Assign it to appView.fullScreenDatumView.model
-      // Render appView.fullScreneDatumView
-
-      $("#fullscreen-datum-view").append(appView.fullScreenDatumView.render().el);
     },
 
     /**
