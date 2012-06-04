@@ -1,9 +1,11 @@
-define( [ "use!backbone" ], function(Backbone) {
-
+define([ 
+    "use!backbone",
+    "libs/Utils" 
+], function(
+    Backbone
+) {
   var Search = Backbone.Model.extend(
-
   /** @lends Search.prototype  */
-
   {
     /** 
      * @class Search progressively searches a corpus and updates a 
@@ -14,15 +16,11 @@ define( [ "use!backbone" ], function(Backbone) {
      * @property {String} searchKeywords 
      * @property {DataList} 
      * 
-     * 
-     * 
      * @description The initialize function probably creates a link to 
      *              a corpus, or checks if a link is established. 
      * 
-     * @extends Backbone.Model 
-     * 
-     * @constructs 
-     * 
+     * @extends Backbone.Model
+     * @constructs
      */
 
     initialize : function() {
@@ -42,7 +40,6 @@ define( [ "use!backbone" ], function(Backbone) {
     saveKeyword: function(){
       this.set("searchKeywords","hihi");
     }
-
   });
 
   return Search;
