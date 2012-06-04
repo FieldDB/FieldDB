@@ -1,22 +1,26 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2007.5.18)  4 JUN 2012 12:16
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  4 JUN 2012 13:50
 entering extended mode
-\write18 enabled.
+ \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
 **Primer.tex
 (./Primer.tex
-LaTeX2e <2005/12/01>
-Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
-yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
-erman, danish, esperanto, spanish, catalan, galician, estonian, farsi, finnish,
- french, greek, monogreek, ancientgreek, croatian, hungarian, interlingua, ibyc
-us, indonesian, icelandic, italian, latin, mongolian, dutch, norsk, polish, por
-tuguese, pinyin, romanian, russian, slovenian, uppersorbian, serbian, swedish, 
-turkish, ukenglish, ukrainian, loaded.
-(/usr/local/texlive/2007/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
-(/usr/local/texlive/2007/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
+c, armenian, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danis
+h, dutch, ukenglish, usenglishmax, esperanto, estonian, ethiopic, farsi, finnis
+h, french, galician, german, ngerman, swissgerman, monogreek, greek, hungarian,
+ icelandic, assamese, bengali, gujarati, hindi, kannada, malayalam, marathi, or
+iya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, kurmanji,
+ lao, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, pol
+ish, portuguese, romanian, russian, sanskrit, serbian, serbianc, slovak, sloven
+ian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, welsh, loaded
+.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
 \c@section=\count80
@@ -30,41 +34,41 @@ File: size12.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/preprint/fullpage.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/preprint/fullpage.sty
 Package: fullpage 1999/02/23 1.1 (PWD)
 \FP@margin=\skip43
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/tipa/tipa.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tipa/tipa.sty
 Package: tipa 2002/08/08 TIPA version 1.1
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/tipa/t3enc.def
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tipa/t3enc.def
 File: t3enc.def 2001/12/31 T3 encoding
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/base/ot1enc.def
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/ot1enc.def
 File: ot1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding OT1 on input line 43.
 )))
-(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsmath.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2000/07/18 v2.13 AMS math features
 \@mathmargin=\skip44
 
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks14
 \ex@=\dimen103
 ))
-(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen104
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count87
@@ -105,11 +109,11 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 LaTeX Info: Redefining \[ on input line 2666.
 LaTeX Info: Redefining \] on input line 2667.
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/linguex/linguex.sty
-(/usr/local/texlive/2007/texmf-dist/tex/latex/tools/xspace.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/linguex/linguex.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2006/05/08 v1.12 Space after command names (DPC,MH)
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/linguex/cgloss4e.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/gb4e/cgloss4e.sty
 \lineone=\box28
 \linetwo=\box29
 \linethree=\box30
@@ -136,26 +140,29 @@ Package: xspace 2006/05/08 v1.12 Space after command names (DPC,MH)
 \SubSubExleftmargin=\skip57
 \Exlabelsep=\skip58
 \alignSubExnegindent=\skip59
+\Exredux=\skip60
+\digitwidth=\skip61
+\mindigitwidth=\skip62
 \c@ExDepth=\count104
 \c@TempExDepth=\count105
 \CollectTokens=\toks19
-LaTeX Info: Redefining \b on input line 239.
-LaTeX Info: Redefining \c on input line 243.
-LaTeX Info: Redefining \d on input line 245.
+LaTeX Info: Redefining \b on input line 303.
+LaTeX Info: Redefining \c on input line 307.
+LaTeX Info: Redefining \d on input line 309.
 \c@tmpaEx=\count106
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/tools/enumerate.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tools/enumerate.sty
 Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
 \@enLab=\toks20
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/mathpazo.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/mathpazo.sty
 Package: mathpazo 2005/04/12 PSNFSS-v9.2a Palatino w/ Pazo Math (D.Puga, WaS) 
 \symupright=\mathgroup4
 )
-(/usr/local/texlive/2007/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/base/t1enc.def
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 )) (./Primer.aux)
@@ -176,65 +183,102 @@ LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 16.
 LaTeX Font Info:    Try loading font information for T3+cmr on input line 16.
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/tipa/t3cmr.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Try loading font information for T1+pplx on input line 16.
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/t1pplx.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/t1pplx.fd
 File: t1pplx.fd 2004/09/06 font definitions for T1/pplx.
 )
 LaTeX Font Info:    Try loading font information for OT1+pplx on input line 17.
 
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/ot1pplx.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1pplx.fd
 File: ot1pplx.fd 2004/09/06 font definitions for OT1/pplx.
 )
 LaTeX Font Info:    Try loading font information for OML+zplm on input line 17.
 
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/omlzplm.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Try loading font information for OMS+zplm on input line 17.
 
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/omszplm.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Try loading font information for OMX+zplm on input line 17.
 
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/omxzplm.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Try loading font information for OT1+zplm on input line 17.
 
 
-(/usr/local/texlive/2007/texmf-dist/tex/latex/psnfss/ot1zplm.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <17.28> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 19.
  [1
 
-{/usr/local/texlive/2007/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] (./
-Primer.aux) ) 
+{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 41.
+LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <12> not available
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 45.
+LaTeX Font Info:    Try loading font information for OMS+pplx on input line 48.
+
+LaTeX Font Info:    No file OMSpplx.fd. on input line 48.
+
+
+LaTeX Font Warning: Font shape `OMS/pplx/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbullet' on input line 48.
+
+[2]
+Overfull \hbox (1.30357pt too wide) in paragraph at lines 53--54
+[]\T1/pplx/m/n/12 "The Phono-log-i-cal/Phonetic sta-tus of Pro-duc-tive Palatal
+-iza-tion in Ro-ma-nian." (with
+ []
+
+
+Overfull \hbox (18.30676pt too wide) in paragraph at lines 65--67
+[]\T1/pplx/m/n/12 "A New Gram-mat-i-cal Cat-e-gory: Im-pul-satives." Penn Lin-g
+uis-tics Col-lo-quium, Philadel-
+ []
+
+[3]
+Overfull \hbox (6.34354pt too wide) in paragraph at lines 79--80
+\T1/pplx/m/n/12 ta-tions of Hy-per-cubes." Y. Aoshima, D. Avis, T. Deer-ing, Y.
+ Mat-sumoto, S. Moriyama.
+ []
+
+[4] (./Primer.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2279 strings out of 94073
- 27131 string characters out of 1162984
- 70569 words of memory out of 1500000
- 5556 multiletter control sequences out of 10000+50000
- 23040 words of font info for 46 fonts, out of 1200000 for 2000
- 645 hyphenation exceptions out of 8191
- 34i,4n,23p,979b,196s stack positions out of 5000i,500n,6000p,200000b,5000s
-{/usr/local/texlive/2007/texmf-dist/fonts/enc/dvips/base/8r.enc}</
-usr/local/texlive/2007/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/loc
-al/texlive/2007/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on Primer.pdf (2 pages, 44564 bytes).
+ 2317 strings out of 493633
+ 27508 string characters out of 3143378
+ 73280 words of memory out of 3000000
+ 5602 multiletter control sequences out of 15000+200000
+ 27911 words of font info for 53 fonts, out of 3000000 for 9000
+ 831 hyphenation exceptions out of 8191
+ 34i,4n,23p,1064b,196s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2
+011/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
+Output written on Primer.pdf (4 pages, 59062 bytes).
 PDF statistics:
- 18 PDF objects out of 1000 (max. 8388607)
- 0 named destinations out of 1000 (max. 131072)
+ 30 PDF objects out of 1000 (max. 8388607)
+ 20 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
