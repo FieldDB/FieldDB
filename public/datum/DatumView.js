@@ -37,9 +37,9 @@ define([
      */
     initialize : function() {
     	this.statusview = new DatumStatusView({model: this.model.get("status")});
-        this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
-        this.tagview = new DatumTagView({model: this.model.get("datumTag")});
-        this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
+      this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
+      this.tagview = new DatumTagView({model: this.model.get("datumTag")});
+      this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
     },
 
     model : Datum,
@@ -71,8 +71,9 @@ define([
     	Handlebars.registerPartial("datum_menu", this.menuview.template(this.model.toJSON()) );
     	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
     	Handlebars.registerPartial("datum_field", this.fieldview.template(this.model.toJSON()) );
-        $(this.el).html(this.template(this.model.toJSON()));
-        return this;
+      $(this.el).html(this.template(this.model.toJSON()));
+      
+      return this;
     },
     
     /**
