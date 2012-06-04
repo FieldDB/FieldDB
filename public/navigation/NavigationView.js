@@ -21,9 +21,29 @@ define("navigation/NavigationView", [
         classname : "menu",
 
         template: Handlebars.compile(navigationTemplate),
+        
         render : function() {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
+        },
+        
+        events: {
+            "click .sync" : "replicateDatabase"
+        },
+        
+        replicateDatabase : function() {
+            app.datumList.pouch(function(err, db) {
+                db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+                    Utils.debug("Replicate to");
+                    Utils.debug(resp);
+                    Utils.debug(err);
+                });
+                db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+                    Utils.debug("Replicate from");
+                    Utils.debug(resp);
+                    Utils.debug(err);
+                });
+            });
         }
     });
 
