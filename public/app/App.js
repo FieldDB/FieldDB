@@ -1,12 +1,19 @@
-define([ "use!backbone", "authentication/Authentication", "corpus/Corpus",
-    "search/Search"
-
-], function(Backbone, Authentication, Corpus, Search) {
+define([
+    "use!backbone", 
+    "authentication/Authentication", 
+    "corpus/Corpus",
+    "search/Search",
+    "libs/Utils"
+], function(
+    Backbone, 
+    Authentication, 
+    Corpus, 
+    Search
+) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
   {
     /**
-     * 
      * @class The App handles the reinitialization and loading of the app
      *        depending on which platform (Android, Chrome, web) the app is
      *        running, who is logged in etc.
@@ -34,24 +41,24 @@ define([ "use!backbone", "authentication/Authentication", "corpus/Corpus",
      */
     initialize : function() {
       this.bind('error', function(model, error) {
-        console.log("Error in App: " + error);
+        Utils.debug("Error in App: " + error);
       });
+      
       // If read in a stringified corpus, turn it into a corpus
       if (this.get("corpus").description != null) {
-        console.log("\tUsing corpus from existing app.");
+        Utils.debug("\tUsing corpus from existing app.");
         this.set("corpus", new Corpus(this.get("corpus")));
       } else {
         this.set("corpus", new Corpus());
-        console.log("\tUsing new corpus.");
+        Utils.debug("\tUsing new corpus.");
       }
-
     },
+    
     defaults : {
       corpus : Corpus,
       username : localStorage.getItem("username"),
       sessionid : localStorage.getItem("sessionid")
     }
-    
   });
 
   return App;
