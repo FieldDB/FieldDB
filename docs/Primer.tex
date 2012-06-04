@@ -1,5 +1,6 @@
 \documentclass[12 pt]{article}
 \usepackage{fullpage}
+\usepackage{rotating}
 \usepackage{tipa}
 \usepackage{amsmath}
 \usepackage{linguex}
@@ -113,13 +114,14 @@ Theresa Deering has a  Bachelor's in Computer Science from Malaspina and a Maste
 
 \section {Budget}
 
-The Field Linguists' Database is composed eight modules and thus the cost is divided into eight major components.  In addition,  a separate price is given for software architecture and for 1 year of user support, and project growth; needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The collaboration module is used to permit collaboration with teams and users.  The Corpus Module is used to sync, share, edit, tag, categorize and open data. The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.   The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants.  The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon. Finally,  the Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis. 
+The Field Linguists' Database is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth; needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The collaboration module is used to permit collaboration with teams and users. The Corpus Module is used to sync, share, edit, tag, categorize and open data. The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.  The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants. The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon. Finally, the Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis. 
 
 
 The prices given include a 40\% Researcher discount and a 10\% Open Source discount.  An additional 40\% discount is given for certain components that can be made with the help of students from Concordia University, Hisako Noguchi and Yulia Manyakina.  The cost is calculated by determining the time in hours and multiplying by \$48, the average rate of a software developer in Montr\'eal.  
 
-\begin{table}[htbp]
 
+\begin{table}[htbp]
+\begin{center}
   \begin{tabular}{ | cc | }
 \hline
     Module & Price \\ 
@@ -141,16 +143,16 @@ Total &  \$83,176.04 \\
   \end{tabular}
   \caption{Cost Summary}
   \label{tab:label}
+  \end{center}
 \end{table}
 
 
 
-
+\newpage
 \subsection{Collaboration Module}
 
 \footnotesize
-\begin{table}[htbp]
-
+\begin{sidewaystable}[htbp]
   \begin{tabular}{ | cccccccc | }
 \hline
 
@@ -180,7 +182,7 @@ Heroku Deployment&	5&	Integration&	48&	240&	144&	129.6&	129.6\\
   \end{tabular}
   \caption{Cost Summary}
   \label{tab:label}
-\end{table}
+\end{sidewaystable}
 %%Include in the budget all expenses for the app, including necessary training costs. Mention any co-funding that you are using from other sources. You may want to include a brief narrative of expenses along with a table of individual cost components. 
 
 
