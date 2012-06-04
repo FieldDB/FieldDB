@@ -48,11 +48,9 @@ define("datum/DatumView", [
 
         render : function() {
         	Handlebars.registerPartial("datum_status", this.statusview.template(this.statusview.model.toJSON()) );
-        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.menuview.model.toJSON()) );
+        	Handlebars.registerPartial("datum_menu", this.menuview.template(this.model.toJSON()) );
         	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
         	Handlebars.registerPartial("datum_field", this.fieldview.template(this.model.toJSON()) );
-
-
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
         },
@@ -66,7 +64,7 @@ define("datum/DatumView", [
              */
         	
 //        	var newDatum = new DatumView({model: new Datum()});
-//         	$("#extended-datum-view").append(newDatum.render().el);
+//         	$("#fullscreen-datum-view").append(newDatum.render().el);
 //         	var sID = this.newDatum.get("sessionID");
 //         	console.log(sID);
 //      	

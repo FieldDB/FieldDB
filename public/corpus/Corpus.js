@@ -3,7 +3,7 @@ define("corpus/Corpus", [
     "confidentiality_encryption/Confidential",
     "libs/Utils"
 ], function(Backbone, Confidential) {
-  var Corpus = Backbone.Collection
+  var Corpus = Backbone.Model
   .extend(
       /** @lends Corpus.prototype */
       {
@@ -35,6 +35,13 @@ define("corpus/Corpus", [
          *           version control with the corpus. This is used so that
          *           the user can go back to their original files:eg
          *           sample_elan.eaf
+         *           
+          * @property {Glosser} glosser The glosser listens to
+     *           orthography/utterence lines and attempts to guess the
+     *           gloss.
+     * @property {Lexicon} lexicon The lexicon is a list of morphemes,
+     *           allomorphs and glosses which are used to index datum, and
+     *           also to gloss datum.
          * 
          * @description The initialize function probably checks to see if
          *              the corpus is new or existing and brings it down to
@@ -44,51 +51,45 @@ define("corpus/Corpus", [
          * @constructs
          */
         initialize : function() {
-          Utils.debug("Initializing the corpus with the paramaters passed in.");
           // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
-          // this.on('all', function(e) {
-          // Utils.debug(this.get('name') + " event: " + e);
-          // });
-
+           this.on('all', function(e) {
+             Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
+           });
+          
+         
         },
         defaults : {
           name : "",
           description : "",
-          remote : "",
-          localFolder : "",
           changedDatumList : [],
-          confidential : new Confidential()
-        },
-        insertDatum : function(datum) {
-          Utils.debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
-              + JSON.stringify(datum));
-          datum.id = this.autoincrement;
-          this.changedDatumList.push(datum);
-          this.autoincrement++;
-        },
-        updateDatum : function(datum) {
-          Utils.debug("Telling the corpus that this datum has changed "
-              + JSON.stringify(datum));
-          this.changedDatumList.push(datum);
-        },
-        push : function() {
-          Utils.debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
-        },
-        pull : function() {
-          Utils.debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
-        },
-        merge : function() {
-          Utils.debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
-        },
-        diff : function() {
-          Utils.debug("Showing the user the diffs between their version of the corpus and the remote version.");
-        },
-        createSample : function() {
-          this.name = "Sample Quechua Corpus";
-          this.description = "This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.";
-          this.remote = "git@github.com:iLanguage/SampleFieldLinguisticsCorpus.git";
-          this.localFolder = "SampleFieldLinguisticsCorpus";
+          confidential :  Confidential
         }
+//        ,
+//        insertDatum : function(datum) {
+//          Utils.debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
+//              + JSON.stringify(datum));
+//          datum.id = this.autoincrement;
+//          this.changedDatumList.push(datum);
+//          this.autoincrement++;
+//        },
+//        updateDatum : function(datum) {
+//          Utils.debug("Telling the corpus that this datum has changed "
+//              + JSON.stringify(datum));
+//          this.changedDatumList.push(datum);
+//        },
+//        push : function() {
+//          Utils.debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
+//        },
+//        pull : function() {
+//          Utils.debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
+//        },
+//        merge : function() {
+//          Utils.debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
+//        },
+//        diff : function() {
+//          Utils.debug("Showing the user the diffs between their version of the corpus and the remote version.");
+//        },
+        
 
       });
   return Corpus;

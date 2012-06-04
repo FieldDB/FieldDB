@@ -1,7 +1,6 @@
 define("datum/Datum", [
     "use!backbone",
     "datum_status/DatumStatus",
-    "datum_menu/DatumMenu",
     "datum_tag/DatumTag",
     "datum_field/DatumField",
     "session/Session",
@@ -60,6 +59,7 @@ define("datum/Datum", [
         defaults : {
             //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
             utterance : "tusunayawan",
+            morphemes: "tusa-naya-wa-n",
             gloss : "dance-IMP-1OM-3SG",
             translation : "I feel like dancing.",
 
@@ -68,7 +68,6 @@ define("datum/Datum", [
 
             sessionID : 0,
             status : new DatumStatus(),
-            datumMenu: new DatumMenu(),
             datumField : new DatumField(),
             datumTag : new DatumTag()
         },
@@ -90,7 +89,45 @@ define("datum/Datum", [
             // }
         },
         
-        pouch: Backbone.sync.pouch(Utils.pouchUrl)
+        pouch: Backbone.sync.pouch(Utils.pouchUrl),
+        
+        /**
+         * The LaTeXiT function automatically mark-ups an example in LaTeX code (\exg. \"a) and then copies it on the clipboard so that when the user switches over to their LaTeX file they only need to paste it in.  
+         */
+        laTeXiT: function() {
+     	   return "";
+        
+        },
+        
+        /**
+         * The addAudio function is a drop box in which the user can drag an audio file and link it to the relevant datum.
+         */
+        addAudio: function() {
+     	   return true;
+        },
+        
+        /**
+         * The playDatum function appears when the audio has already been added and allows the user to play the associated audio file.
+         */
+         
+        playDatum: function() {
+     	   return true;
+        },
+
+        /**
+         * The copyDatum function copies all datum fields to the clipboard.
+         */
+        copyDatum: function() {
+     	   return "";
+        },
+
+         /**
+         The duplicateDatum function opens a new datum field set with the fields already filled exactly like the previous datum so that the user can minimally edit the datum.
+         */
+        duplicateDatum: function() {
+     	   var datum = new Datum();
+     	   return datum;
+        }
     });
 
     return Datum;

@@ -1,88 +1,84 @@
-define("app/AppView", [
-	"use!backbone", 
-	"datum/Datum", 
-	"datum/DatumView", 
-	"datum_status/DatumStatus", 
-	"datum_status/DatumStatusView", 
-	"navigation/Navigation", 
-	"navigation/NavigationView", 
-	"activity_feed/ActivityFeedItem", 
-	"activity_feed/ActivityFeedItemView",
-	"data_list/DataList",
-	"data_list/DataListView",
-	"libs/Utils"
-], function(Backbone, Datum, DatumView, DatumStatus, DatumStatusView, Navigation, NavigationView, ActivityFeedItem, ActivityFeedItemView, DataList, DataListView) {
-	var AppView = Backbone.View.extend(
-	/** @lends AppView.prototype */
-	{
-		/**
-		 * @class The main layout of the program.
-		 *
-		 * @extends Backbone.View
-		 * @constructs
-		 */
-		initialize : function() {
-			Utils.debug("Clicked addOneDatum");
+define([ "use!backbone", 
+         "use!handlebars", 
+         "authentication/Authentication",
+         "authentication/AuthenticationView", 
+         "corpus/Corpus", 
+         "corpus/CorpusView",
+         "search/Search", 
+         "search/SearchView", 
+         "app/App", 
+         "app/AppRouter",
+         "text!app/app.handlebars", 
+         "libs/Utils" ], function(
+             Backbone, 
+             Handlebars,
+             Authentication, 
+             AuthenticationView, 
+             Corpus, 
+             CorpusView, 
+             Search, 
+             SearchView,
+             App, 
+             AppRouter, 
+             appTemplate) {
+  var AppView = Backbone.View.extend(
+  /** @lends AppView.prototype */
+  {
+    /**
+     * @class The main layout of the program controls and loads the app. IT
+     *        allows the user to configure the dashboard by loading their
+     *        handlebars. It contains the views of all the core models
+     *        referenced in the app model and it will have partial handlebar of
+     *        the navigation menu.
+     * 
+     * @extends Backbone.View
+     * @constructs
+     */
+    initialize : function() {
+      this.render();
 
-			// Create the new Datum to be added
-			var navigation = new Navigation();
+      this.router = new AppRouter();
 
-			// Render it as a NavigationView
-			var view = new NavigationView({
-				model : navigation
-			});
-			this.$("#navigation").append(view.render().el);
-			
-			var datalistview = new DataList();
-//			app.dataList.add(datalistview); we can't have this because datalist view is not a collection
-//			 Render datalist view
-			var d = new DataListView({
-				model : datalistview
-			});
-			this.$("#rightside").append(d.render().el);
-			
-			
-		},
+      // Start the Router
+      Backbone.history.start();
 
-		el : $('#app'),
+      this.corpusView = new CorpusView({
+        model : this.model.get("corpus")
+      });
+      this.authView = new AuthenticationView({
+        model : new Authentication()
+      });
+      this.searchView = new SearchView({
+        model : new Search()
+      });
 
-		events : {
-			"click #dashboard-view" : "addOneDatum"
-		},
+    },
 
-		/**
-		 * Add a datum to the screen.
-		 */
-		addOneDatum : function() {
-			Utils.debug("Clicked addOneDatum");
+    el : '#app_view',
+    model : App,
+    template : Handlebars.compile(appTemplate),
+    classname : "app_view",
+    router : AppRouter,
+    render : function() {
+      $(this.el).html(this.template(this.model.toJSON()));
+      return this;
+    },
 
-			// Create the new Datum to be added
-			var datum = new Datum({
-				utterance : "Hello World!"
-			});
-			datum.save();
+    corpusView : CorpusView,
+    authView : AuthenticationView,
+    searchView : SearchView,
+    /**
+     * This function triggers a sample app to load so that new users can play
+     * around and get a feel for the app by seeing the data in context.
+     */
+    loadSample : function() {
+      this.corpusView.loadSample();
+      this.authView.loadSample();
+      this.searchView.loadSample();
+      
+    }
 
-			// Add it to the global list of Datum
-			app.datumList.add(datum);
+  });
 
-			// Render it as a DatumView
-			var view = new DatumView({
-				model : datum
-			});
-			this.$("#content").append(view.render().el);
-
-			var action = new ActivityFeedItem();
-			app.activityFeed.add(action);
-//			 Render an activity in the activity feed
-			var v = new ActivityFeedItemView({
-				model : action
-			});
-			this.$("#activity_feed").append(v.render().el);
-			
-
-			
-		}
-	});
-
-	return AppView;
+  return AppView;
 });
