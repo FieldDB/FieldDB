@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  4 JUN 2012 13:15
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  4 JUN 2012 13:50
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -229,23 +229,56 @@ LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <17.28> not available
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 41.
- [2] [3]
-(./Primer.aux) ) 
+LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <12> not available
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 45.
+LaTeX Font Info:    Try loading font information for OMS+pplx on input line 48.
+
+LaTeX Font Info:    No file OMSpplx.fd. on input line 48.
+
+
+LaTeX Font Warning: Font shape `OMS/pplx/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbullet' on input line 48.
+
+[2]
+Overfull \hbox (1.30357pt too wide) in paragraph at lines 53--54
+[]\T1/pplx/m/n/12 "The Phono-log-i-cal/Phonetic sta-tus of Pro-duc-tive Palatal
+-iza-tion in Ro-ma-nian." (with
+ []
+
+
+Overfull \hbox (18.30676pt too wide) in paragraph at lines 65--67
+[]\T1/pplx/m/n/12 "A New Gram-mat-i-cal Cat-e-gory: Im-pul-satives." Penn Lin-g
+uis-tics Col-lo-quium, Philadel-
+ []
+
+[3]
+Overfull \hbox (6.34354pt too wide) in paragraph at lines 79--80
+\T1/pplx/m/n/12 ta-tions of Hy-per-cubes." Y. Aoshima, D. Avis, T. Deer-ing, Y.
+ Mat-sumoto, S. Moriyama.
+ []
+
+[4] (./Primer.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2306 strings out of 493633
- 27391 string characters out of 3143378
- 72280 words of memory out of 3000000
- 5595 multiletter control sequences out of 15000+200000
- 25347 words of font info for 49 fonts, out of 3000000 for 9000
+ 2317 strings out of 493633
+ 27508 string characters out of 3143378
+ 73280 words of memory out of 3000000
+ 5602 multiletter control sequences out of 15000+200000
+ 27911 words of font info for 53 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  34i,4n,23p,1064b,196s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc
-}</usr/local/texlive/2011/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/
-local/texlive/2011/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on Primer.pdf (3 pages, 45754 bytes).
+{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2
+011/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
+Output written on Primer.pdf (4 pages, 59062 bytes).
 PDF statistics:
- 23 PDF objects out of 1000 (max. 8388607)
- 15 compressed objects within 1 object stream
+ 30 PDF objects out of 1000 (max. 8388607)
+ 20 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
