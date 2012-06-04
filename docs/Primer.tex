@@ -27,40 +27,8 @@ describe the population that will be served.
 
 \section {App Description}
 
-The FieldLinguists' App will enable those interested in language research, preservation, and documentation to securely enter, store, organize, annotate, and share linguistic data. Moreover, the application will be easily customizable to fit specific needs. To accomplish these tasks, the database will be equipped with a variety of features. The system will support:
-
-\begin{itemize}
-
-\item data entry akin to other fieldlinguistics databases
-\item the ability to drag and drop audio to accompany each data field
-\item insertion of IPA and special symbols
-\item Hotkeys and keyboard short-cuts for common tasks
-\item import .csv files
-\item import ELAN files
-
-\end{itemize}
-
-These functional requirements are based on a few important considerations where most existing field linguistics/corpus linguistics databases applications fall short. The FieldLinguists' App will:
-
-\begin{itemize}
-
-\item be user friendly.
-\item be cute so that the users feel like entering data, instead of procrastinating.
-\item be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes; it will be able to display data in context.
-\item be OpenData enabled. Corpora often contain sensitive information, informant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application.
-\item work offine. Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the app in a Chrome Extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location. 
-\item run on Mac, Linux, and Windows computers. By providing the application as an installable Chrome Extension, it will run on all platforms as well as Chrome Books.
-\item be OpenSource. Being OpenSource allows departments to install and customize the database application to tailor specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas.
-\item store data in Unicode. Encoding problems and loosing data should be behind us in the days of unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support unicode, so the unicode support is dangerously fragile.
-\item be simple. The system will not be designed to replace advanced field linguistics databases, or corpus linguistics databases. It will be designed to replace Word Documents or LaTeX documents which is a very common way fieldlinguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.
-\item be theory free. The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data. However, the system will make it possible for teams to set their own categories and thus optionally tie specific theoretical constructs to data. This is a different approach to many corpus databases; most databases are motivated by typologies and language counting that place a large data-entry burden on the user. The FieldLinguists' App will let the researcher gradually constrain their data entry conventions over time.
-\item be collaborative The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
-\item run on touch devices. Touch tablets are one of the easiest tools to carry and use in field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video and direct publishing to YouTube and/or other services. Furthermore, Android tablets are particularly easy to program and integrate the microphone directly into the database. 
-\item be smart. The application will attempt to guess what users do most often, and automate the process for them. Most importantly, the system will have automated predictable glossing information .
-
-
-\end{itemize}
-
+Describe the project or program and provide information on how it will be implemented. Include 
+information on what will be accomplished and the desired outcome. 
 
 \section {Goals \& Objectives}
 
@@ -77,8 +45,12 @@ Gina Cook received her Masters in Field Linguistics \& DESS in Computer Science 
 \subsubsection{Publications}
 \begin{itemize}
 
-\item "Aphasia Assessment on Android: recording voice, eye-gaze and touch for the BAT." (with A. Marquis \& A. Achim). Poster at Academy of Aphasia 49th Annual Meeting, Mont\'eal, Qu\'ebec. October 2011.\item "Eliciting evolving information structure and audienceless vs. audience oriented prosodies: experimentation on Android tablets." (with S. Kattoju). Poster at ETAP2 Ð Experimental and Theoretical Advances in Prosody, Montr\'eal, Qu\'ebec. September 2011.\item "PDFtoAudioBook Android app" (Java, XML).Canadian University Software Engineering Conference (CUSEC) DemoCamp, Montr\'eal, Qu\'ebec. January 2011.\item "Word features and word concatenation."Sixth Interdisciplinary Graduate Student Research Symposium, McGill University, Montr\'eal, Qu\'ebec. March 2009.
-\item "The Structure of Long Distance Agreement in Hindi/Urdu." Invited Lecture in Advanced Syntax, Concordia University, Montr\'eal, Qu\'ebec. November 2007.\item "The Phonological/Phonetic status of Productive Palatalization in Romanian." (with L. Spinu). Presented at the Seoul International Conference on Linguistics, Seoul National University, Seoul, South Korea. July 2006.
+\item "Aphasia Assessment on Android: recording voice, eye-gaze and touch for the BAT." (with A. Marquis \& A. Achim). Poster at Academy of Aphasia 49th Annual Meeting, Mont\'eal, Qu\'ebec. October 2011.
+\item "Eliciting evolving information structure and audienceless vs. audience oriented prosodies: experimentation on Android tablets." (with S. Kattoju). Poster at ETAP2 Ð Experimental and Theoretical Advances in Prosody, Montr\'eal, Qu\'ebec. September 2011.
+\item "PDFtoAudioBook Android app" (Java, XML).Canadian University Software Engineering Conference (CUSEC) DemoCamp, Montr\'eal, Qu\'ebec. January 2011.
+\item "Word features and word concatenation."Sixth Interdisciplinary Graduate Student Research Symposium, McGill University, Montr\'eal, Qu\'ebec. March 2009.
+\item "The Structure of Long Distance Agreement in Hindi/Urdu." Invited Lecture in Advanced Syntax, Concordia University, Montr\'eal, Qu\'ebec. November 2007.
+\item "The Phonological/Phonetic status of Productive Palatalization in Romanian." (with L. Spinu). Presented at the Seoul International Conference on Linguistics, Seoul National University, Seoul, South Korea. July 2006.
 \end{itemize}
 
 
@@ -89,8 +61,12 @@ M.E. Cathcart completed her PhD at the University of Delaware with a dissertatio
 \subsubsection{Publications}
 
 \begin{itemize}
-\item "Affected Arguments Cross-linguistically." S. Bosse, B. Bruening, M.E. Cathcart, A. E. Peng, M. Yamada. In: Tadic, M. Dimitrova-Vulchanova, M., Koeva, S. (eds.): FASSBL 6 The Sixth International Conference on Formal Approaches to South Slavic and Balkan Languages. 2008 (Proceedings) pp. 41-47.\item "A New Grammatical Category: Impulsatives." Penn Linguistics Colloquium, Philadelphia March 2010?Eliciting data for dissertation on Impulsatives: functional morpheme in context
-\item"The Syntax and Semantics of Desideratives in Albanian." Georgetown Linguistics Society, Washington, D.C. February 2010\item "Bi-Eventivity \& Affecting Arguments." S. Bosse, B. Bruening, M.E. Cathcart, H.-j. Cheng, A. E. Peng, M. Yamada. Formal Approaches to South Slavic and Balkan Languages, Dubrovnik (Croatia), 25-28 September 2008.\item "Bi-Eventive Affect." S. Bosse, B. Bruening, M.E. Cathcart, H.-j. Cheng, A. E. Peng, M. Yamada.TEAL, Potsdam (Germany), 10-11 September 2008.
+\item "Affected Arguments Cross-linguistically." S. Bosse, B. Bruening, M.E. Cathcart, A. E. Peng, M. Yamada. In: Tadic, M. Dimitrova-Vulchanova, M., Koeva, S. (eds.): FASSBL 6 The Sixth International Conference on Formal Approaches to South Slavic and Balkan Languages. 2008 (Proceedings) pp. 41-47.
+\item "A New Grammatical Category: Impulsatives." Penn Linguistics Colloquium, Philadelphia March 2010
+?Eliciting data for dissertation on Impulsatives: functional morpheme in context
+\item"The Syntax and Semantics of Desideratives in Albanian." Georgetown Linguistics Society, Washington, D.C. February 2010
+\item "Bi-Eventivity \& Affecting Arguments." S. Bosse, B. Bruening, M.E. Cathcart, H.-j. Cheng, A. E. Peng, M. Yamada. Formal Approaches to South Slavic and Balkan Languages, Dubrovnik (Croatia), 25-28 September 2008.
+\item "Bi-Eventive Affect." S. Bosse, B. Bruening, M.E. Cathcart, H.-j. Cheng, A. E. Peng, M. Yamada.TEAL, Potsdam (Germany), 10-11 September 2008.
 \end{itemize}
 
 
@@ -99,7 +75,8 @@ M.E. Cathcart completed her PhD at the University of Delaware with a dissertatio
 Theresa Deering has a  Bachelor's in Computer Science from Malaspina and a Master's in Computer Science from McGill University. Her thesis focused on the Least-Used Direction pivot rule for the Simplex Method of solving linear programs.
 
 \begin{itemize}
-\item "The Least-Used Direction Pivot Rule on Acyclic Unique Sink Orientations." Master's Thesis. McGill University, Montr\'eal, Qu\'ebec. July 2010.\item "Worst-case Behaviour of History Based Pivot Rules on Acyclic Unique Sink Orientations of Hypercubes." Y. Aoshima, D. Avis, T. Deering, Y. Matsumoto, S. Moriyama. Submitted to AAAC. October 2011.
+\item "The Least-Used Direction Pivot Rule on Acyclic Unique Sink Orientations." Master's Thesis. McGill University, Montr\'eal, Qu\'ebec. July 2010.
+\item "Worst-case Behaviour of History Based Pivot Rules on Acyclic Unique Sink Orientations of Hypercubes." Y. Aoshima, D. Avis, T. Deering, Y. Matsumoto, S. Moriyama. Submitted to AAAC. October 2011.
 \end{itemize}
 
 \section {Budget}
@@ -109,9 +86,15 @@ The Field Linguists' Database is composed eight modules and thus the cost is div
 
 The prices given include a 40\% Researcher discount and a 10\% Open Source discount.  An additional 40\% discount is given for certain components that can be made with the help of students from Concordia University, Hisako Noguchi and Yulia Manyakina.  The cost is calculated by determining the time in hours and multiplying by \$48, the average rate of a software developer in Montr\'eal.  
 
-\begin{table}[htbp]  \begin{tabular}{ | cc | }
-\hline    Module & Price \\ 
-\hline    Software Architecture & \$1,555.20  \\     Collaboration Module & \$5,728.32  \\     Corpus Module & \$9,201.60 \\
+\begin{table}[htbp]
+
+  \begin{tabular}{ | cc | }
+\hline
+    Module & Price \\ 
+\hline
+    Software Architecture & \$1,555.20  \\ 
+    Collaboration Module & \$5,728.32  \\ 
+    Corpus Module & \$9,201.60 \\
      Web Spider Module & \$2,177.28\\
      Phonological Search Module & \$2,177.28 \\
     Lexicon Module & \$7,340.54 \\ 
@@ -122,7 +105,11 @@ User Support & \$30,246.70 \\
 TVS and TPQ & \$10,833.32 \\
 Total &  \$83,176.04 \\
 
-\hline  \end{tabular}  \caption{Cost Summary}  \label{tab:label}\end{table}
+\hline
+  \end{tabular}
+  \caption{Cost Summary}
+  \label{tab:label}
+\end{table}
 
 
 
@@ -130,12 +117,15 @@ Total &  \$83,176.04 \\
 \subsection{Collaboration Module}
 
 \footnotesize
-\begin{table}[htbp]  \begin{tabular}{ | cccccccc | }
+\begin{table}[htbp]
+
+  \begin{tabular}{ | cccccc | }
 \hline
 
 Collaboration Module&	&	&	&	&	&	&	\\ 
 \hline
-Iteration&	Hours&	Technology&	Rate&	Cost Closed Source &	Research Reduction 40\%&	Reduction Open Source 10\%&	 Reduction Student Made \%40\\ 
+Collaboration Module: used to permit collaboration, teams and users&	&	&	&	&	&	&	\\ 
+Iteration&	Hours&	Technology&	Rate&	Cost Closed Source &	Research Reduction 40\%&	Reduction Open Source 10\%&	 Reduction Student Made  \%40\\ 
 Software Architecture Design&	20&	Software Engineering&	48&	960&	576&	518.4&	311.04\\ 
 Collaboration API on central server&	30&	Software Engineering&	48&	1440&	864&	777.6&	777.6\\ 
 Users Model&	15&	Javascript&	48&	720&	432&	388.8&	233.28\\ 
@@ -154,8 +144,14 @@ Android Deployment&	15&	Java&	48&	720&	432&	388.8&	388.8\\
 Chrome Extension Deployment&	20&	Javascript&	48&	960&	576&	518.4&	518.4\\ 
 Heroku Deployment&	5&	Integration&	48&	240&	144&	129.6&	129.6\\ 
 \# of weeks with 3 full time personnel&	2.5416666667&	&	&	14640&	8784&	7905.6&	\$5,728.32\\ 
+\\ 
 
-\hline  \end{tabular}  \caption{Cost Summary}  \label{tab:label}\end{table}
+
+\hline
+  \end{tabular}
+  \caption{Cost Summary}
+  \label{tab:label}
+\end{table}
 %%Include in the budget all expenses for the app, including necessary training costs. Mention any co-funding that you are using from other sources. You may want to include a brief narrative of expenses along with a table of individual cost components. 
 
 
