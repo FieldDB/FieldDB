@@ -41,23 +41,22 @@ require.config({
 // Initialization
 require([
     "app/App",
-    "app/AppView"
-], function(App,AppView) {
-    window.app = {};
-    app.collections = {};
-    app.models = {};
-    app.views = {};
-    app.mixins = {};
-    
+    "app/AppView",
+    "libs/Utils"
+], function(
+    App,
+    AppView
+) {
     var a = localStorage.getItem("app");
-    if (a){
-      console.log("Loading app from localStorage");
+    if (a) {
+      Utils.debug("Loading app from localStorage");
       a = JSON.parse(a);
       a = new App(a); 
-    }else{
-      console.log("Loading fresh app");
+    } else {
+      Utils.debug("Loading fresh app");
       a = new App();
     }
+    
     window.appView = new AppView({model: a}); 
     window.app = a;
     window.appView.loadSample();
