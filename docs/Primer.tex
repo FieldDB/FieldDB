@@ -27,39 +27,55 @@ describe the population that will be served.
 
 \section {App Description}
 
-The FieldLinguists' App will enable those interested in language research, preservation, and documentation to securely enter, store, organize, annotate, and share linguistic data. Moreover, the application will be easily customizable to fit specific needs. To accomplish these tasks, the database will be equipped with a variety of features. The system will support:
-
+The FieldLinguists' App will enable those interested in language research, preservation, and documentation to securely enter, store, organize, annotate, and share linguistic data. Moreover, the application will be easily customizable to fit specific needs. To accomplish these tasks, the database will be equipped with a variety of features. 
+The following functional requirements are based on a few important considerations where most existing field linguistics/corpus linguistics databases applications fall short. 
 \begin{itemize}
 
-\item data entry akin to other fieldlinguistics databases (e. g. ToolBox, FileMakerPro)
-\item the ability to drag and drop audio to accompany each data field
-\item insertion of IPA and special symbols
-\item Hotkeys and keyboard short-cuts for common tasks
-\item import .csv files
-\item import ELAN files
+
+
+\item {\bf Modern and Intuitive}
+
+\begin{itemize}
+\item { \bf Simple} The system will be designed to replace Word Documents or LaTeX documents which is a very common way fieldlinguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  
+
+\item {\bf Attractive} The system will have a modern design like many of the popular websites such as google and be customizable so that the user include a picture of where they are doing research as background.
 
 \end{itemize}
 
-These functional requirements are based on a few important considerations where most existing field linguistics/corpus linguistics databases applications fall short. The FieldLinguists' App will:
-
+\item {\bf Powerful}
 \begin{itemize}
+\item {\bf Smart} The application will guess what users do most often, and automate the process for them. Most importantly, the system will have automated predictable glossing information .
+\item {\bf  Searchable} The application will be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes; it will be able to display data in context.
+\end{itemize}
 
-\item be user friendly.
-\item be cute so that the users feel like entering data, instead of procrastinating.
-\item be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes; it will be able to display data in context.
-\item be OpenData enabled. Corpora often contain sensitive information, informant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application.
-\item work offine. Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the app in a Chrome Extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location. 
-\item run on Mac, Linux, and Windows computers. By providing the application as an installable Chrome Extension, it will run on all platforms as well as Chrome Books.
-\item be OpenSource. Being OpenSource allows departments to install and customize the database application to tailor specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas.
-\item store data in Unicode. Encoding problems and loosing data should be behind us in the days of unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support unicode, so the unicode support is dangerously fragile.
-\item be simple. The system will not be designed to replace advanced field linguistics databases, or corpus linguistics databases. It will be designed to replace Word Documents or LaTeX documents which is a very common way fieldlinguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.
-\item be theory free. The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data. However, the system will make it possible for teams to set their own categories and thus optionally tie specific theoretical constructs to data. This is a different approach to many corpus databases; most databases are motivated by typologies and language counting that place a large data-entry burden on the user. The FieldLinguists' App will let the researcher gradually constrain their data entry conventions over time.
-\item be collaborative The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
-\item run on touch devices. Touch tablets are one of the easiest tools to carry and use in field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video and direct publishing to YouTube and/or other services. Furthermore, Android tablets are particularly easy to program and integrate the microphone directly into the database. 
-\item be smart. The application will attempt to guess what users do most often, and automate the process for them. Most importantly, the system will have automated predictable glossing information .
+\item{\bf Data-Centric}
+\begin{itemize}
+\item {\bf Atheoretical} The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application allows an analysis to develop organically as data collection proceeds as opposed to imposing a particular construct upon entry.  Researchers can set and change their own categories to the data whenever they choose to.
+\item {\bf Collaborative} The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
+\item {\bf Sharable} The application will allow researchers to share their data to anyone interested in their work.
+\end{itemize}
 
+
+\item{\bf Accessable}
+\begin{itemize}
+\item { \bf Cross-Platform} The application will run on Mac, Linux, and Windows computers. The application will be installable as a Chrome extension and available on any device that runs a browser.
+\item  {\bf Portable} Touch tablets are one of the easiest tools to carry and use in field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video and direct publishing to YouTube and/or other services. Furthermore, Android tablets are particularly easy to program and integrate the microphone directly into the database.
+\item {\bf Work offine} Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the app in a Chrome Extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location.
+\end{itemize}
+
+
+
+\item{\bf Open}
+\begin{itemize}
+\item {\bf OpenData}. Corpora often contain sensitive information, informant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application.
+\item { \bf OpenSource}. Being OpenSource allows departments to install and customize the database application to tailor specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas.
+\item {\bf Unicode}. Encoding problems and looing data should be behind us in the days of unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support unicode, so the unicode support is dangerously fragile.
+\end{itemize}
 
 \end{itemize}
+
+
+
 
 
 \section {Goals \& Objectives}
