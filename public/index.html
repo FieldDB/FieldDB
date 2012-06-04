@@ -1,94 +1,39 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title></title>
-	
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="./datum_menu/datum_menu.css">
-	<link rel="stylesheet" type="text/css" href="./app/dashboard.css">
-	<link rel="stylesheet" type="text/css" href="./navigation/menu.css">
-	<link rel="stylesheet" type="text/css" href="./data_list/dataList.css">
-	<link rel="stylesheet" type="text/css" href="./datum/datum.css">
-	<link rel="stylesheet" type="text/css" href="./datum_field/datum_field.css">
-	
-	<!-- END Stylesheets -->
+<title></title>
 
-	
-	<!-- Javascript -->
-	<script type="text/javascript" src="./libs/require.js" data-main="./main.js"></script>
-	<!-- END Javascript -->
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css"
+	href="./datum_menu/datum_menu.css">
+<link rel="stylesheet" type="text/css" href="./app/dashboard.css">
+<link rel="stylesheet" type="text/css" href="./data_list/dataList.css">
+<link rel="stylesheet" type="text/css" href="./datum/datum.css">
+<link rel="stylesheet" type="text/css"
+	href="./datum_field/datum_field.css">
+
+<!-- END Stylesheets -->
+
+
+<!-- Javascript -->
+<script type="text/javascript" src="./libs/require.js"
+	data-main="./main.js"></script>
+<!-- END Javascript -->
 </head>
 <body id="app" class="llama">
-	
-	<!-- The layout of the dashboard page -->
-	<div id="dashboard-view" class="page">
-		<div class="navigationcontainer">
-			<div id="navigation" ></div>
-		</div>
-		<div id="status" style="color:#ffcc00"></div>
-		<div class="main">
-			<div id="leftside" class="leftside widget">
-			<div id="user"></div>
-			<div id="authentication">
-			   <div id="login">
-						<div>
-							<label>Username:</label> <br />
-							<input type="text" id="username" name="username" value="sapir" /><br />
-						</div>
-						<div>
-							<label>Password:</label> <br />
-							<input type="password" id="password" name="password" value="wharf" />
-						</div>
-						<div>
-							<input type="button" id="login_button" class="button" value="Log In" onclick="app.auth.login()"/>
-						</div>
-				</div>
-				<div id="logout" class="hidden">
-		  	  <input type="button" onclick="app.auth.logout()" class="button" value="Logout"/>
-				</div>
-      </div>
-        <div id="activity_feed">
-        <div class="activity_feed_title">
-		      <input onclick="" type="button" class="inactive_activity button " value="Your Activity"/>
-		      <input onclick="" type="button" class="activity button" value="Team Activity"/>
-		    </div>
-        </div>
-			
-			</div>
-			<div id="content" class="content">
-			   <div id="corpus"></div>
-			</div>
-			<div id="rightside" class="rightside widget">Data List/Search</div>
-		</div>
-	</div>
-	
-	<!-- The layout of the extended datum page -->
-	<div id="extended-datum-view" class="page centercontent widget">
-		<div>Extended Datum View</div>
-	</div>
-	
-	<!-- The layout of the extended data list page -->
-	<div id="extended-datalist-view" class="page centercontent widget">
-		<div>Extended Data List View</div>
-	</div>
-	
-	<!-- The layout of the extended search page -->
-	<div id="extended-search-view" class="page centercontent widget">
-		<div>Extended Search View</div>
-	</div>
-	
-	<!-- The layout of the user profile page -->
-	
-	<div id="user-profile-view" class="page widget centercontent">
-		<div>User Profile</div>
-	</div>
-	
-	<!-- The layout of the new session page -->
-	<div id="new-session-view" class="page centercontent widget">
-		<div>New Session</div>
-	</div>
-	
-      
+	<div id="app_view" class="page"></div>
 
+
+
+<!-- sample template for pagination UI -->
+    <script type="text/html" id="tmpServerPagination">
+      <div class="breadcrumb">
+
+          <% if (currentPage < totalPages) { %>
+            <a href="#" class="btn long servernext">Show More</a>
+          <% } %>
+
+        </div>
+      </script>
 </body>
 </html>
