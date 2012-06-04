@@ -1,50 +1,49 @@
-define("search/Search", [
-    "use!Backbone"
-   ], 
-		function(Backbone){
-	
-	var Search = Backbone.Model.extend(
-			
-	/** @lends Search.prototype  */ 
-			
-		{
-			/** 
-			 * @class Search progressively searches a corpus and updates a 
-			 *        search/data list view as a user types keywords in the 
-			 *        search box. BOth eintersective and union search is 
-			 *        possible. It highlights search keywords in the list view.  
-			 * 
-			 * @property {String} searchKeywords 
-			 * @property {Datum} 
-			 * @property {DataList} 
-			 * @property {DatumTag} 
-			 * @property {Corpus} 
-			 * 
-			 * 
-			 * 
-			 * @description The initialize function probably creates a link to 
-			 *              a corpus, or checks if a link is established. 
-			 * 
-			 * @extends Backbone.Model 
-			 * 
-			 * @constructs 
-			 * 
-			 */
+define( [ "use!backbone" ], function(Backbone) {
 
-			initialize : function() {		
-			}, 
-			
-			defaults: {
-//            Default searchKeywords is a null string		
-				searchKeywords : "passive" 
-			}, 
-			
-	    	validate : function(attributes) {
+  var Search = Backbone.Model.extend(
 
-	           }
-		
-		});
-	
-	return Search; 
-}); 
+  /** @lends Search.prototype  */
 
+  {
+    /** 
+     * @class Search progressively searches a corpus and updates a 
+     *        search/data list view as a user types keywords in the 
+     *        search box. Both intersection and union search is 
+     *        possible. It highlights search keywords in the list view.  
+     * 
+     * @property {String} searchKeywords 
+     * @property {DataList} 
+     * 
+     * 
+     * 
+     * @description The initialize function probably creates a link to 
+     *              a corpus, or checks if a link is established. 
+     * 
+     * @extends Backbone.Model 
+     * 
+     * @constructs 
+     * 
+     */
+
+    initialize : function() {
+      this.on('all', function(e) {
+        Utils.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
+      });
+    },
+    
+    defaults : {
+      searchKeywords : ""
+    },
+
+    validate : function(attributes) {
+
+    },
+    
+    saveKeyword: function(){
+      this.set("searchKeywords","hihi");
+    }
+
+  });
+
+  return Search;
+});
