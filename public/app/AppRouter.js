@@ -1,10 +1,27 @@
-define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "data_list/DataList", "data_list/DataListView",
-    "datum/DatumView", "session/Session", "session/SessionView",
-    "corpus/Corpus", "libs/Utils"
-
-], function(Backbone, User, UserProfileView, Datum,DataList, DataListView, DatumView, Session,
-    SessionView, Corpus) {
-
+define([ 
+    "use!backbone", 
+    "user/User", 
+    "user/UserProfileView", 
+    "datum/Datum", 
+    "data_list/DataList", 
+    "data_list/DataListView",
+    "datum/DatumView", 
+    "session/Session", 
+    "session/SessionView",
+    "corpus/Corpus", 
+    "libs/Utils"
+], function(
+    Backbone, 
+    User,
+    UserProfileView, 
+    Datum,
+    DataList, 
+    DataListView, 
+    DatumView, 
+    Session,
+    SessionView,
+    Corpus
+) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
   {
@@ -24,7 +41,7 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
     },
 
     routes : {
-      "corpus/:corpusName/datum/:id" : "showNewDatum",
+      "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
       "corpus/:corpusName/session/:id" : "showNewSession",
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
@@ -55,13 +72,11 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
       $("#user-preferences-view").hide();
-
-
+      
       var sessionView = new SessionView({
         model : new Session()
       });
       $("#new-session-view").append(sessionView.render().el);
-
     },
 
     /**
@@ -83,21 +98,13 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+      
+      // TODO 
+      // Get the Datum with id = datumId
+      // Assign it to appView.fullScreenDatumView.model
+      // Render appView.fullScreneDatumView
 
-
-      var datumView = new DatumView({
-        model : new Datum()
-      });
-      var sID = datumView.model.get("sessionID");
-      // console.log(sID);
-      if (sID === 0) {
-        var yale = new Corpus();
-        this.showNewSession(yale, 12);
-      } else {
-        $("#fullscreen-datum-view").append(datumView.render().el);
-
-      }
-
+      $("#fullscreen-datum-view").append(appView.fullScreenDatumView.render().el);
     },
 
     /**
@@ -121,19 +128,14 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
 
-
       var datalist = new DataList();
       // app.dataList.add(datalistview); we can't have this because datalist
       // view is not a collection
       // Render datalist view
       var d = new DataListView({
-
         model : datalist
-
       });
       this.$("#rightside").append(d.render().el);
-      
-      
     },
 
     /**
@@ -153,8 +155,6 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
-
-
     },
 
     /**
@@ -174,8 +174,6 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#user-profile-view").hide();
       $("#session").hide();
       $("#user-preferences-view").hide();
-
-
     },
 
     /**
@@ -195,8 +193,7 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
 
-
-     // Create
+      // Create
       var userProfileView = new UserProfileView({
         model : new User(),
         el : $('#user-profile-view'),
@@ -221,8 +218,6 @@ define([ "use!backbone", "user/User", "user/UserProfileView", "datum/Datum", "da
       $("#user-preferences-view").show();
       $("#new-session-view").hide();
       $("#user-profile-view").hide();
-
-
     }
   });
 
