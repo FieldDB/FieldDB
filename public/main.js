@@ -9,7 +9,7 @@ require.config({
         "handlebars" : "libs/handlebars-1.0.0.beta.6",
         "paginator" : "libs/backbone.paginator",
         "crypto" : "libs/Crypto_AES",
-        "jquery.couch" : "libs/jquery.couch"
+        "pouch" : "libs/pouch.alpha"
     },
     use : {
         "underscore" : {
@@ -17,7 +17,7 @@ require.config({
         },
 
         "backbone" : {
-            deps : ["use!underscore", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+            deps : ["use!underscore", "jquery", "pouch", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
             attach : function(_, $) {
                 return Backbone;
             }
@@ -30,8 +30,9 @@ require.config({
         "crypto" :{
         	attach: "CryptoJS"
         },
+        
         "paginator":{
-          deps : ["use!underscore", "use!backbone", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+          deps : ["use!underscore", "use!backbone", "jquery"],
           attach: "Paginator"
         }
     }
@@ -39,36 +40,24 @@ require.config({
 
 // Initialization
 require([
-    "use!backbone",
     "app/App",
-    "app/AppView"
-], function(Backbone, App,AppView) {
-    // CouchDB configuration
-    Backbone.couch_connector.config.base_url = "https://trisapeace.iriscouch.com"
-    Backbone.couch_connector.config.db_name = "datum_test";
-    // If set to true, the connector will listen to the changes feed
-    // and will provide your models with real time remote updates.
-    // But in this case we enable the changes feed for each Collection on our own.
-    Backbone.couch_connector.config.global_changes = false;
-
-    
-    window.app = {};
-    app.collections = {};
-    app.models = {};
-    app.views = {};
-    app.mixins = {};
-    
+    "app/AppView",
+    "libs/Utils"
+], function(
+    App,
+    AppView
+) {
     var a = localStorage.getItem("app");
-    if (a){
-      console.log("Loading app from localStorage");
+    if (a) {
+      Utils.debug("Loading app from localStorage");
       a = JSON.parse(a);
       a = new App(a); 
-    }else{
-      console.log("Loading fresh app");
+    } else {
+      Utils.debug("Loading fresh app");
       a = new App();
     }
+    
     window.appView = new AppView({model: a}); 
     window.app = a;
     window.appView.loadSample();
-    
 });

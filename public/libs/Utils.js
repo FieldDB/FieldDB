@@ -11,6 +11,9 @@ var Utils = {};
 
 Utils.debugMode = true;
 
+Utils.pouchUrl = "idb://datum_test";
+Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test2";
+
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if
  * debugMode is true.
