@@ -1,0 +1,47 @@
+<div class="breadcrumb">
+
+  <span class="cell">
+    
+      
+    {{#if afterFirstPage}}
+      <a href="#" class="serverprevious">Previous</a>
+    {{else}}
+      <span>Previous</span>
+    {{/if}}
+      
+    {{#if showNext}}
+      <a href="#" class="servernext">Next</a>
+    {{/if}}
+      
+    {{#if showfirst}}
+      <a href="#" class="serverfirst">First</a>
+    {{/if}}
+      
+    {{#if showLast}}
+      <a href="#" class="serverlast">Last</a>
+    {{/if}}
+      
+      
+    <span class="divider">/</span>
+      
+    <span class="cell serverhowmany">
+      Show
+      <a href="#" class="selected">3</a>
+      |
+      <a href="#" class="">9</a>
+      |
+      <a href="#" class="">12</a>
+      per page
+    </span>
+      
+    
+    <span class="divider">/</span>
+    <span class="cell first records">
+      Page: <span class="current">{{ currentPage }}</span>
+      of
+      <span class="total">{{ totalPages }}</span>
+      shown
+    </span>
+      
+  </span>
+</div>
