@@ -227,6 +227,14 @@ define([
       $("#user-preferences-view").show();
       $("#new-session-view").hide();
       $("#user-profile-view").hide();
+      
+      var PreferenceView = new PreferenceView({
+        model : new User(),
+        el : $('#user-preferences-view'),
+      });
+      
+      
+      
     }
   });
 

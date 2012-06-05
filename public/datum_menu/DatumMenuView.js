@@ -37,7 +37,7 @@ define("datum_menu/DatumMenuView", [
          */
         starDatum: function() {
      	   console.log("I'm your favorite!!");
-     	 return true;
+     	   return true;
         }
     });
 

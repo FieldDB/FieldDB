@@ -7,6 +7,8 @@ define([
     "session/Sessions",
     "session/SessionView", 
     "session/SessionsView",
+    "preference/Preference",
+    "preference/PreferenceView",
     "datum/Datums",
     "datum/DatumsView", 
     "data_list/DataList", 
@@ -30,6 +32,8 @@ define([
     Sessions,
     SessionView, 
     SessionsView, 
+    Preference,
+    PreferenceView,
     Datums, 
     DatumsView, 
     DataList,
@@ -70,7 +74,15 @@ define([
       // this.model.bind('change', this.render);
       this.sessionView = new SessionView({
         model : new Session()
+      
+      
+      
       });
+     
+      this.preferenceView = new PreferenceView({
+        model : new Preference()
+      });
+      
       this.render();
     },
     
@@ -98,6 +110,11 @@ define([
     sessions : Sessions,
     sessionView : SessionView,
     sessionsView : SessionsView,
+    
+    
+    preference : Preference,
+    preferenceView : PreferenceView,
+   
 
     datums : Datums,
     // DatumView will be shown using 1 page in a paginated datumsview
@@ -121,9 +138,10 @@ define([
       if (this.model != undefined) {
         Handlebars.registerPartial("session", this.sessionView
             .template(this.sessionView.model.toJSON()));
-
+       
         $(this.el).html(this.template(this.model.toJSON()));
         Utils.debug("\trendering corpus: " + this.model.get("name"));
+        this.preferenceView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
