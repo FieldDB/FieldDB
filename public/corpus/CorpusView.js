@@ -112,7 +112,7 @@ define(
               });
               this.datums = new Datums();
               this.datumsView = new DatumsView({model: this.datums});
-              this.dataListView = new DataListView( {model: new DataList(), datums: this.datums} );
+              this.dataListView = new DataListView( {model: new DataList(), datumsView: this.datumsView, datums: this.datums} );
               
               this.render();
               this.dataListView.render();
