@@ -31,20 +31,13 @@ define( [
      * @constructs
      */
     initialize : function() {
+      // Update the display every time the model is changed
+      this.model.bind('change', this.renderNewModel);
     },
     
     events : {
-      'click a.servernext': 'nextResultPage',
-      'click a.serverprevious': 'previousResultPage',
-      'click a.orderUpdate': 'updateSortBy',
-      'click a.serverlast': 'gotoLast',
-      'click a.page': 'gotoPage',
-      'click a.serverfirst': 'gotoFirst',
-      'click a.serverpage': 'gotoPage',
-      'click .serverhowmany a': 'changeCount'
+      'click a.servernext': 'nextResultPage'
     },
-    
-    // el : '#data_list',
     
     model : DataList,
     
@@ -55,13 +48,60 @@ define( [
     footerTemplate : Handlebars.compile(pagingFooterTemplate),
 
     /**
-     * Displays a new DatumLatexView for every Datum in this DataList.
+     * Initially renders the DataListView. This should only be called by 
+     * this.initialize. To update the current rendering, use renderUpdate()
+     * instead.
      */
-    addAll : function() {
-      // TODO Loop through all the datumIds in the DataList
-      //      Call addOne() on each datumId
-      // this.collection.each(this.addOne);
+    render : function() {
+      // Display the pagination footer
+      var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
+      var footerjson  = {};
+      footerjson.currentPage = this.currentPage,
+      footerjson.totalPages = totalPages,
+      footerjson.perPage = this.perPage,
+      footerjson.morePages = this.currentPage < totalPages;
+      Handlebars.registerPartial("paging_footer", this.footerTemplate(footerjson));
+      
+      // Display the Data List
+      $(this.el).html(this.template(this.model.toJSON()));
+      this.$el.appendTo('#data_list');
+      
+      return this;
     },
+    
+    /**
+     * Re-renders the pagination footer based on the current pagination data.
+     * Re-renders the datums based on the current model.
+     * 
+     * This should be called whenever the model is replaced (i.e. when you open
+     * a new DataList or perform a new Search).
+     */
+    renderNewModel : function() {
+      this.currentPage = 1;
+      
+      // Display the updated pagination footer
+      renderUpdatedPagination();
+      
+      // TODO Display the first page of Datum
+    },
+    
+    /**
+     * Re-calculates the pagination values and re-renders the pagination footer.
+     */
+    renderUpdatedPagination : function() {
+      // Calculate the new values for the pagination footer
+      var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
+      var footerjson  = {};
+      footerjson.currentPage = this.currentPage,
+      footerjson.totalPages = totalPages,
+      footerjson.perPage = this.perPage,
+      footerjson.morePages = this.currentPage < totalPages;
+      
+      // Replace the old pagination footer
+      $("#data_list_footer").html(this.footerTemplate(footerjson));
+    },
+    
+    datumLatexViews : [],
 
     /**
      * Displays a new DatumLatexView for the Datum with the given datumId.
@@ -69,32 +109,18 @@ define( [
      * @param {String} datumId The datumId of the Datum to display.
      */
     addOne : function(datumId) {
+      // Get the corresponding Datum from PouchDB 
+      var d = new Datum({id: datumId});
+      d.fetch();
+      
+      // Render a DatumLatexView for that Datum at the end of the DataListView
       var view = new DatumLatexView({
-        model :  m
+        model :  d
       });
       $('#data_list_content').append(view.render().el);
-    },
-
-    render : function() {
-      // Display the pagination footer
-      var totalPages = this.model.get("datumIds").length
-      var footerjson  = {};
-      footerjson.currentPage = this.currentPage,
-      footerjson.firstPage = 1,
-      footerjson.totalPages = totalPages,
-      footerjson.lastPage = totalPages,
-      footerjson.perPage = this.perPage,
-      footerjson.morePages = this.currentPage < totalPages;
-      footerjson.afterFirstPage = this.currentPage > 1;
-      footerjson.showNext = this.currentPage < totalPages;
-      footerjson.showFirst = this.currentPage != 1;
-      footerjson.showLast = this.currentPage != totalPages;
-      Handlebars.registerPartial("paging_footer", this.footerTemplate(footerjson));
       
-      $(this.el).html(this.template(this.model.toJSON()));
-      this.$el.appendTo('#data_list');
-      
-      return this;
+      // Keep track of the DatumLatexView
+      this.datumLatexViews.push(view);
     },
     
     /**
@@ -107,50 +133,11 @@ define( [
      */
     perPage : 3,
 
-    updateSortBy: function (e) {
-      e.preventDefault();
-      Utils.debug("in updateSortBy");
-      // var currentSort = $('#sortByField').val();
-      // this.collection.updateOrder(currentSort);
-    },
-
     nextResultPage: function (e) {
       e.preventDefault();
       Utils.debug("in nextResultPage");
       // this.collection.requestNextPage();
     },
-
-    previousResultPage: function (e) {
-      e.preventDefault();
-      Utils.debug("in previousResultPage");
-      // this.collection.requestPreviousPage();
-    },
-
-    gotoFirst: function (e) {
-      e.preventDefault();
-      Utils.debug("in gotoFirst");
-      // this.collection.goTo(this.collection.information.firstPage);
-    },
-
-    gotoLast: function (e) {
-      e.preventDefault();
-      Utils.debug("in gotoLast");
-      // this.collection.goTo(this.collection.information.lastPage);
-    },
-
-    gotoPage: function (e) {
-      e.preventDefault();
-      Utils.debug("in gotoPage");
-      // var page = $(e.target).text();
-      // this.collection.goTo(page);
-    },
-
-    changeCount: function (e) {
-      e.preventDefault();
-      Utils.debug("in changeCount");
-      // var per = $(e.target).text();
-      // this.collection.howManyPer(per);
-    }
   });
 
   return DataListView;
