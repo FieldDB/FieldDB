@@ -36,7 +36,8 @@ define( [
     },
     
     events : {
-      'click a.servernext': 'nextResultPage'
+      'click a.servernext': 'nextResultPage',
+      'click .serverhowmany a': 'changeCount'
     },
     
     model : DataList,
@@ -141,6 +142,18 @@ define( [
      * For paging, the number of items per page.
      */
     perPage : 3,
+    
+    /**
+     * Change the number of items per page.
+     * 
+     * @param {Object} e The event that triggered this method.
+     */
+    changeCount : function(e) {
+      e.preventDefault();
+      
+      // Change the number of items per page
+      this.perPage = $(e.target).text();
+    },
 
     /**
      * Add one page worth of DatumLatexViews from the DataList.
