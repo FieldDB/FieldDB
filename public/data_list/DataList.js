@@ -9,6 +9,7 @@ define([
   /** @lends DataList.prototype */
   {
     /**
+     * TODO Update description
      * @class The Data List widget is the list that appears after a search has
      *        been called. 
      *        
@@ -19,6 +20,12 @@ define([
      *              the dataList will provide filtered results of the user's
      *              corpus.
      * 
+     * @property {String} title The title of the Data List.
+     * @property {String} dateCreated The date that this Data List was created.
+     * @property {String} description The description of the Data List.
+     * @property {Array<String>} datumIds An ordered list of the datum IDs of the
+     *   Datums in the Data List.
+     * 
      * @extends Backbone.Model
      * @constructs
      */
@@ -28,7 +35,8 @@ define([
     defaults : {
       title : "NELS handout",
       dateCreated : "May 29, 2012",
-      description : "some useful examples"
+      description : "some useful examples",
+      datumIds : []
     }
     
   });
