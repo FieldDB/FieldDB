@@ -128,12 +128,13 @@ Theresa Deering has a  Bachelor's in Computer Science from Malaspina and a Maste
 \item "Worst-case Behaviour of History Based Pivot Rules on Acyclic Unique Sink Orientations of Hypercubes." Y. Aoshima, D. Avis, T. Deering, Y. Matsumoto, S. Moriyama. Submitted to AAAC. October 2011.
 \end{itemize}
 
-\section {Budget}
+\section {Budget \& Timeline}
 
-The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth; needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The collaboration module is used to permit collaboration with teams and users. The Corpus Module is used to sync, share, edit, tag, categorize and open data. The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.  The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants. The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon. Finally, the Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis. 
+The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The cost is calculated by determining the time in hours and multiplying by \$42-58, the average rate of a software developer in Montr\'eal. 
 
+Since the budget is dependent on how long it takes to complete the modules, it is possible to focus on each module separately, thus reducing the time of completion. 
 
-The cost is calculated by determining the time in hours and multiplying by \$42-58, the average rate of a software developer in Montr\'eal.  
+ 
 
 
 \begin{table}[htbp]
@@ -146,8 +147,8 @@ The cost is calculated by determining the time in hours and multiplying by \$42-
     Collaboration Module & 2.5  & \$5,728.32  \\ 
     Corpus Module & 4.2 & \$9,201.60 \\
      Web Spider Module  & 2.5 & \$2,177.28\\
+      Lexicon Module & 2.0 & \$7,340.54 \\ 
      Phonological Search Module & 3.0 & \$2,177.28 \\
-    Lexicon Module & 2.0 & \$7,340.54 \\ 
     Dictionary Module & 22.3 & \$18,781.63 \\
         Glosser Module & 19.7 & \$17,770.75 \\
 Aligner Module & 10.2 & \$ 9,787.39\\ 
@@ -195,7 +196,7 @@ Heroku Deployment&	5&	Integration	\\
 %\# of weeks with 3 full time personnel&	2.5416666667& \\ 
 \hline
   \end{tabular}
-  \caption{Module Details}
+  \caption{The Collaboration Module is used to permit collaboration with teams and users. }
   \label{tab:label}
   \end{center}
 \end{table}
@@ -249,7 +250,7 @@ DataList Tests&	20&  Javascript \\
 Heroku Deployment&	5&  Integration \\ 
 \hline
   \end{tabular}
- \caption{Module Details}
+ \caption{The Corpus Module is used to sync, share, edit, tag, categorize and open data. }
   \label{tab:label}
   \end{center}
 \end{table}
@@ -271,31 +272,12 @@ Corpus Visualization Widget&	40&	HTML5	\\
 Web Spider Training Logic&	60&	Java	\\ 
 \hline
   \end{tabular}
-  \caption{Module Details}
+  \caption{This module is a subportion of the Corpus Module.}
   \label{tab:label}
   \end{center}
 \end{table}
 %# of weeks with 1 full time personnel	2.5
 
-\subsection{Phonological Search Module}
-
-\footnotesize
-\begin{table}[htbp]
-\begin{center}
-  \begin{tabular}{ | lcl | }
-\hline
-Iteration&	Hours&	Technology	\\
-\hline
-Phonology Ontology for phonological search&	60&	Java	\\ 
-Lexicon Visualization Widget&	40&	Javascript	\\ 
-Lexicon Editing Widget&	20&	Javascript	\\ 
-\hline
-  \end{tabular}
- \caption{Module Details}
-  \label{tab:label}
-  \end{center}
-\end{table}
-%# of weeks with 1 full time personnel	3
 
 \newpage
 \subsection{Lexicon Module}
@@ -332,11 +314,33 @@ Lexicon Tests&	12&  Javascript \\
 Heroku Deployment&	5&  Integration \\ 
 \hline
   \end{tabular}
- \caption{Module Details}
+ \caption{The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.}
   \label{tab:label}
   \end{center}
 \end{table}
 %# of weeks with 3 full time personnel	1.95833333333333
+
+\newpage
+\subsection{Phonological Search Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+Iteration&	Hours&	Technology	\\
+\hline
+Phonology Ontology for phonological search&	60&	Java	\\ 
+Lexicon Visualization Widget&	40&	Javascript	\\ 
+Lexicon Editing Widget&	20&	Javascript	\\ 
+\hline
+  \end{tabular}
+ \caption{This module is a subportion of the Lexicon Module.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	3
+
 
 \newpage
 \subsection{Dictionary Module}
@@ -370,7 +374,7 @@ Training Tests&	30&	Java	\\
 Heroku Deployment&	5&  Integration \\ 
 \hline
   \end{tabular}
- \caption{Module Details}
+ \caption{The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants.}
   \label{tab:label}
   \end{center}
 \end{table}
@@ -411,7 +415,7 @@ Training Tests&	30&	Java	\\
 Heroku Deployment&	5&  Integration \\ 
 \hline
   \end{tabular}
-   \caption{Module Details}
+   \caption{The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon.}
   \label{tab:label}
   \end{center}
 \end{table}
@@ -445,7 +449,7 @@ Training Tests&	30&	Java	\\
 Heroku Deployment&	5&  Integration \\ 
 \hline
   \end{tabular}
-  \caption{Module Details}
+  \caption{The Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis.}
   \label{tab:label}
   \end{center}
 \end{table}
@@ -476,7 +480,7 @@ Amazon EC2 server CPU+Memory+Bandwidth&	         &  Server \\
 Release new versions&	160&  Javascript \\ 
 \hline
   \end{tabular}
- \caption{Module Details}
+ \caption{User Support includes 1 year of product support and project growth. It is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses.} 
   \label{tab:label}
   \end{center}
 \end{table}
@@ -500,14 +504,6 @@ Release new versions&	160&  Javascript \\
 
 
 
-
-
-%\section {Timeline}
-%
-%How long does it take us to make it? Project progress over time. What we've done and what we'll do.
-%
-%
-%
 %\section {Evaluation}
 %
 %Provide information on the metrics that will be used to determine the effectiveness of the project. It has to meet certain data management criteria -- any scientist can discover and use the data over time; it will benefit the scientific community. We are abiding by the best practice standards set by DataOne.   
