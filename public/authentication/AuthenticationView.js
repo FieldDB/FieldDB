@@ -47,12 +47,11 @@ define([
     
     template : Handlebars.compile(authTemplate),
     
-    el : '#authentication',
-    
     render : function() {
       if (this.model != undefined) {
         Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
+        this.$el.appendTo('#authentication');
         Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
         Utils.debug("\tAuthentication model was undefined.");

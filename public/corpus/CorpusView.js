@@ -93,8 +93,6 @@ define([
     model : Corpus,
     
     template : Handlebars.compile(corpusTemplate),
-    
-    el : '#corpus',
 
     sessions : Sessions,
     sessionView : SessionView,
@@ -116,6 +114,8 @@ define([
             .template(this.sessionView.model.toJSON()));
 
         $(this.el).html(this.template(this.model.toJSON()));
+        this.$el.appendTo('#corpus');
+      
         Utils.debug("\trendering corpus: " + this.model.get("name"));
       } else {
         Utils.debug("\tCorpus model was undefined.");
