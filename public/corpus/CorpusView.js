@@ -154,14 +154,16 @@ define([
         })
       });
       
+   // Render everything
+      this.render();
+      
       // Sample Datum data
       this.datums = new Datums();
-      this.datumsView = new DatumsView({model: this.datums});
-      this.dataListView = new DataListView( {model: new DataList(), datums: this.datums} );
+      this.dataListView = new DataListView( {model: new DataList(), collection: this.datums} );
+      this.datumsView = new DatumsView({collection: this.datums});
       
-      // Render everything
-      this.render();
-      this.dataListView.render();
+      
+      
     },
 
     /**
