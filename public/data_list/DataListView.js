@@ -70,12 +70,13 @@ define( [
      * @return {Object} JSON to be sent to the footerTemplate.
      */
     getPaginationInfo : function() {
+      var currentPage = Math.ceil(this.datumLatexViews.length / this.perPage);
       var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
       var footerjson  = {};
-      footerjson.currentPage = this.currentPage,
+      footerjson.currentPage = currentPage,
       footerjson.totalPages = totalPages,
       footerjson.perPage = this.perPage,
-      footerjson.morePages = this.currentPage < totalPages;
+      footerjson.morePages = currentPage < totalPages;
       
       return footerjson;
     },
@@ -94,19 +95,16 @@ define( [
         datumLatexView.remove();
       }
       
-      // Start at page one
-      this.currentPage = 1;
-      
-      // Display the updated pagination footer
-      this.renderUpdatedPagination();
-      
       // Display the first page of Datum
       for (i = 0; i < this.perPage; i++) {
-        var datumId = this.model.get("datumIds")[i]; 
+        var datumId = this.model.get("datumIds")[i];
         if (datumId) {
           this.addOne(datumId);
         }
       }
+      
+      // Display the updated pagination footer
+      this.renderUpdatedPagination();
     },
     
     /**
@@ -140,20 +138,34 @@ define( [
     },
     
     /**
-     * For paging: the current page.
-     */
-    currentPage : 1,
-    
-    /**
      * For paging, the number of items per page.
      */
     perPage : 3,
 
+    /**
+     * Add one page worth of DatumLatexViews from the DataList.
+     * 
+     * @param {Object} e The event that triggered this method.
+     */
     nextResultPage: function (e) {
       e.preventDefault();
-      Utils.debug("in nextResultPage");
-      // this.collection.requestNextPage();
-    },
+      
+      // Determine the range of indexes into the model's datumIds array that are 
+      // on the page to be displayed
+      var startIndex = this.datumLatexViews.length;
+      var endIndex = startIndex + this.perPage;
+      
+      // Add a DatumLatexView for each one
+      for (i = startIndex; i < endIndex; i++) {
+        var datumId = this.model.get("datumIds")[i]; 
+        if (datumId) {
+          this.addOne(datumId);
+        }
+      }
+      
+      // Update the pagination footer
+      this.renderUpdatedPagination();
+    }
   });
 
   return DataListView;
