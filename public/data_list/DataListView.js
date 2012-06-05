@@ -2,6 +2,7 @@ define( [ "use!backbone",
           "use!handlebars",
           "datum/Datum",
           "datum/Datums",
+          "datum/DatumsView",
           "data_list/DataList",
           "text!data_list/data_list.handlebars"
 ], function(
@@ -9,6 +10,7 @@ define( [ "use!backbone",
     Handlebars, 
     Datum, 
     Datums,
+    DatumsView,
     DataList, 
     data_listTemplate) {
 
@@ -26,7 +28,7 @@ define( [ "use!backbone",
      */
 
     initialize : function() {
-
+      
 //      var tags = this.datums;
 //
 //      tags.on('add', this.addOne, this);
@@ -39,7 +41,8 @@ define( [ "use!backbone",
     
     el : '#data_list',
     model : DataList,
-    datums: Datums,
+    
+    datumsView: DatumsView,
     classname : "dataList",
     template : Handlebars.compile(data_listTemplate),
 
@@ -58,7 +61,8 @@ define( [ "use!backbone",
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
-      
+//      Handlebars.registerPartial("datums", this.datumsView
+//          .template(this.datumsView.collection.toJSON()));
       return this;
     }
   });
