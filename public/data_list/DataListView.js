@@ -2,6 +2,7 @@ define( [
     "use!backbone", 
     "use!handlebars",
     "datum/Datum",
+    "datum/DatumLatexView",
     "datum/Datums",
     "data_list/DataList",
     "text!data_list/data_list.handlebars"
@@ -9,6 +10,7 @@ define( [
     Backbone, 
     Handlebars, 
     Datum, 
+    DatumLatexView,
     Datums,
     DataList, 
     data_listTemplate
@@ -27,20 +29,20 @@ define( [
      */
     initialize : function() {
 
-//      var tags = this.datums;
-//
-//      tags.on('add', this.addOne, this);
-//      tags.on('reset', this.addAll, this);
-//      tags.on('all', this.render, this);
-//
-//      tags.pager();
+      var tags = this.collection;
+
+      tags.on('add', this.addOne, this);
+      tags.on('reset', this.addAll, this);
+      tags.on('all', this.render, this);
+
+      tags.pager();
     },
     
     el : '#data_list',
     
     model : DataList,
     
-    datums: Datums,
+    collection: Datums,
     
     classname : "dataList",
     
@@ -50,16 +52,15 @@ define( [
       this.collection.each(this.addOne);
     },
 
-    addOne : function(item) {
-      var view = new views.ResultView({
-        model :  Backbone.Model.extend({})
+    addOne : function(m) {
+      var view = new DatumLatexView({
+        model :  m
       });
       $('#data_list_content').append(view.render().el);
     },
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
-      
       return this;
     }
   });

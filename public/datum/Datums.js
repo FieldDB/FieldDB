@@ -4,20 +4,20 @@ define([
     "datum/Datum"
 ], function(
     Backbone, 
-    Paginator, 
+    paginator, 
     Datum
 ) {
-  var Datums = Paginator.requestPager.extend(
+  var Datums = Backbone.Paginator.requestPager.extend(
   /** @lends Datums.prototype */
   {
     /**
      * @class A collection of Datums.
      *
-     * @extends Paginator.requestPager
+     * @extends Backbone.Paginator.requestPager
      * @constructs
      */
-    initialize: function() {
-    },
+//    initialize: function() {
+//    },
 
     // As usual, let's specify the model to be used
     // with this collection
