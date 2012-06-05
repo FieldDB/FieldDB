@@ -128,36 +128,37 @@ Theresa Deering has a  Bachelor's in Computer Science from Malaspina and a Maste
 \item "Worst-case Behaviour of History Based Pivot Rules on Acyclic Unique Sink Orientations of Hypercubes." Y. Aoshima, D. Avis, T. Deering, Y. Matsumoto, S. Moriyama. Submitted to AAAC. October 2011.
 \end{itemize}
 
-\section {Budget}
+\section {Budget \& Timeline}
 
-The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth; needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The collaboration module is used to permit collaboration with teams and users. The Corpus Module is used to sync, share, edit, tag, categorize and open data. The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.  The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants. The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon. Finally, the Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis. 
+The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The cost is calculated by determining the time in hours and multiplying by \$42-58, the average rate of a software developer in Montr\'eal. 
 
+Since the budget is dependent on how long it takes to complete the modules, it is possible to focus on each module separately, thus reducing the time of completion. 
 
-The prices given include a 40\% Researcher discount and a 10\% Open Source discount.  An additional 40\% discount is given for certain components that can be made with the help of students from Concordia University, Hisako Noguchi and Yulia Manyakina.  The cost is calculated by determining the time in hours and multiplying by \$48, the average rate of a software developer in Montr\'eal.  
+ 
 
 
 \begin{table}[htbp]
 \begin{center}
-  \begin{tabular}{ | cc | }
+  \begin{tabular}{ | lcl | }
 \hline
-    Module & Price \\ 
+    Module & Weeks & Price\\ 
 \hline
-    Software Architecture & \$1,555.20  \\ 
-    Collaboration Module & \$5,728.32  \\ 
-    Corpus Module & \$9,201.60 \\
-     Web Spider Module & \$2,177.28\\
-     Phonological Search Module & \$2,177.28 \\
-    Lexicon Module & \$7,340.54 \\ 
-    Dictionary Module & \$18,781.63 \\
-        Glosser Module & \$17,770.75 \\
-Aligner Module & \$ 9,787.39\\ 
-User Support & \$30,246.70 \\
-TVS and TPQ & \$10,833.32 \\
-Total &  \$83,176.04 \\
+    Software Architecture & 0.5  & \$1,555.20  \\ 
+    Collaboration Module & 2.5  & \$5,728.32  \\ 
+    Corpus Module & 4.2 & \$9,201.60 \\
+     Web Spider Module  & 2.5 & \$2,177.28\\
+      Lexicon Module & 2.0 & \$7,340.54 \\ 
+     Phonological Search Module & 3.0 & \$2,177.28 \\
+    Dictionary Module & 22.3 & \$18,781.63 \\
+        Glosser Module & 19.7 & \$17,770.75 \\
+Aligner Module & 10.2 & \$ 9,787.39\\ 
+User Support & 21.1 & \$30,246.70 \\
+TVS and TPQ &  & \$10,833.32 \\
+Total &  88 &\$83,176.04\\
 
 \hline
   \end{tabular}
-  \caption{Cost Summary}
+  \caption{Project Summary}
   \label{tab:label}
   \end{center}
 \end{table}
@@ -168,50 +169,341 @@ Total &  \$83,176.04 \\
 \subsection{Collaboration Module}
 
 \footnotesize
-\begin{sidewaystable}[htbp]
-  \begin{tabular}{ | cccccccc | }
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
 \hline
-
-Collaboration Module&	&	&	&	&	\\ 
+%Collaboration Module: used to permit collaboration, teams and users&	&	&	&	&	&	&	\\ 
+Iteration&	Hours&	Technology	\\
 \hline
-Collaboration Module: used to permit collaboration, teams and users&	&	&	&	&	&	&	\\ 
-Iteration&	Hours&	Technology&	Rate&	Cost Closed Source &	Research Reduction 40\%&	Reduction Open Source 10\%&	 Reduction Student Made  \%40\\ 
-Software Architecture Design&	20&	Software Engineering&	48&	960&	576&	518.4&	311.04\\ 
-Collaboration API on central server&	30&	Software Engineering&	48&	1440&	864&	777.6&	777.6\\ 
-Users Model&	15&	Javascript&	48&	720&	432&	388.8&	233.28\\ 
-Informant Model&	15&	Javascript&	48&	720&	432&	388.8&	233.28\\ 
-Team Model&	15&	Javascript&	48&	720&	432&	388.8&	233.28\\ 
-Bot Model&	15&	Javascript&	48&	720&	432&	388.8&	233.28\\ 
-User Activity Model&	8&	Javascript&	48&	384&	230.4&	207.36&	124.416\\ 
-Team Feed Widget&	25&	HTML5&	48&	1200&	720&	648&	648\\ 
-User list item Widget&	16&	HTML5&	48&	768&	460.8&	414.72&	248.832\\ 
-Team Preferences Widget&	8&	HTML5&	48&	384&	230.4&	207.36&	124.416\\ 
-User Profile Widget&	8&	HTML5&	48&	384&	230.4&	207.36&	124.416\\ 
-User Tests&	30&	Javascript&	48&	1440&	864&	777.6&	466.56\\ 
-Informant Tests&	30&	Javascript&	48&	1440&	864&	777.6&	466.56\\ 
-Team Tests&	30&	Javascript&	48&	1440&	864&	777.6&	466.56\\ 
-Android Deployment&	15&	Java&	48&	720&	432&	388.8&	388.8\\ 
-Chrome Extension Deployment&	20&	Javascript&	48&	960&	576&	518.4&	518.4\\ 
-Heroku Deployment&	5&	Integration&	48&	240&	144&	129.6&	129.6\\ 
-\# of weeks with 3 full time personnel&	2.5416666667&	&	&	14640&	8784&	7905.6&	\$5,728.32\\ 
+Software Architecture Design&	20&	Software Engineering	\\ 
+Collaboration API on central server&	30&	Software Engineering\\ 
+Users Model&	15&	Javascript	\\ 
+Informant Model&	15&	Javascript	\\ 
+Team Model&	15&	Javascript	\\ 
+Bot Model&	15&	Javascript	\\ 
+User Activity Model&	8&	Javascript	\\ 
+Team Feed Widget&	25&	HTML5	\\ 
+User list item Widget&	16&	HTML5	\\ 
+Team Preferences Widget&	8&	HTML5	\\ 
+User Profile Widget&	8&	HTML5	\\ 
+User Tests&	30&	Javascript \\ 
+Informant Tests&	30&	Javascript	\\ 
+Team Tests&	30&	Javascript	\\ 
+Android Deployment&	15&	Java	\\ 
+Chrome Extension Deployment&	20&	Javascript \\ 
+Heroku Deployment&	5&	Integration	\\ 
+%\# of weeks with 3 full time personnel&	2.5416666667& \\ 
 \hline
   \end{tabular}
-  \caption{Cost Summary}
+  \caption{The Collaboration Module is used to permit collaboration with teams and users. }
   \label{tab:label}
-\end{sidewaystable}
+  \end{center}
+\end{table}
+
+
+
+
+
+\subsection{Corpus Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Software Architecture Design&	20&	Software Engineering	\\ 
+Corpus API on corpus server&	20&	Software Engineering\\ 
+Corpus Model&	8&	Javascript	\\ 
+Session Model&	8&	Javascript	\\ 
+Datum Model&	8&	Javascript	\\ 
+Datum status model&	8&	Javascript	\\ 
+DataList Model&	8&	Javascript	\\ 
+Confidential datum encrypter&	16&	Javascript	\\ 
+Audio upload and play logic&	8&	Javascript	\\ 
+Corpus DB  implementation on Android&	20&	Java	\\ 
+Corpus DB  implementation on Chrome&	20&	Javascript	\\ 
+Corpus DB  implementation on Node.js&	20&	Javascript \\ 
+Corpus versioning Logic&	25&	Javascript	\\ 
+Corpus Preferences Widget&	6&	HTML5	\\ 
+Session Preferences Widget&	6&	HTML5	\\ 
+Datum Preferences Widget&	20&	HTML5 \\ 
+Datum Status Preferences Widget&	16&	HTML5	\\ 
+DataList Preferences Widget&	6&  HTML5 \\ 
+Corpus sync logic&	10&  Javascript \\ 
+Corpus diff Widget (to show before sync)&	10&  HTML5 \\ 
+Insert Unicode Character Widget&	10&  HTML5 \\ 
+Corpus Details Widget&	6&  HTML5 \\
+Session Details Widget&	6&  HTML5 \\  
+Datum Details Widget&	20&  Javascript \\ 
+DataList Widget&	30&  Javascript \\ 
+Global Search logic&	30&  Javascript \\ 
+Power Search logic&	80&  Javascript \\ 
+Corpus Tests&	5&  Javascript \\ 
+Session Tests&	10&  Javascript \\ 
+Datum Tests&	10&  Javascript \\ 
+Datum Status Tests&	10&  Javascript \\ 
+DataList Tests&	20&  Javascript \\ 
+Heroku Deployment&	5&  Integration \\ 
+\hline
+  \end{tabular}
+ \caption{The Corpus Module is used to sync, share, edit, tag, categorize and open data. }
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 3 full time personnel	4.20833333333333
+
+
+
+\newpage
+\subsection{Web Spider Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+Iteration&	Hours&	Technology	\\
+\hline
+Corpus Visualization Widget&	40&	HTML5	\\ 
+Web Spider Training Logic&	60&	Java	\\ 
+\hline
+  \end{tabular}
+  \caption{This module is a subportion of the Corpus Module.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	2.5
+
+
+\newpage
+\subsection{Lexicon Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Software Architecture Design&	20&	Software Engineering	\\ 
+Lexicon API on Lexicon server&	20&	Software Engineering\\ 
+Lexicon Model&	6&	Javascript	\\ 
+Morpheme Model&	6&	Javascript	\\ 
+Allomorph Model&	6&	Javascript	\\ 
+Gloss Model&	6&	Javascript	\\ 
+Orthography Model&	16&	Javascript	\\ 
+Lexicon DB  implementation on Android&	20&	Java	\\ 
+Lexicon DB  implementation on Chrome&	20&	Javascript	\\ 
+Lexicon DB  implementation on Node.js&	20&	Javascript \\ 
+Lexicon versioning Logic&	10&	Javascript	\\ 
+Lexicon Preferences Widget&	6&	HTML5	\\ 
+Morpheme Tests&	6&	Javascript	\\ 
+Allomorph Tests&	6&	Javascript \\ 
+Gloss Tests&	6&	Javascript	\\ 
+Orthography Tests&	8&  Javascript \\ 
+Lexicon Analysis Widget&	10&  HTML5 \\ 
+Lexicon sync logic&	10&  Javascript \\ 
+Lexicon diff Widget (to show before sync)&	10&  HTML5 \\ 
+Lexicon Details Widget&	6&  HTML5 \\
+Lexicon Tests&	12&  Javascript \\  
+Heroku Deployment&	5&  Integration \\ 
+\hline
+  \end{tabular}
+ \caption{The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 3 full time personnel	1.95833333333333
+
+\newpage
+\subsection{Phonological Search Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+Iteration&	Hours&	Technology	\\
+\hline
+Phonology Ontology for phonological search&	60&	Java	\\ 
+Lexicon Visualization Widget&	40&	Javascript	\\ 
+Lexicon Editing Widget&	20&	Javascript	\\ 
+\hline
+  \end{tabular}
+ \caption{This module is a subportion of the Lexicon Module.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	3
+
+
+\newpage
+\subsection{Dictionary Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Software Architecture Design&	40&	Software Engineering	\\ 
+Dictionary API on Lexicon server&	30&	Software Engineering\\ 
+Semantic Model&	60&	Javascript	\\ 
+Syntactic Model&	60&	Javascript	\\ 
+Citation Model&	60&	Javascript	\\ 
+Synonyms Model&	60&	Javascript	\\ 
+Dictionary DB implementation&	80&	Integration	\\ 
+Dictionary Training Logic&	80&	Java	\\ 
+Web Spider Training Logic&	100&	Java	\\ 
+Dictionary Preferences Widget&	8&	HTML5	\\ 
+Dictionary WordNet Analysis Widget&	120&	HTML6	\\ 
+Dialect Profile Widget&	8&	HTML5 \\ 
+Semantic Tests&	30&	Javascript	\\ 
+Syntactic Tests&	30&  Javascript \\ 
+Citation Tests&	         30&  Javascript \\ 
+Synonyms Tests&	30&  Javascript \\ 
+Spider Tests&	30&	Java \\ 
+Training Tests&	30&	Java	\\ 
+Heroku Deployment&	5&  Integration \\ 
+\hline
+  \end{tabular}
+ \caption{The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	22.275
+
+
+\newpage
+\subsection{Glosser Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Software Architecture Design&	40&	Software Engineering	\\ 
+Glosser API on Lexicon server&	30&	Software Engineering\\ 
+Morpheme Model&	15&	Javascript	\\ 
+Allomorph Model&	15&	Javascript	\\ 
+Gloss Model&	15&	Javascript	\\ 
+Orthography Model&	30&	Javascript	\\ 
+Glosser DB implementation&	80&	Integration	\\ 
+Glosser Prediction Logic&	80&	Java	\\ 
+Glosser Machine Learning Logic&	80&	Java	\\ 
+Glosser Training Logic&	80&	Java	\\ 
+Web Spider Training Logic&	80&	Java	\\ 
+Glosser Preferences Widget&	8&	HTML5	\\ 
+Morphological Analysis Widget&	40&	HTML6	\\ 
+Dialect Profile Widget&	8&	HTML5 \\ 
+Morpheme Tests&	30&	Javascript	\\ 
+Allomorph Tests&	30&  Javascript \\ 
+Gloss Tests&	         30&  Javascript \\ 
+Orthography Tests&	30&  Javascript \\ 
+Spider Tests&	30&	Java \\ 
+Training Tests&	30&	Java	\\ 
+Heroku Deployment&	5&  Integration \\ 
+\hline
+  \end{tabular}
+   \caption{The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	19.65
+
+
+\newpage
+\subsection{Aligner Module}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Software Architecture Design&	10&	Software Engineering	\\ 
+Aligner API on Lexicon server&	10&	Software Engineering\\ 
+Dictionary Model&	15&	Javascript	\\ 
+Aligner DB implementation&	80&	Integration	\\ 
+Aligner Machine Learning Integration&	80&	Java	\\ 
+Aligner Preferences Widget&	8&	HTML5	\\ 
+Audio Waveform Visualization logic&	30&	Javascript	\\ 
+Audio Spectrogram Visualization logic&	?&	Javascript \\ 
+Transcription User Interface&	80&	HTML5	\\ 
+TextGrid export&	20&  Javascript \\ 
+Dialect Profile Widget&	         8&  HTML5 \\ 
+Orthography Tests&	30&  Javascript \\ 
+Training Tests&	30&	Java	\\ 
+Heroku Deployment&	5&  Integration \\ 
+\hline
+  \end{tabular}
+  \caption{The Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis.}
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	10.15
+
+\newpage
+\subsection{User Support}
+
+\footnotesize
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Sample data&	30&	Linguistics	\\ 
+Integrate software with sample data&	30&	Javascript\\ 
+Screencasts on how to use the app(s)&	24&	Quicktime/YouTube	\\ 
+Screencasts on how to modify the code&	40&	Quicktime/YouTube	\\ 
+Server maintenance&	20&	Integration	\\ 
+Monitor server costs and develop pricing plan&	100&   Business	\\ 
+Answer user emails&	250&	Support	\\ 
+Read twitter feeds and facebook channels&	100&	Support \\ 
+Help IT/developers install and set up \\ the server on their department servers&	50&	Support	\\ 
+Upgrade javascript/android libraries&	40&  Javascript \\ 
+Amazon EC2 server CPU+Memory+Bandwidth&	         &  Server \\ 
+Release new versions&	160&  Javascript \\ 
+\hline
+  \end{tabular}
+ \caption{User Support includes 1 year of product support and project growth. It is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses.} 
+  \label{tab:label}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	21.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %%Include in the budget all expenses for the app, including necessary training costs. Mention any co-funding that you are using from other sources. You may want to include a brief narrative of expenses along with a table of individual cost components. 
 
 
 
 
-
-
-%\section {Timeline}
-%
-%How long does it take us to make it? Project progress over time. What we've done and what we'll do.
-%
-%
-%
 %\section {Evaluation}
 %
 %Provide information on the metrics that will be used to determine the effectiveness of the project. It has to meet certain data management criteria -- any scientist can discover and use the data over time; it will benefit the scientific community. We are abiding by the best practice standards set by DataOne.   
