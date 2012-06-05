@@ -43,11 +43,10 @@ define([
     
     template : Handlebars.compile(searchTemplate),
     
-    el : '#search',
-    
     render : function() {
       if (this.model != undefined) {
         $(this.el).html(this.template(this.model.toJSON()));
+        this.$el.appendTo('#search');
         Utils.debug("\trendering search: "+ this.model.get("searchKeywords"));
       } else {
         Utils.debug("\tSearch model was undefined");
