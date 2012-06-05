@@ -1,19 +1,18 @@
-define( [ "use!backbone", 
-          "use!handlebars",
-          "datum/Datum",
-          "datum/Datums",
-          "datum/DatumsView",
-          "data_list/DataList",
-          "text!data_list/data_list.handlebars"
+define( [ 
+    "use!backbone", 
+    "use!handlebars",
+    "datum/Datum",
+    "datum/Datums",
+    "data_list/DataList",
+    "text!data_list/data_list.handlebars"
 ], function(
     Backbone, 
     Handlebars, 
     Datum, 
     Datums,
-    DatumsView,
     DataList, 
-    data_listTemplate) {
-
+    data_listTemplate
+) {
   var DataListView = Backbone.View.extend(
   /** @lends DataList.prototype */
   {
@@ -26,9 +25,8 @@ define( [ "use!backbone",
      * @extends Backbone.View
      * @constructs
      */
-
     initialize : function() {
-      
+
 //      var tags = this.datums;
 //
 //      tags.on('add', this.addOne, this);
@@ -36,17 +34,17 @@ define( [ "use!backbone",
 //      tags.on('all', this.render, this);
 //
 //      tags.pager();
-
     },
     
     el : '#data_list',
+    
     model : DataList,
     
-    datumsView: DatumsView,
+    datums: Datums,
+    
     classname : "dataList",
+    
     template : Handlebars.compile(data_listTemplate),
-
-   
 
     addAll : function() {
       this.collection.each(this.addOne);
@@ -61,8 +59,7 @@ define( [ "use!backbone",
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
-//      Handlebars.registerPartial("datums", this.datumsView
-//          .template(this.datumsView.collection.toJSON()));
+      
       return this;
     }
   });
