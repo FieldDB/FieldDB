@@ -91,26 +91,29 @@ define([
     showFullscreenDatum : function(corpusName, datumId) {
       Utils.debug("In showFullscreenDatum: " + corpusName + " *** " + datumId);
 
-      // Update the display
-      $("#fullscreen-datum-view").append(appView.fullScreenDatumView.render().el);
-      
       // Change the id of the fullscreen datum view's Datum to be the given datumId
       appView.fullScreenDatumView.model.id = datumId;
       
       // Fetch the Datum's attributes from the PouchDB
       appView.fullScreenDatumView.model.fetch({
-        success : appView.fullScreenDatumView.render
+        success : function() {
+          // Update the display with the Datum with the given datumId
+          $("#fullscreen-datum-view").append(appView.fullScreenDatumView.render().el);
+          
+          // Display the fullscreen datum view and hide all the other views
+          $("#dashboard-view").hide();
+          $("#fullscreen-datum-view").show();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#user-profile-view").hide();
+          $("#new-session-view").hide();
+          $("#user-preferences-view").hide(); 
+        },
+        
+        error : function() {
+          Utils.debug("Datum does not exist: " + datumId);
+        }
       });
-
-      
-      // Display the fullscreen datum view and hide all the other views
-      $("#dashboard-view").hide();
-      $("#fullscreen-datum-view").show();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
-      $("#new-session-view").hide();
-      $("#user-preferences-view").hide();
     },
 
     /**
