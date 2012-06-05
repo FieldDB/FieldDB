@@ -53,20 +53,31 @@ define( [
      * instead.
      */
     render : function() {
-      // Display the pagination footer
+      // Display the Data List
+      $(this.el).html(this.template(this.model.toJSON()));
+      this.$el.appendTo('#data_list');
+      
+      // Display the pagination footer and the first page of DatumLatexViews.
+      // this.renderNewModel();
+      
+      return this;
+    },
+    
+    /**
+     * Based on the number of items per page and the current page, calculate the current
+     * pagination info.
+     * 
+     * @return {Object} JSON to be sent to the footerTemplate.
+     */
+    getPaginationInfo : function() {
       var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
       var footerjson  = {};
       footerjson.currentPage = this.currentPage,
       footerjson.totalPages = totalPages,
       footerjson.perPage = this.perPage,
       footerjson.morePages = this.currentPage < totalPages;
-      Handlebars.registerPartial("paging_footer", this.footerTemplate(footerjson));
       
-      // Display the Data List
-      $(this.el).html(this.template(this.model.toJSON()));
-      this.$el.appendTo('#data_list');
-      
-      return this;
+      return footerjson;
     },
     
     /**
@@ -77,28 +88,33 @@ define( [
      * a new DataList or perform a new Search).
      */
     renderNewModel : function() {
+      // Remove all the DatumLatexViews that are currently being displayed
+      while(this.datumLatexViews.length > 0) {
+        var datumLatexView = this.datumLatexViews.pop();
+        datumLatexView.remove();
+      }
+      
+      // Start at page one
       this.currentPage = 1;
       
       // Display the updated pagination footer
-      renderUpdatedPagination();
+      this.renderUpdatedPagination();
       
-      // TODO Display the first page of Datum
+      // Display the first page of Datum
+      for (i = 0; i < this.perPage; i++) {
+        var datumId = this.model.get("datumIds")[i]; 
+        if (datumId) {
+          this.addOne(datumId);
+        }
+      }
     },
     
     /**
      * Re-calculates the pagination values and re-renders the pagination footer.
      */
     renderUpdatedPagination : function() {
-      // Calculate the new values for the pagination footer
-      var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
-      var footerjson  = {};
-      footerjson.currentPage = this.currentPage,
-      footerjson.totalPages = totalPages,
-      footerjson.perPage = this.perPage,
-      footerjson.morePages = this.currentPage < totalPages;
-      
       // Replace the old pagination footer
-      $("#data_list_footer").html(this.footerTemplate(footerjson));
+      $("#data_list_footer").html(this.footerTemplate(this.getPaginationInfo()));
     },
     
     datumLatexViews : [],
