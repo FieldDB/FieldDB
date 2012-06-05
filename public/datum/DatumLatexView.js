@@ -1,13 +1,14 @@
 define([ 
-         "use!backbone", 
-         "use!handlebars", 
-         "datum/Datum",
-         "text!datum/datum_latex.handlebars", 
-         ], function(
-             Backbone, 
-             Handlebars,
-             Datum, 
-             datumTemplate) {
+    "use!backbone", 
+    "use!handlebars", 
+    "datum/Datum",
+    "text!datum/datum_latex.handlebars", 
+], function(
+    Backbone, 
+    Handlebars,
+    Datum, 
+    datumTemplate
+) {
   var DatumLatexView = Backbone.View.extend(
   /** @lends DatumView.prototype */
   {
@@ -20,7 +21,8 @@ define([
      * 
      * DatumLatexView is based off of the MovieView in the Paginated Collection
      * <a
-     * href="https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js">https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js</a>
+     * href="https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js">
+     * https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js</a>
      * 
      * @extends Backbone.View
      * @constructs
@@ -31,14 +33,15 @@ define([
     },
 
     model : Datum,
+    
     tagName : 'li',
+    
     template : Handlebars.compile(datumTemplate),
 
     render : function() {
       this.$el.html(this.template(this.model.toJSON()));
       return this;
     }
-
   });
 
   return DatumLatexView;
