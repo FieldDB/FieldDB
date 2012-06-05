@@ -71,6 +71,7 @@ define([
       this.sessionView = new SessionView({
         model : new Session()
       });
+      
       this.render();
     },
     
@@ -98,14 +99,6 @@ define([
     sessions : Sessions,
     sessionView : SessionView,
     sessionsView : SessionsView,
-
-    datums : Datums,
-    // DatumView will be shown using 1 page in a paginated datumsview
-    datumsView : DatumsView,
-
-    dataLists : DataLists,
-    dataListView : DataListView,
-    dataListsView : DataListsView,
 
     permissions : Permissions,
     permissionView : PermissionView,
@@ -154,16 +147,8 @@ define([
         })
       });
       
-   // Render everything
+      // Render everything
       this.render();
-      
-      // Sample Datum data
-      this.datums = new Datums();
-      this.dataListView = new DataListView( {model: new DataList(), collection: this.datums} );
-      this.datumsView = new DatumsView({collection: this.datums});
-      
-      
-      
     },
 
     /**

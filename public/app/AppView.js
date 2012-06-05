@@ -9,6 +9,8 @@ define([
     "search/SearchView",
     "datum/Datum",
     "datum/DatumView", 
+    "data_list/DataList",
+    "data_list/DataListView",
     "app/App", 
     "app/AppRouter",
     "text!app/app.handlebars", 
@@ -24,6 +26,8 @@ define([
     SearchView,
     Datum,
     DatumView,
+    DataList,
+    DataListView,
     App, 
     AppRouter, 
     appTemplate
@@ -42,8 +46,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Render the AppView
-      this.render();
 
       // Create and start the Router
       this.model.router = new AppRouter();
@@ -68,6 +70,19 @@ define([
       this.fullScreenDatumView = new DatumView({
         model : new Datum()
       });
+      
+      // Create a DataListView   
+      this.dataListView = new DataListView({
+        model : new DataList({
+          title : "MyTitle",
+          dateCreated : "June 5, 2012",
+          description : "MyDescription",
+          datumIds : ["1", "2", "3"]
+        })
+      });
+      
+      // Render the AppView
+      this.render();
     },
 
     el : '#app_view',
@@ -79,7 +94,12 @@ define([
     classname : "app_view",
     
     render : function() {
+      // Display the app
       $(this.el).html(this.template(this.model.toJSON()));
+      
+      // Display the Data List View
+      this.dataListView.render();
+      
       return this;
     },
 
@@ -90,6 +110,8 @@ define([
     searchView : SearchView,
     
     fullScreenDatumView : DatumView,
+    
+    dataListView : DataListView,
     
     /**
      * This function triggers a sample app to load so that new users can play
