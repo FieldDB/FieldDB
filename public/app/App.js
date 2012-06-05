@@ -3,11 +3,13 @@ define([
     "authentication/Authentication", 
     "corpus/Corpus",
     "search/Search",
+    "app/AppRouter",
     "libs/Utils"
 ], function(
     Backbone, 
     Authentication, 
     Corpus, 
+    AppRouter,
     Search
 ) {
   var App = Backbone.Model.extend(
@@ -58,7 +60,9 @@ define([
       corpus : Corpus,
       username : localStorage.getItem("username"),
       sessionid : localStorage.getItem("sessionid")
-    }
+    },
+    
+    router : AppRouter
   });
 
   return App;

@@ -6,7 +6,9 @@ define([
     "corpus/Corpus", 
     "corpus/CorpusView",
     "search/Search", 
-    "search/SearchView", 
+    "search/SearchView",
+    "datum/Datum",
+    "datum/DatumView", 
     "app/App", 
     "app/AppRouter",
     "text!app/app.handlebars", 
@@ -20,6 +22,8 @@ define([
     CorpusView, 
     Search, 
     SearchView,
+    Datum,
+    DatumView,
     App, 
     AppRouter, 
     appTemplate
@@ -42,7 +46,7 @@ define([
       this.render();
 
       // Create and start the Router
-      this.router = new AppRouter();
+      this.model.router = new AppRouter();
       Backbone.history.start();
 
       // Create a CorpusView for the Corpus in the App
@@ -59,6 +63,11 @@ define([
       this.searchView = new SearchView({
         model : new Search()
       });
+      
+      // Create a DatumView
+      this.fullScreenDatumView = new DatumView({
+        model : new Datum()
+      });
     },
 
     el : '#app_view',
@@ -68,8 +77,6 @@ define([
     template : Handlebars.compile(appTemplate),
     
     classname : "app_view",
-    
-    router : AppRouter,
     
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
@@ -81,6 +88,8 @@ define([
     authView : AuthenticationView,
     
     searchView : SearchView,
+    
+    fullScreenDatumView : DatumView,
     
     /**
      * This function triggers a sample app to load so that new users can play
