@@ -72,11 +72,6 @@ define([
       $("#fullscreen-search-view").hide();
       $("#user-profile-view").hide();
       $("#user-preferences-view").hide();
-      
-      var sessionView = new SessionView({
-        model : new Session()
-      });
-      $("#new-session-view").append(sessionView.render().el);
     },
 
     /**
@@ -136,15 +131,6 @@ define([
       $("#user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
-
-      var datalist = new DataList();
-      // app.dataList.add(datalistview); we can't have this because datalist
-      // view is not a collection
-      // Render datalist view
-      var d = new DataListView({
-        model : datalist
-      });
-      this.$("#rightside").append(d.render().el);
     },
 
     /**
@@ -201,14 +187,6 @@ define([
       $("#user-profile-view").show();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
-
-      // Create
-      var userProfileView = new UserProfileView({
-        model : new User(),
-        el : $('#user-profile-view'),
-      });
-
-      userProfileView.render(); //TODO add bind event for change in the user model to the render function so we don't have to call it here.
     },
 
     /**
@@ -227,14 +205,6 @@ define([
       $("#user-preferences-view").show();
       $("#new-session-view").hide();
       $("#user-profile-view").hide();
-      
-      var PreferenceView = new PreferenceView({
-        model : new User(),
-        el : $('#user-preferences-view'),
-      });
-      
-      
-      
     }
   });
 
