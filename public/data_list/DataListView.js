@@ -27,24 +27,45 @@ define( [
      *        
      *        This class is based off of the Infinite paginator by Addy Osmani's AppView
      * 
+     * @description Starts the DataListView with no children. 
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
+      Utils.debug("DATALIST init: " + this.el);
+      
       // Update the display every time the model is changed
       this.model.bind('change', this.renderNewModel);
     },
+
+    /**
+     * The underlying model of the DataListView is a DataList.
+     */    
+    model : DataList,
     
+    /** 
+     * The datumLatexViews array holds all the children of the
+     * DataListView.
+     */
+    datumLatexViews : [],
+
+    /**
+     * Events that the DataListView is listening to and their handlers.
+     */
     events : {
       'click a.servernext': 'nextResultPage'
     },
     
-    model : DataList,
-    
-    classname : "dataList",
-    
+    /**
+     * The Handlebars template rendered as the DataListView.
+     */
     template : Handlebars.compile(data_listTemplate),
     
+    /**
+     * The Handlebars template of the pagination footer, which is used
+     * as a partial.
+     */
     footerTemplate : Handlebars.compile(pagingFooterTemplate),
 
     /**
@@ -53,32 +74,19 @@ define( [
      * instead.
      */
     render : function() {
-      // Display the Data List
-      $(this.el).html(this.template(this.model.toJSON()));
-      this.$el.appendTo('#data_list');
-      
-      // Display the pagination footer and the first page of DatumLatexViews.
-      // this.renderNewModel();
+      Utils.debug("DATALIST render: " + this.el);
+      if (this.model != undefined) {
+        // Display the Data List
+        this.el = "#data_list";
+        $(this.el).html(this.template(this.model.toJSON()));
+        
+        // TODO Display the pagination footer and the first page of DatumLatexViews.
+        // this.renderNewModel();
+      } else {
+        Utils.debug("\tDataList model is not defined");
+      }
       
       return this;
-    },
-    
-    /**
-     * Based on the number of items per page and the current page, calculate the current
-     * pagination info.
-     * 
-     * @return {Object} JSON to be sent to the footerTemplate.
-     */
-    getPaginationInfo : function() {
-      var currentPage = Math.ceil(this.datumLatexViews.length / this.perPage);
-      var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
-      var footerjson  = {};
-      footerjson.currentPage = currentPage,
-      footerjson.totalPages = totalPages,
-      footerjson.perPage = this.perPage,
-      footerjson.morePages = currentPage < totalPages;
-      
-      return footerjson;
     },
     
     /**
@@ -115,8 +123,29 @@ define( [
       $("#data_list_footer").html(this.footerTemplate(this.getPaginationInfo()));
     },
     
-    datumLatexViews : [],
-
+    /**
+     * For paging, the number of items per page.
+     */
+    perPage : 3,
+    
+    /**
+     * Based on the number of items per page and the current page, calculate the current
+     * pagination info.
+     * 
+     * @return {Object} JSON to be sent to the footerTemplate.
+     */
+    getPaginationInfo : function() {
+      var currentPage = Math.ceil(this.datumLatexViews.length / this.perPage);
+      var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
+      var footerjson  = {};
+      footerjson.currentPage = currentPage,
+      footerjson.totalPages = totalPages,
+      footerjson.perPage = this.perPage,
+      footerjson.morePages = currentPage < totalPages;
+      
+      return footerjson;
+    },
+    
     /**
      * Displays a new DatumLatexView for the Datum with the given datumId.
      * 
@@ -136,11 +165,6 @@ define( [
       // Keep track of the DatumLatexView
       this.datumLatexViews.push(view);
     },
-    
-    /**
-     * For paging, the number of items per page.
-     */
-    perPage : 3,
 
     /**
      * Add one page worth of DatumLatexViews from the DataList.

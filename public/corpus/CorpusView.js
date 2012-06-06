@@ -4,21 +4,15 @@ define([
     "text!corpus/corpus.handlebars",
     "corpus/Corpus", 
     "session/Session", 
-    "session/Sessions",
     "session/SessionView", 
-    "session/SessionsView",
-    "datum/Datums",
-    "datum/DatumsView", 
-    "data_list/DataList", 
-    "data_list/DataLists", 
+    "session/SessionsView", 
+    "data_list/DataList",
     "data_list/DataListView",
-    "data_list/DataListsView", 
-    "permission/Permissions",
-    "permission/PermissionView", 
-    "permission/PermissionsView",
-    "lexicon/Lexicon", 
-    "lexicon/LexiconView", 
-    "glosser/Glosser",
+    "authentication/Authentication",
+    "authentication/AuthenticationView",
+    "search/Search",
+    "search/SearchView",
+    "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
 ], function(
@@ -27,21 +21,15 @@ define([
     corpusTemplate, 
     Corpus, 
     Session,
-    Sessions,
     SessionView, 
-    SessionsView, 
-    Datums, 
-    DatumsView, 
+    SessionsView,
     DataList,
-    DataLists, 
     DataListView,
-    DataListsView, 
-    Permissions, 
-    PermissionView, 
-    PermissionsView, 
-    Lexicon,
-    LexiconView, 
-    Glosser, 
+    Authentication,
+    AuthenticationView,
+    Search,
+    SearchView,
+    LexiconView,
     GlosserView
 ) {
   var CorpusView = Backbone.View.extend(
@@ -60,21 +48,54 @@ define([
      *           the dragged and dropped files. On android the app will
      *           have to import data via the menus.
      * 
+     * @description Starts the Corpus and initializes all its children.
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      // this.on('all', function(e) {
-      // this.render();
-      // });
-      // this.model.bind('change', this.render);
+      Utils.debug("CORPUS init: " + this.el);
+      
+      // Create a SessionView
       this.sessionView = new SessionView({
         model : new Session()
       });
-      
-      this.render();
+         
+      // Create a SearchView
+      // this.searchView = new SearchView({
+        // model : new Search()
+      // });
     },
+
+    /**
+     * The underlying model of the CorpusView is a Corpus.
+     */    
+    model : Corpus,
+  
+    /**
+     * The authView is a child of the CorpusView.
+     */  
+    authView : null,
     
+    /**
+     * The searchView is a child of the CorpusView.
+     */
+    searchView : SearchView,
+
+    /**
+     * The sessionView is a child of the CorpusView.
+     */
+    sessionView : SessionView,
+
+    // TODO Should LexiconView really be here?
+    lexicon : LexiconView,
+
+    // TODO Should LexiconView really be here?
+    glosser : GlosserView,
+    
+    /**
+     * Events that the CorpusView is listening to and their handlers.
+     */
     events : {
       "change" : "render",
 //              "click .new_datum" : "newDatum",
@@ -87,39 +108,40 @@ define([
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
       // "click .sync" : "replicateDatabase"
-
+      "change #username" : function() {
+        console.log("/tCORPUS CLICKY!");
+      }
     },
-    
-    model : Corpus,
-    
+
+    /**
+     * The Handlebars template rendered as the CorpusView.
+     */
     template : Handlebars.compile(corpusTemplate),
 
-    sessions : Sessions,
-    sessionView : SessionView,
-    sessionsView : SessionsView,
-
-    permissions : Permissions,
-    permissionView : PermissionView,
-    permissionsView : PermissionsView,
-
-    lexicon : Lexicon,
-    lexicon : LexiconView,
-
-    glosser : Glosser,
-    glosser : GlosserView,
-
+    /**
+     * Renders the CorpusView and all of its child Views.
+     */
     render : function() {
+      Utils.debug("CORPUS render: " + this.el);
       if (this.model != undefined) {
-        Handlebars.registerPartial("session", this.sessionView
-            .template(this.sessionView.model.toJSON()));
-
+        this.el = "#corpus";
+        // Display the CorpusView
+        Handlebars.registerPartial("session", this.sessionView.template(this.sessionView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
-        this.$el.appendTo('#corpus');
-      
-        Utils.debug("\trendering corpus: " + this.model.get("name"));
+        
+        if (this.authView == null) {     
+          // Create an AuthenticationView, if necessary
+          this.authView = new AuthenticationView({
+            model : new Authentication()
+          });
+        }
+        this.authView.render();
+        
+        // this.searchView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
+      
       return this;
     },
     
@@ -147,8 +169,11 @@ define([
         })
       });
       
-      // Render everything
-      this.render();
+      // Sample Authentication data
+      this.authView.loadSample();
+      
+      // Same Search data
+      // this.searchView.loadSample();
     },
 
     /**

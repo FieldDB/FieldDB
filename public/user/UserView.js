@@ -2,15 +2,13 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
-    "user/User", 
-    "user/UserProfileView",
+    "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     userTemplate, 
-    User, 
-    UserProfileView
+    User
 ) {
   var UserView = Backbone.View.extend(
   /** @lends UserView.prototype */
@@ -20,26 +18,38 @@ define([
      *        activity feeds, it is also embedable in the
      *        UserProfileView.
      * 
+     * @description  Starts the UserView.
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
+      Utils.debug("USER init: " + this.el);
+      
       this.on('all', function(e) {
         this.render();
       });
       
       this.model.bind('change', this.render);
-      
-      this.render();
     },
 
+    /**
+     * The underlying model of the UserView is a User.
+     */
     model : User,
     
     classname : "user",
     
+    /**
+     * The Handlebars template rendered as the UserView.
+     */
     template : Handlebars.compile(userTemplate),
     
+    /**
+     * Renders the UserView.
+     */
     render : function() {
+      Utils.debug("USER render: " + this.el);
       if (this.model != undefined) {
         $(this.el).html(this.template(this.model.toJSON()));
         Utils.debug("\trendering user: " + this.model.get("username"));
