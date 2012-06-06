@@ -54,10 +54,6 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
       
-      // Create and start the Router
-      this.model.router = new AppRouter();
-      Backbone.history.start();
-      
       // Create a CorpusView for the Corpus in the App
       this.corpusView = new CorpusView({
         model : this.model.get("corpus")

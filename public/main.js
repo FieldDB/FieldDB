@@ -42,10 +42,12 @@ require.config({
 require([
     "app/App",
     "app/AppView",
+    "app/AppRouter",
     "libs/Utils"
 ], function(
     App,
-    AppView
+    AppView,
+    AppRouter
 ) {
   // Load the App
   var a = localStorage.getItem("app");
@@ -61,6 +63,10 @@ require([
   window.app = a;
   
   window.appView.render();
+  
+  app.router = new AppRouter();
+  Backbone.history.start();
+      
   
   // Load the sample App
   // window.appView.loadSample();
