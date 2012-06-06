@@ -11,6 +11,8 @@ define([
     "search/SearchView",
     "session/Session",
     "session/SessionView",
+    "authentication/Authentication",
+    "authentication/AuthenticationView",
     "app/App", 
     "app/AppRouter",
     "text!app/app.handlebars", 
@@ -28,6 +30,8 @@ define([
     SearchView,
     Session,
     SessionView,
+    Authentication,
+    AuthenticationView,
     App, 
     AppRouter, 
     appTemplate
@@ -92,6 +96,11 @@ define([
       this.sessionView = new SessionView({
         model : new Session()
       });
+               
+      // Create an AuthenticationView, if necessary
+      this.authView = new AuthenticationView({
+        model : new Authentication()
+      });
     },
     
     /**
@@ -123,6 +132,11 @@ define([
      * The sessionView is a child of the AppView.
      */
     sessionView : SessionView,
+  
+    /**
+     * The authView is a child of the AppView.
+     */  
+    authView : AuthenticationView,
     
     /**
      * The Handlebars template rendered as the AppView.
@@ -153,6 +167,9 @@ define([
         
         // Display the SessionView
         this.sessionView.render();
+        
+        // Display the AuthView
+        this.authView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }
