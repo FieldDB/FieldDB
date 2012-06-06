@@ -61,6 +61,11 @@ define([
         model : new Session()
       });
          
+      // Create an AuthenticationView, if necessary
+      this.authView = new AuthenticationView({
+        model : new Authentication()
+      });
+         
       // Create a SearchView
       // this.searchView = new SearchView({
         // model : new Search()
@@ -121,20 +126,19 @@ define([
     render : function() {
       Utils.debug("CORPUS render: " + this.el);
       if (this.model != undefined) {
-        this.setElement($("#corpus"));
         // Display the CorpusView
+        this.setElement($("#corpus"));
         Handlebars.registerPartial("session", this.sessionView.template(this.sessionView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        if (this.authView == null) {     
-          // Create an AuthenticationView, if necessary
-          this.authView = new AuthenticationView({
-            model : new Authentication()
-          });
-        }
+        // Display the AuthView
         this.authView.render();
         
+        // Display the SearchView
         // this.searchView.render();
+        
+        // Display the SessionView
+        this.sessionView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
