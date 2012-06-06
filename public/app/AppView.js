@@ -7,6 +7,8 @@ define([
     "datum/DatumView", 
     "data_list/DataList",
     "data_list/DataListView",
+    "search/Search",
+    "search/SearchView",
     "app/App", 
     "app/AppRouter",
     "text!app/app.handlebars", 
@@ -20,6 +22,8 @@ define([
     DatumView,
     DataList,
     DataListView,
+    Search,
+    SearchView,
     App, 
     AppRouter, 
     appTemplate
@@ -74,6 +78,11 @@ define([
           ]
         })
       });
+      
+      // Create a SearchView
+      this.searchView = new SearchView({
+        model : new Search()
+      });
     },
     
     /**
@@ -95,6 +104,11 @@ define([
      * The dataListView is a child of the AppView.
      */
     dataListView : DataListView,
+    
+    /**
+     * The searchView is a child of the AppView.
+     */
+    searchView : SearchView,
     
     /**
      * The Handlebars template rendered as the AppView.
@@ -119,6 +133,9 @@ define([
         
         // Display the DataListView
         this.dataListView.render();
+                
+        // Display the SearchView
+        this.searchView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }

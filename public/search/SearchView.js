@@ -37,9 +37,7 @@ define([
      * Events that the SearchView is listening to and their handlers.
      */
     events : {
-      "change" : "render",
-      "all" : "render"
-//      "blur" : this.model.saveKeyword
+      "change" : "search"
     },
     
     /**
@@ -63,6 +61,14 @@ define([
       }
       
       return this;
+    },
+    
+    /**
+     * Perform a search.
+     */
+    search : function() {
+      Utils.debug("In search");
+      // TODO Display the search results
     },
     
     /**
