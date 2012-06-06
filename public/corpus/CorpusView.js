@@ -128,7 +128,6 @@ define([
       if (this.model != undefined) {
         // Display the CorpusView
         this.setElement($("#corpus"));
-        Handlebars.registerPartial("session", this.sessionView.template(this.sessionView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display the AuthView
