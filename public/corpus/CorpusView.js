@@ -5,8 +5,6 @@ define([
     "corpus/Corpus",
     "data_list/DataList",
     "data_list/DataListView",
-    "authentication/Authentication",
-    "authentication/AuthenticationView",
     "preference/Preference",
     "preference/PreferenceView",
     "lexicon/LexiconView",
@@ -19,8 +17,6 @@ define([
     Corpus,
     DataList,
     DataListView,
-    Authentication,
-    AuthenticationView,
     Preference,
     PreferenceView,
     LexiconView,
@@ -49,11 +45,6 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
-         
-      // Create an AuthenticationView, if necessary
-      this.authView = new AuthenticationView({
-        model : new Authentication()
-      });
       
       // Create a PreferenceView
       this.preferenceView = new PreferenceView({
@@ -65,11 +56,6 @@ define([
      * The underlying model of the CorpusView is a Corpus.
      */    
     model : Corpus,
-  
-    /**
-     * The authView is a child of the CorpusView.
-     */  
-    authView : null,
     
     /**
      * The preferenceView is a child of the CorpusView.
@@ -113,9 +99,6 @@ define([
         // Display the CorpusView
         this.setElement($("#corpus"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display the AuthView
-        this.authView.render();
         
         // Display the PreferenceView
         this.preferenceView.render();
