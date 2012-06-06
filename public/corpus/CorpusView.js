@@ -12,8 +12,6 @@ define([
     "authentication/AuthenticationView",
     "preference/Preference",
     "preference/PreferenceView",
-    "search/Search",
-    "search/SearchView",
     "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
@@ -31,8 +29,6 @@ define([
     AuthenticationView,
     Preference,
     PreferenceView,
-    Search,
-    SearchView,
     LexiconView,
     GlosserView
 ) {
@@ -63,9 +59,6 @@ define([
       // Create a SessionView
       this.sessionView = new SessionView({
         model : new Session()
-      
-      
-      
       });
      
       this.preferenceView = new PreferenceView({
@@ -76,11 +69,6 @@ define([
       this.authView = new AuthenticationView({
         model : new Authentication()
       });
-         
-      // Create a SearchView
-      // this.searchView = new SearchView({
-        // model : new Search()
-      // });
       
       // Create a PreferenceView
       this.preferenceView = new PreferenceView({
@@ -97,11 +85,6 @@ define([
      * The authView is a child of the CorpusView.
      */  
     authView : null,
-    
-    /**
-     * The searchView is a child of the CorpusView.
-     */
-    searchView : SearchView,
 
     /**
      * The sessionView is a child of the CorpusView.
@@ -153,9 +136,6 @@ define([
         
         // Display the AuthView
         this.authView.render();
-        
-        // Display the SearchView
-        // this.searchView.render();
         
         // Display the SessionView
         this.sessionView.render();
