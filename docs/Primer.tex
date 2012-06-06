@@ -1,3 +1,4 @@
+
 \documentclass[12 pt]{article}
 \usepackage{fullpage}
 \usepackage{rotating}
@@ -23,8 +24,21 @@ The FieldLinguists' App is an OpenSource database that allows language researche
 
 \section {Statement of Need}
 
-The statement of need should describe the problem that the project will attempt to address. Also, 
-describe the population that will be served.  
+The FieldLinguists' App is conceived out of the needs of language researchers doing field work. Linguistic field work often requires researchers to travel to places where a stable connection to the internet is not guaranteed. Also, it often involves a group of researchers contributing to building a single database.
+ An ideal linguistic database should therefore work both on- and off-line as well as make it easy to share and integrate data. 
+ 
+There are existing programmes/software used for linguistic field work, 
+however, they fall short in providing features necessary for collaborative field work. 
+For example, some web-based databases (e.g.  {\it Karuk Dictionary and Texts} http://linguistics.berkeley.edu/{\textasciitilde}ka
+ruk/links.php,   {\it The Washo Project} http://washo.uchicago.edu/dictionary/dictionary.php) work only online, hence it is impossible for researchers to enter new data or search the database while on the field where the internet is unavailable.  
+
+Non-web-based software such as {\it Toolbox} (http://www.sil.org/computing/toolbox/) and {\it FLEx/FieldWorks} (http://fieldworks.sil.org/flex/)
+are excellent in terms of annotating data and building data into various types (corpus, grammar or lexicon). Nonetheless, integration of data taken by individual researchers is not well-automated and takes considerable work of researchers. Moreover, they have a particular preference of platforms (either PC or Linux, but not both), which causes further difficulty in data sharing among researchers using different platforms.  
+
+General purpose database software such as FileMaker Pro can be customized for the purpose of language research. However, it demands researchers to learn the software, and research teams often need to hire a programmer to customize the software for their research purposes. The stand-alone nature of such software makes data sharing and integration difficult as well. 
+
+The existing linguistic database programmes, although useful, have various shortfalls that would hinder collection and integration of data. Some of them are constrained by the internet accessibility or by the computer platform types. Some others demand extra human work in order to integrate data. A database application whose functionality is not limited by such constraints is much anticipated by language researchers. 
+
 
 \section {App Description}
 
@@ -81,7 +95,20 @@ The following functional requirements are based on a few important consideration
 
 \section {Goals \& Objectives}
 
-Describe the project objectives in measurable terms that address the academic and technological needs of language teachers, linguists, etc. (it's for linguists but other people can benefit from it as well i.e. help create dictionaries for endangered languages, which will benefit the communities of these languages; L2 acq. teachers).  
+The principal goal of the FieldLinguists' App is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. The main objectives are to provide: 
+
+\begin{itemize} 
+\item A self-explanatory, easy-to-use user interface so that researchers can start using the application at the time the installation is completed.  
+\item Both on- and off-line functionality so that the field work is not constrained by the internet accessibility. 
+\item Customizable data entry fields to accommodate particular requirements of a research.  
+\item Data sharing and integration functions to facilitate collaboration among researchers and between researchers and language consultants. 
+
+\end{itemize} 
+
+
+Although it is designed primarily for linguists, the application will equally be useful for researchers documenting endangered languages and/or creating dictionaries/grammar books for minority languages, as well as language teachers creating educational materials.  
+
+
 
 \section {Staff \& Organizational Information}
 
@@ -502,9 +529,30 @@ Release new versions&	160&  Javascript \\
 %%Include in the budget all expenses for the app, including necessary training costs. Mention any co-funding that you are using from other sources. You may want to include a brief narrative of expenses along with a table of individual cost components. 
 
 
+\normalsize
+
+\section {Evaluation}
+
+The usefulness and effectiveness of the FieldLinguists' App will be evaluated against the following criteria described in DataONE best data management practices (http://www.data
+one.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
+
+\begin{itemize} 
+
+\item Plan: The goal of the application is to help facilitate language researchers. It is crucial that the application does not impose any constraint on their research plans, including data management plans. 
+\item Collect: Data are collected and organized with ease (self-explanatory UI, off-line functionality).   
+\item Assure: The quality of the data is assured through checks and inspections (datum status, comment function). 
+\item Describe: The application accommodates metadata categories that researchers choose to use (new data entry fields, tags). 
+\item Preserve: Data are securely archived in the host server and confidential information (e.g. consultant's identity) is made inaccessible to the public.  
+\item Discover: Data are searchable.  
+\item Integrate: Data from disparate sources are combined into one consistent data set. Data are shareable (sync function, import/export functions). 
+\item Analyze: The application organizes data in ways to help data analysis (data entry fields, tags).  
+
+\end{itemize}
 
 
-%\section {Evaluation}
+
+
+
 %
 %Provide information on the metrics that will be used to determine the effectiveness of the project. It has to meet certain data management criteria -- any scientist can discover and use the data over time; it will benefit the scientific community. We are abiding by the best practice standards set by DataOne.   
 %
@@ -516,3 +564,4 @@ Release new versions&	160&  Javascript \\
 %
 %
 \end{document}
+
