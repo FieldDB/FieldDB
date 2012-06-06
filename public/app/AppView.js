@@ -46,6 +46,11 @@ define([
       this.model.router = new AppRouter();
       Backbone.history.start();
       
+      // Create a CorpusView for the Corpus in the App
+      this.corpusView = new CorpusView({
+        model : this.model.get("corpus")
+      });
+      
       // Create a DatumView
       this.fullScreenDatumView = new DatumView({
         model : new Datum()
@@ -106,16 +111,13 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        if (this.corpusView == null) {
-          // Create a CorpusView for the Corpus in the App, if necessary
-          this.corpusView = new CorpusView({
-            model : this.model.get("corpus")
-          });
-        }
+        // Display the CorpusView
         this.corpusView.render();
         
+        // Display the DatumView
         this.fullScreenDatumView.render();
         
+        // Display the DataListView
         this.dataListView.render();
       } else {
         Utils.debug("\tApp model is not defined");
