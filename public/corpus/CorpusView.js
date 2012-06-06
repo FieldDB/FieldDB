@@ -2,10 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!corpus/corpus.handlebars",
-    "corpus/Corpus", 
-    "session/Session", 
-    "session/SessionView", 
-    "session/SessionsView", 
+    "corpus/Corpus",
     "data_list/DataList",
     "data_list/DataListView",
     "authentication/Authentication",
@@ -19,10 +16,7 @@ define([
     Backbone, 
     Handlebars, 
     corpusTemplate, 
-    Corpus, 
-    Session,
-    SessionView, 
-    SessionsView,
+    Corpus,
     DataList,
     DataListView,
     Authentication,
@@ -55,15 +49,6 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
-      
-      // Create a SessionView
-      this.sessionView = new SessionView({
-        model : new Session()
-      });
-     
-      this.preferenceView = new PreferenceView({
-        model : new Preference()
-      });
          
       // Create an AuthenticationView, if necessary
       this.authView = new AuthenticationView({
@@ -85,11 +70,6 @@ define([
      * The authView is a child of the CorpusView.
      */  
     authView : null,
-
-    /**
-     * The sessionView is a child of the CorpusView.
-     */
-    sessionView : SessionView,
     
     /**
      * The preferenceView is a child of the CorpusView.
@@ -136,9 +116,6 @@ define([
         
         // Display the AuthView
         this.authView.render();
-        
-        // Display the SessionView
-        this.sessionView.render();
         
         // Display the PreferenceView
         this.preferenceView.render();
