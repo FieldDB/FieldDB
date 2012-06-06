@@ -6,13 +6,18 @@ body {
 	color: white;
 }
 
+#top{
+	float: right
+}
+
 .llama {
-	background-image: url('llama.jpg');
+	background-image: url('../images/skins/salcantay.jpg');
 }
 
 nav {
 	font-size: 1.5em;
 	padding: 0em 1em 1em 0em;
+	float: left;
 }
 
 .page {
@@ -24,6 +29,9 @@ nav {
 	float: right;
 }
 
+.preference{
+	float: left;
+}
 .widget {
 	width: 100%;
 	height: 100%;
@@ -85,7 +93,7 @@ ul {
 
 #navigation {
 	width: 100%;
-	height: 3em;
+	height: 5em;
 }
 
 #navigation ul {
