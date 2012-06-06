@@ -35,7 +35,7 @@ require.config({
       },
       "paginator":{
         deps : ["use!underscore", "use!backbone", "jquery", "jquery.couch", "libs/backbone-couchdb"],
-        attach: "Paginator"
+        attach: "paginator"
       }
   }
 });
@@ -46,11 +46,11 @@ require([
 
    "../tests/confidentiality_encryption/ConfidentialTest",
 //   "../tests/user_generic/UserGenericTest",
-   "../tests/user/UserTest",
+//   "../tests/user/UserTest",
    "../tests/permission/PermissionTest",
     "../tests/datum/DatumsTest",
-   "../tests/data_list/DataListTest",
-    "../tests/datum/DatumTest",
+//   "../tests/data_list/DataListTest",
+//    "../tests/datum/DatumTest",
 //    "../tests/informant/InformantTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/lexicon/LexiconTest",
