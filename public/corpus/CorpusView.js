@@ -2,50 +2,24 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!corpus/corpus.handlebars",
-    "corpus/Corpus", 
-    "session/Session", 
-    "session/Sessions",
-    "session/SessionView", 
-    "session/SessionsView",
+    "corpus/Corpus",
+    "data_list/DataList",
+    "data_list/DataListView",
     "preference/Preference",
     "preference/PreferenceView",
-    "datum/Datums",
-    "datum/DatumsView", 
-    "data_list/DataList", 
-    "data_list/DataLists", 
-    "data_list/DataListView",
-    "data_list/DataListsView", 
-    "permission/Permissions",
-    "permission/PermissionView", 
-    "permission/PermissionsView",
-    "lexicon/Lexicon", 
-    "lexicon/LexiconView", 
-    "glosser/Glosser",
+    "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     corpusTemplate, 
-    Corpus, 
-    Session,
-    Sessions,
-    SessionView, 
-    SessionsView, 
+    Corpus,
+    DataList,
+    DataListView,
     Preference,
     PreferenceView,
-    Datums, 
-    DatumsView, 
-    DataList,
-    DataLists, 
-    DataListView,
-    DataListsView, 
-    Permissions, 
-    PermissionView, 
-    PermissionsView, 
-    Lexicon,
-    LexiconView, 
-    Glosser, 
+    LexiconView,
     GlosserView
 ) {
   var CorpusView = Backbone.View.extend(
@@ -64,28 +38,39 @@ define([
      *           the dragged and dropped files. On android the app will
      *           have to import data via the menus.
      * 
+     * @description Starts the Corpus and initializes all its children.
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      // this.on('all', function(e) {
-      // this.render();
-      // });
-      // this.model.bind('change', this.render);
-      this.sessionView = new SessionView({
-        model : new Session()
+      Utils.debug("CORPUS init: " + this.el);
       
-      
-      
-      });
-     
+      // Create a PreferenceView
       this.preferenceView = new PreferenceView({
         model : new Preference()
-      });
-      
-      this.render();
+      })
     },
+
+    /**
+     * The underlying model of the CorpusView is a Corpus.
+     */    
+    model : Corpus,
     
+    /**
+     * The preferenceView is a child of the CorpusView.
+     */
+    preferenceView : PreferenceView,
+
+    // TODO Should LexiconView really be here?
+    lexicon : LexiconView,
+
+    // TODO Should LexiconView really be here?
+    glosser : GlosserView,
+    
+    /**
+     * Events that the CorpusView is listening to and their handlers.
+     */
     events : {
       "change" : "render",
 //              "click .new_datum" : "newDatum",
@@ -98,53 +83,29 @@ define([
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
       // "click .sync" : "replicateDatabase"
-
     },
-    
-    model : Corpus,
-    
+
+    /**
+     * The Handlebars template rendered as the CorpusView.
+     */
     template : Handlebars.compile(corpusTemplate),
-    
-    el : '#corpus',
 
-    sessions : Sessions,
-    sessionView : SessionView,
-    sessionsView : SessionsView,
-    
-    
-    preference : Preference,
-    preferenceView : PreferenceView,
-   
-
-    datums : Datums,
-    // DatumView will be shown using 1 page in a paginated datumsview
-    datumsView : DatumsView,
-
-    dataLists : DataLists,
-    dataListView : DataListView,
-    dataListsView : DataListsView,
-
-    permissions : Permissions,
-    permissionView : PermissionView,
-    permissionsView : PermissionsView,
-
-    lexicon : Lexicon,
-    lexicon : LexiconView,
-
-    glosser : Glosser,
-    glosser : GlosserView,
-
+    /**
+     * Renders the CorpusView and all of its child Views.
+     */
     render : function() {
+      Utils.debug("CORPUS render: " + this.el);
       if (this.model != undefined) {
-        Handlebars.registerPartial("session", this.sessionView
-            .template(this.sessionView.model.toJSON()));
-       
+        // Display the CorpusView
+        this.setElement($("#corpus"));
         $(this.el).html(this.template(this.model.toJSON()));
-        Utils.debug("\trendering corpus: " + this.model.get("name"));
+        
+        // Display the PreferenceView
         this.preferenceView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
+      
       return this;
     },
     
@@ -172,16 +133,11 @@ define([
         })
       });
       
-   // Render everything
-      this.render();
+      // Sample Authentication data
+      this.authView.loadSample();
       
-      // Sample Datum data
-      this.datums = new Datums();
-      this.dataListView = new DataListView( {model: new DataList(), collection: this.datums} );
-      this.datumsView = new DatumsView({collection: this.datums});
-      
-      
-      
+      // Same Search data
+      // this.searchView.loadSample();
     },
 
     /**
