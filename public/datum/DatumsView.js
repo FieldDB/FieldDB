@@ -2,8 +2,8 @@ define( [
     "use!backbone", 
     "use!handlebars", 
     "datum/Datums",
-    "text!/datum/datum_latex.handlebars"
-], function(Backbone, Handlebars, Datums, datum_latexTemplate) {
+    "text!datum/datums_paging_footer.handlebars"
+], function(Backbone, Handlebars, Datums, datumsFooterTemplate) {
     var DatumsView = Backbone.View.extend(
       /** @lends DatumsView.prototype */
       {
@@ -15,8 +15,14 @@ define( [
            * @extends Backbone.View
            * @constructs
            */
-          initialize : function() {
-          },
+      initialize: function () {
+
+        this.collection.on('reset', this.render, this);
+        this.collection.on('change', this.render, this);
+
+        this.$el.appendTo('#pagination');
+
+      },
 
       events: {
         'click a.servernext': 'nextResultPage',
@@ -31,21 +37,17 @@ define( [
       },
       collection: Datums,
       tagName: 'aside',
-      collection: Datums,
-      template: _.template($('#tmpServerPagination').html()),
-
-      initialize: function () {
-
-//        this.collection.on('reset', this.render, this);
-//        this.collection.on('change', this.render, this);
-
-        this.$el.appendTo('#pagination');
-
-      },
+      datumsFooterTemplate: Handlebars.compile(datumsFooterTemplate),
 
       render: function () {
-        var html = this.template(this.collection.info());
-        this.$el.html(html);
+        var footerjson  = this.collection.info();
+        footerjson.morePages= this.collection.info().currentPage < this.collection.info().totalPages;
+        footerjson.afterFirstPage = this.collection.info().currentPage > this.collection.info().firstPage;
+        footerjson.showNext = this.collection.info().currentPage < this.collection.info().totalPages;
+        footerjson.showFirst = this.collection.info().currentPage != this.collection.info().firstPage;
+        footerjson.showLast = this.collection.info().currentPage != this.collection.info().lastPage;
+        
+        this.$el.html(this.datumsFooterTemplate(footerjson));
       },
 
       updateSortBy: function (e) {
