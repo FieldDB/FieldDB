@@ -60,10 +60,7 @@ define([
      */
     events : {
       "click .logout" : "logout",
-      "click .login" : "login",
-      "change #username" : function() {
-        console.log("/tAUTH CLICKY!");
-      }
+      "click .login" : "login"
     },
     
     /**
@@ -78,7 +75,7 @@ define([
       Utils.debug("AUTH render: " + this.el);
       if (this.model != undefined) {
         // Display the AuthenticationView
-        this.el = "#authentication";
+        this.setElement($("#authentication"));
         Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
