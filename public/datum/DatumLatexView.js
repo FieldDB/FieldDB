@@ -24,22 +24,38 @@ define([
      * href="https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js">
      * https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js</a>
      * 
+     * @description Starts the DatumLatexView.
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
+      Utils.debug("DLATEX init: " + this.el);
+      
       this.model.bind('change', this.render, this);
       this.model.bind('destroy', this.remove, this);
     },
 
+    /**
+     * The underlying model of the DatumLatexView is a Datum.
+     */
     model : Datum,
     
     tagName : 'li',
     
+    /**
+     * The Handlebars template rendered as the DatumLatexView.
+     */
     template : Handlebars.compile(datumTemplate),
 
+    /**
+     * Renders the DatumLatexView.r
+     */
     render : function() {
+      Utils.debug("DLATEX render: " + this.el);
+      
       this.$el.html(this.template(this.model.toJSON()));
+      
       return this;
     }
   });

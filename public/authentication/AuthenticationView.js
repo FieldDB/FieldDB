@@ -20,38 +20,68 @@ define([
     /**
      * @class This is the login logout surface.
      * 
+     * @description Starts the Authentication and initializes all its children.
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      this.userView = new UserView({model: new User()});
+      Utils.debug("AUTH init: " + this.el);
+      
+      // Create a UserView
+      // TODO Move below this.render() after the user view is no longer a partial.
+      this.userView = new UserView({
+        model: new User()
+      });
       
       this.authenticatePreviousUser();
       
-      this.on('all', function(e) {
-        this.render();
-      });
+      // this.on('all', function(e) {
+        // this.render();
+      // });
       
       // Re-render every time the Authentication changes
-      this.model.bind('change', this.render);
+      this.model.bind('change', this.render, this);
     },
-    
-    events : {
-      "click .logout" : "logout",
-      "click .login" : "login"
-    },
-    
+
+    /**
+     * The underlying model of the AuthenticationView is an Authentication
+     */    
     model : Authentication,
-    
+
+    /**
+     * The userView is a child of the AuthenticationView.
+     */
+    // TODO Make this a real child, rather than just a partial.
     userView : UserView,
     
+    /**
+     * Events that the AuthenticationView is listening to and their handlers.
+     */
+    events : {
+      "click .logout" : "logout",
+      "click .login" : "login",
+      "change #username" : function() {
+        console.log("/tAUTH CLICKY!");
+      }
+    },
+    
+    /**
+     * The Handlebars template rendered as the AuthenticationView.
+     */
     template : Handlebars.compile(authTemplate),
     
+    /**
+     * Renders the AuthenticationView and all of its child Views.
+     */
     render : function() {
+      Utils.debug("AUTH render: " + this.el);
       if (this.model != undefined) {
+        // Display the AuthenticationView
+        this.el = "#authentication";
         Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
-        this.$el.appendTo('#authentication');
+        
         Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
         Utils.debug("\tAuthentication model was undefined.");
@@ -94,6 +124,7 @@ define([
      * calls the view's authenticate function.
      */
     login : function() {
+      Utils.debug("LOGIN");
       this.authenticate(document.getElementById("username").value, 
           document.getElementById("password").value);
     },
@@ -109,9 +140,6 @@ define([
       this.userView.loadSample();
       this.model.set("user", this.userView.model);
       this.model.set("username", this.userView.model.get("username"));
-
-      // Update the display
-      this.renderLogout();
     },
     
     /**

@@ -1,12 +1,8 @@
 define([ 
     "use!backbone", 
-    "use!handlebars", 
-    "authentication/Authentication",
-    "authentication/AuthenticationView", 
+    "use!handlebars",
     "corpus/Corpus", 
     "corpus/CorpusView",
-    "search/Search", 
-    "search/SearchView",
     "datum/Datum",
     "datum/DatumView", 
     "data_list/DataList",
@@ -14,16 +10,12 @@ define([
     "app/App", 
     "app/AppRouter",
     "text!app/app.handlebars", 
-    "libs/Utils" 
+    "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
-    Authentication, 
-    AuthenticationView, 
     Corpus, 
-    CorpusView, 
-    Search, 
-    SearchView,
+    CorpusView,
     Datum,
     DatumView,
     DataList,
@@ -42,29 +34,17 @@ define([
      *        referenced in the app model and it will have partial handlebar of
      *        the navigation menu.
      * 
+     * @description Starts the application and initializes all its children.
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-
+      Utils.debug("APP init: " + this.el);
+      
       // Create and start the Router
       this.model.router = new AppRouter();
       Backbone.history.start();
-
-      // Create a CorpusView for the Corpus in the App
-      this.corpusView = new CorpusView({
-        model : this.model.get("corpus")
-      });
-      
-      // Create an AuthenticationView
-      this.authView = new AuthenticationView({
-        model : new Authentication()
-      });
-      
-      // Create a SearchView
-      this.searchView = new SearchView({
-        model : new Search()
-      });
       
       // Create a DatumView
       this.fullScreenDatumView = new DatumView({
@@ -89,38 +69,66 @@ define([
           ]
         })
       });
-      
-      // Render the AppView
-      this.render();
     },
-
-    el : '#app_view',
     
+    events : {
+      "change #username" : function() {
+        console.log("/tAPP CLICKY!");
+      }
+    },
+    
+    /**
+     * The underlying model of the AppView is an App.
+     */
     model : App,
     
+    /**
+     * The corpusView is a child of the AppView.
+     */
+    corpusView : null,
+    
+    /**
+     * The fullScreenDatumView is a child of the AppView.
+     */
+    fullScreenDatumView : DatumView,
+    
+    /**
+     * The dataListView is a child of the AppView.
+     */
+    dataListView : DataListView,
+    
+    /**
+     * The Handlebars template rendered as the AppView.
+     */
     template : Handlebars.compile(appTemplate),
     
-    classname : "app_view",
-    
+    /**
+     * Renders the AppView and all of its child Views.
+     */
     render : function() {
-      // Display the app
-      $(this.el).html(this.template(this.model.toJSON()));
-      
-      // Display the Data List View
-      this.dataListView.render();
+      Utils.debug("APP render: " + this.el);
+      if (this.model != undefined) {
+        // Display the AppView
+        this.el = "#app_view";
+        $(this.el).html(this.template(this.model.toJSON()));
+        
+        if (this.corpusView == null) {
+          // Create a CorpusView for the Corpus in the App, if necessary
+          this.corpusView = new CorpusView({
+            model : this.model.get("corpus")
+          });
+        }
+        this.corpusView.render();
+        
+        this.fullScreenDatumView.render();
+        
+        this.dataListView.render();
+      } else {
+        Utils.debug("\tApp model is not defined");
+      }
       
       return this;
     },
-
-    corpusView : CorpusView,
-    
-    authView : AuthenticationView,
-    
-    searchView : SearchView,
-    
-    fullScreenDatumView : DatumView,
-    
-    dataListView : DataListView,
     
     /**
      * This function triggers a sample app to load so that new users can play
@@ -128,8 +136,6 @@ define([
      */
     loadSample : function() {
       this.corpusView.loadSample();
-      this.authView.loadSample();
-      this.searchView.loadSample();
     }
   });
 
