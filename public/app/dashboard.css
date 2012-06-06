@@ -7,7 +7,9 @@ body {
 }
 
 #top{
-	float: right
+	float: right;
+	 padding: 0em 3em 1em 0em;
+	
 }
 
 .llama {
@@ -26,7 +28,7 @@ nav {
 }
 
 .search {
-	float: right;
+	float: left;
 }
 
 .preference{
@@ -93,7 +95,7 @@ ul {
 
 #navigation {
 	width: 100%;
-	height: 5em;
+	height: 2em;
 }
 
 #navigation ul {
@@ -132,6 +134,9 @@ ul {
 	width: 100%;
 	height: 100%;
 	clear: both;
+   position: relative;
+  top: 55px;
+
 }
 
 .leftside {
