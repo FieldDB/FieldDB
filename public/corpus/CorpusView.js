@@ -10,6 +10,8 @@ define([
     "data_list/DataListView",
     "authentication/Authentication",
     "authentication/AuthenticationView",
+    "preference/Preference",
+    "preference/PreferenceView",
     "search/Search",
     "search/SearchView",
     "lexicon/LexiconView",
@@ -27,6 +29,8 @@ define([
     DataListView,
     Authentication,
     AuthenticationView,
+    Preference,
+    PreferenceView,
     Search,
     SearchView,
     LexiconView,
@@ -59,6 +63,13 @@ define([
       // Create a SessionView
       this.sessionView = new SessionView({
         model : new Session()
+      
+      
+      
+      });
+     
+      this.preferenceView = new PreferenceView({
+        model : new Preference()
       });
          
       // Create an AuthenticationView, if necessary
@@ -70,6 +81,11 @@ define([
       // this.searchView = new SearchView({
         // model : new Search()
       // });
+      
+      // Create a PreferenceView
+      this.preferenceView = new PreferenceView({
+        model : new Preference()
+      })
     },
 
     /**
@@ -91,6 +107,11 @@ define([
      * The sessionView is a child of the CorpusView.
      */
     sessionView : SessionView,
+    
+    /**
+     * The preferenceView is a child of the CorpusView.
+     */
+    preferenceView : PreferenceView,
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -138,6 +159,9 @@ define([
         
         // Display the SessionView
         this.sessionView.render();
+        
+        // Display the PreferenceView
+        this.preferenceView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
