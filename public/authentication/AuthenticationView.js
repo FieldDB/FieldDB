@@ -137,6 +137,9 @@ define([
       this.userView.loadSample();
       this.model.set("user", this.userView.model);
       this.model.set("username", this.userView.model.get("username"));
+      
+      // Update the display
+      this.renderLogout();
     },
     
     /**
