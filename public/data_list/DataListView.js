@@ -77,7 +77,7 @@ define( [
       Utils.debug("DATALIST render: " + this.el);
       if (this.model != undefined) {
         // Display the Data List
-        this.el = "#data_list";
+        this.setElement($("#data_list"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // TODO Display the pagination footer and the first page of DatumLatexViews.

@@ -71,12 +71,6 @@ define([
       });
     },
     
-    events : {
-      "change #username" : function() {
-        console.log("/tAPP CLICKY!");
-      }
-    },
-    
     /**
      * The underlying model of the AppView is an App.
      */
@@ -109,7 +103,7 @@ define([
       Utils.debug("APP render: " + this.el);
       if (this.model != undefined) {
         // Display the AppView
-        this.el = "#app_view";
+        this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         if (this.corpusView == null) {

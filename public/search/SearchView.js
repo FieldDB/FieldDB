@@ -54,7 +54,7 @@ define([
       Utils.debug("SEARCH render: " + this.el);
       if (this.model != undefined) {
         // Display the SearchView
-        this.el = "#search";
+        this.setElement($("#search"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         Utils.debug("\trendering search: "+ this.model.get("searchKeywords"));

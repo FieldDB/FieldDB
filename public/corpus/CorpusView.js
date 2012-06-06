@@ -108,9 +108,6 @@ define([
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
       // "click .sync" : "replicateDatabase"
-      "change #username" : function() {
-        console.log("/tCORPUS CLICKY!");
-      }
     },
 
     /**
@@ -124,7 +121,7 @@ define([
     render : function() {
       Utils.debug("CORPUS render: " + this.el);
       if (this.model != undefined) {
-        this.el = "#corpus";
+        this.setElement($("#corpus"));
         // Display the CorpusView
         Handlebars.registerPartial("session", this.sessionView.template(this.sessionView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
