@@ -9,7 +9,7 @@ define([
     /** @lends PreferenceView.prototype */
     {
         /**
-         * @class HotKeyConfigView
+         * @class PreferenceView
          *
          * @extends Backbone.View
          * @constructs
@@ -19,20 +19,32 @@ define([
 
         model : Preference,
      //make model name: JS/CSS class name
-        hotkeyview: HotKeyConfigView,
+     //   hotkeyview: HotKeyConfigView,
 
-        classname : "preference",
-
+//        classname : "preference",
+        
+        //el : $(".preference"),
+        
         template: Handlebars.compile(preferenceTemplate),
+        
+        events:{
+          "click .skin": "randomSkin"
+          
+        },
    	
         render : function() {
         	
-        	Handlebars.registerPartial("hot_key_config", this.hotkeyview.template(this.hotkeyview.model.toJSON()) );
+        	//Handlebars.registerPartial("hot_key_config", this.hotkeyview.template(this.hotkeyview.model.toJSON()) );
         	
             $(this.el).html(this.template(this.model.toJSON()));
+            $(this.el).appendTo("#preference");
             return this;
-        }	
+        },	
         
+        randomSkin : function(){
+          console.log("Change me!!");
+          return true;
+        }
         
     });
     
