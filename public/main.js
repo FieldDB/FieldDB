@@ -63,5 +63,5 @@ require([
   window.appView.render();
   
   // Load the sample App
-  window.appView.loadSample();
+  // window.appView.loadSample();
 });
