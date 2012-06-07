@@ -30,47 +30,85 @@ define([
   /** @lends DatumView.prototype */
   {
     /**
-     * @class The layout of a single Datum. It contains a datum status, datumFields, datumTags and a datum menu.
+     * @class The layout of a single Datum. It contains a datum status, datumFields, 
+     * datumTags and a datum menu.
      *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
+      // Create a DatumStatusView
     	this.statusview = new DatumStatusView({model: this.model.get("status")});
+    	
+    	// Create a DatumMenuView
       this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
+      
+      // Create a DatumTagView
       this.tagview = new DatumTagView({model: this.model.get("datumTag")});
+      
+      // Create a DatumFieldView
       this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
     },
 
+    /**
+     * The underlying model of the DatumView is a Datum.
+     */
     model : Datum,
-
-    classname : "datum",
-
-    template: Handlebars.compile(datumTemplate),
     
+    /**
+     * The statusview is a partial of the DatumView.
+     */
     statusview: null,  
     
+    /**
+     * The menuview is a partial of the DatumView.
+     */
     menuview: null,
     
+    /**
+     * The tagview is a partial of the DatumView.
+     */
     tagview: null,
     
+    /**
+     * The fieldview is a partial of the DatumView.
+     */
     fieldview: null,
     
+    /**
+     * Events that the DatumView is listening to and their handlers.
+     */
     events:{
     	"click #new" : "newDatum",
     	"blur .utterance" : "updateUtterance",
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
     	"blur .translation" : "updateTranslation"
-    	
     },
 
+    /**
+     * The Handlebars template rendered as the DatumView.
+     */
+    template: Handlebars.compile(datumTemplate),
+
+    /**
+     * Renders the DatumView and all of its partials.
+     */
     render : function() {
-    	Handlebars.registerPartial("datum_status", this.statusview.template(this.statusview.model.toJSON()) );
-    	Handlebars.registerPartial("datum_menu", this.menuview.template(this.model.toJSON()) );
-    	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
-    	Handlebars.registerPartial("datum_field", this.fieldview.template(this.model.toJSON()) );
-      $(this.el).html(this.template(this.model.toJSON()));
+      Utils.debug("DATUM render: " + this.el);
+      if (this.model != undefined) {
+        // Register all the partials
+      	Handlebars.registerPartial("datum_status", this.statusview.template(this.statusview.model.toJSON()) );
+      	Handlebars.registerPartial("datum_menu", this.menuview.template(this.model.toJSON()) );
+      	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
+      	Handlebars.registerPartial("datum_field", this.fieldview.template(this.model.toJSON()) );
+        
+        // Display the DatumView
+        this.setElement($("#datum-view"));
+        $(this.el).html(this.template(this.model.toJSON()));
+      } else {
+        Utils.debug("\tDatum model was undefined");
+      }
       
       return this;
     },
