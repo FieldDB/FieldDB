@@ -61,8 +61,7 @@ define([
     	"blur .utterance" : "updateUtterance",
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
-    	"blur .translation" : "updateTranslation",
-    	"click .sync" : "replicateDatabases"
+    	"blur .translation" : "updateTranslation"
     	
     },
 
@@ -106,21 +105,6 @@ define([
     updateTranslation : function() {
       this.model.set("translation", $(".translation").val());
       this.model.save();
-    },
-    
-    replicateDatabases : function() {
-      this.model.pouch(function(err, db) {
-        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-      });
     },
     
     newDatum: function() {
