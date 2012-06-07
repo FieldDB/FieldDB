@@ -33,6 +33,7 @@ define([
       Utils.debug("DLATEX init: " + this.el);
       
       this.model.bind('change', this.render, this);
+      this.model.bind('destroy', this.remove, this);
     },
 
     /**
