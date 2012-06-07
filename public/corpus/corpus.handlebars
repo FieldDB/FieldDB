@@ -1,41 +1,47 @@
 
 <div>
-<!-- <nav>
-            <ul>
+    <div id="caret">
+    <ul id = "dropdown">
+         <li> <a class = "btn btn-mini btn-inverse dropdown-toggle" data-toggle = "dropdown"> <span class ="caret white"></span></a>      
+               
+            <ul id = "dropdown">
               <li>New
                 <ul>
-                  <li><input type="button" class="new_datum" value="New Datum"/></li>
-                  <li><input type="button" class="new_session" value="New Session"/></li>
+                  <li><input type="button" class="btn-mini new_datum" value="New Datum"/></li>
+                  <li><input type="button" class="btn-mini new_session" value="New Session"/></li>
                 </ul>
               </li> 
               <li> View 
-                <ul>
-                  <li><input type="button" class="show_data_lists" value="Data Lists"/></li>
-                  <li><input type="button" class="show_corpus_details" value="Corpus"/></li>
-                  <li><input type="button" class="show_sessions" value="Sessions"/></li>
-                  <li><input type="button" class="show_permissions" value="Teams"/></li>
-                  <li><input type="button" class="show_corpora" value="Corpora"/></li>
+                <ul class = "dropdown">
+                  <li><input type="button" class="btn-mini show_data_lists" value="Data Lists"/></li>
+                  <li><input type="button" class="btn-mini show_corpus_details" value="Corpus"/></li>
+                  <li><input type="button" class="btn-mini show_sessions" value="Sessions"/></li>
+                  <li><input type="button" class="btn-mini show_permissions" value="Teams"/></li>
+                  <li><input type="button" class="btn-mini show_corpora" value="Corpora"/></li>
                 </ul>
               </li>
               <li> Data
-                <ul>
-                  <li><input type="button" class="import" value="Import"/> </li>
-                  <li><input type="button" class="export" value="Export"/> </li>
+                <ul class = "dropdown">
+                  <li><input type="button" class="btn-mini import" value="Import"/> </li>
+                  <li><input type="button" class="btn-mini export" value="Export"/> </li>
                 </ul>
               </li>
-            </ul>   
- 
-     </nav> -->
+             </li>
+             </ul> 
+       </ul>  
+      
+   
+   
+   
+   </div>   
+       Corpus:<br/> {{name}}
+   
+   <div id="session"></div>
+      <div id="status" style="color: #ffcc00"></div>
      
-     
-     <div>     
- <div>
-   Corpus:<br/> {{name}}
   </div>         
  
  
- <div id="session"></div>
- <div id="status" style="color: #ffcc00"></div>
  
 </div>
      
