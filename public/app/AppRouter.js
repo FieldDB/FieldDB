@@ -93,7 +93,7 @@ define([
       appView.fullScreenDatumView.model.fetch({
         success : function() {
           // Update the display with the Datum with the given datumId
-          $("#fullscreen-datum-view").append(appView.fullScreenDatumView.render().el);
+          appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
           $("#dashboard-view").hide();
