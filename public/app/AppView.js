@@ -107,7 +107,7 @@ define([
     /**
      * The corpusView is a child of the AppView.
      */
-    corpusView : null,
+    corpusView : CorpusView,
     
     /**
      * The fullScreenDatumView is a child of the AppView.
@@ -133,6 +133,13 @@ define([
      * The authView is a child of the AppView.
      */  
     authView : AuthenticationView,
+    
+    /**
+     * Events that the AppView is listening to and their handlers.
+     */
+    events : {
+      "click .icon-refresh" : "replicateDatabases"
+    },
     
     /**
      * The Handlebars template rendered as the AppView.
@@ -179,7 +186,25 @@ define([
      */
     loadSample : function() {
       this.corpusView.loadSample();
-    }
+    },
+    
+    /**
+     * Synchronize the server and local databases.
+     */
+    replicateDatabases : function() {
+      Backbone.sync.pouch(Utils.pouchUrl)(function(err, db) {
+        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate to");
+          Utils.debug(resp);
+          Utils.debug(err);
+        });
+        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate from");
+          Utils.debug(resp);
+          Utils.debug(err);
+        });
+      });
+    },
   });
 
   return AppView;

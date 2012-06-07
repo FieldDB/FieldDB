@@ -82,7 +82,6 @@ define([
 //              "click .show_corpora" : "showCorpora",
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
-      // "click .sync" : "replicateDatabase"
     },
 
     /**
@@ -138,24 +137,6 @@ define([
       
       // Same Search data
       // this.searchView.loadSample();
-    },
-
-    /**
-     * Replicates the PouchDB associated with app.datumList to the IrisCouch CouchDB.
-     */
-    replicateDatabase : function() {
-      app.datumList.pouch(function(err, db) {
-        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-      });
     }
   });
 
