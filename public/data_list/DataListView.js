@@ -53,7 +53,8 @@ define( [
      * Events that the DataListView is listening to and their handlers.
      */
     events : {
-      'click a.servernext': 'nextResultPage'
+      'click a.servernext': 'nextResultPage',
+      'click .serverhowmany a': 'changeCount'
     },
     
     /**
@@ -143,8 +144,8 @@ define( [
      * @return {Object} JSON to be sent to the footerTemplate.
      */
     getPaginationInfo : function() {
-      var currentPage = (this.datumLatexViews.length > 0) ? Math.ceil(this.datumLatexViews.length / this.perPage) : 100;
-      var totalPages = (this.datumLatexViews.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 100;
+      var currentPage = (this.datumLatexViews.length > 0) ? Math.ceil(this.datumLatexViews.length / this.perPage) : 1;
+      var totalPages = (this.datumLatexViews.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 1;
       
       return {
         currentPage : currentPage,
@@ -183,7 +184,19 @@ define( [
         error : function() {
           Utils.debug("Error fetching datum: " + datumId);
         }
-      });
+      })
+    },
+    
+    /**
+     * Change the number of items per page.
+     * 
+     * @param {Object} e The event that triggered this method.
+     */
+    changeCount : function(e) {
+      e.preventDefault();
+      
+      // Change the number of items per page
+      this.perPage = parseInt($(e.target).text());
     },
 
     /**
