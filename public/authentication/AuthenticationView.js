@@ -29,10 +29,11 @@ define([
       Utils.debug("AUTH init: " + this.el);
       
       // Create a UserView
-      // TODO Move below this.render() after the user view is no longer a partial.
       this.userView = new UserView({
         model: new User()
       });
+      
+      // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
       
       this.authenticatePreviousUser();      
@@ -124,6 +125,9 @@ define([
         username : this.userView.model.get("username"),
         state : "loggedIn"
       });
+      
+      // TODO @cesine Do you think that the Sapir user and username should be put into
+      // localStorage?
     },
     
     /**
@@ -147,6 +151,8 @@ define([
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
         this.loadSample();
+        
+        
         return;
       }
       
@@ -166,14 +172,15 @@ define([
         
         // Save the authenticated user in our Models
         self.userView.model = u;
-        self.model.set("user", u);
-        self.model.set("username", u.get("username"));
+        self.model.set({
+          user : u,
+          username : u.get("username"),
+          state : "loggedIn"
+        });
 
         // Save the authenticated user in localStorage
         localStorage.setItem("username", u.get("username"));
         localStorage.setItem("user", JSON.stringify(u.toJSON()));
-        
-        self.model.set("state", "loggedIn");
       });
     },
     
@@ -188,14 +195,15 @@ define([
       u = this.userView.model;
       
       // Save the public user in our Models
-      this.model.set("user", u);
-      this.model.set("username", u.get("username"));
+      this.model.set({
+        user : u,
+        username : u.get("username"),
+        state : "logggedOut"
+      });
       
       // Save the public user in localStorage
       localStorage.setItem("username", u.get("username"));
       localStorage.setItem("user", JSON.stringify(u.toJSON()));
-      
-      this.model.set("state", "loggedOut");
     },
     
     /**
@@ -214,8 +222,10 @@ define([
         
         // Save the previous user in our Models
         this.userView.model = u;
-        this.model.set("user", u);
-        this.model.set("username", u.username);
+        this.model.set({
+          user : u,
+          username : u.username
+        });
         
         if (this.model.staleAuthentication) {
           showQuickAuthenticateView();
