@@ -34,9 +34,6 @@ define( [
      */
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
-      
-      // Update the display every time the model is changed
-      this.model.bind('change', this.renderNewModel);
     },
 
     /**
@@ -153,17 +150,25 @@ define( [
      */
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
-      var d = new Datum({id: datumId});
-      d.fetch();
-      
-      // Render a DatumLatexView for that Datum at the end of the DataListView
-      var view = new DatumLatexView({
-        model :  d
+      var d = new Datum();
+      d.id = datumId;
+      var self = this;
+      d.fetch({
+        success : function() {
+          // Render a DatumLatexView for that Datum at the end of the DataListView
+          var view = new DatumLatexView({
+            model :  d
+          });
+          $('#data_list_content').append(view.render().el);
+          
+          // Keep track of the DatumLatexView
+          self.datumLatexViews.push(view);
+        },
+        
+        error : function() {
+          Utils.debug("Error fetching datum: " + datumId);
+        }
       });
-      $('#data_list_content').append(view.render().el);
-      
-      // Keep track of the DatumLatexView
-      this.datumLatexViews.push(view);
     },
 
     /**
