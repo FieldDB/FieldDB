@@ -9,8 +9,6 @@ define([
     "data_list/DataListView",
     "search/Search",
     "search/SearchView",
-    "session/Session",
-    "session/SessionView",
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "app/App", 
@@ -28,8 +26,6 @@ define([
     DataListView,
     Search,
     SearchView,
-    Session,
-    SessionView,
     Authentication,
     AuthenticationView,
     App, 
@@ -87,11 +83,6 @@ define([
       this.searchView = new SearchView({
         model : new Search()
       });
-      
-      // Create a SessionView
-      this.sessionView = new SessionView({
-        model : new Session()
-      });
                
       // Create an AuthenticationView, if necessary
       this.authView = new AuthenticationView({
@@ -123,11 +114,6 @@ define([
      * The searchView is a child of the AppView.
      */
     searchView : SearchView,
-
-    /**
-     * The sessionView is a child of the AppView.
-     */
-    sessionView : SessionView,
   
     /**
      * The authView is a child of the AppView.
@@ -167,9 +153,6 @@ define([
                 
         // Display the SearchView
         this.searchView.render();
-        
-        // Display the SessionView
-        this.sessionView.render();
         
         // Display the AuthView
         this.authView.render();

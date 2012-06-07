@@ -50,12 +50,14 @@ define([
     
     /**
      * Initialize the sample Session.
+     * 
+     * @param {Corpus} corpus The corpus associated with this Session.
      */
-    loadSample : function() {
+    loadSample : function(corpus) {
       this.model.set({
         user : "sapir",
         informant : "Tillohash",
-        // corpus : this.model,
+        corpus : corpus,
         language : "Cusco Quechua",
         goal : "Working on naya"
       });
