@@ -70,7 +70,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
     },
 
@@ -100,7 +100,7 @@ define([
           $("#fullscreen-datum-view").show();
           $("#fullscreen-datalist-view").hide();
           $("#fullscreen-search-view").hide();
-          $("#user-profile-view").hide();
+          $("#fullscreen-user-profile-view").hide();
           $("#new-session-view").hide();
           $("#user-preferences-view").hide(); 
         },
@@ -128,7 +128,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").show();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
     },
@@ -147,7 +147,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").show();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
     },
@@ -166,7 +166,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#session").hide();
       $("#user-preferences-view").hide();
     },
@@ -179,12 +179,23 @@ define([
      */
     showUserProfile : function(userName) {
       Utils.debug("In showUserProfile: " + userName);
+      
+      // TODO Remove. Just here for testing purposes
+      // Change the id of the fullscreen datum view's Datum to be the given datumId
+      appView.fullScreenUserView.model.set({
+        firstname : "Theresa",
+        lastname : "Deering",
+        teams : [],
+        sessionHistory : [],
+        activityHistory : [],
+        permissions : null
+      });
 
       $("#dashboard-view").hide();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").show();
+      $("#fullscreen-user-profile-view").show();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
     },
@@ -204,7 +215,7 @@ define([
       $("#fullscreen-search-view").hide();
       $("#user-preferences-view").show();
       $("#new-session-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
     }
   });
 
