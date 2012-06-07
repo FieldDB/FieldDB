@@ -16,7 +16,7 @@ body {
 }
 
 .llama {
-	background-image: url('../images/skins/salcantay.jpg');
+	background-image: url('../images/skins/bamboo_garden.jpg');
 }
 
 nav {
@@ -230,12 +230,17 @@ ul {
 }
 
 .authentication .user img {
-	height: 40px;
-	width: 40px;
+	height: 25px;
+	width: 25px;
 }
 
+.log{
+	margin: 10px;
+	background: black;
+}
 .authentication .user .username {
 	display: none;
+	height: 25px
 }
 
 .activity_feed_title {
