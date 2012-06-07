@@ -12,12 +12,16 @@ define([
     /**
      * @class The Authentication Model handles login and logout and
      *        authentication locally or remotely. *
+     * 
      * @property {User} user The user is a User object (User, Bot or Informant)
      *           which is logged in and viewing the app with that user's
      *           perspective. To check whether some data is
      *           public/viewable/editable the app.user should be used to verify
      *           the permissions. If no user is logged in a special user
      *           "public" is logged in and used to calculate permissions.
+     * @property {Boolean} staleAuthentication TODO Describe staleAuthentication.
+     * @property {String} state The current state of the Authentication is either
+     *           "loggedIn" or "loggedOut".
      * 
      * @extends Backbone.Model
      * @constructs
@@ -35,7 +39,8 @@ define([
 
     defaults : {
       user : User,
-      username : localStorage.getItem("username")
+      username : localStorage.getItem("username"),
+      state : "loggedOut"
     },
 
     staleAuthentication: false,

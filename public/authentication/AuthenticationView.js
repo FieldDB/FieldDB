@@ -29,19 +29,14 @@ define([
       Utils.debug("AUTH init: " + this.el);
       
       // Create a UserView
-      // TODO Move below this.render() after the user view is no longer a partial.
       this.userView = new UserView({
         model: new User()
       });
       
-      this.authenticatePreviousUser();
-      
-      // this.on('all', function(e) {
-        // this.render();
-      // });
-      
-      // Re-render every time the Authentication changes
+      // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
+      
+      this.authenticatePreviousUser();      
     },
 
     /**
@@ -79,30 +74,20 @@ define([
         Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
+        if (this.model.get("state") == "loggedIn") {
+          $("#logout").show();
+          $("#login").hide();
+        } else if (this.model.get("state") == "loggedOut") {
+          $("#logout").hide();
+          $("#login").show();
+        }
+        
         Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
         Utils.debug("\tAuthentication model was undefined.");
       }
       
       return this;
-    },
-      
-    /**
-     * Updates the display to show the login.
-     */
-    renderLogin : function() {
-      this.render();
-      $("#logout").hide();
-      $("#login").show();
-    },
-    
-    /**
-     * Updates the display to show the logout.
-     */
-    renderLogout : function() {
-      this.render();
-      $("#logout").show();
-      $("#login").hide();
     },
     
     /**
@@ -133,13 +118,16 @@ define([
      * functions.
      */
     loadSample : function() {      
-      // Save the sample user in our Models
       this.userView.loadSample();
-      this.model.set("user", this.userView.model);
-      this.model.set("username", this.userView.model.get("username"));
       
-      // Update the display
-      this.renderLogout();
+      this.model.set({
+        user : this.userView.model,
+        username : this.userView.model.get("username"),
+        state : "loggedIn"
+      });
+      
+      // TODO @cesine Do you think that the Sapir user and username should be put into
+      // localStorage?
     },
     
     /**
@@ -161,15 +149,18 @@ define([
       }
       
       // Currently signed in as Sapir - no authentication needed
-      if (username == "sapir"){
+      if (username == "sapir") {
         this.loadSample();
+        
+        
         return;
       }
       
       // Temporarily keep the given's credentials
-      var tempuser = new User();
-      tempuser.set("username", username);
-      tempuser.set("password", password);
+      var tempuser = new User({
+        username : username,
+        password : password
+      });
 
       var self = this;
       this.model.authenticate(tempuser, function(u) {
@@ -181,15 +172,15 @@ define([
         
         // Save the authenticated user in our Models
         self.userView.model = u;
-        self.model.set("user", u);
-        self.model.set("username", u.get("username"));
+        self.model.set({
+          user : u,
+          username : u.get("username"),
+          state : "loggedIn"
+        });
 
         // Save the authenticated user in localStorage
         localStorage.setItem("username", u.get("username"));
         localStorage.setItem("user", JSON.stringify(u.toJSON()));
-        
-        // Update the display
-        self.renderLogout();
       });
     },
     
@@ -204,15 +195,15 @@ define([
       u = this.userView.model;
       
       // Save the public user in our Models
-      this.model.set("user", u);
-      this.model.set("username", u.get("username"));
+      this.model.set({
+        user : u,
+        username : u.get("username"),
+        state : "logggedOut"
+      });
       
       // Save the public user in localStorage
       localStorage.setItem("username", u.get("username"));
       localStorage.setItem("user", JSON.stringify(u.toJSON()));
-      
-      // Update the display
-      this.renderLogin();
     },
     
     /**
@@ -231,15 +222,16 @@ define([
         
         // Save the previous user in our Models
         this.userView.model = u;
-        this.model.set("user", u);
-        this.model.set("username", u.username);
+        this.model.set({
+          user : u,
+          username : u.username
+        });
         
         if (this.model.staleAuthentication) {
           showQuickAuthenticateView();
         }
         
-        // Update the display
-       this.renderLogout();
+        this.model.set("state", "loggedIn");
       } else {
         Utils.debug("No previous user.");
         this.authenticateAsPublic();
