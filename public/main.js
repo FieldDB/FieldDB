@@ -59,14 +59,15 @@ require([
     Utils.debug("Loading fresh app");
     a = new App();
   }
-  window.appView = new AppView({model: a}); 
   window.app = a;
   
+  // Create and display the AppView
+  window.appView = new AppView({model: a}); 
   window.appView.render();
   
+  // Start the Router
   app.router = new AppRouter();
   Backbone.history.start();
-      
   
   // Load the sample App
   // window.appView.loadSample();
