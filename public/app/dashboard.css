@@ -6,8 +6,8 @@ body {
 	color: white;
 }
 
-.grav{
-  height: 1em;
+#caret{
+	float: right;
 }
 
 #top{
@@ -16,7 +16,7 @@ body {
 }
 
 .llama {
-	background-image: url('../images/skins/salcantay.jpg');
+	background-image: url('../images/skins/bamboo_garden.jpg');
 }
 
 nav {
@@ -102,37 +102,88 @@ ul {
 	background-color: black;
 }
 
-#navigation ul {
-	margin: 0px;
-	padding: 0px;
+
+
+
+#dropdown{
+  margin: 0;
+  padding: 0;
+  height: 1em; }
 }
 
-#navigation ul li {
-	display: inline;
-	height: 30px;
-	float: left;
-	list-style: none;
-	margin-left: 15px;
-	position: relative;
+#dropdown ul {
+  margin: 0px;
+  padding: 0px;
 }
 
-#navigation li ul {
-	margin: 0px;
-	padding: 0px;
-	display: none;
-	position: absolute;
+#dropdown ul li {
+  display: inline;
+  height: 30px;
+  float: left;
+  list-style: none;
+  margin-left: 15px;
+  position: relative;
 }
 
-#navigation li:hover ul {
-	display: block;
-	width: 160px;
+#dropdown li ul {
+  margin: 0px;
+  padding: 0px;
+  display: none;
+  position: absolute;
 }
 
-#navigation li li {
-	list-style: none;
-	display: list-item;
-	width: 100%;
+#dropdown li:hover ul {
+  display: block;
+  width: 160px;
 }
+
+#dropdown li li {
+  list-style: none;
+  display: list-item;
+  width: 100%;
+}
+
+
+#dropdown ul li ul {
+  margin-top:-3em;
+  margin-left:2em;
+}
+
+#dropdown li:hover ul, #menu li.over ul {
+  display:block;
+}
+#dropdown li:hover ul ul, #menu li.over ul ul {
+  display:none;
+}
+/* SHOW SUBMENU 2 */
+#dropdown ul li:hover ul, #menu ul li.over ul {
+  display:block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .main {
 	width: 100%;
@@ -230,12 +281,17 @@ ul {
 }
 
 .authentication .user img {
-	height: 40px;
-	width: 40px;
+	height: 25px;
+	width: 25px;
 }
 
+.log{
+	margin: 10px;
+	background: black;
+}
 .authentication .user .username {
 	display: none;
+	height: 25px
 }
 
 .activity_feed_title {
