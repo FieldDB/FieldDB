@@ -1,5 +1,4 @@
-define("lexicon/Lexicon", 
-		["use!backbone",
+define(["use!backbone",
 		 "text!sample_data/orthography.txt",
 		 "text!sample_data/morphemes.txt",
 		 "text!sample_data/gloss.txt",
