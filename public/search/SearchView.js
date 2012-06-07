@@ -75,8 +75,9 @@ define([
      * Initialize the sample Search.
      */
     loadSample : function() {
-      this.model.set("searchKeywords","naya");
-      Utils.debug("Changing search keyword: "+ this.model.get("searchKeywords"));
+      this.model.set({
+        searchKeywords : "naya"
+      });
     }
   });
 

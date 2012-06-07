@@ -21,6 +21,8 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
+      
+      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -44,7 +46,20 @@ define([
       $(this.el).html(this.template(this.model.toJSON()));
       
       return this;
-    }    
+    },
+    
+    /**
+     * Initialize the sample Session.
+     */
+    loadSample : function() {
+      this.model.set({
+        user : "sapir",
+        informant : "Tillohash",
+        // corpus : this.model,
+        language : "Cusco Quechua",
+        goal : "Working on naya"
+      });
+    }
   });
   
   return SessionView;
