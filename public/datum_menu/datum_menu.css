@@ -7,10 +7,15 @@
   float: right;
 }
 
-#button{
-  
-}
+
 
 .menuB{
   background-color: transparent;
+  height: 30px;
+  width: 30px;
+}
+
+#LaTeX{
+	background-color: transparent;
+	height: 30px;
 }
