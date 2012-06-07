@@ -34,6 +34,8 @@ define( [
      */
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
+      
+      this.model.bind("change:title change:dateCreated change:description", this.renderUpdatedDataList, this);
     },
 
     /**
@@ -87,6 +89,15 @@ define( [
       }
       
       return this;
+    },
+    
+    /**
+     * Re-renders the datalist header based on the current model.
+     */
+    renderUpdatedDataList : function() {
+      $(".title").text(this.model.get("title"));
+      $(".dateCreated").text(this.model.get("dateCreated"));
+      $(".description").text(this.model.get("description"));
     },
     
     /**
