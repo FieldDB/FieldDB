@@ -84,10 +84,15 @@ define([
         model : new Search()
       });
                
-      // Create an AuthenticationView, if necessary
+      // Create an AuthenticationView
       this.authView = new AuthenticationView({
         model : new Authentication()
       });
+      
+      // Create a full screen DatumView
+      this.fullScreenDatumView = new DatumView({
+        model : new Datum()
+      })
     },
     
     /**
@@ -179,7 +184,7 @@ define([
      * Synchronize the server and local databases.
      */
     replicateDatabases : function() {
-      Backbone.sync.pouch(Utils.pouchUrl)(function(err, db) {
+      this.fullScreenDatumView.model.pouch(function(err, db) {
         db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
           Utils.debug("Replicate to");
           Utils.debug(resp);

@@ -35,8 +35,7 @@ define( [
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
       
-      // Update the display every time the model is changed
-      this.model.bind('change', this.renderNewModel);
+      this.model.bind("change:title change:dateCreated change:description", this.renderUpdatedDataList, this);
     },
 
     /**
@@ -54,7 +53,8 @@ define( [
      * Events that the DataListView is listening to and their handlers.
      */
     events : {
-      'click a.servernext': 'nextResultPage'
+      'click a.servernext': 'nextResultPage',
+      'click .serverhowmany a': 'changeCount'
     },
     
     /**
@@ -80,7 +80,10 @@ define( [
         this.setElement($("#data_list"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // TODO Display the pagination footer and the first page of DatumLatexViews.
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        
+        // TODO Display the first page of DatumLatexViews.
         // this.renderNewModel();
       } else {
         Utils.debug("\tDataList model is not defined");
@@ -90,8 +93,17 @@ define( [
     },
     
     /**
-     * Re-renders the pagination footer based on the current pagination data.
+     * Re-renders the datalist header based on the current model.
+     */
+    renderUpdatedDataList : function() {
+      $(".title").text(this.model.get("title"));
+      $(".dateCreated").text(this.model.get("dateCreated"));
+      $(".description").text(this.model.get("description"));
+    },
+    
+    /**
      * Re-renders the datums based on the current model.
+     * Re-renders the pagination footer based on the current pagination data.
      * 
      * This should be called whenever the model is replaced (i.e. when you open
      * a new DataList or perform a new Search).
@@ -103,16 +115,13 @@ define( [
         datumLatexView.remove();
       }
       
-      // Display the first page of Datum
+      // Display the first page of Datum and the pagination footer
       for (i = 0; i < this.perPage; i++) {
         var datumId = this.model.get("datumIds")[i];
         if (datumId) {
           this.addOne(datumId);
         }
       }
-      
-      // Display the updated pagination footer
-      this.renderUpdatedPagination();
     },
     
     /**
@@ -135,35 +144,59 @@ define( [
      * @return {Object} JSON to be sent to the footerTemplate.
      */
     getPaginationInfo : function() {
-      var currentPage = Math.ceil(this.datumLatexViews.length / this.perPage);
-      var totalPages = Math.ceil(this.model.get("datumIds").length / this.perPage);
-      var footerjson  = {};
-      footerjson.currentPage = currentPage,
-      footerjson.totalPages = totalPages,
-      footerjson.perPage = this.perPage,
-      footerjson.morePages = currentPage < totalPages;
+      var currentPage = (this.datumLatexViews.length > 0) ? Math.ceil(this.datumLatexViews.length / this.perPage) : 1;
+      var totalPages = (this.datumLatexViews.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 1;
       
-      return footerjson;
+      return {
+        currentPage : currentPage,
+        totalPages : totalPages,
+        perPage : this.perPage,
+        morePages : currentPage < totalPages
+      };
     },
     
     /**
-     * Displays a new DatumLatexView for the Datum with the given datumId.
+     * Displays a new DatumLatexView for the Datum with the given datumId
+     * and updates the pagination footer.
      * 
      * @param {String} datumId The datumId of the Datum to display.
      */
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
-      var d = new Datum({id: datumId});
-      d.fetch();
+      var d = new Datum();
+      d.id = datumId;
+      var self = this;
+      d.fetch({
+        success : function() {
+          // Render a DatumLatexView for that Datum at the end of the DataListView
+          var view = new DatumLatexView({
+            model :  d
+          });
+          $('#data_list_content').append(view.render().el);
+          
+          // Keep track of the DatumLatexView
+          self.datumLatexViews.push(view);
+          
+          // Display the updated DatumLatexView
+          self.renderUpdatedPagination();
+        },
+        
+        error : function() {
+          Utils.debug("Error fetching datum: " + datumId);
+        }
+      })
+    },
+    
+    /**
+     * Change the number of items per page.
+     * 
+     * @param {Object} e The event that triggered this method.
+     */
+    changeCount : function(e) {
+      e.preventDefault();
       
-      // Render a DatumLatexView for that Datum at the end of the DataListView
-      var view = new DatumLatexView({
-        model :  d
-      });
-      $('#data_list_content').append(view.render().el);
-      
-      // Keep track of the DatumLatexView
-      this.datumLatexViews.push(view);
+      // Change the number of items per page
+      this.perPage = parseInt($(e.target).text());
     },
 
     /**
@@ -186,9 +219,6 @@ define( [
           this.addOne(datumId);
         }
       }
-      
-      // Update the pagination footer
-      this.renderUpdatedPagination();
     }
   });
 
