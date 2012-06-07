@@ -33,8 +33,9 @@ define([
       this.userView = new UserView({
         model: new User()
       });
+      this.model.bind('change', this.render, this);
       
-      this.authenticatePreviousUser();
+      this.authenticatePreviousUser();      
     },
 
     /**
@@ -72,30 +73,20 @@ define([
         Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
+        if (this.model.get("state") == "loggedIn") {
+          $("#logout").show();
+          $("#login").hide();
+        } else if (this.model.get("state") == "loggedOut") {
+          $("#logout").hide();
+          $("#login").show();
+        }
+        
         Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
         Utils.debug("\tAuthentication model was undefined.");
       }
       
       return this;
-    },
-      
-    /**
-     * Updates the display to show the login.
-     */
-    renderLogin : function() {
-      this.render();
-      $("#logout").hide();
-      $("#login").show();
-    },
-    
-    /**
-     * Updates the display to show the logout.
-     */
-    renderLogout : function() {
-      this.render();
-      $("#logout").show();
-      $("#login").hide();
     },
     
     /**
@@ -126,15 +117,13 @@ define([
      * functions.
      */
     loadSample : function() {      
-      // Save the sample user in our Models
       this.userView.loadSample();
+      
       this.model.set({
         user : this.userView.model,
-        username : this.userView.model.get("username")
+        username : this.userView.model.get("username"),
+        state : "loggedIn"
       });
-      
-      // Update the display
-      this.renderLogout();
     },
     
     /**
@@ -156,15 +145,16 @@ define([
       }
       
       // Currently signed in as Sapir - no authentication needed
-      if (username == "sapir"){
+      if (username == "sapir") {
         this.loadSample();
         return;
       }
       
       // Temporarily keep the given's credentials
-      var tempuser = new User();
-      tempuser.set("username", username);
-      tempuser.set("password", password);
+      var tempuser = new User({
+        username : username,
+        password : password
+      });
 
       var self = this;
       this.model.authenticate(tempuser, function(u) {
@@ -183,8 +173,7 @@ define([
         localStorage.setItem("username", u.get("username"));
         localStorage.setItem("user", JSON.stringify(u.toJSON()));
         
-        // Update the display
-        self.renderLogout();
+        self.model.set("state", "loggedIn");
       });
     },
     
@@ -206,8 +195,7 @@ define([
       localStorage.setItem("username", u.get("username"));
       localStorage.setItem("user", JSON.stringify(u.toJSON()));
       
-      // Update the display
-      this.renderLogin();
+      this.model.set("state", "loggedOut");
     },
     
     /**
@@ -233,8 +221,7 @@ define([
           showQuickAuthenticateView();
         }
         
-        // Update the display
-       this.renderLogout();
+        this.model.set("state", "loggedIn");
       } else {
         Utils.debug("No previous user.");
         this.authenticateAsPublic();
