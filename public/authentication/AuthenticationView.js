@@ -35,13 +35,6 @@ define([
       });
       
       this.authenticatePreviousUser();
-      
-      // this.on('all', function(e) {
-        // this.render();
-      // });
-      
-      // Re-render every time the Authentication changes
-      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -135,8 +128,10 @@ define([
     loadSample : function() {      
       // Save the sample user in our Models
       this.userView.loadSample();
-      this.model.set("user", this.userView.model);
-      this.model.set("username", this.userView.model.get("username"));
+      this.model.set({
+        user : this.userView.model,
+        username : this.userView.model.get("username")
+      });
       
       // Update the display
       this.renderLogout();

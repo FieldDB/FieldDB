@@ -186,6 +186,10 @@ define([
      */
     loadSample : function() {
       this.corpusView.loadSample();
+      
+      this.authView.loadSample();
+      
+      this.searchView.loadSample();
     },
     
     /**

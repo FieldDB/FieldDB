@@ -50,6 +50,8 @@ define([
       this.preferenceView = new PreferenceView({
         model : new Preference()
       })
+      
+      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -109,34 +111,15 @@ define([
     },
     
     /**
-     * 
+     * Initialize the sample Corpus.
      */
-    // TODO Describe the loadSample function.
     loadSample : function() {
       // Sample Corpus data
-      this.model.set("name", "Sample Quechua Corpus");
-      this.model
-          .set(
-              "description",
-              "This is a corpus which will let you explore the app and see how it works. "
-                  + "\nIt contains some data from one of our trips to Cusco, Peru.");
-      
-      // Sample Session data
-      this.sessionView = new SessionView({
-        model : new Session({
-          user : "sapir",
-          informant : "Tillohash",
-          corpus : this.model,
-          language : "Cusco Quechua",
-          goal : "Working on naya"
-        })
+      this.model.set({
+        "name" : "Sample Quechua Corpus",
+        "description" : "This is a corpus which will let you explore the app and see how it works. "
+            + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
-      
-      // Sample Authentication data
-      this.authView.loadSample();
-      
-      // Same Search data
-      // this.searchView.loadSample();
     }
   });
 
