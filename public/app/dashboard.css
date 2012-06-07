@@ -6,24 +6,22 @@ body {
 	color: white;
 }
 
-
-#corpus{
-	width: 100;
-	height: 100;
+.grav{
+  height: 5px;
 }
+
 #top{
 	float: right;
-	 padding: 0em 3em 1em 0em;
 	
 }
 
 .llama {
-	background-image: url('../images/skins/bamboo_garden.jpg');
+	background-image: url('../images/skins/salcantay.jpg');
 }
 
 nav {
 	font-size: 1.5em;
-	padding: 0em 1em 1em 0em;
+	padding: 1em;
 	float: left;
 }
 
@@ -146,21 +144,28 @@ ul {
 }
 
 
+.left{
+  width: 270px;
+  float: left;
+  height: 100%;
+}
+
 #corpus{
-  width: 250px;
   height:100px;
   float: left; 
   position: relative;
 }
-.left{
-	width: 250px;
-	float: left;
-	height: 100%;
-}
+
 .leftside {
-	width: 250px;
 	position: relative;
 	float: left;
+}
+
+.right{
+  width: 1000px;
+  float: right;
+  height: 100%;
+  
 }
 
 .rightside {
@@ -170,26 +175,11 @@ ul {
 }
 
 .centercontent {
-  width: 700px;
+  width: 715px;
   height: 100%;
   float: left;
 }
 
-
-/*
-.centercontent {
-	width: 700px;
-	height: 100%;
-	margin: 0px auto;
-}
-*/
-
-.right{
-	width: 1000px;
-	float: right;
-	height: 100%;
-	
-}
 
 .activity_verb {
 	font-weight: bold;
@@ -256,13 +246,7 @@ ul {
 }
 
 button,.button,input[type="button"] {
-	color: #fff;
-	background-color: #f8b635;
-	border: 1px solid #fcd857;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-box-shadow: 0 0 6px #f8b635;
-	-webkit-box-shadow: 0 0 6px #f8b635;
+	
 }
 
 .inactive_activity {
