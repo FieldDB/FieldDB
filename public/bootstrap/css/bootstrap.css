@@ -3776,14 +3776,15 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav {
   position: relative;
   left: 0;
+  right: 10;
   display: block;
   float: left;
-  margin: 0 10px 0 0;
+  margin: 0 10px 0 10px;
 }
 
 .navbar .nav.pull-right {
-  float: right;
-}
+  left: 0;
+	}
 
 .navbar .nav > li {
   display: block;

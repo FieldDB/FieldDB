@@ -7,6 +7,8 @@ define([
     "data_list/DataListView",
     "preference/Preference",
     "preference/PreferenceView",
+    "session/Session",
+    "session/SessionView",
     "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
@@ -19,6 +21,8 @@ define([
     DataListView,
     Preference,
     PreferenceView,
+    Session,
+    SessionView,
     LexiconView,
     GlosserView
 ) {
@@ -49,7 +53,12 @@ define([
       // Create a PreferenceView
       this.preferenceView = new PreferenceView({
         model : new Preference()
-      })
+      });
+      
+      // Create a SessionView
+      this.sessionView = new SessionView({
+        model : new Session()
+      });
       
       this.model.bind('change', this.render, this);
     },
@@ -63,6 +72,11 @@ define([
      * The preferenceView is a child of the CorpusView.
      */
     preferenceView : PreferenceView,
+
+    /**
+     * The sessionView is a child of the CorpusView.
+     */
+    sessionView : SessionView,
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -103,6 +117,9 @@ define([
         
         // Display the PreferenceView
         this.preferenceView.render();
+        
+        // Display the SessionView
+        this.sessionView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
@@ -120,6 +137,8 @@ define([
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
+      
+      this.sessionView.loadSample(this.model);
     }
   });
 
