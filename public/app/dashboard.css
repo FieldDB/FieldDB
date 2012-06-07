@@ -7,7 +7,7 @@ body {
 }
 
 .grav{
-  height: 5px;
+  height: 1em;
 }
 
 #top{
@@ -93,11 +93,11 @@ ul {
 }
 
 .navigationcontainer {
-	width: 1260px;
-}
+  width: 1260px;
+	}
 
 #navigation {
-	width: 100%;
+	width: 1240px;
 	height: 2em;
 	background-color: black;
 }
