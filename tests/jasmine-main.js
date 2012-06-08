@@ -12,7 +12,7 @@ require.config({
       "handlebars" : "libs/handlebars-1.0.0.beta.6",
       "paginator" : "libs/backbone.paginator",
       "crypto" : "libs/Crypto_AES",
-      "jquery.couch" : "libs/jquery.couch"
+     // "jquery.couch" : "libs/jquery.couch"
   },
   use : {
       "underscore" : {
@@ -20,7 +20,7 @@ require.config({
       },
 
       "backbone" : {
-          deps : ["use!underscore", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+          deps : ["use!underscore", "jquery", "libs/backbone-couchdb"],
           attach : function(_, $) {
               return Backbone;
           }
@@ -34,7 +34,7 @@ require.config({
         attach: "CryptoJS"
       },
       "paginator":{
-        deps : ["use!underscore", "use!backbone", "jquery", "jquery.couch", "libs/backbone-couchdb"],
+        deps : ["use!underscore", "use!backbone", "jquery", "libs/backbone-couchdb"],
         attach: "paginator"
       }
   }
@@ -45,16 +45,16 @@ require([
 
 
    "../tests/confidentiality_encryption/ConfidentialTest",
-//   "../tests/user_generic/UserGenericTest",
-//   "../tests/user/UserTest",
+//   "../tests/user/UserGenericTest",
+   "../tests/user/UserTest",
    "../tests/permission/PermissionTest",
-    "../tests/datum/DatumsTest",
-//   "../tests/data_list/DataListTest",
+//    "../tests/datum/DatumsTest",
+   "../tests/data_list/DataListTest",
 //    "../tests/datum/DatumTest",
-//    "../tests/informant/InformantTest",
+    "../tests/user/InformantTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/lexicon/LexiconTest",
-    "../tests/dashboard/DashboardTest",
+//    "../tests/dashboard/DashboardTest",
 //    "../tests/SinonTest",
     "../tests/activity/ActivityTest",
 ], function() {

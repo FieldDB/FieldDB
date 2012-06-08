@@ -16,7 +16,7 @@ body {
 }
 
 .llama {
-	background-image: url('../images/skins/bamboo_garden.jpg');
+	background-image: url('../images/skins/salcantay.jpg');
 }
 
 nav {
@@ -265,7 +265,7 @@ ul {
 	float: right;
 }
 
-#icons{
+.icons{
 	float: left;
 }
 
