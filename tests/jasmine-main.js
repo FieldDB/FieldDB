@@ -45,7 +45,7 @@ require([
 
 
    "../tests/confidentiality_encryption/ConfidentialTest",
-//   "../tests/user/UserGenericTest",
+   "../tests/user/UserGenericTest",
    "../tests/user/UserTest",
    "../tests/permission/PermissionTest",
 //    "../tests/datum/DatumsTest",

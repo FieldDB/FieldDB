@@ -1,8 +1,7 @@
 define("preference/Preference", [ 
     "use!backbone",
-    "user/User",
     "hotkey/HotKeyConfigView"
-], function(Backbone, User, HotKeyConfigView) {
+], function(Backbone, HotKeyConfigView) {
   var Preference = Backbone.Model.extend(
       /** @lends Preference.prototype */
       {
@@ -16,7 +15,7 @@ define("preference/Preference", [
         initialize : function() {
         },
         defaults : {
-          user : User
+        
         }
       });
 
