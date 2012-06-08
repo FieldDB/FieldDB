@@ -180,9 +180,18 @@ define([
     showUserProfile : function(userName) {
       Utils.debug("In showUserProfile: " + userName);
       
-      // TODO Remove. Just here for testing purposes
-      // Change the id of the fullscreen datum view's Datum to be the given datumId
+      // TODO Set appView.fullScreenUserview.model's properties to be for the
+      // user with the given username
       appView.fullScreenUserView.model.set({
+        username : "trisapeace",
+        password : "pword",
+        email : "trisapeace@gmail.com",
+        gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
+        researchInterest : "computers",
+        affiliation : "iLanguageLab",
+        corpora : [],
+        dataLists : [],
+        prefs : null,
         firstname : "Theresa",
         lastname : "Deering",
         teams : [],
