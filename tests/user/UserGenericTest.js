@@ -1,5 +1,5 @@
 require([
- "user_generic/UserGeneric"
+ "user/UserGeneric"
  ], function(UserGeneric) {
 	
   describe("UserGeneric", function() {

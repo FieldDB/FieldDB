@@ -1,5 +1,5 @@
 require([
-    "informant/Informant",
+    "user/Informant",
     "user/User"
 ], function(Informant,User) {
    
