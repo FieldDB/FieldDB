@@ -34,7 +34,7 @@ define([
      * Events that the PreferenceView is listening to and their handlers.
      */
     events:{
-      "click .skin": "randomSkin"
+      "click #skin": "randomSkin"
     },
  
     /**
@@ -55,7 +55,32 @@ define([
     
     // TODO Comment and implement this function
     randomSkin : function(){
-      console.log("Change me!!");
+      
+      function randomize(min, max) {
+        if (!min)
+          min = 0;
+        if (!max)
+          max = 1;
+        return Math.floor(Math.random()*(max+1)+min);
+      }
+      
+      var randombgs=["../images/skins/bamboo_garden.jpg",
+                     "../images/skins/llama_wool.jpg" , 
+                     "../images/skins/machu_picchu.jpg",
+                     "../images/skins/prague.jpg",
+                     "../images/skins/salcantay.jpg",
+                     "../images/skins/stairs.jpg",
+                     "../images/skins/stone_figurines.jpg",
+                     "../images/skins/temple.jpg",
+                     "../images/skins/weaving.jpg"
+                     ];
+      
+      document.body.style.backgroundImage = "url(" + randombgs[randomize(0, randombgs.length-1)] + ")";
+
+    //  document.getElementById("app").style.backgroundImage="url('+Math.floor(Math.random()*randombgs.length)]+')");
+     // document.getElementById("app").style.backgroundImage = "url('../images/skins/temple.jpg')";
+
+      
       return true;
     } 
   });
