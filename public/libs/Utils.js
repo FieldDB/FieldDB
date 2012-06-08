@@ -12,7 +12,7 @@ var Utils = {};
 Utils.debugMode = true;
 
 Utils.pouchUrl = "idb://datum_test";
-Utils.couchUrl = "http://localhost:5984/fullscreendatum";
+Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test";
 
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if

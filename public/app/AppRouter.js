@@ -70,7 +70,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
     },
 
@@ -100,7 +100,7 @@ define([
           $("#fullscreen-datum-view").show();
           $("#fullscreen-datalist-view").hide();
           $("#fullscreen-search-view").hide();
-          $("#user-profile-view").hide();
+          $("#fullscreen-user-profile-view").hide();
           $("#new-session-view").hide();
           $("#user-preferences-view").hide(); 
         },
@@ -128,7 +128,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").show();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
     },
@@ -147,7 +147,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").show();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
     },
@@ -166,7 +166,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
       $("#session").hide();
       $("#user-preferences-view").hide();
     },
@@ -179,12 +179,32 @@ define([
      */
     showUserProfile : function(userName) {
       Utils.debug("In showUserProfile: " + userName);
+      
+      // TODO Set appView.fullScreenUserview.model's properties to be for the
+      // user with the given username
+      appView.fullScreenUserView.model.set({
+        username : "trisapeace",
+        password : "pword",
+        email : "trisapeace@gmail.com",
+        gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
+        researchInterest : "computers",
+        affiliation : "iLanguageLab",
+        corpora : [],
+        dataLists : [],
+        prefs : null,
+        firstname : "Theresa",
+        lastname : "Deering",
+        teams : [],
+        sessionHistory : [],
+        activityHistory : [],
+        permissions : null
+      });
 
       $("#dashboard-view").hide();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
-      $("#user-profile-view").show();
+      $("#fullscreen-user-profile-view").show();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
     },
@@ -204,7 +224,7 @@ define([
       $("#fullscreen-search-view").hide();
       $("#user-preferences-view").show();
       $("#new-session-view").hide();
-      $("#user-profile-view").hide();
+      $("#fullscreen-user-profile-view").hide();
     }
   });
 
