@@ -1,7 +1,7 @@
-//require(
-//    [ ""
-//        ],
-//function() {
+require(
+    [ "corpus/Corpus","corpus/CorpusView"
+        ],
+function(Corpus,CorpusView) {
 
 	describe("GitHub Corpus", function() {
 		it("should be able to import from GitHub repository", function() {
@@ -34,5 +34,6 @@
 			
 
 		});
-	});
+
+  });
 });
