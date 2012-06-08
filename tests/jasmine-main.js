@@ -43,20 +43,34 @@ require.config({
 require([
     // Put all your tests here. Otherwise they won't run
 
-
-   "../tests/confidentiality_encryption/ConfidentialTest",
-   "../tests/user/UserGenericTest",
-   "../tests/user/UserTest",
-   "../tests/permission/PermissionTest",
-//    "../tests/datum/DatumsTest",
-   "../tests/data_list/DataListTest",
-//    "../tests/datum/DatumTest",
-    "../tests/user/InformantTest",
+//    "../tests/activity/ActivityTest",
     "../tests/authentication/AuthenticationTest",
-    "../tests/lexicon/LexiconTest",
-//    "../tests/dashboard/DashboardTest",
-//    "../tests/SinonTest",
-    "../tests/activity/ActivityTest",
+    "../tests/comment/CommentTest",
+   "../tests/confidentiality_encryption/ConfidentialTest", 
+ //  "../tests/corpus/CorpusTest",
+// "../tests/dashboard/DashboardTest",
+   "../tests/data_list/DataListTest",
+// "../tests/datum/DatumTest",
+   "../tests/export/ExportTest",
+   "../tests/glosser/GlosserTest",
+   "../tests/hotkey/HotkeyTest",
+   "../tests/import/ImportTest",
+   "../tests/insert_unicode/InsertUnicodeTest",
+   "../tests/lexicon/LexiconTest",
+   "../tests/permission/PermissionTest",
+   "../tests/search/SearchTest",
+   "../tests/session/SessionTest",
+   "../tests/user/UserGenericTest",
+
+
+
+   
+
+
+
+
+   
+
 ], function() {
     // Standard Jasmine initialization
     (function() {
