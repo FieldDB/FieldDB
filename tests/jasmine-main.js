@@ -45,11 +45,11 @@ require.config({
 require([
     // Put all your tests here. Otherwise they won't run
 
-//    "../tests/activity/ActivityTest",
+    "../tests/activity/ActivityTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
    "../tests/confidentiality_encryption/ConfidentialTest", 
- //  "../tests/corpus/CorpusTest",
+   "../tests/corpus/CorpusTest",
 // "../tests/dashboard/DashboardTest",
    "../tests/data_list/DataListTest",
  "../tests/datum/DatumTest",
