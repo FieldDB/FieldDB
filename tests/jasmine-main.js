@@ -12,6 +12,8 @@ require.config({
       "handlebars" : "libs/handlebars-1.0.0.beta.6",
       "paginator" : "libs/backbone.paginator",
       "crypto" : "libs/Crypto_AES",
+      "pouch" : "libs/pouch.alpha"
+
      // "jquery.couch" : "libs/jquery.couch"
   },
   use : {
@@ -20,7 +22,7 @@ require.config({
       },
 
       "backbone" : {
-          deps : ["use!underscore", "jquery", "libs/backbone-couchdb"],
+          deps : ["use!underscore", "jquery", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
           attach : function(_, $) {
               return Backbone;
           }
@@ -50,7 +52,7 @@ require([
  //  "../tests/corpus/CorpusTest",
 // "../tests/dashboard/DashboardTest",
    "../tests/data_list/DataListTest",
-// "../tests/datum/DatumTest",
+ "../tests/datum/DatumTest",
    "../tests/export/ExportTest",
    "../tests/glosser/GlosserTest",
    "../tests/hotkey/HotkeyTest",
@@ -62,14 +64,6 @@ require([
    "../tests/session/SessionTest",
    "../tests/user/UserGenericTest",
 
-
-
-   
-
-
-
-
-   
 
 ], function() {
     // Standard Jasmine initialization
