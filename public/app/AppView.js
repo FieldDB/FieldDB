@@ -11,6 +11,8 @@ define([
     "search/SearchView",
     "authentication/Authentication",
     "authentication/AuthenticationView",
+    "user/User",
+    "user/UserProfileView",
     "app/App", 
     "app/AppRouter",
     "text!app/app.handlebars", 
@@ -28,6 +30,8 @@ define([
     SearchView,
     Authentication,
     AuthenticationView,
+    User,
+    UserProfileView,
     App, 
     AppRouter, 
     appTemplate
@@ -60,6 +64,11 @@ define([
         model : new Datum()
       });
       
+      // Create a UserProfileView
+      this.fullScreenUserView = new UserProfileView({
+        model : new User()
+      })
+      
       // Create a DataListView   
       this.dataListView = new DataListView({
         model : new DataList({
@@ -88,11 +97,6 @@ define([
       this.authView = new AuthenticationView({
         model : new Authentication()
       });
-      
-      // Create a full screen DatumView
-      this.fullScreenDatumView = new DatumView({
-        model : new Datum()
-      })
     },
     
     /**
@@ -109,6 +113,11 @@ define([
      * The fullScreenDatumView is a child of the AppView.
      */
     fullScreenDatumView : DatumView,
+    
+    /**
+     * The fullScreenUserView is a child of the AppView.
+     */
+    fullScreenUserView : UserProfileView,
     
     /**
      * The dataListView is a child of the AppView.
@@ -152,6 +161,9 @@ define([
         
         // Display the DatumView
         this.fullScreenDatumView.render();
+        
+        // Display the UserProfileView
+        this.fullScreenUserView.render();
         
         // Display the DataListView
         this.dataListView.render();
