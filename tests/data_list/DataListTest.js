@@ -18,12 +18,12 @@
 //			});
 //	
 //			it("should show filtered results of user's corpus (search)", function(){
-//				
+//			 expect(true).toBeTruthy();	
 //			
 //			});
 //			
 //			
-//			it("should convert datum to LaTeX", function(){
+//			it("should show LaTeX'ed datum", function(){
 //				var d = new Datum();
 //				var dl = new DataList();
 //				dl.set("datum",d);
