@@ -1,26 +1,27 @@
 define([ 
     "use!backbone", 
-    "user/User", 
-    "user/UserProfileView", 
-    "datum/Datum", 
+    "corpus/Corpus", 
     "data_list/DataList", 
     "data_list/DataListView",
+    "datum/Datum", 
     "datum/DatumView", 
     "session/Session", 
     "session/SessionView",
-    "corpus/Corpus", 
+    "user/User", 
+    "user/UserProfileView", 
     "libs/Utils"
+
 ], function(
     Backbone, 
-    User,
-    UserProfileView, 
+    Corpus,
+    DataList,
+    DataListView,
     Datum,
-    DataList, 
-    DataListView, 
-    DatumView, 
+    DatumView,
     Session,
     SessionView,
-    Corpus
+    User,
+    UserProfileView
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
