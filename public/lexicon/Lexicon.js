@@ -142,7 +142,7 @@ define(["use!backbone",
 				var key = translations[w]+"|transl";
 				var value = localStorage.getItem(key);
 				if ( value == null){
-					value = {value: [], data: [w]}
+					value = {value: [], data: [w]};
 					this.get("translationsIndex").push(key);
 				}else{
 					value = JSON.parse(value);

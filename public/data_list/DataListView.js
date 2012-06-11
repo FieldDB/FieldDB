@@ -184,7 +184,7 @@ define( [
         error : function() {
           Utils.debug("Error fetching datum: " + datumId);
         }
-      })
+      });
     },
     
     /**
