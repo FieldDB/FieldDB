@@ -21,7 +21,7 @@ define("lexicon/LexiconNodes",
     model: LexiconNode,
     //https://github.com/documentcloud/backbone/pull/808
     add : function(model, options) {
-    	console.log("Overriding add")
+    	console.log("Overriding add");
         options || (options = {});
         model = this._prepareModel(model, options);
         if (!model) return false;

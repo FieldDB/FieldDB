@@ -67,7 +67,7 @@ define([
       // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
         model : new User()
-      })
+      });
       
       // Create a DataListView   
       this.dataListView = new DataListView({
