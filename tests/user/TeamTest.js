@@ -14,8 +14,8 @@ require([
 			u.set("username", "esapir");
 			u.set("teams", ["YaleNavajo"]);
 			expect("esapir" == u.teams(["YaleNavajo"])).tobeTruthy();
-		})
+		});
 		
 		
-	})
-})
+	});
+});

@@ -99,7 +99,7 @@ require([
 				        {utterance:"allillanchu"}
 				        ]);
 				
-				var utterances = dc.pluck("utterance")
+				var utterances = dc.pluck("utterance");
 				
 				expect(JSON.stringify(utterances)).toEqual('["tusunayawanmi","purunaywanmi","allillanchu"]');
 				
