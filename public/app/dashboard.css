@@ -16,7 +16,7 @@ body {
 }
 
 .llama {
-	background-image: url('../images/skins/stone_figurines.jpg');
+	background-image: url('../images/skins/machu_picchu2.jpg');
 }
 
 
@@ -33,6 +33,7 @@ nav {
 	width: 100%;
 	height: 100%;
 }
+
 
 .search {
 	float: left;
@@ -109,18 +110,18 @@ ul {
 
 
 
-#dropdown{
+.dropdown{
   margin: 0;
   padding: 0;
   height: 1em; }
 }
 
-#dropdown ul {
+.dropdown ul {
   margin: 0px;
   padding: 0px;
 }
 
-#dropdown ul li {
+.dropdown ul li {
   display: inline;
   height: 30px;
   float: left;
@@ -129,38 +130,38 @@ ul {
   position: relative;
 }
 
-#dropdown li ul {
+.dropdown li ul {
   margin: 0px;
   padding: 0px;
   display: none;
   position: absolute;
 }
 
-#dropdown li:hover ul {
+.dropdown li:hover ul {
   display: block;
   width: 160px;
 }
 
-#dropdown li li {
+.dropdown li li {
   list-style: none;
   display: list-item;
   width: 100%;
 }
 
 
-#dropdown ul li ul {
+.dropdown ul li ul {
   margin-top:-3em;
   margin-left:2em;
 }
 
-#dropdown li:hover ul, #menu li.over ul {
+.dropdown li:hover ul, #menu li.over ul {
   display:block;
 }
-#dropdown li:hover ul ul, #menu li.over ul ul {
+.dropdown li:hover ul ul, #menu li.over ul ul {
   display:none;
 }
 /* SHOW SUBMENU 2 */
-#dropdown ul li:hover ul, #menu ul li.over ul {
+.dropdown ul li:hover ul, #menu ul li.over ul {
   display:block;
 }
 
@@ -234,7 +235,11 @@ ul {
   height: 100%;
   float: left;
 }
-
+.middle{
+	width: 715px;
+	padding: 0px;
+	margin: 0px;
+}
 
 .activity_verb {
 	font-weight: bold;
