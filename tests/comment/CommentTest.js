@@ -1,7 +1,7 @@
  require([
     "comment/Comment"
 ], function(Comment) {
-    describe("Comment Tests", function() {
+    describe("Comment Ability", function() {
         it("should allow users to take note of important things and " +
         		"communicate between each other", function() {
         	 expect(true).toBeTruthy();

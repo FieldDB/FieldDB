@@ -22,7 +22,7 @@ require([
 			});
 			it("should have grammatical tags", function() {
 				var d = new Datum();
-				expect("impulsative" == d.get("grammaticalTags")).toBeTruthy()
+				expect("impulsative" == d.get("grammaticalTags")).toBeTruthy();
 			});
 
 	});
