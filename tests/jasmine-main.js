@@ -55,7 +55,7 @@ require([
  "../tests/datum/DatumTest",
    "../tests/export/ExportTest",
    "../tests/glosser/GlosserTest",
-   "../tests/hotkey/HotkeyTest",
+   "../tests/hotkey/HotKeyTest",
    "../tests/import/ImportTest",
    "../tests/insert_unicode/InsertUnicodeTest",
    "../tests/lexicon/LexiconTest",
