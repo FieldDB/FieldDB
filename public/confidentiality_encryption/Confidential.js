@@ -36,7 +36,7 @@ define("confidentiality_encryption/Confidential",
 		initialize : function(){
 			console.log("Initializing confidentiality module");
 			
-			var encryptedMessage = this.encrypt("hi this is a longer message.")
+			var encryptedMessage = this.encrypt("hi this is a longer message.");
 			console.log("encrypted"+encryptedMessage);
 			
 			var decryptedMessage = this.decrypt(encryptedMessage);
@@ -56,7 +56,7 @@ define("confidentiality_encryption/Confidential",
 		 * @returns Returns a base64 string prefixed with "confidential" so that the views can choose to not display the entire string for the user.
 		 */
 		encrypt: function(message) {
-			var result = CryptoJS.AES.encrypt(message, this.get("secretkey"))
+			var result = CryptoJS.AES.encrypt(message, this.get("secretkey"));
 			//return the base64 version to save it as a string in the corpus
 			return  "confidential:"+ btoa( result );
 			
