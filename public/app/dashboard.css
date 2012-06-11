@@ -19,6 +19,10 @@ body {
 	background-image: url('../images/skins/stone_figurines.jpg');
 }
 
+
+.icons{
+	margin-right: 10px;
+}
 nav {
 	font-size: 1.5em;
 	padding: 1em;
