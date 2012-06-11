@@ -173,8 +173,10 @@ define([
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
-      $("#session").hide();
+      $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+
+      
     },
 
     /**
