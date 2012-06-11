@@ -1,6 +1,11 @@
 define([ 
     "use!backbone", 
     "use!handlebars",
+    "app/App", 
+    "text!app/app.handlebars", 
+    "app/AppRouter",
+    "authentication/Authentication",
+    "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
     "datum/Datum",
@@ -9,19 +14,20 @@ define([
     "data_list/DataListView",
     "search/Search",
     "search/SearchView",
-    "session/SessionEditView",
     "session/Session",
-    "authentication/Authentication",
-    "authentication/AuthenticationView",
+    "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
-    "app/App", 
-    "app/AppRouter",
-    "text!app/app.handlebars", 
+  
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
+    App, 
+    appTemplate,
+    AppRouter, 
+    Authentication,
+    AuthenticationView,
     Corpus, 
     CorpusView,
     Datum,
@@ -30,15 +36,10 @@ define([
     DataListView,
     Search,
     SearchView,
-    SessionEditView,
     Session,
-    Authentication,
-    AuthenticationView,
+    SessionEditView,
     User,
-    UserProfileView,
-    App, 
-    AppRouter, 
-    appTemplate
+    UserProfileView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
