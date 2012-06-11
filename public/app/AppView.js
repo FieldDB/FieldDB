@@ -1,6 +1,11 @@
 define([ 
     "use!backbone", 
     "use!handlebars",
+    "app/App", 
+    "text!app/app.handlebars", 
+    "app/AppRouter",
+    "authentication/Authentication",
+    "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
     "datum/Datum",
@@ -9,17 +14,20 @@ define([
     "data_list/DataListView",
     "search/Search",
     "search/SearchView",
-    "authentication/Authentication",
-    "authentication/AuthenticationView",
+    "session/Session",
+    "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
-    "app/App", 
-    "app/AppRouter",
-    "text!app/app.handlebars", 
+  
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
+    App, 
+    appTemplate,
+    AppRouter, 
+    Authentication,
+    AuthenticationView,
     Corpus, 
     CorpusView,
     Datum,
@@ -28,13 +36,10 @@ define([
     DataListView,
     Search,
     SearchView,
-    Authentication,
-    AuthenticationView,
+    Session,
+    SessionEditView,
     User,
-    UserProfileView,
-    App, 
-    AppRouter, 
-    appTemplate
+    UserProfileView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -62,6 +67,10 @@ define([
       // Create a DatumView
       this.fullScreenDatumView = new DatumView({
         model : new Datum()
+      });
+      
+      this.sessionEditView = new SessionEditView({
+        model : new Session()
       });
       
       // Create a UserProfileView
@@ -133,6 +142,11 @@ define([
      * The authView is a child of the AppView.
      */  
     authView : AuthenticationView,
+    /**
+     * The sessionEditView is a child of the AppView.
+     */  
+    sessionEditView : SessionEditView,
+
     
     /**
      * Events that the AppView is listening to and their handlers.
@@ -173,6 +187,10 @@ define([
         
         // Display the AuthView
         this.authView.render();
+        
+        //Display the SessionEditView
+        this.sessionEditView.render();
+        
       } else {
         Utils.debug("\tApp model is not defined");
       }
