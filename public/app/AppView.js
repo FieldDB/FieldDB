@@ -9,6 +9,8 @@ define([
     "data_list/DataListView",
     "search/Search",
     "search/SearchView",
+    "session/SessionEditView",
+    "session/Session",
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "user/User",
@@ -28,6 +30,8 @@ define([
     DataListView,
     Search,
     SearchView,
+    SessionEditView,
+    Session,
     Authentication,
     AuthenticationView,
     User,
@@ -64,10 +68,14 @@ define([
         model : new Datum()
       });
       
+      this.sessionEditView = new SessionEditView({
+        model : new Session()
+      });
+      
       // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
         model : new User()
-      })
+      });
       
       // Create a DataListView   
       this.dataListView = new DataListView({
@@ -133,6 +141,11 @@ define([
      * The authView is a child of the AppView.
      */  
     authView : AuthenticationView,
+    /**
+     * The sessionEditView is a child of the AppView.
+     */  
+    sessionEditView : SessionEditView,
+
     
     /**
      * Events that the AppView is listening to and their handlers.
@@ -173,6 +186,10 @@ define([
         
         // Display the AuthView
         this.authView.render();
+        
+        //Display the SessionEditView
+        this.sessionEditView.render();
+        
       } else {
         Utils.debug("\tApp model is not defined");
       }

@@ -72,7 +72,14 @@ define([
                      "../images/skins/stairs.jpg",
                      "../images/skins/stone_figurines.jpg",
                      "../images/skins/temple.jpg",
-                     "../images/skins/weaving.jpg"
+                     "../images/skins/weaving.jpg",
+                     "../images/skins/sunset.jpg",
+                //     "../images/skins/window.jpg",
+                //   "../images/skins/weaving.jpg",
+                //  "../images/skins/Ceske_Krumlov.jpg",
+
+
+
                      ];
       
       document.body.style.backgroundImage = "url(" + randombgs[randomize(0, randombgs.length-1)] + ")";
