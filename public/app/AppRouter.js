@@ -64,9 +64,9 @@ define([
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
 
-      $("#dashboard-view").show();
+      $("#dashboard-view").hide();
       $("#corpus").hide();
-      $("#session").show();
+      $("#new-session-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
