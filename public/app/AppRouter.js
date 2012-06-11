@@ -65,8 +65,8 @@ define([
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
 
-      $("#dashboard-view").hide();
-      $("#corpus").hide();
+      $("#dashboard-view").show();
+      $("#corpus").show();
       $("#new-session-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
@@ -97,7 +97,7 @@ define([
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
-          $("#dashboard-view").hide();
+          $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
           $("#fullscreen-datalist-view").hide();
           $("#fullscreen-search-view").hide();
