@@ -75,7 +75,7 @@ define([
         "email" : "esapir@email.com",
         "firstname" : "Ed",
         "lastname" : "Sapir",
-        "gravatar" : "./../user/sapir_1910_gravatar.png",
+        "gravatar" : "user/sapir_1910_gravatar.png",
         "researchInterest" : "Phonology",
         "affiliation" : "University of Pennsylvania",
         "description" : "I am currently a fellow at UPenn. I am interested in soundpatterns of Ute and Southern Paiute languages. I propose that the phoneme is not just an abstraction existing at the structural level of language, but that it in fact has psychological reality for speakers.",
