@@ -2,7 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "preference/Preference",
-    "text!preference/preference.handlebars",
+    "text!user/preference.handlebars",
     "hotkey/HotKeyConfigView",
     "libs/Utils"
 ], function(
@@ -46,7 +46,7 @@ define([
       Utils.debug("PREFERENCE render: " + this.el);
       if (this.model != undefined) {
         // Display the PreferenceView
-        this.setElement($("#preference"));
+        this.setElement($("#user-preferences-view"));
         $(this.el).html(this.template(this.model.toJSON()));
       }
       
