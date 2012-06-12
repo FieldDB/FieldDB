@@ -1,5 +1,5 @@
 require([
-    "session/Session"
+    "session/Session", "user/User", "user/Informant"
 ], function(Session) {
 	
 		describe("Test SessionGeneric", function() {
@@ -8,8 +8,6 @@ require([
 				d.set("SessionID", 0);
 				expect(0 == d.get("SessionID")).toBeTruthy();
 			});
-
-
 
 	});
 });

@@ -4,25 +4,44 @@ require([
 ], function(Informant,User) {
    
     
-    	describe("Test Informant", function() {
-    		it("should create an informant", function() {
+    	describe("as an Informant, I want to set up my Informant info", function() {
+    		it("should set an informant code", function() {
     			var i = new Informant();
-    			var isanInformant = i instanceof Informant;
-    			var isaUser = i instanceof User;
-    			expect(isanInformant && isaUser).toBeTruthy();
+    			i.set("informantcode", "C.M.B.");
+    			expect("C.M.B." == u.get("informantcode")).tobeTruthy();
     
     		});
-    		it("should create multiple informants", function() {
-    			var  informants = [];
-    			informants.push(new Informant());
-    			informants.push(new Informant());
-    			informants.push(new Informant());
-    			
-    			expect(informants.length == 3).toBeTruthy();
-    			
-    		});
+
+    		it("should set informant's birthdate", function() {
+    			var i = new Informant();
+    			i.set("informantcode", "C.M.B.");
+    			i.set("birthDate", "January 1, 1900");
+    			expect("C.M.B." == u.birthDate("January 1, 1900")).tobeTruthy();
     
+    		});
+		
+    
+    		it("should set informant's language", function() {
+    			var i = new Informant();
+    			i.set("informantcode", "C.M.B.");
+    			i.set("language", "Cat");
+    			expect("C.M.B." == u.language("Cat")).tobeTruthy();
+    
+    		});
+	
+    		it("should set informant's dialect", function() {
+    			var i = new Informant();
+    			i.set("informantcode", "C.M.B.");
+    			i.set("dialect", "Catfrench");
+    			expect("C.M.B." == u.birthDate("January 1, 1900")).tobeTruthy();
+    
+    		});
+	
+    		
+    		
     	});
     
     	
-    });
+    }); 
+
+
