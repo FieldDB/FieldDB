@@ -75,8 +75,8 @@ define([
                      "images/skins/temple.jpg",
                      "images/skins/weaving.jpg",
                      "images/skins/sunset.jpg",
-                //     "images/skins/window.jpg",
-                //  "images/skins/Ceske_Krumlov.jpg",
+                     "images/skins/window.jpg",
+                     "images/skins/Ceske_Krumlov.jpg", 
 
 
 
