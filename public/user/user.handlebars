@@ -1,5 +1,12 @@
 <div class="user">
-    <a href = "#user/{{username}}"><img class="grav" src="{{gravatar}}" border="0"  ></a> <br/>
-    <span class="username">{{username}}</span> 
+  <ul class = "dropdown">
+    <li><a class = "btn btn-mini btn-inverse" id ="pref"> <img class="grav" src="{{gravatar}}"/>
+       <span class ="caret white"></span></a>     
+       <ul> 
+         <li><a href=  "user/{{username}}/prefs">User Preferences</a></li>
+         <li><a href = "#user/{{username}}">User Profile</a></li>
+         <li>Datum Preferences</li>
+       </ul>     
+       <div class="username">{{username}}</div>
 </div>
 

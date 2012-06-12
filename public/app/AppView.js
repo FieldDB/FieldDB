@@ -12,6 +12,8 @@ define([
     "datum/DatumView", 
     "data_list/DataList",
     "data_list/DataListView",
+    "preference/Preference",
+    "preference/PreferenceView",
     "search/Search",
     "search/SearchView",
     "search/AdvancedSearchView",
@@ -19,7 +21,6 @@ define([
     "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
-  
     "libs/Utils"
 ], function(
     Backbone, 
@@ -35,6 +36,8 @@ define([
     DatumView,
     DataList,
     DataListView,
+    Preference,
+    PreferenceView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -87,14 +90,7 @@ define([
           dateCreated : "June 5, 2012",
           description : "MyDescription",
           datumIds : [
-            "895CCF1D-80A2-4651-B74C-6A3AFF58B056", 
-            "33EE7A7F-45DF-40FD-B847-D46185A2AE0D",
-            "895CCF1D-80A2-4651-B74C-6A3AFF58B056", 
-            "33EE7A7F-45DF-40FD-B847-D46185A2AE0D",
-            "895CCF1D-80A2-4651-B74C-6A3AFF58B056", 
-            "33EE7A7F-45DF-40FD-B847-D46185A2AE0D",
-            "895CCF1D-80A2-4651-B74C-6A3AFF58B056", 
-            "33EE7A7F-45DF-40FD-B847-D46185A2AE0D"
+            "4f3c285937f7dde33d8749ad35001023"
           ]
         })
       });
@@ -105,6 +101,10 @@ define([
       });
       this.advancedSearchView = new AdvancedSearchView({
         model : new Search()
+      });
+      
+      this.preferenceView = new PreferenceView({
+        model : new Preference()
       });
                
       // Create an AuthenticationView
@@ -156,6 +156,14 @@ define([
      * The sessionEditView is a child of the AppView.
      */  
     sessionEditView : SessionEditView,
+    
+    /**
+     * The userPreferenceView is a child of the AppView.
+     */  
+    preferenceView : PreferenceView,
+    
+    
+    
 
     
     /**
@@ -202,6 +210,12 @@ define([
         
         //Display the SessionEditView
         this.sessionEditView.render();
+        
+        //Display the PreferenceView
+        this.preferenceView.render();
+        
+        
+        
         
       } else {
         Utils.debug("\tApp model is not defined");
