@@ -8,8 +8,9 @@ require([
 	describe("as a Generic User I want to see how I appear on the dashboard", function() {
 		it("should set public user name", function() {
 			var u = new UserGeneric();
-			u.set("username", "public");
-			expect("public" == u.get("username")).tobeTruthy();
+			expect(u.get("username")).toEqual("");	
+			//			u.set("username", "public");
+//			expect("public" == u.get("username")).tobeTruthy();
 		});
  
     
@@ -27,8 +28,9 @@ require([
     
         it("should set default gravatar", function() {
         	var u = new UserGeneric();
-        	u.set("gravatar", "./../user/public_gravatar.png")
-            expect("./../user/public_gravatar.png" == u.get("gravatar")).tobeTruthy();
+        	expect(u.get("gravatar")).toEqual("./../user/user_gravatar.png");
+        	//        	u.set("gravatar", "./../user/public_gravatar.png")
+//            expect("./../user/public_gravatar.png" == u.get("gravatar")).tobeTruthy();
         });
 
     
@@ -47,8 +49,9 @@ require([
     
         it("should set default description", function() {
 			var u = new UserGeneric();
-			u.set("description", "public user");
-			expect("public user" == u.get("description")).tobeTruthy();
+			expect(u.get("description")).toEqual("");
+			//			u.set("description", "public user");
+//			expect("public user" == u.get("description")).tobeTruthy();
         });
   
     
