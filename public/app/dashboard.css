@@ -1,5 +1,5 @@
 body {
-	background-color: #FFFFCC;
+	background-color: #000000;
 	width: 1300px;
 	height: 1010px;
 	margin: auto;
@@ -16,7 +16,11 @@ body {
 }
 
 .llama {
-	background-image: url('../images/skins/machu_picchu2.jpg');
+	background-image: url('../images/skins/machu_picchu2.jpg'); 
+/* 	background-size:1333px 1000px; */
+	background-repeat:no-repeat;
+  	background-attachment:fixed;  
+    background-position:center;
 }
 
 
@@ -26,7 +30,8 @@ body {
 nav {
 	font-size: 1.5em;
 	padding: 1em;
-	float: left;
+	margin: auto;
+	width: 100%;
 }
 
 .page {
@@ -102,10 +107,13 @@ ul {
 	}
 
 #navigation {
-	width: 1240px;
+	width: 90%;
+	margin: auto;
 	height: 2em;
 	background-color: black;
 }
+
+
 
 
 
@@ -170,7 +178,12 @@ ul {
   display:block;
 }
 
-
+.grav{
+	
+	border: 0px;
+	
+	
+}
 
 
 
@@ -283,9 +296,11 @@ ul {
 	float: left;
 }
 
+
+
+
 .user {
-	padding: 2px;
-	margin: 2px;
+	margin-right: 10px;
 	text-align: center;
 	/*border: 1px solid #fcd857;
 	-moz-border-radius: 4px;
@@ -303,9 +318,11 @@ ul {
 	margin: 10px;
 	background: black;
 }
-.authentication .user .username {
+
+.username {
 	display: none;
-	height: 25px
+	height: 25px;
+	color: white;
 }
 
 .activity_feed_title {

@@ -12,6 +12,8 @@ define([
     "datum/DatumView", 
     "data_list/DataList",
     "data_list/DataListView",
+    "preference/Preference",
+    "preference/PreferenceView",
     "search/Search",
     "search/SearchView",
     "search/AdvancedSearchView",
@@ -19,7 +21,6 @@ define([
     "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
-  
     "libs/Utils"
 ], function(
     Backbone, 
@@ -35,6 +36,8 @@ define([
     DatumView,
     DataList,
     DataListView,
+    Preference,
+    PreferenceView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -99,6 +102,10 @@ define([
       this.advancedSearchView = new AdvancedSearchView({
         model : new Search()
       });
+      
+      this.preferenceView = new PreferenceView({
+        model : new Preference()
+      });
                
       // Create an AuthenticationView
       this.authView = new AuthenticationView({
@@ -149,6 +156,14 @@ define([
      * The sessionEditView is a child of the AppView.
      */  
     sessionEditView : SessionEditView,
+    
+    /**
+     * The userPreferenceView is a child of the AppView.
+     */  
+    preferenceView : PreferenceView,
+    
+    
+    
 
     
     /**
@@ -195,6 +210,12 @@ define([
         
         //Display the SessionEditView
         this.sessionEditView.render();
+        
+        //Display the PreferenceView
+        this.preferenceView.render();
+        
+        
+        
         
       } else {
         Utils.debug("\tApp model is not defined");
