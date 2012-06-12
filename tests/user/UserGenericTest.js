@@ -5,7 +5,8 @@ require([
   describe("UserGeneric", function() {
 	  
 	  //TODO @hisakonog do we want these to test that the UserGeneric is populated with the Sapir character? or that they are null... or that they are the "public" character?
-//	  
+      //TODO @cesine let UserGeneric be the "public" character and use Sapir for User test
+	  
 //    it("should set default username", function() {
 //      //var UserGeneric = require("UserGeneric");
 //      var u = new UserGeneric();
