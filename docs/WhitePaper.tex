@@ -10,21 +10,26 @@
 \linespread{1.05}         % Palatino needs more leading (space between lines)
 \usepackage[T1]{fontenc}
 
+\hyphenpenalty= 7000 
 
-\title{The FieldLinguists' App}
+\title{White Paper \\ The FieldLinguists' App}
 \author{}
 \date{}
 
 \begin{document}
-\maketitle{}
+\maketitle{} 
+
+%\tableofcontents{section}
 
 \section {Project Abstract}
 
-The FieldLinguists' App is an OpenSource database that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible everywhere; it will run on three different systems (Mac, Linux, and Windows)  and will be suitable for both online and offline use.  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members can modify and discuss the data from within the application. The system will also have a simple and friendly user interface, allowing participants to drag and drop files (audio, video, text), or record them directly into the database when using the Android app. In addition, the application will have import and export capabilities for multiple file types.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works.
+The FieldLinguists' App is an OpenSource database that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible everywhere; it will run on three different systems (Mac, Linux, and Windows) as a Chrome extension and will be suitable for both online and offline use.  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members can modify and discuss the data from within the application. The system will also have a simple and friendly user interface, allowing participants to drag and drop files (audio, video, text), or record them directly into the database when using the Android app. In addition, the application will have import and export capabilities for multiple file types.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works.
+
+%Data will be stored in a host server for sync/integration and long-term archival purposes. The app has a local storage space allowing quick search and offline work. 
 
 \section {Statement of Need}
 
-The FieldLinguists' App is conceived out of the needs of language researchers doing fieldwork. Linguistic fieldwork often requires researchers to travel to places where a stable connection to the internet is not guaranteed. Also, it often involves a group of researchers contributing to building a single database.
+The FieldLinguists' App is conceived out of the needs of language researchers doing fieldwork or lather large scale data collection. Linguistic fieldwork often requires researchers to travel to places where a stable connection to the internet is not guaranteed. Also, it often involves a group of researchers contributing to building a single database.
  An ideal linguistic database should therefore work both on- and off-line as well as make it easy to share and integrate data. 
  
 There are existing programmes/software used for linguistic fieldwork, 
@@ -32,12 +37,14 @@ however, they fall short in providing features necessary for collaborative field
 For example, some web-based databases (e.g.  {\it Karuk Dictionary and Texts} http://linguistics.berkeley.edu/{\textasciitilde}ka
 ruk/links.php,   {\it The Washo Project} http://washo.uchicago.edu/dictionary/dictionary.php) work only online, hence it is impossible for researchers to enter new data or search the database while in the field where the internet is unavailable.  
 
-Non web-based software such as {\it Toolbox} (http://www.sil.org/computing/toolbox/) and {\it FLEx/FieldWorks} (http://fieldworks.sil.org/flex/)
-are excellent in terms of annotating data and building data into various types (corpus, grammar or lexicon). Nonetheless, integration of data taken by individual researchers is not well-automated and takes considerable work by researchers. Moreover, they have a particular preference of platforms (either PC or Linux, but not both), which causes further difficulty in data sharing among researchers using different platforms.  
+Non-web-based software such as {\it Toolbox} (http://www.sil.org/computing/toolbox/) and {\it FLEx/FieldWorks} (http://fieldworks.sil.org/flex/)
+are excellent in terms of annotating data and organizing data into various formats (corpus, grammar or lexicon). Nonetheless, integration of data taken by individual researchers is not well-automated and takes considerable work by researchers. Moreover, they run only on a single platform (either PC or Linux, but not both). These tools therefore cause further difficulty in data sharing among researchers using different platforms.  
 
-General purpose database software such as FileMaker Pro can be customized for the purpose of language research. However, it demands researchers to learn the software, and research teams often need to hire a programmer to customize the software for their research purposes. The stand-alone nature of such software makes data sharing and integration difficult as well. 
+General purpose database software such as {\it FileMaker Pro} can be customized for the purpose of language research. However, it demands researchers to learn the software, and research teams often need to hire a programmer to customize the software for their research purposes. The stand-alone nature of such software makes data sharing and integration difficult as well. 
 
-The existing linguistic database programmes, although useful, have various shortfalls that would hinder collection and integration of data. Some of them are constrained by the internet accessibility or by the computer platform types. Some others demand extra human work in order to integrate data. A database application whose functionality is not limited by such constraints is much anticipated by language researchers. 
+The existing linguistic database programmes, although useful, have various shortfalls that would hinder collection and integration of data. Some of them are constrained by the internet accessibility or by the computer platform types. Some others demand extra human work in order to integrate data. 
+%A database application whose functionality is not limited by such constraints is much anticipated by language researchers. 
+The present project grows out of discussion with a numbers of fieldworkers dissatisfied with currently available options. 
 
 
 \section {App Description}
@@ -48,16 +55,15 @@ The following functional requirements are based on a few important consideration
 
 \subsection{Functionality}
 
-This application will be able to perform the necessary functions needed by fieldlinguists. The dashboard will be composed of several widgets. The Data Entry widget will be the primary focus, containing three core fields customary for a gloss format (utterance, gloss, translation). In addition to these, researchers will be able to add customized fields, such as phonetic transcription or context for an utterance.  Researchers can even upload audio files and link them to the appropriate data. 
+This application will be able to perform the necessary functions needed by field linguists. The dashboard will be composed of several widgets. The Data Entry widget will be the primary focus, containing four core fields customary for a gloss format (utterance, morpheme-segmentation, gloss, translation). In addition to these, researchers will be able to add customized fields, such as phonetic transcription or context for an utterance.  Researchers can even upload audio files and link them to the appropriate data. Each data entry will be tagged for the researcher, date of elicitation and consultant's code. 
 
-Furthermore, researchers can add tags for categorization and mark the status of each individual data entry as "Checked" or "To be checked with consultant", which further aids organization and reduces the number of errors that inevitably occur during research. Other functions such as importing data and exporting data into various formats aid efficiency and convenience. 
+Furthermore, researchers will be able to add tags for categorization and mark the status of each individual data entry as "Checked" or "To be checked with consultant", which further aids organization and reduces the number of errors that inevitably occur during research. Other functions such as importing data and exporting data into various formats aid efficiency and convenience. 
 
-Another widget will be an Activity Feed View displaying the most recent changes. This widget allows researchers to keep up to date on their teams' activity.  The activity feed will display items such as recent additions to the corpus, comments made on data entries, and recent edits. 
+Another widget will be an Activity Feed View displaying the most recent changes. This widget allows researchers to keep up to date on their team's activity.  The activity feed will display items such as recent additions to the corpus, comments made on data entries, and recent edits. 
 
-Finally, the application will have a powerful search function that will expand into a data list that is contained in its own widget. Data lists can be sorted, saved and can be used for batch operations such as exporting or converting into LaTeX.
+Finally, the application will have a powerful search function that will expand into a data list that is contained in its own widget. Data lists can be sorted, saved and can be used for batch operations such as exporting or converting into LaTeX. 
 
-
-
+This application integrates the best functions from existing fieldwork database programs, while avoiding many of the shortcomings discussed above. The core features are summarized as follows: 
 
 \begin{itemize}
 
@@ -65,7 +71,7 @@ Finally, the application will have a powerful search function that will expand i
 \item {\bf Modern}
 
 \begin{itemize}
-\item { \bf Simple} The system will be designed to replace Word Documents or LaTeX documents which is a very common way fieldlinguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  
+\item { \bf Simple} The system will be designed to replace Word Documents or LaTeX documents which is a very common way field linguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  
 
 \item {\bf Attractive} The system will have a modern design like many of the popular websites such as Google and be customizable so that the user can include a picture of where they are doing research as a background.
 
@@ -81,15 +87,17 @@ Finally, the application will have a powerful search function that will expand i
 \begin{itemize}
 \item {\bf Atheoretical.} The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application will allow an analysis to develop organically as data collection proceeds, as opposed to imposing a particular construct upon entry.  Researchers will be able to set and change their own categories for the data whenever they choose to.
 \item {\bf Collaborative.} The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
-\item {\bf Sharable.} The application will allow researchers to share their data with anyone interested in their work.
+\item {\bf Sharable.} The application will allow researchers to share their data with anyone interested in their work. The application will be able to import data from ELAN XML, CSV and text file formats, and to export to XML, Latex and WIki formats. These import/export functions will make it easier to exchange data with those who are not using the same application. 
 \end{itemize}
 
 
 \item{\bf Accessible}
 \begin{itemize}
-\item { \bf Cross-Platform.} The application will run on Mac, Linux, and Windows computers. The application will be installable as a Chrome extension and available on any device that runs a browser.
+\item { \bf Cross-Platform.} The application will be available for any device that runs a browser. Specifically, the application will be installable as a Chrome extension on Mac, Linux, and Windows computers, as well as Android tablets and phones, and will run both online and offline on these devices. The application will run online on iPads and iPhones. 
 \item  {\bf Portable.} Touch tablets are one of the easiest tools to carry and use in field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video and direct publishing to YouTube and/or other services. Furthermore, Android tablets are particularly easy to program and integrate the microphone directly into the database.
-\item {\bf Work offine.} Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the app in a Chrome extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location.
+\item {\bf Work offine.} Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the application in a Chrome extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location. 
+\item {\bf Multiple storage} Data will be stored on a CouchDB server, and will be accessible and sharable by multiple users.  The installable Chrome extension version of the application allows individual researchers to store a portion of a corpus, or an entire corpus, on their own devices, enabling offline work and quick search. 
+% Audio files will be stored elsewhere (not on a CouchDB server), most likely on researcher's own server, to keep the storage space small in order to provide . The database will contain the information of the location path of the audio files, and when users want to access audio files, they will be redirected to their location. We'll use Iris CouchDB which provides free service if the usage (storage and transaction) is less than 5$/month (http://www.iriscouch.com/service). If we host only text data, it is possible to keep the service free. 
 \end{itemize}
 
 
@@ -121,59 +129,15 @@ Although it is designed primarily for linguists, the application will equally be
 
 
 
-\section {Staff \& Organizational Information}
 
- iLanguage Lab is a Montreal based company that develops tools in the form of experimentation and data collection apps for Android and Chrome in collaboration with researchers at UdeM, UQAM, McGill and Concordia. Previous research applications includes the Bilingual Aphasia Test, AuBlog, OPrime and SpyOrNot.  Furthermore, iLanguage Lab has a background in assisting researchers obtain results and publications.  The AuBlog application was employed to investigate evolving information structure and audienceless vs. audience oriented prosodies and culminated in a poster presented at Experimental and Theoretical Advances in Prosody Conference. The Bilingual Aphasia Test led to a presentation at the  Academy of Aphasia 49th Annual Meeting on  Aphasia Assessment on Android: recording voice, eye-gaze and touch for the BAT and a publication in the Academy of Aphasia. 
-
-\subsection{Gina Cook M.A.}
-
-Gina Cook received her Masters in Field Linguistics \& DESS in Computer Science and has worked as a computational linguist for companies such as Nuance and Idelia.  She founded iLanguage Lab with a vision to develop computational tools to help researchers as opposed to consumers.  She is an active contributor to OpenSource projects on GitHub focusing on integrating existing OpenSource libraries for Speech Recognition, Natural Language Processing, Eye Gaze analysis and Acoustic analysis into Android tablet applications.
-
-\subsubsection{Publications}
-\begin{itemize}
-
-\item "Aphasia Assessment on Android: recording voice, eye-gaze and touch for the BAT." (with A. Marquis \& A. Achim). Poster at Academy of Aphasia 49th Annual Meeting, Mont\'eal, Qu\'ebec. October 2011.
-\item "Eliciting evolving information structure and audienceless vs. audience oriented prosodies: experimentation on Android tablets." (with S. Kattoju). Poster at ETAP2 – Experimental and Theoretical Advances in Prosody, Montr\'eal, Qu\'ebec. September 2011.
-\item "PDFtoAudioBook Android app" (Java, XML).Canadian University Software Engineering Conference (CUSEC) DemoCamp, Montr\'eal, Qu\'ebec. January 2011.
-\item "Word features and word concatenation."Sixth Interdisciplinary Graduate Student Research Symposium, McGill University, Montr\'eal, Qu\'ebec. March 2009.
-\item "The Structure of Long Distance Agreement in Hindi/Urdu." Invited Lecture in Advanced Syntax, Concordia University, Montr\'eal, Qu\'ebec. November 2007.
-\item "The Phonological/Phonetic status of Productive Palatalization in Romanian." (with L. Spinu). Presented at the Seoul International Conference on Linguistics, Seoul National University, Seoul, South Korea. July 2006.
-\end{itemize}
-
-
-\subsection{M.E. Cathcart Ph.D.}
-
-M.E. Cathcart completed her PhD at the University of Delaware with a dissertation grant funded by the National Science Foundation (NSF) for her fieldwork in Cusco, Peru on Quechua. In addition, she also has a background of coursework in computational linguistics, at the University of Delaware and at the Linguistic Society of America’s Summer Institute.
-
-\subsubsection{Publications}
-
-\begin{itemize}
-\item "Affected Arguments Cross-linguistically." S. Bosse, B. Bruening, M.E. Cathcart, A. E. Peng, M. Yamada. In: Tadic, M. Dimitrova-Vulchanova, M., Koeva, S. (eds.): FASSBL 6 The Sixth International Conference on Formal Approaches to South Slavic and Balkan Languages. 2008 (Proceedings) pp. 41-47.
-\item "A New Grammatical Category: Impulsatives." Penn Linguistics Colloquium, Philadelphia March 2010
-?Eliciting data for dissertation on Impulsatives: functional morpheme in context
-\item"The Syntax and Semantics of Desideratives in Albanian." Georgetown Linguistics Society, Washington, D.C. February 2010
-\item "Bi-Eventivity \& Affecting Arguments." S. Bosse, B. Bruening, M.E. Cathcart, H.-j. Cheng, A. E. Peng, M. Yamada. Formal Approaches to South Slavic and Balkan Languages, Dubrovnik (Croatia), 25-28 September 2008.
-\item "Bi-Eventive Affect." S. Bosse, B. Bruening, M.E. Cathcart, H.-j. Cheng, A. E. Peng, M. Yamada.TEAL, Potsdam (Germany), 10-11 September 2008.
-\end{itemize}
-
-
-\subsection{Theresa Deering M.A.}
-
-Theresa Deering has a  Bachelor's in Computer Science from Malaspina and a Master's in Computer Science from McGill University. Her thesis focused on the Least-Used Direction pivot rule for the Simplex Method of solving linear programs.
-
-\begin{itemize}
-\item "The Least-Used Direction Pivot Rule on Acyclic Unique Sink Orientations." Master's Thesis. McGill University, Montr\'eal, Qu\'ebec. July 2010.
-\item "Worst-case Behaviour of History Based Pivot Rules on Acyclic Unique Sink Orientations of Hypercubes." Y. Aoshima, D. Avis, T. Deering, Y. Matsumoto, S. Moriyama. Submitted to AAAC. October 2011.
-\end{itemize}
 
 \section {Budget \& Timeline}
 
-The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that fieldlinguists can adopt for their labs or for their field methods courses. The cost is calculated by determining the time in hours and multiplying by \$42-58, the average rate of a software developer in Montr\'eal. 
+The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost is calculated by determining the time in hours and multiplying by \$42-58, the average rate of a software developer in Montr\'eal. 
 
 Since the budget is dependent on how long it takes to complete the modules, it is possible to focus on each module separately, thus reducing the time of completion. 
 
  
-
 
 \begin{table}[htbp]
 \begin{center}
@@ -202,8 +166,8 @@ Total &  88 &\$83,176.04\\
 \end{table}
 
 
-
 \newpage
+
 \subsection{Collaboration Module}
 
 \footnotesize
@@ -237,8 +201,6 @@ Heroku Deployment&	5&	Integration	\\
   \label{tab:label}
   \end{center}
 \end{table}
-
-
 
 
 
@@ -542,6 +504,8 @@ Release new versions&	160&  Javascript \\
 \normalsize
 
 
+
+
 \section {Evaluation}
 
 The usefulness and effectiveness of the FieldLinguists' App will be evaluated against the following criteria, taken and modified from E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html) and DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
@@ -552,7 +516,7 @@ The usefulness and effectiveness of the FieldLinguists' App will be evaluated ag
 
 \item Quality: The quality of data is assured. \\ Datum status and comments functions enables researchers to check and inspect the data quality.  
 
-\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories that researchers choose to use . The application is not tied to a particular terminological convention. 
+\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories that researchers choose to use. The application is not tied to a particular terminological convention. 
 
 \item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables conversion of data format, making data sharing easier.  
 
@@ -566,9 +530,9 @@ The usefulness and effectiveness of the FieldLinguists' App will be evaluated ag
 
 \item Citation: Data provide citation information. \\ Data source will be cited with the name of the corpus in fieldlinguists.com (e.g. fieldlinguists.com\#corpus/corpus-name).   
  
-\item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as json files. json files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
+\item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
 
-\item Security: Confidential information must be kept from public access. \\ Information such as language consultant's identity will be  hidden from public access unless the consultant decides otherwise. 
+\item Security: Confidential information must be kept from public access. \\ Encryption will ensure that confidential information such as language consultant's identity be hidden from public access unless the consultant decides otherwise. 
 
 
 \end{itemize} 
@@ -584,5 +548,9 @@ The usefulness and effectiveness of the FieldLinguists' App will be evaluated ag
 %`My window'
 %
 %
+
+
+
 \end{document}
+
 
