@@ -5,6 +5,8 @@ define([
     "data_list/DataListView",
     "datum/Datum", 
     "datum/DatumView", 
+    "search/Search",
+    "search/AdvancedSearchView",
     "session/Session", 
     "session/SessionView",
     "user/User", 
@@ -18,6 +20,9 @@ define([
     DataListView,
     Datum,
     DatumView,
+    Search,
+    SearchView,
+    AdvancedSearchView,
     Session,
     SessionView,
     User,
@@ -65,8 +70,8 @@ define([
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
 
-      $("#dashboard-view").hide();
-      $("#corpus").hide();
+      $("#dashboard-view").show();
+      $("#corpus").show();
       $("#new-session-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
@@ -97,7 +102,7 @@ define([
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
-          $("#dashboard-view").hide();
+          $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
           $("#fullscreen-datalist-view").hide();
           $("#fullscreen-search-view").hide();
@@ -144,7 +149,7 @@ define([
     showAdvancedSearch : function(corpusName) {
       Utils.debug("In showAdvancedSearch: " + corpusName);
 
-      $("#dashboard-view").hide();
+      $("#dashboard-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").show();
@@ -168,8 +173,10 @@ define([
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
-      $("#session").hide();
+      $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+
+      
     },
 
     /**
@@ -198,7 +205,7 @@ define([
         teams : [],
         sessionHistory : [],
         activityHistory : [],
-        permissions : null
+        permissions : null,
       });
 
       $("#dashboard-view").hide();
