@@ -122,13 +122,11 @@ ul {
   margin: 0;
   padding: 0;
   height: 1em; 
-  background: black;
 }
 
 .dropdown ul {
   margin: 0px;
   padding: 0px;
-  background: black;
   
 }
 
@@ -138,8 +136,8 @@ ul {
   float: left;
   list-style: none;
   margin-left: 0px;
-  position: relative;
-    background: black;
+  position: relative;  
+  background: black;
   
 }
 
@@ -148,11 +146,12 @@ ul {
   padding: 0px;
   display: none;
   position: absolute;
+   
 }
 
 .dropdown li:hover ul {
   display: block;
-  width: 160px;
+	width: 160px;
 }
 
 .dropdown li li {
@@ -164,19 +163,23 @@ ul {
 
 .dropdown ul li ul {
   margin-top:-3em;
-  margin-left:2em;
+  margin-left:3em;
+ 
 }
 
 .dropdown li:hover ul, #menu li.over ul {
   display:block;
-}
+  
+	}
 .dropdown li:hover ul ul, #menu li.over ul ul {
   display:none;
 }
 /* SHOW SUBMENU 2 */
 .dropdown ul li:hover ul, #menu ul li.over ul {
   display:block;
-}
+	
+
+	}
 
 .grav{
 	
@@ -242,20 +245,28 @@ ul {
 	font-size: 0.75em;
 }
 
+
+
+
 .date {
-	color: #343298;
+	color: #FFE099;
 }
 
 .goal {
-	color: #53edf4;
+	color: #FFE099;
+}
+
+
+.informant {
+	color: #FFE099;
+}
+
+#corpusName{
+	text-align: center;
 }
 
 .subtitle {
-	color: #fbef9f;
-}
-
-.informant {
-	color: #fbef9f;
+  color: #fbef9f;
 }
 
 .activity_direct_object,.activity_indirect_object {
