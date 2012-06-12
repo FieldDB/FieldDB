@@ -110,6 +110,8 @@ ul {
 
 
 
+
+
 .dropdown{
   margin: 0;
   padding: 0;
@@ -170,7 +172,12 @@ ul {
   display:block;
 }
 
-
+.grav{
+	
+	border: 0px;
+	
+	
+}
 
 
 
@@ -283,9 +290,11 @@ ul {
 	float: left;
 }
 
+
+
+
 .user {
-	padding: 2px;
-	margin: 2px;
+	margin-right: 10px;
 	text-align: center;
 	/*border: 1px solid #fcd857;
 	-moz-border-radius: 4px;
@@ -303,9 +312,11 @@ ul {
 	margin: 10px;
 	background: black;
 }
-.authentication .user .username {
+
+.username {
 	display: none;
-	height: 25px
+	height: 25px;
+	color: white;
 }
 
 .activity_feed_title {
