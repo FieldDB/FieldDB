@@ -12,5 +12,11 @@ require([
             permission.set("type","w");
             expect(permission.get("type")).toEqual("w");
         });
+        
+        it("should have an exportt permission", function() {
+            var permission = new Permission();
+            permission.set("type","e");
+            expect(permission.get("type")).toEqual("e");
+        });
     });
 });
