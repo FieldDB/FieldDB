@@ -5,7 +5,9 @@ define([
     "data_list/DataListView",
     "datum/Datum", 
     "datum/DatumView", 
-    "preference/Preference",
+    "datum_pref/DatumPref",
+    "datum_pref/DatumPrefView",
+    "preference/Preference",,
     "preference/PreferenceView",
     "search/Search",
     "search/AdvancedSearchView",
@@ -22,6 +24,8 @@ define([
     DataListView,
     Datum,
     DatumView,
+    DatumPref,
+    DatumPrefView,
     Preference,
     PreferenceView,
     Search,
@@ -58,6 +62,9 @@ define([
       "corpus/:corpusName" : "showDashboard",
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
+      "user/:userName/datumprefs" : "showDatumPreferences",
+
+      
       
       "" : "showDashboard",
     },
@@ -83,6 +90,8 @@ define([
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+
     },
 
     /**
@@ -114,6 +123,8 @@ define([
           $("#fullscreen-user-profile-view").hide();
           $("#new-session-view").hide();
           $("#user-preferences-view").hide(); 
+          $("#datum-preferences-view").hide();
+
         },
         
         error : function() {
@@ -142,6 +153,8 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+
     },
 
     /**
@@ -161,6 +174,8 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+
     },
 
     /**
@@ -180,6 +195,8 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+
 
       
     },
@@ -220,6 +237,8 @@ define([
       $("#fullscreen-user-profile-view").show();
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+
     },
 
     /**
@@ -238,7 +257,31 @@ define([
       $("#user-preferences-view").show();
       $("#new-session-view").hide();
       $("#fullscreen-user-profile-view").hide();
+      $("#datum-preferences-view").hide();
+
+    },
+    
+    
+    
+    showDatumPreferences : function(userName) {
+      Utils.debug("In showDatumPreferences: " + userName);
+
+      $("#dashboard-view").show();
+      $("#fullscreen-datum-view").hide();
+      $("#fullscreen-datalist-view").hide();
+      $("#fullscreen-search-view").hide();
+      $("#user-preferences-view").hide();
+      $("#new-session-view").hide();
+      $("#fullscreen-user-profile-view").hide();
+      $("#datum-preferences-view").show();
+
     }
+    
+    
+    
+    
+    
+    
   });
 
   return AppRouter;

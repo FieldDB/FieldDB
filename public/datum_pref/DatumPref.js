@@ -1,10 +1,10 @@
-define("datum_prefs/DatumPrefs", [ 
+define( [ 
     "use!backbone" ,
     "datum_field/DatumField",
     "datum_menu/DatumMenu",
     "datum_status/DatumStatus"
 ], function(Backbone,DatumField,DatumMenu,DatumStatus) {
-  var DatumPrefs = Backbone.Model.extend(
+  var DatumPref = Backbone.Model.extend(
       /** @lends Preference.prototype */
       {
         /**
@@ -27,5 +27,5 @@ define("datum_prefs/DatumPrefs", [
        });
   
 
-  return DatumPrefs;
+  return DatumPref;
 });
