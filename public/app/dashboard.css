@@ -113,12 +113,15 @@ ul {
 .dropdown{
   margin: 0;
   padding: 0;
-  height: 1em; }
+  height: 1em; 
+  background: black;
 }
 
 .dropdown ul {
   margin: 0px;
   padding: 0px;
+  background: black;
+  
 }
 
 .dropdown ul li {
@@ -126,8 +129,10 @@ ul {
   height: 30px;
   float: left;
   list-style: none;
-  margin-left: 15px;
+  margin-left: 0px;
   position: relative;
+    background: black;
+  
 }
 
 .dropdown li ul {
