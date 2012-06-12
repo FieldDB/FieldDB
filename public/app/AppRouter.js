@@ -213,7 +213,7 @@ define([
         permissions : null,
       });
 
-      $("#dashboard-view").show();
+      $("#dashboard-view").hide();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
@@ -231,7 +231,7 @@ define([
     showUserPreferences : function(userName) {
       Utils.debug("In showUserPreferences: " + userName);
 
-      $("#dashboard-view").hide();
+      $("#dashboard-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();

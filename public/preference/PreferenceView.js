@@ -2,7 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "preference/Preference",
-    "text!user/preference.handlebars",
+    "text!preference/preference.handlebars",
     "hotkey/HotKeyConfigView",
     "libs/Utils"
 ], function(
