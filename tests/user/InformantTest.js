@@ -33,7 +33,7 @@ require([
     			var i = new Informant();
     			i.set("informantcode", "C.M.B.");
     			i.set("dialect", "Catfrench");
-    			expect("C.M.B." == u.birthDate("January 1, 1900")).tobeTruthy();
+    			expect("C.M.B." == u.dialect("Catfrench")).tobeTruthy();
     
     		});
 	
