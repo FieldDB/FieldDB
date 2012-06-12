@@ -5,6 +5,8 @@ define([
     "data_list/DataListView",
     "datum/Datum", 
     "datum/DatumView", 
+    "preference/Preference",
+    "preference/PreferenceView",
     "search/Search",
     "search/AdvancedSearchView",
     "session/Session", 
@@ -20,6 +22,8 @@ define([
     DataListView,
     Datum,
     DatumView,
+    Preference,
+    PreferenceView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -54,6 +58,7 @@ define([
       "corpus/:corpusName" : "showDashboard",
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
+      
       "" : "showDashboard",
     },
 
@@ -226,7 +231,7 @@ define([
     showUserPreferences : function(userName) {
       Utils.debug("In showUserPreferences: " + userName);
 
-      $("#dashboard-view").hide();
+      $("#dashboard-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();

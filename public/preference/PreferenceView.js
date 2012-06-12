@@ -46,7 +46,7 @@ define([
       Utils.debug("PREFERENCE render: " + this.el);
       if (this.model != undefined) {
         // Display the PreferenceView
-        this.setElement($("#preference"));
+        this.setElement($("#user-preferences-view"));
         $(this.el).html(this.template(this.model.toJSON()));
       }
       
@@ -75,8 +75,8 @@ define([
                      "images/skins/temple.jpg",
                      "images/skins/weaving.jpg",
                      "images/skins/sunset.jpg",
-                //     "images/skins/window.jpg",
-                //  "images/skins/Ceske_Krumlov.jpg",
+                     "images/skins/window.jpg",
+                     "images/skins/Ceske_Krumlov.jpg", 
 
 
 
