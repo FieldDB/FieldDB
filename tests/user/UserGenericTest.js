@@ -3,14 +3,12 @@ require([
  ], function(UserGeneric) {
 
     //TODO @hisakonog do we want these to test that the UserGeneric is populated with the Sapir character? or that they are null... or that they are the "public" character?
-    //TODO @cesine let UserGeneric be the "public" character and use Sapir for User test
+    //TODO now UserGeneric is null 
 
 	describe("as a Generic User I want to see how I appear on the dashboard", function() {
 		it("should set public user name", function() {
 			var u = new UserGeneric();
 			expect(u.get("username")).toEqual("");	
-			//			u.set("username", "public");
-//			expect("public" == u.get("username")).tobeTruthy();
 		});
  
     
@@ -29,8 +27,6 @@ require([
         it("should set default gravatar", function() {
         	var u = new UserGeneric();
         	expect(u.get("gravatar")).toEqual("./../user/user_gravatar.png");
-        	//        	u.set("gravatar", "./../user/public_gravatar.png")
-//            expect("./../user/public_gravatar.png" == u.get("gravatar")).tobeTruthy();
         });
 
     
@@ -50,8 +46,6 @@ require([
         it("should set default description", function() {
 			var u = new UserGeneric();
 			expect(u.get("description")).toEqual("");
-			//			u.set("description", "public user");
-//			expect("public user" == u.get("description")).tobeTruthy();
         });
   
     

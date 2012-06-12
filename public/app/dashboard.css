@@ -133,7 +133,9 @@ ul {
 
 .dropdown ul li {
   display: inline;
-  height: 30px;
+	height: 35px;
+	 width: 100px;
+	
   float: left;
   list-style: none;
   margin-left: 0px;
@@ -150,26 +152,28 @@ ul {
    
 }
 
-.dropdown li:hover ul {
-  display: block;
-	width: 160px;
+.dropdown li:a ul {
+	width: 200px;
+	
 }
 
 .dropdown li li {
   list-style: none;
   display: list-item;
-  width: 100%;
+  width: 75px;
+  display: inline;
 }
 
 
 .dropdown ul li ul {
   margin-top:-3em;
   margin-left:3em;
+  display: block;
  
 }
 
 .dropdown li:hover ul, #menu li.over ul {
-  display:block;
+  display:inline;
   
 	}
 .dropdown li:hover ul ul, #menu li.over ul ul {
@@ -177,10 +181,14 @@ ul {
 }
 /* SHOW SUBMENU 2 */
 .dropdown ul li:hover ul, #menu ul li.over ul {
-  display:block;
+  display:inline;
 	
-
 	}
+	
+	
+	
+	
+	
 
 .grav{
 	
