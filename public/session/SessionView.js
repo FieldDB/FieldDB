@@ -59,7 +59,7 @@ define([
         informant : "Tillohash",
         corpus : corpus,
         language : "Cusco Quechua",
-        goal : "Working on naya"
+        goal : "Which verbs can be affixed with -naya"
       });
     }
   });
