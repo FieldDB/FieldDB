@@ -47,4 +47,5 @@ This project is released under the [Apache 2.0](http://www.apache.org/licenses/L
 * [Follow the 4 GitHub Help Tutorials](http://help.github.com/) for how to install and use Git on your computer.
 * Edit the code on your computer, and push to your origin (git push origin master).
 * Click on the "Pull Request" button, and leave us a note about what you changed. 
-* Feel the glow :) 
+* Feel the glow :)
+ 

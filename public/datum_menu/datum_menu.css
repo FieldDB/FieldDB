@@ -5,6 +5,7 @@
   width: 130px;
   text-align: center; 
   float: right;
+  margin-right: 10px
 }
 
 
@@ -13,9 +14,23 @@
   background-color: transparent;
   height: 30px;
   width: 30px;
+  border: none;
+  
 }
 
 #LaTeX{
 	background-color: transparent;
 	height: 30px;
+	width: 100px;
+	border: none;
+}
+
+#fullscreen{
+	float: right;
+}
+
+#newDatum{
+	float: right;
+	height: 30px;
+	width: 30px;
 }
