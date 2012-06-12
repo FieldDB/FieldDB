@@ -293,7 +293,18 @@ ul {
 	float: left;
 }
 
+.fullscreen{
+	float: right;
+}
+#dataListMenu{
+	margin: 10px;
+	font-size: 24px;
 
+}
+#data_list_content{
+	margin: 100px;
+color: black;
+}
 
 
 .user {
