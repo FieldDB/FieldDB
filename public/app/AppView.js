@@ -8,10 +8,12 @@ define([
     "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
-    "datum/Datum",
-    "datum/DatumView", 
     "data_list/DataList",
     "data_list/DataListView",
+    "datum/Datum",
+    "datum/DatumView", 
+    "datum_pref/DatumPref",
+    "datum_pref/DatumPrefView",
     "preference/Preference",
     "preference/PreferenceView",
     "search/Search",
@@ -32,10 +34,12 @@ define([
     AuthenticationView,
     Corpus, 
     CorpusView,
-    Datum,
-    DatumView,
     DataList,
     DataListView,
+    Datum,
+    DatumView,
+    DatumPref,
+    DatumPrefView,
     Preference,
     PreferenceView,
     Search,
@@ -111,6 +115,14 @@ define([
       this.authView = new AuthenticationView({
         model : new Authentication()
       });
+      
+      // Create an AuthenticationView
+      this.datumPrefView = new DatumPrefView({
+        model : new Authentication()
+      });
+      
+      
+      
     },
     
     /**
@@ -161,6 +173,9 @@ define([
      * The userPreferenceView is a child of the AppView.
      */  
     preferenceView : PreferenceView,
+    
+    datumPrefView : DatumPrefView,
+
     
     
     
@@ -214,7 +229,8 @@ define([
         //Display the PreferenceView
         this.preferenceView.render();
         
-        
+        this.datumPrefView.render();
+
         
         
       } else {
