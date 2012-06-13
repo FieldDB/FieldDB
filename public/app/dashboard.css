@@ -15,6 +15,10 @@ body {
 	
 }
 
+.top-left{
+	float: left;
+}
+
 .llama {
 	background-image: url('../images/skins/machu_picchu2.jpg'); 
 /* 	background-size:1333px 1000px; */
@@ -24,9 +28,6 @@ body {
 }
 
 
-.icons{
-	margin-right: 10px;
-}
 nav {
 	font-size: 1.5em;
 	padding: 1em;
@@ -274,11 +275,20 @@ SHOW SUBMENU 2
 }
 
 .icons{
-	float: left;
+	margin-right: 10px;
+	font-size: 24px;
 }
 
 
+}
+#data_list_content{
+	margin: 100px;
+  
+}
 
+#data_list_footer{
+	color: #000000;
+}
 
 .user {
 	margin-right: 10px;
