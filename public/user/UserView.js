@@ -51,6 +51,7 @@ define([
     render : function() {
       Utils.debug("USER render: " + this.el);
       if (this.model != undefined) {
+        this.setElement($("#user"));
         $(this.el).html(this.template(this.model.toJSON()));
         Utils.debug("\trendering user: " + this.model.get("username"));
       } else {
