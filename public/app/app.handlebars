@@ -1,64 +1,102 @@
-<!-- The layout of the dashboard page -->
-<div id="dashboard-view" class="page">
-  <div class="navbar navbar-fixed-top ">
-    <div class="navigation widget" id="navigation">
-        <div id="search" class="search"></div> 
-          <div id="top">
-            <div style="font-size: 24px;" class ="icons">
-              <a href="#corpus/yale"><i class="icons icon-home"></i></a>
-               <i class="icons icon-refresh"></i>
-               <div id="preference" class="preference top"></div>
-            </div>
-            <div id="authentication" class="authentication"></div>
-          </div>
-        </div>      
-    </div>   
-    <div class="container main">
-      <div class = "left">
-        <div id="corpus" class = "widget"></div>
-          <div id="leftside" class="leftside widget">
-            <div id="data_list">Data List </div>
-            <ul id="data_list_content">  </ul>
-            <div id="pagination">  </div>
-          </div> 
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <div class="btn-group pull-right">
+          <ul class="nav">
+            <li><a><i class="icons icon-home icon-white"></i></a></li>
+            <li><a><i class="icons icon-refresh icon-white"></i></a></li>
+            <li> <a class="btndropdown-toggle" data-toggle="dropdown" href="#">       
+                <i class="icons icon-user icon-white"></i>
+              </a>
+            <ul class="dropdown-menu" id="authentication">
+            </ul> 
+            </li>
+          </ul>
         </div>
-        <div class ="right">  
-          <div id="content" class="centercontent widget">
-          
-          
-             <!-- The layout of the fullscreen datum page -->
+        <div id="search" class="search class="nav-collapse"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+ <div class="container-fluid main">
+      <div class="row-fluid">
+        <div class="span3">
+            <div id="corpus" class="well sidebar-nav"></div>
+            <div id="data_list" class=" sidebar-nav widget"></div>
+        </div> 
+          <div class="span6 widget">
+<!--                The layout of the fullscreen datum page -->
              <div id="fullscreen-datum-view" class="">
              <div id="datum-view">Fullscreen Datum View</div>
             </div>
       
-              <!-- The layout of the new session page -->
-              <div id="new-session-view" class="middle widget">
+<!--               The layout of the new session page
+ -->              <div id="new-session-view" class="middle widget">
               <div>New Session</div>
               </div>
       
-              <!-- The layout of the fullscreen search page -->
-             <div id="fullscreen-search-view" class="middle widget">
+<!--               The layout of the fullscreen search page
+ -->             <div id="fullscreen-search-view" class="middle widget">
              <div>Fullscreen Search View</div>
              </div>
              
              
-             <!-- The layout of the user preferences page -->
-            <div id="user-preferences-view" class="preference">
+<!--              The layout of the user preferences page
+ -->            <div id="user-preferences-view" class="preference">
             <div>User Preferences</div>
             </div>
             
-             <!-- The layout of the datum preferences page -->
-            <div id="datum-preferences-view" class="preference">
+<!--              The layout of the datum preferences page
+ -->            <div id="datum-preferences-view" class="preference">
             <div>Datum Preferences</div>
             </div>
+              
+             
+         </div><!--/span-->
+         <div class="span3 widget">
+            <div id="activity_feed">Activity Feed</div> 
+           
+            </div><!--/span-->
+        
+      </div><!--/row-->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          </div><!--/row-->
+      </div><!--/row-->
+
+    
+
+    </div>
+ 
+      
+    
+    
+    
+    
+    
+     
+          <!-- <div id="content" class="centercontent widget">
+          
+          
+            
             
            
            
             </div>
             
              <div id="rightside" class="rightside widget">
-            <div id="activity_feed">Activity Feed</div> 
-            
+             -->
           </div>
 
           </div>
@@ -67,21 +105,6 @@
       </div> 
     </div>
   </div>
-</div>
-
-
-<!-- The layout of the fullscreen data list page -->
-<div id="fullscreen-datalist-view" class="page widget">
-  <div><h1>Data List View</h1></div>
-  
-</div>
-
-
-
-
-<!-- The layout of the user profile page -->  
-<div id="fullscreen-user-profile-view" class="  ">
-  <div id="user-profile-view">User Profile</div>
 </div>
 
 
