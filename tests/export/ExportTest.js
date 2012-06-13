@@ -11,7 +11,7 @@ function(Export) {
 
     });
     
-    it("should be able to export into csv format", function() {
+    it("should be able to export into XML format", function() {
           
           expect(true).toBeTruthy();
           
