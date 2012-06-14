@@ -114,9 +114,7 @@ define([
       // Create a DataListView   
       this.dataListView = new DataListView({
         model : new DataList({
-          title : "MyTitle",
-          dateCreated : "June 5, 2012",
-          description : "MyDescription",
+          
           datumIds : [
             "574e79f1c0c02df02b116ac71a0008f0",
             "574e79f1c0c02df02b116ac71a000b3a"

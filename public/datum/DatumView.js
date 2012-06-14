@@ -1,6 +1,7 @@
 define([
     "use!backbone", 
     "use!handlebars", 
+    "confidentiality_encryption/Confidential",
     "datum/Datum",
     "text!datum/datum.handlebars",
     "datum_status/DatumStatus",
@@ -15,6 +16,7 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
+    Confidential,
     Datum, 
     datumTemplate, 
     DatumStatus,
@@ -83,6 +85,7 @@ define([
      */
     events:{
     	"click #new" : "newDatum",
+    	"click .icon-lock": "encryptDatum",
     	"blur .utterance" : "updateUtterance",
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
@@ -153,7 +156,28 @@ define([
     updatePouch : function() {
       this.needsSave = true;
     },
-    
+    /**
+     * Encrypts the datum if it is confidential
+     * 
+     * @returns {Boolean}
+     */
+    encryptDatum: function(){
+      console.log("Fake encrypting");
+      var confidential = appView.corpusView.model.confidential ;
+     
+      if(confidential == undefined){
+        appView.corpusView.model.confidential = new Confidential();
+        confidential = appView.corpusView.model.confidential;
+      }
+      this.model.set("utterance", this.model.get("utterance").replace(/[^ -.]/g,"x"));
+      this.model.set("morphemes", this.model.get("morphemes").replace(/[^ -.]/g,"x"));
+      this.model.set("gloss", this.model.get("gloss").replace(/[^ -.]/g,"x"));
+      this.model.set("translation", this.model.get("translation").replace(/[^ -.]/g,"x"));
+      this.render();
+      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+//      console.log(confidential);
+//      this.model.set()
+    },
     newDatum: function() {
     	/* First, we build a new datum model, 
     	 * this datum model then asks if it belongs to a session
