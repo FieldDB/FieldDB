@@ -21,6 +21,10 @@ define([
     "session/SessionView",
     "user/User", 
     "user/UserProfileView", 
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
+    "export/Export",
+    "export/ExportView",
     "libs/Utils"
 
 ], function(
@@ -46,6 +50,11 @@ define([
     Session,
     SessionView,
     User,
+    UserProfileView,
+    HotKey,
+    HotKeyConfigView,
+    Export,
+    ExportView,
     UserProfileView
   
 ) {
@@ -75,7 +84,7 @@ define([
       "corpus/:corpusName/datalist" : "newFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
       "corpus/" : "newFullscreenCorpus",
-      "corpus/:corpusName" : "showDashboard", 
+      "corpus/:corpusName/export" : "showExport",
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
@@ -111,6 +120,7 @@ define([
       $("#new-data-list").hide();
       $("#new-corpus").hide();
       $('#import').hide();
+      $('#export-view').hide();
     },
       
     /**
@@ -136,6 +146,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#new-corpus").hide();
+      $('#export-view').hide();
     },
     
     
@@ -201,6 +212,7 @@ define([
           $("#hotkey-config-view").hide();
           $('#new-data-list').hide();
           $("#new-corpus").hide();
+          $('#export-view').hide();
           $('#import').hide();
         },
         
@@ -223,7 +235,7 @@ define([
           $("#hotkey-config-view").hide();
           $('#new-data-list').hide();
           $("#new-corpus").hide();        
-        },
+          $('#import').hide();
 
         },
       });
@@ -248,16 +260,13 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#new-session-view").show();
       $("#fullscreen-datalist-view").hide();
-      $('#new_data_list').hide();
+      $('#new-data-list').hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide(); 
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#import').hide();
-
-      
-
 
     },
    
@@ -287,6 +296,7 @@ define([
       $("#hotkey-config-view").hide();
       $('#new-data-list').hide();
       $("#new-corpus").hide();
+      $('#export-view').hide();
       $('#import').hide();
       
     },
@@ -313,8 +323,8 @@ define([
       $("#hotkey-config-view").hide();
       $('#new-data-list').hide();
       $("#new-corpus").hide();
+      $('#export-view').hide();
       $('#import').hide();
-
 
     },
     
@@ -344,6 +354,7 @@ define([
       $("#corpus").show();
       $("#activity_feed").show();
       $("#new-corpus").hide();
+      $('#export-view').hide();
       $('#import').hide();
 
 
@@ -365,7 +376,7 @@ define([
       appView.fullScreenUserView.model.set({
         username : "trisapeace",
         password : "pword",
-        email : "trisapeace@gmail.com",
+        email :  "trisapeace@gmail.com",
         gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
         researchInterest : "computers",
         affiliation : "iLanguageLab",
@@ -391,6 +402,7 @@ define([
       $("#hotkey-config-view").hide();
       $('#new-data-list').hide();
       $("#new-corpus").hide();
+      $('#export-view').hide();
       $('#import').hide();
 
 
@@ -417,6 +429,7 @@ define([
       $('#new-data-list').hide();      
       $("#new-corpus").hide();
       $('#import').hide();
+      $('#export-view').hide();
 
     },
     
@@ -434,6 +447,7 @@ define([
       $("#hotkey-config-view").hide();
       $('#new-data-list').hide();
       $("#new-corpus").hide();
+      $('#export-view').hide();
       $('#import').hide();
 
     },
@@ -454,6 +468,7 @@ define([
         $('#new-data-list').hide();
         $("#new-corpus").hide();
         $('#import').hide();
+        $('#export-view').hide();
 
 
       },
@@ -472,7 +487,31 @@ define([
         $("#datum-preferences-view").hide();
         $("#hotkey-config-view").hide();
         $('#import').show();
-      }, 
+        $('#export-view').hide();
+
+    },
+    
+    showExport : function(corpusName) {
+        Utils.debug("In showExport: " + corpusName);
+
+
+          $("#dashboard-view").show();
+          $("#fullscreen-datum-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#user-preferences-view").hide();
+          $("#new-session-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
+          $('#export-view').show();
+          $('#import').hide();
+
+
+      }
+    
+    
   });
 
   return AppRouter;
