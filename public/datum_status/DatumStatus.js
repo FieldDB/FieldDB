@@ -32,8 +32,11 @@ define("datum_status/DatumStatus", [
     	          label: 'To be checked',
     	          selected: true 
     	      }, {
-    	          id: 3,
-    	          label: 'Deleted'
+              id: 3,
+              label: 'Deleted'
+    	      }, {
+    	        id: 4,
+    	        label: 'Add...'
     	      }], 
     	      
     	      active: 0,

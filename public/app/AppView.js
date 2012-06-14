@@ -29,6 +29,11 @@ define([
     "session/Session",
     "session/SessionEditView",
     "user/User",
+    "user/UserProfileView",
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
+    "export/Export",
+    "export/ExportView",
     "user/UserProfileView",   
     "libs/Utils"
 ], function(
@@ -62,6 +67,11 @@ define([
     Session,
     SessionEditView,
     User,
+    UserProfileView,
+    HotKey,
+    HotKeyConfigView,
+    Export,
+    ExportView,
     UserProfileView
 ) {
   var AppView = Backbone.View.extend(
@@ -150,6 +160,11 @@ define([
       this.hotkeyConfigView = new HotKeyConfigView({
         model : new HotKey()
       });  
+      
+      // Create an ExportView
+      this.exportView = new ExportView({
+        model : new Export()
+      }); 
 
       
 //    Create an ImportView
@@ -173,6 +188,8 @@ define([
      * The corpusView is a child of the AppView.
      */
     corpusView : CorpusView,
+    
+    exportView : ExportView,
     
     /**
      * The fullScreenDatumView is a child of the AppView.
@@ -248,6 +265,8 @@ define([
         
         // Display the CorpusView
         this.corpusView.render();
+        
+        this.exportView.render();
         
         // Display the DatumView
         this.fullScreenDatumView.render();
