@@ -168,13 +168,12 @@ define([
         model : new Export()
       }); 
 
-<<<<<<< HEAD
       // Create a NewCorpusView
       this.newCorpusView = new NewCorpusView({
         model : new Corpus()
       });  
       
-=======
+
       
 //    Create an ImportView
       this.importView = new ImportView({
@@ -183,7 +182,7 @@ define([
       
 
 
->>>>>>> 4844db1ad30e42fdf623b3d8e172694d8b1287a3
+
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
@@ -248,13 +247,12 @@ define([
 
     newDataListView : NewDataListView,
     
-<<<<<<< HEAD
+
     newCorpusView : NewCorpusView,
     
-=======
+
     importView : ImportView,
 
->>>>>>> 4844db1ad30e42fdf623b3d8e172694d8b1287a3
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -313,14 +311,13 @@ define([
         this.hotkeyConfigView.render();
 
         this.newDataListView.render();
-        
-<<<<<<< HEAD
+
         this.newCorpusView.render();
          
-=======
+
         this.importView.render();
         
->>>>>>> 4844db1ad30e42fdf623b3d8e172694d8b1287a3
+
       } else {
         Utils.debug("\tApp model is not defined");
       }
