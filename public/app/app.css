@@ -57,5 +57,60 @@
 	 background: rgba(0, 0, 0, 0.4);
 	   border-radius: 5px;
 	 
+}
+
+.title{
+	
+	text-align: center;
+}
+
+#dateCreated{
+  
+  text-align: right;
+}
+
+.icons{
+	font-size: 20px;
+	margin: 3px;
+}
+
+textarea{
+	width: 100%;
+}
+
+#newDatum{
+	float: right;
+	font-size: 50px;
+}
+
+
+#dropZone{
+	float: right;
+	border: dashed;
+	border-color:#1E90FF;
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

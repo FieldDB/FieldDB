@@ -3,22 +3,22 @@
 	<div class="fullscreen"><a href="#fullscreen"><i class="icons icon-fullscreen"></i></a></div>
 	
 	<div id="dataListInfo">
-		<span class="title"><h2>{{title}}</h2></span><br/> 
+		<span class="title"><h2>{{title}}</h2></span>
 
-		<span class="dateCreated">{{dateCreated}}</span><br/> 
+		<span id="dateCreated"><h4>{{dateCreated}}</h4></span>
 
-		<span class="description">{{description}}</span> 
+		<span id="description"><h4>{{description}}</h4></span> <br>
 	</div>
 </div>
 
 
-   
+
 <div class ="icons" id="dataListMenu">
 
   <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> 
   <a href="#clipboard"><i class="icons icon-paste"></i></a>
   <a href="#duplicate"><i class="icons icon-copy"></i></a>
-  <button  id="LaTeX"> <img src= "./datum_menu/latex.png" alt="this will be the button that will convert your datum into latex." /></button>
+  <button class= "btn btn-primary" id="LaTeX"> LaTeX</button>
   
 </div>
 
@@ -26,6 +26,9 @@
 <div>
 
 <ul id="data_list_content"></ul>
+
+
+
 </div>
 
 
