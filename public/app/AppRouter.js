@@ -3,6 +3,7 @@ define([
     "corpus/Corpus", 
     "data_list/DataList", 
     "data_list/DataListView",
+    "data_list/NewDataListView",
     "datum/Datum", 
     "datum/DatumView", 
     "datum_pref/DatumPref",
@@ -24,6 +25,7 @@ define([
     Corpus,
     DataList,
     DataListView,
+    NewDataListView,
     Datum,
     DatumView,
     DatumPref,
@@ -62,12 +64,15 @@ define([
       "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
       "corpus/:corpusName/session/:id" : "showNewSession",
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
+      "corpus/:corpusName/datalist" : "newFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
       "corpus/:corpusName" : "showDashboard",
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
       "user/:userName/hotkeyconfig" : "showHotKeyConfig",
+
+
 
       
       
@@ -88,7 +93,6 @@ define([
           + sessionId);
 
       $("#dashboard-view").show();
-      $("#corpus").show();
       $("#new-session-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
@@ -97,6 +101,40 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+
+
+    },
+    /**
+     * Displays a page where the user can make their own modified datalist specified by the given
+     * corpusName and the given datumId.
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          sessionId The ID of the session within the corpus.
+     */
+    
+    
+    
+    
+    
+    
+    newFullscreenDataList : function(corpusName) {
+      Utils.debug("In newFullscreenDataList: " + corpusName);
+
+      $("#dashboard-view").show();
+      $("#new-session-view").hide();
+      $("#fullscreen-datum-view").hide();
+      $("#fullscreen-datalist-view").hide();
+      $("#fullscreen-datalist-view").hide();
+      $('#new_data_list').show();
+      $("#fullscreen-search-view").hide();
+      $("#fullscreen-user-profile-view").hide();
+      $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+
+
 
     },
 
@@ -131,6 +169,8 @@ define([
           $("#user-preferences-view").hide(); 
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
+
 
         },
         
@@ -162,6 +202,8 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+
 
     },
 
@@ -184,6 +226,8 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+
 
     },
 
@@ -206,6 +250,10 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+      $("#corpus").show();
+      $("#activity_feed").show();
+
 
 
       
@@ -249,6 +297,9 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+
+
 
     },
 
@@ -270,6 +321,8 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+
 
     },
     
@@ -287,6 +340,9 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#datum-preferences-view").show();
       $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+
+
 
     },
     
