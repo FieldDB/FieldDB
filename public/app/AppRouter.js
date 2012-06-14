@@ -230,7 +230,7 @@ define([
         permissions : null,
       });
 
-      $("#dashboard-view").hide();
+      $("#dashboard-view").show();
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
