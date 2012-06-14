@@ -10,6 +10,7 @@ define([
     "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
+    "corpus/NewCorpusView",
     "data_list/DataList",
     "data_list/DataListView",
     "data_list/NewDataListView",
@@ -48,6 +49,7 @@ define([
     AuthenticationView,
     Corpus, 
     CorpusView,
+    NewCorpusView,
     DataList,
     DataListView,
     NewDataListView,
@@ -164,12 +166,19 @@ define([
         model : new Export()
       }); 
 
+      // Create a NewCorpusView
+      this.newCorpusView = new NewCorpusView({
+        model : new Corpus()
+      });  
+      
+
       
 //    Create an ImportView
       this.importView = new ImportView({
         model : new Import()
       }); 
       
+
 
 
       // Set up a timeout event every 10sec
@@ -236,6 +245,10 @@ define([
 
     newDataListView : NewDataListView,
     
+
+    newCorpusView : NewCorpusView,
+    
+
     importView : ImportView,
 
 
@@ -296,9 +309,13 @@ define([
         this.hotkeyConfigView.render();
 
         this.newDataListView.render();
-        
+
+        this.newCorpusView.render();
+         
+
         this.importView.render();
         
+
       } else {
         Utils.debug("\tApp model is not defined");
       }
