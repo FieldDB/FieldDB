@@ -25,6 +25,8 @@ define([
     "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -52,7 +54,9 @@ define([
     Session,
     SessionEditView,
     User,
-    UserProfileView
+    UserProfileView,
+    HotKey,
+    HotKeyConfigView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -130,6 +134,10 @@ define([
         model : new ActivityFeed()
       });      
       
+//    Create a HotKeyConfigView
+      this.hotkeyConfigView = new HotKeyConfigView({
+        model : new HotKey()
+      });  
       
     },
     
@@ -185,6 +193,8 @@ define([
     datumPrefView : DatumPrefView,
     
     activityFeedView : ActivityFeedView,
+    
+    hotkeyConfigView : HotKeyConfigView,
 
 
     
@@ -243,6 +253,8 @@ define([
         this.datumPrefView.render();
         
         this.activityFeedView.render();
+        
+        this.hotkeyConfigView.render();
 
 
         

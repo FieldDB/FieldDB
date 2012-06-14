@@ -15,6 +15,8 @@ define([
     "session/SessionView",
     "user/User", 
     "user/UserProfileView", 
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
     "libs/Utils"
 
 ], function(
@@ -34,7 +36,9 @@ define([
     Session,
     SessionView,
     User,
-    UserProfileView
+    UserProfileView,
+    HotKey,
+    HotKeyConfigView
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -63,6 +67,7 @@ define([
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
+      "user/:userName/hotkeyconfig" : "showHotKeyConfig",
 
       
       
@@ -91,6 +96,7 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
 
     },
 
@@ -124,6 +130,7 @@ define([
           $("#new-session-view").hide();
           $("#user-preferences-view").hide(); 
           $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
 
         },
         
@@ -154,6 +161,7 @@ define([
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
 
     },
 
@@ -175,6 +183,7 @@ define([
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
 
     },
 
@@ -196,6 +205,7 @@ define([
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
 
 
       
@@ -238,6 +248,7 @@ define([
       $("#new-session-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
 
     },
 
@@ -258,6 +269,7 @@ define([
       $("#new-session-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
 
     },
     
@@ -274,8 +286,24 @@ define([
       $("#new-session-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#datum-preferences-view").show();
+      $("#hotkey-config-view").hide();
 
-    }
+    },
+    
+    showHotKeyConfig : function(userName) {
+        Utils.debug("In showHotKeyConfig: " + userName);
+
+        $("#dashboard-view").show();
+        $("#fullscreen-datum-view").hide();
+        $("#fullscreen-datalist-view").hide();
+        $("#fullscreen-search-view").hide();
+        $("#user-preferences-view").hide();
+        $("#new-session-view").hide();
+        $("#fullscreen-user-profile-view").hide();
+        $("#datum-preferences-view").hide();
+        $("#hotkey-config-view").show();
+
+      }
     
     
     
