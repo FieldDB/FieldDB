@@ -109,6 +109,9 @@ define([
       // Change the id of the fullscreen datum view's Datum to be the given datumId
       appView.fullScreenDatumView.model.id = datumId;
       
+      // Save the currently displayed Datum, if needed
+      appView.fullScreenDatumView.saveScreen();
+      
       // Fetch the Datum's attributes from the PouchDB
       appView.fullScreenDatumView.model.fetch({
         success : function() {

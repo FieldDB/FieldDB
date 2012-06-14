@@ -130,9 +130,10 @@ define([
 //      this.activityFeedView = new ActivityFeedView({
 //        model : new ActivityFeed()
 //      });
-//      
-      
-      
+
+      // Set up a timeout event every 10sec
+      _.bindAll(this, "saveScreen");
+      window.setInterval(this.saveScreen, 10000);      
     },
     
     /**
@@ -188,12 +189,6 @@ define([
     
 //    activityFeedView : ActivityFeedView,
 
-
-    
-    
-    
-
-    
     /**
      * Events that the AppView is listening to and their handlers.
      */
@@ -285,6 +280,11 @@ define([
         });
       });
     },
+    
+    saveScreen : function() {
+      // Save the FullScreenDatum page, if necessary
+      this.fullScreenDatumView.saveScreen();
+    }
   });
 
   return AppView;
