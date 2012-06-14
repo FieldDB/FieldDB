@@ -12,6 +12,7 @@ define([
     "corpus/CorpusView",
     "data_list/DataList",
     "data_list/DataListView",
+    "data_list/NewDataListView",
     "datum/Datum",
     "datum/DatumView", 
     "datum_pref/DatumPref",
@@ -25,6 +26,8 @@ define([
     "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -40,6 +43,7 @@ define([
     CorpusView,
     DataList,
     DataListView,
+    NewDataListView,
     Datum,
     DatumView,
     DatumPref,
@@ -52,7 +56,9 @@ define([
     Session,
     SessionEditView,
     User,
-    UserProfileView
+    UserProfileView,
+    HotKey,
+    HotKeyConfigView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -128,8 +134,18 @@ define([
 //       Create an ActivityFeedView
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
-      });      
+      }); 
       
+      
+     // Create an newDataListView
+      this.newDataListView = new NewDataListView({
+        model : new DataList()
+      });  
+      
+//    Create a HotKeyConfigView
+      this.hotkeyConfigView = new HotKeyConfigView({
+        model : new HotKey()
+      });  
       
     },
     
@@ -185,7 +201,10 @@ define([
     datumPrefView : DatumPrefView,
     
     activityFeedView : ActivityFeedView,
+    
+    hotkeyConfigView : HotKeyConfigView,
 
+    newDataListView : NewDataListView,
 
     
     
@@ -243,7 +262,10 @@ define([
         this.datumPrefView.render();
         
         this.activityFeedView.render();
+        
+        this.hotkeyConfigView.render();
 
+        this.newDataListView.render();
 
         
         
