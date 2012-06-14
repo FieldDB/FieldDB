@@ -48,6 +48,9 @@ define([
       
       // Create a DatumFieldView
       this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
+      
+      // If the model changes, re-render
+      this.model.bind('change', this.render, this);
     },
 
     /**
