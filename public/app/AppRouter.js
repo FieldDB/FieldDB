@@ -87,7 +87,7 @@ define([
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
       "user/:userName/hotkeyconfig" : "showHotKeyConfig",
-      "import/" : "showImport",
+      "import" : "showImport",
 
       
       "" : "showDashboard",
@@ -244,7 +244,6 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $('#export-view').hide();
       $('#import').hide();
 
