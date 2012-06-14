@@ -12,6 +12,7 @@ define([
     "corpus/CorpusView",
     "data_list/DataList",
     "data_list/DataListView",
+    "data_list/NewDataListView",
     "datum/Datum",
     "datum/DatumView", 
     "datum_pref/DatumPref",
@@ -40,6 +41,7 @@ define([
     CorpusView,
     DataList,
     DataListView,
+    NewDataListView,
     Datum,
     DatumView,
     DatumPref,
@@ -128,7 +130,13 @@ define([
 //       Create an ActivityFeedView
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
-      });      
+      }); 
+      
+      
+     // Create an newDataListView
+      this.newDataListView = new NewDataListView({
+        model : new DataList()
+      });  
       
       
     },
@@ -186,6 +194,7 @@ define([
     
     activityFeedView : ActivityFeedView,
 
+    newDataListView : NewDataListView,
 
     
     
@@ -244,6 +253,7 @@ define([
         
         this.activityFeedView.render();
 
+        this.newDataListView.render();
 
         
         
