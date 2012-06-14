@@ -358,6 +358,7 @@ define([
         $("#fullscreen-user-profile-view").hide();
         $("#datum-preferences-view").hide();
         $("#hotkey-config-view").show();
+        $('#new_data_list').hide();
 
       }
     
