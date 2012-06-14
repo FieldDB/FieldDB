@@ -71,11 +71,6 @@ define([
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
       "user/:userName/hotkeyconfig" : "showHotKeyConfig",
-
-
-
-      
-      
       "" : "showDashboard",
     },
 
@@ -102,8 +97,6 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
-
-
     },
     /**
      * Displays a page where the user can make their own modified datalist specified by the given
@@ -114,12 +107,6 @@ define([
      * @param {Number}
      *          sessionId The ID of the session within the corpus.
      */
-    
-    
-    
-    
-    
-    
     newFullscreenDataList : function(corpusName) {
       Utils.debug("In newFullscreenDataList: " + corpusName);
 
@@ -133,9 +120,6 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
-
-
-
     },
 
     /**
@@ -152,6 +136,9 @@ define([
 
       // Change the id of the fullscreen datum view's Datum to be the given datumId
       appView.fullScreenDatumView.model.id = datumId;
+      
+      // Save the currently displayed Datum, if needed
+      appView.fullScreenDatumView.saveScreen();
       
       // Fetch the Datum's attributes from the PouchDB
       appView.fullScreenDatumView.model.fetch({
@@ -170,12 +157,26 @@ define([
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
           $('#new_data_list').hide();
-
-
         },
         
         error : function() {
           Utils.debug("Datum does not exist: " + datumId);
+          
+          // Create a new Datum and render it
+          appView.fullScreenDatumView.model = new Datum();
+          appView.fullScreenDatumView.render();
+          
+          // Display the fullscreen datum view and hide all the other views
+          $("#dashboard-view").show();
+          $("#fullscreen-datum-view").show();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#new-session-view").hide();
+          $("#user-preferences-view").hide(); 
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
         }
       });
     },
@@ -203,8 +204,6 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
-
-
     },
 
     /**
@@ -227,8 +226,6 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
-
-
     },
 
     /**
@@ -253,10 +250,6 @@ define([
       $('#new_data_list').hide();
       $("#corpus").show();
       $("#activity_feed").show();
-
-
-
-      
     },
 
     /**
@@ -298,9 +291,6 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
-
-
-
     },
 
     /**
@@ -322,11 +312,7 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
-
-
     },
-    
-    
     
     showDatumPreferences : function(userName) {
       Utils.debug("In showDatumPreferences: " + userName);
@@ -341,13 +327,11 @@ define([
       $("#datum-preferences-view").show();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
-
-
-
     },
     
     showHotKeyConfig : function(userName) {
-        Utils.debug("In showHotKeyConfig: " + userName);
+      Utils.debug("In showHotKeyConfig: " + userName);
+
 
         $("#dashboard-view").show();
         $("#fullscreen-datum-view").hide();
@@ -358,14 +342,10 @@ define([
         $("#fullscreen-user-profile-view").hide();
         $("#datum-preferences-view").hide();
         $("#hotkey-config-view").show();
+        $('#new_data_list').hide();
 
-      }
-    
-    
-    
-    
-    
-    
+    }   
+        
   });
 
   return AppRouter;
