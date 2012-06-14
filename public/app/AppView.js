@@ -4,14 +4,15 @@ define([
     "app/App", 
     "text!app/app.handlebars", 
     "app/AppRouter",
-//    "activity/ActivityFeed",
-//    "activity/ActivityFeedView",
+    "activity/ActivityFeed",
+    "activity/ActivityFeedView",
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
     "data_list/DataList",
     "data_list/DataListView",
+    "data_list/NewDataListView",
     "datum/Datum",
     "datum/DatumView", 
     "datum_pref/DatumPref",
@@ -25,6 +26,8 @@ define([
     "session/SessionEditView",
     "user/User",
     "user/UserProfileView",
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -32,14 +35,15 @@ define([
     App, 
     appTemplate,
     AppRouter, 
-//    ActivityFeed,
-//    ActivityFeedView,
+    ActivityFeed,
+    ActivityFeedView,
     Authentication,
     AuthenticationView,
     Corpus, 
     CorpusView,
     DataList,
     DataListView,
+    NewDataListView,
     Datum,
     DatumView,
     DatumPref,
@@ -52,7 +56,9 @@ define([
     Session,
     SessionEditView,
     User,
-    UserProfileView
+    UserProfileView,
+    HotKey,
+    HotKeyConfigView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -127,13 +133,23 @@ define([
       });
       
       // Create an ActivityFeedView
-//      this.activityFeedView = new ActivityFeedView({
-//        model : new ActivityFeed()
-//      });
+      this.activityFeedView = new ActivityFeedView({
+        model : new ActivityFeed()
+      }); 
+      
+      // Create an newDataListView
+      this.newDataListView = new NewDataListView({
+        model : new DataList()
+      });  
+      
+      // Create a HotKeyConfigView
+      this.hotkeyConfigView = new HotKeyConfigView({
+        model : new HotKey()
+      });  
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
-      window.setInterval(this.saveScreen, 10000);      
+      window.setInterval(this.saveScreen, 10000);     
     },
     
     /**
@@ -187,7 +203,11 @@ define([
     
     datumPrefView : DatumPrefView,
     
-//    activityFeedView : ActivityFeedView,
+    activityFeedView : ActivityFeedView,
+    
+    hotkeyConfigView : HotKeyConfigView,
+
+    newDataListView : NewDataListView,
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -231,19 +251,19 @@ define([
         // Display the AuthView
         this.authView.render();
         
-        //Display the SessionEditView
+        // Display the SessionEditView
         this.sessionEditView.render();
         
-        //Display the PreferenceView
+        // Display the PreferenceView
         this.preferenceView.render();
         
         this.datumPrefView.render();
         
-//        this.activityFeedView.render();
-
-
+        this.activityFeedView.render();
         
-        
+        this.hotkeyConfigView.render();
+
+        this.newDataListView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }
