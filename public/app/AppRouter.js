@@ -88,8 +88,8 @@ define([
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
-      "user/:userName/hotkeyconfig" : "showHotKeyConfig",      
-      "import/" : "showImport",
+      "user/:userName/hotkeyconfig" : "showHotKeyConfig",
+      "import" : "showImport",
       "" : "showDashboard",
     },
 
@@ -104,52 +104,13 @@ define([
     showDashboard : function(corpusName) {
       Utils.debug("In showDashboard: " + corpusName);
 
-      $("#dashboard-view").show();
-   //   $("#corpus").show();
-    //  $("#activity_feed").show();
+      this.hideEverything();
 
-      
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $("#new_data_list").hide();
-      $("#new-corpus").hide();
-      $('#import').hide();
-      $('#export-view').hide();
+      $("#dashboard-view").show();
+
     },
 
       
-    /**
-     * Displays a page where the user can make their own modified datalist specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    newFullscreenDataList : function(corpusName) {
-      Utils.debug("In newFullscreenDataList: " + corpusName);
-
-      $("#dashboard-view").show();
-      $("#new-session-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#new_data_list").show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-    },
-
     
     
     /**
@@ -161,18 +122,11 @@ define([
      *          sessionId The ID of the session within the corpus.
      */
     newFullscreenCorpus : function() {
-      Utils.debug("In newFullscreenDataList: " + corpusName);
+      Utils.debug("In newFullscreenCorpus: " + corpusName);
+
+      this.hideEverything();
 
       $("#dashboard-view").show();
-      $("#new-session-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#new_data_list").hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
       $("#new-corpus").show();
     },
 
@@ -197,25 +151,17 @@ define([
       appView.fullScreenDatumView.saveScreen();
       
       // Fetch the Datum's attributes from the PouchDB
+      var self = this;
       appView.fullScreenDatumView.model.fetch({
         success : function() {
           // Update the display with the Datum with the given datumId
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
+          self.hideEverything();
+
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
-          $("#new-session-view").hide();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#user-preferences-view").hide(); 
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
-          $("#new-corpus").hide();
-          $('#export-view').hide();
-          $('#import').hide();
         },
         
         error : function() {
@@ -226,18 +172,11 @@ define([
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
+
+          self.hideEverything();
+          
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#new-session-view").hide();
-          $("#user-preferences-view").hide(); 
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
-          $("#new-corpus").hide();        
-          $('#import').hide();
 
         },
       });
@@ -258,17 +197,11 @@ define([
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
 
+      this.hideEverything();
+
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
       $("#new-session-view").show();
-      $("#fullscreen-datalist-view").hide();
-      $('#new_data_list').hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide(); 
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#import').hide();
+
 
     },
    
@@ -287,20 +220,10 @@ define([
       Utils.debug("In showFullscreenDataList: " + corpusName + " *** "
           + dataListId);
 
-      $("#dashboard-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-datalist-view").show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-      $('#import').hide();
-      
+      this.hideEverything();
+     
+      $("#dashboard-view").show();
+      $("#fullscreen-datalist-view").show();      
     },
     /**
      * Displays a page where the user can make their own modified datalist specified by the given
@@ -314,20 +237,11 @@ define([
     newFullscreenDataList : function(corpusName) {
       Utils.debug("In newFullscreenDataList: " + corpusName);
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-      $('#import').hide();
-
+      $('#new_data_list').show();
+      
     },
     
 
@@ -343,22 +257,13 @@ define([
     showAdvancedSearch : function(corpusName) {
       Utils.debug("In showAdvancedSearch: " + corpusName);
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").show();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $("#corpus").show();
       $("#activity_feed").show();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-      $('#import').hide();
-
+     
 
     },
 
@@ -393,20 +298,10 @@ define([
         permissions : null,
       });
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-datalist-view").show();
-      $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").show();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-      $('#import').hide();
-
 
     },
 
@@ -418,78 +313,46 @@ define([
      */
     showUserPreferences : function(userName) {
       Utils.debug("In showUserPreferences: " + userName);
-
+      
+      this.hideEverything();
+ 
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
       $("#fullscreen-datalist-view").show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").show();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();      
-      $("#new-corpus").hide();
-      $('#import').hide();
-      $('#export-view').hide();
-
+      
     },
     
     showDatumPreferences : function(userName) {
       Utils.debug("In showDatumPreferences: " + userName);
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
       $("#fullscreen-datalist-view").show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
       $("#datum-preferences-view").show();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-      $('#import').hide();
-
+      
     },
+    
     
     showHotKeyConfig : function(userName) {
       Utils.debug("In showHotKeyConfig: " + userName);
 
-
+      this.hideEverything();
+      
         $("#dashboard-view").show();
-        $("#fullscreen-datum-view").hide();
-        $("#new-session-view").hide();
         $("#fullscreen-datalist-view").show();
-        $("#fullscreen-search-view").hide();
-        $("#fullscreen-user-profile-view").hide();
-        $("#user-preferences-view").hide();
-        $("#datum-preferences-view").hide();
         $("#hotkey-config-view").show();
-        $('#new_data_list').hide();
-        $("#new-corpus").hide();
-        $('#import').hide();
-        $('#export-view').hide();
-
 
       },
     
+      
       showImport : function() {
         Utils.debug("In import: ");
 
+        this.hideEverything();
         $("#dashboard-view").show();
-        $("#fullscreen-datum-view").hide();
-        $("#fullscreen-datalist-view").hide();
-        $('#new_data_list').hide();
-        $("#fullscreen-search-view").hide();
-        $("#user-preferences-view").hide();
-        $("#new-session-view").hide();
-        $("#fullscreen-user-profile-view").hide();
-        $("#datum-preferences-view").hide();
-        $("#hotkey-config-view").hide();
-        $('#export-view').hide();
         $('#import').show();
+
 
 
     },
@@ -498,20 +361,27 @@ define([
         Utils.debug("In showExport: " + corpusName);
 
 
-          $("#dashboard-view").show();
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $('#export-view').show();
+          
+
+      },
+      
+      hideEverything: function() {
+          $("#dashboard-view").hide();
           $("#fullscreen-datum-view").hide();
-          $("#fullscreen-datalist-view").hide();
-          $('#new_data_list').hide();
-          $("#fullscreen-search-view").hide();
-          $("#user-preferences-view").hide();
           $("#new-session-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
           $("#fullscreen-user-profile-view").hide();
+          $("#user-preferences-view").hide();
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
-          $('#export-view').show();
+          $('#new_data_list').hide();
+          $("#new-corpus").hide();
+          $('#export-view').hide();
           $('#import').hide();
-
-
       }
     
     
