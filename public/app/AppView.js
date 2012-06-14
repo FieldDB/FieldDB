@@ -104,7 +104,8 @@ define([
           dateCreated : "June 5, 2012",
           description : "MyDescription",
           datumIds : [
-            "4f3c285937f7dde33d8749ad35001023"
+            "574e79f1c0c02df02b116ac71a0008f0",
+            "574e79f1c0c02df02b116ac71a000b3a"
           ]
         })
       });
@@ -131,22 +132,24 @@ define([
         model : new Authentication()
       });
       
-//       Create an ActivityFeedView
+      // Create an ActivityFeedView
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
       
-      
-     // Create an newDataListView
+      // Create an newDataListView
       this.newDataListView = new NewDataListView({
         model : new DataList()
       });  
       
-//    Create a HotKeyConfigView
+      // Create a HotKeyConfigView
       this.hotkeyConfigView = new HotKeyConfigView({
         model : new HotKey()
       });  
-      
+
+      // Set up a timeout event every 10sec
+      _.bindAll(this, "saveScreen");
+      window.setInterval(this.saveScreen, 10000);     
     },
     
     /**
@@ -206,11 +209,6 @@ define([
 
     newDataListView : NewDataListView,
 
-    
-    
-    
-
-    
     /**
      * Events that the AppView is listening to and their handlers.
      */
@@ -253,10 +251,10 @@ define([
         // Display the AuthView
         this.authView.render();
         
-        //Display the SessionEditView
+        // Display the SessionEditView
         this.sessionEditView.render();
         
-        //Display the PreferenceView
+        // Display the PreferenceView
         this.preferenceView.render();
         
         this.datumPrefView.render();
@@ -266,9 +264,6 @@ define([
         this.hotkeyConfigView.render();
 
         this.newDataListView.render();
-
-        
-        
       } else {
         Utils.debug("\tApp model is not defined");
       }
@@ -305,6 +300,11 @@ define([
         });
       });
     },
+    
+    saveScreen : function() {
+      // Save the FullScreenDatum page, if necessary
+      this.fullScreenDatumView.saveScreen();
+    }
   });
 
   return AppView;

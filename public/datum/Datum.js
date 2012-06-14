@@ -69,7 +69,7 @@ define([
       datumTag : new DatumTag()
     },
     
-    pouch: Backbone.sync.pouch(Utils.pouchUrl),
+    pouch: Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
     
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code 
