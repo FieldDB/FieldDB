@@ -10,6 +10,7 @@ define([
     "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
+    "corpus/NewCorpusView",
     "data_list/DataList",
     "data_list/DataListView",
     "data_list/NewDataListView",
@@ -17,6 +18,10 @@ define([
     "datum/DatumView", 
     "datum_pref/DatumPref",
     "datum_pref/DatumPrefView",
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
+    "import/Import",
+    "import/ImportView",
     "preference/Preference",
     "preference/PreferenceView",
     "search/Search",
@@ -28,6 +33,9 @@ define([
     "user/UserProfileView",
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
+    "export/Export",
+    "export/ExportView",
+    "user/UserProfileView",   
     "libs/Utils"
 ], function(
     Backbone, 
@@ -41,6 +49,7 @@ define([
     AuthenticationView,
     Corpus, 
     CorpusView,
+    NewCorpusView,
     DataList,
     DataListView,
     NewDataListView,
@@ -48,6 +57,10 @@ define([
     DatumView,
     DatumPref,
     DatumPrefView,
+    HotKey,
+    HotKeyConfigView,
+    Import,
+    ImportView,
     Preference,
     PreferenceView,
     Search,
@@ -58,7 +71,10 @@ define([
     User,
     UserProfileView,
     HotKey,
-    HotKeyConfigView
+    HotKeyConfigView,
+    Export,
+    ExportView,
+    UserProfileView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -146,6 +162,26 @@ define([
       this.hotkeyConfigView = new HotKeyConfigView({
         model : new HotKey()
       });  
+      
+      // Create an ExportView
+      this.exportView = new ExportView({
+        model : new Export()
+      }); 
+
+      // Create a NewCorpusView
+      this.newCorpusView = new NewCorpusView({
+        model : new Corpus()
+      });  
+      
+
+      
+//    Create an ImportView
+      this.importView = new ImportView({
+        model : new Import()
+      }); 
+      
+
+
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -161,6 +197,8 @@ define([
      * The corpusView is a child of the AppView.
      */
     corpusView : CorpusView,
+    
+    exportView : ExportView,
     
     /**
      * The fullScreenDatumView is a child of the AppView.
@@ -208,6 +246,13 @@ define([
     hotkeyConfigView : HotKeyConfigView,
 
     newDataListView : NewDataListView,
+    
+
+    newCorpusView : NewCorpusView,
+    
+
+    importView : ImportView,
+
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -233,6 +278,8 @@ define([
         
         // Display the CorpusView
         this.corpusView.render();
+        
+        this.exportView.render();
         
         // Display the DatumView
         this.fullScreenDatumView.render();
@@ -264,6 +311,13 @@ define([
         this.hotkeyConfigView.render();
 
         this.newDataListView.render();
+
+        this.newCorpusView.render();
+         
+
+        this.importView.render();
+        
+
       } else {
         Utils.debug("\tApp model is not defined");
       }

@@ -1,6 +1,8 @@
 require(
     [ "search/Search"
-        ],
+      "corpus/Corpus"
+      
+      ],
 function(Search) {
 
   describe("Search", function() {

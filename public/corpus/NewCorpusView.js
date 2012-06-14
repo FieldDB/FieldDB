@@ -1,7 +1,7 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!corpus/corpus.handlebars",
+    "text!corpus/new_corpus.handlebars",
     "corpus/Corpus",
     "data_list/DataList",
     "data_list/DataListView",
@@ -15,7 +15,7 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    corpusTemplate, 
+    new_corpusTemplate, 
     Corpus,
     DataList,
     DataListView,
@@ -26,7 +26,7 @@ define([
     LexiconView,
     GlosserView
 ) {
-  var CorpusView = Backbone.View.extend(
+  var NewCorpusView = Backbone.View.extend(
   /** @lends CorpusView.prototype */
   {
     /**
@@ -103,7 +103,7 @@ define([
     /**
      * The Handlebars template rendered as the CorpusView.
      */
-    template : Handlebars.compile(corpusTemplate),
+    template : Handlebars.compile(new_corpusTemplate),
 
     /**
      * Renders the CorpusView and all of its child Views.
@@ -112,7 +112,7 @@ define([
       Utils.debug("CORPUS render: " + this.el);
       if (this.model != undefined) {
         // Display the CorpusView
-        this.setElement($("#corpus"));
+        this.setElement($("#new-corpus"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display the PreferenceView
@@ -133,7 +133,7 @@ define([
     loadSample : function() {
       // Sample Corpus data
       this.model.set({
-        "name" : "Quechua Corpus",
+        "name" : "Sample Quechua Corpus",
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
@@ -142,5 +142,5 @@ define([
     }
   });
 
-  return CorpusView;
+  return NewCorpusView;
 });
