@@ -478,8 +478,13 @@ define([
 
         $("#dashboard-view").show();
         $("#fullscreen-datum-view").hide();
+        $("#fullscreen-datalist-view").hide();
+        $("#fullscreen-search-view").hide();
+        $("#user-preferences-view").hide();
         $("#new-session-view").hide();
-        $("#fullscreen-datalist-view").show();
+        $("#fullscreen-user-profile-view").hide();
+        $("#datum-preferences-view").hide();
+        $("#hotkey-config-view").hide();
         $('#new_data_list').hide();
         $("#fullscreen-search-view").hide();
         $("#fullscreen-user-profile-view").hide();
@@ -488,6 +493,8 @@ define([
         $("#hotkey-config-view").hide();
         $('#import').show();
         $('#export-view').hide();
+        $('#import').show();
+
 
     },
     
