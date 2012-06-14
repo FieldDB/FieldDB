@@ -98,7 +98,8 @@ define([
           dateCreated : "June 5, 2012",
           description : "MyDescription",
           datumIds : [
-            "08F056F3-22D1-4504-9696-B7C7D695DA05"
+            "574e79f1c0c02df02b116ac71a0008f0",
+            "574e79f1c0c02df02b116ac71a000b3a"
           ]
         })
       });
