@@ -124,11 +124,24 @@ define([
           $("#new-session-view").hide();
           $("#user-preferences-view").hide(); 
           $("#datum-preferences-view").hide();
-
         },
         
         error : function() {
           Utils.debug("Datum does not exist: " + datumId);
+          
+          // Create a new Datum and render it
+          appView.fullScreenDatumView.model = new Datum();
+          appView.fullScreenDatumView.render();
+          
+          // Display the fullscreen datum view and hide all the other views
+          $("#dashboard-view").show();
+          $("#fullscreen-datum-view").show();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#new-session-view").hide();
+          $("#user-preferences-view").hide(); 
+          $("#datum-preferences-view").hide();
         }
       });
     },
