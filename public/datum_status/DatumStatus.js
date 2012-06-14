@@ -39,8 +39,8 @@ define("datum_status/DatumStatus", [
     	        label: 'Add...'
     	      }], 
     	      
-    	      active: 0,
-    	      defaultStatus: 0
+    	      active: 1,
+    	      defaultStatus: 1
     	   },
     });
     
