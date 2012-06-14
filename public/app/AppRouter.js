@@ -119,13 +119,6 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#import').hide();
-
-     
-
-
-
-      
-      $('#new_data_list').hide();
       $('#export-view').hide();
     },
     /**
@@ -460,10 +453,17 @@ define([
 
         $("#dashboard-view").show();
         $("#fullscreen-datum-view").hide();
+        $("#fullscreen-datalist-view").hide();
+        $("#fullscreen-search-view").hide();
+        $("#user-preferences-view").hide();
         $("#new-session-view").hide();
-        $("#fullscreen-datalist-view").show();
+        $("#fullscreen-user-profile-view").hide();
+        $("#datum-preferences-view").hide();
+        $("#hotkey-config-view").hide();
         $('#new_data_list').hide();
         $('#export-view').hide();
+        $('#import').show();
+
 
     },
     
