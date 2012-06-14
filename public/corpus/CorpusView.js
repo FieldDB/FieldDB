@@ -133,7 +133,7 @@ define([
     loadSample : function() {
       // Sample Corpus data
       this.model.set({
-        "name" : "Sample Quechua Corpus",
+        "name" : "Quechua Corpus",
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });

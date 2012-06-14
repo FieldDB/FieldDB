@@ -17,6 +17,10 @@ define([
     "datum/DatumView", 
     "datum_pref/DatumPref",
     "datum_pref/DatumPrefView",
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
+    "import/Import",
+    "import/ImportView",
     "preference/Preference",
     "preference/PreferenceView",
     "search/Search",
@@ -30,6 +34,7 @@ define([
     "hotkey/HotKeyConfigView",
     "export/Export",
     "export/ExportView",
+    "user/UserProfileView",   
     "libs/Utils"
 ], function(
     Backbone, 
@@ -50,6 +55,10 @@ define([
     DatumView,
     DatumPref,
     DatumPrefView,
+    HotKey,
+    HotKeyConfigView,
+    Import,
+    ImportView,
     Preference,
     PreferenceView,
     Search,
@@ -62,7 +71,8 @@ define([
     HotKey,
     HotKeyConfigView,
     Export,
-    ExportView
+    ExportView,
+    UserProfileView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -156,6 +166,14 @@ define([
         model : new Export()
       }); 
 
+      
+//    Create an ImportView
+      this.importView = new ImportView({
+        model : new Import()
+      }); 
+      
+
+
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
@@ -219,6 +237,9 @@ define([
     hotkeyConfigView : HotKeyConfigView,
 
     newDataListView : NewDataListView,
+    
+    importView : ImportView,
+
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -277,6 +298,9 @@ define([
         this.hotkeyConfigView.render();
 
         this.newDataListView.render();
+        
+        this.importView.render();
+        
       } else {
         Utils.debug("\tApp model is not defined");
       }
