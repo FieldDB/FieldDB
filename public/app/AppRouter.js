@@ -1,6 +1,7 @@
 define([ 
     "use!backbone", 
     "corpus/Corpus", 
+    "corpus/NewCorpusView",
     "data_list/DataList", 
     "data_list/DataListView",
     "data_list/NewDataListView",
@@ -8,7 +9,11 @@ define([
     "datum/DatumView", 
     "datum_pref/DatumPref",
     "datum_pref/DatumPrefView",
-    "preference/Preference",,
+    "hotkey/HotKey",
+    "hotkey/HotKeyConfigView",
+    "import/Import",
+    "import/ImportView",
+    "preference/Preference",
     "preference/PreferenceView",
     "search/Search",
     "search/AdvancedSearchView",
@@ -18,11 +23,14 @@ define([
     "user/UserProfileView", 
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
+    "export/Export",
+    "export/ExportView",
     "libs/Utils"
 
 ], function(
     Backbone, 
     Corpus,
+    NewCorpusView,
     DataList,
     DataListView,
     NewDataListView,
@@ -30,6 +38,10 @@ define([
     DatumView,
     DatumPref,
     DatumPrefView,
+    HotKey,
+    HotKeyConfigView,
+    Import,
+    ImportView,
     Preference,
     PreferenceView,
     Search,
@@ -40,7 +52,11 @@ define([
     User,
     UserProfileView,
     HotKey,
-    HotKeyConfigView
+    HotKeyConfigView,
+    Export,
+    ExportView,
+    UserProfileView
+  
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -61,99 +77,60 @@ define([
     },
 
     routes : {
+      "corpus/:corpusName" : "showDashboard",
       "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
       "corpus/:corpusName/session/:id" : "showNewSession",
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
       "corpus/:corpusName/datalist" : "newFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
-      "corpus/:corpusName" : "showDashboard",
+      "corpus/" : "newFullscreenCorpus",
+      "corpus/:corpusName/export" : "showExport",
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
       "user/:userName/hotkeyconfig" : "showHotKeyConfig",
+      "import" : "showImport",
       "" : "showDashboard",
     },
 
+    
     /**
-     * Displays the fullscreen view of the session specified by the given
-     * corpusName and the given datumId.
+     * Displays the dashboard view of the given corpusName, if one was given. Or
+     * the blank dashboard view, otherwise.
      * 
      * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
+     *          corpusName (Optional) The name of the corpus to display.
      */
-    showNewSession : function(corpusName, sessionId) {
-      Utils.debug("In showFullscreenSession: " + corpusName + " *** "
-          + sessionId);
-          
-      // Change the id of the edit session view's Session to be the given sessionId
-      appView.sessionEditView.model.id = sessionId;
-      
-      // Fetch the Session's attributes from the PouchDB
-      appView.sessionEditView.model.fetch({
-        success : function() {
-          // Update the display with the Session with the given sessionId
-          appView.sessionEditView.render();
-          
-          // Display the edit session view and hide all the other views
-          $("#dashboard-view").show();
-          $("#new-session-view").show();
-          $("#fullscreen-datum-view").hide();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#user-preferences-view").hide();
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
-        },
-        
-        error : function() {
-          Utils.debug("Session does not exist: " + sessionId);
-          
-          // Create a new Session and render it
-          appView.sessionEditView.model = new Session();
-          appView.sessionEditView.render();
-          
-          // Display the edit session view and hide all the other views
-          $("#dashboard-view").show();
-          $("#new-session-view").show();
-          $("#fullscreen-datum-view").hide();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#user-preferences-view").hide();
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
-        }
-      });
-    },
-    /**
-     * Displays a page where the user can make their own modified datalist specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    newFullscreenDataList : function(corpusName) {
-      Utils.debug("In newFullscreenDataList: " + corpusName);
+    showDashboard : function(corpusName) {
+      Utils.debug("In showDashboard: " + corpusName);
+
+      this.hideEverything();
 
       $("#dashboard-view").show();
-      $("#new-session-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $('#new_data_list').show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
     },
 
+      
+    
+    
+    /**
+     * Displays a a page where the user can create a new corpus. 
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          sessionId The ID of the session within the corpus.
+     */
+    newFullscreenCorpus : function() {
+      Utils.debug("In newFullscreenCorpus: " + corpusName);
+
+      this.hideEverything();
+
+      $("#dashboard-view").show();
+      $("#new-corpus").show();
+    },
+
+
+    
     /**
      * Displays the fullscreen view of the datum specified by the given
      * corpusName and the given datumId.
@@ -173,22 +150,17 @@ define([
       appView.fullScreenDatumView.saveScreen();
       
       // Fetch the Datum's attributes from the PouchDB
+      var self = this;
       appView.fullScreenDatumView.model.fetch({
         success : function() {
           // Update the display with the Datum with the given datumId
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
+          self.hideEverything();
+
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#new-session-view").hide();
-          $("#user-preferences-view").hide(); 
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
         },
         
         error : function() {
@@ -199,20 +171,63 @@ define([
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
+
+          self.hideEverything();
+          
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#new-session-view").hide();
-          $("#user-preferences-view").hide(); 
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
+
+        },
+      });
+    },
+    
+    
+    
+    /**
+     * Displays the fullscreen view of the session specified by the given
+     * corpusName and the given datumId.
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          sessionId The ID of the session within the corpus.
+     */
+    showNewSession : function(corpusName, sessionId) {
+      Utils.debug("In showFullscreenSession: " + corpusName + " *** "
+          + sessionId);
+          
+      // Change the id of the edit session view's Session to be the given sessionId
+      appView.sessionEditView.model.id = sessionId;
+      
+      // Fetch the Session's attributes from the PouchDB
+      var self = this;
+      appView.sessionEditView.model.fetch({
+        success : function() {
+          // Update the display with the Session with the given sessionId
+          appView.sessionEditView.render();
+          
+          // Display the edit session view and hide all the other views
+          self.hideEverything();
+          $("#dashboard-view").show();
+          $("#new-session-view").show();
+        },
+        
+        error : function() {
+          Utils.debug("Session does not exist: " + sessionId);
+          
+          // Create a new Session and render it
+          // appView.sessionEditView.model = new Session();
+          // appView.sessionEditView.model.render();
+          
+          // Display the edit session view and hide all the other views
+          self.hideEverything();
+          $("#dashboard-view").show();
+          $("#new-session-view").show();
         }
       });
     },
-
+   
+    
     /**
      * Displays the fullscreen view of the datalist specified by the given
      * corpusName and the given dataListId
@@ -222,21 +237,37 @@ define([
      * @param {Number}
      *          dataListId The ID of the datalist within the corpus.
      */
+    //TODO this guy isn't connected to any div in the DOM right now (there is nothing with the id "fullscreen-datalist-vew")
     showFullscreenDataList : function(corpusName, dataListId) {
       Utils.debug("In showFullscreenDataList: " + corpusName + " *** "
           + dataListId);
 
-      $("#dashboard-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#new-session-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
+      this.hideEverything();
+     
+      $("#dashboard-view").show();
+      $("#fullscreen-datalist-view").show();      
     },
+    /**
+     * Displays a page where the user can make their own modified datalist specified by the given
+     * corpusName and the given datumId.
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          sessionId The ID of the session within the corpus.
+     */
+    newFullscreenDataList : function(corpusName) {
+      Utils.debug("In newFullscreenDataList: " + corpusName);
+
+      this.hideEverything();
+      
+      $("#dashboard-view").show();
+      $('#new_data_list').show();
+      
+    },
+    
+
+   
 
     /**
      * Display the fullscreen view of search within the corpus specified by the
@@ -248,41 +279,17 @@ define([
     showAdvancedSearch : function(corpusName) {
       Utils.debug("In showAdvancedSearch: " + corpusName);
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").show();
-      $("#fullscreen-user-profile-view").hide();
-      $("#new-session-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
-    },
-
-    /**
-     * Displays the dashboard view of the given corpusName, if one was given. Or
-     * the blank dashboard view, otherwise.
-     * 
-     * @param {String}
-     *          corpusName (Optional) The name of the corpus to display.
-     */
-    showDashboard : function(corpusName) {
-      Utils.debug("In showDashboard: " + corpusName);
-
-      $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#new-session-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $("#corpus").show();
       $("#activity_feed").show();
+     
+
     },
+
+   
 
     /**
      * Displays the profile of the user specified by the given userName.
@@ -298,7 +305,7 @@ define([
       appView.fullScreenUserView.model.set({
         username : "trisapeace",
         password : "pword",
-        email : "trisapeace@gmail.com",
+        email :  "trisapeace@gmail.com",
         gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
         researchInterest : "computers",
         affiliation : "iLanguageLab",
@@ -313,16 +320,11 @@ define([
         permissions : null,
       });
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").show();
-      $("#new-session-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
+
     },
 
     /**
@@ -333,51 +335,78 @@ define([
      */
     showUserPreferences : function(userName) {
       Utils.debug("In showUserPreferences: " + userName);
-
+      
+      this.hideEverything();
+ 
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
+      $("#fullscreen-datalist-view").show();
       $("#user-preferences-view").show();
-      $("#new-session-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
+      
     },
     
     showDatumPreferences : function(userName) {
       Utils.debug("In showDatumPreferences: " + userName);
 
+      this.hideEverything();
+      
       $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#user-preferences-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-user-profile-view").hide();
+      $("#fullscreen-datalist-view").show();
       $("#datum-preferences-view").show();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
+      
     },
+    
     
     showHotKeyConfig : function(userName) {
       Utils.debug("In showHotKeyConfig: " + userName);
 
-
+      this.hideEverything();
+      
         $("#dashboard-view").show();
-        $("#fullscreen-datum-view").hide();
-        $("#fullscreen-datalist-view").hide();
-        $("#fullscreen-search-view").hide();
-        $("#user-preferences-view").hide();
-        $("#new-session-view").hide();
-        $("#fullscreen-user-profile-view").hide();
-        $("#datum-preferences-view").hide();
+        $("#fullscreen-datalist-view").show();
         $("#hotkey-config-view").show();
-        $('#new_data_list').hide();
 
-    }   
-        
+      },
+    
+      
+      showImport : function() {
+        Utils.debug("In import: ");
+
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $('#import').show();
+
+
+
+    },
+    
+    showExport : function(corpusName) {
+        Utils.debug("In showExport: " + corpusName);
+
+
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $('#export-view').show();
+          
+
+      },
+      
+      hideEverything: function() {
+          $("#dashboard-view").hide();
+          $("#fullscreen-datum-view").hide();
+          $("#new-session-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#user-preferences-view").hide();
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
+          $("#new-corpus").hide();
+          $('#export-view').hide();
+          $('#import').hide();
+      }
+    
+    
   });
 
   return AppRouter;
