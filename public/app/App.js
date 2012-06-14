@@ -4,13 +4,15 @@ define([
     "corpus/Corpus",
     "search/Search",
     "app/AppRouter",
+    "confidentiality_encryption/Confidential",
     "libs/Utils"
 ], function(
     Backbone, 
     Authentication, 
-    Corpus, 
+    Corpus,   
+    Search,
     AppRouter,
-    Search
+    Confidential
 ) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
@@ -52,6 +54,7 @@ define([
         this.set("corpus", new Corpus(this.get("corpus")));
       } else {
         this.set("corpus", new Corpus());
+        this.get("corpus").set("confidential", new Confidential());
         Utils.debug("\tUsing new corpus.");
       }
     },
