@@ -77,7 +77,7 @@ define( [
       Utils.debug("DATALIST render: " + this.el);
       if (this.model != undefined) {
         // Display the Data List
-        this.setElement($("#new_data_list"));
+        this.setElement($("#new-data-list"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display the pagination footer

@@ -10,6 +10,7 @@ define([
     "authentication/AuthenticationView",
     "corpus/Corpus", 
     "corpus/CorpusView",
+    "corpus/NewCorpusView",
     "data_list/DataList",
     "data_list/DataListView",
     "data_list/NewDataListView",
@@ -41,6 +42,7 @@ define([
     AuthenticationView,
     Corpus, 
     CorpusView,
+    NewCorpusView,
     DataList,
     DataListView,
     NewDataListView,
@@ -147,6 +149,11 @@ define([
         model : new HotKey()
       });  
 
+      // Create a NewCorpusView
+      this.newCorpusView = new NewCorpusView({
+        model : new Corpus()
+      });  
+      
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
@@ -208,6 +215,9 @@ define([
     hotkeyConfigView : HotKeyConfigView,
 
     newDataListView : NewDataListView,
+    
+    newCorpusView : NewCorpusView,
+    
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -264,6 +274,9 @@ define([
         this.hotkeyConfigView.render();
 
         this.newDataListView.render();
+        
+        this.newCorpusView.render();
+         
       } else {
         Utils.debug("\tApp model is not defined");
       }
