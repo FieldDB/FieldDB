@@ -1,0 +1,116 @@
+.llama{
+  background-image: url('../images/skins/machu_picchu2.jpg'); 
+  background-repeat:no-repeat;
+  background-attachment:fixed;  
+  background-position:center;
+}
+
+.search{
+	padding: 10px
+	
+}
+
+.grav{
+	height: 30px;
+}
+
+.login{
+	margin-left: 5px;
+
+}
+.logout{
+	margin-left: 5px;
+}
+
+#login_form{
+	margin-left: 5px;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  clear: both;
+  position: relative;
+  top: 75px;
+}
+
+
+.corpusMenu{
+	float: right;
+}
+
+.corpusMenu div{
+	 margin: 5px 0px 5px 0px;
+	
+}
+
+
+.sv{
+	color: #0000A0;
+}
+
+.fullscreen{
+	float: right;
+}
+
+.widget{
+	 background: rgba(0, 0, 0, 0.4);
+	   border-radius: 5px;
+	 
+}
+
+.title{
+	
+	text-align: center;
+}
+
+#dateCreated{
+  
+  text-align: right;
+}
+
+.icons{
+	font-size: 20px;
+	margin: 3px;
+}
+
+textarea{
+	width: 100%;
+}
+
+#newDatum{
+	float: right;
+	font-size: 50px;
+}
+
+
+#dropZone{
+	float: right;
+	border: dashed;
+	border-color:#1E90FF;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -28,9 +28,9 @@ define([
     initialize : function() {
       Utils.debug("AUTH init: " + this.el);
       
-      // Create a UserView
-      this.userView = new UserView({
-        model: new User()
+    //   Create a UserView
+         this.userView = new UserView({
+         model: new User()
       });
       
       // Any time the Authentication model changes, re-render
@@ -71,15 +71,17 @@ define([
       if (this.model != undefined) {
         // Display the AuthenticationView
         this.setElement($("#authentication"));
-        Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
+      //  Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
         if (this.model.get("state") == "loggedIn") {
           $("#logout").show();
           $("#login").hide();
+          $("#login_form").hide();
         } else if (this.model.get("state") == "loggedOut") {
           $("#logout").hide();
           $("#login").show();
+          $("#login_form").show();
         }
         
         Utils.debug("\trendering login: " + this.model.get("username"));
@@ -123,7 +125,8 @@ define([
       this.model.set({
         user : this.userView.model,
         username : this.userView.model.get("username"),
-        state : "loggedIn"
+        state : "loggedIn",
+        gravatar :  this.userView.model.get("gravatar") 
       });
       
       // TODO @cesine Do you think that the Sapir user and username should be put into
