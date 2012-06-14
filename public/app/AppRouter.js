@@ -117,7 +117,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $("#new-data-list").hide();
+      $("#new_data_list").hide();
       $("#new-corpus").hide();
       $('#import').hide();
       $('#export-view').hide();
@@ -141,7 +141,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-datalist-view").hide();
-      $("#new-data-list").show();
+      $("#new_data_list").show();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
@@ -168,7 +168,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-datalist-view").hide();
-      $("#new-data-list").hide();
+      $("#new_data_list").hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
@@ -212,7 +212,7 @@ define([
           $("#user-preferences-view").hide(); 
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
-          $('#new-data-list').hide();
+          $('#new_data_list').hide();
           $("#new-corpus").hide();
           $('#export-view').hide();
           $('#import').hide();
@@ -235,7 +235,7 @@ define([
           $("#user-preferences-view").hide(); 
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
-          $('#new-data-list').hide();
+          $('#new_data_list').hide();
           $("#new-corpus").hide();        
           $('#import').hide();
 
@@ -262,7 +262,7 @@ define([
       $("#fullscreen-datum-view").hide();
       $("#new-session-view").show();
       $("#fullscreen-datalist-view").hide();
-      $('#new-data-list').hide();
+      $('#new_data_list').hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide(); 
@@ -296,7 +296,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new-data-list').hide();
+      $('#new_data_list').hide();
       $("#new-corpus").hide();
       $('#export-view').hide();
       $('#import').hide();
@@ -323,7 +323,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new-data-list').hide();
+      $('#new_data_list').hide();
       $("#new-corpus").hide();
       $('#export-view').hide();
       $('#import').hide();
@@ -352,7 +352,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new-data-list').hide();
+      $('#new_data_list').hide();
       $("#corpus").show();
       $("#activity_feed").show();
       $("#new-corpus").hide();
@@ -402,7 +402,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new-data-list').hide();
+      $('#new_data_list').hide();
       $("#new-corpus").hide();
       $('#export-view').hide();
       $('#import').hide();
@@ -428,7 +428,7 @@ define([
       $("#user-preferences-view").show();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new-data-list').hide();      
+      $('#new_data_list').hide();      
       $("#new-corpus").hide();
       $('#import').hide();
       $('#export-view').hide();
@@ -447,7 +447,7 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").show();
       $("#hotkey-config-view").hide();
-      $('#new-data-list').hide();
+      $('#new_data_list').hide();
       $("#new-corpus").hide();
       $('#export-view').hide();
       $('#import').hide();
@@ -467,7 +467,7 @@ define([
         $("#user-preferences-view").hide();
         $("#datum-preferences-view").hide();
         $("#hotkey-config-view").show();
-        $('#new-data-list').hide();
+        $('#new_data_list').hide();
         $("#new-corpus").hide();
         $('#import').hide();
         $('#export-view').hide();
