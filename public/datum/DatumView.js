@@ -86,6 +86,7 @@ define([
     events:{
     	"click #new" : "newDatum",
     	"click .icon-lock": "encryptDatum",
+    	"click .icon-unlock": "decryptDatum",
     	"blur .utterance" : "updateUtterance",
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
@@ -162,21 +163,40 @@ define([
      * @returns {Boolean}
      */
     encryptDatum: function(){
-      console.log("Fake encrypting");
+//      console.log("Fake encrypting");
       var confidential = appView.corpusView.model.confidential ;
      
       if(confidential == undefined){
         appView.corpusView.model.confidential = new Confidential();
         confidential = appView.corpusView.model.confidential;
       }
-      this.model.set("utterance", this.model.get("utterance").replace(/[^ -.]/g,"x"));
-      this.model.set("morphemes", this.model.get("morphemes").replace(/[^ -.]/g,"x"));
-      this.model.set("gloss", this.model.get("gloss").replace(/[^ -.]/g,"x"));
-      this.model.set("translation", this.model.get("translation").replace(/[^ -.]/g,"x"));
+      
+
+      this.model.set("utterance", confidential.encrypt(this.model.get("utterance")));
+      this.model.set("morphemes", confidential.encrypt(this.model.get("morphemes")));
+      this.model.set("gloss", confidential.encrypt(this.model.get("gloss")));
+      this.model.set("translation", confidential.encrypt(this.model.get("translation")));
+      
+      
+//      this.model.set("utterance", this.model.get("utterance").replace(/[^ -.]/g,"x"));
+//      this.model.set("morphemes", this.model.get("morphemes").replace(/[^ -.]/g,"x"));
+//      this.model.set("gloss", this.model.get("gloss").replace(/[^ -.]/g,"x"));
+//      this.model.set("translation", this.model.get("translation").replace(/[^ -.]/g,"x"));
       this.render();
       $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      
 //      console.log(confidential);
 //      this.model.set()
+    },
+    decryptDatum: function(){
+      var confidential = appView.corpusView.model.confidential ;
+      this.model.set("utterance", confidential.decrypt(this.model.get("utterance")));
+      this.model.set("morphemes", confidential.decrypt(this.model.get("morphemes")));
+      this.model.set("gloss", confidential.decrypt(this.model.get("gloss")));
+      this.model.set("translation", confidential.decrypt(this.model.get("translation")));
+      this.render();
+      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      
     },
     newDatum: function() {
     	/* First, we build a new datum model, 
