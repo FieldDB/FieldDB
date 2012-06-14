@@ -332,17 +332,20 @@ define([
     showHotKeyConfig : function(userName) {
       Utils.debug("In showHotKeyConfig: " + userName);
 
-      $("#dashboard-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#user-preferences-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").show();
 
-    }
+        $("#dashboard-view").show();
+        $("#fullscreen-datum-view").hide();
+        $("#fullscreen-datalist-view").hide();
+        $("#fullscreen-search-view").hide();
+        $("#user-preferences-view").hide();
+        $("#new-session-view").hide();
+        $("#fullscreen-user-profile-view").hide();
+        $("#datum-preferences-view").hide();
+        $("#hotkey-config-view").show();
+        $('#new_data_list').hide();
+
+    }   
+        
   });
 
   return AppRouter;
