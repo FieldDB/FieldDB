@@ -121,30 +121,6 @@ define([
       $('#import').hide();
       $('#export-view').hide();
     },
-    /**
-     * Displays a page where the user can make their own modified datalist specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    newFullscreenDataList : function(corpusName) {
-      Utils.debug("In newFullscreenDataList: " + corpusName);
-
-      $("#dashboard-view").show();
-      $("#new-session-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $('#new_data_list').show();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $('#export-view').hide();
-    },
     
     
     /**
@@ -296,7 +272,6 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $('#export-view').hide();
       $('#import').hide();
 
@@ -325,9 +300,6 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
-      $("#corpus").show();
-      $("#activity_feed").show();
       $('#export-view').hide();
       $('#import').hide();
 
@@ -375,7 +347,6 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $('#export-view').hide();
       $('#import').hide();
 
@@ -401,7 +372,6 @@ define([
       $("#user-preferences-view").show();
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $('#export-view').hide();
       $('#import').hide();
 
@@ -421,7 +391,6 @@ define([
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").show();
       $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
       $('#export-view').hide();
       $('#import').hide();
 
@@ -454,13 +423,13 @@ define([
         $("#dashboard-view").show();
         $("#fullscreen-datum-view").hide();
         $("#fullscreen-datalist-view").hide();
+        $('#new_data_list').hide();
         $("#fullscreen-search-view").hide();
         $("#user-preferences-view").hide();
         $("#new-session-view").hide();
         $("#fullscreen-user-profile-view").hide();
         $("#datum-preferences-view").hide();
         $("#hotkey-config-view").hide();
-        $('#new_data_list').hide();
         $('#export-view').hide();
         $('#import').show();
 
@@ -474,13 +443,13 @@ define([
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").hide();
           $("#fullscreen-datalist-view").hide();
+          $('#new_data_list').hide();
           $("#fullscreen-search-view").hide();
           $("#user-preferences-view").hide();
           $("#new-session-view").hide();
           $("#fullscreen-user-profile-view").hide();
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
           $('#export-view').show();
           $('#import').hide();
 
