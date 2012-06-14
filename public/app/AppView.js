@@ -4,8 +4,8 @@ define([
     "app/App", 
     "text!app/app.handlebars", 
     "app/AppRouter",
-//    "activity/ActivityFeed",
-//    "activity/ActivityFeedView",
+    "activity/ActivityFeed",
+    "activity/ActivityFeedView",
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
@@ -32,8 +32,8 @@ define([
     App, 
     appTemplate,
     AppRouter, 
-//    ActivityFeed,
-//    ActivityFeedView,
+    ActivityFeed,
+    ActivityFeedView,
     Authentication,
     AuthenticationView,
     Corpus, 
@@ -125,11 +125,10 @@ define([
         model : new Authentication()
       });
       
-      // Create an ActivityFeedView
-//      this.activityFeedView = new ActivityFeedView({
-//        model : new ActivityFeed()
-//      });
-//      
+//       Create an ActivityFeedView
+      this.activityFeedView = new ActivityFeedView({
+        model : new ActivityFeed()
+      });      
       
       
     },
@@ -185,7 +184,7 @@ define([
     
     datumPrefView : DatumPrefView,
     
-//    activityFeedView : ActivityFeedView,
+    activityFeedView : ActivityFeedView,
 
 
     
@@ -243,7 +242,7 @@ define([
         
         this.datumPrefView.render();
         
-//        this.activityFeedView.render();
+        this.activityFeedView.render();
 
 
         
