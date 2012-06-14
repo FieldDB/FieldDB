@@ -55,14 +55,11 @@ define([
 
     defaults : {
       //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-      utterance : "tusunayawan",
-      morphemes: "tusa-naya-wa-n",
-      gloss : "dance-IMP-1OM-3SG",
-      translation : "I feel like dancing.",
-
-      //While it will not look like a field, it will essentially be a place where the user can click and add tags and then they will appear in little bubbles.
-      grammaticalTags : "impulsative",
-
+      utterance : "",
+      morphemes: "",
+      gloss : "",
+      translation : "",
+      grammaticalTags : "", //While it will not look like a field, it will essentially be a place where the user can click and add tags and then they will appear in little bubbles.
       sessionID : 0,
       status : new DatumStatus(),
       datumField : new DatumField(),

@@ -187,7 +187,13 @@ define([
         this.needsSave = false;
         
         Utils.debug("Saving the Datum");
-        this.model.save();
+        this.model.save(null, {
+          success : function(model, response) {
+            if (location.hash.indexOf("/new") != -1) {
+              location.hash = location.hash.replace("/new", "/" + model.id);
+            }  
+          }
+        });
       }
     }
       
