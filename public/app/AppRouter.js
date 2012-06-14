@@ -86,17 +86,49 @@ define([
     showNewSession : function(corpusName, sessionId) {
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
-
-      $("#dashboard-view").show();
-      $("#new-session-view").show();
-      $("#fullscreen-datum-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
-      $('#new_data_list').hide();
+          
+      // Change the id of the edit session view's Session to be the given sessionId
+      appView.sessionEditView.model.id = sessionId;
+      
+      // Fetch the Session's attributes from the PouchDB
+      appView.sessionEditView.model.fetch({
+        success : function() {
+          // Update the display with the Session with the given sessionId
+          appView.sessionEditView.render();
+          
+          // Display the edit session view and hide all the other views
+          $("#dashboard-view").show();
+          $("#new-session-view").show();
+          $("#fullscreen-datum-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#user-preferences-view").hide();
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
+        },
+        
+        error : function() {
+          Utils.debug("Session does not exist: " + sessionId);
+          
+          // Create a new Session and render it
+          appView.sessionEditView.model = new Session();
+          appView.sessionEditView.render();
+          
+          // Display the edit session view and hide all the other views
+          $("#dashboard-view").show();
+          $("#new-session-view").show();
+          $("#fullscreen-datum-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#user-preferences-view").hide();
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
+        }
+      });
     },
     /**
      * Displays a page where the user can make their own modified datalist specified by the given
