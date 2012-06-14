@@ -18,6 +18,8 @@ define([
     "user/UserProfileView", 
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
+    "export/Export",
+    "export/ExportView",
     "libs/Utils"
 
 ], function(
@@ -40,7 +42,9 @@ define([
     User,
     UserProfileView,
     HotKey,
-    HotKeyConfigView
+    HotKeyConfigView,
+    Export,
+    ExportView
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -67,6 +71,7 @@ define([
       "corpus/:corpusName/datalist" : "newFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
       "corpus/:corpusName" : "showDashboard",
+      "corpus/:corpusName/export" : "showExport",
       "user/:userName" : "showUserProfile",
       "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
@@ -97,6 +102,7 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
+      $('#export-view').hide();
     },
     /**
      * Displays a page where the user can make their own modified datalist specified by the given
@@ -120,6 +126,7 @@ define([
       $("#fullscreen-user-profile-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
+      $('#export-view').hide();
     },
 
     /**
@@ -157,6 +164,7 @@ define([
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
           $('#new_data_list').hide();
+          $('#export-view').hide();
         },
         
         error : function() {
@@ -177,6 +185,7 @@ define([
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
           $('#new_data_list').hide();
+          $('#export-view').hide();
         }
       });
     },
@@ -204,6 +213,7 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
+      $('#export-view').hide();
     },
 
     /**
@@ -226,6 +236,7 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
+      $('#export-view').hide();
     },
 
     /**
@@ -250,6 +261,7 @@ define([
       $('#new_data_list').hide();
       $("#corpus").show();
       $("#activity_feed").show();
+      $('#export-view').hide();
     },
 
     /**
@@ -266,7 +278,7 @@ define([
       appView.fullScreenUserView.model.set({
         username : "trisapeace",
         password : "pword",
-        email : "trisapeace@gmail.com",
+        email :  "trisapeace@gmail.com",
         gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
         researchInterest : "computers",
         affiliation : "iLanguageLab",
@@ -291,6 +303,7 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
+      $('#export-view').hide();
     },
 
     /**
@@ -312,6 +325,7 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
+      $('#export-view').hide();
     },
     
     showDatumPreferences : function(userName) {
@@ -327,6 +341,7 @@ define([
       $("#datum-preferences-view").show();
       $("#hotkey-config-view").hide();
       $('#new_data_list').hide();
+      $('#export-view').hide();
     },
     
     showHotKeyConfig : function(userName) {
@@ -343,8 +358,27 @@ define([
         $("#datum-preferences-view").hide();
         $("#hotkey-config-view").show();
         $('#new_data_list').hide();
+        $('#export-view').hide();
 
-    }   
+    },
+    
+    showExport : function(corpusName) {
+        Utils.debug("In showExport: " + corpusName);
+
+
+          $("#dashboard-view").show();
+          $("#fullscreen-datum-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $("#fullscreen-search-view").hide();
+          $("#user-preferences-view").hide();
+          $("#new-session-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#new_data_list').hide();
+          $('#export-view').show();
+
+      }   
         
   });
 

@@ -28,6 +28,8 @@ define([
     "user/UserProfileView",
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
+    "export/Export",
+    "export/ExportView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -58,7 +60,9 @@ define([
     User,
     UserProfileView,
     HotKey,
-    HotKeyConfigView
+    HotKeyConfigView,
+    Export,
+    ExportView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -146,6 +150,11 @@ define([
       this.hotkeyConfigView = new HotKeyConfigView({
         model : new HotKey()
       });  
+      
+      // Create an ExportView
+      this.exportView = new ExportView({
+        model : new Export()
+      }); 
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -161,6 +170,8 @@ define([
      * The corpusView is a child of the AppView.
      */
     corpusView : CorpusView,
+    
+    exportView : ExportView,
     
     /**
      * The fullScreenDatumView is a child of the AppView.
@@ -233,6 +244,8 @@ define([
         
         // Display the CorpusView
         this.corpusView.render();
+        
+        this.exportView.render();
         
         // Display the DatumView
         this.fullScreenDatumView.render();
