@@ -190,7 +190,18 @@ define([
           appView.fullScreenDatumView.model = new Datum();
           appView.fullScreenDatumView.render();
           
-
+          // Display the fullscreen datum view and hide all the other views
+          $("#dashboard-view").show();
+          $("#fullscreen-datum-view").show();
+          $("#new-session-view").hide();
+          $("#fullscreen-datalist-view").hide();
+          $('#new_data_list').hide();
+          $("#fullscreen-search-view").hide();
+          $("#fullscreen-user-profile-view").hide();
+          $("#user-preferences-view").hide(); 
+          $("#datum-preferences-view").hide();
+          $("#hotkey-config-view").hide();
+          $('#import').hide();
         }
       });
     },
