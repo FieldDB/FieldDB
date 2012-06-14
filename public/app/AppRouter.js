@@ -118,6 +118,30 @@ define([
 
 
       
+      $('#new_data_list').hide();
+    },
+    /**
+     * Displays a page where the user can make their own modified datalist specified by the given
+     * corpusName and the given datumId.
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          sessionId The ID of the session within the corpus.
+     */
+    newFullscreenDataList : function(corpusName) {
+      Utils.debug("In newFullscreenDataList: " + corpusName);
+
+      $("#dashboard-view").show();
+      $("#new-session-view").hide();
+      $("#fullscreen-datum-view").hide();
+      $("#fullscreen-datalist-view").hide();
+      $("#fullscreen-datalist-view").hide();
+      $('#new_data_list').show();
+      $("#fullscreen-search-view").hide();
+      $("#fullscreen-user-profile-view").hide();
+      $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
     },
     
     
@@ -135,6 +159,9 @@ define([
 
       // Change the id of the fullscreen datum view's Datum to be the given datumId
       appView.fullScreenDatumView.model.id = datumId;
+      
+      // Save the currently displayed Datum, if needed
+      appView.fullScreenDatumView.saveScreen();
       
       // Fetch the Datum's attributes from the PouchDB
       appView.fullScreenDatumView.model.fetch({
@@ -154,13 +181,16 @@ define([
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();
           $('#import').hide();
-
-
-
         },
         
         error : function() {
           Utils.debug("Datum does not exist: " + datumId);
+          
+          // Create a new Datum and render it
+          appView.fullScreenDatumView.model = new Datum();
+          appView.fullScreenDatumView.render();
+          
+
         }
       });
     },
@@ -225,7 +255,6 @@ define([
       $('#import').hide();
 
 
-
     },
     /**
      * Displays a page where the user can make their own modified datalist specified by the given
@@ -250,9 +279,6 @@ define([
       $("#datum-preferences-view").hide();
       $("#hotkey-config-view").hide();
       $('#import').hide();
-
-
-
 
 
     },
@@ -359,8 +385,6 @@ define([
 
     },
     
-    
-    
     showDatumPreferences : function(userName) {
       Utils.debug("In showDatumPreferences: " + userName);
 
@@ -383,7 +407,8 @@ define([
     },
     
     showHotKeyConfig : function(userName) {
-        Utils.debug("In showHotKeyConfig: " + userName);
+      Utils.debug("In showHotKeyConfig: " + userName);
+
 
         $("#dashboard-view").show();
         $("#fullscreen-datum-view").hide();
@@ -421,6 +446,7 @@ define([
     
     
     
+
   });
 
   return AppRouter;

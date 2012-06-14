@@ -48,6 +48,9 @@ define([
       
       // Create a DatumFieldView
       this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
+      
+      // If the model changes, re-render
+      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -83,7 +86,8 @@ define([
     	"blur .utterance" : "updateUtterance",
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
-    	"blur .translation" : "updateTranslation"
+    	"blur .translation" : "updateTranslation",
+    	"change" : "updatePouch"
     },
 
     /**
@@ -113,36 +117,41 @@ define([
       return this;
     },
     
+    needsSave : false,
+    
     /**
-     * Save the changed utterance in PouchDB.
+     * Change the model's utterance.
      */
     updateUtterance : function() {
       this.model.set("utterance", $(".utterance").val());
-      this.model.save();
     },
     
     /**
-     * Save the changed morpheme in PouchDB.
+     * Change the model's morpheme.
      */
     updateMorphemes : function() {
       this.model.set("morphemes", $(".morphemes").val());
-      this.model.save();
     },
     
     /**
-     * Save the changed gloss in PouchDB.
+     * Chnage the model's gloss.
      */
     updateGloss : function() {
       this.model.set("gloss", $(".gloss").val());
-      this.model.save();
     },
     
     /** 
-     * Save the changed translation in PouchDB.
+     * Change the model's translation.
      */
     updateTranslation : function() {
       this.model.set("translation", $(".translation").val());
-      this.model.save();
+    },
+    
+    /**
+     * Registers this datum to be saved in PouchDB.
+     */
+    updatePouch : function() {
+      this.needsSave = true;
     },
     
     newDatum: function() {
@@ -166,6 +175,26 @@ define([
     	
       Utils.debug("I'm a new datum!");
       return true;
+    },
+    
+    /**
+     * If the model needs to be saved, saves it.
+     */
+    saveScreen : function() {
+      if (this.needsSave) {
+        // Change the needsSave flag before saving just in case another change happens
+        // before the saving is done
+        this.needsSave = false;
+        
+        Utils.debug("Saving the Datum");
+        this.model.save(null, {
+          success : function(model, response) {
+            if (location.hash.indexOf("/new") != -1) {
+              location.hash = location.hash.replace("/new", "/" + model.id);
+            }  
+          }
+        });
+      }
     }
       
   });
