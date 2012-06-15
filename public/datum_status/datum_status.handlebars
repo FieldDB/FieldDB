@@ -1,7 +1,7 @@
 <div class="datum_status">
-    <select class="datum_status_select ">
+    <select class="datum_status_select">
       {{#each statuses}}
-          <option >{{label}}</option>
+          <option value="{{id}}" {{selected}}>{{label}}</option>
       {{/each}}
     </select>
 </div>

@@ -91,7 +91,8 @@ define([
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
     	"blur .translation" : "updateTranslation",
-    	"change" : "updatePouch"
+    	"change" : "updatePouch",
+    	"blur .datum_status_select" : "renderStatus"
     },
 
     /**
@@ -115,13 +116,18 @@ define([
         this.setElement($("#datum-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
+        this.statusview.render();
       } else {
         Utils.debug("\tDatum model was undefined");
       }
       
       return this;
     },
-    
+    renderStatus : function(){
+      if(this.stausview != undefined){
+        this.statusview.render();
+      }
+    },
     needsSave : false,
     
     /**

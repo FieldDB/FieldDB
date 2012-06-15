@@ -30,7 +30,7 @@ define("datum_status/DatumStatus", [
     	      }, {
     	          id: 2,
     	          label: 'To be checked',
-    	          selected: true 
+    	          selected: 'selected' 
     	      }, {
               id: 3,
               label: 'Deleted'
