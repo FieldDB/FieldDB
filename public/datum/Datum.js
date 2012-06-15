@@ -4,8 +4,7 @@ define([
     "datum_tag/DatumTag",
     "datum_field/DatumField",
     "session/Session",
-    "libs/Utils",
-    "libs/CouchDbUtils"
+    "libs/Utils"
 ], function(
     Backbone, 
     DatumStatus, 
