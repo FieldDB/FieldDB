@@ -107,7 +107,6 @@ define([
       this.hideEverything();
 
       $("#dashboard-view").show();
-
     },
 
       
@@ -196,13 +195,36 @@ define([
     showNewSession : function(corpusName, sessionId) {
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
-
-      this.hideEverything();
-
-      $("#dashboard-view").show();
-      $("#new-session-view").show();
-
-
+          
+      // Change the id of the edit session view's Session to be the given sessionId
+      appView.sessionEditView.model.id = sessionId;
+      
+      // Fetch the Session's attributes from the PouchDB
+      var self = this;
+      appView.sessionEditView.model.fetch({
+        success : function() {
+          // Update the display with the Session with the given sessionId
+          appView.sessionEditView.render();
+          
+          // Display the edit session view and hide all the other views
+          self.hideEverything();
+          $("#dashboard-view").show();
+          $("#new-session-view").show();
+        },
+        
+        error : function() {
+          Utils.debug("Session does not exist: " + sessionId);
+          
+          // Create a new Session and render it
+          // appView.sessionEditView.model = new Session();
+          // appView.sessionEditView.model.render();
+          
+          // Display the edit session view and hide all the other views
+          self.hideEverything();
+          $("#dashboard-view").show();
+          $("#new-session-view").show();
+        }
+      });
     },
    
     
