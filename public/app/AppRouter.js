@@ -1,62 +1,13 @@
 define([ 
-    "use!backbone", 
-    "corpus/Corpus", 
-    "corpus/NewCorpusView",
-    "data_list/DataList", 
-    "data_list/DataListView",
-    "data_list/NewDataListView",
-    "datum/Datum", 
-    "datum/DatumView", 
-    "datum_pref/DatumPref",
-    "datum_pref/DatumPrefView",
-    "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
-    "import/Import",
-    "import/ImportView",
-    "preference/Preference",
-    "preference/PreferenceView",
-    "search/Search",
-    "search/AdvancedSearchView",
-    "session/Session", 
-    "session/SessionView",
-    "user/User", 
-    "user/UserProfileView", 
-    "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
-    "export/Export",
-    "export/ExportView",
+    "use!backbone",
+    "datum/Datum",
+    "session/Session",
     "libs/Utils"
 
 ], function(
-    Backbone, 
-    Corpus,
-    NewCorpusView,
-    DataList,
-    DataListView,
-    NewDataListView,
+    Backbone,
     Datum,
-    DatumView,
-    DatumPref,
-    DatumPrefView,
-    HotKey,
-    HotKeyConfigView,
-    Import,
-    ImportView,
-    Preference,
-    PreferenceView,
-    Search,
-    SearchView,
-    AdvancedSearchView,
-    Session,
-    SessionView,
-    User,
-    UserProfileView,
-    HotKey,
-    HotKeyConfigView,
-    Export,
-    ExportView,
-    UserProfileView
-  
+    Session
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -216,8 +167,8 @@ define([
           Utils.debug("Session does not exist: " + sessionId);
           
           // Create a new Session and render it
-          // appView.sessionEditView.model = new Session();
-          // appView.sessionEditView.model.render();
+          appView.sessionEditView.model = new Session();
+          appView.sessionEditView.render();
           
           // Display the edit session view and hide all the other views
           self.hideEverything();
