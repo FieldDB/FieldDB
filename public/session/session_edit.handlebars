@@ -1,24 +1,34 @@
 <h1>New Session</h1>
-           <label>User: </label>
-            {{user}}<br>
-    
-            <label>Team: </label>
-            {{team}}<br>
-           
-            <label>Language</label>
-            <textarea>{{language}}</textarea> <br>
-           
-            <label>Language Family</label>
-            <textarea>{{languageFamily}}</textarea> <br>
-           
-            <label>Dialect</label>
-            <textarea>{{dialect}}</textarea> <br>
-            
-             <label>Goal</label>
-             <textarea>{{goal}}</textarea> <br>
-            
-            <label>Date</label>
-            <textarea>{{date}}</textarea> <br>
-           
-     <input type="button" class="btn-mini done" value="Done"/>
-   
+<label>User: </label>
+{{user}}
+<br />
+
+<label>Team: </label>
+{{team}}
+<br />
+
+<label>Informant</label>
+<textarea class="session_informant">{{informant}}</textarea>
+<br />
+
+<label>Language</label>
+<textarea class="session_language">{{language}}</textarea>
+<br />
+
+<label>Language Family</label>
+<textarea class="session_family">{{languageFamily}}</textarea>
+<br />
+
+<label>Dialect</label>
+<textarea class="session_dialect">{{dialect}}</textarea>
+<br />
+
+<label>Goal</label>
+<textarea class="session_goal">{{goal}}</textarea>
+<br />
+
+<label>Date</label>
+<textarea class="session_date">{{date}}</textarea>
+<br />
+
+<input id="btn-save-session" type="button" class="btn-mini done" value="Done"/>
