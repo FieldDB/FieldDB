@@ -28,15 +28,6 @@ define([
        *           appears on the corpus details page
        * @property {String} remote The git url of the remote eg:
        *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
-       * @property {String} localFolder The local url of the corpus on
-       *           android/node eg: Sapir/SampleFieldLinguisticsCorpus
-       * @property {Array} changedDatumList This array contains a list of
-       *           the datum that have been changed and need to be synced
-       * @property {Array} originalImportFiles This array contains a list
-       *           of the original source files which will be put into
-       *           version control with the corpus. This is used so that
-       *           the user can go back to their original files:eg
-       *           sample_elan.eaf
        *           
        * @property {Glosser} glosser The glosser listens to
        *           orthography/utterence lines and attempts to guess the
@@ -62,35 +53,9 @@ define([
       defaults : {
         name : "",
         description : "",
-        changedDatumList : [],
         confidential :  Confidential
       }
-      
-//        ,
-//        insertDatum : function(datum) {
-//          Utils.debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
-//              + JSON.stringify(datum));
-//          datum.id = this.autoincrement;
-//          this.changedDatumList.push(datum);
-//          this.autoincrement++;
-//        },
-//        updateDatum : function(datum) {
-//          Utils.debug("Telling the corpus that this datum has changed "
-//              + JSON.stringify(datum));
-//          this.changedDatumList.push(datum);
-//        },
-//        push : function() {
-//          Utils.debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
-//        },
-//        pull : function() {
-//          Utils.debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
-//        },
-//        merge : function() {
-//          Utils.debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
-//        },
-//        diff : function() {
-//          Utils.debug("Showing the user the diffs between their version of the corpus and the remote version.");
-//        },
+
     });
     
   return Corpus;
