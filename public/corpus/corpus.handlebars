@@ -1,23 +1,21 @@
 <div class="corpusMenu">
-	<ul>
+
 	<div class="btn-group">
-	<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-		New <span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu">
+		<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			New <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="new_datum" href="#corpus/Yale/datum/new">New
+					Datum</a></li>
+			<li><a class="new_data_list" href="#corpus/Yale/datalist">New
+					Data List</a></li>
+			<li><a class="new_session" href="#corpus/Yale/session/12">New
+					Session</a></li>
+			<li><a class="new_corpus" href="#corpus/">New Corpus</a></li>
+		</ul>
+	</div>
 
-		<li><a class="new_datum"	href="#corpus/Yale/datum/new">New
-				Datum</a></li>
-		<li><a class="new_data_list" href="#corpus/Yale/datalist">New
-				Data List</a></li>
-		<li><a class="new_session" href="#corpus/Yale/session/12">New
-				Session</a></li>
-		<li><a class="new_corpus" href="#corpus/">New
-				Corpus</a></li>
-	</ul>
-</div>
-
-<div class="btn-group">
+	<!-- <div class="btn-group">
  	<button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
 		View <span class="caret"></span>
 	</button>
@@ -28,31 +26,24 @@
 		<li><a class="corpus_view" href="#corpus/">Corpora</a></li>
 
 	</ul>
+	</div> -->
+
+	<div class="btn-group">
+		<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+			Data <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="new_session" href="#import">Import</a></li>
+			<li><a class="new_session" href="#corpus/Yale/export">Export</a></li>
+		</ul>
 	</div>
 
-<div class="btn-group">
-	<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-		Data <span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu">
-		<li><a class="new_session" href="#import">Import</a></li>
-		<li><a class="new_session" href="#corpus/Yale/export">Export</a></li>
-	</ul>
 </div>
 
+<div id="corpusName">
+	<h3>{{name}}</h3>
 </div>
+<div id="session"></div>
+<!-- <div id="status" style="color: #ffcc00"></div>
+ -->
 
-
-<div id ="corpusName"> <h3>{{name}}</h3></div>
-   
-   <div id="session"></div>
-      <div id="status" style="color: #ffcc00"></div> 
-  </div>         
- 
- 
- 
-</div>
-     
-     
-     
-</div>

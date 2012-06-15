@@ -1,16 +1,16 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "session/Session",
-    "text!session/session.handlebars",
+    "datum/Session",
+    "text!datum/session_edit.handlebars",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     Session, 
-    sessionTemplate
+    session_editTemplate
 ) {
-  var SessionView = Backbone.View.extend(
+  var SessionEditView = Backbone.View.extend(
   /** @lends SessionView.prototype */
   {
     /**
@@ -26,14 +26,14 @@ define([
     },
 
     /**
-     * The underlying model of the SessionView is a Session.
+     * The underlying model of the SessionEditView is a Session.
      */
     model : Session,
     
     /**
-     * The Handlebars template rendered as the SessionView.
+     * The Handlebars template rendered as the SessionEditView.
      */
-    template: Handlebars.compile(sessionTemplate),
+    template: Handlebars.compile(session_editTemplate),
     
     /**
      * Renders the SessionView.
@@ -42,7 +42,7 @@ define([
       Utils.debug("SESSION render: " + this.el);
       
       // Disply the SessionView
-      this.setElement("#session");
+      this.setElement("#new-session-view");
       $(this.el).html(this.template(this.model.toJSON()));
       
       return this;
@@ -59,10 +59,10 @@ define([
         informant : "Tillohash",
         corpus : corpus,
         language : "Cusco Quechua",
-        goal : "Which verbs can be affixed with -naya"
+        goal : "Working on naya"
       });
     }
   });
   
-  return SessionView;
+  return SessionEditView;
 }); 

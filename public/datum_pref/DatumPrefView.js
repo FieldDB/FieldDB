@@ -2,11 +2,10 @@ define( [
     "use!backbone", 
     "use!handlebars", 
     "datum_pref/DatumPref",
-    "datum_field/DatumField",
-    "datum_menu/DatumMenu",
-    "datum_status/DatumStatus",
+    "datum/DatumField",
+    "datum/DatumState",
     "text!datum_pref/datum_pref.handlebars"
-], function(Backbone, Handlebars, DatumPref, DatumField, DatumMenu,DatumStatus, datum_prefTemplate) {
+], function(Backbone, Handlebars, DatumPref, DatumField, DatumState, datum_prefTemplate) {
     var DatumPrefView = Backbone.View.extend(
     /** @lends DatumFieldView.prototype */
     {
