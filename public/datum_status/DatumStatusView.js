@@ -16,7 +16,7 @@ define("datum_status/DatumStatusView", [
         initialize : function() {
         },
         events:{
-          "onblur" : "render"
+          "blur .datum_status_select" : "render"
         },
      //  model : DatumStatus,
 
@@ -25,15 +25,17 @@ define("datum_status/DatumStatusView", [
         template: Handlebars.compile(datum_statusTemplate),
         	
         render : function() {
-          console.log("rendering"+ $(".datum_status_select").val() );
-//            this.model.set("active", $(".datum_status_select").value);
+          console.log("\n\n\nrendering"+ $(".datum_status_select").val() );
+          
+            this.model.set("active", $(".datum_status_select").val() );
+            
             $(this.el).html(this.template(this.model.toJSON()));
             
-            if($(".datum_status_select").val() == "Checked"){
+            if( this.model.set("active") == "Checked"){
               $(".datum_status_select").addClass("btn-success");
-            }else if($(".datum_status_select").val() == "To be checked" ){
+            }else if( this.model.set("active") == "To be checked" ){
               $(".datum_status_select").addClass("btn-warning");
-            }else if( $(".datum_status_select").val() == "Deleted" ){
+            }else if( this.model.set("active") == "Deleted" ){
               $(".datum_status_select").addClass("btn-danger");
             }
             return this;
@@ -42,5 +44,3 @@ define("datum_status/DatumStatusView", [
 
     return DatumStatusView;
 }); 
-
-
