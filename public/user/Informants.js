@@ -1,7 +1,7 @@
 define(
     ["use!backbone",
      "user/Informant"],
-    function(Backbone, User) {
+    function(Backbone, Informant) {
   
   var Informants = Backbone.Collection.extend(
       
