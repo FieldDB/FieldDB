@@ -1,4 +1,4 @@
-define("session/Session", [
+define([
     "use!backbone",
     "user/Team",
     "user/User",
