@@ -14,28 +14,29 @@ define("datum_status/DatumStatusView", [
          * @constructs
          */
         initialize : function() {
+          
         },
         events:{
           "blur .datum_status_select" : "render"
         },
-     //  model : DatumStatus,
+       model : DatumStatus,
 
         classname : "datum_status",
 
         template: Handlebars.compile(datum_statusTemplate),
         	
         render : function() {
-          console.log("\n\n\nrendering"+ $(".datum_status_select").val() );
+          console.log("\n\n\nrendering "+ $(".datum_status_select").val() );
           
             this.model.set("active", $(".datum_status_select").val() );
             
             $(this.el).html(this.template(this.model.toJSON()));
             
-            if( this.model.set("active") == "Checked"){
+            if( this.model.get("active") == 1){
               $(".datum_status_select").addClass("btn-success");
-            }else if( this.model.set("active") == "To be checked" ){
+            }else if( this.model.get("active") == 2 ){
               $(".datum_status_select").addClass("btn-warning");
-            }else if( this.model.set("active") == "Deleted" ){
+            }else if( this.model.get("active") == 3 ){
               $(".datum_status_select").addClass("btn-danger");
             }
             return this;
