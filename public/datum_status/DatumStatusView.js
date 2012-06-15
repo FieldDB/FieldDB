@@ -17,9 +17,9 @@ define("datum_status/DatumStatusView", [
           
         },
         events:{
-          "blur .datum_status_select" : "render"
+//          "blur .datum_status_select" : "render"
         },
-       model : DatumStatus,
+        model : DatumStatus,
 
         classname : "datum_status",
 
@@ -27,16 +27,18 @@ define("datum_status/DatumStatusView", [
         	
         render : function() {
           console.log("\n\n\nrendering "+ $(".datum_status_select").val() );
-          
-            this.model.set("active", $(".datum_status_select").val() );
+          var id = $(".datum_status_select").val() ;
+            this.model.set("active", id );
+            var s = this.model.get("statuses");
+            s[id].selected = "selected";
             
             $(this.el).html(this.template(this.model.toJSON()));
             
-            if( this.model.get("active") == 1){
+            if( id == 0){
               $(".datum_status_select").addClass("btn-success");
-            }else if( this.model.get("active") == 2 ){
+            }else if( id == 1 ){
               $(".datum_status_select").addClass("btn-warning");
-            }else if( this.model.get("active") == 3 ){
+            }else if( id == 2 ){
               $(".datum_status_select").addClass("btn-danger");
             }
             return this;
