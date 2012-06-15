@@ -70,3 +70,7 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.swp
+
+# Couch DB configuration files #
+################################
+*CouchDbUtils*
