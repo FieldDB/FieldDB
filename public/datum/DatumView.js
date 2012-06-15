@@ -63,22 +63,22 @@ define([
     /**
      * The statusview is a partial of the DatumView.
      */
-    statusview: null,  
+    statusview: DatumStatusView,  
     
     /**
      * The menuview is a partial of the DatumView.
      */
-    menuview: null,
+    menuview: DatumStatusView,
     
     /**
      * The tagview is a partial of the DatumView.
      */
-    tagview: null,
+    tagview: DatumStatusView,
     
     /**
      * The fieldview is a partial of the DatumView.
      */
-    fieldview: null,
+    fieldview: DatumStatusView,
     
     /**
      * Events that the DatumView is listening to and their handlers.
@@ -114,6 +114,7 @@ define([
         // Display the DatumView
         this.setElement($("#datum-view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        
       } else {
         Utils.debug("\tDatum model was undefined");
       }
