@@ -54,7 +54,8 @@ define( [
      */
     events : {
       'click a.servernext': 'nextResultPage',
-      'click .serverhowmany a': 'changeCount'
+      'click .serverhowmany a': 'changeCount',
+      "click #populateDataList" : "renderNewModel"    // TODO remove after demo
     },
     
     /**
