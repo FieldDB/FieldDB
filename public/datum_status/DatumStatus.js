@@ -24,18 +24,18 @@ define("datum_status/DatumStatus", [
 //    	      statuses: ["Checked","To be checked","Deleted"],
     	     
     	      statuses: [{
-    	          id: 1,
+    	          id: 0,
     	          label: 'Checked'
     	          
     	      }, {
-    	          id: 2,
+    	          id: 1,
     	          label: 'To be checked',
     	          selected: 'selected' 
     	      }, {
-              id: 3,
+              id: 2,
               label: 'Deleted'
     	      }, {
-    	        id: 4,
+    	        id: 3,
     	        label: 'Add...'
     	      }], 
     	      

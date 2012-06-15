@@ -92,7 +92,7 @@ define([
     	"blur .gloss" : "updateGloss",
     	"blur .translation" : "updateTranslation",
     	"change" : "updatePouch",
-    	"blur .datum_status_select" : "renderStatus"
+    	"click .datum_status_select" : "renderStatus"
     },
 
     /**
