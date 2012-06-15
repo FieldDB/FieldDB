@@ -1,10 +1,17 @@
 define([ 
     "use!backbone",
     "confidentiality_encryption/Confidential",
-    "libs/Utils"
+    "libs/Utils", 
+    "user/Informants", 
+//    "datum_state/DatumStates",
+//    "datum_field/DatumFields,"
+    "session/Sessions",
+    "data_list/DataLists",
+    "permission/Permissions"
 ], function(
-    Backbone, 
-    Confidential
+    Backbone, Confidential, Informants, 
+//    DatumStates, DatumFields, 
+    Sessions, DataLists, Permissions
 ) {
   var Corpus = Backbone.Model.extend(
     /** @lends Corpus.prototype */
@@ -28,6 +35,14 @@ define([
        *           appears on the corpus details page
        * @property {String} remote The git url of the remote eg:
        *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
+       *           
+       * @property {Informants} informants Collection of informants who contributed to the corpus
+       * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
+       * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+       * @property {Sessions} sessions Collection of sessions that belong to the corpus
+       * @property {DataLists} datalists Collection of data lists created under the corpus
+       * @property {Permissions} permissions Collection of permissions groups associated to the corpus 
+       * 
        *           
        * @property {Glosser} glosser The glosser listens to
        *           orthography/utterence lines and attempts to guess the
@@ -53,7 +68,14 @@ define([
       defaults : {
         name : "",
         description : "",
-        confidential :  Confidential
+        confidential :  Confidential,
+        informants : Informants,
+//        datumstates : DatumStates, 
+//        datumfields : DatumFields, 
+        sessions : Sessions, 
+        datalists : DataLists, 
+        permissions : Permissions
+        
       }
 
     });
