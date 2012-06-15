@@ -1,5 +1,6 @@
 define("session/Session", [
     "use!backbone",
+    "user/Team",
     "user/User",
     "user/Informant"
 ], function(
