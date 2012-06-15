@@ -2,9 +2,7 @@ define("session/Session", [
     "use!backbone",
     "user/Team",
     "user/User",
-    "user/Informant",
-    "libs/Utils",
-    "libs/CouchDbUtils"
+    "user/Informant"
 ], function(
     Backbone,
     Team,

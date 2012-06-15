@@ -12,6 +12,16 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 /**
+ * The address of the TouchDB-Android database on the Android.
+ */
+Utils.touchUrl = "http://localhost:8888/db";
+
+/**
+ * The address of the PouchDB database on the browser.
+ */
+Utils.pouchUrl = "idb://db";
+
+/**
  * Console logs out, if not on Internet Explorer. Only logs out if
  * debugMode is true.
  */
