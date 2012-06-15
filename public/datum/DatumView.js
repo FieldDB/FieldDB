@@ -68,17 +68,17 @@ define([
     /**
      * The menuview is a partial of the DatumView.
      */
-    menuview: DatumStatusView,
+    menuview: DatumMenuView,
     
     /**
      * The tagview is a partial of the DatumView.
      */
-    tagview: DatumStatusView,
+    tagview: DatumTagView,
     
     /**
      * The fieldview is a partial of the DatumView.
      */
-    fieldview: DatumStatusView,
+    fieldview: DatumFieldView,
     
     /**
      * Events that the DatumView is listening to and their handlers.
