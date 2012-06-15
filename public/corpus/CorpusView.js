@@ -7,8 +7,8 @@ define([
     "data_list/DataListView",
     "preference/Preference",
     "preference/PreferenceView",
-    "session/Session",
-    "session/SessionView",
+    "datum/Session",
+    "datum/SessionView",
     "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"

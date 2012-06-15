@@ -1,4 +1,4 @@
-define("session/Session", [
+define( [
     "use!backbone",
     "user/User",
     "user/Informant"
@@ -33,12 +33,10 @@ define("session/Session", [
      defaults: {
 
         //The Data that belongs to the session will inherent these values.
-        //The sessionID is an automatically generated number.   
-         sessionID : 0,
+         
          
          user: "User",
-         informant: "",
-
+         informants: "",
          language: "Language",
          languageFamily: "Family",
          dialect: "",
