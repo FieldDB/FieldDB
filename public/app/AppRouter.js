@@ -29,7 +29,7 @@ define([
     },
 
     routes : {
-      "corpus/:corpusName" : "showDashboard",
+      "corpus/:corpusName" : "showFullscreenCorpus",
       "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
       "corpus/:corpusName/session/:id" : "showNewSession",
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
@@ -65,6 +65,7 @@ define([
     
     
     /**
+     * TODO do we need this to be full screen? why not a pop-up? 
      * Displays a a page where the user can create a new corpus. 
      * 
      * @param {String}
@@ -81,6 +82,20 @@ define([
       $("#new-corpus").show();
     },
 
+    /**
+     * Displays all of the corpus details and settings. 
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     */
+    showFullscreenCorpus : function() {
+      Utils.debug("In showFullscreenCorpus: " + corpusName);
+
+      this.hideEverything();
+
+      $("#dashboard-view").show();
+      $("#corpus-info-view").show();
+    },
 
     
     /**
@@ -253,24 +268,10 @@ define([
       Utils.debug("In showUserProfile: " + userName);
       
       // TODO Set appView.fullScreenUserview.model's properties to be for the
-      // user with the given username
-      appView.fullScreenUserView.model.set({
-        username : "trisapeace",
-        password : "pword",
-        email :  "trisapeace@gmail.com",
-        gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
-        researchInterest : "computers",
-        affiliation : "iLanguageLab",
-        corpora : [],
-        dataLists : [],
-        prefs : null,
-        firstname : "Theresa",
-        lastname : "Deering",
-        teams : [],
-        sessionHistory : [],
-        activityHistory : [],
-        permissions : null,
-      });
+      // user with the given username, currently using the logged in user.
+      appView.fullScreenUserView.model.set(
+        appView.authView.model.get("user")
+      );
 
       this.hideEverything();
       
