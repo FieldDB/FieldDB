@@ -59,6 +59,7 @@ define([
       this.hideEverything();
 
       $("#dashboard-view").show();
+      $("#fullscreen-corpus-view").show();
     },
 
       
@@ -350,6 +351,7 @@ define([
           $("#fullscreen-datalist-view").hide();
           $("#fullscreen-search-view").hide();
           $("#fullscreen-user-profile-view").hide();
+          $("#fullscreen-corpus-view").hide();
           $("#user-preferences-view").hide();
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();

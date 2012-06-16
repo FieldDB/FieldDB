@@ -33,7 +33,7 @@ define([
     },
     defaults : {
       state : "Checked",
-      color : "green",
+      color : "success",
       informant : Informant,
       showInSearchResults: true
     },
