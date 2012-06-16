@@ -45,7 +45,7 @@ define([
       Utils.debug("CORPUS init: " + this.el);
    // Create a SessionView
       this.datumStatesView = new DatumStatesView({
-        model: this.model.get("dataStates")
+        collection: this.model.get("datumStates")
       });
       
       // Create a SessionView
@@ -77,7 +77,9 @@ define([
      * Events that the CorpusView is listening to and their handlers.
      */
     events : {
-      "change" : "render",
+//      "change" : "render",
+      "blur .color_chooser" : "alertit",
+      "blur .datum_state_input" : "alertit"
 //              "click .new_datum" : "newDatum",
 //              "click .new_session" : "newSession",
 //              "click .show_data_lists" : "showDataLists",
@@ -129,6 +131,9 @@ define([
       });
       
       this.sessionView.loadSample(this.model);
+    },
+    alertit: function(){
+      alert("clicked in corpus view");
     }
   });
 

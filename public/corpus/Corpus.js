@@ -1,18 +1,20 @@
 define([ 
     "use!backbone",
-    "confidentiality_encryption/Confidential",
-    "libs/Utils", 
+    "confidentiality_encryption/Confidential", 
     "user/Informants", 
     "datum/DatumState",
+    "datum/DatumStates",
 //    "datum/DatumFields,"
     "datum/Sessions",
     "data_list/DataLists",
-    "permission/Permissions"
+    "permission/Permissions",
+    "libs/Utils"
 ], function(
     Backbone, 
     Confidential, 
     Informants, 
     DatumState,
+    DatumStates,
 //    DatumFields, 
     Sessions, 
     DataLists, 
@@ -68,8 +70,19 @@ define([
         this.on('all', function(e) {
           Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
         }); 
-        
-        //TODO add default datumStates
+
+        this.set("datumStates", new DatumStates([ 
+          new DatumState()
+          ,new DatumState({
+            state : "To be checked",
+            color : "warning"
+          })
+          , new DatumState({
+            state : "Deleted",
+            color : "important"
+          }) 
+        ]));
+
       },
       
       defaults : {
@@ -78,9 +91,7 @@ define([
         description : "",
         confidential :  Confidential,
         informants : Informants,
-        datumStates : Backbone.Collection.extend({
-          model : DatumState
-        }),
+        datumStates : DatumStates,
 //        datumFields : DatumFields, 
         sessions : Sessions, 
         datalists : DataLists, //TODO capitalize L?
@@ -88,7 +99,7 @@ define([
         
       },
       validate: function(attrs){
-        console.log(attrs);
+//        console.log(attrs);
 //        if(attrs.name != undefined){
 //          this.set("nameAsUrl",encodeURIComponent(attrs.name));
 //        }
