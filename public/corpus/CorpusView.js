@@ -6,6 +6,7 @@ define([
     "corpus/Corpus",
     "data_list/DataList",
     "data_list/DataListView",
+    "datum/DatumStatesView",
     "datum/Session",
     "datum/SessionView",
     "lexicon/LexiconView",
@@ -19,6 +20,7 @@ define([
     Corpus,
     DataList,
     DataListView,
+    DatumStatesView,
     Session,
     SessionView,
     LexiconView,
@@ -41,6 +43,10 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
+   // Create a SessionView
+      this.datumStatesView = new DatumStatesView({
+        model: this.model.get("dataStates")
+      });
       
       // Create a SessionView
       this.sessionView = new SessionView({
@@ -55,7 +61,7 @@ define([
      */    
     model : Corpus,
     
-    
+    datumStatesView : DatumStatesView,
     /**
      * The sessionView is a child of the CorpusView.
      */
@@ -99,7 +105,8 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         $("#corpus-details-view").html(this.templateDetails(this.model.toJSON()));
         
-        
+        //Display the DatumStatesView
+        this.datumStatesView.render();
         // Display the SessionView
         this.sessionView.render();
       } else {

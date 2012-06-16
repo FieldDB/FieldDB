@@ -3,15 +3,20 @@ define([
     "confidentiality_encryption/Confidential",
     "libs/Utils", 
     "user/Informants", 
-//    "datum/DatumStates",
+    "datum/DatumState",
 //    "datum/DatumFields,"
     "datum/Sessions",
     "data_list/DataLists",
     "permission/Permissions"
 ], function(
-    Backbone, Confidential, Informants, 
-//    DatumStates, DatumFields, 
-    Sessions, DataLists, Permissions
+    Backbone, 
+    Confidential, 
+    Informants, 
+    DatumState,
+//    DatumFields, 
+    Sessions, 
+    DataLists, 
+    Permissions
 ) {
   var Corpus = Backbone.Model.extend(
     /** @lends Corpus.prototype */
@@ -63,6 +68,8 @@ define([
         this.on('all', function(e) {
           Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
         }); 
+        
+        //TODO add default datumStates
       },
       
       defaults : {
@@ -71,10 +78,12 @@ define([
         description : "",
         confidential :  Confidential,
         informants : Informants,
-//        datumstates : DatumStates, 
-//        datumfields : DatumFields, 
+        datumStates : Backbone.Collection.extend({
+          model : DatumState
+        }),
+//        datumFields : DatumFields, 
         sessions : Sessions, 
-        datalists : DataLists, 
+        datalists : DataLists, //TODO capitalize L?
         permissions : Permissions
         
       },
