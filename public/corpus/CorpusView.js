@@ -2,11 +2,10 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!corpus/corpus.handlebars",
+    "text!corpus/corpus_details.handlebars",
     "corpus/Corpus",
     "data_list/DataList",
     "data_list/DataListView",
-    "preference/Preference",
-    "preference/PreferenceView",
     "datum/Session",
     "datum/SessionView",
     "lexicon/LexiconView",
@@ -16,11 +15,10 @@ define([
     Backbone, 
     Handlebars, 
     corpusTemplate, 
+    corpusDetailsTemplate,
     Corpus,
     DataList,
     DataListView,
-    Preference,
-    PreferenceView,
     Session,
     SessionView,
     LexiconView,
@@ -35,12 +33,6 @@ define([
      *        displays a menu of things the User can do (ex. open a new
      *        session, browse all entries, etc.).
      * 
-     * @property {Import} importer The importer is an Importer object
-     *           which attaches itself to the document page on Chrome
-     *           Extensions and non-mobile browsers to listen to drag
-     *           and drop events and attempt to import the contents of
-     *           the dragged and dropped files. On android the app will
-     *           have to import data via the menus.
      * 
      * @description Starts the Corpus and initializes all its children.
      * 
@@ -49,11 +41,6 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
-      
-      // Create a PreferenceView
-      this.preferenceView = new PreferenceView({
-        model : new Preference()
-      });
       
       // Create a SessionView
       this.sessionView = new SessionView({
@@ -68,11 +55,7 @@ define([
      */    
     model : Corpus,
     
-    /**
-     * The preferenceView is a child of the CorpusView.
-     */
-    preferenceView : PreferenceView,
-
+    
     /**
      * The sessionView is a child of the CorpusView.
      */
@@ -104,7 +87,7 @@ define([
      * The Handlebars template rendered as the CorpusView.
      */
     template : Handlebars.compile(corpusTemplate),
-
+    templateDetails : Handlebars.compile(corpusDetailsTemplate),
     /**
      * Renders the CorpusView and all of its child Views.
      */
@@ -114,9 +97,8 @@ define([
         // Display the CorpusView
         this.setElement($("#corpus"));
         $(this.el).html(this.template(this.model.toJSON()));
+        $("#corpus-details-view").html(this.templateDetails(this.model.toJSON()));
         
-        // Display the PreferenceView
-        this.preferenceView.render();
         
         // Display the SessionView
         this.sessionView.render();
