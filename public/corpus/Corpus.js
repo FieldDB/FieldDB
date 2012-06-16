@@ -67,6 +67,7 @@ define([
       
       defaults : {
         name : "",
+        nameAsUrl :"",
         description : "",
         confidential :  Confidential,
         informants : Informants,
@@ -76,6 +77,12 @@ define([
         datalists : DataLists, 
         permissions : Permissions
         
+      },
+      validate: function(attrs){
+        console.log(attrs);
+//        if(attrs.name != undefined){
+//          this.set("nameAsUrl",encodeURIComponent(attrs.name));
+//        }
       }
 
     });
