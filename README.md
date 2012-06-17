@@ -25,9 +25,10 @@ Out in the field with no internet? The application is suitable for offline use. 
 * [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab LTD)
 * [Jessica Coon](http://people.linguistics.mcgill.ca/~jessica/Welcome.html) (McGill)
 * [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab LTD)
+* [Robert Henderson](http://rhenderson.org/) (UC Santa Cruz)
 * [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Concordia, Stony Brook)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
-* [Robert Henderson](http://rhenderson.org/) (UC Santa Cruz)
+* [Michael Wagner](http://prosodylab.org/) (McGill)
 
 
 # References 
