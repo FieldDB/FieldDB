@@ -1,7 +1,7 @@
 {
   "name": "iField",
-  "version": "1.8.1",
-  "description": "Collaborative Data Entry for Fieldlinguistics, like Word/LaTeX but more structured, online, offline, anywhere. Also online at: http://fieldlinguist.com",
+  "version": "1.8.4",
+  "description": "A Fieldlinguistics Database which adapts to its user's I-Language.",
   "app": {
     "launch": {
       "local_path": "dev.html"

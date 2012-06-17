@@ -2,61 +2,104 @@
 <html>
 <head>
 <title></title>
-<style type="text/css">
-body {
-	background: black;
-}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-div {
-	margin: 1em;
-	padding: 10px;
-	background: white;
-}
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css"
+	href="./bootstrap/css/bootstrap.css">
+<link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
-h1 {
-	color: #990000
-}
-</style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32705284-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
 <body>
-	<div>
-		<h1>Welcome, Bienvenue, Bienvenidos...v1.8</h1>
-		<h2>iField: a Fieldlinguistics Database Project - Beta Testing Target: July
+	<div class="well">
+		<h1>iField: a Fieldlinguistics Database which adapts to its
+			user's I-Language</h1>
+		<h2>Welcome, Bienvenue, Bienvenidos - Beta Testing Target: July
 			1st 2012</h2>
+		<h2>Official Launch August 1st, @CAML in Patzún, Guatemala</h2>
 		<h3>Status: 3 days behind schedule</h3>
 		<p>
-			<a href="index.html">Go to the App...</a>
+			Click here to go to the local <a href="index.html">index.html</a>
+			v1.8 (updated weekly).
+		</p>
+		<p>
+			Click here to go to <a href="http://ifield.fieldlinguist.com">http://ifield.fieldlinguist.com</a>
+			(always up-to-date).
 		</p>
 	</div>
-	<div>
-		<h1>How to find out what's new, before its new - GitHub</h1>
-		We are busy every day, updating issues, "committing" code and asking
-		each other for code reviews. To add features, ask questions or leave
-		us notes you can use our GitHub issue tracker: <a target="top"
-			href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">GitHub
-			progress</a>
-	</div>
 
-	<div>
+	<hr>
+	<div class="well">
+
+		<h1 style="text-align: center;">Our Weekly News Channel</h1>
+
+		<p>
+			If you want more frequent updates you can find out what we are doing
+			by "watching" our project on GitHub. GitHub is a project management
+			tool for decentralized projects, kind of like Facebook for
+			programmers. We are busy every day, updating issues, "committing"
+			code and asking each other for code reviews. Anyone can add features,
+			ask questions or leave us comments notes on our GitHub issue tracker:
+			<a target="top"
+				href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
+				on GitHub </a>
+		</p>
+
+	</div>
+	<div class="well">
 		<h1>June 15 2012 - Week 8 - Prettifying and getting all the Views
 			in place, and a new Name!</h1>
 
+		<img src="images/team_at_work.jpg" width="800" />
 		<p>
 			This week continued much from last week. We also prettified the app,
 			using Bootstrap by Twitter, a framework for cute buttons, icons and
 			fonts. There is still the import and search user stories to complete
-			and modules to connect. We connected the modules to Pouch, the
-			portable offline version of Iris Couch. We are still working on
-			getting the Offline corpus to work on Android. In addition, this week
-			we created a new folder entitled <a
+			and modules to connect. We connected the modules to PouchDB, the
+			portable offline version of CouchDB. We are still working on getting
+			the Offline corpus to work on Android using TouchDB. As far as we
+			know, we are the 3rd large project to use TouchDB, it's
+			implementation of Couch might not even be complete so we might have
+			to help them out so that we can use it. The PouchDB folks have also
+			found out we were watching them and have also been implementing
+			things around the clock. The
+			database that PouchDB is using (IndexedDB) is an HTML5 specification
+			that wasn't even implemented until 6 months ago in December. We are
+			using a special advance developers version of Chrome that will be
+			availible only in August, when we launch. Talk about being on the bleeding-edge of development!</p>
+			
+			<p>In addition, this week we
+			created a new folder entitled <a
 				href="https://github.com/iLanguage/iField/tree/master/docs">docs</a>
-			which contains files that are designed to help those interested
-			who want to use this project for their data collection and need a methodology section for their grant (or want to
-			add a programming budget to their grant app to finish the "dream
-			modules"). In these files, you will find information about our goals
-			and objectives, evaluation metrics, and estimations of time and cost.
+			which contains files that are designed to help those interested who
+			want to use this project for their data collection and need a
+			methodology section for their grant (or want to add a programming
+			budget to their grant app to finish the "dream modules").
+
+		</p>
+		<p>
+			If you're a fieldlinguist and you are curious about our app, these
+			docs are for you. You can get either the .pdf or the .tex files. In
+			these files, you will find information about our goals and
+			objectives, evaluation metrics, and estimations of time and cost. <a
+				href="https://github.com/iLanguage/iField/tree/master/docs">https://github.com/iLanguage/iField/tree/master/docs</a>
 		</p>
 
+		<h2>Making Data Fields and Session Fields that truely adapt to
+			your data</h2>
 		<p>We also stated the refactor (the re-doing) of the Datums and
 			Sessions. Here is Hisako explaining how the Datums and Sessions will
 			"learn" and adapt to the team that is building their corpus.</p>
@@ -69,7 +112,7 @@ h1 {
 
 
 
-	<div>
+	<div class="well">
 		<h1>June 8 2012 - Week 7 - Connecting the modules</h1>
 		<p>This week implemented more views and clarify the connections
 			between different modules. We started with what Emmy coined
@@ -77,27 +120,24 @@ h1 {
 			We have begun refactoring the site to reflect the ER diagram.
 			Additionally, we connected our modules to IrisCouch, a hosting
 			service for databases (a couch in cloud, it costs $1 per gigabite per
-			month). In addition, we implemented paginator for the datalist view.
+			month). In addition, we implemented pagination for the datalist view.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 		
-		<h2>Paginator and the DataListView Sequence Diagram</h2>
-
-		<p>Here is a boardcast about the sequence of events happening in
-			the paginator with translations our application.
-		<p>
-			<iframe width="560" height="315"
-				src="http://www.youtube.com/embed/tLQ75Z_2mJQ" frameborder="0"
-				allowfullscreen></iframe>
-		<p>Here is a screencast that looks at the code that corresponds to
-			the boardcast. Please excuse the siren in the background.
-		<p>
-			<iframe width="420" height="315"
-				src="http://www.youtube.com/embed/ZNygnIwP_Qc" frameborder="0"
-				allowfullscreen></iframe>
 		<h2>Page Load Sequence Diagram</h2>
 		<iframe width="420" height="315"
 			src="http://www.youtube.com/embed/B7PTZlzBNb8" frameborder="0"
@@ -120,6 +160,28 @@ h1 {
 		<img src="/images/importSD.jpeg" alt-"Import Sequence
 			Diagram" height="300" width="300" />
 
+
+		<h2>Paginator and the DataListView Sequence Diagram</h2>
+
+		<p>Here is a boardcast about the sequence of events happening in
+			the paginator with explaination in terms of the DataList for our
+			application. DataLists are like favorites where users can put
+			together a list of datum for a special purpose like creating a
+			handout for a conference, or a list of data to prepare for a session
+			with a consultant etc. DataLists can be pretty big, so we need to
+			"paginate" them. we have decided to paginate them by sorting the most
+			recent first.</p>
+		<iframe width="560" height="315"
+			src="http://www.youtube.com/embed/tLQ75Z_2mJQ" frameborder="0"
+			allowfullscreen></iframe>
+		<p>Here is a screencast that looks at the code that corresponds to
+			the boardcast.</p>
+
+		<iframe width="420" height="315"
+			src="http://www.youtube.com/embed/ZNygnIwP_Qc" frameborder="0"
+			allowfullscreen></iframe>
+
+
 		<h2>Getting from Handlebars to the App</h2>
 
 		<p>In implementing the connection between views and modules we
@@ -139,7 +201,7 @@ h1 {
 				allowfullscreen></iframe>
 	</div>
 
-	<div>
+	<div class="well">
 		<h1>June 1 2012 - Week 6 - Testing the modules</h1>
 		<p>
 			This week we set up the corpus database using CouchDB hosted on
@@ -172,7 +234,7 @@ h1 {
 
 	</div>
 
-	<div>
+	<div class="well">
 		<h1>May 18 2012 - Week 5 - Documenting the modules</h1>
 		<p>
 			This week we finished the <a
@@ -188,7 +250,7 @@ h1 {
 			what we are up to.
 		</p>
 	</div>
-	<div>
+	<div class="well">
 		<h1>May 11 2012 - Week 4 - Three Black Boxes</h1>
 		<h2>Continuous Build Server is up: Meet our butler, Jenkins</h2>
 		<p>Jenkins is set up and building the project every time someone
@@ -220,7 +282,7 @@ h1 {
 			allowfullscreen></iframe>
 		<hr />
 	</div>
-	<div>
+	<div class="well">
 		<h1>May 4 2012 - Week 3 - Gimp User Interface Designs</h1>
 
 
@@ -240,7 +302,7 @@ h1 {
 			alt="dark skin" />
 
 	</div>
-	<div>
+	<div class="well">
 		<h1>April 27 2012 - Week 2 - Paper Prototypes</h1>
 		<p>We got together and started desigining the UI. Below are this
 			week's deliverables.</p>
@@ -285,12 +347,29 @@ h1 {
 		<p>Here are other various preferences and permissions.</p>
 
 	</div>
-	<div>
+	<div class="well">
 		<h1>April 20 2012 - Week 1 - Clickable Prototype</h1>
 		The clickable prototype was written in HTML and CSS, it showed the
 		menus and some of the import export. It was replaced above with the
 		paper prototypes.
 	</div>
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="./libs/jquery.js"></script>
+	<script src="./bootstrap/js/bootstrap-transition.js"></script>
+	<script src="./bootstrap/js/bootstrap-alert.js"></script>
+	<script src="./bootstrap/js/bootstrap-modal.js"></script>
+	<script src="./bootstrap/js/bootstrap-dropdown.js"></script>
+	<script src="./bootstrap/js/bootstrap-scrollspy.js"></script>
+	<script src="./bootstrap/js/bootstrap-tab.js"></script>
+	<script src="./bootstrap/js/bootstrap-tooltip.js"></script>
+	<script src="./bootstrap/js/bootstrap-popover.js"></script>
+	<script src="./bootstrap/js/bootstrap-button.js"></script>
+	<script src="./bootstrap/js/bootstrap-collapse.js"></script>
+	<script src="./bootstrap/js/bootstrap-carousel.js"></script>
+	<script src="./bootstrap/js/bootstrap-typeahead.js"></script>
 
 </body>
 </html>
