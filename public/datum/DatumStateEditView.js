@@ -21,7 +21,7 @@ define( [
           _.bindAll(this, 'contentChanged');
         },
         events : {
-          "change" : "render",
+//          "change" : "render",
           "click .color_chooser" : "alertit",
           "blur input.datum_state_input" : "updateState"
         },
@@ -43,6 +43,9 @@ define( [
         },
         updateState : function(e) {
           this.model.set("state", $(".datum_state_input").val());
+          this.model.set("color", $(".color_chooser").val());
+          console.log(this.model.toJSON());
+          this.render();
         },
     });
 
