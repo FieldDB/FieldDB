@@ -45,7 +45,7 @@ Out in the field with no internet? The application is suitable for offline use. 
 
 
 # References 
-See [Wiki](https://github.com/mecathcart/Drag-and-Drop-FieldLinguistics/wiki) for References, Software Design Docs and Software Requirements Specification 
+See [Wiki](https://github.com/iLanguage/iField/wiki) for References, Similar Software that we investigated, Software Design Docs and Software Requirements Specification 
 
 # Funding
 We have some small funding TBA
