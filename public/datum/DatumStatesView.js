@@ -27,7 +27,10 @@ define([
       Utils.debug("DatumStatesView init: " + this.el);
       // bind the functions 'add' and 'remove' to the view.
       _(this).bindAll('add', 'remove');
-   
+      
+      //trying to capture events
+      _.bindAll(this, 'alertit');
+      
       // create an array of datumState views to keep track of children
       this._datumStateViews = [];
    
@@ -38,7 +41,11 @@ define([
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
     },
-    
+    events : {
+      // "change" : "render",
+      "click .color_chooser" : "alertit",
+      "blur input.datum_state_input" : "alertit"
+    },
     add : function(d) {
       // We create an updating donut view for each donut that is added.
       var dv = new DatumStateEditView({
@@ -82,8 +89,14 @@ define([
 
       return this;
     },
-    alertit: function(){
-      alert("clicked in datumstates view");
+    alertit: function(e){
+     console.log(e);
+   // update each datumState View and append them.
+      _(this._datumStateViews).each(function(dv) {
+        
+        dv.updateState(e);
+      });
+      alert("updating states in datumstates view");
     }
 
   });
