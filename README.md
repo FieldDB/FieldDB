@@ -3,11 +3,12 @@ iField: An offline/online fieldlinguistics database which adapts to its user's I
 We designed iField from the ground up to be both user-friendly AND conform to data management best practices from DataOne and E-MELD. In fact, you can use Section 6 Evaluation for the data management section in your grant applications:
 https://github.com/iLanguage/iField/blob/master/docs/WhitePaper.pdf?raw=true
 
+
+# Call for Beta Testers
+
 iField will be officially launched in English, French and Spanish on August 1st 2012 in Patzun, Guatemala. So far we have had input from fieldlinguists working on Morpho-syntax, LF and Prosody. We are currently looking for users who would like to try out our app as a Beta Tester starting July 1st. In particular we need to know if the app is User Friendly, and if you have suggestions on how we can improve the app to save you time entering your data, and searching for your data when writing handouts/articles etc. 
 
-So put on your best fieldlinguist's cargo pants, and join us for the bug hunt!
-
-# Join the Beta Testers
+So [put on your best fieldlinguist's cargo pants, and join us for the bug hunt!](https://docs.google.com/spreadsheet/viewform?formkey=dFlXWENNd1FXRmxPOTl1NVVqemc2ZlE6MQ)
 
 https://docs.google.com/spreadsheet/viewform?formkey=dFlXWENNd1FXRmxPOTl1NVVqemc2ZlE6MQ
 
