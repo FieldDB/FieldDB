@@ -1,17 +1,24 @@
 define([ 
     "use!backbone",
-    "confidentiality_encryption/Confidential",
-    "libs/Utils", 
+    "confidentiality_encryption/Confidential", 
     "user/Informants", 
-//    "datum/DatumStates",
+    "datum/DatumState",
+    "datum/DatumStates",
 //    "datum/DatumFields,"
     "datum/Sessions",
     "data_list/DataLists",
-    "permission/Permissions"
+    "permission/Permissions",
+    "libs/Utils"
 ], function(
-    Backbone, Confidential, Informants, 
-//    DatumStates, DatumFields, 
-    Sessions, DataLists, Permissions
+    Backbone, 
+    Confidential, 
+    Informants, 
+    DatumState,
+    DatumStates,
+//    DatumFields, 
+    Sessions, 
+    DataLists, 
+    Permissions
 ) {
   var Corpus = Backbone.Model.extend(
     /** @lends Corpus.prototype */
@@ -63,19 +70,39 @@ define([
         this.on('all', function(e) {
           Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
         }); 
+
+        this.set("datumStates", new DatumStates([ 
+          new DatumState()
+          ,new DatumState({
+            state : "To be checked",
+            color : "warning"
+          })
+          , new DatumState({
+            state : "Deleted",
+            color : "important"
+          }) 
+        ]));
+
       },
       
       defaults : {
         name : "",
+        nameAsUrl :"",
         description : "",
         confidential :  Confidential,
         informants : Informants,
-//        datumstates : DatumStates, 
-//        datumfields : DatumFields, 
+        datumStates : DatumStates,
+//        datumFields : DatumFields, 
         sessions : Sessions, 
-        datalists : DataLists, 
+        datalists : DataLists, //TODO capitalize L?
         permissions : Permissions
         
+      },
+      validate: function(attrs){
+//        console.log(attrs);
+//        if(attrs.name != undefined){
+//          this.set("nameAsUrl",encodeURIComponent(attrs.name));
+//        }
       }
 
     });
