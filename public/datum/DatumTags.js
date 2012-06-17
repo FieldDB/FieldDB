@@ -9,7 +9,7 @@ define([
     /** @lends Datums.prototype */
     {
        /**
-        * @class A collection of Datums.
+        * @class A collection of Datum tags
         *
         * @extends Backbone.Collection
         * @constructs
