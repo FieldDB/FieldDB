@@ -54,7 +54,7 @@ We have some small funding TBA
 
 This project is released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license, which is an very non-restrictive open source license which basically says you can adapt the software to any use you see fit. You can also download it and install it on your Departments servers.
 
-# How to Contribute
+# How to Contribute Code
 
 * [Signup for a GitHub account](https://github.com/signup/free) (GitHub is free for OpenSource)
 * Click on the "Fork" button to create your own copy.
