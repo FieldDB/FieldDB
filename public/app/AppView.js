@@ -350,9 +350,17 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      this.corpusView.loadSample();
+      // Sample Corpus data
+      /*
+      this.model.get("corpus").set({
+        "name" : "Quechua Corpus",
+        "nameAsUrl": "Quechua_Corpus",
+        "description" : "This is a corpus which will let you explore the app and see how it works. "
+            + "\nIt contains some data from one of our trips to Cusco, Peru."
+      });
+      */
       
-      this.fullscreenCorpusView.loadSample();
+      this.corpusView.loadSample();
       
       this.authView.loadSample();
       

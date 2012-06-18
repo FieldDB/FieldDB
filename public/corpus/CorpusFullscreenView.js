@@ -55,9 +55,6 @@ define([
      * Events that the CorpusView is listening to and their handlers.
      */
     events : {
-      "change" : "render",
-      "blur .color_chooser" : "alertit",
-      "blur .datum_state_input" : "alertit"
 //              "click .new_datum" : "newDatum",
 //              "click .new_session" : "newSession",
 //              "click .show_data_lists" : "showDataLists",
@@ -91,23 +88,6 @@ define([
       }
       
       return this;
-    },
-    
-    /**
-     * Initialize the sample Corpus.
-     */
-    loadSample : function() {
-      // Sample Corpus data
-      this.model.set({
-        "name" : "Quechua Corpus",
-        "nameAsUrl": "Quechua_Corpus",
-        "description" : "This is a corpus which will let you explore the app and see how it works. "
-            + "\nIt contains some data from one of our trips to Cusco, Peru."
-      });
-    },
-    
-    alertit: function(){
-      alert("clicked in corpus view");
     }
   });
 
