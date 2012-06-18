@@ -1,10 +1,24 @@
 define([ 
     "use!backbone",
-    "confidentiality_encryption/Confidential",
+    "confidentiality_encryption/Confidential", 
+    "user/Informants", 
+    "datum/DatumState",
+    "datum/DatumStates",
+//    "datum/DatumFields,"
+    "datum/Sessions",
+    "data_list/DataLists",
+    "permission/Permissions",
     "libs/Utils"
 ], function(
     Backbone, 
-    Confidential
+    Confidential, 
+    Informants, 
+    DatumState,
+    DatumStates,
+//    DatumFields, 
+    Sessions, 
+    DataLists, 
+    Permissions
 ) {
   var Corpus = Backbone.Model.extend(
     /** @lends Corpus.prototype */
@@ -28,15 +42,14 @@ define([
        *           appears on the corpus details page
        * @property {String} remote The git url of the remote eg:
        *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
-       * @property {String} localFolder The local url of the corpus on
-       *           android/node eg: Sapir/SampleFieldLinguisticsCorpus
-       * @property {Array} changedDatumList This array contains a list of
-       *           the datum that have been changed and need to be synced
-       * @property {Array} originalImportFiles This array contains a list
-       *           of the original source files which will be put into
-       *           version control with the corpus. This is used so that
-       *           the user can go back to their original files:eg
-       *           sample_elan.eaf
+       *           
+       * @property {Informants} informants Collection of informants who contributed to the corpus
+       * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
+       * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+       * @property {Sessions} sessions Collection of sessions that belong to the corpus
+       * @property {DataLists} datalists Collection of data lists created under the corpus
+       * @property {Permissions} permissions Collection of permissions groups associated to the corpus 
+       * 
        *           
        * @property {Glosser} glosser The glosser listens to
        *           orthography/utterence lines and attempts to guess the
@@ -57,40 +70,41 @@ define([
         this.on('all', function(e) {
           Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
         }); 
+
+        this.set("datumStates", new DatumStates([ 
+          new DatumState()
+          ,new DatumState({
+            state : "To be checked",
+            color : "warning"
+          })
+          , new DatumState({
+            state : "Deleted",
+            color : "important"
+          }) 
+        ]));
+
       },
       
       defaults : {
         name : "",
+        nameAsUrl :"",
         description : "",
-        changedDatumList : [],
-        confidential :  Confidential
+        confidential :  Confidential,
+        informants : Informants,
+        datumStates : DatumStates,
+//        datumFields : DatumFields, 
+        sessions : Sessions, 
+        datalists : DataLists, //TODO capitalize L?
+        permissions : Permissions
+        
+      },
+      validate: function(attrs){
+//        console.log(attrs);
+//        if(attrs.name != undefined){
+//          this.set("nameAsUrl",encodeURIComponent(attrs.name));
+//        }
       }
-      
-//        ,
-//        insertDatum : function(datum) {
-//          Utils.debug("Getting this datum's id from the corpus, and adding it to the list of changed datum that must be synced. "
-//              + JSON.stringify(datum));
-//          datum.id = this.autoincrement;
-//          this.changedDatumList.push(datum);
-//          this.autoincrement++;
-//        },
-//        updateDatum : function(datum) {
-//          Utils.debug("Telling the corpus that this datum has changed "
-//              + JSON.stringify(datum));
-//          this.changedDatumList.push(datum);
-//        },
-//        push : function() {
-//          Utils.debug("Attempting to connect to the internet, contacting remote and sending changed datum list");
-//        },
-//        pull : function() {
-//          Utils.debug("Attempting to connect to the internet, contacting remote and pulling down the files which have changed.");
-//        },
-//        merge : function() {
-//          Utils.debug("The user has clicked okay, the newer version of the corpus will be saved locally, or the user's branch will be merged remotely.");
-//        },
-//        diff : function() {
-//          Utils.debug("Showing the user the diffs between their version of the corpus and the remote version.");
-//        },
+
     });
     
   return Corpus;

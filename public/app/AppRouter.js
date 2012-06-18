@@ -1,62 +1,14 @@
 define([ 
-    "use!backbone", 
-    "corpus/Corpus", 
-    "corpus/NewCorpusView",
-    "data_list/DataList", 
-    "data_list/DataListView",
-    "data_list/NewDataListView",
-    "datum/Datum", 
-    "datum/DatumView", 
-    "datum_pref/DatumPref",
-    "datum_pref/DatumPrefView",
-    "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
-    "import/Import",
-    "import/ImportView",
-    "preference/Preference",
-    "preference/PreferenceView",
-    "search/Search",
-    "search/AdvancedSearchView",
-    "session/Session", 
-    "session/SessionView",
-    "user/User", 
-    "user/UserProfileView", 
-    "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
-    "export/Export",
-    "export/ExportView",
+
+    "use!backbone",
+    "datum/Datum",
+    "datum/Session",
     "libs/Utils"
 
 ], function(
-    Backbone, 
-    Corpus,
-    NewCorpusView,
-    DataList,
-    DataListView,
-    NewDataListView,
+    Backbone,
     Datum,
-    DatumView,
-    DatumPref,
-    DatumPrefView,
-    HotKey,
-    HotKeyConfigView,
-    Import,
-    ImportView,
-    Preference,
-    PreferenceView,
-    Search,
-    SearchView,
-    AdvancedSearchView,
-    Session,
-    SessionView,
-    User,
-    UserProfileView,
-    HotKey,
-    HotKeyConfigView,
-    Export,
-    ExportView,
-    UserProfileView
-  
+    Session
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -77,7 +29,7 @@ define([
     },
 
     routes : {
-      "corpus/:corpusName" : "showDashboard",
+      "corpus/:corpusName" : "showFullscreenCorpus",
       "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
       "corpus/:corpusName/session/:id" : "showNewSession",
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
@@ -107,12 +59,14 @@ define([
       this.hideEverything();
 
       $("#dashboard-view").show();
+      $("#fullscreen-corpus-view").show();
     },
 
       
     
     
     /**
+     * TODO do we need this to be full screen? why not a pop-up? 
      * Displays a a page where the user can create a new corpus. 
      * 
      * @param {String}
@@ -129,6 +83,20 @@ define([
       $("#new-corpus").show();
     },
 
+    /**
+     * Displays all of the corpus details and settings. 
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     */
+    showFullscreenCorpus : function() {
+      Utils.debug("In showFullscreenCorpus: " + corpusName);
+
+      this.hideEverything();
+
+      $("#dashboard-view").show();
+      $("#corpus-info-view").show();
+    },
 
     
     /**
@@ -216,8 +184,8 @@ define([
           Utils.debug("Session does not exist: " + sessionId);
           
           // Create a new Session and render it
-          // appView.sessionEditView.model = new Session();
-          // appView.sessionEditView.model.render();
+          appView.sessionEditView.model = new Session();
+          appView.sessionEditView.render();
           
           // Display the edit session view and hide all the other views
           self.hideEverything();
@@ -301,24 +269,10 @@ define([
       Utils.debug("In showUserProfile: " + userName);
       
       // TODO Set appView.fullScreenUserview.model's properties to be for the
-      // user with the given username
-      appView.fullScreenUserView.model.set({
-        username : "trisapeace",
-        password : "pword",
-        email :  "trisapeace@gmail.com",
-        gravatar : "https://secure.gravatar.com/avatar/c671bebad1c949435c348ed5bf4f5fac?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
-        researchInterest : "computers",
-        affiliation : "iLanguageLab",
-        corpora : [],
-        dataLists : [],
-        prefs : null,
-        firstname : "Theresa",
-        lastname : "Deering",
-        teams : [],
-        sessionHistory : [],
-        activityHistory : [],
-        permissions : null,
-      });
+      // user with the given username, currently using the logged in user.
+      appView.fullScreenUserView.model.set(
+        appView.authView.model.get("user")
+      );
 
       this.hideEverything();
       
@@ -397,6 +351,7 @@ define([
           $("#fullscreen-datalist-view").hide();
           $("#fullscreen-search-view").hide();
           $("#fullscreen-user-profile-view").hide();
+          $("#fullscreen-corpus-view").hide();
           $("#user-preferences-view").hide();
           $("#datum-preferences-view").hide();
           $("#hotkey-config-view").hide();

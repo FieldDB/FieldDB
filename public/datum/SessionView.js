@@ -1,8 +1,8 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "session/Session",
-    "text!session/session.handlebars",
+    "datum/Session",
+    "text!datum/session.handlebars",
     "libs/Utils"
 ], function(
     Backbone, 

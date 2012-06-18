@@ -4,14 +4,12 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "text!datum/datum.handlebars",
-    "datum_status/DatumStatus",
-    "datum_status/DatumStatusView",
-    "datum_menu/DatumMenu",
-    "datum_menu/DatumMenuView",
-    "datum_tag/DatumTag",
-    "datum_tag/DatumTagView",
-    "datum_field/DatumField",
-    "datum_field/DatumFieldView",
+    "datum/DatumState",
+    "datum/DatumStateView",
+    "datum/DatumTags",
+    "datum/DatumTagsView",
+    "datum/DatumField",
+    "datum/DatumFieldView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -19,12 +17,10 @@ define([
     Confidential,
     Datum, 
     datumTemplate, 
-    DatumStatus,
-    DatumStatusView, 
-    DatumMenu,
-    DatumMenuView,
-    DatumTag, 
-    DatumTagView, 
+    DatumState,
+    DatumStateView, 
+    DatumTags, 
+    DatumTagsView, 
     DatumField, 
     DatumFieldView
 ) {
@@ -32,21 +28,19 @@ define([
   /** @lends DatumView.prototype */
   {
     /**
-     * @class The layout of a single Datum. It contains a datum status, datumFields, 
+     * @class The layout of a single Datum. It contains a datum state, datumFields, 
      * datumTags and a datum menu.
      *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      // Create a DatumStatusView
-    	this.statusview = new DatumStatusView({model: this.model.get("status")});
+      // Create a DatumstateView
+    	this.stateview = new DatumStateView({model: this.model.get("state")});
     	
-    	// Create a DatumMenuView
-      this.menuview = new DatumMenuView({model: this.model.get("datumMenu")});
       
       // Create a DatumTagView
-      this.tagview = new DatumTagView({model: this.model.get("datumTag")});
+      this.tagsview = new DatumTagsView({model: this.model.get("datumTag")});
       
       // Create a DatumFieldView
       this.fieldview = new DatumFieldView({model: this.model.get("datumField")});
@@ -61,24 +55,21 @@ define([
     model : Datum,
     
     /**
-     * The statusview is a partial of the DatumView.
+     * The stateview is a partial of the DatumView.
      */
-    statusview: null,  
+    stateview: DatumStateView,  
     
-    /**
-     * The menuview is a partial of the DatumView.
-     */
-    menuview: null,
+ 
     
     /**
      * The tagview is a partial of the DatumView.
      */
-    tagview: null,
+    tagsview: DatumTagsView,
     
     /**
      * The fieldview is a partial of the DatumView.
      */
-    fieldview: null,
+    fieldview: DatumFieldView,
     
     /**
      * Events that the DatumView is listening to and their handlers.
@@ -91,7 +82,8 @@ define([
     	"blur .morphemes" : "updateMorphemes",
     	"blur .gloss" : "updateGloss",
     	"blur .translation" : "updateTranslation",
-    	"change" : "updatePouch"
+    	"change" : "updatePouch",
+    	"click .datum_state_select" : "renderState"
     },
 
     /**
@@ -105,22 +97,23 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       if (this.model != undefined) {
-        // Register all the partials
-      	Handlebars.registerPartial("datum_status", this.statusview.template(this.statusview.model.toJSON()) );
-      	Handlebars.registerPartial("datum_menu", this.menuview.template(this.model.toJSON()) );
-      	Handlebars.registerPartial("datum_tag", this.tagview.template(this.tagview.model.toJSON()) );
-      	Handlebars.registerPartial("datum_field", this.fieldview.template(this.model.toJSON()) );
         
         // Display the DatumView
         this.setElement($("#datum-view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        
+        this.stateview.render();
       } else {
         Utils.debug("\tDatum model was undefined");
       }
       
       return this;
     },
-    
+    renderState : function(){
+      if(this.stausview != undefined){
+        this.stateview.render();
+      }
+    },
     needsSave : false,
     
     /**
