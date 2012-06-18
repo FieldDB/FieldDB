@@ -1,14 +1,14 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "search/Search",
     "text!search/advanced_search.handlebars",
+    "search/Search",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    Search,
-    advanced_searchTemplate
+    advanced_searchTemplate,
+    Search
 ) {
   var AdvancedSearchView = Backbone.View.extend(
   /** @lends AdvancedSearchView.prototype */

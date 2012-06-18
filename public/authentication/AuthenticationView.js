@@ -20,7 +20,8 @@ define([
     /**
      * @class This is the login logout surface.
      * 
-     * @description Starts the Authentication and initializes all its children.
+     * @description Starts the Authentication and initializes all its children. 
+     * This is where the dropdown menu for user related stuff is housed.
      * 
      * @extends Backbone.View
      * @constructs

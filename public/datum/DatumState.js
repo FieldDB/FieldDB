@@ -35,7 +35,7 @@ define([
       state : "Checked",
       color : "success",
       informant : Informant,
-      showInSearchResults: true
+      showInSearchResults : true
     },
   });
 

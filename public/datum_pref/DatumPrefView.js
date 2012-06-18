@@ -1,16 +1,21 @@
 define( [
     "use!backbone", 
     "use!handlebars", 
-    "datum_pref/DatumPref",
+    "text!datum_pref/datum_pref.handlebars",
     "datum/DatumField",
+    "datum_pref/DatumPref",
     "datum/DatumState",
-    "text!datum_pref/datum_pref.handlebars"
-], function(Backbone, Handlebars, DatumPref, DatumField, DatumState, datum_prefTemplate) {
+], function(Backbone,
+    Handlebars,  
+    datum_prefTemplate,  
+    DatumField,
+    DatumPref, 
+    DatumState) {
     var DatumPrefView = Backbone.View.extend(
     /** @lends DatumFieldView.prototype */
     {
         /**
-         * @class Datum Field
+         * @class Datum Field View
          *
          * @extends Backbone.View
          * @constructs
@@ -23,11 +28,8 @@ define( [
         classname : "datum_prefs",
 
         template: Handlebars.compile(datum_prefTemplate),
-        
-        
-        	
+    
         render : function() {
-          
           this.setElement("#datum-preferences-view");
           $(this.el).html(this.template(this.model.toJSON()));
            

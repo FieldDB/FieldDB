@@ -1,21 +1,21 @@
 define( [ 
-    "use!backbone", 
-    "use!handlebars",
-    "datum/Datum",
-    "datum/DatumLatexView",
-    "datum/Datums",
-    "data_list/DataList",
-    "text!data_list/data_list.handlebars",
-    "text!datum/paging_footer.handlebars"
+  "use!backbone", 
+  "use!handlebars",
+  "text!data_list/data_list.handlebars",
+  "text!datum/paging_footer.handlebars",
+  "data_list/DataList",
+  "datum/Datum",
+  "datum/DatumLatexView",
+  "datum/Datums"
 ], function(
     Backbone, 
     Handlebars, 
+    data_listTemplate,
+    pagingFooterTemplate,
+    DataList, 
     Datum, 
     DatumLatexView,
-    Datums,
-    DataList, 
-    data_listTemplate,
-    pagingFooterTemplate
+    Datums  
 ) {
   var DataListView = Backbone.View.extend(
   /** @lends DataList.prototype */

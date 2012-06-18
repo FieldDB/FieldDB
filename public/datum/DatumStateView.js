@@ -17,8 +17,12 @@ define( [
           
         },
         events:{
-//          "blur .datum_state_select" : "render"
+//          "blur .datum_state_select" : "render",        
+        // "change" : "render",
+        "click .color_chooser" : function() { console.log("color_chooser"); },
+        "blur input.datum_state_input" : function() { console.log("datum_state_input"); }
         },
+        
         model : DatumStatus,
 
         classname : "datum_state",
