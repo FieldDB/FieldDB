@@ -34,7 +34,7 @@ define([
       
       // Create a DatumStatesView
       this.datumStatesView = new DatumStatesView({
-        collection : new DatumStates()
+        collection : this.model.get("datumStates")
       });
       
       // If the model changes, re-render
