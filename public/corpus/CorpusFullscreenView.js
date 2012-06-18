@@ -3,16 +3,28 @@ define([
     "use!handlebars",
     "text!corpus/corpus_details.handlebars",
     "corpus/Corpus",
+    "data_list/DataLists",
+    "data_list/DataListsView",
     "datum/DatumStates",
     "datum/DatumStatesView",
+    "permission/Permissions",
+    "permission/PermissionsView",
+    "datum/Sessions",
+    "datum/SessionsView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
     corpusDetailsTemplate,
     Corpus,
+    DataLists,
+    DataListsView,
     DatumStates,
-    DatumStatesView
+    DatumStatesView,
+    Permissions,
+    PermissionsView,
+    Sessions,
+    SessionsView
 ) {
   var CorpusView = Backbone.View.extend(
   /** @lends CorpusView.prototype */
@@ -37,6 +49,20 @@ define([
         collection : this.model.get("datumStates")
       });
       
+      this.sessionsView = new SessionsView({
+        collection : this.model.get("sessions")
+      });
+      
+      this.dataListsView = new DataListsView({
+        collection : this.model.get("dataLists")
+      });
+      
+      
+      this.permissionsView = new PermissionsView({
+        collection : this.model.get("permissions")
+      });
+      
+      
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
     },
@@ -50,6 +76,22 @@ define([
      * The datumStatesView is a child of the CorpusView.
      */
     datumStatesView : DatumStatesView,
+    
+    /**
+     * The SessionsView is a child of the CorpusView.
+     */
+    sessionsView : SessionsView,
+    /**
+     * The DataListsView is a child of the CorpusView.
+     */
+    dataListsView : DataListsView,
+    /**
+    * The PermissionssView is a child of the CorpusView.
+    */
+   permissionsView : PermissionsView,
+   
+    
+    
     
     /**
      * Events that the CorpusView is listening to and their handlers.
@@ -83,6 +125,16 @@ define([
         
         // Display the DatumStatesView
         this.datumStatesView.render();
+        
+        // Display the SessionsView
+        this.sessionsView.render();
+        
+        // Display the DataListsView
+        this.dataListsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.render();
+        
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }

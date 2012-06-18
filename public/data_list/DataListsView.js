@@ -1,17 +1,19 @@
 define( [
     "use!backbone", 
     "use!handlebars", 
-    "text!data_lists/data_lists.handlebars",
+    "text!data_list/data_lists.handlebars",
+    "data_list/DataList",
     "data_list/DataLists",
 ], function(Backbone,
             Handlebars, 
             data_listsTemplate, 
+            DataList,
             DataLists) {
     var DataListsView = Backbone.View.extend(
   /** @lends DataListsView.prototype */
   {
     /**
-     * @class Datum Lists
+     * @class DataLists
      * 
      * @extends Backbone.View
      * @constructs
@@ -19,16 +21,22 @@ define( [
     initialize : function() {
     },
 
-    model : DataLists,
+    model : DataList,
 
     classname : "data_lists",
 
     template : Handlebars.compile(data_listsTemplate),
 
     render : function() {
-      this.setElement($("#data_lists"));
-      $(this.el).html(this.template(this.model.toJSON()));
+      
+      this._rendered = true;
+      Utils.debug("DataListsView render: ");
+      
+      this.setElement("#dataLists_list");
+      var jsonToRender = {title: "Available DataLists"};
+      $(this.el).html(this.template(jsonToRender));    
       return this;
+   
     }
   });
 
