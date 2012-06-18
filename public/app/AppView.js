@@ -23,8 +23,8 @@ define([
     "hotkey/HotKeyConfigView",
     "import/Import",
     "import/ImportView",
-    "preference/Preference",
-    "preference/PreferenceView",
+    "user/UserPreference",
+    "user/UserPreferenceView",
     "search/Search",
     "search/SearchView",
     "search/AdvancedSearchView",
@@ -63,8 +63,8 @@ define([
     HotKeyConfigView,
     Import,
     ImportView,
-    Preference,
-    PreferenceView,
+    UserPreference,
+    UserPreferenceView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -134,8 +134,8 @@ define([
         model : new Search()
       });
       
-      this.preferenceView = new PreferenceView({
-        model : new Preference()
+      this.userPreferenceView = new UserPreferenceView({
+        model : new UserPreference()
       });
                
       // Create an AuthenticationView
@@ -235,9 +235,9 @@ define([
     sessionEditView : SessionEditView,
     
     /**
-     * The userPreferenceView is a child of the AppView.
+     * The userUserPreferenceView is a child of the AppView.
      */  
-    preferenceView : PreferenceView,
+    userPreferenceView : UserPreferenceView,
     
     /**
      * The datumPrefView is a child of the AppView.
@@ -321,8 +321,8 @@ define([
         // Display the SessionEditView
         this.sessionEditView.render();
         
-        // Display the PreferenceView
-        this.preferenceView.render();
+        // Display the UserPreferenceView
+        this.userPreferenceView.render();
         
         this.datumPrefView.render();
         
