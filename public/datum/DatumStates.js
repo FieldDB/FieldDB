@@ -8,7 +8,7 @@ define([
   /** @lends DatumStates.prototype */
   {
     /**
-     * @class 
+     * @class Collection of Datum State
      * 
      * @description The initialize function 
      * 
@@ -17,8 +17,8 @@ define([
      */
     initialize : function() {
     },
-    model: DatumState
-    
+    model : DatumState
+
   });
 
   return DatumStates;

@@ -1,4 +1,6 @@
-define([ "use!backbone", "activity/Activity" ], function(Backbone, Activity) {
+define([ "use!backbone", 
+         "activity/Activity" ], 
+         function(Backbone, Activity) {
   var Activities = Backbone.Collection.extend(
   /** @lends Activities.prototype */
   {

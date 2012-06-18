@@ -1,4 +1,4 @@
-define("datum/DatumTagsView", [
+define( [
     "use!backbone", 
     "use!handlebars", 
     "datum/DatumTags",

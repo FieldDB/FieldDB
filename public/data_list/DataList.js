@@ -38,7 +38,7 @@ define([
       description : "some useful examples",
       datumIds : []
     }
-    
+
   });
 
   return DataList;
