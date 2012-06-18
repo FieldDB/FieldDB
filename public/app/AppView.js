@@ -9,6 +9,7 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
+    "corpus/CorpusFullscreenView",
     "corpus/CorpusView",
     "corpus/NewCorpusView",
     "data_list/DataList",
@@ -48,6 +49,7 @@ define([
     Authentication,
     AuthenticationView,
     Corpus, 
+    CorpusFullscreenView,
     CorpusView,
     NewCorpusView,
     DataList,
@@ -169,17 +171,17 @@ define([
       // Create a NewCorpusView
       this.newCorpusView = new NewCorpusView({
         model : new Corpus()
-      });  
-      
+      });
 
+      // Create a CorpusEditView
+      this.fullscreenCorpusView = new CorpusFullscreenView({
+        model : this.model.get("corpus")
+      });
       
-//    Create an ImportView
+      // Create an ImportView
       this.importView = new ImportView({
         model : new Import()
-      }); 
-      
-
-
+      });
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -237,20 +239,40 @@ define([
      */  
     preferenceView : PreferenceView,
     
+    /**
+     * The datumPrefView is a child of the AppView.
+     */
     datumPrefView : DatumPrefView,
     
+    /**
+     * The activityFeedView is a child of the AppView.
+     */
     activityFeedView : ActivityFeedView,
     
+    /**
+     * The hotkeyConfigView is a child of the AppView.
+     */
     hotkeyConfigView : HotKeyConfigView,
 
+    /**
+     * The newDataListView is a child of the AppView.
+     */
     newDataListView : NewDataListView,
     
-
+    /**
+     * The newCorpusView is a child of the AppView.
+     */
     newCorpusView : NewCorpusView,
     
+    /**
+     * The fullscreenCorpusView is a child of the AppView.
+     */
+    fullscreenCorpusView : CorpusFullscreenView,
 
+    /**
+     * The importView is a child of the AppView.
+     */
     importView : ImportView,
-
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -312,10 +334,10 @@ define([
 
         this.newCorpusView.render();
          
-
         this.importView.render();
         
-
+        // Dispaly the CorpusFullscreenView
+        this.fullscreenCorpusView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }
@@ -328,6 +350,16 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
+      // Sample Corpus data
+      /*
+      this.model.get("corpus").set({
+        "name" : "Quechua Corpus",
+        "nameAsUrl": "Quechua_Corpus",
+        "description" : "This is a corpus which will let you explore the app and see how it works. "
+            + "\nIt contains some data from one of our trips to Cusco, Peru."
+      });
+      */
+      
       this.corpusView.loadSample();
       
       this.authView.loadSample();
