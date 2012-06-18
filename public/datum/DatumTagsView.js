@@ -1,9 +1,12 @@
-define("datum/DatumTagsView", [
+define( [
     "use!backbone", 
     "use!handlebars", 
-    "datum/DatumTags",
-    "text!datum/datum_tags.handlebars"
-], function(Backbone, Handlebars, DatumTags, datum_tagsTemplate) {
+    "text!datum/datum_tags.handlebars",
+    "datum/DatumTags"
+], function(Backbone,
+    Handlebars, 
+    datum_tagsTemplate, 
+    DatumTags ) {
     var DatumTagsView = Backbone.View.extend(
     /** @lends DatumTagsView.prototype */
     {

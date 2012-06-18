@@ -1,16 +1,16 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "datum/Datum",
     "text!datum/datum_latex.handlebars", 
+    "datum/Datum"
 ], function(
     Backbone, 
     Handlebars,
-    Datum, 
-    datumTemplate
+    datumTemplate,
+    Datum
 ) {
   var DatumLatexView = Backbone.View.extend(
-  /** @lends DatumView.prototype */
+  /** @lends DatumLatexView.prototype */
   {
     /**
      * @class DatumLatex is an item returned as a search result in the data
@@ -31,7 +31,7 @@ define([
      */
     initialize : function() {
       Utils.debug("DLATEX init: " + this.el);
-      
+
       this.model.bind('change', this.render, this);
       this.model.bind('destroy', this.remove, this);
     },
@@ -40,9 +40,9 @@ define([
      * The underlying model of the DatumLatexView is a Datum.
      */
     model : Datum,
-    
+
     tagName : 'li',
-    
+
     /**
      * The Handlebars template rendered as the DatumLatexView.
      */
@@ -53,9 +53,9 @@ define([
      */
     render : function() {
       Utils.debug("DLATEX render: " + this.el);
-      
+
       this.$el.html(this.template(this.model.toJSON()));
-      
+
       return this;
     }
   });

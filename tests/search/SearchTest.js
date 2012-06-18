@@ -1,5 +1,5 @@
 require(
-    [ "search/Search"
+    [ "search/Search",
       "corpus/Corpus"
       
       ],

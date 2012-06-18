@@ -1,9 +1,9 @@
 define([
     "use!backbone", 
     "use!handlebars", 
+    "text!export/export.handlebars",
     "export/Export",
-    "text!export/export.handlebars"
-], function(Backbone, Handlebars, Export, exportTemplate) {
+], function(Backbone, Handlebars, exportTemplate, Export) {
     var ExportView = Backbone.View.extend(
     /** @lends ExportView.prototype */
     {
@@ -23,21 +23,16 @@ define([
         template: Handlebars.compile(exportTemplate),
    	
         render : function() {
-            $(this.el).html(this.template(this.model.toJSON()));
+         //   $(this.el).html(this.template(this.model.toJSON()));
             
          // Display the ExportView
           	this.setElement($("#export-view")); 
           	$(this.el).html(this.template(this.model.toJSON()));
-        	 
-   
-            
+        	      
             return this;
         },
-        
-        
+           
     });
     
-  
-
     return ExportView;
 }); 

@@ -1,4 +1,4 @@
-define("preference/Preference", [ 
+define( [ 
     "use!backbone",
     "hotkey/HotKeyConfigView"
 ], function(Backbone, HotKeyConfigView) {
