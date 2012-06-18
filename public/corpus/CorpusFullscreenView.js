@@ -1,22 +1,18 @@
 define([ 
     "use!backbone", 
-    "use!handlebars", 
-    "text!corpus/corpus.handlebars",
+    "use!handlebars",
+    "text!corpus/corpus_details.handlebars",
     "corpus/Corpus",
-    "datum/Session",
-    "datum/SessionView",
-    "lexicon/LexiconView",
-    "glosser/GlosserView",
+    "datum/DatumStates",
+    "datum/DatumStatesView",
     "libs/Utils"
 ], function(
     Backbone, 
-    Handlebars, 
-    corpusTemplate,
+    Handlebars,
+    corpusDetailsTemplate,
     Corpus,
-    Session,
-    SessionView,
-    LexiconView,
-    GlosserView
+    DatumStates,
+    DatumStatesView
 ) {
   var CorpusView = Backbone.View.extend(
   /** @lends CorpusView.prototype */
@@ -34,14 +30,14 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS init: " + this.el);
+      Utils.debug("CORPUS DETAILS init: " + this.el);
       
-      // Create a SessionView
-      this.sessionView = new SessionView({
-        model : new Session()
+      // Create a DatumStatesView
+      this.datumStatesView = new DatumStatesView({
+        collection : new DatumStates()
       });
       
-      // If the model changes, re-render 
+      // If the model changes, re-render
       this.model.bind('change', this.render, this);
     },
 
@@ -49,35 +45,47 @@ define([
      * The underlying model of the CorpusView is a Corpus.
      */    
     model : Corpus,
+    
+    /**
+     * The datumStatesView is a child of the CorpusView.
+     */
+    datumStatesView : DatumStatesView,
+    
+    /**
+     * Events that the CorpusView is listening to and their handlers.
+     */
+    events : {
+      "change" : "render",
+      "blur .color_chooser" : "alertit",
+      "blur .datum_state_input" : "alertit"
+//              "click .new_datum" : "newDatum",
+//              "click .new_session" : "newSession",
+//              "click .show_data_lists" : "showDataLists",
+//              "click .show_corpus_details" : "showCorpusDetails",
+//              "click .show_sessions" : "showSessions",
+//              "click .show_permissions" : "showPermissions",
+//              "click .show_corpora" : "showCorpora",
+//              "click .import" : "newImport",
+//              "click .export" : "showExport"
+    },
 
     /**
-     * The sessionView is a child of the CorpusView.
+     * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    sessionView : SessionView,
-
-    // TODO Should LexiconView really be here?
-    lexicon : LexiconView,
-
-    // TODO Should LexiconView really be here?
-    glosser : GlosserView,
-
-    /**
-     * The Handlebars template rendered as the CorpusView.
-     */
-    template : Handlebars.compile(corpusTemplate),
-
+    template : Handlebars.compile(corpusDetailsTemplate),
+    
     /**
      * Renders the CorpusView and all of its child Views.
      */
     render : function() {
-      Utils.debug("CORPUS render: " + this.el);
+      Utils.debug("CORPUS DETAILS render: " + this.el);
       if (this.model != undefined) {
         // Display the CorpusView
-        this.setElement($("#corpus"));
+        this.setElement($("#corpus-details-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the SessionView
-        this.sessionView.render();
+        // Display the DatumStatesView
+        this.datumStatesView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
@@ -96,8 +104,10 @@ define([
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
-      
-      this.sessionView.loadSample(this.model);
+    },
+    
+    alertit: function(){
+      alert("clicked in corpus view");
     }
   });
 
