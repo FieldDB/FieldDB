@@ -1,7 +1,13 @@
-define([ "use!backbone", "use!handlebars",
+define([ "use!backbone", 
+         "use!handlebars",
     "text!user/user.handlebars",
-    "user/Users", "user/UserView" ], function(
-    Backbone, Handlebars, userTemplate, Users, UserView) {
+    "user/Users",
+    "user/UserView" 
+    ], function( Backbone, 
+        Handlebars, 
+        userTemplate, 
+        Users, 
+        UserView) {
   var UsersView = Backbone.View.extend(
   /** @lends UsersView.prototype */
   {

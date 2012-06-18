@@ -1,17 +1,17 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "search/Search",
     "text!search/search.handlebars",
+    "search/Search",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    Search,
-    searchTemplate
+    searchTemplate,
+    Search
 ) {
   var SearchView = Backbone.View.extend(
-  /** @lends DatumFieldView.prototype */
+  /** @lends SearchView.prototype */
   {
     /**
      * @class Search View handles the render of the global search in the corner,
