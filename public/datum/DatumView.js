@@ -38,7 +38,6 @@ define([
       // Create a DatumstateView
     	this.stateview = new DatumStateView({model: this.model.get("state")});
     	
-      
       // Create a DatumTagView
       this.tagsview = new DatumTagsView({model: this.model.get("datumTag")});
       
@@ -131,7 +130,7 @@ define([
     },
     
     /**
-     * Chnage the model's gloss.
+     * Change the model's gloss.
      */
     updateGloss : function() {
       this.model.set("gloss", $(".gloss").val());
