@@ -1,23 +1,21 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "preference/Preference",
     "text!preference/preference.handlebars",
-    "hotkey/HotKeyConfigView",
+    "preference/Preference",
     "libs/Utils"
 ], function(
   Backbone, 
   Handlebars, 
-  Preference, 
   preferenceTemplate, 
-  HotKeyConfigView
+  Preference
 ) {
   var PreferenceView = Backbone.View.extend(
   /** @lends PreferenceView.prototype */
   {
-    // TODO comment this class
+    // TODO comment this class I think initially, hotkeys were gonna go in here and how they aren't in here so now I'm not sure what else is supposed to go in here.
     /**
-     * @class PreferenceView
+     * @class PreferenceView This is where the option to  change the background is.
      *
      * @extends Backbone.View
      * @constructs
@@ -55,14 +53,14 @@ define([
     
     // TODO Comment and implement this function
     randomSkin : function(){
-      
-      function randomize(min, max) {
-        if (!min)
-          min = 0;
-        if (!max)
-          max = 1;
-        return Math.floor(Math.random()*(max+1)+min);
-      }
+
+//      function randomize(min, max) {
+//        if (!min)
+//          min = 0;
+//        if (!max)
+//          max = 1;
+//        return Math.floor(Math.random()*(max+1)+min);
+//      }
       
       var randombgs=["images/skins/bamboo_garden.jpg",
                      "images/skins/llama_wool.jpg" , 
@@ -77,12 +75,15 @@ define([
                      "images/skins/sunset.jpg",
                      "images/skins/window.jpg",
                      "images/skins/Ceske_Krumlov.jpg", 
-
-
-
                      ];
-      
-      document.body.style.backgroundImage = "url(" + randombgs[randomize(0, randombgs.length-1)] + ")";
+       
+      for(var i=0; i < randombgs.length; i++){
+        
+        document.body.style.backgroundImage = "url(" + randombgs[i] + ")";
+        
+        return i;
+
+      }
 
     //  document.getElementById("app").style.backgroundImage="url('+Math.floor(Math.random()*randombgs.length)]+')");
      // document.getElementById("app").style.backgroundImage = "url('../images/skins/temple.jpg')";

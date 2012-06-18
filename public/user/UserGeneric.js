@@ -1,5 +1,7 @@
-define([ "use!backbone", "preference/Preference" ], function(Backbone,
-    Preference) {
+define([ "use!backbone", 
+         "preference/Preference"
+ ], function(Backbone,
+             Preference) {
   var UserGeneric = Backbone.Model.extend(
 
   /** @lends UserGeneric.prototype */

@@ -8,11 +8,8 @@ define( [
     className : "import",
     model: Import,
     
-    
     template: Handlebars.compile(importTemplate),
 
-    
-    
     render : function() {
     
       this.setElement("#import");

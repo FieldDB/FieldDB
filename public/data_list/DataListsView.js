@@ -19,14 +19,14 @@ define( [
     initialize : function() {
     },
 
-    model : DatumTags,
+    model : DataLists,
 
-    classname : "datum_lists",
+    classname : "data_lists",
 
-    template : Handlebars.compile(datum_listsTemplate),
+    template : Handlebars.compile(data_listsTemplate),
 
     render : function() {
-      this.setElement($("#datum_lists"));
+      this.setElement($("#data_lists"));
       $(this.el).html(this.template(this.model.toJSON()));
       return this;
     }
