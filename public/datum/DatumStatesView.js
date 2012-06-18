@@ -18,25 +18,53 @@ define([
   /** @lends DatumStatesView.prototype */
   {
     /**
-     * @class DatumStatesView is rendering the datumstates colections in the form of editable settings.
+     * @class DatumStatesView is rendering the datumstates collections in the form of editable settings.
      *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       Utils.debug("DatumStatesView init: " + this.el);
-      // bind the functions 'add' and 'remove' to the view.
+      // Bind the functions 'add' and 'remove' to the view. 
       _(this).bindAll('add', 'remove');
-      
-      // create an array of datumState views to keep track of children
-      this.datumStateViews = [];
    
-      // add each datumState to the view
+      // Add each datumState to the view
       this.collection.each(this.add);
    
-      // bind this view to the add and remove events of the collection!
+      // Bind this view to the add and remove events of the collection
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
+    },
+    
+    /**
+     * The datumStateViews array holds all of the children of the
+     * DatumStatesView.
+     */
+    datumStateViews : [],
+    
+    /**
+     * The Handlebars template rendered as the DatumStatesView.
+     */
+    template : Handlebars.compile(datumStateSettingsTemplate),
+
+    /**
+     * Renders the DatumStatesView and all of its child Views.
+     */
+    render : function() {
+      this._rendered = true;
+      Utils.debug("DatumStatesView render: ");
+      
+      this.setElement(".datum_state_settings");
+      var jsonToRender = {title: "Available Datum States"};
+      $(this.el).html(this.template(jsonToRender));
+      
+      // Render each datumState View and append them.
+      _(this.datumStateViews).each(function(dv) {
+        $('.edit_datum_states').append(dv.render().el);
+        dv.delegateEvents();
+      });
+
+      return this;
     },
     
     add : function(d) {
@@ -64,25 +92,6 @@ define([
       if (this._rendered) {
         $(viewToRemove.el).remove();
       }
-    },
-    
-    template : Handlebars.compile(datumStateSettingsTemplate),
-
-    render : function() {
-      this._rendered = true;
-      Utils.debug("DatumStatesView render: ");
-      
-      this.setElement(".datum_state_settings");
-      var jsonToRender = {title: "Available Datum States"};
-      $(this.el).html(this.template(jsonToRender));
-      
-      // Render each datumState View and append them.
-      _(this.datumStateViews).each(function(dv) {
-        $('.edit_datum_states').append(dv.render().el);
-        dv.delegateEvents();
-      });
-
-      return this;
     }
   });
 
