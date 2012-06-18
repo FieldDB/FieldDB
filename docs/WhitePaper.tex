@@ -505,7 +505,8 @@ Server maintenance&	20&	Integration	\\
 Monitor server costs and develop pricing plan&	100&   Business	\\ 
 Answer user emails&	250&	Support	\\ 
 Read twitter feeds and facebook channels&	100&	Support \\ 
-Help IT/developers install and set up \\ the server on their department servers&	50&	Support	\\ 
+Help IT/developers install and set up  & &\\ 
+the server on their department servers&	50&	Support	\\ 
 Upgrade javascript/android libraries&	40&  Javascript \\ 
 Amazon EC2 server CPU+Memory+Bandwidth&	         &  Server \\ 
 Release new versions&	160&  Javascript \\ 
@@ -540,39 +541,99 @@ Release new versions&	160&  Javascript \\
 
 \section {Evaluation}
 
-The usefulness and effectiveness of the iFiled App will be evaluated against the following criteria, taken and modified from E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html) and DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
+
+
+The usefulness and effectiveness of the iFiled App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following {\it E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html)}, and data management following {\it DataONE Primer on Data Management \\ (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf)}. 
+
+
+
+\subsection {Data Documentation} 
 
 \begin{enumerate} 
 
-\item Collection: Data are collected and organized with ease. 
+\item Content: Data is annotated and described using consistent terminology.  
 
-Self-explanatory UI as well as online and offline functionality will make data collection easier.   This is a fundamental difference between iField, designed by field linguists with software engineering experience, and existing databases which were designed by computer science students, or programmers with no fieldwork experience.
+The application itself is not tied to particular linguistic frameworks or theoretical constructs, and allows researchers to choose categories for annotation. Researchers are able to change the data fields and categories if they find inconsistent terminology within a corpus. 
 
-\item Quality: The quality of data is assured. 
+\item Format: Data are intelligible regardless of the types of operating system 
 
-Datum state (Checked, to be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
+The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. 
 
-\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories and  are customizable by corpus teams, for their team's corpora. The application thus allows data to be annotated and categorized, without unneccessarily  reducing the ease of data entry. 
+\item Discovery: Data are searchable and discoverable. 
 
-\item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (xml), making data integrated with programs researchers commonly use/have used to store their data.
-
-\item Analysis: The application organizes data in ways to help data analysis. \\  Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for analysis.  
-
-\item Format: Data are intelligible regardless of the types of operating system. (E-MELD Summary of Best Practices 2)
-
-The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app.
-
-\item Discovery: Data are searchable and discoverable. \\ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
-
-\item Access: Data are accessible. \\ Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle, however authorized researchers (authors of data) have control over who can see and/or edit their data. 
-
-\item Citation: Data provide citation information. \\ All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data was entered and other metadata controlled by the researcher to ensure that data quality can be traced to its source.
+ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
  
-\item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
 
-\item Security: Confidential information must be kept from public access. \\ Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
+\item Access: Data are accessible. 
+
+Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see and/or edit their data.  
+The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
+
+
+
+\item Citation: Data provide citation information. 
+
+All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
+ 
+
+\item Preservation: Data are archived in a way that withstands long-term preservation. 
+
+Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete.  
+In addition to a host server, researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
+
+\item Rights: Rights of researchers of data and of language consultants are respected. 
+
+Researchers (authors of data) have control over who has access to their data. Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
+
+% The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
+
+%the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application. The system will allow the user to export data encrypted or decrypted. If the corpus contains sensitive confidential information the system will warn the users if they choose to export the information in a decrypted fashion.
+
 
 \end{enumerate} 
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%The usefulness and effectiveness of the iFiled App will be evaluated against the following criteria, taken and modified from E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html) and DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
+%
+%\begin{enumerate} 
+%
+%\item Collection: Data are collected and organized with ease. 
+%
+%Self-explanatory UI as well as online and offline functionality will make data collection easier.   This is a fundamental difference between iField, designed by field linguists with software engineering experience, and existing databases which were designed by computer science students, or programmers with no fieldwork experience.
+%
+%\item Quality: The quality of data is assured. 
+%
+%Datum state (Checked, to be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
+%
+%\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories and  are customizable by corpus teams, for their team's corpora. The application thus allows data to be annotated and categorized, without unneccessarily  reducing the ease of data entry. 
+%
+%\item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (xml), making data integrated with programs researchers commonly use/have used to store their data.
+%
+%\item Analysis: The application organizes data in ways to help data analysis. \\  Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for analysis.  
+%
+%\item Format: Data are intelligible regardless of the types of operating system. (E-MELD Summary of Best Practices 2)
+%
+%The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app.
+%
+%\item Discovery: Data are searchable and discoverable. \\ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
+%
+%\item Access: Data are accessible. \\ Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle, however authorized researchers (authors of data) have control over who can see and/or edit their data. 
+%
+%\item Citation: Data provide citation information. \\ All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data was entered and other metadata controlled by the researcher to ensure that data quality can be traced to its source.
+% 
+%\item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
+%
+%\item Security: Confidential information must be kept from public access. \\ Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
+%
+%\end{enumerate} 
 
 
 %
