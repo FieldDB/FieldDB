@@ -67,6 +67,7 @@ define([ "use!backbone", "datum/AudioVisual", "comment/Comments",
       comments : Comments,
       datumState : DatumState,
       datumTags : DatumTags,
+      dateEntered : DatumField
 
     },
 
