@@ -6,7 +6,7 @@ define([
     Session
 ) {
     var Sessions = Backbone.Collection.extend(
-    /** @lends Datums.prototype */
+    /** @lends Sessions.prototype */
     {
        /**
         * @class A collection of Sessions Probably will be used in the fullscreen corpus view.

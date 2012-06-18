@@ -1,9 +1,10 @@
 define( [
     "use!backbone", 
     "use!handlebars", 
-    "text!sessions/sessions.handlebars",
+    "text!datum/sessions.handlebars",
+    "datum/Session",
     "datum/Sessions"
-], function(Backbone, Handlebars,sessionsTemplate, Sessions) {
+], function(Backbone, Handlebars,sessionsTemplate,Session, Sessions) {
     var SessionsView = Backbone.View.extend(
       /** @lends SessionsView.prototype */
       {
@@ -15,14 +16,21 @@ define( [
       initialize: function () {
       },
       collection: Sessions,
+      model : Session,
       
       template : Handlebars.compile(sessionsTemplate),
 
-//      render : function() {
-//        this.setElement($("#sessions"));
-//        $(this.el).html(this.template(this.model.toJSON()));
-//        return this;
-//      }
+      render : function() {
+      
+        this._rendered = true;
+        Utils.debug("SessionsView render: ");
+        
+        this.setElement("#sessions");
+        var jsonToRender = {title: "Available Sessions"};
+        $(this.el).html(this.template(jsonToRender));    
+        return this;
+
+      }
     });
     
     return SessionsView;
