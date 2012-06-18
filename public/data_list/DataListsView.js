@@ -32,7 +32,7 @@ define( [
       this._rendered = true;
       Utils.debug("DataListsView render: ");
       
-      this.setElement("#dataLists_list");
+      this.setElement(".dataLists_list");
       var jsonToRender = {title: "Available DataLists"};
       $(this.el).html(this.template(jsonToRender));    
       return this;

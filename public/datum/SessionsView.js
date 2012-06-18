@@ -25,7 +25,7 @@ define( [
         this._rendered = true;
         Utils.debug("SessionsView render: ");
         
-        this.setElement("#sessions");
+        this.setElement(".sessions_list");
         var jsonToRender = {title: "Available Sessions"};
         $(this.el).html(this.template(jsonToRender));    
         return this;
