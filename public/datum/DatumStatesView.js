@@ -57,7 +57,7 @@ define([
       // If the view has been rendered, then
       // we immediately append the rendered datumStatus.
       if (this._rendered) {
-        $(this.el).append(dv.render().el);
+        $('.edit_datum_states').append(dv.render().el);
       }
     },
     
