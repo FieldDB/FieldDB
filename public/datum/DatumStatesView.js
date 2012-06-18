@@ -39,10 +39,6 @@ define([
       this.collection.bind('remove', this.remove);
     },
     
-    events : {
-      "blur .datum_state_input" : function() { console.log("in blur: collection"); }
-    },
-    
     add : function(d) {
       // We create an updating DatumStateView for each DatumState that is added.
       var dv = new DatumStateEditView({
@@ -83,6 +79,7 @@ define([
       // Render each datumState View and append them.
       _(this.datumStateViews).each(function(dv) {
         $('.edit_datum_states').append(dv.render().el);
+        dv.delegateEvents();
       });
 
       return this;
