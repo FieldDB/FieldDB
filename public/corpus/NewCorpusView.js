@@ -34,7 +34,10 @@ define([
             model : Corpus,
 
             events : {
-              "change" : "render",
+//              "change" : "render",
+              "blur .title" : "updateTitle",
+              "blur .description" : "updateDescription",
+              "click .save" : "saveNewCorpus"
             },
 
             /**
@@ -58,7 +61,17 @@ define([
 
               return this;
             },
-         
+            updateTitle : function(){
+              this.model.set("title", this.$el.children(".title").val());
+            },
+            updateDescription : function(){
+              this.model.set("description", this.$el.children(".description").val());
+            },
+            saveNewCorpus : function(){
+//              this.model.save();
+              appView.authView.model.get("user").get("corpora").push(this.model); 
+              alert("Saved");
+            }
           });
 
       return NewCorpusView;
