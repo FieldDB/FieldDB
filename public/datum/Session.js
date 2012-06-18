@@ -1,13 +1,17 @@
 define([
     "use!backbone",
+    "comment/Comments",
+    "datum/DatumField",
+    "user/Informant",
     "user/Team",
     "user/User",
-    "user/Informant"
 ], function(
     Backbone,
+    Comments,
+    DatumField,
+    Informant,
     Team,
-    User,
-    Informant
+    User
 ) {
   var Session = Backbone.Model.extend(
   /** @lends Session.prototype */
@@ -33,13 +37,13 @@ define([
    
     defaults: {
       user: "",
-      informant: "",
+      informants: "",
       language: "",
-      languageFamily: "",
       dialect: "",
-      //allow users to insert date that data was retrieved (maybe prior to time of data entry)
-      date: (new Date()).toLocaleString(),
-      goal: ""
+      dateCreated: "",
+      dateEntered: "",
+      goal: "",
+      comments : Comments
     },
    
     pouch: Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
@@ -56,7 +60,7 @@ define([
       // TODO Validation on the attributes. Returning a String counts as an error.
       // We do need to validate some of these attributes, but not sure how they would work. I think they need for loops.
       
-        //for (user not in uers) {
+        //for (user not in users) {
       //    return "user must be in the system.";
       // }
        //for (team not in teams) {

@@ -1,4 +1,6 @@
-define([ "use!backbone", "user/User" ], function(Backbone, User) {
+define([ "use!backbone",
+         "user/User" ],
+         function(Backbone, User) {
   var Activity = Backbone.Model.extend(
   /** @lends Activity.prototype */
   {
