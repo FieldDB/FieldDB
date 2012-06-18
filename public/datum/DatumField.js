@@ -1,6 +1,6 @@
 define([ "use!backbone" ], function(Backbone) {
   var DatumField = Backbone.Model.extend(
-  /** @lends Preference.prototype */
+  /** @lends DatumField.prototype */
   {
     /**
      * @class The datum fields are the fields in the datum and session models.

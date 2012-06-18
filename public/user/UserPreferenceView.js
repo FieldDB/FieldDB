@@ -1,21 +1,21 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!preference/preference.handlebars",
-    "preference/Preference",
+    "text!user/user_preference.handlebars",
+    "user/UserPreference",
     "libs/Utils"
 ], function(
   Backbone, 
   Handlebars, 
   preferenceTemplate, 
-  Preference
+  UserPreference
 ) {
-  var PreferenceView = Backbone.View.extend(
-  /** @lends PreferenceView.prototype */
+  var UserPreferenceView = Backbone.View.extend(
+  /** @lends UserPreferenceView.prototype */
   {
     // TODO comment this class I think initially, hotkeys were gonna go in here and how they aren't in here so now I'm not sure what else is supposed to go in here.
     /**
-     * @class PreferenceView This is where the option to  change the background is.
+     * @class UserPreferenceView This is where the option to  change the background is.
      *
      * @extends Backbone.View
      * @constructs
@@ -24,26 +24,26 @@ define([
     },
 
     /**
-     * The underlying model of the PreferenceView is a Preference.
+     * The underlying model of the UserPreferenceView is a UserPreference.
      */
-    model : Preference,
+    model : UserPreference,
     
     /**
-     * Events that the PreferenceView is listening to and their handlers.
+     * Events that the UserPreferenceView is listening to and their handlers.
      */
     events:{
       "click #skin": "randomSkin"
     },
  
     /**
-     * The Handlebars template rendered as the PreferenceView.
+     * The Handlebars template rendered as the UserPreferenceView.
      */
     template: Handlebars.compile(preferenceTemplate),
 
     render : function() {
-      Utils.debug("PREFERENCE render: " + this.el);
+      Utils.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
-        // Display the PreferenceView
+        // Display the UserPreferenceView
         this.setElement($("#user-preferences-view"));
         $(this.el).html(this.template(this.model.toJSON()));
       }
@@ -93,5 +93,5 @@ define([
     } 
   });
   
-  return PreferenceView;
+  return UserPreferenceView;
 }); 

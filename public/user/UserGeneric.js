@@ -1,7 +1,7 @@
 define([ "use!backbone", 
-         "preference/Preference"
+         "user/UserPreference"
  ], function(Backbone,
-             Preference) {
+             UserPreference) {
   var UserGeneric = Backbone.Model.extend(
 
   /** @lends UserGeneric.prototype */
@@ -23,7 +23,7 @@ define([ "use!backbone",
      *           projects/corpora.
      * @property {Array} dataLists Datalists are selected parts of
      *           corpora (eg. passives; data to be checked week etc).
-     * @property {Preference} prefs This is where we'll have things like
+     * @property {UserPreference} prefs This is where we'll have things like
      *           background/skin.
      * 
      * @description The initialize function probably checks to see if
@@ -64,9 +64,9 @@ define([ "use!backbone",
       // Datalists are selected parts of corpora (favourites, for
       // example: passives, or data to be checked next week).
       dataLists : [],
-      // Preferences are where we'll have things like background/skin
+      // UserPreferences are where we'll have things like background/skin
       // options.
-      prefs : new Preference()
+      prefs : new UserPreference()
 
     },
 
