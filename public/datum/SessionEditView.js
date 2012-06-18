@@ -1,20 +1,20 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "datum/Session",
     "text!datum/session_edit.handlebars",
+    "datum/Session",
     "libs/Utils"
 ], function(
-    Backbone, 
+    Backbone,
     Handlebars, 
-    Session, 
-    session_editTemplate
+    session_editTemplate,
+    Session
 ) {
   var SessionEditView = Backbone.View.extend(
   /** @lends SessionView.prototype */
   {
     /**
-     * @class Session View
+     * @class Session Edit View is where the user provides new session details.
      *
      * @extends Backbone.View
      * @constructs
