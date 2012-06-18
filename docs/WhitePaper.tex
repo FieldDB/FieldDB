@@ -12,19 +12,21 @@
 
 \hyphenpenalty= 7000 
 
-\title{White Paper \\ The FieldLinguists' App}
+\title{White Paper \\ iField: A Fieldlinguistics Database which adapts to its user's I-Language}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle{} 
 
-%\tableofcontents{section}
+\tableofcontents
 
 \section {Project Abstract}
 
-The FieldLinguists' App is an OpenSource database that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible everywhere; it will run on three different systems (Mac, Linux, and Windows) as a Chrome extension and will be suitable for both online and offline use.  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members can modify and discuss the data from within the application. The system will also have a simple and friendly user interface, allowing participants to drag and drop files (audio, video, text), or record them directly into the database when using the Android app. In addition, the application will have import and export capabilities for multiple file types.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works.
+The FieldLinguists' App is an OpenSource database system that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible on any device; as it runs in a HTML5 browser, it will run laptops (Mac  10.5 and above, Linux, Windows, ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).  It will be suitable for both online and \emph{offline} use.\footnote{Running offline requires  a local database. As of August 2012 it would be possible to use the app offline in Chrome Browsers (Mac, Linux \& Windows), ChromeBooks and on Android tablets, in the coming months/years other browsers/systems will support offline databases. Safari and Firefox may also work by the end of 2012.}  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members use the application to modify and discuss the data. The system will also have a simple and friendly user interface, allowing participants to drag and drop data (audio, video, text), or record audio/video directly into the database when using the Android App. In addition, the application will have import and export capabilities for multiple file types. The application will be designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any database which will house data funded by granting agencies.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works. The application will be hosted on cloud servers so that users can use it without knowing how to set up its servers. The application will also have an installation guide for linguistics department server administrators so that they can set up unlimited data usage on their own department servers.
 
+
+iField is a collaboration between  the programming fieldlinguists of iLanguage Lab LTD, Montreal, the Mig'maq Research Group at McGill University and the Prosody Lab at McGill University, Montreal Canada.
 %Data will be stored in a host server for sync/integration and long-term archival purposes. The app has a local storage space allowing quick search and offline work. 
 
 \section {Statement of Need}
@@ -33,7 +35,7 @@ The FieldLinguists' App is conceived out of the needs of language researchers do
  An ideal linguistic database should therefore work both on- and off-line as well as make it easy to share and integrate data. 
  
 There are existing programmes/software used for linguistic fieldwork, 
-however, they fall short in providing features necessary for collaborative fieldwork. 
+however, they fall short in providing features necessary for collaborative fieldwork, while keeping the data confidential if needed. 
 For example, some web-based databases (e.g.  {\it Karuk Dictionary and Texts} http://linguistics.berkeley.edu/{\textasciitilde}ka
 ruk/links.php,   {\it The Washo Project} http://washo.uchicago.edu/dictionary/dictionary.php) work only online, hence it is impossible for researchers to enter new data or search the database while in the field where the internet is unavailable.  
 
@@ -42,7 +44,7 @@ are excellent in terms of annotating data and organizing data into various forma
 
 General purpose database software such as {\it FileMaker Pro} can be customized for the purpose of language research. However, it demands researchers to learn the software, and research teams often need to hire a programmer to customize the software for their research purposes. The stand-alone nature of such software makes data sharing and integration difficult as well. 
 
-The existing linguistic database programmes, although useful, have various shortfalls that would hinder collection and integration of data. Some of them are constrained by the internet accessibility or by the computer platform types. Some others demand extra human work in order to integrate data. 
+The existing linguistic database programmes, although useful, have various shortfalls that would hinder collection and integration of data. Some of them are constrained by the internet accessibility or by the computer platform types. Some others demand extra human work in order to integrate data. Data entry can require hours of a researcher's time. All linguistic database programmes surveyed did not provide a good user experience. The number of clicks required and the delay between actions did not meet current software engineering best practices. In addition to core functionalities, a good user experience is necessary to ensure quality data management.
 %A database application whose functionality is not limited by such constraints is much anticipated by language researchers. 
 The present project grows out of discussion with a numbers of fieldworkers dissatisfied with currently available options. 
 
@@ -50,14 +52,14 @@ The present project grows out of discussion with a numbers of fieldworkers dissa
 \section {App Description}
 
 The FieldLinguists' App will enable those interested in language research, preservation, and documentation to securely enter, store, organize, annotate, and share linguistic data. Moreover, the application will be easily customizable to fit specific needs. To accomplish these tasks, the database will be equipped with a variety of features. 
-The following functional requirements are based on a few important considerations where most existing fieldlinguistics/corpus linguistics databases applications fall short. 
+The following requirements are based on a few important considerations where most existing fieldlinguistics/corpus linguistics databases applications fall short. 
 
 
 \subsection{Functionality}
 
-This application will be able to perform the necessary functions needed by field linguists. The dashboard will be composed of several widgets. The Data Entry widget will be the primary focus, containing four core fields customary for a gloss format (utterance, morpheme-segmentation, gloss, translation). In addition to these, researchers will be able to add customized fields, such as phonetic transcription or context for an utterance.  Researchers can even upload audio files and link them to the appropriate data. Each data entry will be tagged for the researcher, date of elicitation and consultant's code. 
+This application will be able to perform the necessary functions needed by field linguists. The dashboard will be composed of several widgets. The Data Entry widget will be the primary focus, containing four core fields customary for a gloss format (utterance, morpheme-segmentation, gloss, translation). In addition to these fields, researchers will be able to add customized fields, such as phonetic transcription or context for an utterance.  Researchers can even upload audio files and link them to the appropriate data. Each data entry will be tagged with session info such as the researcher, date of elicitation, language, dialect and consultant's code. 
 
-Furthermore, researchers will be able to add tags for categorization and mark the status of each individual data entry as "Checked" or "To be checked with consultant", which further aids organization and reduces the number of errors that inevitably occur during research. Other functions such as importing data and exporting data into various formats aid efficiency and convenience. 
+Furthermore, researchers will be able to add tags for categorization and mark the status of each individual data entry as ''Checked'' or ''To be checked with consultant'', which further aids organization and reduces the number of errors that inevitably occur during research. Other functions such as importing data and exporting data into various formats aid efficiency and convenience. 
 
 Another widget will be an Activity Feed View displaying the most recent changes. This widget allows researchers to keep up to date on their team's activity.  The activity feed will display items such as recent additions to the corpus, comments made on data entries, and recent edits. 
 
@@ -73,19 +75,18 @@ This application integrates the best functions from existing fieldwork database 
 \begin{itemize}
 \item { \bf Simple} The system will be designed to replace Word Documents or LaTeX documents which is a very common way field linguists store data because it requires no training, doesn't require a complicated set-up for data categories, and takes no time to add new categories.  
 
-\item {\bf Attractive} The system will have a modern design like many of the popular websites such as Google and be customizable so that the user can include a picture of where they are doing research as a background.
-
+\item {\bf Attractive} The system will have a modern design like many of the popular websites such as Google and Twitter. It's layout and background image will be customizable so that the user can change the look and feel of the application to make their eyes comfortable  in bright/dark light, or adapt the layout of the widgets to their style of data entry.
 \end{itemize}
 
 \item {\bf Powerful}
 \begin{itemize}
-\item {\bf Smart.} The application will guess what users do most often, and automate the process for them. Most importantly, the system will have automated predictable glossing information.
-\item {\bf  Searchable.} The application will be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes; it will be able to display data in context.
+\item {\bf Smart.} The application will guess what users do most often, and automate the process for them. Most importantly, the system will have semi-automated  glossing based on morpheme segmentation.
+\item {\bf  Searchable.} The application will be designed for search as this is one of the most fundamental tasks a language researcher must be able to do. The search will go far beyond traditional string matches and database indexes.
 \end{itemize}
 
 \item{\bf Data-Centric}
 \begin{itemize}
-\item {\bf Atheoretical.} The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application will allow an analysis to develop organically as data collection proceeds, as opposed to imposing a particular construct upon entry.  Researchers will be able to set and change their own categories for the data whenever they choose to.
+\item {\bf Atheoretical.} The application will not include categories or linguistic frameworks or theoretical constructs that must be tied to the data.  The application will allow data fields and categories to develop organically as data collection proceeds, as opposed to imposing a particular construct upon entry.  Researchers will be able to add and change their fields and categories for the data at any point.
 \item {\bf Collaborative.} The system will have users and teams, and permissions for corpora. Permissions will ensure that data can be safely shared and edited by multiple users. Moreover, the corpus will be versioned so that users can track changes and revert mistakes.
 \item {\bf Sharable.} The application will allow researchers to share their data with anyone interested in their work. The application will be able to import data from ELAN XML, CSV and text file formats, and to export to XML, Latex and WIki formats. These import/export functions will make it easier to exchange data with those who are not using the same application. 
 \end{itemize}
@@ -93,9 +94,9 @@ This application integrates the best functions from existing fieldwork database 
 
 \item{\bf Accessible}
 \begin{itemize}
-\item { \bf Cross-Platform.} The application will be available for any device that runs a browser. Specifically, the application will be installable as a Chrome extension on Mac, Linux, and Windows computers, as well as Android tablets and phones, and will run both online and offline on these devices. The application will run online on iPads and iPhones. 
-\item  {\bf Portable.} Touch tablets are one of the easiest tools to carry and use in field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video and direct publishing to YouTube and/or other services. Furthermore, Android tablets are particularly easy to program and integrate the microphone directly into the database.
-\item {\bf Work offine.} Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the application in a Chrome extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location. 
+\item { \bf Cross-Platform.} The application will be available for any device that has an HTML5 compatible browser. Specifically, the application will run \emph{offline/online} in Chrome  on Mac, Linux, and Windows computers,\footnote{The app will also run on ChromeBooks. ChromeBooks are affordable laptops (\$299) which use the Chrome operating system created by Google. ChromeBooks are currently available in the UK and online at www.google.com/chromebook/. ChromeBooks have very long battery life and automatically backup data, which makes them good laptops for fieldwork.} as well as \emph{online/online} on Android tablets and phones. The application will run \emph{online only} in Safari and Firefox, and \emph{online only }on iPads and iPhones. 
+\item  {\bf Portable.} Touch tablets are one of the easiest tools to carry and use in the field; they have a long battery life; they can play videos or show images for the consultant to elicit complicated contexts; and they permit recording audio and video without  microphones or cameras which distract consultants. Mobile devices also have apps for push button  publishing to YouTube or other audio/video hosting solutions  which  allow for private data like Google Plus. Furthermore, Android tablets are particularly easy to program and integrate the microphone/camera directly into the database (Cook, Marquis and Achim 2011).
+\item {\bf Work offline.} Running a webapp offline will have considerable consequences for how data is stored, how data is retrieved, and how much data can be used while offline. Most browsers have limits on the amount of data a webapp can store offline. By delivering a version of the application in a Chrome extension, which has permission to have unlimited storage, researchers will be able to have a significant portion of their data at their fingertips, regardless of the location. 
 \item {\bf Multiple storage} Data will be stored on a CouchDB server, and will be accessible and sharable by multiple users.  The installable Chrome extension version of the application allows individual researchers to store a portion of a corpus, or an entire corpus, on their own devices, enabling offline work and quick search. 
 % Audio files will be stored elsewhere (not on a CouchDB server), most likely on researcher's own server, to keep the storage space small in order to provide . The database will contain the information of the location path of the audio files, and when users want to access audio files, they will be redirected to their location. We'll use Iris CouchDB which provides free service if the usage (storage and transaction) is less than 5$/month (http://www.iriscouch.com/service). If we host only text data, it is possible to keep the service free. 
 \end{itemize}
@@ -104,9 +105,9 @@ This application integrates the best functions from existing fieldwork database 
 
 \item{\bf Open}
 \begin{itemize}
-\item {\bf OpenData}. Corpora often contain sensitive information, informant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application.
-\item { \bf OpenSource}. Being OpenSource allows departments to install and customize the database application to tailor specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas.
-\item {\bf Unicode}. Encoding problems and losing data should be behind us in the days of unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support unicode, so the unicode support is dangerously fragile.
+\item {\bf OpenData}. Corpora often contain sensitive information, consultant stories and other information which must be kept confidential. Having confidential data in plain text in a corpus forces the entire corpus to be kept confidential. Instead, the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application. The system will allow the user to export data encrypted or decrypted. If the corpus contains sensitive confidential information the system will warn the users if they choose to export the information in a decrypted fashion.
+\item { \bf OpenSource}. Being OpenSource allows departments to install and customize the database application to tailor their specific needs without worry that the company behind the software will disappear or stop maintaining the software. In addition, OpenSourcing the software on GitHub will allow linguists with scripting or programming experience to contribute back to the software to make it more customized to their needs, language typologies, or linguistics research areas. Allowing the software to continue to grow and improves without any company which seeks to profit from the software.
+\item {\bf Unicode}. Encoding problems and losing data should be behind us in the days of unicode. However, many existing fieldlinguistics databases were built in programming languages that did not support unicode, or where unicode support was added as an afterthought, so the unicode support is dangerously fragile. Javascript and HTML5 (the technologies used in the system) are 100\% Unicode.
 \end{itemize}
 
 \end{itemize}
@@ -117,10 +118,10 @@ This application integrates the best functions from existing fieldwork database 
 The principal goal of The FieldLinguists' App is to help language researchers collect and organize linguistic data and to facilitate collaborative research work. The main objectives are to provide: 
 
 \begin{itemize} 
-\item A self-explanatory, easy-to-use user interface so that researchers can start using the application at the time the installation is completed.  
+\item A self-explanatory, easy-to-use user interface so that researchers can understand and start using the application  within seconds of  the time the installation is completed.  
 \item Both on- and off-line functionality so that the fieldwork is not constrained by the internet accessibility. 
 \item Customizable data entry fields to accommodate particular requirements of a research.  
-\item Data sharing and integration functions to facilitate collaboration among researchers and between researchers and language consultants. 
+\item Data sharing, protection and integration functions to facilitate collaboration among researchers and between researchers and language consultants. 
 
 \end{itemize} 
 
@@ -133,11 +134,14 @@ Although it is designed primarily for linguists, the application will equally be
 
 \section {Budget \& Timeline}
 
-The FieldLinguists' App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost is calculated by determining the time in hours and multiplying by \$42-58, the average rate of a software developer in Montr\'eal. 
+The iField App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost is calculated by estimating the time in hours and multiplying by \$42-58, the average rate of a software consultant company in Montr\'eal who is capable of doing offline HTML5 apps. The cost could be higher in other regions (California, Boston) or lower if students or full-time programmers can be hired (\$22-\$35). 
 
-Since the budget is dependent on how long it takes to complete the modules, it is possible to focus on each module separately, thus reducing the time of completion. 
+The  estimates include tests (roughly 10\% - 20\% of the budget) which are functions of code which serve to be sure that the code compiles and runs as is expected. Tests are very important for maintaining software, particularly Javascript which is a very ambiguous language and a HTML5 which is a specification developed by WC3. HTML5 implementation  began in 2008 and is currently unstable and at various levels of implementation by the major web browsers (Firefox, Safari, Chrome, Internet Explorer).
 
- 
+
+Since the budget is dependent on how long it takes to complete the modules, it is possible to focus on each module separately and simultaneously, thus reducing the time of completion. 
+
+
 
 \begin{table}[htbp]
 \begin{center}
@@ -153,7 +157,7 @@ Since the budget is dependent on how long it takes to complete the modules, it i
      Phonological Search Module & 3.0 & \$2,177.28 \\
     Dictionary Module & 22.3 & \$18,781.63 \\
         Glosser Module & 19.7 & \$17,770.75 \\
-Aligner Module & 10.2 & \$ 9,787.39\\ 
+Phonetic Aligner Module & 10.2 & \$ 9,787.39\\ 
 User Support & 21.1 & \$30,246.70 \\
 TVS and TPQ &  & \$10,833.32 \\
 Total &  88 &\$83,176.04\\
@@ -168,10 +172,15 @@ Total &  88 &\$83,176.04\\
 
 \newpage
 
-\subsection{Collaboration Module}
+\subsection{Core Modules}
 
-\footnotesize
-\begin{table}[htbp]
+The project has three core modules which must be developed prior to additional modules. These are the Collaboration, Corpus and Lexicon modules, briefly outlined in terms of functionality and timeline in the following sections.  Implementation of the three core modules began on April 20th 2012. The three core modules will be launched on August 1st at CAML in Patzun Guatemala. We estimate the three core modules and the software architecture to take 9.2 weeks to complete with three software developers,  and cost roughly \$23,800 before taxes. We will have its final time and costs on August 3rd 2012.
+
+\subsubsection{Collaboration Module}
+The collaboration module shown in Table~\ref{table-collaboration}  deals with users, teams, permissions, user authentication,  as well as allowing users to see changes, modifications, and data verication in the form of an ``Activity Feed.'' An activity feed is a common design pattern which allows users to learn form other users how to use the software, what are popular functions other users are completing in addition to being a central location to update oneself on the activity in the corpus. The system will have special users called ``bot'' which are scripts or programs which power users can write in javascript which will crawl their corpus and clean/automate batch actions.
+
+We estimate the total cost of the Collaboration Module to be around \$5,700 before taxes. The implementation of the Collaboration Module was begun on April 20th 2012. We will have its final costs on August 3rd 2012.
+\begin{table}[h]
 \begin{center}
   \begin{tabular}{ | lcl | }
 \hline
@@ -180,7 +189,7 @@ Iteration&	Hours&	Technology	\\
 Software Architecture Design&	20&	Software Engineering	\\ 
 Collaboration API on central server&	30&	Software Engineering\\ 
 Users Model&	15&	Javascript	\\ 
-Informant Model&	15&	Javascript	\\ 
+consultant Model&	15&	Javascript	\\ 
 Team Model&	15&	Javascript	\\ 
 Bot Model&	15&	Javascript	\\ 
 User Activity Model&	8&	Javascript	\\ 
@@ -189,7 +198,7 @@ User list item Widget&	16&	HTML5	\\
 Team Preferences Widget&	8&	HTML5	\\ 
 User Profile Widget&	8&	HTML5	\\ 
 User Tests&	30&	Javascript \\ 
-Informant Tests&	30&	Javascript	\\ 
+consultant Tests&	30&	Javascript	\\ 
 Team Tests&	30&	Javascript	\\ 
 Android Deployment&	15&	Java	\\ 
 Chrome Extension Deployment&	20&	Javascript \\ 
@@ -198,15 +207,14 @@ Heroku Deployment&	5&	Integration	\\
 \hline
   \end{tabular}
   \caption{The Collaboration Module is used to permit collaboration with teams and users. }
-  \label{tab:label}
+\label{table-collaboration}
   \end{center}
 \end{table}
 
+\subsubsection{Corpus Module}
+The corpus module shown in Table~\ref{table-corpus} deals with storing confidential data in the AES US Federal encryption standard, replicating the corpus locally on the  users' computers, as well as on a central server hosted either in the cloud, or on a linguistic department's server. The corpus module contains all of the core logic, including data fields, session fields, as well as data lists which are used to curate lists of data for handouts or publication either in linguistic articles or as web widgets embedded in external websites such as linguistic department blogs, or project pages. The corpus module is also where search of datum is implemented. 
 
-
-\subsection{Corpus Module}
-
-\footnotesize
+We estimate the total cost of the Corpus Module to be around \$9,200 before taxes. The implementation of the Corpus Module was begun on April 20th 2012. We will know its final costs on August 3rd 2012.
 \begin{table}[htbp]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -250,38 +258,20 @@ Heroku Deployment&	5&  Integration \\
 \hline
   \end{tabular}
  \caption{The Corpus Module is used to sync, share, edit, tag, categorize and open data. }
-  \label{tab:label}
+\label{table-corpus}
   \end{center}
 \end{table}
 %# of weeks with 3 full time personnel	4.20833333333333
 
 
-
 \newpage
-\subsection{Web Spider Module}
+\subsubsection{Lexicon Module}
 
-\footnotesize
-\begin{table}[htbp]
-\begin{center}
-  \begin{tabular}{ | lcl | }
-\hline
-Iteration&	Hours&	Technology	\\
-\hline
-Corpus Visualization Widget&	40&	HTML5	\\ 
-Web Spider Training Logic&	60&	Java	\\ 
-\hline
-  \end{tabular}
-  \caption{This module is a subportion of the Corpus Module.}
-  \label{tab:label}
-  \end{center}
-\end{table}
-%# of weeks with 1 full time personnel	2.5
+The lexicon module show in Table~\ref{table-lexicon} is used for search. It is loosely modeled after a mental lexicon, in a network of morphemes, allomorphs, orthographie(s), glosses and translations.  It is not a dictionary but rather a connected graph similar to theoretical models of mental lexicons, for a dictionary see the Dictionary Module in \S~\ref{module-dictionary}. As a connected graph it is the most useful structure to index datum and search for datum real time while data entry is happening. 
+%One requested use-case was to have the search open for a particular morpheme/category and have datum which are entered show up in the search results. 
 
+We estimate the total cost of the Lexicon Module to be around \$7,300 before taxes. The implementation of the Lexicon Module was begun on April 20th 2012. We will know its final costs on August 3rd 2012.
 
-\newpage
-\subsection{Lexicon Module}
-
-\footnotesize
 \begin{table}[htbp]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -314,15 +304,20 @@ Heroku Deployment&	5&  Integration \\
 \hline
   \end{tabular}
  \caption{The Lexicon Module is used to house, and read lexicon entries to be used for the glosser.}
-  \label{tab:label}
+ \label{table-lexicon}
   \end{center}
+  
+
 \end{table}
 %# of weeks with 3 full time personnel	1.95833333333333
 
-\newpage
-\subsection{Phonological Search Module}
+\subsection{``Dream'' Modules}
 
-\footnotesize
+\subsubsection{Phonological Search Module}
+The Phonological Search model shown in Table~\ref{tab:phono} is used to search for phonological features in context. It consists of a phonology ontology (a general purpose feature geometry/articulatory feature ontology, or a customized ontology created by the users for their language of interest) which lets the user search for potential minimal pairs or phonological features in context to verify with consultants or to prepare psycholinguistic experiments. The Phonoloigical search module is used by the Phonetic Aligner module to generate a ``dictionary.txt'' file containing orthography and phones which is used by the Phonetic Aligner Module.
+
+We estimate the cost of the Phonological search module to be roughly \$2,200 before taxes. The Phonological search, or the Phonetic Aligner module is currently schedule to begin in September 2012, we haven't yet decided which is a priority.
+
 \begin{table}[htbp]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -335,16 +330,55 @@ Lexicon Editing Widget&	20&	Javascript	\\
 \hline
   \end{tabular}
  \caption{This module is a subportion of the Lexicon Module.}
-  \label{tab:label}
+  \label{tab:phono}
   \end{center}
 \end{table}
 %# of weeks with 1 full time personnel	3
 
 
-\newpage
-\subsection{Dictionary Module}
+\subsubsection{Phonetic Aligner Module}
+The Phonetic Aligner module show in Table~\ref{tab:aligner} makes it possible to use attached audio recordings, and the orthographic/utterance lines of datum to create a dictionary unique to the corpus' language and run the ProsodyLab Aligner, a machine learning algorithm which uses Hidden Markov Models to predict boundaries between phones and creates a Praat Textgrid with estimated phone boundaries, saving hours of boundary tagging. We also have factored in a bit of sound editing to facilitate the process of creating audio files which correspond closely to the utterance line in the datum's fields. 
 
-\footnotesize
+
+We estimate the Phonetic Aligner to be roughly \$9,800 before taxes. The Phonetic Aligner or the Phonological search module is currently scheduled to begin in September 2012, we haven't yet decided which is a priority.
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+
+Iteration&	Hours&	Technology	\\
+\hline
+Software Architecture Design&	10&	Software Engineering	\\ 
+Aligner API on Lexicon server&	10&	Software Engineering\\ 
+Dictionary Model&	15&	Javascript	\\ 
+Aligner DB implementation&	80&	Integration	\\ 
+Aligner Machine Learning Integration&	80&	Java	\\ 
+Aligner Preferences Widget&	8&	HTML5	\\ 
+Audio Waveform Visualization logic&	30&	Javascript	\\ 
+Audio Spectrogram Visualization logic&	?&	Javascript \\ 
+Transcription User Interface&	80&	HTML5	\\ 
+TextGrid export&	20&  Javascript \\ 
+Dialect Profile Widget&	         8&  HTML5 \\ 
+Orthography Tests&	30&  Javascript \\ 
+Training Tests&	30&	Java	\\ 
+Heroku Deployment&	5&  Integration \\ 
+\hline
+  \end{tabular}
+  \caption{The Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis.}
+  \label{tab:aligner}
+  \end{center}
+\end{table}
+%# of weeks with 1 full time personnel	10.15
+
+
+
+\newpage
+\subsubsection{Dictionary Module}
+
+The Dictionary module shown in Table~\ref{tab:dictionary}is used to crawl the corpus to gather citations and examples to build a Wiktionary dictionary for the corpus' language, as required by some grants which focus on endangered/minority languages. The dictionary module is quite complex and the central component of many online fieldlinguistics databases. 	
+
+We estimate the dictionary module to cost roughly \$ 18,800 before taxes. The Dictionary module is not currently scheduled until we have more users who require its functionality.
+\label{module-dictionary}
 \begin{table}[htbp]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -374,16 +408,18 @@ Heroku Deployment&	5&  Integration \\
 \hline
   \end{tabular}
  \caption{The Dictionary Module is used to share the lexicon in the form of a WordNet/Wiktionary dictionary with the language community as required by some grants.}
-  \label{tab:label}
+  \label{tab:dictionary}
   \end{center}
 \end{table}
 %# of weeks with 1 full time personnel	22.275
 
 
 \newpage
-\subsection{Glosser Module}
+\subsubsection{Glosser Module}
+The glosser module show in Table~\ref{tab:glosser} is designed to make the app ``smarter'' and to reduce the amount of time spent entering predictable information, such as glosses. The glosser can use any existing morphological analysis tool to break down the utterance/orthography line  into a probably morphological segmentation using known morphemes in the lexicon and entering a probabe gloss for the morphemes in the glossing line. The glosser module is designed to reduce redundant data entry, not to provide accurate glosses. It is of course crucial that predicted morpheme segmentation and glosses be corrected by users, particularly in languages where morphemes are ambiguous, or where morphemes are short and hence there are more ambiguous morpheme segmentations for words. 
 
-\footnotesize
+
+We estimate the glosser module to cost roughly \$17,800. The glosser module is not currently scheduled until we have more users who require its functionality.
 \begin{table}[htbp]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -415,47 +451,41 @@ Heroku Deployment&	5&  Integration \\
 \hline
   \end{tabular}
    \caption{The Glosser Module is used to automatically gloss datum, smarter than the standard lexicon.}
-  \label{tab:label}
+  \label{tab:glosser}
   \end{center}
 \end{table}
 %# of weeks with 1 full time personnel	19.65
 
+\subsubsection{Web Spider Module}
 
-\newpage
-\subsection{Aligner Module}
+The Web Spider module shown in Table~\ref{table-spider} is a non-crucial module which allows researchers with limited access to consultants to gather data using blogs or forums. The web spider also provides an additional source of context to assist consultants in providing grammaticality judgements, as well of additional contexts where morphemes appear, example ``ke'' is largely considered a postposition by Urdu-consultants explicit knowledge, however it is often produced as a other functional morphemes in everyday spoken contexts. Blog/forum data can be used to discover these additional contexts.
 
-\footnotesize
+
+The Web Spider module is currently not a scheduled module.  It will not become a priorityntil we have more users who require its functionality.
+
 \begin{table}[htbp]
+
 \begin{center}
   \begin{tabular}{ | lcl | }
 \hline
-
 Iteration&	Hours&	Technology	\\
 \hline
-Software Architecture Design&	10&	Software Engineering	\\ 
-Aligner API on Lexicon server&	10&	Software Engineering\\ 
-Dictionary Model&	15&	Javascript	\\ 
-Aligner DB implementation&	80&	Integration	\\ 
-Aligner Machine Learning Integration&	80&	Java	\\ 
-Aligner Preferences Widget&	8&	HTML5	\\ 
-Audio Waveform Visualization logic&	30&	Javascript	\\ 
-Audio Spectrogram Visualization logic&	?&	Javascript \\ 
-Transcription User Interface&	80&	HTML5	\\ 
-TextGrid export&	20&  Javascript \\ 
-Dialect Profile Widget&	         8&  HTML5 \\ 
-Orthography Tests&	30&  Javascript \\ 
-Training Tests&	30&	Java	\\ 
-Heroku Deployment&	5&  Integration \\ 
+Corpus Visualization Widget&	40&	HTML5	\\ 
+Web Spider Training Logic&	60&	Java	\\ 
 \hline
   \end{tabular}
-  \caption{The Aligner Module is used to create TextGrids from the orthography and the audio files, used for prosody and phonetic analysis.}
-  \label{tab:label}
+  \caption{The Spider module allows for collection and annotation of E-Language data.}
+\label{table-spider}
   \end{center}
 \end{table}
-%# of weeks with 1 full time personnel	10.15
+%# of weeks with 1 full time personnel	2.5
+
+
 
 \newpage
-\subsection{User Support}
+\subsubsection{Maintenance \& User Support}
+
+The User Support module show in Table~\ref{tab:support} includes general support, new features, upgrades, and maintenance. User support includes answering user's emails, helping system administrators install the app and its various server apps on their department server, creating video tutorials, screen casts and sample data to help users figure out the app and begin using it immediately, as well as discover some of its advanced/unexpected features. We estimate the User Support \& Maintenance to cost roughly \$30,200 if we include unlimited support, or \$13,000 if we do not include email and tech support but only new features, maintenance, video tutorials and user guides.
 
 \footnotesize
 \begin{table}[htbp]
@@ -480,7 +510,7 @@ Release new versions&	160&  Javascript \\
 \hline
   \end{tabular}
  \caption{User Support includes 1 year of product support and project growth. It is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses.} 
-  \label{tab:label}
+  \label{tab:support}
   \end{center}
 \end{table}
 %# of weeks with 1 full time personnel	21.1
@@ -512,28 +542,27 @@ The usefulness and effectiveness of the FieldLinguists' App will be evaluated ag
 
 \begin{itemize} 
 
-\item Collection: Data are collected and organized with ease. \\ Self-explanatory UI and on- and off-line functionality will make data collection easier.    
+\item Collection: Data are collected and organized with ease. \\ Self-explanatory UI and on- and off-line functionality will make data collection easier.   This is a fundamental difference between iField, designed by field linguists with software engineering experience, and existing databases which were designed by computer science students, or programmers with no fieldwork experience.
 
-\item Quality: The quality of data is assured. \\ Datum status and comments functions enables researchers to check and inspect the data quality.  
+\item Quality: The quality of data is assured. \\ Datum state (Checked, to be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
 
-\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories that researchers choose to use. The application is not tied to a particular terminological convention. 
+\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories and  are customizable by corpus teams, for their team's corpora. The application thus allows data to be annotated and categorized, without unneccessarily  reducing the ease of data entry. 
 
-\item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables conversion of data format, making data sharing easier.  
+\item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (xml), making data integrated with programs researchers commonly use/have used to store their data.
 
-\item Analysis: The application organizes data in ways to help data analysis. \\  Customizable data entry fields and data tags, as well as search/list view functions allow researchers to organize data ready for analysis.  
+\item Analysis: The application organizes data in ways to help data analysis. \\  Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for analysis.  
 
-\item Format: Data are intelligible regardless of the types of operating system. \\ The application runs on PC, Linux and Mac OS as a Chrome extension, as well as on Android. Data supports Unicode and exportable to XML files. 
+\item Format: Data are intelligible regardless of the types of operating system. \\ The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app.
 
 \item Discovery: Data are searchable and discoverable. \\ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
 
-\item Access: Data are accessible. \\ Data stored in the application are open to public view in principle, however authorized researchers (authors of data) have control over who can see and/or edit their data. 
+\item Access: Data are accessible. \\ Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle, however authorized researchers (authors of data) have control over who can see and/or edit their data. 
 
-\item Citation: Data provide citation information. \\ Data source will be cited with the name of the corpus in fieldlinguists.com (e.g. fieldlinguists.com\#corpus/corpus-name).   
+\item Citation: Data provide citation information. \\ All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data was entered and other metadata controlled by the researcher to ensure that data quality can be traced to its source.
  
 \item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
 
-\item Security: Confidential information must be kept from public access. \\ Encryption will ensure that confidential information such as language consultant's identity be hidden from public access unless the consultant decides otherwise. 
-
+\item Security: Confidential information must be kept from public access. \\ Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This requires ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
 
 \end{itemize} 
 

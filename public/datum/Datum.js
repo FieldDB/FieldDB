@@ -1,51 +1,52 @@
-define([
-    "use!backbone",
-    "datum_status/DatumStatus",
-    "datum_tag/DatumTag",
-    "datum_field/DatumField",
-    "session/Session",
-    "libs/Utils"
-], function(
-    Backbone, 
-    DatumStatus, 
-    DatumMenu, 
-    DatumTag, 
-    DatumField, 
-    Session
-) {
+define([ "use!backbone", "datum/AudioVisual", "comment/Comments",
+    "datum/DatumField", "datum/DatumState", "datum/DatumTags", "datum/Session",
+    "libs/Utils" ], function(Backbone, AudioVisual, Comments, DatumField, DatumState, DatumTags,
+    Session) {
   var Datum = Backbone.Model.extend(
   /** @lends Datum.prototype */
   {
     /**
-     * @class The Datum widget is the place where all linguistic data is 
-     *      entered; one at a time.
-     *
-     * @property {String} utterance The utterance field generally 
-     *      corresponds to the first line in linguistic examples that can 
-     *      either be written in the language's orthography or a 
-     *      romanization of the language. An additional field can be added 
-     *      if the language has a non-roman script.
-     * @property {String} gloss The gloss field corresponds to the gloss 
-     *      line in linguistic examples where the morphological details of 
-     *      the words are displayed.
-     * @property {String} translation The translation field corresponds to 
-     *      the third line in linguistic examples where in general an 
-     *      English translation.  An additional field can be added if 
-     *      translations into other languages is needed.
-     * @property {Number} sessionID The session ID corresponds to the 
-     *      number assigned to the session in which the datum is being 
-     *      placed.  The session will contain details such as date, 
-     *      language, informant etc.
-     * @property {DatumStatus} status When a datum is created, it can be 
-     * tagged with a status, such as 'to be checked with an informant'. 
-     * @property {DatumField} DatumField The extra fields correspond to the 
-     *      user's preset of chosen fields, which may extend beyond the 
-     *      standard three.
-     *
-     * @description The initialize function brings up the datum widget in 
-     *      small view with one set of datum fields.  However, the datum 
-     *      widget can contain more than datum field set and can also be 
-     *      viewed in full screen mode.
+     * @class The Datum widget is the place where all linguistic data is
+     *        entered; one at a time.
+     * 
+     * @property {DatumField} utterance The utterance field generally
+     *           corresponds to the first line in linguistic examples that can
+     *           either be written in the language's orthography or a
+     *           romanization of the language. An additional field can be added
+     *           if the language has a non-roman script.
+     * @property {DatumField} gloss The gloss field corresponds to the gloss
+     *           line in linguistic examples where the morphological details of
+     *           the words are displayed.
+     * @property {DatumField} translation The translation field corresponds to
+     *           the third line in linguistic examples where in general an
+     *           English translation. An additional field can be added if
+     *           translations into other languages is needed.
+     * @property {DatumField} judgment The judgment is the grammaticality
+     *           judgment associated with the datum, so grammatical,
+     *           ungrammatical, felicitous, unfelicitous etc.
+     * @property {DatumState} state When a datum is created, it can be tagged
+     *           with a state, such as 'to be checked with an informant'.
+     * @property {AudioVisual} audioVisual Datums can be associated with an audio or video
+     *           file.
+     * @property {Session} session The session provides details about the set of
+     *           data elicited. The session will contain details such as date,
+     *           language, informant etc.
+     * @property {Comments} comments The comments is a collection of comments
+     *           associated with the datum, this is meant for comments like on a
+     *           blog, not necessarily notes, which can be encoded in a
+     *           field.(Use Case: team discussing a particular datum)
+     * @property {DatumTags} datumtags The datum tags are a collection of tags
+     *           associated with the datum. These are made completely by the
+     *           user.They are like blog tags, a way for the user to make
+     *           categories without make a hierarchical structure, and make
+     *           datum easier for search.
+     * 
+     * 
+     * 
+     * @description The initialize function brings up the datum widget in small
+     *              view with one set of datum fields. However, the datum widget
+     *              can contain more than datum field set and can also be viewed
+     *              in full screen mode.
      * 
      * @extends Backbone.Model
      * @constructs
@@ -54,60 +55,64 @@ define([
     },
 
     defaults : {
-      //here are the attributes a datum minimally has to have, other fields can be added when the user designs their own fields later.
-      utterance : "",
-      morphemes: "",
-      gloss : "",
-      translation : "",
-      grammaticalTags : "", //While it will not look like a field, it will essentially be a place where the user can click and add tags and then they will appear in little bubbles.
-      sessionID : 0,
-      status : new DatumStatus(),
-      datumField : new DatumField(),
-      datumTag : new DatumTag()
+      // here are the attributes a datum minimally has to have, other fields can
+      // be added within the datum widget.
+      audioVisual : AudioVisual,
+      utterance : DatumField,
+      morphemes : DatumField,
+      gloss : DatumField,
+      translation : DatumField,
+      judgement : DatumField,
+      session : Session,
+      comments : Comments,
+      datumState : DatumState,
+      datumTags : DatumTags,
+
     },
-    
-    pouch: Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
-    
+
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+        : Utils.pouchUrl),
+
     /**
-     * The LaTeXiT function automatically mark-ups an example in LaTeX code 
-     * (\exg. \"a) and then copies it on the clipboard so that when the user 
-     * switches over to their LaTeX file they only need to paste it in.  
+     * The LaTeXiT function automatically mark-ups an example in LaTeX code
+     * (\exg. \"a) and then copies it on the clipboard so that when the user
+     * switches over to their LaTeX file they only need to paste it in.
      */
-    laTeXiT: function() {
- 	    return "";
+    laTeXiT : function() {
+      return "";
     },
-    
+
     /**
-     * The addAudio function is a drop box in which the user can drag an 
-     * audio file and link it to the relevant datum.
+     * The addAudio function is a drop box in which the user can drag an audio
+     * file and link it to the relevant datum.
      */
-    addAudio: function() {
- 	    return true;
+    addAudio : function() {
+      return true;
     },
-    
+
     /**
-     * The playDatum function appears when the audio has already been added 
-     * and allows the user to play the associated audio file.
+     * The playDatum function appears when the audio has already been added and
+     * allows the user to play the associated audio file.
      */
-    playDatum: function() {
- 	    return true;
+    playDatum : function() {
+      return true;
     },
 
     /**
      * The copyDatum function copies all datum fields to the clipboard.
      */
-    copyDatum: function() {
- 	    return "";
+    copyDatum : function() {
+      return "";
     },
-    
+
     /**
-     * The duplicateDatum function opens a new datum field set with the fields 
-     * already filled exactly like the previous datum so that the user can 
+     * The duplicateDatum function opens a new datum field set with the fields
+     * already filled exactly like the previous datum so that the user can
      * minimally edit the datum.
      */
-    duplicateDatum: function() {
- 	    var datum = new Datum();
- 	    return datum;
+    duplicateDatum : function() {
+//      var datum = new Datum();
+      return datum;
     }
   });
 

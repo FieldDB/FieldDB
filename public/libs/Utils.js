@@ -7,13 +7,19 @@
  *
  * @constructs
  */
-var Utils = {};
+var Utils = Utils || {};
 
 Utils.debugMode = true;
 
-Utils.touchUrl = "http://localhost:8888/datum_test";
-Utils.pouchUrl = "idb://datum_test";
-Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test4";
+/**
+ * The address of the TouchDB-Android database on the Android.
+ */
+Utils.touchUrl = "http://localhost:8888/db";
+
+/**
+ * The address of the PouchDB database on the browser.
+ */
+Utils.pouchUrl = "idb://db";
 
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if

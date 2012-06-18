@@ -1,50 +1,42 @@
 <div class="datum">
 	<!-- full screen button -->
-  <div class="fullscreen"><a href="#fullscreen"><i class="icons icon-fullscreen"></i></a></div>
+	<div class="fullscreen">
+		<a href="#fullscreen"><i class="icons icon-fullscreen"></i></a>
+	</div>
 
 
 	<!--partial for the fields -->
-	{{> datum_field}}
+<div class ="datum_fields"></div>
 
 	<div>
-		{{> datum_tag}} {{> datum_status}}
 
-		<div class="icons">
 
-			<a id="playDatum"><i class="icons icon-bullhorn"></i></a> 
-			<a id="clipboard"><i class="icons icon-paste"></i></a> 
-			<a id="duplicate"><i class="icons icon-copy"></i></a>
-			<a id="encrypt"><i class="icons icon-lock"></i></a>
-			<div class="btn-toolbar">
-			<div class="btn-group">
-         <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">ə
-         <span class="caret"></span>  </button>
+		<div class="icons btn-group ">
+			<button class="btn btn-primary">
+				<i class="icon-white icon-plus"></i>
+			</button>
 
-        <ul class="dropdown-menu">
-        <li><a> ə</a></li>
-        </ul>
-      </div>
-			
-			
-
-			
-			     <div class="btn-group">
-			
 			<button class="btn btn-primary" id="LaTeX">LaTeX</button>
-			</div>
-			
-			
-      <div class="dropZone">Drop Audio Here!</div>
-      
-      
+			<button class="btn btn-primary dropdown-toggle"
+				data-toggle="dropdown">
+				ə <span class="caret"></span>
+			</button>
+
+			<ul class="dropdown-menu">
+				<li><a> ə</a></li>
+			</ul>
+			<a id="playDatum"><i class="icons icon-bullhorn"></i></a> <a
+				id="clipboard"><i class="icons icon-paste"></i></a> <a
+				id="duplicate"><i class="icons icon-copy"></i></a> <a id="encrypt"><i
+				class="icons icon-lock"></i></a>
+
+
+			<div class="dropZone pull-right ">Drop Audio Here!</div>
+
 		</div>
-		</div>
 
 
-	
 
-
-    <div id="newDatum" > <a><button class="btn btn-primary"><i class="icon-white icon-plus"></i></a></button></div>
 
 	</div>
 

@@ -6,7 +6,7 @@ define(
 			/** @lends Team.prototype */ 
 			{
 				/**
-				 * @class A Team is a collection of users associated with a project/corpus. 
+				 * @class A Team is a collection of users. A team can have many users, and many corpora. 
 				 * It has a name but can not login.  
 				 * 
 				 * 
