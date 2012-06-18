@@ -23,7 +23,7 @@ define( [
       Utils.debug("DATUM STATE EDIT init");
       
       // If the model changes, re-render
-      //this.model.bind('change', this.render, this);
+      this.model.bind('change', this.render, this);
     },
     
     /**
@@ -52,6 +52,9 @@ define( [
       
       // Display the DatumStateEditView
       $(this.el).html(this.template(this.model.toJSON()));
+      
+      // Select the correct value from the color dropdown
+      this.$el.children(".color_chooser").val(this.model.get("color"));
       
       return this;
     },
