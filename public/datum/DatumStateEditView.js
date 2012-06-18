@@ -24,7 +24,8 @@ define( [
     },
     
     events : {
-      "blur .datum_state_input" : function() { console.log("in blur: model"); }
+      "blur .datum_state_input" : "updateState",
+      "change .color_chooser" : "updateColor"
     },
     
     model : DatumState,
@@ -38,6 +39,16 @@ define( [
       $(this.el).html(this.template(this.model.toJSON()));
       
       return this;
+    },
+    
+    updateState : function() {
+      Utils.debug("Updated state to " + this.$el.children(".datum_state_input").val());
+      this.model.set("state", this.$el.children(".datum_state_input").val());
+    },
+    
+    updateColor : function() {
+      Utils.debug("Updated color to " + this.$el.children(".color_chooser").val());
+      this.model.set("color", this.$el.children(".color_chooser").val());
     }
   });
 
