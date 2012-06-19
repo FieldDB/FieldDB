@@ -4,7 +4,7 @@ define([
     "text!datum/datum_fields.handlebars",
     "datum/DatumField",
     "datum/DatumFields",
-    "datum/DatumFieldView",
+    "datum/DatumFieldEditView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -12,7 +12,7 @@ define([
     datumFieldsTemplate,
     DatumField,
     DatumFields,
-    DatumFieldView
+    DatumFieldEditView
 ) {
   var DatumFieldsView = Backbone.View.extend(
   /** @lends DatumFieldsView.prototype */
@@ -41,7 +41,7 @@ define([
     },
     /**
      * The datumFieldViews array holds all of the children of the
-     * DatumFieldView.
+     * DatumFieldEditView.
      */
     datumFieldViews : [],
     
@@ -71,8 +71,8 @@ define([
     },
     
     add : function(d) {
-      // We create an updating DatumFieldView for each DatumField that is added.
-      var dv = new DatumFieldView({
+      // We create an updating DatumFieldEditView for each DatumField that is added.
+      var dv = new DatumFieldEditView({
         tagName : 'li',
         className : 'datum_field_li',
         model : d
