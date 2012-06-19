@@ -33,9 +33,9 @@ define([
       
     //   Create a UserView
       this.userView = new UserView({
-         model: new User()
+         model: this.model.get("user")
       });
-      this.userView.loadSample();
+//      this.userView.loadSample();
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
