@@ -1,6 +1,14 @@
-define([ "use!backbone", "use!handlebars", "activity/ActivityFeed", "text!activity/activity_feed.handlebars"
+define([ "use!backbone", 
+         "use!handlebars", 
+         "activity/Activity", 
+         "activity/ActivityFeed", 
+         "text!activity/activity_feed.handlebars"
  ],
-    function(Backbone, Handlebars, ActivityFeed, activity_feedTemplate) {
+    function(Backbone, 
+        Handlebars, 
+        Activity, 
+        ActivityFeed, 
+        activity_feedTemplate) {
       var ActivityFeedView = Backbone.View.extend(
       /** @lends ActivityFeedView.prototype */
       {
@@ -12,6 +20,9 @@ define([ "use!backbone", "use!handlebars", "activity/ActivityFeed", "text!activi
          * @constructs
          */
         initialize : function() {
+          //TODO this is how i tested the activity feed database, see the ActivityTest where it is hanging out not being tested.
+//          var a = new Activity();
+//          a.save();
         },
 
         model : ActivityFeed,

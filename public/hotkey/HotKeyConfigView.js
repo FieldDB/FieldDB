@@ -1,11 +1,10 @@
 define([
     "use!backbone", 
-    "use!modalview",
     "use!handlebars", 
     "hotkey/HotKey",
     "text!hotkey/hot_key_config_view.handlebars"
-], function(Backbone, ModalView, Handlebars, HotKey, hot_key_config_viewTemplate) {
-    var HotKeyConfigView = ModalView.extend(
+], function(Backbone, Handlebars, HotKey, hot_key_config_viewTemplate) {
+    var HotKeyConfigView = Backbone.View.extend(
     /** @lends HotKeyConfigView.prototype */
     {
         /**
