@@ -3,6 +3,25 @@ require(
         ],
     function(Activity, ActivityFeed, Activities) {
       describe(
+          "Test Activity Feed replication.",
+          function() {
+            it("should have an id if it gets inserted into pouch.",
+                function() {
+              
+                  /*
+                   * TODO this is how i tested it in a view, turn this into a 
+                   * jamine test once we know how to deal with views in jasmine/phantom
+                   */
+                  var a = new Activity();
+//                a.save();
+//                appView.replicateActivityFeedDatabase();
+                  var hasId = (a.id != null);
+                  expect(true).toBeTruthy();
+                });
+            
+          });
+
+      describe(
           "As a user, I want to be updated on team news.",
           function() {
             it("should show my most recent team's activities by default.",
