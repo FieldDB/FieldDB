@@ -16,8 +16,9 @@ define([
   /** @lends DatumFieldsView.prototype */
   {
     /**
-     * @class DatumFieldsView is rendering the datumFields collections in the form of editable settings.
-     *
+     * @class DatumFieldsView is rendering the datumFields collections in the
+     *        form of editable settings.
+     * 
      * @extends Backbone.View
      * @constructs
      */
@@ -26,7 +27,7 @@ define([
       // Bind the functions 'add' and 'remove' to the view. 
       _(this).bindAll('add', 'remove');
    
-      // Add each datumState to the view
+      // Add each datumField to the view
       this.collection.each(this.add);
    
       // Bind this view to the add and remove events of the collection
@@ -59,7 +60,7 @@ define([
       $(this.el).html(this.template(jsonToRender));
       
       // Render each datumField View and append them.
-      _(this.datumStateViews).each(function(dv) {
+      _(this.datumFields).each(function(dv) {
         $('.datum_fields').append(dv.render().el);
         dv.delegateEvents();
       });
@@ -68,30 +69,30 @@ define([
     },
     
     add : function(d) {
-      // We create an updating DatumStateView for each DatumState that is added.
-      var dv = new DatumStateEditView({
+      // We create an updating DatumFieldView for each DatumField that is added.
+      var dv = new DatumFieldView({
         tagName : 'li',
-        className : 'datum_state_li',
+        className : 'datum_field_li',
         model : d
       });
    
       // And add it to the collection so that it's easy to reuse.
-      this.datumStateViews.push(dv);
+      this.datumFieldViews.push(dv);
    
       // If the view has been rendered, then
       // we immediately append the rendered datumStatus.
       if (this._rendered) {
-        $('.edit_datum_states').append(dv.render().el);
+        $('.datum_fields').append(dv.render().el);
       }
     },
-    addNewState : function(){
-      var m = new DatumState({"state": this.$el.children(".add_input").val(), "color": this.$el.children(".add_color_chooser").val() })
+    addNewField : function(){
+      var m = new DatumField({"field": this.$el.children(".add_input").val()});
       this.collection.add(m);
     
     },
     remove : function(model) {
-      var viewToRemove = _(this.datumStateViews).select(function(cv) { return cv.model === model; })[0];
-      this.datumStateViews = _(this.datumStateViews).without(viewToRemove);
+      var viewToRemove = _(this.datumFieldViews).select(function(cv) { return cv.model === model; })[0];
+      this.datumFieldViews = _(this.datumFieldViews).without(viewToRemove);
    
       if (this._rendered) {
         $(viewToRemove.el).remove();

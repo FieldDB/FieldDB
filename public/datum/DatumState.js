@@ -1,10 +1,8 @@
 define([ 
          "use!backbone", 
-         "datum/Datum", 
          "user/Informant" 
 ], function(
          Backbone,
-         Datum, 
          Informant) {
   var DatumState = Backbone.Model.extend(
   /** @lends DatumState.prototype */

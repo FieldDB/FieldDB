@@ -18,8 +18,9 @@ define([
   /** @lends DatumStatesView.prototype */
   {
     /**
-     * @class DatumStatesView is rendering the datumstates collections in the form of editable settings.
-     *
+     * @class DatumStatesView is rendering the datumstates collections in the
+     *        form of editable settings.
+     * 
      * @extends Backbone.View
      * @constructs
      */

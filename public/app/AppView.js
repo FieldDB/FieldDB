@@ -310,14 +310,19 @@ define([
         // Display the UserPreferenceView
         this.userPreferenceView.render();
         
+        //Display ActivityFeedView
         this.activityFeedView.render();
         
+        //Display HotKeyConfigView
         this.hotkeyConfigView.render();
 
+        //Display NewDataListView
         this.newDataListView.render();
-
+        
+        //Display NewCorpusView
         this.newCorpusView.render();
          
+        //Display ImportView
         this.importView.render();
         
         // Dispaly the CorpusFullscreenView
