@@ -34,7 +34,8 @@ require.config({
     "paginator":{
       deps : ["use!underscore", "use!backbone", "jquery"],
       attach: "Paginator"
-    }
+    },
+ 
   }
 });
 
