@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
+    "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
     "libs/Utils"
@@ -9,6 +10,7 @@ define([
     Backbone, 
     Handlebars, 
     userTemplate, 
+    Corpus,
     Corpuses,
     User
 ) {
@@ -88,6 +90,8 @@ define([
         "prefs" : {},
         "teams" : []
       };
+      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview"}));
+
     },
     
     /**
@@ -110,6 +114,8 @@ define([
           "prefs" : {},
           "teams" : []
         };
+      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview"}));
+
     }
   });
 
