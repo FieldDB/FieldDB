@@ -2,13 +2,19 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
+    "corpus/Corpus",
+    "corpus/Corpuses",
     "user/User",
+    "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     userTemplate, 
-    User
+    Corpus,
+    Corpuses,
+    User,
+    UserPreference
 ) {
   var UserView = Backbone.View.extend(
   /** @lends UserView.prototype */
@@ -81,11 +87,13 @@ define([
         "affiliation" : "University of Pennsylvania",
         "description" : "I am currently a fellow at UPenn. I am interested in soundpatterns of Ute and Southern Paiute languages. I propose that the phoneme is not just an abstraction existing at the structural level of language, but that it in fact has psychological reality for speakers.",
         "subtitle" : "",
-        "corpora" : [],
+        "corpuses" : new Corpuses(),
         "dataLists" : [],
-        "prefs" : {},
+        "prefs" : new UserPreference(),
         "teams" : []
       };
+      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
+
     },
     
     /**
@@ -103,11 +111,13 @@ define([
           "affiliation" : "",
           "description" : "",
           "subtitle" : "",
-          "corpora" : [],
+          "corpuses" : new Corpuses(),
           "dataLists" : [],
-          "prefs" : {},
+          "prefs" : new UserPreference(),
           "teams" : []
         };
+      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
+
     }
   });
 
