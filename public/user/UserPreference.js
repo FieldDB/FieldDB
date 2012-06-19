@@ -1,4 +1,4 @@
-define("preference/Preference", [ 
+define( [ 
     "use!backbone",
     "hotkey/HotKeyConfigView"
 ], function(Backbone, HotKeyConfigView) {
@@ -15,7 +15,7 @@ define("preference/Preference", [
         initialize : function() {
         },
         defaults : {
-        
+          skin: ""
         }
       });
 

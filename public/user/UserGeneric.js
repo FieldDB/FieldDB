@@ -1,5 +1,11 @@
-define([ "use!backbone", "preference/Preference" ], function(Backbone,
-    Preference) {
+define([ "use!backbone", 
+         "user/UserPreference",
+         "corpus/Corpus",
+         "corpus/Corpuses"
+ ], function(Backbone,
+             UserPreference,
+             Corpus,
+             Corpuses) {
   var UserGeneric = Backbone.Model.extend(
 
   /** @lends UserGeneric.prototype */
@@ -19,9 +25,9 @@ define([ "use!backbone", "preference/Preference" ], function(Backbone,
      * @property {Array} corpora Corpora are projects, they are a
      *           complete collection of datum. A user is associated with
      *           projects/corpora.
-     * @property {Array} dataLists Datalists are selected parts of
+     * @property {Backbone.Collection} dataLists Datalists are selected parts of
      *           corpora (eg. passives; data to be checked week etc).
-     * @property {Preference} prefs This is where we'll have things like
+     * @property {UserPreference} prefs This is where we'll have things like
      *           background/skin.
      * 
      * @description The initialize function probably checks to see if
@@ -38,7 +44,10 @@ define([ "use!backbone", "preference/Preference" ], function(Backbone,
       // this.bind('error', function(model, error) {
       // // TODO Handle validation errors
       // });
-
+      if( typeof this.get("corpuses") == "function" ){
+        this.set("corpuses", new Corpuses());
+        this.get("corpuses").add(new Corpus({title: "test corpus filled in user generic"}));
+      }
     },
 
     // This is an list of attributes and their default values
@@ -58,13 +67,13 @@ define([ "use!backbone", "preference/Preference" ], function(Backbone,
       subtitle : "",
       // Corpora are projects. They are a complete collection of
       // datum.
-      corpora : [],
+      corpuses : Corpuses,
       // Datalists are selected parts of corpora (favourites, for
       // example: passives, or data to be checked next week).
       dataLists : [],
-      // Preferences are where we'll have things like background/skin
+      // UserPreferences are where we'll have things like background/skin
       // options.
-      prefs : new Preference()
+      prefs : new UserPreference()
 
     },
 

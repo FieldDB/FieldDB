@@ -1,10 +1,10 @@
 require([
-    "preference/Preference"
-], function(Preference) {
+    "user/UserPreference"
+], function(UserPreference) {
 	
-		describe("Test Preference", function() {
-          it("should initialize the Preference menu", function() {
-          var p = new Preference();
+		describe("Test UserPreference", function() {
+          it("should initialize the UserPreference menu", function() {
+          var p = new UserPreference();
           expect(p).not.toBeNull();
           });
 
@@ -15,13 +15,13 @@ require([
 
 
 			it("should contain skin preference ", function() {
-				var p = new Preference();
+				var p = new UserPreference();
 //				expect("skin" == p.get("skin")).toBeTruthy();
 
 			});
 
 			it("should contain hotKey preference ", function() {
-				var p = new Preference();
+				var p = new UserPreference();
 	//			expect("hotKey" == p.get("hotKey")).toBeTruthy();
 
 			});

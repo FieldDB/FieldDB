@@ -1,5 +1,4 @@
-define("insertunicode/InsertUnicode",
-		["use!backbone"], 
+define(	["use!backbone"], 
 		function(Backbone) {
 	
 	var InsertUnicode = Backbone.Model.extend(
@@ -20,15 +19,12 @@ define("insertunicode/InsertUnicode",
 		   */ 
 			
 		initialize: function(){
-			
-			
+		
 		}, 
 		
 		validate : function(){
 			
-			
 		}
-		
 		
 		}); 
 	

@@ -1,7 +1,5 @@
-define(
-    [ "use!backbone"
-      ],
-      function(Backbone){
+define([ "use!backbone"
+      ],function(Backbone){
       var Permission = Backbone.Model.extend(
 
           /** @lends Permission.prototype 	*/

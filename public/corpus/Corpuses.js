@@ -1,14 +1,14 @@
 define([ 
          "use!backbone", 
-         "datum/DatumState"
+         "corpus/Corpus"
 ], function(
          Backbone,
-         DatumState) {
-  var DatumStates = Backbone.Collection.extend(
-  /** @lends DatumStates.prototype */
+         Corpus) {
+  var Corpuses = Backbone.Collection.extend(
+  /** @lends Corpuses.prototype */
   {
     /**
-     * @class Collection of Datum State
+     * @class Collection of Corpuses (normally refered to as Corpora)
      * 
      * @description The initialize function 
      * 
@@ -17,9 +17,9 @@ define([
      */
     initialize : function() {
     },
-    model : DatumState
+    model : Corpus
 
   });
 
-  return DatumStates;
+  return Corpuses;
 });

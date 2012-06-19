@@ -18,87 +18,87 @@ define([
   /** @lends DatumStatesView.prototype */
   {
     /**
-     * @class DatumStatesView is rendering the datumstates colections in the form of editable settings.
+     * @class DatumStatesView is rendering the datumstates collections in the form of editable settings.
      *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       Utils.debug("DatumStatesView init: " + this.el);
-      // bind the functions 'add' and 'remove' to the view.
+      // Bind the functions 'add' and 'remove' to the view. 
       _(this).bindAll('add', 'remove');
-      
-      //trying to capture events
-      _.bindAll(this, 'alertit');
-      
-      // create an array of datumState views to keep track of children
-      this._datumStateViews = [];
    
-      // add each datumState to the view
+      // Add each datumState to the view
       this.collection.each(this.add);
    
-      // bind this view to the add and remove events of the collection!
+      // Bind this view to the add and remove events of the collection
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
     },
     events : {
-      // "change" : "render",
-      "click .color_chooser" : "alertit",
-      "blur input.datum_state_input" : "alertit"
+      "click .add_datum_state" : 'addNewState'
     },
-    add : function(d) {
-      // We create an updating donut view for each donut that is added.
-      var dv = new DatumStateEditView({
-        tagName : 'li',
-        model : d
-      });
-   
-      // And add it to the collection so that it's easy to reuse.
-      this._datumStateViews.push(dv);
-   
-      // If the view has been rendered, then
-      // we immediately append the rendered datumStatus.
-      if (this._rendered) {
-        $(this.el).append(dv.render().el);
-      }
-    },
-    remove : function(model) {
-      var viewToRemove = _(this._datumStateViews).select(function(cv) { return cv.model === model; })[0];
-      this._donutViews = _(this._datumStateViews).without(viewToRemove);
-   
-      if (this._rendered) $(viewToRemove.el).remove();
-    },
-//    collection: DatumStates,
+    /**
+     * The datumStateViews array holds all of the children of the
+     * DatumStatesView.
+     */
+    datumStateViews : [],
+    
+    /**
+     * The Handlebars template rendered as the DatumStatesView.
+     */
     template : Handlebars.compile(datumStateSettingsTemplate),
 
+    /**
+     * Renders the DatumStatesView and all of its child Views.
+     */
     render : function() {
       this._rendered = true;
       Utils.debug("DatumStatesView render: ");
       
       this.setElement(".datum_state_settings");
-      $(this.el).empty();
-      var jsonToRender ={title: "Available Datum States"};
+      var jsonToRender = {title: "Available Datum States"};
       $(this.el).html(this.template(jsonToRender));
       
-   // Render each datumState View and append them.
-      _(this._datumStateViews).each(function(dv) {
+      // Render each datumState View and append them.
+      _(this.datumStateViews).each(function(dv) {
         $('.edit_datum_states').append(dv.render().el);
+        dv.delegateEvents();
       });
-      
-      
 
       return this;
     },
-    alertit: function(e){
-     console.log(e);
-   // update each datumState View and append them.
-      _(this._datumStateViews).each(function(dv) {
-        
-        dv.updateState(e);
+    
+    add : function(d) {
+      // We create an updating DatumStateView for each DatumState that is added.
+      var dv = new DatumStateEditView({
+        tagName : 'li',
+        className : 'datum_state_li',
+        model : d
       });
-      alert("updating states in datumstates view");
+   
+      // And add it to the collection so that it's easy to reuse.
+      this.datumStateViews.push(dv);
+   
+      // If the view has been rendered, then
+      // we immediately append the rendered datumStatus.
+      if (this._rendered) {
+        $('.edit_datum_states').append(dv.render().el);
+      }
+    },
+    addNewState : function(){
+      var m = new DatumState({"state": this.$el.children(".add_input").val(), "color": this.$el.children(".add_color_chooser").val() })
+      this.collection.add(m);
+    
+    },
+    remove : function(model) {
+      var viewToRemove = _(this.datumStateViews).select(function(cv) { return cv.model === model; })[0];
+      this.datumStateViews = _(this.datumStateViews).without(viewToRemove);
+   
+      if (this._rendered) {
+        $(viewToRemove.el).remove();
+      }
     }
-
   });
 
   return DatumStatesView;
