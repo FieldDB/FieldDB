@@ -57,7 +57,7 @@ define([ "use!backbone", "datum/AudioVisual", "comment/Comments",
     defaults : {
       // here are the attributes a datum minimally has to have, other fields can
       // be added within the datum widget.
-      audioVisual : AudioVisual,
+      audioVideo : AudioVideo,
       utterance : DatumField,
       morphemes : DatumField,
       gloss : DatumField,
