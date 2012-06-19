@@ -2,12 +2,14 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!user/user.handlebars",
+    "corpus/Corpuses",
     "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     userTemplate, 
+    Corpuses,
     User
 ) {
   var UserView = Backbone.View.extend(
@@ -81,7 +83,7 @@ define([
         "affiliation" : "University of Pennsylvania",
         "description" : "I am currently a fellow at UPenn. I am interested in soundpatterns of Ute and Southern Paiute languages. I propose that the phoneme is not just an abstraction existing at the structural level of language, but that it in fact has psychological reality for speakers.",
         "subtitle" : "",
-        "corpora" : [],
+        "corpuses" : new Corpuses(),
         "dataLists" : [],
         "prefs" : {},
         "teams" : []
@@ -103,7 +105,7 @@ define([
           "affiliation" : "",
           "description" : "",
           "subtitle" : "",
-          "corpora" : [],
+          "corpuses" : new Corpuses(),
           "dataLists" : [],
           "prefs" : {},
           "teams" : []
