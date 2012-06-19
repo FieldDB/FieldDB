@@ -23,7 +23,7 @@
 
 \section {Project Abstract}
 
-The FieldLinguists' App is an OpenSource database system that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible on any device; as it runs in a HTML5 browser, it will run on laptops (Mac  10.5 and above, Linux, Windows, ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).  It will be suitable for both online and \emph{offline} use.\footnote{Running offline requires  a local database. As of August 2012 it would be possible to use the app offline in Chrome Browsers (Mac, Linux \& Windows), ChromeBooks and on Android tablets, in the coming months/years other browsers/systems will support offline databases. Safari and Firefox may also work by the end of 2012.}  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members use the application to modify and discuss the data. The system will also have a simple and friendly user interface, allowing participants to drag and drop data (audio, video, text), or record audio/video directly into the database when using the Android App. In addition, the application will have import and export capabilities for multiple file types. The application will be designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any database which will house data funded by granting agencies.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works. The application will be hosted on cloud servers so that users can use it without knowing how to set up its servers. The application will also have an installation guide for linguistics department server administrators so that they can set up unlimited data usage on their own department servers.
+The FieldLinguists' App is an OpenSource database system that will allow language researchers to securely enter, store, organize, annotate, and share linguistic data. The application will be accessible on any device; as it runs in a HTML5 browser, it will run on laptops (Mac  10.5 and above, Linux, Windows, ChromeBooks) as well as on mobile devices (Android and iPhone/iPad).  It will be suitable for both online and \emph{offline} use.\footnote{Running offline requires  a local database. As of August 2012 it would be possible to use the app offline in Chrome Browsers (Mac, Linux \& Windows), ChromeBooks and on Android tablets, in the coming months/years other browsers/systems will support offline databases. Safari and Firefox may also work by the end of 2012.}  Furthermore, the application will be created with collaborative goals in mind;  data will be syncable and sharable with other researchers.  Researchers can form teams that contribute to a single corpus, where team members use the application to modify and discuss the data. The system will also have a simple and friendly user interface, allowing users to drag and drop data (audio, video, text), or record audio/video directly into the database when using the Android App. In addition, the application will have import and export capabilities for multiple file types. The application will be designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any database which will house data funded by granting agencies.  Most importantly, the application is designed intuitively and theory free, so it is not necessary to be a field linguist or programmer to figure out how it works. The application will be hosted on cloud servers so that users can use it without knowing how to set up its servers. The application will also have an installation guide for linguistics department server administrators so that they can set up unlimited data usage on their own department servers.
 
 
 iField is a collaboration between  the programming fieldlinguists of iLanguage Lab LTD, Montreal, the Mig'maq Research Group at McGill University and the Prosody Lab at McGill University, Montreal Canada.
@@ -543,11 +543,11 @@ Release new versions&	160&  Javascript \\
 
 
 
-The usefulness and effectiveness of the iFiled App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following {\it E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html)}, and data management following {\it DataONE Primer on Data Management \\ (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf)}. 
+The usefulness and effectiveness of the iFiled App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html), and data management following DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
 
 
 
-\subsection {Data Documentation} 
+\subsection {Data Documentation }
 
 \begin{enumerate} 
 
@@ -566,31 +566,109 @@ The application runs on PC, Linux and Mac OS, as well as on newer platforms such
 
 \item Access: Data are accessible. 
 
-Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see and/or edit their data.  
+Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
 The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
 
 
 
 \item Citation: Data provide citation information. 
 
-All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
- 
+All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data are elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
+% A corpus has an URL that can be used for citation.  
 
 \item Preservation: Data are archived in a way that withstands long-term preservation. 
 
 Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete.  
 In addition to a host server, researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
 
-\item Rights: Rights of researchers of data and of language consultants are respected. 
 
-Researchers (authors of data) have control over who has access to their data. Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
+\item Rights: Rights of authors of data and of language consultants are respected. 
 
-% The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
+Researchers (authors of data) have control over who can see, edit and/or export their data. Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
 
-%the system will encrypt confidential data and store the data in the corpus encrypted. To access the plain text the user will have to log in and use a password to decrypt the data. This design has important ramifications for exporting data, and for editing the data outside the application. The system will allow the user to export data encrypted or decrypted. If the corpus contains sensitive confidential information the system will warn the users if they choose to export the information in a decrypted fashion.
 
 
 \end{enumerate} 
+  
+
+
+\subsection {Data Management }
+
+\begin{enumerate} 
+
+\item Plan: Plan for data management prior to data collection and revise it as necessary during the project. 
+
+
+What data will be generated: collection rationale, collection and analysis methods, infrastructure needed for research (not quite asking about the format of data but more about content of the data to be collected) 
+
+Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. Multiple storage locations means less risk of losing data 
+
+Data organization: stored in JSON format (exportable to .csv, .xml, .txt, .tex), NSQL database so the search is quick 
+
+Data management: who is in charge? version control, backup,    
+
+Data description: metadata, metadata standard   
+
+Data sharing: 
+
+Data preservation: short-term / long term preservation plan (local storage on the device, sync to the host server) how to avoid data loss 
+
+Budget: the app is free, text data stored in the database so storage cost is minimum or zero. 
+  
+
+
+
+
+\item Collect: Data are collected in such a way to ensure future usability. 
+
+The application provides a template for data entry which is flexible and customizable. The four core data fields (utterance, morpheme segmentation, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, context of utterance) relevant to their research. Contents of data fields (default and additional) are subject to search, and researchers can organize data using the information contained in the fields. 
+The application is non-proprietary and data collected are exportable in various formats (.json, .csv, .txt, and .tex) to ensure that data are sharable and usable outside the application. 
+
+ 
+
+
+
+\item Assure: The quality of data is assured through checks and inspections. 
+
+Datum state (Checked, To be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
+%Each datum is associated with session information such as researcher's name, consultant's code and date of elicitation. 
+Each datum is also time stamped when entered and modified so that the data history is trackable. 
+
+% Each modification is recorded (I think) but the app would only show last modified ? 
+ 
+\item Describe: Data are accurately and thoroughly described using the appropriate metadata standard.  
+
+Data will be described at three levels in the application: 
+
+\begin{itemize} 
+\item Corpus: A corpus is a dataset created for a single language/dialect and for a particular purpose. A corpus has a title and a description that will include general information about the corpus such as what the dataset is about, who contributes to the corpus and the purpose of creating the corpus.  
+\item Session: Each datum in a corpus is tied to a Session which includes metadata such as language, dialect, researcher's name, consultant's code and the goal of the session (e.g. eliciting scope ambiguity).  
+\item Datum: Data fields and data tags serve for parameters/categories to describe data. The application is not restricted to a particular theoretical construct so that researchers can choose and describe categories appropriate to their research. 
+% describe categories -- I meant the hint pop-up box for extra datum field where users can give hints what should be in the field. 
+
+
+\end{itemize} 
+
+
+\item Preserve: Data are submitted to an appropriate long-term archive.  
+
+Data and associated metadata are stored in a host server for long-term archival purposes. Confidential data and information are stored encrypted using the US Federal approved AES encryption standard to ensure that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. (See also Data Documentation, Items 1, 5, 6 \& 7.)   
+
+\item Discover: Data are located and obtained. 
+
+The application is accessible through internet search, and data tagged for public view will be discoverable within the application via keyword search. Data permitted for export will be exportable to CSV, text or LaTex formats.  (See also 6.1 Data Documentation, Items 3 \& 4.)
+
+\item Integrate: Data from disparate sources are combined into one consistent data set. 
+
+Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (.xml), making data integrated with programs researchers commonly use/have used to store their data. 
+
+\item Analyze: Data are analyzed. 
+
+The four core data fields include morpheme-segmentation and glossing lines, hence the data will contain primary linguistic analysis at the time of the entry to the database. 
+Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for further analysis.   
+
+\end{enumerate} 
+
 
 %
 %
