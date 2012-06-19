@@ -1,5 +1,5 @@
 define([ "use!backbone",
-         "datum/AudioVideo", 
+         "audio_video/AudioVideo", 
          "comment/Comments",
          "datum/DatumField", 
          "datum/DatumState", 
@@ -63,6 +63,10 @@ define([ "use!backbone",
      * @constructs
      */
     initialize : function() {
+      if(typeof this.get("audioVideo") == "function"){
+        this.set("audioVideo",new AudioVideo());
+      }
+      
     },
 
     defaults : {

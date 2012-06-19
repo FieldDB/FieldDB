@@ -340,7 +340,7 @@ define([
       
       this.model.get("corpus").set({
         "title" : "Quechua Corpus",
-        "nameAsUrl": "Quechua_Corpus",
+        "titleAsUrl": "Quechua_Corpus",
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
