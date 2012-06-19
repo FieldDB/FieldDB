@@ -1,4 +1,13 @@
- {{>user}}
+ <div class="modal toggle" id="myModal1">
+ 
+ <div class="modal-header">
+    <h1>User Profile</h1>
+  </div>
+
+ <div class="modal-body">
+    <p>
+    
+     {{>user}}
 <dl>
 	<dt>Email</dt>
 	<dd>
@@ -23,3 +32,9 @@
 	
 	</dd>
 </dl>
+
+</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+  </div>
