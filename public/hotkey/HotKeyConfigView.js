@@ -1,10 +1,11 @@
 define([
     "use!backbone", 
+    "use!modalview",
     "use!handlebars", 
     "hotkey/HotKey",
     "text!hotkey/hot_key_config_view.handlebars"
-], function(Backbone, Handlebars, HotKey, hot_key_config_viewTemplate) {
-    var HotKeyConfigView = Backbone.View.extend(
+], function(Backbone, ModalView, Handlebars, HotKey, hot_key_config_viewTemplate) {
+    var HotKeyConfigView = ModalView.extend(
     /** @lends HotKeyConfigView.prototype */
     {
         /**
@@ -29,12 +30,16 @@ define([
             this.setElement($("#hotkey-config-view")); 
             $(this.el).html(this.template(this.model.toJSON()));
            
-        //    $(document).bind('keydown', 'ctrl+j', function() {
-        //        alert('You found the hotkey!');
-          //  });
+//
+//            $(document).bind('keydown', 'ctrl+j', function() {
+//                alert('You found the hotkey!');
+//            });
+      
             
             return this;
-        },
+        }, 
+        
+        
         
         
     });
