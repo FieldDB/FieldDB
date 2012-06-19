@@ -1,6 +1,17 @@
-define([ "use!backbone", "datum/AudioVisual", "comment/Comments",
-    "datum/DatumField", "datum/DatumState", "datum/DatumTags", "datum/Session",
-    "libs/Utils" ], function(Backbone, AudioVisual, Comments, DatumField, DatumState, DatumTags,
+define([ "use!backbone",
+         "datum/AudioVideo", 
+         "comment/Comments",
+         "datum/DatumField", 
+         "datum/DatumState", 
+         "datum/DatumTags", 
+         "datum/Session",
+         "libs/Utils"
+], function(Backbone, 
+    AudioVideo, 
+    Comments,
+    DatumField, 
+    DatumState, 
+    DatumTags,
     Session) {
   var Datum = Backbone.Model.extend(
   /** @lends Datum.prototype */
