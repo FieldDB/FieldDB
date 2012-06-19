@@ -30,9 +30,20 @@ define([
       // Bind the functions 'add' and 'remove' to the view. 
       _(this).bindAll('add', 'remove');
    
+      if(this.collection == null){
+        this.collection = new Corpuses();
+        for(i in this.array){
+          var c = new Corpus({id: this.array[i]});
+          c.fetch(); //TODO make this work with the database
+          this.collection.add(c);
+        }
+      }
       // Add each Corpus to the view
       this.collection.each(this.add);
    
+      //TODO bind change/push/pop events on the array to functions which add the corpus to the collection also
+      
+      
       // Bind this view to the add and remove events of the collection
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
