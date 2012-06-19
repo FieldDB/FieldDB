@@ -69,11 +69,12 @@ define([
               this.model.set("description", this.$el.children(".description").val());
             },
             saveNewCorpus : function(){
+              var self = this;
               this.model.save(
                   null,
                   {
                   success : function() {
-                    appView.authView.model.get("user").get("corpuses").push(this.model.id); 
+                    appView.authView.model.get("user").get("corpuses").push(self.model.id); 
                   },
                   error : function() {
                     alert("Unable to create new corpus.");
