@@ -106,9 +106,14 @@ define([
         model : new Session()
       });
       
+   // Create an AuthenticationView
+      this.authView = new AuthenticationView({
+        model : new Authentication()
+      });
+      
       // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
-        model : new User()
+        model : this.authView.model.get("user")
       });
       
       // Create a DataListView   
@@ -131,12 +136,7 @@ define([
       });
       
       this.userPreferenceView = new UserPreferenceView({
-        model : new UserPreference()
-      });
-               
-      // Create an AuthenticationView
-      this.authView = new AuthenticationView({
-        model : new Authentication()
+        model : this.authView.model.get("user").get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -343,7 +343,7 @@ define([
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
       */
-      
+      //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
       this.corpusView.loadSample();
       
       this.authView.loadSample();

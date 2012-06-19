@@ -87,9 +87,10 @@ define([
      * @param {String}
      *          corpusName The name of the corpus this datum is from.
      */
-    showFullscreenCorpus : function() {
+    showFullscreenCorpus : function(corpusName ) {
       Utils.debug("In showFullscreenCorpus: " + corpusName);
 
+      alert("TODO, go get the corpus that matches this name");
       this.hideEverything();
 
       $("#dashboard-view").show();
