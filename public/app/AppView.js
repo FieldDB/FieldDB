@@ -344,11 +344,11 @@ define([
       });
       */
       //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-      this.corpusView.loadSample();
+//      this.corpusView.loadSample();
       
-      this.authView.loadSample();
+//      this.authView.loadSample();
       
-      this.searchView.loadSample();
+//      this.searchView.loadSample();
     },
     
     /**
