@@ -4,7 +4,7 @@ define([
     "user/Informants", 
     "datum/DatumState",
     "datum/DatumStates",
-//    "datum/DatumFields,"
+    "datum/DatumFields",
     "datum/Sessions",
     "data_list/DataLists",
     "permission/Permissions",
@@ -15,7 +15,7 @@ define([
     Informants, 
     DatumState,
     DatumStates,
-//    DatumFields, 
+    DatumFields, 
     Sessions, 
     DataLists, 
     Permissions
@@ -92,7 +92,7 @@ define([
         confidential :  Confidential,
         informants : Informants,
         datumStates : DatumStates,
-//        datumFields : DatumFields, 
+        datumFields : DatumFields, 
         sessions : Sessions, 
         datalists : DataLists, //TODO capitalize L?
         permissions : Permissions
