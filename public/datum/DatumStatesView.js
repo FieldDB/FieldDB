@@ -35,7 +35,9 @@ define([
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
     },
-    
+    events : {
+      "click .add_datum_state" : 'addNewState'
+    },
     /**
      * The datumStateViews array holds all of the children of the
      * DatumStatesView.
@@ -84,7 +86,11 @@ define([
         $('.edit_datum_states').append(dv.render().el);
       }
     },
+    addNewState : function(){
+      var m = new DatumState({"state": this.$el.children(".add_input").val(), "color": this.$el.children(".add_color_chooser").val() })
+      this.collection.add(m);
     
+    },
     remove : function(model) {
       var viewToRemove = _(this.datumStateViews).select(function(cv) { return cv.model === model; })[0];
       this.datumStateViews = _(this.datumStateViews).without(viewToRemove);
