@@ -92,7 +92,9 @@ define([
         "prefs" : new UserPreference(),
         "teams" : []
       };
-      this.model.get("corpuses").push(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
+      var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
+      n.save();
+      this.model.get("corpuses").push(n.id);
 
     },
     
@@ -116,8 +118,9 @@ define([
           "prefs" : new UserPreference(),
           "teams" : []
         };
-      this.model.get("corpuses").push(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
-
+      var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
+      n.save();
+      this.model.get("corpuses").push(n.id);
     }
   });
 
