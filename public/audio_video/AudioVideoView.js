@@ -19,6 +19,7 @@ define([ "use!backbone",
     },
 
     model : AudioVideo,
+   
 
     classname : "audio_video",
 
