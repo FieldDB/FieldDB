@@ -49,7 +49,6 @@ define([
     render : function() {
       Utils.debug("DATUM FIELD render");
      
-   //   this.setElement($(".datum_fields"));
       $(this.el).html(this.template(this.model.toJSON()));
       return this;
     },
@@ -59,7 +58,7 @@ define([
      */
     updateField : function() {
       Utils.debug("Updated field to " + this.$el.children(".datum_field_input").val());
-      this.model.set("state", this.$el.children(".datum_field_input").val());
+      this.model.set("label", this.$el.children(".datum_field_input").val());
     },
     
   });

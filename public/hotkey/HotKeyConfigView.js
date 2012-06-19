@@ -29,9 +29,9 @@ define([
             this.setElement($("#hotkey-config-view")); 
             $(this.el).html(this.template(this.model.toJSON()));
            
-            $(document).bind('keydown', 'ctrl+j', function() {
-                alert('You found the hotkey!');
-            });
+        //    $(document).bind('keydown', 'ctrl+j', function() {
+        //        alert('You found the hotkey!');
+          //  });
             
             return this;
         },

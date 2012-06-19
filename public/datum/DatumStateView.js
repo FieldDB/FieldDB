@@ -3,8 +3,11 @@ define( [
     "use!handlebars", 
     "datum/DatumState",
     "text!datum/datum_state.handlebars"
-], function(Backbone, Handlebars, DatumStatus, datum_stateTemplate) {
-    var DatumStatusView = Backbone.View.extend(
+], function(Backbone, 
+    Handlebars,
+    DatumState,
+    datum_stateTemplate) {
+    var DatumStateView = Backbone.View.extend(
     /** @lends DatumStatusView.prototype */
     {
         /**
@@ -23,7 +26,7 @@ define( [
         "blur input.datum_state_input" : function() { console.log("datum_state_input"); }
         },
         
-        model : DatumStatus,
+        model : DatumState,
 
         classname : "datum_state",
 
@@ -49,5 +52,5 @@ define( [
         }
     });
 
-    return DatumStatusView;
+    return DatumStateView;
 }); 
