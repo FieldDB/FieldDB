@@ -87,12 +87,12 @@ define([
         "affiliation" : "University of Pennsylvania",
         "description" : "I am currently a fellow at UPenn. I am interested in soundpatterns of Ute and Southern Paiute languages. I propose that the phoneme is not just an abstraction existing at the structural level of language, but that it in fact has psychological reality for speakers.",
         "subtitle" : "",
-        "corpuses" : new Corpuses(),
+        "corpuses" : [],
         "dataLists" : [],
         "prefs" : new UserPreference(),
         "teams" : []
       };
-      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
+      this.model.get("corpuses").push(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
 
     },
     
@@ -111,12 +111,12 @@ define([
           "affiliation" : "",
           "description" : "",
           "subtitle" : "",
-          "corpuses" : new Corpuses(),
+          "corpuses" : [],
           "dataLists" : [],
           "prefs" : new UserPreference(),
           "teams" : []
         };
-      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
+      this.model.get("corpuses").push(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
 
     }
   });

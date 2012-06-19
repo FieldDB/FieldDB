@@ -1,11 +1,7 @@
 define([ "use!backbone", 
-         "user/UserPreference",
-         "corpus/Corpus",
-         "corpus/Corpuses"
+         "user/UserPreference"
  ], function(Backbone,
-             UserPreference,
-             Corpus,
-             Corpuses) {
+             UserPreference) {
   var UserGeneric = Backbone.Model.extend(
 
   /** @lends UserGeneric.prototype */
@@ -22,10 +18,10 @@ define([ "use!backbone",
      *           interest (eg. semantics etc)
      * @property {String} affiliation This is user's affiliation
      * @property {String} researchInterest This is user's research interest
-     * @property {Array} corpora Corpora are projects, they are a
+     * @property {Array} corpuses Corpora are projects, they are a
      *           complete collection of datum. A user is associated with
      *           projects/corpora.
-     * @property {Backbone.Collection} dataLists Datalists are selected parts of
+     * @property {Array} dataLists Datalists are selected parts of
      *           corpora (eg. passives; data to be checked week etc).
      * @property {UserPreference} prefs This is where we'll have things like
      *           background/skin.
@@ -44,10 +40,10 @@ define([ "use!backbone",
       // this.bind('error', function(model, error) {
       // // TODO Handle validation errors
       // });
-      if( typeof this.get("corpuses") == "function" ){
-        this.set("corpuses", new Corpuses());
-        this.get("corpuses").add(new Corpus({title: "test corpus filled in user generic"}));
-      }
+//      if( this.get("corpuses") == null){
+//        this.set("corpuses", new Corpuses());
+//        this.get("corpuses").add(new Corpus({title: "test corpus filled in user generic"}));
+//      }
     },
 
     // This is an list of attributes and their default values
@@ -67,7 +63,7 @@ define([ "use!backbone",
       subtitle : "",
       // Corpora are projects. They are a complete collection of
       // datum.
-      corpuses : Corpuses,
+      corpuses : [],
       // Datalists are selected parts of corpora (favourites, for
       // example: passives, or data to be checked next week).
       dataLists : [],
