@@ -7,6 +7,7 @@ require.config({
       "use" : "libs/use",
       "text" : "libs/text",
       "jquery" : "libs/jquery",
+      "hotkeys" : "libs/jquery.hotkeys",
       "underscore" : "libs/underscore",
       "backbone" : "libs/backbone",
       "handlebars" : "libs/handlebars-1.0.0.beta.6",
@@ -38,7 +39,12 @@ require.config({
       "paginator":{
         deps : ["use!underscore", "use!backbone", "jquery", "libs/backbone-couchdb"],
         attach: "paginator"
-      }
+      },
+      
+      "hotkeys":{
+          deps : ["jquery"],
+          attach: "hotkeys"
+        }
   }
 });
 // Run the tests!
