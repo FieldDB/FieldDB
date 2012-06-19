@@ -101,7 +101,7 @@ define([
       validate: function(attrs){
 //        console.log(attrs);
 //        if(attrs.name != undefined){
-//          this.set("nameAsUrl",encodeURIComponent(attrs.name));
+//          this.set("nameAsUrl",encodeURIComponent(attrs.name)); //TODO the validate on corpus was not working.
 //        }
       }
 
