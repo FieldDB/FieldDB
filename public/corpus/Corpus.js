@@ -1,7 +1,7 @@
 define([ 
     "use!backbone",
     "confidentiality_encryption/Confidential", 
-    "user/Informants", 
+//    "user/Informants", 
     "datum/DatumState",
     "datum/DatumStates",
 //    "datum/DatumFields,"
@@ -12,7 +12,7 @@ define([
 ], function(
     Backbone, 
     Confidential, 
-    Informants, 
+//    Informants, 
     DatumState,
     DatumStates,
 //    DatumFields, 
@@ -90,7 +90,7 @@ define([
         titleAsUrl :"",
         description : "",
         confidential :  Confidential,
-        informants : Informants,
+//        informants : Informants,
         datumStates : DatumStates,
 //        datumFields : DatumFields, 
         sessions : Sessions, 
