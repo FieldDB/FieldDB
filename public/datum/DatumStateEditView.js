@@ -8,17 +8,18 @@ define( [
     Handlebars, 
     datum_stateTemplate,
     DatumState
-    
 ) {
   var DatumStateEditView = Backbone.View.extend(
-  /** @lends DatumStateEditView.prototype */
-  {
-    /**
-     * @class TODO Describe the DatumStateEditView.
-     *
-     * @extends Backbone.View
-     * @constructs
-     */
+      /** @lends DatumStateEditView.prototype */
+      {
+        /**
+         * @class The DatumStateEditView is where user's can edit the datum
+         *        states, They can choose the colour and label from the Detailed
+         *        Corpus View.
+         * 
+         * @extends Backbone.View
+         * @constructs
+         */
     initialize : function() {
       Utils.debug("DATUM STATE EDIT init");
       

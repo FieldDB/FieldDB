@@ -1,13 +1,16 @@
-<div class="datum_fields">
+<h2>{{title}}</h2>
+datum fields will show up here
 
-	<label>Utterance:</label>
-	<textarea class="utterance">{{utterance}}</textarea>
-	<br> <label>Morphemes:</label>
-	<textarea class="morphemes">{{morphemes}}</textarea>
-	<br> <label>Gloss:</label>
-	<textarea class="gloss">{{gloss}}</textarea>
-	<br> <label>Translation:</label>
-	<textarea class="translation">{{translation}}</textarea>
-	<br>
+<ul class="datum_fields">
 
-</div>
+</ul>
+
+
+<input class="add_input" value="" placeholder="Add..."></input>
+<select class="add_field">
+  <option value="IPA Transcription">IPA Transcription</option>
+  <option value="Context">Context</option>
+  <option value="Semantic Denotation">Red</option>
+  <option value="Notes">Blue</option>
+</select>
+<input type="button" class="add_datum_field" value="Add"></input>
