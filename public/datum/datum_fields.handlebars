@@ -1,15 +1,21 @@
-<h2>{{title}}</h2>
-datum fields will show up here
-
-<ul class="edit_datum_fields">
-
-</ul>
+<h2>Edit Datum Fields</h2>
 
 
-<input class="add_input" value="" placeholder="Add..."></input>
 <select class="add_field">
   <option value="IPAtranscription">IPA Transcription</option>
   <option value="Context">Context</option>
   <option value="SemanticDenotation">Semantic Denotation</option>
+    <option value="Create New">Create New</option>
+  
 </select>
-<input type="button" class="add_datum_field" value="Add"></input>
+<span>
+<input class="add_input" value="" placeholder="Put a hint here..."></input>
+
+<input type="checkbox"></input> Encrypted
+
+  <button class="btn btn-primary" class="add_datum_field" value="Add">Add</button>
+
+
+<ul class="edit_datum_fields">
+
+</ul>
