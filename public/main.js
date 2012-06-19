@@ -7,6 +7,7 @@ require.config({
     "hotkeys" : "libs/jquery.hotkeys",
     "underscore" : "libs/underscore",
     "backbone" : "libs/backbone",
+    "modalview" : "libs/backbone.modaldialog",
     "handlebars" : "libs/handlebars-1.0.0.beta.6",
     "paginator" : "libs/backbone.paginator",
     "crypto" : "libs/Crypto_AES",
@@ -40,7 +41,12 @@ require.config({
     "hotkeys":{
         deps : ["jquery"],
         attach: "hotkeys"
-      }
+      },
+      
+    "modalview":{
+          deps : ["use!backbone"],
+          attach: "ModalView"
+        }
   }
 });
 
