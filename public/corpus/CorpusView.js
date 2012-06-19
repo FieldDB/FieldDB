@@ -89,7 +89,7 @@ define([
      * Initialize the sample Corpus.
      */
     loadSample : function() {
-//      this.sessionView.loadSample(this.model);
+      this.sessionView.loadSample(this.model);
     }
   });
 

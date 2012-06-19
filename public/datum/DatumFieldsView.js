@@ -1,30 +1,28 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_states_settings.handlebars",
-    "datum/DatumState",
-    "datum/DatumStates",
-    "datum/DatumStateEditView",
+    "text!datum/datum_fields.handlebars",
+    "datum/DatumField",
+    "datum/DatumFields",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
-    datumStateSettingsTemplate,
-    DatumState,
-    DatumStates,
-    DatumStateEditView
+    datumFieldsTemplate,
+    DatumField,
+    DatumFields
 ) {
-  var DatumStatesView = Backbone.View.extend(
-  /** @lends DatumStatesView.prototype */
+  var DatumFieldsView = Backbone.View.extend(
+  /** @lends DatumFieldsView.prototype */
   {
     /**
-     * @class DatumStatesView is rendering the datumstates collections in the form of editable settings.
+     * @class DatumFieldsView is rendering the datumFields collections in the form of editable settings.
      *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DatumStatesView init: " + this.el);
+      Utils.debug("DatumFieldsView init: " + this.el);
       // Bind the functions 'add' and 'remove' to the view. 
       _(this).bindAll('add', 'remove');
    
@@ -36,33 +34,33 @@ define([
       this.collection.bind('remove', this.remove);
     },
     events : {
-      "click .add_datum_state" : 'addNewState'
+      "click .add_datum_field" : 'addNewField'
     },
     /**
-     * The datumStateViews array holds all of the children of the
-     * DatumStatesView.
+     * The datumFieldViews array holds all of the children of the
+     * DatumFieldView.
      */
-    datumStateViews : [],
+    datumFieldViews : [],
     
     /**
-     * The Handlebars template rendered as the DatumStatesView.
+     * The Handlebars template rendered as the DatumFieldsView.
      */
-    template : Handlebars.compile(datumStateSettingsTemplate),
+    template : Handlebars.compile(datumFieldsTemplate),
 
     /**
-     * Renders the DatumStatesView and all of its child Views.
+     * Renders the DatumFieldsView and all of its child Views.
      */
     render : function() {
       this._rendered = true;
-      Utils.debug("DatumStatesView render: ");
+      Utils.debug("DatumFieldsView render: ");
       
-      this.setElement(".datum_state_settings");
-      var jsonToRender = {title: "Available Datum States"};
+      this.setElement(".datum_fields");
+      var jsonToRender = {title: "Available Datum Fields"};
       $(this.el).html(this.template(jsonToRender));
       
-      // Render each datumState View and append them.
+      // Render each datumField View and append them.
       _(this.datumStateViews).each(function(dv) {
-        $('.edit_datum_states').append(dv.render().el);
+        $('.datum_fields').append(dv.render().el);
         dv.delegateEvents();
       });
 
@@ -101,5 +99,5 @@ define([
     }
   });
 
-  return DatumStatesView;
+  return DatumFieldsView;
 });
