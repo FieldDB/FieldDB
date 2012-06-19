@@ -1,5 +1,5 @@
 define([ "use!backbone",
-         "datum/AudioVideo", 
+         "audio_video/AudioVideo", 
          "comment/Comments",
          "datum/DatumField", 
          "datum/DatumState", 

@@ -1,7 +1,7 @@
 define([ "use!backbone",
          "use!handlebars", 
-         "text!datum/audio_video.handlebars",
-         "datum/AudioVideo"
+         "text!audio_video/audio_video.handlebars",
+         "audio_video/AudioVideo"
   ], function(Backbone, 
               Handlebars,
               audio_videoTemplate,
