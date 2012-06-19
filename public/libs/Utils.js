@@ -23,6 +23,19 @@ Utils.touchUrl = "http://localhost:8888/db";
  */
 Utils.pouchUrl = "idb://db";
 
+
+Utils.activityFeedCouchUrl = "http://trisapeace.iriscouch.com/activity_feed";
+/**
+ * The address of the TouchDB-Android database on the Android.
+ */
+Utils.activityFeedTouchUrl = "http://localhost:8888/activity_feed_db";
+
+/**
+ * The address of the PouchDB database on the browser.
+ */
+Utils.activityFeedPouchUrl = "idb://activity_feed_db";
+
+
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if
  * debugMode is true.
