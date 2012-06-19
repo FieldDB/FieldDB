@@ -72,7 +72,10 @@ define([ "use!backbone",
       prefs : new UserPreference()
 
     },
-
+    
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+        : Utils.pouchUrl),
+        
     /**
      * Describe the validation here.
      * 

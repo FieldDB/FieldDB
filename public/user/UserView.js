@@ -93,8 +93,18 @@ define([
         "teams" : []
       };
       var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
-      n.save();
-      this.model.get("corpuses").push(n._id);
+      var self = this;
+      this.model.save(
+          null,
+          {
+            success : function() {
+              self.model.get("corpuses").push(n.id);
+            },
+            error : function() {
+              alert("Unable to create new corpus.");
+            }
+          }
+      );
 
     },
     
@@ -119,8 +129,18 @@ define([
           "teams" : []
         };
       var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
-      n.save();
-      this.model.get("corpuses").push(n._id);
+      var self = this;
+      this.model.save(
+          null,
+          {
+            success : function() {
+              self.model.get("corpuses").push(n.id);
+            },
+            error : function() {
+              alert("Unable to create new corpus.");
+            }
+          }
+      );
     }
   });
 
