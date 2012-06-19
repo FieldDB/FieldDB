@@ -155,6 +155,7 @@ define([
         model : new HotKey()
       });  
       
+      
       // Create an ExportView
       this.exportView = new ExportView({
         model : new Export()
@@ -313,7 +314,7 @@ define([
         
         this.activityFeedView.render();
         
-        this.hotkeyConfigView.render();
+        this.hotkeyConfigView.render();//.showModal();
 
         this.newDataListView.render();
 
