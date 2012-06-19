@@ -98,6 +98,9 @@ define([
         permissions : Permissions
         
       },
+      pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+          : Utils.pouchUrl),
+          
       validate: function(attrs){
 //        console.log(attrs);
 //        if(attrs.title != undefined){
