@@ -106,14 +106,15 @@ define([
         model : new Session()
       });
       
+      var userToBePassedAround = new User();
    // Create an AuthenticationView
       this.authView = new AuthenticationView({
-        model : new Authentication()
+        model : new Authentication({user: userToBePassedAround})
       });
       
       // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
-        model : this.authView.model.get("user")
+        model : userToBePassedAround
       });
       
       // Create a DataListView   
@@ -136,7 +137,7 @@ define([
       });
       
       this.userPreferenceView = new UserPreferenceView({
-        model : this.authView.model.get("user").get("prefs")
+        model : userToBePassedAround.get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -336,20 +337,20 @@ define([
      */
     loadSample : function() {
       // Sample Corpus data
-      /*
+      
       this.model.get("corpus").set({
-        "name" : "Quechua Corpus",
+        "title" : "Quechua Corpus",
         "nameAsUrl": "Quechua_Corpus",
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
-      */
+      
       //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-//      this.corpusView.loadSample();
+      this.corpusView.loadSample();
       
-//      this.authView.loadSample();
+      this.authView.loadSample();
       
-//      this.searchView.loadSample();
+      this.searchView.loadSample();
     },
     
     /**

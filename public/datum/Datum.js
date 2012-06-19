@@ -1,6 +1,17 @@
-define([ "use!backbone", "datum/AudioVisual", "comment/Comments",
-    "datum/DatumField", "datum/DatumState", "datum/DatumTags", "datum/Session",
-    "libs/Utils" ], function(Backbone, AudioVisual, Comments, DatumField, DatumState, DatumTags,
+define([ "use!backbone",
+         "datum/AudioVideo", 
+         "comment/Comments",
+         "datum/DatumField", 
+         "datum/DatumState", 
+         "datum/DatumTags", 
+         "datum/Session",
+         "libs/Utils"
+], function(Backbone, 
+    AudioVideo, 
+    Comments,
+    DatumField, 
+    DatumState, 
+    DatumTags,
     Session) {
   var Datum = Backbone.Model.extend(
   /** @lends Datum.prototype */
@@ -57,7 +68,7 @@ define([ "use!backbone", "datum/AudioVisual", "comment/Comments",
     defaults : {
       // here are the attributes a datum minimally has to have, other fields can
       // be added within the datum widget.
-      audioVisual : AudioVisual,
+      audioVideo : AudioVideo,
       utterance : DatumField,
       morphemes : DatumField,
       gloss : DatumField,
