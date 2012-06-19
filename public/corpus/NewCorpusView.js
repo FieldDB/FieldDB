@@ -69,8 +69,9 @@ define([
             },
             saveNewCorpus : function(){
 //              this.model.save();
-              appView.authView.model.get("user").get("corpora").push(this.model); 
-              alert("Saved");
+              appView.authView.model.get("user").get("corpuses").add(this.model); 
+//              alert("Saved");
+              window.location = "#user/"+appView.authView.model.get("username");
             }
           });
 
