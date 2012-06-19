@@ -63,6 +63,10 @@ define([ "use!backbone",
      * @constructs
      */
     initialize : function() {
+      if(typeof this.get("audioVideo") == "function"){
+        this.set("audioVideo",new AudioVideo());
+      }
+      
     },
 
     defaults : {
