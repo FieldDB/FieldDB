@@ -37,7 +37,7 @@ require.config({
       deps : ["use!underscore", "use!backbone", "jquery"],
       attach: "Paginator"
     },
-    
+
     "hotkeys":{
         deps : ["jquery"],
         attach: "hotkeys"
