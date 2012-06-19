@@ -1,10 +1,8 @@
 define([ 
-
     "use!backbone",
     "datum/Datum",
     "datum/Session",
     "libs/Utils"
-
 ], function(
     Backbone,
     Datum,
@@ -75,7 +73,7 @@ define([
      *          sessionId The ID of the session within the corpus.
      */
     newFullscreenCorpus : function() {
-      Utils.debug("In newFullscreenCorpus: " + corpusName);
+      Utils.debug("In newFullscreenCorpus: " );
 
       this.hideEverything();
 
@@ -89,9 +87,10 @@ define([
      * @param {String}
      *          corpusName The name of the corpus this datum is from.
      */
-    showFullscreenCorpus : function() {
+    showFullscreenCorpus : function(corpusName ) {
       Utils.debug("In showFullscreenCorpus: " + corpusName);
 
+      alert("TODO, go get the corpus that matches this name");
       this.hideEverything();
 
       $("#dashboard-view").show();

@@ -15,7 +15,7 @@ define( [
         initialize : function() {
         },
         defaults : {
-        
+          skin: ""
         }
       });
 

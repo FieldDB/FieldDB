@@ -60,7 +60,7 @@ require([
    "../tests/insert_unicode/InsertUnicodeTest",
    "../tests/lexicon/LexiconTest",
    "../tests/permission/PermissionTest",
-   "../tests/preference/PreferenceTest",
+   "../tests/user/UserPreferenceTest",
    "../tests/search/SearchTest",
    "../tests/session/SessionTest",
    "../tests/user/UserGenericTest",
