@@ -2,7 +2,7 @@ define([
   "use!backbone" 
   ], function(Backbone) {
 
-  var AudioVisual = Backbone.Model.extend(
+  var AudioVideo = Backbone.Model.extend(
 
   /** @lends AudioVisual.prototype */
 
@@ -16,7 +16,10 @@ define([
      * 
      * @constructs
      */
-
+    defaults : {
+      URL : "",
+      FileName : ""
+    },
     initialize : function() {
 
     },
@@ -27,6 +30,6 @@ define([
 
   });
 
-  return AudioVisual;
+  return AudioVideo;
 
 });

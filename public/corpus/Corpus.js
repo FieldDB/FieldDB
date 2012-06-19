@@ -1,7 +1,7 @@
 define([ 
     "use!backbone",
     "confidentiality_encryption/Confidential", 
-    "user/Informants", 
+//    "user/Informants", 
     "datum/DatumState",
     "datum/DatumStates",
 //    "datum/DatumFields,"
@@ -12,7 +12,7 @@ define([
 ], function(
     Backbone, 
     Confidential, 
-    Informants, 
+//    Informants, 
     DatumState,
     DatumStates,
 //    DatumFields, 
@@ -24,7 +24,7 @@ define([
     /** @lends Corpus.prototype */
     {
       /**
-       * @class A corpus is like a git repository, it has a remote, a name
+       * @class A corpus is like a git repository, it has a remote, a title
        *        a description and perhaps a readme When the user hits sync
        *        their "branch" of the corpus will be pushed to the central
        *        remote, and we will show them a "diff" of what has
@@ -35,7 +35,7 @@ define([
        * regardless of how it is really stored on the disk.
        * 
        * 
-       * @property {String} name This is used to refer to the corpus, and
+       * @property {String} title This is used to refer to the corpus, and
        *           what appears in the url on the main website eg
        *           http://fieldlinguist.com/Sapir/SampleFieldLinguisticsCorpus
        * @property {String} description This is a short description that
@@ -68,7 +68,7 @@ define([
       initialize : function() {
         // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
         this.on('all', function(e) {
-          Utils.debug(this.get('name') + " event: " + JSON.stringify(e));
+          Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
         }); 
 
         this.set("datumStates", new DatumStates([ 
@@ -86,11 +86,11 @@ define([
       },
       
       defaults : {
-        name : "",
-        nameAsUrl :"",
+        title : "",
+        titleAsUrl :"",
         description : "",
         confidential :  Confidential,
-        informants : Informants,
+//        informants : Informants,
         datumStates : DatumStates,
 //        datumFields : DatumFields, 
         sessions : Sessions, 
@@ -98,10 +98,13 @@ define([
         permissions : Permissions
         
       },
+      pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+          : Utils.pouchUrl),
+          
       validate: function(attrs){
 //        console.log(attrs);
-//        if(attrs.name != undefined){
-//          this.set("nameAsUrl",encodeURIComponent(attrs.name));
+//        if(attrs.title != undefined){
+//          this.set("titleAsUrl",encodeURIComponent(attrs.title)); //TODO the validate on corpus was not working.
 //        }
       }
 

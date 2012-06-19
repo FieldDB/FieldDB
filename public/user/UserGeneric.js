@@ -1,7 +1,7 @@
 define([ "use!backbone", 
-         "preference/Preference"
+         "user/UserPreference"
  ], function(Backbone,
-             Preference) {
+             UserPreference) {
   var UserGeneric = Backbone.Model.extend(
 
   /** @lends UserGeneric.prototype */
@@ -18,12 +18,12 @@ define([ "use!backbone",
      *           interest (eg. semantics etc)
      * @property {String} affiliation This is user's affiliation
      * @property {String} researchInterest This is user's research interest
-     * @property {Array} corpora Corpora are projects, they are a
+     * @property {Array} corpuses Corpora are projects, they are a
      *           complete collection of datum. A user is associated with
      *           projects/corpora.
      * @property {Array} dataLists Datalists are selected parts of
      *           corpora (eg. passives; data to be checked week etc).
-     * @property {Preference} prefs This is where we'll have things like
+     * @property {UserPreference} prefs This is where we'll have things like
      *           background/skin.
      * 
      * @description The initialize function probably checks to see if
@@ -40,7 +40,10 @@ define([ "use!backbone",
       // this.bind('error', function(model, error) {
       // // TODO Handle validation errors
       // });
-
+//      if( this.get("corpuses") == null){
+//        this.set("corpuses", new Corpuses());
+//        this.get("corpuses").add(new Corpus({title: "test corpus filled in user generic"}));
+//      }
     },
 
     // This is an list of attributes and their default values
@@ -60,16 +63,19 @@ define([ "use!backbone",
       subtitle : "",
       // Corpora are projects. They are a complete collection of
       // datum.
-      corpora : [],
+      corpuses : [],
       // Datalists are selected parts of corpora (favourites, for
       // example: passives, or data to be checked next week).
       dataLists : [],
-      // Preferences are where we'll have things like background/skin
+      // UserPreferences are where we'll have things like background/skin
       // options.
-      prefs : new Preference()
+      prefs : new UserPreference()
 
     },
-
+    
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+        : Utils.pouchUrl),
+        
     /**
      * Describe the validation here.
      * 
