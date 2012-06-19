@@ -16,7 +16,10 @@ define([
      * 
      * @constructs
      */
-
+    defaults : {
+      URL : "",
+      FileName : ""
+    },
     initialize : function() {
 
     },
