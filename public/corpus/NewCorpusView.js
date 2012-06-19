@@ -70,7 +70,7 @@ define([
             },
             saveNewCorpus : function(){
 //              this.model.save();
-              appView.authView.model.get("user").get("corpuses").push(this.model.id); 
+              appView.authView.model.get("user").get("corpuses").push(this.model._id); 
 //              alert("Saved");
               window.location = "#user/"+appView.authView.model.get("username");
             }
