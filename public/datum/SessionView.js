@@ -53,7 +53,7 @@ define([
      * 
      * @param {Corpus} corpus The corpus associated with this Session.
      */
-//    loadSample : function(corpus) {
+    loadSample : function(corpus) {
 //      this.model.set({
 //        user : "sapir",
 //        informant : "Tillohash",
@@ -61,7 +61,7 @@ define([
 //        language : "Cusco Quechua",
 //        goal : "Which verbs can be affixed with -naya"
 //      });
-//    }
+    }
   });
   
   return SessionView;

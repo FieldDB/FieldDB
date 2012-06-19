@@ -23,13 +23,15 @@ define([
         template: Handlebars.compile(hot_key_config_viewTemplate),
     
         render : function() {
-//            $(this.el).html(this.template(this.model.toJSON()));
+            $(this.el).html(this.template(this.model.toJSON()));
             
          // Display the HotKeyConfigView
             this.setElement($("#hotkey-config-view")); 
-//            $(this.el).html(this.template(this.model.toJSON()));
+            $(this.el).html(this.template(this.model.toJSON()));
            
-   
+            $(document).bind('keydown', 'ctrl+j', function() {
+                alert('You found the hotkey!');
+            });
             
             return this;
         },
