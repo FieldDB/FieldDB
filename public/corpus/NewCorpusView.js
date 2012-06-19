@@ -69,9 +69,17 @@ define([
               this.model.set("description", this.$el.children(".description").val());
             },
             saveNewCorpus : function(){
-//              this.model.save();
-              appView.authView.model.get("user").get("corpuses").push(this.model._id); 
-//              alert("Saved");
+              this.model.save(
+                  null,
+                  {
+                  success : function() {
+                    appView.authView.model.get("user").get("corpuses").push(this.model.id); 
+                  },
+                  error : function() {
+                    alert("Unable to create new corpus.");
+                  }
+                }
+              );
               window.location = "#user/"+appView.authView.model.get("username");
             }
           });
