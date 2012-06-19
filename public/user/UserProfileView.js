@@ -36,7 +36,7 @@ define([
 
       // Create a CorpusesView
       this.corpusesView = new CorpusesView({
-        collection : this.model.get("corpuses")
+        array : this.model.get("corpuses")
       });
     },
 
