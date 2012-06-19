@@ -370,6 +370,25 @@ define([
         });
       });
     },
+    /**
+     * Synchronize the activity feed server and local databases.
+     * TODO change this line in case it is called on the wrong model
+     *  this.activityFeedView.model.pouch(
+     */
+    replicateActivityFeedDatabase : function() {
+      this.activityFeedView.model.pouch(function(err, db) {
+        db.replicate.to(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate to");
+          Utils.debug(resp);
+          Utils.debug(err);
+        });
+        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate from");
+          Utils.debug(resp);
+          Utils.debug(err);
+        });
+      });
+    },
     
     saveScreen : function() {
       // Save the FullScreenDatum page, if necessary
