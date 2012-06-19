@@ -1,6 +1,8 @@
-define("export/Export", [ 
-    "use!backbone"
-], function(Backbone) {
+define([ 
+    "use!backbone",
+    "data_list/DataList"
+], function(Backbone, 
+           DataList) {
   var Export = Backbone.Model.extend(
 
       /** @lends Export.prototype */

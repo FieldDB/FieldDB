@@ -1,23 +1,21 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "preference/Preference",
-    "text!preference/preference.handlebars",
-    "hotkey/HotKeyConfigView",
+    "text!user/user_preference.handlebars",
+    "user/UserPreference",
     "libs/Utils"
 ], function(
   Backbone, 
   Handlebars, 
-  Preference, 
   preferenceTemplate, 
-  HotKeyConfigView
+  UserPreference
 ) {
-  var PreferenceView = Backbone.View.extend(
-  /** @lends PreferenceView.prototype */
+  var UserPreferenceView = Backbone.View.extend(
+  /** @lends UserPreferenceView.prototype */
   {
-    // TODO comment this class
+    // TODO comment this class I think initially, hotkeys were gonna go in here and how they aren't in here so now I'm not sure what else is supposed to go in here.
     /**
-     * @class PreferenceView
+     * @class UserPreferenceView This is where the option to  change the background is.
      *
      * @extends Backbone.View
      * @constructs
@@ -26,26 +24,26 @@ define([
     },
 
     /**
-     * The underlying model of the PreferenceView is a Preference.
+     * The underlying model of the UserPreferenceView is a UserPreference.
      */
-    model : Preference,
+    model : UserPreference,
     
     /**
-     * Events that the PreferenceView is listening to and their handlers.
+     * Events that the UserPreferenceView is listening to and their handlers.
      */
     events:{
       "click #skin": "randomSkin"
     },
  
     /**
-     * The Handlebars template rendered as the PreferenceView.
+     * The Handlebars template rendered as the UserPreferenceView.
      */
     template: Handlebars.compile(preferenceTemplate),
 
     render : function() {
-      Utils.debug("PREFERENCE render: " + this.el);
+      Utils.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
-        // Display the PreferenceView
+        // Display the UserPreferenceView
         this.setElement($("#user-preferences-view"));
         $(this.el).html(this.template(this.model.toJSON()));
       }
@@ -55,14 +53,14 @@ define([
     
     // TODO Comment and implement this function
     randomSkin : function(){
-      
-      function randomize(min, max) {
-        if (!min)
-          min = 0;
-        if (!max)
-          max = 1;
-        return Math.floor(Math.random()*(max+1)+min);
-      }
+
+//      function randomize(min, max) {
+//        if (!min)
+//          min = 0;
+//        if (!max)
+//          max = 1;
+//        return Math.floor(Math.random()*(max+1)+min);
+//      }
       
       var randombgs=["images/skins/bamboo_garden.jpg",
                      "images/skins/llama_wool.jpg" , 
@@ -77,12 +75,15 @@ define([
                      "images/skins/sunset.jpg",
                      "images/skins/window.jpg",
                      "images/skins/Ceske_Krumlov.jpg", 
-
-
-
                      ];
-      
-      document.body.style.backgroundImage = "url(" + randombgs[randomize(0, randombgs.length-1)] + ")";
+       
+      for(var i=0; i < randombgs.length; i++){
+        
+        document.body.style.backgroundImage = "url(" + randombgs[i] + ")";
+        
+        return i;
+
+      }
 
     //  document.getElementById("app").style.backgroundImage="url('+Math.floor(Math.random()*randombgs.length)]+')");
      // document.getElementById("app").style.backgroundImage = "url('../images/skins/temple.jpg')";
@@ -92,5 +93,5 @@ define([
     } 
   });
   
-  return PreferenceView;
+  return UserPreferenceView;
 }); 

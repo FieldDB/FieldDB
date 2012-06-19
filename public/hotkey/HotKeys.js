@@ -1,8 +1,6 @@
-define("HotKeys",
-    [ "use!backbone"
-
-      ], 
-      function(Backbone) {
+define([ "use!backbone", 
+         "HotKey"
+      ], function(Backbone, HotKey) {
   var HotKeys = Backbone.Collection.extend(
 
       /** @lends HotKeys.prototype  */

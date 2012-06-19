@@ -9,6 +9,7 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
+    "corpus/CorpusFullscreenView",
     "corpus/CorpusView",
     "corpus/NewCorpusView",
     "data_list/DataList",
@@ -16,14 +17,12 @@ define([
     "data_list/NewDataListView",
     "datum/Datum",
     "datum/DatumView", 
-    "datum_pref/DatumPref",
-    "datum_pref/DatumPrefView",
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
     "import/Import",
     "import/ImportView",
-    "preference/Preference",
-    "preference/PreferenceView",
+    "user/UserPreference",
+    "user/UserPreferenceView",
     "search/Search",
     "search/SearchView",
     "search/AdvancedSearchView",
@@ -48,6 +47,7 @@ define([
     Authentication,
     AuthenticationView,
     Corpus, 
+    CorpusFullscreenView,
     CorpusView,
     NewCorpusView,
     DataList,
@@ -55,14 +55,12 @@ define([
     NewDataListView,
     Datum,
     DatumView,
-    DatumPref,
-    DatumPrefView,
     HotKey,
     HotKeyConfigView,
     Import,
     ImportView,
-    Preference,
-    PreferenceView,
+    UserPreference,
+    UserPreferenceView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -108,9 +106,14 @@ define([
         model : new Session()
       });
       
+   // Create an AuthenticationView
+      this.authView = new AuthenticationView({
+        model : new Authentication()
+      });
+      
       // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
-        model : new User()
+        model : this.authView.model.get("user")
       });
       
       // Create a DataListView   
@@ -132,18 +135,8 @@ define([
         model : new Search()
       });
       
-      this.preferenceView = new PreferenceView({
-        model : new Preference()
-      });
-               
-      // Create an AuthenticationView
-      this.authView = new AuthenticationView({
-        model : new Authentication()
-      });
-      
-      // Create an DatumPrefView
-      this.datumPrefView = new DatumPrefView({
-        model : new Authentication()
+      this.userPreferenceView = new UserPreferenceView({
+        model : this.authView.model.get("user").get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -169,17 +162,17 @@ define([
       // Create a NewCorpusView
       this.newCorpusView = new NewCorpusView({
         model : new Corpus()
-      });  
-      
+      });
 
+      // Create a CorpusEditView
+      this.fullscreenCorpusView = new CorpusFullscreenView({
+        model : this.model.get("corpus")
+      });
       
-//    Create an ImportView
+      // Create an ImportView
       this.importView = new ImportView({
         model : new Import()
-      }); 
-      
-
-
+      });
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -233,24 +226,39 @@ define([
     sessionEditView : SessionEditView,
     
     /**
-     * The userPreferenceView is a child of the AppView.
+     * The userUserPreferenceView is a child of the AppView.
      */  
-    preferenceView : PreferenceView,
+    userPreferenceView : UserPreferenceView,
     
-    datumPrefView : DatumPrefView,
-    
+    /**
+     * The activityFeedView is a child of the AppView.
+     */
     activityFeedView : ActivityFeedView,
     
+    /**
+     * The hotkeyConfigView is a child of the AppView.
+     */
     hotkeyConfigView : HotKeyConfigView,
 
+    /**
+     * The newDataListView is a child of the AppView.
+     */
     newDataListView : NewDataListView,
     
-
+    /**
+     * The newCorpusView is a child of the AppView.
+     */
     newCorpusView : NewCorpusView,
     
+    /**
+     * The fullscreenCorpusView is a child of the AppView.
+     */
+    fullscreenCorpusView : CorpusFullscreenView,
 
+    /**
+     * The importView is a child of the AppView.
+     */
     importView : ImportView,
-
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -299,10 +307,8 @@ define([
         // Display the SessionEditView
         this.sessionEditView.render();
         
-        // Display the PreferenceView
-        this.preferenceView.render();
-        
-        this.datumPrefView.render();
+        // Display the UserPreferenceView
+        this.userPreferenceView.render();
         
         this.activityFeedView.render();
         
@@ -312,10 +318,10 @@ define([
 
         this.newCorpusView.render();
          
-
         this.importView.render();
         
-
+        // Dispaly the CorpusFullscreenView
+        this.fullscreenCorpusView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }
@@ -328,11 +334,21 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      this.corpusView.loadSample();
+      // Sample Corpus data
+      /*
+      this.model.get("corpus").set({
+        "name" : "Quechua Corpus",
+        "nameAsUrl": "Quechua_Corpus",
+        "description" : "This is a corpus which will let you explore the app and see how it works. "
+            + "\nIt contains some data from one of our trips to Cusco, Peru."
+      });
+      */
+      //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
+//      this.corpusView.loadSample();
       
-      this.authView.loadSample();
+//      this.authView.loadSample();
       
-      this.searchView.loadSample();
+//      this.searchView.loadSample();
     },
     
     /**

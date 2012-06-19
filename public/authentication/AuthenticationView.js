@@ -20,7 +20,8 @@ define([
     /**
      * @class This is the login logout surface.
      * 
-     * @description Starts the Authentication and initializes all its children.
+     * @description Starts the Authentication and initializes all its children. 
+     * This is where the dropdown menu for user related stuff is housed.
      * 
      * @extends Backbone.View
      * @constructs
@@ -29,9 +30,10 @@ define([
       Utils.debug("AUTH init: " + this.el);
       
     //   Create a UserView
-         this.userView = new UserView({
+      this.userView = new UserView({
          model: new User()
       });
+      this.userView.loadSample();
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);

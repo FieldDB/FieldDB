@@ -1,10 +1,14 @@
 define("datum/DatumsLatexView", [
     "use!backbone", 
-    "use!handlebars", 
+    "use!handlebars",
+    "text!datum/datum_latex.handlebars",
     "datum/Datums",
-    "text!datum/datums_latex.handlebars"
-], function(Backbone, Handlebars, Datums, datums_latexTemplate) {
-    var SearchView = Backbone.View.extend(
+], function(Backbone,
+    Handlebars, 
+    datum_latexTemplate,
+    Datums 
+) {
+    var DatumsLatexView = Backbone.View.extend(
     /** @lends DatumLatexView.prototype */
     {
         /**
@@ -32,5 +36,5 @@ define("datum/DatumsLatexView", [
         }
     });
 
-    return DatumLatexView;
+    return DatumsLatexView;
 }); 
