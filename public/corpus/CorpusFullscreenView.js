@@ -88,8 +88,7 @@ define([
     /**
      * The DatumFieldsView is a child of the CorpusView.
      */
-    datumFieldsView : DatumFieldsView,
-    
+    datumFieldsView : DatumFieldsView, 
     /**
      * The datumStatesView is a child of the CorpusView.
      */
@@ -98,7 +97,6 @@ define([
      * The PermissionsView is a child of the CorpusView.
      */
     permissionsView : PermissionsView,
-    
     /**
      * The SessionsView is a child of the CorpusView.
      */

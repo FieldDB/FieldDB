@@ -4,13 +4,15 @@ define([
     "text!datum/datum_fields.handlebars",
     "datum/DatumField",
     "datum/DatumFields",
+    "datum/DatumFieldView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
     datumFieldsTemplate,
     DatumField,
-    DatumFields
+    DatumFields,
+    DatumFieldView
 ) {
   var DatumFieldsView = Backbone.View.extend(
   /** @lends DatumFieldsView.prototype */
@@ -55,13 +57,13 @@ define([
       this._rendered = true;
       Utils.debug("DatumFieldsView render: ");
       
-      this.setElement(".datum_fields");
+      this.setElement(".datum_fields_settings");
       var jsonToRender = {title: "Available Datum Fields"};
       $(this.el).html(this.template(jsonToRender));
       
       // Render each datumField View and append them.
-      _(this.datumFields).each(function(dv) {
-        $('.datum_fields').append(dv.render().el);
+      _(this.datumFieldViews).each(function(dv) {
+        $('.edit_datum_fields').append(dv.render().el);
         dv.delegateEvents();
       });
 
@@ -80,9 +82,9 @@ define([
       this.datumFieldViews.push(dv);
    
       // If the view has been rendered, then
-      // we immediately append the rendered datumStatus.
+      // we immediately append the rendered datumField.
       if (this._rendered) {
-        $('.datum_fields').append(dv.render().el);
+        $('.edit_datum_fields').append(dv.render().el);
       }
     },
     addNewField : function(){
