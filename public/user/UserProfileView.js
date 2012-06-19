@@ -35,6 +35,9 @@ define([
       this.model.bind("change", this.render, this);
 
       // Create a CorpusesView
+      if(this.model.get("corpuses") == undefined){
+        this.model.set("corpuses", []);
+      }
       this.corpusesView = new CorpusesView({
         array : this.model.get("corpuses")
       });
