@@ -5,6 +5,7 @@ define([
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
+    "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -12,7 +13,8 @@ define([
     userTemplate, 
     Corpus,
     Corpuses,
-    User
+    User,
+    UserPreference
 ) {
   var UserView = Backbone.View.extend(
   /** @lends UserView.prototype */
@@ -87,10 +89,10 @@ define([
         "subtitle" : "",
         "corpuses" : new Corpuses(),
         "dataLists" : [],
-        "prefs" : {},
+        "prefs" : new UserPreference(),
         "teams" : []
       };
-      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview"}));
+      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
 
     },
     
@@ -111,10 +113,10 @@ define([
           "subtitle" : "",
           "corpuses" : new Corpuses(),
           "dataLists" : [],
-          "prefs" : {},
+          "prefs" : new UserPreference(),
           "teams" : []
         };
-      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview"}));
+      this.model.get("corpuses").add(new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"}));
 
     }
   });

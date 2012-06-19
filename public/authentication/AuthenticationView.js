@@ -30,9 +30,10 @@ define([
       Utils.debug("AUTH init: " + this.el);
       
     //   Create a UserView
-         this.userView = new UserView({
+      this.userView = new UserView({
          model: new User()
       });
+      this.userView.loadSample();
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);

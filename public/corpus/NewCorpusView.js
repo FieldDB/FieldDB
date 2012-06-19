@@ -63,6 +63,7 @@ define([
             },
             updateTitle : function(){
               this.model.set("title", this.$el.children(".title").val());
+              this.model.set("titleAsUrl", encodeURIComponent(this.$el.children(".title").val()));
             },
             updateDescription : function(){
               this.model.set("description", this.$el.children(".description").val());
