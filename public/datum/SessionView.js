@@ -54,13 +54,13 @@ define([
      * @param {Corpus} corpus The corpus associated with this Session.
      */
     loadSample : function(corpus) {
-//      this.model.set({
-//        user : "sapir",
-//        informant : "Tillohash",
-//        corpus : corpus,
-//        language : "Cusco Quechua",
-//        goal : "Which verbs can be affixed with -naya"
-//      });
+      this.model.set({
+        user : "sapir",
+        informant : "Tillohash",
+        corpus : corpus,
+        language : "Cusco Quechua",
+        goal : "Which verbs can be affixed with -naya"
+      });
     }
   });
   
