@@ -32,7 +32,7 @@ define([
      * Events that the UserPreferenceView is listening to and their handlers.
      */
     events:{
-      "click #skin": "randomSkin"
+      "click #skin": "nextSkin"
     },
  
     /**
@@ -49,47 +49,19 @@ define([
       }
       
       return this;
-    },	
+    },
     
-    // TODO Comment and implement this function
-    randomSkin : function(){
-
-//      function randomize(min, max) {
-//        if (!min)
-//          min = 0;
-//        if (!max)
-//          max = 1;
-//        return Math.floor(Math.random()*(max+1)+min);
-//      }
-      
-      var randombgs=["images/skins/bamboo_garden.jpg",
-                     "images/skins/llama_wool.jpg" , 
-                     "images/skins/machu_picchu.jpg",
-                     "images/skins/machu_picchu2.jpg",
-                     "images/skins/prague.jpg",
-                     "images/skins/salcantay.jpg",
-                     "images/skins/stairs.jpg",
-                     "images/skins/stone_figurines.jpg",
-                     "images/skins/temple.jpg",
-                     "images/skins/weaving.jpg",
-                     "images/skins/sunset.jpg",
-                     "images/skins/window.jpg",
-                     "images/skins/Ceske_Krumlov.jpg", 
-                     ];
-       
-      for(var i=0; i < randombgs.length; i++){
-        
-        document.body.style.backgroundImage = "url(" + randombgs[i] + ")";
-        
-        return i;
-
-      }
-
-    //  document.getElementById("app").style.backgroundImage="url('+Math.floor(Math.random()*randombgs.length)]+')");
-     // document.getElementById("app").style.backgroundImage = "url('../images/skins/temple.jpg')";
-
-      
-      return true;
+    /**
+     * The index into the Utils.backgrounds array that is the current skin.
+     */
+    currentSkin : 0,    
+    
+    /**
+     * Change to the next skin in the array of skins.
+     */
+    nextSkin : function() {
+      this.currentSkin = (this.currentSkin + 1) % Utils.backgrounds.length;
+      document.body.style.backgroundImage = "url(" + Utils.backgrounds[this.currentSkin] + ")";
     } 
   });
   
