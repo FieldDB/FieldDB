@@ -64,7 +64,7 @@ define([
         }
       }
       ////TODO added for #181
-      //TODO this is binding so that new items that are added to the corpus defaults, do trigger this, but for somereason the model is not an object but still a function when we get to the addfield 
+      //TODO this is binding so that new items that are added to the corpus defaults, do trigger this, but for some reason the model is not an object but still a function when we get to the add field 
 //      this.model.get("defaultDatumFields").bind('add', this.addField);
 
       
@@ -330,12 +330,6 @@ define([
       }
     }
     
-    
-    
-    
-    
-    
-
   });
 
   return DatumView;

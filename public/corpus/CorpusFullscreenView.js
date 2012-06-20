@@ -11,7 +11,6 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
-    //"datum/DatumStatesView",
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
@@ -31,7 +30,6 @@ define([
     DatumState,
     DatumStates,
     DatumStateEditView,
-  //  DatumStatesView,
     Permissions,
     PermissionsView,
     Sessions,
@@ -61,24 +59,14 @@ define([
         collection : this.model.get("dataLists")
       });
       
-      //Create a DatumFieldsView  
-    //  this.datumFieldsView = new DatumFieldsView({
-    //    collection : this.model.get("datumFields")
-    //  });
-      
+      //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li'
       });
-      
-      
-      // Create a DatumStatesView
-     // this.datumStatesView = new DatumStatesView({
-     //   collection : this.model.get("datumStates")
-     // });
-      
-      
+          
+      // Create a DatumStatesView    
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateEditView,
@@ -137,7 +125,11 @@ define([
 //              "click .show_corpora" : "showCorpora",
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
+      
+      //Add button inserts new Datum State
       "click .add_datum_state" : 'insertNewDatumState',
+      
+      //Add button inserts new Datum Field
       "click .add_datum_field" : 'insertNewDatumField'
     },
 
@@ -179,43 +171,39 @@ define([
       
       return this;
     },
-  
+
+     //Insert functions associate the values chosen with a new
+    // model in the collection, adding it to the collection, which in turn
+    // triggers a view thats added to
+    // the ul
     
-    
-    insertNewDatumField : function(){
+    //This the function called by the add button, it adds a new datum field both to the collection and the model
+    insertNewDatumField : function() {
       var checked = this.$el.children(".add_encrypted").is(':checked');
-      if(checked ){
+      if (checked) {
         checked = "checked";
-      }else{
+      } else {
         checked = "";
       }
-      
-      
       var m = new DatumField({
         "label" : this.$el.children(".choose_field").val(),
         "encrypted" : checked,
         "help" : this.$el.children(".help_text").val()
       });
-      
+
       this.model.get("datumFields").add(m);
     },
     
-    insertNewDatumState : function(){
+    //This the function called by the add button, it adds a new datum state both to the collection and the model
+    insertNewDatumState : function() {
       var m = new DatumField({
-        "state": this.$el.children(".add_input").val(), 
-        "color": this.$el.children(".add_color_chooser").val() });
+        "state" : this.$el.children(".add_input").val(),
+        "color" : this.$el.children(".add_color_chooser").val()
+      });
       this.model.get("datumStates").add(m);
     },
     
-    
   });
-  
-  
-
-    
-    
-    
-
 
   return CorpusView;
 });
