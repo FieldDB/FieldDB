@@ -5,6 +5,7 @@ define([
     "search/Search",
     "datum/DatumFields",
     "datum/DatumFieldView",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -12,7 +13,8 @@ define([
     advanced_searchTemplate,
     Search,
     DatumFields,
-    DatumFieldView
+    DatumFieldView,
+    UpdatingCollectionView
 ) {
   var AdvancedSearchView = Backbone.View.extend(
   /** @lends AdvancedSearchView.prototype */
@@ -30,6 +32,21 @@ define([
       Utils.debug("SEARCH init: " + this.el);
       
       this.model.bind('change', this.render, this);
+      
+      //grabbing datumFields from datum and session in the corpus
+      this.advancedSearchDatumView = new UpdatingCollectionView({
+        collection           : window.app.get("corpus").get("datumFields"),
+        childViewConstructor : DatumFieldView,
+        childViewTagName     : 'li'
+      });
+      this.advancedSearchSessionView = new UpdatingCollectionView({
+        collection           : window.app.get("corpus").get("sessionFields"),
+        childViewConstructor : DatumFieldView,
+        childViewTagName     : 'li'
+      });
+      
+      
+      
     },
     
     /**
@@ -48,7 +65,9 @@ define([
      * The Handlebars template rendered as the SearchView.
      */
     template : Handlebars.compile(advanced_searchTemplate),
-    
+    advancedSearchDatumView : UpdatingCollectionView,
+    advancedSearchSessionView : UpdatingCollectionView,
+   
     /**
      * Renders the SearchView.
      */
@@ -58,6 +77,14 @@ define([
         // Display the SearchView
         this.setElement($("#fullscreen-search-view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        
+
+        this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
+        this.advancedSearchDatumView.render();
+
+        this.advancedSearchSessionView.el = this.$('.advanced_search_session');
+        this.advancedSearchSessionView.render();
+
         
         Utils.debug("\trendering search: "+ this.model.get("searchKeywords"));
       } else {
