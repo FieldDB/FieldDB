@@ -5,8 +5,9 @@ define([
     "corpus/Corpus",
     "data_list/DataLists",
     "data_list/DataListsView",
+    "datum/DatumField",
     "datum/DatumFields",
-    "datum/DatumFieldsView",
+    "datum/DatumFieldEditView",
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
@@ -24,8 +25,9 @@ define([
     Corpus,
     DataLists,
     DataListsView,
+    DatumField,
     DatumFields,
-    DatumFieldsView,
+    DatumFieldEditView,
     DatumState,
     DatumStates,
     DatumStateEditView,
@@ -59,10 +61,11 @@ define([
         collection : this.model.get("dataLists")
       });
       
-      //Create a DatumFieldsView  
-      this.datumFieldsView = new DatumFieldsView({
-        collection : this.model.get("datumFields")
-      });      
+      this.datumFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li'
+      });
       
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
@@ -95,7 +98,7 @@ define([
     /**
      * The DatumFieldsView is a child of the CorpusView.
      */
-    datumFieldsView : DatumFieldsView, 
+    datumFieldsView : UpdatingCollectionView, 
     /**
      * The datumStatesView is a child of the CorpusView.
      */
@@ -123,8 +126,8 @@ define([
 //              "click .show_corpora" : "showCorpora",
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
-      "click .add_datum_state" : 'insertNewDatumState'
-
+      "click .add_datum_state" : 'insertNewDatumState',
+      "click .add_datum_field" : 'insertNewDatumField'
     },
 
     /**
@@ -146,6 +149,7 @@ define([
         this.dataListsView.render();
         
         // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$('.datum_fields_settings');
         this.datumFieldsView.render();
         
         // Display the DatumStatesView
@@ -167,8 +171,28 @@ define([
   
     
     
+    insertNewDatumField : function(){
+      var checked = this.$el.children(".add_encrypted").is(':checked');
+      if(checked ){
+        checked = "checked";
+      }else{
+        checked = "";
+      }
+      
+      
+      var m = new DatumField({
+        "label" : this.$el.children(".choose_field").val(),
+        "encrypted" : checked,
+        "help" : this.$el.children(".help_text").val()
+      });
+      
+      this.model.get("datumFields").add(m);
+    },
+    
     insertNewDatumState : function(){
-      var m = new DatumState({"state": this.$el.children(".add_input").val(), "color": this.$el.children(".add_color_chooser").val() });
+      var m = new DatumField({
+        "state": this.$el.children(".add_input").val(), 
+        "color": this.$el.children(".add_color_chooser").val() });
       this.model.get("datumStates").add(m);
     },
     
