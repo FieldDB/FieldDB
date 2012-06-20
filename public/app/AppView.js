@@ -97,9 +97,13 @@ define([
         model : this.model.get("corpus")
       });
       
-      // Create a DatumView
+      // Create a DatumView, passing in the default datum fields from the corpus incase they change. 
       this.fullScreenDatumView = new DatumView({
-        model : new Datum()
+        model : new Datum({
+          defaultDatumFields : this.model
+            .get("corpus")
+            .get("datumFields")
+        })
       });
       
       this.sessionEditView = new SessionEditView({
