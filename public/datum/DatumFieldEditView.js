@@ -36,7 +36,9 @@ define([
      * Events that the DatumStateEditView is listening to and their handlers.
      */
     events : {
-      "blur .datum_field_input" : "updateField",
+      "blur .choose_field" : "updateField",
+      "click .encrypted" : "updateEncrypted",
+      "blur .help_text" : "updateHelp",
     },
 
     /**
@@ -52,7 +54,7 @@ define([
       $(this.el).html(this.template(this.model.toJSON()));
       
 
-      // Select the correct value from the color dropdown
+      // Select the correct values from the model
       this.$el.children(".choose_field").val(this.model.get("label"));
       
       return this;
@@ -62,9 +64,25 @@ define([
      * Change the model's state.
      */
     updateField : function() {
-      Utils.debug("Updated field to " + this.$el.children(".datum_field_input").val());
+      Utils.debug("Updated label to " + this.$el.children(".datum_field_input").val());
       this.model.set("label", this.$el.children(".datum_field_input").val());
     },
+    updateEncrypted : function() {
+      var checked = this.$el.children(".encrypted").is(':checked');
+      if(checked ){
+        checked = "checked";
+      }else{
+        checked = "";
+      }
+      Utils.debug("Updated encrypted to " + checked);
+      this.model.set("encrypted", checked);
+    },
+    updateHelp : function() {
+      var help = this.$el.children(".help_text").val()
+      Utils.debug("Updated help to " + help);
+      this.model.set("help",help);
+    },
+
     
   });
 
