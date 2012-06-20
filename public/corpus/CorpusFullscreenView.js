@@ -5,12 +5,16 @@ define([
     "corpus/Corpus",
     "data_list/DataLists",
     "data_list/DataListsView",
+    "datum/DatumFields",
+    "datum/DatumFieldsView",
     "datum/DatumStates",
-    "datum/DatumStatesView",
+    "datum/DatumStateEditView",
+    //"datum/DatumStatesView",
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
     "datum/SessionsView",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -19,12 +23,16 @@ define([
     Corpus,
     DataLists,
     DataListsView,
+    DatumFields,
+    DatumFieldsView,
     DatumStates,
-    DatumStatesView,
+    DatumStateEditView,
+  //  DatumStatesView,
     Permissions,
     PermissionsView,
     Sessions,
-    SessionsView
+    SessionsView,
+    UpdatingCollectionView
 ) {
   var CorpusView = Backbone.View.extend(
   /** @lends CorpusView.prototype */
@@ -44,24 +52,37 @@ define([
     initialize : function() {
       Utils.debug("CORPUS DETAILS init: " + this.el);
       
-      // Create a DatumStatesView
-      this.datumStatesView = new DatumStatesView({
-        collection : this.model.get("datumStates")
-      });
-      
-      this.sessionsView = new SessionsView({
-        collection : this.model.get("sessions")
-      });
-      
+      //Create a DataList List
       this.dataListsView = new DataListsView({
         collection : this.model.get("dataLists")
       });
       
+      //Create a DatumFieldsView  
+      this.datumFieldsView = new DatumFieldsView({
+        collection : this.model.get("datumFields")
+      });
       
+      // Create a DatumStatesView
+     // this.datumStatesView = new DatumStatesView({
+     //   collection : this.model.get("datumStates")
+     // });
+      
+      
+      this.datumStatesView = new UpdatingCollectionView({
+        collection           : this.model.get("datumStates"),
+        childViewConstructor : DatumStateEditView,
+        childViewTagName     : 'li'
+      });
+      
+      //Create a Permissions View
       this.permissionsView = new PermissionsView({
         collection : this.model.get("permissions")
       });
       
+      //Create a Sessions List 
+      this.sessionsView = new SessionsView({
+        collection : this.model.get("sessions")
+      });
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -71,28 +92,27 @@ define([
      * The underlying model of the CorpusView is a Corpus.
      */    
     model : Corpus,
-    
-    /**
-     * The datumStatesView is a child of the CorpusView.
-     */
-    datumStatesView : DatumStatesView,
-    
-    /**
-     * The SessionsView is a child of the CorpusView.
-     */
-    sessionsView : SessionsView,
     /**
      * The DataListsView is a child of the CorpusView.
      */
     dataListsView : DataListsView,
     /**
-    * The PermissionssView is a child of the CorpusView.
-    */
-   permissionsView : PermissionsView,
+     * The DatumFieldsView is a child of the CorpusView.
+     */
+    datumFieldsView : DatumFieldsView, 
+    /**
+     * The datumStatesView is a child of the CorpusView.
+     */
+    datumStatesView : UpdatingCollectionView,
+    /**
+     * The PermissionsView is a child of the CorpusView.
+     */
+    permissionsView : PermissionsView,
+    /**
+     * The SessionsView is a child of the CorpusView.
+     */
+    sessionsView : SessionsView,
    
-    
-    
-    
     /**
      * Events that the CorpusView is listening to and their handlers.
      */
@@ -123,17 +143,21 @@ define([
         this.setElement($("#corpus-details-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the DatumStatesView
-        this.datumStatesView.render();
-        
-        // Display the SessionsView
-        this.sessionsView.render();
-        
         // Display the DataListsView
         this.dataListsView.render();
         
+        // Display the DatumFieldsView
+        this.datumFieldsView.render();
+        
+        // Display the DatumStatesView
+        this.datumStatesView.el = this.$('.datum_state_settings');
+        this.datumStatesView.render();
+        
         // Display the PermissionsView
         this.permissionsView.render();
+        
+        // Display the SessionsView
+        this.sessionsView.render();
         
       } else {
         Utils.debug("\tCorpus model was undefined.");

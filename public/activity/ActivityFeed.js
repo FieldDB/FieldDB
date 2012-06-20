@@ -1,6 +1,10 @@
-define([ "use!backbone", "activity/Activity"
+define([ 
+         "use!backbone", 
+         "activity/Activity"
 
-], function(Backbone, Activity) {
+], function(
+    Backbone, 
+    Activity) {
   var ActivityFeed = Backbone.Model.extend(
   /** @lends ActivityFeed.prototype */
   {
@@ -14,7 +18,9 @@ define([ "use!backbone", "activity/Activity"
      * @constructs
      */
     initialize : function() {
-    }
+    },
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
+        : Utils.activityFeedPouchUrl),
 
   });
 

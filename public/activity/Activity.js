@@ -16,7 +16,9 @@ define([ "use!backbone",
     initialize : function() {
 
     },
-
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
+        : Utils.activityFeedPouchUrl),
+        
     defaults : {
       user : User,
       verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],

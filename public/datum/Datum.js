@@ -1,7 +1,8 @@
 define([ "use!backbone",
-         "datum/AudioVideo", 
+         "audio_video/AudioVideo", 
          "comment/Comments",
          "datum/DatumField", 
+         "datum/DatumFields", 
          "datum/DatumState", 
          "datum/DatumTags", 
          "datum/Session",
@@ -10,6 +11,7 @@ define([ "use!backbone",
     AudioVideo, 
     Comments,
     DatumField, 
+    DatumFields,
     DatumState, 
     DatumTags,
     Session) {
@@ -63,23 +65,29 @@ define([ "use!backbone",
      * @constructs
      */
     initialize : function() {
+      if(typeof this.get("audioVideo") == "function"){
+        this.set("audioVideo",new AudioVideo());
+      }
+      
     },
 
     defaults : {
       // here are the attributes a datum minimally has to have, other fields can
       // be added within the datum widget.
-      audioVideo : AudioVideo,
-      utterance : DatumField,
+      judgement : DatumField,
+      utterence : DatumField,
       morphemes : DatumField,
       gloss : DatumField,
       translation : DatumField,
-      judgement : DatumField,
+      
+      audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
       datumState : DatumState,
       datumTags : DatumTags,
-      dateEntered : DatumField
-
+      dateEntered : DatumField,
+      
+      defaultDatumFields : DatumFields,
     },
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl

@@ -1,8 +1,9 @@
 define( [ 
     "use!backbone",
+    "use!handlebars",
     "import/Import",
     "text!import/import.handlebars"
-], function(Backbone,Import,importTemplate) {
+], function(Backbone,Handlebars, Import,importTemplate) {
   var ImportView = Backbone.View.extend({
     tagName : "div",
     className : "import",
