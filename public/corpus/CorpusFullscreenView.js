@@ -8,11 +8,13 @@ define([
     "datum/DatumFields",
     "datum/DatumFieldsView",
     "datum/DatumStates",
-    "datum/DatumStatesView",
+    "datum/DatumStateEditView",
+    //"datum/DatumStatesView",
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
     "datum/SessionsView",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -24,11 +26,13 @@ define([
     DatumFields,
     DatumFieldsView,
     DatumStates,
-    DatumStatesView,
+    DatumStateEditView,
+  //  DatumStatesView,
     Permissions,
     PermissionsView,
     Sessions,
-    SessionsView
+    SessionsView,
+    UpdatingCollectionView
 ) {
   var CorpusView = Backbone.View.extend(
   /** @lends CorpusView.prototype */
@@ -59,8 +63,15 @@ define([
       });
       
       // Create a DatumStatesView
-      this.datumStatesView = new DatumStatesView({
-        collection : this.model.get("datumStates")
+     // this.datumStatesView = new DatumStatesView({
+     //   collection : this.model.get("datumStates")
+     // });
+      
+      
+      this.datumStatesView = new UpdatingCollectionView({
+        collection           : this.model.get("datumStates"),
+        childViewConstructor : DatumStateEditView,
+        childViewTagName     : 'li'
       });
       
       //Create a Permissions View
@@ -92,7 +103,7 @@ define([
     /**
      * The datumStatesView is a child of the CorpusView.
      */
-    datumStatesView : DatumStatesView,
+    datumStatesView : UpdatingCollectionView,
     /**
      * The PermissionsView is a child of the CorpusView.
      */
@@ -139,6 +150,7 @@ define([
         this.datumFieldsView.render();
         
         // Display the DatumStatesView
+        this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
         
         // Display the PermissionsView
