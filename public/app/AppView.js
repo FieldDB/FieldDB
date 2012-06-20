@@ -103,7 +103,9 @@ define([
       
       // Create a SessionEditView
       this.sessionEditView = new SessionEditView({
-        model : new Session()
+        model : new Session({
+          sessionFields : this.model.get("corpus").get("sessionFields").clone()
+        })
       });
       
       var userToBePassedAround = new User();
