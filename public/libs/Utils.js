@@ -23,6 +23,19 @@ Utils.touchUrl = "http://localhost:8888/db";
  */
 Utils.pouchUrl = "idb://db";
 
+
+Utils.activityFeedCouchUrl = "http://trisapeace.iriscouch.com/activity_feed";
+/**
+ * The address of the TouchDB-Android database on the Android.
+ */
+Utils.activityFeedTouchUrl = "http://localhost:8888/activity_feed_db";
+
+/**
+ * The address of the PouchDB database on the browser.
+ */
+Utils.activityFeedPouchUrl = "idb://activity_feed_db";
+
+
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if
  * debugMode is true.
@@ -84,3 +97,19 @@ Utils.removeClass = function(ele, cls) {
 		ele.className = ele.className.replace(reg, ' ');
 	}
 };
+
+Utils.backgrounds = [
+  "images/skins/bamboo_garden.jpg",
+  "images/skins/llama_wool.jpg" , 
+  "images/skins/machu_picchu.jpg",
+  "images/skins/machu_picchu2.jpg",
+  "images/skins/prague.jpg",
+  "images/skins/salcantay.jpg",
+  "images/skins/stairs.jpg",
+  "images/skins/stone_figurines.jpg",
+  "images/skins/temple.jpg",
+  "images/skins/weaving.jpg",
+  "images/skins/sunset.jpg",
+  "images/skins/window.jpg",
+  "images/skins/Ceske_Krumlov.jpg", 
+];

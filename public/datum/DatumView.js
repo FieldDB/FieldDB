@@ -5,11 +5,14 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumField",
+    "datum/DatumFields",
     "datum/DatumFieldView",
     "datum/DatumState",
     "datum/DatumStateView",
     "datum/DatumTags",
     "datum/DatumTagsView",
+    "audio_video/AudioVideo",
+    "audio_video/AudioVideoView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -18,11 +21,14 @@ define([
     Confidential,
     Datum, 
     DatumField, 
+    DatumFields,
     DatumFieldView,
     DatumState,
     DatumStateView, 
     DatumTags, 
-    DatumTagsView
+    DatumTagsView,
+    AudioVideo,
+    AudioVideoView
 ) {
   var DatumView = Backbone.View.extend(
   /** @lends DatumView.prototype */
@@ -35,8 +41,12 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a DatumstateView
-
+     
+      // Create a AudioVideoView
+      this.audioVideoView = new AudioVideoView({
+        model : this.model.get("audioVideo")
+      });
+      
       // Create a DatumStateView
       this.stateview = new DatumStateView({
         model : this.model.get("state")
@@ -46,11 +56,25 @@ define([
       this.tagsview = new DatumTagsView({
         model : this.model.get("datumTag")
       });
+      
 
-      // Create a DatumFieldView
-      this.fieldview = new DatumFieldView({
-        model : this.model.get("datumField")
-      });
+      var defaultDatumFields = new DatumFields([new DatumField(),new DatumField(), new DatumField()]);
+
+      if (window.appView) {
+        defaultDatumFields = appView.model.get("corpus").get("datumFields");
+        if(typeof(defaultDatumFields) == "function"){
+          defaultDatumFields =  new DatumFields([new DatumField(),new DatumField(), new DatumField()]); 
+        }
+      } 
+      
+      for(d in defaultDatumFields.models ){
+        this.addField(defaultDatumFields.models[d]);  
+      }
+    //  this.collection.bind('addField', this.addField);
+
+      
+      
+     
 
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -60,6 +84,11 @@ define([
      * The underlying model of the DatumView is a Datum.
      */
     model : Datum,
+
+    /**
+     * The audioVideoView is not a partial of the DatumView, it must be called to render it.
+     */
+    audioVideoView : AudioVideoView,
 
     /**
      * The stateview is a partial of the DatumView.
@@ -72,9 +101,10 @@ define([
     tagsview : DatumTagsView,
 
     /**
-     * The fieldview is a partial of the DatumView.
+     * The datumFieldViews array holds all of the children of the
+     * DatumFieldView.
      */
-    fieldview : DatumFieldView,
+    datumFieldViews : [],
 
     /**
      * Events that the DatumView is listening to and their handlers.
@@ -101,15 +131,28 @@ define([
      */
     render : function() {
       Utils.debug("DATUM render: " + this.el);
+      
       if (this.model != undefined) {
-
+        //We are keeping track of whether this has been rendered.
+        this._rendered = true;
+        
         // Display the DatumView
         this.setElement($("#datum-view"));
         $(this.el).html(this.template(this.model.toJSON()));
-
+        
+        //Display StateView
         this.stateview.render();
+        
+        //Display audioVideo View
+        this.audioVideoView.render();
+        
+        //Display each DatumFieldView
+        _(this.datumFieldViews).each(function(dv) {
+          $('.datum_fields_ul').append(dv.render().el);
+          dv.delegateEvents();
+        });   
       } else {
-        Utils.debug("\tDatum model was undefined");
+        Utils.debug("\tDatum model was undefined");      
       }
 
       return this;
@@ -246,7 +289,51 @@ define([
           }
         });
       }
+    },
+    
+    
+    
+   //These are functions relating to the datumField 
+    addField : function(d) {
+      
+      
+      this.model.set(d.get("label"), "");
+      
+      // We create an updating DatumFieldView for each DatumField that is added.
+      var dv = new DatumFieldView({
+        tagName : 'li',
+        className : 'datum_field_li',
+        model : d
+      });
+   
+      // And add it to the collection so that it's easy to reuse.
+      this.datumFieldViews.push(dv);
+   
+      // If the view has been rendered, then
+      // we immediately append the rendered datumField.
+      if (this._rendered) {
+        $('.datum_fields_ul').append(dv.render().el);
+      }
+    },
+    addNewFieldtoCorpusDefaults : function(){
+//      var m = new DatumField({"field": this.$el.children(".add_input").val()});
+//      this.collection.add(m);
+    
+    },
+    removeField : function(model) {
+      var viewToRemove = _(this.datumFieldViews).select(function(cv) { return cv.model === model; })[0];
+      this.datumFieldViews = _(this.datumFieldViews).without(viewToRemove);
+   
+      if (this._rendered) {
+        $(viewToRemove.el).remove();
+      }
     }
+    
+    
+    
+    
+    
+    
 
   });
 

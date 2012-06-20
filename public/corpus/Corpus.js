@@ -1,24 +1,26 @@
 define([ 
     "use!backbone",
     "confidentiality_encryption/Confidential", 
-//    "user/Informants", 
+    "data_list/DataLists",
+    "datum/DatumField",
+    "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
-//    "datum/DatumFields,"
-    "datum/Sessions",
-    "data_list/DataLists",
+//  "user/Informants",
     "permission/Permissions",
+    "datum/Sessions",
     "libs/Utils"
 ], function(
     Backbone, 
     Confidential, 
-//    Informants, 
+    DataLists,
+    DatumField,
+    DatumFields, 
     DatumState,
     DatumStates,
-//    DatumFields, 
-    Sessions, 
-    DataLists, 
-    Permissions
+//  Informants,
+    Permissions,
+    Sessions
 ) {
   var Corpus = Backbone.Model.extend(
     /** @lends Corpus.prototype */
@@ -82,6 +84,15 @@ define([
             color : "important"
           }) 
         ]));
+        
+        
+
+          this.set("datumFields", new DatumFields([ 
+            new DatumField(),
+            new DatumField({
+            label : "IPA Transcription",
+          })
+          ]));
 
       },
       
@@ -90,11 +101,11 @@ define([
         titleAsUrl :"",
         description : "",
         confidential :  Confidential,
-//        informants : Informants,
+// informants : Informants,
         datumStates : DatumStates,
-//        datumFields : DatumFields, 
+        datumFields : DatumFields, 
         sessions : Sessions, 
-        datalists : DataLists, //TODO capitalize L?
+        datalists : DataLists, // TODO capitalize L?
         permissions : Permissions
         
       },

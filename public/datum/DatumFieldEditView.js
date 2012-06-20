@@ -1,7 +1,7 @@
 define([ 
          "use!backbone",
          "use!handlebars", 
-         "text!datum/datum_field.handlebars",
+         "text!datum/datum_edit_field.handlebars",
          "datum/DatumField"
   ], function(
       Backbone, 
