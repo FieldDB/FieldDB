@@ -34,7 +34,8 @@ define([ "use!backbone"
       encrypted : false,
       help : ""
     },
- // in your Model validate function
+    
+    // in your Model validate function
     validate: function(attrs) {
       if (!attrs.mask) {
         attrs.mask = "hi empty mask";
