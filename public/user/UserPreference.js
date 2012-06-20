@@ -2,8 +2,8 @@ define( [
     "use!backbone",
     "hotkey/HotKeyConfigView"
 ], function(Backbone, HotKeyConfigView) {
-  var Preference = Backbone.Model.extend(
-      /** @lends Preference.prototype */
+  var UserPreference = Backbone.Model.extend(
+      /** @lends UserPreference.prototype */
       {
         /**
          * @class Hold preferences for users like the skin of the app
@@ -15,9 +15,9 @@ define( [
         initialize : function() {
         },
         defaults : {
-          skin: ""
+          skin: ""//TODO, make this a random skin, and load the background image from here somehow...
         }
       });
 
-  return Preference;
+  return UserPreference;
 });
