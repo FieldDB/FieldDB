@@ -97,7 +97,7 @@ define([
               help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
             }),
             new DatumField({
-              label : "utterence",
+              label : "utterance",
               encrypted: "checked",
               userchosen: "disabled",
               help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"

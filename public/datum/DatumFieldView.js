@@ -24,7 +24,7 @@ define([
       Utils.debug("DATUM FIELD init");
     
       // If the model changes, re-render
-      this.model.bind('change', this.render, this);
+      // this.model.bind('change', this.render, this);
     },
     
     /**
@@ -59,9 +59,8 @@ define([
      */
     updateField : function() {
       Utils.debug("Updated field to " + this.$el.children(".datum_field_input").val());
-      this.model.set("label", this.$el.children(".datum_field_input").val());
-    },
-    
+      this.model.set("value", this.$el.children(".datum_field_input").val());
+    }
   });
 
   return DatumFieldView;
