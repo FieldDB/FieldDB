@@ -44,6 +44,9 @@ define([ "use!backbone",
 //        this.set("corpuses", new Corpuses());
 //        this.get("corpuses").add(new Corpus({title: "test corpus filled in user generic"}));
 //      }
+      if(typeof(this.get("prefs") == "function")){
+        this.set("prefs",new UserPreference());
+      }
     },
 
     // This is an list of attributes and their default values
@@ -69,7 +72,7 @@ define([ "use!backbone",
       dataLists : [],
       // UserPreferences are where we'll have things like background/skin
       // options.
-      prefs : new UserPreference()
+      prefs : UserPreference
 
     },
     
