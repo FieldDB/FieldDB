@@ -42,7 +42,13 @@ define([
       this.collection.each(this.add);
    
       //TODO bind change/push/pop events on the array to functions which add the corpus to the collection also
+      if(this.array == undefined){
+        this.array = [];
+      }
       
+//      _bind(this.addModel, this.array.push);
+//      this.array.bind("push",this.addModel)
+//      this.array.bind("pop",this.addModel)
       
       // Bind this view to the add and remove events of the collection
       this.collection.bind('add', this.add);
@@ -79,7 +85,9 @@ define([
 
       return this;
     },
-    
+    addModel : function(id){
+      alert("new corpus id added: "+id);
+    },
     add : function(d) {
       // We create an updating CorpusGlimpseView for each Corpus that is added.
       var dv = new CorpusGlimpseView({

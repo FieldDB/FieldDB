@@ -312,14 +312,19 @@ define([
         // Display the UserPreferenceView
         this.userPreferenceView.render();
         
+        //Display ActivityFeedView
         this.activityFeedView.render();
         
+        //Display HotKeysView
         this.hotkeyConfigView.render();//.showModal();
 
+        //Display NewDataListView
         this.newDataListView.render();
-
+        
+        //Display NewCorpusView
         this.newCorpusView.render();
          
+        //Display ImportView
         this.importView.render();
         
         // Dispaly the CorpusFullscreenView
@@ -340,7 +345,7 @@ define([
       
       this.model.get("corpus").set({
         "title" : "Quechua Corpus",
-        "nameAsUrl": "Quechua_Corpus",
+        "titleAsUrl": "Quechua_Corpus",
         "description" : "This is a corpus which will let you explore the app and see how it works. "
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
@@ -364,6 +369,25 @@ define([
           Utils.debug(err);
         });
         db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate from");
+          Utils.debug(resp);
+          Utils.debug(err);
+        });
+      });
+    },
+    /**
+     * Synchronize the activity feed server and local databases.
+     * TODO change this line in case it is called on the wrong model
+     *  this.activityFeedView.model.pouch(
+     */
+    replicateActivityFeedDatabase : function() {
+      this.activityFeedView.model.pouch(function(err, db) {
+        db.replicate.to(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate to");
+          Utils.debug(resp);
+          Utils.debug(err);
+        });
+        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
           Utils.debug("Replicate from");
           Utils.debug(resp);
           Utils.debug(err);
