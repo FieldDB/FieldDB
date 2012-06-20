@@ -49,7 +49,7 @@ define([
      * Renders the DatumFieldView.
      */
     render : function() {
-      Utils.debug("DATUM FIELD render");
+      Utils.debug("DATUM FIELD EDIT render");
      
       $(this.el).html(this.template(this.model.toJSON()));
       

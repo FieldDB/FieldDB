@@ -1,11 +1,13 @@
 define([ 
     "use!backbone",
     "datum/Datum",
+    "datum/DatumView",
     "datum/Session",
     "libs/Utils"
 ], function(
     Backbone,
     Datum,
+    DatumView,
     Session
 ) {
   var AppRouter = Backbone.Router.extend(
@@ -42,7 +44,6 @@ define([
       "import" : "showImport",
       "" : "showDashboard",
     },
-
     
     /**
      * Displays the dashboard view of the given corpusName, if one was given. Or
@@ -55,14 +56,10 @@ define([
       Utils.debug("In showDashboard: " + corpusName);
 
       this.hideEverything();
-
       $("#dashboard-view").show();
       $("#fullscreen-corpus-view").show();
     },
 
-      
-    
-    
     /**
      * TODO do we need this to be full screen? why not a pop-up? 
      * Displays a a page where the user can create a new corpus. 
@@ -76,7 +73,6 @@ define([
       Utils.debug("In newFullscreenCorpus: " );
 
       this.hideEverything();
-
       $("#dashboard-view").show();
       $("#new-corpus").show();
     },
@@ -92,11 +88,9 @@ define([
 
       alert("TODO, go get the corpus that matches this name");
       this.hideEverything();
-
       $("#dashboard-view").show();
       $("#corpus-info-view").show();
     },
-
     
     /**
      * Displays the fullscreen view of the datum specified by the given
@@ -125,7 +119,6 @@ define([
           
           // Display the fullscreen datum view and hide all the other views
           self.hideEverything();
-
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
         },
@@ -133,25 +126,22 @@ define([
         error : function() {
           Utils.debug("Datum does not exist: " + datumId);
           
-          // Create a new Datum (passing it the default datum fields from the
+          // Create a new Datum (cloning the default datum fields from the
           // corpus in case they changed) and render it
-          appView.fullScreenDatumView.model = new Datum({
-            datumFields : app.get("corpus").get("datumFields")
+          appView.fullScreenDatumView = new DatumView({
+            model : new Datum({
+              datumFields : app.get("corpus").get("datumFields").clone()
+            })
           });
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views
-
           self.hideEverything();
-          
           $("#dashboard-view").show();
           $("#fullscreen-datum-view").show();
-
         },
       });
     },
-    
-    
     
     /**
      * Displays the fullscreen view of the session specified by the given
@@ -196,7 +186,6 @@ define([
         }
       });
     },
-   
     
     /**
      * Displays the fullscreen view of the datalist specified by the given
@@ -213,7 +202,6 @@ define([
           + dataListId);
 
       this.hideEverything();
-     
       $("#dashboard-view").show();
       $("#fullscreen-datalist-view").show();      
     },
@@ -230,15 +218,10 @@ define([
       Utils.debug("In newFullscreenDataList: " + corpusName);
 
       this.hideEverything();
-      
       $("#dashboard-view").show();
       $('#new_data_list').show();
-      
     },
     
-
-   
-
     /**
      * Display the fullscreen view of search within the corpus specified by the
      * given corpusName.
@@ -250,16 +233,11 @@ define([
       Utils.debug("In showAdvancedSearch: " + corpusName);
 
       this.hideEverything();
-      
       $("#dashboard-view").show();
       $("#fullscreen-search-view").show();
       $("#corpus").show();
       $("#activity_feed").show();
-     
-
     },
-
-   
 
     /**
      * Displays the profile of the user specified by the given userName.
@@ -277,10 +255,8 @@ define([
       );
 
       this.hideEverything();
-      
       $("#dashboard-view").show();
       $("#fullscreen-user-profile-view").show();
-
     },
 
     /**
@@ -293,7 +269,6 @@ define([
       Utils.debug("In showUserPreferences: " + userName);
       
       this.hideEverything();
- 
       $("#dashboard-view").show();
       $("#fullscreen-datalist-view").show();
       $("#user-preferences-view").show();
@@ -304,11 +279,9 @@ define([
       Utils.debug("In showDatumPreferences: " + userName);
 
       this.hideEverything();
-      
       $("#dashboard-view").show();
       $("#fullscreen-datalist-view").show();
       $("#datum-preferences-view").show();
-      
     },
     
     
@@ -316,54 +289,43 @@ define([
       Utils.debug("In showHotKeyConfig: " + userName);
 
       this.hideEverything();
-      
-        $("#dashboard-view").show();
-        $("#fullscreen-datalist-view").show();
-        $("#hotkey-config-view").show();
-
-      },
+      $("#dashboard-view").show();
+      $("#fullscreen-datalist-view").show();
+      $("#hotkey-config-view").show();
+    },
     
-      
-      showImport : function() {
-        Utils.debug("In import: ");
+    showImport : function() {
+      Utils.debug("In import: ");
 
-        this.hideEverything();
-        $("#dashboard-view").show();
-        $('#import').show();
-
-
-
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $('#import').show();
     },
     
     showExport : function(corpusName) {
-        Utils.debug("In showExport: " + corpusName);
+      Utils.debug("In showExport: " + corpusName);
 
-
-        this.hideEverything();
-        $("#dashboard-view").show();
-        $('#export-view').show();
-          
-
-      },
-      
-      hideEverything: function() {
-          $("#dashboard-view").hide();
-          $("#fullscreen-datum-view").hide();
-          $("#new-session-view").hide();
-          $("#fullscreen-datalist-view").hide();
-          $("#fullscreen-search-view").hide();
-          $("#fullscreen-user-profile-view").hide();
-          $("#fullscreen-corpus-view").hide();
-          $("#user-preferences-view").hide();
-          $("#datum-preferences-view").hide();
-          $("#hotkey-config-view").hide();
-          $('#new_data_list').hide();
-          $("#new-corpus").hide();
-          $('#export-view').hide();
-          $('#import').hide();
-      }
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $('#export-view').show();
+    },
     
-    
+    hideEverything: function() {
+      $("#dashboard-view").hide();
+      $("#fullscreen-datum-view").hide();
+      $("#new-session-view").hide();
+      $("#fullscreen-datalist-view").hide();
+      $("#fullscreen-search-view").hide();
+      $("#fullscreen-user-profile-view").hide();
+      $("#fullscreen-corpus-view").hide();
+      $("#user-preferences-view").hide();
+      $("#datum-preferences-view").hide();
+      $("#hotkey-config-view").hide();
+      $('#new_data_list').hide();
+      $("#new-corpus").hide();
+      $('#export-view').hide();
+      $('#import').hide();
+    }
   });
 
   return AppRouter;

@@ -54,9 +54,6 @@ define([
         childViewConstructor : DatumFieldView,
         childViewTagName     : "li"
       });
-      
-      // If the model changes, re-render
-      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -91,8 +88,8 @@ define([
       "click #new" : "newDatum",
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
-      "change" : "updatePouch",
-      "click .datum_state_select" : "renderState"
+      "click .datum_state_select" : "renderState",
+      "change" : "updatePouch"
     },
 
     /**
@@ -229,13 +226,7 @@ define([
         this.needsSave = false;
 
         Utils.debug("Saving the Datum");
-        this.model.save(null, {
-          success : function(model, response) {
-            if (location.hash.indexOf("/new") != -1) {
-              location.hash = location.hash.replace("/new", "/" + model.id);
-            }
-          }
-        });
+        this.model.save();
       }
     }
   });
