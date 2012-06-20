@@ -62,13 +62,7 @@ define([
       //Create a DatumFieldsView  
       this.datumFieldsView = new DatumFieldsView({
         collection : this.model.get("datumFields")
-      });
-      
-      // Create a DatumStatesView
-     // this.datumStatesView = new DatumStatesView({
-     //   collection : this.model.get("datumStates")
-     // });
-      
+      });      
       
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
@@ -106,7 +100,7 @@ define([
      * The datumStatesView is a child of the CorpusView.
      */
     datumStatesView : UpdatingCollectionView,
-    datumStateViews : [],
+
     /**
      * The PermissionsView is a child of the CorpusView.
      */

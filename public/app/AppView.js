@@ -16,6 +16,7 @@ define([
     "data_list/DataListView",
     "data_list/NewDataListView",
     "datum/Datum",
+    "datum/DatumFields",
     "datum/DatumView", 
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
@@ -51,6 +52,7 @@ define([
     DataListView,
     NewDataListView,
     Datum,
+    DatumFields,
     DatumView,
     HotKey,
     HotKeyConfigView,
@@ -91,10 +93,11 @@ define([
         model : this.model.get("corpus")
       });
       
-      // Create a DatumView, passing in the default datum fields from the corpus incase they change. 
+      // Create a DatumView, cloning the default datum fields from the corpus 
+      // in case they changed 
       this.fullScreenDatumView = new DatumView({
         model : new Datum({
-          datumFields : this.model.get("corpus").get("datumFields")
+          datumFields : this.model.get("corpus").get("datumFields").clone()
         })
       });
       
