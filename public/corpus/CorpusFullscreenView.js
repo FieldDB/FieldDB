@@ -7,6 +7,7 @@ define([
     "data_list/DataListsView",
     "datum/DatumFields",
     "datum/DatumFieldsView",
+    "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
     //"datum/DatumStatesView",
@@ -25,6 +26,7 @@ define([
     DataListsView,
     DatumFields,
     DatumFieldsView,
+    DatumState,
     DatumStates,
     DatumStateEditView,
   //  DatumStatesView,
@@ -104,6 +106,7 @@ define([
      * The datumStatesView is a child of the CorpusView.
      */
     datumStatesView : UpdatingCollectionView,
+    datumStateViews : [],
     /**
      * The PermissionsView is a child of the CorpusView.
      */
@@ -126,6 +129,8 @@ define([
 //              "click .show_corpora" : "showCorpora",
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
+      "click .add_datum_state" : 'insertNewDatumState'
+
     },
 
     /**
@@ -164,8 +169,24 @@ define([
       }
       
       return this;
-    }
+    },
+  
+    
+    
+    insertNewDatumState : function(){
+      var m = new DatumState({"state": this.$el.children(".add_input").val(), "color": this.$el.children(".add_color_chooser").val() });
+      this.model.get("datumStates").add(m);
+    },
+    
+    
   });
+  
+  
+
+    
+    
+    
+
 
   return CorpusView;
 });

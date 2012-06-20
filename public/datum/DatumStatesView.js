@@ -70,7 +70,7 @@ define([
       return this;
     },
     
-    add : function(d) {
+    addState : function(d) {
       // We create an updating DatumStateView for each DatumState that is added.
       var dv = new DatumStateEditView({
         tagName : 'li',
