@@ -133,8 +133,11 @@ define([
         error : function() {
           Utils.debug("Datum does not exist: " + datumId);
           
-          // Create a new Datum and render it
-          appView.fullScreenDatumView.model = new Datum();
+          // Create a new Datum (passing it the default datum fields from the
+          // corpus in case they changed) and render it
+          appView.fullScreenDatumView.model = new Datum({
+            datumFields : app.get("corpus").get("datumFields")
+          });
           appView.fullScreenDatumView.render();
           
           // Display the fullscreen datum view and hide all the other views

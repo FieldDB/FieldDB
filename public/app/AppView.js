@@ -30,11 +30,8 @@ define([
     "datum/SessionEditView",
     "user/User",
     "user/UserProfileView",
-    "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
     "export/Export",
     "export/ExportView",
-    "user/UserProfileView",   
     "libs/Utils"
 ], function(
     Backbone, 
@@ -68,11 +65,8 @@ define([
     SessionEditView,
     User,
     UserProfileView,
-    HotKey,
-    HotKeyConfigView,
     Export,
-    ExportView,
-    UserProfileView
+    ExportView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -100,18 +94,18 @@ define([
       // Create a DatumView, passing in the default datum fields from the corpus incase they change. 
       this.fullScreenDatumView = new DatumView({
         model : new Datum({
-          defaultDatumFields : this.model
-            .get("corpus")
-            .get("datumFields")
+          datumFields : this.model.get("corpus").get("datumFields")
         })
       });
       
+      // Create a SessionEditView
       this.sessionEditView = new SessionEditView({
         model : new Session()
       });
       
       var userToBePassedAround = new User();
-   // Create an AuthenticationView
+      
+      // Create an AuthenticationView
       this.authView = new AuthenticationView({
         model : new Authentication({user: userToBePassedAround})
       });
@@ -124,7 +118,7 @@ define([
       // Create a DataListView   
       this.dataListView = new DataListView({
         model : new DataList({
-          
+          // TODO Remove this dummy data once we have real datalists working
           datumIds : [
             "574e79f1c0c02df02b116ac71a0008f0",
             "574e79f1c0c02df02b116ac71a000b3a"
@@ -136,10 +130,13 @@ define([
       this.searchView = new SearchView({
         model : new Search()
       });
+      
+      // Create an AdvancedSearchView
       this.advancedSearchView = new AdvancedSearchView({
         model : new Search()
       });
       
+      // Create a UserPreferenceView
       this.userPreferenceView = new UserPreferenceView({
         model : userToBePassedAround.get("prefs")
       });
@@ -158,7 +155,6 @@ define([
       this.hotkeyConfigView = new HotKeyConfigView({
         model : new HotKey()
       });  
-      
       
       // Create an ExportView
       this.exportView = new ExportView({
