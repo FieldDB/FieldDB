@@ -58,7 +58,6 @@ define([
       this.dataListsView = new DataListsView({
         collection : this.model.get("dataLists")
       });
-      
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -66,7 +65,6 @@ define([
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li'
       });
-
           
       // Create a DatumStatesView    
       this.datumStatesView = new UpdatingCollectionView({
@@ -180,21 +178,25 @@ define([
     // triggers a view thats added to
     // the ul
     
-    //This the function called by the add button, it adds a new datum field both to the collection and the model
+    // This the function called by the add button, it adds a new datum field both to the 
+    // collection and the model
     insertNewDatumField : function() {
-      var checked = this.$el.children(".add_encrypted").is(':checked');
-      if (checked) {
-        checked = "checked";
-      } else {
-        checked = "";
-      }
+      // Remember if the encryption check box was checked
+      var checked = this.$el.children(".add_encrypted").is(':checked') ? "checked" : "";
+      
+      // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label" : this.$el.children(".choose_field").val(),
+        "label" : this.$el.children(".choose_add_field").val(),
         "encrypted" : checked,
-        "help" : this.$el.children(".help_text").val()
+        "help" : this.$el.children(".add_help").val()
       });
 
+      // Add the new DatumField to the Corpus' list fo datumFields
       this.model.get("datumFields").add(m);
+      
+      // Reset the line with the add button
+      this.$el.children(".choose_add_field").children("option:eq(0)").attr("selected", true);
+      this.$el.children(".add_help").val("");
     },
     
     //This the function called by the add button, it adds a new datum state both to the collection and the model
