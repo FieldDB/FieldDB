@@ -139,9 +139,6 @@ define([
 //              "click .export" : "showExport"
       "click .add_datum_state" : 'insertNewDatumState',
       "click .add_datum_field" : 'insertNewDatumField'
-
-      
-
     },
 
     /**
