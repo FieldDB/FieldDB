@@ -16,6 +16,7 @@ define([
     "data_list/DataListView",
     "data_list/NewDataListView",
     "datum/Datum",
+    "datum/DatumFields",
     "datum/DatumView", 
     "hotkey/HotKey",
     "hotkey/HotKeyConfigView",
@@ -30,11 +31,8 @@ define([
     "datum/SessionEditView",
     "user/User",
     "user/UserProfileView",
-    "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
     "export/Export",
     "export/ExportView",
-    "user/UserProfileView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -54,6 +52,7 @@ define([
     DataListView,
     NewDataListView,
     Datum,
+    DatumFields,
     DatumView,
     HotKey,
     HotKeyConfigView,
@@ -68,11 +67,8 @@ define([
     SessionEditView,
     User,
     UserProfileView,
-    HotKey,
-    HotKeyConfigView,
     Export,
-    ExportView,
-    UserProfileView
+    ExportView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -92,35 +88,40 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
       
-      //This is a model user that the other views can use.
-      var userToBePassedAround = new User();
+      // Create a CorpusView for the Corpus in the App
+      this.corpusView = new CorpusView({
+        model : this.model.get("corpus")
+      });
       
-      // Create an ActivityFeedView
-      this.activityFeedView = new ActivityFeedView({
-        model : new ActivityFeed()
-      }); 
+      // Create a DatumView, cloning the default datum fields from the corpus 
+      // in case they changed 
+      this.fullScreenDatumView = new DatumView({
+        model : new Datum({
+          datumFields : this.model.get("corpus").get("datumFields").clone()
+        })
+      });
+      
+      // Create a SessionEditView
+      this.sessionEditView = new SessionEditView({
+        model : new Session()
+      });
+      
+      var userToBePassedAround = new User();
       
       // Create an AuthenticationView
       this.authView = new AuthenticationView({
         model : new Authentication({user: userToBePassedAround})
       });
       
-      //Creates an Advanced Search View
-      this.advancedSearchView = new AdvancedSearchView({
-        model : new Search()
-      }); 
-      
-     
-      
-      // Create a CorpusView for the Corpus in the App
-      this.corpusView = new CorpusView({
-        model : this.model.get("corpus")
+      // Create a UserProfileView
+      this.fullScreenUserView = new UserProfileView({
+        model : userToBePassedAround
       });
       
       // Create a DataListView   
       this.dataListView = new DataListView({
         model : new DataList({
-          
+          // TODO Remove this dummy data once we have real datalists working
           datumIds : [
             "574e79f1c0c02df02b116ac71a0008f0",
             "574e79f1c0c02df02b116ac71a000b3a"
@@ -128,77 +129,61 @@ define([
         })
       });
       
-      // Create an ExportView
-      this.exportView = new ExportView({
-        model : new Export()
+      // Create a SearchView
+      this.searchView = new SearchView({
+        model : new Search()
+      });
+      
+      // Create an AdvancedSearchView
+      this.advancedSearchView = new AdvancedSearchView({
+        model : new Search()
+      });
+      
+      // Create a UserPreferenceView
+      this.userPreferenceView = new UserPreferenceView({
+        model : userToBePassedAround.get("prefs")
+      });
+      
+      // Create an ActivityFeedView
+      this.activityFeedView = new ActivityFeedView({
+        model : new ActivityFeed()
       }); 
-      
-      // Create a CorpusEditView
-      this.fullscreenCorpusView = new CorpusFullscreenView({
-        model : this.model.get("corpus")
-      });
-      
-      // Create a DatumView, passing in the default datum fields from the corpus incase they change. 
-      this.fullScreenDatumView = new DatumView({
-        model : new Datum({
-          defaultDatumFields : this.model
-            .get("corpus")
-            .get("datumFields")
-        })
-      });
-      
-      // Create a UserProfileView
-      this.fullScreenUserView = new UserProfileView({
-        model : userToBePassedAround
-      });
-           
-      // Create a HotKeyConfigView
-      this.hotkeyConfigView = new HotKeyConfigView({
-        model : new HotKey()
-      });  
-      
-      // Create an ImportView
-      this.importView = new ImportView({
-        model : new Import()
-      });
-      
-      // Create a NewCorpusView
-      this.newCorpusView = new NewCorpusView({
-        model : new Corpus()
-      });
       
       // Create an newDataListView
       this.newDataListView = new NewDataListView({
         model : new DataList()
       });  
       
-      // Create a SearchView
-      this.searchView = new SearchView({
-        model : new Search()
+      // Create a HotKeyConfigView
+      this.hotkeyConfigView = new HotKeyConfigView({
+        model : new HotKey()
+      });  
+      
+      // Create an ExportView
+      this.exportView = new ExportView({
+        model : new Export()
+      }); 
+
+      // Create a NewCorpusView
+      this.newCorpusView = new NewCorpusView({
+        model : new Corpus()
+      });
+
+      // Create a CorpusEditView
+      this.fullscreenCorpusView = new CorpusFullscreenView({
+        model : this.model.get("corpus")
       });
       
-      //Create a Session Edit View
-      this.sessionEditView = new SessionEditView({
-        model : new Session()
+      // Create an ImportView
+      this.importView = new ImportView({
+        model : new Import()
       });
-      
-      //User Preference Views
-      this.userPreferenceView = new UserPreferenceView({
-        model : userToBePassedAround.get("prefs")
-      });
-      
-     
-           
+
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
     },
     
-    /**
-     * The advancedSearchView is a child of the AppView.
-     */
-    advancedSearchView : AdvancedSearchView,
-  
     /**
      * The underlying model of the AppView is an App.
      */
@@ -231,7 +216,10 @@ define([
      */
     searchView : SearchView,
     
-  
+    /**
+     * The advancedSearchView is a child of the AppView.
+     */
+    advancedSearchView : AdvancedSearchView,
   
     /**
      * The authView is a child of the AppView.
@@ -302,7 +290,6 @@ define([
         // Display the CorpusView
         this.corpusView.render();
         
-        //Display the Export View
         this.exportView.render();
         
         // Display the DatumView
@@ -317,9 +304,8 @@ define([
         // Display the SearchView
         this.searchView.render();
         
-        //Display the Advanced Search View
         this.advancedSearchView.render();
-      
+        
         // Display the AuthView
         this.authView.render();
         
