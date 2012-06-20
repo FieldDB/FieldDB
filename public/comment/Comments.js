@@ -1,5 +1,7 @@
-define( [ "use!backbone"
-], function(Backbone) {
+define( [ "use!backbone",
+          "comment/Comment",
+          "libs/Utils"
+], function(Backbone, Comment) {
   var Comments = Backbone.Collection.extend(
 
   /** @lends Comments.prototype  */
@@ -13,12 +15,22 @@ define( [ "use!backbone"
      * 
      */
     initialize : function() {
-      this.bind('error', function(model, error) {
-        // TODO Handle validation errors
-      });
+    },
+    
 
-      model: Comment;
-    }
+    model: Comment,
+    
+    
+    clone : function() {
+        var newCollection = new Comments();
+        
+        for (var i = 0; i < this.length; i++) {
+          newCollection.push(new Comment(this.models[i].toJSON())); 
+        }
+        
+        return newCollection;
+      }
+    
   });
 
   return Comments;
