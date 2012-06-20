@@ -72,12 +72,13 @@ define([ "use!backbone",
     defaults : {
       // here are the attributes a datum minimally has to have, other fields can
       // be added within the datum widget.
-      audioVideo : AudioVideo,
-      utterance : DatumField,
+      judgement : DatumField,
+      utterence : DatumField,
       morphemes : DatumField,
       gloss : DatumField,
       translation : DatumField,
-      judgement : DatumField,
+      
+      audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
       datumState : DatumState,

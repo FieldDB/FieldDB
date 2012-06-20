@@ -74,7 +74,7 @@ define([
       // We create an updating DatumFieldEditView for each DatumField that is added.
       var dv = new DatumFieldEditView({
         tagName : 'li',
-        className : 'datum_field_li',
+        className : 'datum_field_li breadcrumb',
         model : d
       });
    
@@ -88,7 +88,17 @@ define([
       }
     },
     addNewField : function(){
-      var m = new DatumField({"field": this.$el.children(".add_input").val()});
+      var checked = this.$el.children(".add_encrypted").is(':checked');
+      if(checked ){
+        checked = "checked";
+      }else{
+        checked = "";
+      }
+      var m = new DatumField({
+        "label" : this.$el.children(".choose_add_field").val(),
+        "encrypted" : checked,
+        "help" : this.$el.children(".add_help").val()
+      });
       this.collection.add(m);
     
     },
