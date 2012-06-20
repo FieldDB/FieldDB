@@ -7,7 +7,7 @@ define([
     "data_list/DataListsView",
     "datum/DatumField",
     "datum/DatumFields",
-    "datum/DatumFieldView",
+    "datum/DatumFieldEditView",
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
@@ -27,7 +27,7 @@ define([
     DataListsView,
     DatumField,
     DatumFields,
-    DatumFieldView,
+    DatumFieldEditView,
     DatumState,
     DatumStates,
     DatumStateEditView,
@@ -68,7 +68,7 @@ define([
       
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li'
       });
       
@@ -195,9 +195,9 @@ define([
       
       
       var m = new DatumField({
-        "label" : this.$el.children(".choose_add_field").val(),
+        "label" : this.$el.children(".choose_field").val(),
         "encrypted" : checked,
-        "help" : this.$el.children(".add_help").val()
+        "help" : this.$el.children(".help_text").val()
       });
       
       this.model.get("datumFields").add(m);
