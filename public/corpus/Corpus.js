@@ -88,10 +88,21 @@ define([
         
 
           this.set("datumFields", new DatumFields([ 
-            new DatumField(),
             new DatumField({
-            label : "IPA Transcription",
-          })
+              label : "judgement",
+            }),
+            new DatumField({
+              label : "orthography",
+            }),
+            new DatumField({
+              label : "morphemes",
+            }),
+            new DatumField({
+              label : "gloss",
+            }),
+            new DatumField({
+              label : "translation",
+            })
           ]));
 
       },
