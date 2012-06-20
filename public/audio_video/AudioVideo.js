@@ -4,11 +4,11 @@ define([
 
   var AudioVideo = Backbone.Model.extend(
 
-  /** @lends AudioVisual.prototype */
+  /** @lends AudioVideo.prototype */
 
   {
     /**
-     * @class AudioVisual allows a user to add audio and video files.
+     * @class AudioVideo models allows a user to add audio and video files.
      * 
      * @description Initialize function
      * 
@@ -18,7 +18,8 @@ define([
      */
     defaults : {
       URL : "",
-      FileName : ""
+      FileName : "",
+      type: "audio" //or video
     },
     initialize : function() {
 

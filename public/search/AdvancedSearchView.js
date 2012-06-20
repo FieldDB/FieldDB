@@ -3,12 +3,16 @@ define([
     "use!handlebars", 
     "text!search/advanced_search.handlebars",
     "search/Search",
+    "datum/DatumFields",
+    "datum/DatumFieldView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     advanced_searchTemplate,
-    Search
+    Search,
+    DatumFields,
+    DatumFieldView
 ) {
   var AdvancedSearchView = Backbone.View.extend(
   /** @lends AdvancedSearchView.prototype */
