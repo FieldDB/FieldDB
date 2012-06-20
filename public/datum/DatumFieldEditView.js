@@ -50,6 +50,11 @@ define([
       Utils.debug("DATUM FIELD render");
      
       $(this.el).html(this.template(this.model.toJSON()));
+      
+
+      // Select the correct value from the color dropdown
+      this.$el.children(".choose_field").val(this.model.get("label"));
+      
       return this;
     },
     

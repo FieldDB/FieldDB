@@ -27,7 +27,7 @@ define([
             
          // Display the HotKeyConfigView
             this.setElement($("#hotkey-config-view")); 
-            $(this.el).html(this.template(this.model.toJSON()));
+//            $(this.el).html(this.template(this.model.toJSON()));
            
 //
 //            $(document).bind('keydown', 'ctrl+j', function() {
