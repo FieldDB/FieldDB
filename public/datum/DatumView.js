@@ -2,24 +2,24 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum.handlebars",
+    "audio_video/AudioVideoView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldView",
     "datum/DatumStateView",
     "datum/DatumTagsView",
-    "audio_video/AudioVideoView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     datumTemplate, 
+    AudioVideoView,
     Confidential,
     Datum,
     DatumFieldView,
     DatumStateView,
     DatumTagsView,
-    AudioVideoView,
     UpdatingCollectionView
 ) {
   var DatumView = Backbone.View.extend(
