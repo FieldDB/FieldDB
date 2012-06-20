@@ -98,18 +98,4 @@ Utils.removeClass = function(ele, cls) {
 	}
 };
 
-Utils.backgrounds = [
-  "images/skins/bamboo_garden.jpg",
-  "images/skins/llama_wool.jpg" , 
-  "images/skins/machu_picchu.jpg",
-  "images/skins/machu_picchu2.jpg",
-  "images/skins/prague.jpg",
-  "images/skins/salcantay.jpg",
-  "images/skins/stairs.jpg",
-  "images/skins/stone_figurines.jpg",
-  "images/skins/temple.jpg",
-  "images/skins/weaving.jpg",
-  "images/skins/sunset.jpg",
-  "images/skins/window.jpg",
-  "images/skins/Ceske_Krumlov.jpg", 
-];
+
