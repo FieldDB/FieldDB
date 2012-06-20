@@ -129,7 +129,7 @@ define([
 //              "click .show_corpora" : "showCorpora",
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
-      "click .add_datum_state" : 'addNewState'
+      "click .add_datum_state" : 'insertNewDatumState'
 
     },
 
