@@ -6,9 +6,10 @@ define([
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
-//  "user/Informants",
+    "user/Informants",
     "permission/Permissions",
     "datum/Sessions",
+    "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -18,9 +19,10 @@ define([
     DatumFields, 
     DatumState,
     DatumStates,
-//  Informants,
+    Informants,
     Permissions,
-    Sessions
+    Sessions,
+    User
 ) {
   var Corpus = Backbone.Model.extend(
     /** @lends Corpus.prototype */
@@ -126,6 +128,18 @@ define([
         if(typeof(this.get("sessionFields")) == "function"){
           this.set("sessionFields", new DatumFields([ 
             new DatumField({
+              label : "user",
+              encrypted: "",
+              userchooseable: "disabled",
+              value: User
+            }),
+            new DatumField({
+              label : "informants",
+              encrypted: "",
+              userchooseable: "disabled",
+              value: Informants
+            }),
+            new DatumField({
               label : "language",
               encrypted: "",
               userchooseable: "disabled",
@@ -135,18 +149,38 @@ define([
               label : "dialect",
               encrypted: "",
               userchooseable: "disabled",
-              help: "You can use this field to be as precise as you would like abotu the dialect of this session."
-            })
+              help: "You can use this field to be as precise as you would like about the dialect of this session."
+            }),
+            new DatumField({
+              label : "dateElicited",
+              encrypted: "",
+              userchooseable: "disabled",
+              help: "This is the date in which the session took place."
+            }),
+            new DatumField({
+              label : "dateSEntered",
+              encrypted: "",
+              userchooseable: "disabled",
+              help: "This is the date in which the session was entered."
+            }),
+            new DatumField({
+              label : "goal",
+              encrypted: "",
+              userchooseable: "disabled",
+              help: "This describes the goals of the session."
+            }),  
           ]));
         }//end if to set sessionFields
         
-        if(typeof(this.get("searchFields")) == "function"){
-          this.set("searchFields", 
-              this.get("datumFields"));
+//        if(typeof(this.get("searchFields")) == "function"){
+//          this.set("searchFields", 
+//              this.get("datumFields"));
+//          this.set("searchFields",
+//              this.get("sessionFields"));
 //            new DatumFields([ 
             //TODO add the session fields here too, instead of just the datumFields
 //          ]));
-        }//end if to set sessionFields
+   //     }//end if to set sessionFields
       },
       
       defaults : {
@@ -154,7 +188,7 @@ define([
         titleAsUrl :"",
         description : "",
         confidential :  Confidential,
-// informants : Informants,
+        informants : Informants,
         datumStates : DatumStates,
         datumFields : DatumFields, 
         sessionFields : DatumFields,
