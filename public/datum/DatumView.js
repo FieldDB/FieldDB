@@ -35,24 +35,25 @@ define([
     initialize : function() {
       // Create a AudioVideoView
       this.audioVideoView = new AudioVideoView({
-        model : this.model.get("audioVideo")
+        model : this.model.get("audioVideo"),
       });
       
       // Create a DatumStateView
       this.stateView = new DatumStateView({
-        model : this.model.get("state")
+        model : this.model.get("state"),
       });
       
       // Create a DatumTagView
       this.tagsview = new DatumTagsView({
-        model : this.model.get("datumTag")
+        model : this.model.get("datumTag"),
       });
+
 
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldView,
-        childViewTagName     : "li"
+        childViewTagName     : "li",
       });
     },
 
@@ -89,7 +90,7 @@ define([
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
-      "change" : "updatePouch"
+      "change" : "updatePouch",
     },
 
     /**
