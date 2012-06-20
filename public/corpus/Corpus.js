@@ -122,6 +122,31 @@ define([
             })
           ]));
         }//end if to set datumFields
+        
+        if(typeof(this.get("sessionFields")) == "function"){
+          this.set("sessionFields", new DatumFields([ 
+            new DatumField({
+              label : "language",
+              encrypted: "",
+              userchosen: "disabled",
+              help: "This is the langauge (or language family) if you would like to use it."
+            }),
+            new DatumField({
+              label : "dialect",
+              encrypted: "",
+              userchosen: "disabled",
+              help: "You can use this field to be as precise as you would like abotu the dialect of this session."
+            })
+          ]));
+        }//end if to set sessionFields
+        
+        if(typeof(this.get("searchFields")) == "function"){
+          this.set("searchFields", 
+              this.get("datumFields"));
+//            new DatumFields([ 
+            //TODO add the session fields here too, instead of just the datumFields
+//          ]));
+        }//end if to set sessionFields
       },
       
       defaults : {
@@ -132,6 +157,8 @@ define([
 // informants : Informants,
         datumStates : DatumStates,
         datumFields : DatumFields, 
+        sessionFields : DatumFields,
+        searchFields : DatumFields,
         sessions : Sessions, 
         datalists : DataLists, // TODO capitalize L?
         permissions : Permissions
