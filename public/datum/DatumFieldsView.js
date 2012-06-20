@@ -74,7 +74,7 @@ define([
       // We create an updating DatumFieldEditView for each DatumField that is added.
       var dv = new DatumFieldEditView({
         tagName : 'li',
-        className : 'datum_field_li',
+        className : 'datum_field_li breadcrumb',
         model : d
       });
    
