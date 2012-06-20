@@ -28,8 +28,6 @@ define([
      * @return The cloned DatumFields.
      */
     clone : function() {
-      Utils.debug("Cloning a DatumFields");
-      
       var newCollection = new DatumFields();
       
       for (var i = 0; i < this.length; i++) {
