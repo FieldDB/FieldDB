@@ -55,7 +55,6 @@ define([
      * Change the model's state.
      */
     updateField : function() {
-      Utils.debug("Updated field " + this.model.get("label") + " to " + this.$el.children(".datum_field_input").val());
       this.model.set("value", this.$el.children(".datum_field_input").val());
     }
   });
