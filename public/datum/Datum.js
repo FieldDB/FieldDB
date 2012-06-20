@@ -2,6 +2,7 @@ define([ "use!backbone",
          "audio_video/AudioVideo", 
          "comment/Comments",
          "datum/DatumField", 
+         "datum/DatumFields", 
          "datum/DatumState", 
          "datum/DatumTags", 
          "datum/Session",
@@ -10,6 +11,7 @@ define([ "use!backbone",
     AudioVideo, 
     Comments,
     DatumField, 
+    DatumFields,
     DatumState, 
     DatumTags,
     Session) {
@@ -83,8 +85,9 @@ define([ "use!backbone",
       comments : Comments,
       datumState : DatumState,
       datumTags : DatumTags,
-      dateEntered : DatumField
-
+      dateEntered : DatumField,
+      
+      defaultDatumFields : DatumFields,
     },
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl

@@ -56,21 +56,16 @@ define([
       this.tagsview = new DatumTagsView({
         model : this.model.get("datumTag")
       });
-      
 
-      var defaultDatumFields = new DatumFields([new DatumField(),new DatumField(), new DatumField()]);
 
-      if (window.appView) {
-        defaultDatumFields = appView.model.get("corpus").get("datumFields");
-        if(typeof(defaultDatumFields) == "function"){
-          defaultDatumFields =  new DatumFields([new DatumField(),new DatumField(), new DatumField()]); 
+      if( typeof(this.model.get("defaultDatumFields")) != "function"){
+        for(d in this.model.get("defaultDatumFields").models ){
+          this.addField(this.model.get("defaultDatumFields").models[d]);  
         }
-      } 
-      
-      for(d in defaultDatumFields.models ){
-        this.addField(defaultDatumFields.models[d]);  
       }
-    //  this.collection.bind('addField', this.addField);
+      ////TODO added for #181
+      //TODO this is binding so that new items that are added to the corpus defaults, do trigger this, but for somereason the model is not an object but still a function when we get to the addfield 
+//      this.model.get("defaultDatumFields").bind('add', this.addField);
 
       
       
@@ -105,7 +100,6 @@ define([
      * DatumFieldView.
      */
     datumFieldViews : [],
-
     /**
      * Events that the DatumView is listening to and their handlers.
      */
@@ -148,6 +142,11 @@ define([
         
         //Display each DatumFieldView
         _(this.datumFieldViews).each(function(dv) {
+          //if it has a size, then turn it into an input template
+          if(dv.model.get("size")){
+            dv.template = Handlebars.compile("" +
+            		"<input maxlength={{size}} class='input-small gramaticality_judgement'>{{mask}}</input>");
+          }
           $('.datum_fields_ul').append(dv.render().el);
           dv.delegateEvents();
         });   
@@ -295,7 +294,9 @@ define([
     
    //These are functions relating to the datumField 
     addField : function(d) {
-      
+//      if(d.collection){
+//        d= d.collection.models[d.collection.models.length-1];
+//      }//TODO added for #181
       
       this.model.set(d.get("label"), "");
       

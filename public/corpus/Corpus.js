@@ -73,23 +73,25 @@ define([
           Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
         }); 
 
-        this.set("datumStates", new DatumStates([ 
-          new DatumState()
-          ,new DatumState({
-            state : "To be checked",
-            color : "warning"
-          })
-          , new DatumState({
-            state : "Deleted",
-            color : "important"
-          }) 
-        ]));
+        if(typeof(this.get("datumStates")) == "function"){
+          this.set("datumStates", new DatumStates([ 
+            new DatumState()
+            ,new DatumState({
+              state : "To be checked",
+              color : "warning"
+            })
+            , new DatumState({
+              state : "Deleted",
+              color : "important"
+            }) 
+          ]));
+        }//end if to set datumStates
         
-        
-
+        if(typeof(this.get("datumFields")) == "function"){
           this.set("datumFields", new DatumFields([ 
             new DatumField({
               label : "judgement",
+              size : "3",
               encrypted: "",
               userchosen: "disabled",
               help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
@@ -119,7 +121,7 @@ define([
               help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
             })
           ]));
-
+        }//end if to set datumFields
       },
       
       defaults : {
