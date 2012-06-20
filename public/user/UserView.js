@@ -76,6 +76,7 @@ define([
       // getting some results for "phoneme" around 1910.
       // For a similar use of historical users see Morgan Blamey and Tucker the Technician at blamestella.com
       // https://twitter.com/#!/tucker1927
+      var oldprefs = this.model.get("prefs");
       this.model.attributes = {
         "username" : "sapir",
         "password" : "phoneme",
@@ -89,7 +90,7 @@ define([
         "subtitle" : "",
         "corpuses" : [],
         "dataLists" : [],
-        "prefs" : new UserPreference(),
+        "prefs" : oldprefs,
         "teams" : []
       };
       var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
@@ -111,7 +112,9 @@ define([
     /**
      * Initializes the public User.
      */
+    
     loadPublic : function(){
+      var oldprefs = this.model.get("prefs");
       this.model.attributes = {
           "username" : "public",
           "password" : "",
@@ -125,7 +128,7 @@ define([
           "subtitle" : "",
           "corpuses" : [],
           "dataLists" : [],
-          "prefs" : new UserPreference(),
+          "prefs" : oldprefs,
           "teams" : []
         };
       var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});

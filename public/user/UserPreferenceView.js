@@ -84,11 +84,11 @@ define([
      */
     nextSkin : function() {
       this.currentSkin = (this.currentSkin + 1) % this.skins.length;
-      this.model.set("skin", this.skins[ currentSkin ]);
+      this.model.set("skin", this.skins[ this.currentSkin ]);
     },
     randomSkin : function(){
       currentSkin = Math.floor(Math.random()* this.skins.length);
-      this.model.set("skin", this.skins[ currentSkin ]);
+      this.model.set("skin", this.skins[ this.currentSkin ]);
     },
     renderSkin : function(){
       document.body.style.backgroundImage = "url(" + this.model.get("skin") + ")";
