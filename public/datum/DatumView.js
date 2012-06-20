@@ -218,7 +218,6 @@ define([
      * If the model needs to be saved, saves it.
      */
     saveScreen : function() {
-      // TODO fix
       if (this.needsSave) {
         // Change the needsSave flag before saving just in case another change
         // happens
