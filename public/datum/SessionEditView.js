@@ -52,12 +52,7 @@ define([
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
-      "blur .session_informant" : "updateInformant",
-      "blur .session_language" : "updateLanguage",
-      "blur .session_family" : "updateFamily",
-      "blur .session_dialect" : "updateDialect",
-      "blur .session_goal" : "updateGoal",
-      "blur .session_date" : "updateDate",
+    
       "click #btn-save-session" : "updatePouch"
     },
     
@@ -87,39 +82,16 @@ define([
      * 
      * @param {Corpus} corpus The corpus associated with this Session.
      */
-    loadSample : function(corpus) {
-      this.model.set({
-        user : "sapir",
-        informant : "Tillohash",
-        corpus : corpus,
-        language : "Cusco Quechua",
-        goal : "Working on naya"
-      });
-    },
+//    loadSample : function(corpus) {
+//      this.model.set({
+//        user : "sapir",
+//        informant : "Tillohash",
+//        corpus : corpus,
+//        language : "Cusco Quechua",
+//        goal : "Working on naya"
+//      });
+//    },
     
-    updateInformant : function() {
-      this.model.set("informant", $(".session_informant").val());
-    },
-    
-    updateLanguage : function() {
-      this.model.set("language", $(".session_language").val());
-    },
-    
-    updateFamily : function() {
-      this.model.set("languageFamily", $(".session_family").val());
-    },
-    
-    updateDialect : function() {
-      this.model.set("dialect", $(".session_dialect").val());
-    },
-    
-    updateGoal : function() {
-      this.model.set("goal", $(".session_goal").val());
-    },
-    
-    updateDate : function() {
-      this.model.set("date", $(".session_date").val());
-    },
     
     updatePouch : function() {
       Utils.debug("Saving the Session");

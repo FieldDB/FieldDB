@@ -54,14 +54,38 @@ define([
     render : function() {
       Utils.debug("DLATEX render: " + this.el);
 
-      this.$el.html(this.template({
-        utterance: this.model.get("datumFields").where({label: "utterance"})[0].get("value"),
-        gloss: this.model.get("datumFields").where({label: "gloss"})[0].get("value"),
-        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),
-      }));
+//      this.$el.html(this.template({
+//        utterance: this.model.get("datumFields").where({label: "utterance"})[0].get("value"),
+//        gloss: this.model.get("datumFields").where({label: "gloss"})[0].get("value"),
+//        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),
+//        
+//      }));
+      
+      utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
+      gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
+      utteranceArray = utterance.split(' ');
+      glossArray = gloss.split(' ');
+      
+      glossCouplet = [];
+      var i= 0;
+      for( i; i<utteranceArray.length; i++){
+        glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
+       // var newdiv = document.createElement('div');
+       // newdiv.innerHTML = glossCouplet;
+        this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
+      };
+      
+      
+      
 
+      
       return this;
-    }
+    },
+    
+   
+    
+    
+
   });
 
   return DatumLatexView;
