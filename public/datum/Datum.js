@@ -150,7 +150,7 @@ define([ "use!backbone",
             // Go through all the rows of glosses
             for (i in response.rows) {
               // If the row's gloss contains the given string
-              if (response.rows[i].key.indexOf(gloss) != 0) {
+              if (response.rows[i].key.indexOf(gloss) >= 0) {
                 // Keep its datum's ID, which is the value
                 matchIds.push(response.rows[i].value);
               }
