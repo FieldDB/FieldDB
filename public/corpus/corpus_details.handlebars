@@ -41,10 +41,32 @@
 
 <div class="permissions_settings">Put permissions here</div>
 
+
+
+
 <div class="datum_fields_settings">Put datum field settings here</div>
+<select class="choose_add_field">
+  <option value="judgement">Gramaticality/Acceptability Judgement</option>
+  <option value="utterence">Orthography/Utterance</option>
+  <option value="morphemes">Morphemes</option>
+  <option value="gloss">Gloss</option>
+  <option value="translation">Translation</option>
+  <option value="transcription">IPA Transcription</option>
+  <option value="context">Context</option>
+  <option value="semantic_denotation">Semantic Denotation</option>
+  <option value="Create New">Create New</option>
+</select>
+Encrypt if confidential:
+  <input type="checkbox" class="add_encrypted" {{encrypted}}></input>
+<label>Help Text</label>
+<textarea placeholder="Put a help text here (optional)" class="add_help"></textarea>
+ <button class="btn btn-primary add_datum_field" value = "Add">Add</button>
+
+
+
+
 
 <div class="datum_state_settings">Put datum state settings here</div>
-
 <input class="add_input" value="" placeholder="Add..."></input>
 <select class="add_color_chooser">
   <option value="success">Green</option>
@@ -55,5 +77,6 @@
   <option value="inverse">Black</option>
   <option value="">Default</option>
 </select>
-<input type="button" class="add_datum_state" value="Add"></input>
+ <button class="btn btn-primary add_datum_state" value = "Add">Add</button>
+
 

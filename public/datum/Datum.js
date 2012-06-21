@@ -71,23 +71,15 @@ define([ "use!backbone",
       
     },
 
-    defaults : {
-      // here are the attributes a datum minimally has to have, other fields can
-      // be added within the datum widget.
-      judgement : DatumField,
-      utterence : DatumField,
-      morphemes : DatumField,
-      gloss : DatumField,
-      translation : DatumField,
+    defaults : {      
+      datumFields : DatumFields,
       
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
       datumState : DatumState,
       datumTags : DatumTags,
-      dateEntered : DatumField,
-      
-      defaultDatumFields : DatumFields,
+      dateEntered : DatumField
     },
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
