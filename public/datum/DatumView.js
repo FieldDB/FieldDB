@@ -228,7 +228,32 @@ define([
         Utils.debug("Saving the Datum");
         this.model.save();
       }
-    }
+    },
+    //Functions relating to the row of icon-buttons
+    /**
+     * The LaTeXiT function automatically mark-ups an example in LaTeX code
+     * (\exg. \"a) and then copies it on the clipboard so that when the user
+     * switches over to their LaTeX file they only need to paste it in.
+     */
+    laTeXiT : function() {
+      return "";
+    },
+    /**
+     * The copyDatum function copies all datum fields to the clipboard.
+     */
+    copyDatum : function() {
+      return "";
+    },
+
+    /**
+     * The duplicateDatum function opens a new datum field set with the fields
+     * already filled exactly like the previous datum so that the user can
+     * minimally edit the datum.
+     */
+    duplicateDatum : function() {
+//      var datum = new Datum();
+      return datum;
+    } 
   });
 
   return DatumView;

@@ -96,13 +96,16 @@ textarea{
 	width: 100%;
 }
 
-ul, li {
-    list-style-type: none;
-}
 
 .gramaticality_judgement{
   width: 2em !important;
 }
+
+.glossCouplet{
+	display: inline-block;
+	padding: 5px;
+}
+
 
 
 
