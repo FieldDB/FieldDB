@@ -52,6 +52,7 @@ define([
         // Display the UserPreferenceView
         this.setElement($("#user-preferences-view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        
       }
       
       return this;
