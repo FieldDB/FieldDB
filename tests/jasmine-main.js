@@ -59,7 +59,7 @@ require([
    "../tests/corpus/CorpusTest",
 // "../tests/dashboard/DashboardTest",
    "../tests/data_list/DataListTest",
- "../tests/datum/DatumTest",
+   "../tests/datum/DatumTest",
    "../tests/export/ExportTest",
    "../tests/glosser/GlosserTest",
    "../tests/hotkey/HotKeyTest",
@@ -69,7 +69,7 @@ require([
    "../tests/permission/PermissionTest",
    "../tests/user/UserPreferenceTest",
    "../tests/search/SearchTest",
-   "../tests/session/SessionTest",
+  "../tests/session/SessionTest",
    "../tests/user/UserGenericTest",
 
 

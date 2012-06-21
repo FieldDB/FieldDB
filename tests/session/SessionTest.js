@@ -1,5 +1,5 @@
 require([
-    "datum/Session", "user/User", "user/Informant"
+    "datum/Session"
 ], function(Session) {
 	
 	   // No longer needed since session ID will be in the PouchDB
