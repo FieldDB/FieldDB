@@ -3,14 +3,17 @@ define([
     "use!handlebars",
     "text!corpus/corpus_details.handlebars",
     "corpus/Corpus",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentView",
     "data_list/DataLists",
     "data_list/DataListsView",
+    "datum/DatumField",
     "datum/DatumFields",
-    "datum/DatumFieldsView",
+    "datum/DatumFieldEditView",
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
-    //"datum/DatumStatesView",
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
@@ -22,14 +25,17 @@ define([
     Handlebars,
     corpusDetailsTemplate,
     Corpus,
+    Comment,
+    Comments,
+    CommentView,
     DataLists,
     DataListsView,
+    DatumField,
     DatumFields,
-    DatumFieldsView,
+    DatumFieldEditView,
     DatumState,
     DatumStates,
     DatumStateEditView,
-  //  DatumStatesView,
     Permissions,
     PermissionsView,
     Sessions,
@@ -54,22 +60,26 @@ define([
     initialize : function() {
       Utils.debug("CORPUS DETAILS init: " + this.el);
       
+      //Create a CommentView     
+      this.commentView = new UpdatingCollectionView({
+        collection           : this.model.get("Comments"),
+        childViewConstructor : CommentView,
+        childViewTagName     : 'li'
+      });
+      
       //Create a DataList List
       this.dataListsView = new DataListsView({
         collection : this.model.get("dataLists")
       });
-      
-      //Create a DatumFieldsView  
-      this.datumFieldsView = new DatumFieldsView({
-        collection : this.model.get("datumFields")
+
+      //Create a DatumFieldsView     
+      this.datumFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li'
       });
-      
-      // Create a DatumStatesView
-     // this.datumStatesView = new DatumStatesView({
-     //   collection : this.model.get("datumStates")
-     // });
-      
-      
+          
+      // Create a DatumStatesView    
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateEditView,
@@ -95,18 +105,22 @@ define([
      */    
     model : Corpus,
     /**
+     * The CommentView is a child of the CorpusView.
+     */
+    commentView : CommentView,
+    /**
      * The DataListsView is a child of the CorpusView.
      */
     dataListsView : DataListsView,
     /**
      * The DatumFieldsView is a child of the CorpusView.
      */
-    datumFieldsView : DatumFieldsView, 
+    datumFieldsView : UpdatingCollectionView, 
     /**
      * The datumStatesView is a child of the CorpusView.
      */
     datumStatesView : UpdatingCollectionView,
-    datumStateViews : [],
+
     /**
      * The PermissionsView is a child of the CorpusView.
      */
@@ -129,8 +143,15 @@ define([
 //              "click .show_corpora" : "showCorpora",
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
-      "click .add_datum_state" : 'insertNewDatumState'
-
+      
+      //Add button inserts new Comment
+      "click .add_comment" : 'insertNewComment',
+    	
+      //Add button inserts new Datum State
+      "click .add_datum_state" : 'insertNewDatumState',
+      
+      //Add button inserts new Datum Field
+      "click .add_datum_field" : 'insertNewDatumField'
     },
 
     /**
@@ -148,10 +169,14 @@ define([
         this.setElement($("#corpus-details-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
+        // Display the CommentView
+        this.commentView.render();
+        
         // Display the DataListsView
         this.dataListsView.render();
         
         // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$('.datum_fields_settings');
         this.datumFieldsView.render();
         
         // Display the DatumStatesView
@@ -170,23 +195,52 @@ define([
       
       return this;
     },
-  
+
+     //Insert functions associate the values chosen with a new
+    // model in the collection, adding it to the collection, which in turn
+    // triggers a view thats added to
+    // the ul
     
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      var m = new Comment({
+        "state" : this.$el.children(".add_input").val(),
+        "color" : this.$el.children(".add_color_chooser").val()
+      });
+      this.model.get("comment").add(m);
+    },
     
-    insertNewDatumState : function(){
-      var m = new DatumState({"state": this.$el.children(".add_input").val(), "color": this.$el.children(".add_color_chooser").val() });
+    // This the function called by the add button, it adds a new datum field both to the 
+    // collection and the model
+    insertNewDatumField : function() {
+      // Remember if the encryption check box was checked
+      var checked = this.$el.children(".add_encrypted").is(':checked') ? "checked" : "";
+      
+      // Create the new DatumField based on what the user entered
+      var m = new DatumField({
+        "label" : this.$el.children(".choose_add_field").val(),
+        "encrypted" : checked,
+        "help" : this.$el.children(".add_help").val()
+      });
+
+      // Add the new DatumField to the Corpus' list fo datumFields
+      this.model.get("datumFields").add(m);
+      
+      // Reset the line with the add button
+      this.$el.children(".choose_add_field").children("option:eq(0)").attr("selected", true);
+      this.$el.children(".add_help").val("");
+    },
+    
+    //This the function called by the add button, it adds a new datum state both to the collection and the model
+    insertNewDatumState : function() {
+      var m = new DatumField({
+        "state" : this.$el.children(".add_input").val(),
+        "color" : this.$el.children(".add_color_chooser").val()
+      });
       this.model.get("datumStates").add(m);
     },
     
-    
   });
-  
-  
-
-    
-    
-    
-
 
   return CorpusView;
 });

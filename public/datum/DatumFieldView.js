@@ -14,17 +14,13 @@ define([
   {
     /**
      * @class This is the view of the Datum Field Model. The Datum Field is a
-     *        drop down field that has the most frequent ones first, and at the
-     *        bottom an option to create a new one.
+     *        textarea preceeded by a label.
      * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       Utils.debug("DATUM FIELD init");
-    
-      // If the model changes, re-render
-      this.model.bind('change', this.render, this);
     },
     
     /**
@@ -43,14 +39,15 @@ define([
      * The Handlebars template rendered as the DatumFieldView.
      */
     template : Handlebars.compile(datum_fieldTemplate),
+    
     /**
      * Renders the DatumFieldView.
      */
     render : function() {
       Utils.debug("DATUM FIELD render");
-      console.log(this.model.toJSON());
       
       $(this.el).html(this.template(this.model.toJSON()));
+      
       return this;
     },
     
@@ -58,10 +55,8 @@ define([
      * Change the model's state.
      */
     updateField : function() {
-      Utils.debug("Updated field to " + this.$el.children(".datum_field_input").val());
-      this.model.set("label", this.$el.children(".datum_field_input").val());
-    },
-    
+      this.model.set("value", this.$el.children(".datum_field_input").val());
+    }
   });
 
   return DatumFieldView;

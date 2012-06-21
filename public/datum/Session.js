@@ -2,14 +2,14 @@
 define([
     "use!backbone",
     "comment/Comments",
-    "datum/DatumField",
+    "datum/DatumFields",
     "user/Informant",
     "user/Team",
     "user/User",
 ], function(
     Backbone,
     Comments,
-    DatumField,
+    DatumFields,
     Informant,
     Team,
     User
@@ -49,13 +49,7 @@ define([
     },
    
     defaults: {
-      user: "",
-      informants: "",
-      language: "",
-      dialect: "",
-      dateElicited: "",
-      dateSEntered: "",
-      goal: "",
+      sessionFields : DatumFields,
       comments : Comments
     },
    
