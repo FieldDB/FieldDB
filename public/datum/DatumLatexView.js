@@ -54,7 +54,11 @@ define([
     render : function() {
       Utils.debug("DLATEX render: " + this.el);
 
-      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.html(this.template({
+        utterance: this.model.get("datumFields").where({label: "utterance"})[0].get("value"),
+        gloss: this.model.get("datumFields").where({label: "gloss"})[0].get("value"),
+        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),
+      }));
 
       return this;
     }

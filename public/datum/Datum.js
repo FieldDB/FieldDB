@@ -86,6 +86,74 @@ define([ "use!backbone",
         : Utils.pouchUrl),
 
 
+    /**
+     * The addAudio function is a drop box in which the user can drag an audio
+     * file and link it to the relevant datum.
+     */
+    addAudio : function() {
+      return true;
+    },
+
+    /**
+     * The playDatum function appears when the audio has already been added and
+     * allows the user to play the associated audio file.
+     */
+    playDatum : function() {
+      return true;
+    },
+
+    /**
+     * The copyDatum function copies all datum fields to the clipboard.
+     */
+    copyDatum : function() {
+      return "";
+    },
+
+    /**
+     * The duplicateDatum function opens a new datum field set with the fields
+     * already filled exactly like the previous datum so that the user can
+     * minimally edit the datum.
+     */
+    duplicateDatum : function() {
+//      var datum = new Datum();
+      return datum;
+    },
+    
+    /**
+     * When a Datum is returned from the database, its internal models are just
+     * arrays of their attributes. This restructures them into their models.
+     */
+    restructure : function() {
+      // Restructure the DatumFields
+      if (this.get("datumFields")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("datumFields");
+        
+        // Create the model to store each DatumField
+        this.set("datumFields", new DatumFields());
+        
+        // Create the Datum Field models and store them
+        for (i in temp) {
+          var field = new DatumField(temp[i])
+          this.get("datumFields").push(field);
+        }
+      }
+    
+      // Restructure the AudioVideo
+      if (this.get("audioVideo")) {
+        this.set("audioVideo", new AudioVideo(this.get("audioVideo")));
+      }
+      
+      // TODO Restructure the Session
+      
+      // TODO Restructure the Comments
+      
+      // TODO Restructure the DatumState
+      
+      // TODO Restructure the DatumTags
+      
+      // TODO Restructure the dateEntered DatumField
+    }
   });
 
   return Datum;
