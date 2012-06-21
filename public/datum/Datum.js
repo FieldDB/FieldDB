@@ -85,47 +85,7 @@ define([ "use!backbone",
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
 
-    /**
-     * The LaTeXiT function automatically mark-ups an example in LaTeX code
-     * (\exg. \"a) and then copies it on the clipboard so that when the user
-     * switches over to their LaTeX file they only need to paste it in.
-     */
-    laTeXiT : function() {
-      return "";
-    },
 
-    /**
-     * The addAudio function is a drop box in which the user can drag an audio
-     * file and link it to the relevant datum.
-     */
-    addAudio : function() {
-      return true;
-    },
-
-    /**
-     * The playDatum function appears when the audio has already been added and
-     * allows the user to play the associated audio file.
-     */
-    playDatum : function() {
-      return true;
-    },
-
-    /**
-     * The copyDatum function copies all datum fields to the clipboard.
-     */
-    copyDatum : function() {
-      return "";
-    },
-
-    /**
-     * The duplicateDatum function opens a new datum field set with the fields
-     * already filled exactly like the previous datum so that the user can
-     * minimally edit the datum.
-     */
-    duplicateDatum : function() {
-//      var datum = new Datum();
-      return datum;
-    }
   });
 
   return Datum;
