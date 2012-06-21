@@ -3,6 +3,9 @@ define([
     "use!handlebars",
     "text!corpus/corpus_details.handlebars",
     "corpus/Corpus",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentView",
     "data_list/DataLists",
     "data_list/DataListsView",
     "datum/DatumField",
@@ -22,6 +25,9 @@ define([
     Handlebars,
     corpusDetailsTemplate,
     Corpus,
+    Comment,
+    Comments,
+    CommentView,
     DataLists,
     DataListsView,
     DatumField,
@@ -53,6 +59,13 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS DETAILS init: " + this.el);
+      
+      //Create a CommentView     
+      this.commentView = new UpdatingCollectionView({
+        collection           : this.model.get("Comments"),
+        childViewConstructor : CommentView,
+        childViewTagName     : 'li'
+      });
       
       //Create a DataList List
       this.dataListsView = new DataListsView({
@@ -92,6 +105,10 @@ define([
      */    
     model : Corpus,
     /**
+     * The CommentView is a child of the CorpusView.
+     */
+    commentView : CommentView,
+    /**
      * The DataListsView is a child of the CorpusView.
      */
     dataListsView : DataListsView,
@@ -127,6 +144,9 @@ define([
 //              "click .import" : "newImport",
 //              "click .export" : "showExport"
       
+      //Add button inserts new Comment
+      "click .add_comment" : 'insertNewComment',
+    	
       //Add button inserts new Datum State
       "click .add_datum_state" : 'insertNewDatumState',
       
@@ -148,6 +168,9 @@ define([
         // Display the CorpusView
         this.setElement($("#corpus-details-view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        
+        // Display the CommentView
+        this.commentView.render();
         
         // Display the DataListsView
         this.dataListsView.render();
@@ -177,6 +200,15 @@ define([
     // model in the collection, adding it to the collection, which in turn
     // triggers a view thats added to
     // the ul
+    
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      var m = new Comment({
+        "state" : this.$el.children(".add_input").val(),
+        "color" : this.$el.children(".add_color_chooser").val()
+      });
+      this.model.get("comment").add(m);
+    },
     
     // This the function called by the add button, it adds a new datum field both to the 
     // collection and the model
