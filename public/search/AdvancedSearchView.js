@@ -2,18 +2,20 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!search/advanced_search.handlebars",
-    "search/Search",
+    "datum/Datum",
     "datum/DatumFields",
     "datum/DatumFieldView",
+    "search/Search",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     advanced_searchTemplate,
-    Search,
+    Datum,
     DatumFields,
     DatumFieldView,
+    Search,
     UpdatingCollectionView
 ) {
   var AdvancedSearchView = Backbone.View.extend(
@@ -97,7 +99,37 @@ define([
      */
     searchUnion : function() {
       Utils.debug("In searchUnion");
-      // TODO Display the search results
+      
+      // All the search fields related to Datum
+      var datumFieldsViews = this.advancedSearchDatumView.collection;
+      
+      // All the resulting Datum ids
+      var allDatumIds = [];
+      
+      // Use these to determine when all the mini-searches are complete and
+      // we can display the results
+      var numDatumFields = this.advancedSearchDatumView.collection.length;
+      var numDatumFieldsProcessed = 0;
+      
+      datumFieldsViews.each(function(datumField) {
+        var value = datumField.get("value");
+        if (value && value != "") {
+          (new Datum()).searchByDatumField(datumField.get("label"), value, function(datumIds) {
+            numDatumFieldsProcessed++;
+            
+            // Add this DatumFields' results to any other results
+            allDatumIds = allDatumIds.concat(datumIds);
+            
+            // If we have all the results, display them in the DataListView
+            if (numDatumFieldsProcessed == numDatumFields) {
+              appView.dataListView.model.set("datumIds", _.uniq(allDatumIds));
+              appView.dataListView.renderNewModel();
+            }
+          });
+        } else {
+          numDatumFieldsProcessed++;
+        }
+      });
     },
     
     /**
