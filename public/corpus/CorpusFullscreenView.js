@@ -62,7 +62,7 @@ define([
       
       //Create a CommentView     
       this.commentView = new UpdatingCollectionView({
-        collection           : this.model.get("Comments"),
+        collection           : this.model.get("comments"),
         childViewConstructor : CommentView,
         childViewTagName     : 'li'
       });
@@ -120,7 +120,6 @@ define([
      * The datumStatesView is a child of the CorpusView.
      */
     datumStatesView : UpdatingCollectionView,
-
     /**
      * The PermissionsView is a child of the CorpusView.
      */

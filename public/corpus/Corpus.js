@@ -1,6 +1,8 @@
 define([ 
     "use!backbone",
-    "confidentiality_encryption/Confidential", 
+    "comment/Comment",
+    "comment/Comments",
+    "confidentiality_encryption/Confidential",
     "data_list/DataLists",
     "datum/DatumField",
     "datum/DatumFields",
@@ -13,6 +15,8 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Comment, 
+    Comments,
     Confidential, 
     DataLists,
     DatumField,
@@ -170,7 +174,15 @@ define([
               help: "This describes the goals of the session."
             }),  
           ]));
+          
         }//end if to set sessionFields
+        
+        
+        if(typeof(this.get("comments")) == "function"){
+          this.set("comments", new Comments([ 
+            new Comment()
+            ]));
+        }
         
 //        if(typeof(this.get("searchFields")) == "function"){
 //          this.set("searchFields", 
@@ -195,7 +207,8 @@ define([
         searchFields : DatumFields,
         sessions : Sessions, 
         datalists : DataLists, // TODO capitalize L?
-        permissions : Permissions
+        permissions : Permissions,
+        comments: Comments
         
       },
       pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
