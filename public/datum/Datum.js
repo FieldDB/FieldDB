@@ -125,6 +125,42 @@ define([ "use!backbone",
     duplicateDatum : function() {
 //      var datum = new Datum();
       return datum;
+    },
+    
+    /**
+     * When a Datum is returned from the database, its internal models are just
+     * arrays of their attributes. This restructures them into their models.
+     */
+    restructure : function() {
+      // Restructure the DatumFields
+      if (this.get("datumFields")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("datumFields");
+        
+        // Create the model to store each DatumField
+        this.set("datumFields", new DatumFields());
+        
+        // Create the Datum Field models and store them
+        for (i in temp) {
+          var field = new DatumField(temp[i])
+          this.get("datumFields").push(field);
+        }
+      }
+    
+      // Restructure the AudioVideo
+      if (this.get("audioVideo")) {
+        this.set("audioVideo", new AudioVideo(this.get("audioVideo")));
+      }
+      
+      // TODO Restructure the Session
+      
+      // TODO Restructure the Comments
+      
+      // TODO Restructure the DatumState
+      
+      // TODO Restructure the DatumTags
+      
+      // TODO Restructure the dateEntered DatumField
     }
   });
 
