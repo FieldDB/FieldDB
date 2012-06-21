@@ -169,6 +169,9 @@ define( [
       var self = this;
       d.fetch({
         success : function() {
+          // Restructure Datum's inner models
+          d.restructure();
+          
           // Render a DatumLatexView for that Datum at the end of the DataListView
           var view = new DatumLatexView({
             model :  d

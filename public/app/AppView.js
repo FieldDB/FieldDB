@@ -125,8 +125,9 @@ define([
         model : new DataList({
           // TODO Remove this dummy data once we have real datalists working
           datumIds : [
-            "574e79f1c0c02df02b116ac71a0008f0",
-            "574e79f1c0c02df02b116ac71a000b3a"
+            "A3F5E512-56D9-4437-B41D-684894020254",
+            "2F4D4B26-E863-4D49-9F40-1431E737AECD",
+            "9A465EF7-5001-4832-BABB-81ACD46EEE9D"
           ]
         })
       });
