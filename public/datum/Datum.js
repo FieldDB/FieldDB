@@ -123,34 +123,35 @@ define([ "use!backbone",
     },
     
     /**
-     * Search Datums whose gloss contains the given string.
+     * Search Datums whose given datum field contains the given string.
      * 
-     * @param gloss {String} The string to search for in the gloss.
+     * @param field {String} The datum field to search through.
+     * @param str {String} The string to search for in the datum field.
      * @param callback {Function} A function that takes a single parameter: an 
-     * array of all the DatumIds whose gloss cotnains the given string or an 
-     * empty Array if there are no matches.
+     * array of all the DatumIds whose datum field contains the given string or 
+     * an empty Array if there are no matches.
      */
-    searchByGloss : function(gloss, callback) {
+    searchByDatumField : function(field, str, callback) {
       this.pouch(function(err, db) {
-        // Code for get_gloss/get_gloss:
+        // Code for get_*/get_*:
         //
         // function(doc) {
         //   if (doc.datumFields) {
         //     for (i = 0; i < doc.datumFields.length; i++) {
-        //       if (doc.datumFields[i].label == "gloss") {
+        //       if (doc.datumFields[i].label == "*") {
         //         emit(doc.datumFields[i].value, doc._id);
         //       }
         //     }
         //   }
         // }
-        db.query("get_gloss/get_gloss", {reduce: false}, function(err, response) {
+        db.query("get_datum_field/get_" + field, {reduce: false}, function(err, response) {
           var matchIds = [];
           
           if (!err) {
-            // Go through all the rows of glosses
+            // Go through all the rows of results
             for (i in response.rows) {
-              // If the row's gloss contains the given string
-              if (response.rows[i].key.indexOf(gloss) >= 0) {
+              // If the row's datum field contains the given string
+              if (response.rows[i].key.indexOf(str) >= 0) {
                 // Keep its datum's ID, which is the value
                 matchIds.push(response.rows[i].value);
               }

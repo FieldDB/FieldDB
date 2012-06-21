@@ -69,9 +69,9 @@ define([
      * Perform a search.
      */
     search : function() {
-      Utils.debug("Searching for " + $("#search_box").val());
+      Utils.debug("Will search for " + $("#search_box").val());
       
-      (new Datum()).searchByGloss($("#search_box").val(), function(datumIds) {
+      (new Datum()).searchByDatumField("gloss", $("#search_box").val(), function(datumIds) {
         appView.dataListView.model.set("datumIds", datumIds);
         appView.dataListView.renderNewModel();
       });
