@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test4";
+Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test5";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
