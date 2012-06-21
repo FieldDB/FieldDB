@@ -99,11 +99,28 @@ define([
      */
     searchUnion : function() {
       Utils.debug("In searchUnion");
-      
+      this.search("union");
+    },
+    
+    /**
+     * Perform a search that finds the intersection of all the criteria.
+     */
+    searchIntersection : function() {
+      Utils.debug("In searchIntersection");
+      this.search("intersection");
+    },
+    
+    /**
+     * Perform a search that finds either the union or the intersection or all
+     * the criteria.
+     * 
+     * @param type {String} Either "union" or "intersection"
+     */
+    search : function(type) {
       // All the search fields related to Datum
       var datumFieldsViews = this.advancedSearchDatumView.collection;
       
-      // All the resulting Datum ids
+      // All the resulting datumIds arrays
       var allDatumIds = [];
       
       // Use these to determine when all the mini-searches are complete and
@@ -118,11 +135,18 @@ define([
             numDatumFieldsProcessed++;
             
             // Add this DatumFields' results to any other results
-            allDatumIds = allDatumIds.concat(datumIds);
+            allDatumIds.push(datumIds);
             
-            // If we have all the results, display them in the DataListView
+            // If all the queries have finished and we have all the results
             if (numDatumFieldsProcessed == numDatumFields) {
-              appView.dataListView.model.set("datumIds", _.uniq(allDatumIds));
+              if (type == "union") {
+                // Union the results before displaying
+                appView.dataListView.model.set("datumIds", _.union.apply(_, allDatumIds));
+              } else if (type == "intersection") {
+                // Intersect the results before displaying
+                appView.dataListView.model.set("datumIds", _.intersection.apply(_, allDatumIds));
+              }
+              // Display the results
               appView.dataListView.renderNewModel();
             }
           });
@@ -130,13 +154,6 @@ define([
           numDatumFieldsProcessed++;
         }
       });
-    },
-    
-    /**
-     * Perform a search that finds the intersection of all the criteria.
-     */
-    searchIntersection : function() {
-      Utils.debug("In searchIntersection");
     },
     
     /**
