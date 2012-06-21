@@ -57,12 +57,14 @@ define([
 //      this.$el.html(this.template({
 //        utterance: this.model.get("datumFields").where({label: "utterance"})[0].get("value"),
 //        gloss: this.model.get("datumFields").where({label: "gloss"})[0].get("value"),
-//        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),
+        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),
 //        
 //      }));
       
       utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
       gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
+      translation= this.model.get("datumFields").where({label: "translation"})[0].get("value"),
+
       utteranceArray = utterance.split(' ');
       glossArray = gloss.split(' ');
       
@@ -74,7 +76,7 @@ define([
        // newdiv.innerHTML = glossCouplet;
         this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
       };
-      
+      this.$el.append('<br>'+translation);
       
       
 

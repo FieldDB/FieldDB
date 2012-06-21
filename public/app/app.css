@@ -103,9 +103,13 @@ textarea{
 
 .glossCouplet{
 	display: inline-block;
-	padding: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
+.zebra li:nth-child(odd){
+	background: #CFECEC;
+}
 
 
 
