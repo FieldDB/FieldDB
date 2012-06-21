@@ -2,12 +2,14 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!search/search.handlebars",
+    "datum/Datum",
     "search/Search",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     searchTemplate,
+    Datum,
     Search
 ) {
   var SearchView = Backbone.View.extend(
@@ -37,7 +39,7 @@ define([
      * Events that the SearchView is listening to and their handlers.
      */
     events : {
-      "change" : "search"
+      "click .icon-search" : "search"
     },
     
     /**
@@ -67,8 +69,12 @@ define([
      * Perform a search.
      */
     search : function() {
-      Utils.debug("In search");
-      // TODO Display the search results
+      Utils.debug("Searching for " + $("#search_box").val());
+      
+      (new Datum()).searchByGloss($("#search_box").val(), function(datumIds) {
+        appView.dataListView.model.set("datumIds", datumIds);
+        appView.dataListView.renderNewModel();
+      });
     },
     
     /**
