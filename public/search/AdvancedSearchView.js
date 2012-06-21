@@ -44,9 +44,6 @@ define([
         childViewConstructor : DatumFieldView,
         childViewTagName     : 'li'
       });
-      
-      
-      
     },
     
     /**
@@ -58,7 +55,8 @@ define([
      * Events that the SearchView is listening to and their handlers.
      */
     events : {
-      "change" : "search"
+      "click .btn-search-union" : "searchUnion",
+      "click .btn-search-intersection" : "searchIntersection"
     },
     
     /**
@@ -95,11 +93,18 @@ define([
     },
     
     /**
-     * Perform a search.
+     * Perform a search that finds the union of all the criteria.
      */
-    search : function() {
-      Utils.debug("In search");
+    searchUnion : function() {
+      Utils.debug("In searchUnion");
       // TODO Display the search results
+    },
+    
+    /**
+     * Perform a search that finds the intersection of all the criteria.
+     */
+    searchIntersection : function() {
+      Utils.debug("In searchIntersection");
     },
     
     /**
