@@ -71,10 +71,10 @@ define([
     search : function() {
       Utils.debug("Will search for " + $("#search_box").val());
       
-      (new Datum()).searchByDatumField("gloss", $("#search_box").val(), function(datumIds) {
-        appView.dataListView.model.set("datumIds", datumIds);
-        appView.dataListView.renderNewModel();
-      });
+      // (new Datum()).searchByDatumField("gloss", $("#search_box").val(), function(datumIds) {
+        // appView.dataListView.model.set("datumIds", datumIds);
+        // appView.dataListView.renderNewModel();
+      // });
     },
     
     /**
