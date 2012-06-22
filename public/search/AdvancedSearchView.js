@@ -65,7 +65,9 @@ define([
      * The Handlebars template rendered as the SearchView.
      */
     template : Handlebars.compile(advanced_searchTemplate),
+    
     advancedSearchDatumView : UpdatingCollectionView,
+    
     advancedSearchSessionView : UpdatingCollectionView,
    
     /**
@@ -100,6 +102,7 @@ define([
     searchUnion : function() {
       Utils.debug("In searchUnion");
       this.search("union");
+      this.updateSearchBox("union");
     },
     
     /**
@@ -108,6 +111,7 @@ define([
     searchIntersection : function() {
       Utils.debug("In searchIntersection");
       this.search("intersection");
+      this.updateSearchBox("intersection");
     },
     
     /**
@@ -154,6 +158,35 @@ define([
           numDatumFieldsProcessed++;
         }
       });
+    },
+    
+    /**
+     * Update the little search box with the search string corresponding to the
+     * current search criteria and the given type of search.
+     * 
+     * @param type {String} "union" if this search unions all the criteria together,
+     * or "intersection" if this search intersects all the criteria together.
+     */
+    updateSearchBox : function(type) {      
+      // All the search fields related to Datum
+      var datumFieldsViews = this.advancedSearchDatumView.collection;
+      
+      // Get all the search criteria
+      var searchCriteria = [];
+      datumFieldsViews.each(function(datumField) {
+        var value = datumField.get("value");
+        if (value && value != "") {
+          searchCriteria.push(datumField.get("label") + ":" + value);
+        }
+      });
+      
+      // Update the search box with the search string corresponding to the
+      // current search criteria
+      if (type == "union") {
+        appView.searchView.model.set("searchKeywords", searchCriteria.join(" OR "));
+      } else if (type == "intersection") {
+        appView.searchView.model.set("searchKeywords", searchCriteria.join(" AND "));
+      }
     },
     
     /**
