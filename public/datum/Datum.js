@@ -122,39 +122,53 @@ define([ "use!backbone",
       // TODO Restructure the dateEntered DatumField
     },
     
-    /**
-     * Search Datums whose given datum field contains the given string.
-     * 
-     * @param field {String} The datum field to search through.
-     * @param str {String} The string to search for in the datum field.
-     * @param callback {Function} A function that takes a single parameter: an 
-     * array of all the DatumIds whose datum field contains the given string or 
-     * an empty Array if there are no matches.
-     */
-    searchByDatumField : function(field, str, callback) {
-      // Change string to lower case for case-insensitive search
-      str = str.toLowerCase();
-      
+    searchByQueryString : function(queryString, callback) {
+      var self = this;
       this.pouch(function(err, db) {
-        // Code for get_datum_field/get_*:
+        // Code for get_datum_field/get_datum_fields
         //
         // function(doc) {
         //   if (doc.datumFields) {
+        //     var obj = {}
         //     for (i = 0; i < doc.datumFields.length; i++) {
-        //       if (doc.datumFields[i].label == "*") {
-        //         emit(doc.datumFields[i].value, doc._id);
+        //       if (doc.datumFields[i].value) {
+        //         obj[doc.datumFields[i].label] = doc.datumFields[i].value;
         //       }
         //     }
+        //     emit(obj, doc._id);
         //   }
         // }
-        db.query("get_datum_field/get_" + field, {reduce: false}, function(err, response) {
+        db.query("get_datum_field/get_datum_fields", {reduce: false}, function(err, response) {
           var matchIds = [];
           
           if (!err) {
+            // Process the given query string into tokens
+            var queryTokens = self.processQueryString(queryString);
+            
             // Go through all the rows of results
             for (i in response.rows) {
-              // If the row's datum field contains the given string
-              if (response.rows[i].key.toLowerCase().indexOf(str) >= 0) {
+              // Determine if this datum matches the first search criteria
+              var thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
+              
+              // Progressively determine whether the datum still matches based on
+              // subsequent search criteria
+              for (j = 1; j < queryTokens.length; j += 2) {
+                if (queryTokens[j] == "AND") {
+                  // Short circuit: if it's already false then it continues to be false
+                  if (!thisDatumIsIn) {
+                    break;
+                  }
+                  
+                  // Do an intersection
+                  thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
+                } else {
+                  // Do a union
+                  thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
+                }
+              }
+              
+              // If the row's datum matches the given query string
+              if (thisDatumIsIn) {
                 // Keep its datum's ID, which is the value
                 matchIds.push(response.rows[i].value);
               }
@@ -164,6 +178,63 @@ define([ "use!backbone",
           callback(matchIds);
         });
       });
+    },
+    
+    /**
+     * Determines whether the given object to search through matches the given
+     * search criteria.
+     * 
+     * @param {Object} objectToSearchThrough An object representing a datum that
+     * contains (key, value) pairs where the key is the datum field label and the
+     * value is the datum field value of that attribute.
+     * @param {String} criteria The single search criteria in the form of a string
+     * made up of a label followed by a colon followed by the value that we wish
+     * to match.
+     * 
+     * @return {Boolean} True if the given object matches the given criteria.
+     * False otherwise.
+     */
+    matchesSingleCriteria : function(objectToSearchThrough, criteria) {
+      var delimiterIndex = criteria.indexOf(":");
+      var label = criteria.substring(0, delimiterIndex);
+      var value = criteria.substring(delimiterIndex + 1);
+      
+      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value) >= 0);
+    },
+    
+    /**
+     * Process the given string into an array of tokens where each token is
+     * either a search criteria or an operator (AND or OR). Also makes each
+     * search criteria token lowercase, so that searches will be case-
+     * insensitive.
+     * 
+     * @param {String} queryString The string to tokenize.
+     * 
+     * @return {String} The tokenized string
+     */
+    processQueryString : function(queryString) {      
+      // Split on spaces
+      var queryArray = queryString.split(" ");
+      
+      // Create an array of tokens out of the query string where each token is
+      // either a search criteria or an operator (AND or OR).
+      var queryTokens = [];
+      var currentString = "";
+      for (i in queryArray) {
+        var currentItem = queryArray[i];
+        if ((currentItem == "AND") || (currentItem == "OR")) {
+          queryTokens.push(currentString);
+          queryTokens.push(currentItem);
+          currentString = "";
+        } else if (currentString) {
+          currentString = currentString + " " + currentItem.toLowerCase();
+        } else {
+          currentString = currentItem.toLowerCase();
+        }
+      }
+      queryTokens.push(currentString);
+      
+      return queryTokens;
     }
   });
 

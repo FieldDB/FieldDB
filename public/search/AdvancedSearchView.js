@@ -101,8 +101,15 @@ define([
      */
     searchUnion : function() {
       Utils.debug("In searchUnion");
-      this.search("union");
-      this.updateSearchBox("union");
+      
+      // Create a query string from the search criteria
+      var queryString = this.getQueryString("union");
+      
+      // Update the search box
+      appView.searchView.model.set("searchKeywords", queryString);
+      
+      // Start the search
+      this.search(queryString);
     },
     
     /**
@@ -110,64 +117,30 @@ define([
      */
     searchIntersection : function() {
       Utils.debug("In searchIntersection");
-      this.search("intersection");
-      this.updateSearchBox("intersection");
+      
+      // Create a query string from the search criteria
+      var queryString = this.getQueryString("intersection");
+      
+      // Update the search box
+      appView.searchView.model.set("searchKeywords", queryString);
+      
+      // Start the search
+      this.search(queryString);
     },
     
     /**
-     * Perform a search that finds either the union or the intersection or all
-     * the criteria.
+     * Create a string representation of the search criteria. Each
+     * Object's key is the datum field's label and its value is the datum
+     * field's value (i.e the search criteria). An example object would be
+     *  {
+     *    utterance : "searchForThisUtterance",
+     *    gloss : "searchForThisGloss",
+     *    translation : "searchForThisTranslation"
+     *  }
      * 
-     * @param type {String} Either "union" or "intersection"
+     * @return {Object} The created query object.
      */
-    search : function(type) {
-      // All the search fields related to Datum
-      var datumFieldsViews = this.advancedSearchDatumView.collection;
-      
-      // All the resulting datumIds arrays
-      var allDatumIds = [];
-      
-      // Use these to determine when all the mini-searches are complete and
-      // we can display the results
-      var numDatumFields = this.advancedSearchDatumView.collection.length;
-      var numDatumFieldsProcessed = 0;
-      
-      datumFieldsViews.each(function(datumField) {
-        var value = datumField.get("value");
-        if (value && value != "") {
-          (new Datum()).searchByDatumField(datumField.get("label"), value, function(datumIds) {
-            numDatumFieldsProcessed++;
-            
-            // Add this DatumFields' results to any other results
-            allDatumIds.push(datumIds);
-            
-            // If all the queries have finished and we have all the results
-            if (numDatumFieldsProcessed == numDatumFields) {
-              if (type == "union") {
-                // Union the results before displaying
-                appView.dataListView.model.set("datumIds", _.union.apply(_, allDatumIds));
-              } else if (type == "intersection") {
-                // Intersect the results before displaying
-                appView.dataListView.model.set("datumIds", _.intersection.apply(_, allDatumIds));
-              }
-              // Display the results
-              appView.dataListView.renderNewModel();
-            }
-          });
-        } else {
-          numDatumFieldsProcessed++;
-        }
-      });
-    },
-    
-    /**
-     * Update the little search box with the search string corresponding to the
-     * current search criteria and the given type of search.
-     * 
-     * @param type {String} "union" if this search unions all the criteria together,
-     * or "intersection" if this search intersects all the criteria together.
-     */
-    updateSearchBox : function(type) {      
+    getQueryString : function(type) {      
       // All the search fields related to Datum
       var datumFieldsViews = this.advancedSearchDatumView.collection;
       
@@ -182,11 +155,30 @@ define([
       
       // Update the search box with the search string corresponding to the
       // current search criteria
+      var queryString = "";
       if (type == "union") {
-        appView.searchView.model.set("searchKeywords", searchCriteria.join(" OR "));
+        queryString = searchCriteria.join(" OR ");
       } else if (type == "intersection") {
-        appView.searchView.model.set("searchKeywords", searchCriteria.join(" AND "));
+        queryString = searchCriteria.join(" AND ");
       }
+      
+      return queryString;
+    },
+    
+    /**
+     * Perform a search that finds either the union or the intersection or all
+     * the criteria.
+     * 
+     * @param queryString {String} The string representing the query.
+     */
+    search : function(queryString) {
+      // Search for Datum that match the search criteria      
+      var allDatumIds = [];
+      (new Datum()).searchByQueryString(queryString, function(datumIds) {        
+        // Display the results in the DataListView
+        appView.dataListView.model.set("datumIds", datumIds);
+        appView.dataListView.renderNewModel();
+      });
     },
     
     /**
