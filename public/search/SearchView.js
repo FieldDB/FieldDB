@@ -70,11 +70,13 @@ define([
      */
     search : function() {
       Utils.debug("Will search for " + $("#search_box").val());
-      
-      // (new Datum()).searchByDatumField("gloss", $("#search_box").val(), function(datumIds) {
-        // appView.dataListView.model.set("datumIds", datumIds);
-        // appView.dataListView.renderNewModel();
-      // });
+            // Search for Datum that match the search criteria      
+      var allDatumIds = [];
+      (new Datum()).searchByQueryString($("#search_box").val(), function(datumIds) {        
+        // Display the results in the DataListView
+        appView.dataListView.model.set("datumIds", datumIds);
+        appView.dataListView.renderNewModel();
+      });
     },
     
     /**
