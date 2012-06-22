@@ -1,113 +1,110 @@
 <!-- Black Navigation Bar Across the Top -->
 <div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container-fluid">
-			<div class="btn-group pull-right">
-				<ul class="nav">
-					<li><a href="#corpus/yale"><i class="icons icon-home"></i></a></li>
-					<li><a><i class="icons icon-refresh icon-white"></i></a></li>
-					<li>
-						<div class="btn-group">
-							<button class="btn dropdown-toggle btn-inverse"
-								data-toggle="dropdown">
-								<i class="icons icon-user icon-white"> </i> <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" id="authentication">
-							</ul>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div id="search" class="search class="nav-collapse"></div>
-		</div>
-	</div>
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <div class="btn-group pull-right">
+        <ul class="nav">
+          <li>
+            <a href="#corpus/yale">
+              <i class="icons icon-home"></i>
+            </a>
+          </li>
+          <li>
+            <a>
+              <i class="icons icon-refresh icon-white"></i>
+            </a>
+          </li>
+          <li>
+            <div class="btn-group">
+              <button class="btn dropdown-toggle btn-inverse"
+              data-toggle="dropdown">
+                <i class="icons icon-user icon-white"></i>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" id="authentication"></ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="search" class="search nav-collapse"></div>
+    </div>
+  </div>
 </div>
-
-
 <!-- The rest of the page -->
 <div class="container-fluid main">
-	<div class="row-fluid">
-		<!-- Elements on Lefthand side -->
-		<div class="span3">
-			<div id="corpus" class="well sidebar-nav"></div>
-			<div id="data_list" class="sidebar-nav well"></div>
-		</div>
-		<!--Elements in the middle (things that get hidden  -->
-		<div class="span6 well">
-			<!--                The layout of the fullscreen datum page -->
-			<div id="fullscreen-datum-view" class="middle">
-				<div id="datum-view">Fullscreen Datum View</div>
-			</div>
+  <div class="row-fluid">
+    <!-- Elements on Lefthand side -->
+    <div class="span3">
+      <div id="corpus" class="well sidebar-nav"></div>
+      <div id="data_list" class="sidebar-nav well"></div>
+    </div>
+    <!--Elements in the middle (things that get hidden  -->
+    <div class="span6 well">
+      <!--                The layout of the fullscreen datum page -->
+      <div id="fullscreen-datum-view" class="middle">
+        <div id="datum-view">Fullscreen Datum View</div>
+      </div>
 
-			<!--               The layout of the new session page -->
+      <!--               The layout of the new session page -->
+      <div id="new-session-view" class="middle">
+        <div>New Session</div>
+      </div>
 
-			<div id="new-session-view" class="middle">
-				<div>New Session</div>
-			</div>
+      <!--               The layout of the fullscreen search page -->
+      <div id="fullscreen-search-view" class="middle">
+        <div>Fullscreen Search View</div>
+      </div>
 
-			<!--               The layout of the fullscreen search page -->
-			<div id="fullscreen-search-view" class="middle">
-				<div>Fullscreen Search View</div>
-			</div>
+      <!--              The layout of the user preferences page -->
+      <div id="user-preferences-view" class="middle">
+        <div>User Preferences</div>
+      </div>
 
+      <!--              The layout of the datum preferences page -->
+      <div id="datum-preferences-view" class="middle">
+        <div>Datum Preferences</div>
+      </div>
 
-			<!--              The layout of the user preferences page -->
-			<div id="user-preferences-view" class="middle">
-				<div>User Preferences</div>
-			</div>
+      <!-- The layout of the new datalist page -->
+      <div id="new_data_list" class="middle"></div>
 
-			<!--              The layout of the datum preferences page -->
-			<div id="datum-preferences-view" class="middle">
-				<div>Datum Preferences</div>
-			</div>
+      <!-- The layout of the new corpus page -->
+      <div id="new-corpus" class="middle">
+        <div>New Corpus</div>
+      </div>
+      <!-- The layout of the corpus details page -->
+      <div id="fullscreen-corpus-view" class="middle">
+        <div id="corpus-details-view">Corpus Details</div>
+      </div>
 
-			<!-- The layout of the new datalist page -->
-			<div id="new_data_list" class="middle"></div>
+      <!-- The layout of the keyboard shortcuts page -->
+      <div id="hotkey-config-view" class="middle">
+        <div>Keyboard Shortcuts</div>
+      </div>
 
+      <!-- The layout of the export data page -->
+      <div id="export-view" class="middle">
+        <div>Export Data</div>
+      </div>
 
-			<!-- The layout of the new corpus page -->
-			<div id="new-corpus" class="middle">
-				<div>New Corpus</div>
-			</div>
-			<!-- The layout of the corpus details page -->
-			<div id="fullscreen-corpus-view" class="middle">
-				<div id="corpus-details-view">Corpus Details</div>
-			</div>
+      <!-- The layout of the import page -->
+      <div id="import" class="middle">
+        <div>Import</div>
+      </div>
 
-			<!-- The layout of the user profile page -->
-			<div id="fullscreen-user-profile-view" class="middle">
-				<div id="user-profile-view">User Profile</div>
-			</div>
-
-			<!-- The layout of the keyboard shortcuts page -->
-			<div id="hotkey-config-view" class="middle">
-				<div>Keyboard Shortcuts</div>
-			</div>
-
-			<!-- The layout of the export data page -->
-			<div id="export-view" class="middle">
-				<div>Export Data</div>
-			</div>
-
-
-			<!-- The layout of the import page -->
-			<div id="import" class="middle">
-				<div>Import</div>
-			</div>
-
-		</div>
-		<!--/span-->
-		<!-- right hand side -->
-		<div class="span3 well">
-			<div id="activity_feed">Activity Feed</div>
-		</div>
-		<!--/span-->
-	</div>
-	<!--/row-->
+    </div>
+    <!--/span-->
+    <!-- right hand side -->
+    <div class="span3 well">
+      <div id="activity_feed">Activity Feed</div>
+    </div>
+    <!--/span-->
+  </div>
+  <!--/row-->
 </div>
 <!--/row-->
 
+<!-- modals -->
 
-
-
-
+<!-- The layout of the user profile page -->
+<div id="fullscreen-user-profile-view" class="modal show"></div>
