@@ -37,12 +37,12 @@ define([
       
       //grabbing datumFields from datum and session in the corpus
       this.advancedSearchDatumView = new UpdatingCollectionView({
-        collection           : window.app.get("corpus").get("datumFields"),
+        collection           : window.app.get("corpus").get("datumFields").clone(),
         childViewConstructor : DatumFieldView,
         childViewTagName     : 'li'
       });
       this.advancedSearchSessionView = new UpdatingCollectionView({
-        collection           : window.app.get("corpus").get("sessionFields"),
+        collection           : window.app.get("corpus").get("sessionFields").clone(),
         childViewConstructor : DatumFieldView,
         childViewTagName     : 'li'
       });
