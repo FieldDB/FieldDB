@@ -1,9 +1,11 @@
-define([ "use!backbone", 
-         "user/UserPreference"
- ], function(Backbone,
-             UserPreference) {
+define([ 
+    "use!backbone", 
+    "user/UserPreference"
+], function(
+    Backbone,
+    UserPreference
+) {
   var UserGeneric = Backbone.Model.extend(
-
   /** @lends UserGeneric.prototype */
   {
     /**
@@ -13,16 +15,16 @@ define([ "use!backbone",
      * @property {String} username This is a username used when login.
      * @property {String} password This is a password used when login. It should be secure (containing 1 digit, 1 uppercase) because it is what protects the confidentiality of the corpus.
      * @property {String} email This is user's email
-     * @property {Url} gravatar This is user's gravatar
+     * @property {String} gravatar This is user's gravatar
      * @property {String} researchInterest This is user's field of
      *           interest (eg. semantics etc)
      * @property {String} affiliation This is user's affiliation
-     * @property {String} researchInterest This is user's research interest
-     * @property {Array} corpuses Corpora are projects, they are a
-     *           complete collection of datum. A user is associated with
-     *           projects/corpora.
-     * @property {Array} dataLists Datalists are selected parts of
-     *           corpora (eg. passives; data to be checked week etc).
+     * @property {String} description This user's description
+     * @property {String} subtitle This user's subtitle
+     * @property {Array} corpuses The corpus IDs of the corpuses owned by
+     *           this user
+     * @property {Array} dataLists The datalist IDs of the datalists owned
+     *           by this user.
      * @property {UserPreference} prefs This is where we'll have things like
      *           background/skin.
      * 
@@ -37,62 +39,10 @@ define([ "use!backbone",
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      // this.bind('error', function(model, error) {
-      // // TODO Handle validation errors
-      // });
-//      if( this.get("corpuses") == null){
-//        this.set("corpuses", new Corpuses());
-//        this.get("corpuses").add(new Corpus({title: "test corpus filled in user generic"}));
-//      }
-      if(typeof(this.get("prefs") == "function")){
-        this.set("prefs",new UserPreference());
-      }
-    },
-
-    // This is an list of attributes and their default values
-    defaults : {
-      // TODO set up attributes and their defaults. Example:
-      // someAttribute: 5,
-      // someAttribute2: 'Hello world',
-      // someAttribute3: []
-
-      username : "",
-      password : "",
-      email : "",
-      gravatar : "./../user/user_gravatar.png",
-      researchInterest : "",
-      affiliation : "",
-      description : "",
-      subtitle : "",
-      // Corpora are projects. They are a complete collection of
-      // datum.
-      corpuses : [],
-      // Datalists are selected parts of corpora (favourites, for
-      // example: passives, or data to be checked next week).
-      dataLists : [],
-      // UserPreferences are where we'll have things like background/skin
-      // options.
-      prefs : UserPreference
-
     },
     
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
-        
-    /**
-     * Describe the validation here.
-     * 
-     * @param {Object}
-     *            attributes The set of attributes to validate.
-     * 
-     * @returns {String} The validation error if there is one. Otherwise
-     *          doesn't return anything.
-     */
-
-    validate : function(attributes) {
-
-    }
-
   });
 
   return UserGeneric;

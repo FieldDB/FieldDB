@@ -5,7 +5,6 @@ define([
     "authentication/Authentication", 
     "user/User", 
     "user/UserView",
-    "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -13,8 +12,7 @@ define([
     authTemplate, 
     Authentication, 
     User, 
-    UserView,
-    UserPreference
+    UserView
 ) {
   var AuthenticationView = Backbone.View.extend(
   /** @lends AuthenticationView.prototype */
@@ -224,12 +222,10 @@ define([
     authenticatePreviousUser : function() {
       if (localStorage.getItem("user")) {
         // Reform the previous user from localStorage
-        var uobj = JSON.parse(localStorage.getItem("user"));
-        uobj.prefs = new UserPreference(uobj.prefs);
+        this.model.get("user").restructure(JSON.parse(localStorage.getItem("user")));
         
         // Save the previous user in our Models
-        this.model.get("user").set(uobj);
-        this.model.set("username", uobj.username);
+        this.model.set("username", this.model.get("user").get("username"));
         
         if (this.model.staleAuthentication) {
           showQuickAuthenticateView();
