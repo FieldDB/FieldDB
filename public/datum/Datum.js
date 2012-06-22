@@ -132,8 +132,11 @@ define([ "use!backbone",
      * an empty Array if there are no matches.
      */
     searchByDatumField : function(field, str, callback) {
+      // Change string to lower case for case-insensitive search
+      str = str.toLowerCase();
+      
       this.pouch(function(err, db) {
-        // Code for get_*/get_*:
+        // Code for get_datum_field/get_*:
         //
         // function(doc) {
         //   if (doc.datumFields) {
@@ -151,7 +154,7 @@ define([ "use!backbone",
             // Go through all the rows of results
             for (i in response.rows) {
               // If the row's datum field contains the given string
-              if (response.rows[i].key.indexOf(str) >= 0) {
+              if (response.rows[i].key.toLowerCase().indexOf(str) >= 0) {
                 // Keep its datum's ID, which is the value
                 matchIds.push(response.rows[i].value);
               }
