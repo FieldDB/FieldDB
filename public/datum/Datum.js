@@ -221,8 +221,10 @@ define([ "use!backbone",
       var queryTokens = [];
       var currentString = "";
       for (i in queryArray) {
-        var currentItem = queryArray[i];
-        if ((currentItem == "AND") || (currentItem == "OR")) {
+        var currentItem = queryArray[i].trim();
+        if (currentItem.length <= 0) {
+          break;
+        } else if ((currentItem == "AND") || (currentItem == "OR")) {
           queryTokens.push(currentString);
           queryTokens.push(currentItem);
           currentString = "";
