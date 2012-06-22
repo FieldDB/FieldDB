@@ -5,7 +5,6 @@ define([
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
-    "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -13,8 +12,7 @@ define([
     userTemplate, 
     Corpus,
     Corpuses,
-    User,
-    UserPreference
+    User
 ) {
   var UserView = Backbone.View.extend(
   /** @lends UserView.prototype */

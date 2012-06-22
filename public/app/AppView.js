@@ -109,6 +109,8 @@ define([
       });
       
       var userToBePassedAround = new User();
+      console.log("userToBePassedAround:");
+      console.log(userToBePassedAround);
       
       // Create an AuthenticationView
       this.authView = new AuthenticationView({
