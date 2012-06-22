@@ -225,15 +225,11 @@ define([
       if (localStorage.getItem("user")) {
         // Reform the previous user from localStorage
         var uobj = JSON.parse(localStorage.getItem("user"));
-        var u = new User(uobj);
-        u.set("prefs", new UserPreference(uobj.prefs));
+        uobj.prefs = new UserPreference(uobj.prefs);
         
         // Save the previous user in our Models
-        this.userView.model = u;
-        this.model.set({
-          user : u,
-          username : u.username
-        });
+        this.model.get("user").set(uobj);
+        this.model.set("username", uobj.username);
         
         if (this.model.staleAuthentication) {
           showQuickAuthenticateView();
