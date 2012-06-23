@@ -134,12 +134,14 @@ Although it is designed primarily for linguists, the application will equally be
 
 \section {Budget \& Timeline}
 
-The iField App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost should be calculated by estimating the time in hours and multiplying by \$42-58, the average rate of a software consultant company who is capable of doing offline HTML5 apps. The cost could be higher in other regions (California, Boston) or lower if students or full-time programmers can be hired (\$22-\$35). 
+The iField App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost is calculated using a rate of \$25/hr.\footnote{The actual cost should be calculated by estimating the time in hours and multiplying by \$42-58, the average rate of a software consultant company who is capable of doing offline HTML5 apps. The cost could be higher in other regions (California, Boston) or lower if students or full-time programmers can be hired (\$22-\$35).  
 
-The  estimates include tests (roughly 10\% - 20\% of the budget) which are functions of code which serve to be sure that the code compiles and runs as is expected. Tests are very important for maintaining software, particularly Javascript which is a very ambiguous language and HTML5 which is a specification developed by WC3. HTML5 implementation  began in 2008 and is currently unstable at various levels of implementation by the major web browsers (Firefox, Safari, Chrome, Internet Explorer).
+The  estimates include tests (roughly 10\% - 20\% of the budget) which are functions of code which serve to be sure that the code compiles and runs as is expected. Tests are very important for maintaining software, particularly Javascript which is a very ambiguous language and HTML5 which is a specification developed by WC3. HTML5 implementation  began in 2008 and is currently unstable at various levels of implementation by the major web browsers (Firefox, Safari, Chrome, Internet Explorer).}
 
 
-Since the budget is dependent on how long it takes to complete the modules, it is possible to focus on each module separately and simultaneously, thus reducing the time of completion. 
+
+
+It is possible to focus on each module separately and simultaneously, thus reducing the time of completion. 
 
 
 
@@ -170,7 +172,12 @@ Total &  88 &\$83,176.04\\
 \end{table}
 
 
-For a complete breakdown of the budget and schedule of the the software by modules see Appendix!~\ref{sec:modules}.
+\subsection{Core Modules}
+
+The project has three core modules which must be developed prior to additional modules. These are the {\it collaboration, corpus} and {\it lexicon} modules, briefly outlined in terms of functionality and timeline in the Appendix~\ref{sec:modules}.  Implementation of the three core modules began on April 20th 2012. The three core modules will be launched on August 1st at CAML in Patzun Guatemala. We estimate the three core modules and the software architecture to take 9.2 weeks to complete with three software developers,  and cost roughly \$23,800 before taxes. We will have its final time and costs on August 3rd 2012.
+
+~\\
+For a complete breakdown of the budget and schedule of the the software by modules see Appendix~\ref{sec:modules}.
 
 
 
@@ -186,7 +193,7 @@ For a complete breakdown of the budget and schedule of the the software by modul
 
 
 
-The usefulness and effectiveness of the iFiled App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html), and data management following DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
+The usefulness and effectiveness of the iField App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html), and data management following DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
 
 
 
@@ -196,44 +203,41 @@ The usefulness and effectiveness of the iFiled App will be evaluated in two resp
 
 \item Content: Data is annotated and described using consistent terminology.  
 
-The application itself is not tied to particular linguistic frameworks or theoretical constructs, and allows researchers to choose categories for annotation. Researchers are able to change the data fields and categories if they find inconsistent terminology within a corpus. 
+The application allows users to design their annotation terminology per corpus and attaches these categories to each datum of the corpus, ensuring that all datum are annotated in a consistent fashion. The creation of datum also automatically inserts the gloss units into an ontology which is used for search indexes and can be human curated in Module~\ref{tab:phono}. The Annotations include three types, free text, enumerated grammatical tags, and enumerated datum status (checked with a consultant, to be checked, elicitation error, deleted etc). While all datum are annotated with a consistent  terminology, the app is designed to adapt to a particular linguistic framework or theoretical construct, and allows researchers to choose categories for annotation. 
 
 \item Format: Data are intelligible regardless of the types of operating system 
 
-The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. 
+The application entirely Unicode and exports data in  a number of plain text human readable non-proprietary formats including .json, .tex, .txt, .csv, and .xml files. The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. 
 
 \item Discovery: Data are searchable and discoverable. 
 
- The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
- 
+Within the application, data are discoverable via keyword and string match search. The search module is capable of performing intersective or union search of the data using any of the annotation fields which are used in the corpus. External to the application the corpora which are public will show up in the OLAC linguistic search engine. \footnote{ http://linguistlist.org/olac/index.html http://www.language-archives.org/documents/implement.html\#conventional}
+
+The system is designed not only for data entry, but also for data retrieval. Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
+Confidential data are stored encrypted in the database. The application allows two sorts of export. Export export of output can maintaining encryption on confidential data, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app and must be protected as any other confidential data.
 
 \item Access: Data are accessible. 
 
-Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
-The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
+As the system is online and hosted by reliable servers, the data is considered accessible, unlike tape-data and noted cards.
 
 
 
-\item Citation: Data provide citation information. 
 
-All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data are elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
-% A corpus has an URL that can be used for citation.  
+\item Citation: Data provide citation information.
 
-\item Preservation: Data are archived in a way that withstands long-term preservation. 
+Each corpus has a unique URL which can be used for citation. In addition, corpus administrators can add an archive URL and automate their corpus archiving by creating a "Bot" which will archive their data to one of the existing known language archives of the user's choosing.\footnote{http://emeld.org/school/classroom/archives/index.html} Data are further citable to their primary sources in that all data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data are elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
 
-Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete.  
-In addition to a host server, researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
+\item Preservation: Data are archived in a way that withstands long-term preservation.  \footnote{http://emeld.org/school/classroom/archives/finding-archives.html}
+
+Data are stored in a host server as JSON files. JSON files are human-readable text files, which are have replaced XML data stores as a lighter weight, similarly featured markup language. Therefore the information content would not be lost even if the data format becomes obsolete.  
+In addition to a host server, the data is stored in multiple locations. Researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
 
 
 \item Rights: Rights of authors of data and of language consultants are respected. 
 
-Researchers (authors of data) have control over who can see, edit and/or export their data. Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
-
-
+Researchers and language consultants (authors of data) have control over who can see, edit and/or export their data. Data which are confidential, as well as consultant information which is confidential are encrypted prior to storage in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author.  The terms of use of data will be well documented, and are enforced using AES encryption. As endangered language data may often have a condition of being kept private until its parties have passed away, should the administration member of the corpus die, a policy of obeying his/her heir's decisions with regard to the data shall be put in place and discussed in the terms and conditions. 
 
 \end{enumerate} 
-  
-
 
 \subsection {Data Management }
 
@@ -246,7 +250,7 @@ What data will be generated: collection rationale, collection and analysis metho
 
 Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. Multiple storage locations means less risk of losing data 
 
-Data organization: stored in JSON format (exportable to .csv, .xml, .txt, .tex), NSQL database so the search is quick 
+Data organization: stored in JSON format (exportable to .csv, .xml, .txt, .tex), NoSQL database so the search of data in context is very powerful 
 
 Data management: who is in charge? version control, backup,    
 
