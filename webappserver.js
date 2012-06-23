@@ -1,8 +1,17 @@
 var express = require('express')
   , passport = require('passport')
+  , htts = require('https')
+  , OAuth = require('oauth').OAuth
+  , crypto = require('crypto')
   , util = require('util')
   , LocalStrategy = require('passport-local').Strategy;
   
+var couchkeys = require('./couchkeys');
+
+//var options = {
+//    key: fs.readFileSync('agent2-key.pem'),
+//    cert: fs.readFileSync('agent2-cert.pem')
+//  };
 
 var users = [
     { id: 1, username: 'sapir', password: 'phoneme', email: 'esapir@email.com' }
