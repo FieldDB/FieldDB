@@ -37,12 +37,12 @@ define([
       
       //grabbing datumFields from datum and session in the corpus
       this.advancedSearchDatumView = new UpdatingCollectionView({
-        collection           : window.app.get("corpus").get("datumFields"),
+        collection           : window.app.get("corpus").get("datumFields").clone(),
         childViewConstructor : DatumFieldView,
         childViewTagName     : 'li'
       });
       this.advancedSearchSessionView = new UpdatingCollectionView({
-        collection           : window.app.get("corpus").get("sessionFields"),
+        collection           : window.app.get("corpus").get("sessionFields").clone(),
         childViewConstructor : DatumFieldView,
         childViewTagName     : 'li'
       });
@@ -65,7 +65,9 @@ define([
      * The Handlebars template rendered as the SearchView.
      */
     template : Handlebars.compile(advanced_searchTemplate),
+    
     advancedSearchDatumView : UpdatingCollectionView,
+    
     advancedSearchSessionView : UpdatingCollectionView,
    
     /**
@@ -99,7 +101,15 @@ define([
      */
     searchUnion : function() {
       Utils.debug("In searchUnion");
-      this.search("union");
+      
+      // Create a query string from the search criteria
+      var queryString = this.getQueryString("union");
+      
+      // Update the search box
+      appView.searchView.model.set("searchKeywords", queryString);
+      
+      // Start the search
+      this.search(queryString);
     },
     
     /**
@@ -107,52 +117,67 @@ define([
      */
     searchIntersection : function() {
       Utils.debug("In searchIntersection");
-      this.search("intersection");
+      
+      // Create a query string from the search criteria
+      var queryString = this.getQueryString("intersection");
+      
+      // Update the search box
+      appView.searchView.model.set("searchKeywords", queryString);
+      
+      // Start the search
+      this.search(queryString);
+    },
+    
+    /**
+     * Create a string representation of the search criteria. Each
+     * Object's key is the datum field's label and its value is the datum
+     * field's value (i.e the search criteria). An example object would be
+     *  {
+     *    utterance : "searchForThisUtterance",
+     *    gloss : "searchForThisGloss",
+     *    translation : "searchForThisTranslation"
+     *  }
+     * 
+     * @return {Object} The created query object.
+     */
+    getQueryString : function(type) {      
+      // All the search fields related to Datum
+      var datumFieldsViews = this.advancedSearchDatumView.collection;
+      
+      // Get all the search criteria
+      var searchCriteria = [];
+      datumFieldsViews.each(function(datumField) {
+        var value = datumField.get("value");
+        if (value && value != "") {
+          searchCriteria.push(datumField.get("label") + ":" + value);
+        }
+      });
+      
+      // Update the search box with the search string corresponding to the
+      // current search criteria
+      var queryString = "";
+      if (type == "union") {
+        queryString = searchCriteria.join(" OR ");
+      } else if (type == "intersection") {
+        queryString = searchCriteria.join(" AND ");
+      }
+      
+      return queryString;
     },
     
     /**
      * Perform a search that finds either the union or the intersection or all
      * the criteria.
      * 
-     * @param type {String} Either "union" or "intersection"
+     * @param queryString {String} The string representing the query.
      */
-    search : function(type) {
-      // All the search fields related to Datum
-      var datumFieldsViews = this.advancedSearchDatumView.collection;
-      
-      // All the resulting datumIds arrays
+    search : function(queryString) {
+      // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      
-      // Use these to determine when all the mini-searches are complete and
-      // we can display the results
-      var numDatumFields = this.advancedSearchDatumView.collection.length;
-      var numDatumFieldsProcessed = 0;
-      
-      datumFieldsViews.each(function(datumField) {
-        var value = datumField.get("value");
-        if (value && value != "") {
-          (new Datum()).searchByDatumField(datumField.get("label"), value, function(datumIds) {
-            numDatumFieldsProcessed++;
-            
-            // Add this DatumFields' results to any other results
-            allDatumIds.push(datumIds);
-            
-            // If all the queries have finished and we have all the results
-            if (numDatumFieldsProcessed == numDatumFields) {
-              if (type == "union") {
-                // Union the results before displaying
-                appView.dataListView.model.set("datumIds", _.union.apply(_, allDatumIds));
-              } else if (type == "intersection") {
-                // Intersect the results before displaying
-                appView.dataListView.model.set("datumIds", _.intersection.apply(_, allDatumIds));
-              }
-              // Display the results
-              appView.dataListView.renderNewModel();
-            }
-          });
-        } else {
-          numDatumFieldsProcessed++;
-        }
+      (new Datum()).searchByQueryString(queryString, function(datumIds) {        
+        // Display the results in the DataListView
+        appView.dataListView.model.set("datumIds", datumIds);
+        appView.dataListView.renderNewModel();
       });
     },
     

@@ -37,8 +37,6 @@ define([
       "corpus/:corpusName/search" : "showAdvancedSearch",
       "corpus/" : "newFullscreenCorpus",
       "corpus/:corpusName/export" : "showExport",
-      "user/:userName" : "showUserProfile",
-      "user/:userName/prefs" : "showUserPreferences",
       "user/:userName/datumprefs" : "showDatumPreferences",
       "user/:userName/hotkeyconfig" : "showHotKeyConfig",
       "import" : "showImport",
@@ -242,42 +240,6 @@ define([
       $("#activity_feed").show();
     },
 
-    /**
-     * Displays the profile of the user specified by the given userName.
-     * 
-     * @param {String}
-     *          userName The username of the user whose profile to display.
-     */
-    showUserProfile : function(userName) {
-      Utils.debug("In showUserProfile: " + userName);
-      
-      // TODO Set appView.fullScreenUserview.model's properties to be for the
-      // user with the given username, currently using the logged in user.
-      appView.fullScreenUserView.model.set(
-        appView.authView.model.get("user")
-      );
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-user-profile-view").show();
-    },
-
-    /**
-     * Displays the preferences of the logged in user.
-     * 
-     * @param {String}
-     *          userName The username of the user logged in.
-     */
-    showUserPreferences : function(userName) {
-      Utils.debug("In showUserPreferences: " + userName);
-      
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-datalist-view").show();
-      $("#user-preferences-view").show();
-      
-    },
-    
     showDatumPreferences : function(userName) {
       Utils.debug("In showDatumPreferences: " + userName);
 

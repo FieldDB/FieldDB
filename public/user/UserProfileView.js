@@ -47,6 +47,16 @@ define([
      * The underlying model of the UserProfileView is a User.
      */
     model : User,
+    
+    /**
+     * Events that the UserProfileView is listening to and their handlers.
+     */
+    events : {
+      "click #close_user_profile" : function() {
+        console.log("hiding user profile");
+        this.$el.modal("hide");
+      }
+    },
 
     /**
      * The corpusesView is a child of the CorpusView.
@@ -75,7 +85,7 @@ define([
             .toJSON()));
 
         // Display the UserProfileView
-        this.setElement($("#user-profile-view"));
+        this.setElement($("#fullscreen-user-profile-view"));
         $(this.el).html(this.template(this.model.toJSON()));
 
         // Display the CorpusesView
