@@ -15,7 +15,7 @@ define( ["use!backbone",
      *        if one has the corpus' secret key, or if one is logged into the
      *        system with their user name and password. This allows the corpus
      *        to be shared with anyone, with out worrying about confidential
-     *        data or informant stories being publically accessible. We are
+     *        data or consultant stories being publically accessible. We are
      *        using the AES cipher algorithm.
      * 
      * The Advanced Encryption Standard (AES) is a U.S. Federal Information

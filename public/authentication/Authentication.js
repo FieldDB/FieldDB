@@ -13,7 +13,7 @@ define([
      * @class The Authentication Model handles login and logout and
      *        authentication locally or remotely. *
      * 
-     * @property {User} user The user is a User object (User, Bot or Informant)
+     * @property {User} user The user is a User object (User, Bot or Consultant)
      *           which is logged in and viewing the app with that user's
      *           perspective. To check whether some data is
      *           public/viewable/editable the app.user should be used to verify
