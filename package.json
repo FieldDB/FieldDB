@@ -5,6 +5,8 @@
     "express": "latest"
     ,"underscore": "latest"
     ,"paperboy": "latest"
+    ,"crypto":"latest"
+    ,"oauth": "latest"
     ,"passport": "latest"
     ,"passport-local": "latest"
   }

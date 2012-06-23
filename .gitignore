@@ -1,3 +1,8 @@
+#ignore private config files
+couchkeys.js
+twitterkeys.js
+
+
 # Ignore natural lib 
 public/libs/natural/
 
