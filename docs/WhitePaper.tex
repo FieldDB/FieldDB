@@ -134,7 +134,7 @@ Although it is designed primarily for linguists, the application will equally be
 
 \section {Budget \& Timeline}
 
-The iField App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost is calculated by estimating the time in hours and multiplying by \$42-58, the average rate of a software consultant company in Montr\'eal who is capable of doing offline HTML5 apps. The cost could be higher in other regions (California, Boston) or lower if students or full-time programmers can be hired (\$22-\$35). 
+The iField App is composed of eight modules and thus the cost is divided into eight major components. In addition, a separate price is given for software architecture and for 1 year of user support and project growth, which is needed to make a longterm viable and useful tool that field linguists can adopt for their labs or for their field methods courses. The cost should be calculated by estimating the time in hours and multiplying by \$42-58, the average rate of a software consultant company who is capable of doing offline HTML5 apps. The cost could be higher in other regions (California, Boston) or lower if students or full-time programmers can be hired (\$22-\$35). 
 
 The  estimates include tests (roughly 10\% - 20\% of the budget) which are functions of code which serve to be sure that the code compiles and runs as is expected. Tests are very important for maintaining software, particularly Javascript which is a very ambiguous language and HTML5 which is a specification developed by WC3. HTML5 implementation  began in 2008 and is currently unstable at various levels of implementation by the major web browsers (Firefox, Safari, Chrome, Internet Explorer).
 
@@ -149,11 +149,11 @@ Since the budget is dependent on how long it takes to complete the modules, it i
 \hline
     Module & Weeks & Price\\ 
 \hline
-    Software Architecture & 0.5  & \$1,555.20  \\ 
-    Collaboration Module & 2.5  & \$5,728.32  \\ 
-    Corpus Module & 4.2 & \$9,201.60 \\
-     Web Spider Module  & 2.5 & \$2,177.28\\
-      Lexicon Module & 2.0 & \$7,340.54 \\ 
+    Software Architecture & 1.5  & \$1,555.20  \\ 
+    Collaboration Module & 7.5  & \$5,728.32  \\ 
+    Corpus Module & 12.6 & \$9,201.60 \\
+     Web Spider Module  & 7.5 & \$2,177.28\\
+      Lexicon Module & 6.0 & \$7,340.54 \\ 
      Phonological Search Module & 3.0 & \$2,177.28 \\
     Dictionary Module & 22.3 & \$18,781.63 \\
         Glosser Module & 19.7 & \$17,770.75 \\
@@ -170,8 +170,208 @@ Total &  88 &\$83,176.04\\
 \end{table}
 
 
-\newpage
+For a complete breakdown of the budget and schedule of the the software by modules see Appendix!~\ref{sec:modules}.
 
+
+
+%%Include in the budget all expenses for the app, including necessary training costs. Mention any co-funding that you are using from other sources. You may want to include a brief narrative of expenses along with a table of individual cost components. 
+
+
+\normalsize
+
+
+
+
+\section {Evaluation}
+
+
+
+The usefulness and effectiveness of the iFiled App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html), and data management following DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
+
+
+
+\subsection {Data Documentation }
+
+\begin{enumerate} 
+
+\item Content: Data is annotated and described using consistent terminology.  
+
+The application itself is not tied to particular linguistic frameworks or theoretical constructs, and allows researchers to choose categories for annotation. Researchers are able to change the data fields and categories if they find inconsistent terminology within a corpus. 
+
+\item Format: Data are intelligible regardless of the types of operating system 
+
+The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. 
+
+\item Discovery: Data are searchable and discoverable. 
+
+ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
+ 
+
+\item Access: Data are accessible. 
+
+Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
+The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
+
+
+
+\item Citation: Data provide citation information. 
+
+All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data are elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
+% A corpus has an URL that can be used for citation.  
+
+\item Preservation: Data are archived in a way that withstands long-term preservation. 
+
+Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete.  
+In addition to a host server, researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
+
+
+\item Rights: Rights of authors of data and of language consultants are respected. 
+
+Researchers (authors of data) have control over who can see, edit and/or export their data. Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
+
+
+
+\end{enumerate} 
+  
+
+
+\subsection {Data Management }
+
+\begin{enumerate} 
+
+\item Plan: Plan for data management prior to data collection and revise it as necessary during the project. 
+
+
+What data will be generated: collection rationale, collection and analysis methods, infrastructure needed for research (not quite asking about the format of data but more about content of the data to be collected) 
+
+Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. Multiple storage locations means less risk of losing data 
+
+Data organization: stored in JSON format (exportable to .csv, .xml, .txt, .tex), NSQL database so the search is quick 
+
+Data management: who is in charge? version control, backup,    
+
+Data description: metadata, metadata standard   
+
+Data sharing: 
+
+Data preservation: short-term / long term preservation plan (local storage on the device, sync to the host server) how to avoid data loss 
+
+Budget: the app is free, text data stored in the database so storage cost is minimum or zero. 
+  
+
+
+
+
+\item Collect: Data are collected in such a way to ensure future usability. 
+
+The application provides a template for data entry which is flexible and customizable. The four core data fields (utterance, morpheme segmentation, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, context of utterance) relevant to their research. Contents of data fields (default and additional) are subject to search, and researchers can organize data using the information contained in the fields. 
+The application is non-proprietary and data collected are exportable in various formats (.csv, .txt, and .tex) to ensure that data are sharable and usable outside the application. 
+
+ 
+
+
+
+\item Assure: The quality of data is assured through checks and inspections. 
+
+Datum state (Checked, To be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
+%Each datum is associated with session information such as researcher's name, consultant's code and date of elicitation. 
+Each datum is also time stamped when entered and modified so that the data history is trackable. 
+
+% Each modification is recorded (I think) but the app would only show last modified ? 
+ 
+\item Describe: Data are accurately and thoroughly described using the appropriate metadata standard.  
+
+Data will be described at three levels in the application: 
+
+\begin{itemize} 
+\item Corpus: A corpus is a dataset created for a single language/dialect and for a particular purpose. A corpus has a title and a description that will include general information about the corpus such as what the dataset is about, who contributes to the corpus and the purpose of creating the corpus.  
+\item Session: Each datum in a corpus is tied to a Session which includes metadata such as language, dialect, researcher's name, consultant's code and the goal of the session (e.g. eliciting scope ambiguity).  
+\item Datum: Data fields and data tags serve for parameters/categories to describe data. The application is not restricted to a particular theoretical construct so that researchers can choose and describe categories appropriate to their research. 
+% describe categories -- I meant the hint pop-up box for extra datum field where users can give hints what should be in the field. 
+
+
+\end{itemize} 
+
+
+\item Preserve: Data are submitted to an appropriate long-term archive.  
+
+Data and associated metadata are stored in a host server for long-term archival purposes. Confidential data and information are stored encrypted using the US Federal approved AES encryption standard to ensure that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. (See also Data Documentation, Items 1, 5, 6 \& 7.)   
+
+\item Discover: Data are located and obtained. 
+
+The application is accessible through internet search, and data tagged for public view will be discoverable within the application via keyword search. Data permitted for export will be exportable to CSV, text or LaTex formats.  (See also 6.1 Data Documentation, Items 3 \& 4.)
+
+\item Integrate: Data from disparate sources are combined into one consistent data set. 
+
+Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (.xml), making data integrated with programs researchers commonly use/have used to store their data. 
+
+\item Analyze: Data are analyzed. 
+
+The four core data fields include morpheme-segmentation and glossing lines, hence the data will contain primary linguistic analysis at the time of the entry to the database. 
+Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for further analysis.   
+
+\end{enumerate} 
+
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%The usefulness and effectiveness of the iFiled App will be evaluated against the following criteria, taken and modified from E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html) and DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
+%
+%\begin{enumerate} 
+%
+%\item Collection: Data are collected and organized with ease. 
+%
+%Self-explanatory UI as well as online and offline functionality will make data collection easier.   This is a fundamental difference between iField, designed by field linguists with software engineering experience, and existing databases which were designed by computer science students, or programmers with no fieldwork experience.
+%
+%\item Quality: The quality of data is assured. 
+%
+%Datum state (Checked, to be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
+%
+%\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories and  are customizable by corpus teams, for their team's corpora. The application thus allows data to be annotated and categorized, without unneccessarily  reducing the ease of data entry. 
+%
+%\item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (xml), making data integrated with programs researchers commonly use/have used to store their data.
+%
+%\item Analysis: The application organizes data in ways to help data analysis. \\  Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for analysis.  
+%
+%\item Format: Data are intelligible regardless of the types of operating system. (E-MELD Summary of Best Practices 2)
+%
+%The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app.
+%
+%\item Discovery: Data are searchable and discoverable. \\ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
+%
+%\item Access: Data are accessible. \\ Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle, however authorized researchers (authors of data) have control over who can see and/or edit their data. 
+%
+%\item Citation: Data provide citation information. \\ All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data was entered and other metadata controlled by the researcher to ensure that data quality can be traced to its source.
+% 
+%\item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
+%
+%\item Security: Confidential information must be kept from public access. \\ Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
+%
+%\end{enumerate} 
+
+
+%
+%Provide information on the metrics that will be used to determine the effectiveness of the project. It has to meet certain data management criteria -- any scientist can discover and use the data over time; it will benefit the scientific community. We are abiding by the best practice standards set by DataOne.   
+%
+%Example format: 
+%
+%\exg. n-tuop'ti-m\\
+%1-window-POSS.SG\\
+%`My window'
+%
+%
+
+\appendix
+
+\section{iField Modules}
+\label{sec:modules}
 \subsection{Core Modules}
 
 The project has three core modules which must be developed prior to additional modules. These are the {\it collaboration, corpus} and {\it lexicon} modules, briefly outlined in terms of functionality and timeline in the following sections.  Implementation of the three core modules began on April 20th 2012. The three core modules will be launched on August 1st at CAML in Patzun Guatemala. We estimate the three core modules and the software architecture to take 9.2 weeks to complete with three software developers,  and cost roughly \$23,800 before taxes. We will have its final time and costs on August 3rd 2012.
@@ -527,203 +727,6 @@ Release new versions&	160&  Javascript \\
 
 
 
-
-
-
-
-%%Include in the budget all expenses for the app, including necessary training costs. Mention any co-funding that you are using from other sources. You may want to include a brief narrative of expenses along with a table of individual cost components. 
-
-
-\normalsize
-
-
-
-
-\section {Evaluation}
-
-
-
-The usefulness and effectiveness of the iFiled App will be evaluated in two respects: Data Documentation and Data Management. Data documentation will be evaluated following E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html), and data management following DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
-
-
-
-\subsection {Data Documentation }
-
-\begin{enumerate} 
-
-\item Content: Data is annotated and described using consistent terminology.  
-
-The application itself is not tied to particular linguistic frameworks or theoretical constructs, and allows researchers to choose categories for annotation. Researchers are able to change the data fields and categories if they find inconsistent terminology within a corpus. 
-
-\item Format: Data are intelligible regardless of the types of operating system 
-
-The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. 
-
-\item Discovery: Data are searchable and discoverable. 
-
- The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
- 
-
-\item Access: Data are accessible. 
-
-Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
-The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app. 
-
-
-
-\item Citation: Data provide citation information. 
-
-All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data are elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
-% A corpus has an URL that can be used for citation.  
-
-\item Preservation: Data are archived in a way that withstands long-term preservation. 
-
-Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete.  
-In addition to a host server, researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
-
-
-\item Rights: Rights of authors of data and of language consultants are respected. 
-
-Researchers (authors of data) have control over who can see, edit and/or export their data. Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
-
-
-
-\end{enumerate} 
-  
-
-
-\subsection {Data Management }
-
-\begin{enumerate} 
-
-\item Plan: Plan for data management prior to data collection and revise it as necessary during the project. 
-
-
-What data will be generated: collection rationale, collection and analysis methods, infrastructure needed for research (not quite asking about the format of data but more about content of the data to be collected) 
-
-Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. Multiple storage locations means less risk of losing data 
-
-Data organization: stored in JSON format (exportable to .csv, .xml, .txt, .tex), NSQL database so the search is quick 
-
-Data management: who is in charge? version control, backup,    
-
-Data description: metadata, metadata standard   
-
-Data sharing: 
-
-Data preservation: short-term / long term preservation plan (local storage on the device, sync to the host server) how to avoid data loss 
-
-Budget: the app is free, text data stored in the database so storage cost is minimum or zero. 
-  
-
-
-
-
-\item Collect: Data are collected in such a way to ensure future usability. 
-
-The application provides a template for data entry which is flexible and customizable. The four core data fields (utterance, morpheme segmentation, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, context of utterance) relevant to their research. Contents of data fields (default and additional) are subject to search, and researchers can organize data using the information contained in the fields. 
-The application is non-proprietary and data collected are exportable in various formats (.csv, .txt, and .tex) to ensure that data are sharable and usable outside the application. 
-
- 
-
-
-
-\item Assure: The quality of data is assured through checks and inspections. 
-
-Datum state (Checked, To be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
-%Each datum is associated with session information such as researcher's name, consultant's code and date of elicitation. 
-Each datum is also time stamped when entered and modified so that the data history is trackable. 
-
-% Each modification is recorded (I think) but the app would only show last modified ? 
- 
-\item Describe: Data are accurately and thoroughly described using the appropriate metadata standard.  
-
-Data will be described at three levels in the application: 
-
-\begin{itemize} 
-\item Corpus: A corpus is a dataset created for a single language/dialect and for a particular purpose. A corpus has a title and a description that will include general information about the corpus such as what the dataset is about, who contributes to the corpus and the purpose of creating the corpus.  
-\item Session: Each datum in a corpus is tied to a Session which includes metadata such as language, dialect, researcher's name, consultant's code and the goal of the session (e.g. eliciting scope ambiguity).  
-\item Datum: Data fields and data tags serve for parameters/categories to describe data. The application is not restricted to a particular theoretical construct so that researchers can choose and describe categories appropriate to their research. 
-% describe categories -- I meant the hint pop-up box for extra datum field where users can give hints what should be in the field. 
-
-
-\end{itemize} 
-
-
-\item Preserve: Data are submitted to an appropriate long-term archive.  
-
-Data and associated metadata are stored in a host server for long-term archival purposes. Confidential data and information are stored encrypted using the US Federal approved AES encryption standard to ensure that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. (See also Data Documentation, Items 1, 5, 6 \& 7.)   
-
-\item Discover: Data are located and obtained. 
-
-The application is accessible through internet search, and data tagged for public view will be discoverable within the application via keyword search. Data permitted for export will be exportable to CSV, text or LaTex formats.  (See also 6.1 Data Documentation, Items 3 \& 4.)
-
-\item Integrate: Data from disparate sources are combined into one consistent data set. 
-
-Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (.xml), making data integrated with programs researchers commonly use/have used to store their data. 
-
-\item Analyze: Data are analyzed. 
-
-The four core data fields include morpheme-segmentation and glossing lines, hence the data will contain primary linguistic analysis at the time of the entry to the database. 
-Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for further analysis.   
-
-\end{enumerate} 
-
-
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%The usefulness and effectiveness of the iFiled App will be evaluated against the following criteria, taken and modified from E-MELD Best Practices in Digital Language Documentation (http://emeld.org/school/what.html) and DataONE Primer on Data Management (http://www.dataone.org/sites/all/documents/DataONE\_BP\_Primer\_020212.pdf). 
-%
-%\begin{enumerate} 
-%
-%\item Collection: Data are collected and organized with ease. 
-%
-%Self-explanatory UI as well as online and offline functionality will make data collection easier.   This is a fundamental difference between iField, designed by field linguists with software engineering experience, and existing databases which were designed by computer science students, or programmers with no fieldwork experience.
-%
-%\item Quality: The quality of data is assured. 
-%
-%Datum state (Checked, to be checked, Elicitation Error) and datum comment feeds enables researchers to check and inspect the data quality.  
-%
-%\item Description: Data are annotated and categorized according to various terminological conventions.  \\ Data fields and tags accommodate metadata categories and  are customizable by corpus teams, for their team's corpora. The application thus allows data to be annotated and categorized, without unneccessarily  reducing the ease of data entry. 
-%
-%\item Integration: Data from disparate sources are combined into one consistent data set. \\ Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (xml), making data integrated with programs researchers commonly use/have used to store their data.
-%
-%\item Analysis: The application organizes data in ways to help data analysis. \\  Customizable data entry fields and data tags, as well as the data list  functionality allows researchers to organize data ready for analysis.  
-%
-%\item Format: Data are intelligible regardless of the types of operating system. (E-MELD Summary of Best Practices 2)
-%
-%The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. The application supports Unicode and exportable to .json, .tex, .txt, .csv, and .xml files. The application allows export of encrypted  output, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app.
-%
-%\item Discovery: Data are searchable and discoverable. \\ The application is accessible through general internet search. Within the application, data are discoverable via keyword search. The two-step data discovery process will minimize irrelevant search results.   
-%
-%\item Access: Data are accessible. \\ Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle, however authorized researchers (authors of data) have control over who can see and/or edit their data. 
-%
-%\item Citation: Data provide citation information. \\ All data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data was entered and other metadata controlled by the researcher to ensure that data quality can be traced to its source.
-% 
-%\item Preservation: Data are archived in a way that withstands long-term preservation. \\ Data are stored in a host server as JSON files. JSON files are human-readable text files, therefore the information content would not be lost even if the data format becomes obsolete. 
-%
-%\item Security: Confidential information must be kept from public access. \\ Data tagged as confidential, as well as consultant information which is confidential are encrypted in the database using the US Federal approved AES encryption standard. This ensures that confidential data cannot be leaked if a corpus is shared or leaked, without the consent of the corpus' author. 
-%
-%\end{enumerate} 
-
-
-%
-%Provide information on the metrics that will be used to determine the effectiveness of the project. It has to meet certain data management criteria -- any scientist can discover and use the data over time; it will benefit the scientific community. We are abiding by the best practice standards set by DataOne.   
-%
-%Example format: 
-%
-%\exg. n-tuop'ti-m\\
-%1-window-POSS.SG\\
-%`My window'
-%
-%
 
 
 
