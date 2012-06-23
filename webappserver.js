@@ -6,7 +6,7 @@ var express = require('express')
   , util = require('util')
   , LocalStrategy = require('passport-local').Strategy;
   
-var couchkeys = require('./couchkeys');
+//var couchkeys = require('./couchkeys');
 
 //var options = {
 //    key: fs.readFileSync('agent2-key.pem'),
