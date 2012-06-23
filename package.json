@@ -5,6 +5,7 @@
     "express": "latest"
     ,"underscore": "latest"
     ,"paperboy": "latest"
+    ,"zlib": "latest"
     ,"crypto":"latest"
     ,"oauth": "latest"
     ,"passport": "latest"
