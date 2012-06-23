@@ -38,12 +38,12 @@ define([ "use!backbone",
      *           judgment associated with the datum, so grammatical,
      *           ungrammatical, felicitous, unfelicitous etc.
      * @property {DatumState} state When a datum is created, it can be tagged
-     *           with a state, such as 'to be checked with an informant'.
+     *           with a state, such as 'to be checked with an consultant'.
      * @property {AudioVisual} audioVisual Datums can be associated with an audio or video
      *           file.
      * @property {Session} session The session provides details about the set of
      *           data elicited. The session will contain details such as date,
-     *           language, informant etc.
+     *           language, consultant etc.
      * @property {Comments} comments The comments is a collection of comments
      *           associated with the datum, this is meant for comments like on a
      *           blog, not necessarily notes, which can be encoded in a

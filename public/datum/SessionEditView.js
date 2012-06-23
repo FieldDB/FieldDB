@@ -85,7 +85,7 @@ define([
 //    loadSample : function(corpus) {
 //      this.model.set({
 //        user : "sapir",
-//        informant : "Tillohash",
+//        consultant : "Tillohash",
 //        corpus : corpus,
 //        language : "Cusco Quechua",
 //        goal : "Working on naya"

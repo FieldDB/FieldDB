@@ -8,7 +8,7 @@ define([
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
-    "user/Informants",
+    "user/Consultants",
     "permission/Permissions",
     "datum/Sessions",
     "user/User",
@@ -23,7 +23,7 @@ define([
     DatumFields, 
     DatumState,
     DatumStates,
-    Informants,
+    Consultants,
     Permissions,
     Sessions,
     User
@@ -51,7 +51,7 @@ define([
        * @property {String} remote The git url of the remote eg:
        *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
        *           
-       * @property {Informants} informants Collection of informants who contributed to the corpus
+       * @property {Consultants} consultants Collection of consultants who contributed to the corpus
        * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
        * @property {DatumFields} datumfields Collection of datum fields used in the corpus
        * @property {Sessions} sessions Collection of sessions that belong to the corpus
@@ -138,10 +138,10 @@ define([
               value: User
             }),
             new DatumField({
-              label : "informants",
+              label : "consultants",
               encrypted: "",
               userchooseable: "disabled",
-              value: Informants
+              value: Consultants
             }),
             new DatumField({
               label : "language",
@@ -200,7 +200,7 @@ define([
         titleAsUrl :"",
         description : "",
         confidential :  Confidential,
-        informants : Informants,
+        consultants : Consultants,
         datumStates : DatumStates,
         datumFields : DatumFields, 
         sessionFields : DatumFields,
