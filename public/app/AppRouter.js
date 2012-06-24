@@ -38,7 +38,7 @@ define([
       "corpus/" : "newFullscreenCorpus",
       "corpus/:corpusName/export" : "showExport",
       "user/:userName/datumprefs" : "showDatumPreferences",
-      "user/:userName/hotkeyconfig" : "showHotKeyConfig",
+      //"user/:userName/hotkeyconfig" : "showHotKeyConfig",
       "import" : "showImport",
       "" : "showDashboard",
     },
@@ -250,14 +250,14 @@ define([
     },
     
     
-    showHotKeyConfig : function(userName) {
-      Utils.debug("In showHotKeyConfig: " + userName);
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-datalist-view").show();
-      $("#hotkey-config-view").show();
-    },
+//    showHotKeyConfig : function(userName) {
+//      Utils.debug("In showHotKeyConfig: " + userName);
+//
+//      this.hideEverything();
+//      $("#dashboard-view").show();
+//      $("#fullscreen-datalist-view").show();
+//      $("#hotkey-config-view").show();
+//    },
     
     showImport : function() {
       Utils.debug("In import: ");

@@ -56,7 +56,7 @@ define([
     loadSample : function(corpus) {
       this.model.set({
         user : "sapir",
-        informant : "Tillohash",
+        consultant : "Tillohash",
         corpus : corpus,
         language : "Cusco Quechua",
         goal : "Which verbs can be affixed with -naya"

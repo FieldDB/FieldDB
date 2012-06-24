@@ -24,7 +24,7 @@ define([ "use!backbone",
       verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
       verb : "added",
       directobject : "an entry",
-      indirectobject : "with Informant-SJ",
+      indirectobject : "with Consultant-SJ",
       context : "via Android/ Offline Chrome App"  
     }
 

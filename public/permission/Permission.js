@@ -11,7 +11,7 @@ define([
      *        write, admin) for a usergeneric with respect to a corpus.
      *
      * @property {String} type Type is the permission type, which is one of {read, write, export}
-     * @property {UserGeneric} user User is the id of the {User, Bot, Informant, Team} with this permission.
+     * @property {UserGeneric} user User is the id of the {User, Bot, Consultant, Team} with this permission.
      * s
      * @extends Backbone.Model
      * @constructs
