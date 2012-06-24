@@ -4,6 +4,7 @@ var express = require('express')
   , OAuth = require('oauth').OAuth
   , crypto = require('crypto')
   , util = require('util')
+  , fs = require('fs')
   , LocalStrategy = require('passport-local').Strategy;
   
 //var couchkeys = require('./couchkeys');
@@ -81,8 +82,10 @@ passport.use(new LocalStrategy(
 
 
 
-
-var app = express.createServer();
+var httpsOptions ={
+  key: fs.readFileSync('ifield.key'),
+  cert: fs.readFileSync('ifield.crt')};
+var app = express.createServer(httpsOptions);
 
 // configure Express
 app.configure(function() {
