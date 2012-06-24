@@ -30,10 +30,10 @@
 		<h2>Welcome, Bienvenue, Bienvenidos - Beta Testing Target: July
 			1st 2012</h2>
 		<h2>Official Launch August 1st, @CAML in Patzún, Guatemala</h2>
-		<h3>Status: 3 days behind schedule</h3>
+		<h3>Status: 6 days behind schedule</h3>
 		<p>
 			Click here to go to the local <a href="index.html">index.html</a>
-			v1.8 (updated weekly).
+			v1.9 (updated weekly).
 		</p>
 		<p>
 			Click here to go to <a href="http://ifield.fieldlinguist.com">http://ifield.fieldlinguist.com</a>
@@ -60,29 +60,47 @@
 
 	</div>
 	<div class="well">
+		<h1>June 22 2012 - Week 9 - Still connecting modules, search and
+			security between black boxes is started</h1>
+
+		<p>Datalists are showing data in a LaTeX way (ie, the glosses and
+			words are all properly aligned so you can read the examples in a
+			quick glance)</p>
+			
+			<p>Intersection search and Union search are working</p>
+			
+			<p>ifield.fieldlinguist.com was down for 3 days. Heroku seems to have changed something on their side requiring us to require zlib to start our app. We fixed it by requireing zlib in our packages.json </p>
+		<p>This week we closed milestone "connecting the modules" 6 days
+			late, but with this we can now let the user choose their own datum
+			fields, choose their own datum state (checked, to be checked,
+			deleted, elicitation error etc).</p>
+		http://en.wikipedia.org/wiki/Public-key_cryptography#A_postal_analogy
+
+	</div>
+
+	<div class="well">
 		<h1>June 15 2012 - Week 8 - Prettifying and getting all the Views
 			in place, and a new Name!</h1>
 
 		<img src="images/team_at_work.jpg" width="800" />
-		<p>
-			This week continued much from last week. We also prettified the app,
-			using Bootstrap by Twitter, a framework for cute buttons, icons and
-			fonts. There is still the import and search user stories to complete
-			and modules to connect. We connected the modules to PouchDB, the
-			portable offline version of CouchDB. We are still working on getting
-			the Offline corpus to work on Android using TouchDB. As far as we
-			know, we are the 3rd large project to use TouchDB, it's
+		<p>This week continued much from last week. We also prettified the
+			app, using Bootstrap by Twitter, a framework for cute buttons, icons
+			and fonts. There is still the import and search user stories to
+			complete and modules to connect. We connected the modules to PouchDB,
+			the portable offline version of CouchDB. We are still working on
+			getting the Offline corpus to work on Android using TouchDB. As far
+			as we know, we are the 3rd large project to use TouchDB, it's
 			implementation of CouchDB might not even be complete so we might have
 			to help them out so that we can use it. The PouchDB folks have also
 			found out we were watching them and have also been implementing
-			things around the clock. The
-			database that PouchDB is using (IndexedDB) is an HTML5 specification
-			that wasn't even implemented until 6 months ago in December. We are
-			using a special advance developers version of Chrome that will be
-			availible only in August, when we launch. Talk about being on the bleeding-edge of development!</p>
-			
-			<p>In addition, this week we
-			created a new folder entitled <a
+			things around the clock. The database that PouchDB is using
+			(IndexedDB) is an HTML5 specification that wasn't even implemented
+			until 6 months ago in December. We are using a special advance
+			developers version of Chrome that will be availible only in August,
+			when we launch. Talk about being on the bleeding-edge of development!</p>
+
+		<p>
+			In addition, this week we created a new folder entitled <a
 				href="https://github.com/iLanguage/iField/tree/master/docs">docs</a>
 			which contains files that are designed to help those interested who
 			want to use this project for their data collection and need a
@@ -121,6 +139,8 @@
 			Additionally, we connected our modules to IrisCouch, a hosting
 			service for databases (a couch in cloud, it costs $1 per gigabite per
 			month). In addition, we implemented pagination for the datalist view.
+
+
 
 
 
@@ -274,7 +294,8 @@
 
 		<h2>Corpus Server is a CouchDB server running on IrisCouch (it
 			can run on a department server too).</h2>
-		<iframe width="100%" height="300" src="http://trisapeace.iriscouch.com/_utils/"></iframe>
+		<iframe width="100%" height="300"
+			src="http://trisapeace.iriscouch.com/_utils/"></iframe>
 
 		<h2>Screen cast explaining the coarse grained architecture</h2>
 		<iframe width="420" height="315"
