@@ -1,4 +1,9 @@
 #ignore private config files
+ifield.key
+ifield.orig.key
+ifield.csr
+ifield.crt
+
 couchkeys.js
 twitterkeys.js
 
