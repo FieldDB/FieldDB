@@ -1,11 +1,11 @@
 define(
     ["use!backbone",
-     "user/Informant"],
-    function(Backbone, Informant) {
+     "user/Consultant"],
+    function(Backbone, Consultant) {
   
-  var Informants = Backbone.Collection.extend(
+  var Consultants = Backbone.Collection.extend(
       
-    /** @lends Informants.prototype */ 
+    /** @lends Consultants.prototype */ 
         
     {
       /**
@@ -18,7 +18,7 @@ define(
        * @constructs
        * 
        */
-    model: Informant,
+    model: Consultant,
     add : function(model, options) {
      
       }
@@ -28,6 +28,6 @@ define(
   
   }); 
   
-  return Informants; 
+  return Consultants; 
   
 }); 

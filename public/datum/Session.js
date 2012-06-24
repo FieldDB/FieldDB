@@ -3,14 +3,14 @@ define([
     "use!backbone",
     "comment/Comments",
     "datum/DatumFields",
-    "user/Informant",
+    "user/Consultant",
     "user/Team",
     "user/User",
 ], function(
     Backbone,
     Comments,
     DatumFields,
-    Informant,
+    Consultant,
     Team,
     User
 ) {
@@ -25,7 +25,7 @@ define([
      * @property {String} user The user is the person inputting the data for
      *           that session.
      * @property {String} team The team is the team that the user belongs to.
-     * @property {String} informant The informant is the native speaker of the
+     * @property {String} consultant The consultant is the native speaker of the
      *           language under investigation that has verified the data in the
      *           session.
      * @property {String} language The language is the language under
@@ -58,7 +58,7 @@ define([
 
         /**
          * Validation functions will verify that the session ID is unique and
-         * that the informant,users, and teams are all correspond to people in
+         * that the consultant,users, and teams are all correspond to people in
          * the system.
          * 
          * @param {Object}
@@ -77,8 +77,8 @@ define([
        //for (team not in teams) {
       //    return "team must be in the system.";
       // }
-       //if (informant not in informants ) {
-      //    return "informant must be in the system.";
+       //if (consultant not in consultants ) {
+      //    return "consultant must be in the system.";
       // }
     },
   });
