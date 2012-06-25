@@ -1,1 +1,2 @@
-./node_modules/forever/bin/forever stop webappserver.js
+./node_modules/forever/bin/forever stop httpredirectapp.js
+./node_modules/forever/bin/forever stop app.js
