@@ -2,11 +2,12 @@
   "name": "FieldLinguisticsInTheCloud",
   "version": "0.0.1",
   "dependencies": {
-    "express": "latest"
+    "express": "2.5.10"
     ,"underscore": "latest"
     ,"cradle": "latest"
     ,"paperboy": "latest"
-    ,"zlib": "latest"
+    ,"backbone": "latest"
+    ,"zlib": "latest"                     
     ,"crypto":"latest"
     ,"everyauth": "latest"
   }
