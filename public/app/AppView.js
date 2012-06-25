@@ -31,6 +31,7 @@ define([
     "datum/SessionEditView",
     "user/User",
     "user/UserProfileView",
+    "user/UserWelcomeView",
     "export/Export",
     "export/ExportView",
     "libs/Utils"
@@ -67,6 +68,7 @@ define([
     SessionEditView,
     User,
     UserProfileView,
+    UserWelcomeView,
     Export,
     ExportView
 ) {
@@ -117,8 +119,12 @@ define([
         model : new Authentication({user: userToBePassedAround})
       });
       
-      // Create a UserProfileView
+   // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
+        model : userToBePassedAround
+      });
+   // Create a UserWelcomeView
+      this.welcomeUserView = new UserWelcomeView({
         model : userToBePassedAround
       });
       
@@ -212,6 +218,11 @@ define([
     fullScreenUserView : UserProfileView,
     
     /**
+     * The WelcomeUserView is a child of the AppView.
+     */
+    welcomeUserView : UserWelcomeView,
+    
+    /**
      * The dataListView is a child of the AppView.
      */
     dataListView : DataListView,
@@ -302,6 +313,9 @@ define([
         
         // Display the UserProfileView
         this.fullScreenUserView.render();
+        
+        // Display the UserWelcomeView
+        this.welcomeUserView.render();
         
         // Display the DataListView
         this.dataListView.render();

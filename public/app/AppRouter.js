@@ -56,6 +56,8 @@ define([
       this.hideEverything();
       $("#dashboard-view").show();
       $("#fullscreen-corpus-view").show();
+      $("#welcome-user-view").show();
+      
     },
 
     /**
