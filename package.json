@@ -7,6 +7,8 @@
     ,"cradle": "latest"
     ,"paperboy": "latest"
     ,"backbone": "latest"
+    ,"acl": "latest"
+    ,"redis": "latest"
     ,"zlib": "latest"                     
     ,"crypto":"latest"
     ,"everyauth": "latest"
