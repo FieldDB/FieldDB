@@ -37,7 +37,7 @@ define([
       "corpus/:corpusName/search" : "showAdvancedSearch",
       "corpus/" : "newFullscreenCorpus",
       "corpus/:corpusName/export" : "showExport",
-      "user/:userName/datumprefs" : "showDatumPreferences",
+      //"user/:userName/datumprefs" : "showDatumPreferences",
       //"user/:userName/hotkeyconfig" : "showHotKeyConfig",
       "import" : "showImport",
       "" : "showDashboard",
@@ -242,15 +242,15 @@ define([
       $("#activity_feed").show();
     },
 
-    showDatumPreferences : function(userName) {
-      Utils.debug("In showDatumPreferences: " + userName);
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-datalist-view").show();
-      $("#datum-preferences-view").show();
-    },
-    
+//    showDatumPreferences : function(userName) {
+//      Utils.debug("In showDatumPreferences: " + userName);
+//
+//      this.hideEverything();
+//      $("#dashboard-view").show();
+//      $("#fullscreen-datalist-view").show();
+//      $("#datum-preferences-view").show();
+//    },
+//    
     
 //    showHotKeyConfig : function(userName) {
 //      Utils.debug("In showHotKeyConfig: " + userName);
