@@ -6,7 +6,7 @@ var express     = require('express')
     ,fs         = require('fs')
     ,users      = require('./lib/users');
 
-var authconf = require('./everyauthconfig.json');
+var authconf = require('./everyauthconfig');
 
 everyauth.twitter
   .consumerKey(authconf.twitter.consumerKey)
@@ -33,7 +33,6 @@ app.configure(function() {
   app.use(express.errorHandler());
   everyauth.helpExpress(app);
 });
-
 
 
 app.listen(3001);

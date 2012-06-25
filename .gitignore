@@ -5,7 +5,7 @@ ifield.csr
 ifield.crt
 
 couchkeys.js
-everyauthconfig.json
+everyauthconfig.js
 
 # Ignore natural lib 
 public/libs/natural/
