@@ -34,6 +34,7 @@ app.configure(function() {
   everyauth.helpExpress(app);
 });
 
-
-app.listen(3001);
+port = "3001";
+app.listen(port);
+console.log("Listening on " + port)
 
