@@ -49,18 +49,18 @@ define([
     },
     
     /**
-     * Initialize the sample Session.
+     * Initialize the sample Session. TODO this needs to be done using the new Session model which has an array of datumfields in it.
      * 
      * @param {Corpus} corpus The corpus associated with this Session.
      */
     loadSample : function(corpus) {
-      this.model.set({
-        user : "sapir",
-        consultant : "Tillohash",
-        corpus : corpus,
-        language : "Cusco Quechua",
-        goal : "Which verbs can be affixed with -naya"
-      });
+//      this.model.set({
+//        user : "sapir",
+//        consultant : "Tillohash",
+//        corpus : corpus,
+//        language : "Cusco Quechua",
+//        goal : "Which verbs can be affixed with -naya"
+//      });
     }
   });
   

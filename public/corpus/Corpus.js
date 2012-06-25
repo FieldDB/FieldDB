@@ -196,9 +196,9 @@ define([
       },
       
       defaults : {
-        title : "",
-        titleAsUrl :"",
-        description : "",
+        title : "Untitled Corpus",
+        titleAsUrl :"UntitledCorpus",
+        description : "This is an untitled corpus, created by default.",
         confidential :  Confidential,
         consultants : Consultants,
         datumStates : DatumStates,
