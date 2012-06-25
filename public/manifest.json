@@ -1,7 +1,7 @@
 {
   "name": "iField",
-  "version": "1.8.4",
-  "description": "A Fieldlinguistics Database which adapts to its user's I-Language.",
+  "version": "1.9",
+  "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
   "app": {
     "launch": {
       "local_path": "dev.html"

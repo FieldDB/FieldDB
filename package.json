@@ -4,11 +4,10 @@
   "dependencies": {
     "express": "latest"
     ,"underscore": "latest"
+    ,"cradle": "latest"
     ,"paperboy": "latest"
     ,"zlib": "latest"
     ,"crypto":"latest"
-    ,"oauth": "latest"
-    ,"passport": "latest"
-    ,"passport-local": "latest"
+    ,"everyauth": "latest"
   }
 }
