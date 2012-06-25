@@ -77,5 +77,5 @@ require([
   Backbone.history.start();
   
   // Load the sample App
-  window.appView.loadSample();
+//  window.appView.loadSample();
 });
