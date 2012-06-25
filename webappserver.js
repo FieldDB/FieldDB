@@ -82,11 +82,10 @@ passport.use(new LocalStrategy(
 
 
 
-//var httpsOptions ={
-//  key: fs.readFileSync('ifield.key'),
-//  cert: fs.readFileSync('ifield.crt')};
-//var app = express.createServer(httpsOptions);
-var app = express.createServer();
+var httpsOptions ={
+  key: fs.readFileSync('ifield.key'),
+  cert: fs.readFileSync('ifield.crt')};
+var app = express.createServer(httpsOptions);
 
 // configure Express
 app.configure(function() {
