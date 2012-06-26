@@ -50,7 +50,7 @@ define([
 //    	  JSONtorender.timestamp = this.model.timestamp.toString();
 //    	  JSONtorender.userid = this.model.userid;
 //      }
-      $(this.el).html(this.template(JSONtorender));
+      // $(this.el).html(this.template(JSONtorender));
       
       return this;
     },
