@@ -374,7 +374,7 @@ define([
       });
       
       //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-      this.corpusReadEmbeddedView.loadSample();
+   //   this.corpusReadEmbeddedView.loadSample();
       
       this.authView.loadSample();
       

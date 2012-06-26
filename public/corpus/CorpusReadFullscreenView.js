@@ -5,7 +5,7 @@ define([
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentView",
+    "comment/CommentEditView",
     "data_list/DataLists",
     "data_list/DataListsView",
     "datum/DatumField",
@@ -27,7 +27,7 @@ define([
     Corpus,
     Comment,
     Comments,
-    CommentView,
+    CommentEditView,
     DataLists,
     DataListsView,
     DatumField,
@@ -60,10 +60,10 @@ define([
     initialize : function() {
       Utils.debug("CORPUS DETAILS init: " + this.el);
       
-      //Create a CommentView     
-      this.commentView = new UpdatingCollectionView({
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentView,
+        childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
       
@@ -105,9 +105,9 @@ define([
      */    
     model : Corpus,
     /**
-     * The CommentView is a child of the CorpusReadFullScreenView.
+     * The CommentEditView is a child of the CorpusReadFullScreenView.
      */
-    commentView : CommentView,
+    commentEditView : CommentEditView,
     /**
      * The DataListsView is a child of the CorpusReadFullScreenView.
      */
@@ -167,9 +167,9 @@ define([
         this.setElement($("#corpus-read-fullscreen-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CommentView
-        this.commentView.el = this.$('.comments');
-        this.commentView.render();
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DataListsView
         this.dataListsView.render();
