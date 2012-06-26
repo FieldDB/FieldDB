@@ -78,7 +78,7 @@ define([
       this.model.set("encrypted", checked);
     },
     updateHelp : function() {
-      var help = this.$el.children(".help_text").val()
+      var help = this.$el.children(".help_text").val();
       Utils.debug("Updated help to " + help);
       this.model.set("help",help);
     },

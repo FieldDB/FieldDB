@@ -53,20 +53,19 @@ define([
       comments : Comments
     },
    
-    pouch: Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
    
-
-        /**
-         * Validation functions will verify that the session ID is unique and
-         * that the consultant,users, and teams are all correspond to people in
-         * the system.
-         * 
-         * @param {Object}
-         *          attributes The set of attributes to validate.
-         * 
-         * @returns {String} The validation error, if there is one. Otherwise,
-         *          doesn't return anything.
-         */
+    /**
+     * Validation functions will verify that the session ID is unique and
+     * that the consultant,users, and teams are all correspond to people in
+     * the system.
+     * 
+     * @param {Object}
+     *          attributes The set of attributes to validate.
+     * 
+     * @returns {String} The validation error, if there is one. Otherwise,
+     *          doesn't return anything.
+     */
     validate: function(attributes) {
       // TODO Validation on the attributes. Returning a String counts as an error.
       // We do need to validate some of these attributes, but not sure how they would work. I think they need for loops.
