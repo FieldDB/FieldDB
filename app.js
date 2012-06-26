@@ -16,7 +16,7 @@ everyauth.twitter
     users.findOrCreateByTwitterData(twitterUserData, accessToken, accessTokenSecret, promise);
     return promise;
   })
-  .redirectPath('/');
+  .redirectPath('https://ifield.fieldlinguist.com#user');
 
 var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
@@ -34,6 +34,7 @@ app.configure(function() {
   everyauth.helpExpress(app);
 });
 
-
-app.listen(3001);
+port = "3001";
+app.listen(port);
+console.log("Listening on " + port)
 

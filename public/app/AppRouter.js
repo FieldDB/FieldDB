@@ -37,7 +37,8 @@ define([
       "corpus/:corpusName/search" : "showAdvancedSearch",
       "corpus/" : "newFullscreenCorpus",
       "corpus/:corpusName/export" : "showExport",
-      "user/:userName/datumprefs" : "showDatumPreferences",
+      "user/:username" : "showUser",
+      //"user/:userName/datumprefs" : "showDatumPreferences",
       //"user/:userName/hotkeyconfig" : "showHotKeyConfig",
       "import" : "showImport",
       "" : "showDashboard",
@@ -56,6 +57,20 @@ define([
       this.hideEverything();
       $("#dashboard-view").show();
       $("#fullscreen-corpus-view").show();
+      $("#welcome-user-view").show();
+      
+    },
+/**
+ *      * Displays the dashboard view of the given corpusName, if one was given. Or
+ *                               */
+    showUser : function(userName) {
+      Utils.debug("In showUser: " + userName);
+
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#fullscreen-corpus-view").show();
+      $("#welcome-user-view").hide();
+
     },
 
     /**
@@ -240,15 +255,15 @@ define([
       $("#activity_feed").show();
     },
 
-    showDatumPreferences : function(userName) {
-      Utils.debug("In showDatumPreferences: " + userName);
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-datalist-view").show();
-      $("#datum-preferences-view").show();
-    },
-    
+//    showDatumPreferences : function(userName) {
+//      Utils.debug("In showDatumPreferences: " + userName);
+//
+//      this.hideEverything();
+//      $("#dashboard-view").show();
+//      $("#fullscreen-datalist-view").show();
+//      $("#datum-preferences-view").show();
+//    },
+//    
     
 //    showHotKeyConfig : function(userName) {
 //      Utils.debug("In showHotKeyConfig: " + userName);
