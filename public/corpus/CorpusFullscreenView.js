@@ -7,7 +7,7 @@ define([
     "comment/Comments",
     "comment/CommentEditView",
     "data_list/DataLists",
-    "data_list/DataListsView",
+    "data_list/DataListReadLinkView",
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumFieldEditView",
@@ -29,7 +29,7 @@ define([
     Comments,
     CommentEditView,
     DataLists,
-    DataListsView,
+    DataListReadLinkView,
     DatumField,
     DatumFields,
     DatumFieldEditView,
@@ -67,10 +67,12 @@ define([
         childViewTagName     : 'li'
       });
       
-      //Create a DataList List
-      this.dataListsView = new DataListsView({
-        collection : this.model.get("dataLists")
-      });
+      //Create a DataList List TODO uncomment this and add datalists to the corpus, and make sure its not null.
+//      this.dataListsView = new UpdatingCollectionView({
+//        collection : this.model.get("dataLists"),
+//        childViewConstructor : DataListReadLinkView,
+//        childViewTagName     : 'li'
+//      });
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -111,7 +113,7 @@ define([
     /**
      * The DataListsView is a child of the CorpusView.
      */
-    dataListsView : DataListsView,
+    dataListsView : UpdatingCollectionView,
     /**
      * The DatumFieldsView is a child of the CorpusView.
      */
@@ -173,7 +175,7 @@ define([
         this.commentReadView.render();
         
         // Display the DataListsView
-        this.dataListsView.render();
+//        this.dataListsView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_fields_settings');
