@@ -169,6 +169,7 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display the CommentView
+        this.commentView.el = this.$('.comments');
         this.commentView.render();
         
         // Display the DataListsView
