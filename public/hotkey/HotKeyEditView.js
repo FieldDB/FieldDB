@@ -4,11 +4,11 @@ define([
     "hotkey/HotKey",
     "text!hotkey/hot_key_edit_modal.handlebars"
 ], function(Backbone, Handlebars, HotKey, hot_key_edit_modalTemplate) {
-    var HotKeyConfigView = Backbone.View.extend(
-    /** @lends HotKeyConfigView.prototype */
+    var HotKeyEditView = Backbone.View.extend(
+    /** @lends HotKeyEditView.prototype */
     {
         /**
-         * @class HotKeyConfigView
+         * @class HotKeyEditView
          *
          * @extends Backbone.View
          * @constructs
@@ -18,15 +18,15 @@ define([
 
         model : HotKey,
 
-        classname : "hot_key_config",
+        classname : "hot_key_edit",
 
         template: Handlebars.compile(hot_key_edit_modalTemplate),
     
         render : function() {
 //            $(this.el).html(this.template(this.model.toJSON()));
             
-         // Display the HotKeyConfigView
-            this.setElement($("#hotkey-config-view")); 
+         // Display the HotKeyEditView
+            this.setElement($("#hotkey-edit-view")); 
             $(this.el).html(this.template(this.model.toJSON()));
            
 //
@@ -45,5 +45,5 @@ define([
     
   
 
-    return HotKeyConfigView;
+    return HotKeyEditView;
 }); 
