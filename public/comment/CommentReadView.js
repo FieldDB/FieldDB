@@ -9,8 +9,8 @@ define([
       commentReadEmbeddedTemplate,
       Comment
 ) {
-  var CommentView = Backbone.View.extend(
-  /** @lends CommentView.prototype */
+  var CommentReadView = Backbone.View.extend(
+  /** @lends CommentReadView.prototype */
   {
     /**
      * @class This is the view of the Comment Model. The Comment is a
@@ -24,7 +24,7 @@ define([
     },
     
     /**
-     * The underlying model of the CommentView is a Comment.
+     * The underlying model of the CommentReadView is a Comment.
      */
     model : Comment,
     
@@ -36,7 +36,7 @@ define([
     },
 
     /**
-     * The Handlebars template rendered as the CommentView.
+     * The Handlebars template rendered as the CommentReadView.
      */
     template : Handlebars.compile(commentReadEmbeddedTemplate),
     
@@ -59,5 +59,5 @@ define([
     }
   });
 
-  return CommentView;
+  return CommentReadView;
 });
