@@ -48,7 +48,6 @@ define([
         model : this.model.get("datumTag"),
       });
 
-
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
