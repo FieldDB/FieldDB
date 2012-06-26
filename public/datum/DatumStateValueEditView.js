@@ -2,12 +2,12 @@ define( [
     "use!backbone", 
     "use!handlebars", 
     "datum/DatumState",
-    "text!datum/datum_state.handlebars"
+    "text!datum/datum_state_value_edit.handlebars"
 ], function(Backbone, 
     Handlebars,
     DatumState,
     datum_stateTemplate) {
-    var DatumStateView = Backbone.View.extend(
+    var DatumStateValueEditView = Backbone.View.extend(
     /** @lends DatumStatusView.prototype */
     {
         /**
@@ -52,5 +52,5 @@ define( [
         }
     });
 
-    return DatumStateView;
+    return DatumStateValueEditView;
 }); 
