@@ -119,11 +119,12 @@ define([
         model : new Authentication({user: userToBePassedAround})
       });
       
-   // Create a UserProfileView
+      // Create a UserProfileView
       this.fullScreenUserView = new UserProfileView({
         model : userToBePassedAround
       });
-   // Create a UserWelcomeView
+      
+      // Create a UserWelcomeView
       this.welcomeUserView = new UserWelcomeView({
         model : userToBePassedAround
       });
