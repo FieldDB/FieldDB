@@ -29,22 +29,25 @@ app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.session({secret: "90ndsj9dfdsfwewfead3"}));
   app.use(everyauth.middleware());
-  app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.use(app.router);
   app.use(express.errorHandler());
   everyauth.helpExpress(app);
 });
-app.get('/c/:usergeneric/:corpusordatalist', function(req, res){
+
+app.get('/:usergeneric/:corpusordatalist', function(req, res){
   console.log("hi");
   var usergeneric = req.params.usergeneric
     , corpusordatalist = req.params.corpusordatalist;
   var corpusid = "";
-  //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus.
+  var datalistid = "";
+  //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus, if it is a datalist, do that instead
 //  res.redirect(apphttpsdomain+'#corpus/'+corpusid);
-  res.send('usergeneric ' + req.params.usergeneric+ ', corpusordatalist '+req.params.corpusordatalist);
+//  res.redirect("https://localhost:3001\#data/"+req.params.datalistid);
+  res.redirect("https://localhost:3001\#corpus/"+req.params.corpusid);
 });
 
-app.get('/u/:usergeneric', function(req, res){
+app.get('/:usergeneric', function(req, res){
   console.log("Got a route");
   res.redirect("https://localhost:3001\#user/"+req.params.usergeneric);
 });
