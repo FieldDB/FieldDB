@@ -3,12 +3,14 @@ define([
     "datum/Datum",
     "datum/DatumView",
     "datum/Session",
+    "datum/SessionEditView",
     "libs/Utils"
 ], function(
     Backbone,
     Datum,
     DatumView,
-    Session
+    Session,
+    SessionEditView
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -191,8 +193,13 @@ define([
         error : function() {
           Utils.debug("Session does not exist: " + sessionId);
           
-          // Create a new Session and render it
-          appView.sessionEditView.model = new Session();
+          // Create a new Session (cloning the default session fields from the
+          // corpus in case they changed) and render it
+          appView.sessionEditView = new SessionEditView({
+            model : new Session({
+              sessionFields : app.get("corpus").get("sessionFields").clone()
+            })
+          });
           appView.sessionEditView.render();
           
           // Display the edit session view and hide all the other views
@@ -300,7 +307,7 @@ define([
       $("#fullscreen-corpus-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
+      $("#hotkey-edit-view").hide();
       $('#new_data_list').hide();
       $("#new-corpus").hide();
       $('#export-view').hide();

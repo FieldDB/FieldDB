@@ -25,26 +25,26 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
-        
+
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldView,
         childViewTagName     : "li",
-        
       });
       
-    this.model.bind('change', this.render, this);
-  
+      this.model.bind('change', this.render, this);
     },
 
     /**
      * The underlying model of the SessionEditView is a Session.
      */
     model : Session,
+    
     /**
      * The sessionFieldsView displays the all the DatumFieldViews.
      */
     sessionFieldsView : UpdatingCollectionView,
+
     /**
      * Events that the SessionEditView is listening to and their handlers.
      */
