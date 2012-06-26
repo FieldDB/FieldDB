@@ -90,6 +90,7 @@ define([
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
+      "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
     },
 
@@ -242,6 +243,14 @@ define([
      * The copyDatum function copies all datum fields to the clipboard.
      */
     copyDatum : function() {
+      
+      var text = $(".datum_field_input").val() || [];
+     // $(".datum_fields_ul")[0].focus();
+    //  $(".datum_fields_ul")[0].select();
+      console.log(text);
+      
+ 
+      
       return "";
     },
 
