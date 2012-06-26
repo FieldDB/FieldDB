@@ -90,6 +90,7 @@ define([
      */
     loadSample : function() {
       this.sessionView.loadSample(this.model);
+      
     }
   });
 
