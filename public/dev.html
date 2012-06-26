@@ -60,21 +60,75 @@
 
 	</div>
 	<div class="well">
-		<h1>June 22 2012 - Week 9 - Still connecting modules, search and
-			security between black boxes is started</h1>
+		<h1>June 22 2012 - Week 9 - Search and security between black
+			boxes is started</h1>
 
+		<h2>Datum fields and datum states are adaptable to your corpus</h2>
+		<p>This we we moved from hard coded datum fields and states that
+			we were using while scaffolding out backone, to truely being able to
+			decide on datum fields and datum states by the corpus administrator</p>
+
+		<h2>LaTeX looking Data lists</h2>
 		<p>Datalists are showing data in a LaTeX way (ie, the glosses and
 			words are all properly aligned so you can read the examples in a
 			quick glance)</p>
-			
-			<p>Intersection search and Union search are working</p>
-			
-			<p>ifield.fieldlinguist.com was down for 3 days. Heroku seems to have changed something on their side requiring us to require zlib to start our app. We fixed it by requireing zlib in our packages.json </p>
-		<p>This week we closed milestone "connecting the modules" 6 days
-			late, but with this we can now let the user choose their own datum
-			fields, choose their own datum state (checked, to be checked,
-			deleted, elicitation error etc).</p>
-		http://en.wikipedia.org/wiki/Public-key_cryptography#A_postal_analogy
+
+		<h2>Search: intersection or union</h2>
+		<p>Intersection search and Union search are working. Users can
+			search using any of the datum fields.</p>
+
+		<h2>Moving to EC2: Amazon Elastic Cloud</h2>
+
+		<p>Heroku seems to want us to pay 20$ a month to use https (a
+			secure connection). So we switched to EC2 which we expected to do
+			anyway since heroku is more expensive (it is a platform as a service,
+			probably built off of EC2 or a similar cloud)</p>
+
+
+		<h2>Securing Authentication and Database</h2>
+		<p>This week we worked on getting EveryAuth to work. EveryAuth is
+			a node module built on top of OAuth which allows users to log in
+			using their other accounts, so that we have no password info for
+			them, and they don't have another password to remember. We also
+			worked on locking down the database and getting new users into the
+			database via the authentication hook, not just via backbone.</p>
+
+		<p>In this video Hisako explains what happens when the user clicks
+			"Sync," and how we insure that data are not modified without proper
+			permissions. Similar to offline games, we "replay" the edits on the
+			server to be sure that no one with unauthorized access can modify the
+			central database. What this means is that if the users have been able
+			to download the data while they were offline, they can edit it, but
+			they wont be able to sync (ie share their edits) unless they have the
+			proper permissions.</p>
+
+		<iframe width="420" height="315"
+			src="http://www.youtube.com/embed/NOvuy516Tw4" frameborder="0"
+			allowfullscreen></iframe>
+		<img src="/images/authentication_sequence.jpg" height="50%"
+			width="50%" />
+
+		<p>In this video we look at what happens when a new user comes to
+			the app, and how we let them play with Sapir's sample data until they
+			feel like making their own corpus.</p>
+		<iframe width="420" height="315"
+			src="http://www.youtube.com/embed/BhCaO8ZvmXY" frameborder="0"
+			allowfullscreen></iframe>
+		<img src="/images/new_user_storyboard.jpg" height="50%" width="50%" />
+
+		<p>
+			In this video we discuss offline authentication, how a user must use
+			a password to be able to edit confidential data offline. We are using
+			something similar to <a
+				href="
+      http://en.wikipedia.org/wiki/Public-key_cryptography#A_postal_analogy">http://en.wikipedia.org/wiki/Public-key_cryptography#A_postal_analogy</a>
+		</p>
+		<iframe width="420" height="315"
+			src="http://www.youtube.com/embed/5XD6H-JpyDo" frameborder="0"
+			allowfullscreen></iframe>
+		<img src="/images/confidential_datum_descryption_sequence.jpg"
+			height="50%" width="50%" />
+
 
 	</div>
 
@@ -128,8 +182,6 @@
 
 
 
-
-
 	<div class="well">
 		<h1>June 8 2012 - Week 7 - Connecting the modules</h1>
 		<p>This week implemented more views and clarify the connections
@@ -138,26 +190,8 @@
 			We have begun refactoring the site to reflect the ER diagram.
 			Additionally, we connected our modules to IrisCouch, a hosting
 			service for databases (a couch in cloud, it costs $1 per gigabite per
-			month). In addition, we implemented pagination for the datalist view.
+			month). In addition, we implemented pagination for the datalist view.</p>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
 		<h2>Page Load Sequence Diagram</h2>
 		<iframe width="420" height="315"
 			src="http://www.youtube.com/embed/B7PTZlzBNb8" frameborder="0"

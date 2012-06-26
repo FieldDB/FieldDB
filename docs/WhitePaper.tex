@@ -207,14 +207,16 @@ The application allows users to design their annotation terminology per corpus a
 
 \item Format: Data are intelligible regardless of the types of operating system 
 
-The application entirely Unicode and exports data in  a number of plain text human readable non-proprietary formats including .json, .tex, .txt, .csv, and .xml files. The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. 
+The application entirely supports Unicode and exports data in  a number of plain text human readable non-proprietary formats including .json, .tex, .txt, .csv, and .xml files. The application runs on PC, Linux and Mac OS, as well as on newer platforms such as Android and ChromeBook. 
 
 \item Discovery: Data are searchable and discoverable. 
 
-Within the application, data are discoverable via keyword and string match search. The search module is capable of performing intersective or union search of the data using any of the annotation fields which are used in the corpus. External to the application the corpora which are public will show up in the OLAC linguistic search engine. \footnote{ http://linguistlist.org/olac/index.html http://www.language-archives.org/documents/implement.html\#conventional}
+Within the application, data are discoverable via keyword and string match search. The search module is capable of performing intersective or union search of the data using any of the annotation fields which are used in the corpus. External to the application the corpora which are public will show up in the OLAC linguistic search engine. \footnote{ http://linguistlist.org/olac/index.html 
+
+\hspace{.2cm}http://www.language-archives.org/documents/implement.html\#conventional}
 
 The system is designed not only for data entry, but also for data retrieval. Data stored in the application, if tagged as public by the researcher, is indexable by search engines and open to public view in principle. However authorized researchers (authors of data) have control over who can see, edit and/or export their data.  
-Confidential data are stored encrypted in the database. The application allows two sorts of export. Export export of output can maintaining encryption on confidential data, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public, or export of decrypted output which keeps the data non-proprietary and viewable outside of the app and must be protected as any other confidential data.
+Confidential data are stored encrypted in the database. The application allows two sorts of export. Export of encrypted output maintains encryption on confidential data, allowing researchers to make their public data public, without concern that confidential data or consultant information will become public. Export of decrypted output keeps the data non-proprietary and viewable outside of the app and must be protected as any other confidential data.
 
 \item Access: Data are accessible. 
 
@@ -225,11 +227,11 @@ As the system is online and hosted by reliable servers, the data is considered a
 
 \item Citation: Data provide citation information.
 
-Each corpus has a unique URL which can be used for citation. In addition, corpus administrators can add an archive URL and automate their corpus archiving by creating a "Bot" which will archive their data to one of the existing known language archives of the user's choosing.\footnote{http://emeld.org/school/classroom/archives/index.html} Data are further citable to their primary sources in that all data points are tied to a Session which contains details of data source such as consultant, publication, web page in addition to the time the data are elicited  and other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
+Each corpus has a unique URL which can be used for citation. In addition, corpus administrators can add an archive URL and automate their corpus archiving by creating a "Bot" which will archive their data to one of the existing language archives of the user's choosing.\footnote{http://emeld.org/school/classroom/archives/index.html} Data are further citable to their primary sources in that all data points are tied to a Session which contains details of data source such as consultant, publication, web page and the time the data are elicited, as well as other metadata controlled by the researcher to ensure that data quality can be traced to its source. 
 
 \item Preservation: Data are archived in a way that withstands long-term preservation.  \footnote{http://emeld.org/school/classroom/archives/finding-archives.html}
 
-Data are stored in a host server as JSON files. JSON files are human-readable text files, which are have replaced XML data stores as a lighter weight, similarly featured markup language. Therefore the information content would not be lost even if the data format becomes obsolete.  
+Data are stored in a host server as JSON files. JSON files are human-readable text files, which have replaced XML data stores as a lighter weight, similarly featured markup language. Therefore the information content would not be lost even if the data format becomes obsolete.  
 In addition to a host server, the data is stored in multiple locations. Researchers have a local storage on their own devices if the application is installed as Chrome extension, which could host a significant portion of (or an entire) corpus. 
 
 
@@ -246,17 +248,17 @@ Researchers and language consultants (authors of data) have control over who can
 \item Plan: Plan for data management prior to data collection and revise it as necessary during the project. 
 
 
-What data will be generated: users can use the iField app to manage their data collection process. They can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way iField helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text with will pop-over the datum as users are entering if they need to know what are the conventions for that field, ie. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate this using the conventions text. 
+What data will be generated: users can use the iField app to manage their data collection process. They can begin by adding a description to their corpus, as well as adding language consultants and collaborators. When they begin collecting data they are first prompted to enter a Session and encouraged to write the session goals. Users are even able to prepare hypotheses in the form of Data lists containing Datum "To be Checked" to prepare for their data elicitation session with their language consultant. In this way iField helps a researcher in their collection rationale, collection and analysis methods. When the users add fields to datum they can enter a help text which will pop-up over the datum field as users are entering if they need to know what are the conventions for that field, i.e. IPA transcription could be either phonological or phonetic, the corpus administrator can indicate the conventions using the help text. 
 
-Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. In addition "Bots" have been included as a feature so that users can automatically archive their data in existing known language data archives as described by E-MELD requirements above. Multiple storage locations means less risk of losing data.
+Repository:  data can be stored on cloud servers or on department's own server, or researcher's own device. In addition "Bots" have been included as a feature so that users can automatically archive their data in existing language data archives as described by E-MELD requirements above. Multiple storage locations means less risk of losing data.
 
 Data organization: Data are stored in a versioned document centered storage solution referred to as "NoSQL." Data is stored in JSON format (exportable to .csv, .xml, .txt, .tex). Unlike SQL databases, NoSQL databases are designed to expand limitlessly and focuses on the ability to provide powerful search of data in context.
 
 Data management: The iField app allows a number of permissions and data administration. All data is versioned and so mistakes can be recovered easily and discussed via the datum comment feeds. 
 
-Data description: The datum are produced according to leipzig conventions as linguist examples (transcription, morphemes, gloss, translation). Additional metadata description are configured on a corpus basis by the corpus administrator. The iField app offers a list of commonly used annotation fields to researchers which is generated by the popularity of fields among app users. 
+Data description: A datum is produced according to leipzig conventions as linguist examples (transcription, morphemes, gloss, translation). Additional metadata description are configured on a corpus basis by the corpus administrator. The iField app offers a list of commonly used annotation fields to researchers which is generated by the popularity of fields among app users. 
 
-Data sharing: Data may be shared with members outside of the iField app via embedding live widgets on their department or lab webpages, or WordPress blogs. Data may also be expiated as LaTeX source code to be given directly to members of their data collection team who are not using the iField app. Users can schedule "Bots" to automatically release/publish their data to external web services  or language archives.
+Data sharing: Data may be shared with members outside of the iField app via embedding live widgets on their department or lab webpages, or WordPress blogs. Data may also be converted as LaTeX source code to be given directly to members of their data collection team who are not using the iField app. Users can schedule "Bots" to automatically release/publish their data to external web services  or language archives.
 
 Data preservation: Data are stored locally on the users' machines if they use an Android or a Chrome App. The data is also stored on a central server of their choosing, either a server hosted in the cloud, or a department server. 
 
@@ -267,7 +269,7 @@ Budget: The iField app is free and OpenSouce, it can be installed for free on de
 
 
 The application provides a template for data entry which is flexible and customizable. The four core data fields (transcription, morpheme segmentation, gloss, translation) are usually required for language data and are set as defaults on the template. Researchers can add extra fields (e.g. IPA transcription, semantic context of utterance) relevant to their research. Contents of data fields (default and additional) can be used in a fine grained way  to search, and researchers can organize data using the information contained in the fields. 
-The application is non-proprietary and data collected are exportable in various formats (.csv, .txt, and .tex) to ensure that data are sharable and usable outside the application. 
+The application is non-proprietary and data collected are exportable in various formats (.csv, .xml, .txt, and .tex) to ensure that data are sharable and usable outside the application. 
 
 When the user exports their corpus a readme.txt is generated which describes the datum annotation fields (using the conventions help text which the users can customize). In this way, when they share their data they can attach the readme.txt to allow others to know what their conventions were when building their corpus. 
 
@@ -305,7 +307,7 @@ The application is accessible through internet search, and data tagged for publi
 
 \item Integrate: Data from disparate sources are combined into one consistent data set. 
 
-Sync function helps integrate data taken by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (.xml), making data integrated with programs researchers commonly use/have used to store their data. Data can be made consistent by the creation of "Bots" who crawl the corpus and automate changes.
+Sync function helps integrate data collected by multiple researchers into one corpus. Import/export functions enables integration of data from Filemaker Pro (.csv) and ELAN (.xml), making data integrated with programs researchers commonly use to store their data. Data can be made consistent by the creation of "Bots" who crawl the corpus and automate changes.
 
 \item Analyze: Data are analyzed. 
 

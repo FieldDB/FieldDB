@@ -32,7 +32,7 @@ define([ "use!backbone"
       value : "",
       mask : "",
       encrypted : false,
-      help : ""
+      help : "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
     },
     
     // in your Model validate function
