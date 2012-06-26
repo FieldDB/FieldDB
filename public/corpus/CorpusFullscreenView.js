@@ -175,7 +175,7 @@ define([
         this.commentReadView.render();
         
         // Display the DataListsView
-        this.dataListsView.render();
+//        this.dataListsView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_fields_settings');
