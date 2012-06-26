@@ -13,8 +13,8 @@ define([
     "corpus/CorpusReadEmbeddedView",
     "corpus/CorpusEditEmbeddedView",
     "data_list/DataList",
-    "data_list/DataListView",
-    "data_list/NewDataListView",
+    "data_list/DataListReadView",
+    "data_list/DataListEditView",
     "datum/Datum",
     "datum/DatumFields",
     "datum/DatumView", 
@@ -50,8 +50,8 @@ define([
     CorpusReadEmbeddedView,
     CorpusEditEmbeddedView,
     DataList,
-    DataListView,
-    NewDataListView,
+    DataListReadView,
+    DataListEditView,
     Datum,
     DatumFields,
     DatumView,
@@ -129,8 +129,8 @@ define([
         model : userToBePassedAround
       });
       
-      // Create a DataListView   
-      this.dataListView = new DataListView({
+      // Create a DataListReadView   
+      this.dataListReadView = new DataListReadView({
         model : new DataList({
           // TODO Remove this dummy data once we have real datalists working
           datumIds : [
@@ -161,8 +161,8 @@ define([
         model : new ActivityFeed()
       }); 
       
-      // Create an newDataListView
-      this.newDataListView = new NewDataListView({
+      // Create an dataListEditView
+      this.dataListEditView = new DataListEditView({
         model : new DataList()
       });  
       
@@ -224,9 +224,9 @@ define([
     welcomeUserView : UserWelcomeView,
     
     /**
-     * The dataListView is a child of the AppView.
+     * The dataListReadView is a child of the AppView.
      */
-    dataListView : DataListView,
+    dataListReadView : DataListReadView,
     
     /**
      * The searchView is a child of the AppView.
@@ -263,9 +263,9 @@ define([
     hotkeyEditView : HotKeyEditView,
 
     /**
-     * The newDataListView is a child of the AppView.
+     * The dataListEditView is a child of the AppView.
      */
-    newDataListView : NewDataListView,
+    dataListEditView : DataListEditView,
     
     /**
      * The CorpusEditEmbeddedView is a child of the AppView.
@@ -318,8 +318,8 @@ define([
         // Display the UserWelcomeView
         this.welcomeUserView.render();
         
-        // Display the DataListView
-        this.dataListView.render();
+        // Display the DataListReadView
+        this.dataListReadView.render();
                 
         // Display the SearchView
         this.searchView.render();
@@ -341,8 +341,8 @@ define([
         //Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
 
-        //Display NewDataListView
-        this.newDataListView.render();
+        //Display DataListEditView
+        this.dataListEditView.render();
         
         //Display corpusEditEmbeddedView
         this.corpusEditEmbeddedView.render();

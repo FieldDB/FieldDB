@@ -73,9 +73,9 @@ define([
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
       (new Datum()).searchByQueryString($("#search_box").val(), function(datumIds) {        
-        // Display the results in the DataListView
-        appView.dataListView.model.set("datumIds", datumIds);
-        appView.dataListView.renderNewModel();
+        // Display the results in the DataListReadView
+        appView.dataListReadView.model.set("datumIds", datumIds);
+        appView.dataListReadView.renderNewModel();
       });
     },
     
