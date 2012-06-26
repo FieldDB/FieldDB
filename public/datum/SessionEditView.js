@@ -2,7 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/session_edit.handlebars",
-    "datum/DatumFieldView",
+    "datum/DatumFieldValueEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
@@ -10,7 +10,7 @@ define([
     Backbone,
     Handlebars, 
     session_editTemplate,
-    DatumFieldView,
+    DatumFieldValueEditView,
     Session,
     UpdatingCollectionView
 ) {
@@ -28,7 +28,7 @@ define([
 
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldValueEditView,
         childViewTagName     : "li",
       });
       
@@ -41,7 +41,7 @@ define([
     model : Session,
     
     /**
-     * The sessionFieldsView displays the all the DatumFieldViews.
+     * The sessionFieldsView displays the all the DatumFieldValueEditViews.
      */
     sessionFieldsView : UpdatingCollectionView,
 

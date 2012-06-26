@@ -9,8 +9,8 @@ define([
       datum_fieldTemplate,
       DatumField
 ) {
-  var DatumFieldView = Backbone.View.extend(
-  /** @lends DatumFieldView.prototype */
+  var DatumFieldSettingsEditView = Backbone.View.extend(
+  /** @lends DatumFieldSettingsEditView.prototype */
   {
     /**
      * @class This is the view of the Datum Field Model. The Datum Field is a
@@ -28,7 +28,7 @@ define([
     },
     
     /**
-     * The underlying model of the DatumFieldView is a DatumField.
+     * The underlying model of the DatumFieldSettingsEditView is a DatumField.
      */
     model : DatumField,
     
@@ -42,12 +42,12 @@ define([
     },
 
     /**
-     * The Handlebars template rendered as the DatumFieldView.
+     * The Handlebars template rendered as the DatumFieldSettingsEditView.
      */
     template : Handlebars.compile(datum_fieldTemplate),
     
     /**
-     * Renders the DatumFieldView.
+     * Renders the DatumFieldSettingsEditView.
      */
     render : function() {
       Utils.debug("DATUM FIELD EDIT render");
@@ -89,5 +89,5 @@ define([
     }    
   });
 
-  return DatumFieldView;
+  return DatumFieldSettingsEditView;
 });
