@@ -6,7 +6,7 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldValueEditView",
-    "datum/DatumStateView",
+    "datum/DatumStateValueEditView",
     "datum/DatumTagsView",
     "app/UpdatingCollectionView",
     "libs/Utils"
@@ -18,7 +18,7 @@ define([
     Confidential,
     Datum,
     DatumFieldValueEditView,
-    DatumStateView,
+    DatumStateValueEditView,
     DatumTagsView,
     UpdatingCollectionView
 ) {
@@ -38,8 +38,8 @@ define([
         model : this.model.get("audioVideo"),
       });
       
-      // Create a DatumStateView
-      this.stateView = new DatumStateView({
+      // Create a DatumStateValueEditView
+      this.stateView = new DatumStateValueEditView({
         model : this.model.get("state"),
       });
       
@@ -69,7 +69,7 @@ define([
     /**
      * The stateView is a partial of the DatumView.
      */
-    stateView : DatumStateView,
+    stateView : DatumStateValueEditView,
 
     /**
      * The tagview is a partial of the DatumView.
