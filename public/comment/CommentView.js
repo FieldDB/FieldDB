@@ -45,8 +45,12 @@ define([
      */
     render : function() {
       Utils.debug("COMMENT render");
-      
-      $(this.el).html(this.template(this.model.toJSON()));
+//      var JSONtorender = {};
+//      if ( typeof this.model != undefined){
+//    	  JSONtorender.timestamp = this.model.timestamp.toString();
+//    	  JSONtorender.userid = this.model.userid;
+//      }
+      $(this.el).html(this.template(JSONtorender));
       
       return this;
     },
