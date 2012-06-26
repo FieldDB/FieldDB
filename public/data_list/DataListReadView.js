@@ -1,7 +1,8 @@
 define( [ 
   "use!backbone", 
   "use!handlebars",
-  "text!data_list/data_list.handlebars",
+  "text!data_list/data_list_read_fullscreen.handlebars",
+  "text!data_list/data_list_read_embedded.handlebars",
   "text!datum/paging_footer.handlebars",
   "data_list/DataList",
   "datum/Datum",
@@ -10,24 +11,23 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    data_listTemplate,
+    dataListReadFullscreenTemplate,
+    dataListReadEmbeddedTemplate,
     pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumLatexView,
     Datums  
 ) {
-  var DataListView = Backbone.View.extend(
-  /** @lends DataList.prototype */
+  var DataListReadView = Backbone.View.extend(
+  /** @lends DataListReadView.prototype */
   {
     /**
-     * TODO Update description
+     * 
      * @class A list of datum that are returned as a search result. It will have
      *        check-boxes on the side and a datum menu on the bottom.
-     *        
-     *        This class is based off of the Infinite paginator by Addy Osmani's AppView
      * 
-     * @description Starts the DataListView with no children. 
+     * @description Starts the DataListReadView with no children.
      * 
      * @extends Backbone.View
      * @constructs
@@ -39,18 +39,18 @@ define( [
     },
 
     /**
-     * The underlying model of the DataListView is a DataList.
+     * The underlying model of the DataListReadView is a DataList.
      */    
     model : DataList,
     
     /** 
      * The datumLatexViews array holds all the children of the
-     * DataListView.
+     * DataListReadView.
      */
     datumLatexViews : [],
 
     /**
-     * Events that the DataListView is listening to and their handlers.
+     * Events that the DataListReadView is listening to and their handlers.
      */
     events : {
       'click a.servernext': 'nextResultPage',
@@ -59,10 +59,11 @@ define( [
     },
     
     /**
-     * The Handlebars template rendered as the DataListView.
+     * The Handlebars template rendered as the DataListReadView.
      */
-    template : Handlebars.compile(data_listTemplate),
-    
+    fullscreenTemplate : Handlebars.compile(dataListReadFullscreenTemplate),
+    embeddedTemplate : Handlebars.compile(dataListReadEmbeddedTemplate),
+
     /**
      * The Handlebars template of the pagination footer, which is used
      * as a partial.
@@ -70,7 +71,7 @@ define( [
     footerTemplate : Handlebars.compile(pagingFooterTemplate),
 
     /**
-     * Initially renders the DataListView. This should only be called by 
+     * Initially renders the DataListReadView. This should only be called by 
      * this.initialize. To update the current rendering, use renderUpdate()
      * instead.
      */
@@ -79,7 +80,8 @@ define( [
       if (this.model != undefined) {
         // Display the Data List
         this.setElement($("#data_list"));
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+      //TODO do the other template
         
         // Display the pagination footer
         this.renderUpdatedPagination();
@@ -172,7 +174,7 @@ define( [
           // Restructure Datum's inner models
           d.restructure();
           
-          // Render a DatumLatexView for that Datum at the end of the DataListView
+          // Render a DatumLatexView for that Datum at the end of the DataListReadView
           var view = new DatumLatexView({
             model :  d
           });
@@ -226,5 +228,5 @@ define( [
     }
   });
 
-  return DataListView;
+  return DataListReadView;
 });
