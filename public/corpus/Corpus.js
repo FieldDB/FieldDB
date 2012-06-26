@@ -206,7 +206,7 @@ define([
         sessionFields : DatumFields,
         searchFields : DatumFields,
         sessions : Sessions, 
-        datalists : DataLists, // TODO capitalize L?
+        dataLists : DataLists, // TODO capitalize L?
         permissions : Permissions,
         comments: Comments
         

@@ -11,7 +11,7 @@ define([
     "corpus/Corpus", 
     "corpus/CorpusReadFullscreenView",
     "corpus/CorpusReadEmbeddedView",
-    "corpus/NewCorpusView",
+    "corpus/CorpusEditEmbeddedView",
     "data_list/DataList",
     "data_list/DataListView",
     "data_list/NewDataListView",
@@ -48,7 +48,7 @@ define([
     Corpus, 
     CorpusReadFullscreenView,
     CorpusReadEmbeddedView,
-    NewCorpusView,
+    CorpusEditEmbeddedView,
     DataList,
     DataListView,
     NewDataListView,
@@ -177,7 +177,7 @@ define([
       }); 
 
       // Create a NewCorpusView
-      this.newCorpusView = new NewCorpusView({
+      this.corpusEditEmbeddedView = new CorpusEditEmbeddedView({
         model : new Corpus()
       });
 
@@ -268,9 +268,9 @@ define([
     newDataListView : NewDataListView,
     
     /**
-     * The newCorpusView is a child of the AppView.
+     * The CorpusEditEmbeddedView is a child of the AppView.
      */
-    newCorpusView : NewCorpusView,
+    corpusEditEmbeddedView : CorpusEditEmbeddedView,
     
     /**
      * The CorpusReadFullscreenView is a child of the AppView.
@@ -344,8 +344,8 @@ define([
         //Display NewDataListView
         this.newDataListView.render();
         
-        //Display NewCorpusView
-        this.newCorpusView.render();
+        //Display corpusEditEmbeddedView
+        this.corpusEditEmbeddedView.render();
          
         //Display ImportView
         this.importView.render();

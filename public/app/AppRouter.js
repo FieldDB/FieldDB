@@ -58,8 +58,8 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#fullscreen-corpus-view").show();
-      $("#welcome-user-view").show();
+      $("#corpus-read-fullscreen-view").show();
+//      $("#welcome-user-view").show();
       
     },
 /**
@@ -70,8 +70,8 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#fullscreen-corpus-view").show();
-      $("#welcome-user-view").hide();
+      $("#corpus-read-fullscreen-view").show();
+//      $("#welcome-user-view").hide();
 
     },
 
@@ -89,7 +89,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#new-corpus").show();
+      $("#corpus-edit-embedded").show();
     },
 
     /**
@@ -304,12 +304,12 @@ define([
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
-      $("#fullscreen-corpus-view").hide();
+      $("#corpus-read-fullscreen-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-edit-view").hide();
       $('#new_data_list').hide();
-      $("#new-corpus").hide();
+      $("#corpus-edit-embedded").hide();
       $('#export-view').hide();
       $('#import').hide();
     }
