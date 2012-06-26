@@ -4,7 +4,7 @@ define([
     "text!search/advanced_search.handlebars",
     "datum/Datum",
     "datum/DatumFields",
-    "datum/DatumFieldView",
+    "datum/DatumFieldValueEditView",
     "search/Search",
     "app/UpdatingCollectionView",
     "libs/Utils"
@@ -14,7 +14,7 @@ define([
     advanced_searchTemplate,
     Datum,
     DatumFields,
-    DatumFieldView,
+    DatumFieldValueEditView,
     Search,
     UpdatingCollectionView
 ) {
@@ -38,12 +38,12 @@ define([
       //grabbing datumFields from datum and session in the corpus
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields").clone(),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldValueEditView,
         childViewTagName     : 'li'
       });
       this.advancedSearchSessionView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("sessionFields").clone(),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldValueEditView,
         childViewTagName     : 'li'
       });
     },

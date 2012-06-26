@@ -5,7 +5,7 @@ define([
     "audio_video/AudioVideoView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
-    "datum/DatumFieldView",
+    "datum/DatumFieldValueEditView",
     "datum/DatumStateView",
     "datum/DatumTagsView",
     "app/UpdatingCollectionView",
@@ -17,7 +17,7 @@ define([
     AudioVideoView,
     Confidential,
     Datum,
-    DatumFieldView,
+    DatumFieldValueEditView,
     DatumStateView,
     DatumTagsView,
     UpdatingCollectionView
@@ -51,7 +51,7 @@ define([
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldValueEditView,
         childViewTagName     : "li",
       });
     },
@@ -77,7 +77,7 @@ define([
     tagsview : DatumTagsView,
 
     /**
-     * The datumFieldsView displays the all the DatumFieldViews.
+     * The datumFieldsView displays the all the DatumFieldValueEditViews.
      */
     datumFieldsView : UpdatingCollectionView,
     
