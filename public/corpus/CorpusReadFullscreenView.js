@@ -1,13 +1,13 @@
 define([ 
     "use!backbone", 
     "use!handlebars",
-    "text!corpus/corpus_details.handlebars",
+    "text!corpus/corpus_read_fullscreen.handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentEditView",
     "data_list/DataLists",
-    "data_list/DataListReadLinkView",
+    "data_list/DataListsView",
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumFieldEditView",
@@ -23,13 +23,13 @@ define([
 ], function(
     Backbone, 
     Handlebars,
-    corpusDetailsTemplate,
+    corpusReadFullScreenTemplate,
     Corpus,
     Comment,
     Comments,
     CommentEditView,
     DataLists,
-    DataListReadLinkView,
+    DataListsView,
     DatumField,
     DatumFields,
     DatumFieldEditView,
@@ -42,8 +42,8 @@ define([
     SessionsView,
     UpdatingCollectionView
 ) {
-  var CorpusView = Backbone.View.extend(
-  /** @lends CorpusView.prototype */
+  var CorpusReadFullscreenView = Backbone.View.extend(
+  /** @lends CorpusReadFullScreenView.prototype */
   {
     /**
      * @class This is the corpus view. To the user it looks like a
@@ -60,19 +60,17 @@ define([
     initialize : function() {
       Utils.debug("CORPUS DETAILS init: " + this.el);
       
-      //Create a CommentReadView     
-      this.commentReadView = new UpdatingCollectionView({
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
       
-      //Create a DataList List TODO uncomment this and add datalists to the corpus, and make sure its not null.
-//      this.dataListsView = new UpdatingCollectionView({
-//        collection : this.model.get("dataLists"),
-//        childViewConstructor : DataListReadLinkView,
-//        childViewTagName     : 'li'
-//      });
+      //Create a DataList List
+      this.dataListsView = new DataListsView({
+        collection : this.model.get("dataLists")
+      });
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -103,42 +101,41 @@ define([
     },
 
     /**
-     * The underlying model of the CorpusView is a Corpus.
+     * The underlying model of the CorpusReadFullScreenView is a Corpus.
      */    
     model : Corpus,
     /**
-     * The CommentEditView is a child of the CorpusView.
+     * The CommentEditView is a child of the CorpusReadFullScreenView.
      */
     commentEditView : CommentEditView,
     /**
-     * The DataListsView is a child of the CorpusView.
+     * The DataListsView is a child of the CorpusReadFullScreenView.
      */
-    dataListsView : UpdatingCollectionView,
+    dataListsView : DataListsView,
     /**
-     * The DatumFieldsView is a child of the CorpusView.
+     * The DatumFieldsView is a child of the CorpusReadFullScreenView.
      */
     datumFieldsView : UpdatingCollectionView, 
     /**
-     * The datumStatesView is a child of the CorpusView.
+     * The datumStatesView is a child of the CorpusReadFullScreenView.
      */
     datumStatesView : UpdatingCollectionView,
     /**
-     * The PermissionsView is a child of the CorpusView.
+     * The PermissionsView is a child of the CorpusReadFullScreenView.
      */
     permissionsView : PermissionsView,
     /**
-     * The SessionsView is a child of the CorpusView.
+     * The SessionsView is a child of the CorpusReadFullScreenView.
      */
     sessionsView : SessionsView,
    
     /**
-     * Events that the CorpusView is listening to and their handlers.
+     * Events that the CorpusReadFullScreenView is listening to and their handlers.
      */
     events : {
 //              "click .new_datum" : "newDatum",
 //              "click .new_session" : "newSession",
 //              "click .show_data_lists" : "showDataLists",
-//              "click .show_corpus_details" : "showCorpusDetails",
 //              "click .show_sessions" : "showSessions",
 //              "click .show_permissions" : "showPermissions",
 //              "click .show_corpora" : "showCorpora",
@@ -158,21 +155,21 @@ define([
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    template : Handlebars.compile(corpusDetailsTemplate),
+    template : Handlebars.compile(corpusReadFullScreenTemplate),
     
     /**
-     * Renders the CorpusView and all of its child Views.
+     * Renders the CorpusReadFullScreenView and all of its child Views.
      */
     render : function() {
-      Utils.debug("CORPUS DETAILS render: " + this.el);
+      Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
       if (this.model != undefined) {
-        // Display the CorpusView
-        this.setElement($("#corpus-details-view"));
+        // Display the CorpusReadFullScreenView
+        this.setElement($("#corpus-read-fullscreen-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DataListsView
         this.dataListsView.render();
@@ -245,5 +242,5 @@ define([
     
   });
 
-  return CorpusView;
+  return CorpusReadFullscreenView;
 });

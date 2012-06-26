@@ -3,7 +3,6 @@ define([
     "use!handlebars", 
     "text!user/user.handlebars",
     "text!user/user_profile.handlebars",
-    "corpus/CorpusesView",
     "user/User",
     "user/UserView",
     "libs/Utils"
@@ -12,7 +11,6 @@ define([
     Handlebars, 
     userTemplate, 
     user_profileTemplate, 
-    CorpusesView,
     User, 
     UserView
 ) {
@@ -34,13 +32,15 @@ define([
 
       this.model.bind("change", this.render, this);
 
+      //TODO replace this code with a Updating Collections View
+      
       // Create a CorpusesView
-      if(this.model.get("corpuses") == undefined){
-        this.model.set("corpuses", []);
-      }
-      this.corpusesView = new CorpusesView({
-        array : this.model.get("corpuses")
-      });
+//      if(this.model.get("corpuses") == undefined){
+//        this.model.set("corpuses", []);
+//      }
+//      this.corpusesView = new CorpusesView({
+//        array : this.model.get("corpuses")
+//      });
     },
 
     /**
@@ -61,7 +61,7 @@ define([
     /**
      * The corpusesView is a child of the CorpusView.
      */
-    corpusesView : CorpusesView,
+//    corpusesView : CorpusesView,
 
     /**
      * The Handlebars template rendered as the UserProfileView
@@ -89,7 +89,7 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
 
         // Display the CorpusesView
-        this.corpusesView.render();
+  //      this.corpusesView.render();
 
       } else {
         Utils.debug("\User model was undefined");

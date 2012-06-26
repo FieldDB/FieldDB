@@ -9,8 +9,8 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
-    "corpus/CorpusFullscreenView",
-    "corpus/CorpusView",
+    "corpus/CorpusReadFullscreenView",
+    "corpus/CorpusReadEmbeddedView",
     "corpus/NewCorpusView",
     "data_list/DataList",
     "data_list/DataListReadView",
@@ -19,7 +19,7 @@ define([
     "datum/DatumFields",
     "datum/DatumView", 
     "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
+    "hotkey/HotKeyEditView",
     "import/Import",
     "import/ImportView",
     "user/UserPreference",
@@ -46,8 +46,8 @@ define([
     Authentication,
     AuthenticationView,
     Corpus, 
-    CorpusFullscreenView,
-    CorpusView,
+    CorpusReadFullscreenView,
+    CorpusReadEmbeddedView,
     NewCorpusView,
     DataList,
     DataListReadView,
@@ -56,7 +56,7 @@ define([
     DatumFields,
     DatumView,
     HotKey,
-    HotKeyConfigView,
+    HotKeyEditView,
     Import,
     ImportView,
     UserPreference,
@@ -90,8 +90,8 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
       
-      // Create a CorpusView for the Corpus in the App
-      this.corpusView = new CorpusView({
+      // Create a CorpusReadEmbeddedView for the Corpus in the App
+      this.corpusReadEmbeddedView = new CorpusReadEmbeddedView({
         model : this.model.get("corpus")
       });
       
@@ -166,8 +166,8 @@ define([
         model : new DataList()
       });  
       
-      // Create a HotKeyConfigView
-      this.hotkeyConfigView = new HotKeyConfigView({
+      // Create a HotKeyEditView
+      this.hotkeyEditView = new HotKeyEditView({
         model : new HotKey()
       });  
       
@@ -182,7 +182,7 @@ define([
       });
 
       // Create a CorpusEditView
-      this.fullscreenCorpusView = new CorpusFullscreenView({
+      this.corpusReadFullscreenView = new CorpusReadFullscreenView({
         model : this.model.get("corpus")
       });
       
@@ -202,9 +202,9 @@ define([
     model : App,
     
     /**
-     * The corpusView is a child of the AppView.
+     * The corpusReadEmbeddedView is a child of the AppView.
      */
-    corpusView : CorpusView,
+    corpusReadEmbeddedView : CorpusReadEmbeddedView,
     
     exportView : ExportView,
     
@@ -258,9 +258,9 @@ define([
     activityFeedView : ActivityFeedView,
     
     /**
-     * The hotkeyConfigView is a child of the AppView.
+     * The hotkeyEditView is a child of the AppView.
      */
-    hotkeyConfigView : HotKeyConfigView,
+    hotkeyEditView : HotKeyEditView,
 
     /**
      * The dataListEditView is a child of the AppView.
@@ -273,9 +273,9 @@ define([
     newCorpusView : NewCorpusView,
     
     /**
-     * The fullscreenCorpusView is a child of the AppView.
+     * The CorpusReadFullscreenView is a child of the AppView.
      */
-    fullscreenCorpusView : CorpusFullscreenView,
+    corpusReadFullscreenView : CorpusReadFullscreenView,
 
     /**
      * The importView is a child of the AppView.
@@ -304,8 +304,8 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CorpusView
-        this.corpusView.render();
+        // Display the CorpusReadEmbeddedView
+        this.corpusReadEmbeddedView.render();
         
         this.exportView.render();
         
@@ -339,7 +339,7 @@ define([
         this.activityFeedView.render();
         
         //Display HotKeysView
-        this.hotkeyConfigView.render();//.showModal();
+        this.hotkeyEditView.render();//.showModal();
 
         //Display DataListEditView
         this.dataListEditView.render();
@@ -351,7 +351,7 @@ define([
         this.importView.render();
         
         // Dispaly the CorpusFullscreenView
-        this.fullscreenCorpusView.render();
+        this.corpusReadFullscreenView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }
@@ -374,7 +374,7 @@ define([
       });
       
       //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-      this.corpusView.loadSample();
+   //   this.corpusReadEmbeddedView.loadSample();
       
       this.authView.loadSample();
       
