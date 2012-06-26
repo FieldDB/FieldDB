@@ -33,9 +33,9 @@ define([
     },
 
     defaults : {
-      title : "NELS handout",
+      title : "Untitled Data list",
       dateCreated : "May 29, 2012",
-      description : "some useful examples",
+      description : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collegues.",
       datumIds : []
     }
 
