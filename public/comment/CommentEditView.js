@@ -1,12 +1,12 @@
 define([ 
          "use!backbone",
          "use!handlebars", 
-         "text!comment/comment.handlebars",
+         "text!comment/comment_edit_embedded.handlebars",
          "comment/Comment"
   ], function(
       Backbone, 
       Handlebars,
-      commentTemplate,
+      commentEditEmbeddedTemplate,
       Comment
 ) {
   var CommentView = Backbone.View.extend(
@@ -38,7 +38,7 @@ define([
     /**
      * The Handlebars template rendered as the CommentView.
      */
-    template : Handlebars.compile(commentTemplate),
+    template : Handlebars.compile(commentEditEmbeddedTemplate),
     
     /**
      * Renders the DatumFieldView.
@@ -50,7 +50,7 @@ define([
 //    	  JSONtorender.timestamp = this.model.timestamp.toString();
 //    	  JSONtorender.userid = this.model.userid;
 //      }
-      $(this.el).html(this.template(JSONtorender));
+      $(this.el).html(this.template(this.model.toJSON()));
       
       return this;
     },
