@@ -2,25 +2,37 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/session.handlebars",
+    "datum/DatumFieldView",
     "datum/Session",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     sessionTemplate,
-    Session
+    DatumFieldView,
+    Session,
+    UpdatingCollectionView
 ) {
   var SessionView = Backbone.View.extend(
   /** @lends SessionView.prototype */
   {
     /**
-     * @class Session View
-     *
+     * @class Session View This is the summary of the session that user can see
+     *        from the corpusGlimpseView
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
+      
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
+        childViewConstructor : DatumFieldView,
+        childViewTagName     : "li",
+        
+      });
       
       this.model.bind('change', this.render, this);
     },
@@ -29,7 +41,10 @@ define([
      * The underlying model of the SessionView is a Session.
      */
     model : Session,
-    
+    /**
+     * The sessionFieldsView displays the all the DatumFieldViews.
+     */
+    sessionFieldsView : UpdatingCollectionView,
     /**
      * The Handlebars template rendered as the SessionView.
      */
@@ -41,9 +56,12 @@ define([
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
-      // Disply the SessionView
+      // Display the SessionView
       this.setElement("#session");
       $(this.el).html(this.template(this.model.toJSON()));
+      
+      this.sessionFieldsView.el = this.$(".session_fields_ul");
+      this.sessionFieldsView.render();
       
       return this;
     },
@@ -53,7 +71,7 @@ define([
      * 
      * @param {Corpus} corpus The corpus associated with this Session.
      */
-    loadSample : function(corpus) {
+ //   loadSample : function(corpus) {
 //      this.model.set({
 //        user : "sapir",
 //        consultant : "Tillohash",
@@ -61,7 +79,7 @@ define([
 //        language : "Cusco Quechua",
 //        goal : "Which verbs can be affixed with -naya"
 //      });
-    }
+ //   }
   });
   
   return SessionView;

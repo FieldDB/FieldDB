@@ -38,7 +38,9 @@ define([
       
       // Create a SessionView
       this.sessionView = new SessionView({
-        model : new Session()
+        model : new Session({
+          sessionFields : this.model.get("sessionFields").clone()
+        })
       });
       
       // If the model changes, re-render 
@@ -49,7 +51,6 @@ define([
      * The underlying model of the CorpusView is a Corpus.
      */    
     model : Corpus,
-
     /**
      * The sessionView is a child of the CorpusView.
      */
@@ -88,10 +89,10 @@ define([
     /**
      * Initialize the sample Corpus.
      */
-    loadSample : function() {
-      this.sessionView.loadSample(this.model);
-      
-    }
+//    loadSample : function() {
+//      this.sessionView.loadSample(this.model);
+//      
+//    }
   });
 
   return CorpusView;

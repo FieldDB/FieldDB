@@ -223,7 +223,7 @@ define([
         "help" : this.$el.children(".add_help").val()
       });
 
-      // Add the new DatumField to the Corpus' list fo datumFields
+      // Add the new DatumField to the Corpus' list for datumFields
       this.model.get("datumFields").add(m);
       
       // Reset the line with the add button
