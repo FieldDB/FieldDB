@@ -5,7 +5,7 @@ define([
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataLists",
     "data_list/DataListsView",
     "datum/DatumField",
@@ -27,7 +27,7 @@ define([
     Corpus,
     Comment,
     Comments,
-    CommentReadView,
+    CommentEditView,
     DataLists,
     DataListsView,
     DatumField,
@@ -63,7 +63,7 @@ define([
       //Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
+        childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
       
@@ -105,9 +105,9 @@ define([
      */    
     model : Corpus,
     /**
-     * The CommentReadView is a child of the CorpusView.
+     * The CommentEditView is a child of the CorpusView.
      */
-    commentReadView : CommentReadView,
+    commentEditView : CommentEditView,
     /**
      * The DataListsView is a child of the CorpusView.
      */
