@@ -1,12 +1,10 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_latex.handlebars", 
     "datum/Datum"
 ], function(
     Backbone, 
     Handlebars,
-    datumTemplate,
     Datum
 ) {
   var DatumLatexView = Backbone.View.extend(
@@ -40,13 +38,8 @@ define([
      * The underlying model of the DatumLatexView is a Datum.
      */
     model : Datum,
-
+    
     tagName : 'li',
-
-    /**
-     * The Handlebars template rendered as the DatumLatexView.
-     */
-    template : Handlebars.compile(datumTemplate),
 
     /**
      * Renders the DatumLatexView.r
@@ -54,13 +47,7 @@ define([
     render : function() {
       Utils.debug("DLATEX render: " + this.el);
 
-//      this.$el.html(this.template({
-//        utterance: this.model.get("datumFields").where({label: "utterance"})[0].get("value"),
-//        gloss: this.model.get("datumFields").where({label: "gloss"})[0].get("value"),
-        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),
-//        
-//      }));
-      
+      translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),      
       utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
       gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
       translation= this.model.get("datumFields").where({label: "translation"})[0].get("value"),
@@ -72,22 +59,12 @@ define([
       var i= 0;
       for( i; i<utteranceArray.length; i++){
         glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
-       // var newdiv = document.createElement('div');
-       // newdiv.innerHTML = glossCouplet;
         this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
       };
       this.$el.append('<br>'+translation);
-      
-      
 
-      
       return this;
-    },
-    
-   
-    
-    
-
+    }
   });
 
   return DatumLatexView;

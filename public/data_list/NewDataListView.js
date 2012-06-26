@@ -6,7 +6,7 @@ define( [
     "text!datum/paging_footer.handlebars",
     "data_list/DataList",
     "datum/Datum",
-    "datum/DatumLatexView",
+    "datum/DatumLatexReadView",
     "datum/Datums"
 ], function(
     Backbone, 
@@ -15,7 +15,7 @@ define( [
     pagingFooterTemplate,
     DataList, 
     Datum, 
-    DatumLatexView,
+    DatumLatexReadView,
     Datums  
 ) {
   var NewDataListView = Backbone.View.extend(
@@ -79,7 +79,7 @@ define( [
         // Display the pagination footer
         this.renderUpdatedPagination();
 
-        // TODO Display the first page of DatumLatexViews.
+        // TODO Display the first page of DatumLatexReadViews.
         // this.renderNewModel();
       } else {
         Utils.debug("\tDataList model is not defined");
@@ -105,7 +105,7 @@ define( [
      * a new DataList or perform a new Search).
      */
     renderNewModel : function() {
-      // Remove all the DatumLatexViews that are currently being displayed
+      // Remove all the DatumLatexReadViews that are currently being displayed
       while (this.datumLatexViews.length > 0) {
         var datumLatexView = this.datumLatexViews.pop();
         datumLatexView.remove();
@@ -156,7 +156,7 @@ define( [
     },
 
     /**
-     * Displays a new DatumLatexView for the Datum with the given datumId
+     * Displays a new DatumLatexReadView for the Datum with the given datumId
      * and updates the pagination footer.
      * 
      * @param {String} datumId The datumId of the Datum to display.
@@ -171,16 +171,16 @@ define( [
           // Restructure Datum's inner models
           d.restructure();
           
-          // Render a DatumLatexView for that Datum at the end of the DataListView
-          var view = new DatumLatexView({
+          // Render a DatumLatexReadView for that Datum at the end of the DataListView
+          var view = new DatumLatexReadView({
             model : d
           });
           $('#data_list_content').append(view.render().el);
 
-          // Keep track of the DatumLatexView
+          // Keep track of the DatumLatexReadView
           self.datumLatexViews.push(view);
 
-          // Display the updated DatumLatexView
+          // Display the updated DatumLatexReadView
           self.renderUpdatedPagination();
         },
 
@@ -203,7 +203,7 @@ define( [
     },
 
     /**
-     * Add one page worth of DatumLatexViews from the DataList.
+     * Add one page worth of DatumLatexReadViews from the DataList.
      * 
      * @param {Object} e The event that triggered this method.
      */
@@ -215,7 +215,7 @@ define( [
       var startIndex = this.datumLatexViews.length;
       var endIndex = startIndex + this.perPage;
 
-      // Add a DatumLatexView for each one
+      // Add a DatumLatexReadView for each one
       for (i = startIndex; i < endIndex; i++) {
         var datumId = this.model.get("datumIds")[i];
         if (datumId) {
