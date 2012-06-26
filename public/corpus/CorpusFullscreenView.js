@@ -203,11 +203,12 @@ define([
     
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
+    	console.log("I'm a new comment!");
       var m = new Comment({
-//        "value" : this.$el.children(".add_input").val(),
+//        "label" : this.$el.children(".comment_input").val(),
 
       });
-      this.model.get("comment").add(m);
+      this.model.get("comments").add(m);
     },
     
     // This the function called by the add button, it adds a new datum field both to the 
