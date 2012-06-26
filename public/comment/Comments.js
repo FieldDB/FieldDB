@@ -21,15 +21,15 @@ define( [ "use!backbone",
     model: Comment,
     
     
-    clone : function() {
-        var newCollection = new Comments();
-        
-        for (var i = 0; i < this.length; i++) {
-          newCollection.push(new Comment(this.models[i].toJSON())); 
-        }
-        
-        return newCollection;
-      }
+//    clone : function() {
+//        var newCollection = new Comments();
+//        
+//        for (var i = 0; i < this.length; i++) {
+//          newCollection.push(new Comment(this.models[i].toJSON())); 
+//        }
+//        
+//        return newCollection;
+//      }
     
   });
 
