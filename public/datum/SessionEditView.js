@@ -25,7 +25,7 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
-      
+
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldView,
@@ -44,7 +44,7 @@ define([
      * The sessionFieldsView displays the all the DatumFieldViews.
      */
     sessionFieldsView : UpdatingCollectionView,
-    
+
     /**
      * Events that the SessionEditView is listening to and their handlers.
      */
@@ -64,7 +64,7 @@ define([
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
-      // Disply the SessionView
+      // Display the SessionView
       this.setElement("#new-session-view");
       $(this.el).html(this.template(this.model.toJSON()));
       

@@ -203,11 +203,12 @@ define([
     
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
+    	console.log("I'm a new comment!");
       var m = new Comment({
-        "state" : this.$el.children(".add_input").val(),
-        "color" : this.$el.children(".add_color_chooser").val()
+//        "label" : this.$el.children(".comment_input").val(),
+
       });
-      this.model.get("comment").add(m);
+      this.model.get("comments").add(m);
     },
     
     // This the function called by the add button, it adds a new datum field both to the 
@@ -223,7 +224,7 @@ define([
         "help" : this.$el.children(".add_help").val()
       });
 
-      // Add the new DatumField to the Corpus' list fo datumFields
+      // Add the new DatumField to the Corpus' list for datumFields
       this.model.get("datumFields").add(m);
       
       // Reset the line with the add button
