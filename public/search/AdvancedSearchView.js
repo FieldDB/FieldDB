@@ -3,7 +3,6 @@ define([
     "use!handlebars", 
     "text!search/advanced_search.handlebars",
     "datum/Datum",
-    "datum/DatumFields",
     "datum/DatumFieldValueEditView",
     "search/Search",
     "app/UpdatingCollectionView",
@@ -13,7 +12,6 @@ define([
     Handlebars, 
     advanced_searchTemplate,
     Datum,
-    DatumFields,
     DatumFieldValueEditView,
     Search,
     UpdatingCollectionView
