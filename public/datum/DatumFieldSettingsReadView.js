@@ -34,7 +34,7 @@ define([
     model : DatumField,
     
     /**
-     * Events that the DatumStateEditView is listening to and their handlers.
+     * Events that the DatumFieldSettingsReadView is listening to and their handlers.
      */
     events : {
       "blur .choose-field" : "updateField",
