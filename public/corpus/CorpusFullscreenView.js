@@ -204,8 +204,8 @@ define([
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
       var m = new Comment({
-        "state" : this.$el.children(".add_input").val(),
-        "color" : this.$el.children(".add_color_chooser").val()
+//        "value" : this.$el.children(".add_input").val(),
+
       });
       this.model.get("comment").add(m);
     },
