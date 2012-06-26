@@ -7,6 +7,7 @@ var express     = require('express')
     ,users      = require('./lib/users');
 
 var authconf = require('./everyauthconfig');
+var apphttpsdomain = "https://localhost:3001";
 
 everyauth.twitter
   .consumerKey(authconf.twitter.consumerKey)
@@ -16,7 +17,7 @@ everyauth.twitter
     users.findOrCreateByTwitterData(twitterUserData, accessToken, accessTokenSecret, promise);
     return promise;
   })
-  .redirectPath('https://ifield.fieldlinguist.com#user');
+  .redirectPath(apphttpsdomain+'#user');
 
 var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
@@ -32,6 +33,20 @@ app.configure(function() {
   app.use(express.static(__dirname + '/public'));
   app.use(express.errorHandler());
   everyauth.helpExpress(app);
+});
+app.get('/c/:usergeneric/:corpusordatalist', function(req, res){
+  console.log("hi");
+  var usergeneric = req.params.usergeneric
+    , corpusordatalist = req.params.corpusordatalist;
+  var corpusid = "";
+  //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus.
+//  res.redirect(apphttpsdomain+'#corpus/'+corpusid);
+  res.send('usergeneric ' + req.params.usergeneric+ ', corpusordatalist '+req.params.corpusordatalist);
+});
+
+app.get('/u/:usergeneric', function(req, res){
+  console.log("Got a route");
+  res.redirect("https://localhost:3001\#user/"+req.params.usergeneric);
 });
 
 port = "3001";
