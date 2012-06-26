@@ -307,7 +307,7 @@ define([
       $("#fullscreen-corpus-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
-      $("#hotkey-config-view").hide();
+      $("#hotkey-edit-view").hide();
       $('#new_data_list').hide();
       $("#new-corpus").hide();
       $('#export-view').hide();

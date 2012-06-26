@@ -19,7 +19,7 @@ define([
     "datum/DatumFields",
     "datum/DatumView", 
     "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
+    "hotkey/HotKeyEditView",
     "import/Import",
     "import/ImportView",
     "user/UserPreference",
@@ -56,7 +56,7 @@ define([
     DatumFields,
     DatumView,
     HotKey,
-    HotKeyConfigView,
+    HotKeyEditView,
     Import,
     ImportView,
     UserPreference,
@@ -166,8 +166,8 @@ define([
         model : new DataList()
       });  
       
-      // Create a HotKeyConfigView
-      this.hotkeyConfigView = new HotKeyConfigView({
+      // Create a HotKeyEditView
+      this.hotkeyEditView = new HotKeyEditView({
         model : new HotKey()
       });  
       
@@ -258,9 +258,9 @@ define([
     activityFeedView : ActivityFeedView,
     
     /**
-     * The hotkeyConfigView is a child of the AppView.
+     * The hotkeyEditView is a child of the AppView.
      */
-    hotkeyConfigView : HotKeyConfigView,
+    hotkeyEditView : HotKeyEditView,
 
     /**
      * The newDataListView is a child of the AppView.
@@ -339,7 +339,7 @@ define([
         this.activityFeedView.render();
         
         //Display HotKeysView
-        this.hotkeyConfigView.render();//.showModal();
+        this.hotkeyEditView.render();//.showModal();
 
         //Display NewDataListView
         this.newDataListView.render();
