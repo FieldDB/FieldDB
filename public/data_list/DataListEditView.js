@@ -1,8 +1,9 @@
-//TODO this is mostly a copy of DataListView, we will need to think about what actually needs to go in here and what it will look like.
+//TODO this is mostly a copy of DataListEditView, we will need to think about what actually needs to go in here and what it will look like.
 define( [ 
     "use!backbone", 
     "use!handlebars",
-    "text!data_list/new_data_list.handlebars",
+    "text!data_list/data_list_edit_fullscreen.handlebars",
+    "text!data_list/data_list_edit_embedded.handlebars",
     "text!datum/paging_footer.handlebars",
     "data_list/DataList",
     "datum/Datum",
@@ -11,19 +12,22 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    new_data_listTemplate,
+    dataListEditFullscreenTemplate,
+    dataListEditEmbeddedTemplate,
     pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumLatexView,
     Datums  
 ) {
-  var NewDataListView = Backbone.View.extend(
-  /** @lends NewDataList.prototype */
+  var DataListEditView = Backbone.View.extend(
+  /** @lends DataListEditView.prototype */
   {
     /**
-     * TODO Update description
-     * @class  This is a page where the user can create their own assorted datalist.  They can pick examples from the DataListView and then drag them over to their own customized data list.
+     * 
+     * @class This is a page where the user can create their own datalist. They
+     *        can pick datum and then drag them over to their own customized
+     *        data list.
      * @extends Backbone.View
      * @constructs
      */
@@ -35,18 +39,18 @@ define( [
     },
 
     /**
-     * The underlying model of the DataListView is a DataList.
+     * The underlying model of the DataListEditView is a DataList.
      */
     model : DataList,
 
     /** 
      * The datumLatexViews array holds all the children of the
-     * DataListView.
+     * DataListEditView.
      */
     datumLatexViews : [],
 
     /**
-     * Events that the DataListView is listening to and their handlers.
+     * Events that the DataListEditView is listening to and their handlers.
      */
     events : {
       'click a.servernext' : 'nextResultPage',
@@ -54,9 +58,10 @@ define( [
     },
 
     /**
-     * The Handlebars template rendered as the NewDataListView.
+     * The Handlebars template rendered as the DataListEditView.
      */
-    template : Handlebars.compile(new_data_listTemplate),
+    fullscreenTemplate : Handlebars.compile(dataListEditFullscreenTemplate),
+    embeddedTemplate : Handlebars.compile(dataListEditEmbeddedTemplate),
 
     /**
      * The Handlebars template of the pagination footer, which is used
@@ -65,7 +70,7 @@ define( [
     footerTemplate : Handlebars.compile(pagingFooterTemplate),
 
     /**
-     * Initially renders the DataListView. This should only be called by 
+     * Initially renders the DataListEditView. This should only be called by 
      * this.initialize. To update the current rendering, use renderUpdate()
      * instead.
      */
@@ -74,7 +79,8 @@ define( [
       if (this.model != undefined) {
         // Display the Data List
         this.setElement($("#new_data_list"));
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        //TODO do the other template
 
         // Display the pagination footer
         this.renderUpdatedPagination();
@@ -171,7 +177,7 @@ define( [
           // Restructure Datum's inner models
           d.restructure();
           
-          // Render a DatumLatexView for that Datum at the end of the DataListView
+          // Render a DatumLatexView for that Datum at the end of the DataListEditView
           var view = new DatumLatexView({
             model : d
           });
@@ -225,5 +231,5 @@ define( [
     }
   });
 
-  return NewDataListView;
+  return DataListEditView;
 });
