@@ -1,7 +1,9 @@
+// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
+
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum.handlebars",
+    "text!datum/datum_read_embedded.handlebars",
     "audio_video/AudioVideoView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
@@ -24,8 +26,8 @@ define([
     DatumTagEditView,
     UpdatingCollectionView
 ) {
-  var DatumView = Backbone.View.extend(
-  /** @lends DatumView.prototype */
+  var DatumReadView = Backbone.View.extend(
+  /** @lends DatumReadView.prototype */
   {
     /**
      * @class The layout of a single Datum. It contains a datum state,
@@ -61,22 +63,22 @@ define([
     },
 
     /**
-     * The underlying model of the DatumView is a Datum.
+     * The underlying model of the DatumReadView is a Datum.
      */
     model : Datum,
 
     /**
-     * The audioVideoView is not a partial of the DatumView, it must be called to render it.
+     * The audioVideoView is not a partial of the DatumReadView, it must be called to render it.
      */
     audioVideoView : AudioVideoView,
 
     /**
-     * The stateView is a partial of the DatumView.
+     * The stateView is a partial of the DatumReadView.
      */
     stateView : DatumStateValueEditView,
 
     /**
-     * The tagview is a partial of the DatumView.
+     * The tagview is a partial of the DatumReadView.
      */
     datumTagsView : UpdatingCollectionView,
 
@@ -86,7 +88,7 @@ define([
     datumFieldsView : UpdatingCollectionView,
     
     /**
-     * Events that the DatumView is listening to and their handlers.
+     * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
       "click #new" : "newDatum",
@@ -99,18 +101,18 @@ define([
     },
 
     /**
-     * The Handlebars template rendered as the DatumView.
+     * The Handlebars template rendered as the DatumReadView.
      */
     template : Handlebars.compile(datumTemplate),
 
     /**
-     * Renders the DatumView and all of its partials.
+     * Renders the DatumReadView and all of its partials.
      */
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
       if (this.model != undefined) {        
-        // Display the DatumView
+        // Display the DatumReadView
         this.setElement($("#datum-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
@@ -204,7 +206,7 @@ define([
        * to pouch, then a new datumview can be rendered.
        */
 
-      // var newDatum = new DatumView({model: new Datum()});
+      // var newDatum = new DatumReadView({model: new Datum()});
       // $("#fullscreen-datum-view").append(newDatum.render().el);
       // var sID = this.newDatum.get("sessionID");
       // console.log(sID);
@@ -290,5 +292,5 @@ define([
     }
   });
 
-  return DatumView;
+  return DatumReadView;
 });
