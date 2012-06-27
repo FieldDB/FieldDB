@@ -16,8 +16,8 @@ define([
     "data_list/DataListReadView",
     "data_list/DataListEditView",
     "datum/Datum",
-    "datum/DatumFields",
-    "datum/DatumView", 
+    "datum/DatumEditView",
+    "datum/DatumFields", 
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -29,6 +29,7 @@ define([
     "search/AdvancedSearchView",
     "datum/Session",
     "datum/SessionEditView",
+    "datum/SessionReadView",
     "user/User",
     "user/UserProfileView",
     "user/UserWelcomeView",
@@ -53,8 +54,8 @@ define([
     DataListReadView,
     DataListEditView,
     Datum,
+    DatumEditView,
     DatumFields,
-    DatumView,
     HotKey,
     HotKeyEditView,
     Import,
@@ -66,6 +67,7 @@ define([
     AdvancedSearchView,
     Session,
     SessionEditView,
+    SessionReadView,
     User,
     UserProfileView,
     UserWelcomeView,
@@ -97,18 +99,25 @@ define([
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
-      this.fullScreenDatumView = new DatumView({
+      this.fullScreenDatumView = new DatumEditView({
         model : new Datum({
           datumFields : this.model.get("corpus").get("datumFields").clone()
         })
       });
       
+      var sessionToBePassedAround = this.model.get("currentSession");
+      sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
+      
       // Create a SessionEditView
       this.sessionEditView = new SessionEditView({
-        model : new Session({
-          sessionFields : this.model.get("corpus").get("sessionFields").clone()
-        })
+        model : sessionToBePassedAround
       });
+      
+      // Create a SessionSummaryReadView
+      this.sessionSummaryView = new SessionReadView({
+        model : sessionToBePassedAround
+      });
+      this.sessionSummaryView.format = "leftWell";
       
       var userToBePassedAround = new User();
       console.log("userToBePassedAround:");
@@ -211,7 +220,7 @@ define([
     /**
      * The fullScreenDatumView is a child of the AppView.
      */
-    fullScreenDatumView : DatumView,
+    fullScreenDatumView : DatumEditView,
     
     /**
      * The fullScreenUserView is a child of the AppView.
@@ -242,10 +251,16 @@ define([
      * The authView is a child of the AppView.
      */  
     authView : AuthenticationView,
+    
     /**
      * The sessionEditView is a child of the AppView.
      */  
     sessionEditView : SessionEditView,
+    
+    /**
+     * The sessionSummaryView is a child of the AppView.
+     */
+    sessionSummaryView : SessionReadView,
     
     /**
      * The userUserPreferenceView is a child of the AppView.
@@ -309,7 +324,7 @@ define([
         
         this.exportView.render();
         
-        // Display the DatumView
+        // Display the DatumEditView
         this.fullScreenDatumView.render();
         
         // Display the UserProfileView
@@ -331,6 +346,9 @@ define([
         
         // Display the SessionEditView
         this.sessionEditView.render();
+        
+        // Display the SessionSummaryReadView
+        this.sessionSummaryView.render();
         
         // Display the UserPreferenceView
         this.userPreferenceView.render();
@@ -365,7 +383,6 @@ define([
      */
     loadSample : function() {
       // Sample Corpus data
-      
       this.model.get("corpus").set({
         "title" : "Quechua Corpus",
         "titleAsUrl": "Quechua_Corpus",
@@ -373,9 +390,18 @@ define([
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
       
-      //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-   //   this.corpusReadEmbeddedView.loadSample();
-      
+
+      // Sample Session data
+      this.model.get("currentSession").set("sessionFields", new DatumFields([
+        {label: "user", value: ""},
+        {label: "consultants", value: "John Doe and Mary Stewart"},
+        {label: "language", value: ""},
+        {label: "dialect", value: ""},
+        {label: "dateElicited", value: new Date()},
+        {label: "dateSEntered", value: new Date()},
+        {label: "goal", value: "To Win!"}
+      ]));
+        
       this.authView.loadSample();
       
       this.searchView.loadSample();

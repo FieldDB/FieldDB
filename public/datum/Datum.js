@@ -1,20 +1,23 @@
-define([ "use!backbone",
-         "audio_video/AudioVideo", 
-         "comment/Comments",
-         "datum/DatumField", 
-         "datum/DatumFields", 
-         "datum/DatumState", 
-         "datum/DatumTags", 
-         "datum/Session",
-         "libs/Utils"
-], function(Backbone, 
+define([ 
+    "use!backbone",
+    "audio_video/AudioVideo", 
+    "comment/Comments",
+    "datum/DatumField", 
+    "datum/DatumFields", 
+    "datum/DatumState", 
+    "datum/DatumTags", 
+    "datum/Session",
+    "libs/Utils"
+], function(
+    Backbone, 
     AudioVideo, 
     Comments,
     DatumField, 
     DatumFields,
     DatumState, 
     DatumTags,
-    Session) {
+    Session
+) {
   var Datum = Backbone.Model.extend(
   /** @lends Datum.prototype */
   {
@@ -68,17 +71,15 @@ define([ "use!backbone",
       if(typeof this.get("audioVideo") == "function"){
         this.set("audioVideo",new AudioVideo());
       }
-      
     },
 
     defaults : {      
       datumFields : DatumFields,
-      
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
       datumState : DatumState,
-      datumTags : DatumTags,
+      datumTags : new DatumTags(),
       dateEntered : DatumField
     },
 
@@ -118,6 +119,19 @@ define([ "use!backbone",
       // TODO Restructure the DatumState
       
       // TODO Restructure the DatumTags
+      if (this.get("datumTags")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("datumTags");
+        
+        // Create the model to store each DatumTag
+        this.set("datumTags", new DatumTags());
+        
+        // Create the Datum Tags models and store them
+        for (i in temp) {
+          var tag = new DatumTag(temp[i]);
+          this.get("datumTags").push(tag);
+        }
+      }
       
       // TODO Restructure the dateEntered DatumField
     },
