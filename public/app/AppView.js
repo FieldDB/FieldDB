@@ -16,7 +16,8 @@ define([
     "data_list/DataListView",
     "data_list/NewDataListView",
     "datum/Datum",
-    "datum/DatumEditView", 
+    "datum/DatumEditView",
+    "datum/DatumFields", 
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -54,6 +55,7 @@ define([
     NewDataListView,
     Datum,
     DatumEditView,
+    DatumFields,
     HotKey,
     HotKeyEditView,
     Import,
@@ -103,9 +105,8 @@ define([
         })
       });
       
-      var sessionToBePassedAround = new Session({
-        sessionFields : this.model.get("corpus").get("sessionFields").clone()
-      });
+      var sessionToBePassedAround = this.model.get("currentSession");
+      sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
       
       // Create a SessionEditView
       this.sessionEditView = new SessionEditView({
@@ -381,7 +382,6 @@ define([
      */
     loadSample : function() {
       // Sample Corpus data
-      
       this.model.get("corpus").set({
         "title" : "Quechua Corpus",
         "titleAsUrl": "Quechua_Corpus",
@@ -389,9 +389,17 @@ define([
             + "\nIt contains some data from one of our trips to Cusco, Peru."
       });
       
-      //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-      this.corpusView.loadSample();
-      
+      // Sample Session data
+      this.model.get("currentSession").set("sessionFields", new DatumFields([
+        {label: "user", value: ""},
+        {label: "consultants", value: "John Doe and Mary Stewart"},
+        {label: "language", value: ""},
+        {label: "dialect", value: ""},
+        {label: "dateElicited", value: new Date()},
+        {label: "dateSEntered", value: new Date()},
+        {label: "goal", value: "To Win!"}
+      ]));
+        
       this.authView.loadSample();
       
       this.searchView.loadSample();

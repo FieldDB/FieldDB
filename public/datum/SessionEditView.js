@@ -72,23 +72,7 @@ define([
       this.sessionFieldsView.render();
       
       return this;
-    },
-    
-    /**
-     * Initialize the sample Session.
-     * 
-     * @param {Corpus} corpus The corpus associated with this Session.
-     */
-//    loadSample : function(corpus) {
-//      this.model.set({
-//        user : "sapir",
-//        consultant : "Tillohash",
-//        corpus : corpus,
-//        language : "Cusco Quechua",
-//        goal : "Working on naya"
-//      });
-//    },
-    
+    },    
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
