@@ -41,6 +41,12 @@ define([
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
+      var jsonToRender = {
+        goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
+        consultant : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
+        date : this.model.get("sessionFields").where({label: "dateSEntered"})[0].get("value")
+      }
+      
       // Disply the SessionSummaryReadView
       this.setElement("#session");
       $(this.el).html(this.template(this.model.toJSON()));
