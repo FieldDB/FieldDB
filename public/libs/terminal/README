@@ -1,0 +1,20 @@
+HTML5 Terminal
+Command-line terminal emulator running on top of HTML5 APIs.
+
+Author: Eric Bidelman <ericbidelman@chromium.org>
+================================================================================
+
+HTML5 APIs:
+- FileSystem API
+- Web Audio API
+- filesystem: URLs
+- xhr.responseType = 'arraybuffer';
+- el.classList
+- localStorage (save theme preference)
+- DnD Files into window.
+- CSS3: gradients, text shadow, multi-columns, alpha colors, rounded corners,
+    flex box, animations, transitions, transforms, scroll bar styling, web fonts
+- CORS XHR
+
+Chrome App/Extension feature
+- unlimitedStorage
