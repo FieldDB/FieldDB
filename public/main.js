@@ -5,6 +5,7 @@ require.config({
     "text" : "libs/text",
     "jquery" : "libs/jquery",
     "hotkeys" : "libs/jquery.hotkeys",
+    "terminal" : "libs/terminal/terminal",
     "underscore" : "libs/underscore",
     "backbone" : "libs/backbone",
     "handlebars" : "libs/handlebars-1.0.0.beta.6",
@@ -40,6 +41,10 @@ require.config({
     "hotkeys":{
         deps : ["jquery"],
         attach: "hotkeys"
+      },
+      
+     "terminal":{
+       attach: "Terminal"
       }
     
   }
@@ -50,11 +55,13 @@ require([
     "app/App",
     "app/AppView",
     "app/AppRouter",
+    "use!terminal",
     "libs/Utils"
 ], function(
     App,
     AppView,
-    AppRouter
+    AppRouter,
+    Terminal
 ) {
   // Load the App
   var a = localStorage.getItem("app");
@@ -76,6 +83,9 @@ require([
   app.router = new AppRouter();
   Backbone.history.start();
   
+  
+
   // Load the sample App
 //  window.appView.loadSample();
+  
 });
