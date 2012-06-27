@@ -1,29 +1,33 @@
+// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
+
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum.handlebars",
-    "audio_video/AudioVideoEditView",
+    "text!datum/datum_read_embedded.handlebars",
+    "audio_video/AudioVideoView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
-    "datum/DatumFieldView",
-    "datum/DatumStateView",
-    "datum/DatumTagsView",
+    "datum/DatumFieldValueReadView",
+    "datum/DatumStateValueReadView",
+    "datum/DatumTag",
+    "datum/DatumTagReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     datumTemplate, 
-    AudioVideoEditView,
+    AudioVideoView,
     Confidential,
     Datum,
-    DatumFieldView,
-    DatumStateView,
-    DatumTagsView,
+    DatumFieldValueReadView,
+    DatumStateValueReadView,
+    DatumTag,
+    DatumTagReadView,
     UpdatingCollectionView
 ) {
-  var DatumView = Backbone.View.extend(
-  /** @lends DatumView.prototype */
+  var DatumReadView = Backbone.View.extend(
+  /** @lends DatumReadView.prototype */
   {
     /**
      * @class The layout of a single Datum. It contains a datum state,
@@ -33,56 +37,58 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoEditView
-      this.audioVideoEditView = new AudioVideoEditView({
+      // Create a AudioVideoView
+      this.audioVideoView = new AudioVideoView({
         model : this.model.get("audioVideo"),
       });
       
-      // Create a DatumStateView
-      this.stateView = new DatumStateView({
+      // Create a DatumStateValueEditView
+      this.stateView = new DatumStateValueReadView({
         model : this.model.get("state"),
       });
       
       // Create a DatumTagView
-      this.tagsview = new DatumTagsView({
-        model : this.model.get("datumTag"),
-      });
+      this.datumTagsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumTags"),
+        childViewConstructor : DatumTagReadView,
+        childViewTagName     : "li",
+      }),
 
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldValueReadView,
         childViewTagName     : "li",
       });
     },
 
     /**
-     * The underlying model of the DatumView is a Datum.
+     * The underlying model of the DatumReadView is a Datum.
      */
     model : Datum,
 
     /**
-     * The audioVideoEditView is not a partial of the DatumView, it must be called to render it.
+     * The audioVideoView is not a partial of the DatumReadView, it must be called to render it.
      */
-    audioVideoEditView : AudioVideoEditView,
+    audioVideoView : AudioVideoView,
 
     /**
-     * The stateView is a partial of the DatumView.
+     * The stateView is a partial of the DatumReadView.
      */
-    stateView : DatumStateView,
+    stateView : DatumStateValueEditView,
 
     /**
-     * The tagview is a partial of the DatumView.
+     * The tagview is a partial of the DatumReadView.
      */
-    tagsview : DatumTagsView,
+    datumTagsView : UpdatingCollectionView,
 
     /**
-     * The datumFieldsView displays the all the DatumFieldViews.
+     * The datumFieldsView displays the all the DatumFieldValueEditViews.
      */
     datumFieldsView : UpdatingCollectionView,
     
     /**
-     * Events that the DatumView is listening to and their handlers.
+     * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
       "click #new" : "newDatum",
@@ -91,21 +97,22 @@ define([
       "click .datum_state_select" : "renderState",
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
+      "click .add_datum_tag" : "insertNewDatumTag"
     },
 
     /**
-     * The Handlebars template rendered as the DatumView.
+     * The Handlebars template rendered as the DatumReadView.
      */
     template : Handlebars.compile(datumTemplate),
 
     /**
-     * Renders the DatumView and all of its partials.
+     * Renders the DatumReadView and all of its partials.
      */
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
       if (this.model != undefined) {        
-        // Display the DatumView
+        // Display the DatumReadView
         this.setElement($("#datum-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
@@ -113,13 +120,17 @@ define([
         this.stateView.render();
         
         // Display audioVideo View
-        this.audioVideoEditView.render();
+        this.audioVideoView.render();
+        
+        // Display the DatumTagsView
+        this.datumTagsView.el = this.$(".datum_tags_ul")
+        this.datumTagsView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
       } else {
-        Utils.debug("\tDatum model was undefined");      
+        Utils.debug("\tDatum model was undefined");
       }
 
       return this;
@@ -186,49 +197,6 @@ define([
       $(".icon-lock").toggleClass("icon-lock icon-unlock");
     },
     
-    newDatum : function() {
-      /*
-       * First, we build a new datum model, this datum model then asks if it
-       * belongs to a session if it belongs to a session it goes ahead and
-       * renders a new datum if it does not belong to a session, it builds a new
-       * session and renders a new session view. after the new session is sent
-       * to pouch, then a new datumview can be rendered.
-       */
-
-      // var newDatum = new DatumView({model: new Datum()});
-      // $("#fullscreen-datum-view").append(newDatum.render().el);
-      // var sID = this.newDatum.get("sessionID");
-      // console.log(sID);
-      //      	
-      // if(newDatum.sessionID == 0){
-      // var newSession = new SessionView({model: new Session()});
-      // $("#new-session-view").append(newSession.render().el);
-      //
-      // }
-      Utils.debug("I'm a new datum!");
-      return true;
-    },
-    
-    needsSave : false,
-    
-    updatePouch : function() {
-      this.needsSave = true;
-    },
-
-    /**
-     * If the model needs to be saved, saves it.
-     */
-    saveScreen : function() {
-      if (this.needsSave) {
-        // Change the needsSave flag before saving just in case another change
-        // happens
-        // before the saving is done
-        this.needsSave = false;
-
-        Utils.debug("Saving the Datum");
-        this.model.save();
-      }
-    },
     //Functions relating to the row of icon-buttons
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -238,6 +206,7 @@ define([
     laTeXiT : function() {
       return "";
     },
+    
     /**
      * The copyDatum function copies all datum fields to the clipboard.
      */
@@ -247,22 +216,10 @@ define([
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
       console.log(text);
-      
  
-      
       return "";
-    },
-
-    /**
-     * The duplicateDatum function opens a new datum field set with the fields
-     * already filled exactly like the previous datum so that the user can
-     * minimally edit the datum.
-     */
-    duplicateDatum : function() {
-//      var datum = new Datum();
-      return datum;
-    } 
+    }
   });
 
-  return DatumView;
+  return DatumReadView;
 });
