@@ -37,12 +37,12 @@ define([
       Utils.debug("CORPUS init: " + this.el);
       
       // Create a SessionView
-      this.sessionView = new SessionView({
-        model : new Session({
-          sessionFields : this.model.get("sessionFields").clone()
-        })
-      });
-      
+//      this.sessionView = new SessionView({
+//        model : new Session({
+//          sessionFields : this.model.get("sessionFields").clone()
+//        })
+//      });
+//      
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
     },
@@ -54,7 +54,7 @@ define([
     /**
      * The sessionView is a child of the CorpusReadEmbeddedView.
      */
-    sessionView : SessionView,
+//    sessionView : SessionView,
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -78,12 +78,12 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display the SessionView
-        this.sessionView.render();
+//        this.sessionView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
       
-      return this;
+     return this;
     },
     
     /**
