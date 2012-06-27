@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/session_read_embedded.handlebars",
+    "text!datum/session_summary_read_embedded.handlebars",
     "datum/DatumFieldValueEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -9,7 +10,8 @@ define([
 ], function(
     Backbone,
     Handlebars, 
-    sessionEditTemplate,
+    sessionReadTemplate,
+    sessionSummaryReadTemplate,
     DatumFieldValueEditView,
     Session,
     UpdatingCollectionView
@@ -56,7 +58,12 @@ define([
     /**
      * The Handlebars template rendered as the SessionReadView.
      */
-    template: Handlebars.compile(sessionEditTemplate),
+    template: Handlebars.compile(sessionReadTemplate),
+    
+    /**
+     * The Handlebars template rendered as the SessionSummaryReadView.
+     */
+    templateSummary : Handlebars.compile(sessionSummaryReadTemplate),
     
     /**
      * Renders the SessionReadView.
@@ -64,31 +71,27 @@ define([
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
-      // Display the SessionReadView
-      this.setElement("#new-session-view");
-      $(this.el).html(this.template(this.model.toJSON()));
-      
-      this.sessionFieldsView.el = this.$(".session-fields-ul");
-      this.sessionFieldsView.render();
+      if (this.format == "centerWell") {
+        // Display the SessionReadView
+        this.setElement("#new-session-view");
+        $(this.el).html(this.template(this.model.toJSON()));
+        
+        this.sessionFieldsView.el = this.$(".session-fields-ul");
+        this.sessionFieldsView.render();
+      } else if (this.format == "leftWell") {
+        var jsonToRender = {
+          goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
+          consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
+          date : this.model.get("sessionFields").where({label: "dateSEntered"})[0].get("value")
+        };
+        
+        // Disply the SessionSummaryReadView
+        this.setElement("#session");
+        $(this.el).html(this.templateSummary(jsonToRender));
+      }
       
       return this;
     },
-    
-    /**
-     * Initialize the sample Session.
-     * 
-     * @param {Corpus} corpus The corpus associated with this Session.
-     */
-//    loadSample : function(corpus) {
-//      this.model.set({
-//        user : "sapir",
-//        consultant : "Tillohash",
-//        corpus : corpus,
-//        language : "Cusco Quechua",
-//        goal : "Working on naya"
-//      });
-//    },
-    
     
     updatePouch : function() {
       Utils.debug("Saving the Session");

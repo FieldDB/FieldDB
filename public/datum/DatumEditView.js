@@ -2,7 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum_edit_embedded.handlebars",
-    "audio_video/AudioVideoView",
+    "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldValueEditView",
@@ -27,13 +27,14 @@ define([
   var DatumEditView = Backbone.View.extend(
   /** @lends DatumEditView.prototype */
   {
-    /**
-     * @class The layout of a single Datum. It contains a datum state,
-     *        datumFields, datumTags and a datum menu.
-     * 
-     * @extends Backbone.View
-     * @constructs
-     */
+        /**
+         * @class The layout of a single editable Datum. It contains a datum
+         *        state, datumFields, datumTags and a datum menu. This is where
+         *        the user enters theirs data, the main task of our application.
+         * 
+         * @extends Backbone.View
+         * @constructs
+         */
     initialize : function() {
       // Create a AudioVideoEditView
       this.audioVideoEditView = new AudioVideoEditView({
@@ -52,7 +53,7 @@ define([
         childViewTagName     : "li",
       }),
 
-      // Create the DatumFieldsView
+      // Create the DatumFieldsValueEditView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldValueEditView,
@@ -66,11 +67,7 @@ define([
     model : Datum,
 
     /**
-<<<<<<< HEAD:public/datum/DatumView.js
-     * The audioVideoEditView is not a partial of the DatumView, it must be called to render it.
-=======
-     * The audioVideoView is not a partial of the DatumEditView, it must be called to render it.
->>>>>>> 11301e02d9bdefe928cb5ae221e641662b3fd9fc:public/datum/DatumEditView.js
+     * The AudioVideoEditView is not a partial of the DatumEditView, it must be called to render it.
      */
     audioVideoEditView : AudioVideoEditView,
 
@@ -115,7 +112,7 @@ define([
       
       if (this.model != undefined) {        
         // Display the DatumEditView
-        this.setElement($("#datum-view"));
+        this.setElement($("#datum-embedded-view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display StateView
@@ -125,7 +122,7 @@ define([
         this.audioVideoEditView.render();
         
         // Display the DatumTagsView
-        this.datumTagsView.el = this.$(".datum_tags_ul")
+        this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
         
         // Display the DatumFieldsView
@@ -139,7 +136,7 @@ define([
     },
     
     renderState : function() {
-      if (this.stausview != undefined) {
+      if (this.statesview != undefined) {
         this.stateView.render();
       }
     },
