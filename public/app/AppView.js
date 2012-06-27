@@ -191,6 +191,9 @@ define([
         model : new Import()
       });
 
+      this.term = new Terminal('terminal');
+      this.term.initFS(false, 1024 * 1024);
+      
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
