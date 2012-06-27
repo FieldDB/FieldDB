@@ -15,7 +15,7 @@ define([
     UpdatingCollectionView
 ) {
   var SessionEditView = Backbone.View.extend(
-  /** @lends SessionView.prototype */
+  /** @lends SessionEditView.prototype */
   {
     /**
      * @class Session Edit View is where the user provides new session details.
@@ -59,12 +59,12 @@ define([
     template: Handlebars.compile(sessionEditTemplate),
     
     /**
-     * Renders the SessionView.
+     * Renders the SessionEditView.
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
-      // Display the SessionView
+      // Display the SessionEditView
       this.setElement("#new-session-view");
       $(this.el).html(this.template(this.model.toJSON()));
       

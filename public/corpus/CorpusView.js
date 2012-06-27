@@ -4,7 +4,7 @@ define([
     "text!corpus/corpus.handlebars",
     "corpus/Corpus",
     "datum/Session",
-    "datum/SessionView",
+    "datum/SessionSummaryReadView",
     "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
@@ -14,7 +14,7 @@ define([
     corpusTemplate,
     Corpus,
     Session,
-    SessionView,
+    SessionSummaryReadView,
     LexiconView,
     GlosserView
 ) {
@@ -36,8 +36,8 @@ define([
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
       
-      // Create a SessionView
-      this.sessionView = new SessionView({
+      // Create a SessionSummaryReadView
+      this.sessionView = new SessionSummaryReadView({
         model : new Session({
           sessionFields : this.model.get("sessionFields").clone()
         })
@@ -54,7 +54,7 @@ define([
     /**
      * The sessionView is a child of the CorpusView.
      */
-    sessionView : SessionView,
+    sessionView : SessionSummaryReadView,
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -77,7 +77,7 @@ define([
         this.setElement($("#corpus"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the SessionView
+        // Display the SessionSummaryReadView
         this.sessionView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
