@@ -212,7 +212,7 @@ define([
       // console.log(sID);
       //      	
       // if(newDatum.sessionID == 0){
-      // var newSession = new SessionView({model: new Session()});
+      // var newSession = new SessionSummaryReadView({model: new Session()});
       // $("#new-session-view").append(newSession.render().el);
       //
       // }

@@ -16,7 +16,6 @@ define([
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
-    "datum/SessionsView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -37,7 +36,6 @@ define([
     Permissions,
     PermissionsView,
     Sessions,
-    SessionsView,
     UpdatingCollectionView
 ) {
   var CorpusView = Backbone.View.extend(
@@ -90,9 +88,9 @@ define([
       });
       
       //Create a Sessions List 
-      this.sessionsView = new SessionsView({
-        collection : this.model.get("sessions")
-      });
+      // this.sessionsView = new SessionsView({
+        // collection : this.model.get("sessions")
+      // });
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -102,30 +100,36 @@ define([
      * The underlying model of the CorpusView is a Corpus.
      */    
     model : Corpus,
+    
     /**
      * The CommentEditView is a child of the CorpusView.
      */
     commentEditView : CommentEditView,
+    
     /**
      * The DataListsView is a child of the CorpusView.
      */
     dataListsView : DataListsView,
+    
     /**
      * The DatumFieldsView is a child of the CorpusView.
      */
     datumFieldsView : UpdatingCollectionView, 
+    
     /**
      * The datumStatesView is a child of the CorpusView.
      */
     datumStatesView : UpdatingCollectionView,
+    
     /**
      * The PermissionsView is a child of the CorpusView.
      */
     permissionsView : PermissionsView,
+    
     /**
-     * The SessionsView is a child of the CorpusView.
+     * The sessionsView is a child of the CorpusView.
      */
-    sessionsView : SessionsView,
+    sessionsView : UpdatingCollectionView,
    
     /**
      * Events that the CorpusView is listening to and their handlers.
@@ -185,7 +189,7 @@ define([
         this.permissionsView.render();
         
         // Display the SessionsView
-        this.sessionsView.render();
+        // this.sessionsView.render();
         
       } else {
         Utils.debug("\tCorpus model was undefined.");
