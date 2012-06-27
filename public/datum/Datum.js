@@ -5,7 +5,8 @@ define([
     "datum/DatumField", 
     "datum/DatumFields", 
     "datum/DatumState", 
-    "datum/DatumTags", 
+    "datum/DatumTag",
+    "datum/DatumTags",
     "datum/Session",
     "libs/Utils"
 ], function(
@@ -15,6 +16,7 @@ define([
     DatumField, 
     DatumFields,
     DatumState, 
+    DatumTag,
     DatumTags,
     Session
 ) {
