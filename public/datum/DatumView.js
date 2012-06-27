@@ -2,7 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum.handlebars",
-    "audio_video/AudioVideoView",
+    "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldView",
@@ -14,7 +14,7 @@ define([
     Backbone, 
     Handlebars, 
     datumTemplate, 
-    AudioVideoView,
+    AudioVideoEditView,
     Confidential,
     Datum,
     DatumFieldView,
@@ -33,8 +33,8 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoView
-      this.audioVideoView = new AudioVideoView({
+      // Create a AudioVideoEditView
+      this.audioVideoEditView = new AudioVideoEditView({
         model : this.model.get("audioVideo"),
       });
       
@@ -62,9 +62,9 @@ define([
     model : Datum,
 
     /**
-     * The audioVideoView is not a partial of the DatumView, it must be called to render it.
+     * The audioVideoEditView is not a partial of the DatumView, it must be called to render it.
      */
-    audioVideoView : AudioVideoView,
+    audioVideoEditView : AudioVideoEditView,
 
     /**
      * The stateView is a partial of the DatumView.
@@ -113,7 +113,7 @@ define([
         this.stateView.render();
         
         // Display audioVideo View
-        this.audioVideoView.render();
+        this.audioVideoEditView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
