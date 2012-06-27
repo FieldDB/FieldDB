@@ -3,14 +3,16 @@ define([
     "authentication/Authentication", 
     "corpus/Corpus",
     "search/Search",
+    "datum/Session",
     "app/AppRouter",
     "confidentiality_encryption/Confidential",
     "libs/Utils"
 ], function(
     Backbone, 
     Authentication, 
-    Corpus,   
+    Corpus,
     Search,
+    Session,
     AppRouter,
     Confidential
 ) {
@@ -39,7 +41,9 @@ define([
      * 
      * @property {Search} search The search is the primary surface where the
      *           global search features will attach.
-     * @property
+     * 
+     * @property {Session} currentSession The session that is currently open.
+     * 
      * @extends Backbone.Model
      * @constructs
      */
@@ -62,7 +66,8 @@ define([
     defaults : {
       corpus : Corpus,
       username : localStorage.getItem("username"),
-      sessionid : localStorage.getItem("sessionid")
+      sessionid : localStorage.getItem("sessionid"),
+      currentSession : new Session()
     },
     
     router : AppRouter

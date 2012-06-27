@@ -9,15 +9,13 @@ define([
     "data_list/DataLists",
     "data_list/DataListReadLinkView",
     "datum/DatumField",
-    "datum/DatumFields",
-    "datum/DatumFieldEditView",
+    "datum/DatumFieldSettingsEditView",
     "datum/DatumState",
     "datum/DatumStates",
-    "datum/DatumStateEditView",
+    "datum/DatumStateSettingsEditView",
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
-    "datum/SessionsView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -31,15 +29,13 @@ define([
     DataLists,
     DataListReadLinkView,
     DatumField,
-    DatumFields,
-    DatumFieldEditView,
+    DatumFieldSettingsEditView,
     DatumState,
     DatumStates,
-    DatumStateEditView,
+    DatumStateSettingsEditView,
     Permissions,
     PermissionsView,
     Sessions,
-    SessionsView,
     UpdatingCollectionView
 ) {
   var CorpusReadFullscreenView = Backbone.View.extend(
@@ -77,14 +73,14 @@ define([
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldEditView,
+        childViewConstructor : DatumFieldSettingsEditView,
         childViewTagName     : 'li'
       });
           
       // Create a DatumStatesView    
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
-        childViewConstructor : DatumStateEditView,
+        childViewConstructor : DatumStateSettingsEditView,
         childViewTagName     : 'li'
       });
       
@@ -94,9 +90,9 @@ define([
       });
       
       //Create a Sessions List 
-      this.sessionsView = new SessionsView({
-        collection : this.model.get("sessions")
-      });
+      // this.sessionsView = new SessionsView({
+        // collection : this.model.get("sessions")
+      // });
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -106,10 +102,12 @@ define([
      * The underlying model of the CorpusReadFullScreenView is a Corpus.
      */    
     model : Corpus,
+    
     /**
      * The CommentEditView is a child of the CorpusReadFullScreenView.
      */
     commentEditView : CommentEditView,
+    
     /**
      * The DataListsView is a child of the CorpusReadFullScreenView.
      */
@@ -118,18 +116,21 @@ define([
      * The DatumFieldsView is a child of the CorpusReadFullScreenView.
      */
     datumFieldsView : UpdatingCollectionView, 
+    
     /**
      * The datumStatesView is a child of the CorpusReadFullScreenView.
      */
     datumStatesView : UpdatingCollectionView,
+    
     /**
      * The PermissionsView is a child of the CorpusReadFullScreenView.
      */
     permissionsView : PermissionsView,
+    
     /**
      * The SessionsView is a child of the CorpusReadFullScreenView.
      */
-    sessionsView : SessionsView,
+    sessionsView : UpdatingCollectionView,
    
     /**
      * Events that the CorpusReadFullScreenView is listening to and their handlers.
@@ -189,7 +190,7 @@ define([
         this.permissionsView.render();
         
         // Display the SessionsView
-        this.sessionsView.render();
+        // this.sessionsView.render();
         
       } else {
         Utils.debug("\tCorpus model was undefined.");
@@ -241,8 +242,7 @@ define([
         "color" : this.$el.children(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
-    },
-    
+    }
   });
 
   return CorpusReadFullscreenView;
