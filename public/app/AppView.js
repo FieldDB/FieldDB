@@ -9,17 +9,17 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
-    "corpus/CorpusFullscreenView",
-    "corpus/CorpusView",
+    "corpus/CorpusReadFullscreenView",
+    "corpus/CorpusReadEmbeddedView",
     "corpus/NewCorpusView",
     "data_list/DataList",
-    "data_list/DataListView",
-    "data_list/NewDataListView",
+    "data_list/DataListReadView",
+    "data_list/DataListEditView",
     "datum/Datum",
     "datum/DatumFields",
     "datum/DatumView", 
     "hotkey/HotKey",
-    "hotkey/HotKeyConfigView",
+    "hotkey/HotKeyEditView",
     "import/Import",
     "import/ImportView",
     "user/UserPreference",
@@ -46,17 +46,17 @@ define([
     Authentication,
     AuthenticationView,
     Corpus, 
-    CorpusFullscreenView,
-    CorpusView,
+    CorpusReadFullscreenView,
+    CorpusReadEmbeddedView,
     NewCorpusView,
     DataList,
-    DataListView,
-    NewDataListView,
+    DataListReadView,
+    DataListEditView,
     Datum,
     DatumFields,
     DatumView,
     HotKey,
-    HotKeyConfigView,
+    HotKeyEditView,
     Import,
     ImportView,
     UserPreference,
@@ -90,8 +90,8 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
       
-      // Create a CorpusView for the Corpus in the App
-      this.corpusView = new CorpusView({
+      // Create a CorpusReadEmbeddedView for the Corpus in the App
+      this.corpusReadEmbeddedView = new CorpusReadEmbeddedView({
         model : this.model.get("corpus")
       });
       
@@ -129,8 +129,8 @@ define([
         model : userToBePassedAround
       });
       
-      // Create a DataListView   
-      this.dataListView = new DataListView({
+      // Create a DataListReadView   
+      this.dataListReadView = new DataListReadView({
         model : new DataList({
           // TODO Remove this dummy data once we have real datalists working
           datumIds : [
@@ -161,13 +161,13 @@ define([
         model : new ActivityFeed()
       }); 
       
-      // Create an newDataListView
-      this.newDataListView = new NewDataListView({
+      // Create an dataListEditView
+      this.dataListEditView = new DataListEditView({
         model : new DataList()
       });  
       
-      // Create a HotKeyConfigView
-      this.hotkeyConfigView = new HotKeyConfigView({
+      // Create a HotKeyEditView
+      this.hotkeyEditView = new HotKeyEditView({
         model : new HotKey()
       });  
       
@@ -182,7 +182,7 @@ define([
       });
 
       // Create a CorpusEditView
-      this.fullscreenCorpusView = new CorpusFullscreenView({
+      this.corpusReadFullscreenView = new CorpusReadFullscreenView({
         model : this.model.get("corpus")
       });
       
@@ -202,9 +202,9 @@ define([
     model : App,
     
     /**
-     * The corpusView is a child of the AppView.
+     * The corpusReadEmbeddedView is a child of the AppView.
      */
-    corpusView : CorpusView,
+    corpusReadEmbeddedView : CorpusReadEmbeddedView,
     
     exportView : ExportView,
     
@@ -224,9 +224,9 @@ define([
     welcomeUserView : UserWelcomeView,
     
     /**
-     * The dataListView is a child of the AppView.
+     * The dataListReadView is a child of the AppView.
      */
-    dataListView : DataListView,
+    dataListReadView : DataListReadView,
     
     /**
      * The searchView is a child of the AppView.
@@ -258,14 +258,14 @@ define([
     activityFeedView : ActivityFeedView,
     
     /**
-     * The hotkeyConfigView is a child of the AppView.
+     * The hotkeyEditView is a child of the AppView.
      */
-    hotkeyConfigView : HotKeyConfigView,
+    hotkeyEditView : HotKeyEditView,
 
     /**
-     * The newDataListView is a child of the AppView.
+     * The dataListEditView is a child of the AppView.
      */
-    newDataListView : NewDataListView,
+    dataListEditView : DataListEditView,
     
     /**
      * The newCorpusView is a child of the AppView.
@@ -273,9 +273,9 @@ define([
     newCorpusView : NewCorpusView,
     
     /**
-     * The fullscreenCorpusView is a child of the AppView.
+     * The CorpusReadFullscreenView is a child of the AppView.
      */
-    fullscreenCorpusView : CorpusFullscreenView,
+    corpusReadFullscreenView : CorpusReadFullscreenView,
 
     /**
      * The importView is a child of the AppView.
@@ -304,8 +304,8 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CorpusView
-        this.corpusView.render();
+        // Display the CorpusReadEmbeddedView
+        this.corpusReadEmbeddedView.render();
         
         this.exportView.render();
         
@@ -318,8 +318,8 @@ define([
         // Display the UserWelcomeView
         this.welcomeUserView.render();
         
-        // Display the DataListView
-        this.dataListView.render();
+        // Display the DataListReadView
+        this.dataListReadView.render();
                 
         // Display the SearchView
         this.searchView.render();
@@ -339,10 +339,10 @@ define([
         this.activityFeedView.render();
         
         //Display HotKeysView
-        this.hotkeyConfigView.render();//.showModal();
+        this.hotkeyEditView.render();//.showModal();
 
-        //Display NewDataListView
-        this.newDataListView.render();
+        //Display DataListEditView
+        this.dataListEditView.render();
         
         //Display NewCorpusView
         this.newCorpusView.render();
@@ -351,7 +351,7 @@ define([
         this.importView.render();
         
         // Dispaly the CorpusFullscreenView
-        this.fullscreenCorpusView.render();
+        this.corpusReadFullscreenView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }
@@ -374,7 +374,7 @@ define([
       });
       
       //Notes, i moved loadsample "higher" in the sense that it is geting called in auth view so that the user can be conneced throughout the app.
-      this.corpusView.loadSample();
+   //   this.corpusReadEmbeddedView.loadSample();
       
       this.authView.loadSample();
       
