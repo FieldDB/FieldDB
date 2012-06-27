@@ -1,7 +1,7 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/session_edit_embedded.handlebars",
+    "text!datum/session_read_embedded.handlebars",
     "datum/DatumFieldValueEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -14,7 +14,7 @@ define([
     Session,
     UpdatingCollectionView
 ) {
-  var SessionEditView = Backbone.View.extend(
+  var SessionReadView = Backbone.View.extend(
   /** @lends SessionView.prototype */
   {
     /**
@@ -36,7 +36,7 @@ define([
     },
 
     /**
-     * The underlying model of the SessionEditView is a Session.
+     * The underlying model of the SessionReadView is a Session.
      */
     model : Session,
     
@@ -46,7 +46,7 @@ define([
     sessionFieldsView : UpdatingCollectionView,
 
     /**
-     * Events that the SessionEditView is listening to and their handlers.
+     * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
     
@@ -54,7 +54,7 @@ define([
     },
     
     /**
-     * The Handlebars template rendered as the SessionEditView.
+     * The Handlebars template rendered as the SessionReadView.
      */
     template: Handlebars.compile(sessionEditTemplate),
     
@@ -96,5 +96,5 @@ define([
     }
   });
   
-  return SessionEditView;
+  return SessionReadView;
 }); 
