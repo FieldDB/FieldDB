@@ -4,7 +4,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "datum/DatumState",
-    "text!datum/datum_state_value_edit_embedded.handlebars"
+    "text!datum/datum_state_value_read_embedded.handlebars"
 ], function(
     Backbone, 
     Handlebars,

@@ -7,8 +7,8 @@ define([
     Handlebars,
     Datum
 ) {
-  var DatumLatexView = Backbone.View.extend(
-  /** @lends DatumLatexView.prototype */
+  var DatumLatexReadView = Backbone.View.extend(
+  /** @lends DatumLatexReadView.prototype */
   {
     /**
      * @class DatumLatex is an item returned as a search result in the data
@@ -17,12 +17,12 @@ define([
      *        gloss as in Latex, but this is not a true Latex format (just
      *        looking like Latex).
      * 
-     * DatumLatexView is based off of the MovieView in the Paginated Collection
+     * DatumLatexReadView is based off of the MovieView in the Paginated Collection
      * <a
      * href="https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js">
      * https://github.com/cesine/backbone.paginator/blob/master/examples/netflix-infinite-paging-requirejs/views/MovieView.js</a>
      * 
-     * @description Starts the DatumLatexView.
+     * @description Starts the DatumLatexReadView.
      * 
      * @extends Backbone.View
      * @constructs
@@ -35,14 +35,14 @@ define([
     },
 
     /**
-     * The underlying model of the DatumLatexView is a Datum.
+     * The underlying model of the DatumLatexReadView is a Datum.
      */
     model : Datum,
     
     tagName : 'li',
 
     /**
-     * Renders the DatumLatexView.r
+     * Renders the DatumLatexReadView.r
      */
     render : function() {
       Utils.debug("DLATEX render: " + this.el);
@@ -67,5 +67,5 @@ define([
     }
   });
 
-  return DatumLatexView;
+  return DatumLatexReadView;
 });
