@@ -37,7 +37,7 @@ define([
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
       "corpus/:corpusName/datalist" : "newFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
-      "corpus/" : "newFullscreenCorpus",
+      "corpus/" : "showFullscreenCorpus",
       "corpus/:corpusName/export" : "showExport",
       "user/:username" : "showUser",
       //"user/:userName/datumprefs" : "showDatumPreferences",
@@ -58,7 +58,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#fullscreen-corpus-view").show();
+      $("#corpus-read-fullscreen-view").show();
 //      $("#welcome-user-view").show();
       
     },
@@ -70,26 +70,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#fullscreen-corpus-view").show();
-//      $("#welcome-user-view").hide();
-
-    },
-
-    /**
-     * TODO do we need this to be full screen? why not a pop-up? 
-     * Displays a a page where the user can create a new corpus. 
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    newFullscreenCorpus : function() {
-      Utils.debug("In newFullscreenCorpus: " );
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#new-corpus").show();
+      $("#corpus-read-fullscreen-view").show();
     },
 
     /**
@@ -101,10 +82,9 @@ define([
     showFullscreenCorpus : function(corpusName ) {
       Utils.debug("In showFullscreenCorpus: " + corpusName);
 
-      alert("TODO, go get the corpus that matches this name");
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#corpus-info-view").show();
+      $("#corpus-read-fullscreen-view").show();
     },
     
     /**
@@ -304,16 +284,16 @@ define([
       $("#fullscreen-datalist-view").hide();
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
-      $("#fullscreen-corpus-view").hide();
       $("#terminal-modal").hide();
-      $("#welcome-user-view").hide();
+      $("#corpus-read-fullscreen-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-edit-view").hide();
       $('#new_data_list').hide();
-      $("#new-corpus").hide();
+      $("#corpus-edit-embedded").hide();
       $('#export-view').hide();
       $('#import').hide();
+      $("#welcome-user-view").hide();
     }
   });
 
