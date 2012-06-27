@@ -3,8 +3,6 @@ define([
     "use!handlebars", 
     "text!corpus/corpus.handlebars",
     "corpus/Corpus",
-    "datum/Session",
-    "datum/SessionSummaryReadView",
     "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
@@ -13,8 +11,6 @@ define([
     Handlebars, 
     corpusTemplate,
     Corpus,
-    Session,
-    SessionSummaryReadView,
     LexiconView,
     GlosserView
 ) {
@@ -36,13 +32,6 @@ define([
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
       
-      // Create a SessionSummaryReadView
-      this.sessionView = new SessionSummaryReadView({
-        model : new Session({
-          sessionFields : this.model.get("sessionFields").clone()
-        })
-      });
-      
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
     },
@@ -51,10 +40,6 @@ define([
      * The underlying model of the CorpusView is a Corpus.
      */    
     model : Corpus,
-    /**
-     * The sessionView is a child of the CorpusView.
-     */
-    sessionView : SessionSummaryReadView,
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -76,23 +61,12 @@ define([
         // Display the CorpusView
         this.setElement($("#corpus"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display the SessionSummaryReadView
-        this.sessionView.render();
       } else {
         Utils.debug("\tCorpus model was undefined.");
       }
       
       return this;
-    },
-    
-    /**
-     * Initialize the sample Corpus.
-     */
-//    loadSample : function() {
-//      this.sessionView.loadSample(this.model);
-//      
-//    }
+    }
   });
 
   return CorpusView;

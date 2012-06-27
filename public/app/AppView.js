@@ -28,6 +28,7 @@ define([
     "search/AdvancedSearchView",
     "datum/Session",
     "datum/SessionEditView",
+    "datum/SessionSummaryReadView",
     "user/User",
     "user/UserProfileView",
     "user/UserWelcomeView",
@@ -64,6 +65,7 @@ define([
     AdvancedSearchView,
     Session,
     SessionEditView,
+    SessionSummaryReadView,
     User,
     UserProfileView,
     UserWelcomeView,
@@ -101,11 +103,18 @@ define([
         })
       });
       
+      var sessionToBePassedAround = new Session({
+        sessionFields : this.model.get("corpus").get("sessionFields").clone()
+      });
+      
       // Create a SessionEditView
       this.sessionEditView = new SessionEditView({
-        model : new Session({
-          sessionFields : this.model.get("corpus").get("sessionFields").clone()
-        })
+        model : sessionToBePassedAround
+      });
+      
+      // Create a SessionSummaryReadView
+      this.sessionSummaryView = new SessionSummaryReadView({
+        model : sessionToBePassedAround
       });
       
       var userToBePassedAround = new User();
@@ -240,10 +249,16 @@ define([
      * The authView is a child of the AppView.
      */  
     authView : AuthenticationView,
+    
     /**
      * The sessionEditView is a child of the AppView.
      */  
     sessionEditView : SessionEditView,
+    
+    /**
+     * The sessionSummaryView is a child of the AppView.
+     */
+    sessionSummaryView : SessionSummaryReadView,
     
     /**
      * The userUserPreferenceView is a child of the AppView.
@@ -329,6 +344,9 @@ define([
         
         // Display the SessionEditView
         this.sessionEditView.render();
+        
+        // Display the SessionSummaryReadView
+        this.sessionSummaryView.render();
         
         // Display the UserPreferenceView
         this.userPreferenceView.render();

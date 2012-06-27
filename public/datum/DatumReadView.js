@@ -7,10 +7,10 @@ define([
     "audio_video/AudioVideoView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
-    "datum/DatumFieldValueEditView",
-    "datum/DatumStateValueEditView",
+    "datum/DatumFieldValueReadView",
+    "datum/DatumStateValueReadView",
     "datum/DatumTag",
-    "datum/DatumTagEditView",
+    "datum/DatumTagReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -20,10 +20,10 @@ define([
     AudioVideoView,
     Confidential,
     Datum,
-    DatumFieldValueEditView,
-    DatumStateValueEditView,
+    DatumFieldValueReadView,
+    DatumStateValueReadView,
     DatumTag,
-    DatumTagEditView,
+    DatumTagReadView,
     UpdatingCollectionView
 ) {
   var DatumReadView = Backbone.View.extend(
@@ -43,21 +43,21 @@ define([
       });
       
       // Create a DatumStateValueEditView
-      this.stateView = new DatumStateValueEditView({
+      this.stateView = new DatumStateValueReadView({
         model : this.model.get("state"),
       });
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
-        childViewConstructor : DatumTagEditView,
+        childViewConstructor : DatumTagReadView,
         childViewTagName     : "li",
       }),
 
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldValueEditView,
+        childViewConstructor : DatumFieldValueReadView,
         childViewTagName     : "li",
       });
     },
@@ -197,50 +197,6 @@ define([
       $(".icon-lock").toggleClass("icon-lock icon-unlock");
     },
     
-    newDatum : function() {
-      /*
-       * First, we build a new datum model, this datum model then asks if it
-       * belongs to a session if it belongs to a session it goes ahead and
-       * renders a new datum if it does not belong to a session, it builds a new
-       * session and renders a new session view. after the new session is sent
-       * to pouch, then a new datumview can be rendered.
-       */
-
-      // var newDatum = new DatumReadView({model: new Datum()});
-      // $("#fullscreen-datum-view").append(newDatum.render().el);
-      // var sID = this.newDatum.get("sessionID");
-      // console.log(sID);
-      //      	
-      // if(newDatum.sessionID == 0){
-      // var newSession = new SessionSummaryReadView({model: new Session()});
-      // $("#new-session-view").append(newSession.render().el);
-      //
-      // }
-      Utils.debug("I'm a new datum!");
-      return true;
-    },
-    
-    needsSave : false,
-    
-    updatePouch : function() {
-      this.needsSave = true;
-    },
-
-    /**
-     * If the model needs to be saved, saves it.
-     */
-    saveScreen : function() {
-      if (this.needsSave) {
-        // Change the needsSave flag before saving just in case another change
-        // happens
-        // before the saving is done
-        this.needsSave = false;
-
-        Utils.debug("Saving the Datum");
-        this.model.save();
-      }
-    },
-    
     //Functions relating to the row of icon-buttons
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -262,33 +218,6 @@ define([
       console.log(text);
  
       return "";
-    },
-
-    /**
-     * The duplicateDatum function opens a new datum field set with the fields
-     * already filled exactly like the previous datum so that the user can
-     * minimally edit the datum.
-     */
-    duplicateDatum : function() {
-//      var datum = new Datum();
-      return datum;
-    },
-    
-    insertNewDatumTag : function() {
-      // Create the new DatumTag based on what the user entered
-      var t = new DatumTag({
-        "tag" : this.$el.children(".datum").children(".add_tag").val()
-      })
-      
-      // Add the new DatumTag to the Datum's list for datumTags 
-      this.model.get("datumTags").add(t);
-      
-      // Reset the "add" textbox
-      this.$el.children(".datum").children(".add_tag").val("");
-      
-      needsSave = true;
-      
-      return false;
     }
   });
 

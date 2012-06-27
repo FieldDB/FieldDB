@@ -210,7 +210,7 @@ define([
       // console.log(sID);
       //      	
       // if(newDatum.sessionID == 0){
-      // var newSession = new SessionSummaryReadView({model: new Session()});
+      // var newSession = new SessionEditView({model: new Session()});
       // $("#new-session-view").append(newSession.render().el);
       //
       // }
