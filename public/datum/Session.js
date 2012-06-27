@@ -49,7 +49,7 @@ define([
     },
    
     defaults: {
-      sessionFields : DatumFields,
+      sessionFields : new DatumFields(),
       comments : Comments
     },
    

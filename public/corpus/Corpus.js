@@ -134,14 +134,12 @@ define([
             new DatumField({
               label : "user",
               encrypted: "",
-              userchooseable: "disabled",
-              value: User
+              userchooseable: "disabled"
             }),
             new DatumField({
               label : "consultants",
               encrypted: "",
-              userchooseable: "disabled",
-              value: Consultants
+              userchooseable: "disabled"
             }),
             new DatumField({
               label : "language",
