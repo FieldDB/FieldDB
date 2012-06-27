@@ -176,7 +176,7 @@ define( [
         success : function() {
           // Restructure Datum's inner models
           d.restructure();
-          
+
           // Render a DatumLatexReadView for that Datum at the end of the DataListEditView
           var view = new DatumLatexReadView({
             model : d
@@ -222,7 +222,7 @@ define( [
       var endIndex = startIndex + this.perPage;
 
       // Add a DatumLatexReadView for each one
-      for (i = startIndex; i < endIndex; i++) {
+      for (var i = startIndex; i < endIndex; i++) {
         var datumId = this.model.get("datumIds")[i];
         if (datumId) {
           this.addOne(datumId);

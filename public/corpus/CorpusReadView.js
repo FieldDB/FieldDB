@@ -2,9 +2,9 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!corpus/corpus_read_embedded.handlebars",
+    "text!corpus/corpus_read_link.handlebars",
+    "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
-    "datum/Session",
-    "datum/SessionView",
     "lexicon/LexiconView",
     "glosser/GlosserView",
     "libs/Utils"
@@ -12,14 +12,14 @@ define([
     Backbone, 
     Handlebars, 
     corpusReadEmbeddedTemplate,
+    corpusReadLinkTemplate,
+    corpusReadSummaryTemplate,
     Corpus,
-    Session,
-    SessionView,
     LexiconView,
     GlosserView
 ) {
-  var CorpusReadEmbeddedView = Backbone.View.extend(
-  /** @lends CorpusReadEmbeddedView.prototype */
+  var CorpusReadView = Backbone.View.extend(
+  /** @lends CorpusReadView.prototype */
   {
     /**
      * @class This is the corpus view. To the user it looks like a
@@ -36,25 +36,16 @@ define([
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
       
-      // Create a SessionView
-      this.sessionView = new SessionView({
-        model : new Session({
-          sessionFields : this.model.get("sessionFields").clone()
-        })
-      });
-      
+
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
     },
 
     /**
-     * The underlying model of the CorpusReadEmbeddedView is a Corpus.
+     * The underlying model of the CorpusReadView is a Corpus.
      */    
     model : Corpus,
-    /**
-     * The sessionView is a child of the CorpusReadEmbeddedView.
-     */
-    sessionView : SessionView,
+
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -63,37 +54,46 @@ define([
     glosser : GlosserView,
 
     /**
-     * The Handlebars template rendered as the CorpusReadEmbeddedView.
+     * The Handlebars template rendered as the CorpusReadView.
      */
     template : Handlebars.compile(corpusReadEmbeddedTemplate),
+    
+    /**
+     * The Handlebars template rendered as the CorpusReadLinkView.
+     */
+    templateLink: Handlebars.compile(corpusReadLinkTemplate),
+    
+    /**
+     * The Handlebars template rendered as the CorpusSummaryReadView.
+     */
+    templateSummary : Handlebars.compile(corpusReadSummaryTemplate),
 
     /**
-     * Renders the CorpusReadEmbeddedView and all of its child Views.
+     * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
       Utils.debug("CORPUS render: " + this.el);
-      if (this.model != undefined) {
-        // Display the CorpusReadEmbeddedView
-        this.setElement($("#corpus-read-embedded"));
-        $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display the SessionView
-        this.sessionView.render();
-      } else {
-        Utils.debug("\tCorpus model was undefined.");
-      }
       
+      if (this.format == "leftWell") {
+        if (this.model != undefined) {
+          // Display the CorpusReadView
+          this.setElement($("#corpus-read-embedded"));
+          $(this.el).html(this.templateSummary(this.model.toJSON()));
+  
+        } else {
+          Utils.debug("\tCorpus model was undefined.");
+        }
+      } else if (this.format == "link") {
+        // Display the CorpusGlimpseView
+        $(this.el).html(this.templateLink(this.model.toJSON()));
+      }
+
       return this;
     },
     
-    /**
-     * Initialize the sample Corpus.
-     */
-//    loadSample : function() {
-//      this.sessionView.loadSample(this.model);
-//      
-//    }
+  
+
   });
 
-  return CorpusReadEmbeddedView;
+  return CorpusReadView;
 });
