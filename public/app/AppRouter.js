@@ -59,7 +59,7 @@ define([
       this.hideEverything();
       $("#dashboard-view").show();
       $("#fullscreen-corpus-view").show();
-      $("#welcome-user-view").show();
+//      $("#welcome-user-view").show();
       
     },
 /**
@@ -71,7 +71,7 @@ define([
       this.hideEverything();
       $("#dashboard-view").show();
       $("#fullscreen-corpus-view").show();
-      $("#welcome-user-view").hide();
+//      $("#welcome-user-view").hide();
 
     },
 
@@ -305,6 +305,8 @@ define([
       $("#fullscreen-search-view").hide();
       $("#fullscreen-user-profile-view").hide();
       $("#fullscreen-corpus-view").hide();
+      $("#terminal-modal").hide();
+      $("#welcome-user-view").hide();
       $("#user-preferences-view").hide();
       $("#datum-preferences-view").hide();
       $("#hotkey-edit-view").hide();
