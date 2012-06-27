@@ -16,7 +16,7 @@ define([
     "data_list/DataListView",
     "data_list/NewDataListView",
     "datum/Datum",
-    "datum/DatumView", 
+    "datum/DatumEditView", 
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -52,7 +52,7 @@ define([
     DataListView,
     NewDataListView,
     Datum,
-    DatumView,
+    DatumEditView,
     HotKey,
     HotKeyEditView,
     Import,
@@ -95,7 +95,7 @@ define([
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
-      this.fullScreenDatumView = new DatumView({
+      this.fullScreenDatumView = new DatumEditView({
         model : new Datum({
           datumFields : this.model.get("corpus").get("datumFields").clone()
         })
@@ -209,7 +209,7 @@ define([
     /**
      * The fullScreenDatumView is a child of the AppView.
      */
-    fullScreenDatumView : DatumView,
+    fullScreenDatumView : DatumEditView,
     
     /**
      * The fullScreenUserView is a child of the AppView.
@@ -307,7 +307,7 @@ define([
         
         this.exportView.render();
         
-        // Display the DatumView
+        // Display the DatumEditView
         this.fullScreenDatumView.render();
         
         // Display the UserProfileView
