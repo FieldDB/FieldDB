@@ -7,7 +7,8 @@ define([
     "datum/Datum",
     "datum/DatumFieldValueEditView",
     "datum/DatumStateValueEditView",
-    "datum/DatumTagsView",
+    "datum/DatumTag",
+    "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -19,7 +20,8 @@ define([
     Datum,
     DatumFieldValueEditView,
     DatumStateValueEditView,
-    DatumTagsView,
+    DatumTag,
+    DatumTagEditView,
     UpdatingCollectionView
 ) {
   var DatumView = Backbone.View.extend(
@@ -44,9 +46,11 @@ define([
       });
       
       // Create a DatumTagView
-      this.tagsview = new DatumTagsView({
-        model : this.model.get("datumTag"),
-      });
+      this.datumTagsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumTags"),
+        childViewConstructor : DatumTagEditView,
+        childViewTagName     : "li",
+      }),
 
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
@@ -74,7 +78,7 @@ define([
     /**
      * The tagview is a partial of the DatumView.
      */
-    tagsview : DatumTagsView,
+    datumTagsView : UpdatingCollectionView,
 
     /**
      * The datumFieldsView displays the all the DatumFieldValueEditViews.
@@ -91,6 +95,7 @@ define([
       "click .datum_state_select" : "renderState",
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
+      "click .add_datum_tag" : "insertNewDatumTag"
     },
 
     /**
@@ -115,11 +120,15 @@ define([
         // Display audioVideo View
         this.audioVideoView.render();
         
+        // Display the DatumTagsView
+        this.datumTagsView.el = this.$(".datum_tags_ul")
+        this.datumTagsView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
       } else {
-        Utils.debug("\tDatum model was undefined");      
+        Utils.debug("\tDatum model was undefined");
       }
 
       return this;
@@ -229,6 +238,7 @@ define([
         this.model.save();
       }
     },
+    
     //Functions relating to the row of icon-buttons
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -238,6 +248,7 @@ define([
     laTeXiT : function() {
       return "";
     },
+    
     /**
      * The copyDatum function copies all datum fields to the clipboard.
      */
@@ -247,9 +258,7 @@ define([
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
       console.log(text);
-      
  
-      
       return "";
     },
 
@@ -261,7 +270,24 @@ define([
     duplicateDatum : function() {
 //      var datum = new Datum();
       return datum;
-    } 
+    },
+    
+    insertNewDatumTag : function() {
+      // Create the new DatumTag based on what the user entered
+      var t = new DatumTag({
+        "tag" : this.$el.children(".datum").children(".add_tag").val()
+      })
+      
+      // Add the new DatumTag to the Datum's list for datumTags 
+      this.model.get("datumTags").add(t);
+      
+      // Reset the "add" textbox
+      this.$el.children(".datum").children(".add_tag").val("");
+      
+      needsSave = true;
+      
+      return false;
+    }
   });
 
   return DatumView;

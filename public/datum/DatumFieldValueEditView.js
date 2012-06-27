@@ -1,13 +1,14 @@
 define([ 
-         "use!backbone",
-         "use!handlebars", 
-         "text!datum/datum_field_value_edit_embedded.handlebars",
-         "datum/DatumField"
-  ], function(
-      Backbone, 
-      Handlebars,
-      datumFieldTemplate,
-      DatumField
+    "use!backbone",
+    "use!handlebars", 
+    "text!datum/datum_field_value_edit_embedded.handlebars",
+    "datum/DatumField",
+    "libs/Utils"
+], function(
+    Backbone, 
+    Handlebars,
+    datumFieldTemplate,
+    DatumField
 ) {
   var DatumFieldValueEditView = Backbone.View.extend(
   /** @lends DatumFieldValueEditView.prototype */

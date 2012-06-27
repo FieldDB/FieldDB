@@ -2,38 +2,40 @@ define( [
     "use!backbone", 
     "use!handlebars", 
     "datum/DatumState",
-    "text!datum/datum_state_value_edit.handlebars"
-], function(Backbone, 
+    "text!datum/datum_state_value_edit_embedded.handlebars"
+], function(
+    Backbone, 
     Handlebars,
     DatumState,
-    datum_stateTemplate) {
-    var DatumStateValueEditView = Backbone.View.extend(
-    /** @lends DatumStatusView.prototype */
-    {
-        /**
-         * @class The status of a single Datum.
-         *
-         * @extends Backbone.View
-         * @constructs
-         */
-        initialize : function() {
-          
-        },
-        events:{
+    datum_stateTemplate
+) {
+  var DatumStateValueEditView = Backbone.View.extend(
+  /** @lends DatumStatusView.prototype */
+  {
+    /**
+     * @class The status of a single Datum.
+     *
+     * @extends Backbone.View
+     * @constructs
+     */
+    initialize : function() {
+      
+    },
+    events:{
 //          "blur .datum_state_select" : "render",        
-        // "change" : "render",
-        "click .color_chooser" : function() { console.log("color_chooser"); },
-        "blur input.datum_state_input" : function() { console.log("datum_state_input"); }
-        },
-        
-        model : DatumState,
+    // "change" : "render",
+      "click .color_chooser" : function() { console.log("color_chooser"); },
+      "blur input.datum_state_input" : function() { console.log("datum_state_input"); }
+    },
+    
+    model : DatumState,
 
-        classname : "datum_state",
+    classname : "datum_state",
 
-        template: Handlebars.compile(datum_stateTemplate),
-        	
-        render : function() {
-          console.log("\n\n\nrendering "+ $(".datum_state_select").val() );
+    template: Handlebars.compile(datum_stateTemplate),
+    	
+    render : function() {
+      console.log("\n\n\nrendering "+ $(".datum_state_select").val() );
 //          var id = $(".datum_state_select").val() ;
 //            this.model.set("active", id );
 //            var s = this.model.get("states");
@@ -49,8 +51,8 @@ define( [
 //              $(".datum_state_select").addClass("btn-danger");
 //            }
 //            return this;
-        }
-    });
+    }
+  });
 
-    return DatumStateValueEditView;
+  return DatumStateValueEditView;
 }); 
