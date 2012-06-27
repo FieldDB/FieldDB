@@ -173,9 +173,8 @@ define( [
         success : function() {
           // Restructure Datum's inner models
           d.restructure();
-          
 
-          // Render a DatumLatexReadView for that Datum at the end of the DataListView
+          // Render a DatumLatexReadView for that Datum at the end of the DataListReadView
           var view = new DatumLatexReadView({
             model :  d
           });
