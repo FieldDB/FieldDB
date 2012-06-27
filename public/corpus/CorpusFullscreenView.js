@@ -237,8 +237,7 @@ define([
         "color" : this.$el.children(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
-    },
-    
+    }
   });
 
   return CorpusView;

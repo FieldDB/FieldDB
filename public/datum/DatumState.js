@@ -1,9 +1,10 @@
 define([ 
-         "use!backbone", 
-         "user/Consultant" 
+    "use!backbone", 
+    "user/Consultant" 
 ], function(
-         Backbone,
-         Consultant) {
+    Backbone,
+    Consultant
+) {
   var DatumState = Backbone.Model.extend(
   /** @lends DatumState.prototype */
   {
@@ -29,12 +30,13 @@ define([
      */
     initialize : function() {
     },
+    
     defaults : {
       state : "Checked",
       color : "success",
       consultant : Consultant,
       showInSearchResults : true
-    },
+    }
   });
 
   return DatumState;
