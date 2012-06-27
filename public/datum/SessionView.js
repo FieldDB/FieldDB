@@ -60,7 +60,7 @@ define([
       this.setElement("#session");
       $(this.el).html(this.template(this.model.toJSON()));
       
-      this.sessionFieldsView.el = this.$(".session_fields_ul");
+      this.sessionFieldsView.el = this.$(".session-fields-ul");
       this.sessionFieldsView.render();
       
       return this;
