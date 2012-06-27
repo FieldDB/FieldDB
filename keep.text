@@ -1,0 +1,7 @@
+      
+      // Create a SessionSummaryReadView
+      this.sessionView = new SessionSummaryReadView({
+        model : new Session({
+          sessionFields : this.model.get("sessionFields").clone()
+        })
+      });

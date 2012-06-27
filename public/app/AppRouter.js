@@ -1,14 +1,14 @@
 define([ 
     "use!backbone",
     "datum/Datum",
-    "datum/DatumView",
+    "datum/DatumEditView",
     "datum/Session",
     "datum/SessionEditView",
     "libs/Utils"
 ], function(
     Backbone,
     Datum,
-    DatumView,
+    DatumEditView,
     Session,
     SessionEditView
 ) {
@@ -146,7 +146,7 @@ define([
           
           // Create a new Datum (cloning the default datum fields from the
           // corpus in case they changed) and render it
-          appView.fullScreenDatumView = new DatumView({
+          appView.fullScreenDatumView = new DatumEditView({
             model : new Datum({
               datumFields : app.get("corpus").get("datumFields").clone()
             })

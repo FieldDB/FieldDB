@@ -1,7 +1,7 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/session_edit_embedded.handlebars",
+    "text!datum/session_read_embedded.handlebars",
     "datum/DatumFieldValueEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -14,8 +14,8 @@ define([
     Session,
     UpdatingCollectionView
 ) {
-  var SessionEditView = Backbone.View.extend(
-  /** @lends SessionEditView.prototype */
+  var SessionReadView = Backbone.View.extend(
+  /** @lends SessionReadView.prototype */
   {
     /**
      * @class Session Edit View is where the user provides new session details.
@@ -36,7 +36,7 @@ define([
     },
 
     /**
-     * The underlying model of the SessionEditView is a Session.
+     * The underlying model of the SessionReadView is a Session.
      */
     model : Session,
     
@@ -46,7 +46,7 @@ define([
     sessionFieldsView : UpdatingCollectionView,
 
     /**
-     * Events that the SessionEditView is listening to and their handlers.
+     * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
     
@@ -54,17 +54,17 @@ define([
     },
     
     /**
-     * The Handlebars template rendered as the SessionEditView.
+     * The Handlebars template rendered as the SessionReadView.
      */
     template: Handlebars.compile(sessionEditTemplate),
     
     /**
-     * Renders the SessionEditView.
+     * Renders the SessionReadView.
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
-      // Display the SessionEditView
+      // Display the SessionReadView
       this.setElement("#new-session-view");
       $(this.el).html(this.template(this.model.toJSON()));
       
@@ -72,7 +72,23 @@ define([
       this.sessionFieldsView.render();
       
       return this;
-    },    
+    },
+    
+    /**
+     * Initialize the sample Session.
+     * 
+     * @param {Corpus} corpus The corpus associated with this Session.
+     */
+//    loadSample : function(corpus) {
+//      this.model.set({
+//        user : "sapir",
+//        consultant : "Tillohash",
+//        corpus : corpus,
+//        language : "Cusco Quechua",
+//        goal : "Working on naya"
+//      });
+//    },
+    
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
@@ -80,5 +96,5 @@ define([
     }
   });
   
-  return SessionEditView;
+  return SessionReadView;
 }); 
