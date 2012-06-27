@@ -1,7 +1,8 @@
 define( [
     "use!backbone", 
     "use!handlebars", 
-    "text!permission/permissions.handlebars",
+    "text!permission/permissions_read_embedded.handlebars",
+    "text!permission/permissions_edit_embedded.handlebars",
     "permission/Permission",
     "permission/Permissions",
 ], function(Backbone,
