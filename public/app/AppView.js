@@ -9,9 +9,8 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationView",
     "corpus/Corpus", 
-    "corpus/CorpusReadFullscreenView",
-    "corpus/CorpusReadEmbeddedView",
-    "corpus/CorpusEditEmbeddedView",
+    "corpus/CorpusEditView",
+    "corpus/CorpusReadView",
     "data_list/DataList",
     "data_list/DataListReadView",
     "data_list/DataListEditView",
@@ -47,9 +46,8 @@ define([
     Authentication,
     AuthenticationView,
     Corpus, 
-    CorpusReadFullscreenView,
-    CorpusReadEmbeddedView,
-    CorpusEditEmbeddedView,
+    CorpusEditView,
+    CorpusReadView,
     DataList,
     DataListReadView,
     DataListEditView,
@@ -92,10 +90,11 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
       
-      // Create a CorpusReadEmbeddedView for the Corpus in the App
-      this.corpusReadEmbeddedView = new CorpusReadEmbeddedView({
+      // Create a CorpusReadView for the Corpus in the App's left well
+      this.corpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
+      this.corpusReadView.format = "leftWell";
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
@@ -183,17 +182,13 @@ define([
       // Create an ExportView
       this.exportView = new ExportView({
         model : new Export()
-      }); 
-
-      // Create a NewCorpusView
-      this.corpusEditEmbeddedView = new CorpusEditEmbeddedView({
-        model : new Corpus()
       });
 
       // Create a CorpusEditView
-      this.corpusReadFullscreenView = new CorpusReadFullscreenView({
+      this.corpusEditView = new CorpusEditView({
         model : this.model.get("corpus")
       });
+      this.corpusEditView.format = "centreWell";
       
       // Create an ImportView
       this.importView = new ImportView({
@@ -211,9 +206,9 @@ define([
     model : App,
     
     /**
-     * The corpusReadEmbeddedView is a child of the AppView.
+     * The corpusReadView is a child of the AppView.
      */
-    corpusReadEmbeddedView : CorpusReadEmbeddedView,
+    corpusReadView : CorpusReadView,
     
     exportView : ExportView,
     
@@ -283,14 +278,9 @@ define([
     dataListEditView : DataListEditView,
     
     /**
-     * The CorpusEditEmbeddedView is a child of the AppView.
-     */
-    corpusEditEmbeddedView : CorpusEditEmbeddedView,
-    
-    /**
      * The CorpusReadFullscreenView is a child of the AppView.
      */
-    corpusReadFullscreenView : CorpusReadFullscreenView,
+    corpusEditView : CorpusEditView,
 
     /**
      * The importView is a child of the AppView.
@@ -319,8 +309,8 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CorpusReadEmbeddedView
-        this.corpusReadEmbeddedView.render();
+        // Display the CorpusReadView
+        this.corpusReadView.render();
         
         this.exportView.render();
         
@@ -361,15 +351,12 @@ define([
 
         //Display DataListEditView
         this.dataListEditView.render();
-        
-        //Display corpusEditEmbeddedView
-        this.corpusEditEmbeddedView.render();
          
         //Display ImportView
         this.importView.render();
         
         // Dispaly the CorpusFullscreenView
-        this.corpusReadFullscreenView.render();
+        this.corpusEditView.render();
       } else {
         Utils.debug("\tApp model is not defined");
       }

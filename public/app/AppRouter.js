@@ -37,7 +37,7 @@ define([
       "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
       "corpus/:corpusName/datalist" : "newFullscreenDataList",
       "corpus/:corpusName/search" : "showAdvancedSearch",
-      "corpus/" : "newFullscreenCorpus",
+      "corpus/" : "showFullscreenCorpus",
       "corpus/:corpusName/export" : "showExport",
       "user/:username" : "showUser",
       //"user/:userName/datumprefs" : "showDatumPreferences",
@@ -72,24 +72,6 @@ define([
       $("#dashboard-view").show();
       $("#corpus-read-fullscreen-view").show();
 //      $("#welcome-user-view").hide();
-
-    },
-
-    /**
-     * TODO do we need this to be full screen? why not a pop-up? 
-     * Displays a a page where the user can create a new corpus. 
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    newFullscreenCorpus : function() {
-      Utils.debug("In newFullscreenCorpus: " );
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#corpus-edit-embedded").show();
     },
 
     /**
@@ -101,10 +83,9 @@ define([
     showFullscreenCorpus : function(corpusName ) {
       Utils.debug("In showFullscreenCorpus: " + corpusName);
 
-      alert("TODO, go get the corpus that matches this name");
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#corpus-info-view").show();
+      $("#corpus-read-fullscreen-view").show();
     },
     
     /**

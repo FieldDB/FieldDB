@@ -2,6 +2,8 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!corpus/corpus_read_embedded.handlebars",
+    "text!corpus/corpus_read_link.handlebars",
+    "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
     "lexicon/LexiconView",
     "glosser/GlosserView",
@@ -10,12 +12,14 @@ define([
     Backbone, 
     Handlebars, 
     corpusReadEmbeddedTemplate,
+    corpusReadLinkTemplate,
+    corpusReadSummaryTemplate,
     Corpus,
     LexiconView,
     GlosserView
 ) {
-  var CorpusReadEmbeddedView = Backbone.View.extend(
-  /** @lends CorpusReadEmbeddedView.prototype */
+  var CorpusReadView = Backbone.View.extend(
+  /** @lends CorpusReadView.prototype */
   {
     /**
      * @class This is the corpus view. To the user it looks like a
@@ -38,7 +42,7 @@ define([
     },
 
     /**
-     * The underlying model of the CorpusReadEmbeddedView is a Corpus.
+     * The underlying model of the CorpusReadView is a Corpus.
      */    
     model : Corpus,
 
@@ -50,31 +54,46 @@ define([
     glosser : GlosserView,
 
     /**
-     * The Handlebars template rendered as the CorpusReadEmbeddedView.
+     * The Handlebars template rendered as the CorpusReadView.
      */
     template : Handlebars.compile(corpusReadEmbeddedTemplate),
+    
+    /**
+     * The Handlebars template rendered as the CorpusReadLinkView.
+     */
+    templateLink: Handlebars.compile(corpusReadLinkTemplate),
+    
+    /**
+     * The Handlebars template rendered as the CorpusSummaryReadView.
+     */
+    templateSummary : Handlebars.compile(corpusReadSummaryTemplate),
 
     /**
-     * Renders the CorpusReadEmbeddedView and all of its child Views.
+     * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
       Utils.debug("CORPUS render: " + this.el);
-      if (this.model != undefined) {
-        // Display the CorpusReadEmbeddedView
-        this.setElement($("#corpus-read-embedded"));
-        $(this.el).html(this.template(this.model.toJSON()));
-
-      } else {
-        Utils.debug("\tCorpus model was undefined.");
-      }
       
+      if (this.format == "leftWell") {
+        if (this.model != undefined) {
+          // Display the CorpusReadView
+          this.setElement($("#corpus-read-embedded"));
+          $(this.el).html(this.templateSummary(this.model.toJSON()));
+  
+        } else {
+          Utils.debug("\tCorpus model was undefined.");
+        }
+      } else if (this.format == "link") {
+        // Display the CorpusGlimpseView
+        $(this.el).html(this.templateLink(this.model.toJSON()));
+      }
 
-     return this;
+      return this;
     },
     
   
 
   });
 
-  return CorpusReadEmbeddedView;
+  return CorpusReadView;
 });
