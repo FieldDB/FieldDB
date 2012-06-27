@@ -1,7 +1,9 @@
+// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
+
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_tag_edit_embedded.handlebars",
+    "text!datum/datum_tag_read_embedded.handlebars",
     "datum/DatumTag",
     "libs/Utils"
 ], function(Backbone,
@@ -9,8 +11,8 @@ define([
     datumTagTemplate, 
     DatumTag
 ) {
-  var DatumTagEditView = Backbone.View.extend(
-  /** @lends DatumTagEditView.prototype */
+  var DatumTagReadView = Backbone.View.extend(
+  /** @lends DatumTagReadView.prototype */
   {
     /**
      * @class Datum Tags
@@ -58,5 +60,5 @@ define([
     }
   });
 
-  return DatumTagEditView;
+  return DatumTagReadView;
 }); 
