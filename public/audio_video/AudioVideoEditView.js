@@ -19,7 +19,12 @@ define([ "use!backbone",
       
       
     },
-
+    events : {
+      "dragenter" : "dragEnterAudio",
+      "dragover" : "dragOverAudio",
+      "dragleave" : "dragLeave",
+      "drop": "dropAudio"
+    },
     model : AudioVideo,
 
     classname : "audio_video",
@@ -30,7 +35,28 @@ define([ "use!backbone",
       this.setElement($(".audio_video"));
       $(this.el).html(this.template(this.model.toJSON()));
       return this;
+    },
+    dragEnterAudio: function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+//      this.classList.add('dropping');
+    },
+    dragOverAudio : function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    },
+    dragLeave: function(e) {
+//      this.classList.remove('dropping');
+    },
+    dropAudio: function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+//      this.classList.remove('dropping');
+      window.appView.term.addDroppedFiles(e.dataTransfer.files);
+      window.appView.term.output('<div>File(s) added!</div>');
     }
+  
   });
 
   return AudioVideoEditView;
