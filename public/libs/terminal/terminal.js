@@ -89,7 +89,7 @@ var Terminal = Terminal || function(containerId) {
   window.requestFileSystem = window.requestFileSystem ||
                              window.webkitRequestFileSystem;
 
-  const VERSION_ = '1.0.0';
+  const VERSION_ = '1.9.0';
   const CMDS_ = [
     '3d', 'cat', 'cd', 'cp', 'clear', 'date', 'help', 'install', 'ls', 'mkdir',
     'mv', 'open', 'pwd', 'rm', 'rmdir', 'theme', 'version', 'who', 'wget'

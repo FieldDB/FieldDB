@@ -56,11 +56,8 @@
   background: #0080FF;
   text-shadow: none !important;
 }
-html, body {
-  margin: 0;
-  height: 100%;
-}
-body {
+
+.terminalbody {
   font-family: Inconsolata, monospace;
   color: white;
   background: -webkit-radial-gradient(center center, contain, rgba(0,150,0,1), black) center center no-repeat, black; /*center center for the gradient scrolls with the page :(*/
@@ -85,7 +82,7 @@ body {
 .offscreen .interlace {
   display: none;
 }
-#container {
+#terminal {
   -webkit-transition: -webkit-transform 1.5s ease-in-out;
   width: 100%;
   -webkit-box-sizing: border-box;
@@ -176,7 +173,7 @@ iframe#fsn {
   width: 100%;
   border: none;
 }
-#container {
+#terminal {
   padding: 1em 1.5em 1em 1em;
   text-shadow: 0 0 5px #C8C8C8;
   /*overflow: hidden;
@@ -187,17 +184,17 @@ iframe#fsn {
   border-radius: 50px;
   background: rgba(255, 255, 255, 0.1);*/
 }
-#container output {
+#terminal output {
   clear: both;
   width: 100%;
 }
-#container output h3 {
+#terminal output h3 {
   margin: 0;
 }
-#container output pre {
+#terminal output pre {
   margin: 0;
 }
-#container output textarea {
+#terminal output textarea {
   width: 100%;
   height: 200px;
   background-color: rgba(255,255,255,0.1);
@@ -208,13 +205,13 @@ iframe#fsn {
   border-radius: 10px;
   padding: 5px;
 }
-#container output textarea::selection {
+#terminal output textarea::selection {
   background: red;
 }
-#container output textarea::-webkit-scrollbar {
+#terminal output textarea::-webkit-scrollbar {
   width: 1ex;
 }
-#container output textarea::-webkit-scrollbar-thumb {
+#terminal output textarea::-webkit-scrollbar-thumb {
   border-top: 1px solid #fff;
   background: #ccc -webkit-linear-gradient(rgb(240, 240, 240), rgb(210, 210, 210));
   border-radius: 1ex;
@@ -270,7 +267,7 @@ iframe#fsn {
 .ls-files span:hover {
   text-decoration: underline;
 }
-button {
+.terminalbutton {
   background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#F9F9F9), to(#E3E3E3));
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -283,13 +280,13 @@ button {
   user-select: none;
   cursor: pointer;
 }
-button:not([disabled]):hover {
+.terminalbutton([disabled]):hover {
   border-color: #ffcc00;
 }
-button:not([disabled]):active {
+.terminalbutton:not([disabled]):active {
   background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#E3E3E3), to(#F9F9F9));
 }
-button[disabled] {
+.terminalbutton[disabled] {
   color: #ccc;
 }
 .help {
