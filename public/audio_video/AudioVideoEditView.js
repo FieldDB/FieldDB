@@ -1,13 +1,13 @@
 define([ "use!backbone",
          "use!handlebars", 
-         "text!audio_video/audio_video.handlebars",
+         "text!audio_video/audio_video_edit_embedded.handlebars",
          "audio_video/AudioVideo"
   ], function(Backbone, 
               Handlebars,
               audio_videoTemplate,
               AudioVideo) {
-  var AudioVideoView = Backbone.View.extend(
-  /** @lends AudioVideoView.prototype */
+  var AudioVideoEditView = Backbone.View.extend(
+  /** @lends AudioVideoEditView.prototype */
   {
     /**
      * @class This is the view of the Audio Video Model.
@@ -16,10 +16,11 @@ define([ "use!backbone",
      * @constructs
      */
     initialize : function() {
+      
+      
     },
 
     model : AudioVideo,
-   
 
     classname : "audio_video",
 
@@ -32,5 +33,5 @@ define([ "use!backbone",
     }
   });
 
-  return AudioVideoView;
+  return AudioVideoEditView;
 });
