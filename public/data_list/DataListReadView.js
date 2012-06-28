@@ -232,7 +232,7 @@ define( [
       window.app.router.showDashboard();
     },
     resizeFullscreen : function(){
-      window.app.router.showFullscreenCorpus();
+      window.app.router.showFullscreenDataList();
     }
   });
 
