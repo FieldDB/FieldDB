@@ -1,7 +1,7 @@
 require(
-    [ "import/Import","import/ImportView"
+    [ "import/Import","import/ImportEditView"
         ],
-function(Corpus,CorpusView) {
+function(Import,ImportEditView) {
 
 	describe("Import CSV", function() {
 		it("should detect drag and drop", function() {

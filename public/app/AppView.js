@@ -18,11 +18,11 @@ define([
     "datum/DatumEditView",
     "datum/DatumFields", 
     "export/Export",
-    "export/ExportView",
+    "export/ExportReadView",
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
-    "import/ImportView",
+    "import/ImportEditView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
@@ -56,11 +56,11 @@ define([
     DatumEditView,
     DatumFields,
     Export,
-    ExportView,
+    ExportReadView,
     HotKey,
     HotKeyEditView,
     Import,
-    ImportView,
+    ImportEditView,
     UserPreference,
     UserPreferenceEditView,
     Search,
@@ -212,8 +212,8 @@ define([
         model : new HotKey()
       });  
       
-      // Create an ExportView
-      this.exportView = new ExportView({
+      // Create an ExportREadView
+      this.exportView = new ExportReadView({
         model : new Export()
       });
 
@@ -223,8 +223,8 @@ define([
       });
       this.corpusEditView.format = "centreWell";
       
-      // Create an ImportView
-      this.importView = new ImportView({
+      // Create an ImportEditView
+      this.importView = new ImportEditView({
         model : new Import()
       });
 
@@ -301,19 +301,19 @@ define([
         //Display ActivityFeedView
         this.activityFeedView.render();
         
-        //Display HotKeysView
+        // Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
 
-        //Display Data List Views 
+        // Display Data List Views 
         this.dataListEditLeftSideView.render();
         this.dataListEditFullscreenView.render();
         this.dataListReadLeftSideView.render();
         this.dataListReadFullscreenView.render();
          
-        //Display ImportView
+        // Display the ImportEditView
         this.importView.render();
         
-        // Dispaly the CorpusFullscreenView
+        // Display the CorpusFullscreenView
         this.corpusEditView.render();
       } else {
         Utils.debug("\tApp model is not defined");
