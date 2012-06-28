@@ -17,12 +17,14 @@ define([
     "datum/Datum",
     "datum/DatumEditView",
     "datum/DatumFields", 
+    "export/Export",
+    "export/ExportView",
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
     "import/ImportView",
     "user/UserPreference",
-    "user/UserPreferenceView",
+    "user/UserPreferenceEditView",
     "search/Search",
     "search/SearchView",
     "search/AdvancedSearchView",
@@ -30,10 +32,9 @@ define([
     "datum/SessionEditView",
     "datum/SessionReadView",
     "user/User",
-    "user/UserProfileView",
+    "user/UserEditView",
+    "user/UserReadView",
     "user/UserWelcomeView",
-    "export/Export",
-    "export/ExportView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -54,12 +55,14 @@ define([
     Datum,
     DatumEditView,
     DatumFields,
+    Export,
+    ExportView,
     HotKey,
     HotKeyEditView,
     Import,
     ImportView,
     UserPreference,
-    UserPreferenceView,
+    UserPreferenceEditView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -67,10 +70,9 @@ define([
     SessionEditView,
     SessionReadView,
     User,
-    UserProfileView,
-    UserWelcomeView,
-    Export,
-    ExportView
+    UserEditView,
+    UserReadView,
+    UserWelcomeView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -94,13 +96,14 @@ define([
       this.corpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
-      this.corpusReadView.format = "leftWell";
+      this.corpusReadView.format = "leftSide";
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
       this.fullScreenDatumView = new DatumEditView({
         model : new Datum({
-          datumFields : this.model.get("corpus").get("datumFields").clone()
+          datumFields : this.model.get("corpus").get("datumFields").clone(),
+          datumStates : app.get("corpus").get("datumStates").clone()
         })
       });
       
@@ -116,38 +119,73 @@ define([
       this.sessionSummaryView = new SessionReadView({
         model : sessionToBePassedAround
       });
-      this.sessionSummaryView.format = "leftWell";
+      this.sessionSummaryView.format = "leftSide";
       
       var userToBePassedAround = new User();
-      console.log("userToBePassedAround:");
-      console.log(userToBePassedAround);
       
       // Create an AuthenticationView
       this.authView = new AuthenticationView({
         model : new Authentication({user: userToBePassedAround})
       });
       
-      // Create a UserProfileView
-      this.fullScreenUserView = new UserProfileView({
+      /* 
+       * Set up the five user views
+       */
+      this.fullScreenEditUserView = new UserEditView({
         model : userToBePassedAround
       });
+      this.fullScreenEditUserView.format = "fullscreen";
       
-      // Create a UserWelcomeView
+      this.fullScreenReadUserView = new UserReadView({
+        model : userToBePassedAround
+      });
+      this.fullScreenReadUserView.format = "fullscreen";
+
+      this.modalEditUserView = new UserEditView({
+        model : userToBePassedAround
+      });
+      this.modalEditUserView.format = "modal";
+      
+      this.modalReadUserView = new UserReadView({
+        model : userToBePassedAround
+      });
+      this.modalReadUserView.format = "modal";
+
+      // Create a UserWelcomeView modal
       this.welcomeUserView = new UserWelcomeView({
         model : userToBePassedAround
       });
       
-      // Create a DataListReadView   
-      this.dataListReadView = new DataListReadView({
-        model : new DataList({
-          // TODO Remove this dummy data once we have real datalists working
-          datumIds : [
-            "A3F5E512-56D9-4437-B41D-684894020254",
-            "2F4D4B26-E863-4D49-9F40-1431E737AECD",
-            "9A465EF7-5001-4832-BABB-81ACD46EEE9D"
-          ]
-        })
+      /*
+       * Set up the four data list views
+       */
+      var dataListToBePassedAround = new DataList({
+        // TODO Remove this dummy data once we have real datalists working
+        datumIds : [
+          "A3F5E512-56D9-4437-B41D-684894020254",
+          "2F4D4B26-E863-4D49-9F40-1431E737AECD",
+          "9A465EF7-5001-4832-BABB-81ACD46EEE9D"
+        ]
       });
+      this.dataListEditLeftSideView = new DataListEditView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListEditLeftSideView.format = "leftSide";
+   
+      this.dataListEditFullscreenView = new DataListEditView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListEditFullscreenView.format = "fullscreen";
+
+      this.dataListReadLeftSideView = new DataListReadView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListReadLeftSideView.format = "leftSide";
+   
+      this.dataListReadFullscreenView = new DataListReadView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListReadFullscreenView.format = "fullscreen";
       
       // Create a SearchView
       this.searchView = new SearchView({
@@ -159,8 +197,8 @@ define([
         model : new Search()
       });
       
-      // Create a UserPreferenceView
-      this.userPreferenceView = new UserPreferenceView({
+      // Create a UserPreferenceEditView
+      this.userPreferenceView = new UserPreferenceEditView({
         model : userToBePassedAround.get("prefs")
       });
       
@@ -168,12 +206,7 @@ define([
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
-      
-      // Create an dataListEditView
-      this.dataListEditView = new DataListEditView({
-        model : new DataList()
-      });  
-      
+
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
         model : new HotKey()
@@ -195,9 +228,10 @@ define([
         model : new Import()
       });
 
+      // Create and initialize a Terminal
       this.term = new Terminal('terminal');
       this.term.initFS(false, 1024 * 1024);
-      
+
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
@@ -207,88 +241,6 @@ define([
      * The underlying model of the AppView is an App.
      */
     model : App,
-    
-    /**
-     * The corpusReadView is a child of the AppView.
-     */
-    corpusReadView : CorpusReadView,
-    
-    exportView : ExportView,
-    
-    /**
-     * The fullScreenDatumView is a child of the AppView.
-     */
-    fullScreenDatumView : DatumEditView,
-    
-    /**
-     * The fullScreenUserView is a child of the AppView.
-     */
-    fullScreenUserView : UserProfileView,
-    
-    /**
-     * The WelcomeUserView is a child of the AppView.
-     */
-    welcomeUserView : UserWelcomeView,
-    
-    /**
-     * The dataListReadView is a child of the AppView.
-     */
-    dataListReadView : DataListReadView,
-    
-    /**
-     * The searchView is a child of the AppView.
-     */
-    searchView : SearchView,
-    
-    /**
-     * The advancedSearchView is a child of the AppView.
-     */
-    advancedSearchView : AdvancedSearchView,
-  
-    /**
-     * The authView is a child of the AppView.
-     */  
-    authView : AuthenticationView,
-    
-    /**
-     * The sessionEditView is a child of the AppView.
-     */  
-    sessionEditView : SessionEditView,
-    
-    /**
-     * The sessionSummaryView is a child of the AppView.
-     */
-    sessionSummaryView : SessionReadView,
-    
-    /**
-     * The userUserPreferenceView is a child of the AppView.
-     */  
-    userPreferenceView : UserPreferenceView,
-    
-    /**
-     * The activityFeedView is a child of the AppView.
-     */
-    activityFeedView : ActivityFeedView,
-    
-    /**
-     * The hotkeyEditView is a child of the AppView.
-     */
-    hotkeyEditView : HotKeyEditView,
-
-    /**
-     * The dataListEditView is a child of the AppView.
-     */
-    dataListEditView : DataListEditView,
-    
-    /**
-     * The CorpusReadFullscreenView is a child of the AppView.
-     */
-    corpusEditView : CorpusEditView,
-
-    /**
-     * The importView is a child of the AppView.
-     */
-    importView : ImportView,
 
     /**
      * Events that the AppView is listening to and their handlers.
@@ -320,15 +272,15 @@ define([
         // Display the DatumEditView
         this.fullScreenDatumView.render();
         
-        // Display the UserProfileView
-        this.fullScreenUserView.render();
+        // Display the User Views
+        this.fullScreenEditUserView.render();
+        this.fullScreenReadUserView.render();
+        this.modalEditUserView.render();
+        this.modalReadUserView.render();
         
         // Display the UserWelcomeView
         this.welcomeUserView.render();
         
-        // Display the DataListReadView
-        this.dataListReadView.render();
-                
         // Display the SearchView
         this.searchView.render();
         
@@ -343,7 +295,7 @@ define([
         // Display the SessionSummaryReadView
         this.sessionSummaryView.render();
         
-        // Display the UserPreferenceView
+        // Display the UserPreferenceEditView
         this.userPreferenceView.render();
         
         //Display ActivityFeedView
@@ -352,8 +304,11 @@ define([
         //Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
 
-        //Display DataListEditView
-        this.dataListEditView.render();
+        //Display Data List Views 
+        this.dataListEditLeftSideView.render();
+        this.dataListEditFullscreenView.render();
+        this.dataListReadLeftSideView.render();
+        this.dataListReadFullscreenView.render();
          
         //Display ImportView
         this.importView.render();

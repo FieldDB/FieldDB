@@ -7,7 +7,7 @@ define( [
     "text!datum/paging_footer.handlebars",
     "data_list/DataList",
     "datum/Datum",
-    "datum/DatumLatexReadView",
+    "datum/DatumReadView",
     "datum/Datums"
 ], function(
     Backbone, 
@@ -17,7 +17,7 @@ define( [
     pagingFooterTemplate,
     DataList, 
     Datum, 
-    DatumLatexReadView,
+    DatumReadView,
     Datums  
 ) {
   var DataListEditView = Backbone.View.extend(
@@ -28,6 +28,11 @@ define( [
      * @class This is a page where the user can create their own datalist. They
      *        can pick datum and then drag them over to their own customized
      *        data list.
+     *        
+     * @property {String} format Must be set when the view is
+     * initialized. Valid values are "leftSide" and
+     * "fullscreen".
+     * 
      * @extends Backbone.View
      * @constructs
      */
@@ -56,7 +61,8 @@ define( [
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "blur .title": "updateTitle"
     },
 
     /**
@@ -73,24 +79,32 @@ define( [
 
     /**
      * Initially renders the DataListEditView. This should only be called by 
-     * this.initialize. To update the current rendering, use renderUpdate()
+     * this.initialize. To update the current rendering, use renderUpdatedDataList()
      * instead.
      */
     render : function() {
-      Utils.debug("DATALIST render: " + this.el);
-      if (this.model != undefined) {
-        // Display the Data List
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-        //TODO do the other template
+      if (this.model == undefined) {
+        Utils.debug("\tDataList model is not defined");
+        return this;
+      }
+      if (this.format == "fullscreen") {
+        Utils.debug("DATALIST fullscreen render: " + this.el);
 
+        this.setElement($("#data-list-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         // Display the pagination footer
         this.renderUpdatedPagination();
-
-        // TODO Display the first page of DatumLatexReadViews.
+        // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
-      } else {
-        Utils.debug("\tDataList model is not defined");
+      } else if (this.format == "leftSide") {
+        Utils.debug("DATALIST leftSide render: " + this.el);
+
+        this.setElement($("#data-list-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        // TODO Display the first page of DatumReadViews.
+        // this.renderNewModel();
       }
 
       return this;
@@ -113,7 +127,7 @@ define( [
      * a new DataList or perform a new Search).
      */
     renderNewModel : function() {
-      // Remove all the DatumLatexReadViews that are currently being displayed
+      // Remove all the DatumReadViews that are currently being displayed
       while (this.datumLatexViews.length > 0) {
         var datumLatexView = this.datumLatexViews.pop();
         datumLatexView.remove();
@@ -164,7 +178,7 @@ define( [
     },
 
     /**
-     * Displays a new DatumLatexReadView for the Datum with the given datumId
+     * Displays a new DatumReadView for the Datum with the given datumId
      * and updates the pagination footer.
      * 
      * @param {String} datumId The datumId of the Datum to display.
@@ -179,16 +193,18 @@ define( [
           // Restructure Datum's inner models
           d.restructure();
 
-          // Render a DatumLatexReadView for that Datum at the end of the DataListEditView
-          var view = new DatumLatexReadView({
-            model : d
+          // Render a DatumReadView for that Datum at the end of the DataListEditView
+          var view = new DatumReadView({
+            model : d,
+            tagName : "li"
           });
+          view.format = "latex";
           $('#data_list_content').append(view.render().el);
 
-          // Keep track of the DatumLatexReadView
+          // Keep track of the DatumReadView
           self.datumLatexViews.push(view);
 
-          // Display the updated DatumLatexReadView
+          // Display the updated DatumReadView
           self.renderUpdatedPagination();
         },
 
@@ -211,7 +227,7 @@ define( [
     },
 
     /**
-     * Add one page worth of DatumLatexReadViews from the DataList.
+     * Add one page worth of DatumReadViews from the DataList.
      * 
      * @param {Object} e The event that triggered this method.
      */
@@ -223,7 +239,7 @@ define( [
       var startIndex = this.datumLatexViews.length;
       var endIndex = startIndex + this.perPage;
 
-      // Add a DatumLatexReadView for each one
+      // Add a DatumReadView for each one
       for (var i = startIndex; i < endIndex; i++) {
         var datumId = this.model.get("datumIds")[i];
         if (datumId) {
@@ -236,6 +252,9 @@ define( [
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
+    },
+    updateTitle : function(){
+      this.model.set("title",this.$el.children(".title").val());
     }
   });
 

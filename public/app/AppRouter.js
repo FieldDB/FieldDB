@@ -136,7 +136,8 @@ define([
           // corpus in case they changed) and render it
           appView.fullScreenDatumView = new DatumEditView({
             model : new Datum({
-              datumFields : app.get("corpus").get("datumFields").clone()
+              datumFields : app.get("corpus").get("datumFields").clone(),
+              datumStates : app.get("corpus").get("datumStates").clone()
             })
           });
           appView.fullScreenDatumView.render();
@@ -188,7 +189,8 @@ define([
           // corpus in case they changed) and render it
           appView.fullScreenDatumView = new DatumEditView({
             model : new Datum({
-              datumFields : app.get("corpus").get("datumFields").clone()
+              datumFields : app.get("corpus").get("datumFields").clone(),
+              datumStates : app.get("corpus").get("datumStates").clone()
             })
           });
           appView.fullScreenDatumView.render();

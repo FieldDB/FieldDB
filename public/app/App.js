@@ -52,7 +52,8 @@ define([
         Utils.debug("Error in App: " + error);
       });
       
-      // If read in a stringified corpus, turn it into a corpus
+      //TODO pull corpus id out of local storage or make new
+      // If read in a stringified corpus, turn it into a corpus, then call fetch  
       if (this.get("corpus").description != null) {
         Utils.debug("\tUsing corpus from existing app.");
         this.set("corpus", new Corpus(this.get("corpus")));
@@ -61,13 +62,14 @@ define([
         this.get("corpus").set("confidential", new Confidential());
         Utils.debug("\tUsing new corpus.");
       }
+      //TODO pull session out of local storage, or make new
     },
     
     defaults : {
       corpus : Corpus,
       username : localStorage.getItem("username"),
       sessionid : localStorage.getItem("sessionid"),
-      currentSession : new Session()
+      currentSession : new Session()//TODO this seems dangerous, why create a new session rather than just putting a predicate/classname here?
     },
     
     router : AppRouter
