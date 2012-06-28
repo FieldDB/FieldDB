@@ -284,7 +284,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#import-modal').show();
+      $('#import-modal').modal("show");
     },
     
     showExport : function(corpusName) {
@@ -292,7 +292,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#export-modal').show();
+      $('#export-modal').modal("show");
     },
     
     hideEverything: function() {
@@ -301,18 +301,10 @@ define([
       $("#data-list-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
-      $("#corpus-settings-modal").hide();
-      $('#export-modal').hide();
-      $('#import-modal').hide();
-      $("#hotkey-settings-modal").hide();
       $("#search-fullscreen").hide();
       $("#search-embedded").hide();
       $("#session-embedded").hide();
-      $("#terminal-modal").hide();
-      $("#user-modal").hide();
       $('#user-fullscreen').hide();
-      $("#user-preferences-modal").hide();
-      $("#user-welcome-modal").hide();
     }
   });
 
