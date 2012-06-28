@@ -1,7 +1,7 @@
 define([
     "use!backbone", 
     "use!handlebars",
-    "text!authentication/authentication.handlebars",
+    "text!authentication/authentication_edit_embedded.handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
@@ -14,8 +14,8 @@ define([
     User, 
     UserReadView
 ) {
-  var AuthenticationView = Backbone.View.extend(
-  /** @lends AuthenticationView.prototype */
+  var AuthenticationEditView = Backbone.View.extend(
+  /** @lends AuthenticationEditView.prototype */
   {
     /**
      * @class This is the login logout surface.
@@ -42,18 +42,18 @@ define([
     },
 
     /**
-     * The underlying model of the AuthenticationView is an Authentication
+     * The underlying model of the AuthenticationEditView is an Authentication
      */    
     model : Authentication,
 
     /**
-     * The userView is a child of the AuthenticationView.
+     * The userView is a child of the AuthenticationEditView.
      */
     // TODO Make this a real child, rather than just a partial.
     userView : UserReadView,
     
     /**
-     * Events that the AuthenticationView is listening to and their handlers.
+     * Events that the AuthenticationEditView is listening to and their handlers.
      */
     events : {
       "click .logout" : "logout",
@@ -61,18 +61,18 @@ define([
     },
     
     /**
-     * The Handlebars template rendered as the AuthenticationView.
+     * The Handlebars template rendered as the AuthenticationEditView.
      */
     template : Handlebars.compile(authTemplate),
     
     /**
-     * Renders the AuthenticationView and all of its child Views.
+     * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
       if (this.model != undefined) {
-        // Display the AuthenticationView
-        this.setElement($("#authentication"));
+        // Display the AuthenticationEditView
+        this.setElement($("#authentication-embedded"));
       //  Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
@@ -249,5 +249,5 @@ define([
     }
   });
 
-  return AuthenticationView;
+  return AuthenticationEditView;
 });
