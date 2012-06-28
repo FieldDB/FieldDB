@@ -2,20 +2,24 @@ define([
      "use!backbone",
      "use!handlebars", 
      "text!datum/datum_field_settings_edit_embedded.handlebars",
+     "text!datum/datum_field_value_edit_embedded.handlebars",
      "datum/DatumField"
   ], function(
       Backbone, 
       Handlebars,
-      datum_fieldTemplate,
+      datumFieldSettingsTemplate,
+      datumFieldValueTemplate,
       DatumField
 ) {
-  var DatumFieldSettingsEditView = Backbone.View.extend(
-  /** @lends DatumFieldSettingsEditView.prototype */
+  var DatumFieldEditView = Backbone.View.extend(
+  /** @lends DatumFieldEditView.prototype */
   {
     /**
      * @class This is the view of the Datum Field Model. The Datum Field is a
      *        drop down field that has the most frequent ones first, and at the
      *        bottom an option to create a new one.
+     * 
+     * @property {String} format Valid values are "corpus" and "datum".
      * 
      * @extends Backbone.View
      * @constructs
@@ -28,7 +32,7 @@ define([
     },
     
     /**
-     * The underlying model of the DatumFieldSettingsEditView is a DatumField.
+     * The underlying model of the DatumFieldEditView is a DatumField.
      */
     model : DatumField,
     
@@ -38,30 +42,40 @@ define([
     className   : 'breadcrumb',
     
     /**
-     * Events that the DatumFieldSettingsEditView is listening to and their handlers.
+     * Events that the DatumFieldEditView is listening to and their handlers.
      */
     events : {
       "blur .choose-field" : "updateField",
       "click .encrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
+      "blur .datum_field_input" : "updateField",
     },
 
     /**
      * The Handlebars template rendered as the DatumFieldSettingsEditView.
      */
-    template : Handlebars.compile(datum_fieldTemplate),
+    templateSettings : Handlebars.compile(datumFieldSettingsTemplate),
     
     /**
-     * Renders the DatumFieldSettingsEditView.
+     * The Handlebars template rendered as the DatumFieldValueEditView.
+     */
+    templateValue : Handlebars.compile(datumFieldValueTemplate),
+    
+    /**
+     * Renders the DatumFieldEditView.
      */
     render : function() {
       Utils.debug("DATUM FIELD EDIT render");
      
-      $(this.el).html(this.template(this.model.toJSON()));
-      
-
-      // Select the correct values from the model
-      this.$el.children(".choose-field").val(this.model.get("label"));
+      if (this.format == "corpus") {
+        $(this.el).html(this.templateSettings(this.model.toJSON()));
+        
+  
+        // Select the correct values from the model
+        this.$el.children(".choose-field").val(this.model.get("label"));
+      } else if (this.format == "datum") {
+        $(this.el).html(this.template(this.model.toJSON()));
+      }
       
       return this;
     },
@@ -91,8 +105,15 @@ define([
       var help = this.$el.children(".help-text").val();
       Utils.debug("Updated help to " + help);
       this.model.set("help",help);
-    }    
+    },
+         
+    /**
+     * Change the model's state.
+     */
+    updateField : function() {
+      this.model.set("value", this.$el.children(".datum_field_input").val());
+    }   
   });
 
-  return DatumFieldSettingsEditView;
+  return DatumFieldEditView;
 });
