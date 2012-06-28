@@ -65,7 +65,7 @@ define([
       Utils.debug("SESSION render: " + this.el);
       
       // Display the SessionEditView
-      this.setElement("#new-session-view");
+      this.setElement("#session-embedded");
       $(this.el).html(this.template(this.model.toJSON()));
       
       this.sessionFieldsView.el = this.$(".session-fields-ul");

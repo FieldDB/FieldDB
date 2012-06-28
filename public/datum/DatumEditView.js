@@ -112,7 +112,7 @@ define([
       
       if (this.model != undefined) {        
         // Display the DatumEditView
-        this.setElement($("#datum-embedded-view"));
+        this.setElement($("#datum-embedded"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display StateView
@@ -206,13 +206,13 @@ define([
        */
 
       // var newDatum = new DatumEditView({model: new Datum()});
-      // $("#fullscreen-datum-view").append(newDatum.render().el);
+      // $("#datums-embedded").append(newDatum.render().el);
       // var sID = this.newDatum.get("sessionID");
       // console.log(sID);
       //      	
       // if(newDatum.sessionID == 0){
       // var newSession = new SessionEditView({model: new Session()});
-      // $("#new-session-view").append(newSession.render().el);
+      // $("#session-embedded").append(newSession.render().el);
       //
       // }
       Utils.debug("I'm a new datum!");

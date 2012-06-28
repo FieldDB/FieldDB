@@ -13,7 +13,7 @@ define( [
 
     render : function() {
     
-      this.setElement("#import");
+      this.setElement("#import-embedded");
       $(this.el).html(this.template(this.model.toJSON()));
        
    

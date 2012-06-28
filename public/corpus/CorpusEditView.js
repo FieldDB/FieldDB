@@ -179,7 +179,7 @@ define([
         Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
         if (this.model != undefined) {
           // Display the CorpusReadFullScreenView
-          this.setElement($("#corpus-read-fullscreen-view"));
+          this.setElement($("#corpus-fullscreen"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
           // Display the CommentEditView

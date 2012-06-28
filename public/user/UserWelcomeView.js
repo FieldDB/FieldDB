@@ -77,7 +77,7 @@ define([
             .toJSON()));
 
         // Display the UserProfileView
-        this.setElement($("#welcome-user-view"));
+        this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
 
 
