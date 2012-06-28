@@ -85,7 +85,7 @@ define([
             .toJSON()));
 
         // Display the UserProfileView
-        this.setElement($("#fullscreen-user-profile-view"));
+        this.setElement($("#user-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
 
         // Display the CorpusesView

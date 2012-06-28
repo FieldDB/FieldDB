@@ -26,7 +26,7 @@ define([
          //   $(this.el).html(this.template(this.model.toJSON()));
             
          // Display the ExportView
-          	this.setElement($("#export-view")); 
+          	this.setElement($("#export-embedded")); 
           	$(this.el).html(this.template(this.model.toJSON()));
         	      
             return this;

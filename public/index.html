@@ -1,13 +1,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title></title>
+<title>iField</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.css">
 <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./app/app.css">
+  
+  <link rel="stylesheet" type="text/css" href="./libs/terminal/terminal.css">
   <link rel="stylesheet"type="text/css"href="./font_awesome/css/font-awesome.css"]]>
   
   
@@ -39,12 +41,14 @@
 </head>
 <body id="app" class="llama">
  <div id="app_view" class="page"></div>
- 
 
 
 
+	<div id="terminal-modal" class="modal show terminalbody ">
+		<div id="terminal"></div>
+	</div>
 
-  <!-- Le javascript
+	<!-- Le javascript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="./libs/jquery.js"></script>

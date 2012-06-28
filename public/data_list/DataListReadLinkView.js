@@ -47,7 +47,7 @@ define( [
       Utils.debug("DATALIST render: " + this.el);
       if (this.model != undefined) {
         // Display the Data List
-        this.setElement($("#data_list"));
+        this.setElement($("#data-list-link"));
         $(this.el).html(this.template(this.model.toJSON()));
       
       } else {

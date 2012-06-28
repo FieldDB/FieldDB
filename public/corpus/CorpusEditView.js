@@ -1,0 +1,271 @@
+define([ 
+    "use!backbone", 
+    "use!handlebars",
+    "text!corpus/corpus_edit_fullscreen.handlebars",
+    "text!corpus/corpus_edit_embedded.handlebars",
+    "corpus/Corpus",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
+    "data_list/DataLists",
+    "data_list/DataListReadLinkView",
+    "datum/DatumField",
+    "datum/DatumFieldSettingsEditView",
+    "datum/DatumState",
+    "datum/DatumStates",
+    "datum/DatumStateSettingsEditView",
+    "permission/Permissions",
+    "permission/PermissionsView",
+    "datum/Sessions",
+    "app/UpdatingCollectionView",
+    "libs/Utils"
+], function(
+    Backbone, 
+    Handlebars,
+    corpusFullscreenTemplate,
+    corpusWellTemplate,
+    Corpus,
+    Comment,
+    Comments,
+    CommentEditView,
+    DataLists,
+    DataListReadLinkView,
+    DatumField,
+    DatumFieldSettingsEditView,
+    DatumState,
+    DatumStates,
+    DatumStateSettingsEditView,
+    Permissions,
+    PermissionsView,
+    Sessions,
+    UpdatingCollectionView
+) {
+  var CorpusReadFullscreenView = Backbone.View.extend(
+  /** @lends CorpusReadFullScreenView.prototype */
+  {
+    /**
+     * @class This is the corpus view. To the user it looks like a
+     *        Navigation panel on the main dashboard screen, which
+     *        displays a menu of things the User can do (ex. open a new
+     *        session, browse all entries, etc.).
+     * 
+     * @property {String} format Must be set when the CorpusEditView is
+     * initialized. Valid values are "centreWell" and
+     * "fullscreen".
+     * 
+     * @description Starts the Corpus and initializes all its children.
+     * 
+     * @extends Backbone.View
+     * @constructs
+     */
+    initialize : function() {
+      Utils.debug("CORPUS DETAILS init: " + this.el);
+      
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+      
+//    Create a DataList List
+    this.dataListsView = new UpdatingCollectionView({
+      collection : this.model.get("dataLists"),
+      childViewConstructor : DataListReadLinkView,
+      childViewTagName     : 'li'
+    });
+
+      //Create a DatumFieldsView     
+      this.datumFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumFields"),
+        childViewConstructor : DatumFieldSettingsEditView,
+        childViewTagName     : 'li'
+      });
+          
+      // Create a DatumStatesView    
+      this.datumStatesView = new UpdatingCollectionView({
+        collection           : this.model.get("datumStates"),
+        childViewConstructor : DatumStateSettingsEditView,
+        childViewTagName     : 'li'
+      });
+      
+      //Create a Permissions View
+      this.permissionsView = new PermissionsView({
+        collection : this.model.get("permissions")
+      });
+      
+      //Create a Sessions List 
+      // this.sessionsView = new SessionsView({
+        // collection : this.model.get("sessions")
+      // });
+      
+      // If the model changes, re-render
+      this.model.bind('change', this.render, this);
+    },
+
+    /**
+     * The underlying model of the CorpusReadFullScreenView is a Corpus.
+     */    
+    model : Corpus,
+    
+    /**
+     * The CommentEditView is a child of the CorpusReadFullScreenView.
+     */
+    commentEditView : CommentEditView,
+    
+    /**
+     * The DataListsView is a child of the CorpusReadFullScreenView.
+     */
+    dataListsView : UpdatingCollectionView,
+    /**
+     * The DatumFieldsView is a child of the CorpusReadFullScreenView.
+     */
+    datumFieldsView : UpdatingCollectionView, 
+    
+    /**
+     * The datumStatesView is a child of the CorpusReadFullScreenView.
+     */
+    datumStatesView : UpdatingCollectionView,
+    
+    /**
+     * The PermissionsView is a child of the CorpusReadFullScreenView.
+     */
+    permissionsView : PermissionsView,
+    
+    /**
+     * The SessionsView is a child of the CorpusReadFullScreenView.
+     */
+    sessionsView : UpdatingCollectionView,
+   
+    /**
+     * Events that the CorpusReadFullScreenView is listening to and their handlers.
+     */
+    events : {
+//              "click .new_datum" : "newDatum",
+//              "click .new_session" : "newSession",
+//              "click .show_data_lists" : "showDataLists",
+//              "click .show_corpus_details" : "showCorpusDetails",
+//              "click .show_sessions" : "showSessions",
+//              "click .show_permissions" : "showPermissions",
+//              "click .show_corpora" : "showCorpora",
+//              "click .import" : "newImport",
+//              "click .export" : "showExport"
+      
+      //Add button inserts new Comment
+      "click .add_comment" : 'insertNewComment',
+    	
+      //Add button inserts new Datum State
+      "click .add_datum_state" : 'insertNewDatumState',
+      
+      //Add button inserts new Datum Field
+      "click .add_datum_field" : 'insertNewDatumField',
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeFullscreen"
+    },
+
+    /**
+     * The Handlebars template rendered as the CorpusFullscreenView.
+     */
+    templateFullscreen : Handlebars.compile(corpusFullscreenTemplate),
+    
+    /**
+     * The Handlebars template rendered as the CorpusWellView.
+     */
+    templateCentreWell : Handlebars.compile(corpusWellTemplate),
+    
+    /**
+     * Renders the CorpusReadFullScreenView and all of its child Views.
+     */
+    render : function() {
+      if (this.format == "centreWell") {
+        Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
+        if (this.model != undefined) {
+          // Display the CorpusReadFullScreenView
+          this.setElement($("#corpus-fullscreen"));
+          $(this.el).html(this.templateCentreWell(this.model.toJSON()));
+          
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
+          
+          // Display the UpdatingCollectionView
+  //        this.dataListsView.render();
+          
+          // Display the DatumFieldsView
+          this.datumFieldsView.el = this.$('.datum_fields_settings');
+          this.datumFieldsView.render();
+          
+          // Display the DatumStatesView
+          this.datumStatesView.el = this.$('.datum_state_settings');
+          this.datumStatesView.render();
+          
+          // Display the PermissionsView
+          this.permissionsView.render();
+          
+          // Display the SessionsView
+          // this.sessionsView.render();
+          
+        } else {
+          Utils.debug("\tCorpus model was undefined.");
+        }
+      } else if (this.format == "fullscreen") {
+        // TODO render full screen
+      }
+        
+      return this;
+    },
+
+     //Insert functions associate the values chosen with a new
+    // model in the collection, adding it to the collection, which in turn
+    // triggers a view thats added to
+    // the ul
+    
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+    	console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
+    },
+    
+    // This the function called by the add button, it adds a new datum field both to the 
+    // collection and the model
+    insertNewDatumField : function() {
+      // Remember if the encryption check box was checked
+      var checked = this.$el.children(".add_encrypted").is(':checked') ? "checked" : "";
+      
+      // Create the new DatumField based on what the user entered
+      var m = new DatumField({
+        "label" : this.$el.children(".choose_add_field").val(),
+        "encrypted" : checked,
+        "help" : this.$el.children(".add_help").val()
+      });
+
+      // Add the new DatumField to the Corpus' list for datumFields
+      this.model.get("datumFields").add(m);
+      
+      // Reset the line with the add button
+      this.$el.children(".choose_add_field").children("option:eq(0)").attr("selected", true);
+      this.$el.children(".add_help").val("");
+    },
+    
+    //This the function called by the add button, it adds a new datum state both to the collection and the model
+    insertNewDatumState : function() {
+      var m = new DatumField({
+        "state" : this.$el.children(".add_input").val(),
+        "color" : this.$el.children(".add_color_chooser").val()
+      });
+      this.model.get("datumStates").add(m);
+    },
+    resizeSmall : function(){
+      window.app.router.showEmbeddedCorpus();
+    },
+    resizeFullscreen : function(){
+      window.app.router.showFullscreenCorpus();
+    }
+  });
+
+  return CorpusReadFullscreenView;
+});
