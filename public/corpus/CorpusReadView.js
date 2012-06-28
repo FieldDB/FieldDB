@@ -77,7 +77,7 @@ define([
     render : function() {
       Utils.debug("CORPUS render: " + this.el);
       
-      if (this.format == "leftWell") {
+      if (this.format == "leftSide") {
         if (this.model != undefined) {
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
