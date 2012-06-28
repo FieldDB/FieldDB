@@ -17,6 +17,8 @@ define([
     "datum/Datum",
     "datum/DatumEditView",
     "datum/DatumFields", 
+    "export/Export",
+    "export/ExportView",
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -33,8 +35,6 @@ define([
     "user/UserEditView",
     "user/UserReadView",
     "user/UserWelcomeView",
-    "export/Export",
-    "export/ExportView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -55,6 +55,8 @@ define([
     Datum,
     DatumEditView,
     DatumFields,
+    Export,
+    ExportView,
     HotKey,
     HotKeyEditView,
     Import,
@@ -70,9 +72,7 @@ define([
     User,
     UserEditView,
     UserReadView,
-    UserWelcomeView,
-    Export,
-    ExportView
+    UserWelcomeView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -122,8 +122,6 @@ define([
       this.sessionSummaryView.format = "leftSide";
       
       var userToBePassedAround = new User();
-      console.log("userToBePassedAround:");
-      console.log(userToBePassedAround);
       
       // Create an AuthenticationView
       this.authView = new AuthenticationView({
@@ -158,7 +156,6 @@ define([
         model : userToBePassedAround
       });
       
-      
       /*
        * Set up the four data list views
        */
@@ -189,7 +186,6 @@ define([
         model : dataListToBePassedAround
       });  
       this.dataListReadFullscreenView.format = "fullscreen";
-      
       
       // Create a SearchView
       this.searchView = new SearchView({
@@ -232,10 +228,10 @@ define([
         model : new Import()
       });
 
+      // Create and initialize a Terminal
       this.term = new Terminal('terminal');
       this.term.initFS(false, 1024 * 1024);
 
-      
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
