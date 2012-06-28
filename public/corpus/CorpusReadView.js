@@ -6,7 +6,6 @@ define([
     "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
     "lexicon/LexiconView",
-    "glosser/GlosserView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -15,8 +14,7 @@ define([
     corpusReadLinkTemplate,
     corpusReadSummaryTemplate,
     Corpus,
-    LexiconView,
-    GlosserView
+    LexiconView
 ) {
   var CorpusReadView = Backbone.View.extend(
   /** @lends CorpusReadView.prototype */
@@ -52,9 +50,6 @@ define([
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
-
-    // TODO Should LexiconView really be here?
-    glosser : GlosserView,
 
     /**
      * The Handlebars template rendered as the CorpusReadView.
