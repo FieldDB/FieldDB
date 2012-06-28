@@ -101,7 +101,7 @@ define([
       this.model.save();
     },
     resizeSmall : function(){
-      window.app.router.hideEmbeddedSession();
+      window.app.router.showDashboard();
     },
     resizeLarge : function(){
       window.app.router.showEmbeddedSession();
