@@ -7,7 +7,7 @@ define([
     "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
-    "datum/DatumFieldValueReadView",
+    "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
     "datum/DatumTag",
     "datum/DatumTagReadView",
@@ -20,7 +20,7 @@ define([
     AudioVideoEditView,
     Confidential,
     Datum,
-    DatumFieldValueReadView,
+    DatumFieldReadView,
     DatumStateReadView,
     DatumTag,
     DatumTagReadView,
@@ -32,6 +32,8 @@ define([
     /**
      * @class The layout of a single Datum. It contains a datum state,
      *        datumFields, datumTags and a datum menu.
+     * 
+     * @property {String} format Value formats are "latex", "leftSide", or "centreWell".
      * 
      * @extends Backbone.View
      * @constructs
@@ -58,8 +60,9 @@ define([
       // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldValueReadView,
+        childViewConstructor : DatumFieldReadView,
         childViewTagName     : "li",
+        childViewFormat      : "datum"
       });
     },
 
@@ -92,13 +95,10 @@ define([
      * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
-      "click #new" : "newDatum",
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
-      "click #clipboard" : "copyDatum",
-      "change" : "updatePouch",
-      "click .add_datum_tag" : "insertNewDatumTag"
+      "click #clipboard" : "copyDatum"
     },
 
     /**
@@ -112,26 +112,44 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
-      if (this.model != undefined) {        
-        // Display the DatumReadView
-        this.setElement($("#datum-embedded"));
-        $(this.el).html(this.template(this.model.toJSON()));
+      if (this.format == "centreWell") {
+        if (this.model != undefined) {        
+          // Display the DatumReadView
+          this.setElement($("#datum-embedded"));
+          $(this.el).html(this.template(this.model.toJSON()));
+          
+          // Display StateView
+          this.stateView.render();
+          
+          // Display audioVideo View
+          this.AudioVideoEditView.render();
+          
+          // Display the DatumTagsView
+          this.datumTagsView.el = this.$(".datum_tags_ul")
+          this.datumTagsView.render();
+          
+          // Display the DatumFieldsView
+          this.datumFieldsView.el = this.$(".datum_fields_ul");
+          this.datumFieldsView.render();
+        } else {
+          Utils.debug("\tDatum model was undefined");
+        }
+      } else if (this.format == "latex") {
+        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),      
+        utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
+        gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
+        translation= this.model.get("datumFields").where({label: "translation"})[0].get("value"),
+  
+        utteranceArray = utterance.split(' ');
+        glossArray = gloss.split(' ');
         
-        // Display StateView
-        this.stateView.render();
-        
-        // Display audioVideo View
-        this.AudioVideoEditView.render();
-        
-        // Display the DatumTagsView
-        this.datumTagsView.el = this.$(".datum_tags_ul")
-        this.datumTagsView.render();
-        
-        // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$(".datum_fields_ul");
-        this.datumFieldsView.render();
-      } else {
-        Utils.debug("\tDatum model was undefined");
+        glossCouplet = [];
+        var i= 0;
+        for( i; i<utteranceArray.length; i++){
+          glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
+          this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
+        };
+        this.$el.append('<br>'+translation);
       }
 
       return this;
