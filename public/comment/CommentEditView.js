@@ -29,7 +29,7 @@ define([
     model : Comment,
     
     /**
-     * Events that the DatumStateEditView is listening to and their handlers.
+     * Events that the CommentEditView is listening to and their handlers.
      */
     events : {
       "blur .comment_input" : "updateComment",

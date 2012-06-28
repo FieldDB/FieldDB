@@ -1,9 +1,10 @@
 define([ 
-         "use!backbone", 
-         "datum/DatumState"
+    "use!backbone", 
+    "datum/DatumState"
 ], function(
-         Backbone,
-         DatumState) {
+    Backbone,
+    DatumState
+) {
   var DatumStates = Backbone.Collection.extend(
   /** @lends DatumStates.prototype */
   {
@@ -17,8 +18,8 @@ define([
      */
     initialize : function() {
     },
-    model : DatumState
 
+    model : DatumState
   });
 
   return DatumStates;

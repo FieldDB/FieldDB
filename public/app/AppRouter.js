@@ -1,14 +1,14 @@
 define([ 
     "use!backbone",
     "datum/Datum",
-    "datum/DatumView",
+    "datum/DatumEditView",
     "datum/Session",
     "datum/SessionEditView",
     "libs/Utils"
 ], function(
     Backbone,
     Datum,
-    DatumView,
+    DatumEditView,
     Session,
     SessionEditView
 ) {
@@ -31,19 +31,18 @@ define([
     },
 
     routes : {
-      "corpus/:corpusName" : "showFullscreenCorpus",
-      "corpus/:corpusName/datum/:id" : "showFullscreenDatum",
-      "corpus/:corpusName/session/:id" : "showNewSession",
-      "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",
-      "corpus/:corpusName/datalist" : "newFullscreenDataList",
-      "corpus/:corpusName/search" : "showAdvancedSearch",
-      "corpus/" : "newFullscreenCorpus",
-      "corpus/:corpusName/export" : "showExport",
-      "user/:username" : "showUser",
-      //"user/:userName/datumprefs" : "showDatumPreferences",
-      //"user/:userName/hotkeyconfig" : "showHotKeyConfig",
-      "import" : "showImport",
-      "" : "showDashboard",
+      "corpus/:corpusId"                : "showFullscreenCorpus", 
+      "corpus/:corpusName"              : "showFullscreenCorpus",               // @deprecated 
+      "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum",
+      "corpus/:corpusName/session/:id"  : "showEmbeddedSession",                // @deprecated
+      "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",             // @deprecated
+      "corpus/:corpusName/search"       : "showAdvancedSearch",
+      "corpus/"                         : "showFullscreenCorpus",
+      "corpus/:corpusName/export"       : "showExport",                         // @deprecated 
+      "data/:dataListId"                : "showFullscreenDataList",
+      "user/:username"                  : "showFullscreenUser",
+      "import"                          : "showImport",
+      ""                                : "showDashboard"
     },
     
     /**
@@ -58,38 +57,17 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#fullscreen-corpus-view").show();
-      $("#welcome-user-view").show();
+      $("#datums-embedded").show();
       
     },
-/**
- *      * Displays the dashboard view of the given corpusName, if one was given. Or
- *                               */
-    showUser : function(userName) {
-      Utils.debug("In showUser: " + userName);
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-corpus-view").show();
-      $("#welcome-user-view").hide();
-
-    },
-
     /**
-     * TODO do we need this to be full screen? why not a pop-up? 
-     * Displays a a page where the user can create a new corpus. 
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
+     * Displays the fullscreen user page view of the given user
      */
-    newFullscreenCorpus : function() {
-      Utils.debug("In newFullscreenCorpus: " );
+    showFullscreenUser : function(userName) {
+      Utils.debug("In showFullscreenUser: " + userName);
 
       this.hideEverything();
-      $("#dashboard-view").show();
-      $("#new-corpus").show();
+      $("#user-fullscreen").show();
     },
 
     /**
@@ -101,10 +79,21 @@ define([
     showFullscreenCorpus : function(corpusName ) {
       Utils.debug("In showFullscreenCorpus: " + corpusName);
 
-      alert("TODO, go get the corpus that matches this name");
+      this.hideEverything();
+      $("#corpus-fullscreen").show();
+    },
+    /**
+     * Displays all of the corpus details and settings. 
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     */
+    showEmbeddedCorpus : function(corpusName ) {
+      Utils.debug("In showEmbeddedCorpus: " + corpusName);
+
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#corpus-info-view").show();
+      $("#corpus-embedded").show();
     },
     
     /**
@@ -137,8 +126,7 @@ define([
           
           // Display the fullscreen datum view and hide all the other views
           self.hideEverything();
-          $("#dashboard-view").show();
-          $("#fullscreen-datum-view").show();
+          $("#datums-fullscreen").show();
         },
         
         error : function() {
@@ -146,7 +134,59 @@ define([
           
           // Create a new Datum (cloning the default datum fields from the
           // corpus in case they changed) and render it
-          appView.fullScreenDatumView = new DatumView({
+          appView.fullScreenDatumView = new DatumEditView({
+            model : new Datum({
+              datumFields : app.get("corpus").get("datumFields").clone()
+            })
+          });
+          appView.fullScreenDatumView.render();
+          
+          // Display the fullscreen datum view and hide all the other views
+          self.hideEverything();
+          $("#datums-fullscreen").show();
+        },
+      });
+    }, 
+    /**
+     * Displays the fullscreen view of the datum specified by the given
+     * corpusName and the given datumId.
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          datumId The ID of the datum within the corpus.
+     */
+    showEmbeddedDatum : function(corpusName, datumId) {
+      Utils.debug("In showEmbeddedDatum: " + corpusName + " *** " + datumId);
+
+      // Change the id of the fullscreen datum view's Datum to be the given datumId
+      appView.fullScreenDatumView.model.id = datumId;
+      
+      // Save the currently displayed Datum, if needed
+      appView.fullScreenDatumView.saveScreen();
+      
+      // Fetch the Datum's attributes from the PouchDB
+      var self = this;
+      appView.fullScreenDatumView.model.fetch({
+        success : function() {
+          // Restructure Datum's inner models
+          appView.fullScreenDatumView.model.restructure();
+          
+          // Update the display with the Datum with the given datumId
+          appView.fullScreenDatumView.render();
+          
+          // Display the fullscreen datum view and hide all the other views
+          self.hideEverything();
+          $("#dashboard-view").show();
+          $("#datums-embedded").show();
+        },
+        
+        error : function() {
+          Utils.debug("Datum does not exist: " + datumId);
+          
+          // Create a new Datum (cloning the default datum fields from the
+          // corpus in case they changed) and render it
+          appView.fullScreenDatumView = new DatumEditView({
             model : new Datum({
               datumFields : app.get("corpus").get("datumFields").clone()
             })
@@ -156,7 +196,7 @@ define([
           // Display the fullscreen datum view and hide all the other views
           self.hideEverything();
           $("#dashboard-view").show();
-          $("#fullscreen-datum-view").show();
+          $("#datums-embedded").show();
         },
       });
     },
@@ -170,7 +210,7 @@ define([
      * @param {Number}
      *          sessionId The ID of the session within the corpus.
      */
-    showNewSession : function(corpusName, sessionId) {
+    showEmbeddedSession : function(corpusName, sessionId) {
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
           
@@ -187,7 +227,7 @@ define([
           // Display the edit session view and hide all the other views
           self.hideEverything();
           $("#dashboard-view").show();
-          $("#new-session-view").show();
+          $("#session-embedded").show();
         },
         
         error : function() {
@@ -205,11 +245,11 @@ define([
           // Display the edit session view and hide all the other views
           self.hideEverything();
           $("#dashboard-view").show();
-          $("#new-session-view").show();
+          $("#session-embedded").show();
         }
       });
     },
-    
+   
     /**
      * Displays the fullscreen view of the datalist specified by the given
      * corpusName and the given dataListId
@@ -219,30 +259,12 @@ define([
      * @param {Number}
      *          dataListId The ID of the datalist within the corpus.
      */
-    //TODO this guy isn't connected to any div in the DOM right now (there is nothing with the id "fullscreen-datalist-vew")
     showFullscreenDataList : function(corpusName, dataListId) {
       Utils.debug("In showFullscreenDataList: " + corpusName + " *** "
           + dataListId);
 
       this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-datalist-view").show();      
-    },
-    /**
-     * Displays a page where the user can make their own modified datalist specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    newFullscreenDataList : function(corpusName) {
-      Utils.debug("In newFullscreenDataList: " + corpusName);
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $('#new_data_list').show();
+      $("#data-list-fullscreen").show();      
     },
     
     /**
@@ -256,37 +278,15 @@ define([
       Utils.debug("In showAdvancedSearch: " + corpusName);
 
       this.hideEverything();
-      $("#dashboard-view").show();
-      $("#fullscreen-search-view").show();
-      $("#corpus").show();
-      $("#activity_feed").show();
+      $("#search-fullscreen").show();
     },
 
-//    showDatumPreferences : function(userName) {
-//      Utils.debug("In showDatumPreferences: " + userName);
-//
-//      this.hideEverything();
-//      $("#dashboard-view").show();
-//      $("#fullscreen-datalist-view").show();
-//      $("#datum-preferences-view").show();
-//    },
-//    
-    
-//    showHotKeyConfig : function(userName) {
-//      Utils.debug("In showHotKeyConfig: " + userName);
-//
-//      this.hideEverything();
-//      $("#dashboard-view").show();
-//      $("#fullscreen-datalist-view").show();
-//      $("#hotkey-config-view").show();
-//    },
-    
     showImport : function() {
       Utils.debug("In import: ");
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#import').show();
+      $('#import-embedded').show();
     },
     
     showExport : function(corpusName) {
@@ -294,24 +294,28 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#export-view').show();
+      $('#export-embedded').show();
     },
     
     hideEverything: function() {
       $("#dashboard-view").hide();
-      $("#fullscreen-datum-view").hide();
-      $("#new-session-view").hide();
-      $("#fullscreen-datalist-view").hide();
-      $("#fullscreen-search-view").hide();
-      $("#fullscreen-user-profile-view").hide();
-      $("#fullscreen-corpus-view").hide();
-      $("#user-preferences-view").hide();
-      $("#datum-preferences-view").hide();
-      $("#hotkey-edit-view").hide();
-      $('#new_data_list').hide();
-      $("#new-corpus").hide();
-      $('#export-view').hide();
-      $('#import').hide();
+      $("#datums-embedded").hide();
+      $("#data-list-fullscreen").hide();
+      $("#corpus-embedded").hide();
+      $("#corpus-fullscreen").hide();
+      $("#corpus-settings-modal").hide();
+      $('#export-embedded').hide();
+      $('#import-embedded').hide();
+      $("#hotkey-settings-modal").hide();
+      $("#search-fullscreen").hide();
+      $("#search-embedded").hide();
+      $("#session-embedded").hide();
+      $("#terminal-modal").hide();
+      $("#user-modal").hide();
+      $('#user-fullscreen').hide();
+      $("#user-preferences-modal").hide();
+      $("#user-welcome-modal").hide();
+      
     }
   });
 

@@ -10,7 +10,7 @@
   "offline_enabled": true,
   "permissions": [
     "unlimitedStorage",
-    "<all_urls>"
+    "https://ifield.fieldlinguist.com"
   ],
    "icons": { 
     "16": "icon16.png",

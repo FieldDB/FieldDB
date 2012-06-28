@@ -1,21 +1,21 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/session_edit.handlebars",
-    "datum/DatumFieldView",
+    "text!datum/session_edit_embedded.handlebars",
+    "datum/DatumFieldValueEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
     Handlebars, 
-    session_editTemplate,
-    DatumFieldView,
+    sessionEditTemplate,
+    DatumFieldValueEditView,
     Session,
     UpdatingCollectionView
 ) {
   var SessionEditView = Backbone.View.extend(
-  /** @lends SessionView.prototype */
+  /** @lends SessionEditView.prototype */
   {
     /**
      * @class Session Edit View is where the user provides new session details.
@@ -28,7 +28,7 @@ define([
 
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldView,
+        childViewConstructor : DatumFieldValueEditView,
         childViewTagName     : "li",
       });
       
@@ -41,7 +41,7 @@ define([
     model : Session,
     
     /**
-     * The sessionFieldsView displays the all the DatumFieldViews.
+     * The sessionFieldsView displays the all the DatumFieldValueEditViews.
      */
     sessionFieldsView : UpdatingCollectionView,
 
@@ -50,49 +50,41 @@ define([
      */
     events : {
     
-      "click #btn-save-session" : "updatePouch"
+      "click #btn-save-session" : "updatePouch",
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeLarge"
     },
     
     /**
      * The Handlebars template rendered as the SessionEditView.
      */
-    template: Handlebars.compile(session_editTemplate),
+    template: Handlebars.compile(sessionEditTemplate),
     
     /**
-     * Renders the SessionView.
+     * Renders the SessionEditView.
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
       
-      // Display the SessionView
-      this.setElement("#new-session-view");
+      // Display the SessionEditView
+      this.setElement("#session-embedded");
       $(this.el).html(this.template(this.model.toJSON()));
       
-      this.sessionFieldsView.el = this.$(".session_fields_ul");
+      this.sessionFieldsView.el = this.$(".session-fields-ul");
       this.sessionFieldsView.render();
       
       return this;
-    },
-    
-    /**
-     * Initialize the sample Session.
-     * 
-     * @param {Corpus} corpus The corpus associated with this Session.
-     */
-//    loadSample : function(corpus) {
-//      this.model.set({
-//        user : "sapir",
-//        consultant : "Tillohash",
-//        corpus : corpus,
-//        language : "Cusco Quechua",
-//        goal : "Working on naya"
-//      });
-//    },
-    
+    },    
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
       this.model.save();
+    },
+    resizeSmall : function(){
+      window.app.router.showDashboard();
+    },
+    resizeLarge : function(){
+      window.app.router.showEmbeddedSession();
     }
   });
   
