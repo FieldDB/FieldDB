@@ -249,55 +249,7 @@ define([
         }
       });
     },
-    /**
-     * Displays the fullscreen view of the session specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          sessionId The ID of the session within the corpus.
-     */
-    hideEmbeddedSession : function(corpusName, sessionId) {
-      Utils.debug("In showFullscreenSession: " + corpusName + " *** "
-          + sessionId);
-          
-      // Change the id of the edit session view's Session to be the given sessionId
-      appView.sessionEditView.model.id = sessionId;
-      
-      // Fetch the Session's attributes from the PouchDB
-      var self = this;
-      appView.sessionEditView.model.fetch({
-        success : function() {
-          // Update the display with the Session with the given sessionId
-          appView.sessionEditView.render();
-          
-          // Display the edit session view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#datums-embedded").show();
-        },
-        
-        error : function() {
-          Utils.debug("Session does not exist: " + sessionId);
-          
-          // Create a new Session (cloning the default session fields from the
-          // corpus in case they changed) and render it
-          appView.sessionEditView = new SessionEditView({
-            model : new Session({
-              sessionFields : app.get("corpus").get("sessionFields").clone()
-            })
-          });
-          appView.sessionEditView.render();
-          
-          // Display the edit session view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#datums-embedded").show();
-        }
-      });
-    },
-    
+   
     /**
      * Displays the fullscreen view of the datalist specified by the given
      * corpusName and the given dataListId
