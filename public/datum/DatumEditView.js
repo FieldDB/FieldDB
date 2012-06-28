@@ -6,7 +6,7 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldValueEditView",
-    "datum/DatumStateValueEditView",
+    "datum/DatumStateEditView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
@@ -19,7 +19,7 @@ define([
     Confidential,
     Datum,
     DatumFieldValueEditView,
-    DatumStateValueEditView,
+    DatumStateEditView,
     DatumTag,
     DatumTagEditView,
     UpdatingCollectionView
@@ -41,10 +41,11 @@ define([
         model : this.model.get("audioVideo"),
       });
       
-      // Create a DatumStateValueEditView
-      this.stateView = new DatumStateValueEditView({
-        model : this.model.get("state"),
+      // Create a DatumStateEditView
+      this.datumStateView = new DatumStateEditView({
+        model : this.model.get("datumStates"),
       });
+      this.datumStateView.format = "datum";
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -72,9 +73,9 @@ define([
     audioVideoEditView : AudioVideoEditView,
 
     /**
-     * The stateView is a partial of the DatumEditView.
+     * The datumStateView is a partial of the DatumEditView.
      */
-    stateView : DatumStateValueEditView,
+    datumStateView : DatumStateEditView,
 
     /**
      * The tagview is a partial of the DatumEditView.
@@ -93,10 +94,10 @@ define([
       "click #new" : "newDatum",
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
-      "click .datum_state_select" : "renderState",
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
-      "click .add_datum_tag" : "insertNewDatumTag"
+      "click .add_datum_tag" : "insertNewDatumTag",
+      "change .datum_state_select" : "updateDatumState"
     },
 
     /**
@@ -116,7 +117,7 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display StateView
-        this.stateView.render();
+        this.datumStateView.render();
         
         // Display audioVideo View
         this.audioVideoEditView.render();
@@ -133,12 +134,6 @@ define([
       }
 
       return this;
-    },
-    
-    renderState : function() {
-      if (this.statesview != undefined) {
-        this.stateView.render();
-      }
     },
     
     /**
@@ -288,6 +283,10 @@ define([
       needsSave = true;
       
       return false;
+    },
+    
+    updateDatumState : function() {
+      // TODO Save value of the selected DatumState
     }
   });
 

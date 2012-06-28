@@ -13,7 +13,7 @@ define([
     "datum/DatumFieldSettingsEditView",
     "datum/DatumState",
     "datum/DatumStates",
-    "datum/DatumStateSettingsEditView",
+    "datum/DatumStateEditView",
     "permission/Permissions",
     "permission/PermissionsView",
     "datum/Sessions",
@@ -34,7 +34,7 @@ define([
     DatumFieldSettingsEditView,
     DatumState,
     DatumStates,
-    DatumStateSettingsEditView,
+    DatumStateEditView,
     Permissions,
     PermissionsView,
     Sessions,
@@ -85,7 +85,7 @@ define([
       // Create a DatumStatesView    
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
-        childViewConstructor : DatumStateSettingsEditView,
+        childViewConstructor : DatumStateEditView,
         childViewTagName     : 'li'
       });
       

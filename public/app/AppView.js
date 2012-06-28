@@ -100,7 +100,8 @@ define([
       // in case they changed 
       this.fullScreenDatumView = new DatumEditView({
         model : new Datum({
-          datumFields : this.model.get("corpus").get("datumFields").clone()
+          datumFields : this.model.get("corpus").get("datumFields").clone(),
+          datumStates : app.get("corpus").get("datumStates").clone()
         })
       });
       

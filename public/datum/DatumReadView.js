@@ -42,7 +42,7 @@ define([
         model : this.model.get("audioVideo"),
       });
       
-      // Create a DatumStateValueEditView
+      // Create a DatumStateValueReadView
       this.stateView = new DatumStateValueReadView({
         model : this.model.get("state"),
       });
@@ -75,7 +75,7 @@ define([
     /**
      * The stateView is a partial of the DatumReadView.
      */
-    stateView : DatumStateValueEditView,
+    stateView : DatumStateValueReadView,
 
     /**
      * The tagview is a partial of the DatumReadView.

@@ -80,7 +80,8 @@ define([
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumState : DatumState,
+      datumState : new DatumState(),
+      datumState : DatumState,      // The selected DatumState
       datumTags : new DatumTags(),
       dateEntered : DatumField
     },
