@@ -1,7 +1,9 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
+    "text!user/user_read_link.handlebars",
     "text!user/user_read_modal.handlebars",
+    "text!user/user_read_fullscreen.handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
@@ -9,7 +11,9 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    userTemplate, 
+    userLinkTemplate,
+    userModalTemplate,
+    userFullscreenTemplate, 
     Corpus,
     Corpuses,
     User
@@ -18,11 +22,13 @@ define([
   /** @lends UserReadView.prototype */
   {
     /**
-     * @class The layout of a single User. This view is used in the
-     *        activity feeds, it is also embedable in the
-     *        UserEditView.
+     * @class The layout of a single User. This view is used in the activity
+     *        feeds, it is also embedable in the UserEditView.
+     *        
+     * @property {String} format Must be set when the view is initialized. Valid
+     *           values are "link" "modal" and "fullscreen".
      * 
-     * @description  Starts the UserView.
+     * @description Starts the UserView.
      * 
      * @extends Backbone.View
      * @constructs
@@ -47,19 +53,30 @@ define([
     /**
      * The Handlebars template rendered as the UserReadView.
      */
-    template : Handlebars.compile(userTemplate),
+    linkTemplate : Handlebars.compile(userLinkTemplate),
+    modalTemplate : Handlebars.compile(userModalTemplate),
+    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
     
     /**
      * Renders the UserReadView.
      */
     render : function() {
+      
       Utils.debug("USER render: " + this.el);
-      if (this.model != undefined) {
-        this.setElement($("#user"));
-        $(this.el).html(this.template(this.model.toJSON()));
-        Utils.debug("\trendering user: " + this.model.get("username"));
-      } else {
-        Utils.debug("\tUser model was undefined.");
+      if (this.model == undefined) {
+        Utils.debug("\User model was undefined");
+        return this;
+      }
+      Utils.debug("\tRendering user: " + this.model.get("username"));
+
+      if(this.format == "fullscreen"){
+        this.setElement($("#user-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+      }else if(this.format == "modal"){
+        this.setElement($("#user-modal"));
+        $(this.el).html(this.modalTemplate(this.model.toJSON()));
+      }else if(this.format == "link"){
+        $(this.el).html(this.linkTemplate(this.model.toJSON()));
       }
 
       return this;

@@ -21,6 +21,9 @@ define([
      *        but also a list of their corpora which will allow their friends to
      *        browse their corpora, and also give them a quick way to navigate
      *        between corpora.
+     *  
+     * @property {String} format Must be set when the view is initialized. Valid
+     *           values are "modal" and "fullscreen".
      * 
      * @extends Backbone.View
      * @constructs
@@ -59,39 +62,35 @@ define([
     /**
      * The corpusesView is a child of the CorpusView.
      */
-//    corpusesView : CorpusesView,
+//    corpusesView : CorpusesView, //TODO put this in as an updating collection
 
     /**
      * The Handlebars template rendered as the UserEditView
      */
     modalTemplate : Handlebars.compile(userModalTemplate),
+    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
 
     /**
-     * The Handlebars template of the user header, which is used as a partial.
-     */
-    fullscreemTemplate : Handlebars.compile(userFullscreenTemplate),
-
-    /**
-     * Renders the UserEditView and its partial.
+     * Renders the UserEditView depending on its format.
      */
     render : function() {
       Utils.debug("USER render: " + this.el);
 
-      if (this.model != undefined) {
-        
-
-        // Display the UserEditView
+      if (this.model == undefined) {
+        Utils.debug("\User model was undefined");
+        return this;
+      }
+      if(this.format == "fullscreen"){
+        this.setElement($("#user-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+      }else if(this.format == "modal"){
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
-
-        // Display the CorpusesView
-  //      this.corpusesView.render();
-
-      } else {
-        Utils.debug("\User model was undefined");
       }
 
-      return this;
+        // Display the CorpusesView
+//        this.corpusesView.render();
+
     }
   });
 
