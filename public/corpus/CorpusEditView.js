@@ -80,7 +80,8 @@ define([
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li',
-        childViewFormat      : "corpus"
+        childViewFormat      : "corpus",
+        childViewClass       : "breadcrumb"
       });
           
       // Create a DatumStatesView    

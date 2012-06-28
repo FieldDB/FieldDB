@@ -37,11 +37,6 @@ define([
     model : DatumField,
     
     /**
-     * Specified which css class to add to the elements
-     */
-    className   : 'breadcrumb',
-    
-    /**
      * Events that the DatumFieldReadView is listening to and their handlers.
      */
     events : {
@@ -70,11 +65,10 @@ define([
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         
-  
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).html(this.templateValue(this.model.toJSON()));
       }
       
       return this;
