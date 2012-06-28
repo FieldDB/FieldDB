@@ -26,8 +26,7 @@ define([
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
-    "search/SearchView",
-    "search/AdvancedSearchView",
+    "search/SearchEditView",
     "datum/Session",
     "datum/SessionEditView",
     "datum/SessionReadView",
@@ -64,8 +63,7 @@ define([
     UserPreference,
     UserPreferenceEditView,
     Search,
-    SearchView,
-    AdvancedSearchView,
+    SearchEditView,
     Session,
     SessionEditView,
     SessionReadView,
@@ -187,15 +185,17 @@ define([
       });  
       this.dataListReadFullscreenView.format = "fullscreen";
       
-      // Create a SearchView
-      this.searchView = new SearchView({
+      // Create a SearchEditView
+      this.searchView = new SearchEditView({
         model : new Search()
       });
+      this.searchView.format = "top";
       
       // Create an AdvancedSearchView
-      this.advancedSearchView = new AdvancedSearchView({
+      this.advancedSearchView = new SearchEditView({
         model : new Search()
       });
+      this.advancedSearchView.format = "fullscreen";
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
@@ -281,9 +281,8 @@ define([
         // Display the UserWelcomeView
         this.welcomeUserView.render();
         
-        // Display the SearchView
+        // Display the Search Views
         this.searchView.render();
-        
         this.advancedSearchView.render();
         
         // Display the AuthView
