@@ -236,7 +236,6 @@ define([
     hideEverything: function() {
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();
-      $('#data-list-embedded').hide();
       $("#data-list-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
