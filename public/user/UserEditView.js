@@ -65,9 +65,13 @@ define([
 //    corpusesView : CorpusesView, //TODO put this in as an updating collection
 
     /**
-     * The Handlebars template rendered as the UserEditView
+     * The Handlebars template rendered as the UserModalEditView
      */
     modalTemplate : Handlebars.compile(userModalTemplate),
+    
+    /** 
+     * The Handlebars template rendered as the UserFullscreenEditView
+     */
     fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
 
     /**
@@ -80,10 +84,10 @@ define([
         Utils.debug("\User model was undefined");
         return this;
       }
-      if(this.format == "fullscreen"){
+      if (this.format == "fullscreen") {
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
-      }else if(this.format == "modal"){
+      } else if(this.format == "modal") {
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }
