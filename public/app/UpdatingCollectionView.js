@@ -12,6 +12,7 @@ var UpdatingCollectionView = Backbone.View.extend({
 
       this._childViewConstructor = options.childViewConstructor;
       this._childViewTagName = options.childViewTagName;
+      this._childViewFormat = options.childViewFormat || null;
 
       this._childViews = [];
 
@@ -20,6 +21,7 @@ var UpdatingCollectionView = Backbone.View.extend({
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
     },
+    
     tagName: "ul",
     
     add : function(model) {
@@ -27,6 +29,9 @@ var UpdatingCollectionView = Backbone.View.extend({
         tagName : this._childViewTagName,
         model : model
       });
+      if (this._childViewFormat) {
+        childView.format = this._childViewFormat;
+      }
 
       this._childViews.push(childView);
 
