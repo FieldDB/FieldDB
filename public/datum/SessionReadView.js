@@ -3,7 +3,7 @@ define([
     "use!handlebars", 
     "text!datum/session_read_embedded.handlebars",
     "text!datum/session_summary_read_embedded.handlebars",
-    "datum/DatumFieldValueEditView",
+    "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
@@ -12,7 +12,7 @@ define([
     Handlebars, 
     sessionReadTemplate,
     sessionSummaryReadTemplate,
-    DatumFieldValueEditView,
+    DatumFieldEditView,
     Session,
     UpdatingCollectionView
 ) {
@@ -30,8 +30,9 @@ define([
 
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldValueEditView,
+        childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
+        childViewFormat      : "datum"
       });
       
       this.model.bind('change', this.render, this);
@@ -43,7 +44,7 @@ define([
     model : Session,
     
     /**
-     * The sessionFieldsView displays the all the DatumFieldValueEditViews.
+     * The sessionFieldsView displays the all the DatumFieldEditViews.
      */
     sessionFieldsView : UpdatingCollectionView,
 

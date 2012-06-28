@@ -10,7 +10,7 @@ define([
     "data_list/DataLists",
     "data_list/DataListReadLinkView",
     "datum/DatumField",
-    "datum/DatumFieldSettingsEditView",
+    "datum/DatumFieldEditView",
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
@@ -31,7 +31,7 @@ define([
     DataLists,
     DataListReadLinkView,
     DatumField,
-    DatumFieldSettingsEditView,
+    DatumFieldEditView,
     DatumState,
     DatumStates,
     DatumStateEditView,
@@ -78,8 +78,9 @@ define([
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldSettingsEditView,
-        childViewTagName     : 'li'
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus"
       });
           
       // Create a DatumStatesView    

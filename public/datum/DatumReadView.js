@@ -84,7 +84,7 @@ define([
     datumTagsView : UpdatingCollectionView,
 
     /**
-     * The datumFieldsView displays the all the DatumFieldValueEditViews.
+     * The datumFieldsView displays the all the DatumFieldEditViews.
      */
     datumFieldsView : UpdatingCollectionView,
     
