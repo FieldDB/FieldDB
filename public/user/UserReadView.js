@@ -1,7 +1,7 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user.handlebars",
+    "text!user/user_read_modal.handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
