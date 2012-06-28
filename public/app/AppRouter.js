@@ -284,7 +284,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#import-embedded').show();
+      $('#import-modal').show();
     },
     
     showExport : function(corpusName) {
@@ -303,7 +303,7 @@ define([
       $("#corpus-fullscreen").hide();
       $("#corpus-settings-modal").hide();
       $('#export-modal').hide();
-      $('#import-embedded').hide();
+      $('#import-modal').hide();
       $("#hotkey-settings-modal").hide();
       $("#search-fullscreen").hide();
       $("#search-embedded").hide();
@@ -313,7 +313,6 @@ define([
       $('#user-fullscreen').hide();
       $("#user-preferences-modal").hide();
       $("#user-welcome-modal").hide();
-      
     }
   });
 
