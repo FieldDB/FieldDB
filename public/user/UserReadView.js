@@ -36,11 +36,7 @@ define([
     initialize : function() {
       Utils.debug("USER init: " + this.el);
       
-      this.on('all', function(e) {
-        this.render();
-      });
-      
-      this.model.bind('change', this.render);
+      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -51,10 +47,18 @@ define([
     classname : "user",
     
     /**
-     * The Handlebars template rendered as the UserReadView.
+     * The Handlebars template rendered as the UserReadLinkView.
      */
     linkTemplate : Handlebars.compile(userLinkTemplate),
+    
+    /**
+     * The Handlebars template rendered as the UserReadModalView.
+     */
     modalTemplate : Handlebars.compile(userModalTemplate),
+    
+    /**
+     * The Handlebars template rendered as the UserReadFullscreenView.
+     */
     fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
     
     /**
@@ -69,13 +73,13 @@ define([
       }
       Utils.debug("\tRendering user: " + this.model.get("username"));
 
-      if(this.format == "fullscreen"){
+      if (this.format == "fullscreen") {
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
-      }else if(this.format == "modal"){
+      } else if (this.format == "modal") {
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
-      }else if(this.format == "link"){
+      } else if (this.format == "link") {
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
       }
 
