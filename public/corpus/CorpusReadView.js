@@ -77,7 +77,7 @@ define([
       if (this.format == "leftWell") {
         if (this.model != undefined) {
           // Display the CorpusReadView
-          this.setElement($("#corpus-read-embedded"));
+          this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(this.model.toJSON()));
   
         } else {

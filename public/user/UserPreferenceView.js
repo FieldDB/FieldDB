@@ -50,7 +50,7 @@ define([
       Utils.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
         // Display the UserPreferenceView
-        this.setElement($("#user-preferences-view"));
+        this.setElement($("#user-preferences-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         
       }
