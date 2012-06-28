@@ -40,7 +40,10 @@ define([
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
     },
-
+    events : {
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeFullscreen"
+    },
     /**
      * The underlying model of the CorpusReadView is a Corpus.
      */    
@@ -90,9 +93,12 @@ define([
 
       return this;
     },
-    
-  
-
+    resizeSmall : function(){
+      window.app.router.showEmbeddedCorpus();
+    },
+    resizeFullscreen : function(){
+      window.app.router.showFullscreenCorpus();
+    }
   });
 
   return CorpusReadView;
