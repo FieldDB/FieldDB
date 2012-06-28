@@ -54,7 +54,9 @@ define( [
      */
     events : {
       'click a.servernext' : 'nextResultPage',
-      'click .serverhowmany a' : 'changeCount'
+      'click .serverhowmany a' : 'changeCount',
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeFullscreen"
     },
 
     /**
@@ -228,6 +230,12 @@ define( [
           this.addOne(datumId);
         }
       }
+    },
+    resizeSmall : function(){
+      window.app.router.showDashboard();
+    },
+    resizeFullscreen : function(){
+      window.app.router.showFullscreenCorpus();
     }
   });
 
