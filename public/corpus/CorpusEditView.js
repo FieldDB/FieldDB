@@ -68,7 +68,7 @@ define([
         childViewTagName     : 'li'
       });
       
-//    Create a DataList List TODO uncomment this and add datalists to the corpus, and make sure its not null.
+//    Create a DataList List
     this.dataListsView = new UpdatingCollectionView({
       collection : this.model.get("dataLists"),
       childViewConstructor : DataListReadLinkView,
