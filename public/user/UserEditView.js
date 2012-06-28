@@ -1,28 +1,29 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user.handlebars",
-    "text!user/user_profile.handlebars",
+    "text!user/user_edit_fullscreen.handlebars",
+    "text!user/user_edit_modal.handlebars",
     "user/User",
-    "user/UserView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    userTemplate, 
-    user_profileTemplate, 
-    User, 
-    UserView
+    userFullscreenTemplate, 
+    userModalTemplate, 
+    User
 ) {
-  var UserProfileView = Backbone.View.extend(
-  /** @lends UserProfileView.prototype */
+  var UserEditView = Backbone.View.extend(
+  /** @lends UserEditView.prototype */
   {
     /**
-     * @class The UserProfileView shows information about the user, normal
+     * @class The UserEditView shows information about the user, normal
      *        information such as username, research interests affiliations etc,
      *        but also a list of their corpora which will allow their friends to
      *        browse their corpora, and also give them a quick way to navigate
      *        between corpora.
+     *  
+     * @property {String} format Must be set when the view is initialized. Valid
+     *           values are "modal" and "fullscreen".
      * 
      * @extends Backbone.View
      * @constructs
@@ -44,12 +45,12 @@ define([
     },
 
     /**
-     * The underlying model of the UserProfileView is a User.
+     * The underlying model of the UserEditView is a User.
      */
     model : User,
     
     /**
-     * Events that the UserProfileView is listening to and their handlers.
+     * Events that the UserEditView is listening to and their handlers.
      */
     events : {
       "click #close_user_profile" : function() {
@@ -61,43 +62,37 @@ define([
     /**
      * The corpusesView is a child of the CorpusView.
      */
-//    corpusesView : CorpusesView,
+//    corpusesView : CorpusesView, //TODO put this in as an updating collection
 
     /**
-     * The Handlebars template rendered as the UserProfileView
+     * The Handlebars template rendered as the UserEditView
      */
-    template : Handlebars.compile(user_profileTemplate),
+    modalTemplate : Handlebars.compile(userModalTemplate),
+    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
 
     /**
-     * The Handlebars template of the user header, which is used as a partial.
-     */
-    usertemplate : Handlebars.compile(userTemplate),
-
-    /**
-     * Renders the UserProfileView and its partial.
+     * Renders the UserEditView depending on its format.
      */
     render : function() {
       Utils.debug("USER render: " + this.el);
 
-      if (this.model != undefined) {
-        // Register the partial
-        Handlebars.registerPartial("user", this.usertemplate(this.model
-            .toJSON()));
-
-        // Display the UserProfileView
-        this.setElement($("#user-modal"));
-        $(this.el).html(this.template(this.model.toJSON()));
-
-        // Display the CorpusesView
-  //      this.corpusesView.render();
-
-      } else {
+      if (this.model == undefined) {
         Utils.debug("\User model was undefined");
+        return this;
+      }
+      if(this.format == "fullscreen"){
+        this.setElement($("#user-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+      }else if(this.format == "modal"){
+        this.setElement($("#user-modal"));
+        $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }
 
-      return this;
+        // Display the CorpusesView
+//        this.corpusesView.render();
+
     }
   });
 
-  return UserProfileView;
+  return UserEditView;
 }); 

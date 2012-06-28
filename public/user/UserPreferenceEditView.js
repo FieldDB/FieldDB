@@ -1,7 +1,7 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user_preference.handlebars",
+    "text!user/user_preference_edit_modal.handlebars",
     "user/UserPreference",
     "libs/Utils"
 ], function(
@@ -10,12 +10,12 @@ define([
   preferenceTemplate, 
   UserPreference
 ) {
-  var UserPreferenceView = Backbone.View.extend(
-  /** @lends UserPreferenceView.prototype */
+  var UserPreferenceEditView = Backbone.View.extend(
+  /** @lends UserPreferenceEditView.prototype */
   {
     // TODO comment this class I think initially, hotkeys were gonna go in here and how they aren't in here so now I'm not sure what else is supposed to go in here.
     /**
-     * @class UserPreferenceView This is where the option to  change the background is.
+     * @class UserPreferenceEditView This is where the option to  change the background is.
      *
      * @extends Backbone.View
      * @constructs
@@ -30,26 +30,26 @@ define([
     },
 
     /**
-     * The underlying model of the UserPreferenceView is a UserPreference.
+     * The underlying model of the UserPreferenceEditView is a UserPreference.
      */
     model : UserPreference,
     
     /**
-     * Events that the UserPreferenceView is listening to and their handlers.
+     * Events that the UserPreferenceEditView is listening to and their handlers.
      */
     events:{
       "click #skin": "nextSkin"
     },
  
     /**
-     * The Handlebars template rendered as the UserPreferenceView.
+     * The Handlebars template rendered as the UserPreferenceEditView.
      */
     template: Handlebars.compile(preferenceTemplate),
 
     render : function() {
       Utils.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
-        // Display the UserPreferenceView
+        // Display the UserPreferenceEditView
         this.setElement($("#user-preferences-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         
@@ -88,7 +88,7 @@ define([
       this.model.set("skin", this.skins[ this.currentSkin ]);
     },
     randomSkin : function(){
-      currentSkin = Math.floor(Math.random()* this.skins.length);
+      this.currentSkin = Math.floor(Math.random()* this.skins.length);
       this.model.set("skin", this.skins[ this.currentSkin ]);
     },
     renderSkin : function(){
@@ -96,5 +96,5 @@ define([
     }
   });
   
-  return UserPreferenceView;
+  return UserPreferenceEditView;
 }); 
