@@ -4,7 +4,7 @@ define([
     "text!authentication/authentication.handlebars",
     "authentication/Authentication", 
     "user/User", 
-    "user/UserView",
+    "user/UserReadView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -12,7 +12,7 @@ define([
     authTemplate, 
     Authentication, 
     User, 
-    UserView
+    UserReadView
 ) {
   var AuthenticationView = Backbone.View.extend(
   /** @lends AuthenticationView.prototype */
@@ -29,8 +29,8 @@ define([
     initialize : function() {
       Utils.debug("AUTH init: " + this.el);
       
-    //   Create a UserView
-      this.userView = new UserView({
+    //   Create a UserReadView
+      this.userView = new UserReadView({
          model: this.model.get("user")
       });
 //      this.userView.loadSample();
@@ -50,7 +50,7 @@ define([
      * The userView is a child of the AuthenticationView.
      */
     // TODO Make this a real child, rather than just a partial.
-    userView : UserView,
+    userView : UserReadView,
     
     /**
      * Events that the AuthenticationView is listening to and their handlers.
@@ -116,7 +116,7 @@ define([
     },
     
     /**
-     * Load sample calls the UserView's function to load a sample user, at this
+     * Load sample calls the UserReadView's function to load a sample user, at this
      * time the sample user is Edward Sapir, a well-known early fieldlinguist.
      * He is simply loaded as a user, without calling any user authentication
      * functions.
