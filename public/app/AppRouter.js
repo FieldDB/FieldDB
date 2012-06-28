@@ -82,7 +82,71 @@ define([
       this.hideEverything();
       $("#corpus-fullscreen").show();
     },
+    /**
+     * Displays all of the corpus details and settings. 
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     */
+    showEmbeddedCorpus : function(corpusName ) {
+      Utils.debug("In showEmbeddedCorpus: " + corpusName);
+
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#corpus-embedded").show();
+    },
     
+    /**
+     * Displays the fullscreen view of the datum specified by the given
+     * corpusName and the given datumId.
+     * 
+     * @param {String}
+     *          corpusName The name of the corpus this datum is from.
+     * @param {Number}
+     *          datumId The ID of the datum within the corpus.
+     */
+    showFullscreenDatum : function(corpusName, datumId) {
+      Utils.debug("In showFullscreenDatum: " + corpusName + " *** " + datumId);
+
+      // Change the id of the fullscreen datum view's Datum to be the given datumId
+      appView.fullScreenDatumView.model.id = datumId;
+      
+      // Save the currently displayed Datum, if needed
+      appView.fullScreenDatumView.saveScreen();
+      
+      // Fetch the Datum's attributes from the PouchDB
+      var self = this;
+      appView.fullScreenDatumView.model.fetch({
+        success : function() {
+          // Restructure Datum's inner models
+          appView.fullScreenDatumView.model.restructure();
+          
+          // Update the display with the Datum with the given datumId
+          appView.fullScreenDatumView.render();
+          
+          // Display the fullscreen datum view and hide all the other views
+          self.hideEverything();
+          $("#datums-fullscreen").show();
+        },
+        
+        error : function() {
+          Utils.debug("Datum does not exist: " + datumId);
+          
+          // Create a new Datum (cloning the default datum fields from the
+          // corpus in case they changed) and render it
+          appView.fullScreenDatumView = new DatumEditView({
+            model : new Datum({
+              datumFields : app.get("corpus").get("datumFields").clone()
+            })
+          });
+          appView.fullScreenDatumView.render();
+          
+          // Display the fullscreen datum view and hide all the other views
+          self.hideEverything();
+          $("#datums-fullscreen").show();
+        },
+      });
+    }, 
     /**
      * Displays the fullscreen view of the datum specified by the given
      * corpusName and the given datumId.
@@ -185,7 +249,7 @@ define([
         }
       });
     },
-    
+   
     /**
      * Displays the fullscreen view of the datalist specified by the given
      * corpusName and the given dataListId
