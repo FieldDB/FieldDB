@@ -27,7 +27,7 @@ define([
      * The App should be serializable to save state to local storage for the
      * next run.
      * 
-     * @property {Authentication} auth The auth member variable is an
+     * @property {Authentication} authentication The auth member variable is an
      *           Authentication object permits access to the login and logout
      *           functions, and the database of users depending on whether the
      *           app is online or not.
@@ -69,7 +69,8 @@ define([
       corpus : Corpus,
       username : localStorage.getItem("username"),
       sessionid : localStorage.getItem("sessionid"),
-      currentSession : new Session()//TODO this seems dangerous, why create a new session rather than just putting a predicate/classname here?
+      currentSession : new Session(),//TODO this seems dangerous, why create a new session rather than just putting a predicate/classname here?
+      authentication : new Authentication()
     },
     
     router : AppRouter
