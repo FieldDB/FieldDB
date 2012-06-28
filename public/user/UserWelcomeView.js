@@ -1,24 +1,20 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user.handlebars",
-    "text!user/user_welcome.handlebars",
+    "text!user/user_welcome_modal.handlebars",
     "user/User",
-    "user/UserView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    userTemplate, 
     user_welcomeTemplate, 
-    User, 
-    UserView
+    User
 ) {
-  var UserProfileView = Backbone.View.extend(
-  /** @lends UserProfileView.prototype */
+  var UserEditView = Backbone.View.extend(
+  /** @lends UserEditView.prototype */
   {
     /**
-     * @class The UserProfileView shows information about the user, normal
+     * @class The UserEditView shows information about the user, normal
      *        information such as username, research interests affiliations etc,
      *        but also a list of their corpora which will allow their friends to
      *        browse their corpora, and also give them a quick way to navigate
@@ -35,12 +31,12 @@ define([
     },
 
     /**
-     * The underlying model of the UserProfileView is a User.
+     * The underlying model of the UserEditView is a User.
      */
     model : User,
     
     /**
-     * Events that the UserProfileView is listening to and their handlers.
+     * Events that the UserEditView is listening to and their handlers.
      */
     events : {
       "click .sync_sapir_data" : function() {
@@ -56,27 +52,20 @@ define([
 
 
     /**
-     * The Handlebars template rendered as the UserProfileView
+     * The Handlebars template rendered as the UserEditView
      */
     template : Handlebars.compile(user_welcomeTemplate),
 
-    /**
-     * The Handlebars template of the user header, which is used as a partial.
-     */
-    usertemplate : Handlebars.compile(userTemplate),
 
     /**
-     * Renders the UserProfileView and its partial.
+     * Renders the UserEditView and its partial.
      */
     render : function() {
       Utils.debug("USER render: " + this.el);
 
       if (this.model != undefined) {
-        // Register the partial
-        Handlebars.registerPartial("user", this.usertemplate(this.model
-            .toJSON()));
-
-        // Display the UserProfileView
+       
+        // Display the UserEditView
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
 
@@ -89,5 +78,5 @@ define([
     }
   });
 
-  return UserProfileView;
+  return UserEditView;
 }); 
