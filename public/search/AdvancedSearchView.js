@@ -75,7 +75,7 @@ define([
       Utils.debug("SEARCH render: " + this.el);
       if (this.model != undefined) {
         // Display the SearchView
-        this.setElement($("#fullscreen-search-view"));
+        this.setElement($("#search-fullscreen"));
         $(this.el).html(this.template(this.model.toJSON()));
         
 
