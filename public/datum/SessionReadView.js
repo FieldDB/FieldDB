@@ -86,7 +86,7 @@ define([
         };
         
         // Disply the SessionSummaryReadView
-        this.setElement("#session");
+        this.setElement("#session-quickview");
         $(this.el).html(this.templateSummary(jsonToRender));
       }
       
