@@ -29,9 +29,6 @@ define( [
     initialize : function() {
       Utils.debug("DATUM STATE EDIT init");
       
-      // Default format is "corpus" since it will be used in an UpdatingCollectionView.
-      this.format = "corpus";
-      
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
     },

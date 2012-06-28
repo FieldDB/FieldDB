@@ -86,7 +86,8 @@ define([
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateEditView,
-        childViewTagName     : 'li'
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus"
       });
       
       //Create a Permissions View
