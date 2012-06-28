@@ -81,7 +81,7 @@ define([
         
         this.sessionFieldsView.el = this.$(".session-fields-ul");
         this.sessionFieldsView.render();
-      } else if (this.format == "leftWell") {
+      } else if (this.format == "leftSide") {
         var jsonToRender = {
           goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
           consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
