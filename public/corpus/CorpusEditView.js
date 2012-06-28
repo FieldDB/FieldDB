@@ -158,7 +158,9 @@ define([
       "click .add_datum_state" : 'insertNewDatumState',
       
       //Add button inserts new Datum Field
-      "click .add_datum_field" : 'insertNewDatumField'
+      "click .add_datum_field" : 'insertNewDatumField',
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeFullscreen"
     },
 
     /**
@@ -256,6 +258,12 @@ define([
         "color" : this.$el.children(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
+    },
+    resizeSmall : function(){
+      window.app.router.showEmbeddedCorpus();
+    },
+    resizeFullscreen : function(){
+      window.app.router.showFullscreenCorpus();
     }
   });
 
