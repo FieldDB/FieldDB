@@ -28,6 +28,11 @@ define( [
      * @class This is a page where the user can create their own datalist. They
      *        can pick datum and then drag them over to their own customized
      *        data list.
+     *        
+     * @property {String} format Must be set when the view is
+     * initialized. Valid values are "leftSide" and
+     * "fullscreen".
+     * 
      * @extends Backbone.View
      * @constructs
      */
@@ -56,7 +61,8 @@ define( [
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "blur .title": "updateTitle"
     },
 
     /**
@@ -73,24 +79,32 @@ define( [
 
     /**
      * Initially renders the DataListEditView. This should only be called by 
-     * this.initialize. To update the current rendering, use renderUpdate()
+     * this.initialize. To update the current rendering, use renderUpdatedDataList()
      * instead.
      */
     render : function() {
-      Utils.debug("DATALIST render: " + this.el);
-      if (this.model != undefined) {
-        // Display the Data List
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-        //TODO do the other template
+      if (this.model == undefined) {
+        Utils.debug("\tDataList model is not defined");
+        return this;
+      }
+      if (this.format == "fullscreen") {
+        Utils.debug("DATALIST fullscreen render: " + this.el);
 
+        this.setElement($("#data-list-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         // Display the pagination footer
         this.renderUpdatedPagination();
-
         // TODO Display the first page of DatumLatexReadViews.
         // this.renderNewModel();
-      } else {
-        Utils.debug("\tDataList model is not defined");
+      } else if (this.format == "leftSide") {
+        Utils.debug("DATALIST leftSide render: " + this.el);
+
+        this.setElement($("#data-list-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        // TODO Display the first page of DatumLatexReadViews.
+        // this.renderNewModel();
       }
 
       return this;
@@ -236,6 +250,9 @@ define( [
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
+    },
+    updateTitle : function(){
+      this.model.set("title",this.$el.children(".title").val());
     }
   });
 
