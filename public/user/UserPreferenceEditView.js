@@ -5,10 +5,10 @@ define([
     "user/UserPreference",
     "libs/Utils"
 ], function(
-  Backbone, 
-  Handlebars, 
-  preferenceTemplate, 
-  UserPreference
+    Backbone, 
+    Handlebars, 
+    preferenceTemplate, 
+    UserPreference
 ) {
   var UserPreferenceEditView = Backbone.View.extend(
   /** @lends UserPreferenceEditView.prototype */
@@ -26,7 +26,6 @@ define([
       if( this.model.get("skin") == ""){
         this.randomSkin();
       }
-      
     },
 
     /**
@@ -61,25 +60,27 @@ define([
     /**
      * The index into the skins array that is the current skin.
      */
-    currentSkin : 0,    
+    currentSkin : 0,
+    
     /*
      * Available backgrounds 
      */
     skins : [
-                   "images/skins/bamboo_garden.jpg",
-                   "images/skins/llama_wool.jpg" , 
-                   "images/skins/machu_picchu.jpg",
-                   "images/skins/machu_picchu2.jpg",
-                   "images/skins/prague.jpg",
-                   "images/skins/salcantay.jpg",
-                   "images/skins/stairs.jpg",
-                   "images/skins/stone_figurines.jpg",
-                   "images/skins/temple.jpg",
-                   "images/skins/weaving.jpg",
-                   "images/skins/sunset.jpg",
-                   "images/skins/window.jpg",
-                   "images/skins/Ceske_Krumlov.jpg", 
-                 ],
+       "images/skins/bamboo_garden.jpg",
+       "images/skins/llama_wool.jpg" , 
+       "images/skins/machu_picchu.jpg",
+       "images/skins/machu_picchu2.jpg",
+       "images/skins/prague.jpg",
+       "images/skins/salcantay.jpg",
+       "images/skins/stairs.jpg",
+       "images/skins/stone_figurines.jpg",
+       "images/skins/temple.jpg",
+       "images/skins/weaving.jpg",
+       "images/skins/sunset.jpg",
+       "images/skins/window.jpg",
+       "images/skins/Ceske_Krumlov.jpg", 
+     ],
+     
     /**
      * Change to the next skin in the array of skins.
      */
@@ -87,10 +88,12 @@ define([
       this.currentSkin = (this.currentSkin + 1) % this.skins.length;
       this.model.set("skin", this.skins[ this.currentSkin ]);
     },
+    
     randomSkin : function(){
       this.currentSkin = Math.floor(Math.random()* this.skins.length);
       this.model.set("skin", this.skins[ this.currentSkin ]);
     },
+    
     renderSkin : function(){
       document.body.style.backgroundImage = "url(" + this.model.get("skin") + ")";
     }
