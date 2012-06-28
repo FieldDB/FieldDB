@@ -52,7 +52,10 @@ define([
      */
     events : {
     
-      "click #btn-save-session" : "updatePouch"
+      "click #btn-save-session" : "updatePouch",
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeLarge"
+      
     },
     
     /**
@@ -96,6 +99,12 @@ define([
     updatePouch : function() {
       Utils.debug("Saving the Session");
       this.model.save();
+    },
+    resizeSmall : function(){
+      window.app.router.hideEmbeddedSession();
+    },
+    resizeLarge : function(){
+      window.app.router.showEmbeddedSession();
     }
   });
   
