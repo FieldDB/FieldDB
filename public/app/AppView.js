@@ -18,7 +18,7 @@ define([
     "datum/DatumEditView",
     "datum/DatumFields", 
     "export/Export",
-    "export/ExportView",
+    "export/ExportReadView",
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -56,7 +56,7 @@ define([
     DatumEditView,
     DatumFields,
     Export,
-    ExportView,
+    ExportReadView,
     HotKey,
     HotKeyEditView,
     Import,
@@ -212,8 +212,8 @@ define([
         model : new HotKey()
       });  
       
-      // Create an ExportView
-      this.exportView = new ExportView({
+      // Create an ExportREadView
+      this.exportView = new ExportReadView({
         model : new Export()
       });
 
