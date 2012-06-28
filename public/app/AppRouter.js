@@ -32,13 +32,9 @@ define([
 
     routes : {
       "corpus/:corpusId"                : "showFullscreenCorpus", 
-      "corpus/:corpusName"              : "showFullscreenCorpus",               // @deprecated 
       "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum",
-      "corpus/:corpusName/session/:id"  : "showEmbeddedSession",                // @deprecated
-      "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",             // @deprecated
       "corpus/:corpusName/search"       : "showAdvancedSearch",
-      "corpus/"                         : "showFullscreenCorpus",
-      "corpus/:corpusName/export"       : "showExport",                         // @deprecated 
+      "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListId"                : "showFullscreenDataList",
       "user/:username"                  : "showFullscreenUser",
       "import"                          : "showImport",
@@ -296,7 +292,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#export-embedded').show();
+      $('#export-modal').show();
     },
     
     hideEverything: function() {
@@ -306,7 +302,7 @@ define([
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
       $("#corpus-settings-modal").hide();
-      $('#export-embedded').hide();
+      $('#export-modal').hide();
       $('#import-embedded').hide();
       $("#hotkey-settings-modal").hide();
       $("#search-fullscreen").hide();
