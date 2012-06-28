@@ -78,7 +78,7 @@ define( [
       Utils.debug("DATALIST render: " + this.el);
       if (this.model != undefined) {
         // Display the Data List
-        this.setElement($("#new_data_list"));
+        this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         //TODO do the other template
 

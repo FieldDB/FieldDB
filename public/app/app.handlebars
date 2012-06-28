@@ -31,53 +31,39 @@
   </div>
 </div>
 <!-- The rest of the page -->
-<div class="container-fluid main">
-  <div class="row-fluid">
+<div  class="container-fluid main">
+  <div id="dashboard-view" class="row-fluid">
     <!-- Elements on Lefthand side -->
     <div class="span3">
-
-      <div id="corpus-read-embedded" class="well sidebar-nav"></div>
-      <div id="session" class="well sidebar-nav"></div>
-      <div id="data_list" class="sidebar-nav well"></div>
+      <div id="corpus-quickview" class="well sidebar-nav"></div>
+      <div id="session-quickview" class="well sidebar-nav"></div>
+      <div id="data-list-embedded" class="sidebar-nav well"></div>
     </div>
-    <!--Elements in the middle (things that get hidden  -->
+    <!--Elements in the middle (things that get hidden)  -->
     <div class="span6 well">
-      <!--                The layout of the embedded datum page first div needs to be renamed-->
-      <div id="fullscreen-datum-view" class="middle">
-        <div id="datum-embedded-view">Fullscreen Datum View</div>
-      </div>
+			
+			<div id="datums-embedded" class="middle">
+				<div>Multiple Data Entry View</div>
+				<div id="datum-embedded">Datum View</div>
+			</div>
 
-      <!--               The layout of the new session page -->
-      <div id="new-session-view" class="middle">
+			<div id="session-embedded" class="middle">
         <div>New Session</div>
       </div>
 
-      <!--               The layout of the fullscreen search page -->
-      <div id="fullscreen-search-view" class="middle">
-        <div>Fullscreen Search View</div>
+      <div id="corpus-embedded" class="middle">
+        <div>Corpus</div>
       </div>
 
-      <!-- The layout of the new datalist page -->
-      <div id="new_data_list" class="middle"></div>
-
-      <!-- The layout of the new corpus page -->
-      <div id="corpus-edit-embedded" class="middle">
-        <div>New Corpus</div>
-      </div>
-      <!-- The layout of the corpus details page -->
-      <div id="corpus-read-fullscreen-view" class="middle">
-        <div id="corpus-details-view">Corpus Details</div>
-      </div>
-
-
-      <!-- The layout of the export data page -->
-      <div id="export-view" class="middle">
+      <div id="export-embedded" class="middle">
         <div>Export Data</div>
       </div>
 
-      <!-- The layout of the import page -->
-      <div id="import" class="middle">
+      <div id="import-embedded" class="middle">
         <div>Import</div>
+      </div>
+      <div id="search-embedded" class="middle">
+        <div>Search</div>
       </div>
 
     </div>
@@ -89,17 +75,27 @@
     <!--/span-->
   </div>
   <!--/row-->
+
+	<!-- FullScreen Views -->
+	<div id="user-fullscreen" class="well">
+		<div>User</div>
+	</div>
+	<div id="corpus-fullscreen" class="well">
+		<div>Corpus</div>
+	</div>
+	<div id="search-fullscreen" class="well">
+		<div>Search</div>
+	</div>
+	<div id="data-list-fullscreen" class="well">
+		<div>Data List</div>
+	</div>
 </div>
 <!--/row-->
 
-<!-- modals -->
-<!-- The layout of the user profile page -->
-<div id="fullscreen-user-profile-view" class="modal show"></div>
-<!-- The layout of the welcome page -->
-<div id="welcome-user-view" class="modal show"></div>
-<!-- The layout of the user preferences page -->
-<div id="user-preferences-view" class="modal show"></div>
-<!-- The layout of the keyboard shortcuts page -->
-<div id="hotkey-config-view" class="modal show"></div>
-<!-- The layout of the datum preferences page -->
-<div id="datum-preferences-view" class="modal show"></div>
+
+<!-- Modals are windows which pop over the active app to take focus -->
+<div id="corpus-settings-modal" class="modal show"></div>
+<div id="hotkey-settings-modal" class="modal show"></div>
+<div id="user-modal" class="modal show"></div>
+<div id="user-welcome-modal" class="modal show"></div>
+<div id="user-preferences-modal" class="modal show"></div>

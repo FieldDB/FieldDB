@@ -68,12 +68,12 @@ define([
         childViewTagName     : 'li'
       });
       
-    //Create a DataList List TODO uncomment this and add datalists to the corpus, and make sure its not null.
-//    this.dataListsView = new UpdatingCollectionView({
-//      collection : this.model.get("dataLists"),
-//      childViewConstructor : DataListReadLinkView,
-//      childViewTagName     : 'li'
-//    });
+//    Create a DataList List
+    this.dataListsView = new UpdatingCollectionView({
+      collection : this.model.get("dataLists"),
+      childViewConstructor : DataListReadLinkView,
+      childViewTagName     : 'li'
+    });
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -179,7 +179,7 @@ define([
         Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
         if (this.model != undefined) {
           // Display the CorpusReadFullScreenView
-          this.setElement($("#corpus-read-fullscreen-view"));
+          this.setElement($("#corpus-fullscreen"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
           // Display the CommentEditView

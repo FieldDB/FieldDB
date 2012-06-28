@@ -73,7 +73,7 @@ define([
       
       if (this.format == "centerWell") {
         // Display the SessionReadView
-        this.setElement("#new-session-view");
+        this.setElement("#session-embedded");
         $(this.el).html(this.template(this.model.toJSON()));
         
         this.sessionFieldsView.el = this.$(".session-fields-ul");
@@ -86,7 +86,7 @@ define([
         };
         
         // Disply the SessionSummaryReadView
-        this.setElement("#session");
+        this.setElement("#session-quickview");
         $(this.el).html(this.templateSummary(jsonToRender));
       }
       
