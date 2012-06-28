@@ -68,12 +68,12 @@ define([
         childViewTagName     : 'li'
       });
       
-    //Create a DataList List TODO uncomment this and add datalists to the corpus, and make sure its not null.
-//    this.dataListsView = new UpdatingCollectionView({
-//      collection : this.model.get("dataLists"),
-//      childViewConstructor : DataListReadLinkView,
-//      childViewTagName     : 'li'
-//    });
+//    Create a DataList List TODO uncomment this and add datalists to the corpus, and make sure its not null.
+    this.dataListsView = new UpdatingCollectionView({
+      collection : this.model.get("dataLists"),
+      childViewConstructor : DataListReadLinkView,
+      childViewTagName     : 'li'
+    });
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({

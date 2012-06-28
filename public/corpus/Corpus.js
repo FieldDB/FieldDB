@@ -8,6 +8,7 @@ define([
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
+    "data_list/DataLists",
     "user/Consultants",
     "permission/Permissions",
     "datum/Sessions",
@@ -23,6 +24,7 @@ define([
     DatumFields, 
     DatumState,
     DatumStates,
+    DataLists,
     Consultants,
     Permissions,
     Sessions,
@@ -182,6 +184,11 @@ define([
             ]));
         }
         
+        if(typeof(this.get("dataLists")) == "function"){
+          this.set("dataLists", new Comments([ 
+            new DataLists()
+            ]));
+        }
 //        if(typeof(this.get("searchFields")) == "function"){
 //          this.set("searchFields", 
 //              this.get("datumFields"));
@@ -204,7 +211,7 @@ define([
         sessionFields : DatumFields,
         searchFields : DatumFields,
         sessions : Sessions, 
-        dataLists : DataLists, // TODO capitalize L?
+        dataLists : DataLists, 
         permissions : Permissions,
         comments: Comments
         
