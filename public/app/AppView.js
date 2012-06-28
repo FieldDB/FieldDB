@@ -7,7 +7,7 @@ define([
     "activity/ActivityFeed",
     "activity/ActivityFeedView",
     "authentication/Authentication",
-    "authentication/AuthenticationView",
+    "authentication/AuthenticationEditView",
     "corpus/Corpus", 
     "corpus/CorpusEditView",
     "corpus/CorpusReadView",
@@ -44,7 +44,7 @@ define([
     ActivityFeed,
     ActivityFeedView,
     Authentication,
-    AuthenticationView,
+    AuthenticationEditView,
     Corpus, 
     CorpusEditView,
     CorpusReadView,
@@ -121,8 +121,8 @@ define([
       
       var userToBePassedAround = new User();
       
-      // Create an AuthenticationView
-      this.authView = new AuthenticationView({
+      // Create an AuthenticationEditView
+      this.authView = new AuthenticationEditView({
         model : new Authentication({user: userToBePassedAround})
       });
       
