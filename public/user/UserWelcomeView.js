@@ -1,14 +1,12 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user.handlebars",
     "text!user/user_welcome_modal.handlebars",
     "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    userTemplate, 
     user_welcomeTemplate, 
     User
 ) {
@@ -58,10 +56,6 @@ define([
      */
     template : Handlebars.compile(user_welcomeTemplate),
 
-    /**
-     * The Handlebars template of the user header, which is used as a partial.
-     */
-    usertemplate : Handlebars.compile(userTemplate),
 
     /**
      * Renders the UserEditView and its partial.
@@ -70,10 +64,7 @@ define([
       Utils.debug("USER render: " + this.el);
 
       if (this.model != undefined) {
-        // Register the partial
-        Handlebars.registerPartial("user", this.usertemplate(this.model
-            .toJSON()));
-
+       
         // Display the UserEditView
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));

@@ -1,5 +1,9 @@
-define([ "use!backbone", "use!handlebars", "text!activity/activity.handlebars",
-    "user/UserEditView", "text!user/user.handlebars", "activity/Activity" ],
+define([ "use!backbone", 
+         "use!handlebars", 
+         "text!activity/activity.handlebars",
+         "user/UserEditView", 
+         "text!user/user_read_link.handlebars", 
+         "activity/Activity" ],
     function(Backbone, Handlebars, activityTemplate, User, UserEditView,
         userTemplate, Activity) {
       var ActivityView = Backbone.View.extend(
