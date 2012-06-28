@@ -7,8 +7,8 @@ define([
   /** @lends Permission.prototype 	*/
   {
     /**
-     * @class The permission class specifies data access types (e.g. read,
-     *        write, admin) for a usergeneric with respect to a corpus.
+     * @class The permission class specifies data access types (e.g. read, addNew, edit, 
+     *        comment, export, admin) for a usergeneric with respect to a corpus.
      *
      * @property {String} type Type is the permission type, which is one of {read, write, export}
      * @property {UserGeneric} user User is the id of the {User, Bot, Consultant, Team} with this permission.
