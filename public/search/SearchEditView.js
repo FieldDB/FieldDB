@@ -1,7 +1,8 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!search/advanced_search.handlebars",
+    "text!search/search_advanced_edit_embedded.handlebars",
+    "text!search/search_edit_embedded.handlebars",
     "datum/Datum",
     "datum/DatumFieldEditView",
     "search/Search",
@@ -10,18 +11,21 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    advanced_searchTemplate,
+    searchAdvancedTemplate,
+    searchTemplate,
     Datum,
     DatumFieldEditView,
     Search,
     UpdatingCollectionView
 ) {
-  var AdvancedSearchView = Backbone.View.extend(
-  /** @lends AdvancedSearchView.prototype */
+  var SearchEditView = Backbone.View.extend(
+  /** @lends SearchEditView.prototype */
   {
     /**
      * @class Search View handles the render of the global search in the corner,
-     *        and the advanced power search, as well as their events.\
+     *        and the advanced power search, as well as their events.
+     * 
+     * @property {String} format Valid values are "fullscreen" or "top".
      * 
      * @description Starts the Search.
      * 
@@ -31,53 +35,57 @@ define([
     initialize : function() {
       Utils.debug("SEARCH init: " + this.el);
       
-      this.model.bind('change', this.render, this);
-      
-      //grabbing datumFields from datum and session in the corpus
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields").clone(),
         childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li'
+        childViewTagName     : 'li',
+        childViewFormat      : "datum"
       });
+      
       this.advancedSearchSessionView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("sessionFields").clone(),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li',
         childViewFormat      : "datum"
       });
+      
+      this.model.bind('change', this.render, this);
     },
     
     /**
-     * The underlying model of the SearchView is a Search.
+     * The underlying model of the SearchEditView is a Search.
      */
     model : Search,
     
     /**
-     * Events that the SearchView is listening to and their handlers.
+     * Events that the SearchEditView is listening to and their handlers.
      */
     events : {
       "click .btn-search-union" : "searchUnion",
-      "click .btn-search-intersection" : "searchIntersection"
+      "click .btn-search-intersection" : "searchIntersection",
+      "click .icon-search" : "searchTop"
     },
     
     /**
-     * The Handlebars template rendered as the SearchView.
+     * The Handlebars template rendered as the AdvancedSearchView.
      */
-    template : Handlebars.compile(advanced_searchTemplate),
+    advancedTemplate : Handlebars.compile(searchAdvancedTemplate),
     
-    advancedSearchDatumView : UpdatingCollectionView,
-    
-    advancedSearchSessionView : UpdatingCollectionView,
+    /**
+     * The Handlebars template rendered as the TopSearchView.
+     */
+    topTemplate : Handlebars.compile(searchTemplate),
    
     /**
-     * Renders the SearchView.
+     * Renders the SearchEditView.
      */
     render : function() {
       Utils.debug("SEARCH render: " + this.el);
-      if (this.model != undefined) {
+      
+      if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).html(this.advancedTemplate(this.model.toJSON()));
         
 
         this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
@@ -88,8 +96,10 @@ define([
 
         
         Utils.debug("\trendering search: "+ this.model.get("searchKeywords"));
-      } else {
-        Utils.debug("\tSearch model was undefined");
+      } else if (this.format == "top") {
+        // Display the SearchView
+        this.setElement($("#search-top"));
+        $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
       
       return this;
@@ -126,6 +136,21 @@ define([
       // Start the search
       this.search(queryString);
     },
+    
+    /**
+     * Perform a search.
+     */
+    searchTop : function() {
+      Utils.debug("Will search for " + $("#search_box").val());
+            // Search for Datum that match the search criteria      
+      var allDatumIds = [];
+      (new Datum()).searchByQueryString($("#search_box").val(), function(datumIds) {        
+        // Display the results in the DataListReadView
+        appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
+        appView.dataListReadLeftSideView.renderNewModel();
+      });
+    },
+    
     
     /**
      * Create a string representation of the search criteria. Each
@@ -175,8 +200,8 @@ define([
       var allDatumIds = [];
       (new Datum()).searchByQueryString(queryString, function(datumIds) {        
         // Display the results in the DataListReadView
-        appView.dataListReadView.model.set("datumIds", datumIds);
-        appView.dataListReadView.renderNewModel();
+        appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
+        appView.dataListReadLeftSideView.renderNewModel();
       });
     },
     
@@ -190,5 +215,5 @@ define([
     }
   });
 
-  return AdvancedSearchView;
+  return SearchEditView;
 });
