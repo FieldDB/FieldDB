@@ -22,7 +22,7 @@ define([
     "import/Import",
     "import/ImportView",
     "user/UserPreference",
-    "user/UserPreferenceView",
+    "user/UserPreferenceEditView",
     "search/Search",
     "search/SearchView",
     "search/AdvancedSearchView",
@@ -30,7 +30,7 @@ define([
     "datum/SessionEditView",
     "datum/SessionReadView",
     "user/User",
-    "user/UserProfileView",
+    "user/UserEditView",
     "user/UserWelcomeView",
     "export/Export",
     "export/ExportView",
@@ -59,7 +59,7 @@ define([
     Import,
     ImportView,
     UserPreference,
-    UserPreferenceView,
+    UserPreferenceEditView,
     Search,
     SearchView,
     AdvancedSearchView,
@@ -67,7 +67,7 @@ define([
     SessionEditView,
     SessionReadView,
     User,
-    UserProfileView,
+    UserEditView,
     UserWelcomeView,
     Export,
     ExportView
@@ -127,8 +127,8 @@ define([
         model : new Authentication({user: userToBePassedAround})
       });
       
-      // Create a UserProfileView
-      this.fullScreenUserView = new UserProfileView({
+      // Create a UserEditView
+      this.fullScreenUserView = new UserEditView({
         model : userToBePassedAround
       });
       
@@ -159,8 +159,8 @@ define([
         model : new Search()
       });
       
-      // Create a UserPreferenceView
-      this.userPreferenceView = new UserPreferenceView({
+      // Create a UserPreferenceEditView
+      this.userPreferenceView = new UserPreferenceEditView({
         model : userToBePassedAround.get("prefs")
       });
       
@@ -218,6 +218,7 @@ define([
 
       this.term = new Terminal('terminal');
       this.term.initFS(false, 1024 * 1024);
+
       
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -244,7 +245,7 @@ define([
     /**
      * The fullScreenUserView is a child of the AppView.
      */
-    fullScreenUserView : UserProfileView,
+    fullScreenUserView : UserEditView,
     
     /**
      * The WelcomeUserView is a child of the AppView.
@@ -282,9 +283,9 @@ define([
     sessionSummaryView : SessionReadView,
     
     /**
-     * The userUserPreferenceView is a child of the AppView.
+     * The userUserPreferenceEditView is a child of the AppView.
      */  
-    userPreferenceView : UserPreferenceView,
+    userPreferenceView : UserPreferenceEditView,
     
     /**
      * The activityFeedView is a child of the AppView.
@@ -341,7 +342,7 @@ define([
         // Display the DatumEditView
         this.fullScreenDatumView.render();
         
-        // Display the UserProfileView
+        // Display the UserEditView
         this.fullScreenUserView.render();
         
         // Display the UserWelcomeView
@@ -364,7 +365,7 @@ define([
         // Display the SessionSummaryReadView
         this.sessionSummaryView.render();
         
-        // Display the UserPreferenceView
+        // Display the UserPreferenceEditView
         this.userPreferenceView.render();
         
         //Display ActivityFeedView

@@ -14,13 +14,13 @@ define([
     Corpuses,
     User
 ) {
-  var UserView = Backbone.View.extend(
-  /** @lends UserView.prototype */
+  var UserReadView = Backbone.View.extend(
+  /** @lends UserReadView.prototype */
   {
     /**
      * @class The layout of a single User. This view is used in the
      *        activity feeds, it is also embedable in the
-     *        UserProfileView.
+     *        UserEditView.
      * 
      * @description  Starts the UserView.
      * 
@@ -38,19 +38,19 @@ define([
     },
 
     /**
-     * The underlying model of the UserView is a User.
+     * The underlying model of the UserReadView is a User.
      */
     model : User,
     
     classname : "user",
     
     /**
-     * The Handlebars template rendered as the UserView.
+     * The Handlebars template rendered as the UserReadView.
      */
     template : Handlebars.compile(userTemplate),
     
     /**
-     * Renders the UserView.
+     * Renders the UserReadView.
      */
     render : function() {
       Utils.debug("USER render: " + this.el);
@@ -145,5 +145,5 @@ define([
     }
   });
 
-  return UserView;
+  return UserReadView;
 });

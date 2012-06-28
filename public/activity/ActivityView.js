@@ -1,6 +1,6 @@
 define([ "use!backbone", "use!handlebars", "text!activity/activity.handlebars",
-    "user/UserProfileView", "text!user/user.handlebars", "activity/Activity" ],
-    function(Backbone, Handlebars, activityTemplate, User, UserProfileView,
+    "user/UserEditView", "text!user/user.handlebars", "activity/Activity" ],
+    function(Backbone, Handlebars, activityTemplate, User, UserEditView,
         userTemplate, Activity) {
       var ActivityView = Backbone.View.extend(
       /** @lends ActivityView.prototype */
@@ -19,7 +19,7 @@ define([ "use!backbone", "use!handlebars", "text!activity/activity.handlebars",
         },
 
         model : Activity,
-        userview : UserView,
+        userview : UserReadView,
         classname : "activity",
         template : Handlebars.compile(activityTemplate),
         render : function() {
