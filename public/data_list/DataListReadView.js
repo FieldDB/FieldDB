@@ -3,6 +3,7 @@ define( [
   "use!handlebars",
   "text!data_list/data_list_read_fullscreen.handlebars",
   "text!data_list/data_list_read_embedded.handlebars",
+  "text!data_list/data_list_read_link.handlebars",
   "text!datum/paging_footer.handlebars",
   "data_list/DataList",
   "datum/Datum",
@@ -13,6 +14,7 @@ define( [
     Handlebars, 
     dataListReadFullscreenTemplate,
     dataListReadEmbeddedTemplate,
+    dataListReadLinkTemplate,
     pagingFooterTemplate,
     DataList, 
     Datum, 
@@ -23,9 +25,10 @@ define( [
   /** @lends DataListReadView.prototype */
   {
     /**
-     * 
      * @class A list of datum that are returned as a search result. It will have
      *        check-boxes on the side and a datum menu on the bottom.
+     * 
+     * @property {String} format Valid formats are "link", "fullscreen", or "leftSide".
      * 
      * @description Starts the DataListReadView with no children.
      * 
@@ -36,6 +39,7 @@ define( [
       Utils.debug("DATALIST init: " + this.el);
       
       this.model.bind("change:title change:dateCreated change:description", this.renderUpdatedDataList, this);
+      this.model.bind("change:title ", this.render, this);
     },
 
     /**
@@ -61,10 +65,19 @@ define( [
     },
     
     /**
-     * The Handlebars template rendered as the DataListReadView.
+     * The Handlebars template rendered as the DataListFullscreenReadView.
      */
     fullscreenTemplate : Handlebars.compile(dataListReadFullscreenTemplate),
+    
+    /**
+     * The Handlebars template rendered as the DataListEmbeddedReadView.
+     */
     embeddedTemplate : Handlebars.compile(dataListReadEmbeddedTemplate),
+    
+    /**
+     * The Handlebars template rendered as the DataListLinkReadView.
+     */
+    linkTemplate : Handlebars.compile(dataListReadLinkTemplate),
 
     /**
      * The Handlebars template of the pagination footer, which is used
@@ -79,19 +92,22 @@ define( [
      */
     render : function() {
       Utils.debug("DATALIST render: " + this.el);
-      if (this.model != undefined) {
+      
+      if (this.format == "link") {
+        // Display the Data List
+        this.setElement($("#data-list-link"));
+        $(this.el).html(this.linkTemplate(this.model.toJSON()));
+      } else if ((this.format == "leftSide") || (this.format == "fullscreen")) {
         // Display the Data List
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-      //TODO do the other template
-        
+        //TODO do the other template
+          
         // Display the pagination footer
         this.renderUpdatedPagination();
         
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
-      } else {
-        Utils.debug("\tDataList model is not defined");
       }
       
       return this;
@@ -101,9 +117,11 @@ define( [
      * Re-renders the datalist header based on the current model.
      */
     renderUpdatedDataList : function() {
-      $(".title").text(this.model.get("title"));
-      $(".dateCreated").text(this.model.get("dateCreated"));
-      $(".description").text(this.model.get("description"));
+      if ((this.format == "leftSide") || (this.format == "fullscreen")) {
+        $(".title").text(this.model.get("title"));
+        $(".dateCreated").text(this.model.get("dateCreated"));
+        $(".description").text(this.model.get("description"));
+      }
     },
     
     /**
