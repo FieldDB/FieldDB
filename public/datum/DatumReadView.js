@@ -113,7 +113,7 @@ define([
       
       if (this.model != undefined) {        
         // Display the DatumReadView
-        this.setElement($("#datum-embedded-view"));
+        this.setElement($("#datum-embedded"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display StateView
