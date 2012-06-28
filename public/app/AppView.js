@@ -22,7 +22,7 @@ define([
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
-    "import/ImportView",
+    "import/ImportEditView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
@@ -60,7 +60,7 @@ define([
     HotKey,
     HotKeyEditView,
     Import,
-    ImportView,
+    ImportEditView,
     UserPreference,
     UserPreferenceEditView,
     Search,
@@ -223,8 +223,8 @@ define([
       });
       this.corpusEditView.format = "centreWell";
       
-      // Create an ImportView
-      this.importView = new ImportView({
+      // Create an ImportEditView
+      this.importView = new ImportEditView({
         model : new Import()
       });
 
@@ -301,19 +301,19 @@ define([
         //Display ActivityFeedView
         this.activityFeedView.render();
         
-        //Display HotKeysView
+        // Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
 
-        //Display Data List Views 
+        // Display Data List Views 
         this.dataListEditLeftSideView.render();
         this.dataListEditFullscreenView.render();
         this.dataListReadLeftSideView.render();
         this.dataListReadFullscreenView.render();
          
-        //Display ImportView
+        // Display the ImportEditView
         this.importView.render();
         
-        // Dispaly the CorpusFullscreenView
+        // Display the CorpusFullscreenView
         this.corpusEditView.render();
       } else {
         Utils.debug("\tApp model is not defined");
