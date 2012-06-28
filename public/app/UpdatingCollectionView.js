@@ -20,7 +20,8 @@ var UpdatingCollectionView = Backbone.View.extend({
       this.collection.bind('add', this.add);
       this.collection.bind('remove', this.remove);
     },
-
+    tagName: "ul",
+    
     add : function(model) {
       var childView = new this._childViewConstructor({
         tagName : this._childViewTagName,

@@ -33,6 +33,11 @@ define([
     model : DatumField,
     
     /**
+     * Specified which css class to add to the elements
+     */
+    className   : 'breadcrumb',
+    
+    /**
      * Events that the DatumFieldSettingsEditView is listening to and their handlers.
      */
     events : {
