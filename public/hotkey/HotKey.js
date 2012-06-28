@@ -1,8 +1,9 @@
-define(["use!backbone",
-        "use!hotkeys"
-  ] ,function(Backbone, hotkeys) {
-      var HotKey = Backbone.Model.extend(
-
+define([
+    "use!backbone"
+] ,function(
+    Backbone
+) {
+  var HotKey = Backbone.Model.extend(
   /** @lends HotKey.prototype */
   {
     /**
@@ -26,31 +27,13 @@ define(["use!backbone",
 
     },
 
-    // This is a list of attributes and their default values
     defaults : {
-
       firstKey : "",
       secondKey : "",
       functiontocall : function() {
       },
       description : ""
-
-    },
-
-    /**
-     * Describe the validation here.
-     * 
-     * @param {Object}
-     *          attributes The set of attributes to validate.
-     * 
-     * @returns {String} The validation error if there is one. Otherwise doesn't
-     *          return anything.
-     */
-
-    validate : function(attributes) {
-
     }
-
   });
 
   return HotKey;

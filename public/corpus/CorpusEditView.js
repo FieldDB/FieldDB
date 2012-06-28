@@ -8,7 +8,7 @@ define([
     "comment/Comments",
     "comment/CommentEditView",
     "data_list/DataLists",
-    "data_list/DataListReadLinkView",
+    "data_list/DataListReadView",
     "datum/DatumField",
     "datum/DatumFieldEditView",
     "datum/DatumState",
@@ -29,7 +29,7 @@ define([
     Comments,
     CommentEditView,
     DataLists,
-    DataListReadLinkView,
+    DataListReadView,
     DatumField,
     DatumFieldEditView,
     DatumState,
@@ -68,12 +68,13 @@ define([
         childViewTagName     : 'li'
       });
       
-//    Create a DataList List
-    this.dataListsView = new UpdatingCollectionView({
-      collection : this.model.get("dataLists"),
-      childViewConstructor : DataListReadLinkView,
-      childViewTagName     : 'li'
-    });
+      // Create a DataList List
+      this.dataListsView = new UpdatingCollectionView({
+        collection : this.model.get("dataLists"),
+        childViewConstructor : DataListReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "link"
+      });
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
