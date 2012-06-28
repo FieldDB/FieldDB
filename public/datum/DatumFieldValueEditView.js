@@ -22,6 +22,8 @@ define([
      */
     initialize : function() {
       Utils.debug("DATUM FIELD init");
+      
+
     },
     
     /**
@@ -34,6 +36,7 @@ define([
      */
     events : {
       "blur .datum_field_input" : "updateField",
+      "click .icon-question-sign" : "showHelpConventions"
     },
 
     /**
@@ -57,7 +60,19 @@ define([
      */
     updateField : function() {
       this.model.set("value", this.$el.children(".datum_field_input").val());
+    },
+    
+    showHelpConventions : function(){
+//    	$("a[rel=popover]")
+//        .popover()
+//        .click(function(e) {
+//          e.preventDefault()
+//        })
+//    	this.$el.children(".help-conventions").popover("show");
+//    	$(".help-conventions").popover("show");
+    	alert(this.model.get("help"));
     }
+    
   });
 
   return DatumFieldValueEditView;
