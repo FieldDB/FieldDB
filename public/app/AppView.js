@@ -94,7 +94,7 @@ define([
       this.corpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
-      this.corpusReadView.format = "leftWell";
+      this.corpusReadView.format = "leftSide";
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
@@ -117,7 +117,7 @@ define([
       this.sessionSummaryView = new SessionReadView({
         model : sessionToBePassedAround
       });
-      this.sessionSummaryView.format = "leftWell";
+      this.sessionSummaryView.format = "leftSide";
       
       var userToBePassedAround = new User();
       console.log("userToBePassedAround:");
@@ -170,11 +170,32 @@ define([
         model : new ActivityFeed()
       }); 
       
-      // Create an dataListEditView
-      this.dataListEditView = new DataListEditView({
-        model : new DataList()
+      /*
+       * Set up the four data list views
+       */
+      var dataListToBePassedAround = new DataList();
+      this.dataListEditLeftSideView = new DataListEditView({
+        model : dataListToBePassedAround
       });  
+      this.dataListEditLeftSideView.format = "leftSide";
+   
+      this.dataListEditFullscreenView = new DataListEditView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListEditFullscreenView.format = "fullscreen";
+
+      this.dataListReadLeftSideView = new DataListReadView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListReadLeftSideView.format = "leftSide";
+   
+      this.dataListReadFullscreenView = new DataListReadView({
+        model : dataListToBePassedAround
+      });  
+      this.dataListReadFullscreenView.format = "fullscreen";
       
+      
+
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
         model : new HotKey()
@@ -353,8 +374,11 @@ define([
         //Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
 
-        //Display DataListEditView
-        this.dataListEditView.render();
+        //Display Data List Views 
+        this.dataListEditLeftSideView.render();
+        this.dataListEditFullscreenView.render();
+        this.dataListReadLeftSideView.render();
+        this.dataListReadFullscreenView.render();
          
         //Display ImportView
         this.importView.render();

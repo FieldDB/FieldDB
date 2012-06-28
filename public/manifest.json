@@ -10,7 +10,8 @@
   "offline_enabled": true,
   "permissions": [
     "unlimitedStorage",
-    "https://ifield.fieldlinguist.com"
+    "https://ifield.fieldlinguist.com/",
+    "http://trisapeace.iriscouch.com/"
   ],
    "icons": { 
     "16": "icon16.png",
