@@ -8,7 +8,7 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldValueReadView",
-    "datum/DatumStateValueReadView",
+    "datum/DatumStateReadView",
     "datum/DatumTag",
     "datum/DatumTagReadView",
     "app/UpdatingCollectionView",
@@ -21,7 +21,7 @@ define([
     Confidential,
     Datum,
     DatumFieldValueReadView,
-    DatumStateValueReadView,
+    DatumStateReadView,
     DatumTag,
     DatumTagReadView,
     UpdatingCollectionView
@@ -42,10 +42,11 @@ define([
         model : this.model.get("audioVideo"),
       });
       
-      // Create a DatumStateValueReadView
-      this.stateView = new DatumStateValueReadView({
+      // Create a DatumStateReadView
+      this.stateView = new DatumStateReadView({
         model : this.model.get("state"),
       });
+      this.stateView.format = "datum";
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -75,7 +76,7 @@ define([
     /**
      * The stateView is a partial of the DatumReadView.
      */
-    stateView : DatumStateValueReadView,
+    stateView : DatumStateReadView,
 
     /**
      * The tagview is a partial of the DatumReadView.
