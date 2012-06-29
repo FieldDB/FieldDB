@@ -23,6 +23,7 @@ define([
     initialize : function() {
       Utils.debug("USER init: " + this.el);
       this.model = new User();
+      this.model.set("username","YourNewUserNameGoesHere");
       this.model.bind("change", this.render, this);
 
     },
@@ -36,6 +37,18 @@ define([
      * Events that the UserWelcomeView is listening to and their handlers.
      */
     events : {
+      "blur .username" : function(){
+        this.model.set("username",$(".username").val());
+      },
+      "click .new-user-button" : function(){
+        $(".confirm-password").show();
+      },
+      "click .build-new-user" : function(){
+        if($(".username").val() != "" && ( $(".password").val() == $(".confirm-password").val() ) && $(".email").val() != null ){
+          alert("Contacting server creating new user");
+          //TODO post to server to build the user, sync etc.
+        }
+      },
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
         window.loadApp(null, function(){
@@ -77,8 +90,7 @@ define([
         // Display the UserWelcomeView
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
-
-
+        $(".username").focus();
       } else {
         Utils.debug("\User model was undefined");
       }
