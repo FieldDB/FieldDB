@@ -21,11 +21,11 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER init: " + this.el);
+      Utils.debug("USER welcome init: " + this.el);
       this.model = new User();
       this.model.set("username","YourNewUserNameGoesHere");
       this.model.bind("change", this.render, this);
-
+      this.url = "http://localhost:3000";
     },
 
     /**
@@ -43,12 +43,45 @@ define([
       "click .new-user-button" : function(){
         $(".confirm-password").show();
       },
-      "click .build-new-user" : function(){
-        if($(".username").val() != "" && ( $(".password").val() == $(".confirm-password").val() ) && $(".email").val() != null ){
-          alert("Contacting server creating new user");
-          //TODO post to server to build the user, sync etc.
+      "click .register-new-user" : function(){
+        Utils.debug("Attempting to register a new user: " + this.el);
+        var dataToPost = {};
+        dataToPost.email = $(".email").val();
+        dataToPost.username = $(".username").val();
+        dataToPost.password = $(".password").val();
+        
+
+        if (dataToPost.username != ""
+          && (dataToPost.password == $(".to-confirm-password").val())
+          && dataToPost.email != "") {
+          Utils
+          .debug("User has entered an email and the passwords match. ");
+
+          /*
+           * Contact the server and register the new user
+           */
+          $.ajax({
+            type : 'POST',
+            url : this.url + "/register",
+            data : dataToPost,
+            success : function() {
+              alert("success");
+            },
+            dataType : ""
+          });
+        } else{
+          Utils
+          .debug("User has not entered good info. ");
+          alert("Sorry, something is wrong with your password or email. ");
         }
       },
+      "click .register-twitter" : function(){
+        
+      },
+      "click .register-facebook" : function(){
+        
+      },
+      
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
         window.loadApp(null, function(){
