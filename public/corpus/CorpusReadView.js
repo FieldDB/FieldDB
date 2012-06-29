@@ -100,7 +100,7 @@ define([
     } ,
        
     newDatum : function() {
-      app.router.showFullscreenDatum(this.model.get("title"), "new");
+      app.router.showDashboard();
     },
   });
 
