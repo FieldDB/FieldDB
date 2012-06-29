@@ -1,9 +1,9 @@
 define([
     "use!backbone", 
     "user/UserGeneric", 
-    "datum/Datum", 
-    "data_list/DataList",
-    "session/Session"
+ //   "datum/Datum", 
+ //   "data_list/DataList",
+ //   "session/Session"
 ], function(
     Backbone
 ) {
