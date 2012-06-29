@@ -34,6 +34,14 @@
   top: 75px;
 }
 
+#corpus-quickview{
+	height: 100px;
+}
+
+#description{
+	width: 160px;
+	float: left;
+}
 
 .corpusMenu{
 	float: right;

@@ -14,7 +14,7 @@ define([
   {
     /**
      * @class This is the view of the Comment Model. The Comment is a
-     *        textarea that includes a userid and a timestamp.
+     *        textarea that includes a username and a timestamp.
      * 
      * @extends Backbone.View
      * @constructs
@@ -48,7 +48,7 @@ define([
 //      var JSONtorender = {};
 //      if ( typeof this.model != undefined){
 //    	  JSONtorender.timestamp = this.model.timestamp.toString();
-//    	  JSONtorender.userid = this.model.userid;
+//    	  JSONtorender.username = this.model.username;
 //      }
       $(this.el).html(this.template(this.model.toJSON()));
       
