@@ -231,7 +231,7 @@ define([
     authenticatePreviousUser : function() {
       var userid = localStorage.getItem("userid");
       if (userid) {
-        
+        //TODO this needs testing
         // Save the previous user in our Models
         this.model.get("user").set("id",userid);
         this.model.get("user").fetch();
