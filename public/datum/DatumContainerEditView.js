@@ -6,6 +6,7 @@ define([
     "datum/Datum",
     "datum/Datums",
     "datum/DatumEditView",
+    "datum/DatumTags",
     "app/UpdatingCollectionView"
 ], function(
     Backbone,
@@ -15,6 +16,7 @@ define([
     Datum,
     Datums,
     DatumEditView,
+    DatumTags,
     UpdatingCollectionView
 ) {
   var DatumContainerEditView = Backbone.View.extend(
@@ -43,7 +45,8 @@ define([
       for (var i = 0; i < app.get("authentication").get("user").get("prefs").get("numVisibleDatum"); i++) {
         this.datums.add(new Datum({
           datumFields : app.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone()
+          datumStates : app.get("corpus").get("datumStates").clone(),
+          datumTags : new DatumTags()
         }));
       }
     },
