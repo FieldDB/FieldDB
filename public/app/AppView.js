@@ -231,6 +231,8 @@ define([
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
       this.term.initFS(false, 1024 * 1024);
+      
+      this.openPreviousCorpus();
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -367,6 +369,22 @@ define([
         });
       });
     },
+    replicateDatabasesWithCallback : function(callback) {
+      this.fullScreenDatumView.model.pouch(function(err, db) {
+        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate to");
+          Utils.debug(resp);
+          Utils.debug(err);
+          
+        });
+        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+          Utils.debug("Replicate from");
+          Utils.debug(resp);
+          Utils.debug(err);
+          callback();
+        });
+      });
+    },
     /**
      * Synchronize the activity feed server and local databases.
      * TODO change this line in case it is called on the wrong model
@@ -390,6 +408,16 @@ define([
     saveScreen : function() {
       // Save the FullScreenDatum page, if necessary
       this.fullScreenDatumView.saveScreen();
+    },
+    openPreviousCorpus : function(){
+      var corpusid = localStorage.getItem("corpusid");
+      if(corpusid){
+        //TODO
+      }else{
+        corpuses = this.authView.model.get("user").get("corpuses");
+        this.model.get("corpus").id = corpuses[0];
+        this.model.get("corpus").fetch();
+      }
     }
   });
 
