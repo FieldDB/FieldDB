@@ -302,10 +302,10 @@ define([
       window.app.router.showFullscreenCorpus();
     },
     showEditable :function(){
-      alert("this will contact the router and ask it to render the other one.");
+      window.app.router.showEditableCorpus();
     },
     showReadonly : function(){
-      alert("this will contact the router and ask it to render the other one.");      
+      window.app.router.showReadonlyCorpus();
     }
   });
 
