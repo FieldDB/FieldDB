@@ -94,6 +94,11 @@ define([
      
       
       // Create five corpus views
+      this.corpusEditLeftSideView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusEditLeftSideView.format = "leftSide";
+      
       this.corpusReadLeftSideView = new CorpusReadView({
         model : this.model.get("corpus")
       });
@@ -282,6 +287,7 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display the Corpus Views
+        this.corpusEditLeftSideView.render();
         this.corpusReadLeftSideView.render();
         this.corpusEditEmbeddedView.render();
         this.corpusReadEmbeddedView.render();
