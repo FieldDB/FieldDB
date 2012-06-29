@@ -89,37 +89,66 @@ define([
      */
     initialize : function() {
       Utils.debug("APP init: " + this.el);
+
+      var userToBePassedAround = new User();
+     
       
-      // Create a CorpusReadView for the Corpus in the App's left well
-      this.corpusReadView = new CorpusReadView({
+      // Create five corpus views
+      this.corpusEditLeftSideView = new CorpusEditView({
         model : this.model.get("corpus")
       });
-      this.corpusReadView.format = "leftSide";
+      this.corpusEditLeftSideView.format = "leftSide";
+      
+      this.corpusReadLeftSideView = new CorpusReadView({
+        model : this.model.get("corpus")
+      });
+      this.corpusReadLeftSideView.format = "leftSide";
+
+      this.corpusEditEmbeddedView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusEditEmbeddedView.format = "centreWell";
+      
+      this.corpusReadEmbeddedView = new CorpusReadView({
+        model : this.model.get("corpus")
+      });
+      this.corpusReadEmbeddedView.format = "centreWell";
+      
+      this.corpusEditFullscreenView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusEditFullscreenView.format = "fullscreen";
+      
+      this.corpusReadFullscreenView = new CorpusReadView({
+        model : this.model.get("corpus")
+      });
+      this.corpusReadFullscreenView.format = "fullscreen";
+      
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
       this.fullScreenDatumView = new DatumEditView({
         model : new Datum({
           datumFields : this.model.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone()
+          datumStates : this.model.get("corpus").get("datumStates").clone()
         })
       });
       
       var sessionToBePassedAround = this.model.get("currentSession");
       sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
       
-      // Create a SessionEditView
+      /*
+       * Set up two session views
+       */ 
       this.sessionEditView = new SessionEditView({
         model : sessionToBePassedAround
       });
       
-      // Create a SessionSummaryReadView
       this.sessionSummaryView = new SessionReadView({
         model : sessionToBePassedAround
       });
       this.sessionSummaryView.format = "leftSide";
       
-      var userToBePassedAround = new User();
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -130,68 +159,64 @@ define([
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : userToBePassedAround
+        model : this.authView.model.get("user")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : userToBePassedAround
+        model : this.authView.model.get("user")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : userToBePassedAround
+        model : this.authView.model.get("user")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : userToBePassedAround
+        model : this.authView.model.get("user")
       });
       this.modalReadUserView.format = "modal";
 
       // Create a UserWelcomeView modal
       this.welcomeUserView = new UserWelcomeView({
-        model : userToBePassedAround
+        model : this.authView.model.get("user")
       });
       
       /*
        * Set up the four data list views
        */
-      var dataListToBePassedAround = new DataList({
-        // TODO Remove this dummy data once we have real datalists working
-        datumIds : [
-          "A3F5E512-56D9-4437-B41D-684894020254",
-          "2F4D4B26-E863-4D49-9F40-1431E737AECD",
-          "9A465EF7-5001-4832-BABB-81ACD46EEE9D"
-        ]
-      });
+      var dataListToBePassedAround = new DataList();
+      
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
-      });  
+      }); 
+      this.dataListEditLeftSideView.loadSample();
       this.dataListEditLeftSideView.format = "leftSide";
    
       this.dataListEditFullscreenView = new DataListEditView({
-        model : dataListToBePassedAround
+        model : this.dataListEditLeftSideView.model
       });  
       this.dataListEditFullscreenView.format = "fullscreen";
 
       this.dataListReadLeftSideView = new DataListReadView({
-        model : dataListToBePassedAround
+        model :  this.dataListEditLeftSideView.model
       });  
       this.dataListReadLeftSideView.format = "leftSide";
    
       this.dataListReadFullscreenView = new DataListReadView({
-        model : dataListToBePassedAround
+        model :  this.dataListEditLeftSideView.model
       });  
       this.dataListReadFullscreenView.format = "fullscreen";
       
-      // Create a SearchEditView
+      /*
+       *  Create search views
+       */
       this.searchView = new SearchEditView({
         model : new Search()
       });
       this.searchView.format = "top";
       
-      // Create an AdvancedSearchView
       this.advancedSearchView = new SearchEditView({
         model : new Search()
       });
@@ -199,7 +224,7 @@ define([
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
-        model : userToBePassedAround.get("prefs")
+        model : this.authView.model.get("user").get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -209,19 +234,15 @@ define([
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
-        model : new HotKey()
-      });  
+        model : this.authView.model.get("user").get("hotkeys")
+      });   
       
       // Create an ExportREadView
       this.exportView = new ExportReadView({
         model : new Export()
       });
 
-      // Create a CorpusEditView
-      this.corpusEditView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusEditView.format = "centreWell";
+     
       
       // Create an ImportEditView
       this.importView = new ImportEditView({
@@ -232,8 +253,7 @@ define([
       this.term = new Terminal('terminal');
       this.term.initFS(false, 1024 * 1024);
       
-      this.openPreviousCorpus();
-
+      
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
       window.setInterval(this.saveScreen, 10000);     
@@ -266,8 +286,13 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CorpusReadView
-        this.corpusReadView.render();
+        // Display the Corpus Views
+        this.corpusEditLeftSideView.render();
+        this.corpusReadLeftSideView.render();
+        this.corpusEditEmbeddedView.render();
+        this.corpusReadEmbeddedView.render();
+        this.corpusEditFullscreenView.render();
+        this.corpusReadFullscreenView.render();
         
         this.exportView.render();
         
@@ -314,8 +339,7 @@ define([
         // Display the ImportEditView
         this.importView.render();
         
-        // Display the CorpusFullscreenView
-        this.corpusEditView.render();
+        
       } else {
         Utils.debug("\tApp model is not defined");
       }
@@ -328,25 +352,26 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      // Sample Corpus data
-      this.model.get("corpus").set({
-        "title" : "Quechua Corpus",
-        "titleAsUrl": "Quechua_Corpus",
-        "description" : "This is a corpus which will let you explore the app and see how it works. "
-            + "\nIt contains some data from one of our trips to Cusco, Peru."
-      });
-
-      // Sample Session data
-      this.model.get("currentSession").set("sessionFields", new DatumFields([
-        {label: "user", value: ""},
-        {label: "consultants", value: "John Doe and Mary Stewart"},
-        {label: "language", value: ""},
-        {label: "dialect", value: ""},
-        {label: "dateElicited", value: new Date()},
-        {label: "dateSEntered", value: new Date()},
-        {label: "goal", value: "To Win!"}
-      ]));
-        
+      //these old methods were over writing the model with new data, effectively deleting old models which will be a terrible thing ot do in prodution
+//      // Sample Corpus data
+//      this.model.get("corpus").set({
+//        "title" : "Quechua Corpus",
+//        "titleAsUrl": "Quechua_Corpus",
+//        "description" : "This is a corpus which will let you explore the app and see how it works. "
+//            + "\nIt contains some data from one of our trips to Cusco, Peru."
+//      });
+//
+//      // Sample Session data
+//      this.model.get("currentSession").set("sessionFields", new DatumFields([
+//        {label: "user", value: ""},
+//        {label: "consultants", value: "John Doe and Mary Stewart"},
+//        {label: "language", value: ""},
+//        {label: "dialect", value: ""},
+//        {label: "dateElicited", value: new Date()},
+//        {label: "dateSEntered", value: new Date()},
+//        {label: "goal", value: "To Win!"}
+//      ]));
+//        
       this.authView.loadSample();
       
       this.searchView.loadSample();
@@ -408,17 +433,8 @@ define([
     saveScreen : function() {
       // Save the FullScreenDatum page, if necessary
       this.fullScreenDatumView.saveScreen();
-    },
-    openPreviousCorpus : function(){
-      var corpusid = localStorage.getItem("corpusid");
-      if(corpusid){
-        //TODO
-      }else{
-        corpuses = this.authView.model.get("user").get("corpuses");
-        this.model.get("corpus").id = corpuses[0];
-        this.model.get("corpus").fetch();
-      }
     }
+    
   });
 
   return AppView;
