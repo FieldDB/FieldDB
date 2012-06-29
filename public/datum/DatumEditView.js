@@ -114,7 +114,6 @@ define([
       
       if (this.model != undefined) {        
         // Display the DatumEditView
-        this.setElement($("#datum-embedded"));
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display StateView
