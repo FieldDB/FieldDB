@@ -37,7 +37,6 @@ define([
       });
       this.userView.format = "link";
       this.userView.setElement($("#user-quickview"));
-//      this.userView.loadSample();
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
@@ -247,7 +246,8 @@ define([
         $('#user-welcome-modal').modal("show");
         this.model.set("state", "loggedOut");
 
-        this.authenticateAsPublic();
+//        this.authenticateAsPublic(); //TODO this will be used in production
+        this.authenticate("sapir");
       }
     },
     
