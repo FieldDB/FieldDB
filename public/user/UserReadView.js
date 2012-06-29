@@ -113,9 +113,7 @@ define([
         ],
         "dataLists": ["45444C8F-D707-426D-A422-54CD4041A5A1"
         ],
-        "prefs": {
-            "skin": oldprefs
-        },
+        "prefs": oldprefs,
         "teams": [
         ]
      });
