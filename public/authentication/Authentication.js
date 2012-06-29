@@ -31,10 +31,7 @@ define([
         Utils.debug("Error in Authentication  : " + error);
       });
       
-      this.on('all', function(e) {
-        Utils.debug("Authentication, " + this.get('username') + " event: "
-            + JSON.stringify(e));
-      });
+      
     },
 
     defaults : {

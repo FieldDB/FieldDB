@@ -304,6 +304,12 @@ define([
       $("#dashboard-view").show();
       $('#export-modal').modal("show");
     },
+    showEditableCorpus : function(corpusid){
+      window.appView.renderEditableCorpusViews(corpusid);
+    },
+    showReadonlyCorpus : function(corpusid){
+      window.appView.renderReadonlyCorpusViews(corpusid);
+    },
     
     hideEverything: function() {
       $("#dashboard-view").hide();

@@ -1,8 +1,10 @@
 define([ 
     "use!backbone", 
+    "hotkey/HotKey",
     "user/UserPreference"
 ], function(
     Backbone,
+    HotKey,
     UserPreference
 ) {
   var UserGeneric = Backbone.Model.extend(
@@ -39,6 +41,7 @@ define([
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
+      this.set("hotkeys", new HotKey()); //TODO dont know where this should go now, whether it goes in UserGeneric, or in the defaults of User since thats where everything else is.
     },
     
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl

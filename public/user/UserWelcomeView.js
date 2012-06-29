@@ -42,10 +42,15 @@ define([
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
         this.$el.hide();//TODO @trisapeace please code review this, how was it hiding the modal before?
-        window.appView.loadSample();
+        window.appView.replicateDatabasesWithCallback(function(){
+          window.appView.authView.loadSample();
+        });
       },
       "click .sync_my_data" : function(){
         console.log("hiding user welcome, syncing users data");
+        window.appView.replicateDatabasesWithCallback(function(){
+          window.appView.authView.authenticate($("#welcomeusername"));
+        });
         this.$el.hide();
       }
     },
