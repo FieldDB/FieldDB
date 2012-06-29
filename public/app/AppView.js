@@ -231,6 +231,8 @@ define([
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
       this.term.initFS(false, 1024 * 1024);
+      
+      this.openPreviousCorpus();
 
       // Set up a timeout event every 10sec
       _.bindAll(this, "saveScreen");
@@ -390,6 +392,16 @@ define([
     saveScreen : function() {
       // Save the FullScreenDatum page, if necessary
       this.fullScreenDatumView.saveScreen();
+    },
+    openPreviousCorpus : function(){
+      var corpusid = localStorage.getItem("corpusid");
+      if(corpusid){
+        //TODO
+      }else{
+        corpuses = this.authView.model.get("user").get("corpuses");
+        this.model.get("corpus").id = corpuses[0];
+        this.model.get("corpus").fetch();
+      }
     }
   });
 
