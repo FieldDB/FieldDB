@@ -56,36 +56,48 @@ require([
     "app/AppView",
     "app/AppRouter",
     "use!terminal",
+    "user/UserWelcomeView",
     "libs/Utils"
 ], function(
     App,
     AppView,
     AppRouter,
-    Terminal
+    Terminal,
+    UserWelcomeView
 ) {
-  // Load the App
+  window.loadApp= function(a, callback){
+    if (a == null){
+      a = new App();
+    }
+    window.app = a;
+    
+    // Create and display the AppView
+    window.appView = new AppView({model: a}); 
+    window.appView.render();
+    
+    // Start the Router
+    app.router = new AppRouter();
+    Backbone.history.start();
+    
+    if(typeof callback == "function"){
+      callback();
+    }
+    
+    
+  };
+  // Load the App from localStorage
   var a = localStorage.getItem("app");
   if (a) {
     Utils.debug("Loading app from localStorage");
     a = JSON.parse(a);
     a = new App(a); 
+    window.loadApp(a);
   } else {
     Utils.debug("Loading fresh app");
-    a = new App();
+    // Create a UserWelcomeView modal
+    welcomeUserView = new UserWelcomeView();
+    welcomeUserView.render();
+    $('#user-welcome-modal').modal("show");
   }
-  window.app = a;
-  
-  // Create and display the AppView
-  window.appView = new AppView({model: a}); 
-  window.appView.render();
-  
-  // Start the Router
-  app.router = new AppRouter();
-  Backbone.history.start();
-  
-  
-
-  // Load the sample App
-//  window.appView.loadSample();
   
 });
