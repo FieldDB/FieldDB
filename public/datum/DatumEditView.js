@@ -67,26 +67,6 @@ define([
      * The underlying model of the DatumEditView is a Datum.
      */
     model : Datum,
-
-    /**
-     * The AudioVideoEditView is not a partial of the DatumEditView, it must be called to render it.
-     */
-    audioVideoEditView : AudioVideoEditView,
-
-    /**
-     * The datumStateView is a partial of the DatumEditView.
-     */
-    datumStateView : DatumStateEditView,
-
-    /**
-     * The tagview is a partial of the DatumEditView.
-     */
-    datumTagsView : UpdatingCollectionView,
-
-    /**
-     * The datumFieldsView displays the all the DatumFieldEditViews.
-     */
-    datumFieldsView : UpdatingCollectionView,
     
     /**
      * Events that the DatumEditView is listening to and their handlers.
@@ -271,14 +251,14 @@ define([
     insertNewDatumTag : function() {
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
-        "tag" : this.$el.children(".datum").children(".add_tag").val()
+        "tag" : this.$el.find(".add_tag").val()
       })
       
       // Add the new DatumTag to the Datum's list for datumTags 
       this.model.get("datumTags").add(t);
       
       // Reset the "add" textbox
-      this.$el.children(".datum").children(".add_tag").val("");
+      this.$el.find(".add_tag").val("");
       
       needsSave = true;
       
