@@ -38,15 +38,17 @@ define([
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
     },
+    
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "click .new_datum" : "newDatum"
     },
+    
     /**
      * The underlying model of the CorpusReadView is a Corpus.
      */    
     model : Corpus,
-
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -88,12 +90,18 @@ define([
 
       return this;
     },
+    
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
     },
+    
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
-    }
+    } ,
+       
+    newDatum : function() {
+      app.router.showFullscreenDatum(this.model.get("title"), "new");
+    },
   });
 
   return CorpusReadView;

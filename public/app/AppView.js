@@ -15,7 +15,7 @@ define([
     "data_list/DataListReadView",
     "data_list/DataListEditView",
     "datum/Datum",
-    "datum/DatumEditView",
+    "datum/DatumContainerEditView",
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
@@ -52,7 +52,7 @@ define([
     DataListReadView,
     DataListEditView,
     Datum,
-    DatumEditView,
+    DatumContainerEditView,
     DatumFields,
     Export,
     ExportReadView,
@@ -96,15 +96,6 @@ define([
       });
       this.corpusReadView.format = "leftSide";
       
-      // Create a DatumView, cloning the default datum fields from the corpus 
-      // in case they changed 
-      this.fullScreenDatumView = new DatumEditView({
-        model : new Datum({
-          datumFields : this.model.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone()
-        })
-      });
-      
       var sessionToBePassedAround = this.model.get("currentSession");
       sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
       
@@ -119,11 +110,11 @@ define([
       });
       this.sessionSummaryView.format = "leftSide";
       
-      var userToBePassedAround = new User();
+      var userToBePassedAround = this.model.get("authentication").get("user");
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
-        model : new Authentication({user: userToBePassedAround})
+        model : this.model.get("authentication")
       });
       
       /* 
@@ -153,6 +144,9 @@ define([
       this.welcomeUserView = new UserWelcomeView({
         model : userToBePassedAround
       });
+      
+      // Create a DatumContainerEditView
+      this.datumsView = new DatumContainerEditView();
       
       /*
        * Set up the four data list views
@@ -267,16 +261,17 @@ define([
         // Display the CorpusReadView
         this.corpusReadView.render();
         
+        // Display the ExportView
         this.exportView.render();
-        
-        // Display the DatumEditView
-        this.fullScreenDatumView.render();
         
         // Display the User Views
         this.fullScreenEditUserView.render();
         this.fullScreenReadUserView.render();
         this.modalEditUserView.render();
         this.modalReadUserView.render();
+        
+        // Display the Datum Container View
+        this.datumsView.render();
         
         // Display the UserWelcomeView
         this.welcomeUserView.render();
@@ -354,7 +349,7 @@ define([
      * Synchronize the server and local databases.
      */
     replicateDatabases : function() {
-      this.fullScreenDatumView.model.pouch(function(err, db) {
+      (new Datum()).pouch(function(err, db) {
         db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
           Utils.debug("Replicate to");
           Utils.debug(resp);
@@ -388,8 +383,8 @@ define([
     },
     
     saveScreen : function() {
-      // Save the FullScreenDatum page, if necessary
-      this.fullScreenDatumView.saveScreen();
+      // Save the Datum pages, if necessary
+      this.datumsView.saveScreen();
     }
   });
 
