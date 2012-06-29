@@ -73,6 +73,9 @@ define([
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
+      if(this.model.get("user") != undefined){
+        this.model.set( "gravatar", this.model.get("user").get("gravatar") );
+      }
       if (this.model != undefined) {
         // Display the AuthenticationEditView
         this.setElement($("#authentication-embedded"));
