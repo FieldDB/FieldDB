@@ -97,9 +97,11 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         
         // Display StateView
+        this.datumStateView.el = this.$(".datum_state_edit");
         this.datumStateView.render();
         
         // Display audioVideo View
+        this.audioVideoEditView.el = this.$(".audio_video");
         this.audioVideoEditView.render();
         
         // Display the DatumTagsView
