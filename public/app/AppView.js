@@ -93,11 +93,32 @@ define([
       var userToBePassedAround = new User();
      
       
-      // Create a CorpusReadView for the Corpus in the App's left well
-      this.corpusReadView = new CorpusReadView({
+      // Create five corpus views
+      this.corpusReadLeftSideView = new CorpusReadView({
         model : this.model.get("corpus")
       });
-      this.corpusReadView.format = "leftSide";
+      this.corpusReadLeftSideView.format = "leftSide";
+
+      this.corpusEditEmbeddedView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusEditEmbeddedView.format = "centreWell";
+      
+      this.corpusReadEmbeddedView = new CorpusReadView({
+        model : this.model.get("corpus")
+      });
+      this.corpusReadEmbeddedView.format = "centreWell";
+      
+      this.corpusEditFullscreenView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusEditFullscreenView.format = "fullscreen";
+      
+      this.corpusReadFullscreenView = new CorpusReadView({
+        model : this.model.get("corpus")
+      });
+      this.corpusReadFullscreenView.format = "fullscreen";
+      
       
       // Create a DatumView, cloning the default datum fields from the corpus 
       // in case they changed 
@@ -216,11 +237,7 @@ define([
         model : new Export()
       });
 
-      // Create a CorpusEditView
-      this.corpusEditView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusEditView.format = "centreWell";
+     
       
       // Create an ImportEditView
       this.importView = new ImportEditView({
@@ -264,8 +281,12 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the CorpusReadView
-        this.corpusReadView.render();
+        // Display the Corpus Views
+        this.corpusReadLeftSideView.render();
+        this.corpusEditEmbeddedView.render();
+        this.corpusReadEmbeddedView.render();
+        this.corpusEditFullscreenView.render();
+        this.corpusReadFullscreenView.render();
         
         this.exportView.render();
         
@@ -312,8 +333,7 @@ define([
         // Display the ImportEditView
         this.importView.render();
         
-        // Display the CorpusFullscreenView
-        this.corpusEditView.render();
+        
       } else {
         Utils.debug("\tApp model is not defined");
       }
