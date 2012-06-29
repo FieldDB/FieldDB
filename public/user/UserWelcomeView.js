@@ -25,7 +25,7 @@ define([
       this.model = new User();
       this.model.set("username","YourNewUserNameGoesHere");
       this.model.bind("change", this.render, this);
-      this.url = "http://localhost:3000";
+      this.url = "https://localhost:3001";
     },
 
     /**
