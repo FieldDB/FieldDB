@@ -347,6 +347,25 @@ define([
       return this;
     },
     
+    renderEditableCorpusViews: function(corpusid){
+      // Display the Corpus Views
+      this.corpusEditLeftSideView.render();
+//      this.corpusReadLeftSideView.render();
+      this.corpusEditEmbeddedView.render();
+//      this.corpusReadEmbeddedView.render();
+      this.corpusEditFullscreenView.render();
+//      this.corpusReadFullscreenView.render();
+    },
+    renderReadonlyCorpusViews: function(corpusid){
+      // Display the Corpus Views
+//      this.corpusEditLeftSideView.render();
+      this.corpusReadLeftSideView.render();
+//      this.corpusEditEmbeddedView.render();
+      this.corpusReadEmbeddedView.render();
+//      this.corpusEditFullscreenView.render();
+      this.corpusReadFullscreenView.render();
+    },
+    
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
