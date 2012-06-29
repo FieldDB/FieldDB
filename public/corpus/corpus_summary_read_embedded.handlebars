@@ -1,32 +1,44 @@
-<i class="icons icon-resize-full pull-right"></i>
-<i class="icons icon-edit pull-right"></i>
-<div class="corpusMenu">
-
-	<div class="btn-group">
-		<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-			New <span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu">
-			<li><a class="new_datum" href="#corpus/{{titleAsUrl}}/datum/new">New
-					Datum</a></li>
-			<li><a class="data-list-embedded"
-				href="#corpus/{{titleAsUrl}}/datalist">New Data List</a></li>
-			<li><a class="new_session"
-				href="#corpus/{{titleAsUrl}}/session/12">New Session</a></li>
-			<li><a class="new_corpus" href="#corpus/">New Corpus</a></li>
-		</ul>
+<!-- This div aligns the title with the icons in the corner -->
+<div>
+	<div>
+		<i class="icons icon-resize-small pull-right"></i> 
+		<i class="icons icon-edit pull-right"></i>
 	</div>
-
-	<div class="btn-group">
-		<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-			Data <span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu">
-			<li><a class="" href="#import">Import</a></li>
-			<li><a class="" href="#corpus/{{titleAsUrl}}/export">Export</a></li>
-		</ul>
+	<div>
+		<h3>{{title}}</h3>
 	</div>
 </div>
 
-<h3>{{title}}</h3>
-<p>{{description}}</p>
+<!-- This div aligns the description with the menu buttons -->
+<div>
+	<div id="description">
+		<h5>{{description}}</h5>
+	</div>
+	<div class="btn-group corpusMenu">
+		<div>
+			<button class="btn btn-primary dropdown-toggle"	data-toggle="dropdown">
+				New <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<li><a class="new_datum"
+					href="#corpus/{{titleAsUrl}}/datum/new">New Datum</a></li>
+				<li><a class="data-list-embedded"
+					href="#corpus/{{titleAsUrl}}/datalist">New Data List</a></li>
+				<li><a class="new_session"
+					href="#corpus/{{titleAsUrl}}/session/12">New Session</a></li>
+				<li><a class="new_corpus" href="#corpus/">New Corpus</a></li>
+			</ul>
+		</div>
+		<div>
+			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+				Data <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<li><a class="" href="#import">Import</a></li>
+				<li><a class="" href="#corpus/{{titleAsUrl}}/export">Export</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
