@@ -73,7 +73,6 @@ define( [
           datumStates : this.model.toJSON()
         };
         
-        this.setElement(".datum_state_edit");
         $(this.el).html(this.templateValue(jsonToRender));
       }
       
