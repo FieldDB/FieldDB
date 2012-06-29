@@ -73,6 +73,9 @@ define([
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
+      if(this.model.get("user") != undefined){
+        this.model.set( "gravatar", this.model.get("user").get("gravatar") );
+      }
       if (this.model != undefined) {
         // Display the AuthenticationEditView
         this.setElement($("#authentication-embedded"));
@@ -101,7 +104,7 @@ define([
           this.$el.children(".user").html("");
         }
         
-        Utils.debug("\trendering login: " + this.model.get("userid"));
+        Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
         Utils.debug("\tAuthentication model was undefined.");
       }
@@ -110,17 +113,17 @@ define([
     },
     
     /**
-     * Logout removes the stringified user and the userid from local storage,
+     * Logout removes the stringified user and the username from local storage,
      * and then authenticates public into the app.
      */
     logout : function() {
-      localStorage.removeItem("userid");
+      localStorage.removeItem("username");
       
       this.authenticateAsPublic();
     },
     
     /**
-     * Login tries to get the userid and password from the user interface, and
+     * Login tries to get the username and password from the user interface, and
      * calls the view's authenticate function.
      */
     login : function() {
@@ -140,7 +143,7 @@ define([
       
       this.model.set({
         user : this.userView.model,
-        userid : this.userView.model.get("userid"),
+        username : this.userView.model.get("username"),
         state : "loggedIn",
         gravatar :  this.userView.model.get("gravatar") 
       });
@@ -148,14 +151,14 @@ define([
     },
     
     /**
-     * Authenticate accepts a userid and password, creates a simple user, and
+     * Authenticate accepts a username and password, creates a simple user, and
      * passes that user to the authentication module for real authentication
      * against a server or local database. The Authenticate function also sends a
      * callback which will render views once the authentication server has
      * responded. If the authentication result is null, it can flash an error to
      * the user and then logs in as public.
      * 
-     * @param userid {String} The userid to authenticate.
+     * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
     authenticate : function(username, password) {
@@ -189,12 +192,12 @@ define([
         self.userView.model = u;
         self.model.set({
           user : u,
-          userid : u.get("userid"),
+          username : u.get("username"),
           state : "loggedIn"
         });
 
         // Save the authenticated user in localStorage
-//        localStorage.setItem("userid", u.get("userid"));
+//        localStorage.setItem("username", u.get("username"));
       });
     },
     
@@ -211,12 +214,12 @@ define([
       // Save the public user in our Models
       this.model.set({
         user : u,
-        userid : u.get("userid"),
+        username : u.get("username"),
         state : "logggedOut"
       });
       
       // Save the public user in localStorage
-//      localStorage.setItem("userid", u.get("userid"));
+//      localStorage.setItem("username", u.get("username"));
     },
     
     /**
@@ -228,13 +231,13 @@ define([
      * 
      */
     authenticatePreviousUser : function() {
-      var userid = localStorage.getItem("userid");
-      if (userid) {
+      var username = localStorage.getItem("username");
+      if (username) {
         //TODO this needs testing
         // Save the previous user in our Models
-        this.model.get("user").set("id",userid);
+        this.model.get("user").set("id",username);
         this.model.get("user").fetch();
-        this.model.set("userid", userid);
+        this.model.set("username", username);
         
         if (this.model.staleAuthentication) {
           showQuickAuthenticateView();

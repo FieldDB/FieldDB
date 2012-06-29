@@ -61,7 +61,7 @@ define([
 //        login: function(username, password) {
 //          if (this.get("username") == username) {
 //            if (this.get("password") == password) {
-//              window.userid = username; 
+//              window.username = username; 
 //              return true;	   
 //            }
 //          }
