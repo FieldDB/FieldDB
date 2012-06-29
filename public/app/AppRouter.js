@@ -32,13 +32,9 @@ define([
 
     routes : {
       "corpus/:corpusId"                : "showFullscreenCorpus", 
-      "corpus/:corpusName"              : "showFullscreenCorpus",               // @deprecated 
       "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum",
-      "corpus/:corpusName/session/:id"  : "showEmbeddedSession",                // @deprecated
-      "corpus/:corpusName/datalist/:id" : "showFullscreenDataList",             // @deprecated
       "corpus/:corpusName/search"       : "showAdvancedSearch",
-      "corpus/"                         : "showFullscreenCorpus",
-      "corpus/:corpusName/export"       : "showExport",                         // @deprecated 
+      "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListId"                : "showFullscreenDataList",
       "user/:username"                  : "showFullscreenUser",
       "import"                          : "showImport",
@@ -288,7 +284,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#import-embedded').show();
+      $('#import-modal').modal("show");
     },
     
     showExport : function(corpusName) {
@@ -296,7 +292,13 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#export-embedded').show();
+      $('#export-modal').modal("show");
+    },
+    showEditableCorpus : function(corpusid){
+      window.appView.renderEditableCorpusViews(corpusid);
+    },
+    showReadonlyCorpus : function(corpusid){
+      window.appView.renderReadonlyCorpusViews(corpusid);
     },
     
     hideEverything: function() {
@@ -305,19 +307,10 @@ define([
       $("#data-list-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
-      $("#corpus-settings-modal").hide();
-      $('#export-embedded').hide();
-      $('#import-embedded').hide();
-      $("#hotkey-settings-modal").hide();
       $("#search-fullscreen").hide();
       $("#search-embedded").hide();
       $("#session-embedded").hide();
-      $("#terminal-modal").hide();
-      $("#user-modal").hide();
       $('#user-fullscreen').hide();
-      $("#user-preferences-modal").hide();
-      $("#user-welcome-modal").hide();
-      
     }
   });
 

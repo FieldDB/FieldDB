@@ -3,12 +3,13 @@ define([
     "use!handlebars",
     "text!corpus/corpus_edit_fullscreen.handlebars",
     "text!corpus/corpus_edit_embedded.handlebars",
+    "text!corpus/corpus_summary_edit_embedded.handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentEditView",
     "data_list/DataLists",
-    "data_list/DataListReadLinkView",
+    "data_list/DataListReadView",
     "datum/DatumField",
     "datum/DatumFieldEditView",
     "datum/DatumState",
@@ -24,12 +25,13 @@ define([
     Handlebars,
     corpusFullscreenTemplate,
     corpusWellTemplate,
+    corpusSummaryTemplate,
     Corpus,
     Comment,
     Comments,
     CommentEditView,
     DataLists,
-    DataListReadLinkView,
+    DataListReadView,
     DatumField,
     DatumFieldEditView,
     DatumState,
@@ -51,7 +53,7 @@ define([
      * 
      * @property {String} format Must be set when the CorpusEditView is
      * initialized. Valid values are "centreWell" and
-     * "fullscreen".
+     * "fullscreen" and "leftSide"
      * 
      * @description Starts the Corpus and initializes all its children.
      * 
@@ -68,12 +70,13 @@ define([
         childViewTagName     : 'li'
       });
       
-//    Create a DataList List
-    this.dataListsView = new UpdatingCollectionView({
-      collection : this.model.get("dataLists"),
-      childViewConstructor : DataListReadLinkView,
-      childViewTagName     : 'li'
-    });
+      // Create a DataList List
+      this.dataListsView = new UpdatingCollectionView({
+        collection : this.model.get("dataLists"),
+        childViewConstructor : DataListReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "link"
+      });
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -177,6 +180,11 @@ define([
     templateCentreWell : Handlebars.compile(corpusWellTemplate),
     
     /**
+     * The Handlebars template rendered as the Summary
+     */
+    templateSummary : Handlebars.compile(corpusSummaryTemplate),
+    
+    /**
      * Renders the CorpusReadFullScreenView and all of its child Views.
      */
     render : function() {
@@ -184,7 +192,7 @@ define([
         Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
         if (this.model != undefined) {
           // Display the CorpusReadFullScreenView
-          this.setElement($("#corpus-fullscreen"));
+          this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
           // Display the CommentEditView
@@ -212,7 +220,32 @@ define([
           Utils.debug("\tCorpus model was undefined.");
         }
       } else if (this.format == "fullscreen") {
-        // TODO render full screen
+        this.setElement($("#corpus-fullscreen"));
+        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
+
+        // Display the UpdatingCollectionView
+        // this.dataListsView.render();
+
+        // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$('.datum_fields_settings');
+        this.datumFieldsView.render();
+
+        // Display the DatumStatesView
+        this.datumStatesView.el = this.$('.datum_state_settings');
+        this.datumStatesView.render();
+
+        // Display the PermissionsView
+        this.permissionsView.render();
+
+        // Display the SessionsView
+        // this.sessionsView.render();
+      } else if (this.format == "leftSide"){
+        this.setElement($("#corpus-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
       }
         
       return this;
@@ -267,6 +300,12 @@ define([
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
+    },
+    showEditable :function(){
+      window.app.router.showEditableCorpus();
+    },
+    showReadonly : function(){
+      window.app.router.showReadonlyCorpus();
     }
   });
 

@@ -1,16 +1,19 @@
-<li><img class="grav" src="{{gravatar}}" />{{username}}</li>
-
-<li id="login_form"><label>Username:</label> <input type="text"
-	id="username" name="username" value="sapir" /> <label>Password:</label>
-	<input type="password" id="password" size="100px" name="password"
-	value="wharf" /></li>
-
-<li id="login">
-	<button class="btn-mini login">Log In:</button>
+<li>
+  <div>
+  <img src="{{gravatar}}"/> {{userid}}
+  </div>
+  <div id="login_form">
+	  <label>Username:</label> 
+	  <input type="text" id="username" name="username" value="sapir" /> 
+		<label>Password:</label>
+		<input type="password" id="password" size="100px" name="password"
+		value="wharf" />
+	</div>
 </li>
-
-<li id="logout">
-	<button class="btn-mini logout">Log Out</button>
+<li>
+  <button id="logout" class="btn btn-inverse logout ">Log Out</button>
+  <button id="login" class="btn btn-inverse login ">Log In</button>
+</li>
 <li class="divider"></li>
 
 <li><a data-toggle="modal" href="#user-modal"><i class="icon-user"></i> User
