@@ -1,12 +1,14 @@
 define( [
     "use!backbone", 
     "use!handlebars", 
-    "text!permission/permissions.handlebars",
+    "text!permission/permissions_read_embedded.handlebars",
+    "text!permission/permissions_edit_embedded.handlebars",
     "permission/Permission",
     "permission/Permissions",
 ], function(Backbone,
             Handlebars, 
-            permissionsTemplate, 
+            permissions_read_embeddedTemplate, 
+            permissions_edit_embeddedTemplate, 
             Permission,
             Permissions) {
     var Permissions = Backbone.View.extend(
@@ -25,7 +27,8 @@ define( [
 
     classname : "permissions",
 
-    template : Handlebars.compile(permissionsTemplate),
+    templateread : Handlebars.compile(permissions_read_embeddedTemplate),
+    templateedit : Handlebars.compile(permissions_edit_embeddedTemplate),
 
     render : function() {
       
@@ -34,7 +37,7 @@ define( [
       
       this.setElement(".permissions_settings");
       var jsonToRender = {title: "Permission Settings"};
-      $(this.el).html(this.template(jsonToRender));    
+      $(this.el).html(this.templateedit(jsonToRender));    
       return this;
    
     }
