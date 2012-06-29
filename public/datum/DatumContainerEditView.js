@@ -42,13 +42,10 @@ define([
         childViewClass       : "well"
       });
       
-      for (var i = 0; i < app.get("authentication").get("user").get("prefs").get("numVisibleDatum"); i++) {
-        this.datums.add(new Datum({
-          datumFields : app.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone(),
-          datumTags : new DatumTags()
-        }));
-      }
+      this.updateDatums();
+      
+      // Listen for changes in the number of Datum to display
+      app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
     },
     
     events : {
@@ -99,6 +96,25 @@ define([
       this.format = "fullscreen";
       this.render();
       window.app.router.showFullscreenDatumContainer();
+    },
+    
+    updateDatums : function() {
+      var previousNumberOfDatum = this.datums.length;
+      var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+      
+      if (nextNumberOfDatum > previousNumberOfDatum) {
+        for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
+          this.datums.add(new Datum({
+          datumFields : app.get("corpus").get("datumFields").clone(),
+          datumStates : app.get("corpus").get("datumStates").clone(),
+          datumTags : new DatumTags()
+        }));
+        }
+      } else if (nextNumberOfDatum < previousNumberOfDatum) {
+        for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
+          this.datums.pop();
+        }
+      }
     }
   });
   
