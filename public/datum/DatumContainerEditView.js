@@ -90,10 +90,14 @@ define([
     },
     
     resizeSmall : function() {
+      this.format = "centreWell";
+      this.render();
       window.app.router.showDashboard();
     },
     
     resizeFullscreen : function() {
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenDatumContainer();
     }
   });
