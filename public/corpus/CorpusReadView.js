@@ -44,7 +44,9 @@ define([
     },
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "click .icon-edit": "showEditable",
+      "click .icon-check" : "showReadonly"
     },
     /**
      * The underlying model of the CorpusReadView is a Corpus.
@@ -107,6 +109,12 @@ define([
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
+    },
+    showEditable :function(){
+      alert("this will contact the router and ask it to render the other one.");
+    },
+    showReadonly : function(){
+      alert("this will contact the router and ask it to render the other one.");      
     }
   });
 

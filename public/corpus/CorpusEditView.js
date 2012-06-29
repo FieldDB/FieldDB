@@ -300,6 +300,12 @@ define([
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
+    },
+    showEditable :function(){
+      alert("this will contact the router and ask it to render the other one.");
+    },
+    showReadonly : function(){
+      alert("this will contact the router and ask it to render the other one.");      
     }
   });
 
