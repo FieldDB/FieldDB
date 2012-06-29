@@ -33,7 +33,6 @@ define([
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
-    "user/UserWelcomeView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -69,8 +68,7 @@ define([
     SessionReadView,
     User,
     UserEditView,
-    UserReadView,
-    UserWelcomeView
+    UserReadView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -178,10 +176,7 @@ define([
       });
       this.modalReadUserView.format = "modal";
 
-      // Create a UserWelcomeView modal
-      this.welcomeUserView = new UserWelcomeView({
-        model : this.authView.model.get("user")
-      });
+      
       
       /*
        * Set up the four data list views
@@ -304,9 +299,6 @@ define([
         this.fullScreenReadUserView.render();
         this.modalEditUserView.render();
         this.modalReadUserView.render();
-        
-        // Display the UserWelcomeView
-        this.welcomeUserView.render();
         
         // Display the Search Views
         this.searchView.render();
