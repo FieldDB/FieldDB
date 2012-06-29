@@ -65,6 +65,16 @@ define([
       this.hideEverything();
       $("#user-fullscreen").show();
     },
+    
+    /**
+     * Displays the fullscreen datum container page view.
+     */
+    showFullscreenDatumContainer : function() {
+      Utils.debug("In showFullscreenDatumContainer");
+      
+      this.hideEverything();
+      $("#datum-container-fullscreen").show();
+    },
 
     /**
      * Displays all of the corpus details and settings. 
@@ -299,6 +309,7 @@ define([
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();
       $("#data-list-fullscreen").hide();
+      $("#datum-container-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
       $("#search-fullscreen").hide();

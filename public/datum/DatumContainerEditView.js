@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars",
     "text!datum/datum_container_edit_embedded.handlebars",
+    "text!datum/datum_container_edit_fullscreen.handlebars",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumEditView",
@@ -9,7 +10,8 @@ define([
 ], function(
     Backbone,
     Handlebars,
-    datumContainerTemplate,
+    datumContainerEmbeddedTemplate,
+    datumContainerFullscreenTemplate,
     Datum,
     Datums,
     DatumEditView,
@@ -21,6 +23,8 @@ define([
     /**
      * @class The area where Datum appear. The number of datum that appear
      * is in UserPreference.
+     * 
+     * @property {String} format Valid values are "centreWell" or "fullscreen".
      * 
      * @extends Backbone.View
      * @constructs
@@ -44,16 +48,33 @@ define([
       }
     },
     
-    template : Handlebars.compile(datumContainerTemplate),
+    events : {
+      "click .icon-resize-small" : 'resizeSmall',
+      "click .icon-resize-full" : "resizeFullscreen"
+    },
+    
+    templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
+    
+    templateFullscreen : Handlebars.compile(datumContainerFullscreenTemplate),
     
     render : function() {
-      // Display the DatumContainerEditView
-      this.setElement($("#datums-embedded"));
-      $(this.el).html(this.template({}));
-      
-      // Display the DatumFieldsView
-      this.datumsView.el = this.$(".datum-embedded-ul");
-      this.datumsView.render();
+      if (this.format == "centreWell") {
+        // Display the DatumContainerEditView
+        this.setElement($("#datums-embedded"));
+        $(this.el).html(this.templateEmbedded({}));
+        
+        // Display the DatumFieldsView
+        this.datumsView.el = this.$(".datum-embedded-ul");
+        this.datumsView.render();
+      } else if (this.format == "fullscreen") {
+        // Display the DatumContainerEditView
+        this.setElement($("#datum-container-fullscreen"));
+        $(this.el).html(this.templateFullscreen({}));
+        
+        // Display the DatumFieldsView
+        this.datumsView.el = this.$(".datum-embedded-ul");
+        this.datumsView.render();
+      }
     },
     
     /**
@@ -63,6 +84,14 @@ define([
       for (var i in this.datumsView._childViews) {
         this.datumsView._childViews[i].saveScreen();
       }
+    },
+    
+    resizeSmall : function() {
+      window.app.router.showDashboard();
+    },
+    
+    resizeFullscreen : function() {
+      window.app.router.showFullscreenDatumContainer();
     }
   });
   

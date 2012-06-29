@@ -145,8 +145,12 @@ define([
         model : userToBePassedAround
       });
       
-      // Create a DatumContainerEditView
-      this.datumsView = new DatumContainerEditView();
+      // Create the embedded and fullscreen DatumContainerEditView
+      this.datumsEmbeddedView = new DatumContainerEditView();
+      this.datumsEmbeddedView.format = "centreWell";
+      
+      this.datumsFullscreenView = new DatumContainerEditView();
+      this.datumsFullscreenView.format = "fullscreen";
       
       /*
        * Set up the four data list views
@@ -270,8 +274,9 @@ define([
         this.modalEditUserView.render();
         this.modalReadUserView.render();
         
-        // Display the Datum Container View
-        this.datumsView.render();
+        // Display the Datum Container Views
+        this.datumsEmbeddedView.render();
+        this.datumsFullscreenView.render();
         
         // Display the UserWelcomeView
         this.welcomeUserView.render();
@@ -384,7 +389,8 @@ define([
     
     saveScreen : function() {
       // Save the Datum pages, if necessary
-      this.datumsView.saveScreen();
+      this.datumsEmbeddedView.saveScreen();
+      this.datumsFullscreenView.saveScreen();
     }
   });
 
