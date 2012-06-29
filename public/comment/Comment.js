@@ -11,10 +11,10 @@ define( [
      *        also be edited and removed.
      * 
      * @property {String} text Describe text here.
-     * @property {Number} userid Describe userid here.
+     * @property {Number} username Describe username here.
      * @property {Date} timestamp Describe timestamp here.
      * 
-     * @description Initialize function has a timestamp and a userid and waits
+     * @description Initialize function has a timestamp and a username and waits
      *              until text is entered.
      * 
      * @extends Backbone.Model
@@ -23,13 +23,13 @@ define( [
     initialize : function() {
      
       this.set("timestamp", Date.now());
-      this.set("userid", window.userid);
+      this.set("username", window.username);
       
     },
 
     defaults : {
       text : "",
-      userid : ""
+      username : ""
     },
 
 
