@@ -88,7 +88,7 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
 
-      var userToBePassedAround = new User();
+//      var userToBePassedAround = new User();
      
       
       // Create five corpus views
@@ -174,7 +174,7 @@ define([
       /*
        * Set up the four data list views
        */
-      var dataListToBePassedAround = new DataList();
+      var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
       
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
