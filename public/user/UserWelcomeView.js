@@ -47,6 +47,7 @@ define([
         Utils.debug("Attempting to register a new user: " + this.el);
         var dataToPost = {};
         dataToPost.login = $(".email").val();
+        dataToPost.email = $(".email").val();
         dataToPost.username = $(".username").val();
         dataToPost.password = $(".password").val();
         
