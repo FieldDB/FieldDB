@@ -7,14 +7,12 @@
     ,"cradle": "latest"
     ,"mongoose": "latest"
     ,"mongoose-auth": "latest"
-    ,"jade": "latest"
     ,"paperboy": "latest"
     ,"backbone": "latest"
     ,"mothermayi": "latest"
     ,"redis": "latest"
     ,"zlib": "latest"                     
     ,"crypto":"latest"
-    ,"bcrypt":"latest"
     ,"everyauth": "latest"
   }
 }
