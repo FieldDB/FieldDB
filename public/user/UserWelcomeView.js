@@ -46,7 +46,7 @@ define([
       "click .register-new-user" : function(){
         Utils.debug("Attempting to register a new user: " + this.el);
         var dataToPost = {};
-        dataToPost.email = $(".email").val();
+        dataToPost.login = $(".email").val();
         dataToPost.username = $(".username").val();
         dataToPost.password = $(".password").val();
         

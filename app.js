@@ -41,25 +41,7 @@ app.configure(function() {
 //  res.redirect("https://localhost:3001/register.html");
 //});
 
-/*
- * Everyauth views
- */
-app.configure( function () {
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-});
 
-app.get('/', function (req, res) {
-  res.render('home');
-});
-
-app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
-/*
- * End everyauth views
- */
 
 
 app.get('/:usergeneric/:corpusordatalist', function(req, res){
