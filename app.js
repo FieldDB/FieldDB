@@ -1,13 +1,6 @@
 var express     = require('express')
     ,util       = require('util')
     
-    ,everyauth  = require('everyauth')
-    ,Promise        = everyauth.Promise
-    
-    ,mongoose   = require('mongoose')
-    ,Schema         = mongoose.Schema
-    ,ObjectId       = mongoose.SchemaTypes.ObjectId
-
     ,mongooseAuth  = require('mongoose-auth')
     ,Users = require('./lib/restfullmongooseusers.js')
     
@@ -26,23 +19,11 @@ app.configure(function() {
   app.use(express.bodyParser());
   app.use(express.cookieParser());
   app.use(express.session({secret: "90ndsj9dfdsfwewfead3"}));
-//  app.use(everyauth.middleware()); //replaced by mongooseAuth
   app.use(express.static(__dirname + '/public'));
-//  app.use(app.router); //see notes on https://github.com/bnoguchi/mongoose-auth/
+//  app.use(app.router); //do not turn this on, see notes on https://github.com/bnoguchi/mongoose-auth/
   app.use(mongooseAuth.middleware());
   app.use(express.errorHandler());
-//  everyauth.helpExpress(app); //replaced by mongooseauth
 });
-
-//app.get('/auth', function (req, res) {
-//  res.render('auth');
-//});
-//app.get('/register', function(req, res){
-//  res.redirect("https://localhost:3001/register.html");
-//});
-
-
-
 
 app.get('/:usergeneric/:corpusordatalist', function(req, res){
   console.log("hi");
