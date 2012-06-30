@@ -46,6 +46,7 @@ define([
       "click .register-new-user" : function(){
         Utils.debug("Attempting to register a new user: " + this.el);
         var dataToPost = {};
+        dataToPost.login = $(".email").val();
         dataToPost.email = $(".email").val();
         dataToPost.username = $(".username").val();
         dataToPost.password = $(".password").val();
@@ -64,8 +65,8 @@ define([
             type : 'POST',
             url : this.url + "/register",
             data : dataToPost,
-            success : function() {
-              alert("success");
+            success : function(data) {
+              alert("Result: "+JSON.stringify(data));
             },
             dataType : ""
           });
