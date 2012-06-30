@@ -66,7 +66,7 @@ define([
             url : this.url + "/register",
             data : dataToPost,
             success : function(data) {
-              alert("success"+JSON.stringify(data));
+              alert("Result: "+JSON.stringify(data));
             },
             dataType : ""
           });
