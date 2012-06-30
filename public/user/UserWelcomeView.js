@@ -66,7 +66,20 @@ define([
             url : this.url + "/register",
             data : dataToPost,
             success : function(data) {
-              alert("Result: "+JSON.stringify(data));
+              if(data.errors != null){
+                $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+                $(".alert-error").show();
+              }else if ( data.user != null ){
+                /*
+                 * Create a new user, and put them into the authView, dismiss modal
+                 */
+//                this.model = new User(data.user);
+                window.loadApp(null, function(){
+                  //TODOD remove sensitive items from the user returned before turning it into a couch entry
+                  window.appView.authView.model.set(data.user);
+                });
+                $('#user-welcome-modal').modal("hide");
+              }
             },
             dataType : ""
           });
