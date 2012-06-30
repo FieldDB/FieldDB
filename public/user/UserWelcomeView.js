@@ -64,8 +64,8 @@ define([
             type : 'POST',
             url : this.url + "/register",
             data : dataToPost,
-            success : function() {
-              alert("success");
+            success : function(data) {
+              alert("success"+JSON.stringify(data));
             },
             dataType : ""
           });
