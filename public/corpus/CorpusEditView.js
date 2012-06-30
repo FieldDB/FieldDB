@@ -113,41 +113,11 @@ define([
      * The underlying model of the CorpusReadFullScreenView is a Corpus.
      */    
     model : Corpus,
-    
-    /**
-     * The CommentEditView is a child of the CorpusReadFullScreenView.
-     */
-    commentEditView : CommentEditView,
-    
-    /**
-     * The DataListsView is a child of the CorpusReadFullScreenView.
-     */
-    dataListsView : UpdatingCollectionView,
-    /**
-     * The DatumFieldsView is a child of the CorpusReadFullScreenView.
-     */
-    datumFieldsView : UpdatingCollectionView, 
-    
-    /**
-     * The datumStatesView is a child of the CorpusReadFullScreenView.
-     */
-    datumStatesView : UpdatingCollectionView,
-    
-    /**
-     * The PermissionsView is a child of the CorpusReadFullScreenView.
-     */
-    permissionsView : PermissionsView,
-    
-    /**
-     * The SessionsView is a child of the CorpusReadFullScreenView.
-     */
-    sessionsView : UpdatingCollectionView,
    
     /**
      * Events that the CorpusReadFullScreenView is listening to and their handlers.
      */
     events : {
-//              "click .new_datum" : "newDatum",
 //              "click .new_session" : "newSession",
 //              "click .show_data_lists" : "showDataLists",
 //              "click .show_corpus_details" : "showCorpusDetails",
@@ -166,7 +136,9 @@ define([
       //Add button inserts new Datum Field
       "click .add_datum_field" : 'insertNewDatumField',
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      
+      "click .new_datum" : "newDatum"
     },
 
     /**
@@ -249,6 +221,10 @@ define([
       }
         
       return this;
+    },
+    
+    newDatum : function() {
+      app.router.showDashboard();
     },
 
      //Insert functions associate the values chosen with a new

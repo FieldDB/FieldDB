@@ -35,7 +35,7 @@ define([
     },
 
     defaults : {
-      user : User,
+      user : new User(),
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
