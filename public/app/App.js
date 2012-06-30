@@ -29,7 +29,7 @@ define([
      * The App should be serializable to save state to local storage for the
      * next run.
      * 
-     * @property {Authentication} auth The auth member variable is an
+     * @property {Authentication} authentication The auth member variable is an
      *           Authentication object permits access to the login and logout
      *           functions, and the database of users depending on whether the
      *           app is online or not.
@@ -113,6 +113,7 @@ define([
     defaults : {
       corpus : Corpus,
       sessionid : localStorage.getItem("sessionid"),
+      authentication : new Authentication(),
       currentSession : Session
     },
     
