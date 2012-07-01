@@ -322,6 +322,19 @@ define([
       $("#search-embedded").hide();
       $("#session-embedded").hide();
       $('#user-fullscreen').hide();
+    },
+    storeCurrentDashboardIdsToLocalStorage : function(){
+      var ids = {};
+      window.appView.authView.model.get("user").save();
+      window.app.get("currentSession").save();
+      window.app.get("currentDataList").save();
+      window.app.get("corpus").save();
+      
+      ids.corpusid = window.app.get("corpus").id;
+      ids.sessionid = window.app.get("currentSession").id;
+      ids.datalistid = window.app.get("currentDataList").id;
+      ids.userid = window.appView.authView.model.get("user").id;
+      localStorage.setItem("appids",JSON.stringify(ids));
     }
   });
 
