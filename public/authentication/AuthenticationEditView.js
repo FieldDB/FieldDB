@@ -193,7 +193,7 @@ define([
           username : userfromserver.get("username"),
           state : "loggedIn"
         });
-        var appids = userfromserver.mostRecentIds.clone();
+        var appids = userfromserver.get("mostRecentIds");
         appids.userid = null;
         window.app.loadMostRecentIds(appids);
 
