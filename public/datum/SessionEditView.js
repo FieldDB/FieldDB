@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/session_edit_embedded.handlebars",
+    "text!datum/session_summary_edit_embedded.handlebars",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -9,7 +10,8 @@ define([
 ], function(
     Backbone,
     Handlebars, 
-    sessionEditTemplate,
+    sessionEmbeddedTemplate,
+    sessionSummaryTemplate,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -20,6 +22,10 @@ define([
     /**
      * @class Session Edit View is where the user provides new session details.
      *
+     ** @property {String} format Must be set when the view is
+     * initialized. Valid values are "leftSide" and
+     * "embedded" 
+     * 
      * @extends Backbone.View
      * @constructs
      */
@@ -57,23 +63,48 @@ define([
     },
     
     /**
-     * The Handlebars template rendered as the SessionEditView.
+     * The Handlebars template rendered as the Embedded.
      */
-    template: Handlebars.compile(sessionEditTemplate),
+    templateEmbedded: Handlebars.compile(sessionEmbeddedTemplate),
+    
+    /**
+     * The Handlebars template rendered as the Summary.
+     */
+    templateSummary : Handlebars.compile(sessionSummaryTemplate),
     
     /**
      * Renders the SessionEditView.
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
-      
-      // Display the SessionEditView
-      this.setElement("#session-embedded");
-      $(this.el).html(this.template(this.model.toJSON()));
-      
-      this.sessionFieldsView.el = this.$(".session-fields-ul");
-      this.sessionFieldsView.render();
-      
+      if(this.model == undefined){
+        Utils.debug("SESSION is undefined, come back later.");
+        return this;
+      }
+      try{
+        if(this.model.get("sessionFields").where({label: "goal"})[0] == undefined){
+          Utils.debug("SESSION fields are undefined, come back later.");
+          return this;
+        }
+        if (this.format == "embedded") {
+          this.setElement("#session-embedded");
+          $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+          
+          this.sessionFieldsView.el = this.$(".session-fields-ul");
+          this.sessionFieldsView.render();
+        } else if (this.format == "leftSide") {
+          var jsonToRender = {
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
+            date : this.model.get("sessionFields").where({label: "dateSEntered"})[0].get("value")
+          };
+          
+          this.setElement("#session-quickview");
+          $(this.el).html(this.templateSummary(jsonToRender));
+        }
+      }catch(e){
+        Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
+      }
       return this;
     },    
     

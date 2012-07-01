@@ -88,7 +88,7 @@ define([
      * 
      * Function copied from Datum.js
      */
-    restructure : function() {
+    restructure : function(callback) {
       // Restructure the SessionFields
       if (this.get("sessionFields")) {
         // Keep track of the data that we want to restructure
@@ -103,9 +103,10 @@ define([
           this.get("sessionFields").push(field);
         }
       }
-    
-      
       // TODO Restructure the rest
+      if(typeof callback == "function"){
+          callback();
+      }
     },
   });
   return Session;

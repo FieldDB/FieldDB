@@ -163,7 +163,9 @@ define([
            */
           s.fetch({
             success : function() {
-              s.restructure();
+              s.restructure(function(){
+                appView.render();//TODO see if need this
+              });
             },
             error : function() {
               alert("There was an error restructuring the session. Loading defaults...");
@@ -177,7 +179,9 @@ define([
           alert("There was an error fetching corpus. Loading defaults...");
           s.fetch({
             success : function() {
-              s.restructure();
+              s.restructure(function(){
+                appView.render();//TODO see if need this
+              });
             },
             error : function() {
               alert("There was an error restructuring the session, and an error fetching the corpus. Loading defaults...");
