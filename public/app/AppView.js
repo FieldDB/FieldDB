@@ -122,22 +122,17 @@ define([
       });
       this.corpusReadFullscreenView.format = "fullscreen";
       
-      var sessionToBePassedAround = this.model.get("currentSession");
-      sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
-      
       /*
        * Set up two session views
        */ 
       this.sessionEditView = new SessionEditView({
-        model : sessionToBePassedAround
+        model : this.model.get("currentSession")
       });
       
       this.sessionSummaryView = new SessionReadView({
-        model : sessionToBePassedAround
+        model : this.model.get("currentSession")
       });
       this.sessionSummaryView.format = "leftSide";
-      
-      var userToBePassedAround = this.model.get("authentication").get("user");
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -148,22 +143,22 @@ define([
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.modalReadUserView.format = "modal";
 
@@ -179,7 +174,6 @@ define([
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
       }); 
-      this.dataListEditLeftSideView.loadSample();
       this.dataListEditLeftSideView.format = "leftSide";
    
       this.dataListEditFullscreenView = new DataListEditView({
@@ -378,6 +372,8 @@ define([
 //        {label: "goal", value: "To Win!"}
 //      ]));
 //        
+      this.dataListEditLeftSideView.loadSample();
+
       this.authView.loadSample();
       
       this.searchView.loadSample();

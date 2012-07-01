@@ -55,7 +55,7 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in App: " + error);
       });
-      
+      this.set("authentication", new Authentication());
       /*
        * Load the most recent corpus
        */
