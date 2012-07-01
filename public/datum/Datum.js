@@ -82,7 +82,7 @@ define([
       comments : Comments,
       datumState : new DatumState(),
       datumState : DatumState,      // The selected DatumState
-      datumTags : new DatumTags(),
+      datumTags : DatumTags,
       dateEntered : DatumField
     },
 

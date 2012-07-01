@@ -5,6 +5,8 @@
     "express": "2.5.10"
     ,"underscore": "latest"
     ,"cradle": "latest"
+    ,"mongoose": "latest"
+    ,"mongoose-auth": "latest"
     ,"paperboy": "latest"
     ,"backbone": "latest"
     ,"mothermayi": "latest"

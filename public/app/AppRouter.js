@@ -65,6 +65,16 @@ define([
       this.hideEverything();
       $("#user-fullscreen").show();
     },
+    
+    /**
+     * Displays the fullscreen datum container page view.
+     */
+    showFullscreenDatumContainer : function() {
+      Utils.debug("In showFullscreenDatumContainer");
+      
+      this.hideEverything();
+      $("#datum-container-fullscreen").show();
+    },
 
     /**
      * Displays all of the corpus details and settings. 
@@ -305,12 +315,26 @@ define([
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();
       $("#data-list-fullscreen").hide();
+      $("#datum-container-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
       $("#search-fullscreen").hide();
       $("#search-embedded").hide();
       $("#session-embedded").hide();
       $('#user-fullscreen').hide();
+    },
+    storeCurrentDashboardIdsToLocalStorage : function(){
+      var ids = {};
+      window.appView.authView.model.get("user").save();
+      window.app.get("currentSession").save();
+      window.app.get("currentDataList").save();
+      window.app.get("corpus").save();
+      
+      ids.corpusid = window.app.get("corpus").id;
+      ids.sessionid = window.app.get("currentSession").id;
+      ids.datalistid = window.app.get("currentDataList").id;
+      ids.userid = window.appView.authView.model.get("user").id;
+      localStorage.setItem("appids",JSON.stringify(ids));
     }
   });
 

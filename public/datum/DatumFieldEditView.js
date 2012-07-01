@@ -26,9 +26,6 @@ define([
      */
     initialize : function() {
       Utils.debug("DATUM FIELD init");
-    
-      // If the model changes, re-render
-      this.model.bind('change', this.render, this);
     },
     
     /**
