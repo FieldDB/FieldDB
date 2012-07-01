@@ -78,9 +78,21 @@ require([
   window.loadApp= function(a, callback){
     if (a == null){
       a = new App();
+      var u = new User();
+      var c = new Corpus();
+      a.set("corpus", c);
+
+      var s = new Session({
+        sessionFields : a.get("corpus").get("sessionFields").clone()
+      });
+      a.set("currentSession", s);
+
+      var dl = new DataList();
+      a.set("currentDataList", dl);
+      a.get("authentication").set("user",u);
     }
     window.app = a;
-    
+
     // Create and display the AppView
     window.appView = new AppView({model: a}); 
     window.appView.render();
