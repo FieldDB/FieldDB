@@ -80,6 +80,31 @@ define([
       //    return "consultant must be in the system.";
       // }
     },
+    /**
+     * When a Session is returned from the database, its internal models are just
+     * arrays of their attributes. This restructures them into their models.
+     * 
+     * Function copied from Datum.js
+     */
+    restructure : function() {
+      // Restructure the SessionFields
+      if (this.get("sessionFields")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("sessionFields");
+        
+        // Create the model to store each DatumField
+        this.set("sessionFields", new DatumFields());
+        
+        // Create the Datum Field models and store them
+        for (i in temp) {
+          var field = new DatumField(temp[i]);
+          this.get("sessionFields").push(field);
+        }
+      }
+    
+      
+      // TODO Restructure the rest
+    },
   });
   return Session;
 });
