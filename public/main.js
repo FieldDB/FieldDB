@@ -125,6 +125,21 @@ require([
     appjson = JSON.parse(appjson);
     //TODO test this
     a = new App(); 
+    if (typeof a.get("authentication").get("user") == "function") {
+      var u = new User();
+      a.get("authentication").set("user", u);
+    }
+    var c = new Corpus();
+    a.set("corpus", c);
+
+    var s = new Session({
+      sessionFields : a.get("corpus").get("sessionFields").clone()
+    });
+    a.set("currentSession", s);
+
+    var dl = new DataList();
+    a.set("currentDataList", dl);
+    
     a.loadMostRecentIds(appjson, function(){
       
     });
