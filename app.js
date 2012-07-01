@@ -25,6 +25,14 @@ app.configure(function() {
   app.use(express.errorHandler());
 });
 
+app.post('/usernamelogin/:username', function(req,res){
+  console.log("User wants to log in "+req.params.username);
+  // TODO Look up username in mongodb, find their login service, and redirect them to
+  // that service. if username and password, reply to backbone with a message to
+  // show login and password
+  
+  res.redirect('/login');
+});
 app.get('/:usergeneric/:corpusordatalist', function(req, res){
   console.log("hi");
   var usergeneric = req.params.usergeneric
@@ -38,7 +46,6 @@ app.get('/:usergeneric/:corpusordatalist', function(req, res){
 });
 
 app.get('/:usergeneric', function(req, res){
-  console.log("Got a route");
   res.redirect("https://localhost:3001\#user/"+req.params.usergeneric);
 });
 

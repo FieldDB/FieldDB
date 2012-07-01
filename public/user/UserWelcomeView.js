@@ -180,12 +180,33 @@ define([
       },
       "click .sync_my_data" : function(){
         console.log("hiding user welcome, syncing users data");
-        //TODO do a POST login
-        window.loadApp(null, function(){
-          window.appView.replicateDatabasesWithCallback(function(){
-            window.appView.authView.authenticate($("#welcomeusername"));
-          });
+        var dataToPost = {};
+        dataToPost.username = $("#welcomeusername").val();
+        
+        /*
+         * Contact the server and register the new user
+         */
+        $.ajax({
+          type : 'POST',
+          url : this.url + "/usernamelogin/"+dataToPost.username,
+          data : dataToPost,
+          success : function(data) {
+            if(data.errors != null){
+              $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+              $(".alert-error").show();
+            }else if ( data.user != null ){
+              
+              
+              window.loadApp(null, function(){
+                
+                window.appView.replicateDatabasesWithCallback(function(){
+                  window.appView.authView.authenticate($("#welcomeusername"));
+                });
+              });
+            }
+          }
         });
+        
         
         $('#user-welcome-modal').modal("hide");
         
