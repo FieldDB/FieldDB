@@ -71,7 +71,7 @@ require([
     Corpus,
     DataList,
     Datum,
-    Sesssion,
+    Session,
     User,
     UserWelcomeView
 ) {
@@ -113,14 +113,16 @@ require([
     var s = new Session();
     s.id = appjson.sessionid;
     s.fetch();
+    a.set("currentSession", s);
 
     var dl = new DataList();
     dl.id = appjson.datalistid;
     dl.fetch();
-      
-    a.set("currentSession", s);
+    a.set("currentDataList", dl);
+    
     a.get("authentication").set("user",u);
     window.loadApp(a);
+    
   } else {
     Utils.debug("Loading fresh app");
     // Create a UserWelcomeView modal
