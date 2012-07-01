@@ -123,16 +123,25 @@ define([
       this.corpusReadFullscreenView.format = "fullscreen";
       
       /*
-       * Set up two session views
+       * Set up four session views
        */ 
-      this.sessionEditView = new SessionEditView({
+      this.sessionEditLeftSideView = new SessionEditView({
         model : this.model.get("currentSession")
       });
+      this.sessionEditLeftSideView.format = "leftSide";
+      this.sessionReadLeftSideView = new SessionReadView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionReadLeftSideView.format = "leftSide";
+      this.sessionEditEmbeddedView = new SessionEditView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionEditEmbeddedView.format = "embedded";
+      this.sessionReadEmbeddedView = new SessionReadView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionReadEmbeddedView.format = "embedded";
       
-      this.sessionSummaryView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionSummaryView.format = "leftSide";
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -296,11 +305,12 @@ define([
         // Display the AuthView
         this.authView.render();
         
-        // Display the SessionEditView
-        this.sessionEditView.render();
+        // Display the Session Views
+        this.sessionEditLeftSideView.render();
+        this.sessionReadLeftSideView.render();
+        this.sessionEditEmbeddedView.render();
+        this.sessionReadEmbeddedView.render();
         
-        // Display the SessionSummaryReadView
-        this.sessionSummaryView.render();
         
         // Display the UserPreferenceEditView
         this.userPreferenceView.render();
