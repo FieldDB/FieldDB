@@ -149,7 +149,10 @@ define([
           glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
           this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
         };
+        this.$el.append('<input type="checkbox" class="styled"/>');
+
         this.$el.append('<br>'+translation);
+
       }
 
       return this;
