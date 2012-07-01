@@ -108,31 +108,15 @@ require([
   };
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
+  //gina's test ids "{"corpusid":"0178C541-79AC-41DA-BB34-D14CFEA1F144","sessionid":"1E7D610E-F491-4487-A001-FF61CC5027DA","datalistid":"E9F3962D-FB81-465B-9946-63ADEF2DEC27","userid":"4ff05b4567ede22d01000018"}"
   if (appjson) {
     Utils.debug("Loading app from localStorage");
     appjson = JSON.parse(appjson);
     //TODO test this
     a = new App(); 
-    var u = new User();
-    u.id = appjson.userid;
-    u.fetch();
-    
-    var c = new Corpus();
-    c.id = appjson.corpusid;
-    c.fetch();
-    a.set("corpus", c);
-    
-    var s = new Session();
-    s.id = appjson.sessionid;
-    s.fetch();
-    a.set("currentSession", s);
-
-    var dl = new DataList();
-    dl.id = appjson.datalistid;
-    dl.fetch();
-    a.set("currentDataList", dl);
-    
-    a.get("authentication").set("user",u);
+    a.loadMostRecentIds(appjson, function(){
+      
+    });
     window.loadApp(a);
     
   } else {

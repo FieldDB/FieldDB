@@ -74,6 +74,15 @@ define([
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
+      if(this.model == undefined){
+        Utils.debug("SESSION is undefined, come back later.");
+        return this;
+      }
+      if(this.model.get("sessionFields").where({label: "goal"})[0] == undefined){
+        Utils.debug("SESSION fields are undefined, come back later.");
+        return this;
+      }
+      
       
       if (this.format == "centerWell") {
         // Display the SessionReadView
