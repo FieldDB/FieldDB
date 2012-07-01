@@ -180,20 +180,22 @@ define([
       });
 
       var self = this;
-      this.model.authenticate(tempuser, function(u) {
-        if (u == null) {
-          Utils.debug("Authentication failed. Authenticating as public.");
+      this.model.authenticate(tempuser, function(userfromserver) {
+        if (userfromserver == null) {
+          alert("Authentication failed. Authenticating as public.");
           self.authenticateAsPublic();
           return;
         }
         
         // Save the authenticated user in our Models
-        self.userView.model = u;
         self.model.set({
-          user : u,
-          username : u.get("username"),
+          gravatar : userfromserver.get("gravatar"),
+          username : userfromserver.get("username"),
           state : "loggedIn"
         });
+        var appids = userfromserver.get("mostRecentIds");
+        appids.userid = null;
+        window.app.loadMostRecentIds(appids);
 
         // Save the authenticated user in localStorage
 //        localStorage.setItem("username", u.get("username"));

@@ -10,6 +10,8 @@
 			<li class="divider"></li>
 			<li>Username: <input id="welcomeusername"
 				size="16" type="text">
+				<li>Password: <input id="welcomepassword"
+        size="16" type="password">
 			</li>
 			<li>
 				<a class="btn btn-success sync_my_data" href="#" data-dismiss="modal">Sync
@@ -37,14 +39,15 @@
 		<p>http://ifield.fieldlinguist.com/{{username}}</p>
 		<label> What is your username going to be? </label> <input
 			class="username" value="{{username}}" />
+			 <div class=" alert alert-error hide "></div>
 		<hr />
 		<button  class="btn btn-primary new-user-button">New User</button>
 
 
 		<div class="hide confirm-password">
-		  <div class=" alert alert-error hide "></div>
-			<label>Email</label> 
-			<input class="email" type="email"></input>
+		 
+			<!-- <label class="">Email</label> 
+			<input class="email " type="email"></input> -->
 			<label>Password</label>
 			<input class="password" type="password"></input>
 			<label>Confirm Password</label> 

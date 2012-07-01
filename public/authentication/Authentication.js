@@ -51,14 +51,42 @@ define([
      * @param callback A callback to call upon sucess.
      */
     authenticate : function(user, callback) {
-      // TODO actually check to see if its truly a user, locally or on server
-      var success = true;
-      
-      if (success) {
-        callback(user);
-      } else {
-        callback(null);
-      }
+      var dataToPost = {};
+      dataToPost.login = user.get("username");
+      dataToPost.password = user.get("password");
+      var self= this;
+      $.ajax({
+        type : 'POST',
+        url : Utils.authUrl + "/login",
+        data : dataToPost,
+        success : function(data) {
+          if(data.errors != null){
+            $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+            $(".alert-error").show();
+            if(typeof callback == "function"){
+              callback(null); //tell caller that the user failed to authenticate
+            }
+          }else if ( data.user != null ){
+            self.get("user").id = data.user._id; //This id is created by mongoose-auth when the user first signs up, and is used to link user across mongodb and couchdb
+            self.get("user").fetch({
+              success : function() {
+                if(typeof callback == "function"){
+                  callback(self.get("user")); //let the caller have the user, now the usr profile will also be availible
+                }
+              },
+              error : function() {
+                Utils.debug("There was an error fetching the users' data. Either this is a first install, and the sync is comming up next, or they are offline. You can try clicking the sync button, or create new data and hit sync when you go back online.");
+                if(typeof callback == "function"){
+                  callback(self.get("user")); //let the caller have the user, even though their data didnt come down from couch so their profile wont be availible but they can make new data.
+                }
+              }
+            });
+            
+            
+          }
+        }
+      });
+     
     }
   });
 
