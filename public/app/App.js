@@ -8,6 +8,7 @@ define([
     "datum/Session",
     "app/AppRouter",
     "confidentiality_encryption/Confidential",
+    "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -18,7 +19,8 @@ define([
     Search,
     Session,
     AppRouter,
-    Confidential
+    Confidential,
+    User
 ) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
@@ -118,6 +120,115 @@ define([
       currentSession : Session,
       currentDataList : DataList
     },
+    /**
+     * Accepts the ids to load the app. This is a helper function which is caled
+     * at the three entry points, main (if there is json in the localstorage
+     * from where the user was last working), Welcome new user has a similar
+     * function but which creates a user and their recent data, and
+     * authentication calls this function to load the users most recent work
+     * after they have authenticated (if they were the user who was logged in,
+     * they take it frmo local storage, if they were not then the data will have
+     * to be synced.)
+     * 
+     * @param corpusid
+     * @param sessionid
+     * @param datalistid
+     * @param userid
+     */
+    loadMostRecentIds: function(appids){
+      var u;
+      if(appids.userid != null){
+        u = new User();
+        u.id = appids.userid;
+        u.fetch();
+        this.get("authentication").set("user",u);
+      }else{
+        /*
+         * if this is being called by authentication, it will not pass the user because it has already loaded the user.
+         */
+        u = appView.authView.model.get("user");
+      }
+      var c = this.get("corpus");
+      c.id = appids.corpusid;
+      this.set("corpus", c);
+      
+      var s = this.get("currentSession");
+      s.id = appids.sessionid;
+      this.set("currentSession", s);
+      
+      c.fetch({
+        success : function() {
+          /*
+           * if corpus fetch worked, fetch session because it might need the fields form corpus
+           */
+          s.fetch({
+            success : function() {
+              s.restructure(function(){
+                appView.render();//TODO see if need this
+              });
+            },
+            error : function() {
+              alert("There was an error restructuring the session. Loading defaults...");
+              s.set(
+                  sessionFields , this.get("corpus").get("sessionFields").clone()
+              );
+            }
+          });
+        },
+        error : function() {
+          alert("There was an error fetching corpus. Loading defaults...");
+          s.fetch({
+            success : function() {
+              s.restructure(function(){
+                appView.render();//TODO see if need this
+              });
+            },
+            error : function() {
+              alert("There was an error restructuring the session, and an error fetching the corpus. Loading defaults...");
+//              s.set(
+//                  "sessionFields", new DatumFields(//TODO if the corpus fails to fetch, the datumfields wont listen to events. this might be unnecsary.
+//                      [
+//                       {
+//                         label : "user",
+//                         value : u.id //TODO turn this into an array of users
+//                       },
+//                       {
+//                         label : "consultants",
+//                         value : "AA" //TODO turn this into an array of consultants
+//                       },
+//                       {
+//                         label : "language",
+//                         value : "Unknown language"
+//                       },
+//                       {
+//                         label : "dialect",
+//                         value : "Unknown dialect"
+//                       },
+//                       {
+//                         label : "dateElicited",
+//                         value : new Date()
+//                       },
+//                       {
+//                         label : "dateSEntered",
+//                         value : new Date()
+//                       },
+//                       {
+//                         label : "goal",
+//                         value : "Unsucessful Restructuring. Created default session."
+//                       } ])
+//                  );
+            }
+          });
+        }
+      });
+      
+      var dl = this.get("currentDataList");
+      dl.id = appids.datalistid;
+      dl.fetch();
+      this.set("currentDataList", dl);
+      
+    },
+    
     
     router : AppRouter,
     /**

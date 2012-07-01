@@ -36,6 +36,10 @@ Utils.activityFeedTouchUrl = "http://localhost:8888/activity_feed_db";
 Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 
 /**
+ * The url of the authentication server.
+ */
+Utils.authUrl = "https://localhost:3001";
+/**
  * A message for users if they need help which brings them to our contact us form
  */
 Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ'>Contact Us</a>";
