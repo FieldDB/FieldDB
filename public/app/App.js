@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "authentication/Authentication", 
     "corpus/Corpus",
+    "data_list/DataList",
     "datum/DatumFields",
     "search/Search",
     "datum/Session",
@@ -12,6 +13,7 @@ define([
     Backbone, 
     Authentication, 
     Corpus,
+    DataList,
     DatumFields,
     Search,
     Session,
@@ -53,71 +55,97 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in App: " + error);
       });
-      
+      this.set("authentication", new Authentication());
       /*
        * Load the most recent corpus
        */
-      if (typeof this.get("corpus") == "function") {
-        if(localStorage.getItem("corpusid")){
-          //TODO user the corpusid from local storage
-        }
-        Utils.debug("\tUsing corpus from existing app.");
-        this.set("corpus", new Corpus({
-          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
-          "title": "Quechua Corpus",
-          "titleAsUrl": "Quechua_Corpus",
-          "description": "This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.",
-       }));
-        this.get("corpus").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
-      }
-      /*
-       * Load the most recent session
-       */
-      if (typeof this.get("currentSession") == "function") {
-        if (localStorage.getItem("sessionid")) {
-          // TODO use the sessionid from local storage
-        }
-        Utils.debug("\tUsing session from existing app.");
-        this.set("currentSession", new Session({
+//      if (typeof this.get("corpus") == "function") {
+//        if(localStorage.getItem("corpusid")){
+//          //TODO user the corpusid from local storage
+//        }
+//        Utils.debug("\tUsing corpus from existing app.");
+//        this.set("corpus", new Corpus({
 //          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
-          "sessionFields" : new DatumFields([ {
-            label : "user",
-            value : "sapir"
-          }, {
-            label : "consultants",
-            value : "Tillohash and Gladys"
-          }, {
-            label : "language",
-            value : "Quechua"
-          }, {
-            label : "dialect",
-            value : "Cusco"
-          }, {
-            label : "dateElicited",
-            value : new Date()
-          }, {
-            label : "dateSEntered",
-            value : new Date()
-          }, {
-            label : "goal",
-            value : "Working on which verbs combine with -naya"
-          } ])
-        }));
+//          "title": "Quechua Corpus",
+//          "titleAsUrl": "Quechua_Corpus",
+//          "description": "This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.",
+//       }));
+//        this.get("corpus").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
+//      }
+//      /*
+//       * Load the most recent session
+//       */
+//      if (typeof this.get("currentSession") == "function") {
+//        if (localStorage.getItem("sessionid")) {
+//          // TODO use the sessionid from local storage
+//        }
+//        Utils.debug("\tUsing session from existing app.");
+//        this.set("currentSession", new Session({
+////          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
+//          "sessionFields" : new DatumFields([ {
+//            label : "user",
+//            value : "sapir"
+//          }, {
+//            label : "consultants",
+//            value : "Tillohash and Gladys"
+//          }, {
+//            label : "language",
+//            value : "Quechua"
+//          }, {
+//            label : "dialect",
+//            value : "Cusco"
+//          }, {
+//            label : "dateElicited",
+//            value : new Date()
+//          }, {
+//            label : "dateSEntered",
+//            value : new Date()
+//          }, {
+//            label : "goal",
+//            value : "Working on which verbs combine with -naya"
+//          } ])
+//        }));
 //        this.get("currentSession").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
 
-      }
+//      }
       
       
     },
     
     defaults : {
       corpus : Corpus,
-      sessionid : localStorage.getItem("sessionid"),
-      authentication : new Authentication(),
-      currentSession : Session
+      authentication : Authentication,
+      currentSession : Session,
+      currentDataList : DataList
     },
     
-    router : AppRouter
+    router : AppRouter,
+    /**
+     * Modifies this App so that its properties match those in 
+     * the given object.
+     * 
+     * @param {Object} obj Contains the App properties.
+     */
+    restructure : function(obj) {
+      console.log("*** Before App resturcture: " + JSON.stringify(obj));
+      console.log(this);
+      
+      for (key in obj) {
+        if ((key == "corpus") && (this.get("corpus"))) {
+          this.get("corpus").restructure(obj[key]);
+        } else if ((key == "authentication") && (this.get("authentication"))) {
+          this.get("authentication").restructure(obj[key]);
+        } else if ((key == "currentSession") && (this.get("currentSession"))) {
+          this.get("currentSession").restructure(obj[key]);
+        } else if ((key == "currentDataList") && (this.get("currentDataList"))) {
+          this.get("currentDataList").restructure(obj[key]);
+        } else {
+          this.set(key, obj[key]);
+        }
+      }
+      
+      console.log("*** After App restructure");
+    }
   });
 
   return App;

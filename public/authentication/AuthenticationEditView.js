@@ -41,7 +41,6 @@ define([
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
       this.model.get("user").bind('change', this.render, this);
-      this.authenticatePreviousUser();      
     },
 
     /**
@@ -170,7 +169,7 @@ define([
       
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
-        this.loadSample();
+        window.appView.loadSample();
         return;
       }
       
@@ -208,6 +207,7 @@ define([
      */
     authenticateAsPublic : function() {
       // Load the public user
+
       this.userView.loadPublic();
       u = this.userView.model;
       

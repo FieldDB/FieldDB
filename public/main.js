@@ -56,6 +56,11 @@ require([
     "app/AppView",
     "app/AppRouter",
     "use!terminal",
+    "corpus/Corpus",
+    "data_list/DataList",
+    "datum/Datum",
+    "datum/Session",
+    "user/User",
     "user/UserWelcomeView",
     "libs/Utils"
 ], function(
@@ -63,14 +68,31 @@ require([
     AppView,
     AppRouter,
     Terminal,
+    Corpus,
+    DataList,
+    Datum,
+    Session,
+    User,
     UserWelcomeView
 ) {
   window.loadApp= function(a, callback){
     if (a == null){
       a = new App();
+      var u = new User();
+      var c = new Corpus();
+      a.set("corpus", c);
+
+      var s = new Session({
+        sessionFields : a.get("corpus").get("sessionFields").clone()
+      });
+      a.set("currentSession", s);
+
+      var dl = new DataList();
+      a.set("currentDataList", dl);
+      a.get("authentication").set("user",u);
     }
     window.app = a;
-    
+
     // Create and display the AppView
     window.appView = new AppView({model: a}); 
     window.appView.render();
@@ -83,15 +105,36 @@ require([
       callback();
     }
     
-    
   };
   // Load the App from localStorage
-  var a = localStorage.getItem("app");
-  if (a) {
+  var appjson = localStorage.getItem("appids");
+  if (appjson) {
     Utils.debug("Loading app from localStorage");
-    a = JSON.parse(a);
-    a = new App(a); 
+    appjson = JSON.parse(appjson);
+    //TODO test this
+    a = new App(); 
+    var u = new User();
+    u.id = appjson.userid;
+    u.fetch();
+    
+    var c = new Corpus();
+    c.id = appjson.corpusid;
+    c.fetch();
+    a.set("corpus", c);
+    
+    var s = new Session();
+    s.id = appjson.sessionid;
+    s.fetch();
+    a.set("currentSession", s);
+
+    var dl = new DataList();
+    dl.id = appjson.datalistid;
+    dl.fetch();
+    a.set("currentDataList", dl);
+    
+    a.get("authentication").set("user",u);
     window.loadApp(a);
+    
   } else {
     Utils.debug("Loading fresh app");
     // Create a UserWelcomeView modal
