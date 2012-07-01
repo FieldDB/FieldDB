@@ -5,8 +5,11 @@ define([
     "app/App",
     "corpus/Corpus",
     "data_list/DataList",
+    "data_list/DataLists",
     "datum/Datum",
-    "session/Session",
+    "datum/DatumFields",
+    "datum/Session",
+    "datum/Sessions",
     "user/User",
     "libs/Utils"
 ], function(
@@ -16,8 +19,11 @@ define([
     App,
     Corpus,
     DataList,
+    DataLists,
     Datum,
-    Sesssion,
+    DatumFields,
+    Session,
+    Sessions,
     User
 ) {
   var UserWelcomeView = Backbone.View.extend(
@@ -101,7 +107,11 @@ define([
                           [
                            {
                              label : "user",
-                             value : u
+                             value : u //TODO turn this into an array of users
+                           },
+                           {
+                             label : "consultants",
+                             value : "AA" //TODO turn this into an array of consultants
                            },
                            {
                              label : "language",
@@ -133,6 +143,7 @@ define([
                     });
                 a.get("corpus").get("dataLists").add(dl);
                 a.set("currentSession", s);
+                a.set("currentDataList",dl);
                 a.get("authentication").set("user",u);
                 
                 window.loadApp(a, function(){
@@ -161,7 +172,7 @@ define([
         console.log("hiding user welcome, syncing sapir");
         window.loadApp(null, function(){
           window.appView.replicateDatabasesWithCallback(function(){
-            window.appView.authView.loadSample();
+            window.appView.loadSample();
           });
         });
         $('#user-welcome-modal').modal("hide");
@@ -169,6 +180,7 @@ define([
       },
       "click .sync_my_data" : function(){
         console.log("hiding user welcome, syncing users data");
+        //TODO do a POST login
         window.loadApp(null, function(){
           window.appView.replicateDatabasesWithCallback(function(){
             window.appView.authView.authenticate($("#welcomeusername"));

@@ -59,7 +59,7 @@ require([
     "corpus/Corpus",
     "data_list/DataList",
     "datum/Datum",
-    "session/Session",
+    "datum/Session",
     "user/User",
     "user/UserWelcomeView",
     "libs/Utils"
