@@ -369,31 +369,41 @@ define([
 //        "description" : "This is a corpus which will let you explore the app and see how it works. "
 //            + "\nIt contains some data from one of our trips to Cusco, Peru."
 //      });
-      this.model.get("corpus").id ="822AFBA3-CE50-40F5-B983-315277DD9661";
-      this.model.get("corpus").fetch();
-      
-      // Sample Session data
-      this.model.get("currentSession").set("sessionFields", new DatumFields([
-        {label: "user", value: ""},
-        {label: "consultants", value: "Tillohash and Gladys"},
-        {label: "language", value: "Cusco Quechua"},
-        {label: "dialect", value: "Upper Cusco"},
-        {label: "dateElicited", value: new Date()},
-        {label: "dateSEntered", value: new Date()},
-        {label: "goal", value: "Explore verbs which can combine with -naya"}
-      ]));
-      //TODO cant load sesson from database with out restructuring? SESSION render: [object HTMLDivElement] Utils.js:52
-      //Uncaught TypeError: Object [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] has no method 'where' 
-      
-//      this.model.get("currentSession").id = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
-//      this.model.get("currentSession").fetch();
-        
-      this.model.get("currentDataList").id = "45444C8F-D707-426D-A422-54CD4041A5A1";
-      this.model.get("currentDataList").fetch();
-      
-//      this.dataListEditLeftSideView.loadSample();
-
       this.authView.loadSample();
+      var appids= {};
+      appids.corpusid = "822AFBA3-CE50-40F5-B983-315277DD9661";
+//      appids.userid = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
+      appids.datalistid = "45444C8F-D707-426D-A422-54CD4041A5A1";
+      appids.sessionid = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
+      
+      
+      this.model.loadMostRecentIds(appids);
+//      
+//      this.model.get("corpus").id ="822AFBA3-CE50-40F5-B983-315277DD9661";
+//      this.model.get("corpus").fetch();
+//      
+//      // Sample Session data
+//      this.model.get("currentSession").set("sessionFields", new DatumFields([
+//        {label: "user", value: ""},
+//        {label: "consultants", value: "Tillohash and Gladys"},
+//        {label: "language", value: "Cusco Quechua"},
+//        {label: "dialect", value: "Upper Cusco"},
+//        {label: "dateElicited", value: new Date()},
+//        {label: "dateSEntered", value: new Date()},
+//        {label: "goal", value: "Explore verbs which can combine with -naya"}
+//      ]));
+//      //TODO cant load sesson from database with out restructuring? SESSION render: [object HTMLDivElement] Utils.js:52
+//      //Uncaught TypeError: Object [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] has no method 'where' 
+//      
+////      this.model.get("currentSession").id = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
+////      this.model.get("currentSession").fetch();
+//        
+//      this.model.get("currentDataList").id = "45444C8F-D707-426D-A422-54CD4041A5A1";
+//      this.model.get("currentDataList").fetch();
+//      
+////      this.dataListEditLeftSideView.loadSample();
+//
+//      this.authView.loadSample();
       //cannot laod directly cause wa want to fake that sapir is logged in.
 //      this.authView.get("user").id = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
 //      this.authView.get("user").fetch();
