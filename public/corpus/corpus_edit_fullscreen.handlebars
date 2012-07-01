@@ -35,49 +35,109 @@
 <label>Description:</label>
 <textarea class="description">{{description}}</textarea>
 
-<h4>Sessions associated with this corpus</h4>
+<div class="accordion" id="accordion2">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseSessions">
+				<h4>SSSessions associated with this corpus</h4>
+				 </a>
+		</div>
+		<div id="collapseSessions" class="accordion-body collapse"
+			style="height: 0px;">
+			<div class="accordion-inner">
+				<ul>
+				<li>Session 1</li>
+				<li>Session 2</li>
+				<li>Session 3</li>
+				<li>Session 4</li>
+				<li>Session 5</li>
+				<li>Session 6</li>
+				<li>Session 7</li>
+				<li>Session 8</li>
+				<li>Session 9</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseDatalists">
+				<h4>Datalists associated with this corpus</h4>
+				</a>
+		</div>
+		<div id="collapseDatalists" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<ul>
+				<li>Datalist 1</li>
+				<li>Datalist 2</li>
+				<li>Datalist 3</li>
+				<li>Datalist 4</li>
+				<li>Datalist 5</li>
+				<li>Datalist 6</li>
+				<li>Datalist 7</li>
+				<li>Datalist 8</li>
+				<li>Datalist 9</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapsePermissions">
+				<h4>Permissins associated with this corpus</h4>
+				</a>
+		</div>
+		<div id="collapsePermissions" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<ul>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				<li>Permission 1</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-<div class="sessions_list">
-	<ul>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-		<li>Session 1</li>
-	</ul>
-</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseDatumFieldsSettings">
+				<h4>Datum field settings</h4>
+				</a>
+		</div>
+		<div id="collapseDatumFieldSettings" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<div class="breadcrumb">
+					<select class="choose_add_field">
+						<option value="judgement">Gramaticality/Acceptability Judgement</option>
+						<option value="utterence">Orthography/Utterance</option>
+						<option value="morphemes">Morphemes</option>
+						<option value="gloss">Gloss</option>
+						<option value="translation">Translation</option>
+						<option value="transcription">IPA Transcription</option>
+						<option value="context">Context</option>
+						<option value="semantic_denotation">Semantic Denotation</option>
+						<option value="Create New">Create New</option>
+				</select> Encrypt if confidential: <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
+						<label>Help Text</label>
+							<textarea
+							placeholder="Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
+							class="add_help">
+							</textarea>
+					<button class="btn btn-primary add_datum_field" value="Add">Add</button>
+				</div>
 
-<h4>Datalists associated with this corpus</h4>
-<div class="dataLists_list">
-	<ul>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-		<li>Datalist 1</li>
-	</ul>
-</div>
-
-<h4>Corpus permission settings</h4>
-<div class="permissions_settings">
-	<ul>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-		<li>Permission 1</li>
-	</ul>
+			</div>
+		</div>
+	</div>
 </div>
 
 <h4>Datum field settings</h4>
