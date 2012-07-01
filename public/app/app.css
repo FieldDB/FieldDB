@@ -93,7 +93,7 @@ textarea{
 }
 
 
-.dropZone{
+.drop-zone{
 	float: right;
 	border: dashed;
 	border-color:#1E90FF;

@@ -15,7 +15,7 @@ define([
     "data_list/DataListReadView",
     "data_list/DataListEditView",
     "datum/Datum",
-    "datum/DatumEditView",
+    "datum/DatumContainerEditView",
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
@@ -33,7 +33,6 @@ define([
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
-    "user/UserWelcomeView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -52,7 +51,7 @@ define([
     DataListReadView,
     DataListEditView,
     Datum,
-    DatumEditView,
+    DatumContainerEditView,
     DatumFields,
     Export,
     ExportReadView,
@@ -69,8 +68,7 @@ define([
     SessionReadView,
     User,
     UserEditView,
-    UserReadView,
-    UserWelcomeView
+    UserReadView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -90,7 +88,7 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
 
-      var userToBePassedAround = new User();
+//      var userToBePassedAround = new User();
      
       
       // Create five corpus views
@@ -124,74 +122,58 @@ define([
       });
       this.corpusReadFullscreenView.format = "fullscreen";
       
-      
-      // Create a DatumView, cloning the default datum fields from the corpus 
-      // in case they changed 
-      this.fullScreenDatumView = new DatumEditView({
-        model : new Datum({
-          datumFields : this.model.get("corpus").get("datumFields").clone(),
-          datumStates : this.model.get("corpus").get("datumStates").clone()
-        })
-      });
-      
-      var sessionToBePassedAround = this.model.get("currentSession");
-      sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
-      
       /*
        * Set up two session views
        */ 
       this.sessionEditView = new SessionEditView({
-        model : sessionToBePassedAround
+        model : this.model.get("currentSession")
       });
       
       this.sessionSummaryView = new SessionReadView({
-        model : sessionToBePassedAround
+        model : this.model.get("currentSession")
       });
       this.sessionSummaryView.format = "leftSide";
       
-      
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
-        model : new Authentication({user: userToBePassedAround})
+        model : this.model.get("authentication")
       });
       
       /* 
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : this.authView.model.get("user")
+        model : this.model.get("authentication").get("user")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : this.authView.model.get("user")
+        model : this.model.get("authentication").get("user")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : this.authView.model.get("user")
+        model : this.model.get("authentication").get("user")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : this.authView.model.get("user")
+        model : this.model.get("authentication").get("user")
       });
       this.modalReadUserView.format = "modal";
 
-      // Create a UserWelcomeView modal
-      this.welcomeUserView = new UserWelcomeView({
-        model : this.authView.model.get("user")
-      });
+      
+      // Create the embedded and fullscreen DatumContainerEditView
+      this.datumsView = new DatumContainerEditView();
       
       /*
        * Set up the four data list views
        */
-      var dataListToBePassedAround = new DataList();
+      var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
       
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
       }); 
-      this.dataListEditLeftSideView.loadSample();
       this.dataListEditLeftSideView.format = "leftSide";
    
       this.dataListEditFullscreenView = new DataListEditView({
@@ -294,10 +276,8 @@ define([
         this.corpusEditFullscreenView.render();
         this.corpusReadFullscreenView.render();
         
+        // Display the ExportView
         this.exportView.render();
-        
-        // Display the DatumEditView
-        this.fullScreenDatumView.render();
         
         // Display the User Views
         this.fullScreenEditUserView.render();
@@ -305,8 +285,9 @@ define([
         this.modalEditUserView.render();
         this.modalReadUserView.render();
         
-        // Display the UserWelcomeView
-        this.welcomeUserView.render();
+        // Display the Datum Container Views
+        this.datumsView.format = "centreWell";
+        this.datumsView.render();
         
         // Display the Search Views
         this.searchView.render();
@@ -371,27 +352,41 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      //these old methods were over writing the model with new data, effectively deleting old models which will be a terrible thing ot do in prodution
-//      // Sample Corpus data
+      // Sample Corpus data
 //      this.model.get("corpus").set({
 //        "title" : "Quechua Corpus",
 //        "titleAsUrl": "Quechua_Corpus",
 //        "description" : "This is a corpus which will let you explore the app and see how it works. "
 //            + "\nIt contains some data from one of our trips to Cusco, Peru."
 //      });
-//
-//      // Sample Session data
-//      this.model.get("currentSession").set("sessionFields", new DatumFields([
-//        {label: "user", value: ""},
-//        {label: "consultants", value: "John Doe and Mary Stewart"},
-//        {label: "language", value: ""},
-//        {label: "dialect", value: ""},
-//        {label: "dateElicited", value: new Date()},
-//        {label: "dateSEntered", value: new Date()},
-//        {label: "goal", value: "To Win!"}
-//      ]));
-//        
+      this.model.get("corpus").id ="822AFBA3-CE50-40F5-B983-315277DD9661";
+      this.model.get("corpus").fetch();
+      
+      // Sample Session data
+      this.model.get("currentSession").set("sessionFields", new DatumFields([
+        {label: "user", value: ""},
+        {label: "consultants", value: "Tillohash and Gladys"},
+        {label: "language", value: "Cusco Quechua"},
+        {label: "dialect", value: "Upper Cusco"},
+        {label: "dateElicited", value: new Date()},
+        {label: "dateSEntered", value: new Date()},
+        {label: "goal", value: "Explore verbs which can combine with -naya"}
+      ]));
+      //TODO cant load sesson from database with out restructuring? SESSION render: [object HTMLDivElement] Utils.js:52
+      //Uncaught TypeError: Object [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] has no method 'where' 
+      
+//      this.model.get("currentSession").id = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
+//      this.model.get("currentSession").fetch();
+        
+      this.model.get("currentDataList").id = "45444C8F-D707-426D-A422-54CD4041A5A1";
+      this.model.get("currentDataList").fetch();
+      
+//      this.dataListEditLeftSideView.loadSample();
+
       this.authView.loadSample();
+      //cannot laod directly cause wa want to fake that sapir is logged in.
+//      this.authView.get("user").id = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
+//      this.authView.get("user").fetch();
       
       this.searchView.loadSample();
     },
@@ -400,7 +395,7 @@ define([
      * Synchronize the server and local databases.
      */
     replicateDatabases : function() {
-      this.fullScreenDatumView.model.pouch(function(err, db) {
+      (new Datum()).pouch(function(err, db) {
         db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
           Utils.debug("Replicate to");
           Utils.debug(resp);
@@ -414,7 +409,7 @@ define([
       });
     },
     replicateDatabasesWithCallback : function(callback) {
-      this.fullScreenDatumView.model.pouch(function(err, db) {
+      (new Datum()).pouch(function(err, db) {
         db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
           Utils.debug("Replicate to");
           Utils.debug(resp);
@@ -435,7 +430,7 @@ define([
      *  this.activityFeedView.model.pouch(
      */
     replicateActivityFeedDatabase : function() {
-      this.activityFeedView.model.pouch(function(err, db) {
+      (new ActivityFeedView()).pouch(function(err, db) {
         db.replicate.to(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
           Utils.debug("Replicate to");
           Utils.debug(resp);
@@ -450,8 +445,8 @@ define([
     },
     
     saveScreen : function() {
-      // Save the FullScreenDatum page, if necessary
-      this.fullScreenDatumView.saveScreen();
+      // Save the Datum pages, if necessary
+      this.datumsView.saveScreen();
     }
     
   });

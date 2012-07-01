@@ -10,6 +10,8 @@ define([
      * @class Hold preferences for users like the skin of the app
      * 
      * @property {int} skin This is user's preferred skin.
+     * @property {int} numVisibleDatum The number of Datum visible at the time on
+     * the Datum*View's.
      *
      * @extends Backbone.Model
      * @constructs
@@ -18,7 +20,8 @@ define([
     },
     
     defaults : {
-      skin : ""//TODO, make this a random skin, and load the background image from here somehow...
+      skin : "",
+      numVisibleDatum : 3
     },
     
     /**
@@ -28,15 +31,9 @@ define([
      * @param {Object} obj Contains the UserPreference properties.
      */
     restructure : function(obj) {
-      console.log("*** Before UserPreference restructure: " + JSON.stringify(obj));
-      console.log(this);
-      
       for (key in obj) {
         this.set(key, obj[key]);
       }
-      
-      console.log("*** After UserPreference restructure");
-      console.log(this);
     }
   });
 
