@@ -56,6 +56,11 @@ require([
     "app/AppView",
     "app/AppRouter",
     "use!terminal",
+    "corpus/Corpus",
+    "data_list/DataList",
+    "datum/Datum",
+    "session/Session",
+    "user/User",
     "user/UserWelcomeView",
     "libs/Utils"
 ], function(
@@ -63,6 +68,11 @@ require([
     AppView,
     AppRouter,
     Terminal,
+    Corpus,
+    DataList,
+    Datum,
+    Sesssion,
+    User,
     UserWelcomeView
 ) {
   window.loadApp= function(a, callback){
@@ -83,14 +93,33 @@ require([
       callback();
     }
     
-    
   };
   // Load the App from localStorage
-  var a = localStorage.getItem("app");
-  if (a) {
+  var appjson = localStorage.getItem("appids");
+  if (appjson) {
     Utils.debug("Loading app from localStorage");
-    a = JSON.parse(a);
-    a = new App(a); 
+    appjson = JSON.parse(appjson);
+    //TODO test this
+    a = new App(); 
+    var u = new User();
+    u.id = appjson.userid;
+    u.fetch();
+    
+    var c = new Corpus();
+    c.id = appjson.corpusid;
+    c.fetch();
+    a.set("corpus", c);
+    
+    var s = new Session();
+    s.id = appjson.sessionid;
+    s.fetch();
+
+    var dl = new DataList();
+    dl.id = appjson.datalistid;
+    dl.fetch();
+      
+    a.set("currentSession", s);
+    a.get("authentication").set("user",u);
     window.loadApp(a);
   } else {
     Utils.debug("Loading fresh app");
