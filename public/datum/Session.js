@@ -2,6 +2,7 @@
 define([
     "use!backbone",
     "comment/Comments",
+    "datum/DatumField",
     "datum/DatumFields",
     "user/Consultant",
     "user/Team",
@@ -9,6 +10,7 @@ define([
 ], function(
     Backbone,
     Comments,
+    DatumField,
     DatumFields,
     Consultant,
     Team,

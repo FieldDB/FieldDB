@@ -54,7 +54,7 @@ define([
       var dataToPost = {};
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
-      
+      var self= this;
       $.ajax({
         type : 'POST',
         url : Utils.authUrl + "/login",
@@ -67,17 +67,17 @@ define([
               callback(null); //tell caller that the user failed to authenticate
             }
           }else if ( data.user != null ){
-            this.get("user").id = data.user._id; //This id is created by mongoose-auth when the user first signs up, and is used to link user across mongodb and couchdb
-            this.get("user").fetch({
+            self.get("user").id = data.user._id; //This id is created by mongoose-auth when the user first signs up, and is used to link user across mongodb and couchdb
+            self.get("user").fetch({
               success : function() {
                 if(typeof callback == "function"){
-                  callback(this.get("user")); //let the caller have the user, now the usr profile will also be availible
+                  callback(self.get("user")); //let the caller have the user, now the usr profile will also be availible
                 }
               },
               error : function() {
-                alert("There was an error fetching your data. You can try clicking the sync button, or create new data and hit sync when you go back online.");
+                Utils.debug("There was an error fetching the users' data. Either this is a first install, and the sync is comming up next, or they are offline. You can try clicking the sync button, or create new data and hit sync when you go back online.");
                 if(typeof callback == "function"){
-                  callback(this.get("user")); //let the caller have the user, even though their data didnt come down from couch so their profile wont be availible but they can make new data.
+                  callback(self.get("user")); //let the caller have the user, even though their data didnt come down from couch so their profile wont be availible but they can make new data.
                 }
               }
             });

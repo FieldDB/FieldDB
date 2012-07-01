@@ -191,9 +191,28 @@ define([
             $('#user-welcome-modal').modal("hide");
             window.loadApp(null, function(){
               window.appView.replicateDatabasesWithCallback(function(){
-                var appids = userfromserver.mostRecentIds.clone();
+                /*
+                 * If the user fetch didn't succeed, try again.
+                 */
+                if(userfromserver.get("mostRecentIds") == undefined){
+                  userfromserver.fetch({
+                    success : function() {
+                      var appids = userfromserver.get("mostRecentIds");
+//                    appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
+                      window.app.loadMostRecentIds(appids);
+                    },
+                    error : function() {
+                      alert("There was an error fetching your data. Loading defaults...");
+                    }
+                  });
+                }else{
+                  /*
+                   * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
+                   */
+                  var appids = userfromserver.get("mostRecentIds");
 //                appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                window.app.loadMostRecentIds(appids);
+                  window.app.loadMostRecentIds(appids);
+                }
               });
             });
           }
