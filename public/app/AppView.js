@@ -337,29 +337,26 @@ define([
       
       return this;
     },
-    
+    // Display the Corpus Views
     renderEditableCorpusViews: function(corpusid){
-      // Display the Corpus Views
       this.corpusEditLeftSideView.render();
-//      this.corpusReadLeftSideView.render();
       this.corpusEditEmbeddedView.render();
-//      this.corpusReadEmbeddedView.render();
       this.corpusEditFullscreenView.render();
-//      this.corpusReadFullscreenView.render();
     },
     renderReadonlyCorpusViews: function(corpusid){
-      // Display the Corpus Views
-//      this.corpusEditLeftSideView.render();
       this.corpusReadLeftSideView.render();
-//      this.corpusEditEmbeddedView.render();
       this.corpusReadEmbeddedView.render();
-//      this.corpusEditFullscreenView.render();
       this.corpusReadFullscreenView.render();
     },
-    
+      
+    //Display Session Views
     renderEditableSessionViews: function(sessionid){
       this.sessionEditLeftSideView.render();
       this.sessionEditEmbeddedView.render();
+    },
+    renderReadonlySessionViews: function(sessionid){
+      this.sessionReadLeftSideView.render();
+      this.sessionReadEmbeddedView.render();
     },
     
     /**

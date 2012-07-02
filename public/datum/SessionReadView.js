@@ -115,6 +115,8 @@ define([
       Utils.debug("Saving the Session");
       this.model.save();
     },
+    
+    //functions associated with corner icons
     resizeSmall : function(){
       window.app.router.showDashboard();
     },
