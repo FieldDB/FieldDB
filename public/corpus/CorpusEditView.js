@@ -118,6 +118,8 @@ define([
      * Events that the CorpusReadFullScreenView is listening to and their handlers.
      */
     events : {
+      "click .icon-book": "showReadonly",
+
 //              "click .new_session" : "newSession",
 //              "click .show_data_lists" : "showDataLists",
 //              "click .show_corpus_details" : "showCorpusDetails",
