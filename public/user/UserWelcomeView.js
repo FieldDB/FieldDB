@@ -157,6 +157,35 @@ define([
                   console.log("Loadded app from json.");
                 });
                 $('#user-welcome-modal').modal("hide");
+                
+                
+                /*
+                 * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
+                 * "http://localhost:5984/_session";
+                 * 
+                 * References:
+                 * http://guide.couchdb.org/draft/security.html
+                 */
+                var couchConnection = data.user.corpuses[data.user.corpuses.length-1];
+                
+                var corpusLoginUrl = couchConnection.protocol+couchConnection.domain;
+                if(couchConnection.port){
+                  corpusLoginUrl = corpusLoginUrl+":"+couchConnection.port+"/_session";
+                }
+                var corpusloginparams = {};
+                corpusloginparams.name = dataToPost.username;
+                corpusloginparams.password = dataToPost.password;
+                $.ajax({
+                  type : 'POST',
+                  url : corpusLoginUrl ,
+                  data : corpusloginparams,
+                  success : function(data) {
+                    alert("I logged you into your corpus server automatically.");
+                  },
+                  error : function(data){
+                    alert("I couldnt log you into your corpus.");
+                  }
+                });
               }
             },
             dataType : ""
