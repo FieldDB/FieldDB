@@ -3,6 +3,7 @@ define([
     "use!handlebars", 
     "text!user/user_welcome_modal.handlebars",
     "app/App",
+    "authentication/Authentication",
     "corpus/Corpus",
     "data_list/DataList",
     "data_list/DataLists",
@@ -17,6 +18,7 @@ define([
     Handlebars, 
     user_welcomeTemplate,
     App,
+    Authentication,
     Corpus,
     DataList,
     DataLists,
@@ -41,7 +43,6 @@ define([
       this.model = new User();
       this.model.set("username","YourNewUserNameGoesHere");
       this.model.bind("change", this.render, this);
-      this.url = "https://localhost:3001";
     },
 
     /**
@@ -62,7 +63,7 @@ define([
       "click .register-new-user" : function(){
         Utils.debug("Attempting to register a new user: " + this.el);
         var dataToPost = {};
-        dataToPost.login = $(".email").val();
+        dataToPost.login = $(".username").val();
         dataToPost.email = $(".email").val();
         dataToPost.username = $(".username").val();
         dataToPost.password = $(".password").val();
@@ -79,7 +80,7 @@ define([
            */
           $.ajax({
             type : 'POST',
-            url : this.url + "/register",
+            url : Utils.authUrl + "/register",
             data : dataToPost,
             success : function(data) {
               if(data.errors != null){
@@ -107,7 +108,7 @@ define([
                           [
                            {
                              label : "user",
-                             value : u //TODO turn this into an array of users
+                             value : u.id //TODO turn this into an array of users
                            },
                            {
                              label : "consultants",
@@ -180,36 +181,42 @@ define([
       },
       "click .sync_my_data" : function(){
         console.log("hiding user welcome, syncing users data");
-        var dataToPost = {};
-        dataToPost.username = $("#welcomeusername").val();
-        
-        /*
-         * Contact the server and register the new user
-         */
-        $.ajax({
-          type : 'POST',
-          url : this.url + "/usernamelogin/"+dataToPost.username,
-          data : dataToPost,
-          success : function(data) {
-            if(data.errors != null){
-              $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
-              $(".alert-error").show();
-            }else if ( data.user != null ){
-              
-              
-              window.loadApp(null, function(){
-                
-                window.appView.replicateDatabasesWithCallback(function(){
-                  window.appView.authView.authenticate($("#welcomeusername"));
-                });
+        var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
+        var auth = new Authentication();
+        auth.authenticate(u, function(userfromserver){
+          if(userfromserver == null){
+            alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
+            $(".alert-error").show();
+          }else{
+            $('#user-welcome-modal').modal("hide");
+            window.loadApp(null, function(){
+              window.appView.replicateDatabasesWithCallback(function(){
+                /*
+                 * If the user fetch didn't succeed, try again.
+                 */
+                if(userfromserver.get("mostRecentIds") == undefined){
+                  userfromserver.fetch({
+                    success : function() {
+                      var appids = userfromserver.get("mostRecentIds");
+//                    appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
+                      window.app.loadMostRecentIds(appids);
+                    },
+                    error : function() {
+                      alert("There was an error fetching your data. Loading defaults...");
+                    }
+                  });
+                }else{
+                  /*
+                   * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
+                   */
+                  var appids = userfromserver.get("mostRecentIds");
+//                appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
+                  window.app.loadMostRecentIds(appids);
+                }
               });
-            }
+            });
           }
         });
-        
-        
-        $('#user-welcome-modal').modal("hide");
-        
       }
     },
 
