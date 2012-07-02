@@ -58,7 +58,9 @@ define([
     
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeLarge"
+      "click .icon-resize-full" : "resizeLarge",
+      "click .icon-edit": "showEditable"
+  
       
     },
     
@@ -118,7 +120,10 @@ define([
     },
     resizeLarge : function(){
       window.app.router.showEmbeddedSession();
-    }
+    },
+    showEditable :function(){
+      window.app.router.showEditableSession();
+    },
   });
   
   return SessionReadView;
