@@ -213,12 +213,45 @@ define([
         sessions : Sessions, 
         dataLists : DataLists, 
         permissions : Permissions,
-        comments: Comments
+        comments: Comments,
+        couchConnection : Utils.defaultCouchConnection()
         
       },
+      //this gets overridden when user calls replicate, so that it is the current corpus's database url
       pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
           : Utils.pouchUrl),
+      /**
+       * Synchronize the server and local databases.
+       */
+      replicateCorpus : function(callback) {
+        var self = this;
+        
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+self.get("couchConnection").corpusname
+            : Utils.pouchUrl+self.get("couchConnection").corpusname);
+        
+        this.pouch(function(err, db) {
+          var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
+          if(self.get("couchConnection").port){
+            couchurl = couchurl+":"+self.get("couchConnection").port;
+          }
+          couchurl = couchurl + self.get("couchConnection").corpusname;
           
+          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate to " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+          });
+          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate from " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+            if(typeof callback == "function"){
+              callback();
+            }
+          });
+        });
+      },
+      
       validate: function(attrs){
 //        console.log(attrs);
 //        if(attrs.title != undefined){

@@ -68,8 +68,7 @@ define([
         dataToPost.username = $(".username").val();
         dataToPost.password = $(".password").val();
         //Send a corpusname to create
-        var corpusConnection = JSON.stringify(Utils.defaultCouchConnection);
-        corpusConnection = JSON.parse(corpusConnection);
+        var corpusConnection = Utils.defaultCouchConnection();
         corpusConnection.corpusname = $(".username").val()+"corpus";
         dataToPost.corpuses = [corpusConnection];
         
@@ -103,7 +102,8 @@ define([
                   "titleAsUrl" : data.user.username+"Corpus",
                   "description" : "This is an untitled corpus, created by default.",
                   "dataLists": new DataLists(),
-                  "sessions": new Sessions()
+                  "sessions": new Sessions(),
+                  "couchConnection" : data.user.corpuses[data.user.corpuses.length-1]
                 }));
                 a.get("corpus").save()
                 u.get("corpuses").push(a.get("corpus").id);
