@@ -97,14 +97,15 @@ define([
                  */ 
                 var u = new User(data.user);
                 var a = new App();
-                a.set("corpus", new Corpus({
+                var c = new Corpus({
                   "title" : data.user.username+"'s Corpus",
                   "titleAsUrl" : data.user.username+"Corpus",
                   "description" : "This is an untitled corpus, created by default.",
                   "dataLists": new DataLists(),
                   "sessions": new Sessions(),
                   "couchConnection" : data.user.corpuses[data.user.corpuses.length-1]
-                }));
+                });
+                a.set("corpus", c);
                 a.get("corpus").save()
                 u.get("corpuses").push(a.get("corpus").id);
                 var s = new Session(
@@ -160,31 +161,10 @@ define([
                 
                 
                 /*
-                 * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
-                 * "http://localhost:5984/_session";
-                 * 
-                 * References:
-                 * http://guide.couchdb.org/draft/security.html
+                 * Use the corpus just created to log the user into that corpus's couch server
                  */
-                var couchConnection = data.user.corpuses[data.user.corpuses.length-1];
-                
-                var corpusLoginUrl = couchConnection.protocol+couchConnection.domain;
-                if(couchConnection.port){
-                  corpusLoginUrl = corpusLoginUrl+":"+couchConnection.port+"/_session";
-                }
-                var corpusloginparams = {};
-                corpusloginparams.name = dataToPost.username;
-                corpusloginparams.password = dataToPost.password;
-                $.ajax({
-                  type : 'POST',
-                  url : corpusLoginUrl ,
-                  data : corpusloginparams,
-                  success : function(data) {
-                    alert("I logged you into your corpus server automatically.");
-                  },
-                  error : function(data){
-                    alert("I couldnt log you into your corpus.");
-                  }
+                c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function(){
+                  Utils.debug("Successfully authenticated user with their corpus server.")
                 });
               }
             },
