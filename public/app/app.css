@@ -131,6 +131,10 @@ textarea{
     position:absolute;  
     
     } 
+    
+ .datum_field_label{
+ display:inline;
+ }   
 
 
 
