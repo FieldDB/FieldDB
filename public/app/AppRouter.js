@@ -304,11 +304,29 @@ define([
       $("#dashboard-view").show();
       $('#export-modal').modal("show");
     },
+    
+    //Functions that toggle between editable and readonly corpus views
     showEditableCorpus : function(corpusid){
       window.appView.renderEditableCorpusViews(corpusid);
     },
     showReadonlyCorpus : function(corpusid){
       window.appView.renderReadonlyCorpusViews(corpusid);
+    },
+    
+    //Functions that toggle between editable and readonly session views
+    showEditableSession : function(sessionid){
+      window.appView.renderEditableSessionViews(sessionid);
+    },
+    showReadonlySession : function(sessionid){
+      window.appView.renderReadonlySessionViews(sessionid);
+    },
+    
+    //Functions that toggle between editable and readonly session views
+    showEditableDataList : function(datalistid){
+      window.appView.renderEditableDataListViews(datalistid);
+    },
+    showReadonlyDataList : function(datalistid){
+      window.appView.renderReadonlyDataListViews(datalistid);
     },
     
     hideEverything: function() {
