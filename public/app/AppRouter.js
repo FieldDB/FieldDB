@@ -323,6 +323,11 @@ define([
       $("#session-embedded").hide();
       $('#user-fullscreen').hide();
     },
+    /**
+     * This function should be called before the user leaves the page, it should also be called before the user clicks sync
+     * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
+     * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
+     */
     storeCurrentDashboardIdsToLocalStorage : function(){
       var ids = {};
       window.appView.authView.model.get("user").save();
@@ -335,6 +340,10 @@ define([
       ids.datalistid = window.app.get("currentDataList").id;
       ids.userid = window.appView.authView.model.get("user").id;
       localStorage.setItem("appids",JSON.stringify(ids));
+      
+      //save ids to the user also so that the app can bring them back to where they were
+      window.appView.authView.model.get("user").set("mostRecentIds",ids);
+      window.appView.authView.model.get("user").save();
     }
   });
 
