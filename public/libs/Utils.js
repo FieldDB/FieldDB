@@ -42,7 +42,7 @@ Utils.authUrl = "https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
-Utils.defaultCouchConnection = {protocol: "http://", domain:"127.0.0.1", port:"5984"};
+Utils.defaultCouchConnection = {protocol: "https://", domain:"127.0.0.1", port:"6984"};
 /**
  * A message for users if they need help which brings them to our contact us form
  */
