@@ -69,7 +69,7 @@ define([
         dataToPost.password = $(".password").val();
         //Send a corpusname to create
         var corpusConnection = Utils.defaultCouchConnection();
-        corpusConnection.corpusname = $(".username").val()+"corpus";
+        corpusConnection.corpusname = "firstcorpus";
         dataToPost.corpuses = [corpusConnection];
         
 
