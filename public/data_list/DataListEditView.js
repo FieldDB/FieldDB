@@ -62,7 +62,8 @@ define( [
       'click .serverhowmany a' : 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
-      "blur .title": "updateTitle"
+      "blur .title": "updateTitle",
+      "click .icon-book" :"showReadonly"
     },
 
     /**
@@ -270,7 +271,10 @@ define( [
     },
     updateTitle : function(){
       this.model.set("title",this.$el.children(".title").val());
-    }
+    },
+    showReadonly :function(){
+      window.app.router.showReadonlyDataList();
+    },
   });
 
   return DataListEditView;
