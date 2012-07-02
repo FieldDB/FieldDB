@@ -321,6 +321,14 @@ define([
       window.appView.renderReadonlySessionViews(sessionid);
     },
     
+    //Functions that toggle between editable and readonly session views
+    showEditableDataList : function(datalistid){
+      window.appView.renderEditableDataListViews(datalistid);
+    },
+    showReadonlyDataList : function(datalistid){
+      window.appView.renderReadonlyDataListViews(datalistid);
+    },
+    
     hideEverything: function() {
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();

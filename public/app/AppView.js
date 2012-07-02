@@ -359,6 +359,16 @@ define([
       this.sessionReadEmbeddedView.render();
     },
     
+    //Display DataList Views
+    renderEditableDataListViews: function(datalistid){
+      this.dataListEditLeftSideView.render();
+      this.dataListEditFullscreenView.render();
+    },
+    renderReadonlyDataListViews: function(datalistid){
+      this.dataListReadLeftSideView.render();
+      this.dataListReadFullscreenView.render();
+    },
+    
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
