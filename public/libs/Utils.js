@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test5";
+Utils.couchUrl = "http://localhost:5984/test_insert";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -42,7 +42,15 @@ Utils.authUrl = "https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
-Utils.defaultCouchConnection = {protocol: "https://", domain:"127.0.0.1", port:"6984"};
+Utils.defaultCouchConnection = function() {
+  // return {protocol: "https://", domain:"localhost", port:"6984"}; //https
+  return {
+    protocol : "http://",
+    domain : "localhost",
+    port : "5984",
+    corpusname : "test_insert"
+  }; // http because pouch doesnt support https
+};
 /**
  * A message for users if they need help which brings them to our contact us form
  */
