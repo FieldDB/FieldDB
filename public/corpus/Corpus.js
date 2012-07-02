@@ -251,7 +251,41 @@ define([
           });
         });
       },
-      
+      /**
+       * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
+       * "http://localhost:5984/_session";
+       * 
+       * References:
+       * http://guide.couchdb.org/draft/security.html
+       * 
+       * @param username this can come from a username field in a login, or from the User model.
+       * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
+       * @param callback A function to call upon success, it receives the data back from the post request.
+       */
+      logUserIntoTheirCorpusServer : function(username, password, callback){
+        var couchurl = this.get("couchConnection").protocol+this.get("couchConnection").domain;
+        if(this.get("couchConnection").port){
+          couchurl = couchurl+":"+this.get("couchConnection").port;
+        }
+        couchurl = couchurl + "/_session";
+        var corpusloginparams = {};
+        corpusloginparams.name = username;
+        corpusloginparams.password = password;//
+        $.ajax({
+          type : 'POST',
+          url : couchurl ,
+          data : corpusloginparams,
+          success : function(data) {
+            alert("I logged you into your corpus server automatically.");
+            if(typeof callback == "function"){
+              callback(data);
+            }
+          },
+          error : function(data){
+            alert("I couldn't log you into your corpus.");
+          }
+        });
+      },
       validate: function(attrs){
 //        console.log(attrs);
 //        if(attrs.title != undefined){
