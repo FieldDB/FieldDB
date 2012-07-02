@@ -31,8 +31,10 @@ define([
      */
     initialize : function() {
       
-      //rebuild the pouch and touchdb urls to be relative to the active corpus
-      var c = app.get("corpus").get("couchConnection");
+     
+    },relativizePouchToACorpus : function(corpus){
+    //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
+      var c = corpus.get("couchConnection");
       this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
           : Utils.pouchUrl+c.corpusname);
     },

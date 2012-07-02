@@ -113,6 +113,7 @@ require([
   };
   /*
    * Clear the app completely
+   * TODO this doesnt work any more because each corpus is in a different pouch.
    */
   Pouch.destroy('idb://db');
   localStorage.clear();
@@ -125,8 +126,9 @@ require([
     appjson = JSON.parse(appjson);
     //TODO test this
     a = new App(); 
+    var u; 
     if (typeof a.get("authentication").get("user") == "function") {
-      var u = new User();
+      u = new User();
       a.get("authentication").set("user", u);
     }
     var c = new Corpus();
@@ -135,11 +137,18 @@ require([
     var s = new Session({
       sessionFields : a.get("corpus").get("sessionFields").clone()
     });
+    s.relativizePouchToACorpus(c);
+
     a.set("currentSession", s);
 
     var dl = new DataList();
     a.set("currentDataList", dl);
+    dl.relativizePouchToACorpus(c);
     
+    
+    u.relativizePouchToACorpus(c);
+
+
     a.loadMostRecentIds(appjson, function(){
       
     });
