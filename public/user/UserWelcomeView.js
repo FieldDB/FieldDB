@@ -67,6 +67,8 @@ define([
         dataToPost.email = $(".email").val();
         dataToPost.username = $(".username").val();
         dataToPost.password = $(".password").val();
+        //Send a corpusname to create
+        dataToPost.corpuses = [$(".username").val()+"corpus"];
         
 
         if (dataToPost.username != ""
