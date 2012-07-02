@@ -141,6 +141,7 @@ define([
                              value : "To explore the app and try entering/importing data"
                            } ])
                     });
+                s.relativizePouchToACorpus(c);
                 a.get("corpus").get("sessions").add(s);
                 var dl = new DataList(
                     {
@@ -148,11 +149,14 @@ define([
                       "dateCreated" : "May 29, 2012",
                       "description" : "You can use datalists to create handouts or to prepare for sessions with consultants, export to LaTeX or to share with collaborators. ",
                     });
+                dl.relativizePouchToACorpus(c);
+
                 a.get("corpus").get("dataLists").add(dl);
                 a.set("currentSession", s);
                 a.set("currentDataList",dl);
                 a.get("authentication").set("user",u);
-                
+                u.relativizePouchToACorpus(c);
+
                 window.loadApp(a, function(){
                   //TODOD remove sensitive items from the user returned before turning it into a couch entry
                   console.log("Loadded app from json.");

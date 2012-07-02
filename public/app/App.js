@@ -139,6 +139,9 @@ define([
       var u;
       if(appids.userid != null){
         u = new User();
+        if(typeof this.get("corpus") != "function"){
+          u.relativizePouchToACorpus(this.get("corpus"));
+        }
         u.id = appids.userid;
         u.fetch();
         this.get("authentication").set("user",u);
@@ -147,12 +150,18 @@ define([
          * if this is being called by authentication, it will not pass the user because it has already loaded the user.
          */
         u = appView.authView.model.get("user");
+        if(typeof this.get("corpus") != "function"){
+          u.relativizePouchToACorpus(this.get("corpus"));
+        }
       }
       var c = this.get("corpus");
       c.id = appids.corpusid;
       this.set("corpus", c);
       
       var s = this.get("currentSession");
+      if(typeof this.get("corpus") != "function"){
+        s.relativizePouchToACorpus(this.get("corpus"));
+      }
       s.id = appids.sessionid;
       this.set("currentSession", s);
       
@@ -163,6 +172,9 @@ define([
            */
           s.fetch({
             success : function() {
+              if(typeof this.get("corpus") != "function"){
+                s.relativizePouchToACorpus(this.get("corpus"));
+              }
               s.restructure(function(){
                 appView.render();//TODO see if need this
               });
@@ -179,6 +191,9 @@ define([
           alert("There was an error fetching corpus. Loading defaults...");
           s.fetch({
             success : function() {
+              if(typeof this.get("corpus") != "function"){
+                s.relativizePouchToACorpus(this.get("corpus"));
+              }
               s.restructure(function(){
                 appView.render();//TODO see if need this
               });
@@ -223,6 +238,9 @@ define([
       });
       
       var dl = this.get("currentDataList");
+      if(typeof this.get("corpus") != "function"){
+        s.relativizePouchToACorpus(this.get("corpus"));
+      }
       dl.id = appids.datalistid;
       dl.fetch();
       this.set("currentDataList", dl);
