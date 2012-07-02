@@ -114,8 +114,8 @@ require([
   /*
    * Clear the app completely
    */
-//  Pouch.destroy('idb://db');
-//  localStorage.clear();
+  Pouch.destroy('idb://db');
+  localStorage.clear();
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
