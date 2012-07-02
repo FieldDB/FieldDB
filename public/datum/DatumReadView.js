@@ -127,7 +127,7 @@ define([
           this.audioVideoEditView.render();
           
           // Display the DatumTagsView
-          this.datumTagsView.el = this.$(".datum_tags_ul")
+          this.datumTagsView.el = this.$(".datum_tags_ul");
           this.datumTagsView.render();
           
           // Display the DatumFieldsView
@@ -137,23 +137,30 @@ define([
           Utils.debug("\tDatum model was undefined");
         }
       } else if (this.format == "latex") {
-        translation: this.model.get("datumFields").where({label: "translation"})[0].get("value"),      
+        //This bit of code makes the datum look like its rendered by latex, could be put into a function, but not sure if thats necessary...
+        
+        //This gets the fields necessary from the model
         utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
         gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
-        translation= this.model.get("datumFields").where({label: "translation"})[0].get("value"),
-  
+        translation= this.model.get("datumFields").where({label: "translation"})[0].get("value");
+        
+        //makes the top two lines into an array of words.
         utteranceArray = utterance.split(' ');
         glossArray = gloss.split(' ');
         
+        //for loop aligns each word in the utterance with a word in the  gloss
         glossCouplet = [];
         var i= 0;
         for( i; i<utteranceArray.length; i++){
           glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
           this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
         };
+        
+        //adding a checkbox
+        this.$el.prepend('<input type="checkbox" class="styled datum-checkboxes"/> &nbsp &nbsp');
+        //adding the translation on the final line.
         this.$el.append('<br>'+translation);
       }
-
       return this;
     },
     
