@@ -310,6 +310,9 @@ define([
     showReadonlyCorpus : function(corpusid){
       window.appView.renderReadonlyCorpusViews(corpusid);
     },
+    showEditableSession : function(sessionid){
+      window.appView.renderEditableSessionViews(sessionid);
+    },
     
     hideEverything: function() {
       $("#dashboard-view").hide();

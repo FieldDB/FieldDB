@@ -357,6 +357,11 @@ define([
       this.corpusReadFullscreenView.render();
     },
     
+    renderEditableSessionViews: function(sessionid){
+      this.sessionEditLeftSideView.render();
+      this.sessionEditEmbeddedView.render();
+    },
+    
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
