@@ -40,6 +40,10 @@ Utils.activityFeedPouchUrl = "idb://activity_feed_db";
  */
 Utils.authUrl = "https://localhost:3001";
 /**
+ * The parameters of the default couch server.
+ */
+Utils.defaultCouchConnection = {protocol: "http://", domain:"127.0.0.1", port:"5984"};
+/**
  * A message for users if they need help which brings them to our contact us form
  */
 Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ'>Contact Us</a>";

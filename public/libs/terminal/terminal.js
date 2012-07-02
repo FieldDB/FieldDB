@@ -155,11 +155,12 @@ var Terminal = Terminal || function(containerId) {
     }
   }, false);
 
-  window.addEventListener('click', function(e) {
-    //if (!document.body.classList.contains('offscreen')) {
-      cmdLine_.focus();
-    //}
-  }, false);
+  /*dont listen to mouse clicks*/
+//  window.addEventListener('click', function(e) {
+//    //if (!document.body.classList.contains('offscreen')) {
+//      cmdLine_.focus();
+//    //}
+//  }, false);
 
   // Always force text cursor to end of input line.
   cmdLine_.addEventListener('click', inputTextClick_, false);
