@@ -76,6 +76,10 @@ define([
        * @constructs
        */
       initialize : function() {
+        //rebuild the pouch and touchdb urls to be relative to the active corpus
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+this.get("couchConnection").corpusname
+            : Utils.pouchUrl+this.get("couchConnection").corpusname);
+        
         // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
         this.on('all', function(e) {
           Utils.debug(this.get('title') + " event: " + JSON.stringify(e));

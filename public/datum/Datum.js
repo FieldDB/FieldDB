@@ -73,6 +73,10 @@ define([
       if(typeof this.get("audioVideo") == "function"){
         this.set("audioVideo",new AudioVideo());
       }
+    //rebuild the pouch and touchdb urls to be relative to the active corpus
+      var c = app.get("corpus").get("couchConnection");
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
+          : Utils.pouchUrl+c.corpusname);
     },
 
     defaults : {      
