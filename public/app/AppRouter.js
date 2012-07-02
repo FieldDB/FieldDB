@@ -222,7 +222,15 @@ define([
       Utils.debug("In showFullscreenSession: " + corpusName + " *** "
           + sessionId);
           
-      // Change the id of the edit session view's Session to be the given sessionId
+      //If called with no sessionId, don't change the model, simply show the div TODO is this really the convention we want?
+      if(sessionId == null){
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $("#session-embedded").show();
+        return;
+      }
+      
+      // Change the id of the session view's Session to be the given sessionId
       appView.sessionEditView.model.id = sessionId;
       
       // Fetch the Session's attributes from the PouchDB
