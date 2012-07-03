@@ -46,7 +46,7 @@ Utils.defaultCouchConnection = function() {
   return {
     protocol : "https://",
     domain : "ilanguage.iriscouch.com",
-    port : "80",
+    port : "443",
     corpusname : "default"
   }; 
 };
