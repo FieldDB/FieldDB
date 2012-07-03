@@ -145,9 +145,10 @@ require([
     a.set("currentDataList", dl);
     dl.relativizePouchToACorpus(c);
     
-    
-    u.relativizePouchToACorpus(c);
-
+    if( u == undefined ){
+      u = a.get("authentication").get("user");
+      u.relativizePouchToACorpus(c);
+    }
 
     a.loadMostRecentIds(appjson, function(){
       
