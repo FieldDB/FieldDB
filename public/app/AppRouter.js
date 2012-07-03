@@ -355,21 +355,25 @@ define([
      * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
      */
     storeCurrentDashboardIdsToLocalStorage : function(){
-      var ids = {};
-      window.appView.authView.model.get("user").save();
-      window.app.get("currentSession").save();
-      window.app.get("currentDataList").save();
-      window.app.get("corpus").save();
-      
-      ids.corpusid = window.app.get("corpus").id;
-      ids.sessionid = window.app.get("currentSession").id;
-      ids.datalistid = window.app.get("currentDataList").id;
-      ids.userid = window.appView.authView.model.get("user").id;
-      localStorage.setItem("appids",JSON.stringify(ids));
-      
-      //save ids to the user also so that the app can bring them back to where they were
-      window.appView.authView.model.get("user").set("mostRecentIds",ids);
-      window.appView.authView.model.get("user").save();
+      try{
+        var ids = {};
+        window.appView.authView.model.get("user").save();
+        window.app.get("currentSession").save();
+        window.app.get("currentDataList").save();
+        window.app.get("corpus").save();
+        
+        ids.corpusid = window.app.get("corpus").id;
+        ids.sessionid = window.app.get("currentSession").id;
+        ids.datalistid = window.app.get("currentDataList").id;
+        ids.userid = window.appView.authView.model.get("user").id;
+        localStorage.setItem("appids",JSON.stringify(ids));
+        
+        //save ids to the user also so that the app can bring them back to where they were
+        window.appView.authView.model.get("user").set("mostRecentIds",ids);
+        window.appView.authView.model.get("user").save();
+      }catch(e){
+        Utils.debug("storeCurrentDashboardIdsToLocalStorage failed, probably called too early.");
+      }
     }
   });
 
