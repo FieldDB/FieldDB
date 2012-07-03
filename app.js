@@ -8,7 +8,8 @@ var express     = require('express')
     ,crypto     = require('crypto')
     ,fs         = require('fs');
 
-var apphttpsdomain = "https://localhost:3001";
+//var apphttpsdomain = "https://localhost:3001";
+var apphttpsdomain = "https://ifield.fieldlinguist.com";
 
 var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
@@ -42,11 +43,11 @@ app.get('/:usergeneric/:corpusordatalist', function(req, res){
   //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus, if it is a datalist, do that instead
 //  res.redirect(apphttpsdomain+'#corpus/'+corpusid);
 //  res.redirect("https://localhost:3001\#data/"+req.params.datalistid);
-  res.redirect("https://localhost:3001\#corpus/"+req.params.corpusid);
+  res.redirect("https://ifield.fieldlinguist.com\#corpus/"+req.params.corpusid);
 });
 
 app.get('/:usergeneric', function(req, res){
-  res.redirect("https://localhost:3001\#user/"+req.params.usergeneric);
+  res.redirect("https://ifield.fieldlinguist.com\#user/"+req.params.usergeneric);
 });
 
 
