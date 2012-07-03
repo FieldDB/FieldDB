@@ -50,8 +50,7 @@ define([
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen",
-      "click .icon-plus" : "newDatum"
+      "click .icon-resize-full" : "resizeFullscreen"
     },
     
     templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
@@ -119,28 +118,32 @@ define([
     },
     
     /**
-     * Adds a new Datum to the current Corpus in the current Session. It is
-     * placed at the top of the datumsView, pushing off the bottom Datum, if
-     * necessary.
+     * Adds a new Datum to the current Corpus in the current Session.
      */
     newDatum : function() {
-      console.log("Adding a new datum");
-      
-      // Add the new, blank, Datum
-      this.datums.add(new Datum({
+      this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
         datumStates : app.get("corpus").get("datumStates").clone(),
         datumTags : new DatumTags()
-      }), {at:0});
-      
+      }));
+    },
+    
+    /**
+     * Prepends the given Datum to the top of the Datum stack.
+     * Saves and bumps the bottom Datum off the stack, if necessary.
+     * 
+     * @param {Datm} datum The Datum to preprend.
+     */
+    prependDatum : function(datum) {
+      // Add the new, blank, Datum
+      this.datums.add(datum, {at:0});
+       
       // If there are too many datum on the screen, remove the bottom one and save it.
       if (this.datums.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
         var d = this.datums.pop();
-        console.log("Removed the datum with gloss: " + d.get("datumFields").models[3].get("value"));
+        console.log("Removed the datum with id: " + d._id);
         d.save();
       }
-      
-      return false;
     }
   });
   
