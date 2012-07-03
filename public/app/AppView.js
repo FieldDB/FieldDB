@@ -337,24 +337,36 @@ define([
       
       return this;
     },
-    
+    // Display the Corpus Views
     renderEditableCorpusViews: function(corpusid){
-      // Display the Corpus Views
       this.corpusEditLeftSideView.render();
-//      this.corpusReadLeftSideView.render();
       this.corpusEditEmbeddedView.render();
-//      this.corpusReadEmbeddedView.render();
       this.corpusEditFullscreenView.render();
-//      this.corpusReadFullscreenView.render();
     },
     renderReadonlyCorpusViews: function(corpusid){
-      // Display the Corpus Views
-//      this.corpusEditLeftSideView.render();
       this.corpusReadLeftSideView.render();
-//      this.corpusEditEmbeddedView.render();
       this.corpusReadEmbeddedView.render();
-//      this.corpusEditFullscreenView.render();
       this.corpusReadFullscreenView.render();
+    },
+      
+    //Display Session Views
+    renderEditableSessionViews: function(sessionid){
+      this.sessionEditLeftSideView.render();
+      this.sessionEditEmbeddedView.render();
+    },
+    renderReadonlySessionViews: function(sessionid){
+      this.sessionReadLeftSideView.render();
+      this.sessionReadEmbeddedView.render();
+    },
+    
+    //Display DataList Views
+    renderEditableDataListViews: function(datalistid){
+      this.dataListEditLeftSideView.render();
+      this.dataListEditFullscreenView.render();
+    },
+    renderReadonlyDataListViews: function(datalistid){
+      this.dataListReadLeftSideView.render();
+      this.dataListReadFullscreenView.render();
     },
     
     /**
@@ -415,34 +427,41 @@ define([
      * Synchronize the server and local databases.
      */
     replicateDatabases : function() {
-      (new Datum()).pouch(function(err, db) {
-        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-      });
+      //save all the important stuff to pouch before replicating.
+      window.app.router.storeCurrentDashboardIdsToLocalStorage();
+      
+
+      this.model.get("corpus").replicateCorpus();
+//      (new Datum()).pouch(function(err, db) {
+//        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate to");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//        });
+//        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate from");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//        });
+//      });
     },
     replicateDatabasesWithCallback : function(callback) {
-      (new Datum()).pouch(function(err, db) {
-        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-          
-        });
-        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-          callback();
-        });
-      });
+      this.model.get("corpus").replicateCorpus(callback);
+//
+//      (new Datum()).pouch(function(err, db) {
+//        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate to");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//          
+//        });
+//        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate from");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//          callback();
+//        });
+//      });
     },
     /**
      * Synchronize the activity feed server and local databases.

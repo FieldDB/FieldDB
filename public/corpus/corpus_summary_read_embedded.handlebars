@@ -11,11 +11,12 @@
 
 <!-- This div aligns the description with the menu buttons -->
 <div>
-	<div id="description">
-		<h5>{{description}}</h5>
-	</div>
+	<div id="corpus-description">
+		<p>{{description}}<p>
+	</div>	
 	<div class="btn-group corpusMenu">
-		<div>
+	 <!-- This div is necessary so that the menu appears below the buttons -->
+		<div class= "btn-group">
 			<button class="btn btn-primary dropdown-toggle"	data-toggle="dropdown">
 				New <span class="caret"></span>
 			</button>

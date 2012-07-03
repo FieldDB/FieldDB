@@ -9,8 +9,6 @@
     ,"mongoose-auth": "latest"
     ,"paperboy": "latest"
     ,"backbone": "latest"
-    ,"mothermayi": "latest"
-    ,"redis": "latest"
     ,"zlib": "latest"                     
     ,"crypto":"latest"
     ,"everyauth": "latest"
