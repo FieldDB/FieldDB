@@ -76,6 +76,10 @@ define([
        * @constructs
        */
       initialize : function() {
+        //rebuild the pouch and touchdb urls to be relative to the active corpus
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+this.get("couchConnection").corpusname
+            : Utils.pouchUrl+this.get("couchConnection").corpusname);
+        
         // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
         this.on('all', function(e) {
           Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
@@ -213,12 +217,79 @@ define([
         sessions : Sessions, 
         dataLists : DataLists, 
         permissions : Permissions,
-        comments: Comments
+        comments: Comments,
+        couchConnection : Utils.defaultCouchConnection()
         
       },
+      //this gets overridden when user calls replicate, so that it is the current corpus's database url
       pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
           : Utils.pouchUrl),
+      /**
+       * Synchronize the server and local databases.
+       */
+      replicateCorpus : function(callback) {
+        var self = this;
+        
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+self.get("couchConnection").corpusname
+            : Utils.pouchUrl+self.get("couchConnection").corpusname);
+        
+        this.pouch(function(err, db) {
+          var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
+          if(self.get("couchConnection").port != null){
+            couchurl = couchurl+":"+self.get("couchConnection").port;
+          }
+          couchurl = couchurl +"/"+ self.get("couchConnection").corpusname;
           
+          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate to " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+          });
+          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate from " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+            if(typeof callback == "function"){
+              callback();
+            }
+          });
+        });
+      },
+      /**
+       * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
+       * "http://localhost:5984/_session";
+       * 
+       * References:
+       * http://guide.couchdb.org/draft/security.html
+       * 
+       * @param username this can come from a username field in a login, or from the User model.
+       * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
+       * @param callback A function to call upon success, it receives the data back from the post request.
+       */
+      logUserIntoTheirCorpusServer : function(username, password, callback){
+        var couchurl = this.get("couchConnection").protocol+this.get("couchConnection").domain;
+        if(this.get("couchConnection").port != null){
+          couchurl = couchurl+":"+this.get("couchConnection").port;
+        }
+        couchurl = couchurl + "/_session";
+        var corpusloginparams = {};
+        corpusloginparams.name = username;
+        corpusloginparams.password = password;//
+        $.ajax({
+          type : 'POST',
+          url : couchurl ,
+          data : corpusloginparams,
+          success : function(data) {
+            alert("I logged you into your corpus server automatically.");
+            if(typeof callback == "function"){
+              callback(data);
+            }
+          },
+          error : function(data){
+            alert("I couldn't log you into your corpus.");
+          }
+        });
+      },
       validate: function(attrs){
 //        console.log(attrs);
 //        if(attrs.title != undefined){

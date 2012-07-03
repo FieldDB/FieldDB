@@ -1,23 +1,15 @@
 var express     = require('express')
-    ,everyauth  = require('everyauth')
     ,util       = require('util')
+    
+    ,mongooseAuth  = require('mongoose-auth')
+    ,Users = require('./lib/restfullmongooseusers.js')
+    
     ,https      = require('https')
     ,crypto     = require('crypto')
-    ,fs         = require('fs')
-    ,users      = require('./lib/users');
+    ,fs         = require('fs');
 
-var authconf = require('./everyauthconfig');
-var apphttpsdomain = "https://localhost:3001";
-
-everyauth.twitter
-  .consumerKey(authconf.twitter.consumerKey)
-  .consumerSecret(authconf.twitter.consumerSecret)
-  .findOrCreateUser(function(session, accessToken, accessTokenSecret, twitterUserData) {
-    var promise = this.Promise();
-    users.findOrCreateByTwitterData(twitterUserData, accessToken, accessTokenSecret, promise);
-    return promise;
-  })
-  .redirectPath(apphttpsdomain+'#user');
+//var apphttpsdomain = "https://localhost:3001";
+var apphttpsdomain = "https://ifield.fieldlinguist.com";
 
 var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
@@ -28,13 +20,20 @@ app.configure(function() {
   app.use(express.bodyParser());
   app.use(express.cookieParser());
   app.use(express.session({secret: "90ndsj9dfdsfwewfead3"}));
-  app.use(everyauth.middleware());
   app.use(express.static(__dirname + '/public'));
-  app.use(app.router);
+//  app.use(app.router); //do not turn this on, see notes on https://github.com/bnoguchi/mongoose-auth/
+  app.use(mongooseAuth.middleware());
   app.use(express.errorHandler());
-  everyauth.helpExpress(app);
 });
 
+app.post('/usernamelogin/:username', function(req,res){
+  console.log("User wants to log in "+req.params.username);
+  // TODO Look up username in mongodb, find their login service, and redirect them to
+  // that service. if username and password, reply to backbone with a message to
+  // show login and password
+  
+  res.redirect('/login');
+});
 app.get('/:usergeneric/:corpusordatalist', function(req, res){
   console.log("hi");
   var usergeneric = req.params.usergeneric
@@ -44,15 +43,16 @@ app.get('/:usergeneric/:corpusordatalist', function(req, res){
   //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus, if it is a datalist, do that instead
 //  res.redirect(apphttpsdomain+'#corpus/'+corpusid);
 //  res.redirect("https://localhost:3001\#data/"+req.params.datalistid);
-  res.redirect("https://localhost:3001\#corpus/"+req.params.corpusid);
+  res.redirect("https://ifield.fieldlinguist.com\#corpus/"+req.params.corpusid);
 });
 
 app.get('/:usergeneric', function(req, res){
-  console.log("Got a route");
-  res.redirect("https://localhost:3001\#user/"+req.params.usergeneric);
+  res.redirect("https://ifield.fieldlinguist.com\#user/"+req.params.usergeneric);
 });
+
+
+mongooseAuth.helpExpress(app);
 
 port = "3001";
 app.listen(port);
 console.log("Listening on " + port)
-

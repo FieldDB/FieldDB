@@ -62,7 +62,8 @@ define( [
       'click .serverhowmany a': 'changeCount',
       "click #populateDataList" : "renderNewModel",// TODO remove after demo
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"    
+      "click .icon-resize-full" : "resizeFullscreen",    
+       "click .icon-edit" : "showEditable" 
     },
     
     /**
@@ -254,6 +255,9 @@ define( [
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
+    },
+    showEditable :function(){
+      window.app.router.showEditableDataList();
     }
   });
 

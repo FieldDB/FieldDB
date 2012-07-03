@@ -2,6 +2,7 @@
 define([
     "use!backbone",
     "comment/Comments",
+    "datum/DatumField",
     "datum/DatumFields",
     "user/Consultant",
     "user/Team",
@@ -9,6 +10,7 @@ define([
 ], function(
     Backbone,
     Comments,
+    DatumField,
     DatumFields,
     Consultant,
     Team,
@@ -46,8 +48,14 @@ define([
      * @constructs
      */
     initialize: function() {
+     
     },
-   
+    relativizePouchToACorpus : function(corpus){
+      //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
+        var c = corpus.get("couchConnection");
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
+            : Utils.pouchUrl+c.corpusname);
+      },
     defaults: {
       sessionFields : new DatumFields(),
       comments : Comments
@@ -79,6 +87,32 @@ define([
        //if (consultant not in consultants ) {
       //    return "consultant must be in the system.";
       // }
+    },
+    /**
+     * When a Session is returned from the database, its internal models are just
+     * arrays of their attributes. This restructures them into their models.
+     * 
+     * Function copied from Datum.js
+     */
+    restructure : function(callback) {
+      // Restructure the SessionFields
+      if (this.get("sessionFields")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("sessionFields");
+        
+        // Create the model to store each DatumField
+        this.set("sessionFields", new DatumFields());
+        
+        // Create the Datum Field models and store them
+        for (i in temp) {
+          var field = new DatumField(temp[i]);
+          this.get("sessionFields").push(field);
+        }
+      }
+      // TODO Restructure the rest
+      if(typeof callback == "function"){
+          callback();
+      }
     },
   });
   return Session;

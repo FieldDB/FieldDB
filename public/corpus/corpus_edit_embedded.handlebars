@@ -33,11 +33,78 @@
 <label>Description:</label>
 <textarea class="description">{{description}}</textarea>
 
-<div class="sessions_list">Put session list here</div>
+<div class="accordion" id="accordion2">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseSessions">
+				<h4>Sessions associated with this corpus</h4>
+				 </a>
+		</div>
+		<div id="collapseSessions" class="accordion-body collapse"
+			style="height: 0px;">
+			<div class="accordion-inner">
+				<ul>
+				<li>Session 1</li>
+				<li>Session 2</li>
+				<li>Session 3</li>
+				<li>Session 3</li>
+				<li>Session 3</li>
+				<li>Session 3</li>
+				<li>Session 7</li>
+				<li>Session 8</li>
+				<li>Session 9</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseDatalists">
+				<h4>Datalists associated with this corpus</h4>
+				</a>
+		</div>
+		<div id="collapseDatalists" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<ul>
+				<li>Datalist 1</li>
+				<li>Datalist 2</li>
+				<li>Datalist 3</li>
+				<li>Datalist 4</li>
+				<li>Datalist 5</li>
+				<li>Datalist 6</li>
+				<li>Datalist 7</li>
+				<li>Datalist 8</li>
+				<li>Datalist 9</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#1" href="#collapsePermissions">
+				<h4>Permissins associated with this corpus</h4>
+				</a>
+		</div>
+		<div id="collapsePermissions" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<ul>
+				<li>Permission 1</li>
+				<li>Permission 2</li>
+				<li>Permission 3</li>
+				<li>Permission 4</li>
+				<li>Permission 5</li>
+				<li>Permission 6</li>
+				<li>Permission 7</li>
+				<li>Permission 8</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
 
-<div class="dataLists_list">Put datalist list here</div>
-
-<div class="permissions_settings">Put permissions here</div>
 
 
 <h4>Datum field settings</h4>
