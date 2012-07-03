@@ -35,13 +35,13 @@
 }
 
 #corpus-quickview{
-	overflow: auto;
-	
+	height: 100px;	
 }
 
 #corpus-description{
 	width: 170px;
 	float: left;
+	overflow: auto;
 }
 
 #corpus-title{
