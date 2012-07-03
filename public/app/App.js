@@ -261,7 +261,7 @@ define([
      * @param {Object} obj Contains the App properties.
      */
     restructure : function(obj) {
-      console.log("*** Before App resturcture: " + JSON.stringify(obj));
+      console.log("*** Before App restructure: " + JSON.stringify(obj));
       console.log(this);
       
       for (key in obj) {
