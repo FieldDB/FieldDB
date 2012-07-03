@@ -42,7 +42,15 @@ Utils.authUrl = "https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
-Utils.defaultCouchConnection = {protocol: "http://", domain:"127.0.0.1", port:"5984"};
+Utils.defaultCouchConnection = function() {
+  // return {protocol: "https://", domain:"localhost", port:"6984"}; //https
+  return {
+    protocol : "http://",
+    domain : "trisapeace.iriscouch.com",
+    port : null,
+    corpusname : "datum_test5"
+  }; // http because pouch doesnt support https
+};
 /**
  * A message for users if they need help which brings them to our contact us form
  */
