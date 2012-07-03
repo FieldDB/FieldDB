@@ -3,6 +3,7 @@ define([
     "use!handlebars",
     "text!corpus/corpus_edit_fullscreen.handlebars",
     "text!corpus/corpus_edit_embedded.handlebars",
+    "text!corpus/corpus_summary_edit_embedded.handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -24,6 +25,7 @@ define([
     Handlebars,
     corpusFullscreenTemplate,
     corpusWellTemplate,
+    corpusSummaryTemplate,
     Corpus,
     Comment,
     Comments,
@@ -51,7 +53,7 @@ define([
      * 
      * @property {String} format Must be set when the CorpusEditView is
      * initialized. Valid values are "centreWell" and
-     * "fullscreen".
+     * "fullscreen" and "leftSide"
      * 
      * @description Starts the Corpus and initializes all its children.
      * 
@@ -111,41 +113,11 @@ define([
      * The underlying model of the CorpusReadFullScreenView is a Corpus.
      */    
     model : Corpus,
-    
-    /**
-     * The CommentEditView is a child of the CorpusReadFullScreenView.
-     */
-    commentEditView : CommentEditView,
-    
-    /**
-     * The DataListsView is a child of the CorpusReadFullScreenView.
-     */
-    dataListsView : UpdatingCollectionView,
-    /**
-     * The DatumFieldsView is a child of the CorpusReadFullScreenView.
-     */
-    datumFieldsView : UpdatingCollectionView, 
-    
-    /**
-     * The datumStatesView is a child of the CorpusReadFullScreenView.
-     */
-    datumStatesView : UpdatingCollectionView,
-    
-    /**
-     * The PermissionsView is a child of the CorpusReadFullScreenView.
-     */
-    permissionsView : PermissionsView,
-    
-    /**
-     * The SessionsView is a child of the CorpusReadFullScreenView.
-     */
-    sessionsView : UpdatingCollectionView,
    
     /**
      * Events that the CorpusReadFullScreenView is listening to and their handlers.
      */
     events : {
-//              "click .new_datum" : "newDatum",
 //              "click .new_session" : "newSession",
 //              "click .show_data_lists" : "showDataLists",
 //              "click .show_corpus_details" : "showCorpusDetails",
@@ -164,7 +136,9 @@ define([
       //Add button inserts new Datum Field
       "click .add_datum_field" : 'insertNewDatumField',
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      
+      "click .new_datum" : "newDatum"
     },
 
     /**
@@ -178,6 +152,11 @@ define([
     templateCentreWell : Handlebars.compile(corpusWellTemplate),
     
     /**
+     * The Handlebars template rendered as the Summary
+     */
+    templateSummary : Handlebars.compile(corpusSummaryTemplate),
+    
+    /**
      * Renders the CorpusReadFullScreenView and all of its child Views.
      */
     render : function() {
@@ -185,7 +164,7 @@ define([
         Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
         if (this.model != undefined) {
           // Display the CorpusReadFullScreenView
-          this.setElement($("#corpus-fullscreen"));
+          this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
           // Display the CommentEditView
@@ -213,10 +192,39 @@ define([
           Utils.debug("\tCorpus model was undefined.");
         }
       } else if (this.format == "fullscreen") {
-        // TODO render full screen
+        this.setElement($("#corpus-fullscreen"));
+        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
+
+        // Display the UpdatingCollectionView
+        // this.dataListsView.render();
+
+        // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$('.datum_fields_settings');
+        this.datumFieldsView.render();
+
+        // Display the DatumStatesView
+        this.datumStatesView.el = this.$('.datum_state_settings');
+        this.datumStatesView.render();
+
+        // Display the PermissionsView
+        this.permissionsView.render();
+
+        // Display the SessionsView
+        // this.sessionsView.render();
+      } else if (this.format == "leftSide"){
+        this.setElement($("#corpus-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
       }
         
       return this;
+    },
+    
+    newDatum : function() {
+      app.router.showDashboard();
     },
 
      //Insert functions associate the values chosen with a new
@@ -268,6 +276,12 @@ define([
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
+    },
+    showEditable :function(){
+      window.app.router.showEditableCorpus();
+    },
+    showReadonly : function(){
+      window.app.router.showReadonlyCorpus();
     }
   });
 

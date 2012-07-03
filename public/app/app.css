@@ -34,6 +34,14 @@
   top: 75px;
 }
 
+#corpus-quickview{
+	height: 100px;
+}
+
+#description{
+	width: 160px;
+	float: left;
+}
 
 .corpusMenu{
 	float: right;
@@ -85,7 +93,7 @@ textarea{
 }
 
 
-.dropZone{
+.drop-zone{
 	float: right;
 	border: dashed;
 	border-color:#1E90FF;

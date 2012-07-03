@@ -21,9 +21,9 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.model.bind("change",this.renderSkin, this);
+      this.model.bind("change:skin", this.renderSkin, this);
       
-      if( this.model.get("skin") == ""){
+      if (this.model.get("skin") == "") {
         this.randomSkin();
       }
     },
@@ -37,7 +37,8 @@ define([
      * Events that the UserPreferenceEditView is listening to and their handlers.
      */
     events:{
-      "click #skin": "nextSkin"
+      "click #skin" : "nextSkin",
+      "change .num_datum_dropdown" : "updateNumVisibleDatum" 
     },
  
     /**
@@ -51,7 +52,7 @@ define([
         // Display the UserPreferenceEditView
         this.setElement($("#user-preferences-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
+        this.$el.find(".num_datum_dropdown").val(this.model.get("numVisibleDatum"));
       }
       
       return this;
@@ -86,16 +87,20 @@ define([
      */
     nextSkin : function() {
       this.currentSkin = (this.currentSkin + 1) % this.skins.length;
-      this.model.set("skin", this.skins[ this.currentSkin ]);
+      this.model.set("skin", this.skins[this.currentSkin]);
     },
     
-    randomSkin : function(){
-      this.currentSkin = Math.floor(Math.random()* this.skins.length);
-      this.model.set("skin", this.skins[ this.currentSkin ]);
+    randomSkin : function() {
+      this.currentSkin = Math.floor(Math.random() * this.skins.length);
+      this.model.set("skin", this.skins[this.currentSkin]);
     },
     
-    renderSkin : function(){
+    renderSkin : function() {
       document.body.style.backgroundImage = "url(" + this.model.get("skin") + ")";
+    },
+    
+    updateNumVisibleDatum : function() {
+      this.model.set("numVisibleDatum", this.$el.find(".num_datum_dropdown").val());
     }
   });
   
