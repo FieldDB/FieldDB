@@ -1,4 +1,7 @@
 #!/bin/bash
+
+#sudo service couchdb start
+#sudo service mongod start
 ./node_modules/forever/bin/forever \
 start \
 -al forever.log \
