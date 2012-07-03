@@ -1,3 +1,4 @@
+//TODO this is mostly a copy of DataListEditView, we will need to think about what actually needs to go in here and what it will look like.
 define( [ 
   "use!backbone", 
   "use!handlebars",
@@ -61,7 +62,8 @@ define( [
       'click .serverhowmany a': 'changeCount',
       "click #populateDataList" : "renderNewModel",// TODO remove after demo
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"    
+      "click .icon-resize-full" : "resizeFullscreen",    
+       "click .icon-edit" : "showEditable" 
     },
     
     /**
@@ -253,6 +255,9 @@ define( [
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
+    },
+    showEditable :function(){
+      window.app.router.showEditableDataList();
     }
   });
 
