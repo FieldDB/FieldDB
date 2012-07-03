@@ -115,8 +115,8 @@ require([
    * Clear the app completely
    * TODO this doesnt work any more because each corpus is in a different pouch.
    */
-  Pouch.destroy('idb://db');
-  localStorage.clear();
+//  Pouch.destroy('idb://db');
+//  localStorage.clear();
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
