@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://ilanguage.iriscouch.com/default";
+Utils.couchUrl = "http://trisapeace.iriscouch.com/default";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -44,9 +44,9 @@ Utils.authUrl = "https://ifield.fieldlinguist.com";
  */
 Utils.defaultCouchConnection = function() {
   return {
-    protocol : "https://",
-    domain : "ilanguage.iriscouch.com",
-    port : "443",
+    protocol : "http://",
+    domain : "trisapeace.iriscouch.com",
+    port : "80",
     corpusname : "default"
   }; 
 };
