@@ -427,6 +427,10 @@ define([
      * Synchronize the server and local databases.
      */
     replicateDatabases : function() {
+      //save all the important stuff to pouch before replicating.
+      window.app.router.storeCurrentDashboardIdsToLocalStorage();
+      
+
       this.model.get("corpus").replicateCorpus();
 //      (new Datum()).pouch(function(err, db) {
 //        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
