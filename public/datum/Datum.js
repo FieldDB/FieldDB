@@ -193,11 +193,18 @@ define([
         // Code for get_datum_field/get_datum_fields
         //
         // function(doc) {
-        //   if (doc.datumFields) {
-        //     var obj = {}
+        //   if ((doc.datumFields) && (doc.session)) {
+        //     var obj = {};
         //     for (i = 0; i < doc.datumFields.length; i++) {
         //       if (doc.datumFields[i].value) {
         //         obj[doc.datumFields[i].label] = doc.datumFields[i].value;
+        //       }
+        //     }
+        //     if (doc.session.sessionFields) {
+        //       for (j = 0; j < doc.session.sessionFields.length; j++) {
+        //         if (doc.session.sessionFields[j].value) {
+        //           obj[doc.session.sessionFields[j].label] = doc.doc.session.sessionFields[j].value;
+        //         }
         //       }
         //     }
         //     emit(obj, doc._id);
