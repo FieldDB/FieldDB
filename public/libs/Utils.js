@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://ifield.fieldlinguist.com:5984/test";
+Utils.couchUrl = "http://ilanguage.iriscouch.com/default";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -43,13 +43,12 @@ Utils.authUrl = "https://ifield.fieldlinguist.com";
  * The parameters of the default couch server.
  */
 Utils.defaultCouchConnection = function() {
-  // return {protocol: "https://", domain:"localhost", port:"6984"}; //https
   return {
     protocol : "http://",
-    domain : "ifield.fieldlinguist.com",
-    port : "5984",
-    corpusname : "test"
-  }; // http because pouch doesnt support https
+    domain : "ilanguage.iriscouch.com",
+    port : "80",
+    corpusname : "default"
+  }; 
 };
 /**
  * A message for users if they need help which brings them to our contact us form
