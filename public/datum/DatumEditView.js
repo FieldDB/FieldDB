@@ -212,6 +212,9 @@ define([
         // happens
         // before the saving is done
         this.needsSave = false;
+        
+        // Store the current Session in the Datum
+        this.model.set("session", app.get("currentSession"));
 
         Utils.debug("Saving the Datum");
         this.model.save();
