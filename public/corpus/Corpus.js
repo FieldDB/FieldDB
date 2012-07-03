@@ -235,10 +235,10 @@ define([
         
         this.pouch(function(err, db) {
           var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
-          if(self.get("couchConnection").port){
+          if(self.get("couchConnection").port != null){
             couchurl = couchurl+":"+self.get("couchConnection").port;
           }
-          couchurl = couchurl + self.get("couchConnection").corpusname;
+          couchurl = couchurl +"/"+ self.get("couchConnection").corpusname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
             Utils.debug("Replicate to " + couchurl);
@@ -268,7 +268,7 @@ define([
        */
       logUserIntoTheirCorpusServer : function(username, password, callback){
         var couchurl = this.get("couchConnection").protocol+this.get("couchConnection").domain;
-        if(this.get("couchConnection").port){
+        if(this.get("couchConnection").port != null){
           couchurl = couchurl+":"+this.get("couchConnection").port;
         }
         couchurl = couchurl + "/_session";

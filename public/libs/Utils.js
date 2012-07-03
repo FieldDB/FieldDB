@@ -46,9 +46,9 @@ Utils.defaultCouchConnection = function() {
   // return {protocol: "https://", domain:"localhost", port:"6984"}; //https
   return {
     protocol : "http://",
-    domain : "localhost",
-    port : "5984",
-    corpusname : "test_insert"
+    domain : "trisapeace.iriscouch.com",
+    port : null,
+    corpusname : "datum_test5"
   }; // http because pouch doesnt support https
 };
 /**
