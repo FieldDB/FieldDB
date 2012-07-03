@@ -50,7 +50,8 @@ define([
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "click .icon-plus" : "newDatum"
     },
     
     templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
@@ -105,16 +106,41 @@ define([
       if (nextNumberOfDatum > previousNumberOfDatum) {
         for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
           this.datums.add(new Datum({
-          datumFields : app.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone(),
-          datumTags : new DatumTags()
-        }));
+            datumFields : app.get("corpus").get("datumFields").clone(),
+            datumStates : app.get("corpus").get("datumStates").clone(),
+            datumTags : new DatumTags()
+          }));
         }
       } else if (nextNumberOfDatum < previousNumberOfDatum) {
         for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
           this.datums.pop();
         }
       }
+    },
+    
+    /**
+     * Adds a new Datum to the current Corpus in the current Session. It is
+     * placed at the top of the datumsView, pushing off the bottom Datum, if
+     * necessary.
+     */
+    newDatum : function() {
+      console.log("Adding a new datum");
+      
+      // Add the new, blank, Datum
+      this.datums.add(new Datum({
+        datumFields : app.get("corpus").get("datumFields").clone(),
+        datumStates : app.get("corpus").get("datumStates").clone(),
+        datumTags : new DatumTags()
+      }), {at:0});
+      
+      // If there are too many datum on the screen, remove the bottom one and save it.
+      if (this.datums.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
+        var d = this.datums.pop();
+        console.log("Removed the datum with gloss: " + d.get("datumFields").models[3].get("value"));
+        d.save();
+      }
+      
+      return false;
     }
   });
   
