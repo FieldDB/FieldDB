@@ -11,9 +11,7 @@
   "permissions": [
     "unlimitedStorage",
     "https://ifield.fieldlinguist.com/",
-    "http://trisapeace.iriscouch.com/",
-    "http://localhost:3000/",
-    "https://localhost:3001/"
+    "https://ilanguage.iriscouch.com/"
   ],
    "icons": { 
     "16": "icon16.png",
