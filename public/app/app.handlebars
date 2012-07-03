@@ -18,7 +18,7 @@
             <div class="btn-group">
               <button class="btn dropdown-toggle btn-inverse"
               data-toggle="dropdown">
-                <i class="icons icon-user icon-white"></i>
+                <span id="user-quickview"><i class="icons icon-user icon-white"></i></span>
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" id="authentication-embedded"></ul>
@@ -40,22 +40,21 @@
       <div id="data-list-embedded" class="sidebar-nav well"></div>
     </div>
     <!--Elements in the middle (things that get hidden)  -->
-    <div class="span6 well">
+    <div class="span6">
 			
-			<div id="datums-embedded" class="middle">
-				<div>Multiple Data Entry View</div>
-				<div id="datum-embedded">Datum View</div>
+			<div id="datums-embedded" class="middle well">
+			  <div>Datums</div>
 			</div>
 
-			<div id="session-embedded" class="middle">
+			<div id="session-embedded" class="middle well">
         <div>Session</div>
       </div>
 
-      <div id="corpus-embedded" class="middle">
+      <div id="corpus-embedded" class="middle well">
         <div>Corpus</div>
       </div>
 
-      <div id="search-embedded" class="middle">
+      <div id="search-embedded" class="middle well">
         <div>Search</div>
       </div>
 
@@ -81,6 +80,9 @@
 	</div>
 	<div id="data-list-fullscreen" class="well">
 		<div>Data List</div>
+	</div>
+	<div id="datum-container-fullscreen" class="well">
+	  <div>Datum Container</div>
 	</div>
 </div>
 <!--/row-->

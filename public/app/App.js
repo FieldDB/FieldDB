@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "authentication/Authentication", 
     "corpus/Corpus",
+    "datum/DatumFields",
     "search/Search",
     "datum/Session",
     "app/AppRouter",
@@ -11,6 +12,7 @@ define([
     Backbone, 
     Authentication, 
     Corpus,
+    DatumFields,
     Search,
     Session,
     AppRouter,
@@ -27,7 +29,7 @@ define([
      * The App should be serializable to save state to local storage for the
      * next run.
      * 
-     * @property {Authentication} auth The auth member variable is an
+     * @property {Authentication} authentication The auth member variable is an
      *           Authentication object permits access to the login and logout
      *           functions, and the database of users depending on whether the
      *           app is online or not.
@@ -52,24 +54,67 @@ define([
         Utils.debug("Error in App: " + error);
       });
       
-      //TODO pull corpus id out of local storage or make new
-      // If read in a stringified corpus, turn it into a corpus, then call fetch  
-      if (this.get("corpus").description != null) {
+      /*
+       * Load the most recent corpus
+       */
+      if (typeof this.get("corpus") == "function") {
+        if(localStorage.getItem("corpusid")){
+          //TODO user the corpusid from local storage
+        }
         Utils.debug("\tUsing corpus from existing app.");
-        this.set("corpus", new Corpus(this.get("corpus")));
-      } else {
-        this.set("corpus", new Corpus());
-        this.get("corpus").set("confidential", new Confidential());
-        Utils.debug("\tUsing new corpus.");
+        this.set("corpus", new Corpus({
+          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
+          "title": "Quechua Corpus",
+          "titleAsUrl": "Quechua_Corpus",
+          "description": "This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.",
+       }));
+        this.get("corpus").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
       }
-      //TODO pull session out of local storage, or make new
+      /*
+       * Load the most recent session
+       */
+      if (typeof this.get("currentSession") == "function") {
+        if (localStorage.getItem("sessionid")) {
+          // TODO use the sessionid from local storage
+        }
+        Utils.debug("\tUsing session from existing app.");
+        this.set("currentSession", new Session({
+//          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
+          "sessionFields" : new DatumFields([ {
+            label : "user",
+            value : "sapir"
+          }, {
+            label : "consultants",
+            value : "Tillohash and Gladys"
+          }, {
+            label : "language",
+            value : "Quechua"
+          }, {
+            label : "dialect",
+            value : "Cusco"
+          }, {
+            label : "dateElicited",
+            value : new Date()
+          }, {
+            label : "dateSEntered",
+            value : new Date()
+          }, {
+            label : "goal",
+            value : "Working on which verbs combine with -naya"
+          } ])
+        }));
+//        this.get("currentSession").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
+
+      }
+      
+      
     },
     
     defaults : {
       corpus : Corpus,
-      username : localStorage.getItem("username"),
       sessionid : localStorage.getItem("sessionid"),
-      currentSession : new Session()//TODO this seems dangerous, why create a new session rather than just putting a predicate/classname here?
+      authentication : new Authentication(),
+      currentSession : Session
     },
     
     router : AppRouter

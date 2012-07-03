@@ -6,7 +6,7 @@
         		"communicate between each other", function() {
         	 expect(true).toBeTruthy();
         });
-        it("should show a timestamp and a userid by default", function() {
+        it("should show a timestamp and a username by default", function() {
         	 expect(true).toBeTruthy();
         });
         it("should be able to be edited", function() {

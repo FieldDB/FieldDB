@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars",
     "text!authentication/authentication_edit_embedded.handlebars",
+    "text!user/user_read_link.handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
@@ -10,6 +11,7 @@ define([
     Backbone, 
     Handlebars, 
     authTemplate, 
+    userTemplate,
     Authentication, 
     User, 
     UserReadView
@@ -33,11 +35,12 @@ define([
       this.userView = new UserReadView({
          model: this.model.get("user")
       });
-//      this.userView.loadSample();
+      this.userView.format = "link";
+      this.userView.setElement($("#user-quickview"));
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
-      
+      this.model.get("user").bind('change', this.render, this);
       this.authenticatePreviousUser();      
     },
 
@@ -49,7 +52,6 @@ define([
     /**
      * The userView is a child of the AuthenticationEditView.
      */
-    // TODO Make this a real child, rather than just a partial.
     userView : UserReadView,
     
     /**
@@ -64,26 +66,42 @@ define([
      * The Handlebars template rendered as the AuthenticationEditView.
      */
     template : Handlebars.compile(authTemplate),
+    userTemplate : Handlebars.compile(userTemplate),
     
     /**
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
+      if(this.model.get("user") != undefined){
+        this.model.set( "gravatar", this.model.get("user").get("gravatar") );
+      }
       if (this.model != undefined) {
         // Display the AuthenticationEditView
         this.setElement($("#authentication-embedded"));
-      //  Handlebars.registerPartial("user", this.userView.template(this.userView.model.toJSON()));
         $(this.el).html(this.template(this.model.toJSON()));
         
         if (this.model.get("state") == "loggedIn") {
           $("#logout").show();
           $("#login").hide();
           $("#login_form").hide();
-        } else if (this.model.get("state") == "loggedOut") {
+          if(this.model.get("user") != undefined){
+            this.userView.setElement($("#user-quickview"));
+            this.userView.render();
+          }else{
+            $("#user-quickview").html('<i class="icons icon-user icon-white">');
+          }
+        } else {
           $("#logout").hide();
           $("#login").show();
           $("#login_form").show();
+          if(this.model.get("user") != undefined){
+            this.userView.setElement($("#user-quickview"));
+            this.userView.render();
+          }else{
+            $("#user-quickview").html('<i class="icons icon-user icon-white">');
+          }
+          this.$el.children(".user").html("");
         }
         
         Utils.debug("\trendering login: " + this.model.get("username"));
@@ -99,7 +117,6 @@ define([
      * and then authenticates public into the app.
      */
     logout : function() {
-      localStorage.removeItem("user");
       localStorage.removeItem("username");
       
       this.authenticateAsPublic();
@@ -131,8 +148,6 @@ define([
         gravatar :  this.userView.model.get("gravatar") 
       });
       
-      // TODO @cesine Do you think that the Sapir user and username should be put into
-      // localStorage?
     },
     
     /**
@@ -156,8 +171,6 @@ define([
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
         this.loadSample();
-        
-        
         return;
       }
       
@@ -184,8 +197,7 @@ define([
         });
 
         // Save the authenticated user in localStorage
-        localStorage.setItem("username", u.get("username"));
-        localStorage.setItem("user", JSON.stringify(u.toJSON()));
+//        localStorage.setItem("username", u.get("username"));
       });
     },
     
@@ -207,8 +219,7 @@ define([
       });
       
       // Save the public user in localStorage
-      localStorage.setItem("username", u.get("username"));
-      localStorage.setItem("user", JSON.stringify(u.toJSON()));
+//      localStorage.setItem("username", u.get("username"));
     },
     
     /**
@@ -220,12 +231,13 @@ define([
      * 
      */
     authenticatePreviousUser : function() {
-      if (localStorage.getItem("user")) {
-        // Reform the previous user from localStorage
-        this.model.get("user").restructure(JSON.parse(localStorage.getItem("user")));
-        
+      var username = localStorage.getItem("username");
+      if (username) {
+        //TODO this needs testing
         // Save the previous user in our Models
-        this.model.set("username", this.model.get("user").get("username"));
+        this.model.get("user").set("id",username);
+        this.model.get("user").fetch();
+        this.model.set("username", username);
         
         if (this.model.staleAuthentication) {
           showQuickAuthenticateView();
@@ -234,7 +246,11 @@ define([
         this.model.set("state", "loggedIn");
       } else {
         Utils.debug("No previous user.");
-        this.authenticateAsPublic();
+        $('#user-welcome-modal').modal("show");
+        this.model.set("state", "loggedOut");
+
+//        this.authenticateAsPublic(); //TODO this will be used in production
+        this.authenticate("sapir");
       }
     },
     
@@ -245,7 +261,7 @@ define([
      * identitiy in a while.
      */
     showQuickAuthenticateView : function() {
-
+      alert("Authenticating quickly, with just password.");
     }
   });
 

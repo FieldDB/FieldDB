@@ -1,4 +1,3 @@
-//TODO this is mostly a copy of DataListEditView, we will need to think about what actually needs to go in here and what it will look like.
 define( [ 
     "use!backbone", 
     "use!handlebars",
@@ -246,6 +245,20 @@ define( [
           this.addOne(datumId);
         }
       }
+    },
+    loadSample : function() {
+      this.model = new DataList(
+          {
+            "_id" : "45444C8F-D707-426D-A422-54CD4041A5A1",
+            "_rev" : "1-68565ded015c387c0aec5117b76180d6",
+            "title" : "Sample data list",
+            "dateCreated" : "May 29, 2012",
+            "description" : "This a sample data list made by Sapir. You can use datalists to prepare for sessions with your consultant, or for handouts and articles. Data lists are a way to have a subset of your corpus at your finger tips, and export it to LaTeX or other forms.",
+            "datumIds" : [ "A3F5E512-56D9-4437-B41D-684894020254",
+                           "2F4D4B26-E863-4D49-9F40-1431E737AECD",
+                           "9A465EF7-5001-4832-BABB-81ACD46EEE9D" ]
+          });
+      this.model.id = "45444C8F-D707-426D-A422-54CD4041A5A1";
     },
     resizeSmall : function(){
       window.app.router.showDashboard();

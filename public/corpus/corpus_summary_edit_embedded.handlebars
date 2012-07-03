@@ -1,0 +1,35 @@
+<i class="icons icon-resize-full pull-right"></i>
+<i class="icons icon-check pull-right"></i>
+<div class="corpusMenu">
+
+	<div class="btn-group">
+		<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			New <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="new_datum" href="#corpus/{{titleAsUrl}}/datum/new">New
+					Datum</a></li>
+			<li><a class="data-list-embedded"
+				href="#corpus/{{titleAsUrl}}/datalist">New Data List</a></li>
+			<li><a class="new_session"
+				href="#corpus/{{titleAsUrl}}/session/12">New Session</a></li>
+			<li><a class="new_corpus" href="#corpus/">New Corpus</a></li>
+		</ul>
+	</div>
+
+	<div class="btn-group">
+		<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+			Data <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a class="" href="#import">Import</a></li>
+			<li><a class="" href="#corpus/{{titleAsUrl}}/export">Export</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<label>Title:</label>
+<input value="{{title}}"/>
+<label>Description:</label>
+<textarea class="description">{{description}}</textarea>
