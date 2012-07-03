@@ -1,26 +1,30 @@
 <div class="modal-header">
 	<div class="btn-group pull-right">
-		<a class="btn btn-success" href="#" data-dismiss="modal"><i
-			class="icon-user icon-white"></i> Login</a> <a
+	<a href="#corpus" class="btn btn-success sync_sapir_data "
+    data-dismiss="modal">Close and login as Ed Sapir</a>
+		<button  class="btn btn-success"><i
+			class="icon-user icon-white"></i> Login</button> <a
 			class="btn btn-success dropdown-toggle" data-toggle="dropdown"
 			href="#"><span class="caret"></span></a>
 		<ul class="dropdown-menu">
 			<li class="divider"></li>
 			<li>Username: <input id="welcomeusername"
 				size="16" type="text">
+				<li>Password: <input id="welcomepassword"
+        size="16" type="password">
 			</li>
 			<li>
-				<button class="btn btn-success sync_my_data" type="button">Sync
-					my data to this computer</button>
+				<a class="btn btn-success sync_my_data" href="#" data-dismiss="modal">Sync
+					my data to this computer</a>
 			</li>
 		</ul>
 	</div>
-
-	<h1>Welcome to iField!</h1>
-
-	<i> iField: An offline/online fieldlinguistics database which
-		adapts to its user's I-Language.</i>
-
+	<div>
+		<h1>Welcome to iField!</h1>
+	
+		<i> iField: An offline/online fieldlinguistics database which
+			adapts to its user's I-Language.</i>
+	</div>
 </div>
 <div class="modal-body">
 
@@ -30,28 +34,40 @@
 
 
 
-	<form class="well create_new_user_password">
-		<p>http://ifield.fieldlinguist.com/user/YourNewUserNameGoesHere</p>
+	<div class="well create_new_user_password">
+	<h3>Or create a new user</h3>
+		<p>http://ifield.fieldlinguist.com/{{username}}</p>
 		<label> What is your username going to be? </label> <input
-			class="span2" id="appendedInputButton" size="16" type="text" />
+			class="username" value="{{username}}" />
+			 <div class=" alert alert-error hide "></div>
 		<hr />
-		<button type="submit" class="btn btn-primary">New User</button>
-		<a class="btn btn-primary" href="auth/twitter"><i class="i"></i>
-			Sign in with Twitter</a> <a class="btn btn-primary" href="auth/facebook"><i
-			class="i"></i> Sign in with Facebook</a>
+		<button  class="btn btn-primary new-user-button">New User</button>
 
-		<div class="hidden">
-			<label>Password</label> <input class="span2" type="password"
-				 size="16" type="text" /> <label>Confirm
-				Password</label> <input class="span2" type="password"
-				 size="16" type="text" />
+
+		<div class="hide confirm-password">
+		 
+			<!-- <label class="">Email</label> 
+			<input class="email " type="email"></input> -->
+			<label>Password</label>
+			<input class="password" type="password"></input>
+			<label>Confirm Password</label> 
+			<input class="to-confirm-password" type="password"></input>
+			<br />
+			<button class="btn btn-success register-new-user">Sign in
+				with password</button>
+			OR
+			<button class="btn btn-success register-twitter">
+				<i class="i icon-twitter"></i> Sign in with Twitter
+			</button>
+			<button class="btn btn-success register-facebook">
+				<i class="i icon-facebook"></i> Sign in with Facebook
+			</button>
 		</div>
 
-	</form>
+	</div>
 
 
 </div>
 <div class="modal-footer">
-	<a href="#corpus" class="btn btn-success sync_sapir_data"
-		data-dismiss="modal">Close and login as Ed Sapir</a>
+	
 </div>

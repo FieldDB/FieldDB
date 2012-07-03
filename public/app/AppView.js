@@ -33,7 +33,6 @@ define([
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
-    "user/UserWelcomeView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -69,8 +68,7 @@ define([
     SessionReadView,
     User,
     UserEditView,
-    UserReadView,
-    UserWelcomeView
+    UserReadView
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -90,7 +88,7 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
 
-      var userToBePassedAround = new User();
+//      var userToBePassedAround = new User();
      
       
       // Create five corpus views
@@ -124,22 +122,26 @@ define([
       });
       this.corpusReadFullscreenView.format = "fullscreen";
       
-      var sessionToBePassedAround = this.model.get("currentSession");
-      sessionToBePassedAround.set("sessionFields", this.model.get("corpus").get("sessionFields").clone());
-      
       /*
-       * Set up two session views
+       * Set up four session views
        */ 
-      this.sessionEditView = new SessionEditView({
-        model : sessionToBePassedAround
+      this.sessionEditLeftSideView = new SessionEditView({
+        model : this.model.get("currentSession")
       });
-      
-      this.sessionSummaryView = new SessionReadView({
-        model : sessionToBePassedAround
+      this.sessionEditLeftSideView.format = "leftSide";
+      this.sessionReadLeftSideView = new SessionReadView({
+        model : this.model.get("currentSession")
       });
-      this.sessionSummaryView.format = "leftSide";
+      this.sessionReadLeftSideView.format = "leftSide";
+      this.sessionEditEmbeddedView = new SessionEditView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionEditEmbeddedView.format = "embedded";
+      this.sessionReadEmbeddedView = new SessionReadView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionReadEmbeddedView.format = "embedded";
       
-      var userToBePassedAround = this.model.get("authentication").get("user");
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -150,29 +152,25 @@ define([
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : userToBePassedAround
+        model : this.model.get("authentication").get("user")
       });
       this.modalReadUserView.format = "modal";
 
-      // Create a UserWelcomeView modal
-      this.welcomeUserView = new UserWelcomeView({
-        model : userToBePassedAround
-      });
       
       // Create the embedded and fullscreen DatumContainerEditView
       this.datumsView = new DatumContainerEditView();
@@ -180,12 +178,11 @@ define([
       /*
        * Set up the four data list views
        */
-      var dataListToBePassedAround = new DataList();
+      var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
       
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
       }); 
-      this.dataListEditLeftSideView.loadSample();
       this.dataListEditLeftSideView.format = "leftSide";
    
       this.dataListEditFullscreenView = new DataListEditView({
@@ -301,9 +298,6 @@ define([
         this.datumsView.format = "centreWell";
         this.datumsView.render();
         
-        // Display the UserWelcomeView
-        this.welcomeUserView.render();
-        
         // Display the Search Views
         this.searchView.render();
         this.advancedSearchView.render();
@@ -311,11 +305,12 @@ define([
         // Display the AuthView
         this.authView.render();
         
-        // Display the SessionEditView
-        this.sessionEditView.render();
+        // Display the Session Views
+        this.sessionEditLeftSideView.render();
+        this.sessionReadLeftSideView.render();
+        this.sessionEditEmbeddedView.render();
+        this.sessionReadEmbeddedView.render();
         
-        // Display the SessionSummaryReadView
-        this.sessionSummaryView.render();
         
         // Display the UserPreferenceEditView
         this.userPreferenceView.render();
@@ -342,24 +337,36 @@ define([
       
       return this;
     },
-    
+    // Display the Corpus Views
     renderEditableCorpusViews: function(corpusid){
-      // Display the Corpus Views
       this.corpusEditLeftSideView.render();
-//      this.corpusReadLeftSideView.render();
       this.corpusEditEmbeddedView.render();
-//      this.corpusReadEmbeddedView.render();
       this.corpusEditFullscreenView.render();
-//      this.corpusReadFullscreenView.render();
     },
     renderReadonlyCorpusViews: function(corpusid){
-      // Display the Corpus Views
-//      this.corpusEditLeftSideView.render();
       this.corpusReadLeftSideView.render();
-//      this.corpusEditEmbeddedView.render();
       this.corpusReadEmbeddedView.render();
-//      this.corpusEditFullscreenView.render();
       this.corpusReadFullscreenView.render();
+    },
+      
+    //Display Session Views
+    renderEditableSessionViews: function(sessionid){
+      this.sessionEditLeftSideView.render();
+      this.sessionEditEmbeddedView.render();
+    },
+    renderReadonlySessionViews: function(sessionid){
+      this.sessionReadLeftSideView.render();
+      this.sessionReadEmbeddedView.render();
+    },
+    
+    //Display DataList Views
+    renderEditableDataListViews: function(datalistid){
+      this.dataListEditLeftSideView.render();
+      this.dataListEditFullscreenView.render();
+    },
+    renderReadonlyDataListViews: function(datalistid){
+      this.dataListReadLeftSideView.render();
+      this.dataListReadFullscreenView.render();
     },
     
     /**
@@ -367,27 +374,51 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      //these old methods were over writing the model with new data, effectively deleting old models which will be a terrible thing ot do in prodution
-//      // Sample Corpus data
+      // Sample Corpus data
 //      this.model.get("corpus").set({
 //        "title" : "Quechua Corpus",
 //        "titleAsUrl": "Quechua_Corpus",
 //        "description" : "This is a corpus which will let you explore the app and see how it works. "
 //            + "\nIt contains some data from one of our trips to Cusco, Peru."
 //      });
-//
+      this.authView.loadSample();
+      var appids= {};
+      appids.corpusid = "822AFBA3-CE50-40F5-B983-315277DD9661";
+//      appids.userid = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
+      appids.datalistid = "45444C8F-D707-426D-A422-54CD4041A5A1";
+      appids.sessionid = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
+      
+      
+      this.model.loadMostRecentIds(appids);
+//      
+//      this.model.get("corpus").id ="822AFBA3-CE50-40F5-B983-315277DD9661";
+//      this.model.get("corpus").fetch();
+//      
 //      // Sample Session data
 //      this.model.get("currentSession").set("sessionFields", new DatumFields([
 //        {label: "user", value: ""},
-//        {label: "consultants", value: "John Doe and Mary Stewart"},
-//        {label: "language", value: ""},
-//        {label: "dialect", value: ""},
+//        {label: "consultants", value: "Tillohash and Gladys"},
+//        {label: "language", value: "Cusco Quechua"},
+//        {label: "dialect", value: "Upper Cusco"},
 //        {label: "dateElicited", value: new Date()},
 //        {label: "dateSEntered", value: new Date()},
-//        {label: "goal", value: "To Win!"}
+//        {label: "goal", value: "Explore verbs which can combine with -naya"}
 //      ]));
+//      //TODO cant load sesson from database with out restructuring? SESSION render: [object HTMLDivElement] Utils.js:52
+//      //Uncaught TypeError: Object [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] has no method 'where' 
+//      
+////      this.model.get("currentSession").id = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
+////      this.model.get("currentSession").fetch();
 //        
-      this.authView.loadSample();
+//      this.model.get("currentDataList").id = "45444C8F-D707-426D-A422-54CD4041A5A1";
+//      this.model.get("currentDataList").fetch();
+//      
+////      this.dataListEditLeftSideView.loadSample();
+//
+//      this.authView.loadSample();
+      //cannot laod directly cause wa want to fake that sapir is logged in.
+//      this.authView.get("user").id = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
+//      this.authView.get("user").fetch();
       
       this.searchView.loadSample();
     },
@@ -396,34 +427,41 @@ define([
      * Synchronize the server and local databases.
      */
     replicateDatabases : function() {
-      (new Datum()).pouch(function(err, db) {
-        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-      });
+      //save all the important stuff to pouch before replicating.
+      window.app.router.storeCurrentDashboardIdsToLocalStorage();
+      
+
+      this.model.get("corpus").replicateCorpus();
+//      (new Datum()).pouch(function(err, db) {
+//        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate to");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//        });
+//        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate from");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//        });
+//      });
     },
     replicateDatabasesWithCallback : function(callback) {
-      (new Datum()).pouch(function(err, db) {
-        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-          
-        });
-        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-          callback();
-        });
-      });
+      this.model.get("corpus").replicateCorpus(callback);
+//
+//      (new Datum()).pouch(function(err, db) {
+//        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate to");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//          
+//        });
+//        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate from");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//          callback();
+//        });
+//      });
     },
     /**
      * Synchronize the activity feed server and local databases.

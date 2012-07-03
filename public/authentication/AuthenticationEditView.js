@@ -41,7 +41,6 @@ define([
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
       this.model.get("user").bind('change', this.render, this);
-      this.authenticatePreviousUser();      
     },
 
     /**
@@ -170,7 +169,7 @@ define([
       
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
-        this.loadSample();
+        window.appView.loadSample();
         return;
       }
       
@@ -181,20 +180,22 @@ define([
       });
 
       var self = this;
-      this.model.authenticate(tempuser, function(u) {
-        if (u == null) {
-          Utils.debug("Authentication failed. Authenticating as public.");
+      this.model.authenticate(tempuser, function(userfromserver) {
+        if (userfromserver == null) {
+          alert("Authentication failed. Authenticating as public.");
           self.authenticateAsPublic();
           return;
         }
         
         // Save the authenticated user in our Models
-        self.userView.model = u;
         self.model.set({
-          user : u,
-          username : u.get("username"),
+          gravatar : userfromserver.get("gravatar"),
+          username : userfromserver.get("username"),
           state : "loggedIn"
         });
+        var appids = userfromserver.get("mostRecentIds");
+        appids.userid = null;
+        window.app.loadMostRecentIds(appids);
 
         // Save the authenticated user in localStorage
 //        localStorage.setItem("username", u.get("username"));
@@ -208,6 +209,7 @@ define([
      */
     authenticateAsPublic : function() {
       // Load the public user
+
       this.userView.loadPublic();
       u = this.userView.model;
       

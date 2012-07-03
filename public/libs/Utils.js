@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://trisapeace.iriscouch.com/datum_test5";
+Utils.couchUrl = "http://ifield.fieldlinguist.com:5984/test";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -35,6 +35,26 @@ Utils.activityFeedTouchUrl = "http://localhost:8888/activity_feed_db";
  */
 Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 
+/**
+ * The url of the authentication server.
+ */
+Utils.authUrl = "https://ifield.fieldlinguist.com";
+/**
+ * The parameters of the default couch server.
+ */
+Utils.defaultCouchConnection = function() {
+  // return {protocol: "https://", domain:"localhost", port:"6984"}; //https
+  return {
+    protocol : "http://",
+    domain : "ifield.fieldlinguist.com",
+    port : "5984",
+    corpusname : "test"
+  }; // http because pouch doesnt support https
+};
+/**
+ * A message for users if they need help which brings them to our contact us form
+ */
+Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ'>Contact Us</a>";
 
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if
