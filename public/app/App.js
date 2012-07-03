@@ -137,6 +137,7 @@ define([
      */
     loadMostRecentIds: function(appids){
       var u;
+      var self = this;
       if(appids.userid != null){
         u = new User();
         if(typeof this.get("corpus") != "function"){
@@ -167,13 +168,17 @@ define([
       
       c.fetch({
         success : function() {
+          if(typeof self.get("corpus") != "function"){
+            u.relativizePouchToACorpus(self.get("corpus"));
+            u.fetch();
+          }
           /*
            * if corpus fetch worked, fetch session because it might need the fields form corpus
            */
           s.fetch({
             success : function() {
-              if(typeof this.get("corpus") != "function"){
-                s.relativizePouchToACorpus(this.get("corpus"));
+              if(typeof self.get("corpus") != "function"){
+                s.relativizePouchToACorpus(self.get("corpus"));
               }
               s.restructure(function(){
                 appView.render();//TODO see if need this
@@ -182,7 +187,7 @@ define([
             error : function() {
               alert("There was an error restructuring the session. Loading defaults...");
               s.set(
-                  sessionFields , this.get("corpus").get("sessionFields").clone()
+                  sessionFields , self.get("corpus").get("sessionFields").clone()
               );
             }
           });
@@ -191,8 +196,8 @@ define([
           alert("There was an error fetching corpus. Loading defaults...");
           s.fetch({
             success : function() {
-              if(typeof this.get("corpus") != "function"){
-                s.relativizePouchToACorpus(this.get("corpus"));
+              if(typeof self.get("corpus") != "function"){
+                s.relativizePouchToACorpus(self.get("corpus"));
               }
               s.restructure(function(){
                 appView.render();//TODO see if need this
