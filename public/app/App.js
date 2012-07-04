@@ -137,32 +137,19 @@ define([
      */
     loadMostRecentIds: function(appids){
       var u;
+      u = this.get("authentication").get("user") || new User();
       var self = this;
       if(appids.userid != null){
-        u = new User();
-        if(typeof this.get("corpus") != "function"){
-          u.relativizePouchToACorpus(this.get("corpus"));
-        }
         u.id = appids.userid;
-        u.fetch();
         this.get("authentication").set("user",u);
       }else{
-        /*
-         * if this is being called by authentication, it will not pass the user because it has already loaded the user.
-         */
         u = appView.authView.model.get("user");
-        if(typeof this.get("corpus") != "function"){
-          u.relativizePouchToACorpus(this.get("corpus"));
-        }
       }
       var c = this.get("corpus");
       c.id = appids.corpusid;
       this.set("corpus", c);
       
       var s = this.get("currentSession");
-      if(typeof this.get("corpus") != "function"){
-        s.relativizePouchToACorpus(this.get("corpus"));
-      }
       s.id = appids.sessionid;
       this.set("currentSession", s);
       
@@ -172,83 +159,66 @@ define([
             u.relativizePouchToACorpus(self.get("corpus"));
             u.fetch();
           }
+          var dl = self.get("currentDataList");
+          dl.relativizePouchToACorpus(self.get("corpus"));
+          dl.id = appids.datalistid;
+          dl.fetch();
           /*
            * if corpus fetch worked, fetch session because it might need the fields form corpus
            */
           s.fetch({
             success : function() {
-              if(typeof self.get("corpus") != "function"){
-                s.relativizePouchToACorpus(self.get("corpus"));
-              }
+              s.relativizePouchToACorpus(self.get("corpus"));
               s.restructure(function(){
                 appView.render();//TODO see if need this
               });
             },
-            error : function() {
-              alert("There was an error restructuring the session. Loading defaults...");
-              s.set(
-                  sessionFields , self.get("corpus").get("sessionFields").clone()
-              );
+            error : function(e) {
+              Utils.debug("It thinks there was an error fetching the session. But chances are there wasnt...."+JSON.stringify(e));
+//              s.relativizePouchToACorpus(self.get("corpus"));
+//              s.restructure(function(){
+//                appView.render();//TODO see if need this
+//              });
+//              s.set(
+//                  "sessionFields" , self.get("corpus").get("sessionFields").clone()
+//              );
             }
           });
         },
-        error : function() {
-          alert("There was an error fetching corpus. Loading defaults...");
+        error : function(e) {
+          Utils.debug("It thinks there was an error fetching corpus. But it came back with an object..."+JSON.stringify(e));
+          if(typeof self.get("corpus") != "function"){
+            u.relativizePouchToACorpus(self.get("corpus"));
+            u.fetch();
+          }
+          var dl = self.get("currentDataList");
+          dl.relativizePouchToACorpus(self.get("corpus"));
+          dl.id = appids.datalistid;
+          dl.fetch();
+          /*
+           * if corpus fetch worked, fetch session because it might need the fields form corpus
+           */
           s.fetch({
             success : function() {
-              if(typeof self.get("corpus") != "function"){
-                s.relativizePouchToACorpus(self.get("corpus"));
-              }
+              s.relativizePouchToACorpus(self.get("corpus"));
               s.restructure(function(){
                 appView.render();//TODO see if need this
               });
             },
-            error : function() {
-              alert("There was an error restructuring the session, and an error fetching the corpus. Loading defaults...");
+            error : function(e) {
+              Utils.debug("There was an error restructuring the session. Loading defaults..."+JSON.stringify(e));
+              se= new Session(e);
+              se.restructure;
+              s.set(se.toJSON());
 //              s.set(
-//                  "sessionFields", new DatumFields(//TODO if the corpus fails to fetch, the datumfields wont listen to events. this might be unnecsary.
-//                      [
-//                       {
-//                         label : "user",
-//                         value : u.id //TODO turn this into an array of users
-//                       },
-//                       {
-//                         label : "consultants",
-//                         value : "AA" //TODO turn this into an array of consultants
-//                       },
-//                       {
-//                         label : "language",
-//                         value : "Unknown language"
-//                       },
-//                       {
-//                         label : "dialect",
-//                         value : "Unknown dialect"
-//                       },
-//                       {
-//                         label : "dateElicited",
-//                         value : new Date()
-//                       },
-//                       {
-//                         label : "dateSEntered",
-//                         value : new Date()
-//                       },
-//                       {
-//                         label : "goal",
-//                         value : "Unsucessful Restructuring. Created default session."
-//                       } ])
-//                  );
+//                  sessionFields , self.get("corpus").get("sessionFields").clone()
+//              );
             }
           });
         }
       });
       
-      var dl = this.get("currentDataList");
-      if(typeof this.get("corpus") != "function"){
-        s.relativizePouchToACorpus(this.get("corpus"));
-      }
-      dl.id = appids.datalistid;
-      dl.fetch();
-      this.set("currentDataList", dl);
+     
       
     },
     
