@@ -156,7 +156,7 @@ define([
                 a.set("currentDataList",dl);
                 a.get("authentication").set("user",u);
 
-                window.loadApp(a, function(){
+                window.startApp(a, function(){
                   //TODOD remove sensitive items from the user returned before turning it into a couch entry
                   console.log("Loadded app from json.");
                 });
@@ -187,7 +187,7 @@ define([
       
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
-        window.loadApp(null, function(){
+        window.startApp(null, function(){
           window.appView.replicateDatabasesWithCallback(function(){
             window.appView.loadSample();
           });
@@ -205,7 +205,7 @@ define([
             $(".alert-error").show();
           }else{
             $('#user-welcome-modal').modal("hide");
-            window.loadApp(null, function(){
+            window.startApp(null, function(){
               window.appView.replicateDatabasesWithCallback(function(){
                 /*
                  * If the user fetch didn't succeed, try again.
@@ -215,7 +215,7 @@ define([
                     success : function() {
                       var appids = userfromserver.get("mostRecentIds");
 //                    appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                      window.app.loadMostRecentIds(appids);
+                      window.app.loadBackboneObjectsById(appids);
                     },
                     error : function() {
                       alert("There was an error fetching your data. Loading defaults...");
@@ -227,7 +227,7 @@ define([
                    */
                   var appids = userfromserver.get("mostRecentIds");
 //                appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                  window.app.loadMostRecentIds(appids);
+                  window.app.loadBackboneObjectsById(appids);
                 }
               });
             });
