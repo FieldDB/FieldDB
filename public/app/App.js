@@ -112,11 +112,9 @@ define([
         sessionFields : c.get("sessionFields").clone()
       });
       this.set("currentSession", s);
-      s.relativizePouchToACorpus(c);
 
       var dl = new DataList();
       this.set("currentDataList", dl);
-      dl.relativizePouchToACorpus(c);
       
       if(typeof callback == "function"){
         callback();
@@ -143,13 +141,19 @@ define([
       this.set("corpus", c);
       
       var s = this.get("currentSession");
-      s.relativizePouchToACorpus(this.get("corpus"));
       s.id = appids.sessionid;
       this.set("currentSession", s);
+      
+      var dl = this.get("currentDataList");
+      dl.id = appids.datalistid;
+      dl.fetch();
+      this.set("currentDataList", dl);
+      
       
       c.fetch({
         success : function(e) {
           Utils.debug("Corpus fetched successfully" +e);
+          
         },
         error : function(e) {
           Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
@@ -159,24 +163,18 @@ define([
       s.fetch({
         success : function(e) {
           Utils.debug("Session fetched successfully" +e);
-          s.relativizePouchToACorpus(self.get("corpus"));
           s.set(
               sessionFields , self.get("corpus").get("sessionFields").clone()
           );
         },
         error : function(e) {
           Utils.debug("There was an error restructuring the session. Loading defaults..."+e);
-          s.relativizePouchToACorpus(self.get("corpus"));
           s.set(
               sessionFields , self.get("corpus").get("sessionFields").clone()
           );
         }
       });
-      var dl = this.get("currentDataList");
-      dl.relativizePouchToACorpus(this.get("corpus"));
-      dl.id = appids.datalistid;
-      dl.fetch();
-      this.set("currentDataList", dl);
+      
       
       if(typeof callback == "function"){
         callback();

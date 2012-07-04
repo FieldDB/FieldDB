@@ -56,19 +56,6 @@ define([
       permissions : new Permission()
     },
 
-    /** 
-     * The login function checks username, password, and the combination of the two. 
-     */
-//        login: function(username, password) {
-//          if (this.get("username") == username) {
-//            if (this.get("password") == password) {
-//              window.username = username; 
-//              return true;	   
-//            }
-//          }
-//          return false;  
-//        },
-
     /**
      * The subtitle function returns user's first and last names. 
      */
