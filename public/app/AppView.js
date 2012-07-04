@@ -152,22 +152,22 @@ define([
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
 
@@ -215,7 +215,7 @@ define([
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
-        model : this.authView.model.get("user").get("prefs")
+        model : this.authView.model.get("userPrivate").get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -225,7 +225,7 @@ define([
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
-        model : this.authView.model.get("user").get("hotkeys")
+        model : this.authView.model.get("userPrivate").get("hotkeys")
       });   
       
       // Create an ExportREadView
@@ -389,11 +389,10 @@ define([
      * Save current state, synchronize the server and local databases.
      */
     replicateDatabases : function(callback) {
-      window.app.router.storeCurrentDashboardIdsToLocalStorage();
-      this.model.get("autentication").pullUserFromServer();
-      this.model.get("corpus").replicateCorpus(callback);
-      
-
+      window.app.storeCurrentDashboardIdsToLocalStorage(function(){
+        this.model.get("authentication").syncUserWithServer();
+        this.model.get("corpus").replicateCorpus(callback);
+      });
     },
     /**
      * Synchronize the activity feed server and local databases.

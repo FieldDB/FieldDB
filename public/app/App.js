@@ -79,9 +79,13 @@ define([
      * @param callback
      */
     createAppBackboneObjects : function(callback){
-      if (typeof this.get("authentication").get("user") == "function") {
+      if (typeof this.get("authentication").get("userPublic") == "function") {
         var u = new User();
-        this.get("authentication").set("user", u);
+        this.get("authentication").set("userPublic", u);
+      }
+      if (typeof this.get("authentication").get("userPrivate") == "function") {
+        var u2 = new User();
+        this.get("authentication").set("userPrivate", u2);
       }
       var c = new Corpus();
       this.set("corpus", c);
@@ -162,31 +166,34 @@ define([
       
     },
     router : AppRouter,
+    
     /**
-     * Modifies this App so that its properties match those in 
-     * the given object.
-     * 
-     * @param {Object} obj Contains the App properties.
+     * This function should be called before the user leaves the page, it should also be called before the user clicks sync
+     * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
+     * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
      */
-    restructure : function(obj) {
-      console.log("*** Before App restructure: " + JSON.stringify(obj));
-      console.log(this);
-      
-      for (key in obj) {
-        if ((key == "corpus") && (this.get("corpus"))) {
-          this.get("corpus").restructure(obj[key]);
-        } else if ((key == "authentication") && (this.get("authentication"))) {
-          this.get("authentication").restructure(obj[key]);
-        } else if ((key == "currentSession") && (this.get("currentSession"))) {
-          this.get("currentSession").restructure(obj[key]);
-        } else if ((key == "currentDataList") && (this.get("currentDataList"))) {
-          this.get("currentDataList").restructure(obj[key]);
-        } else {
-          this.set(key, obj[key]);
+    storeCurrentDashboardIdsToLocalStorage : function(callback){
+      try{
+        var ids = {};
+        this.get("currentSession").save();
+        this.get("currentDataList").save();
+        this.get("corpus").save();
+        
+        ids.corpusid = this.get("corpus").id;
+        ids.sessionid = this.get("currentSession").id;
+        ids.datalistid = this.get("currentDataList").id;
+        localStorage.setItem("appids",JSON.stringify(ids));
+        localStorage.setItem("userid",this.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
+        
+        //save ids to the user also so that the app can bring them back to where they were
+        this.get("authentication").get("userPrivate").set("mostRecentIds",ids);
+        
+        if(typeof callback == "function"){
+          callback();
         }
+      }catch(e){
+        Utils.debug("storeCurrentDashboardIdsToLocalStorage failed, probably called too early.");
       }
-      
-      console.log("*** After App restructure");
     }
   });
 
