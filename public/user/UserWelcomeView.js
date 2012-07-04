@@ -155,14 +155,12 @@ define([
                 a.set("currentSession", s);
                 a.set("currentDataList",dl);
                 a.get("authentication").set("user",u);
-                u.relativizePouchToACorpus(c);
 
-                window.loadApp(a, function(){
+                window.startApp(a, function(){
                   //TODOD remove sensitive items from the user returned before turning it into a couch entry
                   console.log("Loadded app from json.");
                 });
                 $('#user-welcome-modal').modal("hide");
-                
                 
                 /*
                  * Use the corpus just created to log the user into that corpus's couch server
@@ -189,18 +187,9 @@ define([
       
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
-        
         //Load a corpus, datalist, session and user
-        window.loadApp(null, function(){
-          //Set sapir's remote corpus to fetch from
-          window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
-          window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
-          //Replicate sapir's corpus down to pouch
-            window.app.get("corpus").replicateCorpus(function(){
-              //load the sample user (sapir) into the existing corus, datalist, session and user
-              window.appView.loadSample();
-            });
-          });
+        window.startApp(null, function(){
+          window.appView.loadSample();
         });
         $('#user-welcome-modal').modal("hide");
       },
@@ -215,7 +204,7 @@ define([
             $(".alert-error").show();
           }else{
             $('#user-welcome-modal').modal("hide");
-            window.loadApp(null, function(){
+            window.startApp(null, function(){
               window.appView.replicateDatabasesWithCallback(function(){
                 /*
                  * If the user fetch didn't succeed, try again.
@@ -225,7 +214,7 @@ define([
                     success : function() {
                       var appids = userfromserver.get("mostRecentIds");
 //                    appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                      window.app.loadMostRecentIds(appids);
+                      window.app.loadBackboneObjectsById(appids);
                     },
                     error : function() {
                       alert("There was an error fetching your data. Loading defaults...");
@@ -237,7 +226,7 @@ define([
                    */
                   var appids = userfromserver.get("mostRecentIds");
 //                appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                  window.app.loadMostRecentIds(appids);
+                  window.app.loadBackboneObjectsById(appids);
                 }
               });
             });

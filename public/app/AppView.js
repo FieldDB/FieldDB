@@ -374,94 +374,35 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      // Sample Corpus data
-//      this.model.get("corpus").set({
-//        "title" : "Quechua Corpus",
-//        "titleAsUrl": "Quechua_Corpus",
-//        "description" : "This is a corpus which will let you explore the app and see how it works. "
-//            + "\nIt contains some data from one of our trips to Cusco, Peru."
-//      });
-      this.authView.loadSample();
       var appids= {};
       appids.corpusid = "420C2294-9713-41F2-9FEE-235D043679FE";
-//      appids.userid = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
       appids.datalistid = "C1659620-63D0-4A0C-8AE0-66E6892D026E";
       appids.sessionid = "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5";
       
-      
-      this.model.loadMostRecentIds(appids);
-//      
-//      this.model.get("corpus").id ="822AFBA3-CE50-40F5-B983-315277DD9661";
-//      this.model.get("corpus").fetch();
-//      
-//      // Sample Session data
-//      this.model.get("currentSession").set("sessionFields", new DatumFields([
-//        {label: "user", value: ""},
-//        {label: "consultants", value: "Tillohash and Gladys"},
-//        {label: "language", value: "Cusco Quechua"},
-//        {label: "dialect", value: "Upper Cusco"},
-//        {label: "dateElicited", value: new Date()},
-//        {label: "dateSEntered", value: new Date()},
-//        {label: "goal", value: "Explore verbs which can combine with -naya"}
-//      ]));
-//      //TODO cant load sesson from database with out restructuring? SESSION render: [object HTMLDivElement] Utils.js:52
-//      //Uncaught TypeError: Object [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] has no method 'where' 
-//      
-////      this.model.get("currentSession").id = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
-////      this.model.get("currentSession").fetch();
-//        
-//      this.model.get("currentDataList").id = "45444C8F-D707-426D-A422-54CD4041A5A1";
-//      this.model.get("currentDataList").fetch();
-//      
-////      this.dataListEditLeftSideView.loadSample();
-//
-//      this.authView.loadSample();
-      //cannot laod directly cause wa want to fake that sapir is logged in.
-//      this.authView.get("user").id = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
-//      this.authView.get("user").fetch();
+      //all the replication etc happens in authView
+      this.authView.loadSample(appids);
       
       this.searchView.loadSample();
     },
     
     /**
-     * Synchronize the server and local databases.
+     * Save current state, synchronize the server and local databases.
      */
     replicateDatabases : function() {
-      //save all the important stuff to pouch before replicating.
       window.app.router.storeCurrentDashboardIdsToLocalStorage();
-      
 
       this.model.get("corpus").replicateCorpus();
-//      (new Datum()).pouch(function(err, db) {
-//        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-//          Utils.debug("Replicate to");
-//          Utils.debug(resp);
-//          Utils.debug(err);
-//        });
-//        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-//          Utils.debug("Replicate from");
-//          Utils.debug(resp);
-//          Utils.debug(err);
-//        });
-//      });
+      
+      //TODO pull down and push up the user's preferences and details too
+      
     },
     replicateDatabasesWithCallback : function(callback) {
+      window.app.router.storeCurrentDashboardIdsToLocalStorage();
+
       this.model.get("corpus").replicateCorpus(callback);
-//
-//      (new Datum()).pouch(function(err, db) {
-//        db.replicate.to(Utils.couchUrl, { continuous: false }, function(err, resp) {
-//          Utils.debug("Replicate to");
-//          Utils.debug(resp);
-//          Utils.debug(err);
-//          
-//        });
-//        db.replicate.from(Utils.couchUrl, { continuous: false }, function(err, resp) {
-//          Utils.debug("Replicate from");
-//          Utils.debug(resp);
-//          Utils.debug(err);
-//          callback();
-//        });
-//      });
+      
+      //TODO pull down and push up the user's preferences and details too
+
     },
     /**
      * Synchronize the activity feed server and local databases.
