@@ -149,11 +149,9 @@ define([
       dl.fetch();
       this.set("currentDataList", dl);
       
-      
       c.fetch({
         success : function(e) {
           Utils.debug("Corpus fetched successfully" +e);
-          
         },
         error : function(e) {
           Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
