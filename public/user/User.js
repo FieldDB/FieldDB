@@ -2,7 +2,8 @@ define([
     "use!backbone",
     "user/UserGeneric",
     "permission/Permission",
-    "user/UserPreference"
+    "user/UserPreference",
+    "libs/Utils"
 ], function(
     Backbone, 
     UserGeneric,
