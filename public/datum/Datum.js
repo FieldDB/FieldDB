@@ -114,6 +114,35 @@ define([
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
+        
+    /**
+     * Gets all the DatumIds in the current Corpus sorted by their date.
+     * 
+     * @param {Function} callback A function that expects a single parameter. That
+     * parameter is the result of calling "get_datum_ids/by_date". So it is an array
+     * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
+     * attribute contains the Datum's dateEntered and the 'value' attribute contains
+     * the Datum's ID.
+     */
+    getAllDatumIdsByDate : function(callback) {
+      this.pouch(function(err, db) {
+        /*
+        Code for get_datum_ids/by_date
+        
+        function(doc) {
+          if (doc.dateEntered) {
+            emit(doc.dateEntered, doc.id);
+          }
+        }
+        */
+        
+        db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
+          if ((!err) && (typeof callback == "function"))  {
+            callback(response.rows)
+          }
+        });
+      });
+    },
     
     searchByQueryString : function(queryString, callback) {
       var self = this;
