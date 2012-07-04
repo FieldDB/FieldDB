@@ -12,7 +12,7 @@ define([
     Backbone, 
     Handlebars, 
     corpusReadEmbeddedTemplate,
-    corpusFullscreenTemplate,
+    corpusReadFullscreenTemplate,
     corpusReadLinkTemplate,
     corpusReadSummaryTemplate,
     Corpus,
@@ -77,7 +77,7 @@ define([
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.compile(corpusFullscreenTemplate),
+    templateFullscreen : Handlebars.compile(corpusReadFullscreenTemplate),
    
     /**
      * Renders the CorpusReadView and all of its child Views.
@@ -116,6 +116,7 @@ define([
     } ,
        
     newDatum : function() {
+      appView.datumsView.newDatum();
       app.router.showDashboard();
     },
     

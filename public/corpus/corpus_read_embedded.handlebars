@@ -8,8 +8,7 @@
       New <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li><a class="new_datum" href="#corpus/{{titleAsUrl}}/datum/new">New
-          Datum</a></li>
+      <li class="new_datum">New Datum</li>
       <li><a class="data-list-embedded"
         href="#corpus/{{titleAsUrl}}/datalist">New Data List</a></li>
       <li><a class="new_session"
@@ -32,15 +31,15 @@
 
 <div class="description">{{description}}</div>
 
-<div class="accordion" id="accordion2">
+<div class="accordion" id="accordion-read-embedded">
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion2" href="#collapseSessions">
-				<h4>Sessions ASSOCiated with this corpus</h4>
+				data-parent="#accordion-read-embedded" href="#collapseSessionsRE">
+				<h4>Sessions associated with this corpus</h4>
 				 </a>
 		</div>
-		<div id="collapseSessions" class="accordion-body collapse"
+		<div id="collapseSessionsRE" class="accordion-body collapse"
 			style="height: 0px;">
 			<div class="accordion-inner">
 				<ul>
@@ -60,11 +59,11 @@
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion2" href="#collapseDatalists">
+				data-parent="#accordion-read-embedded" href="#collapseDatalistsRE">
 				<h4>Datalists associated with this corpus</h4>
 				</a>
 		</div>
-		<div id="collapseDatalists" class="accordion-body collapse">
+		<div id="collapseDatalistsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<ul>
 				<li>Datalist 1</li>
@@ -83,11 +82,11 @@
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion2" href="#collapsePermissions">
+				data-parent="#accordion-read-embedded" href="#collapsePermissionsRE">
 				<h4>Permissins associated with this corpus</h4>
 				</a>
 		</div>
-		<div id="collapsePermissions" class="accordion-body collapse">
+		<div id="collapsePermissionsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<ul>
 				<li>Permission 1</li>
