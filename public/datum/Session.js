@@ -1,4 +1,3 @@
-//needs to have attributes as DatumFields.... but  can't put them in until DatumFields is up and running.
 define([
     "use!backbone",
     "comment/Comments",
@@ -50,15 +49,22 @@ define([
     initialize: function() {
      
     },
-    relativizePouchToACorpus : function(corpus){
-      //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
-        var c = corpus.get("couchConnection");
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
-            : Utils.pouchUrl+c.corpusname);
-      },
-    defaults: {
-      sessionFields : new DatumFields(),
+    
+    model : {
+      sessionFields : DatumFields,
       comments : Comments
+    },
+    
+    parse : function(response) {
+      if (response.ok === undefined) {
+        for (var key in this.model) {
+          var embeddedClass = this.model[key];
+          var embeddedData = response[key];
+          response[key] = new embeddedClass(embeddedData, {parse:true});
+        }
+      }
+      
+      return response;
     },
    
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
@@ -88,32 +94,13 @@ define([
       //    return "consultant must be in the system.";
       // }
     },
-    /**
-     * When a Session is returned from the database, its internal models are just
-     * arrays of their attributes. This restructures them into their models.
-     * 
-     * Function copied from Datum.js
-     */
-    restructure : function(callback) {
-      // Restructure the SessionFields
-      if (this.get("sessionFields")) {
-        // Keep track of the data that we want to restructure
-        var temp = this.get("sessionFields");
-        
-        // Create the model to store each DatumField
-        this.set("sessionFields", new DatumFields());
-        
-        // Create the Datum Field models and store them
-        for (i in temp) {
-          var field = new DatumField(temp[i]);
-          this.get("sessionFields").push(field);
-        }
-      }
-      // TODO Restructure the rest
-      if(typeof callback == "function"){
-          callback();
-      }
-    },
+    
+    relativizePouchToACorpus : function(corpus){
+      //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
+      var c = corpus.get("couchConnection");
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
+          : Utils.pouchUrl+c.corpusname);
+    }
   });
   return Session;
 });
