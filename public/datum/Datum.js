@@ -83,11 +83,9 @@ define([
           : Utils.pouchUrl+c.corpusname);
     },
     
-    defaults : {      
-      datumFields : new DatumFields(),
+    defaults : {
       audioVideo : new AudioVideo(),
       comments : new Comments(),
-      datumState : new DatumState(),
       datumState : new DatumState(),      // The selected DatumState
       datumTags : new DatumTags(),
       dateEntered : new Date()
@@ -98,7 +96,7 @@ define([
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumState : DatumState,
+      datumStates : DatumStates,
       datumState : DatumState,      // The selected DatumState
       datumTags : DatumTags
     },
