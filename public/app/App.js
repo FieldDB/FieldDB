@@ -121,6 +121,23 @@ define([
       currentDataList : DataList
     },
     
+    model : {
+      corpus : Corpus,
+      authentication : Authentication,
+      currentSession : Session,
+      currentDataList : DataList
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
+    
     /**
      * Accepts the ids to load the app. This is a helper function which is caled
      * at the three entry points, main (if there is json in the localstorage
@@ -177,9 +194,9 @@ define([
               if(typeof self.get("corpus") != "function"){
                 s.relativizePouchToACorpus(self.get("corpus"));
               }
-              s.restructure(function(){
-                appView.render();//TODO see if need this
-              });
+              // s.restructure(function(){
+                // appView.render();//TODO see if need this
+              // });
             },
             error : function() {
               alert("There was an error restructuring the session. Loading defaults...");
@@ -189,16 +206,17 @@ define([
             }
           });
         },
-        error : function() {
-          alert("There was an error fetching corpus. Loading defaults...");
+        error : function(e) {
+          alert("There was an error fetching corpus. Loading defaults... ");
+          console.log("error: ", e);
           s.fetch({
             success : function() {
               if(typeof self.get("corpus") != "function"){
                 s.relativizePouchToACorpus(self.get("corpus"));
               }
-              s.restructure(function(){
-                appView.render();//TODO see if need this
-              });
+              // s.restructure(function(){
+                // appView.render();//TODO see if need this
+              // });
             },
             error : function() {
               alert("There was an error restructuring the session, and an error fetching the corpus. Loading defaults...");

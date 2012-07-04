@@ -35,6 +35,19 @@ define([ "use!backbone"
       help : "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
     },
     
+    model : {
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
+   
     // in your Model validate function
     validate: function(attrs) {
       if (!attrs.mask) {
