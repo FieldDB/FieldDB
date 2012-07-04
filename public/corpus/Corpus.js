@@ -244,14 +244,15 @@ define([
             Utils.debug("Replicate to " + couchurl);
             Utils.debug(resp);
             Utils.debug(err);
-          });
-          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
-            Utils.debug("Replicate from " + couchurl);
-            Utils.debug(resp);
-            Utils.debug(err);
-            if(typeof callback == "function"){
-              callback();
-            }
+            
+            db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+              Utils.debug("Replicate from " + couchurl);
+              Utils.debug(resp);
+              Utils.debug(err);
+              if(typeof callback == "function"){
+                callback();
+              }
+            });
           });
         });
       },

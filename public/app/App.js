@@ -58,59 +58,6 @@ define([
         Utils.debug("Error in App: " + error);
       });
       this.set("authentication", new Authentication());
-      /*
-       * Load the most recent corpus
-       */
-//      if (typeof this.get("corpus") == "function") {
-//        if(localStorage.getItem("corpusid")){
-//          //TODO user the corpusid from local storage
-//        }
-//        Utils.debug("\tUsing corpus from existing app.");
-//        this.set("corpus", new Corpus({
-//          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
-//          "title": "Quechua Corpus",
-//          "titleAsUrl": "Quechua_Corpus",
-//          "description": "This is a corpus which will let you explore the app and see how it works. \nIt contains some data from one of our trips to Cusco, Peru.",
-//       }));
-//        this.get("corpus").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
-//      }
-//      /*
-//       * Load the most recent session
-//       */
-//      if (typeof this.get("currentSession") == "function") {
-//        if (localStorage.getItem("sessionid")) {
-//          // TODO use the sessionid from local storage
-//        }
-//        Utils.debug("\tUsing session from existing app.");
-//        this.set("currentSession", new Session({
-////          "_id": "822AFBA3-CE50-40F5-B983-315277DD9661",
-//          "sessionFields" : new DatumFields([ {
-//            label : "user",
-//            value : "sapir"
-//          }, {
-//            label : "consultants",
-//            value : "Tillohash and Gladys"
-//          }, {
-//            label : "language",
-//            value : "Quechua"
-//          }, {
-//            label : "dialect",
-//            value : "Cusco"
-//          }, {
-//            label : "dateElicited",
-//            value : new Date()
-//          }, {
-//            label : "dateSEntered",
-//            value : new Date()
-//          }, {
-//            label : "goal",
-//            value : "Working on which verbs combine with -naya"
-//          } ])
-//        }));
-//        this.get("currentSession").id = "822AFBA3-CE50-40F5-B983-315277DD9661";
-
-//      }
-      
       
     },
     
@@ -119,6 +66,39 @@ define([
       authentication : Authentication,
       currentSession : Session,
       currentDataList : DataList
+    },
+    
+    /**
+     * This function creates the backbone objects, and links them up so that
+     * they are ready to be used in the views. This function should be called on
+     * app load, either by main, or by welcome new user. This function should
+     * not be called at any later time as it will break the connection between
+     * the views and the models. To load different models into the app after it
+     * has first loaded, use the loadBackboneObjectsById function below.
+     * 
+     * @param callback
+     */
+    createAppBackboneObjects : function(callback){
+      if (typeof this.get("authentication").get("user") == "function") {
+        var u = new User();
+        this.get("authentication").set("user", u);
+      }
+      var c = new Corpus();
+      this.set("corpus", c);
+
+      var s = new Session({
+        sessionFields : c.get("sessionFields").clone()
+      });
+      this.set("currentSession", s);
+      s.relativizePouchToACorpus(c);
+
+      var dl = new DataList();
+      this.set("currentDataList", dl);
+      dl.relativizePouchToACorpus(c);
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     /**
      * Accepts the ids to load the app. This is a helper function which is caled
@@ -133,126 +113,54 @@ define([
      * @param corpusid
      * @param sessionid
      * @param datalistid
-     * @param userid
      */
-    loadMostRecentIds: function(appids){
-      var u;
+    loadBackboneObjectsById: function(appids, callback){
       var self = this;
-      if(appids.userid != null){
-        u = new User();
-        if(typeof this.get("corpus") != "function"){
-          u.relativizePouchToACorpus(this.get("corpus"));
-        }
-        u.id = appids.userid;
-        u.fetch();
-        this.get("authentication").set("user",u);
-      }else{
-        /*
-         * if this is being called by authentication, it will not pass the user because it has already loaded the user.
-         */
-        u = appView.authView.model.get("user");
-        if(typeof this.get("corpus") != "function"){
-          u.relativizePouchToACorpus(this.get("corpus"));
-        }
-      }
       var c = this.get("corpus");
       c.id = appids.corpusid;
       this.set("corpus", c);
       
       var s = this.get("currentSession");
-      if(typeof this.get("corpus") != "function"){
-        s.relativizePouchToACorpus(this.get("corpus"));
-      }
+      s.relativizePouchToACorpus(this.get("corpus"));
       s.id = appids.sessionid;
       this.set("currentSession", s);
       
       c.fetch({
-        success : function() {
-          if(typeof self.get("corpus") != "function"){
-            u.relativizePouchToACorpus(self.get("corpus"));
-            u.fetch();
-          }
-          /*
-           * if corpus fetch worked, fetch session because it might need the fields form corpus
-           */
-          s.fetch({
-            success : function() {
-              if(typeof self.get("corpus") != "function"){
-                s.relativizePouchToACorpus(self.get("corpus"));
-              }
-              s.restructure(function(){
-                appView.render();//TODO see if need this
-              });
-            },
-            error : function() {
-              alert("There was an error restructuring the session. Loading defaults...");
-              s.set(
-                  sessionFields , self.get("corpus").get("sessionFields").clone()
-              );
-            }
-          });
+        success : function(e) {
+          Utils.debug("Corpus fetched successfully" +e);
         },
-        error : function() {
-          alert("There was an error fetching corpus. Loading defaults...");
-          s.fetch({
-            success : function() {
-              if(typeof self.get("corpus") != "function"){
-                s.relativizePouchToACorpus(self.get("corpus"));
-              }
-              s.restructure(function(){
-                appView.render();//TODO see if need this
-              });
-            },
-            error : function() {
-              alert("There was an error restructuring the session, and an error fetching the corpus. Loading defaults...");
-//              s.set(
-//                  "sessionFields", new DatumFields(//TODO if the corpus fails to fetch, the datumfields wont listen to events. this might be unnecsary.
-//                      [
-//                       {
-//                         label : "user",
-//                         value : u.id //TODO turn this into an array of users
-//                       },
-//                       {
-//                         label : "consultants",
-//                         value : "AA" //TODO turn this into an array of consultants
-//                       },
-//                       {
-//                         label : "language",
-//                         value : "Unknown language"
-//                       },
-//                       {
-//                         label : "dialect",
-//                         value : "Unknown dialect"
-//                       },
-//                       {
-//                         label : "dateElicited",
-//                         value : new Date()
-//                       },
-//                       {
-//                         label : "dateSEntered",
-//                         value : new Date()
-//                       },
-//                       {
-//                         label : "goal",
-//                         value : "Unsucessful Restructuring. Created default session."
-//                       } ])
-//                  );
-            }
-          });
+        error : function(e) {
+          Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
         }
       });
       
+      s.fetch({
+        success : function(e) {
+          Utils.debug("Session fetched successfully" +e);
+          s.relativizePouchToACorpus(self.get("corpus"));
+          s.set(
+              sessionFields , self.get("corpus").get("sessionFields").clone()
+          );
+        },
+        error : function(e) {
+          Utils.debug("There was an error restructuring the session. Loading defaults..."+e);
+          s.relativizePouchToACorpus(self.get("corpus"));
+          s.set(
+              sessionFields , self.get("corpus").get("sessionFields").clone()
+          );
+        }
+      });
       var dl = this.get("currentDataList");
-      if(typeof this.get("corpus") != "function"){
-        s.relativizePouchToACorpus(this.get("corpus"));
-      }
+      dl.relativizePouchToACorpus(this.get("corpus"));
       dl.id = appids.datalistid;
       dl.fetch();
       this.set("currentDataList", dl);
       
+      if(typeof callback == "function"){
+        callback();
+      }
+      
     },
-    
-    
     router : AppRouter,
     /**
      * Modifies this App so that its properties match those in 
