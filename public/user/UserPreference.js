@@ -36,18 +36,6 @@ define([
       }
       
       return response;
-    },
-    
-    /**
-     * Modifies this UserPreference so that its properties match those
-     * in the given object.
-     * 
-     * @param {Object} obj Contains the UserPreference properties.
-     */
-    restructure : function(obj) {
-      for (key in obj) {
-        this.set(key, obj[key]);
-      }
     }
   });
 
