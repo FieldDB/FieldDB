@@ -389,7 +389,7 @@ define([
       appids.sessionid = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
       
       
-      this.model.loadMostRecentIds(appids);
+      this.model.loadBackboneObjectsById(appids);
 //      
 //      this.model.get("corpus").id ="822AFBA3-CE50-40F5-B983-315277DD9661";
 //      this.model.get("corpus").fetch();

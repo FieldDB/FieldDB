@@ -120,25 +120,37 @@ define([
       currentSession : Session,
       currentDataList : DataList
     },
+    /**
+     * This function creates the backbone objects, and links them up so that
+     * they are ready to be used in the views. This function should be called on
+     * app load, either by main, or by welcome new user. This function should
+     * not be called at any later time as it will break the connection between
+     * the views and the models. To load different models into the app after it
+     * has first loaded, use the loadBackboneObjectsById function below.
+     * 
+     * @param callback
+     */
     createAppBackboneObjects : function(callback){
-      if (typeof a.get("authentication").get("user") == "function") {
+      if (typeof this.get("authentication").get("user") == "function") {
         var u = new User();
-        a.get("authentication").set("user", u);
+        this.get("authentication").set("user", u);
       }
       var c = new Corpus();
-      a.set("corpus", c);
+      this.set("corpus", c);
 
       var s = new Session({
-        sessionFields : a.get("corpus").get("sessionFields").clone()
+        sessionFields : c.get("sessionFields").clone()
       });
-      a.set("currentSession", s);
+      this.set("currentSession", s);
+      s.relativizePouchToACorpus(c);
 
       var dl = new DataList();
-      a.set("currentDataList", dl);
+      this.set("currentDataList", dl);
+      dl.relativizePouchToACorpus(c);
+      
       if(typeof callback == "function"){
         callback();
       }
-      
     },
     /**
      * Accepts the ids to load the app. This is a helper function which is caled
@@ -153,9 +165,8 @@ define([
      * @param corpusid
      * @param sessionid
      * @param datalistid
-     * @param userid
      */
-    loadMostRecentIds: function(appids){
+    loadBackboneObjectsById: function(appids, callback){
       var self = this;
       var c = this.get("corpus");
       c.id = appids.corpusid;
@@ -197,9 +208,11 @@ define([
       dl.fetch();
       this.set("currentDataList", dl);
       
+      if(typeof callback == "function"){
+        callback();
+      }
+      
     },
-    
-    
     router : AppRouter,
     /**
      * Modifies this App so that its properties match those in 

@@ -195,7 +195,7 @@ define([
         });
         var appids = userfromserver.get("mostRecentIds");
         appids.userid = null;
-        window.app.loadMostRecentIds(appids);
+        window.app.loadBackboneObjectsById(appids);
 
         // Save the authenticated user in localStorage
 //        localStorage.setItem("username", u.get("username"));
