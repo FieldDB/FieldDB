@@ -226,6 +226,7 @@ define([
     },
     
     newDatum : function() {
+      appView.datumsView.newDatum();
       app.router.showDashboard();
     },
 
