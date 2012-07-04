@@ -68,6 +68,25 @@ define([
       currentDataList : DataList
     },
     
+    model : {
+      corpus : Corpus,
+      authentication : Authentication,
+      currentSession : Session,
+      currentDataList : DataList
+    },
+    
+    parse : function(response) {
+      if (response.ok === undefined) {
+        for (var key in this.model) {
+          var embeddedClass = this.model[key];
+          var embeddedData = response[key];
+          response[key] = new embeddedClass(embeddedData, {parse:true});
+        }
+      }
+      
+      return response;
+    },
+    
     /**
      * This function creates the backbone objects, and links them up so that
      * they are ready to be used in the views. This function should be called on
@@ -195,6 +214,7 @@ define([
         Utils.debug("storeCurrentDashboardIdsToLocalStorage failed, probably called too early.");
       }
     }
+
   });
 
   return App;

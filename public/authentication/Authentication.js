@@ -30,8 +30,6 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in Authentication  : " + error);
       });
-      
-      
     },
 
     defaults : {
@@ -39,6 +37,22 @@ define([
       userPublic : User,
       username : localStorage.getItem("username"),
       state : "loggedOut"
+    },
+    
+    model : {
+      user : User
+    },
+    
+    parse : function(response) {
+      if (response.ok === undefined) {
+        for (var key in this.model) {
+          var embeddedClass = this.model[key];
+          var embeddedData = response[key];
+          response[key] = new embeddedClass(embeddedData, {parse:true});
+        }
+      }
+      
+      return response;
     },
 
     staleAuthentication: true,
@@ -84,8 +98,7 @@ define([
             self.get("userPublic").save();
           }
         }
-      });
-     
+      });     
     },
     /**
      * This function uses the quick authentication view to get the user's

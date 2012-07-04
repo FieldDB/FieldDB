@@ -24,16 +24,20 @@ define([
       numVisibleDatum : 3
     },
     
-    /**
-     * Modifies this UserPreference so that its properties match those
-     * in the given object.
-     * 
-     * @param {Object} obj Contains the UserPreference properties.
-     */
-    restructure : function(obj) {
-      for (key in obj) {
-        this.set(key, obj[key]);
+    model : {
+      // There are no nested models
+    },
+    
+    parse : function(response) {
+      if (response.ok === undefined) {
+        for (var key in this.model) {
+          var embeddedClass = this.model[key];
+          var embeddedData = response[key];
+          response[key] = new embeddedClass(embeddedData, {parse:true});
+        }
       }
+      
+      return response;
     }
   });
 

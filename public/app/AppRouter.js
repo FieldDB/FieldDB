@@ -124,9 +124,6 @@ define([
       var self = this;
       appView.fullScreenDatumView.model.fetch({
         success : function() {
-          // Restructure Datum's inner models
-          appView.fullScreenDatumView.model.restructure();
-          
           // Update the display with the Datum with the given datumId
           appView.fullScreenDatumView.render();
           
@@ -176,9 +173,6 @@ define([
       var self = this;
       appView.fullScreenDatumView.model.fetch({
         success : function() {
-          // Restructure Datum's inner models
-          appView.fullScreenDatumView.model.restructure();
-          
           // Update the display with the Datum with the given datumId
           appView.fullScreenDatumView.render();
           

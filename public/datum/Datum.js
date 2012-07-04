@@ -94,98 +94,32 @@ define([
       datumTags : new DatumTags(),
       dateEntered : new DatumField()
     },
+    
+    model : {
+      datumFields : DatumFields,
+      audioVideo : AudioVideo,
+      session : Session,
+      comments : Comments,
+      datumState : DatumState,
+      datumState : DatumState,      // The selected DatumState
+      datumTags : DatumTags,
+      dateEntered : DatumField
+    },
+    
+    parse : function(response) {
+      if (response.ok === undefined) {
+        for (var key in this.model) {
+          var embeddedClass = this.model[key];
+          var embeddedData = response[key];
+          response[key] = new embeddedClass(embeddedData, {parse:true});
+        }
+      }
+      
+      return response;
+    },
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
-    
-    /**
-     * When a Datum is returned from the database, its internal models are just
-     * arrays of their attributes. This restructures them into their models.
-     */
-    restructure : function() {
-      // Restructure the DatumFields
-      if (this.get("datumFields")) {
-        // Keep track of the data that we want to restructure
-        var temp = this.get("datumFields");
-        
-        // Create the model to store each DatumField
-        this.set("datumFields", new DatumFields());
-        
-        // Create the Datum Field models and store them
-        for (i in temp) {
-          var field = new DatumField(temp[i]);
-          this.get("datumFields").push(field);
-        }
-      }
-    
-      // Restructure the AudioVideo
-      if (this.get("audioVideo")) {
-        this.set("audioVideo", new AudioVideo(this.get("audioVideo")));
-      }
-      
-      // Restructure the Session
-      if (this.get("session")) {
-        // Create the Session
-        var s = new Session();
-        s.restructure(this.get("session"));
-        
-        // Store the session
-        this.set("session", s);
-      }
-      
-      // Restructure the Comments
-      if (this.get("comments")) {
-        // Keep track of the data that we want to restructure
-        var temp = this.get("comments");
-        
-        // Create the model to store each new Comment
-        this.set("comments", new Comments());
-        
-        // Create the Comment models and store them
-        for (i in temp) {
-          var comment = new Comment(temp[i]);
-          this.get("comments").push(comment);
-        }
-      }
-      
-      // Restructure the DatumStates
-      if (this.get("datumStates")) {
-        // Keep track of the data that we want to restructure
-        var temp = this.get("datumStates");
-        
-        // Create the model to store each new DatumState
-        this.set("datumStates", new DatumStates());
-        
-        // Create the DatumState models and store them
-        for (i in temp) {
-          var state = new DatumState(temp[i]);
-          this.get("datumStates").push(state);
-        }
-      }
-      
-      // Restructure the DatumState
-      if (this.get("datumState")) {
-        // Create the new model and store it
-        this.set("datumState", new DatumState(this.get("datumState")));
-      }
-      
-      // Restructure the DatumTags
-      if (this.get("datumTags")) {
-        // Keep track of the data that we want to restructure
-        var temp = this.get("datumTags");
-        
-        // Create the model to store each DatumTag
-        this.set("datumTags", new DatumTags());
-        
-        // Create the Datum Tags models and store them
-        for (i in temp) {
-          var tag = new DatumTag(temp[i]);
-          this.get("datumTags").push(tag);
-        }
-      }
-      
-      // TODO Restructure the dateEntered DatumField
-    },
     
     searchByQueryString : function(queryString, callback) {
       var self = this;
@@ -319,17 +253,15 @@ define([
     clone : function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
-        audioVideo : this.get("audioVideo").toJSON(),
-        comments : this.get("comments").toJSON(),
-        dateEntered : this.get("dateEntered").toJSON(),
-        datumFields : this.get("datumFields").toJSON(),
-        datumState : this.get("datumState").toJSON(),
-        datumStates : this.get("datumStates").toJSON(),
-        datumTags : this.get("datumTags").toJSON(),
-        session: this.get("session").toJSON()
+        audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
+        comments : new Comments(this.get("comments").toJSON(), {parse: true}),
+        dateEntered : this.get("dateEntered"),
+        datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
+        datumState : new DatumState(this.get("datumState").toJSON(), {parse: true}),
+        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
+        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
+        session: new Session(this.get("session").toJSON(), {parse: true})
       });
-      
-      datum.restructure();
       
       return datum;
     }
