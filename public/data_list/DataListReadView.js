@@ -193,9 +193,6 @@ define( [
       var self = this;
       d.fetch({
         success : function() {
-          // Restructure Datum's inner models
-          d.restructure();
-
           // Render a DatumReadView for that Datum at the end of the DataListReadView
           var view = new DatumReadView({
             model :  d,

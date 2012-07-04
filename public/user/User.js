@@ -82,32 +82,6 @@ define([
       }
       
       return this.get("firstname") + " " + this.get("lastname");
-    },
-    
-    /**
-     * Modifies this User so that its properties match those in 
-     * the given object.
-     * 
-     * @param {Object} obj Contains the User properties.
-     */
-    restructure : function(obj) {
-      console.log("*** Before User resturcture: " + JSON.stringify(obj));
-      console.log(this);
-      
-      for (key in obj) {
-        if ((key == "permissions") && (this.get("permissions"))) {
-          // permissions is a Permission object
-          this.get("permissions").restructure(obj[key]);
-        } else if ((key == "prefs") && (this.get("prefs"))) {
-          // prefs is a UserPreference object
-          this.get("prefs").restructure(obj[key]);
-        } else {
-          this.set(key, obj[key]);
-        }
-      }
-      
-      console.log("*** After User restructure");
-      console.log(this);
     }
   });
 
