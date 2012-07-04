@@ -60,8 +60,7 @@ define([
      *           user.They are like blog tags, a way for the user to make
      *           categories without make a hierarchical structure, and make
      *           datum easier for search.
-     * 
-     * 
+     * @property {Date} dateEntered The date the Datum was first saved.
      * 
      * @description The initialize function brings up the datum widget in small
      *              view with one set of datum fields. However, the datum widget
@@ -84,15 +83,11 @@ define([
           : Utils.pouchUrl+c.corpusname);
     },
     
-    defaults : {      
-      datumFields : new DatumFields(),
+    defaults : {
       audioVideo : new AudioVideo(),
-      session : new Session(),
       comments : new Comments(),
-      datumState : new DatumState(),
       datumState : new DatumState(),      // The selected DatumState
-      datumTags : new DatumTags(),
-      dateEntered : new DatumField()
+      datumTags : new DatumTags()
     },
     
     model : {
@@ -100,10 +95,9 @@ define([
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumState : DatumState,
+      datumStates : DatumStates,
       datumState : DatumState,      // The selected DatumState
-      datumTags : DatumTags,
-      dateEntered : DatumField
+      datumTags : DatumTags
     },
     
     parse : function(response) {
@@ -120,6 +114,35 @@ define([
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
+        
+    /**
+     * Gets all the DatumIds in the current Corpus sorted by their date.
+     * 
+     * @param {Function} callback A function that expects a single parameter. That
+     * parameter is the result of calling "get_datum_ids/by_date". So it is an array
+     * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
+     * attribute contains the Datum's dateEntered and the 'value' attribute contains
+     * the Datum's ID.
+     */
+    getAllDatumIdsByDate : function(callback) {
+      this.pouch(function(err, db) {
+        /*
+        Code for get_datum_ids/by_date
+        
+        function(doc) {
+          if (doc.dateEntered) {
+            emit(doc.dateEntered, doc.id);
+          }
+        }
+        */
+        
+        db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
+          if ((!err) && (typeof callback == "function"))  {
+            callback(response.rows)
+          }
+        });
+      });
+    },
     
     searchByQueryString : function(queryString, callback) {
       var self = this;
@@ -246,7 +269,8 @@ define([
     },
     
     /**
-     * Clone the current Datum and return the clone.
+     * Clone the current Datum and return the clone. The clone is put in the current
+     * Session, regardless of the origin Datum's Session.
      * 
      * @return The clone of the current Datum.
      */
@@ -259,8 +283,8 @@ define([
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumState : new DatumState(this.get("datumState").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
-        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
-        session: new Session(this.get("session").toJSON(), {parse: true})
+        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true})
+        // Don't need to do Session here since it will be overwritten in DatumContainerEditView.prependDatum()
       });
       
       return datum;
