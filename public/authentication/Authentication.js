@@ -100,6 +100,9 @@ define([
             }
             self.get("userPublic").set(data.user.publicSelf);
             self.get("userPublic").save();
+            if(typeof callback == "function"){
+              callback(); //tell caller that the user failed to authenticate
+            }
           }
         }
       });     

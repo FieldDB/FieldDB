@@ -60,8 +60,9 @@ define([
       }
       
       return response;
-    }
-    
+    },
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
+
   });
 
   return UserGeneric;

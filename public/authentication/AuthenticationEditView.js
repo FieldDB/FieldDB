@@ -195,11 +195,11 @@ define([
       
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
-        window.appView.loadSample();
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
+//        window.appView.loadSample();
+//        if(typeof callback == "function"){
+//          callback();
+//        }
+//        return;
       }
       
       // Temporarily keep the given's credentials
