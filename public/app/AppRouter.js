@@ -114,6 +114,7 @@ define([
     showFullscreenDatum : function(corpusName, datumId) {
       Utils.debug("In showFullscreenDatum: " + corpusName + " *** " + datumId);
 
+      /**** This part is broken ****
       // Change the id of the fullscreen datum view's Datum to be the given datumId
       appView.fullScreenDatumView.model.id = datumId;
       
@@ -150,6 +151,7 @@ define([
           $("#datums-fullscreen").show();
         },
       });
+      */
     }, 
     /**
      * Displays the fullscreen view of the datum specified by the given
