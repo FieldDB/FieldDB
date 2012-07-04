@@ -194,9 +194,6 @@ define([
               if(typeof self.get("corpus") != "function"){
                 s.relativizePouchToACorpus(self.get("corpus"));
               }
-              // s.restructure(function(){
-                // appView.render();//TODO see if need this
-              // });
             },
             error : function() {
               alert("There was an error restructuring the session. Loading defaults...");
@@ -214,9 +211,6 @@ define([
               if(typeof self.get("corpus") != "function"){
                 s.relativizePouchToACorpus(self.get("corpus"));
               }
-              // s.restructure(function(){
-                // appView.render();//TODO see if need this
-              // });
             },
             error : function() {
               alert("There was an error restructuring the session, and an error fetching the corpus. Loading defaults...");
@@ -268,33 +262,7 @@ define([
     },
     
     
-    router : AppRouter,
-    /**
-     * Modifies this App so that its properties match those in 
-     * the given object.
-     * 
-     * @param {Object} obj Contains the App properties.
-     */
-    restructure : function(obj) {
-      console.log("*** Before App restructure: " + JSON.stringify(obj));
-      console.log(this);
-      
-      for (key in obj) {
-        if ((key == "corpus") && (this.get("corpus"))) {
-          this.get("corpus").restructure(obj[key]);
-        } else if ((key == "authentication") && (this.get("authentication"))) {
-          this.get("authentication").restructure(obj[key]);
-        } else if ((key == "currentSession") && (this.get("currentSession"))) {
-          this.get("currentSession").restructure(obj[key]);
-        } else if ((key == "currentDataList") && (this.get("currentDataList"))) {
-          this.get("currentDataList").restructure(obj[key]);
-        } else {
-          this.set(key, obj[key]);
-        }
-      }
-      
-      console.log("*** After App restructure");
-    }
+    router : AppRouter
   });
 
   return App;

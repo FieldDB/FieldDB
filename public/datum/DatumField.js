@@ -36,6 +36,7 @@ define([ "use!backbone"
     },
     
     model : {
+      // There are no nested models
     },
     
     parse : function(response) {

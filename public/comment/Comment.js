@@ -1,6 +1,8 @@
 define( [
-         "use!backbone",
-], function(Backbone) {
+    "use!backbone",
+], function(
+    Backbone
+) {
 	var Comment = Backbone.Model.extend(
   /** @lends Comment.prototype */
   {
@@ -21,25 +23,34 @@ define( [
      * @constructs
      */
     initialize : function() {
-     
       this.set("timestamp", Date.now());
       this.set("username", window.username);
-      
     },
 
     defaults : {
       text : "",
       username : ""
     },
-
+    
+    model : {
+      // There are no nested models
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
 
     /**
      * The remove function removes a comment.
      */
-    
     remove : function() {
-
-    }
+    },
 
     /**
      * The edit function allows users to edit a comment.
@@ -48,20 +59,17 @@ define( [
      *          newtext Takes new text and replaces old one.
      * 
      */
-    ,
     edit : function(newtext) {
       this.set("text", newtext);
     },
     
     // in your Model validate function
-    validate: function(attrs) {
+    validate : function(attrs) {
       if (!attrs.mask) {
         attrs.mask = "hi empty mask";
       }
     }
   });
-
-
 
   return Comment;
 });
