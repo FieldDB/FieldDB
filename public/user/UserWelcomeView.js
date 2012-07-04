@@ -187,18 +187,9 @@ define([
       
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
-        
         //Load a corpus, datalist, session and user
-        window.loadApp(null, function(){
-          //Set sapir's remote corpus to fetch from
-          window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
-          window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
-          //Replicate sapir's corpus down to pouch
-            window.app.get("corpus").replicateCorpus(function(){
-              //load the sample user (sapir) into the existing corus, datalist, session and user
-              window.appView.loadSample();
-            });
-          });
+        window.startApp(null, function(){
+          window.appView.loadSample();
         });
         $('#user-welcome-modal').modal("hide");
       },
