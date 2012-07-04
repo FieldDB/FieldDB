@@ -108,10 +108,11 @@ define([
      * @param callback
      */
     syncUserWithServer : function(callback){
-      if(staleAuthentication){
+      if(this.staleAuthentication){
+        var self = this;
         window.appView.authView.showQuickAuthenticateView( function(){
           //This happens after the user has been authenticated. 
-          this.staleAuthentication = false;
+          self.staleAuthentication = false;
           if(typeof callback == "function"){
             callback();
           }

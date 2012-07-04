@@ -57,13 +57,12 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in App: " + error);
       });
-      this.set("authentication", new Authentication());
       
     },
     
     defaults : {
       corpus : Corpus,
-      authentication : Authentication,
+      authentication : new Authentication(),
       currentSession : Session,
       currentDataList : DataList
     },

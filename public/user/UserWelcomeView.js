@@ -176,10 +176,13 @@ define([
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
-        window.startApp(null, function(){
-          window.appView.loadSample();
+        a = new App();
+        a.createAppBackboneObjects( function(){
+          $('#user-welcome-modal').modal("hide");
+          window.startApp(a, function(){
+            window.appView.loadSample();
+          });
         });
-        $('#user-welcome-modal').modal("hide");
       },
         
       "click .sync_my_data" : function(){

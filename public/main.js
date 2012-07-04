@@ -76,10 +76,6 @@ require([
     UserWelcomeView
 ) {
   window.startApp = function(a, callback){
-    if (a == null){
-      a = new App();
-      a.createAppBackboneObjects();
-    }
     window.app = a;
 
     // Create and display the AppView and its dependants
