@@ -243,17 +243,6 @@ define([
  
       return "";
     },
-
-    /**
-     * The duplicateDatum function opens a new datum field set with the fields
-     * already filled exactly like the previous datum so that the user can
-     * minimally edit the datum.
-     */
-    duplicateDatum : function() {
-//      var datum = new Datum();
-      console.log("In duplicateDatum in datum");
-      this.trigger("duplicateDatum", this.model);
-    },
     
     insertNewDatumTag : function() {
       // Create the new DatumTag based on what the user entered

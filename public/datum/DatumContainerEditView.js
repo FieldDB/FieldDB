@@ -107,7 +107,7 @@ define([
           this.datums.add(new Datum({
             datumFields : app.get("corpus").get("datumFields").clone(),
             datumStates : app.get("corpus").get("datumStates").clone(),
-            datumTags : new DatumTags()
+            session : app.get("currentSession")
           }));
         }
       } else if (nextNumberOfDatum < previousNumberOfDatum) {
@@ -124,7 +124,7 @@ define([
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
         datumStates : app.get("corpus").get("datumStates").clone(),
-        datumTags : new DatumTags()
+        session : app.get("currentSession")
       }));
     },
     
@@ -135,6 +135,12 @@ define([
      * @param {Datm} datum The Datum to preprend.
      */
     prependDatum : function(datum) {
+      // TODO If the corpus' previous Datum is more than 24 hours old,
+      // prompt the user if they want to create a new Session.
+      
+      // Set the Datum's Session to the current Session
+      datum.set("session", app.get("currentSession")); 
+      
       // Add the new, blank, Datum
       this.datums.add(datum, {at:0});
        
