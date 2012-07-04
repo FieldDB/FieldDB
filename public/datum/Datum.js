@@ -87,8 +87,7 @@ define([
       audioVideo : new AudioVideo(),
       comments : new Comments(),
       datumState : new DatumState(),      // The selected DatumState
-      datumTags : new DatumTags(),
-      dateEntered : new Date()
+      datumTags : new DatumTags()
     },
     
     model : {
