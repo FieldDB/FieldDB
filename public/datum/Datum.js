@@ -86,7 +86,7 @@ define([
           this.set("corpusname", app.get("corpus").couchConnection.corpusname);
         }
       }catch(e){
-        Utils.debug("Corpusname was undefined on this corpus, the datalist will not have a valid corpusname until it is set.");
+        Utils.debug("Corpusname was undefined on this corpus, the datum will not have a valid corpusname until it is set.");
       }
       
     },

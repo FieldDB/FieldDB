@@ -81,7 +81,8 @@ define([
           : Utils.pouchUrl+this.get("couchConnection").corpusname);
       
     //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-      this.model.bind("change:couchConnection", function() {
+      this.bind("change:couchConnection", function() {
+        
         this.pouch = Backbone.sync
         .pouch(Utils.androidApp() ? Utils.touchUrl
             + this.get("couchConnection").corpusname : Utils.pouchUrl
