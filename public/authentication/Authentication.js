@@ -1,10 +1,12 @@
 define([
     "use!backbone", 
     "user/User",
+    "user/UserMask",
     "libs/Utils" 
 ], function(
     Backbone, 
-    User
+    User,
+    UserMask
 ) {
   var Authentication = Backbone.Model.extend(
   /** @lends Authentication.prototype */
@@ -34,13 +36,14 @@ define([
 
     defaults : {
       userPrivate : User,
-      userPublic : User,
+      userPublic : UserMask,
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
     
     model : {
-      user : User
+      userPrivate : User,
+      userPublic : UserMask
     },
     
     parse : function(response) {

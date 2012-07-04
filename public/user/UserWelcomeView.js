@@ -134,7 +134,7 @@ define([
                   s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
                   s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
-                  s.relativizePouchToACorpus(c);
+                  s.set("corpusname", data.user.corpuses[data.user.corpuses.length-1].corpusname);
                   c.get("sessions").add(s);
                   
                   var dl = a.get("currentDataList");
@@ -142,8 +142,8 @@ define([
                     "title" : data.user.username+"'s untitled data list",
                     "dateCreated" : "May 29, 2012",
                     "description" : "You can use datalists to create handouts or to prepare for sessions with consultants, export to LaTeX or to share with collaborators. ",
+                    "corpusname" : data.user.corpuses[data.user.corpuses.length-1].corpusname
                   });
-                  dl.relativizePouchToACorpus(c);
                   c.get("dataLists").add(dl);
                   
                   window.startApp(a, function(){
