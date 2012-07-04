@@ -30,14 +30,26 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in Authentication  : " + error);
       });
-      
-      
     },
 
     defaults : {
       user : new User(),
       username : localStorage.getItem("username"),
       state : "loggedOut"
+    },
+    
+    model : {
+      user : User
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
     },
 
     staleAuthentication: false,
@@ -86,7 +98,6 @@ define([
           }
         }
       });
-     
     }
   });
 

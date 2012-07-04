@@ -1,4 +1,3 @@
-//needs to have attributes as DatumFields.... but  can't put them in until DatumFields is up and running.
 define([
     "use!backbone",
     "comment/Comments",

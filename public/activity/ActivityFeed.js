@@ -1,10 +1,10 @@
 define([ 
-         "use!backbone", 
-         "activity/Activity"
-
+    "use!backbone", 
+    "activity/Activity"
 ], function(
     Backbone, 
-    Activity) {
+    Activity
+) {
   var ActivityFeed = Backbone.Model.extend(
   /** @lends ActivityFeed.prototype */
   {
@@ -19,6 +19,21 @@ define([
      */
     initialize : function() {
     },
+    
+    model : {
+      // There are no nested models
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
+    
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
         : Utils.activityFeedPouchUrl),
 
