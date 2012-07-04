@@ -191,7 +191,7 @@ define([
      * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
      */
     storeCurrentDashboardIdsToLocalStorage : function(callback){
-      try{
+//      try{
         var ids = {};
         this.get("currentSession").save();
         this.get("currentDataList").save();
@@ -209,9 +209,10 @@ define([
         if(typeof callback == "function"){
           callback();
         }
-      }catch(e){
-        Utils.debug("storeCurrentDashboardIdsToLocalStorage failed, probably called too early.");
-      }
+//      }catch(e){
+//        Utils.debug("storeCurrentDashboardIdsTo  LocalStorage failed, probably called too early. ");
+//        Utils.debug(e);
+//      }
     }
 
   });

@@ -91,12 +91,6 @@ define([
                 $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
                 $(".alert-error").show();
               }else if ( data.user != null ){
-                /*
-                 * Use the corpus just created to log the user into that corpus's couch server
-                 */
-                c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function(){
-                  Utils.debug("Successfully authenticated user with their corpus server.")
-                });
                 
                 /*
                  * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
@@ -109,7 +103,8 @@ define([
                   auth.set("state", "loggedIn");
                   auth.staleAuthentication = false;
 
-                  auth.set("userPrivate", data.user); //TODO might have to parse here
+                  var u = auth.get("userPrivate");
+                  u.set(data.user); //TODO might have to parse here
                   //Over write the public copy with any (new) username/gravatar info
                   auth.get("userPublic").id = auth.get("userPrivate").get("id");//TODO check this
                   if (data.user.publicSelf == null){
@@ -121,7 +116,7 @@ define([
                   auth.get("userPublic").set(data.user.publicSelf);
                   auth.get("userPublic").save();
                   
-                  var c = app.get("corpus");
+                  var c = a.get("corpus");
                   c.set({
                     "title" : data.user.username+"'s Corpus",
                     "titleAsUrl" : data.user.username+"Corpus",
@@ -152,6 +147,12 @@ define([
                   c.get("dataLists").add(dl);
                   
                   window.startApp(a, function(){
+                    /*
+                     * Use the corpus just created to log the user into that corpus's couch server
+                     */
+                    c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function(){
+                      Utils.debug("Successfully authenticated user with their corpus server.")
+                    });
                     console.log("Loadded app for a new user.");
                   });
                   $('#user-welcome-modal').modal("hide");

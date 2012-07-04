@@ -85,7 +85,8 @@ define([
             self.set("state", "loggedIn");
             self.staleAuthentication = false;
 
-            self.set("userPrivate", data.user); //TODO might have to parse here
+            var u = self.get("userPrivate");
+            u.set(data.user); //TODO might have to parse here
             //Over write the public copy with any (new) username/gravatar info
             self.get("userPublic").id = self.get("userPrivate").get("id");//TODO check this
             if (data.user.publicSelf == null){
