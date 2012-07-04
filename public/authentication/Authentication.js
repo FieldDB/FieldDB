@@ -91,14 +91,20 @@ define([
      
     },
     pullUserFromServer : function(callback){
-      alert("Pulling user details and preferences from server");
+      alert("TODO Pulling user details and preferences from server");
+      
+      //TODO contact server and get user details
+      
       this.set("userPublic", this.get("userPrivate")); //TODO make a smaller copy, not a full copy.
       if(typeof callback == "function"){
         callback();
       }
     }, 
     pushUserToServer : function(callback){
-      alert("Pushing user details and preferences to server");
+      alert("TODO Pushing user details and preferences to server");
+      
+      //TODO contact server and send user details
+      
       if(typeof callback == "function"){
         callback();
       }
