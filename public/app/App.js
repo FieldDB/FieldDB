@@ -120,6 +120,7 @@ define([
       currentSession : Session,
       currentDataList : DataList
     },
+    
     /**
      * Accepts the ids to load the app. This is a helper function which is caled
      * at the three entry points, main (if there is json in the localstorage
@@ -168,10 +169,6 @@ define([
       
       c.fetch({
         success : function() {
-          if(typeof self.get("corpus") != "function"){
-            u.relativizePouchToACorpus(self.get("corpus"));
-            u.fetch();
-          }
           /*
            * if corpus fetch worked, fetch session because it might need the fields form corpus
            */
