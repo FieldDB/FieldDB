@@ -35,14 +35,13 @@ define([
     },
 
     defaults : {
-      user: new User(), //Deprecated
       userPrivate : User,
       userPublic : User,
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
 
-    staleAuthentication: false,
+    staleAuthentication: true,
     
     /**
      * Contacts local or remote server to verify the username and password
@@ -69,54 +68,49 @@ define([
               callback(null); //tell caller that the user failed to authenticate
             }
           }else if ( data.user != null ){
-            self.get("user").id = data.user._id; //This id is created by mongoose-auth when the user first signs up, and is used to link user across mongodb and couchdb
-            self.get("user").fetch({
-              success : function() {
-                this.set("userPublic", this.get("userPrivate")); //TODO make a smaller copy, not a full copy.
-                
-                if(typeof callback == "function"){
-                  callback(self.get("user")); //let the caller have the user, now the usr profile will also be availible
-                }
-              },
-              error : function() {
-                Utils.debug("There was an error fetching the users' data. Either this is a first install, and the sync is comming up next, or they are offline. You can try clicking the sync button, or create new data and hit sync when you go back online.");
-                if(typeof callback == "function"){
-                  callback(self.get("user")); //let the caller have the user, even though their data didnt come down from couch so their profile wont be availible but they can make new data.
-                }
-              }
-            });
-            
-            
+            self.set("state", "loggedIn");
+            self.staleAuthentication = false;
+
+            self.set("userPrivate", data.user); //TODO might have to parse here
+            //Over write the public copy with any (new) username/gravatar info
+            self.get("userPublic").id = self.get("userPrivate").get("id");//TODO check this
+            if (data.user.publicSelf == null){
+              //if the user hasnt already specified their public self, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
+              data.user.publicSelf = {};
+              data.user.publicSelf.username = self.get("userPrivate").get("username");
+              data.user.publicSelf.gravatar = self.get("userPrivate").get("gravatar");
+            }
+            self.get("userPublic").set(data.user.publicSelf);
+            self.get("userPublic").save();
           }
         }
       });
      
     },
     /**
-     * This function uses the quick athentication view to get the user's
+     * This function uses the quick authentication view to get the user's
      * password and authenticate them. The authenticate process brings
      * down the user from the server without any extra work in this function. 
      * 
      * @param callback
      */
-    pullUserFromServer : function(callback){
-      window.appView.authView.showQuickAuthenticateView( function(){
-        //This happens after the user has been authenticated. 
+    syncUserWithServer : function(callback){
+      if(staleAuthentication){
+        window.appView.authView.showQuickAuthenticateView( function(){
+          //This happens after the user has been authenticated. 
+          this.staleAuthentication = false;
+          if(typeof callback == "function"){
+            callback();
+          }
+        });
+      }else{
+        //the user has authenticated recently, or there are no changes in their details.
         if(typeof callback == "function"){
           callback();
         }
-      });
-
-    }, 
-    pushUserToServer : function(callback){
-      alert("TODO Pushing user details and preferences to server");
-      
-      //TODO contact server and send user details
-      
-      if(typeof callback == "function"){
-        callback();
       }
     }
+    
   });
 
   return Authentication;

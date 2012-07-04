@@ -31,20 +31,17 @@ define([
     initialize : function() {
       Utils.debug("AUTH init: " + this.el);
       
-    //   Create a UserReadView
+    //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
-         model: this.model.get("user")
+         model: this.model.get("userPublic")
       });
       this.userView.format = "link";
       this.userView.setElement($("#user-quickview"));
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
-      this.model.get("user").bind('change', this.render, this);
+      this.model.get("userPublic").bind('change', this.render, this);
       
-      //TODO remove this later
-      this.model.set("userPublic",this.model.get("user"));
-      this.model.set("userPrivate",this.model.get("user"));
     },
 
     /**
@@ -76,8 +73,8 @@ define([
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
-      if(this.model.get("user") != undefined){
-        this.model.set( "gravatar", this.model.get("user").get("gravatar") );
+      if(this.model.get("userPublic") != undefined){
+        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
       }
       if (this.model != undefined) {
         // Display the AuthenticationEditView
@@ -88,7 +85,7 @@ define([
           $("#logout").show();
           $("#login").hide();
           $("#login_form").hide();
-          if(this.model.get("user") != undefined){
+          if(this.model.get("userPublic") != undefined){
             this.userView.setElement($("#user-quickview"));
             this.userView.render();
           }else{
@@ -98,7 +95,7 @@ define([
           $("#logout").hide();
           $("#login").show();
           $("#login_form").show();
-          if(this.model.get("user") != undefined){
+          if(this.model.get("userPublic") != undefined){
             this.userView.setElement($("#user-quickview"));
             this.userView.render();
           }else{
@@ -155,7 +152,7 @@ define([
      */
     loadSample : function(appidsIn) {      
       this.model.get("userPrivate").id = "4ff342351501135e7c000030";
-      this.model.pullUserFromServer( function(){
+      this.model.syncUserWithServer( function(){
         var appids = this.model.get("userPrivate").get("mostRecentIds"); 
         
         //Set sapir's remote corpus to fetch from
@@ -261,26 +258,17 @@ define([
      * 
      */
     authenticatePreviousUser : function() {
-      var username = localStorage.getItem("username");
-      if (username) {
+      var userid = localStorage.getItem("userid");
+      if (userid) {
         //TODO this needs testing
-        // Save the previous user in our Models
-        this.model.get("user").set("id",username);
-        this.model.get("user").fetch();
-        this.model.set("username", username);
+        // Save the  user in our Models
+        this.model.get("userPublic").set("id",userid);
+        this.model.get("userPublic").fetch();
+        this.model.syncUserWithServer();
         
-        if (this.model.staleAuthentication) {
-          showQuickAuthenticateView();
-        }
-        
-        this.model.set("state", "loggedIn");
       } else {
-        Utils.debug("No previous user.");
-        $('#user-welcome-modal').modal("show");
         this.model.set("state", "loggedOut");
-
-//        this.authenticateAsPublic(); //TODO this will be used in production
-        this.authenticate("sapir");
+        this.authenticateAsPublic(); //TODO this will be used in production
       }
     },
     
