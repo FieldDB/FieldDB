@@ -388,20 +388,11 @@ define([
     /**
      * Save current state, synchronize the server and local databases.
      */
-    replicateDatabases : function() {
+    replicateDatabases : function(callback) {
       window.app.router.storeCurrentDashboardIdsToLocalStorage();
-
-      this.model.get("corpus").replicateCorpus();
-      
-      //TODO pull down and push up the user's preferences and details too
-      
-    },
-    replicateDatabasesWithCallback : function(callback) {
-      window.app.router.storeCurrentDashboardIdsToLocalStorage();
-
+      this.model.get("autentication").pullUserFromServer();
       this.model.get("corpus").replicateCorpus(callback);
       
-      //TODO pull down and push up the user's preferences and details too
 
     },
     /**
