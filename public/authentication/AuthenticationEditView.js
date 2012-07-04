@@ -41,6 +41,10 @@ define([
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
       this.model.get("user").bind('change', this.render, this);
+      
+      //TODO remove this later
+      this.model.set("userPublic",this.model.get("user"));
+      this.model.set("userPrivate",this.model.get("user"));
     },
 
     /**
@@ -136,15 +140,25 @@ define([
      * time the sample user is Edward Sapir, a well-known early fieldlinguist.
      * He is simply loaded as a user, without calling any user authentication
      * functions.
+     * 
+     * Notes: Sapir's user comes from his time after his PhD and
+         before his foray into the industry. This is when he started
+         getting some results for "phoneme" around 1910.
+         For a similar use of historical users see Morgan Blamey and Tucker the Technician at blamestella.com
+         https://twitter.com/#!/tucker1927
      */
-    loadSample : function() {      
-      this.userView.loadSample();
+    loadSample : function(appids) {      
+      this.model.get("userPrivate").id = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
+      this.model.pullUserFromServer( function(){
+        var appids = this.model.get("userPrivate").get("mostRecentIds");
+        // move the welcome user code about loading sapir's remote corpus and replicating, here.
+        window.app.loadBackboneObjectsById(appids);
+      });
       
       this.model.set({
-        user : this.userView.model,
-        username : this.userView.model.get("username"),
+        username : this.model.get("userPublic").get("username"),
         state : "loggedIn",
-        gravatar :  this.userView.model.get("gravatar") 
+        gravatar :  this.model.get("userPublic").get("gravatar") 
       });
       
     },

@@ -35,7 +35,9 @@ define([
     },
 
     defaults : {
-      user : new User(),
+      user: new User(), //Deprecated
+      userPrivate : User,
+      userPublic : User,
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
@@ -87,6 +89,19 @@ define([
         }
       });
      
+    },
+    pullUserFromServer : function(callback){
+      alert("Pulling user details and preferences from server");
+      this.set("userPublic", this.get("userPrivate")); //TODO make a smaller copy, not a full copy.
+      if(typeof callback == "function"){
+        callback();
+      }
+    }, 
+    pushUserToServer : function(callback){
+      alert("Pushing user details and preferences to server");
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

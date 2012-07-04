@@ -374,16 +374,14 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      this.authView.loadSample();
-      
       var appids= {};
       appids.corpusid = "822AFBA3-CE50-40F5-B983-315277DD9661";
       appids.datalistid = "45444C8F-D707-426D-A422-54CD4041A5A1";
       appids.sessionid = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
       
-      //TODO move the welcome user code about loading sapir's remote corpus and replicating, here.
-      this.model.loadBackboneObjectsById(appids);
-
+      //all the replication etc happens in authView
+      this.authView.loadSample(appids);
+      
       this.searchView.loadSample();
     },
     
