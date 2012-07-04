@@ -75,26 +75,10 @@ require([
     User,
     UserWelcomeView
 ) {
-  window.loadApp= function(a, callback){
+  window.loadApp = function(a, callback){
     if (a == null){
       a = new App();
-      // this most likely wont happen since the only one who calls LoadApp with
-      // null, is the userwelcomeview and it has already set the user in
-      // authview with the user it got back frmo the server.
-      if (typeof a.get("authentication").get("user") == "function") {
-        var u = new User();
-        a.get("authentication").set("user", u);
-      }
-      var c = new Corpus();
-      a.set("corpus", c);
-
-      var s = new Session({
-        sessionFields : a.get("corpus").get("sessionFields").clone()
-      });
-      a.set("currentSession", s);
-
-      var dl = new DataList();
-      a.set("currentDataList", dl);
+      a.createAppBackboneObjects();
     }
     window.app = a;
 
