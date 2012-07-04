@@ -100,6 +100,7 @@ require([
    * TODO this doesnt work any more because each corpus is in a different pouch.
    */
   Pouch.destroy('idb://db');
+  Pouch.destroy('idb://dbdefault');
   localStorage.clear();
   
   // Load the App from localStorage
