@@ -1,10 +1,11 @@
 define( [ 
     "use!backbone", 
     "user/User" 
-], function(Backbone,
-    User) {
+], function(
+    Backbone,
+    User
+) {
   var Consultant = User.extend(
-
   /** @lends Consultant.prototype */
   {
     /**
@@ -26,7 +27,6 @@ define( [
      * @constructs
      * 
      */
-
     initialize : function(attributes) {
       Consultant.__super__.initialize.call(this, attributes);
 
@@ -34,7 +34,21 @@ define( [
       this.set("birthDate", "");
       this.set("language", "");
       this.set("dialect", "");
-    }
+    },
+    
+    model : {
+      // There are no nested models
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
   });
 
   return Consultant;
