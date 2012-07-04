@@ -41,6 +41,10 @@ define([
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
       this.model.get("user").bind('change', this.render, this);
+      
+      //TODO remove this later
+      this.model.set("userPublic",this.model.get("user"));
+      this.model.set("userPrivate",this.model.get("user"));
     },
 
     /**
@@ -132,19 +136,43 @@ define([
     },
     
     /**
-     * Load sample calls the UserReadView's function to load a sample user, at this
-     * time the sample user is Edward Sapir, a well-known early fieldlinguist.
-     * He is simply loaded as a user, without calling any user authentication
-     * functions.
+     * Load sample calls the UserReadView's function to load a sample user, at
+     * this time the sample user is Edward Sapir, a well-known early
+     * fieldlinguist. He is simply loaded as a user, without calling any user
+     * authentication functions.
+     * 
+     * This function pulls sapir's user from a server, then pulls his corpus
+     * from another server, then loads his dashboard using his most recent items
+     * in his user details. In the end, we would like ot package him in the app,
+     * so that the user can be offline and play with sapir's data. TODO we can
+     * only do this once the app can load from JSON. 
+     * 
+     * Notes: Sapir's user comes from his time after his PhD and before his
+     * foray into the industry. This is when he started getting some results for
+     * "phoneme" around 1910. For a similar use of historical users see Morgan
+     * Blamey and Tucker the Technician at blamestella.com
+     * https://twitter.com/#!/tucker1927
      */
-    loadSample : function() {      
-      this.userView.loadSample();
+    loadSample : function(appidsIn) {      
+      this.model.get("userPrivate").id = "4ff342351501135e7c000030";
+      this.model.pullUserFromServer( function(){
+        var appids = appidsIn;//TODO when pulling user from server is working use this: this.model.get("userPrivate").get("mostRecentIds"); 
+        
+        //Set sapir's remote corpus to fetch from
+        window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
+        window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
+          //Replicate sapir's corpus down to pouch
+          window.app.get("corpus").replicateCorpus(function(){
+            //load the sapir's most recent objects into the existing corpus, datalist, session and user
+            window.app.loadBackboneObjectsById(appids);
+          });
+        });
+      });
       
       this.model.set({
-        user : this.userView.model,
-        username : this.userView.model.get("username"),
+        username : this.model.get("userPublic").get("username"),
         state : "loggedIn",
-        gravatar :  this.userView.model.get("gravatar") 
+        gravatar :  this.model.get("userPublic").get("gravatar") 
       });
       
     },
@@ -195,7 +223,7 @@ define([
         });
         var appids = userfromserver.get("mostRecentIds");
         appids.userid = null;
-        window.app.loadMostRecentIds(appids);
+        window.app.loadBackboneObjectsById(appids);
 
         // Save the authenticated user in localStorage
 //        localStorage.setItem("username", u.get("username"));
