@@ -101,18 +101,33 @@ define([
     updateDatums : function() {
       var previousNumberOfDatum = this.datums.length;
       var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+        
+      // TODO Get the current Corpus' Datum based on their date entered
       
-      if (nextNumberOfDatum > previousNumberOfDatum) {
-        for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
-          this.datums.add(new Datum({
-            datumFields : app.get("corpus").get("datumFields").clone(),
-            datumStates : app.get("corpus").get("datumStates").clone(),
-            session : app.get("currentSession")
-          }));
-        }
-      } else if (nextNumberOfDatum < previousNumberOfDatum) {
-        for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
+      // TODO If there are no Datum in the current Corpus
+      if (true) {
+        // Remove all currently displayed Datums
+        for (var i = 0; i < previousNumberOfDatum; i++) {
           this.datums.pop();
+        }
+          
+        // Add a single, blank Datum
+        this.prependDatum(new Datum({
+          datumFields : app.get("corpus").get("datumFields").clone(),
+          datumStates : app.get("corpus").get("datumStates").clone()
+        }));
+      } else {
+        // If the user has increased the number of Datum to display in the container
+        if (nextNumberOfDatum > previousNumberOfDatum) {
+          for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
+            // TODO Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
+          }
+        // If the user has decrease the number of Datum to display in the container
+        } else if (nextNumberOfDatum < previousNumberOfDatum) {
+          // Pop the excess Datum from the bottom of the stack
+          for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
+            this.datums.pop();
+          }
         }
       }
     },
@@ -123,8 +138,7 @@ define([
     newDatum : function() {
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
-        datumStates : app.get("corpus").get("datumStates").clone(),
-        session : app.get("currentSession")
+        datumStates : app.get("corpus").get("datumStates").clone()
       }));
     },
     
