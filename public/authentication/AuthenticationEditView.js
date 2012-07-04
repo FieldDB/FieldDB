@@ -152,6 +152,7 @@ define([
      */
     loadSample : function(appidsIn) {      
       this.model.get("userPrivate").id = "4ff342351501135e7c000030";
+      this.model.get("userPrivate").set("username", "sapir");
       this.model.syncUserWithServer( function(){
         var appids = this.model.get("userPrivate").get("mostRecentIds"); 
         
@@ -279,7 +280,7 @@ define([
      * identity in a while.
      */
     showQuickAuthenticateView : function(callback) {
-      if( this.model.get("userPrivate").username == "sapir" ){
+      if( this.model.get("userPrivate").get("username") == "sapir" ){
         this.authenticate("sapir", "phoneme", callback);
       }else{
         //TODO show a modal instead of alert

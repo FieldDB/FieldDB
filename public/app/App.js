@@ -100,7 +100,7 @@ define([
      */
     createAppBackboneObjects : function(callback){
       if (typeof this.get("authentication").get("userPublic") == "function") {
-        var u = new User();
+        var u = new UserMask();
         this.get("authentication").set("userPublic", u);
       }
       if (typeof this.get("authentication").get("userPrivate") == "function") {

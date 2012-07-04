@@ -1,7 +1,8 @@
 define([ 
     "use!backbone", 
     "hotkey/HotKey",
-    "user/UserPreference"
+    "user/UserPreference",
+    "libs/Utils"
 ], function(
     Backbone,
     HotKey,

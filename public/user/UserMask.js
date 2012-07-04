@@ -1,5 +1,6 @@
 define([ 
-    "use!backbone"
+    "use!backbone",
+    "libs/Utils"
 ], function(
     Backbone
 ) {
@@ -34,8 +35,8 @@ define([
       }
     },
     
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-        : Utils.pouchUrl),
+//    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+//        : Utils.pouchUrl)
   });
 
   return UserMask;
