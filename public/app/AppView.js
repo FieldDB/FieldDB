@@ -389,9 +389,10 @@ define([
      * Save current state, synchronize the server and local databases.
      */
     replicateDatabases : function(callback) {
+      var self = this;
       window.app.storeCurrentDashboardIdsToLocalStorage(function(){
-        this.model.get("authentication").syncUserWithServer();
-        this.model.get("corpus").replicateCorpus(callback);
+        self.model.get("authentication").syncUserWithServer();
+        self.model.get("corpus").replicateCorpus(callback);
       });
     },
     /**
