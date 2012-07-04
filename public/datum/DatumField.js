@@ -1,5 +1,8 @@
-define([ "use!backbone"
-], function(Backbone) {
+define([
+    "use!backbone"
+], function(
+    Backbone
+) {
   var DatumField = Backbone.Model.extend(
   /** @lends DatumField.prototype */
   {

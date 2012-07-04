@@ -24,6 +24,20 @@ define([
       numVisibleDatum : 3
     },
     
+    model : {
+      // There are no nested models
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
+    
     /**
      * Modifies this UserPreference so that its properties match those
      * in the given object.

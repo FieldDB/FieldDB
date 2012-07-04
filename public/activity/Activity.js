@@ -1,6 +1,10 @@
-define([ "use!backbone",
-         "user/User" ],
-         function(Backbone, User) {
+define([ 
+    "use!backbone",
+    "user/User" 
+], function(
+    Backbone, 
+    User
+) {
   var Activity = Backbone.Model.extend(
   /** @lends Activity.prototype */
   {
@@ -14,11 +18,8 @@ define([ "use!backbone",
      * @constructs
      */
     initialize : function() {
-
     },
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
-        : Utils.activityFeedPouchUrl),
-        
+    
     defaults : {
       user : User,
       verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
@@ -26,8 +27,25 @@ define([ "use!backbone",
       directobject : "an entry",
       indirectobject : "with Consultant-SJ",
       context : "via Android/ Offline Chrome App"  
-    }
-
+    },
+    
+    model : {
+      user : User
+    },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
+    
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
+        : Utils.activityFeedPouchUrl),
+        
   });
 
   return Activity;
