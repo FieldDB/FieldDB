@@ -101,9 +101,6 @@ define([
         } else if ((key == "prefs") && (this.get("prefs"))) {
           // prefs is a UserPreference object
           this.get("prefs").restructure(obj[key]);
-        } else if ((key == "hotkeys") && (this.get("hotkeys"))) {
-          // prefs is a UserPreference object
-          this.get("hotkeys").restructure(obj[key]);
         } else {
           this.set(key, obj[key]);
         }

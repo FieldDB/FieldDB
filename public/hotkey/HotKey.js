@@ -33,11 +33,6 @@ define([
       functiontocall : function() {
       },
       description : ""
-    },
-    restructure : function(obj) {
-      for (key in obj) {
-        this.set(key, obj[key]);
-      }
     }
   });
 
