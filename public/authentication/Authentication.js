@@ -72,6 +72,8 @@ define([
             self.get("user").id = data.user._id; //This id is created by mongoose-auth when the user first signs up, and is used to link user across mongodb and couchdb
             self.get("user").fetch({
               success : function() {
+                this.set("userPublic", this.get("userPrivate")); //TODO make a smaller copy, not a full copy.
+                
                 if(typeof callback == "function"){
                   callback(self.get("user")); //let the caller have the user, now the usr profile will also be availible
                 }
@@ -90,15 +92,21 @@ define([
       });
      
     },
+    /**
+     * This function uses the quick athentication view to get the user's
+     * password and authenticate them. The authenticate process brings
+     * down the user from the server without any extra work in this function. 
+     * 
+     * @param callback
+     */
     pullUserFromServer : function(callback){
-      alert("TODO Pulling user details and preferences from server");
-      
-      //TODO contact server and get user details
-      
-      this.set("userPublic", this.get("userPrivate")); //TODO make a smaller copy, not a full copy.
-      if(typeof callback == "function"){
-        callback();
-      }
+      window.appView.authView.showQuickAuthenticateView( function(){
+        //This happens after the user has been authenticated. 
+        if(typeof callback == "function"){
+          callback();
+        }
+      });
+
     }, 
     pushUserToServer : function(callback){
       alert("TODO Pushing user details and preferences to server");

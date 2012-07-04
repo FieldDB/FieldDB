@@ -156,7 +156,7 @@ define([
     loadSample : function(appidsIn) {      
       this.model.get("userPrivate").id = "4ff342351501135e7c000030";
       this.model.pullUserFromServer( function(){
-        var appids = appidsIn;//TODO when pulling user from server is working use this: this.model.get("userPrivate").get("mostRecentIds"); 
+        var appids = this.model.get("userPrivate").get("mostRecentIds"); 
         
         //Set sapir's remote corpus to fetch from
         window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
@@ -188,7 +188,7 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate : function(username, password) {
+    authenticate : function(username, password, callback) {
       // Current signed in as the public user - special case authentication
       if (username == "public") {
         this.authenticateAsPublic();
@@ -198,6 +198,9 @@ define([
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
         window.appView.loadSample();
+        if(typeof callback == "function"){
+          callback();
+        }
         return;
       }
       
@@ -221,12 +224,9 @@ define([
           username : userfromserver.get("username"),
           state : "loggedIn"
         });
-        var appids = userfromserver.get("mostRecentIds");
-        appids.userid = null;
-        window.app.loadBackboneObjectsById(appids);
-
-        // Save the authenticated user in localStorage
-//        localStorage.setItem("username", u.get("username"));
+        if(typeof callback == "function"){
+          callback();
+        }
       });
     },
     
@@ -288,10 +288,16 @@ define([
      * TODO the ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
      * like removing a corpus. It is also used if the user hasn't confirmed their
-     * identitiy in a while.
+     * identity in a while.
      */
-    showQuickAuthenticateView : function() {
-      alert("Authenticating quickly, with just password.");
+    showQuickAuthenticateView : function(callback) {
+      if( this.model.get("privateUser").username == "sapir" ){
+        this.authenticate("sapir", "phoneme", callback);
+      }else{
+        //TODO show a modal instead of alert
+        alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+        this.authenticate(this.model.get("privateUser").username, "test" , callback );
+      }
     }
   });
 

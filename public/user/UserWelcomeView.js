@@ -205,7 +205,7 @@ define([
           }else{
             $('#user-welcome-modal').modal("hide");
             window.startApp(null, function(){
-              window.appView.replicateDatabasesWithCallback(function(){
+              window.appView.replicateDatabases(function(){
                 /*
                  * If the user fetch didn't succeed, try again.
                  */
