@@ -52,7 +52,7 @@ define([
         collection           : this.model.get("datumTags"),
         childViewConstructor : DatumTagEditView,
         childViewTagName     : "li",
-      }),
+      });
 
       // Create the DatumFieldsValueEditView
       this.datumFieldsView = new UpdatingCollectionView({
@@ -72,13 +72,14 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      "click #new" : "newDatum",
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
-      "change .datum_state_select" : "updateDatumState"
+      "change .datum_state_select" : "updateDatumState",
+      "click #duplicate" : "duplicateDatum",
+      "click .icon-plus" : "newDatum"
     },
 
     /**
@@ -211,6 +212,9 @@ define([
         // happens
         // before the saving is done
         this.needsSave = false;
+        
+        // Store the current Session in the Datum
+        this.model.set("session", app.get("currentSession"));
 
         Utils.debug("Saving the Datum");
         this.model.save();
@@ -247,7 +251,8 @@ define([
      */
     duplicateDatum : function() {
 //      var datum = new Datum();
-      return datum;
+      console.log("In duplicateDatum in datum");
+      this.trigger("duplicateDatum", this.model);
     },
     
     insertNewDatumTag : function() {
@@ -269,7 +274,26 @@ define([
     
     updateDatumState : function() {
       // TODO Save value of the selected DatumState
-    }
+    },
+    
+    /**
+     * Adds a new Datum to the current Corpus in the current Session. It is
+     * placed at the top of the datumsView, pushing off the bottom Datum, if
+     * necessary.
+     */
+    newDatum : function() {
+      // Add a new Datum to the top of the Datum stack
+      appView.datumsView.newDatum();
+    },
+    
+    /** 
+     * Adds a new Datum to the current Corpus in the current Session with the same
+     * values as the Datum where the Copy button was clicked.
+     */
+    duplicateDatum : function() {      
+      // Add it as a new Datum to the top of the Datum stack
+      appView.datumsView.prependDatum(this.model.clone());
+    },
   });
 
   return DatumEditView;

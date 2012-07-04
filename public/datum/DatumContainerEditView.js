@@ -105,15 +105,44 @@ define([
       if (nextNumberOfDatum > previousNumberOfDatum) {
         for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
           this.datums.add(new Datum({
-          datumFields : app.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone(),
-          datumTags : new DatumTags()
-        }));
+            datumFields : app.get("corpus").get("datumFields").clone(),
+            datumStates : app.get("corpus").get("datumStates").clone(),
+            datumTags : new DatumTags()
+          }));
         }
       } else if (nextNumberOfDatum < previousNumberOfDatum) {
         for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
           this.datums.pop();
         }
+      }
+    },
+    
+    /**
+     * Adds a new Datum to the current Corpus in the current Session.
+     */
+    newDatum : function() {
+      this.prependDatum(new Datum({
+        datumFields : app.get("corpus").get("datumFields").clone(),
+        datumStates : app.get("corpus").get("datumStates").clone(),
+        datumTags : new DatumTags()
+      }));
+    },
+    
+    /**
+     * Prepends the given Datum to the top of the Datum stack.
+     * Saves and bumps the bottom Datum off the stack, if necessary.
+     * 
+     * @param {Datm} datum The Datum to preprend.
+     */
+    prependDatum : function(datum) {
+      // Add the new, blank, Datum
+      this.datums.add(datum, {at:0});
+       
+      // If there are too many datum on the screen, remove the bottom one and save it.
+      if (this.datums.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
+        var d = this.datums.pop();
+        console.log("Removed the datum with id: " + d._id);
+        d.save();
       }
     }
   });

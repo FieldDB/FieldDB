@@ -5,6 +5,7 @@ define([
     "datum/DatumField", 
     "datum/DatumFields", 
     "datum/DatumState", 
+    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -16,6 +17,7 @@ define([
     DatumField, 
     DatumFields,
     DatumState, 
+    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -73,28 +75,28 @@ define([
       if(typeof this.get("audioVideo") == "function"){
         this.set("audioVideo",new AudioVideo());
       }
-    
     },
+    
     relativizePouchToACorpus : function(corpus){
       //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
       var c = corpus.get("couchConnection");
       this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
           : Utils.pouchUrl+c.corpusname);
     },
+    
     defaults : {      
-      datumFields : DatumFields,
-      audioVideo : AudioVideo,
-      session : Session,
-      comments : Comments,
+      datumFields : new DatumFields(),
+      audioVideo : new AudioVideo(),
+      session : new Session(),
+      comments : new Comments(),
       datumState : new DatumState(),
-      datumState : DatumState,      // The selected DatumState
-      datumTags : DatumTags,
-      dateEntered : DatumField
+      datumState : new DatumState(),      // The selected DatumState
+      datumTags : new DatumTags(),
+      dateEntered : new DatumField()
     },
 
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
-
     
     /**
      * When a Datum is returned from the database, its internal models are just
@@ -121,13 +123,53 @@ define([
         this.set("audioVideo", new AudioVideo(this.get("audioVideo")));
       }
       
-      // TODO Restructure the Session
+      // Restructure the Session
+      if (this.get("session")) {
+        // Create the Session
+        var s = new Session();
+        s.restructure(this.get("session"));
+        
+        // Store the session
+        this.set("session", s);
+      }
       
-      // TODO Restructure the Comments
+      // Restructure the Comments
+      if (this.get("comments")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("comments");
+        
+        // Create the model to store each new Comment
+        this.set("comments", new Comments());
+        
+        // Create the Comment models and store them
+        for (i in temp) {
+          var comment = new Comment(temp[i]);
+          this.get("comments").push(comment);
+        }
+      }
       
-      // TODO Restructure the DatumState
+      // Restructure the DatumStates
+      if (this.get("datumStates")) {
+        // Keep track of the data that we want to restructure
+        var temp = this.get("datumStates");
+        
+        // Create the model to store each new DatumState
+        this.set("datumStates", new DatumStates());
+        
+        // Create the DatumState models and store them
+        for (i in temp) {
+          var state = new DatumState(temp[i]);
+          this.get("datumStates").push(state);
+        }
+      }
       
-      // TODO Restructure the DatumTags
+      // Restructure the DatumState
+      if (this.get("datumState")) {
+        // Create the new model and store it
+        this.set("datumState", new DatumState(this.get("datumState")));
+      }
+      
+      // Restructure the DatumTags
       if (this.get("datumTags")) {
         // Keep track of the data that we want to restructure
         var temp = this.get("datumTags");
@@ -151,11 +193,18 @@ define([
         // Code for get_datum_field/get_datum_fields
         //
         // function(doc) {
-        //   if (doc.datumFields) {
-        //     var obj = {}
+        //   if ((doc.datumFields) && (doc.session)) {
+        //     var obj = {};
         //     for (i = 0; i < doc.datumFields.length; i++) {
         //       if (doc.datumFields[i].value) {
         //         obj[doc.datumFields[i].label] = doc.datumFields[i].value;
+        //       }
+        //     }
+        //     if (doc.session.sessionFields) {
+        //       for (j = 0; j < doc.session.sessionFields.length; j++) {
+        //         if (doc.session.sessionFields[j].value) {
+        //           obj[doc.session.sessionFields[j].label] = doc.doc.session.sessionFields[j].value;
+        //         }
         //       }
         //     }
         //     emit(obj, doc._id);
@@ -260,6 +309,29 @@ define([
       queryTokens.push(currentString);
       
       return queryTokens;
+    },
+    
+    /**
+     * Clone the current Datum and return the clone.
+     * 
+     * @return The clone of the current Datum.
+     */
+    clone : function() {
+      // Create a new Datum based on the current Datum
+      var datum = new Datum({
+        audioVideo : this.get("audioVideo").toJSON(),
+        comments : this.get("comments").toJSON(),
+        dateEntered : this.get("dateEntered").toJSON(),
+        datumFields : this.get("datumFields").toJSON(),
+        datumState : this.get("datumState").toJSON(),
+        datumStates : this.get("datumStates").toJSON(),
+        datumTags : this.get("datumTags").toJSON(),
+        session: this.get("session").toJSON()
+      });
+      
+      datum.restructure();
+      
+      return datum;
     }
   });
 
