@@ -1,12 +1,12 @@
-define( ["use!backbone",
-         "use!crypto"
-],function(Backbone, CryptoJS) {
-	
-
-  	var Confidential = Backbone.Model.extend(
-
+define( [
+    "use!backbone",
+    "use!crypto"
+],function(
+    Backbone, 
+    CryptoJS
+) {
+  var Confidential = Backbone.Model.extend(
   /** @lends Confidential.prototype */
-
   {
     /**
      * @class Confidential makes it possible to generate pass phrases (one per
@@ -32,7 +32,6 @@ define( ["use!backbone",
      * @constructs
      * 
      */
-
     initialize : function() {
       console.log("Initializing confidentiality module");
 
@@ -46,9 +45,25 @@ define( ["use!backbone",
         this.set("secretkey", this.secretKeyGenerator());
       }
     },
+    
     defaults : {
       secretkey : "This should be a top secret pass phrase."
+    },    
+    
+    model : {
+      // There are no nested models
     },
+    
+    parse : function(response) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+      
+      return response;
+    },
+    
     /**
      * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
      * encoding so that it looks like a string, and can be saved as a string in
@@ -65,6 +80,7 @@ define( ["use!backbone",
       return "confidential:" + btoa(result);
 
     },
+    
     /**
      * Decrypt uses this object's secret key to decode its paramater using the
      * AES algorithm.
@@ -80,6 +96,7 @@ define( ["use!backbone",
       return CryptoJS.AES.decrypt(encrypted, this.get("secretkey")).toString(
           CryptoJS.enc.Utf8);
     },
+    
     /**
      * The secretkeygenerator uses a "GUID" like generation to create a string
      * for the secret key.
