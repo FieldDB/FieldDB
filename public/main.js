@@ -101,6 +101,7 @@ require([
    */
   Pouch.destroy('idb://db');
   Pouch.destroy('idb://dbdefault');
+  Pouch.destroy('idb://dbsapir-firstcorpus');
   localStorage.clear();
   
   // Load the App from localStorage
