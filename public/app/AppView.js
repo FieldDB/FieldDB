@@ -383,7 +383,7 @@ define([
 //      });
       this.authView.loadSample();
       var appids= {};
-      appids.corpusid = "7FCCD454-EBD2-4A32-8C6F-9F9CC7DBDC88";
+      appids.corpusid = "420C2294-9713-41F2-9FEE-235D043679FE";
 //      appids.userid = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
       appids.datalistid = "C1659620-63D0-4A0C-8AE0-66E6892D026E";
       appids.sessionid = "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5";
