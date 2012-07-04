@@ -117,8 +117,8 @@ define([
 //        "teams": [
 //        ]
 //     });
-      this.model.id = "4ff342351501135e7c000030";
-//      this.model.fetch();//dont call fetch on users
+      this.model.id = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
+      this.model.fetch();
 //      this.model.id = "11A3ED39-4F99-471A-A80F-3D8C507C6A1A";
 //      this.model.fetch();
 //      this.model.attributes = {
