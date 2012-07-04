@@ -107,10 +107,12 @@ define([
     },
     
     parse : function(response) {
-      for (var key in this.model) {
-        var embeddedClass = this.model[key];
-        var embeddedData = response[key];
-        response[key] = new embeddedClass(embeddedData, {parse:true});
+      if (response.ok === undefined) {
+        for (var key in this.model) {
+          var embeddedClass = this.model[key];
+          var embeddedData = response[key];
+          response[key] = new embeddedClass(embeddedData, {parse:true});
+        }
       }
       
       return response;
@@ -251,18 +253,15 @@ define([
     clone : function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
-        audioVideo : this.get("audioVideo").toJSON(),
-        comments : this.get("comments").toJSON(),
-        dateEntered : this.get("dateEntered").toJSON(),
-        datumFields : this.get("datumFields").toJSON(),
-        datumState : this.get("datumState").toJSON(),
-        datumStates : this.get("datumStates").toJSON(),
-        datumTags : this.get("datumTags").toJSON(),
-        session: this.get("session").toJSON()
+        audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
+        comments : new Comments(this.get("comments").toJSON(), {parse: true}),
+        dateEntered : this.get("dateEntered"),
+        datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
+        datumState : new DatumState(this.get("datumState").toJSON(), {parse: true}),
+        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
+        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
+        session: new Session(this.get("session").toJSON(), {parse: true})
       });
-      
-      // TODO Need to find a new way of doing this.
-      datum.restructure();
       
       return datum;
     }
