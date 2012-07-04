@@ -133,7 +133,7 @@ define([
      * @param sessionid
      * @param datalistid
      */
-    loadBackboneObjectsById: function(appids, callback){
+    loadBackboneObjectsById : function(appids, callback) {
       var self = this;
       var c = this.get("corpus");
       c.id = appids.corpusid;
@@ -146,7 +146,7 @@ define([
       
       c.fetch({
         success : function(e) {
-          Utils.debug("Corpus fetched successfully" +e);
+          Utils.debug("Corpus fetched successfully" + e);
         },
         error : function(e) {
           Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
@@ -155,7 +155,7 @@ define([
       
       s.fetch({
         success : function(e) {
-          Utils.debug("Session fetched successfully" +e);
+          Utils.debug("Session fetched successfully" + e);
           s.relativizePouchToACorpus(self.get("corpus"));
           s.set(
               sessionFields , self.get("corpus").get("sessionFields").clone()
@@ -169,19 +169,17 @@ define([
           );
         }
       });
+      
       var dl = this.get("currentDataList");
       dl.relativizePouchToACorpus(this.get("corpus"));
       dl.id = appids.datalistid;
       dl.fetch();
       this.set("currentDataList", dl);
       
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
-      
-    },
-
-    router : AppRouter
+    }
   });
 
   return App;
