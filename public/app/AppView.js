@@ -383,10 +383,10 @@ define([
 //      });
       this.authView.loadSample();
       var appids= {};
-      appids.corpusid = "822AFBA3-CE50-40F5-B983-315277DD9661";
-//      appids.userid = "5198E356-55AC-4E56-8F5D-CF3266C6457E";
-      appids.datalistid = "45444C8F-D707-426D-A422-54CD4041A5A1";
-      appids.sessionid = "421CCC12-1487-4696-B7E9-AF80BBB9296C";
+      appids.corpusid = "420C2294-9713-41F2-9FEE-235D043679FE";
+      appids.userid = "4ff342351501135e7c000030";
+      appids.datalistid = "C1659620-63D0-4A0C-8AE0-66E6892D026E";
+      appids.sessionid = "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5";
       
       
       this.model.loadMostRecentIds(appids);
