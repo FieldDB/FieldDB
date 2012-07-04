@@ -155,14 +155,12 @@ define([
                 a.set("currentSession", s);
                 a.set("currentDataList",dl);
                 a.get("authentication").set("user",u);
-                u.relativizePouchToACorpus(c);
 
                 window.loadApp(a, function(){
                   //TODOD remove sensitive items from the user returned before turning it into a couch entry
                   console.log("Loadded app from json.");
                 });
                 $('#user-welcome-modal').modal("hide");
-                
                 
                 /*
                  * Use the corpus just created to log the user into that corpus's couch server
