@@ -9,6 +9,7 @@ define([
     "app/AppRouter",
     "confidentiality_encryption/Confidential",
     "user/User",
+    "user/UserMask",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -20,7 +21,8 @@ define([
     Session,
     AppRouter,
     Confidential,
-    User
+    User,
+    UserMask
 ) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
