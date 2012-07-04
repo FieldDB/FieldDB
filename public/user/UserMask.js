@@ -25,7 +25,8 @@ define([
             + this.get("corpusname") : Utils.pouchUrl
             + this.get("corpusname"));
       }, this);
-      
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl);
+
       try{
         if(this.get("corpusname") == undefined){
           this.set("corpusname", app.get("corpus").couchConnection.corpusname);
@@ -34,6 +35,7 @@ define([
         Utils.debug("Corpusname was undefined on this corpus, the user mask will not have a valid corpusname until it is set.");
       }
     },
+
     
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
 //        : Utils.pouchUrl)
