@@ -120,6 +120,7 @@ define([
       currentSession : Session,
       currentDataList : DataList
     },
+    
     /**
      * This function creates the backbone objects, and links them up so that
      * they are ready to be used in the views. This function should be called on
