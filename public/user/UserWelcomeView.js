@@ -126,8 +126,6 @@ define([
                     "couchConnection" : data.user.corpuses[0],
                     "corpusname": data.user.corpuses[0].corpusname
                   });
-//                  c.save(); why is this saving here?
-                  auth.get("userPrivate").get("corpuses").push(c.id);
                   
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") ),
@@ -147,7 +145,9 @@ define([
                   });
                   c.get("dataLists").add(dl);
                   
+                  c.save(); //this is saving to add the corpus to the user's array of corpuses later on
                   window.startApp(a, function(){
+                    auth.get("userPrivate").addCurrentCorpusToUser();
                     /*
                      * Use the corpus just created to log the user into that corpus's couch server
                      */
