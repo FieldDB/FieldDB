@@ -56,14 +56,13 @@ define([
             + this.get("corpusname"));
       }, this);
       
-      try{
-        if(this.get("corpusname") == undefined){
-          this.set("corpusname", app.get("corpus").couchConnection.corpusname);
+      try {
+        if (this.get("corpusname") == undefined) {
+          this.set("corpusname", app.get("corpus").get("corpusname"));
         }
-      }catch(e){
+      } catch(e) {
         Utils.debug("Corpusname was undefined on this corpus, the session will not have a valid corpusname until it is set.");
       }
-      
     },
     
     model : {
