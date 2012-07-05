@@ -7,6 +7,7 @@ define([
     "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
     "datum/DatumFieldReadView",
+    "datum/DatumStateReadView",
     "lexicon/LexiconView",
     "app/UpdatingCollectionView",
     "libs/Utils"
@@ -19,6 +20,7 @@ define([
     corpusReadSummaryTemplate,
     Corpus,
     DatumFieldReadView,
+    DatumStateReadView, 
     LexiconView,
     UpdatingCollectionView
 ) {
@@ -50,6 +52,15 @@ define([
         childViewFormat      : "corpus",
         childViewClass       : "breadcrumb"
       });
+      
+      // Create a DatumStatesView    
+      this.datumStatesView = new UpdatingCollectionView({
+        collection           : this.model.get("datumStates"),
+        childViewConstructor : DatumStateReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus"
+      });
+
       
       
       // If the model changes, re-render 
@@ -108,6 +119,7 @@ define([
       } else if (this.format == "link") {
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(this.model.toJSON()));
+        
       } else if (this.format == "fullscreen"){
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
@@ -115,6 +127,11 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
+        
+        // Display the DatumStatesView
+        this.datumStatesView.el = this.$('.datum_state_settings');
+        this.datumStatesView.render();
+
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
@@ -123,6 +140,10 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
+
+        // Display the DatumStatesView
+        this.datumStatesView.el = this.$('.datum_state_settings');
+        this.datumStatesView.render();
 
       }
       
