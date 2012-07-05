@@ -99,11 +99,11 @@ define([
      * @param callback
      */
     createAppBackboneObjects : function(callback){
-      if (typeof this.get("authentication").get("userPublic") == "function") {
+      if ( this.get("authentication").get("userPublic") == undefined) {
         var u = new UserMask();
         this.get("authentication").set("userPublic", u);
       }
-      if (typeof this.get("authentication").get("userPrivate") == "function") {
+      if ( this.get("authentication").get("userPrivate") == undefined) {
         var u2 = new User();
         this.get("authentication").set("userPrivate", u2);
       }
