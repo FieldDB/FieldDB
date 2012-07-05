@@ -71,7 +71,11 @@ define([
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
       if(this.get("userPrivate") != undefined){
-        dataToPost.syncUserDetails = JSON.stringify(this.get("userPrivate").toJSON());
+        //if the same user is re-authenticating, include their details to sync to the server.
+        if(user.get("username") == this.get("userPrivate").get("username")){
+          dataToPost.syncDetails = "true";
+          dataToPost.syncUserDetails = JSON.stringify(this.get("userPrivate").toJSON());
+        }
       }
       var self= this;
       $.ajax({
