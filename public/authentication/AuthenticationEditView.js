@@ -213,17 +213,17 @@ define([
       });
 
       var self = this;
-      this.model.authenticate(tempuser, function(userfromserver) {
-        if (userfromserver == null) {
+      this.model.authenticate(tempuser, function(success) {
+        if (success == null) {
           alert("Authentication failed. Authenticating as public.");
-          self.authenticateAsPublic();
+//          self.authenticateAsPublic();
           return;
         }
         
         // Save the authenticated user in our Models
         self.model.set({
-          gravatar : userfromserver.get("gravatar"),
-          username : userfromserver.get("username"),
+          gravatar : self.model.get("userPrivate").get("gravatar"),
+          username : self.model.get("userPrivate").get("username"),
           state : "loggedIn"
         });
         if(typeof callback == "function"){
@@ -289,7 +289,7 @@ define([
       }else{
         //TODO show a modal instead of alert
         alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
-        this.authenticate(this.model.get("userPrivate").username, "test" , callback );
+        this.authenticate(this.model.get("userPrivate").get("username"), "test" , callback );
       }
     }
   });

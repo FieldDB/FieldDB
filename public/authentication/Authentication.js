@@ -71,7 +71,11 @@ define([
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
       if(this.get("userPrivate") != undefined){
-        dataToPost.syncUserDetails = this.get("userPrivate").toJSON();
+        //if the same user is re-authenticating, include their details to sync to the server.
+        if(user.get("username") == this.get("userPrivate").get("username")){
+          dataToPost.syncDetails = "true";
+          dataToPost.syncUserDetails = JSON.stringify(this.get("userPrivate").toJSON());
+        }
       }
       var self= this;
       $.ajax({
@@ -80,35 +84,50 @@ define([
         data : dataToPost,
         success : function(data) {
           if (data.errors != null) {
-            $(".alert-error").html(data.errors.join("<br/>") + " " + Utils.contactUs);
+            $(".alert-error").html(
+                data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
             if (typeof callback == "function") {
-              callback(null); //tell caller that the user failed to authenticate
+              callback(null, data.errors); // tell caller that the user failed to
+              // authenticate
             }
           } else if (data.user != null) {
             self.set("state", "loggedIn");
             self.staleAuthentication = false;
 
+            if (self.get("userPrivate") == undefined) {
+              self.set("userPrivate", new User());
+            }
+            if (self.get("userPublic") == undefined) {
+              self.set("userPublic", new UserMask());
+            }
             var u = self.get("userPrivate");
-            u.set(data.user); //TODO might have to parse here
-            //Over write the public copy with any (new) username/gravatar info
-            self.get("userPublic").id = self.get("userPrivate").get("id");//TODO check this
+            u.set(data.user); // TODO might have to parse here
+            // Over write the public copy with any (new) username/gravatar
+            // info
+            self.get("userPublic").id = self.get("userPrivate").id;
             if (data.user.publicSelf == null) {
-              //if the user hasnt already specified their public self, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
+              // if the user hasnt already specified their public self, then
+              // put in a username and gravatar,however they can add more
+              // details like their affiliation, name, research interests
+              // etc.
               data.user.publicSelf = {};
-              data.user.publicSelf.username = self.get("userPrivate").get("username");
-              data.user.publicSelf.gravatar = self.get("userPrivate").get("gravatar");
+              data.user.publicSelf.username = self.get("userPrivate").get(
+              "username");
+              data.user.publicSelf.gravatar = self.get("userPrivate").get(
+              "gravatar");
             }
             self.get("userPublic").set(data.user.publicSelf);
-            self.get("userPublic").save();
-            if(typeof callback == "function"){
-              callback(self.get("userPrivate")); //tell caller that the user failed to authenticate
+            // self.get("userPublic").save(); //TODO save this when there is
+            // no problem with pouch
+            if (typeof callback == "function") {
+              callback("true"); //tell caller that the user succeeded to authenticate
             }
           }
-        }
+        },//end successful login
+        dataType : ""
       });     
     },
-    
     /**
      * This function uses the quick authentication view to get the user's
      * password and authenticate them. The authenticate process brings
