@@ -216,7 +216,7 @@ define([
       this.model.authenticate(tempuser, function(success) {
         if (success == null) {
           alert("Authentication failed. Authenticating as public.");
-          self.authenticateAsPublic();
+//          self.authenticateAsPublic();
           return;
         }
         
@@ -289,7 +289,7 @@ define([
       }else{
         //TODO show a modal instead of alert
         alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
-        this.authenticate(this.model.get("userPrivate").username, "test" , callback );
+        this.authenticate(this.model.get("userPrivate").get("username"), "test" , callback );
       }
     }
   });

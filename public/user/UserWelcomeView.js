@@ -204,6 +204,8 @@ define([
               $('#user-welcome-modal').modal("hide");
               window.startApp(a, function(){
                 window.app.get("corpus").replicateCorpus(function(){
+                  //temp set to fred 15's ids
+//                  auth.get("userPrivate").set("mostRecentIds", {"corpusid":"5BD34252-6042-45B3-BA00-96D65B30386D","sessionid":"7A353356-8637-40E9-9DE4-F60146154560","datalistid":"8DCA8E13-2877-4B58-B234-53E6564B9B42"});
                   if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                     //do nothing because they have no recent ids
                     Utils.debug("User does not have most recent ids, doing nothing.");
