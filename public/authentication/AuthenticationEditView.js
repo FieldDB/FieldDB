@@ -222,8 +222,8 @@ define([
         
         // Save the authenticated user in our Models
         self.model.set({
-          gravatar : self.get("userPrivate").get("gravatar"),
-          username : self.get("userPrivate").get("username"),
+          gravatar : self.model.get("userPrivate").get("gravatar"),
+          username : self.model.get("userPrivate").get("username"),
           state : "loggedIn"
         });
         if(typeof callback == "function"){
