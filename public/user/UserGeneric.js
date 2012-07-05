@@ -24,7 +24,7 @@ define([
      * @property {String} affiliation This is user's affiliation
      * @property {String} description This user's description
      * @property {String} subtitle This user's subtitle
-     * @property {Array} corpuses The corpus IDs of the corpuses owned by
+     * @property {Array} corpuses The corpus connections of the corpuses owned by
      *           this user
      * @property {Array} dataLists The datalist IDs of the datalists owned
      *           by this user.
@@ -63,6 +63,14 @@ define([
     },
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
 
+    addCurrentCorpusToUser : function(){
+      var c = window.app.get("corpus").get("couchConnection");
+      c.corpusid =  window.app.get("corpus").id;
+      this.get("corpuses").push(c);
+      if(window.app.get("corpus").id != undefined){
+        Utils.debug("Sucessfully added the corpus's connection to the user.");
+      }
+    }
   });
 
   return UserGeneric;
