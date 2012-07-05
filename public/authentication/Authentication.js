@@ -79,13 +79,13 @@ define([
         url : Utils.authUrl + "/login",
         data : dataToPost,
         success : function(data) {
-          if(data.errors != null){
-            $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+          if (data.errors != null) {
+            $(".alert-error").html(data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
-            if(typeof callback == "function"){
+            if (typeof callback == "function") {
               callback(null); //tell caller that the user failed to authenticate
             }
-          }else if ( data.user != null ){
+          } else if (data.user != null) {
             self.set("state", "loggedIn");
             self.staleAuthentication = false;
 
@@ -93,14 +93,14 @@ define([
             u.set(data.user); //TODO might have to parse here
             //Over write the public copy with any (new) username/gravatar info
             self.get("userPublic").id = self.get("userPrivate").get("id");//TODO check this
-            if (data.user.publicSelf == null){
+            if (data.user.publicSelf == null) {
               //if the user hasnt already specified their public self, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
               data.user.publicSelf = {};
               data.user.publicSelf.username = self.get("userPrivate").get("username");
               data.user.publicSelf.gravatar = self.get("userPrivate").get("gravatar");
             }
             self.get("userPublic").set(data.user.publicSelf);
-//            self.get("userPublic").save(); //TODO save this when there is no problem with pouch
+            self.get("userPublic").save();
             if(typeof callback == "function"){
               callback(self.get("userPrivate")); //tell caller that the user failed to authenticate
             }
@@ -108,6 +108,7 @@ define([
         }
       });     
     },
+    
     /**
      * This function uses the quick authentication view to get the user's
      * password and authenticate them. The authenticate process brings
