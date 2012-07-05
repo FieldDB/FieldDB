@@ -54,13 +54,13 @@ define([
      * Events that the UserWelcomeView is listening to and their handlers.
      */
     events : {
-      "blur .username" : function(){
+      "blur .username" : function() {
         this.model.set("username",$(".username").val());
       },
-      "click .new-user-button" : function(){
+      "click .new-user-button" : function() {
         $(".confirm-password").show();
       },
-      "click .register-new-user" : function(){
+      "click .register-new-user" : function() {
         Utils.debug("Attempting to register a new user: " + this.el);
         var dataToPost = {};
         dataToPost.login = $(".username").val();
@@ -72,12 +72,10 @@ define([
         corpusConnection.corpusname = "firstcorpus";
         dataToPost.corpuses = [corpusConnection];
         
-
         if (dataToPost.username != ""
           && (dataToPost.password == $(".to-confirm-password").val())
           && dataToPost.email != "") {
-          Utils
-          .debug("User has entered an email and the passwords match. ");
+          Utils.debug("User has entered an email and the passwords match. ");
 
           /*
            * Contact the server and register the new user
@@ -87,44 +85,44 @@ define([
             url : Utils.authUrl + "/register",
             data : dataToPost,
             success : function(data) {
-              if(data.errors != null){
+              if (data.errors != null) {
                 $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
                 $(".alert-error").show();
-              }else if ( data.user != null ){
-                
+              } else if (data.user) {
                 /*
                  * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
                  * dismiss modal
                  */ 
                 var a = new App();
                 a.createAppBackboneObjects(function(){
-                  //faking a login behavior, copy pasted from authentication auth function
+                  // Faking a login behavior, copy pasted from authentication auth function
                   var auth  = a.get("authentication");
                   auth.set("state", "loggedIn");
                   auth.staleAuthentication = false;
 
                   var u = auth.get("userPrivate");
-                  u.set(data.user); //TODO might have to parse here
-                  //Over write the public copy with any (new) username/gravatar info
-                  auth.get("userPublic").id = auth.get("userPrivate").get("id");//TODO check this
-                  if (data.user.publicSelf == null){
-                    //if the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
+                  u.set(data.user);
+                  // Over write the public copy with any (new) username/gravatar info
+                  auth.get("userPublic").set("_id", auth.get("userPrivate").get("_id"));
+                  if (data.user.publicSelf == null) {
+                    // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
                     data.user.publicSelf = {};
                     data.user.publicSelf.username = auth.get("userPrivate").get("username");
                     data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
                   }
                   auth.get("userPublic").set(data.user.publicSelf);
-//                  auth.get("userPublic").save();
+                  auth.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
+                  auth.get("userPublic").save();
                   
                   var c = a.get("corpus");
                   c.set({
-                    "title" : data.user.username+"'s Corpus",
-                    "titleAsUrl" : data.user.username+"Corpus",
+                    "title" : data.user.username + "'s Corpus",
+                    "titleAsUrl" : data.user.username + "Corpus",
                     "description" : "This is an untitled corpus, created by default.",
-                    "dataLists": new DataLists(),
-                    "sessions": new Sessions(),
+                    "dataLists" : new DataLists(),
+                    "sessions" : new Sessions(),
                     "couchConnection" : data.user.corpuses[0],
-                    "corpusname": data.user.corpuses[0].corpusname
+                    "corpusname" : data.user.corpuses[0].corpusname
                   });
                   
                   var s = a.get("currentSession");
@@ -138,25 +136,26 @@ define([
                   
                   var dl = a.get("currentDataList");
                   dl.set({
-                    "title" : data.user.username+"'s untitled data list",
+                    "title" : data.user.username + "'s untitled data list",
                     "dateCreated" : "May 29, 2012",
                     "description" : "You can use datalists to create handouts or to prepare for sessions with consultants, export to LaTeX or to share with collaborators. ",
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
                   c.get("dataLists").add(dl);
                   
-                  c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-                  window.startApp(a, function(){
-                    auth.get("userPrivate").addCurrentCorpusToUser();
-                    /*
-                     * Use the corpus just created to log the user into that corpus's couch server
-                     */
-                    c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function(){
-                      Utils.debug("Successfully authenticated user with their corpus server.")
-                    });
-                    console.log("Loadded app for a new user.");
-                  });
-                  $('#user-welcome-modal').modal("hide");
+                  c.changeCorpus();
+                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
+                  // window.startApp(a, function(){
+                    // auth.get("userPrivate").addCurrentCorpusToUser();
+                    // /*
+                     // * Use the corpus just created to log the user into that corpus's couch server
+                     // */
+                    // c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
+                      // Utils.debug("Successfully authenticated user with their corpus server.")
+                    // });
+                    // console.log("Loadded app for a new user.");
+                  // });
+                  // $('#user-welcome-modal').modal("hide");
                 });
               }
             },//end successful registration
@@ -164,30 +163,28 @@ define([
           });
         } else{
           Utils.debug("User has not entered good info. ");
-            $(".alert-error").html("Your passwords don't match, or you didn't enter an email. "+Utils.contactUs );
+            $(".alert-error").html("Your passwords don't match, or you didn't enter an email. " + Utils.contactUs );
             $(".alert-error").show();
         }
       },
-      "click .register-twitter" : function(){
+      "click .register-twitter" : function() {
         
       },
-      "click .register-facebook" : function(){
+      "click .register-facebook" : function() {
         
       },
-      
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
         a = new App();
-        a.createAppBackboneObjects( function(){
+        a.createAppBackboneObjects(function() {
           $('#user-welcome-modal').modal("hide");
-          window.startApp(a, function(){
+          window.startApp(a, function() {
             window.appView.loadSample();
           });
         });
       },
-        
-      "click .sync_my_data" : function(){
+      "click .sync_my_data" : function() {
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
         a = new App();
