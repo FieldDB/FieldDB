@@ -201,15 +201,12 @@ define([
               $('#user-welcome-modal').modal("hide");
               window.startApp(a, function(){
                 window.app.get("corpus").replicateCorpus(function(){
-                  /*
-                   * If the user fetch didn't succeed, try again.
-                   */
                   if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                     //do nothing because they have no recent ids
                     Utils.debug("User does not have most recent ids, doing nothing.");
                   }else{
                     /*
-                     * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
+                     *  Load their last corpus, session, datalist etc
                      */
                     var appids = auth.get("userPrivate").get("mostRecentIds");
                     window.app.loadBackboneObjectsById(appids);
