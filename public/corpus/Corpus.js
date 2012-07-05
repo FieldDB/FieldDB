@@ -303,22 +303,22 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(username, password, callback){
-      var couchurl = this.get("couchConnection").protocol+this.get("couchConnection").domain;
-      if(this.get("couchConnection").port != null){
-        couchurl = couchurl+":"+this.get("couchConnection").port;
+    logUserIntoTheirCorpusServer : function(username, password, callback) {
+      var couchurl = this.get("couchConnection").protocol + this.get("couchConnection").domain;
+      if (this.get("couchConnection").port != null) {
+        couchurl = couchurl + ":" + this.get("couchConnection").port;
       }
       couchurl = couchurl + "/_session";
       var corpusloginparams = {};
       corpusloginparams.name = username;
-      corpusloginparams.password = password;//
+      corpusloginparams.password = password;
       $.ajax({
         type : 'POST',
         url : couchurl ,
         data : corpusloginparams,
         success : function(data) {
           alert("I logged you into your corpus server automatically.");
-          if(typeof callback == "function"){
+          if (typeof callback == "function") {
             callback(data);
           }
         },
