@@ -35,11 +35,12 @@ define([
       state : "Checked",
       color : "success",
       consultant : Consultant,
-      showInSearchResults : true
+      showInSearchResults : true,
+      selected : false
     },
     
     model : {
-      // consultant : Consultant
+      consultant : Consultant
     },
     
     parse : function(response) {

@@ -1,6 +1,15 @@
 <!-- list for the fields -->
 <ul class="datum_fields_ul unstyled"></ul>
-<div class="datum_state_edit"></div>
+<!-- drop down for the states -->
+<div class="datum_state">
+    <select class="datum_state_select">
+      {{#each datumStates}}
+          <!--<option value="{{state}}" {{selected}}>{{state}}</option>-->
+          <option value="1">1</option>
+      {{/each}}
+    </select>
+</div>
+<!-- Buttons for various actions -->
 <div>
   <div class="icons btn-group ">
     <button class="btn btn-primary">
