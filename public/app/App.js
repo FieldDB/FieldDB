@@ -183,30 +183,52 @@ define([
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync
      * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
      * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
+     * 
+     * Note: its callback is only called if saving the corpus worked. 
+     * 
      */
     storeCurrentDashboardIdsToLocalStorage : function(callback){
-//      try{
-        var ids = {};
-        this.get("currentSession").save();
-        this.get("currentDataList").save();
-        this.get("corpus").save();
+        this.get("currentSession").save({
+          success: function(model, response){
+            console.log('Session save success');
+          },
+          error: function(e){
+            console.log('Session save error'+e);
+          }
+        });
+        this.get("currentDataList").save({
+          success: function(model, response){
+            console.log('Datalist save success');
+          },
+          error: function(){
+            console.log('Datalist save error');
+          }
+        });
+        this.get("corpus").save({
+          success: function(model, response){
+            console.log('Corpus save success');
+            
+            var ids = {};
+            ids.corpusid = this.get("corpus").id;
+            ids.sessionid = this.get("currentSession").id;
+            ids.datalistid = this.get("currentDataList").id;
+            localStorage.setItem("appids",JSON.stringify(ids));
+            localStorage.setItem("userid",this.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
+            
+            //save ids to the user also so that the app can bring them back to where they were
+            this.get("authentication").get("userPrivate").set("mostRecentIds",ids);
+            
+            if(typeof callback == "function"){
+              callback();
+            }
+            
+            
+          },
+          error: function(){
+            console.log('Corpus save error');
+          }
+        });
         
-        ids.corpusid = this.get("corpus").id;
-        ids.sessionid = this.get("currentSession").id;
-        ids.datalistid = this.get("currentDataList").id;
-        localStorage.setItem("appids",JSON.stringify(ids));
-        localStorage.setItem("userid",this.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
-        
-        //save ids to the user also so that the app can bring them back to where they were
-        this.get("authentication").get("userPrivate").set("mostRecentIds",ids);
-        
-        if(typeof callback == "function"){
-          callback();
-        }
-//      }catch(e){
-//        Utils.debug("storeCurrentDashboardIdsTo  LocalStorage failed, probably called too early. ");
-//        Utils.debug(e);
-//      }
     }
 
   });
