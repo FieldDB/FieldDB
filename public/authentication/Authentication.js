@@ -35,8 +35,6 @@ define([
     },
 
     defaults : {
-      userPrivate : User,
-      userPublic : UserMask,
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
@@ -72,7 +70,9 @@ define([
       var dataToPost = {};
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
-      dataToPost.syncUserDetails = this.get("userPrivate").toJSON();
+      if(this.get("userPrivate") != undefined){
+        dataToPost.syncUserDetails = this.get("userPrivate").toJSON();
+      }
       var self= this;
       $.ajax({
         type : 'POST',
