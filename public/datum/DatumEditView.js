@@ -261,13 +261,15 @@ define([
       // Reset the "add" textbox
       this.$el.find(".add_tag").val("");
       
-      needsSave = true;
-      
       return false;
     },
     
+    /*
+     * Save value of the selected DatumState.
+     */
     updateDatumState : function() {
-      // TODO Save value of the selected DatumState
+      var selectedValue = this.$el.find(".datum_state_select").val();
+      this.model.set("datumState", selectedValue);
     },
     
     /**
