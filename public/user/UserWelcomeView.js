@@ -114,7 +114,7 @@ define([
                     data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
                   }
                   auth.get("userPublic").set(data.user.publicSelf);
-                  auth.get("userPublic").save();
+//                  auth.get("userPublic").save();
                   
                   var c = a.get("corpus");
                   c.set({
@@ -123,9 +123,10 @@ define([
                     "description" : "This is an untitled corpus, created by default.",
                     "dataLists": new DataLists(),
                     "sessions": new Sessions(),
-                    "couchConnection" : data.user.corpuses[0]
+                    "couchConnection" : data.user.corpuses[0],
+                    "corpusname": data.user.corpuses[0].corpusname
                   });
-                  c.save();
+//                  c.save(); why is this saving here?
                   auth.get("userPrivate").get("corpuses").push(c.id);
                   
                   var s = a.get("currentSession");

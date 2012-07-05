@@ -100,7 +100,7 @@ define([
               data.user.publicSelf.gravatar = self.get("userPrivate").get("gravatar");
             }
             self.get("userPublic").set(data.user.publicSelf);
-            self.get("userPublic").save();
+//            self.get("userPublic").save(); //TODO save this when there is no problem with pouch
             if(typeof callback == "function"){
               callback(self.get("userPrivate")); //tell caller that the user failed to authenticate
             }
