@@ -84,7 +84,7 @@ define([
                 data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
             if (typeof callback == "function") {
-              callback(null); // tell caller that the user failed to
+              callback(null, data.errors); // tell caller that the user failed to
               // authenticate
             }
           } else if (data.user != null) {

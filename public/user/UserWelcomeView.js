@@ -192,10 +192,13 @@ define([
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
         a = new App();
         var auth = a.get("authentication");
-        auth.authenticate(u, function(success){
+        auth.authenticate(u, function(success, errors){
           if(success == null){
-            alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
+            $(".alert-error").html(
+                errors.join("<br/>") + " " + Utils.contactUs);
+//            alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
             $(".alert-error").show();
+            $('#user-welcome-modal').modal("show");
           }else{
             a.createAppBackboneObjects( function(){
               $('#user-welcome-modal').modal("hide");
