@@ -6,9 +6,12 @@ define([
     "text!corpus/corpus_read_link.handlebars",
     "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
+    "data_list/DataListReadView",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
     "lexicon/LexiconView",
+    "permission/PermissionsView",
+//    "datum/SessionsView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -19,9 +22,12 @@ define([
     corpusReadLinkTemplate,
     corpusReadSummaryTemplate,
     Corpus,
+    DataListReadView,
     DatumFieldReadView,
     DatumStateReadView, 
     LexiconView,
+    PermissionsView,
+//    SessionsView,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -43,8 +49,17 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
+  
+      // Create a list of DataLists
+      this.dataListsView = new UpdatingCollectionView({
+        collection : this.model.get("dataLists"),
+        childViewConstructor : DataListReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "link"
+      });
+
       
-      //Create a DatumFieldsView     
+      //Create a list of DatumFields     
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldReadView,
@@ -53,7 +68,7 @@ define([
         childViewClass       : "breadcrumb"
       });
       
-      // Create a DatumStatesView    
+      // Create a list of DatumStates    
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
         childViewConstructor : DatumStateReadView,
@@ -61,7 +76,16 @@ define([
         childViewFormat      : "corpus"
       });
 
-      
+      //Create a list of Permissions
+      this.permissionsView = new PermissionsView({
+        collection : this.model.get("permissions")
+      });
+        
+      //Create a Sessions List 
+      // this.sessionsView = new SessionsView({
+        // collection : this.model.get("sessions")
+      // });
+
       
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
@@ -124,6 +148,9 @@ define([
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
+        // Display the UpdatingCollectionView
+        //        this.dataListsView.render();
+     
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
@@ -131,12 +158,21 @@ define([
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
+
+        // Display the PermissionsView
+        this.permissionsView.render();
+
+        // Display the SessionsView
+        // this.sessionsView.render();
 
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateEmbedded(this.model.toJSON()));
         
+        // Display the UpdatingCollectionView
+        //        this.dataListsView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
@@ -144,6 +180,13 @@ define([
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
+
+        // Display the PermissionsView
+        this.permissionsView.render();
+        
+        // Display the SessionsView
+        // this.sessionsView.render();
+
 
       }
       
