@@ -60,7 +60,7 @@ define([
      * Renders the DatumFieldReadView.
      */
     render : function() {
-      Utils.debug("DATUM FIELD EDIT render");
+      Utils.debug("DATUM FIELD READ render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));

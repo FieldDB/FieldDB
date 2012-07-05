@@ -6,7 +6,9 @@ define([
     "text!corpus/corpus_read_link.handlebars",
     "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
+    "datum/DatumFieldReadView",
     "lexicon/LexiconView",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -16,7 +18,9 @@ define([
     corpusReadLinkTemplate,
     corpusReadSummaryTemplate,
     Corpus,
-    LexiconView
+    DatumFieldReadView,
+    LexiconView,
+    UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
   /** @lends CorpusReadView.prototype */
@@ -38,7 +42,16 @@ define([
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
       
-
+      //Create a DatumFieldsView     
+      this.datumFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumFields"),
+        childViewConstructor : DatumFieldReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus",
+        childViewClass       : "breadcrumb"
+      });
+      
+      
       // If the model changes, re-render 
       this.model.bind('change', this.render, this);
     },
@@ -96,11 +109,21 @@ define([
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(this.model.toJSON()));
       } else if (this.format == "fullscreen"){
-        this.setElement($("#corpus-fullscreen"));
+        this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+        
+        // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$('.datum_field_settings');
+        this.datumFieldsView.render();
+
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+        
+        // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$('.datum_field_settings');
+        this.datumFieldsView.render();
+
       }
       
 
