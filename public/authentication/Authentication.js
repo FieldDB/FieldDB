@@ -72,6 +72,7 @@ define([
       var dataToPost = {};
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
+      dataToPost.syncUserDetails = this.get("userPrivate").toJSON();
       var self= this;
       $.ajax({
         type : 'POST',
@@ -101,7 +102,7 @@ define([
             self.get("userPublic").set(data.user.publicSelf);
             self.get("userPublic").save();
             if(typeof callback == "function"){
-              callback(); //tell caller that the user failed to authenticate
+              callback(self.get("userPrivate")); //tell caller that the user failed to authenticate
             }
           }
         }
