@@ -38,7 +38,7 @@ Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 /**
  * The url of the authentication server.
  */
-Utils.authUrl = "https://localhost:3001";//"https://ifield.fieldlinguist.com";
+Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
