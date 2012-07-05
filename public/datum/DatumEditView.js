@@ -215,6 +215,11 @@ define([
         
         // Store the current Session in the Datum
         this.model.set("session", app.get("currentSession"));
+        
+        // If this Datum has never been saved
+        if (!this.model.get("dateEntered")) {
+          this.model.set("dateEntered", JSON.stringify(new Date()));
+        }
 
         Utils.debug("Saving the Datum");
         this.model.save();
@@ -242,17 +247,6 @@ define([
       console.log(text);
  
       return "";
-    },
-
-    /**
-     * The duplicateDatum function opens a new datum field set with the fields
-     * already filled exactly like the previous datum so that the user can
-     * minimally edit the datum.
-     */
-    duplicateDatum : function() {
-//      var datum = new Datum();
-      console.log("In duplicateDatum in datum");
-      this.trigger("duplicateDatum", this.model);
     },
     
     insertNewDatumTag : function() {
