@@ -89,10 +89,17 @@ define([
             self.set("state", "loggedIn");
             self.staleAuthentication = false;
 
+            
+            if(self.get("userPrivate") == undefined){
+              self.set("userPrivate", new User());
+            }
+            if(self.get("userPublic") == undefined){
+              self.set("userPublic", new UserMask());
+            }
             var u = self.get("userPrivate");
             u.set(data.user); //TODO might have to parse here
             //Over write the public copy with any (new) username/gravatar info
-            self.get("userPublic").id = self.get("userPrivate").get("id");//TODO check this
+            self.get("userPublic").id = self.get("userPrivate").id;
             if (data.user.publicSelf == null){
               //if the user hasnt already specified their public self, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
               data.user.publicSelf = {};
@@ -102,7 +109,7 @@ define([
             self.get("userPublic").set(data.user.publicSelf);
 //            self.get("userPublic").save(); //TODO save this when there is no problem with pouch
             if(typeof callback == "function"){
-              callback(self.get("userPrivate")); //tell caller that the user failed to authenticate
+              callback(true); //tell caller that the user succeeded to authenticate
             }
           }
         }

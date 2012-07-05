@@ -196,33 +196,37 @@ define([
             alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
             $(".alert-error").show();
           }else{
-            $('#user-welcome-modal').modal("hide");
-            window.startApp(null, function(){
-              window.appView.replicateDatabases(function(){
-                /*
-                 * If the user fetch didn't succeed, try again.
-                 */
-                if(userfromserver.get("mostRecentIds") == undefined){
-                  userfromserver.fetch({
-                    success : function() {
-                      var appids = userfromserver.get("mostRecentIds");
-//                    appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                      window.app.loadBackboneObjectsById(appids);
-                    },
-                    error : function() {
-                      alert("There was an error fetching your data. Loading defaults...");
-                    }
-                  });
-                }else{
+            a = new App();
+            a.createAppBackboneObjects( function(){
+              $('#user-welcome-modal').modal("hide");
+              window.startApp(a, function(){
+                window.appView.replicateDatabases(function(){
                   /*
-                   * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
+                   * If the user fetch didn't succeed, try again.
                    */
-                  var appids = userfromserver.get("mostRecentIds");
-//                appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                  window.app.loadBackboneObjectsById(appids);
-                }
+                  if(userfromserver.get("mostRecentIds") == undefined){
+                    userfromserver.fetch({
+                      success : function() {
+                        var appids = userfromserver.get("mostRecentIds");
+//                      appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
+                        window.app.loadBackboneObjectsById(appids);
+                      },
+                      error : function() {
+                        alert("There was an error fetching your data. Loading defaults...");
+                      }
+                    });
+                  }else{
+                    /*
+                     * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
+                     */
+                    var appids = userfromserver.get("mostRecentIds");
+//                  appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
+                    window.app.loadBackboneObjectsById(appids);
+                  }
+                });
               });
             });
+            
           }
         });
       }
