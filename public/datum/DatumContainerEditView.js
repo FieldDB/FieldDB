@@ -45,7 +45,7 @@ define([
       this.updateDatums();
       
       // Listen for changes in the number of Datum to display
-      app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
+      app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
     },
     
     events : {
@@ -100,7 +100,7 @@ define([
     
     updateDatums : function() {
       var previousNumberOfDatum = this.datums.length;
-      var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+      var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
@@ -169,7 +169,7 @@ define([
       this.datums.add(datum, {at:0});
        
       // If there are too many datum on the screen, remove the bottom one and save it.
-      if (this.datums.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
+      if (this.datums.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
         var d = this.datums.pop();
         console.log("Removed the datum with id: " + d._id);
         d.save();
