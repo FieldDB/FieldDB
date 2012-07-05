@@ -27,18 +27,14 @@ define([
 //      }, this);
 //      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl);
 
-      try{
+      try {
         if(this.get("corpusname") == undefined){
-          this.set("corpusname", app.get("corpus").couchConnection.corpusname);
+          this.set("corpusname", app.get("corpus").get("corpusname"));
         }
-      }catch(e){
+      } catch(e) {
         Utils.debug("Corpusname was undefined on this corpus, the user mask will not have a valid corpusname until it is set.");
       }
     },
-
-    
-//    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-//        : Utils.pouchUrl)
   });
 
   return UserMask;
