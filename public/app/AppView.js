@@ -390,7 +390,7 @@ define([
      */
     replicateDatabases : function(callback) {
       var self = this;
-      window.app.storeCurrentDashboardIdsToLocalStorage(function(){
+      this.model.storeCurrentDashboardIdsToLocalStorage(function(){
         self.model.get("authentication").syncUserWithServer();
         self.model.get("corpus").replicateCorpus(callback);
       });
