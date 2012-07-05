@@ -9,6 +9,7 @@ define([
     "app/AppRouter",
     "confidentiality_encryption/Confidential",
     "user/User",
+    "user/UserMask",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -20,7 +21,8 @@ define([
     Session,
     AppRouter,
     Confidential,
-    User
+    User,
+    UserMask
 ) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
@@ -57,13 +59,12 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in App: " + error);
       });
-      this.set("authentication", new Authentication());
       
     },
     
     defaults : {
       corpus : Corpus,
-      authentication : Authentication,
+      authentication : new Authentication(),
       currentSession : Session,
       currentDataList : DataList
     },
@@ -98,9 +99,13 @@ define([
      * @param callback
      */
     createAppBackboneObjects : function(callback){
-      if (typeof this.get("authentication").get("user") == "function") {
-        var u = new User();
-        this.get("authentication").set("user", u);
+      if ( this.get("authentication").get("userPublic") == undefined) {
+        var u = new UserMask();
+        this.get("authentication").set("userPublic", u);
+      }
+      if ( this.get("authentication").get("userPrivate") == undefined) {
+        var u2 = new User();
+        this.get("authentication").set("userPrivate", u2);
       }
       var c = new Corpus();
       this.set("corpus", c);
@@ -109,11 +114,9 @@ define([
         sessionFields : c.get("sessionFields").clone()
       });
       this.set("currentSession", s);
-      s.relativizePouchToACorpus(c);
 
       var dl = new DataList();
       this.set("currentDataList", dl);
-      dl.relativizePouchToACorpus(c);
       
       if(typeof callback == "function"){
         callback();
@@ -140,9 +143,13 @@ define([
       this.set("corpus", c);
       
       var s = this.get("currentSession");
-      s.relativizePouchToACorpus(this.get("corpus"));
       s.id = appids.sessionid;
       this.set("currentSession", s);
+      
+      var dl = this.get("currentDataList");
+      dl.id = appids.datalistid;
+      dl.fetch();
+      this.set("currentDataList", dl);
       
       c.fetch({
         success : function(e) {
@@ -155,31 +162,77 @@ define([
       
       s.fetch({
         success : function(e) {
-          Utils.debug("Session fetched successfully" + e);
-          s.relativizePouchToACorpus(self.get("corpus"));
-          s.set(
-              sessionFields , self.get("corpus").get("sessionFields").clone()
-          );
+          Utils.debug("Session fetched successfully" +e);
         },
         error : function(e) {
           Utils.debug("There was an error restructuring the session. Loading defaults..."+e);
-          s.relativizePouchToACorpus(self.get("corpus"));
           s.set(
               sessionFields , self.get("corpus").get("sessionFields").clone()
           );
         }
       });
       
-      var dl = this.get("currentDataList");
-      dl.relativizePouchToACorpus(this.get("corpus"));
-      dl.id = appids.datalistid;
-      dl.fetch();
-      this.set("currentDataList", dl);
-      
       if (typeof callback == "function") {
         callback();
       }
+      
+    },
+    router : AppRouter,
+    
+    /**
+     * This function should be called before the user leaves the page, it should also be called before the user clicks sync
+     * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
+     * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
+     * 
+     * Note: its callback is only called if saving the corpus worked. 
+     * 
+     */
+    storeCurrentDashboardIdsToLocalStorage : function(callback){
+      this.get("currentSession").save({}, {
+        success : function(model, response) {
+          console.log('Session save success');
+        },
+        error : function(e) {
+          console.log('Session save error' + e);
+        }
+      });
+      this.get("currentDataList").save({}, {
+        success : function(model, response) {
+          console.log('Datalist save success');
+        },
+        error : function(e) {
+          console.log('Datalist save error' + e);
+        }
+      });
+      this.get("corpus").save({}, {
+        success : function(model, response) {
+          console.log('Corpus save success');
+        },
+        error : function(e) {
+          console.log('Corpus save error' + e);
+        }
+      });
+
+        //Note: unable to use the success and fail of the backbone save to trigger this, so instead, waiting 1 second and hoping all the saves resulted in ids
+        window.setTimeout( (function(callback){
+          var ids = {};
+          ids.corpusid = window.app.get("corpus").id;
+          ids.sessionid = window.app.get("currentSession").id;
+          ids.datalistid = window.app.get("currentDataList").id;
+          localStorage.setItem("appids", JSON.stringify(ids));
+          localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
+          
+          //save ids to the user also so that the app can bring them back to where they were
+          window.app.get("authentication").get("userPrivate").set("mostRecentIds",ids);
+          
+          if(typeof callback == "function"){
+            callback();
+          }
+        })(callback), 1000);
+        
+        
     }
+
   });
 
   return App;
