@@ -213,8 +213,8 @@ define([
       });
 
       var self = this;
-      this.model.authenticate(tempuser, function(userfromserver) {
-        if (userfromserver == null) {
+      this.model.authenticate(tempuser, function(success) {
+        if (success == null) {
           alert("Authentication failed. Authenticating as public.");
           self.authenticateAsPublic();
           return;
@@ -222,8 +222,8 @@ define([
         
         // Save the authenticated user in our Models
         self.model.set({
-          gravatar : userfromserver.get("gravatar"),
-          username : userfromserver.get("username"),
+          gravatar : self.get("userPrivate").get("gravatar"),
+          username : self.get("userPrivate").get("username"),
           state : "loggedIn"
         });
         if(typeof callback == "function"){
