@@ -132,6 +132,10 @@ define([
      * they take it frmo local storage, if they were not then the data will have
      * to be synced.)
      * 
+     * Preconditions:
+     * The user is already authenticated with their corpus server,
+     * The corpus server has sent down(replicated) the data.
+     * 
      * @param corpusid
      * @param sessionid
      * @param datalistid
@@ -140,16 +144,13 @@ define([
       var self = this;
       var c = this.get("corpus");
       c.id = appids.corpusid;
-      this.set("corpus", c);
       
       var s = this.get("currentSession");
       s.id = appids.sessionid;
-      this.set("currentSession", s);
       
       var dl = this.get("currentDataList");
       dl.id = appids.datalistid;
       dl.fetch();
-      this.set("currentDataList", dl);
       
       c.fetch({
         success : function(e) {
@@ -165,7 +166,7 @@ define([
           Utils.debug("Session fetched successfully" +e);
         },
         error : function(e) {
-          Utils.debug("There was an error restructuring the session. Loading defaults..."+e);
+          Utils.debug("There was an error fetching the session. Loading defaults..."+e);
           s.set(
               sessionFields , self.get("corpus").get("sessionFields").clone()
           );

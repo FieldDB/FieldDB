@@ -187,39 +187,36 @@ define([
       "click .sync_my_data" : function() {
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
-        var auth = new Authentication();
-        auth.authenticate(u, function(userfromserver){
-          if(userfromserver == null){
-            alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
+        a = new App();
+        var auth = a.get("authentication");
+        auth.authenticate(u, function(success, errors){
+          if(success == null){
+            $(".alert-error").html(
+                errors.join("<br/>") + " " + Utils.contactUs);
+//            alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
             $(".alert-error").show();
+            $('#user-welcome-modal').modal("show");
           }else{
-            $('#user-welcome-modal').modal("hide");
-            window.startApp(null, function(){
-              window.appView.replicateDatabases(function(){
-                /*
-                 * If the user fetch didn't succeed, try again.
-                 */
-                if(userfromserver.get("mostRecentIds") == undefined){
-                  userfromserver.fetch({
-                    success : function() {
-                      var appids = userfromserver.get("mostRecentIds");
-//                    appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                      window.app.loadBackboneObjectsById(appids);
-                    },
-                    error : function() {
-                      alert("There was an error fetching your data. Loading defaults...");
-                    }
-                  });
-                }else{
-                  /*
-                   * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
-                   */
-                  var appids = userfromserver.get("mostRecentIds");
-//                appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                  window.app.loadBackboneObjectsById(appids);
-                }
+            a.createAppBackboneObjects( function(){
+              $('#user-welcome-modal').modal("hide");
+              window.startApp(a, function(){
+                window.app.get("corpus").replicateCorpus(function(){
+                  //temp set to fred 15's ids
+//                  auth.get("userPrivate").set("mostRecentIds", {"corpusid":"5BD34252-6042-45B3-BA00-96D65B30386D","sessionid":"7A353356-8637-40E9-9DE4-F60146154560","datalistid":"8DCA8E13-2877-4B58-B234-53E6564B9B42"});
+                  if(auth.get("userPrivate").get("mostRecentIds") == undefined){
+                    //do nothing because they have no recent ids
+                    Utils.debug("User does not have most recent ids, doing nothing.");
+                  }else{
+                    /*
+                     *  Load their last corpus, session, datalist etc
+                     */
+                    var appids = auth.get("userPrivate").get("mostRecentIds");
+                    window.app.loadBackboneObjectsById(appids);
+                  }
+                });
               });
             });
+            
           }
         });
       }
