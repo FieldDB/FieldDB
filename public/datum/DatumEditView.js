@@ -6,7 +6,6 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
-    "datum/DatumStateEditView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
@@ -19,7 +18,6 @@ define([
     Confidential,
     Datum,
     DatumFieldEditView,
-    DatumStateEditView,
     DatumTag,
     DatumTagEditView,
     UpdatingCollectionView
@@ -40,12 +38,6 @@ define([
       this.audioVideoEditView = new AudioVideoEditView({
         model : this.model.get("audioVideo"),
       });
-      
-      // Create a DatumStateEditView
-      this.datumStateView = new DatumStateEditView({
-        model : this.model.get("datumStates"),
-      });
-      this.datumStateView.format = "datum";
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -77,9 +69,9 @@ define([
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
-      "change .datum_state_select" : "updateDatumState",
       "click #duplicate" : "duplicateDatum",
-      "click .icon-plus" : "newDatum"
+      "click .icon-plus" : "newDatum",
+      "change .datum_state_select" : "updateDatumStates",
     },
 
     /**
@@ -264,12 +256,10 @@ define([
       return false;
     },
     
-    /*
-     * Save value of the selected DatumState.
-     */
-    updateDatumState : function() {
+    updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
-      this.model.set("datumState", selectedValue);
+      this.model.get("datumStates").where({selected : true}).set("selected", false);
+      this.model.get("datumStates").where({state : selectedValue}).set("selected", true);
     },
     
     /**

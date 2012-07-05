@@ -44,8 +44,6 @@ define([
      * @property {DatumField} judgment The judgment is the grammaticality
      *           judgment associated with the datum, so grammatical,
      *           ungrammatical, felicitous, unfelicitous etc.
-     * @property {String} datumState When a datum is created, it can be tagged
-     *           with a state, such as 'to be checked with an consultant'.
      * @property {AudioVisual} audioVisual Datums can be associated with an audio or video
      *           file.
      * @property {Session} session The session provides details about the set of
@@ -75,9 +73,9 @@ define([
         this.set("audioVideo",new AudioVideo());
       }
       
+      // Initialially, the first datumState is selected
       if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-        // Default datumState is the first one in the list of datumStates
-        this.set("datumState", this.get("datumStates").models[0].get("state"));
+        this.get("datumStates").models[0].set("selected", true);
       }
     },
     
@@ -285,7 +283,6 @@ define([
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumState : this.get("datumState"),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true})
         // Don't need to do Session here since it will be overwritten in DatumContainerEditView.prependDatum()
