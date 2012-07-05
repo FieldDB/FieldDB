@@ -20,12 +20,12 @@ define([
     initialize : function() {
       
     //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-      this.bind("change:corpusname", function() {
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-            + this.get("corpusname") : Utils.pouchUrl
-            + this.get("corpusname"));
-      }, this);
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl);
+//      this.bind("change:corpusname", function() {
+//        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
+//            + this.get("corpusname") : Utils.pouchUrl
+//            + this.get("corpusname"));
+//      }, this);
+//      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl);
 
       try{
         if(this.get("corpusname") == undefined){
