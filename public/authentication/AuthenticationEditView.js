@@ -153,16 +153,20 @@ define([
     loadSample : function(appidsIn) {      
       this.model.get("userPrivate").id = "4ff342351501135e7c000030";
       this.model.get("userPrivate").set("username", "sapir");
+      this.model.get("userPrivate").set("mostRecentIds", {
+        "corpusid" : "420C2294-9713-41F2-9FEE-235D043679FE",
+        "datalistid" : "C1659620-63D0-4A0C-8AE0-66E6892D026E",
+        "sessionid" : "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5"
+      });
+      var self = this;
       this.model.syncUserWithServer( function(){
-        var appids = this.model.get("userPrivate").get("mostRecentIds"); 
-        
         //Set sapir's remote corpus to fetch from
         window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
         window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
           //Replicate sapir's corpus down to pouch
           window.app.get("corpus").replicateCorpus(function(){
             //load the sapir's most recent objects into the existing corpus, datalist, session and user
-            window.app.loadBackboneObjectsById(appids);
+            window.app.loadBackboneObjectsById(window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
           });
         });
       });
