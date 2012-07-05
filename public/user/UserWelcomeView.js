@@ -111,8 +111,15 @@ define([
                     data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
                   }
                   auth.get("userPublic").set(data.user.publicSelf);
-                  // TODO Need to set auth.get("userPublic") 's corpusname first
-                  auth.get("userPublic").save();
+                  auth.get("userPublic").set("corpusname", data.user.corpuses[0].corpusname);
+                  auth.get("userPublic").save(null, {
+                    success: function() {
+                      console.log("successfully saved userPublic");
+                    }, 
+                    error : function() {
+                      console.log("error saving userPublic");
+                    }
+                  });
                   
                   var c = a.get("corpus");
                   c.set({
