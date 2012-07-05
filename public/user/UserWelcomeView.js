@@ -190,37 +190,28 @@ define([
       "click .sync_my_data" : function(){
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
-        var auth = new Authentication();
-        auth.authenticate(u, function(userfromserver){
-          if(userfromserver == null){
+        a = new App();
+        var auth = a.get("authentication");
+        auth.authenticate(u, function(success){
+          if(success == null){
             alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
             $(".alert-error").show();
           }else{
-            a = new App();
             a.createAppBackboneObjects( function(){
               $('#user-welcome-modal').modal("hide");
               window.startApp(a, function(){
-                window.appView.replicateDatabases(function(){
+                window.app.get("corpus").replicateCorpus(function(){
                   /*
                    * If the user fetch didn't succeed, try again.
                    */
-                  if(userfromserver.get("mostRecentIds") == undefined){
-                    userfromserver.fetch({
-                      success : function() {
-                        var appids = userfromserver.get("mostRecentIds");
-//                      appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
-                        window.app.loadBackboneObjectsById(appids);
-                      },
-                      error : function() {
-                        alert("There was an error fetching your data. Loading defaults...");
-                      }
-                    });
+                  if(auth.get("userPrivate").get("mostRecentIds") == undefined){
+                    //do nothing because they have no recent ids
+                    Utils.debug("User does not have most recent ids, doing nothing.");
                   }else{
                     /*
                      * If the user fetch succeeds the first time, load their last corpus, session, datalist etc
                      */
-                    var appids = userfromserver.get("mostRecentIds");
-//                  appids.userid = null; //This authentication will dissapear when the app is built, so let the app build the user too
+                    var appids = auth.get("userPrivate").get("mostRecentIds");
                     window.app.loadBackboneObjectsById(appids);
                   }
                 });
