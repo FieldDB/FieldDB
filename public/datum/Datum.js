@@ -74,6 +74,11 @@ define([
       if (typeof this.get("audioVideo") == "function") {
         this.set("audioVideo",new AudioVideo());
       }
+      
+      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
+        // Default datumState is the first one in the list of datumStates
+        this.set("datumState", this.get("datumStates").models[0].get("state"));
+      }
     },
     
     relativizePouchToACorpus : function(corpus){
