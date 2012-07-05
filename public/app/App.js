@@ -188,48 +188,31 @@ define([
      * 
      */
     storeCurrentDashboardIdsToLocalStorage : function(callback){
-        this.get("currentSession").save(
-            
-            /*
-             * the success and error functions of the save were getting stored in the toJSON of the backbone models!?
-             * Object
-                corpusname: "fred10-firstcorpus"
-                error: function (e){
-                sessionFields: child
-                success: function (model, response){
-                __proto__: Object
+      this.get("currentSession").save({}, {
+        success : function(model, response) {
+          console.log('Session save success');
+        },
+        error : function(e) {
+          console.log('Session save error' + e);
+        }
+      });
+      this.get("currentDataList").save({}, {
+        success : function(model, response) {
+          console.log('Datalist save success');
+        },
+        error : function(e) {
+          console.log('Datalist save error' + e);
+        }
+      });
+      this.get("corpus").save({}, {
+        success : function(model, response) {
+          console.log('Corpus save success');
+        },
+        error : function(e) {
+          console.log('Corpus save error' + e);
+        }
+      });
 
-             */
-//            {
-//          success: function(model, response){
-//            console.log('Session save success');
-//          },
-//          error: function(e){
-//            console.log('Session save error'+e);
-//          }
-//        }
-            );
-        this.get("currentDataList").save(
-//            {
-//          success: function(model, response){
-//            console.log('Datalist save success');
-//          },
-//          error: function(e){
-//            console.log('Datalist save error'+e);
-//          }
-//        }
-            );
-        this.get("corpus").save(
-//            {
-//          success: function(model, response){
-//            console.log('Corpus save success');
-//          },
-//          error: function(e){
-//            console.log('Corpus save error'+e);
-//          }
-//        }
-            );
-        
         //Note: unable to use the success and fail of the backbone save to trigger this, so instead, waiting 1 second and hoping all the saves resulted in ids
         window.setTimeout( (function(callback){
           var ids = {};
