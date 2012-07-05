@@ -16,25 +16,19 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-
     initialize : function() {
-    // If the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-     // this.bind("change:corpusname", function() {
-       // this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-           // + this.get("corpusname") : Utils.pouchUrl
-           // + this.get("corpusname"));
-     // }, this);
-     
-     this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl);
-
       try {
         if (this.get("corpusname") == undefined) {
-          this.set("corpusname", app.get("corpus").get("corpusname"));
+          this.changeCorpus(app.get("corpus").get("corpusname"));
         }
       } catch(e) {
         Utils.debug("Corpusname was undefined on this corpus, the user mask will not have a valid corpusname until it is set.");
       }
     },
+    
+    changeCorpus : function(corpusname) {
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+    }
   });
 
   return UserMask;

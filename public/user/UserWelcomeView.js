@@ -111,25 +111,18 @@ define([
                     data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
                   }
                   auth.get("userPublic").set(data.user.publicSelf);
-                  auth.get("userPublic").set("corpusname", data.user.corpuses[0].corpusname);
-                  auth.get("userPublic").save(null, {
-                    success: function() {
-                      console.log("successfully saved userPublic");
-                    }, 
-                    error : function() {
-                      console.log("error saving userPublic");
-                    }
-                  });
+                  auth.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
+                  auth.get("userPublic").save();
                   
                   var c = a.get("corpus");
                   c.set({
                     "title" : data.user.username + "'s Corpus",
                     "titleAsUrl" : data.user.username + "Corpus",
                     "description" : "This is an untitled corpus, created by default.",
-                    "dataLists": new DataLists(),
-                    "sessions": new Sessions(),
+                    "dataLists" : new DataLists(),
+                    "sessions" : new Sessions(),
                     "couchConnection" : data.user.corpuses[0],
-                    "corpusname": data.user.corpuses[0].corpusname
+                    "corpusname" : data.user.corpuses[0].corpusname
                   });
                   
                   var s = a.get("currentSession");
@@ -150,18 +143,19 @@ define([
                   });
                   c.get("dataLists").add(dl);
                   
-                  c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-                  window.startApp(a, function(){
-                    auth.get("userPrivate").addCurrentCorpusToUser();
-                    /*
-                     * Use the corpus just created to log the user into that corpus's couch server
-                     */
-                    c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
-                      Utils.debug("Successfully authenticated user with their corpus server.")
-                    });
-                    console.log("Loadded app for a new user.");
-                  });
-                  $('#user-welcome-modal').modal("hide");
+                  c.changeCorpus();
+                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
+                  // window.startApp(a, function(){
+                    // auth.get("userPrivate").addCurrentCorpusToUser();
+                    // /*
+                     // * Use the corpus just created to log the user into that corpus's couch server
+                     // */
+                    // c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
+                      // Utils.debug("Successfully authenticated user with their corpus server.")
+                    // });
+                    // console.log("Loadded app for a new user.");
+                  // });
+                  // $('#user-welcome-modal').modal("hide");
                 });
               }
             },//end successful registration

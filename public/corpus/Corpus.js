@@ -76,20 +76,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      //rebuild the pouch and touchdb urls to be relative to the active corpus
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+this.get("couchConnection").corpusname
-          : Utils.pouchUrl+this.get("couchConnection").corpusname);
-      
-    //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-      this.bind("change:couchConnection", function() {
-        
-        this.pouch = Backbone.sync
-        .pouch(Utils.androidApp() ? Utils.touchUrl
-            + this.get("couchConnection").corpusname : Utils.pouchUrl
-            + this.get("couchConnection").corpusname );
-      }, this);
-      
-      
       // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
       this.on('all', function(e) {
         Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
@@ -191,7 +177,6 @@ define([
         
       }//end if to set sessionFields
       
-      
       if(typeof(this.get("comments")) == "function"){
         this.set("comments", new Comments([ 
           new Comment()
@@ -260,14 +245,20 @@ define([
     //this gets overridden when user calls replicate, so that it is the current corpus's database url
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
+        
+    changeCorpus : function() {
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() 
+          ? Utils.touchUrl + this.get("couchConnection").corpusname 
+          : Utils.pouchUrl + this.get("couchConnection").corpusname);
+    }, 
+      
     /**
      * Synchronize the server and local databases.
      */
     replicateCorpus : function(callback) {
       var self = this;
       
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+self.get("couchConnection").corpusname
-          : Utils.pouchUrl+self.get("couchConnection").corpusname);
+      this.changeCorpus();
       
       this.pouch(function(err, db) {
         var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
