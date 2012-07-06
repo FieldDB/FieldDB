@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/session_read_embedded.handlebars",
+    "text!datum/session_read_fullscreen.handlebars",
     "text!datum/session_summary_read_embedded.handlebars",
     "datum/DatumFieldReadView",
     "datum/Session",
@@ -11,6 +12,7 @@ define([
     Backbone,
     Handlebars, 
     sessionEmbeddedTemplate,
+    sessionFullscreenTemplate,
     sessionSummaryTemplate,
     DatumFieldReadView,
     Session,
@@ -23,8 +25,9 @@ define([
      * @class Session Edit View is where the user provides new session details.
     
      * @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide" and
-     * "embedded" 
+     * initialized. Valid values are "leftSide",
+     * "embedded", and "fullscreen"
+     * 
      * @extends Backbone.View
      * @constructs
      */
@@ -58,7 +61,12 @@ define([
     /**
      * The Handlebars template rendered as the Embedded.
      */
-    templateEmbedded: Handlebars.compile(sessionEmbeddedTemplate),
+    templateEmbedded : Handlebars.compile(sessionEmbeddedTemplate),
+      
+    /**
+     * The Handlebars template rendered as the Fullscreen.
+     */
+    templateFullscreen : Handlebars.compile(sessionFullscreenTemplate),
     
     /**
      * The Handlebars template rendered as the Summary.
@@ -95,6 +103,12 @@ define([
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
+        } else if (this.format == "fullscreen") {
+          this.setElement("#session-fullscreen");
+          $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+          
+          this.sessionFieldsView.el = this.$(".session-fields-ul");
+          this.sessionFieldsView.render();
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -102,18 +116,18 @@ define([
       return this;
     },
     
-    //functions associated with corner icons
-    resizeSmall : function(){
-      window.app.router.showDashboard();
-    },
-    
-    resizeLarge : function(){
+    // functions associated with corner icons
+    resizeSmall : function() {
       window.app.router.showEmbeddedSession();
     },
     
-    showEditable :function(){
-      window.app.router.showEditableSession();
+    resizeLarge : function() {
+      window.app.router.showFullscreenSession();
     },
+    
+    showEditable :function() {
+      window.app.router.showEditableSession();
+    }
   });
   
   return SessionReadView;

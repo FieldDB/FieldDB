@@ -2,6 +2,7 @@ define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/session_edit_embedded.handlebars",
+    "text!datum/session_edit_fullscreen.handlebars",
     "text!datum/session_summary_edit_embedded.handlebars",
     "datum/DatumFieldEditView",
     "datum/Session",
@@ -11,6 +12,7 @@ define([
     Backbone,
     Handlebars, 
     sessionEmbeddedTemplate,
+    sessionFullscreenTemplate,
     sessionSummaryTemplate,
     DatumFieldEditView,
     Session,
@@ -23,8 +25,8 @@ define([
      * @class Session Edit View is where the user provides new session details.
      *
      ** @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide" and
-     * "embedded" 
+     * initialized. Valid values are "leftSide",
+     * "embedded", and "fullscreen".
      * 
      * @extends Backbone.View
      * @constructs
@@ -36,7 +38,7 @@ define([
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
-        childViewFormat      : "datum"
+        childViewFormat      : "session"
       });
       
       this.model.bind('change', this.render, this);
@@ -60,7 +62,12 @@ define([
     /**
      * The Handlebars template rendered as the Embedded.
      */
-    templateEmbedded: Handlebars.compile(sessionEmbeddedTemplate),
+    templateEmbedded : Handlebars.compile(sessionEmbeddedTemplate),
+    
+    /**
+     * The Handlebars template rendered as the Fullscreen.
+     */
+    templateFullscreen : Handlebars.compile(sessionFullscreenTemplate),
     
     /**
      * The Handlebars template rendered as the Summary.
@@ -96,6 +103,12 @@ define([
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
+        } else if (this.format == "fullscreen") {
+          this.setElement("#session-fullscreen");
+          $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+          
+          this.sessionFieldsView.el = this.$(".session-fields-ul");
+          this.sessionFieldsView.render();
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -108,16 +121,16 @@ define([
       this.model.save();
     },
     
-    //functions associated with icons
-    resizeSmall : function(){
-      window.app.router.showDashboard();
-    },
-    
-    resizeLarge : function(){
+    // functions associated with icons
+    resizeSmall : function() {
       window.app.router.showEmbeddedSession();
     },
     
-    showReadonly : function(){
+    resizeLarge : function() {
+      window.app.router.showFullscreenSession();
+    },
+    
+    showReadonly : function() {
       window.app.router.showReadonlySession();
     }
   });
