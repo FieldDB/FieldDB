@@ -225,7 +225,7 @@ define([
           return;
         }
         
-        var couchConnection = self.model.get("userPrivate").get("corpuses")[0].couchConnection; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+        var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           //Replicate user's corpus down to pouch
           window.app.get("corpus").replicateCorpus(couchConnection, function(){
