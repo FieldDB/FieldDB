@@ -77,9 +77,9 @@ define([
      */
     initialize : function() {
       // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
-      this.on('all', function(e) {
-        Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
-      }); 
+//      this.on('all', function(e) {
+//        Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
+//      }); 
 
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 

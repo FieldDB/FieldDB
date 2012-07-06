@@ -99,6 +99,7 @@ require([
   Pouch.destroy('idb://dbdefault');
   Pouch.destroy('idb://dbsapir-firstcorpus');
   localStorage.removeItem("appids");
+  localStorage.removeItem("corpusname");
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
@@ -106,7 +107,11 @@ require([
     Utils.debug("Loading app from localStorage");
     appjson = JSON.parse(appjson);
     a = new App(); 
-    a.createAppBackboneObjects(function(){
+    var corpusname = null;
+    if(localStorage.getItem("mostRecentCouchConnection")){
+      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+    }
+    a.createAppBackboneObjects(corpusname ,function(){
       a.loadBackboneObjectsById(appjson, function(){
         window.startApp(a);
       });

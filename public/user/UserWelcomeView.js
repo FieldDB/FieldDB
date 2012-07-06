@@ -77,7 +77,7 @@ define([
           && dataToPost.email != "") {
           Utils.debug("User has entered an email and the passwords match. ");
           var a = new App();
-          a.createAppBackboneObjects();
+          a.createAppBackboneObjects($(".username").val()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
           
           /*
            * Contact the server and register the new user
@@ -96,7 +96,7 @@ define([
                  * dismiss modal
                  */ 
                 
-//                a.createAppBackboneObjects(function(){
+//                a.createAppBackboneObjects(data.user.couchConnection.corpusname, function(){
                   // Faking a login behavior, copy pasted from authentication auth function
                   var auth  = a.get("authentication");
                   auth.set("state", "loggedIn");
@@ -184,7 +184,7 @@ define([
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
         a = new App();
-        a.createAppBackboneObjects(function() {
+        a.createAppBackboneObjects("sapir-firstcorpus",function() {
           $('#user-welcome-modal').modal("hide");
           window.startApp(a, function() {
             window.appView.loadSample();
@@ -204,10 +204,10 @@ define([
             $(".alert-error").show();
             $('#user-welcome-modal').modal("show");
           }else{
-            a.createAppBackboneObjects( function(){
+            a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
               $('#user-welcome-modal').modal("hide");
               window.startApp(a, function(){
-                var couchConnection = auth.get("userPrivate").get("corpuses")[0].couchConnection; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+                var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
                 window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, $("#welcomeusername").val(), $("#welcomepassword").val(), function(){
                   //Replicate user's corpus down to pouch
                   window.app.get("corpus").replicateCorpus(couchConnection, function(){

@@ -98,24 +98,28 @@ define([
      * 
      * @param callback
      */
-    createAppBackboneObjects : function(callback){
+    createAppBackboneObjects : function(optionalcorpusname, callback){
+      if(optionalcorpusname == null){
+        optionalcorpusname == "";
+      }
       if (this.get("authentication").get("userPublic") == undefined) {
-        var u = new UserMask();
+        var u = new UserMask({corpusname: optionalcorpusname});
         this.get("authentication").set("userPublic", u);
       }
       if (this.get("authentication").get("userPrivate") == undefined) {
         var u2 = new User();
         this.get("authentication").set("userPrivate", u2);
       }
-      var c = new Corpus();
+      var c = new Corpus({corpusname : optionalcorpusname});
       this.set("corpus", c);
 
       var s = new Session({
+        corpusname : optionalcorpusname,
         sessionFields : c.get("sessionFields").clone()
       });
       this.set("currentSession", s);
 
-      var dl = new DataList();
+      var dl = new DataList({corpusname: optionalcorpusname});
       this.set("currentDataList", dl);
       
       if (typeof callback == "function") {
@@ -210,6 +214,7 @@ define([
       this.get("corpus").save({}, {
         success : function(model, response) {
           console.log('Corpus save success');
+          localStorage.setItem("mostRecentCouchConnection", model.get("couchConnection"));
           window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.get("id");
         },
         error : function(e) {
