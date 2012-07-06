@@ -102,34 +102,44 @@ define([
       var previousNumberOfDatum = this.datums.length;
       var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
         
-      // TODO Get the current Corpus' Datum based on their date entered
-      
-      // TODO If there are no Datum in the current Corpus
-      if (true) {
-        // Remove all currently displayed Datums
-        for (var i = 0; i < previousNumberOfDatum; i++) {
-          this.datums.pop();
-        }
-          
-        // Add a single, blank Datum
-        this.prependDatum(new Datum({
-          datumFields : app.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone()
-        }));
-      } else {
-        // If the user has increased the number of Datum to display in the container
-        if (nextNumberOfDatum > previousNumberOfDatum) {
-          for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
-            // TODO Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
+      // Get the current Corpus' Datum based on their date entered
+      var self = this;
+      (new Datum()).getAllDatumIdsByDate(function(rows) {
+        // If there are no Datum in the current Corpus
+        if ((rows == null) || (rows.length <= 0)) {
+          // Remove all currently displayed Datums
+          for (var i = 0; i < previousNumberOfDatum; i++) {
+            self.datums.pop();
           }
-        // If the user has decrease the number of Datum to display in the container
-        } else if (nextNumberOfDatum < previousNumberOfDatum) {
-          // Pop the excess Datum from the bottom of the stack
-          for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
-            this.datums.pop();
+            
+          // Add a single, blank Datum
+          self.prependDatum(new Datum({
+            datumFields : app.get("corpus").get("datumFields").clone(),
+            datumStates : app.get("corpus").get("datumStates").clone()
+          }));
+        } else {
+          // If the user has increased the number of Datum to display in the container
+          if (nextNumberOfDatum > previousNumberOfDatum) {
+            for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
+              // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
+              var d = new Datum();
+              d.id = rows[i].value;
+              d.fetch({
+                success : function() {
+                  // Add the new, blank, Datum
+                  self.datums.add(datum);
+                }
+              });
+            }
+          // If the user has decrease the number of Datum to display in the container
+          } else if (nextNumberOfDatum < previousNumberOfDatum) {
+            // Pop the excess Datum from the bottom of the stack
+            for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
+              self.datums.pop();
+            }
           }
         }
-      }
+      })
     },
     
     /**
