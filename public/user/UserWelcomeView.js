@@ -155,7 +155,8 @@ define([
                        /*
                         * Use the corpus just created to log the user into that corpus's couch server
                         */
-                       c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
+                       var couchConnection = data.user.corpuses[0];
+                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                          Utils.debug("Successfully authenticated user with their corpus server.")
                        });
                      }, 5000);
