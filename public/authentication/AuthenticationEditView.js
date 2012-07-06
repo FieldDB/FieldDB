@@ -151,22 +151,27 @@ define([
      * https://twitter.com/#!/tucker1927
      */
     loadSample : function(appidsIn) {      
-      this.model.get("userPrivate").id = "4ff342351501135e7c000030";
+      this.model.get("userPrivate").set("id","4ff342351501135e7c000030");
       this.model.get("userPrivate").set("username", "sapir");
       this.model.get("userPrivate").set("mostRecentIds", {
         "corpusid" : "420C2294-9713-41F2-9FEE-235D043679FE",
         "datalistid" : "C1659620-63D0-4A0C-8AE0-66E6892D026E",
         "sessionid" : "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5"
       });
+      var couchConnection = {
+          protocol : "http://",
+          domain : "ilanguage.iriscouch.com",
+          port : "80",
+          corpusname : "sapir-firstcorpus"
+        };
       var self = this;
       this.model.syncUserWithServer( function(){
         //Set sapir's remote corpus to fetch from
-        window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
-        window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
+        window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection,"sapir","phoneme", function(){
           //Replicate sapir's corpus down to pouch
-          window.app.get("corpus").replicateCorpus(function(){
+          window.app.get("corpus").replicateCorpus(couchConnection, function(){
             //load the sapir's most recent objects into the existing corpus, datalist, session and user
-            window.app.loadBackboneObjectsById(window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
+            window.app.loadBackboneObjectsById(couchConnection , window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
           });
         });
       });
@@ -219,6 +224,25 @@ define([
 //          self.authenticateAsPublic();
           return;
         }
+        
+        var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+        window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+          //Replicate user's corpus down to pouch
+          window.app.get("corpus").replicateCorpus(couchConnection, function(){
+            if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+              //do nothing because they have no recent ids
+              Utils.debug("User does not have most recent ids, doing nothing.");
+            }else{
+              /*
+               *  Load their last corpus, session, datalist etc
+               */
+              var appids = self.model.get("userPrivate").get("mostRecentIds");
+              window.app.loadBackboneObjectsById(couchConnection, appids);
+            }                    
+          });
+        });
+
+
         
         // Save the authenticated user in our Models
         self.model.set({
