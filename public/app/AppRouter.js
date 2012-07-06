@@ -98,7 +98,7 @@ define([
      *          sessionId The ID of the session within the corpus.
      */
     showEmbeddedSession : function(corpusName, sessionId) {
-      Utils.debug("In showFullscreenSession: " + corpusName + " *** "
+      Utils.debug("In showEmbeddedSession: " + corpusName + " *** "
           + sessionId);
           
       //If called with no sessionId, don't change the model, simply show the div TODO is this really the convention we want?
@@ -108,9 +108,11 @@ define([
         $("#session-embedded").show();
         return;
       }
-      
+      if(sessionId == undefined){
+        return;
+      }
       // Change the id of the session view's Session to be the given sessionId
-      appView.sessionEditView.model.id = sessionId;
+      appView.sessionEditView.model.set("id" , sessionId);
       
       // Fetch the Session's attributes from the PouchDB
       var self = this;
