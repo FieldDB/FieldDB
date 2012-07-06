@@ -20,8 +20,7 @@ define( [
      *        states, They can choose the colour and label from the Detailed
      *        Corpus View.
      * 
-     * @property {String} format The format of the View. Valid values are "corpus" or
-     * "datum".
+     * @property {String} format The format of the View. Valid values are "corpus".
      * 
      * @extends Backbone.View
      * @constructs
@@ -68,12 +67,6 @@ define( [
         
         // Select the correct value from the color dropdown
         this.$el.children(".color_chooser").val(this.model.get("color"));
-      } else if (this.format == "datum") {
-        var jsonToRender = {
-          datumStates : this.model.toJSON()
-        };
-        
-        $(this.el).html(this.templateValue(jsonToRender));
       }
       
       return this;

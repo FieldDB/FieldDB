@@ -44,8 +44,6 @@ define([
      * @property {DatumField} judgment The judgment is the grammaticality
      *           judgment associated with the datum, so grammatical,
      *           ungrammatical, felicitous, unfelicitous etc.
-     * @property {DatumState} state When a datum is created, it can be tagged
-     *           with a state, such as 'to be checked with an consultant'.
      * @property {AudioVisual} audioVisual Datums can be associated with an audio or video
      *           file.
      * @property {Session} session The session provides details about the set of
@@ -71,8 +69,13 @@ define([
      * @constructs
      */
     initialize : function() {
-      if(typeof this.get("audioVideo") == "function"){
+      if (typeof this.get("audioVideo") == "function") {
         this.set("audioVideo",new AudioVideo());
+      }
+      
+      // Initialially, the first datumState is selected
+      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
+        this.get("datumStates").models[0].set("selected", "selected");
       }
     },
     
@@ -86,7 +89,6 @@ define([
     defaults : {
       audioVideo : new AudioVideo(),
       comments : new Comments(),
-      datumState : new DatumState(),      // The selected DatumState
       datumTags : new DatumTags()
     },
     
@@ -96,7 +98,6 @@ define([
       session : Session,
       comments : Comments,
       datumStates : DatumStates,
-      datumState : DatumState,      // The selected DatumState
       datumTags : DatumTags
     },
     
@@ -138,6 +139,7 @@ define([
         
         db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
           if ((!err) && (typeof callback == "function"))  {
+            console.log("Callback with: ", response.rows);
             callback(response.rows)
           }
         });
@@ -281,7 +283,6 @@ define([
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumState : new DatumState(this.get("datumState").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true})
         // Don't need to do Session here since it will be overwritten in DatumContainerEditView.prependDatum()
