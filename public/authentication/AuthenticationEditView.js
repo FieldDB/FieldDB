@@ -31,20 +31,17 @@ define([
     initialize : function() {
       Utils.debug("AUTH init: " + this.el);
       
-    //   Create a UserReadView
+    //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
-         model: this.model.get("user")
+         model: this.model.get("userPublic")
       });
       this.userView.format = "link";
       this.userView.setElement($("#user-quickview"));
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
-      this.model.get("user").bind('change', this.render, this);
+      this.model.get("userPublic").bind('change', this.render, this);
       
-      //TODO remove this later
-      this.model.set("userPublic",this.model.get("user"));
-      this.model.set("userPrivate",this.model.get("user"));
     },
 
     /**
@@ -76,8 +73,8 @@ define([
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
-      if(this.model.get("user") != undefined){
-        this.model.set( "gravatar", this.model.get("user").get("gravatar") );
+      if(this.model.get("userPublic") != undefined){
+        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
       }
       if (this.model != undefined) {
         // Display the AuthenticationEditView
@@ -88,7 +85,7 @@ define([
           $("#logout").show();
           $("#login").hide();
           $("#login_form").hide();
-          if(this.model.get("user") != undefined){
+          if(this.model.get("userPublic") != undefined){
             this.userView.setElement($("#user-quickview"));
             this.userView.render();
           }else{
@@ -98,7 +95,7 @@ define([
           $("#logout").hide();
           $("#login").show();
           $("#login_form").show();
-          if(this.model.get("user") != undefined){
+          if(this.model.get("userPublic") != undefined){
             this.userView.setElement($("#user-quickview"));
             this.userView.render();
           }else{
@@ -155,16 +152,21 @@ define([
      */
     loadSample : function(appidsIn) {      
       this.model.get("userPrivate").id = "4ff342351501135e7c000030";
-      this.model.pullUserFromServer( function(){
-        var appids = appidsIn;//TODO when pulling user from server is working use this: this.model.get("userPrivate").get("mostRecentIds"); 
-        
+      this.model.get("userPrivate").set("username", "sapir");
+      this.model.get("userPrivate").set("mostRecentIds", {
+        "corpusid" : "420C2294-9713-41F2-9FEE-235D043679FE",
+        "datalistid" : "C1659620-63D0-4A0C-8AE0-66E6892D026E",
+        "sessionid" : "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5"
+      });
+      var self = this;
+      this.model.syncUserWithServer( function(){
         //Set sapir's remote corpus to fetch from
         window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
         window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
           //Replicate sapir's corpus down to pouch
           window.app.get("corpus").replicateCorpus(function(){
             //load the sapir's most recent objects into the existing corpus, datalist, session and user
-            window.app.loadBackboneObjectsById(appids);
+            window.app.loadBackboneObjectsById(window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
           });
         });
       });
@@ -188,7 +190,7 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate : function(username, password) {
+    authenticate : function(username, password, callback) {
       // Current signed in as the public user - special case authentication
       if (username == "public") {
         this.authenticateAsPublic();
@@ -197,8 +199,11 @@ define([
       
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
-        window.appView.loadSample();
-        return;
+//        window.appView.loadSample();
+//        if(typeof callback == "function"){
+//          callback();
+//        }
+//        return;
       }
       
       // Temporarily keep the given's credentials
@@ -208,25 +213,22 @@ define([
       });
 
       var self = this;
-      this.model.authenticate(tempuser, function(userfromserver) {
-        if (userfromserver == null) {
+      this.model.authenticate(tempuser, function(success) {
+        if (success == null) {
           alert("Authentication failed. Authenticating as public.");
-          self.authenticateAsPublic();
+//          self.authenticateAsPublic();
           return;
         }
         
         // Save the authenticated user in our Models
         self.model.set({
-          gravatar : userfromserver.get("gravatar"),
-          username : userfromserver.get("username"),
+          gravatar : self.model.get("userPrivate").get("gravatar"),
+          username : self.model.get("userPrivate").get("username"),
           state : "loggedIn"
         });
-        var appids = userfromserver.get("mostRecentIds");
-        appids.userid = null;
-        window.app.loadBackboneObjectsById(appids);
-
-        // Save the authenticated user in localStorage
-//        localStorage.setItem("username", u.get("username"));
+        if(typeof callback == "function"){
+          callback();
+        }
       });
     },
     
@@ -261,26 +263,17 @@ define([
      * 
      */
     authenticatePreviousUser : function() {
-      var username = localStorage.getItem("username");
-      if (username) {
+      var userid = localStorage.getItem("userid");
+      if (userid) {
         //TODO this needs testing
-        // Save the previous user in our Models
-        this.model.get("user").set("id",username);
-        this.model.get("user").fetch();
-        this.model.set("username", username);
+        // Save the  user in our Models
+        this.model.get("userPublic").set("id",userid);
+        this.model.get("userPublic").fetch();
+        this.model.syncUserWithServer();
         
-        if (this.model.staleAuthentication) {
-          showQuickAuthenticateView();
-        }
-        
-        this.model.set("state", "loggedIn");
       } else {
-        Utils.debug("No previous user.");
-        $('#user-welcome-modal').modal("show");
         this.model.set("state", "loggedOut");
-
-//        this.authenticateAsPublic(); //TODO this will be used in production
-        this.authenticate("sapir");
+        this.authenticateAsPublic(); //TODO this will be used in production
       }
     },
     
@@ -288,10 +281,16 @@ define([
      * TODO the ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
      * like removing a corpus. It is also used if the user hasn't confirmed their
-     * identitiy in a while.
+     * identity in a while.
      */
-    showQuickAuthenticateView : function() {
-      alert("Authenticating quickly, with just password.");
+    showQuickAuthenticateView : function(callback) {
+      if( this.model.get("userPrivate").get("username") == "sapir" ){
+        this.authenticate("sapir", "phoneme", callback);
+      }else{
+        //TODO show a modal instead of alert
+        alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+        this.authenticate(this.model.get("userPrivate").get("username"), "test" , callback );
+      }
     }
   });
 
