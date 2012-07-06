@@ -40,8 +40,6 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "session"
       });
-      
-      this.model.bind('change', this.render, this);
     },
 
     /**

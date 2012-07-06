@@ -40,8 +40,6 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "session"
       });
-      
-      this.model.bind('change', this.render, this);
     },
 
     /**
@@ -56,7 +54,10 @@ define([
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
-      "click .icon-book": "showReadonly"
+      "click .icon-book" : "showReadonly",
+      "blur .sessionGoal" : "updateGoal",
+      "blur .sessionConsultants" : "updateConsultants",
+      "blur .sessionDate" : "updateDateSEntered"
     },
     
     /**
@@ -114,11 +115,31 @@ define([
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       return this;
-    },    
+    },
+    
+    updateGoal : function() {
+      this.model.get("sessionFields").where({label: "goal"})[0].set("value", this.$el.find(".sessionGoal").val());
+      this.updatePouch();
+    },
+    
+    updateConsultants : function() {
+      this.model.get("sessionFields").where({label: "consultants"})[0].set("value", this.$el.find(".sessionConsultants").val());
+      this.updatePouch();
+    },
+    
+    updateDateSEntered : function() {
+      this.model.get("sessionFields").where({label: "dateSEntered"})[0].set("value", this.$el.find(".sessionDate").val());
+      this.updatePouch();
+    },
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
-      this.model.save();
+      this.model.save(null, {
+        success : function() {
+          appView.renderReadonlySessionViews();
+          appView.renderEditableSessionViews();
+        }
+      });
     },
     
     // functions associated with icons

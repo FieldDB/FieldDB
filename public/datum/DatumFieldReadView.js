@@ -35,16 +35,6 @@ define([
      * The underlying model of the DatumFieldReadView is a DatumField.
      */
     model : DatumField,
-    
-    /**
-     * Events that the DatumFieldReadView is listening to and their handlers.
-     */
-    events : {
-      "blur .choose-field" : "updateField",
-      "click .encrypted" : "updateEncrypted",
-      "blur .help-text" : "updateHelp",
-      "blur .datum_field_input" : "updateField",
-    },
 
     /**
      * The Handlebars template rendered as the DatumFieldSettingsReadView.
@@ -78,41 +68,7 @@ define([
       }
       
       return this;
-    },
-    
-    /**
-     * Change the model's state.
-     */
-    updateField : function() {
-      Utils.debug("Updated label to " + this.$el.children(".datum_field_input").val());
-      this.model.set("label", this.$el.children(".datum_field_input").val());
-    },
-    
-    // TODO Add description
-    updateEncrypted : function() {
-      var checked = this.$el.children(".encrypted").is(':checked');
-      if (checked ) {
-        checked = "checked";
-      } else {
-        checked = "";
-      }
-      Utils.debug("Updated encrypted to " + checked);
-      this.model.set("encrypted", checked);
-    },
-    
-    // TODO Add description
-    updateHelp : function() {
-      var help = this.$el.children(".help-text").val();
-      Utils.debug("Updated help to " + help);
-      this.model.set("help",help);
-    },
-         
-    /**
-     * Change the model's state.
-     */
-    updateField : function() {
-      this.model.set("value", this.$el.children(".datum_field_input").val());
-    }   
+    }
   });
 
   return DatumFieldReadView;

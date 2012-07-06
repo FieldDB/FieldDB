@@ -38,10 +38,10 @@ define([
      * Events that the DatumFieldEditView is listening to and their handlers.
      */
     events : {
-      "blur .choose-field" : "updateField",
+      "blur .choose-field" : "updateFieldLabel",
       "click .encrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
-      "blur .datum_field_input" : "updateField",
+      "blur .datum_field_input" : "updateFieldValue",
       "click .icon-question-sign" : "showHelpConvention"
     },
 
@@ -82,7 +82,7 @@ define([
     /**
      * Change the model's state.
      */
-    updateField : function() {
+    updateFieldLabel : function() {
       Utils.debug("Updated label to " + this.$el.children(".datum_field_input").val());
       this.model.set("label", this.$el.children(".datum_field_input").val());
     },
@@ -109,7 +109,7 @@ define([
     /**
      * Change the model's state.
      */
-    updateField : function() {
+    updateFieldValue : function() {
       this.model.set("value", this.$el.children(".datum_field_input").val());
     }, 
     
