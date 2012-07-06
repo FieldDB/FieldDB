@@ -15,7 +15,9 @@ define([
     "data_list/DataListReadView",
     "data_list/DataListEditView",
     "datum/Datum",
+    "datum/Datums",
     "datum/DatumContainerEditView",
+    "datum/DatumContainerReadView",
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
@@ -51,7 +53,9 @@ define([
     DataListReadView,
     DataListEditView,
     Datum,
+    Datums,
     DatumContainerEditView,
+    DatumContainerReadView,
     DatumFields,
     Export,
     ExportReadView,
@@ -173,7 +177,13 @@ define([
 
       
       // Create the embedded and fullscreen DatumContainerEditView
-      this.datumsView = new DatumContainerEditView();
+      var datumsToBePassedAround = new Datums();
+      this.datumsView = new DatumContainerEditView({
+        model : datumsToBePassedAround
+      });
+      this.datumsReadView = new DatumContainerReadView({
+        model : datumsToBePassedAround
+      });
       
       /*
        * Set up the four data list views
@@ -297,6 +307,8 @@ define([
         // Display the Datum Container Views
         this.datumsView.format = "centreWell";
         this.datumsView.render();
+        this.datumsReadView.format = "centreWell";
+        this.datumsReadView.render();
         
         // Display the Search Views
         this.searchView.render();
