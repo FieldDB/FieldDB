@@ -152,22 +152,22 @@ define([
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
 
@@ -215,7 +215,7 @@ define([
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
-        model : this.authView.model.get("user").get("prefs")
+        model : this.authView.model.get("userPrivate").get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -225,7 +225,7 @@ define([
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
-        model : this.authView.model.get("user").get("hotkeys")
+        model : this.authView.model.get("userPrivate").get("hotkeys")
       });   
       
       // Create an ExportREadView
@@ -387,22 +387,20 @@ define([
     
     /**
      * Save current state, synchronize the server and local databases.
+     * 
+     * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
-    replicateDatabases : function() {
-      window.app.router.storeCurrentDashboardIdsToLocalStorage();
-
-      this.model.get("corpus").replicateCorpus();
-      
-      //TODO pull down and push up the user's preferences and details too
-      
-    },
-    replicateDatabasesWithCallback : function(callback) {
-      window.app.router.storeCurrentDashboardIdsToLocalStorage();
-
-      this.model.get("corpus").replicateCorpus(callback);
-      
-      //TODO pull down and push up the user's preferences and details too
-
+    replicateDatabases : function(callback) {
+      var self = this;
+      this.model.storeCurrentDashboardIdsToLocalStorage(function(){
+        self.model.get("authentication").syncUserWithServer();
+        var corpusConnection = self.model.get("corpus").get("couchConnection");
+        if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
+          && app.get("corpus").get("couchConnection").corpusname == "default"){
+          corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+        }
+        self.model.get("corpus").replicateCorpus(corpusConnection, callback);
+      });
     },
     /**
      * Synchronize the activity feed server and local databases.
