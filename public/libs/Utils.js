@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://ilanguage.iriscouch.com/default";
+Utils.couchUrl = "http://ilanguage.iriscouch.com/sapir-firstcorpus";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -38,7 +38,7 @@ Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 /**
  * The url of the authentication server.
  */
-Utils.authUrl = "https://ifield.fieldlinguist.com";
+Utils.authUrl = "https://localhost:3001";//"https://ifield.fieldlinguist.com";
 /**
  * The parameters of the default couch server.
  */
@@ -47,7 +47,7 @@ Utils.defaultCouchConnection = function() {
     protocol : "http://",
     domain : "ilanguage.iriscouch.com",
     port : "80",
-    corpusname : "default"
+    corpusname : "sapir-firstcorpus"
   }; 
 };
 /**
