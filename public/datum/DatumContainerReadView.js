@@ -109,7 +109,7 @@ define([
             for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
               var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
-              d.id = rows[i].value;
+              d.set("id",rows[i].value);
               d.fetch({
                 success : function() {
                   // Add the new, blank, Datum

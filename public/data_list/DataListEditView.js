@@ -256,7 +256,7 @@ define( [
 //                           "2F4D4B26-E863-4D49-9F40-1431E737AECD",
 //                           "9A465EF7-5001-4832-BABB-81ACD46EEE9D" ]
 //          });
-      this.model.id = "45444C8F-D707-426D-A422-54CD4041A5A1";
+      this.modelset("id","45444C8F-D707-426D-A422-54CD4041A5A1");
       this.model.fetch();
     },
     resizeSmall : function(){
