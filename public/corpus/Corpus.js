@@ -188,6 +188,11 @@ define([
           new DataLists()
           ]));
       }
+      
+      this.pouch = Backbone.sync
+      .pouch(Utils.androidApp() ? Utils.touchUrl
+          + this.get("corpusname") : Utils.pouchUrl
+          + this.get("corpusname"));
 //        if(typeof(this.get("searchFields")) == "function"){
 //          this.set("searchFields", 
 //              this.get("datumFields"));
