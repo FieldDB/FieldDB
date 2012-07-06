@@ -6,7 +6,6 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
-    "datum/DatumStateEditView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
@@ -19,7 +18,6 @@ define([
     Confidential,
     Datum,
     DatumFieldEditView,
-    DatumStateEditView,
     DatumTag,
     DatumTagEditView,
     UpdatingCollectionView
@@ -40,12 +38,6 @@ define([
       this.audioVideoEditView = new AudioVideoEditView({
         model : this.model.get("audioVideo"),
       });
-      
-      // Create a DatumStateEditView
-      this.datumStateView = new DatumStateEditView({
-        model : this.model.get("datumStates"),
-      });
-      this.datumStateView.format = "datum";
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -77,9 +69,9 @@ define([
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
-      "change .datum_state_select" : "updateDatumState",
       "click #duplicate" : "duplicateDatum",
-      "click .icon-plus" : "newDatum"
+      "click .icon-plus" : "newDatum",
+      "change .datum_state_select" : "updateDatumStates",
     },
 
     /**
@@ -95,11 +87,9 @@ define([
       
       if (this.model != undefined) {        
         // Display the DatumEditView
-        $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display StateView
-        this.datumStateView.el = this.$(".datum_state_edit");
-        this.datumStateView.render();
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+        $(this.el).html(this.template(jsonToRender));
         
         // Display audioVideo View
         this.audioVideoEditView.el = this.$(".audio_video");
@@ -261,13 +251,15 @@ define([
       // Reset the "add" textbox
       this.$el.find(".add_tag").val("");
       
-      needsSave = true;
-      
       return false;
     },
     
-    updateDatumState : function() {
-      // TODO Save value of the selected DatumState
+    updateDatumStates : function() {
+      var selectedValue = this.$el.find(".datum_state_select").val();
+      this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+      this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      
+      this.needsSave = true;
     },
     
     /**
