@@ -225,12 +225,20 @@ define([
           return;
         }
         
-        var couchConnection = this.model.get("userPrivate").get("corpuses")[0].couchConnection; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+        var couchConnection = self.model.get("userPrivate").get("corpuses")[0].couchConnection; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
-          //Replicate users corpus down to pouch
+          //Replicate user's corpus down to pouch
           window.app.get("corpus").replicateCorpus(couchConnection, function(){
-            //load the users most recent objects into the existing corpus, datalist, session 
-            window.app.loadBackboneObjectsById(window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
+            if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+              //do nothing because they have no recent ids
+              Utils.debug("User does not have most recent ids, doing nothing.");
+            }else{
+              /*
+               *  Load their last corpus, session, datalist etc
+               */
+              var appids = self.model.get("userPrivate").get("mostRecentIds");
+              window.app.loadBackboneObjectsById(appids);
+            }                    
           });
         });
 
