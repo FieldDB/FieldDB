@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://ilanguage.iriscouch.com/default";
+Utils.couchUrl = "http://ilanguage.iriscouch.com/sapir-firstcorpus";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -47,7 +47,7 @@ Utils.defaultCouchConnection = function() {
     protocol : "http://",
     domain : "ilanguage.iriscouch.com",
     port : "80",
-    corpusname : "default"
+    corpusname : "sapir-firstcorpus"
   }; 
 };
 /**
