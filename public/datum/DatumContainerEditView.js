@@ -35,7 +35,8 @@ define([
         collection           : this.model,
         childViewConstructor : DatumEditView,
         childViewTagName     : "li",
-        childViewClass       : "well"
+        childViewClass       : "well",
+        childViewFormat      : "well"
       });
       
       this.updateDatums();
@@ -48,7 +49,8 @@ define([
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "click .icon-book" : "showReadonly"
     },
     
     templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
@@ -85,15 +87,16 @@ define([
     },
     
     resizeSmall : function() {
-      this.format = "centreWell";
-      this.render();
+      window.app.router.showEditableDatums("centreWell");
       window.app.router.showDashboard();
     },
     
     resizeFullscreen : function() {
-      this.format = "fullscreen";
-      this.render();
-      window.app.router.showFullscreenDatumContainer();
+      window.app.router.showEditableDatums("fullscreen");
+    },
+ 
+    showReadonly : function() {
+      window.app.router.showReadonlyDatums(this.format);
     },
     
     updateDatums : function() {
