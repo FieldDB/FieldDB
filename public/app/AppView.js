@@ -145,7 +145,14 @@ define([
         model : this.model.get("currentSession")
       });
       this.sessionReadEmbeddedView.format = "embedded";
-      
+      this.sessionEditFullscreenView = new SessionEditView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionEditFullscreenView.format = "fullscreen";
+      this.sessionReadFullscreenView = new SessionReadView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionReadFullscreenView.format = "fullscreen";
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -320,7 +327,8 @@ define([
         this.sessionReadLeftSideView.render();
         this.sessionEditEmbeddedView.render();
         this.sessionReadEmbeddedView.render();
-        
+        this.sessionEditFullscreenView.render();
+        this.sessionReadFullscreenView.render();
         
         // Display the UserPreferenceEditView
         this.userPreferenceView.render();
@@ -363,10 +371,12 @@ define([
     renderEditableSessionViews: function(sessionid){
       this.sessionEditLeftSideView.render();
       this.sessionEditEmbeddedView.render();
+      this.sessionEditFullscreenView.render();
     },
     renderReadonlySessionViews: function(sessionid){
       this.sessionReadLeftSideView.render();
       this.sessionReadEmbeddedView.render();
+      this.sessionReadFullscreenView.render();
     },
     
     //Display DataList Views

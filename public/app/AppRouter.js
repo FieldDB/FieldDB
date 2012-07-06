@@ -102,10 +102,10 @@ define([
           + sessionId);
           
       //If called with no sessionId, don't change the model, simply show the div TODO is this really the convention we want?
-      if(sessionId == null){
+      if (sessionId == null) {
         this.hideEverything();
-        $("#dashboard-view").show();
         $("#session-embedded").show();
+        $("#dashboard-view").show();
         return;
       }
       
@@ -143,6 +143,16 @@ define([
           $("#session-embedded").show();
         }
       });
+    },
+    
+    /**
+     * Displays the fullscreen view of the session.
+     */
+    showFullscreenSession : function() {
+      Utils.debug("In showFullscreenSession");
+      
+      this.hideEverything();
+      $("#session-fullscreen").show();
     },
    
     /**
@@ -246,6 +256,7 @@ define([
       $("#search-fullscreen").hide();
       $("#search-embedded").hide();
       $("#session-embedded").hide();
+      $("#session-fullscreen").hide();
       $('#user-fullscreen').hide();
     },
     /**
