@@ -305,10 +305,8 @@ define([
         this.modalReadUserView.render();
         
         // Display the Datum Container Views
-        this.datumsView.format = "centreWell";
-        this.datumsView.render();
-        this.datumsReadView.format = "centreWell";
-        this.datumsReadView.render();
+        this.renderReadonlyDatumsViews("centreWell");
+        this.renderEditableDatumsViews("centreWell");
         
         // Display the Search Views
         this.searchView.render();
@@ -379,6 +377,16 @@ define([
     renderReadonlyDataListViews: function(datalistid){
       this.dataListReadLeftSideView.render();
       this.dataListReadFullscreenView.render();
+    },
+    
+    // Display Datums View
+    renderEditableDatumsViews : function(format) {
+      this.datumsView.format = format;
+      this.datumsView.render();
+    },
+    renderReadonlyDatumsViews : function(format) {
+      this.datumsReadView.format = format;
+      this.datumsReadView.render();
     },
     
     /**
