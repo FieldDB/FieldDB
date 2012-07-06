@@ -185,7 +185,7 @@ define( [
      */
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
-      var d = new Datum();
+      var d = new Datum({corpusname : window.app.get("corpus").get("corpusname")});
       d.set("id", datumId);
       var self = this;
       d.fetch({
