@@ -19,7 +19,7 @@ define([
      *        drop down field that has the most frequent ones first, and at the
      *        bottom an option to create a new one.
      * 
-     * @property {String} format Valid values are "corpus" and "datum".
+     * @property {String} format Valid values are "corpus", "datum", and "session".
      * 
      * @extends Backbone.View
      * @constructs
@@ -68,7 +68,13 @@ define([
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
-        $(this.el).html(this.templateValue(this.model.toJSON()));
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.helpText = true;
+        $(this.el).html(this.templateValue(jsonToRender));
+      } else if (this.format == "session") {
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.helpText = false;
+        $(this.el).html(this.templateValue(jsonToRender));
       }
       
       return this;
