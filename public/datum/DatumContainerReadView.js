@@ -39,7 +39,7 @@ define([
         childViewFormat      : "well"
       });
       
-      this.updateDatums();
+//    this.updateDatums();//TODO uncomment this, or try to not call update datums when you first initialze the datum container.
       
       // Listen for changes in the number of Datum to display
       app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
