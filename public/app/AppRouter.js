@@ -1,14 +1,10 @@
 define([ 
     "use!backbone",
-    "datum/Datum",
-    "datum/DatumEditView",
     "datum/Session",
     "datum/SessionEditView",
     "libs/Utils"
 ], function(
     Backbone,
-    Datum,
-    DatumEditView,
     Session,
     SessionEditView
 ) {
@@ -65,16 +61,6 @@ define([
       this.hideEverything();
       $("#user-fullscreen").show();
     },
-    
-    /**
-     * Displays the fullscreen datum container page view.
-     */
-    showFullscreenDatumContainer : function() {
-      Utils.debug("In showFullscreenDatumContainer");
-      
-      this.hideEverything();
-      $("#datum-container-fullscreen").show();
-    },
 
     /**
      * Displays all of the corpus details and settings. 
@@ -100,109 +86,6 @@ define([
       this.hideEverything();
       $("#dashboard-view").show();
       $("#corpus-embedded").show();
-    },
-    
-    /**
-     * Displays the fullscreen view of the datum specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          datumId The ID of the datum within the corpus.
-     */
-    showFullscreenDatum : function(corpusName, datumId) {
-      Utils.debug("In showFullscreenDatum: " + corpusName + " *** " + datumId);
-
-      /**** This part is broken ****
-      // Change the id of the fullscreen datum view's Datum to be the given datumId
-      appView.fullScreenDatumView.model.id = datumId;
-      
-      // Save the currently displayed Datum, if needed
-      appView.fullScreenDatumView.saveScreen();
-      
-      // Fetch the Datum's attributes from the PouchDB
-      var self = this;
-      appView.fullScreenDatumView.model.fetch({
-        success : function() {
-          // Update the display with the Datum with the given datumId
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#datums-fullscreen").show();
-        },
-        
-        error : function() {
-          Utils.debug("Datum does not exist: " + datumId);
-          
-          // Create a new Datum (cloning the default datum fields from the
-          // corpus in case they changed) and render it
-          appView.fullScreenDatumView = new DatumEditView({
-            model : new Datum({
-              datumFields : app.get("corpus").get("datumFields").clone(),
-              datumStates : app.get("corpus").get("datumStates").clone()
-            })
-          });
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#datums-fullscreen").show();
-        },
-      });
-      */
-    }, 
-    /**
-     * Displays the fullscreen view of the datum specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          datumId The ID of the datum within the corpus.
-     */
-    showEmbeddedDatum : function(corpusName, datumId) {
-      Utils.debug("In showEmbeddedDatum: " + corpusName + " *** " + datumId);
-
-      // Change the id of the fullscreen datum view's Datum to be the given datumId
-      appView.fullScreenDatumView.model.id = datumId;
-      
-      // Save the currently displayed Datum, if needed
-      appView.fullScreenDatumView.saveScreen();
-      
-      // Fetch the Datum's attributes from the PouchDB
-      var self = this;
-      appView.fullScreenDatumView.model.fetch({
-        success : function() {
-          // Update the display with the Datum with the given datumId
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#datums-embedded").show();
-        },
-        
-        error : function() {
-          Utils.debug("Datum does not exist: " + datumId);
-          
-          // Create a new Datum (cloning the default datum fields from the
-          // corpus in case they changed) and render it
-          appView.fullScreenDatumView = new DatumEditView({
-            model : new Datum({
-              datumFields : app.get("corpus").get("datumFields").clone(),
-              datumStates : app.get("corpus").get("datumStates").clone()
-            })
-          });
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#datums-embedded").show();
-        },
-      });
     },
     
     /**
@@ -331,6 +214,26 @@ define([
     },
     showReadonlyDataList : function(datalistid){
       window.appView.renderReadonlyDataListViews(datalistid);
+    },
+    
+    // Functions that toggle between editable and readonly datums view
+    showEditableDatums : function(format) {
+      window.appView.renderEditableDatumsViews(format);
+      this.hideEverything();
+      if (format == "centreWell") {
+        this.showDashboard();
+      } else if (format == "fullscreen") {
+        $("#datum-container-fullscreen").show();
+      }
+    },
+    showReadonlyDatums : function(format) {
+      window.appView.renderReadonlyDatumsViews(format);
+      this.hideEverything();
+      if (format == "centreWell") {
+        this.showDashboard();
+      } else if (format == "fullscreen") {
+        $("#datum-container-fullscreen").show();
+      }
     },
     
     hideEverything: function() {
