@@ -36,7 +36,7 @@ define([
       color : "success",
       consultant : Consultant,
       showInSearchResults : true,
-      selected : false
+      selected : ""
     },
     
     model : {
