@@ -192,6 +192,7 @@ define([
       this.get("currentSession").save({}, {
         success : function(model, response) {
           console.log('Session save success');
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.get("id");
         },
         error : function(e) {
           console.log('Session save error' + e);
@@ -200,6 +201,7 @@ define([
       this.get("currentDataList").save({}, {
         success : function(model, response) {
           console.log('Datalist save success');
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.get("id");
         },
         error : function(e) {
           console.log('Datalist save error' + e);
@@ -208,6 +210,7 @@ define([
       this.get("corpus").save({}, {
         success : function(model, response) {
           console.log('Corpus save success');
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.get("id");
         },
         error : function(e) {
           console.log('Corpus save error' + e);
@@ -216,16 +219,16 @@ define([
 
         //Note: unable to use the success and fail of the backbone save to trigger this, so instead, waiting 1 second and hoping all the saves resulted in ids
         window.setTimeout( (function(callback){
-          var ids = {};
-          ids.corpusid = window.app.get("corpus").get("id");
-          ids.sessionid = window.app.get("currentSession").get("id");
-          ids.datalistid = window.app.get("currentDataList").get("id");
+          //moved the save of these into the 
+//          var ids = {};
+//          ids.corpusid = window.app.get("corpus").get("id");
+//          ids.sessionid = window.app.get("currentSession").get("id");
+//          ids.datalistid = window.app.get("currentDataList").get("id");
           
 //          localStorage.setItem("appids", JSON.stringify(ids));
           localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").get("id"));//the user private should get their id from mongodb
           
           //save ids to the user also so that the app can bring them back to where they were
-          window.app.get("authentication").get("userPrivate").set("mostRecentIds",ids);
           
           if(typeof callback == "function"){
             callback();

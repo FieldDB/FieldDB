@@ -107,7 +107,7 @@ define([
                   u.set(data.user);//TODO maybe id conflicts are popping up here
                   
                   // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
-//                  auth.get("userPublic").set("id", auth.get("userPrivate").get("_id"));
+                  auth.get("userPublic").set("id", auth.get("userPrivate").get("id"));
                   if (data.user.publicSelf == null) {
                     // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
                     data.user.publicSelf = {};
@@ -151,12 +151,14 @@ define([
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
                    window.startApp(a, function(){
 //                     auth.get("userPrivate").addCurrentCorpusToUser();
-                     /*
-                      * Use the corpus just created to log the user into that corpus's couch server
-                      */
-                     c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
-                       Utils.debug("Successfully authenticated user with their corpus server.")
-                     });
+                     window.setTimeout(function(){
+                       /*
+                        * Use the corpus just created to log the user into that corpus's couch server
+                        */
+                       c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
+                         Utils.debug("Successfully authenticated user with their corpus server.")
+                       });
+                     }, 5000);
                      console.log("Loadded app for a new user.");
                    });
                    $('#user-welcome-modal').modal("hide");
