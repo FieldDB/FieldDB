@@ -3,7 +3,7 @@ define([
     "use!handlebars", 
     "text!datum/session_read_embedded.handlebars",
     "text!datum/session_summary_read_embedded.handlebars",
-    "datum/DatumFieldEditView",
+    "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
@@ -12,7 +12,7 @@ define([
     Handlebars, 
     sessionEmbeddedTemplate,
     sessionSummaryTemplate,
-    DatumFieldEditView,
+    DatumFieldReadView,
     Session,
     UpdatingCollectionView
 ) {
@@ -33,9 +33,9 @@ define([
 
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldEditView,
+        childViewConstructor : DatumFieldReadView,
         childViewTagName     : "li",
-        childViewFormat      : "datum"
+        childViewFormat      : "session"
       });
       
       this.model.bind('change', this.render, this);
@@ -47,21 +47,12 @@ define([
     model : Session,
     
     /**
-     * The sessionFieldsView displays the all the DatumFieldEditViews.
-     */
-    sessionFieldsView : UpdatingCollectionView,
-
-    /**
      * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
-    
-      "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
-  
-      
     },
     
     /**
@@ -79,13 +70,13 @@ define([
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
-      if(this.model == undefined){
+      if (this.model == undefined) {
         Utils.debug("SESSION is undefined, come back later.");
         return this;
       }
       
-      try{
-        if(this.model.get("sessionFields").where({label: "goal"})[0] == undefined){
+      try {
+        if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
@@ -105,24 +96,21 @@ define([
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
         }
-      }catch(e){
+      } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       return this;
-    },
-    
-    updatePouch : function() {
-      Utils.debug("Saving the Session");
-      this.model.save();
     },
     
     //functions associated with corner icons
     resizeSmall : function(){
       window.app.router.showDashboard();
     },
+    
     resizeLarge : function(){
       window.app.router.showEmbeddedSession();
     },
+    
     showEditable :function(){
       window.app.router.showEditableSession();
     },
