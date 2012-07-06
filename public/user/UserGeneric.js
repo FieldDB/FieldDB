@@ -1,7 +1,8 @@
 define([ 
     "use!backbone", 
     "hotkey/HotKey",
-    "user/UserPreference"
+    "user/UserPreference",
+    "libs/Utils"
 ], function(
     Backbone,
     HotKey,
@@ -23,7 +24,7 @@ define([
      * @property {String} affiliation This is user's affiliation
      * @property {String} description This user's description
      * @property {String} subtitle This user's subtitle
-     * @property {Array} corpuses The corpus IDs of the corpuses owned by
+     * @property {Array} corpuses The corpus connections of the corpuses owned by
      *           this user
      * @property {Array} dataLists The datalist IDs of the datalists owned
      *           by this user.
@@ -42,7 +43,6 @@ define([
     // User.
     initialize : function() {
       this.set("hotkeys", new HotKey()); //TODO dont know where this should go now, whether it goes in UserGeneric, or in the defaults of User since thats where everything else is.
-    
       
     },
     
@@ -61,16 +61,17 @@ define([
       
       return response;
     },
-    
-    relativizePouchToACorpus : function(corpus){
-    //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
-      var c = corpus.get("couchConnection");
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
-          : Utils.pouchUrl+c.corpusname);
-    },
-    
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-        : Utils.pouchUrl),
+    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
+
+    addCurrentCorpusToUser : function(){
+      var cc = window.app.get("corpus").get("couchConnection");
+      if(window.app.get("corpus").id != undefined){
+        cc.corpusid =  window.app.get("corpus").id;
+        this.get("corpuses").push(cc);
+      }else{
+        alert("The corpus has no id, cant add it to the user.");
+      }
+    }
   });
 
   return UserGeneric;
