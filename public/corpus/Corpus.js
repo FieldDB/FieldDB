@@ -213,7 +213,7 @@ define([
       dataLists : DataLists, 
       permissions : Permissions,
       comments: Comments,
-      couchConnection : localStorage.getItem("mostRecentCouchConnection") || Utils.defaultCouchConnection()
+      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
       
     },
     
@@ -291,7 +291,7 @@ define([
             Utils.debug(err);
             if(err == null || err == undefined){
               //This was a valid connection, lets save it into localstorage.
-              localStorage.setItem("mostRecentCouchConnection",couchConnection);
+              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
             }
             if(typeof fromcallback == "function"){
               fromcallback();
