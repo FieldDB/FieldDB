@@ -262,7 +262,7 @@ define([
     /**
      * Synchronize the server and local databases.
      */
-    replicateCorpus : function(couchConnection, callback) {
+    replicateCorpus : function(couchConnection, fromcallback, tocallback) {
       var self = this;
       
       this.changeCorpus(couchConnection, function(){
@@ -280,15 +280,18 @@ define([
             Utils.debug("Replicate to " + couchurl);
             Utils.debug(resp);
             Utils.debug(err);
-            
-            db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
-              Utils.debug("Replicate from " + couchurl);
-              Utils.debug(resp);
-              Utils.debug(err);
-              if(typeof callback == "function"){
-                callback();
-              }
-            });
+            if(typeof tocallback == "function"){
+              tocallback();
+            }
+          });
+          //We can leave the to and from replication async, and make two callbacks. 
+          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate from " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+            if(typeof fromcallback == "function"){
+              fromcallback();
+            }
           });
         });
       });
