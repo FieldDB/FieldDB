@@ -246,10 +246,14 @@ define([
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
         
-    changeCorpus : function() {
+    changeCorpus : function(callback) {
         this.pouch = Backbone.sync.pouch(Utils.androidApp() 
           ? Utils.touchUrl + this.get("couchConnection").corpusname 
           : Utils.pouchUrl + this.get("couchConnection").corpusname);
+        
+        if(typeof callback == "function"){
+          callback();
+        }
     }, 
       
     /**
@@ -258,27 +262,27 @@ define([
     replicateCorpus : function(callback) {
       var self = this;
       
-      this.changeCorpus();
-      
-      this.pouch(function(err, db) {
-        var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
-        if(self.get("couchConnection").port != null){
-          couchurl = couchurl+":"+self.get("couchConnection").port;
-        }
-        couchurl = couchurl +"/"+ self.get("couchConnection").corpusname;
-        
-        db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to " + couchurl);
-          Utils.debug(resp);
-          Utils.debug(err);
+      this.changeCorpus(function(){
+        self.pouch(function(err, db) {
+          var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
+          if(self.get("couchConnection").port != null){
+            couchurl = couchurl+":"+self.get("couchConnection").port;
+          }
+          couchurl = couchurl +"/"+ self.get("couchConnection").corpusname;
           
-          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
-            Utils.debug("Replicate from " + couchurl);
+          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate to " + couchurl);
             Utils.debug(resp);
             Utils.debug(err);
-            if(typeof callback == "function"){
-              callback();
-            }
+            
+            db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+              Utils.debug("Replicate from " + couchurl);
+              Utils.debug(resp);
+              Utils.debug(err);
+              if(typeof callback == "function"){
+                callback();
+              }
+            });
           });
         });
       });

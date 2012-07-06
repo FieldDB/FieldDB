@@ -76,7 +76,9 @@ define([
           && (dataToPost.password == $(".to-confirm-password").val())
           && dataToPost.email != "") {
           Utils.debug("User has entered an email and the passwords match. ");
-
+          var a = new App();
+          a.createAppBackboneObjects();
+          
           /*
            * Contact the server and register the new user
            */
@@ -93,17 +95,19 @@ define([
                  * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
                  * dismiss modal
                  */ 
-                var a = new App();
-                a.createAppBackboneObjects(function(){
+                
+//                a.createAppBackboneObjects(function(){
                   // Faking a login behavior, copy pasted from authentication auth function
                   var auth  = a.get("authentication");
                   auth.set("state", "loggedIn");
                   auth.staleAuthentication = false;
 
                   var u = auth.get("userPrivate");
-                  u.set(data.user);
-                  // Over write the public copy with any (new) username/gravatar info
-                  auth.get("userPublic").set("_id", auth.get("userPrivate").get("_id"));
+                  u.set("id",data.user._id); //set the backbone id to be the same as the mongodb id
+                  u.set(data.user);//TODO maybe id conflicts are popping up here
+                  
+                  // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
+//                  auth.get("userPublic").set("id", auth.get("userPrivate").get("_id"));
                   if (data.user.publicSelf == null) {
                     // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
                     data.user.publicSelf = {};
@@ -112,7 +116,7 @@ define([
                   }
                   auth.get("userPublic").set(data.user.publicSelf);
                   auth.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
-                  auth.get("userPublic").save();
+//                  auth.get("userPublic").save();
                   
                   var c = a.get("corpus");
                   c.set({
@@ -145,18 +149,18 @@ define([
                   
                   c.changeCorpus();
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-                  // window.startApp(a, function(){
-                    // auth.get("userPrivate").addCurrentCorpusToUser();
-                    // /*
-                     // * Use the corpus just created to log the user into that corpus's couch server
-                     // */
-                    // c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
-                      // Utils.debug("Successfully authenticated user with their corpus server.")
-                    // });
-                    // console.log("Loadded app for a new user.");
-                  // });
-                  // $('#user-welcome-modal').modal("hide");
-                });
+                   window.startApp(a, function(){
+//                     auth.get("userPrivate").addCurrentCorpusToUser();
+                     /*
+                      * Use the corpus just created to log the user into that corpus's couch server
+                      */
+                     c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
+                       Utils.debug("Successfully authenticated user with their corpus server.")
+                     });
+                     console.log("Loadded app for a new user.");
+                   });
+                   $('#user-welcome-modal').modal("hide");
+//                });
               }
             },//end successful registration
             dataType : ""
