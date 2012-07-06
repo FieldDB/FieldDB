@@ -65,8 +65,8 @@ define([
 
     addCurrentCorpusToUser : function(){
       var cc = window.app.get("corpus").get("couchConnection");
-      if(window.app.get("corpus").id != undefined){
-        cc.corpusid =  window.app.get("corpus").id;
+      if(window.app.get("corpus").get("id") != undefined){
+        cc.corpusid =  window.app.get("corpus").get("id");
         this.get("corpuses").push(cc);
       }else{
         alert("The corpus has no id, cant add it to the user.");
