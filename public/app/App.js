@@ -144,10 +144,17 @@ define([
      * @param sessionid
      * @param datalistid
      */
-    loadBackboneObjectsById : function(appids, callback) {
+    loadBackboneObjectsById : function(couchConnection, appids, callback) {
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = this.get("corpus").get("couchConnection");
+      }
       var self = this;
       var c = this.get("corpus");
       c.set("id",appids.corpusid);
+      c.set({
+        "corpusname" : couchConnection.corpusname,
+        couchConnection : couchConnection
+      });
       
       var s = this.get("currentSession");
       s.set("id", appids.sessionid);

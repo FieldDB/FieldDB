@@ -171,7 +171,7 @@ define([
           //Replicate sapir's corpus down to pouch
           window.app.get("corpus").replicateCorpus(couchConnection, function(){
             //load the sapir's most recent objects into the existing corpus, datalist, session and user
-            window.app.loadBackboneObjectsById(window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
+            window.app.loadBackboneObjectsById(couchConnection , window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
           });
         });
       });
@@ -237,7 +237,7 @@ define([
                *  Load their last corpus, session, datalist etc
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsById(appids);
+              window.app.loadBackboneObjectsById(couchConnection, appids);
             }                    
           });
         });

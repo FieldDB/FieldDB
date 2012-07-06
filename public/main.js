@@ -108,11 +108,13 @@ require([
     appjson = JSON.parse(appjson);
     a = new App(); 
     var corpusname = null;
+    var couchConnection = null;
     if(localStorage.getItem("mostRecentCouchConnection")){
       corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
     }
     a.createAppBackboneObjects(corpusname ,function(){
-      a.loadBackboneObjectsById(appjson, function(){
+      a.loadBackboneObjectsById(couchConnection, appjson, function(){
         window.startApp(a);
       });
     });

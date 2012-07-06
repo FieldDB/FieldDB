@@ -219,7 +219,7 @@ define([
                        *  Load their last corpus, session, datalist etc
                        */
                       var appids = auth.get("userPrivate").get("mostRecentIds");
-                      window.app.loadBackboneObjectsById(appids);
+                      window.app.loadBackboneObjectsById(couchConnection, appids);
                     }                    
                   });
                 });
