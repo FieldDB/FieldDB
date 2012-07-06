@@ -196,7 +196,11 @@ define([
       this.get("currentSession").save({}, {
         success : function(model, response) {
           console.log('Session save success');
-          window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.get("id");
+          try{
+            window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.get("id");
+          }catch(e){
+            Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
+          }
         },
         error : function(e) {
           console.log('Session save error' + e);
@@ -205,7 +209,11 @@ define([
       this.get("currentDataList").save({}, {
         success : function(model, response) {
           console.log('Datalist save success');
-          window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.get("id");
+          try{
+            window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.get("id");
+          }catch(e){
+            Utils.debug("Couldnt save the datatlist id to the user's mostrecentids"+e);
+          }
         },
         error : function(e) {
           console.log('Datalist save error' + e);
@@ -214,8 +222,12 @@ define([
       this.get("corpus").save({}, {
         success : function(model, response) {
           console.log('Corpus save success');
-          localStorage.setItem("mostRecentCouchConnection", model.get("couchConnection"));
-          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.get("id");
+          try{
+            localStorage.setItem("mostRecentCouchConnection", model.get("couchConnection"));
+            window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.get("id");
+          }catch(e){
+            Utils.debug("Couldnt save the corpus id to the user's mostrecentids"+e);
+          }
         },
         error : function(e) {
           console.log('Corpus save error' + e);
