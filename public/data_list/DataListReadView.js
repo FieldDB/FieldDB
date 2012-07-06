@@ -189,7 +189,7 @@ define( [
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
       var d = new Datum();
-      d.id = datumId;
+      d.set("id", datumId);
       var self = this;
       d.fetch({
         success : function() {
