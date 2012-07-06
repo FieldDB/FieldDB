@@ -387,12 +387,19 @@ define([
     
     /**
      * Save current state, synchronize the server and local databases.
+     * 
+     * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
     replicateDatabases : function(callback) {
       var self = this;
       this.model.storeCurrentDashboardIdsToLocalStorage(function(){
         self.model.get("authentication").syncUserWithServer();
-        self.model.get("corpus").replicateCorpus(self.model.get("corpus").get("couchConnection"), callback);
+        var corpusConnection = self.model.get("corpus").get("couchConnection");
+        if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
+          && app.get("corpus").get("couchConnection").corpusname == "default"){
+          corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+        }
+        self.model.get("corpus").replicateCorpus(corpusConnection, callback);
       });
     },
     /**
