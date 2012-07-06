@@ -246,10 +246,13 @@ define([
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
         
-    changeCorpus : function(callback) {
+    changeCorpus : function(couchConnection, callback) {
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = this.get("couchConnection");
+      }
         this.pouch = Backbone.sync.pouch(Utils.androidApp() 
-          ? Utils.touchUrl + this.get("couchConnection").corpusname 
-          : Utils.pouchUrl + this.get("couchConnection").corpusname);
+          ? Utils.touchUrl + couchConnection.corpusname 
+          : Utils.pouchUrl + couchConnection.corpusname);
         
         if(typeof callback == "function"){
           callback();
@@ -262,13 +265,16 @@ define([
     replicateCorpus : function(couchConnection, callback) {
       var self = this;
       
-      this.changeCorpus(function(){
+      this.changeCorpus(couchConnection, function(){
+        if(couchConnection == null || couchConnection == undefined){
+          couchConnection = self.get("couchConnection");
+        }
         self.pouch(function(err, db) {
-          var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
-          if(self.get("couchConnection").port != null){
-            couchurl = couchurl+":"+self.get("couchConnection").port;
+          var couchurl = couchConnection.protocol+couchConnection.domain;
+          if(couchConnection.port != null){
+            couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ self.get("couchConnection").corpusname;
+          couchurl = couchurl +"/"+ couchConnection.corpusname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
             Utils.debug("Replicate to " + couchurl);

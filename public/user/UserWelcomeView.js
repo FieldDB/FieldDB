@@ -147,7 +147,7 @@ define([
                   });
                   c.get("dataLists").add(dl);
                   
-                  c.changeCorpus();
+                  c.changeCorpus(data.user.corpuses[0]);
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
                    window.startApp(a, function(){
 //                     auth.get("userPrivate").addCurrentCorpusToUser();
