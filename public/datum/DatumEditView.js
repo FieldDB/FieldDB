@@ -87,11 +87,9 @@ define([
       
       if (this.model != undefined) {        
         // Display the DatumEditView
-        $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display StateView
-        this.datumStateView.el = this.$(".datum_state_edit");
-        this.datumStateView.render();
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+        $(this.el).html(this.template(jsonToRender));
         
         // Display audioVideo View
         this.audioVideoEditView.el = this.$(".audio_video");
@@ -258,8 +256,10 @@ define([
     
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
-      this.model.get("datumStates").where({selected : true}).set("selected", false);
-      this.model.get("datumStates").where({state : selectedValue}).set("selected", true);
+      this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+      this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      
+      this.needsSave = true;
     },
     
     /**
