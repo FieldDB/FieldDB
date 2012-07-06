@@ -392,7 +392,7 @@ define([
       var self = this;
       this.model.storeCurrentDashboardIdsToLocalStorage(function(){
         self.model.get("authentication").syncUserWithServer();
-        self.model.get("corpus").replicateCorpus(callback);
+        self.model.get("corpus").replicateCorpus(self.model.get("corpus").get("couchConnection"), callback);
       });
     },
     /**

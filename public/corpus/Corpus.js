@@ -259,7 +259,7 @@ define([
     /**
      * Synchronize the server and local databases.
      */
-    replicateCorpus : function(callback) {
+    replicateCorpus : function(couchConnection, callback) {
       var self = this;
       
       this.changeCorpus(function(){
@@ -298,10 +298,10 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(username, password, callback) {
-      var couchurl = this.get("couchConnection").protocol + this.get("couchConnection").domain;
-      if (this.get("couchConnection").port != null) {
-        couchurl = couchurl + ":" + this.get("couchConnection").port;
+    logUserIntoTheirCorpusServer : function(couchConnection, username, password, callback) {
+      var couchurl = couchConnection.protocol + couchConnection.domain;
+      if (couchConnection.port != null) {
+        couchurl = couchurl + ":" + couchConnection.port;
       }
       couchurl = couchurl + "/_session";
       var corpusloginparams = {};
