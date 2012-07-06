@@ -76,10 +76,6 @@ require([
     UserWelcomeView
 ) {
   window.startApp = function(a, callback){
-    if (a == null){
-      a = new App();
-      a.createAppBackboneObjects();
-    }
     window.app = a;
 
     // Create and display the AppView and its dependants
@@ -99,10 +95,11 @@ require([
    * Clear the app completely
    * TODO this doesnt work any more because each corpus is in a different pouch.
    */
-  Pouch.destroy('idb://db');
+//  Pouch.destroy('idb://db');
   Pouch.destroy('idb://dbdefault');
   Pouch.destroy('idb://dbsapir-firstcorpus');
-  localStorage.clear();
+  localStorage.removeItem("appids");
+  localStorage.removeItem("corpusname");
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
@@ -110,8 +107,14 @@ require([
     Utils.debug("Loading app from localStorage");
     appjson = JSON.parse(appjson);
     a = new App(); 
-    a.createAppBackboneObjects(function(){
-      a.loadBackboneObjectsById(appjson, function(){
+    var corpusname = null;
+    var couchConnection = null;
+    if(localStorage.getItem("mostRecentCouchConnection")){
+      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+    }
+    a.createAppBackboneObjects(corpusname ,function(){
+      a.loadBackboneObjectsById(couchConnection, appjson, function(){
         window.startApp(a);
       });
     });
