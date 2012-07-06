@@ -116,14 +116,15 @@ define([
           // Add a single, blank Datum
           self.prependDatum(new Datum({
             datumFields : app.get("corpus").get("datumFields").clone(),
-            datumStates : app.get("corpus").get("datumStates").clone()
+            datumStates : app.get("corpus").get("datumStates").clone(),
+            corpusname : app.get("corpus").get("corpusname")
           }));
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > previousNumberOfDatum) {
             for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              var d = new Datum();
+              var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
               d.id = rows[i].value;
               d.fetch({
                 success : function() {
@@ -149,7 +150,8 @@ define([
     newDatum : function() {
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
-        datumStates : app.get("corpus").get("datumStates").clone()
+        datumStates : app.get("corpus").get("datumStates").clone(),
+        corpusname : app.get("corpus").get("corpusname")
       }));
     },
     

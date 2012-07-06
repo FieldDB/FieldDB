@@ -204,8 +204,11 @@ define([
         this.needsSave = false;
         
         // Store the current Session in the Datum
-        this.model.set("session", app.get("currentSession"));
-        
+        this.model.set({
+          "session" : app.get("currentSession"),
+          "corpusname" : app.get("corpus").get("corpusname")
+        });
+
         // If this Datum has never been saved
         if (!this.model.get("dateEntered")) {
           this.model.set("dateEntered", JSON.stringify(new Date()));
