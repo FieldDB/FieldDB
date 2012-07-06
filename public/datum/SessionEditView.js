@@ -36,7 +36,7 @@ define([
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
-        format               : "datum"
+        childViewFormat      : "datum"
       });
       
       this.model.bind('change', this.render, this);
