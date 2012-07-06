@@ -143,13 +143,13 @@ define([
     loadBackboneObjectsById : function(appids, callback) {
       var self = this;
       var c = this.get("corpus");
-      c.id = appids.corpusid;
+      c.set("id",appids.corpusid);
       
       var s = this.get("currentSession");
-      s.id = appids.sessionid;
+      s.set("id", appids.sessionid);
       
       var dl = this.get("currentDataList");
-      dl.id = appids.datalistid;
+      dl.set("id", appids.datalistid);
       dl.fetch();
       
       c.fetch({
@@ -217,11 +217,12 @@ define([
         //Note: unable to use the success and fail of the backbone save to trigger this, so instead, waiting 1 second and hoping all the saves resulted in ids
         window.setTimeout( (function(callback){
           var ids = {};
-          ids.corpusid = window.app.get("corpus").id;
-          ids.sessionid = window.app.get("currentSession").id;
-          ids.datalistid = window.app.get("currentDataList").id;
-          localStorage.setItem("appids", JSON.stringify(ids));
-          localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
+          ids.corpusid = window.app.get("corpus").get("id");
+          ids.sessionid = window.app.get("currentSession").get("id");
+          ids.datalistid = window.app.get("currentDataList").get("id");
+          
+//          localStorage.setItem("appids", JSON.stringify(ids));
+          localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").get("id"));//the user private should get their id from mongodb
           
           //save ids to the user also so that the app can bring them back to where they were
           window.app.get("authentication").get("userPrivate").set("mostRecentIds",ids);
@@ -229,7 +230,7 @@ define([
           if(typeof callback == "function"){
             callback();
           }
-        })(callback), 1000);
+        })(callback), 5000);
         
         
     }

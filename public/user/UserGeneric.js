@@ -64,11 +64,12 @@ define([
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
 
     addCurrentCorpusToUser : function(){
-      var c = window.app.get("corpus").get("couchConnection");
-      c.corpusid =  window.app.get("corpus").id;
-      this.get("corpuses").push(c);
+      var cc = window.app.get("corpus").get("couchConnection");
       if(window.app.get("corpus").id != undefined){
-        Utils.debug("Sucessfully added the corpus's connection to the user.");
+        cc.corpusid =  window.app.get("corpus").id;
+        this.get("corpuses").push(cc);
+      }else{
+        alert("The corpus has no id, cant add it to the user.");
       }
     }
   });
