@@ -1,28 +1,22 @@
-// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
-
 define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum_read_embedded.handlebars",
-    "audio_video/AudioVideoReadView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
-    "datum/DatumTag",
     "datum/DatumTagReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    datumTemplate, 
-    AudioVideoReadView,
+    datumTemplate,
     Confidential,
     Datum,
     DatumFieldReadView,
     DatumStateReadView,
-    DatumTag,
     DatumTagReadView,
     UpdatingCollectionView
 ) {
@@ -39,11 +33,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoReadView
-      this.audioVideoView = new AudioVideoReadView({
-        model : this.model.get("audioVideo"),
-      });
-      
       // Create a DatumStateReadView
       this.stateView = new DatumStateReadView({
         model : this.model.get("state"),
@@ -97,10 +86,6 @@ define([
         var jsonToRender = this.model.toJSON();
         jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
-        
-        // Display audioVideo View
-        this.audioVideoView.el = this.$(".audio_video");
-        this.audioVideoView.render();
         
         // Display the DatumTagsView
         this.datumTagsView.el = this.$(".datum_tags_ul");
