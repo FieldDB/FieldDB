@@ -102,10 +102,11 @@ define([
               self.set("userPublic", new UserMask());
             }
             var u = self.get("userPrivate");
+            u.set("id",data.user._id); //set the backbone id to be the same as the mongodb id
             u.set(data.user); // TODO might have to parse here
             // Over write the public copy with any (new) username/gravatar
             // info
-            self.get("userPublic").id = self.get("userPrivate").id;
+            self.get("userPublic").set("id", self.get("userPrivate").get("id") );
             if (data.user.publicSelf == null) {
               // if the user hasnt already specified their public self, then
               // put in a username and gravatar,however they can add more
@@ -120,6 +121,7 @@ define([
             self.get("userPublic").set(data.user.publicSelf);
             // self.get("userPublic").save(); //TODO save this when there is
             // no problem with pouch
+            Utils.debug(data.user);
             if (typeof callback == "function") {
               callback("true"); //tell caller that the user succeeded to authenticate
             }
