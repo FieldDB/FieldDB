@@ -4,14 +4,12 @@ define( [
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum_state_settings_read_embedded.handlebars",
-    "text!datum/datum_state_value_read_embedded.handlebars",
     "datum/DatumState",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     datumStateSettingsTemplate,
-    datumStateValueTemplate,
     DatumState
 ) {
   var DatumStateReadView = Backbone.View.extend(
@@ -21,8 +19,7 @@ define( [
      * @class The DatumStateReadView is where user's can see the datum
      *        states.
      * 
-     * @property {String} format The format of the View. Valid values are "corpus" or
-     * "datum".
+     * @property {String} format The format of the View. Valid values are "corpus".
      * 
      * @extends Backbone.View
      * @constructs
@@ -54,11 +51,6 @@ define( [
      * The Handlebars template rendered as the DatumStateSettingsReadView.
      */
     templateSettings : Handlebars.compile(datumStateSettingsTemplate),
-    
-    /**
-     * The Handlebars template rendered as the DatumStateValueReadView.
-     */
-    templateValue : Handlebars.compile(datumStateValueTemplate),
       
     /**
      * Renders the DatumStateReadView.
@@ -72,13 +64,6 @@ define( [
         
         // Select the correct value from the color dropdown
         this.$el.children(".color_chooser").val(this.model.get("color"));
-      } else if (this.format == "datum") {
-        var jsonToRender = {
-          datumStates : this.model.toJSON()
-        };
-        
-        this.setElement(".datum_state_read");
-        $(this.el).html(this.templateValue(jsonToRender));
       }
       
       return this;
