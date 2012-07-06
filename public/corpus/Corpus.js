@@ -312,6 +312,10 @@ define([
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
     logUserIntoTheirCorpusServer : function(couchConnection, username, password, callback) {
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = this.get("couchConnection");
+      }
+      
       var couchurl = couchConnection.protocol + couchConnection.domain;
       if (couchConnection.port != null) {
         couchurl = couchurl + ":" + couchConnection.port;
