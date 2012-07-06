@@ -177,7 +177,7 @@ define([
   //        this.dataListsView.render();
           
           // Display the DatumFieldsView
-          this.datumFieldsView.el = this.$('.datum_fields_settings');
+          this.datumFieldsView.el = this.$('.datum_field_settings');
           this.datumFieldsView.render();
           
           // Display the DatumStatesView
@@ -205,7 +205,7 @@ define([
         // this.dataListsView.render();
 
         // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$('.datum_fields_settings');
+        this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
 
         // Display the DatumStatesView
