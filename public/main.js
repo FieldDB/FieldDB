@@ -76,10 +76,6 @@ require([
     UserWelcomeView
 ) {
   window.startApp = function(a, callback){
-    if (a == null){
-      a = new App();
-      a.createAppBackboneObjects();
-    }
     window.app = a;
 
     // Create and display the AppView and its dependants
@@ -99,10 +95,10 @@ require([
    * Clear the app completely
    * TODO this doesnt work any more because each corpus is in a different pouch.
    */
-  Pouch.destroy('idb://db');
+//  Pouch.destroy('idb://db');
   Pouch.destroy('idb://dbdefault');
   Pouch.destroy('idb://dbsapir-firstcorpus');
-  localStorage.clear();
+  localStorage.removeItem("appids");
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");

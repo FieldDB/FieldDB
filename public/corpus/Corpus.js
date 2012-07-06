@@ -76,10 +76,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      //rebuild the pouch and touchdb urls to be relative to the active corpus
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+this.get("couchConnection").corpusname
-          : Utils.pouchUrl+this.get("couchConnection").corpusname);
-      
       // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
       this.on('all', function(e) {
         Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
@@ -181,7 +177,6 @@ define([
         
       }//end if to set sessionFields
       
-      
       if(typeof(this.get("comments")) == "function"){
         this.set("comments", new Comments([ 
           new Comment()
@@ -250,14 +245,20 @@ define([
     //this gets overridden when user calls replicate, so that it is the current corpus's database url
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
+        
+    changeCorpus : function() {
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() 
+          ? Utils.touchUrl + this.get("couchConnection").corpusname 
+          : Utils.pouchUrl + this.get("couchConnection").corpusname);
+    }, 
+      
     /**
      * Synchronize the server and local databases.
      */
     replicateCorpus : function(callback) {
       var self = this;
       
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+self.get("couchConnection").corpusname
-          : Utils.pouchUrl+self.get("couchConnection").corpusname);
+      this.changeCorpus();
       
       this.pouch(function(err, db) {
         var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
@@ -293,22 +294,22 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(username, password, callback){
-      var couchurl = this.get("couchConnection").protocol+this.get("couchConnection").domain;
-      if(this.get("couchConnection").port != null){
-        couchurl = couchurl+":"+this.get("couchConnection").port;
+    logUserIntoTheirCorpusServer : function(username, password, callback) {
+      var couchurl = this.get("couchConnection").protocol + this.get("couchConnection").domain;
+      if (this.get("couchConnection").port != null) {
+        couchurl = couchurl + ":" + this.get("couchConnection").port;
       }
       couchurl = couchurl + "/_session";
       var corpusloginparams = {};
       corpusloginparams.name = username;
-      corpusloginparams.password = password;//
+      corpusloginparams.password = password;
       $.ajax({
         type : 'POST',
         url : couchurl ,
         data : corpusloginparams,
         success : function(data) {
           alert("I logged you into your corpus server automatically.");
-          if(typeof callback == "function"){
+          if (typeof callback == "function") {
             callback(data);
           }
         },

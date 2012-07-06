@@ -42,7 +42,7 @@ define([
       this.updateDatums();
       
       // Listen for changes in the number of Datum to display
-      app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
+      app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
     },
     
     model: Datums,

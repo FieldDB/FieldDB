@@ -48,6 +48,21 @@ define([
      */
     initialize: function() {
      
+    //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
+      this.bind("change:corpusname", function() {
+        this.pouch = Backbone.sync
+        .pouch(Utils.androidApp() ? Utils.touchUrl
+            + this.get("corpusname") : Utils.pouchUrl
+            + this.get("corpusname"));
+      }, this);
+      
+      try {
+        if (this.get("corpusname") == undefined) {
+          this.set("corpusname", app.get("corpus").get("corpusname"));
+        }
+      } catch(e) {
+        Utils.debug("Corpusname was undefined on this corpus, the session will not have a valid corpusname until it is set.");
+      }
     },
     
     model : {
@@ -93,13 +108,6 @@ define([
        //if (consultant not in consultants ) {
       //    return "consultant must be in the system.";
       // }
-    },
-    
-    relativizePouchToACorpus : function(corpus){
-      //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
-      var c = corpus.get("couchConnection");
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
-          : Utils.pouchUrl+c.corpusname);
     }
   });
   return Session;
