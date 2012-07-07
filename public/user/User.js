@@ -47,7 +47,7 @@ define([
       corpuses : [],
       dataLists : [],
       prefs : new UserPreference(),
-      
+      mostRecentIds : {},
       // Defaults from User
       firstname : "",
       lastname : "",
