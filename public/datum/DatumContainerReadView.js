@@ -96,7 +96,7 @@ define([
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum()).getAllDatumIdsByDate(function(rows) {
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).getAllDatumIdsByDate(function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums

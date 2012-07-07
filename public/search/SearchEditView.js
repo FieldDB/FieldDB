@@ -144,7 +144,7 @@ define([
       Utils.debug("Will search for " + $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum()).searchByQueryString($("#search_box").val(), function(datumIds) {        
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {        
         // Display the results in the DataListReadView
         appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
         appView.dataListReadLeftSideView.renderNewModel();
@@ -198,7 +198,7 @@ define([
     search : function(queryString) {
       // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum()).searchByQueryString(queryString, function(datumIds) {        
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, function(datumIds) {        
         // Display the results in the DataListReadView
         appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
         appView.dataListReadLeftSideView.renderNewModel();
