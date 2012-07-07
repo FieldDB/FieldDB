@@ -92,7 +92,7 @@ define([
     
     updateDatums : function() {
       var previousNumberOfDatum = this.model.length;
-      var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+      var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;

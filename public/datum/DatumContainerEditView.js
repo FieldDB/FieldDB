@@ -101,7 +101,7 @@ define([
     
     updateDatums : function() {
       var previousNumberOfDatum = this.model.length;
-      var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+      var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
@@ -172,7 +172,7 @@ define([
       this.model.add(datum, {at:0});
        
       // If there are too many datum on the screen, remove the bottom one and save it.
-      if (this.model.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
+      if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
         var d = this.model.pop();
         console.log("Removed the datum with id: " + d._id);
         d.save();
