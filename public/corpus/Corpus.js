@@ -76,14 +76,10 @@ define([
      * @constructs
      */
     initialize : function() {
-      //rebuild the pouch and touchdb urls to be relative to the active corpus
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+this.get("couchConnection").corpusname
-          : Utils.pouchUrl+this.get("couchConnection").corpusname);
-      
       // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
-      this.on('all', function(e) {
-        Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
-      }); 
+//      this.on('all', function(e) {
+//        Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
+//      }); 
 
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
@@ -181,7 +177,6 @@ define([
         
       }//end if to set sessionFields
       
-      
       if(typeof(this.get("comments")) == "function"){
         this.set("comments", new Comments([ 
           new Comment()
@@ -193,6 +188,11 @@ define([
           new DataLists()
           ]));
       }
+      
+      this.pouch = Backbone.sync
+      .pouch(Utils.androidApp() ? Utils.touchUrl
+          + this.get("corpusname") : Utils.pouchUrl
+          + this.get("corpusname"));
 //        if(typeof(this.get("searchFields")) == "function"){
 //          this.set("searchFields", 
 //              this.get("datumFields"));
@@ -218,7 +218,7 @@ define([
       dataLists : DataLists, 
       permissions : Permissions,
       comments: Comments,
-      couchConnection : Utils.defaultCouchConnection()
+      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
       
     },
     
@@ -250,33 +250,56 @@ define([
     //this gets overridden when user calls replicate, so that it is the current corpus's database url
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
+        
+    changeCorpus : function(couchConnection, callback) {
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = this.get("couchConnection");
+      }
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() 
+          ? Utils.touchUrl + couchConnection.corpusname 
+          : Utils.pouchUrl + couchConnection.corpusname);
+        
+        if(typeof callback == "function"){
+          callback();
+        }
+    }, 
+      
     /**
      * Synchronize the server and local databases.
      */
-    replicateCorpus : function(callback) {
+    replicateCorpus : function(couchConnection, fromcallback, tocallback) {
       var self = this;
       
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+self.get("couchConnection").corpusname
-          : Utils.pouchUrl+self.get("couchConnection").corpusname);
-      
-      this.pouch(function(err, db) {
-        var couchurl = self.get("couchConnection").protocol+self.get("couchConnection").domain;
-        if(self.get("couchConnection").port != null){
-          couchurl = couchurl+":"+self.get("couchConnection").port;
+      this.changeCorpus(couchConnection, function(){
+        if(couchConnection == null || couchConnection == undefined){
+          couchConnection = self.get("couchConnection");
         }
-        couchurl = couchurl +"/"+ self.get("couchConnection").corpusname;
-        
-        db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to " + couchurl);
-          Utils.debug(resp);
-          Utils.debug(err);
+        self.pouch(function(err, db) {
+          var couchurl = couchConnection.protocol+couchConnection.domain;
+          if(couchConnection.port != null){
+            couchurl = couchurl+":"+couchConnection.port;
+          }
+          couchurl = couchurl +"/"+ couchConnection.corpusname;
           
+          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate to " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+            if(typeof tocallback == "function"){
+              tocallback();
+            }
+          });
+          //We can leave the to and from replication async, and make two callbacks. 
           db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
             Utils.debug("Replicate from " + couchurl);
             Utils.debug(resp);
             Utils.debug(err);
-            if(typeof callback == "function"){
-              callback();
+            if(err == null || err == undefined){
+              //This was a valid connection, lets save it into localstorage.
+              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
+            }
+            if(typeof fromcallback == "function"){
+              fromcallback();
             }
           });
         });
@@ -293,27 +316,32 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(username, password, callback){
-      var couchurl = this.get("couchConnection").protocol+this.get("couchConnection").domain;
-      if(this.get("couchConnection").port != null){
-        couchurl = couchurl+":"+this.get("couchConnection").port;
+    logUserIntoTheirCorpusServer : function(couchConnection, username, password, callback) {
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = this.get("couchConnection");
+      }
+      
+      var couchurl = couchConnection.protocol + couchConnection.domain;
+      if (couchConnection.port != null) {
+        couchurl = couchurl + ":" + couchConnection.port;
       }
       couchurl = couchurl + "/_session";
       var corpusloginparams = {};
       corpusloginparams.name = username;
-      corpusloginparams.password = password;//
+      corpusloginparams.password = password;
       $.ajax({
         type : 'POST',
         url : couchurl ,
         data : corpusloginparams,
         success : function(data) {
           alert("I logged you into your corpus server automatically.");
-          if(typeof callback == "function"){
+          if (typeof callback == "function") {
             callback(data);
           }
         },
         error : function(data){
           alert("I couldn't log you into your corpus.");
+          window.app.get("authentication").set("staleAuthentication", true);
         }
       });
     },

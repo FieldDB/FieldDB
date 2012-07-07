@@ -1,6 +1,6 @@
 {
   "name": "iField",
-  "version": "1.9",
+  "version": "1.11",
   "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
   "app": {
     "launch": {
@@ -11,6 +11,8 @@
   "permissions": [
     "unlimitedStorage",
     "https://ifield.fieldlinguist.com/",
+    "https://localhost:3001/",
+    "http://localhost:3001/",
     "https://ilanguage.iriscouch.com/",
     "http://ilanguage.iriscouch.com/",
     "https://trisapeace.iriscouch.com/",
