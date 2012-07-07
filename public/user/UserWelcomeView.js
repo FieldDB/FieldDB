@@ -43,6 +43,12 @@ define([
       this.model = new User();
       this.model.set("username","YourNewUserNameGoesHere");
       this.model.bind("change", this.render, this);
+//      $(function(){
+//    	  $('.btn btn-success dropdown-toggle').dropdown();
+//    	  $('.dropdown input, .dropdown label').click(function(e) {
+//    		  e.stopPropergation();
+//    	  });
+//      });
     },
 
     /**
