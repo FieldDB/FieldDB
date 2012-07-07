@@ -185,29 +185,33 @@ define( [
      */
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
-      var d = new Datum();
-      d.id = datumId;
+      var d = new Datum({
+        id : datumId,
+        corpusname : window.app.get("corpus").get("corpusname")
+      });
       var self = this;
-      d.fetch({
-        success : function() {
-          // Render a DatumReadView for that Datum at the end of the DataListEditView
-          var view = new DatumReadView({
-            model : d,
-            tagName : "li"
-          });
-          view.format = "latex";
-          $('#data_list_content').append(view.render().el);
-
-          // Keep track of the DatumReadView
-          self.datumLatexViews.push(view);
-
-          // Display the updated DatumReadView
-          self.renderUpdatedPagination();
-        },
-
-        error : function() {
-          Utils.debug("Error fetching datum: " + datumId);
-        }
+      d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+        d.fetch({
+          success : function() {
+            // Render a DatumReadView for that Datum at the end of the DataListEditView
+            var view = new DatumReadView({
+              model : d,
+              tagName : "li"
+            });
+            view.format = "latex";
+            $('#data_list_content').append(view.render().el);
+            
+            // Keep track of the DatumReadView
+            self.datumLatexViews.push(view);
+            
+            // Display the updated DatumReadView
+            self.renderUpdatedPagination();
+          },
+          
+          error : function() {
+            Utils.debug("Error fetching datum: " + datumId);
+          }
+        });
       });
     },
 
@@ -256,8 +260,13 @@ define( [
 //                           "2F4D4B26-E863-4D49-9F40-1431E737AECD",
 //                           "9A465EF7-5001-4832-BABB-81ACD46EEE9D" ]
 //          });
-      this.model.id = "45444C8F-D707-426D-A422-54CD4041A5A1";
-      this.model.fetch();
+      this.model.set({
+        "id" : "45444C8F-D707-426D-A422-54CD4041A5A1",
+        "corpusname" : "sapir-firstcorpus"
+      });
+      this.model.changeCorpus("sapir-firstcorpus",function(){
+        this.model.fetch();
+      });
     },
     resizeSmall : function(){
       window.app.router.showDashboard();

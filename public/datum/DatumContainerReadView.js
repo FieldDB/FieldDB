@@ -39,10 +39,10 @@ define([
         childViewFormat      : "well"
       });
       
-      this.updateDatums();
+    this.updateDatums();//TODO uncomment this, or try to not call update datums when you first initialze the datum container.
       
       // Listen for changes in the number of Datum to display
-      app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
+    app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this); //we might have to bind this in the other direction since the user's preferences are craeted later than the datum container.
     },
     
     model : Datums,
@@ -92,11 +92,11 @@ define([
     
     updateDatums : function() {
       var previousNumberOfDatum = this.model.length;
-      var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+      var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum()).getAllDatumIdsByDate(function(rows) {
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).getAllDatumIdsByDate(function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
@@ -108,13 +108,17 @@ define([
           if (nextNumberOfDatum > previousNumberOfDatum) {
             for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              var d = new Datum();
-              d.id = rows[i].value;
-              d.fetch({
-                success : function() {
-                  // Add the new, blank, Datum
-                  self.model.add(datum);
-                }
+              var d = new Datum({
+                id : rows[i].value,
+                corpusname : app.get("corpus").get("corpusname")
+              });
+              d.changeCorpus(app.get("corpus").get("corpusname"), function(){
+                d.fetch({
+                  success : function() {
+                    // Add the new, blank, Datum
+                    self.model.add(datum);
+                  }
+                });
               });
             }
           // If the user has decrease the number of Datum to display in the container
