@@ -150,40 +150,57 @@ define([
       }
       var self = this;
       var c = this.get("corpus");
-      c.set("id",appids.corpusid);
       c.set({
+        "id" : appids.corpusid,
         "corpusname" : couchConnection.corpusname,
         couchConnection : couchConnection
       });
+      c.changeCorpus(function(){
+        //fetch only after having setting the right pouch which is what changeCorpus does.
+        c.fetch({
+          success : function(e) {
+            Utils.debug("Corpus fetched successfully" + e);
+          },
+          error : function(e) {
+            Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
+          }
+        });
+      });
       
       var s = this.get("currentSession");
-      s.set("id", appids.sessionid);
-      
+      s.set({"id": appids.sessionid,
+        "corpusname" : couchConnection.corpusname});
+      s.changeCorpus(couchConnection.corpusname, function(){
+        //fetch only after having setting the right pouch which is what changeCorpus does.
+        s.fetch({
+          success : function(e) {
+            Utils.debug("Session fetched successfully" +e);
+          },
+          error : function(e) {
+            Utils.debug("There was an error fetching the session. Loading defaults..."+e);
+            s.set(
+                sessionFields , self.get("corpus").get("sessionFields").clone()
+            );
+          }
+        });
+      });
       var dl = this.get("currentDataList");
-      dl.set("id", appids.datalistid);
-      dl.fetch();
-      
-      c.fetch({
-        success : function(e) {
-          Utils.debug("Corpus fetched successfully" + e);
-        },
-        error : function(e) {
-          Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
-        }
+      dl.set({
+        "id" : appids.datalistid, 
+        "corpusname" : couchConnection.corpusname});
+      dl.changeCorpus(couchConnection.corpusname, function(){
+        //fetch only after having setting the right pouch which is what changeCorpus does.
+        dl.fetch({
+          success : function(e) {
+            Utils.debug("Data list fetched successfully" +e);
+          },
+          error : function(e) {
+            Utils.debug("There was an error fetching the data list. Loading defaults..."+e);
+          }
+        });
       });
       
-      s.fetch({
-        success : function(e) {
-          Utils.debug("Session fetched successfully" +e);
-        },
-        error : function(e) {
-          Utils.debug("There was an error fetching the session. Loading defaults..."+e);
-          s.set(
-              sessionFields , self.get("corpus").get("sessionFields").clone()
-          );
-        }
-      });
-      
+      //TODO move this callback after the fetch succeeds?
       if (typeof callback == "function") {
         callback();
       }
