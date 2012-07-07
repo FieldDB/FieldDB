@@ -114,7 +114,8 @@ define([
 //      this.model.id = "E144FA24-BAF4-48F9-9800-62E7A7E93CF4";
 //      this.model.fetch();
       this.model.set ({
-          "username" : "public",
+          "id": "E144FA24-BAF4-48F9-9800-62E7A7E93CF4",
+          "username" : "ifieldpublicuser",
           "password" : "",
           "email" : "",
           "firstname" : "Anonymous",
