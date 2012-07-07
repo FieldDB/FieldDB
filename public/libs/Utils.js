@@ -12,7 +12,7 @@ var Utils = Utils || {};
 Utils.debugMode = true;
 
 
-Utils.couchUrl = "http://ilanguage.iriscouch.com/default";
+Utils.couchUrl = "http://ilanguage.iriscouch.com/sapir-firstcorpus";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -47,7 +47,7 @@ Utils.defaultCouchConnection = function() {
     protocol : "http://",
     domain : "ilanguage.iriscouch.com",
     port : "80",
-    corpusname : "default"
+    corpusname : "sapir-firstcorpus"
   }; 
 };
 /**
@@ -69,12 +69,100 @@ Utils.debug = function(message) {
 };
 
 /**
+ * Simple Pub/sub plugin to create a decoupled javascript app
+ * http://answers.oreilly.com/topic/2190-two-examples-of-the-observer-pattern-in-javascript/
+ * 
+ * How to use it:
+var hub = {};
+makePublisher(hub);
+
+hub.subscribe(
+  "probeCommand",
+  function(arg) {
+    debug("Receiving command " + arg);
+  }, self);
+    
+hub.publish(
+    "probeResponse",
+"Command not valid.")
+    
+var right = document.getElementById("rightSideReading");
+hub.unsubscribe('probeResponse', null, center);
+hub.subscribe('probeResponse', function(arg) {
+  debug("Putting probe's response in the right input field.");
+  var cleanedMessage = arg.replace(/[^0-9]/g, "");
+  debug("Cleaned message: " + arg + " to: " + cleanedMessage);
+  right.value = cleanedMessage;
+}, right);
+    
+hub.subscribe('changeLogo',function(arg){
+  debug("Putting the logo from the user. This is the path: "+ arg);
+  img.setAttribute("src",storage.getItem("userLogo"));
+},img);
+ * 
+ */
+
+Utils.publisher = {
+  subscribers : {
+    any : []
+  },
+  subscribe : function(type, fn, context) {
+    type = type || 'any';
+    fn = typeof fn === "function" ? fn : context[fn];
+
+    if (typeof this.subscribers[type] === "undefined") {
+      this.subscribers[type] = [];
+    }
+    this.subscribers[type].push({
+      fn : fn,
+      context : context || this
+    });
+  },
+  unsubscribe : function(type, fn, context) {
+    this.visitSubscribers('unsubscribe', type, fn, context);
+  },
+  publish : function(type, publication) {
+    this.visitSubscribers('publish', type, publication);
+  },
+  visitSubscribers : function(action, type, arg, context) {
+    var pubtype = type || 'any', subscribers = this.subscribers[pubtype], i, max = subscribers ? subscribers.length
+        : 0;
+
+    for (i = 0; i < max; i += 1) {
+      if (action === 'publish') {
+        subscribers[i].fn.call(subscribers[i].context, arg);
+      } else {
+        if (subscribers[i].context === context) {
+          subscribers.splice(i, 1);
+          debug("Removed subscribers");
+
+        } else {
+          debug("Not removing subscriber" + i);
+
+        }
+      }
+    }
+  }
+};
+Utils.makePublisher = function(o) {
+  var i;
+  for (i in Utils.publisher) {
+    if (Utils.publisher.hasOwnProperty(i)
+        && typeof Utils.publisher[i] === "function") {
+      o[i] = Utils.publisher[i];
+    }
+  }
+  o.subscribers = {
+    any : []
+  };
+};
+
+/**
  * Detects whether we are running offline on an Android app.
- *
- * Note: to Android app developers, append this to your user agent
- * string to take advantage of the offline functionality of this
- * app.
- *
+ * 
+ * Note: to Android app developers, append this to your user agent string to
+ * take advantage of the offline functionality of this app.
+ * 
  * @returns {Boolean} true if using offline Android
  */
 Utils.androidApp = function() {
@@ -83,7 +171,7 @@ Utils.androidApp = function() {
 
 /**
  * Detects whether we are running offline in chrome extension.
- *
+ * 
  * @returns {Boolean} true if using a Chrome Extension
  */
 Utils.chromeApp = function() {

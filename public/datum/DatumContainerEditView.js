@@ -39,10 +39,10 @@ define([
         childViewFormat      : "well"
       });
       
-      this.updateDatums();
+//      this.updateDatums();//TODO uncomment this, or try to not call update datums when you first initialze the datum container.
       
       // Listen for changes in the number of Datum to display
-      app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
+//      app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this); //we might have to bind this in the other direction since the user's preferences are craeted later than the datum container.
     },
     
     model: Datums,
@@ -116,15 +116,16 @@ define([
           // Add a single, blank Datum
           self.prependDatum(new Datum({
             datumFields : app.get("corpus").get("datumFields").clone(),
-            datumStates : app.get("corpus").get("datumStates").clone()
+            datumStates : app.get("corpus").get("datumStates").clone(),
+            corpusname : app.get("corpus").get("corpusname")
           }));
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > previousNumberOfDatum) {
             for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              var d = new Datum();
-              d.id = rows[i].value;
+              var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
+              d.set("id", rows[i].value);
               d.fetch({
                 success : function() {
                   // Add the new, blank, Datum
@@ -149,7 +150,8 @@ define([
     newDatum : function() {
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
-        datumStates : app.get("corpus").get("datumStates").clone()
+        datumStates : app.get("corpus").get("datumStates").clone(),
+        corpusname : app.get("corpus").get("corpusname")
       }));
     },
     

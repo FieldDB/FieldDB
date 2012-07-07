@@ -285,20 +285,24 @@ define([
      * password authentication view to let user know they haven't been active in
      * a while.
      * 
+     * @deprecated
      */
     authenticatePreviousUser : function() {
-      var userid = localStorage.getItem("userid");
-      if (userid) {
-        //TODO this needs testing
-        // Save the  user in our Models
-        this.model.get("userPublic").set("id",userid);
-        this.model.get("userPublic").fetch();
-        this.model.syncUserWithServer();
-        
-      } else {
-        this.model.set("state", "loggedOut");
-        this.authenticateAsPublic(); //TODO this will be used in production
-      }
+      return; //TODO this function needs to be removed
+      
+//      
+//      var userid = localStorage.getItem("userid");
+//      if (userid) {
+//        //TODO this needs testing
+//        // Save the  user in our Models
+//        this.model.get("userPublic").set("id", userid);
+//        this.model.get("userPublic").fetch();
+//        this.model.syncUserWithServer();
+//        
+//      } else {
+//        this.model.set("state", "loggedOut");
+//        this.authenticateAsPublic(); //TODO this will be used in production
+//      }
     },
     
     /**
