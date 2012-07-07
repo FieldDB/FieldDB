@@ -136,6 +136,8 @@ define([
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
                   s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
                   s.set("corpusname", data.user.corpuses[0].corpusname);
+                  s.changeCorpus(data.user.corpuses[0].corpusname);
+
                   c.get("sessions").add(s);
                   
                   var dl = a.get("currentDataList");
@@ -145,6 +147,7 @@ define([
                     "description" : "You can use datalists to create handouts or to prepare for sessions with consultants, export to LaTeX or to share with collaborators. ",
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
+                  dl.changeCorpus(data.user.corpuses[0].corpusname);
                   c.get("dataLists").add(dl);
                   
                   c.changeCorpus(data.user.corpuses[0]);

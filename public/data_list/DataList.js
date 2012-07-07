@@ -77,6 +77,9 @@ define([
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
 
+    changeCorpus : function(corpusname) {
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+    }
   });
 
   return DataList;
