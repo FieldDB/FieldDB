@@ -28,8 +28,8 @@ define([
 
     routes : {
       "corpus/:corpusId"                : "showFullscreenCorpus", 
-      "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum",
-      "corpus/:corpusName/search"       : "showAdvancedSearch",
+      "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum", //corpusName has to match the pouch of the datum
+      "corpus/:corpusName/search"       : "showAdvancedSearch",//corpusName has to match the pouch of the corpus
       "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListId"                : "showFullscreenDataList",
       "user/:username"                  : "showFullscreenUser",
@@ -93,7 +93,7 @@ define([
      * corpusName and the given datumId.
      * 
      * @param {String}
-     *          corpusName The name of the corpus this datum is from.
+     *          corpusName The name of the corpus this datum is from, this needs to direclty match its pouch.
      * @param {Number}
      *          sessionId The ID of the session within the corpus.
      */
@@ -108,42 +108,46 @@ define([
         $("#session-embedded").show();
         return;
       }
-      if(sessionId == undefined){
+      if(sessionId == undefined || corpusName == undefined){
         return;
       }
       // Change the id of the session view's Session to be the given sessionId
-      appView.sessionEditView.model.set("id" , sessionId);
-      
-      // Fetch the Session's attributes from the PouchDB
+      appView.sessionEditView.model.set({
+        "id" : sessionId,
+        "corpusname": corpusName});
       var self = this;
-      appView.sessionEditView.model.fetch({
-        success : function() {
-          // Update the display with the Session with the given sessionId
-          appView.sessionEditView.render();
+      //change to the right pouch first
+      appView.sessionEditView.model.changeCorpus(corpusName, function(){
+        // Fetch the Session's attributes from the PouchDB
+        appView.sessionEditView.model.fetch({
+          success : function() {
+            // Update the display with the Session with the given sessionId
+            appView.sessionEditView.render();
+            
+            // Display the edit session view and hide all the other views
+            self.hideEverything();
+            $("#dashboard-view").show();
+            $("#session-embedded").show();
+          },
           
-          // Display the edit session view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#session-embedded").show();
-        },
-        
-        error : function() {
-          Utils.debug("Session does not exist: " + sessionId);
-          
-          // Create a new Session (cloning the default session fields from the
-          // corpus in case they changed) and render it
-          appView.sessionEditView = new SessionEditView({
-            model : new Session({
-              sessionFields : app.get("corpus").get("sessionFields").clone()
-            })
-          });
-          appView.sessionEditView.render();
-          
-          // Display the edit session view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#session-embedded").show();
-        }
+          error : function() {
+            Utils.debug("Session does not exist: " + sessionId);
+            
+            // Create a new Session (cloning the default session fields from the
+            // corpus in case they changed) and render it
+            appView.sessionEditView = new SessionEditView({
+              model : new Session({
+                sessionFields : app.get("corpus").get("sessionFields").clone()
+              })
+            });
+            appView.sessionEditView.render();
+            
+            // Display the edit session view and hide all the other views
+            self.hideEverything();
+            $("#dashboard-view").show();
+            $("#session-embedded").show();
+          }
+        });
       });
     },
    
