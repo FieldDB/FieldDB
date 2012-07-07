@@ -125,8 +125,11 @@ define([
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
         : Utils.pouchUrl),
         
-    changeCorpus : function(corpusname) {
+    changeCorpus : function(corpusname, callback) {
       this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
