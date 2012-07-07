@@ -132,9 +132,13 @@ textarea{
     
     } 
     
- .datum_field_label{
+.datum_field_label{
  display:inline;
- }   
+}   
+ 
+.datum_field_h4{
+  display:inline;
+}   
 
 
 

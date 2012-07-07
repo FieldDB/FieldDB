@@ -6,7 +6,6 @@ define([
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
-    "datum/DatumStateEditView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
@@ -19,7 +18,6 @@ define([
     Confidential,
     Datum,
     DatumFieldEditView,
-    DatumStateEditView,
     DatumTag,
     DatumTagEditView,
     UpdatingCollectionView
@@ -27,25 +25,21 @@ define([
   var DatumEditView = Backbone.View.extend(
   /** @lends DatumEditView.prototype */
   {
-        /**
-         * @class The layout of a single editable Datum. It contains a datum
-         *        state, datumFields, datumTags and a datum menu. This is where
-         *        the user enters theirs data, the main task of our application.
-         * 
-         * @extends Backbone.View
-         * @constructs
-         */
+    /**
+     * @class The layout of a single editable Datum. It contains a datum
+     *        state, datumFields, datumTags and a datum menu. This is where
+     *        the user enters theirs data, the main task of our application.
+     * 
+     * @property {String} format Valid values are "well"
+     * 
+     * @extends Backbone.View
+     * @constructs
+     */
     initialize : function() {
       // Create a AudioVideoEditView
-      this.audioVideoEditView = new AudioVideoEditView({
+      this.audioVideoView = new AudioVideoEditView({
         model : this.model.get("audioVideo"),
       });
-      
-      // Create a DatumStateEditView
-      this.datumStateView = new DatumStateEditView({
-        model : this.model.get("datumStates"),
-      });
-      this.datumStateView.format = "datum";
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -77,9 +71,9 @@ define([
       "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
-      "change .datum_state_select" : "updateDatumState",
       "click #duplicate" : "duplicateDatum",
-      "click .icon-plus" : "newDatum"
+      "click .icon-plus" : "newDatum",
+      "change .datum_state_select" : "updateDatumStates",
     },
 
     /**
@@ -93,17 +87,15 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
-      if (this.model != undefined) {        
+      if (this.format == "well") {
         // Display the DatumEditView
-        $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display StateView
-        this.datumStateView.el = this.$(".datum_state_edit");
-        this.datumStateView.render();
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+        $(this.el).html(this.template(jsonToRender));
         
         // Display audioVideo View
-        this.audioVideoEditView.el = this.$(".audio_video");
-        this.audioVideoEditView.render();
+        this.audioVideoView.el = this.$(".audio_video");
+        this.audioVideoView.render();
         
         // Display the DatumTagsView
         this.datumTagsView.el = this.$(".datum_tags_ul");
@@ -112,8 +104,6 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
-      } else {
-        Utils.debug("\tDatum model was undefined");
       }
 
       return this;
@@ -261,13 +251,15 @@ define([
       // Reset the "add" textbox
       this.$el.find(".add_tag").val("");
       
-      needsSave = true;
-      
       return false;
     },
     
-    updateDatumState : function() {
-      // TODO Save value of the selected DatumState
+    updateDatumStates : function() {
+      var selectedValue = this.$el.find(".datum_state_select").val();
+      this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+      this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      
+      this.needsSave = true;
     },
     
     /**

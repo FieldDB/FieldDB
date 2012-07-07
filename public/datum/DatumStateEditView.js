@@ -2,14 +2,12 @@ define( [
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum_state_settings_edit_embedded.handlebars",
-    "text!datum/datum_state_value_edit_embedded.handlebars",
     "datum/DatumState",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     datumStateSettingsTemplate,
-    datumStateValueTemplate,
     DatumState
 ) {
   var DatumStateEditView = Backbone.View.extend(
@@ -20,8 +18,7 @@ define( [
      *        states, They can choose the colour and label from the Detailed
      *        Corpus View.
      * 
-     * @property {String} format The format of the View. Valid values are "corpus" or
-     * "datum".
+     * @property {String} format The format of the View. Valid values are "corpus".
      * 
      * @extends Backbone.View
      * @constructs
@@ -50,11 +47,6 @@ define( [
      * The Handlebars template rendered as the DatumStateSettingsEditView.
      */
     templateSettings : Handlebars.compile(datumStateSettingsTemplate),
-    
-    /**
-     * The Handlebars template rendered as the DatumStateValueEditView.
-     */
-    templateValue : Handlebars.compile(datumStateValueTemplate),
       
     /**
      * Renders the DatumStateEditView.
@@ -68,12 +60,6 @@ define( [
         
         // Select the correct value from the color dropdown
         this.$el.children(".color_chooser").val(this.model.get("color"));
-      } else if (this.format == "datum") {
-        var jsonToRender = {
-          datumStates : this.model.toJSON()
-        };
-        
-        $(this.el).html(this.templateValue(jsonToRender));
       }
       
       return this;
