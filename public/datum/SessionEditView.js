@@ -112,7 +112,10 @@ define([
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
-      this.model.save();
+      var self = this;
+      this.model.changeCorpus(this.model.get("corpusname"),function(){
+        self.model.save();
+      });
     },
     
     //functions associated with icons

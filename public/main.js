@@ -76,10 +76,6 @@ require([
     UserWelcomeView
 ) {
   window.startApp = function(a, callback){
-    if (a == null){
-      a = new App();
-      a.createAppBackboneObjects();
-    }
     window.app = a;
 
     // Create and display the AppView and its dependants
@@ -96,13 +92,23 @@ require([
     
   };
   /*
+   * Start the pub sub hub
+   */
+  window.hub = {};
+  Utils.makePublisher(window.hub);
+  
+  /*
    * Clear the app completely
    * TODO this doesnt work any more because each corpus is in a different pouch.
    */
-  Pouch.destroy('idb://db');
-  Pouch.destroy('idb://dbdefault');
-  Pouch.destroy('idb://dbsapir-firstcorpus');
-  localStorage.clear();
+//  Pouch.destroy('idb://db');
+//  Pouch.destroy('idb://dbdefault');
+//  Pouch.destroy('idb://dbsapir-firstcorpus');
+//  localStorage.removeItem("appids");
+//  localStorage.removeItem("corpusname");
+//  ids.corpusid = "27D8E985-91BA-4020-9A83-E9284423CC58";
+//  ids.sessionid = "9E3E3C3B-8856-43A5-8204-33FDB7538522";
+//  ids.datalistid = "42D00DC8-FDB0-4099-B001-7D8A578A0D59";
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
@@ -110,8 +116,14 @@ require([
     Utils.debug("Loading app from localStorage");
     appjson = JSON.parse(appjson);
     a = new App(); 
-    a.createAppBackboneObjects(function(){
-      a.loadBackboneObjectsById(appjson, function(){
+    var corpusname = null;
+    var couchConnection = null;
+    if(localStorage.getItem("mostRecentCouchConnection")){
+      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+    }
+    a.createAppBackboneObjects(corpusname ,function(){
+      a.loadBackboneObjectsById(couchConnection, appjson, function(){
         window.startApp(a);
       });
     });
