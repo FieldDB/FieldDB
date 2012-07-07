@@ -106,9 +106,9 @@ require([
 //  Pouch.destroy('idb://dbsapir-firstcorpus');
 //  localStorage.removeItem("appids");
 //  localStorage.removeItem("corpusname");
-//  ids.corpusid = "27D8E985-91BA-4020-9A83-E9284423CC58";
-//  ids.sessionid = "9E3E3C3B-8856-43A5-8204-33FDB7538522";
-//  ids.datalistid = "42D00DC8-FDB0-4099-B001-7D8A578A0D59";
+//  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
+//  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
+//  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
