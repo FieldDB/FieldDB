@@ -12,6 +12,8 @@
     "unlimitedStorage",
     "https://ifield.fieldlinguist.com/",
     "http://ifield.fieldlinguist.com/",
+    "https://localhost:3001/",
+    "http://localhost:3001/",
     "https://ilanguage.iriscouch.com/",
     "http://ilanguage.iriscouch.com/"
   ],
