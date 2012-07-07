@@ -1,11 +1,11 @@
 define([
     "use!backbone", 
     "use!handlebars",
-    "text!datum/datum_container_edit_embedded.handlebars",
-    "text!datum/datum_container_edit_fullscreen.handlebars",
+    "text!datum/datum_container_read_embedded.handlebars",
+    "text!datum/datum_container_read_fullscreen.handlebars",
     "datum/Datum",
     "datum/Datums",
-    "datum/DatumEditView",
+    "datum/DatumReadView",
     "app/UpdatingCollectionView"
 ], function(
     Backbone,
@@ -14,11 +14,11 @@ define([
     datumContainerFullscreenTemplate,
     Datum,
     Datums,
-    DatumEditView,
+    DatumReadView,
     UpdatingCollectionView
 ) {
-  var DatumContainerEditView = Backbone.View.extend(
-  /** @lends DatumContainerEditView.prototype */
+  var DatumContainerReadView = Backbone.View.extend(
+  /** @lends DatumContainerReadView.prototype */
   {
     /**
      * @class The area where Datum appear. The number of datum that appear
@@ -33,7 +33,7 @@ define([
       // Create a DatumTagView
       this.datumsView = new UpdatingCollectionView({
         collection           : this.model,
-        childViewConstructor : DatumEditView,
+        childViewConstructor : DatumReadView,
         childViewTagName     : "li",
         childViewClass       : "well",
         childViewFormat      : "well"
@@ -45,12 +45,12 @@ define([
       app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
     },
     
-    model: Datums,
+    model : Datums,
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
-      "click .icon-book" : "showReadonly"
+      "click .icon-edit" : "showEditable"
     },
     
     templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
@@ -77,26 +77,17 @@ define([
       }
     },
     
-    /**
-     * Saves the Datum pages (if necessary) after a timeout.
-     */
-    saveScreen : function() {
-      for (var i in this.datumsView._childViews) {
-        this.datumsView._childViews[i].saveScreen();
-      }
-    },
-    
     resizeSmall : function() {
-      window.app.router.showEditableDatums("centreWell");
+      window.app.router.showReadonlyDatums("centreWell");
       window.app.router.showDashboard();
     },
     
     resizeFullscreen : function() {
-      window.app.router.showEditableDatums("fullscreen");
+      window.app.router.showReadonlyDatums("fullscreen");
     },
- 
-    showReadonly : function() {
-      window.app.router.showReadonlyDatums(this.format);
+    
+    showEditable : function() {
+      window.app.router.showEditableDatums(this.format);
     },
     
     updateDatums : function() {
@@ -112,12 +103,6 @@ define([
           for (var i = 0; i < previousNumberOfDatum; i++) {
             self.model.pop();
           }
-            
-          // Add a single, blank Datum
-          self.prependDatum(new Datum({
-            datumFields : app.get("corpus").get("datumFields").clone(),
-            datumStates : app.get("corpus").get("datumStates").clone()
-          }));
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > previousNumberOfDatum) {
@@ -141,42 +126,8 @@ define([
           }
         }
       })
-    },
-    
-    /**
-     * Adds a new Datum to the current Corpus in the current Session.
-     */
-    newDatum : function() {
-      this.prependDatum(new Datum({
-        datumFields : app.get("corpus").get("datumFields").clone(),
-        datumStates : app.get("corpus").get("datumStates").clone()
-      }));
-    },
-    
-    /**
-     * Prepends the given Datum to the top of the Datum stack.
-     * Saves and bumps the bottom Datum off the stack, if necessary.
-     * 
-     * @param {Datm} datum The Datum to preprend.
-     */
-    prependDatum : function(datum) {
-      // TODO If the corpus' previous Datum is more than 24 hours old,
-      // prompt the user if they want to create a new Session.
-      
-      // Set the Datum's Session to the current Session
-      datum.set("session", app.get("currentSession")); 
-      
-      // Add the new, blank, Datum
-      this.model.add(datum, {at:0});
-       
-      // If there are too many datum on the screen, remove the bottom one and save it.
-      if (this.model.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
-        var d = this.model.pop();
-        console.log("Removed the datum with id: " + d._id);
-        d.save();
-      }
     }
   });
   
-  return DatumContainerEditView;
+  return DatumContainerReadView;
 });

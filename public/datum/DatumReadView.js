@@ -1,28 +1,22 @@
-// TODO Make this a read-only version. Right now, this is just a copy of the Editable version
-
 define([
     "use!backbone", 
     "use!handlebars", 
     "text!datum/datum_read_embedded.handlebars",
-    "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
-    "datum/DatumTag",
     "datum/DatumTagReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    datumTemplate, 
-    AudioVideoEditView,
+    datumTemplate,
     Confidential,
     Datum,
     DatumFieldReadView,
     DatumStateReadView,
-    DatumTag,
     DatumTagReadView,
     UpdatingCollectionView
 ) {
@@ -39,11 +33,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a AudioVideoEditView
-      this.AudioVideoEditView = new AudioVideoEditView({
-        model : this.model.get("audioVideo"),
-      });
-      
       // Create a DatumStateReadView
       this.stateView = new DatumStateReadView({
         model : this.model.get("state"),
@@ -70,26 +59,6 @@ define([
      * The underlying model of the DatumReadView is a Datum.
      */
     model : Datum,
-
-    /**
-     * The AudioVideoEditView is not a partial of the DatumReadView, it must be called to render it.
-     */
-    AudioVideoEditView : AudioVideoEditView,
-
-    /**
-     * The stateView is a partial of the DatumReadView.
-     */
-    stateView : DatumStateReadView,
-
-    /**
-     * The tagview is a partial of the DatumReadView.
-     */
-    datumTagsView : UpdatingCollectionView,
-
-    /**
-     * The datumFieldsView displays the all the DatumFieldEditViews.
-     */
-    datumFieldsView : UpdatingCollectionView,
     
     /**
      * Events that the DatumReadView is listening to and their handlers.
@@ -112,30 +81,19 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
-      if (this.format == "centreWell") {
-        if (this.model != undefined) {        
-          // Display the DatumReadView
-          this.setElement($("#datum-embedded"));
-          $(this.el).html(this.template(this.model.toJSON()));
-          
-          // Display StateView
-          this.datumStateView.el = this.$(".datum_state_edit");
-          this.datumStateView.render();
-          
-          // Display audioVideo View
-          this.audioVideoEditView.el = this.$(".audio_video");
-          this.audioVideoEditView.render();
-          
-          // Display the DatumTagsView
-          this.datumTagsView.el = this.$(".datum_tags_ul");
-          this.datumTagsView.render();
-          
-          // Display the DatumFieldsView
-          this.datumFieldsView.el = this.$(".datum_fields_ul");
-          this.datumFieldsView.render();
-        } else {
-          Utils.debug("\tDatum model was undefined");
-        }
+      if (this.format == "well") {        
+        // Display the DatumReadView
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+        $(this.el).html(this.template(jsonToRender));
+        
+        // Display the DatumTagsView
+        this.datumTagsView.el = this.$(".datum_tags_ul");
+        this.datumTagsView.render();
+        
+        // Display the DatumFieldsView
+        this.datumFieldsView.el = this.$(".datum_fields_ul");
+        this.datumFieldsView.render();
       } else if (this.format == "latex") {
         //This bit of code makes the datum look like its rendered by latex, could be put into a function, but not sure if thats necessary...
         
@@ -150,8 +108,8 @@ define([
         
         //for loop aligns each word in the utterance with a word in the  gloss
         glossCouplet = [];
-        var i= 0;
-        for( i; i<utteranceArray.length; i++){
+        var i = 0;
+        for (i; i < utteranceArray.length; i++) {
           glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
           this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
         };
