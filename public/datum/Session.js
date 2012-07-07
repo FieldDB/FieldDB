@@ -87,7 +87,11 @@ define([
     },
    
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
-   
+
+    changeCorpus : function(corpusname) {
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+    },
+    
     /**
      * Validation functions will verify that the session ID is unique and
      * that the consultant,users, and teams are all correspond to people in

@@ -92,14 +92,23 @@ require([
     
   };
   /*
+   * Start the pub sub hub
+   */
+  window.hub = {};
+  Utils.makePublisher(window.hub);
+  
+  /*
    * Clear the app completely
    * TODO this doesnt work any more because each corpus is in a different pouch.
    */
-//  Pouch.destroy('idb://db');
+  Pouch.destroy('idb://db');
   Pouch.destroy('idb://dbdefault');
   Pouch.destroy('idb://dbsapir-firstcorpus');
   localStorage.removeItem("appids");
   localStorage.removeItem("corpusname");
+//  ids.corpusid = "27D8E985-91BA-4020-9A83-E9284423CC58";
+//  ids.sessionid = "9E3E3C3B-8856-43A5-8204-33FDB7538522";
+//  ids.datalistid = "42D00DC8-FDB0-4099-B001-7D8A578A0D59";
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");
