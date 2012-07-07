@@ -76,7 +76,9 @@ define([
           && (dataToPost.password == $(".to-confirm-password").val())
           && dataToPost.email != "") {
           Utils.debug("User has entered an email and the passwords match. ");
-
+          var a = new App();
+          a.createAppBackboneObjects($(".username").val()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
+          
           /*
            * Contact the server and register the new user
            */
@@ -93,17 +95,19 @@ define([
                  * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
                  * dismiss modal
                  */ 
-                var a = new App();
-                a.createAppBackboneObjects(function(){
+                
+//                a.createAppBackboneObjects(data.user.couchConnection.corpusname, function(){
                   // Faking a login behavior, copy pasted from authentication auth function
                   var auth  = a.get("authentication");
                   auth.set("state", "loggedIn");
                   auth.staleAuthentication = false;
 
                   var u = auth.get("userPrivate");
-                  u.set(data.user);
-                  // Over write the public copy with any (new) username/gravatar info
-                  auth.get("userPublic").set("_id", auth.get("userPrivate").get("_id"));
+                  u.set("id",data.user._id); //set the backbone id to be the same as the mongodb id
+                  u.set(data.user);//TODO maybe id conflicts are popping up here
+                  
+                  // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
+                  auth.get("userPublic").set("id", auth.get("userPrivate").get("id"));
                   if (data.user.publicSelf == null) {
                     // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
                     data.user.publicSelf = {};
@@ -112,7 +116,7 @@ define([
                   }
                   auth.get("userPublic").set(data.user.publicSelf);
                   auth.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
-                  auth.get("userPublic").save();
+//                  auth.get("userPublic").save();
                   
                   var c = a.get("corpus");
                   c.set({
@@ -132,6 +136,8 @@ define([
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
                   s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
                   s.set("corpusname", data.user.corpuses[0].corpusname);
+                  s.changeCorpus(data.user.corpuses[0].corpusname);
+
                   c.get("sessions").add(s);
                   
                   var dl = a.get("currentDataList");
@@ -141,22 +147,26 @@ define([
                     "description" : "You can use datalists to create handouts or to prepare for sessions with consultants, export to LaTeX or to share with collaborators. ",
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
+                  dl.changeCorpus(data.user.corpuses[0].corpusname);
                   c.get("dataLists").add(dl);
                   
-                  c.changeCorpus();
+                  c.changeCorpus(data.user.corpuses[0]);
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-                  // window.startApp(a, function(){
-                    // auth.get("userPrivate").addCurrentCorpusToUser();
-                    // /*
-                     // * Use the corpus just created to log the user into that corpus's couch server
-                     // */
-                    // c.logUserIntoTheirCorpusServer(dataToPost.username, dataToPost.password, function() {
-                      // Utils.debug("Successfully authenticated user with their corpus server.")
-                    // });
-                    // console.log("Loadded app for a new user.");
-                  // });
-                  // $('#user-welcome-modal').modal("hide");
-                });
+                   window.startApp(a, function(){
+//                     auth.get("userPrivate").addCurrentCorpusToUser();
+                     window.setTimeout(function(){
+                       /*
+                        * Use the corpus just created to log the user into that corpus's couch server
+                        */
+                       var couchConnection = data.user.corpuses[0];
+                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
+                         Utils.debug("Successfully authenticated user with their corpus server.")
+                       });
+                     }, 5000);
+                     console.log("Loadded app for a new user.");
+                   });
+                   $('#user-welcome-modal').modal("hide");
+//                });
               }
             },//end successful registration
             dataType : ""
@@ -177,7 +187,7 @@ define([
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
         a = new App();
-        a.createAppBackboneObjects(function() {
+        a.createAppBackboneObjects("sapir-firstcorpus",function() {
           $('#user-welcome-modal').modal("hide");
           window.startApp(a, function() {
             window.appView.loadSample();
@@ -197,22 +207,24 @@ define([
             $(".alert-error").show();
             $('#user-welcome-modal').modal("show");
           }else{
-            a.createAppBackboneObjects( function(){
+            a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
               $('#user-welcome-modal').modal("hide");
               window.startApp(a, function(){
-                window.app.get("corpus").replicateCorpus(function(){
-                  //temp set to fred 15's ids
-//                  auth.get("userPrivate").set("mostRecentIds", {"corpusid":"5BD34252-6042-45B3-BA00-96D65B30386D","sessionid":"7A353356-8637-40E9-9DE4-F60146154560","datalistid":"8DCA8E13-2877-4B58-B234-53E6564B9B42"});
-                  if(auth.get("userPrivate").get("mostRecentIds") == undefined){
-                    //do nothing because they have no recent ids
-                    Utils.debug("User does not have most recent ids, doing nothing.");
-                  }else{
-                    /*
-                     *  Load their last corpus, session, datalist etc
-                     */
-                    var appids = auth.get("userPrivate").get("mostRecentIds");
-                    window.app.loadBackboneObjectsById(appids);
-                  }
+                var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+                window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, $("#welcomeusername").val(), $("#welcomepassword").val(), function(){
+                  //Replicate user's corpus down to pouch
+                  window.app.get("corpus").replicateCorpus(couchConnection, function(){
+                    if(auth.get("userPrivate").get("mostRecentIds") == undefined){
+                      //do nothing because they have no recent ids
+                      Utils.debug("User does not have most recent ids, doing nothing.");
+                    }else{
+                      /*
+                       *  Load their last corpus, session, datalist etc
+                       */
+                      var appids = auth.get("userPrivate").get("mostRecentIds");
+                      window.app.loadBackboneObjectsById(couchConnection, appids);
+                    }                    
+                  });
                 });
               });
             });

@@ -85,7 +85,6 @@ define([
       } catch(e) {
         Utils.debug("Corpusname was undefined on this corpus, the datum will not have a valid corpusname until it is set.");
       }
-      
       // Initialially, the first datumState is selected
       if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
         this.get("datumStates").models[0].set("selected", "selected");
@@ -290,7 +289,8 @@ define([
         dateEntered : this.get("dateEntered"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
-        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true})
+        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
+        corpusname : this.get("corpusname")
         // Don't need to do Session here since it will be overwritten in DatumContainerEditView.prependDatum()
       });
       

@@ -60,6 +60,10 @@ define([
         if (this.get("corpusname") == undefined) {
           this.set("corpusname", app.get("corpus").get("corpusname"));
         }
+        this.pouch = Backbone.sync
+        .pouch(Utils.androidApp() ? Utils.touchUrl
+            + this.get("corpusname") : Utils.pouchUrl
+            + this.get("corpusname"));
       } catch(e) {
         Utils.debug("Corpusname was undefined on this corpus, the session will not have a valid corpusname until it is set.");
       }
@@ -83,7 +87,11 @@ define([
     },
    
     pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
-   
+
+    changeCorpus : function(corpusname) {
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+    },
+    
     /**
      * Validation functions will verify that the session ID is unique and
      * that the consultant,users, and teams are all correspond to people in

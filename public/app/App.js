@@ -200,7 +200,7 @@ define([
      * 
      */
     storeCurrentDashboardIdsToLocalStorage : function(callback){
-      this.get("currentSession").save({}, {
+      this.get("currentSession").save(null, {
         success : function(model, response) {
           console.log('Session save success');
           try{
@@ -213,7 +213,7 @@ define([
           console.log('Session save error' + e);
         }
       });
-      this.get("currentDataList").save({}, {
+      this.get("currentDataList").save(null, {
         success : function(model, response) {
           console.log('Datalist save success');
           try{
@@ -226,7 +226,7 @@ define([
           console.log('Datalist save error' + e);
         }
       });
-      this.get("corpus").save({}, {
+      this.get("corpus").save(null, {
         success : function(model, response) {
           console.log('Corpus save success');
           try{
