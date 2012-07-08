@@ -75,10 +75,17 @@ require([
     User,
     UserWelcomeView
 ) {
+  
+  
+  
+  /**
+   * This function is the only place that starts the app, notably the app view and app router. 
+   * It is called either by the main.js or by the UserWelcomeView.js
+   */
   window.startApp = function(a, callback){
     window.app = a;
 
-    // Create and display the AppView and its dependants
+    // Create and display the AppView and its dependents
     window.appView = new AppView({model: a}); 
     window.appView.render();
     
