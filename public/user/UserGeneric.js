@@ -1,5 +1,5 @@
 define([ 
-    "use!backbone", 
+    "backbone", 
     "hotkey/HotKey",
     "user/UserPreference",
     "libs/Utils"
@@ -61,7 +61,6 @@ define([
       
       return response;
     },
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl : Utils.pouchUrl),
 
     addCurrentCorpusToUser : function(){
       var cc = window.app.get("corpus").get("couchConnection");

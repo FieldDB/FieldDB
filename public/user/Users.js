@@ -1,5 +1,5 @@
 define(
-    ["use!backbone",
+    ["backbone",
      "user/User"],
     function(Backbone, User) {
   

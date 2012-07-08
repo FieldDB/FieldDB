@@ -1,58 +1,92 @@
 // Set the RequireJS configuration
 require.config({
   paths : {
-    "use" : "libs/use",
     "text" : "libs/text",
     "jquery" : "libs/jquery",
     "hotkeys" : "libs/jquery.hotkeys",
     "terminal" : "libs/terminal/terminal",
     "underscore" : "libs/underscore",
     "backbone" : "libs/backbone",
-    "handlebars" : "libs/handlebars-1.0.0.beta.6",
-    "compiledTemplates" :"libs/compiled_handlebars",
-    "paginator" : "libs/backbone.paginator",
+    "handlebars" : "libs/handlebars.runtime",
+    "compiledTemplates" : "libs/compiled_handlebars",
     "crypto" : "libs/Crypto_AES",
-    "pouch" : "libs/pouch.alpha"  
+    "pouch" : "libs/pouch.alpha",
+    "backbone_pouchdb" : "libs/backbone-pouchdb",
+    "backbone_couchdb" : "libs/backbone-couchdb",
+    "bootstrap" : "bootstrap/js/bootstrap",
+    "bootstrap-transition" : "bootstrap/js/bootstrap-transition",
+    "bootstrap-alert" : "bootstrap/js/bootstrap-alert",
+    "bootstrap-modal" : "bootstrap/js/bootstrap-modal",
+    "bootstrap-dropdown" : "bootstrap/js/bootstrap-dropdown",
+    "bootstrap-scrollspy" : "bootstrap/js/bootstrap-scrollspy",
+    "bootstrap-tab" : "bootstrap/js/bootstrap-tab",
+    "bootstrap-tooltip" : "bootstrap/js/bootstrap-tooltip",
+    "bootstrap-popover" : "bootstrap/js/bootstrap-popover",
+    "bootstrap-button" : "bootstrap/js/bootstrap-button",
+    "bootstrap-collapse" : "bootstrap/js/bootstrap-collapse",
+    "bootstrap-carousel" : "bootstrap/js/bootstrap-carousel",
+    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead"
   },
-  use : {
+  shim : {
     "underscore" : {
-      attach : "_"
+      exports : "_"
+    },
+    
+    "jquery" : {
+      exports : "$"
+    },
+
+    "bootstrap" :{
+      deps : [ "jquery", "bootstrap-transition", "bootstrap-alert",
+          "bootstrap-modal", "bootstrap-dropdown", "bootstrap-scrollspy",
+          "bootstrap-tab", "bootstrap-tooltip", "bootstrap-popover",
+          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel",
+          "bootstrap-typeahead" ],
+      exports : function($) {
+        return $;
+      }
+    },
+    
+    "pouch" :{
+      exports: "Pouch"
     },
 
     "backbone" : {
-      deps : ["use!underscore", "jquery", "pouch", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
-      attach : function(_, $) {
+      deps : [ "underscore", "jquery", "compiledTemplates" ],
+      exports : function(_, $) {
         return Backbone;
       }
     },
+    "backbone_pouchdb" :{
+      deps : ["backbone", "pouch", "backbone_couchdb"],
+      exports : function(Backbone, Pouch, backbone_couchdb) {
+        return Backbone;
+      }
+    },
+    
+    "backbone_couchdb" :{
+      deps : ["backbone", "pouch"],
+      exports : function(Backbone, Pouch) {
+        return Backbone;
+      }
+    },
+    
 
     "handlebars" : {
-      attach: "Handlebars"
-    },
-    
-    "crypto" :{
-    	attach: "CryptoJS"
-    },
-    
-    "paginator":{
-      deps : ["use!underscore", "use!backbone", "jquery"],
-      attach: "Paginator"
+      deps : ["bootstrap"],
+      exports : "Handlebars"
     },
 
-    "hotkeys":{
-        deps : ["jquery"],
-        attach: "hotkeys"
-      },
-      
-     "terminal":{
-       attach: "Terminal"
-      },
-      
-      "compiledTemplates":{
-        deps :["use!handlebars"],
-        attach: "compiledTemplates"
+    "crypto" : {
+      exports : "CryptoJS"
+    },
+
+    "compiledTemplates" : {
+      deps : [ "handlebars" ],
+      exports : function(Handlebars) {
+        return Handlebars;
       }
-    
+    }
   }
 });
 
@@ -61,15 +95,17 @@ require([
     "app/App",
     "app/AppView",
     "app/AppRouter",
-    "use!terminal",
+    "terminal",
     "corpus/Corpus",
     "data_list/DataList",
     "datum/Datum",
     "datum/Session",
     "user/User",
     "user/UserWelcomeView",
-    "use!handlebars",
-    "use!compiledTemplates",
+    "handlebars",
+    "compiledTemplates",
+    "backbone",
+    "backbone_pouchdb",
     "libs/Utils"
 ], function(
     App,
@@ -83,11 +119,12 @@ require([
     User,
     UserWelcomeView,
     Handlebars,
-    compiledTemplates
+    compiledTemplates,
+    Backbone,
+    forcingpouchtoloadonbackboneearly
 ) {
   
   
-  window.compiledTemplates = compiledTemplates;
   /**
    * This function is the only place that starts the app, notably the app view and app router. 
    * It is called either by the main.js or by the UserWelcomeView.js

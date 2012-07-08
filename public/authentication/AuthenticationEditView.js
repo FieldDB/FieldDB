@@ -1,6 +1,6 @@
 define([
-    "use!backbone", 
-    "use!handlebars",
+    "backbone", 
+    "handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
