@@ -23,6 +23,6 @@
     "128": "icon128.png" 
   },
   "manifest_version": 2,
-  "content_security_policy": " script-src 'self' https://ssl.google-analytics.com; connect-src 'self' https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://ilanguage.iriscouch.com/; object-src 'self';"
+  "content_security_policy": " script-src 'self' https://ssl.google-analytics.com; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ https://localhost:3001/ 'self'; object-src 'self';"
   
 }
