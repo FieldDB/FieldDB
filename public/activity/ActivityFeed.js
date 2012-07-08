@@ -1,5 +1,5 @@
 define([ 
-    "use!backbone", 
+    "backbone", 
     "activity/Activity"
 ], function(
     Backbone, 

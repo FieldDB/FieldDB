@@ -1,5 +1,5 @@
-define([ "use!backbone", 
-         "use!handlebars", 
+define([ "backbone", 
+         "handlebars", 
          "activity/Activity", 
          "activity/ActivityFeed"
  ],

@@ -1,6 +1,6 @@
 // Store models in *PouchDB*.
 require([
-  "use!backbone"
+  "backbone"
 ], function(Backbone) {
   Backbone.sync = (function() {
     // match read request to get, query or allDocs call

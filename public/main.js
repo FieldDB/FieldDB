@@ -1,56 +1,55 @@
 // Set the RequireJS configuration
 require.config({
   paths : {
-    "use" : "libs/use",
     "text" : "libs/text",
     "jquery" : "libs/jquery",
     "hotkeys" : "libs/jquery.hotkeys",
     "terminal" : "libs/terminal/terminal",
     "underscore" : "libs/underscore",
     "backbone" : "libs/backbone",
-    "handlebars" : "libs/handlebars-1.0.0.beta.6",
+    "handlebars" : "libs/handlebars.runtime",
     "compiledTemplates" :"libs/compiled_handlebars",
     "paginator" : "libs/backbone.paginator",
     "crypto" : "libs/Crypto_AES",
     "pouch" : "libs/pouch.alpha"  
   },
-  use : {
+  shim : {
     "underscore" : {
-      attach : "_"
+      exports : "_"
     },
 
     "backbone" : {
-      deps : ["use!underscore", "jquery", "pouch", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
-      attach : function(_, $) {
+      deps : ["underscore", "jquery", "pouch", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
+      exports : function(_, $) {
         return Backbone;
       }
     },
 
     "handlebars" : {
-      attach: "Handlebars"
+      exports: "Handlebars"
     },
     
     "crypto" :{
-    	attach: "CryptoJS"
+      exports: "CryptoJS"
     },
     
     "paginator":{
-      deps : ["use!underscore", "use!backbone", "jquery"],
-      attach: "Paginator"
+      deps : ["underscore", "backbone", "jquery"],
+      exports: "Paginator"
     },
 
     "hotkeys":{
         deps : ["jquery"],
-        attach: "hotkeys"
+        exports: "hotkeys"
       },
       
      "terminal":{
-       attach: "Terminal"
+       exports: "Terminal"
       },
       
       "compiledTemplates":{
-        deps :["use!handlebars"],
-        attach: "compiledTemplates"
+        deps :["handlebars"],
+        exports: "compiledTemplates"
       }
     
   }
@@ -61,15 +60,15 @@ require([
     "app/App",
     "app/AppView",
     "app/AppRouter",
-    "use!terminal",
+    "terminal",
     "corpus/Corpus",
     "data_list/DataList",
     "datum/Datum",
     "datum/Session",
     "user/User",
     "user/UserWelcomeView",
-    "use!handlebars",
-    "use!compiledTemplates",
+    "handlebars",
+    "compiledTemplates",
     "libs/Utils"
 ], function(
     App,
