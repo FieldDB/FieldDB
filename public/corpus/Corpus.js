@@ -1,5 +1,5 @@
 define([ 
-    "backbone",
+    "libs/backbone",
     "comment/Comment",
     "comment/Comments",
     "confidentiality_encryption/Confidential",

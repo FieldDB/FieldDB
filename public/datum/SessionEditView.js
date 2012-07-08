@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "libs/backbone", 
+    "libs/handlebars.runtime", 
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",

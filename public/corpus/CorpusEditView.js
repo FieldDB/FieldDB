@@ -1,6 +1,6 @@
 define([ 
-    "backbone", 
-    "handlebars",
+    "libs/backbone", 
+    "libs/handlebars.runtime",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",

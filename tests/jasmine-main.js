@@ -9,7 +9,7 @@ require.config({
       "hotkeys" : "libs/jquery.hotkeys",
       "underscore" : "libs/underscore",
       "backbone" : "libs/backbone",
-      "handlebars" : "libs/handlebars-1.0.0.beta.6",
+      "libs/handlebars.runtime" : "libs/handlebars-1.0.0.beta.6",
       "paginator" : "libs/backbone.paginator",
       "crypto" : "libs/Crypto_AES",
       "pouch" : "libs/pouch.alpha"
@@ -28,7 +28,7 @@ require.config({
           }
       },
 
-      "handlebars" : {
+      "libs/handlebars.runtime" : {
         exports: "Handlebars"
       },
       
@@ -36,7 +36,7 @@ require.config({
         exports: "CryptoJS"
       },
       "paginator":{
-        deps : ["underscore", "backbone", "jquery", "libs/backbone-couchdb"],
+        deps : ["underscore", "libs/backbone", "jquery", "libs/backbone-couchdb"],
         exports: "paginator"
       },
       
@@ -46,7 +46,7 @@ require.config({
       },
       
       "compiledTemplates":{
-        deps :["handlebars"],
+        deps :["libs/handlebars.runtime"],
         exports: "compiledTemplates"
       }
   }

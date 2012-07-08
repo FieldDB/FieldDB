@@ -1,5 +1,5 @@
 define(
-		["backbone"],
+		["libs/backbone"],
 		function(Backbone){
 	var Team = Backbone.Collection.extend(
 			

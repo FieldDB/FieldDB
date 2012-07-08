@@ -1,5 +1,5 @@
 define("lexicon/LexiconNodes", 
-    ["backbone",
+    ["libs/backbone",
      "lexicon/LexiconNode"],
     function(Backbone, LexiconNode) {
   
