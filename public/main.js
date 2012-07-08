@@ -9,6 +9,7 @@ require.config({
     "underscore" : "libs/underscore",
     "backbone" : "libs/backbone",
     "handlebars" : "libs/handlebars-1.0.0.beta.6",
+    "compiledTemplates" :"libs/compiled_handlebars",
     "paginator" : "libs/backbone.paginator",
     "crypto" : "libs/Crypto_AES",
     "pouch" : "libs/pouch.alpha"  
@@ -45,6 +46,11 @@ require.config({
       
      "terminal":{
        attach: "Terminal"
+      },
+      
+      "compiledTemplates":{
+        deps :["use!handlebars"],
+        attach: "compiledTemplates"
       }
     
   }
@@ -62,6 +68,8 @@ require([
     "datum/Session",
     "user/User",
     "user/UserWelcomeView",
+    "use!handlebars",
+    "use!compiledTemplates",
     "libs/Utils"
 ], function(
     App,
@@ -73,12 +81,21 @@ require([
     Datum,
     Session,
     User,
-    UserWelcomeView
+    UserWelcomeView,
+    Handlebars,
+    compiledTemplates
 ) {
+  
+  
+  window.compiledTemplates = compiledTemplates;
+  /**
+   * This function is the only place that starts the app, notably the app view and app router. 
+   * It is called either by the main.js or by the UserWelcomeView.js
+   */
   window.startApp = function(a, callback){
     window.app = a;
 
-    // Create and display the AppView and its dependants
+    // Create and display the AppView and its dependents
     window.appView = new AppView({model: a}); 
     window.appView.render();
     
@@ -106,9 +123,9 @@ require([
 //  Pouch.destroy('idb://dbsapir-firstcorpus');
 //  localStorage.removeItem("appids");
 //  localStorage.removeItem("corpusname");
-//  ids.corpusid = "27D8E985-91BA-4020-9A83-E9284423CC58";
-//  ids.sessionid = "9E3E3C3B-8856-43A5-8204-33FDB7538522";
-//  ids.datalistid = "42D00DC8-FDB0-4099-B001-7D8A578A0D59";
+//  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
+//  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
+//  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
   
   // Load the App from localStorage
   var appjson = localStorage.getItem("appids");

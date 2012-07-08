@@ -2,7 +2,6 @@ define([
     "use!backbone", 
     "use!handlebars",
     "app/App", 
-    "text!app/app.handlebars", 
     "app/AppRouter",
     "activity/ActivityFeed",
     "activity/ActivityFeedView",
@@ -40,7 +39,6 @@ define([
     Backbone, 
     Handlebars,
     App, 
-    appTemplate,
     AppRouter, 
     ActivityFeed,
     ActivityFeedView,
@@ -275,8 +273,7 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.compile(appTemplate),
-    
+    template : Handlebars.templates.app,
     /**
      * Renders the AppView and all of its child Views.
      */
@@ -394,13 +391,13 @@ define([
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      var appids= {};
-      appids.corpusid = "420C2294-9713-41F2-9FEE-235D043679FE";
-      appids.datalistid = "C1659620-63D0-4A0C-8AE0-66E6892D026E";
-      appids.sessionid = "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5";
+      var ids= {};
+      ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
+      ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
+      ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
       
       //all the replication etc happens in authView
-      this.authView.loadSample(appids);
+      this.authView.loadSample(ids);
       
       this.searchView.loadSample();
     },

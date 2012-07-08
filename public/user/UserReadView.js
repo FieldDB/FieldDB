@@ -1,9 +1,6 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user_read_link.handlebars",
-    "text!user/user_read_modal.handlebars",
-    "text!user/user_read_fullscreen.handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
@@ -11,9 +8,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    userLinkTemplate,
-    userModalTemplate,
-    userFullscreenTemplate, 
     Corpus,
     Corpuses,
     User
@@ -49,17 +43,17 @@ define([
     /**
      * The Handlebars template rendered as the UserReadLinkView.
      */
-    linkTemplate : Handlebars.compile(userLinkTemplate),
+    linkTemplate : Handlebars.templates.user_read_link,
     
     /**
      * The Handlebars template rendered as the UserReadModalView.
      */
-    modalTemplate : Handlebars.compile(userModalTemplate),
+    modalTemplate : Handlebars.templates.user_read_modal,
     
     /**
      * The Handlebars template rendered as the UserReadFullscreenView.
      */
-    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
+    fullscreenTemplate : Handlebars.templates.user_read_fullscreen,
     
     /**
      * Renders the UserReadView.
