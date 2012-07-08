@@ -1,4 +1,5 @@
 #ignore compiled handlebars
+release
 compiled_handlebars.js
 *.handlebars.js
 
