@@ -1,5 +1,5 @@
 define([ 
-    "use!backbone",
+    "backbone",
     "datum/Session",
     "datum/SessionEditView",
     "libs/Utils"

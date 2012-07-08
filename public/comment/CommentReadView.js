@@ -1,6 +1,6 @@
 define([ 
-         "use!backbone",
-         "use!handlebars", 
+         "backbone",
+         "handlebars", 
          "comment/Comment"
   ], function(
       Backbone, 

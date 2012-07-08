@@ -1,5 +1,5 @@
 define([
-    "use!backbone",
+    "backbone",
 		"text!sample_data/orthography.txt",
 		"text!sample_data/morphemes.txt",
 		"text!sample_data/gloss.txt",

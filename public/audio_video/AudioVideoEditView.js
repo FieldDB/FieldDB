@@ -1,6 +1,6 @@
 define([ 
-    "use!backbone",
-     "use!handlebars", 
+    "backbone",
+     "handlebars", 
      "audio_video/AudioVideo"
 ], function(
     Backbone, 

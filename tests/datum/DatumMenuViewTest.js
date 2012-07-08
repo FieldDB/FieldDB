@@ -1,5 +1,5 @@
 require([
-	"use!sinon",
+	"sinon",
 	"datum_menu/DatumMenu", 
 	"datum_menu/DatumMenuView",
 	"text!index.html"
