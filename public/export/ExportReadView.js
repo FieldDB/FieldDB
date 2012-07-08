@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "libs/backbone", 
+    "libs/handlebars.runtime", 
     "export/Export",
 ], function(
     Backbone, 

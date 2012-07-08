@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "libs/backbone", 
+    "libs/handlebars.runtime", 
     "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",

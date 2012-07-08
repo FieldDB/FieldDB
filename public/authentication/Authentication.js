@@ -1,5 +1,5 @@
 define([
-    "backbone", 
+    "libs/backbone", 
     "user/User",
     "user/UserMask",
     "libs/Utils" 

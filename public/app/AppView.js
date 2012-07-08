@@ -1,6 +1,6 @@
 define([ 
-    "backbone", 
-    "handlebars",
+    "libs/backbone", 
+    "libs/handlebars.runtime",
     "app/App", 
     "app/AppRouter",
     "activity/ActivityFeed",

@@ -1,6 +1,6 @@
 define( [
-    "backbone",
-    "crypto"
+    "libs/backbone",
+    "libs/Crypto_AES"
 ],function(
     Backbone, 
     CryptoJS

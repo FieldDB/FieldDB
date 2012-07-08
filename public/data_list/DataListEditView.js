@@ -1,6 +1,6 @@
 define( [ 
-    "backbone", 
-    "handlebars",
+    "libs/backbone", 
+    "libs/handlebars.runtime",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",

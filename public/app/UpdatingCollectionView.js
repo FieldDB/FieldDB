@@ -1,5 +1,5 @@
 define([ 
-    "backbone",
+    "libs/backbone",
 ], function(Backbone) {
 var UpdatingCollectionView = Backbone.View.extend({
     initialize : function(options) {
