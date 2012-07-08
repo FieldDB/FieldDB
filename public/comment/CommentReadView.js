@@ -1,12 +1,10 @@
 define([ 
          "use!backbone",
          "use!handlebars", 
-         "text!comment/comment_read_embedded.handlebars",
          "comment/Comment"
   ], function(
       Backbone, 
       Handlebars,
-      commentReadEmbeddedTemplate,
       Comment
 ) {
   var CommentReadView = Backbone.View.extend(
@@ -38,7 +36,7 @@ define([
     /**
      * The Handlebars template rendered as the CommentReadView.
      */
-    template : Handlebars.compile(commentReadEmbeddedTemplate),
+    template : Handlebars.templates.comment_read_embedded,
     
     /**
      * Renders the DatumFieldView.

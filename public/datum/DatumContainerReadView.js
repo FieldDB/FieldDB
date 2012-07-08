@@ -1,8 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars",
-    "text!datum/datum_container_read_embedded.handlebars",
-    "text!datum/datum_container_read_fullscreen.handlebars",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumReadView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone,
     Handlebars,
-    datumContainerEmbeddedTemplate,
-    datumContainerFullscreenTemplate,
     Datum,
     Datums,
     DatumReadView,
@@ -53,9 +49,9 @@ define([
       "click .icon-edit" : "showEditable"
     },
     
-    templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
+    templateEmbedded : Handlebars.templates.datum_container_read_embedded,
     
-    templateFullscreen : Handlebars.compile(datumContainerFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.datum_container_read_fullscreen,
     
     render : function() {
       if (this.format == "centreWell") {

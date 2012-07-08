@@ -1,9 +1,8 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "hotkey/HotKey",
-    "text!hotkey/hot_key_edit_modal.handlebars"
-], function(Backbone, Handlebars, HotKey, hot_key_edit_modalTemplate) {
+    "hotkey/HotKey"
+], function(Backbone, Handlebars, HotKey) {
     var HotKeyEditView = Backbone.View.extend(
     /** @lends HotKeyEditView.prototype */
     {
@@ -20,7 +19,7 @@ define([
 
         classname : "hot_key_edit",
 
-        template: Handlebars.compile(hot_key_edit_modalTemplate),
+        template: Handlebars.templates.hot_key_edit_modal,
     
         render : function() {
 //            $(this.el).html(this.template(this.model.toJSON()));

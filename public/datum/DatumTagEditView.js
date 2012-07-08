@@ -1,12 +1,10 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_tag_edit_embedded.handlebars",
     "datum/DatumTag",
     "libs/Utils"
 ], function(Backbone,
     Handlebars, 
-    datumTagTemplate, 
     DatumTag
 ) {
   var DatumTagEditView = Backbone.View.extend(
@@ -37,7 +35,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumTagEditView.
      */
-    template: Handlebars.compile(datumTagTemplate),
+    template: Handlebars.templates.datum_tag_edit_embedded,
     	
     /**
      * Renders the DatumTagEditView.
