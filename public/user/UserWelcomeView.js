@@ -1,6 +1,6 @@
 define([
-    "libs/backbone", 
-    "libs/handlebars.runtime", 
+    "backbone", 
+    "handlebars", 
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",

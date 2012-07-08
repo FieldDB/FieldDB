@@ -1,4 +1,4 @@
-define([ "libs/backbone", 
+define([ "backbone", 
          "HotKey"
       ], function(Backbone, HotKey) {
   var HotKeys = Backbone.Collection.extend(

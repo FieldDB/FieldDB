@@ -1,4 +1,4 @@
-define( [ "libs/backbone",
+define( [ "backbone",
           "comment/Comment",
           "libs/Utils"
 ], function(Backbone, Comment) {

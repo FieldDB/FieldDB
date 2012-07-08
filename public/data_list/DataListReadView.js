@@ -1,7 +1,7 @@
 //TODO this is mostly a copy of DataListEditView, we will need to think about what actually needs to go in here and what it will look like.
 define( [ 
-  "libs/backbone", 
-  "libs/handlebars.runtime",
+  "backbone", 
+  "handlebars",
   "data_list/DataList",
   "datum/Datum",
   "datum/DatumReadView",

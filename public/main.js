@@ -34,7 +34,7 @@ require.config({
     },
     
     "paginator":{
-      deps : ["underscore", "libs/backbone", "jquery"],
+      deps : ["underscore", "backbone", "jquery"],
       exports: "Paginator"
     },
 
@@ -60,16 +60,15 @@ require([
     "app/App",
     "app/AppView",
     "app/AppRouter",
-    "libs/terminal/terminal",
+    "terminal",
     "corpus/Corpus",
     "data_list/DataList",
     "datum/Datum",
     "datum/Session",
     "user/User",
     "user/UserWelcomeView",
-    "libs/handlebars.runtime",
-    "libs/compiled_handlebars",
-    "libs/underscore",
+    "handlebars",
+    "compiledTemplates",
     "libs/Utils"
 ], function(
     App,
@@ -83,8 +82,7 @@ require([
     User,
     UserWelcomeView,
     Handlebars,
-    compiledTemplates,
-    _
+    compiledTemplates
 ) {
   
   

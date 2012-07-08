@@ -1,5 +1,5 @@
 define([
-    "libs/backbone",
+    "backbone",
     "comment/Comments",
     "datum/DatumField",
     "datum/DatumFields",

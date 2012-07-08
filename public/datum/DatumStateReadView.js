@@ -1,8 +1,8 @@
 // TODO Make this a read-only version. Right now, this is just a copy of the Editable version
 
 define( [
-    "libs/backbone", 
-    "libs/handlebars.runtime", 
+    "backbone", 
+    "handlebars", 
     "datum/DatumState",
     "libs/Utils"
 ], function(

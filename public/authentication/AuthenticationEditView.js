@@ -1,6 +1,6 @@
 define([
-    "libs/backbone", 
-    "libs/handlebars.runtime",
+    "backbone", 
+    "handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
