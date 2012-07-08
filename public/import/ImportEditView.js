@@ -16,7 +16,7 @@ define( [
     
     model: Import,
     
-    template: Handlebars.compile(importTemplate),
+    template: Handlebars.templates.import_edit_modal,
 
     render : function() {
       this.setElement("#import-modal");

@@ -65,8 +65,8 @@ define([
     /**
      * The Handlebars template rendered as the AuthenticationEditView.
      */
-    template : Handlebars.compile(authTemplate),
-    userTemplate : Handlebars.compile(userTemplate),
+    template : Handlebars.templates.authentication_edit_embedded,
+    userTemplate : Handlebars.templates.user_read_link,
     
     /**
      * Renders the AuthenticationEditView and all of its child Views.

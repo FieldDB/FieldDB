@@ -25,7 +25,7 @@ define([
 
     classname : "audio_video",
 
-    template : Handlebars.compile(audioVideoTemplate),
+    template : Handlebars.templates.audio_video_read_embedded,
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));

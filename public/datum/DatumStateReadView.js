@@ -50,7 +50,7 @@ define( [
     /**
      * The Handlebars template rendered as the DatumStateSettingsReadView.
      */
-    templateSettings : Handlebars.compile(datumStateSettingsTemplate),
+    templateSettings : Handlebars.templates.datum_state_settings_read_embedded,
       
     /**
      * Renders the DatumStateReadView.

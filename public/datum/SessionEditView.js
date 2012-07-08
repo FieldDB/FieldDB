@@ -67,12 +67,12 @@ define([
     /**
      * The Handlebars template rendered as the Embedded.
      */
-    templateEmbedded: Handlebars.compile(sessionEmbeddedTemplate),
+    templateEmbedded: Handlebars.templates.session_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Summary.
      */
-    templateSummary : Handlebars.compile(sessionSummaryTemplate),
+    templateSummary : Handlebars.templates.session_summary_edit_embedded,
     
     /**
      * Renders the SessionEditView.

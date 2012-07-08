@@ -25,7 +25,7 @@ define([
 
     classname : "export",
 
-    template: Handlebars.compile(exportTemplate),
+    template: Handlebars.templates.export_read_modal,
 
     render : function() {
      // Display the ExportView

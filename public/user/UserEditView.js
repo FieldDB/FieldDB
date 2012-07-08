@@ -67,12 +67,12 @@ define([
     /**
      * The Handlebars template rendered as the UserModalEditView
      */
-    modalTemplate : Handlebars.compile(userModalTemplate),
+    modalTemplate : Handlebars.templates.user_edit_modal,
     
     /** 
      * The Handlebars template rendered as the UserFullscreenEditView
      */
-    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
+    fullscreenTemplate : Handlebars.templates.user_edit_fullscreen,
 
     /**
      * Renders the UserEditView depending on its format.

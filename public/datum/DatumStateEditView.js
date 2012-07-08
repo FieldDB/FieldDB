@@ -46,7 +46,7 @@ define( [
     /**
      * The Handlebars template rendered as the DatumStateSettingsEditView.
      */
-    templateSettings : Handlebars.compile(datumStateSettingsTemplate),
+    templateSettings : Handlebars.templates.datum_state_settings_edit_embedded,
       
     /**
      * Renders the DatumStateEditView.

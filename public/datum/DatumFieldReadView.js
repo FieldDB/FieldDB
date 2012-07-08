@@ -49,12 +49,12 @@ define([
     /**
      * The Handlebars template rendered as the DatumFieldSettingsReadView.
      */
-    templateSettings : Handlebars.compile(datumFieldSettingsTemplate),
+    templateSettings : Handlebars.templates.datum_field_settings_read_embedded,
     
     /**
      * The Handlebars template rendered as the DatumFieldValueReadView.
      */
-    templateValue : Handlebars.compile(datumFieldValueTemplate),
+    templateValue : Handlebars.templates.datum_field_value_read_embedded,
     
     /**
      * Renders the DatumFieldReadView.

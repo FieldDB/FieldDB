@@ -27,7 +27,7 @@ define([ "use!backbone",
 
         model : ActivityFeed,
         classname : "activity_feed",
-        template : Handlebars.compile(activity_feedTemplate),
+        template : Handlebars.templates.activity_feed,
 
         render : function() {
           this.setElement($("#activity_feed"));

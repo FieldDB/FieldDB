@@ -38,7 +38,7 @@ define([
     /**
      * The Handlebars template rendered as the CommentEditView.
      */
-    template : Handlebars.compile(commentEditEmbeddedTemplate),
+    template : Handlebars.templates.comment_edit_embedded,
     
     /**
      * Renders the DatumFieldView.

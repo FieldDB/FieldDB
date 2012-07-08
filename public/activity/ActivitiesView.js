@@ -19,7 +19,7 @@ function(Backbone, Handlebars, Activities) {
 
     model : Activity,
     classname : "activities",
-    template : Handlebars.compile(activities_viewTemplate),
+    template : Handlebars.templates.activity_feed,
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
