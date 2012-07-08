@@ -1,12 +1,10 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!export/export_read_modal.handlebars",
     "export/Export",
 ], function(
     Backbone, 
     Handlebars, 
-    exportTemplate, 
     Export
 ) {
   var ExportView = Backbone.View.extend(
