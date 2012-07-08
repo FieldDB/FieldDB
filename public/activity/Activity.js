@@ -43,10 +43,10 @@ define([
       }
       
       return response;
-    },
+    }
     
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
-        : Utils.activityFeedPouchUrl),
+//    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
+//        : Utils.activityFeedPouchUrl),
         
   });
 
