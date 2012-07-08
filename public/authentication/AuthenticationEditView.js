@@ -1,8 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars",
-    "text!authentication/authentication_edit_embedded.handlebars",
-    "text!user/user_read_link.handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    authTemplate, 
-    userTemplate,
     Authentication, 
     User, 
     UserReadView
@@ -65,8 +61,8 @@ define([
     /**
      * The Handlebars template rendered as the AuthenticationEditView.
      */
-    template : Handlebars.compile(authTemplate),
-    userTemplate : Handlebars.compile(userTemplate),
+    template : Handlebars.templates.authentication_edit_embedded,
+    userTemplate : Handlebars.templates.user_read_link,
     
     /**
      * Renders the AuthenticationEditView and all of its child Views.
@@ -151,13 +147,9 @@ define([
      * https://twitter.com/#!/tucker1927
      */
     loadSample : function(appidsIn) {      
-      this.model.get("userPrivate").set("id","4ff342351501135e7c000030");
+      this.model.get("userPrivate").set("id","4ff85cecc9de185f0b000004");
       this.model.get("userPrivate").set("username", "sapir");
-      this.model.get("userPrivate").set("mostRecentIds", {
-        "corpusid" : "420C2294-9713-41F2-9FEE-235D043679FE",
-        "datalistid" : "C1659620-63D0-4A0C-8AE0-66E6892D026E",
-        "sessionid" : "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5"
-      });
+      this.model.get("userPrivate").set("mostRecentIds", appidsIn);
       var couchConnection = {
           protocol : "http://",
           domain : "ilanguage.iriscouch.com",
@@ -165,14 +157,12 @@ define([
           corpusname : "sapir-firstcorpus"
         };
       var self = this;
-      this.model.syncUserWithServer( function(){
-        //Set sapir's remote corpus to fetch from
-        window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection,"sapir","phoneme", function(){
-          //Replicate sapir's corpus down to pouch
-          window.app.get("corpus").replicateCorpus(couchConnection, function(){
-            //load the sapir's most recent objects into the existing corpus, datalist, session and user
-            window.app.loadBackboneObjectsById(couchConnection , window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
-          });
+      //Set sapir's remote corpus to fetch from
+      window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection,"sapir","phoneme", function(){
+        //Replicate sapir's corpus down to pouch
+        window.app.get("corpus").replicateCorpus(couchConnection, function(){
+          //load the sapir's most recent objects into the existing corpus, datalist, session and user
+          window.app.loadBackboneObjectsById(couchConnection , window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
         });
       });
       

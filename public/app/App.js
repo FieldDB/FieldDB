@@ -155,6 +155,8 @@ define([
         "corpusname" : couchConnection.corpusname,
         couchConnection : couchConnection
       });
+      c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
+      
       c.changeCorpus(function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         c.fetch({
@@ -170,6 +172,8 @@ define([
       var s = this.get("currentSession");
       s.set({"id": appids.sessionid,
         "corpusname" : couchConnection.corpusname});
+      s.id = appids.sessionid; //tried setting both ids to match, and it worked!!
+
       s.changeCorpus(couchConnection.corpusname, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         s.fetch({
@@ -188,6 +192,8 @@ define([
       dl.set({
         "id" : appids.datalistid, 
         "corpusname" : couchConnection.corpusname});
+      dl.id = appids.datalistid; //tried setting both ids to match, and it worked!!
+
       dl.changeCorpus(couchConnection.corpusname, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         dl.fetch({
