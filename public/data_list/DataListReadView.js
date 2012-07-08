@@ -61,12 +61,12 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    fullscreenTemplate : Handlebars.templates.data_list_edit_fullscreen,
+    fullscreenTemplate : Handlebars.templates.data_list_read_fullscreen,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
      */
-    embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
+    embeddedTemplate : Handlebars.templates.data_list_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListLinkReadView.

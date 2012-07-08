@@ -1,13 +1,11 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user_preference_edit_modal.handlebars",
     "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    preferenceTemplate, 
     UserPreference
 ) {
   var UserPreferenceEditView = Backbone.View.extend(

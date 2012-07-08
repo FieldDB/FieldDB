@@ -1,7 +1,6 @@
 define( [ 
     "use!backbone", 
     "use!handlebars",
-    "text!datum/paging_footer.handlebars",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -9,7 +8,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumReadView,
