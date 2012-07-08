@@ -1,5 +1,5 @@
 define([ 
-    "libs/backbone",
+    "backbone",
     "libs/Utils"
 ], function(
     Backbone

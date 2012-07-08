@@ -1,6 +1,6 @@
 define([
-    "libs/backbone", 
-    "libs/handlebars.runtime", 
+    "backbone", 
+    "handlebars", 
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldReadView",

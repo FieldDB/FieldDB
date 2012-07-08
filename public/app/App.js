@@ -1,5 +1,5 @@
 define([
-    "libs/backbone", 
+    "backbone", 
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",

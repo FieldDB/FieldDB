@@ -1,5 +1,5 @@
 define([
-    "libs/backbone",
+    "backbone",
     "datum/DatumTag"
 ], function(
     Backbone, 

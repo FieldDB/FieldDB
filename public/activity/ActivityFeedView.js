@@ -1,5 +1,5 @@
-define([ "libs/backbone", 
-         "libs/handlebars.runtime", 
+define([ "backbone", 
+         "handlebars", 
          "activity/Activity", 
          "activity/ActivityFeed"
  ],

@@ -1,6 +1,6 @@
 define([ 
-         "libs/backbone",
-         "libs/handlebars.runtime", 
+         "backbone",
+         "handlebars", 
          "comment/Comment"
   ], function(
       Backbone, 
