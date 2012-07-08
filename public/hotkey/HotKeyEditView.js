@@ -20,7 +20,7 @@ define([
 
         classname : "hot_key_edit",
 
-        template: Handlebars.compile(hot_key_edit_modalTemplate),
+        template: Handlebars.templates.hot_key_edit_modal,
     
         render : function() {
 //            $(this.el).html(this.template(this.model.toJSON()));

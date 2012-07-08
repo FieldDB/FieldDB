@@ -69,12 +69,12 @@ define([
     /**
      * The Handlebars template rendered as the AdvancedSearchView.
      */
-    advancedTemplate : Handlebars.compile(searchAdvancedTemplate),
+    advancedTemplate : Handlebars.templates.search_advanced_edit_embedded,
     
     /**
      * The Handlebars template rendered as the TopSearchView.
      */
-    topTemplate : Handlebars.compile(searchTemplate),
+    topTemplate : Handlebars.templates.search_edit_embedded,
    
     /**
      * Renders the SearchEditView.

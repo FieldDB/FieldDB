@@ -49,17 +49,17 @@ define([
     /**
      * The Handlebars template rendered as the UserReadLinkView.
      */
-    linkTemplate : Handlebars.compile(userLinkTemplate),
+    linkTemplate : Handlebars.templates.user_read_link,
     
     /**
      * The Handlebars template rendered as the UserReadModalView.
      */
-    modalTemplate : Handlebars.compile(userModalTemplate),
+    modalTemplate : Handlebars.templates.user_read_modal,
     
     /**
      * The Handlebars template rendered as the UserReadFullscreenView.
      */
-    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
+    fullscreenTemplate : Handlebars.templates.user_read_fullscreen,
     
     /**
      * Renders the UserReadView.

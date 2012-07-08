@@ -32,7 +32,7 @@ define([
 
     classname : "audio_video",
 
-    template : Handlebars.compile(audioVideoTemplate),
+    template : Handlebars.templates.audio_video_edit_embedded,
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));

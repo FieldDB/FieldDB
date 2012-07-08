@@ -39,7 +39,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumTagEditView.
      */
-    template: Handlebars.compile(datumTagTemplate),
+    template: Handlebars.templates.datum_tag_read_embedded,
     	
     /**
      * Renders the DatumTagEditView.

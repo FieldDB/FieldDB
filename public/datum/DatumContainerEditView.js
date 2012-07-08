@@ -53,9 +53,9 @@ define([
       "click .icon-book" : "showReadonly"
     },
     
-    templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
+    templateEmbedded : Handlebars.templates.datum_container_edit_embedded,
     
-    templateFullscreen : Handlebars.compile(datumContainerFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.datum_container_edit_fullscreen,
     
     render : function() {
       if (this.format == "centreWell") {

@@ -79,7 +79,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.compile(datumTemplate),
+    template : Handlebars.templates.datum_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.

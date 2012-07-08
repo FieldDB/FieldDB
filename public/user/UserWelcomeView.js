@@ -238,7 +238,7 @@ define([
     /**
      * The Handlebars template rendered as the UserWelcomeView
      */
-    template : Handlebars.compile(user_welcomeTemplate),
+    template : Handlebars.templates.user_welcome_modal,
 
 
     /**

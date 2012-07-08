@@ -108,25 +108,25 @@ define([
     lexicon : LexiconView,
 
     /**
-     * The Handlebars template rendered as the CorpusReadView.
+     * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateEmbedded : Handlebars.compile(corpusReadEmbeddedTemplate),
+    templateFullscreen : Handlebars.templates.corpus_read_fullscreen,
+    
+    /**
+     * The Handlebars template rendered as the CorpusWellView.
+     */
+    templateCentreWell : Handlebars.templates.corpus_read_embedded,
+    
+    /**
+     * The Handlebars template rendered as the Summary
+     */
+    templateSummary : Handlebars.templates.corpus_summary_read_embedded,
     
     /**
      * The Handlebars template rendered as the CorpusReadLinkView.
      */
-    templateLink: Handlebars.compile(corpusReadLinkTemplate),
+    templateLink: Handlebars.templates.corpus_read_link,
     
-    /**
-     * The Handlebars template rendered as the CorpusSummaryReadView.
-     */
-    templateSummary : Handlebars.compile(corpusReadSummaryTemplate),
-    
-    /**
-     * The Handlebars template rendered as the CorpusFullscreenView.
-     */
-    templateFullscreen : Handlebars.compile(corpusReadFullscreenTemplate),
-   
     /**
      * Renders the CorpusReadView and all of its child Views.
      */
@@ -168,7 +168,7 @@ define([
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
-        $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+        $(this.el).html(this.templateCentreWell(this.model.toJSON()));
         
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();

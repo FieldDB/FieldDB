@@ -73,7 +73,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumReadView.
      */
-    template : Handlebars.compile(datumTemplate),
+    template : Handlebars.templates.datum_read_embedded,
 
     /**
      * Renders the DatumReadView and all of its partials.

@@ -47,12 +47,12 @@ define([
     /**
      * The Handlebars template rendered as the DatumFieldSettingsEditView.
      */
-    templateSettings : Handlebars.compile(datumFieldSettingsTemplate),
+    templateSettings : Handlebars.templates.datum_field_settings_edit_embedded,
     
     /**
      * The Handlebars template rendered as the DatumFieldValueEditView.
      */
-    templateValue : Handlebars.compile(datumFieldValueTemplate),
+    templateValue : Handlebars.templates.datum_field_value_edit_embedded,
     
     /**
      * Renders the DatumFieldEditView.

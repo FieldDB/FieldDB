@@ -27,8 +27,8 @@ define( [
 
     classname : "permissions",
 
-    templateread : Handlebars.compile(permissions_read_embeddedTemplate),
-    templateedit : Handlebars.compile(permissions_edit_embeddedTemplate),
+    templateread : Handlebars.templates.permissions_read_embedded,
+    templateedit : Handlebars.templates.permissions_edit_embedded,
 
     render : function() {
       

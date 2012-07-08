@@ -44,7 +44,7 @@ define([
     /**
      * The Handlebars template rendered as the UserPreferenceEditView.
      */
-    template: Handlebars.compile(preferenceTemplate),
+    template: Handlebars.templates.user_preference_edit_modal,
 
     render : function() {
       Utils.debug("USERPREFERENCE render: " + this.el);

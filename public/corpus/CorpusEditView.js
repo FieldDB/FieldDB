@@ -146,17 +146,17 @@ define([
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.compile(corpusFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.corpus_edit_fullscreen,
     
     /**
      * The Handlebars template rendered as the CorpusWellView.
      */
-    templateCentreWell : Handlebars.compile(corpusWellTemplate),
+    templateCentreWell : Handlebars.templates.corpus_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Summary
      */
-    templateSummary : Handlebars.compile(corpusSummaryTemplate),
+    templateSummary : Handlebars.templates.corpus_summary_edit_embedded,
     
     /**
      * Renders the CorpusReadFullScreenView and all of its child Views.

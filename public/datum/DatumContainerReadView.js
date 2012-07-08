@@ -53,9 +53,9 @@ define([
       "click .icon-edit" : "showEditable"
     },
     
-    templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
+    templateEmbedded : Handlebars.templates.datum_container_read_embedded,
     
-    templateFullscreen : Handlebars.compile(datumContainerFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.datum_container_read_fullscreen,
     
     render : function() {
       if (this.format == "centreWell") {
