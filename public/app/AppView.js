@@ -2,7 +2,6 @@ define([
     "use!backbone", 
     "use!handlebars",
     "app/App", 
-    "text!app/app.handlebars", 
     "app/AppRouter",
     "activity/ActivityFeed",
     "activity/ActivityFeedView",
@@ -40,7 +39,6 @@ define([
     Backbone, 
     Handlebars,
     App, 
-    appTemplate,
     AppRouter, 
     ActivityFeed,
     ActivityFeedView,
@@ -275,8 +273,7 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.compile(appTemplate),
-    
+    template : Handlebars.templates.app,
     /**
      * Renders the AppView and all of its child Views.
      */

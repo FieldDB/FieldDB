@@ -1,9 +1,6 @@
 define( [ 
     "use!backbone", 
     "use!handlebars",
-    "text!data_list/data_list_edit_fullscreen.handlebars",
-    "text!data_list/data_list_edit_embedded.handlebars",
-    "text!datum/paging_footer.handlebars",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -11,9 +8,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    dataListEditFullscreenTemplate,
-    dataListEditEmbeddedTemplate,
-    pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumReadView,
@@ -68,14 +62,14 @@ define( [
     /**
      * The Handlebars template rendered as the DataListEditView.
      */
-    fullscreenTemplate : Handlebars.compile(dataListEditFullscreenTemplate),
-    embeddedTemplate : Handlebars.compile(dataListEditEmbeddedTemplate),
+    fullscreenTemplate : Handlebars.templates.data_list_edit_fullscreen,
+    embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
 
     /**
      * The Handlebars template of the pagination footer, which is used
      * as a partial.
      */
-    footerTemplate : Handlebars.compile(pagingFooterTemplate),
+    footerTemplate : Handlebars.templates.paging_footer,
 
     /**
      * Initially renders the DataListEditView. This should only be called by 

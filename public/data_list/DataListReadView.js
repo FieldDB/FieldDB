@@ -2,10 +2,6 @@
 define( [ 
   "use!backbone", 
   "use!handlebars",
-  "text!data_list/data_list_read_fullscreen.handlebars",
-  "text!data_list/data_list_read_embedded.handlebars",
-  "text!data_list/data_list_read_link.handlebars",
-  "text!datum/paging_footer.handlebars",
   "data_list/DataList",
   "datum/Datum",
   "datum/DatumReadView",
@@ -13,10 +9,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    dataListReadFullscreenTemplate,
-    dataListReadEmbeddedTemplate,
-    dataListReadLinkTemplate,
-    pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumReadView,
@@ -69,23 +61,23 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    fullscreenTemplate : Handlebars.compile(dataListReadFullscreenTemplate),
+    fullscreenTemplate : Handlebars.templates.data_list_read_fullscreen,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
      */
-    embeddedTemplate : Handlebars.compile(dataListReadEmbeddedTemplate),
+    embeddedTemplate : Handlebars.templates.data_list_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListLinkReadView.
      */
-    linkTemplate : Handlebars.compile(dataListReadLinkTemplate),
+    linkTemplate : Handlebars.templates.data_list_read_link,
 
     /**
      * The Handlebars template of the pagination footer, which is used
      * as a partial.
      */
-    footerTemplate : Handlebars.compile(pagingFooterTemplate),
+    footerTemplate : Handlebars.templates.paging_footer,
 
     /**
      * Initially renders the DataListReadView. This should only be called by 

@@ -1,7 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_edit_embedded.handlebars",
     "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
@@ -13,7 +12,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    datumTemplate, 
     AudioVideoEditView,
     Confidential,
     Datum,
@@ -79,7 +77,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.compile(datumTemplate),
+    template : Handlebars.templates.datum_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.
