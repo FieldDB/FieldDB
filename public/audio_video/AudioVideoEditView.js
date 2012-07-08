@@ -1,12 +1,10 @@
 define([ 
     "use!backbone",
      "use!handlebars", 
-     "text!audio_video/audio_video_edit_embedded.handlebars",
      "audio_video/AudioVideo"
 ], function(
     Backbone, 
     Handlebars,
-    audioVideoTemplate,
     AudioVideo
 ) {
   var AudioVideoEditView = Backbone.View.extend(

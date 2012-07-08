@@ -1,8 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/session_read_embedded.handlebars",
-    "text!datum/session_summary_read_embedded.handlebars",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone,
     Handlebars, 
-    sessionEmbeddedTemplate,
-    sessionSummaryTemplate,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView

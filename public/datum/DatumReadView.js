@@ -1,7 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_read_embedded.handlebars",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldReadView",
@@ -12,7 +11,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    datumTemplate,
     Confidential,
     Datum,
     DatumFieldReadView,

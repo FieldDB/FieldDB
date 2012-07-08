@@ -1,10 +1,6 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!corpus/corpus_read_embedded.handlebars",
-    "text!corpus/corpus_read_fullscreen.handlebars",
-    "text!corpus/corpus_read_link.handlebars",
-    "text!corpus/corpus_summary_read_embedded.handlebars",
     "corpus/Corpus",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
@@ -17,10 +13,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    corpusReadEmbeddedTemplate,
-    corpusReadFullscreenTemplate,
-    corpusReadLinkTemplate,
-    corpusReadSummaryTemplate,
     Corpus,
     DataListReadView,
     DatumFieldReadView,

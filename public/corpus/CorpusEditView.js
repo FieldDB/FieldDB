@@ -1,9 +1,6 @@
 define([ 
     "use!backbone", 
     "use!handlebars",
-    "text!corpus/corpus_edit_fullscreen.handlebars",
-    "text!corpus/corpus_edit_embedded.handlebars",
-    "text!corpus/corpus_summary_edit_embedded.handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -23,9 +20,6 @@ define([
 ], function(
     Backbone, 
     Handlebars,
-    corpusFullscreenTemplate,
-    corpusWellTemplate,
-    corpusSummaryTemplate,
     Corpus,
     Comment,
     Comments,

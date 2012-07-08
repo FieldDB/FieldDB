@@ -1,7 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user_welcome_modal.handlebars",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -16,7 +15,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    user_welcomeTemplate,
     App,
     Authentication,
     Corpus,

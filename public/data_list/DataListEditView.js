@@ -1,8 +1,6 @@
 define( [ 
     "use!backbone", 
     "use!handlebars",
-    "text!data_list/data_list_edit_fullscreen.handlebars",
-    "text!data_list/data_list_edit_embedded.handlebars",
     "text!datum/paging_footer.handlebars",
     "data_list/DataList",
     "datum/Datum",
@@ -11,8 +9,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    dataListEditFullscreenTemplate,
-    dataListEditEmbeddedTemplate,
     pagingFooterTemplate,
     DataList, 
     Datum, 
