@@ -1,4 +1,4 @@
-define([ "use!backbone", "use!handlebars", "activity/Activities" ],
+define([ "backbone", "handlebars", "activity/Activities" ],
 
 function(Backbone, Handlebars, Activities) {
   var ActivitiesView = Backbone.View.extend(

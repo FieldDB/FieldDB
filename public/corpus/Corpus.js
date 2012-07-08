@@ -1,5 +1,5 @@
 define([ 
-    "use!backbone",
+    "backbone",
     "comment/Comment",
     "comment/Comments",
     "confidentiality_encryption/Confidential",
@@ -189,10 +189,10 @@ define([
           ]));
       }
       
-      this.pouch = Backbone.sync
-      .pouch(Utils.androidApp() ? Utils.touchUrl
-          + this.get("corpusname") : Utils.pouchUrl
-          + this.get("corpusname"));
+//      this.pouch = Backbone.sync
+//      .pouch(Utils.androidApp() ? Utils.touchUrl
+//          + this.get("corpusname") : Utils.pouchUrl
+//          + this.get("corpusname"));
 //        if(typeof(this.get("searchFields")) == "function"){
 //          this.set("searchFields", 
 //              this.get("datumFields"));
@@ -246,22 +246,20 @@ define([
       
       return response;
     },
-    
-    //this gets overridden when user calls replicate, so that it is the current corpus's database url
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-        : Utils.pouchUrl),
-        
     changeCorpus : function(couchConnection, callback) {
-      if(couchConnection == null || couchConnection == undefined){
+      if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() 
-          ? Utils.touchUrl + couchConnection.corpusname 
-          : Utils.pouchUrl + couchConnection.corpusname);
-        
-        if(typeof callback == "function"){
-          callback();
-        }
+      if (this.pouch == undefined) {
+        this.pouch = Backbone.sync
+        .pouch(Utils.androidApp() ? Utils.touchUrl
+            + couchConnection.corpusname : Utils.pouchUrl
+            + couchConnection.corpusname);
+      }
+
+      if (typeof callback == "function") {
+        callback();
+      }
     }, 
       
     /**
