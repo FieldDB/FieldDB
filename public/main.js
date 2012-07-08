@@ -9,6 +9,7 @@ require.config({
     "underscore" : "libs/underscore",
     "backbone" : "libs/backbone",
     "handlebars" : "libs/handlebars-1.0.0.beta.6",
+    "compiledTemplates" :"libs/compiled_handlebars",
     "paginator" : "libs/backbone.paginator",
     "crypto" : "libs/Crypto_AES",
     "pouch" : "libs/pouch.alpha"  
@@ -45,6 +46,11 @@ require.config({
       
      "terminal":{
        attach: "Terminal"
+      },
+      
+      "compiledTemplates":{
+        deps :["use!handlebars"],
+        attach: "compiledTemplates"
       }
     
   }
@@ -62,6 +68,8 @@ require([
     "datum/Session",
     "user/User",
     "user/UserWelcomeView",
+    "use!handlebars",
+    "use!compiledTemplates",
     "libs/Utils"
 ], function(
     App,
@@ -73,11 +81,13 @@ require([
     Datum,
     Session,
     User,
-    UserWelcomeView
+    UserWelcomeView,
+    Handlebars,
+    compiledTemplates
 ) {
   
   
-  
+  window.compiledTemplates = compiledTemplates;
   /**
    * This function is the only place that starts the app, notably the app view and app router. 
    * It is called either by the main.js or by the UserWelcomeView.js
