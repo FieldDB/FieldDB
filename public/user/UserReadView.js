@@ -1,6 +1,6 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars", 
+    "backbone", 
+    "handlebars", 
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",

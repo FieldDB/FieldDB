@@ -1,6 +1,6 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
+    "backbone", 
+    "handlebars", 
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldReadView",

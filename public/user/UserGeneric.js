@@ -1,5 +1,5 @@
 define([ 
-    "use!backbone", 
+    "backbone", 
     "hotkey/HotKey",
     "user/UserPreference",
     "libs/Utils"

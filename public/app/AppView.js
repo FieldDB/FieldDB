@@ -1,6 +1,6 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars",
+    "backbone", 
+    "handlebars",
     "app/App", 
     "app/AppRouter",
     "activity/ActivityFeed",

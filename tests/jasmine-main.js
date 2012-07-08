@@ -4,7 +4,6 @@ require.config({
   baseUrl: "./../public",
   
   paths : {
-      "use" : "libs/use",
       "text" : "libs/text",
       "jquery" : "libs/jquery",
       "hotkeys" : "libs/jquery.hotkeys",
@@ -17,41 +16,44 @@ require.config({
 
      // "jquery.couch" : "libs/jquery.couch"
   },
-  use : {
+  shim : {
       "underscore" : {
-          attach : "_"
+        exports : "_"
       },
 
       "backbone" : {
-          deps : ["use!underscore", "jquery", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
-          attach : function(_, $) {
+          deps : ["underscore", "jquery", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
+          exports : function(_, $) {
               return Backbone;
           }
       },
 
       "handlebars" : {
-          attach: "Handlebars"
+        exports: "Handlebars"
       },
       
       "crypto" :{
-        attach: "CryptoJS"
+        exports: "CryptoJS"
       },
       "paginator":{
-        deps : ["use!underscore", "use!backbone", "jquery", "libs/backbone-couchdb"],
-        attach: "paginator"
+        deps : ["underscore", "backbone", "jquery", "libs/backbone-couchdb"],
+        exports: "paginator"
       },
       
       "hotkeys":{
           deps : ["jquery"],
-          attach: "hotkeys"
-        }
+          exports: "hotkeys"
+      },
       
+      "compiledTemplates":{
+        deps :["handlebars"],
+        exports: "compiledTemplates"
+      }
   }
 });
 // Run the tests!
 require([
     // Put all your tests here. Otherwise they won't run
-
     "../tests/activity/ActivityTest",
     "../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",

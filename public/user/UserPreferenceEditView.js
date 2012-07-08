@@ -1,6 +1,6 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
+    "backbone", 
+    "handlebars", 
     "user/UserPreference",
     "libs/Utils"
 ], function(

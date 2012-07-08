@@ -1,6 +1,6 @@
 define( [
-    "use!backbone", 
-    "use!handlebars", 
+    "backbone", 
+    "handlebars", 
     "permission/Permission",
     "permission/Permissions",
 ], function(Backbone,
