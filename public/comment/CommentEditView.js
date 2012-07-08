@@ -1,12 +1,10 @@
 define([ 
          "use!backbone",
          "use!handlebars", 
-         "text!comment/comment_edit_embedded.handlebars",
          "comment/Comment"
   ], function(
       Backbone, 
       Handlebars,
-      commentEditEmbeddedTemplate,
       Comment
 ) {
   var CommentEditView = Backbone.View.extend(

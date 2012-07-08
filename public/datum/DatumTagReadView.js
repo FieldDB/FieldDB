@@ -3,12 +3,10 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_tag_read_embedded.handlebars",
     "datum/DatumTag",
     "libs/Utils"
 ], function(Backbone,
     Handlebars, 
-    datumTagTemplate, 
     DatumTag
 ) {
   var DatumTagReadView = Backbone.View.extend(

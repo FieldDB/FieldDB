@@ -1,13 +1,11 @@
 define( [
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_state_settings_edit_embedded.handlebars",
     "datum/DatumState",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    datumStateSettingsTemplate,
     DatumState
 ) {
   var DatumStateEditView = Backbone.View.extend(

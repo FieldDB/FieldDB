@@ -1,8 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars",
-    "text!authentication/authentication_edit_embedded.handlebars",
-    "text!user/user_read_link.handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    authTemplate, 
-    userTemplate,
     Authentication, 
     User, 
     UserReadView

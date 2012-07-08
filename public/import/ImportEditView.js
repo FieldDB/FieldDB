@@ -1,13 +1,11 @@
 define( [ 
     "use!backbone",
     "use!handlebars",
-    "import/Import",
-    "text!import/import_edit_modal.handlebars"
+    "import/Import"
 ], function(
     Backbone,
     Handlebars, 
-    Import,
-    importTemplate
+    Import
 ) {
   var ImportEditView = Backbone.View.extend({
     tagName : "div",

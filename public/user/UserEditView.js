@@ -1,15 +1,11 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user_edit_fullscreen.handlebars",
-    "text!user/user_edit_modal.handlebars",
     "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    userFullscreenTemplate, 
-    userModalTemplate, 
     User
 ) {
   var UserEditView = Backbone.View.extend(

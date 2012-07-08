@@ -1,12 +1,10 @@
 define([ 
          "use!backbone",
          "use!handlebars", 
-         "text!comment/comment_read_embedded.handlebars",
          "comment/Comment"
   ], function(
       Backbone, 
       Handlebars,
-      commentReadEmbeddedTemplate,
       Comment
 ) {
   var CommentReadView = Backbone.View.extend(

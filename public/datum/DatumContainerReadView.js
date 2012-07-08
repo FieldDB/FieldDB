@@ -1,8 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars",
-    "text!datum/datum_container_read_embedded.handlebars",
-    "text!datum/datum_container_read_fullscreen.handlebars",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumReadView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone,
     Handlebars,
-    datumContainerEmbeddedTemplate,
-    datumContainerFullscreenTemplate,
     Datum,
     Datums,
     DatumReadView,

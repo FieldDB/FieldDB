@@ -1,14 +1,13 @@
 define([ "use!backbone", 
          "use!handlebars", 
          "activity/Activity", 
-         "activity/ActivityFeed", 
-         "text!activity/activity_feed.handlebars"
+         "activity/ActivityFeed"
  ],
     function(Backbone, 
         Handlebars, 
         Activity, 
-        ActivityFeed, 
-        activity_feedTemplate) {
+        ActivityFeed
+        ) {
       var ActivityFeedView = Backbone.View.extend(
       /** @lends ActivityFeedView.prototype */
       {

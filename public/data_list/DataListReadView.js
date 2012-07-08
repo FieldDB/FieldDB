@@ -2,10 +2,6 @@
 define( [ 
   "use!backbone", 
   "use!handlebars",
-  "text!data_list/data_list_read_fullscreen.handlebars",
-  "text!data_list/data_list_read_embedded.handlebars",
-  "text!data_list/data_list_read_link.handlebars",
-  "text!datum/paging_footer.handlebars",
   "data_list/DataList",
   "datum/Datum",
   "datum/DatumReadView",
@@ -13,10 +9,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    dataListReadFullscreenTemplate,
-    dataListReadEmbeddedTemplate,
-    dataListReadLinkTemplate,
-    pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumReadView,

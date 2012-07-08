@@ -1,7 +1,6 @@
 define([
     "use!backbone", 
     "use!handlebars", 
-    "text!datum/datum_edit_embedded.handlebars",
     "audio_video/AudioVideoEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
@@ -13,7 +12,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    datumTemplate, 
     AudioVideoEditView,
     Confidential,
     Datum,

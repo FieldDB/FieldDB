@@ -1,9 +1,6 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!user/user_read_link.handlebars",
-    "text!user/user_read_modal.handlebars",
-    "text!user/user_read_fullscreen.handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
@@ -11,9 +8,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    userLinkTemplate,
-    userModalTemplate,
-    userFullscreenTemplate, 
     Corpus,
     Corpuses,
     User

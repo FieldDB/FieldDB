@@ -1,8 +1,6 @@
 define([ 
     "use!backbone", 
     "use!handlebars", 
-    "text!search/search_advanced_edit_embedded.handlebars",
-    "text!search/search_edit_embedded.handlebars",
     "datum/Datum",
     "datum/DatumFieldEditView",
     "search/Search",
@@ -11,8 +9,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    searchAdvancedTemplate,
-    searchTemplate,
     Datum,
     DatumFieldEditView,
     Search,
