@@ -183,7 +183,7 @@ define([
         
       },
 
-      "click .sync_sapir_data" : function() {
+      "click .sync-sapir-data" : function() {
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
         a = new App();
@@ -195,7 +195,7 @@ define([
         });
       },
 
-      "click .sync_my_data" : function() {
+      "click .sync-my-data" : function() {
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
         a = new App();
