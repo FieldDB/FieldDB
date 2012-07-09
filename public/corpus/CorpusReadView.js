@@ -198,13 +198,13 @@ define([
       appView.datumsView.newDatum();
       app.router.showDashboard();
     },
-    
+    //This is bound to the little pencil function
     showEditable :function(){
       window.app.router.showEditableCorpus();
     },
-    
+    //This is bound to change
     showReadonly : function(){
-      window.app.router.showReadonlyCorpus();
+      window.appView.renderReadonlyCorpusViews(corpusid);
     }
   });
 
