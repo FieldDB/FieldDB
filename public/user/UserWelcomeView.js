@@ -45,11 +45,15 @@ define([
       this.model.bind("change", this.render, this);
 //      $(function(){
 //    	  $('.btn btn-success dropdown-toggle').dropdown();
-//    	  $('.dropdown input, .dropdown label').click(function(e) {
+//    	  $('.dropdown input').click(function(e) {
 //    		  e.stopPropergation();
 //    	  });
 //      });
+//       $('.dropdown-menu').find('form').click(function(e) {
+//          e.stopPropagation();
+//        });
     },
+
 
     /**
      * The underlying model of the UserWelcomeView is a User.
@@ -191,7 +195,7 @@ define([
         
       },
       
-      "click .sync_sapir_data" : function() {
+      "click .sync-sapir-data" : function() {
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
         window.startApp(null, function(){
@@ -199,8 +203,8 @@ define([
         });
         $('#user-welcome-modal').modal("hide");
       },
-        
-      "click .sync_my_data" : function(){
+              
+      "click .sync-my-data" : function(){
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
         var auth = new Authentication();
@@ -239,9 +243,19 @@ define([
           }
         });
       }
+      
+//      "click .dropdown-toggle" : function(){
+//    	  $(function(){
+//        	  $(".dropdown-toggle").dropdown();
+//        	  $(".dropdown-menu").find("form").click(function(e) {
+//        		  e.stopPropergation();
+//        	  });
+//          });
+//      } 
+               	  
     },
-
-
+    
+    
     /**
      * The Handlebars template rendered as the UserWelcomeView
      */
