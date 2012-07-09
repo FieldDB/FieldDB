@@ -68,6 +68,10 @@ define([
 //      },
       "click .register-new-user" : function() {
         Utils.debug("Attempting to register a new user: " + this.el);
+        /*
+         * Set defaults for new user registration here,
+         * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
+         */
         var dataToPost = {};
         dataToPost.login = $(".username").val();
         dataToPost.email = $(".email").val();
@@ -77,7 +81,25 @@ define([
         var corpusConnection = Utils.defaultCouchConnection();
         corpusConnection.corpusname = "firstcorpus";
         dataToPost.corpuses = [corpusConnection];
-        
+        dataToPost.gravatar = "./../user/user_gravatar.png";
+        dataToPost.researchInterest = "";
+        dataToPost.affiliation = "";
+        dataToPost.description = "";
+        dataToPost.subtitle = "";
+        dataToPost.dataLists = ["1"];
+        dataToPost.prefs = {
+            "skin" : "",
+            "numVisibleDatum" : 1
+          };
+        dataToPost.mostRecentIds = {corpusid:null};
+        dataToPost.firstname = "";
+        dataToPost.lastname = "";
+        dataToPost.teams = ["1"];
+        dataToPost.sessionHistory = ["1"];
+        dataToPost.activityHistory = ["1"];
+        dataToPost.permissions = {empty:"permission"};
+        dataToPost.hotkeys = {empty: "hotkey"};
+       
         if (dataToPost.username != ""
           && (dataToPost.password == $(".to-confirm-password").val())
           && dataToPost.email != "") {

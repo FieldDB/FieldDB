@@ -99,19 +99,15 @@ textarea{
 	font-size: 50px;
 }
 
-
 .drop-zone{
 	float: right;
 	border: dashed;
-	border-color:#1E90FF;
-	
+	border-color:#1E90FF;	
 }
-
 
 .add_field{
 	width: 100%;
 }
-
 
 .gramaticality_judgement{
   width: 2em !important;
@@ -128,9 +124,8 @@ textarea{
 }
 
 .datum-checkboxes{  
-    position:absolute;  
-    
-    } 
+    position:absolute;
+} 
     
 .datum_field_label{
  display:inline;
@@ -140,16 +135,12 @@ textarea{
   display:inline;
 }   
 
+.clear-spacing{
+  clear:both;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+.activity-inner{
+  float:left;
+  white-space:wrap;
+  padding:5px;
+}
