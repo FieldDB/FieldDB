@@ -33,7 +33,6 @@ require.config({
     },
     
     "jquery" : {
-      deps : [ "compiledTemplates" ],
       exports : "$"
     },
 
@@ -44,85 +43,12 @@ require.config({
       }
     },
     
-    "bootstrap-transition" : {
-      deps : [ "jquery", "bootstrap" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-alert" : {
-      deps : [ "jquery", "bootstrap-transition" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-modal" : {
-      deps : [ "jquery", "bootstrap-alert" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-dropdown" : {
-      deps : [ "jquery", "bootstrap-modal" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-scrollspy" : {
-      deps : [ "jquery", "bootstrap-dropdown" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-tab" : {
-      deps : [ "jquery", "bootstrap-scrollspy" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-tooltip" : {
-      deps : [ "jquery", "bootstrap-tab" ],
-      exports : function($) {
-        return $;
-      }     
-    },
-    
-    "bootstrap-popover" : {
-      deps : [ "jquery", "bootstrap-tooltip" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-button" : {
-      deps : [ "jquery", "bootstrap-popover" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-collapse" : {
-      deps : [ "jquery", "bootstrap-button" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-carousel" : {
-      deps : [ "jquery", "bootstrap-collapse" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-typeahead" : {
-      deps : [ "jquery", "bootstrap-carousel" ],
+    "bootstrap-typeahead" :{
+      deps : [ "jquery", "bootstrap","bootstrap-transition", "bootstrap-alert",
+          "bootstrap-modal", "bootstrap-dropdown", "bootstrap-scrollspy",
+          "bootstrap-tab", "bootstrap-tooltip", "bootstrap-popover",
+          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel"
+           ],
       exports : function($) {
         return $;
       }
@@ -133,7 +59,7 @@ require.config({
     },
 
     "backbone" : {
-      deps : [ "underscore", "jquery", "compiledTemplates", "bootstrap-typeahead" ],
+      deps : [ "underscore", "jquery", "compiledTemplates" ],
       exports : function(_, $) {
         return Backbone;
       }
@@ -153,6 +79,7 @@ require.config({
     },
 
     "handlebars" : {
+      deps : ["bootstrap","jquery"],
       exports : "Handlebars"
     },
 
@@ -167,7 +94,7 @@ require.config({
       }
     },
     "terminal" : {
-      deps : ["bootstrap-typeahead","jquery"],
+      deps : ["bootstrap","jquery"],
       exports : "Terminal"
     }
     
