@@ -1,8 +1,6 @@
 define([
-    "use!backbone", 
-    "use!handlebars",
-    "text!authentication/authentication_edit_embedded.handlebars",
-    "text!user/user_read_link.handlebars",
+    "backbone", 
+    "handlebars",
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    authTemplate, 
-    userTemplate,
     Authentication, 
     User, 
     UserReadView
@@ -31,20 +27,17 @@ define([
     initialize : function() {
       Utils.debug("AUTH init: " + this.el);
       
-    //   Create a UserReadView
+    //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
-         model: this.model.get("user")
+         model: this.model.get("userPublic")
       });
       this.userView.format = "link";
       this.userView.setElement($("#user-quickview"));
       
       // Any time the Authentication model changes, re-render
       this.model.bind('change', this.render, this);
-      this.model.get("user").bind('change', this.render, this);
+      this.model.get("userPublic").bind('change', this.render, this);
       
-      //TODO remove this later
-      this.model.set("userPublic",this.model.get("user"));
-      this.model.set("userPrivate",this.model.get("user"));
     },
 
     /**
@@ -68,16 +61,16 @@ define([
     /**
      * The Handlebars template rendered as the AuthenticationEditView.
      */
-    template : Handlebars.compile(authTemplate),
-    userTemplate : Handlebars.compile(userTemplate),
+    template : Handlebars.templates.authentication_edit_embedded,
+    userTemplate : Handlebars.templates.user_read_link,
     
     /**
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
       Utils.debug("AUTH render: " + this.el);
-      if(this.model.get("user") != undefined){
-        this.model.set( "gravatar", this.model.get("user").get("gravatar") );
+      if(this.model.get("userPublic") != undefined){
+        this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
       }
       if (this.model != undefined) {
         // Display the AuthenticationEditView
@@ -88,7 +81,7 @@ define([
           $("#logout").show();
           $("#login").hide();
           $("#login_form").hide();
-          if(this.model.get("user") != undefined){
+          if(this.model.get("userPublic") != undefined){
             this.userView.setElement($("#user-quickview"));
             this.userView.render();
           }else{
@@ -98,7 +91,7 @@ define([
           $("#logout").hide();
           $("#login").show();
           $("#login_form").show();
-          if(this.model.get("user") != undefined){
+          if(this.model.get("userPublic") != undefined){
             this.userView.setElement($("#user-quickview"));
             this.userView.render();
           }else{
@@ -154,18 +147,22 @@ define([
      * https://twitter.com/#!/tucker1927
      */
     loadSample : function(appidsIn) {      
-      this.model.get("userPrivate").id = "4ff342351501135e7c000030";
-      this.model.pullUserFromServer( function(){
-        var appids = appidsIn;//TODO when pulling user from server is working use this: this.model.get("userPrivate").get("mostRecentIds"); 
-        
-        //Set sapir's remote corpus to fetch from
-        window.app.get("corpus").get("couchConnection").corpusname = "sapir-firstcorpus";
-        window.app.get("corpus").logUserIntoTheirCorpusServer("sapir","phoneme", function(){
-          //Replicate sapir's corpus down to pouch
-          window.app.get("corpus").replicateCorpus(function(){
-            //load the sapir's most recent objects into the existing corpus, datalist, session and user
-            window.app.loadBackboneObjectsById(appids);
-          });
+      this.model.get("userPrivate").set("id","4ff85cecc9de185f0b000004");
+      this.model.get("userPrivate").set("username", "sapir");
+      this.model.get("userPrivate").set("mostRecentIds", appidsIn);
+      var couchConnection = {
+          protocol : "https://",
+          domain : "ilanguage.iriscouch.com",
+          port : "443",
+          corpusname : "sapir-firstcorpus"
+        };
+      var self = this;
+      //Set sapir's remote corpus to fetch from
+      window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection,"sapir","phoneme", function(){
+        //Replicate sapir's corpus down to pouch
+        window.app.get("corpus").replicateCorpus(couchConnection, function(){
+          //load the sapir's most recent objects into the existing corpus, datalist, session and user
+          window.app.loadBackboneObjectsById(couchConnection , window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
         });
       });
       
@@ -188,7 +185,7 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate : function(username, password) {
+    authenticate : function(username, password, callback) {
       // Current signed in as the public user - special case authentication
       if (username == "public") {
         this.authenticateAsPublic();
@@ -197,8 +194,11 @@ define([
       
       // Currently signed in as Sapir - no authentication needed
       if (username == "sapir") {
-        window.appView.loadSample();
-        return;
+//        window.appView.loadSample();
+//        if(typeof callback == "function"){
+//          callback();
+//        }
+//        return;
       }
       
       // Temporarily keep the given's credentials
@@ -208,25 +208,41 @@ define([
       });
 
       var self = this;
-      this.model.authenticate(tempuser, function(userfromserver) {
-        if (userfromserver == null) {
+      this.model.authenticate(tempuser, function(success) {
+        if (success == null) {
           alert("Authentication failed. Authenticating as public.");
-          self.authenticateAsPublic();
+//          self.authenticateAsPublic();
           return;
         }
         
+        var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+        window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+          //Replicate user's corpus down to pouch
+          window.app.get("corpus").replicateCorpus(couchConnection, function(){
+            if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+              //do nothing because they have no recent ids
+              Utils.debug("User does not have most recent ids, doing nothing.");
+            }else{
+              /*
+               *  Load their last corpus, session, datalist etc
+               */
+              var appids = self.model.get("userPrivate").get("mostRecentIds");
+              window.app.loadBackboneObjectsById(couchConnection, appids);
+            }                    
+          });
+        });
+
+
+        
         // Save the authenticated user in our Models
         self.model.set({
-          gravatar : userfromserver.get("gravatar"),
-          username : userfromserver.get("username"),
+          gravatar : self.model.get("userPrivate").get("gravatar"),
+          username : self.model.get("userPrivate").get("username"),
           state : "loggedIn"
         });
-        var appids = userfromserver.get("mostRecentIds");
-        appids.userid = null;
-        window.app.loadBackboneObjectsById(appids);
-
-        // Save the authenticated user in localStorage
-//        localStorage.setItem("username", u.get("username"));
+        if(typeof callback == "function"){
+          callback();
+        }
       });
     },
     
@@ -259,39 +275,40 @@ define([
      * password authentication view to let user know they haven't been active in
      * a while.
      * 
+     * @deprecated
      */
     authenticatePreviousUser : function() {
-      var username = localStorage.getItem("username");
-      if (username) {
-        //TODO this needs testing
-        // Save the previous user in our Models
-        this.model.get("user").set("id",username);
-        this.model.get("user").fetch();
-        this.model.set("username", username);
-        
-        if (this.model.staleAuthentication) {
-          showQuickAuthenticateView();
-        }
-        
-        this.model.set("state", "loggedIn");
-      } else {
-        Utils.debug("No previous user.");
-        $('#user-welcome-modal').modal("show");
-        this.model.set("state", "loggedOut");
-
+      return; //TODO this function needs to be removed
+      
+//      
+//      var userid = localStorage.getItem("userid");
+//      if (userid) {
+//        //TODO this needs testing
+//        // Save the  user in our Models
+//        this.model.get("userPublic").set("id", userid);
+//        this.model.get("userPublic").fetch();
+//        this.model.syncUserWithServer();
+//        
+//      } else {
+//        this.model.set("state", "loggedOut");
 //        this.authenticateAsPublic(); //TODO this will be used in production
-        this.authenticate("sapir");
-      }
+//      }
     },
     
     /**
      * TODO the ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
      * like removing a corpus. It is also used if the user hasn't confirmed their
-     * identitiy in a while.
+     * identity in a while.
      */
-    showQuickAuthenticateView : function() {
-      alert("Authenticating quickly, with just password.");
+    showQuickAuthenticateView : function(callback) {
+      if( this.model.get("userPrivate").get("username") == "sapir" ){
+        this.authenticate("sapir", "phoneme", callback);
+      }else{
+        //TODO show a modal instead of alert
+        alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+        this.authenticate(this.model.get("userPrivate").get("username"), "test" , callback );
+      }
     }
   });
 

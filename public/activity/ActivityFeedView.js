@@ -1,14 +1,13 @@
-define([ "use!backbone", 
-         "use!handlebars", 
+define([ "backbone", 
+         "handlebars", 
          "activity/Activity", 
-         "activity/ActivityFeed", 
-         "text!activity/activity_feed.handlebars"
+         "activity/ActivityFeed"
  ],
     function(Backbone, 
         Handlebars, 
         Activity, 
-        ActivityFeed, 
-        activity_feedTemplate) {
+        ActivityFeed
+        ) {
       var ActivityFeedView = Backbone.View.extend(
       /** @lends ActivityFeedView.prototype */
       {
@@ -27,7 +26,7 @@ define([ "use!backbone",
 
         model : ActivityFeed,
         classname : "activity_feed",
-        template : Handlebars.compile(activity_feedTemplate),
+        template : Handlebars.templates.activity_feed,
 
         render : function() {
           this.setElement($("#activity_feed"));

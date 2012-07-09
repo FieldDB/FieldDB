@@ -1,8 +1,6 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
-    "text!datum/session_edit_embedded.handlebars",
-    "text!datum/session_summary_edit_embedded.handlebars",
+    "backbone", 
+    "handlebars", 
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -10,8 +8,6 @@ define([
 ], function(
     Backbone,
     Handlebars, 
-    sessionEmbeddedTemplate,
-    sessionSummaryTemplate,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -67,12 +63,12 @@ define([
     /**
      * The Handlebars template rendered as the Embedded.
      */
-    templateEmbedded: Handlebars.compile(sessionEmbeddedTemplate),
+    templateEmbedded: Handlebars.templates.session_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Summary.
      */
-    templateSummary : Handlebars.compile(sessionSummaryTemplate),
+    templateSummary : Handlebars.templates.session_summary_edit_embedded,
     
     /**
      * Renders the SessionEditView.
@@ -112,7 +108,10 @@ define([
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
-      this.model.save();
+      var self = this;
+      this.model.changeCorpus(this.model.get("corpusname"),function(){
+        self.model.save();
+      });
     },
     
     //functions associated with icons

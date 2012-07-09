@@ -1,12 +1,10 @@
 define([ 
-         "use!backbone",
-         "use!handlebars", 
-         "text!comment/comment_edit_embedded.handlebars",
+         "backbone",
+         "handlebars", 
          "comment/Comment"
   ], function(
       Backbone, 
       Handlebars,
-      commentEditEmbeddedTemplate,
       Comment
 ) {
   var CommentEditView = Backbone.View.extend(
@@ -38,7 +36,7 @@ define([
     /**
      * The Handlebars template rendered as the CommentEditView.
      */
-    template : Handlebars.compile(commentEditEmbeddedTemplate),
+    template : Handlebars.templates.comment_edit_embedded,
     
     /**
      * Renders the DatumFieldView.

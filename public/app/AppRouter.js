@@ -1,14 +1,10 @@
 define([ 
-    "use!backbone",
-    "datum/Datum",
-    "datum/DatumEditView",
+    "backbone",
     "datum/Session",
     "datum/SessionEditView",
     "libs/Utils"
 ], function(
     Backbone,
-    Datum,
-    DatumEditView,
     Session,
     SessionEditView
 ) {
@@ -32,8 +28,8 @@ define([
 
     routes : {
       "corpus/:corpusId"                : "showFullscreenCorpus", 
-      "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum",
-      "corpus/:corpusName/search"       : "showAdvancedSearch",
+      "corpus/:corpusName/datum/:id"    : "showEmbeddedDatum", //corpusName has to match the pouch of the datum
+      "corpus/:corpusName/search"       : "showAdvancedSearch",//corpusName has to match the pouch of the corpus
       "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListId"                : "showFullscreenDataList",
       "user/:username"                  : "showFullscreenUser",
@@ -65,16 +61,6 @@ define([
       this.hideEverything();
       $("#user-fullscreen").show();
     },
-    
-    /**
-     * Displays the fullscreen datum container page view.
-     */
-    showFullscreenDatumContainer : function() {
-      Utils.debug("In showFullscreenDatumContainer");
-      
-      this.hideEverything();
-      $("#datum-container-fullscreen").show();
-    },
 
     /**
      * Displays all of the corpus details and settings. 
@@ -103,119 +89,16 @@ define([
     },
     
     /**
-     * Displays the fullscreen view of the datum specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          datumId The ID of the datum within the corpus.
-     */
-    showFullscreenDatum : function(corpusName, datumId) {
-      Utils.debug("In showFullscreenDatum: " + corpusName + " *** " + datumId);
-
-      /**** This part is broken ****
-      // Change the id of the fullscreen datum view's Datum to be the given datumId
-      appView.fullScreenDatumView.model.id = datumId;
-      
-      // Save the currently displayed Datum, if needed
-      appView.fullScreenDatumView.saveScreen();
-      
-      // Fetch the Datum's attributes from the PouchDB
-      var self = this;
-      appView.fullScreenDatumView.model.fetch({
-        success : function() {
-          // Update the display with the Datum with the given datumId
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#datums-fullscreen").show();
-        },
-        
-        error : function() {
-          Utils.debug("Datum does not exist: " + datumId);
-          
-          // Create a new Datum (cloning the default datum fields from the
-          // corpus in case they changed) and render it
-          appView.fullScreenDatumView = new DatumEditView({
-            model : new Datum({
-              datumFields : app.get("corpus").get("datumFields").clone(),
-              datumStates : app.get("corpus").get("datumStates").clone()
-            })
-          });
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#datums-fullscreen").show();
-        },
-      });
-      */
-    }, 
-    /**
-     * Displays the fullscreen view of the datum specified by the given
-     * corpusName and the given datumId.
-     * 
-     * @param {String}
-     *          corpusName The name of the corpus this datum is from.
-     * @param {Number}
-     *          datumId The ID of the datum within the corpus.
-     */
-    showEmbeddedDatum : function(corpusName, datumId) {
-      Utils.debug("In showEmbeddedDatum: " + corpusName + " *** " + datumId);
-
-      // Change the id of the fullscreen datum view's Datum to be the given datumId
-      appView.fullScreenDatumView.model.id = datumId;
-      
-      // Save the currently displayed Datum, if needed
-      appView.fullScreenDatumView.saveScreen();
-      
-      // Fetch the Datum's attributes from the PouchDB
-      var self = this;
-      appView.fullScreenDatumView.model.fetch({
-        success : function() {
-          // Update the display with the Datum with the given datumId
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#datums-embedded").show();
-        },
-        
-        error : function() {
-          Utils.debug("Datum does not exist: " + datumId);
-          
-          // Create a new Datum (cloning the default datum fields from the
-          // corpus in case they changed) and render it
-          appView.fullScreenDatumView = new DatumEditView({
-            model : new Datum({
-              datumFields : app.get("corpus").get("datumFields").clone(),
-              datumStates : app.get("corpus").get("datumStates").clone()
-            })
-          });
-          appView.fullScreenDatumView.render();
-          
-          // Display the fullscreen datum view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#datums-embedded").show();
-        },
-      });
-    },
-    
-    /**
      * Displays the fullscreen view of the session specified by the given
      * corpusName and the given datumId.
      * 
      * @param {String}
-     *          corpusName The name of the corpus this datum is from.
+     *          corpusName The name of the corpus this datum is from, this needs to direclty match its pouch.
      * @param {Number}
      *          sessionId The ID of the session within the corpus.
      */
     showEmbeddedSession : function(corpusName, sessionId) {
-      Utils.debug("In showFullscreenSession: " + corpusName + " *** "
+      Utils.debug("In showEmbeddedSession: " + corpusName + " *** "
           + sessionId);
           
       //If called with no sessionId, don't change the model, simply show the div TODO is this really the convention we want?
@@ -225,40 +108,46 @@ define([
         $("#session-embedded").show();
         return;
       }
-      
+      if(sessionId == undefined || corpusName == undefined){
+        return;
+      }
       // Change the id of the session view's Session to be the given sessionId
-      appView.sessionEditView.model.id = sessionId;
-      
-      // Fetch the Session's attributes from the PouchDB
+      appView.sessionEditView.model.set({
+        "id" : sessionId,
+        "corpusname": corpusName});
       var self = this;
-      appView.sessionEditView.model.fetch({
-        success : function() {
-          // Update the display with the Session with the given sessionId
-          appView.sessionEditView.render();
+      //change to the right pouch first
+      appView.sessionEditView.model.changeCorpus(corpusName, function(){
+        // Fetch the Session's attributes from the PouchDB
+        appView.sessionEditView.model.fetch({
+          success : function() {
+            // Update the display with the Session with the given sessionId
+            appView.sessionEditView.render();
+            
+            // Display the edit session view and hide all the other views
+            self.hideEverything();
+            $("#dashboard-view").show();
+            $("#session-embedded").show();
+          },
           
-          // Display the edit session view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#session-embedded").show();
-        },
-        
-        error : function() {
-          Utils.debug("Session does not exist: " + sessionId);
-          
-          // Create a new Session (cloning the default session fields from the
-          // corpus in case they changed) and render it
-          appView.sessionEditView = new SessionEditView({
-            model : new Session({
-              sessionFields : app.get("corpus").get("sessionFields").clone()
-            })
-          });
-          appView.sessionEditView.render();
-          
-          // Display the edit session view and hide all the other views
-          self.hideEverything();
-          $("#dashboard-view").show();
-          $("#session-embedded").show();
-        }
+          error : function() {
+            Utils.debug("Session does not exist: " + sessionId);
+            
+            // Create a new Session (cloning the default session fields from the
+            // corpus in case they changed) and render it
+            appView.sessionEditView = new SessionEditView({
+              model : new Session({
+                sessionFields : app.get("corpus").get("sessionFields").clone()
+              })
+            });
+            appView.sessionEditView.render();
+            
+            // Display the edit session view and hide all the other views
+            self.hideEverything();
+            $("#dashboard-view").show();
+            $("#session-embedded").show();
+          }
+        });
       });
     },
    
@@ -333,6 +222,26 @@ define([
       window.appView.renderReadonlyDataListViews(datalistid);
     },
     
+    // Functions that toggle between editable and readonly datums view
+    showEditableDatums : function(format) {
+      window.appView.renderEditableDatumsViews(format);
+      this.hideEverything();
+      if (format == "centreWell") {
+        this.showDashboard();
+      } else if (format == "fullscreen") {
+        $("#datum-container-fullscreen").show();
+      }
+    },
+    showReadonlyDatums : function(format) {
+      window.appView.renderReadonlyDatumsViews(format);
+      this.hideEverything();
+      if (format == "centreWell") {
+        this.showDashboard();
+      } else if (format == "fullscreen") {
+        $("#datum-container-fullscreen").show();
+      }
+    },
+    
     hideEverything: function() {
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();
@@ -344,32 +253,6 @@ define([
       $("#search-embedded").hide();
       $("#session-embedded").hide();
       $('#user-fullscreen').hide();
-    },
-    /**
-     * This function should be called before the user leaves the page, it should also be called before the user clicks sync
-     * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
-     * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
-     */
-    storeCurrentDashboardIdsToLocalStorage : function(){
-      try{
-        var ids = {};
-        window.appView.authView.model.get("user").save();
-        window.app.get("currentSession").save();
-        window.app.get("currentDataList").save();
-        window.app.get("corpus").save();
-        
-        ids.corpusid = window.app.get("corpus").id;
-        ids.sessionid = window.app.get("currentSession").id;
-        ids.datalistid = window.app.get("currentDataList").id;
-        ids.userid = window.appView.authView.model.get("user").id;
-        localStorage.setItem("appids",JSON.stringify(ids));
-        
-        //save ids to the user also so that the app can bring them back to where they were
-        window.appView.authView.model.get("user").set("mostRecentIds",ids);
-        window.appView.authView.model.get("user").save();
-      }catch(e){
-        Utils.debug("storeCurrentDashboardIdsToLocalStorage failed, probably called too early.");
-      }
     }
   });
 

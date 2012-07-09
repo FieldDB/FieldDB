@@ -1,8 +1,7 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars",
+    "backbone", 
+    "handlebars",
     "app/App", 
-    "text!app/app.handlebars", 
     "app/AppRouter",
     "activity/ActivityFeed",
     "activity/ActivityFeedView",
@@ -15,7 +14,9 @@ define([
     "data_list/DataListReadView",
     "data_list/DataListEditView",
     "datum/Datum",
+    "datum/Datums",
     "datum/DatumContainerEditView",
+    "datum/DatumContainerReadView",
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
@@ -33,12 +34,12 @@ define([
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
+    "terminal",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars,
     App, 
-    appTemplate,
     AppRouter, 
     ActivityFeed,
     ActivityFeedView,
@@ -51,7 +52,9 @@ define([
     DataListReadView,
     DataListEditView,
     Datum,
+    Datums,
     DatumContainerEditView,
+    DatumContainerReadView,
     DatumFields,
     Export,
     ExportReadView,
@@ -68,7 +71,8 @@ define([
     SessionReadView,
     User,
     UserEditView,
-    UserReadView
+    UserReadView,
+    Terminal
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */
@@ -152,28 +156,34 @@ define([
        * Set up the five user views
        */
       this.fullScreenEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
       this.fullScreenReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenReadUserView.format = "fullscreen";
 
       this.modalEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.modalEditUserView.format = "modal";
       
       this.modalReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("user")
+        model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
 
       
       // Create the embedded and fullscreen DatumContainerEditView
-      this.datumsView = new DatumContainerEditView();
+      var datumsToBePassedAround = new Datums();
+      this.datumsView = new DatumContainerEditView({
+        model : datumsToBePassedAround
+      });
+      this.datumsReadView = new DatumContainerReadView({
+        model : datumsToBePassedAround
+      });
       
       /*
        * Set up the four data list views
@@ -215,7 +225,7 @@ define([
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
-        model : this.authView.model.get("user").get("prefs")
+        model : this.authView.model.get("userPrivate").get("prefs")
       });
       
       // Create an ActivityFeedView
@@ -225,7 +235,7 @@ define([
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
-        model : this.authView.model.get("user").get("hotkeys")
+        model : this.authView.model.get("userPrivate").get("hotkeys")
       });   
       
       // Create an ExportREadView
@@ -265,8 +275,7 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.compile(appTemplate),
-    
+    template : Handlebars.templates.app,
     /**
      * Renders the AppView and all of its child Views.
      */
@@ -295,8 +304,8 @@ define([
         this.modalReadUserView.render();
         
         // Display the Datum Container Views
-        this.datumsView.format = "centreWell";
-        this.datumsView.render();
+        this.renderReadonlyDatumsViews("centreWell");
+        this.renderEditableDatumsViews("centreWell");
         
         // Display the Search Views
         this.searchView.render();
@@ -369,40 +378,48 @@ define([
       this.dataListReadFullscreenView.render();
     },
     
+    // Display Datums View
+    renderEditableDatumsViews : function(format) {
+      this.datumsView.format = format;
+      this.datumsView.render();
+    },
+    renderReadonlyDatumsViews : function(format) {
+      this.datumsReadView.format = format;
+      this.datumsReadView.render();
+    },
+    
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
      */
     loadSample : function() {
-      var appids= {};
-      appids.corpusid = "420C2294-9713-41F2-9FEE-235D043679FE";
-      appids.datalistid = "C1659620-63D0-4A0C-8AE0-66E6892D026E";
-      appids.sessionid = "7DAF97E5-C44B-4E8C-8F12-D6170BEB74E5";
+      var ids= {};
+      ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
+      ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
+      ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
       
       //all the replication etc happens in authView
-      this.authView.loadSample(appids);
+      this.authView.loadSample(ids);
       
       this.searchView.loadSample();
     },
     
     /**
      * Save current state, synchronize the server and local databases.
+     * 
+     * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
-    replicateDatabases : function() {
-      window.app.router.storeCurrentDashboardIdsToLocalStorage();
-
-      this.model.get("corpus").replicateCorpus();
-      
-      //TODO pull down and push up the user's preferences and details too
-      
-    },
-    replicateDatabasesWithCallback : function(callback) {
-      window.app.router.storeCurrentDashboardIdsToLocalStorage();
-
-      this.model.get("corpus").replicateCorpus(callback);
-      
-      //TODO pull down and push up the user's preferences and details too
-
+    replicateDatabases : function(callback) {
+      var self = this;
+      this.model.storeCurrentDashboardIdsToLocalStorage(function(){
+        self.model.get("authentication").syncUserWithServer();
+        var corpusConnection = self.model.get("corpus").get("couchConnection");
+        if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
+          && app.get("corpus").get("couchConnection").corpusname == "default"){
+          corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+        }
+        self.model.get("corpus").replicateCorpus(corpusConnection, callback);
+      });
     },
     /**
      * Synchronize the activity feed server and local databases.

@@ -1,4 +1,4 @@
-require([ "use!backbone", "use!crypto",
+require([ "backbone", "crypto",
 		"confidentiality_encryption/Confidential" ], 
 		function(Backbone, CryptoJS, Confidential) {
 

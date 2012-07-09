@@ -1,5 +1,5 @@
 define([ 
-         "use!backbone", 
+         "backbone", 
          "corpus/Corpus"
 ], function(
          Backbone,
