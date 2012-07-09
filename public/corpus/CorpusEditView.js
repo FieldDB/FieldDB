@@ -287,7 +287,7 @@ define([
     },
     //This is the function that is bound to changes
     showEditable :function(){
-      window.appView.renderEditableCorpusViews(corpusid);
+      window.appView.renderEditableCorpusViews();
     },
     //This is the function that is  bound to the book button
     showReadonly : function(){

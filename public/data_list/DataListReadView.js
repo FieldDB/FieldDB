@@ -257,7 +257,7 @@ define( [
     
     //bound to changes
     showReadonly :function(){
-      window.appView.renderReadonlyDataListViews(datalistid);
+      window.appView.renderReadonlyDataListViews();
     },
     //bound to pencil button
     showEditable :function(){
