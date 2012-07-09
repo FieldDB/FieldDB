@@ -85,8 +85,10 @@ require.config({
       exports : function(Handlebars) {
         return Handlebars;
       }
+    },
+    "terminal" : {
+      exports : "Terminal"
     }
-    
     
   }
 });
@@ -96,7 +98,6 @@ require([
     "app/App",
     "app/AppView",
     "app/AppRouter",
-    "terminal",
     "corpus/Corpus",
     "data_list/DataList",
     "datum/Datum",
@@ -112,7 +113,6 @@ require([
     App,
     AppView,
     AppRouter,
-    Terminal,
     Corpus,
     DataList,
     Datum,
@@ -131,19 +131,19 @@ require([
    * It is called either by the main.js or by the UserWelcomeView.js
    */
   window.startApp = function(a, callback){
-//    window.app = a;
-//
-//    // Create and display the AppView and its dependents
-//    window.appView = new AppView({model: a}); 
-//    window.appView.render();
-//    
-//    // Start the Router
-//    app.router = new AppRouter();
-//    Backbone.history.start();
-//    
-//    if(typeof callback == "function"){
-//      callback();
-//    }
+    window.app = a;
+
+    // Create and display the AppView and its dependents
+    window.appView = new AppView({model: a}); 
+    window.appView.render();
+    
+    // Start the Router
+    app.router = new AppRouter();
+    Backbone.history.start();
+    
+    if(typeof callback == "function"){
+      callback();
+    }
     
   };
   /*
@@ -169,19 +169,19 @@ require([
   var appjson = localStorage.getItem("appids");
   if (appjson) {
     Utils.debug("Loading app from localStorage");
-//    appjson = JSON.parse(appjson);
-//    a = new App(); 
-//    var corpusname = null;
-//    var couchConnection = null;
-//    if(localStorage.getItem("mostRecentCouchConnection")){
-//      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
-//      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-//    }
-//    a.createAppBackboneObjects(corpusname ,function(){
-//      a.loadBackboneObjectsById(couchConnection, appjson, function(){
-//        window.startApp(a);
-//      });
-//    });
+    appjson = JSON.parse(appjson);
+    a = new App(); 
+    var corpusname = null;
+    var couchConnection = null;
+    if(localStorage.getItem("mostRecentCouchConnection")){
+      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+    }
+    a.createAppBackboneObjects(corpusname ,function(){
+      a.loadBackboneObjectsById(couchConnection, appjson, function(){
+        window.startApp(a);
+      });
+    });
   } else {
     Utils.debug("Loading fresh app");
     $(".testcss").html("changing it dynamically");
