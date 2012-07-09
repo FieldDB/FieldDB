@@ -32,8 +32,7 @@ define( [
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
 
-      this.model.bind("change:title change:dateCreated change:description",
-          this.renderUpdatedDataList, this);
+      this.model.bind("change", this.showEditable, this);
     },
 
     /**
@@ -279,6 +278,9 @@ define( [
     showReadonly :function(){
       window.app.router.showReadonlyDataList();
     },
+    showEditable :function(){
+      window.app.router.showEditableDataList();
+    }
   });
 
   return DataListEditView;
