@@ -1,11 +1,13 @@
 define([ 
     "backbone", 
     "hotkey/HotKey",
+    "permission/Permission",
     "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone,
     HotKey,
+    Permission,
     UserPreference
 ) {
   var UserGeneric = Backbone.Model.extend(
@@ -42,12 +44,13 @@ define([
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      this.set("hotkeys", new HotKey()); //TODO dont know where this should go now, whether it goes in UserGeneric, or in the defaults of User since thats where everything else is.
       
     },
-    
+      
     model : {
-      // There are no nested models
+      prefs : UserPreference,
+      permissions : Permission,
+      hotkeys : HotKey
     },
     
     parse : function(response) {

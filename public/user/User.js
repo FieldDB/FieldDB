@@ -1,11 +1,13 @@
 define([
     "backbone",
+    "hotkey/HotKey",
     "user/UserGeneric",
     "permission/Permission",
     "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone, 
+    HotKey,
     UserGeneric,
     Permission,
     UserPreference
@@ -54,7 +56,8 @@ define([
       teams : [],
       sessionHistory : [],
       activityHistory : [],
-      permissions : new Permission()
+      permissions : new Permission(),
+      hotkeys: new HotKey()
     },
 
     /**
