@@ -31,7 +31,6 @@ define( [
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
       
-      this.model.bind("change", this.showReadonly, this);
     },
 
     /**
@@ -54,7 +53,7 @@ define( [
       "click #populateDataList" : "renderNewModel",// TODO remove after demo
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
-       "click .icon-edit" : "showEditable" 
+      "click .icon-edit" : "showEditable" 
     },
     
     /**
@@ -253,11 +252,6 @@ define( [
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
-    },
-    
-    //bound to changes
-    showReadonly :function(){
-      window.appView.renderReadonlyDataListViews();
     },
     //bound to pencil button
     showEditable :function(){
