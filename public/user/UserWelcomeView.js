@@ -57,7 +57,7 @@ define([
         if (this.$el.find(".username").val() != "YourNewUserNameGoesHere") {
             this.model.set("username",$(".username").val());      
             $(".confirm-password").show();
-        }
+        };
       },
 //      "click .new-user-button" : function() {
 //        $(".confirm-password").show();
@@ -132,7 +132,7 @@ define([
                   });
                   
                   var s = a.get("currentSession");
-                  s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") ),
+                  s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") );
                   s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
                   s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
@@ -186,7 +186,7 @@ define([
         
       },
 
-      "click .sync_sapir_data" : function() {
+      "click .sync-sapir-data" : function() {
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
         a = new App();
@@ -198,7 +198,7 @@ define([
         });
       },
 
-      "click .sync_my_data" : function() {
+      "click .sync-my-data" : function() {
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
         a = new App();
@@ -236,14 +236,12 @@ define([
           }
         });
       },
+
       "click .dropdown-menu" : function(e) {
         e.stopPropagation();
       },
             
-      "click .username" : function(e){
-        e.target.select();
-      }
-    },
+      },
     
     /**
      * The Handlebars template rendered as the UserWelcomeView

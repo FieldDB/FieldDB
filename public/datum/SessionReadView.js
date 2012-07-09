@@ -34,7 +34,7 @@ define([
         childViewFormat      : "datum"
       });
       
-      this.model.bind('change', this.render, this);
+      this.model.bind('change', this.showReadonly, this);
     },
 
     /**
@@ -125,6 +125,9 @@ define([
     showEditable :function(){
       window.app.router.showEditableSession();
     },
+    showReadonly : function(){
+      window.app.router.showReadonlySession();
+    }
   });
   
   return SessionReadView;
