@@ -32,7 +32,7 @@ define([
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
-        format               : "datum"
+        childViewFormat      : "session"
       });
       
       this.model.bind('change', this.showEditable, this);
