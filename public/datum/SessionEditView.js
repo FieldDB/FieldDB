@@ -7,7 +7,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone,
-    Handlebars,
+    Handlebars, 
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -19,8 +19,8 @@ define([
      * @class Session Edit View is where the user provides new session details.
      *
      ** @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide",
-     * "embedded", and "fullscreen".
+     * initialized. Valid values are "leftSide" and
+     * "embedded" 
      * 
      * @extends Backbone.View
      * @constructs
@@ -32,19 +32,27 @@ define([
         collection           : this.model.get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
-        childViewFormat      : "session"
+        format               : "datum"
       });
+      
+      this.model.bind('change', this.showEditable, this);
     },
 
     /**
      * The underlying model of the SessionEditView is a Session.
      */
     model : Session,
+    
+    /**
+     * The sessionFieldsView displays the all the DatumFieldEditViews.
+     */
+    sessionFieldsView : UpdatingCollectionView,
 
     /**
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
+    
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
@@ -53,22 +61,19 @@ define([
       "blur .session-elicitation-date-input" : "updateElicitedDate",
       "blur .session-goal-input" : "updateGoal"
     },
-    
-    updateConsultant : function() {
+    updateConsultant : function(){
       this.model.get("sessionFields").where({
         label : "consultants"
       })[0].set("value", this.$el.find(".session-consultant-input")
           .val());
     },
-    
-    updateElicitedDate : function() {
+    updateElicitedDate : function(){
       this.model.get("sessionFields").where({
         label : "dateElicited"
       })[0].set("value", this.$el.find(".session-elicitation-date-input")
           .val());
     },
-    
-    updateGoal : function() {
+    updateGoal : function(){
       this.model.get("sessionFields").where({
         label : "goal"
       })[0].set("value", this.$el.find(".session-goal-input")
@@ -80,11 +85,6 @@ define([
     templateEmbedded: Handlebars.templates.session_edit_embedded,
     
     /**
-     * The Handlebars template rendered as the Fullscreen.
-     */
-    templateFullscreen : Handlebars.templates.session_edit_fullscreen,
-    
-    /**
      * The Handlebars template rendered as the Summary.
      */
     templateSummary : Handlebars.templates.session_summary_edit_embedded,
@@ -94,12 +94,12 @@ define([
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
-      if (this.model == undefined) {
+      if(this.model == undefined){
         Utils.debug("SESSION is undefined, come back later.");
         return this;
       }
-      try {
-        if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
+      try{
+        if(this.model.get("sessionFields").where({label: "goal"})[0] == undefined){
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
@@ -118,33 +118,12 @@ define([
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
-        } else if (this.format == "fullscreen") {
-          this.setElement("#session-fullscreen");
-          $(this.el).html(this.templateFullscreen(this.model.toJSON()));
-          
-          this.sessionFieldsView.el = this.$(".session-fields-ul");
-          this.sessionFieldsView.render();
         }
-      } catch(e) {
+      }catch(e){
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       return this;
-    },
-    
-    updateGoal : function() {
-      this.model.get("sessionFields").where({label: "goal"})[0].set("value", this.$el.find(".sessionGoal").val());
-      this.updatePouch();
-    },
-    
-    updateConsultants : function() {
-      this.model.get("sessionFields").where({label: "consultants"})[0].set("value", this.$el.find(".sessionConsultants").val());
-      this.updatePouch();
-    },
-    
-    updateDateSEntered : function() {
-      this.model.get("sessionFields").where({label: "dateSEntered"})[0].set("value", this.$el.find(".sessionDate").val());
-      this.updatePouch();
-    },
+    },    
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
@@ -154,16 +133,17 @@ define([
       });
     },
     
-    // functions associated with icons
-    resizeSmall : function() {
+    //functions associated with icons
+    resizeSmall : function(){
+      window.app.router.showDashboard();
+    },
+    resizeLarge : function(){
       window.app.router.showEmbeddedSession();
     },
-    
-    resizeLarge : function() {
-      window.app.router.showFullscreenSession();
+    showEditable :function(){
+      window.app.router.showEditableSession();
     },
-    
-    showReadonly : function() {
+    showReadonly : function(){
       window.app.router.showReadonlySession();
     }
   });
