@@ -274,12 +274,15 @@ define( [
     updateDescription: function(){
       this.model.set("description",this.$el.find(".data-list-description").val());
     },
-    
+    //bound to pencil
     showReadonly :function(){
       window.app.router.showReadonlyDataList();
     },
+    
+    //bound to change
     showEditable :function(){
-      window.app.router.showEditableDataList();
+      window.appView.renderEditableDataListViews(datalistid);
+
     }
   });
 
