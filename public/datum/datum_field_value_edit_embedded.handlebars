@@ -1,6 +1,8 @@
 <label class="datum_field_label">{{label}}</label>
+{{#if helpText}}
 <a  href="#" class="help-conventions" rel="popover" data-placement="bottom" data-content="{{help}}" 
   data-original-title="Help Conventions set by your team" tabindex="-1">
   <i class="icon-question-sign"></i>
 </a>
+{{/if}}
 <textarea class="datum_field_input">{{value}}</textarea>

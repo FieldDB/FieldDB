@@ -128,7 +128,7 @@ define([
     },
     //bound to changes
     showReadonly : function(){
-      window.appView.renderReadonlySessionViews(sessionid);
+      window.appView.renderReadonlySessionViews();
 
     }
   });
