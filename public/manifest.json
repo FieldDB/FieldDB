@@ -1,6 +1,6 @@
 {
   "name": "iField",
-  "version": "1.11.1.15",
+  "version": "1.11.1.22",
   "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
   "app": {
     "launch": {

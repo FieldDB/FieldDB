@@ -70,7 +70,6 @@ require.config({
         return Backbone;
       }
     },
-    
 
     "handlebars" : {
       deps : ["bootstrap"],
@@ -87,43 +86,43 @@ require.config({
         return Handlebars;
       }
     }
+    
+    
   }
 });
 
 // Initialization
 require([
-//    "app/App",
-//    "app/AppView",
-//    "app/AppRouter",
-//    "terminal",
-//    "corpus/Corpus",
-//    "data_list/DataList",
-//    "datum/Datum",
-//    "datum/Session",
-//    "user/User",
-//    "user/UserWelcomeView",
-//    "handlebars",
-//    "compiledTemplates",
-//    "backbone",
-//    "backbone_pouchdb",
-"bootstrap",
-"libs/Utils"
+    "app/App",
+    "app/AppView",
+    "app/AppRouter",
+    "terminal",
+    "corpus/Corpus",
+    "data_list/DataList",
+    "datum/Datum",
+    "datum/Session",
+    "user/User",
+    "user/UserWelcomeView",
+    "handlebars",
+    "compiledTemplates",
+    "backbone",
+    "backbone_pouchdb",
+    "libs/Utils"
 ], function(
-//    App,
-//    AppView,
-//    AppRouter,
-//    Terminal,
-//    Corpus,
-//    DataList,
-//    Datum,
-//    Session,
-//    User,
-//    UserWelcomeView,
-//    Handlebars,
-//    compiledTemplates,
-//    Backbone,
-//    forcingpouchtoloadonbackboneearly
-    bootstrap
+    App,
+    AppView,
+    AppRouter,
+    Terminal,
+    Corpus,
+    DataList,
+    Datum,
+    Session,
+    User,
+    UserWelcomeView,
+    Handlebars,
+    compiledTemplates,
+    Backbone,
+    forcingpouchtoloadonbackboneearly
 ) {
   
   
@@ -187,8 +186,8 @@ require([
     Utils.debug("Loading fresh app");
     $(".testcss").html("changing it dynamically");
     // Create a UserWelcomeView modal
-//    welcomeUserView = new UserWelcomeView();
-//    welcomeUserView.render();
+    var welcomeUserView = new UserWelcomeView();
+    welcomeUserView.render();
     $('#user-welcome-modal').modal("show");
   }
   
