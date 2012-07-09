@@ -41,15 +41,6 @@ define([
       this.model = new User();
       this.model.set("username","YourNewUserNameGoesHere");
       this.model.bind("change", this.render, this);
-//      $(function(){
-//    	  $('.btn btn-success dropdown-toggle').dropdown();
-//    	  $('.dropdown input').click(function(e) {
-//    		  e.stopPropergation();
-//    	  });
-//      });
-//       $('.dropdown-menu').find('form').click(function(e) {
-//          e.stopPropagation();
-//        });
     },
 
 
@@ -168,7 +159,7 @@ define([
                         */
                        var couchConnection = data.user.corpuses[0];
                        c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
-                         Utils.debug("Successfully authenticated user with their corpus server.")
+                         Utils.debug("Successfully authenticated user with their corpus server.");
                        });
                      }, 5000);
                      console.log("Loadded app for a new user.");
@@ -241,19 +232,11 @@ define([
             
           }
         });
+      },
+      "click .dropdown-menu" : function(e) {
+        e.stopPropagation();
       }
-      
-//      "click .dropdown-toggle" : function(){
-//    	  $(function(){
-//        	  $(".dropdown-toggle").dropdown();
-//        	  $(".dropdown-menu").find("form").click(function(e) {
-//        		  e.stopPropergation();
-//        	  });
-//          });
-//      } 
-               	  
     },
-    
     
     /**
      * The Handlebars template rendered as the UserWelcomeView
