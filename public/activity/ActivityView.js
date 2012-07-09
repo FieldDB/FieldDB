@@ -1,12 +1,10 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars", 
-    "text!activity/activity.handlebars",
+    "backbone", 
+    "handlebars", 
     "activity/Activity"
 ], function(
     Backbone, 
     Handlebars, 
-    activityTemplate,
     Activity
 ) {
   var ActivityView = Backbone.View.extend(
@@ -30,7 +28,7 @@ define([
     
     classname : "activity",
     
-    template : Handlebars.compile(activityTemplate),
+    template : Handlebars.template.activity,
     
     render : function() {
       Handlebars.registerPartial("user", this.userview

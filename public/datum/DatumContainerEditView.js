@@ -1,22 +1,16 @@
 define([
-    "use!backbone", 
-    "use!handlebars",
-    "text!datum/datum_container_edit_embedded.handlebars",
-    "text!datum/datum_container_edit_fullscreen.handlebars",
+    "backbone", 
+    "handlebars",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumEditView",
-    "datum/DatumTags",
     "app/UpdatingCollectionView"
 ], function(
     Backbone,
     Handlebars,
-    datumContainerEmbeddedTemplate,
-    datumContainerFullscreenTemplate,
     Datum,
     Datums,
     DatumEditView,
-    DatumTags,
     UpdatingCollectionView
 ) {
   var DatumContainerEditView = Backbone.View.extend(
@@ -32,30 +26,32 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.datums = new Datums();
-      
       // Create a DatumTagView
       this.datumsView = new UpdatingCollectionView({
-        collection           : this.datums,
+        collection           : this.model,
         childViewConstructor : DatumEditView,
         childViewTagName     : "li",
-        childViewClass       : "well"
+        childViewClass       : "well",
+        childViewFormat      : "well"
       });
       
-      this.updateDatums();
+      this.updateDatums();//TODO uncomment this, or try to not call update datums when you first initialze the datum container.
       
       // Listen for changes in the number of Datum to display
-      app.get("authentication").get("user").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this);
+      app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this); //we might have to bind this in the other direction since the user's preferences are craeted later than the datum container.
     },
+    
+    model: Datums,
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen"
+      "click .icon-resize-full" : "resizeFullscreen",
+      "click .icon-book" : "showReadonly"
     },
     
-    templateEmbedded : Handlebars.compile(datumContainerEmbeddedTemplate),
+    templateEmbedded : Handlebars.templates.datum_container_edit_embedded,
     
-    templateFullscreen : Handlebars.compile(datumContainerFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.datum_container_edit_fullscreen,
     
     render : function() {
       if (this.format == "centreWell") {
@@ -87,49 +83,65 @@ define([
     },
     
     resizeSmall : function() {
-      this.format = "centreWell";
-      this.render();
+      window.app.router.showEditableDatums("centreWell");
       window.app.router.showDashboard();
     },
     
     resizeFullscreen : function() {
-      this.format = "fullscreen";
-      this.render();
-      window.app.router.showFullscreenDatumContainer();
+      window.app.router.showEditableDatums("fullscreen");
+    },
+ 
+    showReadonly : function() {
+      window.app.router.showReadonlyDatums(this.format);
     },
     
     updateDatums : function() {
-      var previousNumberOfDatum = this.datums.length;
-      var nextNumberOfDatum = app.get("authentication").get("user").get("prefs").get("numVisibleDatum");
+      var previousNumberOfDatum = this.model.length;
+      var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
-      // TODO Get the current Corpus' Datum based on their date entered
-      
-      // TODO If there are no Datum in the current Corpus
-      if (true) {
-        // Remove all currently displayed Datums
-        for (var i = 0; i < previousNumberOfDatum; i++) {
-          this.datums.pop();
-        }
-          
-        // Add a single, blank Datum
-        this.prependDatum(new Datum({
-          datumFields : app.get("corpus").get("datumFields").clone(),
-          datumStates : app.get("corpus").get("datumStates").clone()
-        }));
-      } else {
-        // If the user has increased the number of Datum to display in the container
-        if (nextNumberOfDatum > previousNumberOfDatum) {
-          for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
-            // TODO Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
+      // Get the current Corpus' Datum based on their date entered
+      var self = this;
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).getAllDatumIdsByDate(function(rows) {
+        // If there are no Datum in the current Corpus
+        if ((rows == null) || (rows.length <= 0)) {
+          // Remove all currently displayed Datums
+          for (var i = 0; i < previousNumberOfDatum; i++) {
+            self.model.pop();
           }
-        // If the user has decrease the number of Datum to display in the container
-        } else if (nextNumberOfDatum < previousNumberOfDatum) {
-          // Pop the excess Datum from the bottom of the stack
-          for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
-            this.datums.pop();
+            
+          // Add a single, blank Datum
+          self.prependDatum(new Datum({
+            datumFields : app.get("corpus").get("datumFields").clone(),
+            datumStates : app.get("corpus").get("datumStates").clone(),
+            corpusname : app.get("corpus").get("corpusname")
+          }));
+        } else {
+          // If the user has increased the number of Datum to display in the container
+          if (nextNumberOfDatum > previousNumberOfDatum) {
+            for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
+              // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
+              var d = new Datum({
+                id : rows[i].value,
+                corpusname : app.get("corpus").get("corpusname")
+              });
+              d.changeCorpus(app.get("corpus").get("corpusname"), function(){
+                d.fetch({
+                  success : function() {
+                    // Add the new, blank, Datum
+                    self.model.add(datum);
+                  }
+                });
+              });
+            }
+          // If the user has decrease the number of Datum to display in the container
+          } else if (nextNumberOfDatum < previousNumberOfDatum) {
+            // Pop the excess Datum from the bottom of the stack
+            for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
+              self.model.pop();
+            }
           }
         }
-      }
+      })
     },
     
     /**
@@ -138,7 +150,8 @@ define([
     newDatum : function() {
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
-        datumStates : app.get("corpus").get("datumStates").clone()
+        datumStates : app.get("corpus").get("datumStates").clone(),
+        corpusname : app.get("corpus").get("corpusname")
       }));
     },
     
@@ -156,11 +169,11 @@ define([
       datum.set("session", app.get("currentSession")); 
       
       // Add the new, blank, Datum
-      this.datums.add(datum, {at:0});
+      this.model.add(datum, {at:0});
        
       // If there are too many datum on the screen, remove the bottom one and save it.
-      if (this.datums.length > app.get("authentication").get("user").get("prefs").get("numVisibleDatum")) {
-        var d = this.datums.pop();
+      if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
+        var d = this.model.pop();
         console.log("Removed the datum with id: " + d._id);
         d.save();
       }

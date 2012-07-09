@@ -1,12 +1,10 @@
 define([ 
-    "use!backbone",
-     "use!handlebars", 
-     "text!audio_video/audio_video_edit_embedded.handlebars",
+    "backbone",
+     "handlebars", 
      "audio_video/AudioVideo"
 ], function(
     Backbone, 
     Handlebars,
-    audioVideoTemplate,
     AudioVideo
 ) {
   var AudioVideoEditView = Backbone.View.extend(
@@ -32,7 +30,7 @@ define([
 
     classname : "audio_video",
 
-    template : Handlebars.compile(audioVideoTemplate),
+    template : Handlebars.templates.audio_video_edit_embedded,
 
     render : function() {
       $(this.el).html(this.template(this.model.toJSON()));
