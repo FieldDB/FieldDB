@@ -254,9 +254,12 @@ define( [
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
     },
+    
+    //bound to changes
     showReadonly :function(){
-      window.app.router.showReadonlyDataList();
+      window.appView.renderReadonlyDataListViews(datalistid);
     },
+    //bound to pencil button
     showEditable :function(){
       window.app.router.showEditableDataList();
     }
