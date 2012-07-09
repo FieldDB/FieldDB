@@ -1,6 +1,27 @@
+<script>
+$('.dropdown-menu').find('form').click(function(e) {          
+      e.stopPropagation();
+        });      
+</script>  
+
 <div class="modal-header">
+
 	<div class="btn-group pull-right">
-	<a href="#corpus" class="btn btn-success sync_sapir_data "
+		<a class="btn btn-success sync-sapir-data" href="#corpus" data-dismiss="modal">Close and login as Ed Sapir</a>
+		<a class="btn btn-success"><i class="icon-user icon-white"></i>Login</a> 
+		<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+			<div class="dropdown-menu">
+				<form action="showlogin" method="post" accept-charset="UTF-8">
+				<span>Username</span><input id="welcomeusername" style="margin-left: 7px;" size="16" type="text" />
+				<span>Password</span><input id="welcomepassword" style="margin-left: 7px;" size="16" type="password" />
+				<button class="btn btn-success sync-my-data" href="#" data-dismiss="modal">Sync my data to this computer</button></li>		
+				</form>
+			</div>
+	</div>
+
+
+<!-- 	<div class="btn-group pull-right">
+	<a href="#corpus" class="btn btn-success sync-sapir-data"
     data-dismiss="modal">Close and login as Ed Sapir</a>
 		<button  class="btn btn-success"><i
 			class="icon-user icon-white"></i> Login</button> <a
@@ -14,11 +35,13 @@
         size="16" type="password">
 			</li>
 			<li>
-				<a class="btn btn-success sync_my_data" href="#" data-dismiss="modal">Sync
+				<a class="btn btn-success sync-my-data" href="#" data-dismiss="modal">Sync
 					my data to this computer</a>
 			</li>
 		</ul>
 	</div>
+ -->
+
 	<div>
 		<h1>Welcome to iField!</h1>
 	
