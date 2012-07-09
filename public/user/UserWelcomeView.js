@@ -43,6 +43,7 @@ define([
       this.model.bind("change", this.render, this);
     },
 
+
     /**
      * The underlying model of the UserWelcomeView is a User.
      */
@@ -158,7 +159,7 @@ define([
                         */
                        var couchConnection = data.user.corpuses[0];
                        c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
-                         Utils.debug("Successfully authenticated user with their corpus server.")
+                         Utils.debug("Successfully authenticated user with their corpus server.");
                        });
                      }, 5000);
                      console.log("Loadded app for a new user.");
@@ -181,6 +182,7 @@ define([
       "click .register-facebook" : function() {
         
       },
+
       "click .sync_sapir_data" : function() {
         console.log("hiding user welcome, syncing sapir");
         //Load a corpus, datalist, session and user
@@ -192,6 +194,7 @@ define([
           });
         });
       },
+
       "click .sync_my_data" : function() {
         console.log("hiding user welcome, syncing users data");
         var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
@@ -229,10 +232,12 @@ define([
             
           }
         });
+      },
+      "click .dropdown-menu" : function(e) {
+        e.stopPropagation();
       }
     },
-
-
+    
     /**
      * The Handlebars template rendered as the UserWelcomeView
      */
