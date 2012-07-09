@@ -34,7 +34,6 @@ define([
         childViewFormat      : "session"
       });
       
-      this.model.bind('change', this.showReadonly, this);
     },
 
     /**
@@ -125,11 +124,6 @@ define([
     //bound to book
     showEditable :function(){
       window.app.router.showEditableSession();
-    },
-    //bound to changes
-    showReadonly : function(){
-      window.appView.renderReadonlySessionViews();
-
     }
   });
   

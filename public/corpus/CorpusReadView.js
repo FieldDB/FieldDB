@@ -79,16 +79,13 @@ define([
       // });
 
       
-      // If the model changes, re-render 
-      this.model.bind('change', this.showReadonly, this);
     },
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       "click .new_datum" : "newDatum",
-      "click .icon-edit": "showEditable",
-      "click .icon-book" : "showReadonly"
+      "click .icon-edit": "showEditable"
     },
     
     /**
@@ -201,10 +198,6 @@ define([
     //This is bound to the little pencil function
     showEditable :function(){
       window.app.router.showEditableCorpus();
-    },
-    //This is bound to change
-    showReadonly : function(){
-      window.appView.renderReadonlyCorpusViews();
     }
   });
 
