@@ -204,7 +204,7 @@ define([
     },
     //This is bound to change
     showReadonly : function(){
-      window.appView.renderReadonlyCorpusViews(corpusid);
+      window.appView.renderReadonlyCorpusViews();
     }
   });
 

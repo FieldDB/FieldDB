@@ -281,7 +281,7 @@ define( [
     
     //bound to change
     showEditable :function(){
-      window.appView.renderEditableDataListViews(datalistid);
+      window.appView.renderEditableDataListViews();
 
     }
   });

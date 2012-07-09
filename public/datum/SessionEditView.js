@@ -142,7 +142,7 @@ define([
     },
     //bound to changes
     showEditable :function(){
-      window.appView.renderEditableSessionViews(sessionid);
+      window.appView.renderEditableSessionViews();
     },
     //bound to book
     showReadonly : function(){
