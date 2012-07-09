@@ -108,9 +108,7 @@ define( [
      * Re-renders the datalist header based on the current model.
      */
     renderUpdatedDataList : function() {
-      $(".title").text(this.model.get("title"));
-      $(".dateCreated").text(this.model.get("dateCreated"));
-      $(".description").text(this.model.get("description"));
+      window.appView.renderEditableDataListViews();
     },
 
     /**
@@ -270,11 +268,11 @@ define( [
     },
 
     updateTitle: function(){
-      this.model.set("title",this.$el.children(".data-list-title").val());
+      this.model.set("title",this.$el.find(".data-list-title").val());
     },
     
     updateDescription: function(){
-      this.model.set("description",this.$el.children(".data-list-description").val());
+      this.model.set("description",this.$el.find(".data-list-description").val());
     },
     //bound to pencil
     showReadonly :function(){
