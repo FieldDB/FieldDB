@@ -54,11 +54,14 @@ define([
      */
     events : {
       "blur .username" : function() {
-        this.model.set("username",$(".username").val());
+        if (this.$el.find(".username").val() != "YourNewUserNameGoesHere") {
+            this.model.set("username",$(".username").val());      
+            $(".confirm-password").show();
+        }
       },
-      "click .new-user-button" : function() {
-        $(".confirm-password").show();
-      },
+//      "click .new-user-button" : function() {
+//        $(".confirm-password").show();
+//      },
       "click .register-new-user" : function() {
         Utils.debug("Attempting to register a new user: " + this.el);
         var dataToPost = {};
@@ -236,8 +239,7 @@ define([
       "click .dropdown-menu" : function(e) {
         e.stopPropagation();
       },
-      
-      
+            
       "click .username" : function(e){
         e.target.select();
       }
