@@ -37,11 +37,18 @@ require.config({
     },
 
     "bootstrap" :{
-      deps : [ "jquery", "bootstrap-transition", "bootstrap-alert",
+      deps : [ "jquery" ],
+      exports : function($) {
+        return $;
+      }
+    },
+    
+    "bootstrap-typeahead" :{
+      deps : [ "jquery", "bootstrap","bootstrap-transition", "bootstrap-alert",
           "bootstrap-modal", "bootstrap-dropdown", "bootstrap-scrollspy",
           "bootstrap-tab", "bootstrap-tooltip", "bootstrap-popover",
-          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel",
-          "bootstrap-typeahead" ],
+          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel"
+           ],
       exports : function($) {
         return $;
       }
@@ -72,7 +79,7 @@ require.config({
     },
 
     "handlebars" : {
-      deps : ["bootstrap"],
+      deps : ["bootstrap","jquery"],
       exports : "Handlebars"
     },
 
@@ -87,6 +94,7 @@ require.config({
       }
     },
     "terminal" : {
+      deps : ["bootstrap","jquery"],
       exports : "Terminal"
     }
     
