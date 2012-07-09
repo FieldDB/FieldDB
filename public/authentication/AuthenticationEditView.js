@@ -151,9 +151,9 @@ define([
       this.model.get("userPrivate").set("username", "sapir");
       this.model.get("userPrivate").set("mostRecentIds", appidsIn);
       var couchConnection = {
-          protocol : "http://",
+          protocol : "https://",
           domain : "ilanguage.iriscouch.com",
-          port : "80",
+          port : "443",
           corpusname : "sapir-firstcorpus"
         };
       var self = this;
