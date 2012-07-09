@@ -1,5 +1,5 @@
 define(
-		["use!backbone"],
+		["backbone"],
 		function(Backbone){
 	var Team = Backbone.Collection.extend(
 			

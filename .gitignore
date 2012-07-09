@@ -1,3 +1,8 @@
+#ignore compiled handlebars
+release
+compiled_handlebars.js
+*.handlebars.js
+
 #ignore private config files
 ifield.key
 ifield.orig.key

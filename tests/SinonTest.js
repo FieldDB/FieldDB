@@ -3,7 +3,7 @@
  * Spies are functions that keep track of how and often they were called, and what values were returned. This is phenomenally useful in asynchronous and event-driven applications as you can send a spy function off to keep track of what’s going on inside your methods, even if those methods are anonymous or closed off from direct inspection.
  */
 require([
-         "use!backbone",
+         "backbone",
          "../tests/sinon"
          ], function(Backbone) {
 	describe("Sinon spy on Backbone Episode model", function() {

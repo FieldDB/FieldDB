@@ -1,15 +1,13 @@
 // TODO Make this a read-only version. Right now, this is just a copy of the Editable version
 
 define( [
-    "use!backbone", 
-    "use!handlebars", 
-    "text!datum/datum_state_settings_read_embedded.handlebars",
+    "backbone", 
+    "handlebars", 
     "datum/DatumState",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
-    datumStateSettingsTemplate,
     DatumState
 ) {
   var DatumStateReadView = Backbone.View.extend(
@@ -50,7 +48,7 @@ define( [
     /**
      * The Handlebars template rendered as the DatumStateSettingsReadView.
      */
-    templateSettings : Handlebars.compile(datumStateSettingsTemplate),
+    templateSettings : Handlebars.templates.datum_state_settings_read_embedded,
       
     /**
      * Renders the DatumStateReadView.
