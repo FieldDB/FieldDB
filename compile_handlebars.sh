@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm public/libs/compiled_handlebars.js
+
 find . -name '*.handlebars' -type f | 
 while read NAME ; 
 	do 

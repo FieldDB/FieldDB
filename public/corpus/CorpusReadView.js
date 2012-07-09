@@ -88,7 +88,7 @@ define([
       "click .icon-resize-full" : "resizeFullscreen",
       "click .new_datum" : "newDatum",
       "click .icon-edit": "showEditable",
-      "click .icon-check" : "showReadonly"
+      "click .icon-book" : "showReadonly"
     },
     
     /**
