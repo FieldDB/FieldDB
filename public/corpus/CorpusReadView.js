@@ -80,7 +80,7 @@ define([
 
       
       // If the model changes, re-render 
-      this.model.bind('change', this.render, this);
+      this.model.bind('change', this.showReadonly, this);
     },
     
     events : {
