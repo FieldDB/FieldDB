@@ -53,6 +53,10 @@ define([
      * Events that the UserWelcomeView is listening to and their handlers.
      */
     events : {
+      "click .username" : function(e){
+        e.target.select();
+      },
+      
       "blur .username" : function() {
         if (this.$el.find(".username").val() != "YourNewUserNameGoesHere") {
             this.model.set("username",$(".username").val());      
