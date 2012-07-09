@@ -213,8 +213,9 @@ define([
         }
 
         Utils.debug("Saving the Datum");
+        var self = this;
         this.model.changeCorpus(app.get("corpus").get("corpusname"), function(){
-          this.model.save();
+          self.model.save();
         });
       }
     },
