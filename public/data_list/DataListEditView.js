@@ -55,7 +55,8 @@ define( [
       'click .serverhowmany a' : 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
-      "blur .title": "updateTitle",
+      "blur .data-list-title": "updateTitle",
+      "blur .data-list-description": "updateDescription",
       "click .icon-book" :"showReadonly"
     },
 
@@ -268,9 +269,15 @@ define( [
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
     },
-    updateTitle : function(){
-      this.model.set("title",this.$el.children(".title").val());
+
+    updateTitle: function(){
+      this.model.set("title",this.$el.children(".data-list-title").val());
     },
+    
+    updateDescription: function(){
+      this.model.set("description",this.$el.children(".data-list-description").val());
+    },
+    
     showReadonly :function(){
       window.app.router.showReadonlyDataList();
     },
