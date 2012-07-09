@@ -223,11 +223,11 @@ define([
     },
     
     updateTitle: function(){
-      this.model.set("title",this.$el.children(".corpus-title-input").val());
+      this.model.set("title",this.$el.find(".corpus-title-input").val());
     },
     
     updateDescription: function(){
-      this.model.set("description",this.$el.children(".corpus-description-input").val());
+      this.model.set("description",this.$el.find(".corpus-description-input").val());
     },
     
     newDatum : function() {
