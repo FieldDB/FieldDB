@@ -61,6 +61,9 @@ define([
       },
       "click .register-new-user" : function() {
         Utils.debug("Attempting to register a new user: " + this.el);
+        /*
+         * Set defaults for new user registration here
+         */
         var dataToPost = {};
         dataToPost.login = $(".username").val();
         dataToPost.email = $(".email").val();
@@ -70,7 +73,25 @@ define([
         var corpusConnection = Utils.defaultCouchConnection();
         corpusConnection.corpusname = "firstcorpus";
         dataToPost.corpuses = [corpusConnection];
-        
+        dataToPost.gravatar = "./../user/user_gravatar.png";
+        dataToPost.researchInterest = "";
+        dataToPost.affiliation = "";
+        dataToPost.description = "";
+        dataToPost.subtitle = "";
+        dataToPost.dataLists = [];
+        dataToPost.prefs = {
+            "skin" : "",
+            "numVisibleDatum" : 1
+          };
+        dataToPost.mostRecentIds = {};
+        dataToPost.firstname = "";
+        dataToPost.lastname = "";
+        dataToPost.teams = [];
+        dataToPost.sessionHistory = [];
+        dataToPost.activityHistory = [];
+        dataToPost.permissions = {};
+        dataToPost.hotkeys = {};
+       
         if (dataToPost.username != ""
           && (dataToPost.password == $(".to-confirm-password").val())
           && dataToPost.email != "") {
