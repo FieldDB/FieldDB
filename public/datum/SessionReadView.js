@@ -122,11 +122,14 @@ define([
     resizeLarge : function(){
       window.app.router.showEmbeddedSession();
     },
+    //bound to book
     showEditable :function(){
       window.app.router.showEditableSession();
     },
+    //bound to changes
     showReadonly : function(){
-      window.app.router.showReadonlySession();
+      window.appView.renderReadonlySessionViews(sessionid);
+
     }
   });
   
