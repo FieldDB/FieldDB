@@ -285,9 +285,11 @@ define([
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
     },
+    //This is the function that is bound to changes
     showEditable :function(){
-      window.app.router.showEditableCorpus();
+      window.appView.renderEditableCorpusViews(corpusid);
     },
+    //This is the function that is  bound to the book button
     showReadonly : function(){
       window.app.router.showReadonlyCorpus();
     }
