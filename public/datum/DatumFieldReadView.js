@@ -40,6 +40,7 @@ define([
       "click .encrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateField",
+      "click .icon-question-sign" : "showHelpConvention"
     },
 
     /**
@@ -102,7 +103,15 @@ define([
      */
     updateField : function() {
       this.model.set("value", this.$el.children(".datum_field_input").val());
-    }   
+    },
+    
+    /**
+     * Show help convention in popover  
+     */
+    showHelpConvention : function() {
+    	this.$el.children(".help-conventions").popover("show") 
+    }
+    
   });
 
   return DatumFieldReadView;
