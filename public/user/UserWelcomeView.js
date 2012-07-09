@@ -235,6 +235,11 @@ define([
       },
       "click .dropdown-menu" : function(e) {
         e.stopPropagation();
+      },
+      
+      
+      "click .username" : function(e){
+        e.target.select();
       }
     },
     
