@@ -25,7 +25,7 @@ define([
 //            $(this.el).html(this.template(this.model.toJSON()));
             
          // Display the HotKeyEditView
-            this.setElement($("#hotkey-edit-view")); 
+            this.setElement($("#hotkey-settings-modal")); 
             $(this.el).html(this.template(this.model.toJSON()));
            
 //
