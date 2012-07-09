@@ -1,14 +1,14 @@
 define([
     "backbone", 
     "handlebars", 
-    "datum/DatumFieldEditView",
+    "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
     Handlebars, 
-    DatumFieldEditView,
+    DatumFieldReadView,
     Session,
     UpdatingCollectionView
 ) {
@@ -29,9 +29,9 @@ define([
 
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldEditView,
+        childViewConstructor : DatumFieldReadView,
         childViewTagName     : "li",
-        childViewFormat      : "datum"
+        childViewFormat      : "session"
       });
       
       this.model.bind('change', this.showReadonly, this);
