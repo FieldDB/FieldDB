@@ -1,20 +1,14 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
-    "text!datum/session_read_embedded.handlebars",
-    "text!datum/session_read_fullscreen.handlebars",
-    "text!datum/session_summary_read_embedded.handlebars",
-    "datum/DatumFieldReadView",
+    "backbone", 
+    "handlebars", 
+    "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
-    Handlebars, 
-    sessionEmbeddedTemplate,
-    sessionFullscreenTemplate,
-    sessionSummaryTemplate,
-    DatumFieldReadView,
+    Handlebars,
+    DatumFieldEditView,
     Session,
     UpdatingCollectionView
 ) {
@@ -59,17 +53,17 @@ define([
     /**
      * The Handlebars template rendered as the Embedded.
      */
-    templateEmbedded : Handlebars.compile(sessionEmbeddedTemplate),
+    templateEmbedded : Handlebars.templates.session_read_embedded,
       
     /**
      * The Handlebars template rendered as the Fullscreen.
      */
-    templateFullscreen : Handlebars.compile(sessionFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.session_read_fullscreen,
     
     /**
      * The Handlebars template rendered as the Summary.
      */
-    templateSummary : Handlebars.compile(sessionSummaryTemplate),
+    templateSummary : Handlebars.templates.session_summary_read_embedded,
     
     /**
      * Renders the SessionReadView.

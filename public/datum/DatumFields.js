@@ -1,5 +1,5 @@
 define([ 
-         "use!backbone", 
+         "backbone", 
          "datum/DatumField",
          "libs/Utils"
 ], function(

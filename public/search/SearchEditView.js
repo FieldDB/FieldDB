@@ -1,8 +1,6 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars", 
-    "text!search/search_advanced_edit_embedded.handlebars",
-    "text!search/search_edit_embedded.handlebars",
+    "backbone", 
+    "handlebars", 
     "datum/Datum",
     "datum/DatumFieldEditView",
     "search/Search",
@@ -11,8 +9,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    searchAdvancedTemplate,
-    searchTemplate,
     Datum,
     DatumFieldEditView,
     Search,
@@ -69,12 +65,12 @@ define([
     /**
      * The Handlebars template rendered as the AdvancedSearchView.
      */
-    advancedTemplate : Handlebars.compile(searchAdvancedTemplate),
+    advancedTemplate : Handlebars.templates.search_advanced_edit_embedded,
     
     /**
      * The Handlebars template rendered as the TopSearchView.
      */
-    topTemplate : Handlebars.compile(searchTemplate),
+    topTemplate : Handlebars.templates.search_edit_embedded,
    
     /**
      * Renders the SearchEditView.
@@ -144,7 +140,7 @@ define([
       Utils.debug("Will search for " + $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum()).searchByQueryString($("#search_box").val(), function(datumIds) {        
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {        
         // Display the results in the DataListReadView
         appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
         appView.dataListReadLeftSideView.renderNewModel();
@@ -198,7 +194,7 @@ define([
     search : function(queryString) {
       // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum()).searchByQueryString(queryString, function(datumIds) {        
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, function(datumIds) {        
         // Display the results in the DataListReadView
         appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
         appView.dataListReadLeftSideView.renderNewModel();
