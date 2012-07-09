@@ -32,8 +32,7 @@ define( [
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
 
-      this.model.bind("change:title change:dateCreated change:description",
-          this.renderUpdatedDataList, this);
+      this.model.bind("change", this.showEditable, this);
     },
 
     /**
@@ -109,9 +108,7 @@ define( [
      * Re-renders the datalist header based on the current model.
      */
     renderUpdatedDataList : function() {
-      $(".title").text(this.model.get("title"));
-      $(".dateCreated").text(this.model.get("dateCreated"));
-      $(".description").text(this.model.get("description"));
+      window.appView.renderEditableDataListViews();
     },
 
     /**
@@ -129,7 +126,7 @@ define( [
       }
 
       // Display the first page of Datum and the pagination footer
-      for (i = 0; i < this.perPage; i++) {
+      for (var i = 0; i < this.perPage; i++) {
         var datumId = this.model.get("datumIds")[i];
         if (datumId) {
           this.addOne(datumId);
@@ -271,16 +268,19 @@ define( [
     },
 
     updateTitle: function(){
-      this.model.set("title",this.$el.children(".data-list-title").val());
+      this.model.set("title",this.$el.find(".data-list-title").val());
     },
     
     updateDescription: function(){
-      this.model.set("description",this.$el.children(".data-list-description").val());
+      this.model.set("description",this.$el.find(".data-list-description").val());
     },
     
     showReadonly :function(){
       window.app.router.showReadonlyDataList();
     },
+    showEditable :function(){
+      window.app.router.showEditableDataList();
+    }
   });
 
   return DataListEditView;

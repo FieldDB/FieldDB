@@ -31,8 +31,7 @@ define( [
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
       
-      this.model.bind("change:title change:dateCreated change:description", this.renderUpdatedDataList, this);
-      this.model.bind("change:title ", this.render, this);
+      this.model.bind("change", this.showReadonly, this);
     },
 
     /**
@@ -139,7 +138,7 @@ define( [
       }
       
       // Display the first page of Datum and the pagination footer
-      for (i = 0; i < this.perPage; i++) {
+      for (var i = 0; i < this.perPage; i++) {
         var datumId = this.model.get("datumIds")[i];
         if (datumId) {
           this.addOne(datumId);
@@ -254,6 +253,9 @@ define( [
     },
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
+    },
+    showReadonly :function(){
+      window.app.router.showReadonlyDataList();
     },
     showEditable :function(){
       window.app.router.showEditableDataList();

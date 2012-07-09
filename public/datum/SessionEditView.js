@@ -35,7 +35,7 @@ define([
         format               : "datum"
       });
       
-      this.model.bind('change', this.render, this);
+      this.model.bind('change', this.showEditable, this);
     },
 
     /**
@@ -139,6 +139,9 @@ define([
     },
     resizeLarge : function(){
       window.app.router.showEmbeddedSession();
+    },
+    showEditable :function(){
+      window.app.router.showEditableSession();
     },
     showReadonly : function(){
       window.app.router.showReadonlySession();
