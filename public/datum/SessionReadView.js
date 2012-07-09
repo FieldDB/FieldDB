@@ -1,14 +1,14 @@
 define([
     "backbone", 
     "handlebars", 
-    "datum/DatumFieldEditView",
+    "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
     Handlebars,
-    DatumFieldEditView,
+    DatumFieldReadView,
     Session,
     UpdatingCollectionView
 ) {
