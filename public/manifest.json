@@ -1,10 +1,10 @@
 {
   "name": "iField",
-  "version": "1.11.1.11",
+  "version": "1.11.1.15",
   "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
   "app": {
     "launch": {
-      "local_path": "dev.html"
+      "local_path": "index.html"
     }
   },
   "offline_enabled": true,
@@ -19,6 +19,6 @@
     "128": "icon128.png" 
   },
   "manifest_version": 2,
-  "content_security_policy": "default-src 'self' https://ifield.fieldlinguist.com/ https://ssl.google-analytics.com/ https://www.youtube.com http://redmine.ilanguage.ca:8080 http://gentle-ice-2185.herokuapp.com/ https://trisapeace.iriscouch.com; script-src 'self' https://ssl.google-analytics.com/; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ 'self'; object-src 'self';"
+  "content_security_policy": "default-src 'self' https://ifield.fieldlinguist.com/ https://ssl.google-analytics.com/ ; script-src 'self' https://ssl.google-analytics.com/; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ 'self'; object-src 'self';"
   
 }

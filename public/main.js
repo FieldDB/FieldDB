@@ -92,36 +92,38 @@ require.config({
 
 // Initialization
 require([
-    "app/App",
-    "app/AppView",
-    "app/AppRouter",
-    "terminal",
-    "corpus/Corpus",
-    "data_list/DataList",
-    "datum/Datum",
-    "datum/Session",
-    "user/User",
-    "user/UserWelcomeView",
-    "handlebars",
-    "compiledTemplates",
-    "backbone",
-    "backbone_pouchdb",
-    "libs/Utils"
+//    "app/App",
+//    "app/AppView",
+//    "app/AppRouter",
+//    "terminal",
+//    "corpus/Corpus",
+//    "data_list/DataList",
+//    "datum/Datum",
+//    "datum/Session",
+//    "user/User",
+//    "user/UserWelcomeView",
+//    "handlebars",
+//    "compiledTemplates",
+//    "backbone",
+//    "backbone_pouchdb",
+"bootstrap",
+"libs/Utils"
 ], function(
-    App,
-    AppView,
-    AppRouter,
-    Terminal,
-    Corpus,
-    DataList,
-    Datum,
-    Session,
-    User,
-    UserWelcomeView,
-    Handlebars,
-    compiledTemplates,
-    Backbone,
-    forcingpouchtoloadonbackboneearly
+//    App,
+//    AppView,
+//    AppRouter,
+//    Terminal,
+//    Corpus,
+//    DataList,
+//    Datum,
+//    Session,
+//    User,
+//    UserWelcomeView,
+//    Handlebars,
+//    compiledTemplates,
+//    Backbone,
+//    forcingpouchtoloadonbackboneearly
+    bootstrap
 ) {
   
   
@@ -130,19 +132,19 @@ require([
    * It is called either by the main.js or by the UserWelcomeView.js
    */
   window.startApp = function(a, callback){
-    window.app = a;
-
-    // Create and display the AppView and its dependents
-    window.appView = new AppView({model: a}); 
-    window.appView.render();
-    
-    // Start the Router
-    app.router = new AppRouter();
-    Backbone.history.start();
-    
-    if(typeof callback == "function"){
-      callback();
-    }
+//    window.app = a;
+//
+//    // Create and display the AppView and its dependents
+//    window.appView = new AppView({model: a}); 
+//    window.appView.render();
+//    
+//    // Start the Router
+//    app.router = new AppRouter();
+//    Backbone.history.start();
+//    
+//    if(typeof callback == "function"){
+//      callback();
+//    }
     
   };
   /*
@@ -168,24 +170,25 @@ require([
   var appjson = localStorage.getItem("appids");
   if (appjson) {
     Utils.debug("Loading app from localStorage");
-    appjson = JSON.parse(appjson);
-    a = new App(); 
-    var corpusname = null;
-    var couchConnection = null;
-    if(localStorage.getItem("mostRecentCouchConnection")){
-      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
-      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-    }
-    a.createAppBackboneObjects(corpusname ,function(){
-      a.loadBackboneObjectsById(couchConnection, appjson, function(){
-        window.startApp(a);
-      });
-    });
+//    appjson = JSON.parse(appjson);
+//    a = new App(); 
+//    var corpusname = null;
+//    var couchConnection = null;
+//    if(localStorage.getItem("mostRecentCouchConnection")){
+//      corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+//      couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+//    }
+//    a.createAppBackboneObjects(corpusname ,function(){
+//      a.loadBackboneObjectsById(couchConnection, appjson, function(){
+//        window.startApp(a);
+//      });
+//    });
   } else {
     Utils.debug("Loading fresh app");
+    $(".testcss").html("changing it dynamically");
     // Create a UserWelcomeView modal
-    welcomeUserView = new UserWelcomeView();
-    welcomeUserView.render();
+//    welcomeUserView = new UserWelcomeView();
+//    welcomeUserView.render();
     $('#user-welcome-modal').modal("show");
   }
   
