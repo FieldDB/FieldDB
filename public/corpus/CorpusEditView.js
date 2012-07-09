@@ -285,14 +285,15 @@ define([
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
     },
-    //This is the function that is bound to changes
-    showEditable :function(){
-      window.appView.renderEditableCorpusViews();
-    },
     //This is the function that is  bound to the book button
     showReadonly : function(){
       window.app.router.showReadonlyCorpus();
+    },
+    //This is the function that is bound to changes
+    showEditable :function(){
+      window.appView.renderEditableCorpusViews();
     }
+   
   });
 
   return CorpusReadFullscreenView;
