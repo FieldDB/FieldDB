@@ -57,21 +57,21 @@ define([
     updateConsultant : function() {
       this.model.get("sessionFields").where({
         label : "consultants"
-      })[0].set("value", this.$el.children(".session-consultant-input")
+      })[0].set("value", this.$el.find(".session-consultant-input")
           .val());
     },
     
     updateElicitedDate : function() {
       this.model.get("sessionFields").where({
         label : "dateElicited"
-      })[0].set("value", this.$el.children(".session-elicitation-date-input")
+      })[0].set("value", this.$el.find(".session-elicitation-date-input")
           .val());
     },
     
     updateGoal : function() {
       this.model.get("sessionFields").where({
         label : "goal"
-      })[0].set("value", this.$el.children(".session-goal-input")
+      })[0].set("value", this.$el.find(".session-goal-input")
           .val());
     },
     /**
