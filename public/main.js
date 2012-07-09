@@ -70,7 +70,6 @@ require.config({
         return Backbone;
       }
     },
-    
 
     "handlebars" : {
       deps : ["bootstrap"],
@@ -86,7 +85,11 @@ require.config({
       exports : function(Handlebars) {
         return Handlebars;
       }
+    },
+    "terminal" : {
+      exports : "Terminal"
     }
+    
   }
 });
 
@@ -95,7 +98,6 @@ require([
     "app/App",
     "app/AppView",
     "app/AppRouter",
-    "terminal",
     "corpus/Corpus",
     "data_list/DataList",
     "datum/Datum",
@@ -111,7 +113,6 @@ require([
     App,
     AppView,
     AppRouter,
-    Terminal,
     Corpus,
     DataList,
     Datum,
@@ -183,8 +184,9 @@ require([
     });
   } else {
     Utils.debug("Loading fresh app");
+    $(".testcss").html("changing it dynamically");
     // Create a UserWelcomeView modal
-    welcomeUserView = new UserWelcomeView();
+    var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
     $('#user-welcome-modal').modal("show");
   }
