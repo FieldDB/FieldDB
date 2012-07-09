@@ -34,6 +34,7 @@ define([
     "user/User",
     "user/UserEditView",
     "user/UserReadView",
+    "terminal",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -70,7 +71,8 @@ define([
     SessionReadView,
     User,
     UserEditView,
-    UserReadView
+    UserReadView,
+    Terminal
 ) {
   var AppView = Backbone.View.extend(
   /** @lends AppView.prototype */

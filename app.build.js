@@ -1,7 +1,6 @@
 ({
-  appDir : "./",
-  baseUrl : "./",
-  dir : "../release",
+  baseUrl : "./public",
+  dir : "./release",
   optimize : 'none',
 //  optimize : 'uglify',
 //  uglify: {
@@ -11,14 +10,14 @@
 //    max_line_length: 1000
 //  },
 //  inlineText: true,
-//  namespace: 'foo',
-  skipModuleInsertion: true,
+//  namespace: 'ifield',
+  skipModuleInsertion: false,
 //  stubModules: ['underscore', 'jquery','backbone'],
-  wrap: {
-    start: "(function() {",
-    end: "}());"
-  },
-  mainConfigFile : "main.js",
+//  wrap: {
+//    start: "(function() {",
+//    end: "}());"
+//  },
+  mainConfigFile : "public/main.js",
   modules : [ {
     name : "main"
   } ]
