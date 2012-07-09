@@ -56,10 +56,29 @@ define([
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
-      "click .icon-book": "showReadonly"
- 
+      "click .icon-book": "showReadonly",
+      "blur .session-consultant-input" : "updateConsultant",
+      "blur .session-elicitation-date-input" : "updateElicitedDate",
+      "blur .session-goal-input" : "updateGoal"
     },
-    
+    updateConsultant : function(){
+      this.model.get("sessionFields").where({
+        label : "consultants"
+      })[0].set("value", this.$el.find(".session-consultant-input")
+          .val());
+    },
+    updateElicitedDate : function(){
+      this.model.get("sessionFields").where({
+        label : "dateElicited"
+      })[0].set("value", this.$el.find(".session-elicitation-date-input")
+          .val());
+    },
+    updateGoal : function(){
+      this.model.get("sessionFields").where({
+        label : "goal"
+      })[0].set("value", this.$el.find(".session-goal-input")
+          .val());
+    },
     /**
      * The Handlebars template rendered as the Embedded.
      */
@@ -94,7 +113,7 @@ define([
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
             consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            date : this.model.get("sessionFields").where({label: "dateSEntered"})[0].get("value")
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
           };
           
           this.setElement("#session-quickview");
