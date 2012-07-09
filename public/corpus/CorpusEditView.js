@@ -1,9 +1,6 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars",
-    "text!corpus/corpus_edit_fullscreen.handlebars",
-    "text!corpus/corpus_edit_embedded.handlebars",
-    "text!corpus/corpus_summary_edit_embedded.handlebars",
+    "backbone", 
+    "handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -23,9 +20,6 @@ define([
 ], function(
     Backbone, 
     Handlebars,
-    corpusFullscreenTemplate,
-    corpusWellTemplate,
-    corpusSummaryTemplate,
     Corpus,
     Comment,
     Comments,
@@ -140,23 +134,26 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       
-      "click .new_datum" : "newDatum"
+      "click .new_datum" : "newDatum",
+      "blur .corpus-title-input" : "updateTitle",
+      "blur .corpus-description-input" : "updateDescription"
+      
     },
 
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.compile(corpusFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.corpus_edit_fullscreen,
     
     /**
      * The Handlebars template rendered as the CorpusWellView.
      */
-    templateCentreWell : Handlebars.compile(corpusWellTemplate),
+    templateCentreWell : Handlebars.templates.corpus_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Summary
      */
-    templateSummary : Handlebars.compile(corpusSummaryTemplate),
+    templateSummary : Handlebars.templates.corpus_summary_edit_embedded,
     
     /**
      * Renders the CorpusReadFullScreenView and all of its child Views.
@@ -223,6 +220,14 @@ define([
       }
         
       return this;
+    },
+    
+    updateTitle: function(){
+      this.model.set("title",this.$el.children(".corpus-title-input").val());
+    },
+    
+    updateDescription: function(){
+      this.model.set("description",this.$el.children(".corpus-description-input").val());
     },
     
     newDatum : function() {

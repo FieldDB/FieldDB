@@ -1,7 +1,6 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
-    "text!datum/datum_read_embedded.handlebars",
+    "backbone", 
+    "handlebars", 
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldReadView",
@@ -12,7 +11,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    datumTemplate,
     Confidential,
     Datum,
     DatumFieldReadView,
@@ -73,7 +71,7 @@ define([
     /**
      * The Handlebars template rendered as the DatumReadView.
      */
-    template : Handlebars.compile(datumTemplate),
+    template : Handlebars.templates.datum_read_embedded,
 
     /**
      * Renders the DatumReadView and all of its partials.

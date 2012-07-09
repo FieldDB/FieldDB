@@ -1,7 +1,13 @@
 #!/bin/bash
 
+
+
 #sudo service couchdb start
 #sudo service mongod start
+
+#Compile handlebars templates: required to use chrome extension, and avoid insecure script injection vunerabilites
+./compile_handlebars.sh
+
 ./node_modules/forever/bin/forever \
 start \
 -al forever.log \
