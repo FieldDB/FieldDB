@@ -1,8 +1,9 @@
 define([
-    "use!backbone",
+    "backbone",
     "user/UserGeneric",
     "permission/Permission",
-    "user/UserPreference"
+    "user/UserPreference",
+    "libs/Utils"
 ], function(
     Backbone, 
     UserGeneric,
@@ -46,7 +47,7 @@ define([
       corpuses : [],
       dataLists : [],
       prefs : new UserPreference(),
-      
+      mostRecentIds : {},
       // Defaults from User
       firstname : "",
       lastname : "",
@@ -55,19 +56,6 @@ define([
       activityHistory : [],
       permissions : new Permission()
     },
-
-    /** 
-     * The login function checks username, password, and the combination of the two. 
-     */
-//        login: function(username, password) {
-//          if (this.get("username") == username) {
-//            if (this.get("password") == password) {
-//              window.username = username; 
-//              return true;	   
-//            }
-//          }
-//          return false;  
-//        },
 
     /**
      * The subtitle function returns user's first and last names. 

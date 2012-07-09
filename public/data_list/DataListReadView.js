@@ -1,11 +1,7 @@
 //TODO this is mostly a copy of DataListEditView, we will need to think about what actually needs to go in here and what it will look like.
 define( [ 
-  "use!backbone", 
-  "use!handlebars",
-  "text!data_list/data_list_read_fullscreen.handlebars",
-  "text!data_list/data_list_read_embedded.handlebars",
-  "text!data_list/data_list_read_link.handlebars",
-  "text!datum/paging_footer.handlebars",
+  "backbone", 
+  "handlebars",
   "data_list/DataList",
   "datum/Datum",
   "datum/DatumReadView",
@@ -13,10 +9,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    dataListReadFullscreenTemplate,
-    dataListReadEmbeddedTemplate,
-    dataListReadLinkTemplate,
-    pagingFooterTemplate,
     DataList, 
     Datum, 
     DatumReadView,
@@ -69,23 +61,23 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    fullscreenTemplate : Handlebars.compile(dataListReadFullscreenTemplate),
+    fullscreenTemplate : Handlebars.templates.data_list_read_fullscreen,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
      */
-    embeddedTemplate : Handlebars.compile(dataListReadEmbeddedTemplate),
+    embeddedTemplate : Handlebars.templates.data_list_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListLinkReadView.
      */
-    linkTemplate : Handlebars.compile(dataListReadLinkTemplate),
+    linkTemplate : Handlebars.templates.data_list_read_link,
 
     /**
      * The Handlebars template of the pagination footer, which is used
      * as a partial.
      */
-    footerTemplate : Handlebars.compile(pagingFooterTemplate),
+    footerTemplate : Handlebars.templates.paging_footer,
 
     /**
      * Initially renders the DataListReadView. This should only be called by 
@@ -99,11 +91,17 @@ define( [
         // Display the Data List
         this.setElement($("#data-list-link"));
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
-      } else if ((this.format == "leftSide") || (this.format == "fullscreen")) {
-        // Display the Data List
+      } else if (this.format == "leftSide") {
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-        //TODO do the other template
+          
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+       
+      }else if (this.format == "fullscreen") {
+        // Display the Data List
+        this.setElement($("#data-list-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
           
         // Display the pagination footer
         this.renderUpdatedPagination();
@@ -188,29 +186,33 @@ define( [
      */
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
-      var d = new Datum();
-      d.id = datumId;
+      var d = new Datum({
+        id : datumId,
+        corpusname : window.app.get("corpus").get("corpusname")
+      });
       var self = this;
-      d.fetch({
-        success : function() {
-          // Render a DatumReadView for that Datum at the end of the DataListReadView
-          var view = new DatumReadView({
-            model :  d,
-            tagName : "li"
-          });
-          view.format = "latex";
-          $('#data_list_content').append(view.render().el);
+      d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+        d.fetch({
+          success : function() {
+            // Render a DatumReadView for that Datum at the end of the DataListEditView
+            var view = new DatumReadView({
+              model : d,
+              tagName : "li"
+            });
+            view.format = "latex";
+            $('#data_list_content').append(view.render().el);
+            
+            // Keep track of the DatumReadView
+            self.datumLatexViews.push(view);
+            
+            // Display the updated DatumReadView
+            self.renderUpdatedPagination();
+          },
           
-          // Keep track of the DatumReadView
-          self.datumLatexViews.push(view);
-          
-          // Display the updated DatumReadView
-          self.renderUpdatedPagination();
-        },
-        
-        error : function() {
-          Utils.debug("Error fetching datum: " + datumId);
-        }
+          error : function() {
+            Utils.debug("Error fetching datum: " + datumId);
+          }
+        });
       });
     },
     

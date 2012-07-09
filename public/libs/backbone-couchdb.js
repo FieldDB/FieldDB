@@ -3,7 +3,7 @@
 // id attribute
 // http://backbonejs.org/docs/backbone.html#section-34
 require([
-  "use!backbone"
+  "backbone"
 ], function(
   Backbone
 ) {

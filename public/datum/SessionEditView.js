@@ -1,19 +1,13 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
-    "text!datum/session_edit_embedded.handlebars",
-    "text!datum/session_edit_fullscreen.handlebars",
-    "text!datum/session_summary_edit_embedded.handlebars",
+    "backbone", 
+    "handlebars", 
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
-    Handlebars, 
-    sessionEmbeddedTemplate,
-    sessionFullscreenTemplate,
-    sessionSummaryTemplate,
+    Handlebars,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -54,26 +48,46 @@ define([
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
-      "click .icon-book" : "showReadonly",
-      "blur .sessionGoal" : "updateGoal",
-      "blur .sessionConsultants" : "updateConsultants",
-      "blur .sessionDate" : "updateDateSEntered"
+      "click .icon-book": "showReadonly",
+      "blur .session-consultant-input" : "updateConsultant",
+      "blur .session-elicitation-date-input" : "updateElicitedDate",
+      "blur .session-goal-input" : "updateGoal"
     },
     
+    updateConsultant : function() {
+      this.model.get("sessionFields").where({
+        label : "consultants"
+      })[0].set("value", this.$el.children(".session-consultant-input")
+          .val());
+    },
+    
+    updateElicitedDate : function() {
+      this.model.get("sessionFields").where({
+        label : "dateElicited"
+      })[0].set("value", this.$el.children(".session-elicitation-date-input")
+          .val());
+    },
+    
+    updateGoal : function() {
+      this.model.get("sessionFields").where({
+        label : "goal"
+      })[0].set("value", this.$el.children(".session-goal-input")
+          .val());
+    },
     /**
      * The Handlebars template rendered as the Embedded.
      */
-    templateEmbedded : Handlebars.compile(sessionEmbeddedTemplate),
+    templateEmbedded: Handlebars.templates.session_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Fullscreen.
      */
-    templateFullscreen : Handlebars.compile(sessionFullscreenTemplate),
+    templateFullscreen : Handlebars.templates.session_edit_fullscreen,
     
     /**
      * The Handlebars template rendered as the Summary.
      */
-    templateSummary : Handlebars.compile(sessionSummaryTemplate),
+    templateSummary : Handlebars.templates.session_summary_edit_embedded,
     
     /**
      * Renders the SessionEditView.
@@ -99,7 +113,7 @@ define([
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
             consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            date : this.model.get("sessionFields").where({label: "dateSEntered"})[0].get("value")
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
           };
           
           this.setElement("#session-quickview");
@@ -134,11 +148,9 @@ define([
     
     updatePouch : function() {
       Utils.debug("Saving the Session");
-      this.model.save(null, {
-        success : function() {
-          appView.renderReadonlySessionViews();
-          appView.renderEditableSessionViews();
-        }
+      var self = this;
+      this.model.changeCorpus(this.model.get("corpusname"),function(){
+        self.model.save();
       });
     },
     

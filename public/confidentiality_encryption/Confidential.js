@@ -1,6 +1,6 @@
 define( [
-    "use!backbone",
-    "use!crypto"
+    "backbone",
+    "crypto"
 ],function(
     Backbone, 
     CryptoJS
