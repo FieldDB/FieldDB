@@ -62,7 +62,8 @@ define([
       "click .register-new-user" : function() {
         Utils.debug("Attempting to register a new user: " + this.el);
         /*
-         * Set defaults for new user registration here
+         * Set defaults for new user registration here,
+         * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
          */
         var dataToPost = {};
         dataToPost.login = $(".username").val();
@@ -78,19 +79,19 @@ define([
         dataToPost.affiliation = "";
         dataToPost.description = "";
         dataToPost.subtitle = "";
-        dataToPost.dataLists = [];
+        dataToPost.dataLists = ["1"];
         dataToPost.prefs = {
             "skin" : "",
             "numVisibleDatum" : 1
           };
-        dataToPost.mostRecentIds = {};
+        dataToPost.mostRecentIds = {corpusid:null};
         dataToPost.firstname = "";
         dataToPost.lastname = "";
-        dataToPost.teams = [];
-        dataToPost.sessionHistory = [];
-        dataToPost.activityHistory = [];
-        dataToPost.permissions = {};
-        dataToPost.hotkeys = {};
+        dataToPost.teams = ["1"];
+        dataToPost.sessionHistory = ["1"];
+        dataToPost.activityHistory = ["1"];
+        dataToPost.permissions = {empty:"permission"};
+        dataToPost.hotkeys = {empty: "hotkey"};
        
         if (dataToPost.username != ""
           && (dataToPost.password == $(".to-confirm-password").val())
