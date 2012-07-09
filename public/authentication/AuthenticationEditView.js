@@ -55,7 +55,11 @@ define([
      */
     events : {
       "click .logout" : "logout",
-      "click .login" : "login"
+      "click .login" : "login",
+      "click #login_form" : function(e) {
+        e.stopPropagation();
+      }
+      
     },
     
     /**
