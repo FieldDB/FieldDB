@@ -1,5 +1,5 @@
 define([ 
-    "use!backbone",
+    "backbone",
     "audio_video/AudioVideo", 
     "comment/Comments",
     "datum/DatumField", 
@@ -69,24 +69,33 @@ define([
      * @constructs
      */
     initialize : function() {
-      if (typeof this.get("audioVideo") == "function") {
-        this.set("audioVideo",new AudioVideo());
-      }
       
+    //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
+//      this.bind("change:corpusname", function() {
+//        this.pouch = Backbone.sync
+//        .pouch(Utils.androidApp() ? Utils.touchUrl
+//            + this.get("corpusname") : Utils.pouchUrl
+//            + this.get("corpusname"));
+//      }, this);
+//      
+//      try {
+//        if (this.get("corpusname") == undefined) {
+//          this.set("corpusname", app.get("corpus").get("corpusname"));
+//        }
+//        this.pouch = Backbone.sync
+//        .pouch(Utils.androidApp() ? Utils.touchUrl
+//            + this.get("corpusname") : Utils.pouchUrl
+//            + this.get("corpusname"));
+//      } catch(e) {
+//        Utils.debug("Corpusname was undefined on this corpus, the datum will not have a valid corpusname until it is set.");
+//      }
       // Initialially, the first datumState is selected
       if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
         this.get("datumStates").models[0].set("selected", "selected");
       }
     },
     
-    relativizePouchToACorpus : function(corpus){
-      //rebuild the pouch and touchdb urls to be relative to the active corpus TODO users shouldnt get saved in their corpus or should they? if they are saved, then if you replcate the corpus you can eaisly see the collaborators/contributors profiles since they are in the corpus. but they might be out of date.
-      var c = corpus.get("couchConnection");
-      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl+c.corpusname
-          : Utils.pouchUrl+c.corpusname);
-    },
-    
-    defaults : {
+    defaults : {      
       audioVideo : new AudioVideo(),
       comments : new Comments(),
       datumTags : new DatumTags()
@@ -113,9 +122,14 @@ define([
       return response;
     },
 
-    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
-        : Utils.pouchUrl),
-        
+    changeCorpus : function(corpusname, callback) {
+      if(this.pouch == undefined){
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+      }
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -126,8 +140,10 @@ define([
      * the Datum's ID.
      */
     getAllDatumIdsByDate : function(callback) {
-      this.pouch(function(err, db) {
-        /*
+      var self = this;
+      this.changeCorpus(this.get("corpusname"),function(){
+        self.pouch(function(err, db) {
+          /*
         Code for get_datum_ids/by_date
         
         function(doc) {
@@ -135,13 +151,14 @@ define([
             emit(doc.dateEntered, doc.id);
           }
         }
-        */
-        
-        db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
-          if ((!err) && (typeof callback == "function"))  {
-            console.log("Callback with: ", response.rows);
-            callback(response.rows)
-          }
+           */
+          
+          db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
+            if ((!err) && (typeof callback == "function"))  {
+              console.log("Callback with: ", response.rows);
+              callback(response.rows)
+            }
+          });
         });
       });
     },
@@ -284,7 +301,8 @@ define([
         dateEntered : this.get("dateEntered"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
-        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true})
+        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
+        corpusname : this.get("corpusname")
         // Don't need to do Session here since it will be overwritten in DatumContainerEditView.prependDatum()
       });
       

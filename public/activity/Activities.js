@@ -1,4 +1,4 @@
-define([ "use!backbone", 
+define([ "backbone", 
          "activity/Activity" ], 
          function(Backbone, Activity) {
   var Activities = Backbone.Collection.extend(

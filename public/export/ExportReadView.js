@@ -1,12 +1,10 @@
 define([
-    "use!backbone", 
-    "use!handlebars", 
-    "text!export/export_read_modal.handlebars",
+    "backbone", 
+    "handlebars", 
     "export/Export",
 ], function(
     Backbone, 
     Handlebars, 
-    exportTemplate, 
     Export
 ) {
   var ExportView = Backbone.View.extend(
@@ -25,7 +23,7 @@ define([
 
     classname : "export",
 
-    template: Handlebars.compile(exportTemplate),
+    template: Handlebars.templates.export_read_modal,
 
     render : function() {
      // Display the ExportView

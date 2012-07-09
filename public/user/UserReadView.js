@@ -1,9 +1,6 @@
 define([ 
-    "use!backbone", 
-    "use!handlebars", 
-    "text!user/user_read_link.handlebars",
-    "text!user/user_read_modal.handlebars",
-    "text!user/user_read_fullscreen.handlebars",
+    "backbone", 
+    "handlebars", 
     "corpus/Corpus",
     "corpus/Corpuses",
     "user/User",
@@ -11,9 +8,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    userLinkTemplate,
-    userModalTemplate,
-    userFullscreenTemplate, 
     Corpus,
     Corpuses,
     User
@@ -49,17 +43,17 @@ define([
     /**
      * The Handlebars template rendered as the UserReadLinkView.
      */
-    linkTemplate : Handlebars.compile(userLinkTemplate),
+    linkTemplate : Handlebars.templates.user_read_link,
     
     /**
      * The Handlebars template rendered as the UserReadModalView.
      */
-    modalTemplate : Handlebars.compile(userModalTemplate),
+    modalTemplate : Handlebars.templates.user_read_modal,
     
     /**
      * The Handlebars template rendered as the UserReadFullscreenView.
      */
-    fullscreenTemplate : Handlebars.compile(userFullscreenTemplate),
+    fullscreenTemplate : Handlebars.templates.user_read_fullscreen,
     
     /**
      * Renders the UserReadView.
@@ -111,24 +105,18 @@ define([
 //        "teams" : []
 //      });
 
-      this.model.id = "E144FA24-BAF4-48F9-9800-62E7A7E93CF4";
-      this.model.fetch();
-//      this.model.attributes = {
-//          "username" : "public",
-//          "password" : "",
-//          "email" : "",
-//          "firstname" : "Anonymous",
-//          "lastname" : "User",
-//          "gravatar" : "./../user/public_gravatar.png",
-//          "researchInterest" : "",
-//          "affiliation" : "",
-//          "description" : "",
-//          "subtitle" : "",
-//          "corpuses" : ["5028B933-72BB-4EA4-ADF8-67C2A5ABC968"],
-//          "dataLists" : [],
-//          "prefs" : oldprefs,
-//          "teams" : []
-//        };
+//      this.model.id = "E144FA24-BAF4-48F9-9800-62E7A7E93CF4";
+//      this.model.fetch();
+      this.model.set ({
+          "id": "E144FA24-BAF4-48F9-9800-62E7A7E93CF4",
+          "username" : "ifieldpublicuser",
+          "password" : "",
+          "email" : "",
+          "firstname" : "Anonymous",
+          "lastname" : "User",
+          "gravatar" : "./../user/public_gravatar.png",
+          "prefs" : oldprefs,
+        });
 //      var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
 //      this.model.get("corpuses").push(n.id);
 //      var d = new DataList({});
