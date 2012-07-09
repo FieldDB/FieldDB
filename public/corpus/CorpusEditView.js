@@ -134,7 +134,10 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       
-      "click .new_datum" : "newDatum"
+      "click .new_datum" : "newDatum",
+      "blur .corpus-title-input" : "updateTitle",
+      "blur .corpus-description-input" : "updateDescription"
+      
     },
 
     /**
@@ -217,6 +220,14 @@ define([
       }
         
       return this;
+    },
+    
+    updateTitle: function(){
+      this.model.set("title",this.$el.children(".corpus-title-input").val());
+    },
+    
+    updateDescription: function(){
+      this.model.set("description",this.$el.children(".corpus-description-input").val());
     },
     
     newDatum : function() {

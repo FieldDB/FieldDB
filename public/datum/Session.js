@@ -39,6 +39,49 @@ define([
      * @property {String} goal The goal is the particular linguistic goal that
      *           the researcher was pursuing during that session.
      * 
+     *  new DatumField({
+            label : "user",
+            encrypted: "",
+            userchooseable: "disabled"
+          }),
+          new DatumField({
+            label : "consultants",
+            encrypted: "",
+            userchooseable: "disabled"
+          }),
+          new DatumField({
+            label : "language",
+            encrypted: "",
+            userchooseable: "disabled",
+            help: "This is the langauge (or language family) if you would like to use it."
+          }),
+          new DatumField({
+            label : "dialect",
+            encrypted: "",
+            userchooseable: "disabled",
+            help: "You can use this field to be as precise as you would like about the dialect of this session."
+          }),
+          new DatumField({
+            label : "dateElicited",
+            encrypted: "",
+            userchooseable: "disabled",
+            help: "This is the date in which the session took place."
+          }),
+          new DatumField({
+            label : "dateSEntered",
+            encrypted: "",
+            userchooseable: "disabled",
+            help: "This is the date in which the session was entered."
+          }),
+          new DatumField({
+            label : "goal",
+            encrypted: "",
+            userchooseable: "disabled",
+            help: "This describes the goals of the session."
+          }),  
+     * 
+     * 
+     * 
      * @description The initialize function brings up a page in which the user
      *              can fill out the details corresponding to the session. These
      *              details will be linked to each datum submitted in the
