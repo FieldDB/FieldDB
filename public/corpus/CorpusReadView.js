@@ -84,7 +84,7 @@ define([
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
-      "click .new_datum" : "newDatum",
+      "click .new_datum_read" : "newDatum",
       "click .icon-edit": "showEditable"
     },
     
@@ -191,7 +191,7 @@ define([
       window.app.router.showFullscreenCorpus();
     } ,
        
-    newDatum : function() {
+    newDatum : function(e) {
       appView.datumsView.newDatum();
       app.router.showDashboard();
     },

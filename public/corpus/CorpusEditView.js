@@ -134,7 +134,7 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       
-      "click .new_datum" : "newDatum",
+      "click .new_datum_edit" : "newDatum",
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription"
       
