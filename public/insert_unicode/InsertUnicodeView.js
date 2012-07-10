@@ -22,7 +22,7 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .insert-unicode-input" : "updateUnicode"
+      "click .insert-unicode-input" : "insertNewUnicode"
     },
 
     classname : "insert-unicode",
@@ -45,13 +45,15 @@ define([
       Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
       this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
     },
-    insertNewDatumState : function() {
+    insertNewUnicode : function() {
       var m = new InsertUnicode({
         "unicode" : this.$el.children(".insert-unicode-input").val(),
       });
-      this.model.get("datumStates").add(m);
+      
+      app.get("authentication").get("userPrivate").get("prefs").get("unicodes").add(m);
+      console.log(m);
     },
-    
+
     
   });
 
