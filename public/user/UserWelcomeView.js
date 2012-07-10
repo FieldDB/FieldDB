@@ -85,23 +85,6 @@ define([
         corpusConnection.corpusname = "firstcorpus";
         dataToPost.corpuses = [corpusConnection];
         dataToPost.gravatar = "./../user/user_gravatar.png";
-        dataToPost.researchInterest = "";
-        dataToPost.affiliation = "";
-        dataToPost.description = "";
-        dataToPost.subtitle = "";
-        dataToPost.dataLists = ["1"];
-        dataToPost.prefs = {
-            "skin" : "",
-            "numVisibleDatum" : 1
-          };
-        dataToPost.mostRecentIds = {corpusid:null};
-        dataToPost.firstname = "";
-        dataToPost.lastname = "";
-        dataToPost.teams = ["1"];
-        dataToPost.sessionHistory = ["1"];
-        dataToPost.activityHistory = ["1"];
-        dataToPost.permissions = {empty:"permission"};
-        dataToPost.hotkeys = {empty: "hotkey"};
        
         if (dataToPost.username != ""
           && (dataToPost.password == $(".to-confirm-password").val())
@@ -135,38 +118,6 @@ define([
 
                   var u = auth.get("userPrivate");
                   u.set("id",data.user._id); //set the backbone id to be the same as the mongodb id
-
-                  /*
-                   * Clear out dummy values used to create mongooseauth UserSchema
-                   */
-                  if(data.user.dataLists = ["1"]){
-                    data.user.dataLists = [];
-                  }
-                  if(data.user.prefs = {
-                      "skin" : "",
-                      "numVisibleDatum" : 1
-                    }){
-                    data.user.prefs = {};
-                  }
-                  if(data.user.mostRecentIds = {corpusid:null}){
-                    data.user.mostRecentIds = {};
-                  };
-                  if(data.user.teams = ["1"]){
-                    data.user.teams = [];
-                  }
-                  if(data.user.sessionHistory = ["1"]){
-                    data.user.sessionHistory = [];
-                  }
-                  if(data.user.activityHistory = ["1"]){
-                    data.user.activityHistory = [];
-                  }
-                  if(data.user.permissions = {empty:"permission"}){
-                    data.user.permissions = [];
-                  }
-                  if(data.user.hotkeys = {empty: "hotkey"}){
-                    data.user.hotkeys = [];
-                  }
-                    
                   u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
                   
                   // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
