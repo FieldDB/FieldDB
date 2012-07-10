@@ -2306,7 +2306,7 @@ var IdbPouch = function(opts, callback) {
     // An object of couch view functions that we use
     // Note that spacing is very important. Do not reformat these values
     var validCouchViews = {
-      getDatumIdsByDate : function(doc) {if (doc.dateEntered) {emit(doc.dateEntered, doc.id);}}
+      getDatumIdsByDate : function(doc) {if (doc.dateEntered) {emit(doc.dateEntered, doc);}}
     };
 
     // We may have passed in an anonymous function that used emit in
