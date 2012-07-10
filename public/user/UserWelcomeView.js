@@ -241,10 +241,10 @@ define([
         }
       },
       "click .register-twitter" : function() {
-        
+        window.location.href = Utils.authUrl+"/auth/twitter";
       },
       "click .register-facebook" : function() {
-        
+        window.location.href = Utils.authUrl+"/auth/facebook";
       },
 
       "click .sync-sapir-data" : function() {
@@ -297,13 +297,14 @@ define([
           }
         });
       },
+      "click #welcomeusername" : function(e) {
+        return false;
+      },
+      "click #welcomepassword" : function(e) {
+        return false;
+      }
+    },
 
-      "click .dropdown-menu" : function(e) {
-        e.stopPropagation();
-      },
-            
-      },
-    
     /**
      * The Handlebars template rendered as the UserWelcomeView
      */
