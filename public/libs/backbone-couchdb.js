@@ -12,6 +12,15 @@ require([
   
   // parse models
   Backbone.Model.prototype.parse = function(response) {
+    // parse internal models
+    if (response.ok === undefined) {
+      for (var key in this.model) {
+        var embeddedClass = this.model[key];
+        var embeddedData = response[key];
+        response[key] = new embeddedClass(embeddedData, {parse:true});
+      }
+    }
+  
     // adjust rev
     if (response.rev) {
       response._rev = response.rev;

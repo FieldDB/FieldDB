@@ -112,24 +112,12 @@ define([
 //      }
     },
     
+    // Internal models: used by the parse function
     model : {
       sessionFields : DatumFields,
       comments : Comments
     },
     
-    parse : function(response) {
-      if (response.ok === undefined) {
-        for (var key in this.model) {
-          var embeddedClass = this.model[key];
-          var embeddedData = response[key];
-          response[key] = new embeddedClass(embeddedData, {parse:true});
-        }
-      }
-      
-      return response;
-    },
-   
-
     changeCorpus : function(corpusname, callback) {
       if(this.pouch == undefined){
         this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);

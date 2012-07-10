@@ -222,6 +222,7 @@ define([
       
     },
     
+    // Internal models: used by the parse function
     model : {
       confidential :  Confidential,
       consultants : Consultants,
@@ -234,18 +235,7 @@ define([
       permissions : Permissions,
       comments: Comments
     },
-    
-    parse : function(response) {
-      if (response.ok === undefined) {
-        for (var key in this.model) {
-          var embeddedClass = this.model[key];
-          var embeddedData = response[key];
-          response[key] = new embeddedClass(embeddedData, {parse:true});
-        }
-      }
-      
-      return response;
-    },
+
     changeCorpus : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
