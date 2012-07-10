@@ -146,7 +146,7 @@ define([
       });
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
       
-      c.changeCorpus(function(){
+      c.changeCorpus(couchConnection, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         c.fetch({
           success : function(e) {
