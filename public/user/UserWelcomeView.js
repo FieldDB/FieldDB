@@ -178,7 +178,7 @@ define([
                         c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                           Utils.debug("Successfully authenticated user with their corpus server.");
                           //Bring down the views so the user can search locally without pushing to a server.
-//                          c.replicateCorpus(couchConnection);
+                          c.replicateCorpus(couchConnection);
                         });
                       }, 5000);
                       console.log("Loadded app for a new user.");
