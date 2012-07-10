@@ -92,8 +92,10 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
+        // This bit of code makes the datum look like its rendered by
+        // latex, could be put into a function, but not sure if thats
+        // necessary...
       } else if (this.format == "latex") {
-        //This bit of code makes the datum look like its rendered by latex, could be put into a function, but not sure if thats necessary...
         
         //This gets the fields necessary from the model
         utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
