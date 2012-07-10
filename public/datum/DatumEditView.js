@@ -66,7 +66,6 @@ define([
     events : {
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
-      "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
       "click #duplicate" : "duplicateDatum",
@@ -267,19 +266,7 @@ define([
       $("#export-modal").modal("show");
       return result;
     },
-    /**
-     * The copyDatum function copies all datum fields to the clipboard.
-     */
-    copyDatum : function() {
-      
-      var text = $(".datum_field_input").val() || [];
-     // $(".datum_fields_ul")[0].focus();
-    //  $(".datum_fields_ul")[0].select();
-      console.log(text);
- 
-      return "";
-    },
-    
+   
     insertNewDatumTag : function() {
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
