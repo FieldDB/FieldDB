@@ -227,35 +227,45 @@ define([
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
      * (\exg. \"a) and then copies it on the expor modal so that when the user
      * switches over to their LaTeX file they only need to paste it in.
+     * 
+     * We did a poll on Facebook among EGGers, and other linguists we know and
+     * found that Linguex was very popular, and GB4E, so we did the export in
+     * GB4E.
      */
     laTeXiT : function() {
       utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
       gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
       translation= this.model.get("datumFields").where({label: "translation"})[0].get("value");
-      
+      var result = "\n \\begin{exe} "
+            + "\n \\ex [*] \\gll "+utterance+" \\\\"
+            + "\n\t"+gloss+" \\\\"
+            + "\n\t\\glt `"+ translation +"'"
+            + "\n\\end{exe}\n\n";
       $("#export-type-description").html(" as LaTeX (GB4E)");
       $("#export-text-area").val( $("#export-text-area").val()+
-          "\n \\begin{exe} "
-          + "\n \\ex [*] \\gll "+utterance+" \\\\"
-          + "\n\t"+gloss+" \\\\"
-          + "\n\t\\glt `"+ translation +"'"
-          + "\n\\end{exe}\n\n"
+          result
                );
       $("#export-modal").modal("show");
+      return result;
     },
+    /**
+     * This function simply takes the utterance gloss and translation and puts
+     * them out as plain text so the user can do as they wish.
+     */
     exportAsPlainText: function(){
       utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
       gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
       translation= this.model.get("datumFields").where({label: "translation"})[0].get("value");
-      
+      var result =  utterance+"\n"
+            +gloss+"\n"
+            +translation
+            +"\n\n";
       $("#export-type-description").html(" as text (Word)");
-      $("#export-text-area").val( $("#export-text-area").val()
-          +utterance+"\n"
-          +gloss+"\n"
-          +translation
-          +"\n\n"
+      $("#export-text-area").val( $("#export-text-area").val()+
+         result
                );
       $("#export-modal").modal("show");
+      return result;
     },
     /**
      * The copyDatum function copies all datum fields to the clipboard.
