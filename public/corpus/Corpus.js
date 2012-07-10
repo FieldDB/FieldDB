@@ -3,7 +3,6 @@ define([
     "comment/Comment",
     "comment/Comments",
     "confidentiality_encryption/Confidential",
-    "data_list/DataLists",
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumState",
@@ -18,8 +17,7 @@ define([
     Backbone, 
     Comment, 
     Comments,
-    Confidential, 
-    DataLists,
+    Confidential,
     DatumField,
     DatumFields, 
     DatumState,
@@ -222,6 +220,7 @@ define([
       
     },
     
+    // Internal models: used by the parse function
     model : {
       confidential :  Confidential,
       consultants : Consultants,
@@ -234,18 +233,7 @@ define([
       permissions : Permissions,
       comments: Comments
     },
-    
-    parse : function(response) {
-      if (response.ok === undefined) {
-        for (var key in this.model) {
-          var embeddedClass = this.model[key];
-          var embeddedData = response[key];
-          response[key] = new embeddedClass(embeddedData, {parse:true});
-        }
-      }
-      
-      return response;
-    },
+
     changeCorpus : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
@@ -295,6 +283,9 @@ define([
             if(err == null || err == undefined){
               //This was a valid connection, lets save it into localstorage.
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
+              
+              // Display the most recent datum in this corpus
+              appView.datumsView.updateDatums();
             }
             if(typeof fromcallback == "function"){
               fromcallback();
