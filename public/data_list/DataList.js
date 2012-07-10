@@ -59,21 +59,11 @@ define([
       datumIds : [],
     },
     
+    // Internal models: used by the parse function
     model : {
       // There are no nested models
     },
     
-    parse : function(response) {
-      if (response.ok === undefined) {
-        for (var key in this.model) {
-          var embeddedClass = this.model[key];
-          var embeddedData = response[key];
-          response[key] = new embeddedClass(embeddedData, {parse:true});
-        }
-      }
-      
-      return response;
-    },
     //dont define pouch on start, instead, define it once in change corpus
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl
 //        : Utils.pouchUrl),
