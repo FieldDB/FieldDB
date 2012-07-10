@@ -7,7 +7,6 @@
 
 .search{
 	padding: 10px
-	
 }
 
 .grav{
@@ -137,4 +136,8 @@ textarea{
   float:left;
   white-space:wrap;
   padding:5px;
+}
+.export-large-textarea{
+	width: 100%;
+	height: 30em;
 }
