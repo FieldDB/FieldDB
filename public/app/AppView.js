@@ -284,7 +284,10 @@ define([
      * Events that the AppView is listening to and their handlers.
      */
     events : {
-      "click .icon-refresh" : "replicateDatabases"
+      "click .icon-refresh" : "replicateDatabases",
+      "click #quick-authentication-okay-btn" : function(e){
+        window.hub.publish("quickAuthenticationClose","no message");
+      }
     },
     
     /**
