@@ -178,7 +178,7 @@ define([
                         c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                           Utils.debug("Successfully authenticated user with their corpus server.");
                           //Bring down the views so the user can search locally without pushing to a server.
-                          c.replicateCorpus(couchConnection);
+//                          c.replicateCorpus(couchConnection);
                         });
                       }, 5000);
                       console.log("Loadded app for a new user.");
@@ -279,18 +279,20 @@ define([
               var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
               window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
                 //Replicate user's corpus down to pouch
-                window.app.get("corpus").replicateCorpus(couchConnection, function(){
-                  if(auth.get("userPrivate").get("mostRecentIds") == undefined){
-                    //do nothing because they have no recent ids
-                    Utils.debug("User does not have most recent ids, doing nothing.");
-                  }else{
-                    /*
-                     *  Load their last corpus, session, datalist etc
-                     */
-                    var appids = auth.get("userPrivate").get("mostRecentIds");
-                    window.app.loadBackboneObjectsById(couchConnection, appids);
-                  }                    
-                });
+                window.setTimeout(function(){
+                  window.app.get("corpus").replicateCorpus(couchConnection, function(){
+                    if(auth.get("userPrivate").get("mostRecentIds") == undefined){
+                      //do nothing because they have no recent ids
+                      Utils.debug("User does not have most recent ids, doing nothing.");
+                    }else{
+                      /*
+                       *  Load their last corpus, session, datalist etc
+                       */
+                      var appids = auth.get("userPrivate").get("mostRecentIds");
+                      window.app.loadBackboneObjectsById(couchConnection, appids);
+                    }                    
+                  });
+                },5000);
               });
             });
           });
