@@ -295,6 +295,9 @@ define([
             if(err == null || err == undefined){
               //This was a valid connection, lets save it into localstorage.
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
+              
+              // Display the most recent datum in this corpus
+              appView.datumsView.updateDatums();
             }
             if(typeof fromcallback == "function"){
               fromcallback();
