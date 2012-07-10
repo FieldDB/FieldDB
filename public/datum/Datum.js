@@ -101,6 +101,7 @@ define([
       datumTags : new DatumTags()
     },
     
+    // Internal models: used by the parse function
     model : {
       datumFields : DatumFields,
       audioVideo : AudioVideo,
@@ -108,18 +109,6 @@ define([
       comments : Comments,
       datumStates : DatumStates,
       datumTags : DatumTags
-    },
-    
-    parse : function(response) {
-      if (response.ok === undefined) {
-        for (var key in this.model) {
-          var embeddedClass = this.model[key];
-          var embeddedData = response[key];
-          response[key] = new embeddedClass(embeddedData, {parse:true});
-        }
-      }
-      
-      return response;
     },
 
     changeCorpus : function(corpusname, callback) {
