@@ -134,10 +134,10 @@ Utils.publisher = {
       } else {
         if (subscribers[i].context === context) {
           subscribers.splice(i, 1);
-          debug("Removed subscribers");
+          Utils.debug("Removed subscribers");
 
         } else {
-          debug("Not removing subscriber" + i);
+          Utils.debug("Not removing subscriber" + i);
 
         }
       }
