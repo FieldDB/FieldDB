@@ -1,0 +1,59 @@
+define([
+    "backbone", 
+    "handlebars", 
+    "insert_unicode/InsertUnicode"
+], function(Backbone,
+    Handlebars,
+    InsertUnicode) {
+    var InsertUnicodeView = Backbone.View.extend(
+  /** @lends InsertUnicodeView.prototype */
+  {
+    /**
+     * @class InsertUnicodeView
+     *
+     * @extends Backbone.View
+     * @constructs
+     */
+    initialize : function() {
+    },
+
+    model : InsertUnicode,
+    /**
+     * Events that the InsertUnicode is listening to and their handlers.
+     */
+    events : {
+      "click .insert-unicode-input" : "updateUnicode"
+    },
+
+    classname : "insert-unicode",
+
+    template : Handlebars.templates.insert_unicode,
+
+    render : function() {
+
+      // Display the InsertUnicodeView
+      this.setElement($("#insert-unicode"));
+      $(this.el).html(this.template(this.model.toJSON()));
+
+      return this;
+    },
+    
+    /**
+     * Change the model's state.
+     */
+    updateUnicode : function() {
+      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
+      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
+    },
+    insertNewDatumState : function() {
+      var m = new InsertUnicode({
+        "unicode" : this.$el.children(".insert-unicode-input").val(),
+      });
+      this.model.get("datumStates").add(m);
+    },
+    
+    
+  });
+
+  return InsertUnicodeView;
+});
