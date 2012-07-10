@@ -18,7 +18,7 @@ Beta Tester sign-up:
 
 The FieldLinguistics Database Project is aimed at providing fieldlinguists with an app where they can enter and store linguistic data, customized to the needs of fieldlinguists. 
 
-Out in the field with no internet? The application is suitable for offline use. In a field methods class collaborating with other linguists? The application is designed to make data syncable and sharable with your team members. Recording your data? Drag and drop the audio file with the datum, or record it directly into the datum if you are using the Android app. Need to compute the semantic composition? You can add a field with the semantic details in lambda calculus. There are many more features, in a very simple and intuitive interface, designed for linguists, by linguists with software engineering experience.
+Out in the field with no internet? The application is suitable for offline use on a touch tablet or on a laptop. In a field methods class collaborating with other linguists? The application is designed to make data syncable and sharable with your team members. Recording your data? Drag and drop the audio file with the datum, or record it directly into the datum if you are using the Android app. Need to compute the semantic composition? You can add a field with the semantic details in lambda calculus. There are many more features, in a very simple and intuitive interface, designed for linguists, by linguists with software engineering experience.
 
 
 # Team
