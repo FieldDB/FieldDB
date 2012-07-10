@@ -21,7 +21,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      if(typeof(this.get("unicodes")) == "function"){
+      if(this.get("unicodes") == undefined){
         this.set("unicodes", new InsertUnicodes([ 
           new InsertUnicode({symbol: "ɑ"}),
          new InsertUnicode({symbol: "ɒ"})
@@ -33,13 +33,11 @@ define([
     defaults : {
       skin : "",
       numVisibleDatum : 3,
-      unicodes : InsertUnicodes
     },
     
     // Internal models: used by the parse function
     model : {
       unicodes : InsertUnicodes
-
     },
     
     
