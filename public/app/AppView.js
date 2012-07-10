@@ -24,6 +24,8 @@ define([
     "hotkey/HotKeyEditView",
     "import/Import",
     "import/ImportEditView",
+    "insert_unicode/InsertUnicode",
+    "insert_unicode/InsertUnicodeView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
@@ -62,6 +64,8 @@ define([
     HotKeyEditView,
     Import,
     ImportEditView,
+    InsertUnicode,
+    InsertUnicodeView,
     UserPreference,
     UserPreferenceEditView,
     Search,
@@ -239,6 +243,10 @@ define([
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
+      // Create an InsertUnicodeView
+      this.insertUnicodeView = new InsertUnicodeView({
+        model : new InsertUnicode()
+      }); 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
@@ -334,6 +342,8 @@ define([
         
         //Display ActivityFeedView
         this.activityFeedView.render();
+        
+        this.insertUnicodeView.render();
         
         // Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
