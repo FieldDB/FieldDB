@@ -19,7 +19,7 @@ define([
      * @class Session Edit View is where the user provides new session details.
     
      * @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide" and
+     * initialized. Valid values are "leftSide", "fullscreen", and
      * "embedded" 
      * @extends Backbone.View
      * @constructs
@@ -33,30 +33,21 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "session"
       });
-      
     },
 
     /**
      * The underlying model of the SessionReadView is a Session.
      */
     model : Session,
-    
-    /**
-     * The sessionFieldsView displays the all the DatumFieldEditViews.
-     */
-    sessionFieldsView : UpdatingCollectionView,
 
     /**
      * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
-    
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
-  
-      
     },
     
     /**
@@ -70,17 +61,22 @@ define([
     templateSummary : Handlebars.templates.session_summary_read_embedded,
     
     /**
+     * The Handlebars template rendered as the Fullscreen.
+     */
+    templateFullscreen : Handlebars.templates.session_read_fullscreen,
+    
+    /**
      * Renders the SessionReadView.
      */
     render : function() {
       Utils.debug("SESSION render: " + this.el);
-      if(this.model == undefined){
+      if (this.model == undefined) {
         Utils.debug("SESSION is undefined, come back later.");
         return this;
       }
       
-      try{
-        if(this.model.get("sessionFields").where({label: "goal"})[0] == undefined){
+      try {
+        if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
@@ -99,8 +95,14 @@ define([
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
+        } else if (this.format == "fullscreen") {
+          this.setElement("#session-fullscreen");
+          $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+          
+          this.sessionFieldsView.el = this.$(".session-fields-ul");
+          this.sessionFieldsView.render();
         }
-      }catch(e){
+      } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       return this;
@@ -115,14 +117,16 @@ define([
     },
     
     //functions associated with corner icons
-    resizeSmall : function(){
-      window.app.router.showDashboard();
-    },
-    resizeLarge : function(){
+    resizeSmall : function() {
       window.app.router.showEmbeddedSession();
     },
+    
+    resizeLarge : function() {
+      window.app.router.showFullscreenSession();
+    },
+    
     //bound to book
-    showEditable :function(){
+    showEditable :function() {
       window.app.router.showEditableSession();
     }
   });
