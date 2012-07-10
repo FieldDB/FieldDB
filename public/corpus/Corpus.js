@@ -268,10 +268,10 @@ define([
     replicateCorpus : function(couchConnection, fromcallback, tocallback) {
       var self = this;
       
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = self.get("couchConnection");
+      }
       this.changeCorpus(couchConnection, function(){
-        if(couchConnection == null || couchConnection == undefined){
-          couchConnection = self.get("couchConnection");
-        }
         self.pouch(function(err, db) {
           var couchurl = couchConnection.protocol+couchConnection.domain;
           if(couchConnection.port != null){
