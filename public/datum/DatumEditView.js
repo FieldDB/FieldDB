@@ -72,7 +72,8 @@ define([
       "click #duplicate" : "duplicateDatum",
       "click .icon-plus" : "newDatum",
       "change .datum_state_select" : "updateDatumStates",
-      "click .LaTeX" : "laTeXiT"
+      "click .LaTeX" : "laTeXiT",
+      "click .icon-paste" : "exportAsPlainText"
     },
 
     /**
@@ -224,7 +225,7 @@ define([
     //Functions relating to the row of icon-buttons
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
-     * (\exg. \"a) and then copies it on the clipboard so that when the user
+     * (\exg. \"a) and then copies it on the expor modal so that when the user
      * switches over to their LaTeX file they only need to paste it in.
      */
     laTeXiT : function() {
@@ -242,7 +243,20 @@ define([
                );
       $("#export-modal").modal("show");
     },
-    
+    exportAsPlainText: function(){
+      utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
+      gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
+      translation= this.model.get("datumFields").where({label: "translation"})[0].get("value");
+      
+      $("#export-type-description").html(" as text (Word)");
+      $("#export-text-area").val( $("#export-text-area").val()
+          +utterance+"\n"
+          +gloss+"\n"
+          +translation
+          +"\n\n"
+               );
+      $("#export-modal").modal("show");
+    },
     /**
      * The copyDatum function copies all datum fields to the clipboard.
      */
