@@ -151,6 +151,8 @@ define([
         c.fetch({
           success : function(e) {
             Utils.debug("Corpus fetched successfully" + e);
+            //show pretty views after loading everything.
+            window.appView.renderReadonlyCorpusViews();
           },
           error : function(e) {
             Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
@@ -168,6 +170,8 @@ define([
         s.fetch({
           success : function(e) {
             Utils.debug("Session fetched successfully" +e);
+            //show pretty views after loading everything.
+            window.appView.renderReadonlySessionViews();
           },
           error : function(e) {
             Utils.debug("There was an error fetching the session. Loading defaults..."+e);
@@ -188,6 +192,8 @@ define([
         dl.fetch({
           success : function(e) {
             Utils.debug("Data list fetched successfully" +e);
+            //show pretty views after loading everything.
+            window.appView.renderReadonlyDataListViews();
           },
           error : function(e) {
             Utils.debug("There was an error fetching the data list. Loading defaults..."+e);
@@ -199,11 +205,6 @@ define([
       if (typeof callback == "function") {
         callback();
         //show pretty views after loading everything.
-        window.appView.renderReadonlyUserViews();
-        window.appView.renderReadonlyDatumsViews();
-        window.appView.renderReadonlyDataListViews();
-        window.appView.renderReadonlySessionViews();
-        window.appView.renderReadonlyCorpusViews();
       }
       
     },

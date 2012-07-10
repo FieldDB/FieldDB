@@ -175,6 +175,8 @@ define([
                        var couchConnection = data.user.corpuses[0];
                        c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                          Utils.debug("Successfully authenticated user with their corpus server.");
+                         //Bring down the views so the user can search locally without pushing to a server.
+                         c.replicateCorpus(couchConnection);
                        });
                      }, 5000);
                      console.log("Loadded app for a new user.");
@@ -187,7 +189,7 @@ define([
           });
         } else{
           Utils.debug("User has not entered good info. ");
-            $(".alert-error").html("Your passwords don't match, or you didn't enter an email. " + Utils.contactUs );
+            $(".alert-error").html("Your passwords don't seem to match. " + Utils.contactUs );
             $(".alert-error").show();
         }
       },
@@ -200,53 +202,20 @@ define([
 
       "click .sync-sapir-data" : function() {
         console.log("hiding user welcome, syncing sapir");
-        //Load a corpus, datalist, session and user
-        a = new App();
-        a.createAppBackboneObjects("sapir-firstcorpus",function() {
-          $('#user-welcome-modal').modal("hide");
-          window.startApp(a, function() {
-            window.appView.loadSample();
-          });
-        });
+        this.syncUser("sapir","phoneme");
+
+//        //This is the old logic which can still be used to load sapir without contacting a server. DO NOT DELETE
+//        a = new App();
+//        a.createAppBackboneObjects("sapir-firstcorpus",function() {
+//          $('#user-welcome-modal').modal("hide");
+//          window.startApp(a, function() {
+//            window.appView.loadSample();
+//          });
+//        });
       },
 
       "click .sync-my-data" : function() {
-        console.log("hiding user welcome, syncing users data");
-        var u = new User({username:$("#welcomeusername").val(), password: $("#welcomepassword").val() });
-        a = new App();
-        var auth = a.get("authentication");
-        auth.authenticate(u, function(success, errors){
-          if(success == null){
-            $(".alert-error").html(
-                errors.join("<br/>") + " " + Utils.contactUs);
-//            alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
-            $(".alert-error").show();
-            $('#user-welcome-modal').modal("show");
-          }else{
-            a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
-              $('#user-welcome-modal').modal("hide");
-              window.startApp(a, function(){
-                var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
-                window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, $("#welcomeusername").val(), $("#welcomepassword").val(), function(){
-                  //Replicate user's corpus down to pouch
-                  window.app.get("corpus").replicateCorpus(couchConnection, function(){
-                    if(auth.get("userPrivate").get("mostRecentIds") == undefined){
-                      //do nothing because they have no recent ids
-                      Utils.debug("User does not have most recent ids, doing nothing.");
-                    }else{
-                      /*
-                       *  Load their last corpus, session, datalist etc
-                       */
-                      var appids = auth.get("userPrivate").get("mostRecentIds");
-                      window.app.loadBackboneObjectsById(couchConnection, appids);
-                    }                    
-                  });
-                });
-              });
-            });
-            
-          }
-        });
+        this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
       },
       "click #welcomeusername" : function(e) {
         return false;
@@ -279,6 +248,52 @@ define([
       }
 
       return this;
+    },
+    /**
+     * This function manages all the data flow from the auth server and
+     * corpus server to get the app to load in the right order so that
+     * all the models and views are loaded, and tied together
+     * 
+     * @param username
+     * @param password
+     */
+    syncUser : function(username,password){
+      console.log("hiding user welcome, syncing users data");
+      var u = new User({username:username, password: password });
+      a = new App();
+      var auth = a.get("authentication");
+      auth.authenticate(u, function(success, errors){
+        if(success == null){
+          $(".alert-error").html(
+              errors.join("<br/>") + " " + Utils.contactUs);
+//          alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
+          $(".alert-error").show();
+          $('#user-welcome-modal').modal("show");
+        }else{
+          a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
+            $('#user-welcome-modal').modal("hide");
+            window.startApp(a, function(){
+              var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+              window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+                //Replicate user's corpus down to pouch
+                window.app.get("corpus").replicateCorpus(couchConnection, function(){
+                  if(auth.get("userPrivate").get("mostRecentIds") == undefined){
+                    //do nothing because they have no recent ids
+                    Utils.debug("User does not have most recent ids, doing nothing.");
+                  }else{
+                    /*
+                     *  Load their last corpus, session, datalist etc
+                     */
+                    var appids = auth.get("userPrivate").get("mostRecentIds");
+                    window.app.loadBackboneObjectsById(couchConnection, appids);
+                  }                    
+                });
+              });
+            });
+          });
+          
+        }
+      });
     }
   });
 
