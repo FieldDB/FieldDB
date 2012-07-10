@@ -346,6 +346,33 @@ define([
       }
       return result;
     },
+    /**
+     * This takes as an argument the order of fields and then creates a row of csv.
+     */
+    exportAsCSV: function(showInExportModal, orderedFields, printheader){
+      if(orderedFields == null){
+        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
+      }
+      judgement = this.get("datumFields").where({label: "judgement"})[0].get("value");
+      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("value");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
+      var result = '"'+resultarray.join('","')+'"';
+      if(printheader != null){
+        var header = '"'+orderedFields.join('","')+'"';
+        result = header+"\n"+result;
+      }
+      if(showInExportModal != null){
+        $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
+        $("#export-text-area").val( $("#export-text-area").val()+
+           result
+                 );
+        $("#export-modal").modal("show");
+      }
+      return result;
+    }
   });
 
   return Datum;
