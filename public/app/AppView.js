@@ -394,10 +394,21 @@ define([
       this.datumsView.render();
     },
     renderReadonlyDatumsViews : function(format) {
-      this.datumsReadView.format = format;
+      this.datumsReadView.format = format;//TODO what is the format for??
       this.datumsReadView.render();
     },
     
+    //Display DataList Views
+    renderEditableUserViews: function(userid){
+      this.fullScreenEditUserView.render();
+      this.modalEditUserView.render();
+    },
+    renderReadonlyUserViews: function(userid){
+      this.fullScreenReadUserView.render();
+      this.modalReadUserView.render();
+    },
+    
+ // Display the User Views
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
