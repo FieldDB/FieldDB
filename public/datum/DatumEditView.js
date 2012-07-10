@@ -76,6 +76,9 @@ define([
       },
       "click .icon-paste" : function(){
         this.model.exportAsPlainText(true);
+      },
+      "click .CSV" : function(){
+        this.model.exportAsCSV(true, null, true);
       }
     },
 
