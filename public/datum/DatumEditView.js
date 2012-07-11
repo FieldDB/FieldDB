@@ -66,12 +66,20 @@ define([
     events : {
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
-      "click #clipboard" : "copyDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
       "click #duplicate" : "duplicateDatum",
       "click .icon-plus" : "newDatum",
       "change .datum_state_select" : "updateDatumStates",
+      "click .LaTeX" : function(){
+        this.model.laTeXiT(true);
+      },
+      "click .icon-paste" : function(){
+        this.model.exportAsPlainText(true);
+      },
+      "click .CSV" : function(){
+        this.model.exportAsCSV(true, null, true);
+      }
     },
 
     /**
@@ -221,33 +229,13 @@ define([
     },
     
     //Functions relating to the row of icon-buttons
-    /**
-     * The LaTeXiT function automatically mark-ups an example in LaTeX code
-     * (\exg. \"a) and then copies it on the clipboard so that when the user
-     * switches over to their LaTeX file they only need to paste it in.
-     */
-    laTeXiT : function() {
-      return "";
-    },
     
-    /**
-     * The copyDatum function copies all datum fields to the clipboard.
-     */
-    copyDatum : function() {
-      
-      var text = $(".datum_field_input").val() || [];
-     // $(".datum_fields_ul")[0].focus();
-    //  $(".datum_fields_ul")[0].select();
-      console.log(text);
- 
-      return "";
-    },
-    
+   
     insertNewDatumTag : function() {
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
         "tag" : this.$el.find(".add_tag").val()
-      })
+      });
       
       // Add the new DatumTag to the Datum's list for datumTags 
       this.model.get("datumTags").add(t);

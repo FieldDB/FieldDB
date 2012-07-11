@@ -102,18 +102,11 @@ define([
           if (nextNumberOfDatum > previousNumberOfDatum) {
             for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              var d = new Datum({
-                id : rows[i].value,
-                corpusname : app.get("corpus").get("corpusname")
-              });
-              d.changeCorpus(app.get("corpus").get("corpusname"), function(){
-                d.fetch({
-                  success : function() {
-                    // Add the new, blank, Datum
-                    self.model.add(datum);
-                  }
-                });
-              });
+if (rows[rows.length - i - 1]) {
+                var d = new Datum();
+                d.set(d.parse(rows[rows.length - i - 1].value));
+                self.model.add(d);
+              }
             }
           // If the user has decrease the number of Datum to display in the container
           } else if (nextNumberOfDatum < previousNumberOfDatum) {
