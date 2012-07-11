@@ -24,7 +24,7 @@ define( [
      *        
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide" and
-     * "fullscreen".
+     * "fullscreen" and "import"
      * 
      * @extends Backbone.View
      * @constructs
@@ -99,6 +99,11 @@ define( [
         this.renderUpdatedPagination();
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
+      } else if (this.format == "import"){
+        this.setElement($("#import-data-list-view"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
       }
 
       return this;
