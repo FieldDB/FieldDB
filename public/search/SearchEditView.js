@@ -42,7 +42,7 @@ define([
         collection           : window.app.get("corpus").get("sessionFields").clone(),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li',
-        childViewFormat      : "datum"
+        childViewFormat      : "session"
       });
       
       this.model.bind('change', this.render, this);
