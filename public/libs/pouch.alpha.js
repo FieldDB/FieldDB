@@ -2302,12 +2302,30 @@ var IdbPouch = function(opts, callback) {
       }
       results.push(viewRow);
     };
+    
+    // An object of couch view functions that we use
+    // Note that spacing is very important. Do not reformat these values
+    var validCouchViews = {
+      getDatumIdsByDate : function(doc) {if (doc.dateEntered) {emit(doc.dateEntered, doc);}}
+    };
 
     // We may have passed in an anonymous function that used emit in
     // the global scope, this is an ugly way to rescope it
-    eval('fun.map = ' + fun.map.toString() + ';');
+    // eval('fun.map = ' + fun.map.toString() + ';');
+    for (var view in validCouchViews) {
+      if (fun.map.toString() == validCouchViews[view].toString()) {
+        fun.map = validCouchViews[view];
+        break;
+      }
+    }
     if (fun.reduce) {
-      eval('fun.reduce = ' + fun.reduce.toString() + ';');
+      // eval('fun.reduce = ' + fun.reduce.toString() + ';');
+      for (var view in validCouchViews) {
+        if (fun.reduce.toString() == validCouchViews[view].toString()) {
+          fun.reduce = validCouchViews[view];
+          break;
+        }
+      }
     }
 
     var request = objectStore.openCursor();
