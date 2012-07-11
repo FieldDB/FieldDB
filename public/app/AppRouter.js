@@ -178,6 +178,14 @@ define([
       $("#data-list-fullscreen").show();      
     },
     
+    showMiddleDataList : function() {
+      Utils.debug("In showMiddleDataList");
+
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#new-datalist-embedded").show();      
+    },
+    
     /**
      * Display the fullscreen view of search within the corpus specified by the
      * given corpusName.
@@ -264,6 +272,7 @@ define([
       $("#session-embedded").hide();
       $("#session-fullscreen").hide();
       $('#user-fullscreen').hide();
+      $('#new-datalist-embedded').hide();
     }
   });
 

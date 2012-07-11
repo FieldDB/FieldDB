@@ -24,6 +24,7 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
+      "click .unicode" : "insertUnicode"
      
     },
 
@@ -42,9 +43,15 @@ define([
     /**
      * Change the model's state.
      */
-    updateUnicode : function() {
-      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
-      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
+//    updateUnicode : function() {
+//      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
+//      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
+//    },
+    
+    insertUnicode : function() {
+      var u = this.model.get("symbol");
+      console.log(u);
+      return u;
     },
  
     

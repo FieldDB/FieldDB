@@ -99,7 +99,19 @@ define( [
         this.renderUpdatedPagination();
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
+      }else if(this.format == "centreWell"){
+        Utils.debug("DATALIST CentreWell render: " + this.el);
+
+        this.setElement($("#new-datalist-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        // TODO Display the first page of DatumReadViews.
+        // this.renderNewModel();
+      
       }
+      
+      
 
       return this;
     },
