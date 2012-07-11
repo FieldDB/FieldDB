@@ -1,7 +1,11 @@
 define([
-    "backbone"
+    "backbone",
+    "insert_unicode/InsertUnicode",
+    "insert_unicode/InsertUnicodes"
 ], function(
-    Backbone
+    Backbone,
+    InsertUnicode,
+    InsertUnicodes
 ) {
   var UserPreference = Backbone.Model.extend(
   /** @lends UserPreference.prototype */
@@ -17,17 +21,26 @@ define([
      * @constructs
      */
     initialize : function() {
+      if(this.get("unicodes") == undefined){
+        this.set("unicodes", new InsertUnicodes([ 
+          new InsertUnicode({symbol: "ɑ"}),
+         new InsertUnicode({symbol: "ɒ"})
+        ]));
+      }//end if to set unicode
+      
     },
     
     defaults : {
       skin : "",
-      numVisibleDatum : 3
+      numVisibleDatum : 3,
     },
     
     // Internal models: used by the parse function
     model : {
-      // There are no nested models
+      unicodes : InsertUnicodes
     },
+    
+    
   });
 
   return UserPreference;
