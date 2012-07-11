@@ -247,7 +247,7 @@ define([
       }); 
       // Create an InsertUnicodesView
       this.insertUnicodeView = new InsertUnicodesView({
-        model : new InsertUnicode()
+        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
       }); 
 
       // Create a HotKeyEditView

@@ -21,7 +21,7 @@ define(	[
   	}, 
   	
   	defaults : {
-  	  symbol : "ɐ" 
+  	  symbol : "" 
   	},
   	// Internal models: used by the parse function
     model : {

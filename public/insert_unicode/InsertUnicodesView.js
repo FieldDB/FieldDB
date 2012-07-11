@@ -22,7 +22,7 @@ define([
      */
     initialize : function() {
       this.insertUnicodesView = new UpdatingCollectionView({
-        collection           :  app.get("authentication").get("userPrivate").get("prefs").get("unicodes"),
+        collection           :  this.model,
         childViewConstructor : InsertUnicodeView,
         childViewTagName     : "span",
       });
@@ -30,7 +30,6 @@ define([
       
     },
 
-    model : InsertUnicode,
     /**
      * Events that the InsertUnicode is listening to and their handlers.
      */
@@ -38,7 +37,7 @@ define([
       "click .add-unicode" : "insertNewUnicode"
     },
 
-    classname : "insert-unicode",
+  //  classname : "insert-unicode",
 
     template : Handlebars.templates.insert_unicodes,
 
@@ -46,7 +45,7 @@ define([
 
       // Display the InsertUnicodesView
       this.setElement($("#insert-unicode"));
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template({}));
       
       this.insertUnicodesView.el = this.$("#unicodes");
       this.insertUnicodesView.render();
