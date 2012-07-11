@@ -224,15 +224,21 @@ define([
       /*
        *  Create search views
        */
-      this.searchView = new SearchEditView({
+      this.searchTopView = new SearchEditView({
         model : new Search()
       });
-      this.searchView.format = "top";
+      this.searchTopView.format = "top";
       
-      this.advancedSearchView = new SearchEditView({
-        model : new Search()
+      var searchToBePassedAround = new Search();
+      this.searchFullscreenView = new SearchEditView({
+        model : searchToBePassedAround
       });
-      this.advancedSearchView.format = "fullscreen";
+      this.searchFullscreenView.format = "fullscreen";
+      
+      this.searchEmbeddedView = new SearchEditView({
+        model : searchToBePassedAround
+      });
+      this.searchEmbeddedView.format = "centreWell";
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
@@ -326,8 +332,9 @@ define([
         this.renderEditableDatumsViews("centreWell");
         
         // Display the Search Views
-        this.searchView.render();
-        this.advancedSearchView.render();
+        this.searchTopView.render();
+        this.searchFullscreenView.render();
+        this.searchEmbeddedView.render();
         
         // Display the AuthView
         this.authView.render();
@@ -435,7 +442,7 @@ define([
       //all the replication etc happens in authView
       this.authView.loadSample(ids);
       
-      this.searchView.loadSample();
+      this.searchTopView.loadSample();
     },
     
     /**
