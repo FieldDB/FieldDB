@@ -205,7 +205,7 @@ define([
         queryString = searchCriteria.join(" AND ");
       }
       
-      console.log("Searching for " + queryString);
+      Utils.debug("Searching for " + queryString);
       return queryString;
     },
     
