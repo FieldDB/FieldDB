@@ -25,7 +25,8 @@ define([
     "import/Import",
     "import/ImportEditView",
     "insert_unicode/InsertUnicode",
-    "insert_unicode/InsertUnicodeView",
+    "insert_unicode/InsertUnicodes",
+    "insert_unicode/InsertUnicodesView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
@@ -65,7 +66,8 @@ define([
     Import,
     ImportEditView,
     InsertUnicode,
-    InsertUnicodeView,
+    InsertUnicodes,
+    InsertUnicodesView,
     UserPreference,
     UserPreferenceEditView,
     Search,
@@ -249,9 +251,9 @@ define([
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
-      // Create an InsertUnicodeView
-      this.insertUnicodeView = new InsertUnicodeView({
-        model : new InsertUnicode()
+      // Create an InsertUnicodesView
+      this.insertUnicodeView = new InsertUnicodesView({
+        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
       }); 
 
       // Create a HotKeyEditView
