@@ -1,10 +1,22 @@
- <i class="icons icon-resize-small pull-right"></i>
-  <h1>Import<small id="import-type-description">{{corpusname}}</small></h1>
-<div class="drop-zone ">(Drop files here)
-  <textarea class="large-textarea" id="export-text-area">{{rawText}}</textarea>  
-  <textarea class="large-textarea" id="export-text-area">{{asCSV}}</textarea>  
-  <textarea class="large-textarea" id="export-text-area">{{asXML}}</textarea>  
-  <div class="import-data-list-view"></div>
+
+<i class="icons icon-resize-small pull-right"></i>
+<h1>
+	Import <small id="import-type-description">{{corpusname}}</small>
+</h1>
+<div class="container-fluid drop-zone">
+	<div class="row-fluid">
+		<div class="span2">
+			<!--Sidebar content-->
+			<button class="btn btn-success approve-import disabled">Import and Save</button>
+			<div id="import-data-list-view"></div>
+		</div>
+		<div class="span10">
+			<!--Body content-->
+			<textarea class="export-large-textarea" id="export-text-area">{{rawText}}</textarea>
+			<textarea class="export-large-textarea" id="export-text-area">{{asCSV}}</textarea>
+			<div id="csv-table-area"></div>
+			<textarea class="export-large-textarea" id="export-text-area">{{asXML}}</textarea>
+		</div>
+	</div>
 </div>
-  <div>{{status}}</div>
-  <a href="#" class="btn" data-dismiss="modal">Close</a>
+<div>{{status}}</div>
