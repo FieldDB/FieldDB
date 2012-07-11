@@ -26,7 +26,7 @@ define([
     "import/ImportEditView",
     "insert_unicode/InsertUnicode",
     "insert_unicode/InsertUnicodes",
-    "insert_unicode/InsertUnicodeView",
+    "insert_unicode/InsertUnicodesView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
@@ -67,7 +67,7 @@ define([
     ImportEditView,
     InsertUnicode,
     InsertUnicodes,
-    InsertUnicodeView,
+    InsertUnicodesView,
     UserPreference,
     UserPreferenceEditView,
     Search,
@@ -245,10 +245,8 @@ define([
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
-      // Create an InsertUnicodeView
-  
-      
-      this.insertUnicodeView = new InsertUnicodeView({
+      // Create an InsertUnicodesView
+      this.insertUnicodeView = new InsertUnicodesView({
         model : new InsertUnicode()
       }); 
 
