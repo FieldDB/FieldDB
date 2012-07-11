@@ -89,6 +89,23 @@ define([
     },
     
     /**
+     * Displays the advanced search in fullscreen form.
+     */
+    showFullscreenSearch : function() {
+      this.hideEverything();
+      $("#search-fullscreen").show();
+    },
+    
+    /**
+     * * Displays the advanced search in embedded form.
+     */
+    showEmbeddedSearch : function(corpusName ) {
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#search-embedded").show();
+    },
+    
+    /**
      * Displays the fullscreen view of the session specified by the given
      * corpusName and the given datumId.
      * 
