@@ -106,6 +106,15 @@ define( [
         
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
+      }else if(this.format == "middle"){
+        
+        this.setElement($("#new-data-list-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        // TODO Display the first page of DatumReadViews.
+        // this.renderNewModel();
+      
       }
       
       return this;

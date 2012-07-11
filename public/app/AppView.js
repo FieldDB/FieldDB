@@ -199,9 +199,19 @@ define([
       });
       
       /*
-       * Set up the four data list views
+       * Set up the six data list views
        */
       var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
+      
+      this.dataListEditMiddleView = new DataListEditView({
+        model : dataListToBePassedAround
+      }); 
+      this.dataListEditMiddleView.format = "centreWell";
+      
+      this.dataListReadMiddleView = new DataListEditView({
+        model : dataListToBePassedAround
+      }); 
+      this.dataListReadMiddleView.format = "centreWell";
       
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
@@ -354,10 +364,13 @@ define([
         this.hotkeyEditView.render();//.showModal();
 
         // Display Data List Views 
+        this.dataListEditMiddleView.render();
         this.dataListEditLeftSideView.render();
         this.dataListEditFullscreenView.render();
         this.dataListReadLeftSideView.render();
         this.dataListReadFullscreenView.render();
+        this.dataListReadMiddleView.render();
+
          
         // Display the ImportEditView
         this.importView.render();

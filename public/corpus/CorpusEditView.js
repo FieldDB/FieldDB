@@ -134,7 +134,13 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       
+      //corpus menu buttons
       "click .new_datum_edit" : "newDatum",
+      "click .data-list-embedded" : "newDataList",
+      "click .new_session" : "newSession",
+      "click .new_corpus" : "newCorpus",
+      
+      //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription"
       
@@ -229,11 +235,30 @@ define([
     updateDescription: function(){
       this.model.set("description",this.$el.find(".corpus-description-input").val());
     },
-    
+   
+    //Functions assoicate with the corpus menu
     newDatum : function() {
       appView.datumsView.newDatum();
       app.router.showDashboard();
     },
+    
+    newDataList : function() {
+      app.router.showMiddleDataList();
+    },
+    
+    newSession : function() {
+      app.router.showEmbeddedSession();
+      app.router.showEditableSession();
+     
+    },
+    
+    newCorpus : function(){
+      app.router.showEmbeddedCorpus();
+      app.router.showEditableCorpus();
+     
+    },
+    
+    
 
      //Insert functions associate the values chosen with a new
     // model in the collection, adding it to the collection, which in turn
