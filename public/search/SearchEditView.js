@@ -179,6 +179,7 @@ define([
     getQueryString : function(type) {      
       // All the search fields related to Datum
       var datumFieldsViews = this.advancedSearchDatumView.collection;
+      var sessionFieldsView = this.advancedSearchSessionView.collection;
       
       // Get all the search criteria
       var searchCriteria = [];
@@ -186,6 +187,12 @@ define([
         var value = datumField.get("value");
         if (value && value != "") {
           searchCriteria.push(datumField.get("label") + ":" + value);
+        }
+      });
+      sessionFieldsView.each(function(sessionField) {
+        var value = sessionField.get("value");
+        if (value && value != "") {
+          searchCriteria.push(sessionField.get("label") + ":" + value);
         }
       });
       
@@ -198,6 +205,7 @@ define([
         queryString = searchCriteria.join(" AND ");
       }
       
+      console.log("Searching for " + queryString);
       return queryString;
     },
     
