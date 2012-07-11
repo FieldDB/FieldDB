@@ -32,6 +32,9 @@ define([
      */
     initialize : function() {
       this.set("corpusname", window.app.get("corpus").get("corpusname"));
+      if(this.get("datumFields") == undefined){
+        this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
+      }
     },
 
     // This is an list of attributes and their default values
@@ -39,9 +42,10 @@ define([
       status : "",
       fileDetails : "",
       corpusname : "",
-      rawText: "",
-      asCSV : "",
-      asXML : "",
+//      rawText: "",
+//      asCSV : "", //leave undefined
+//      asXML : "",
+//      asDatumFields : "";
       files : [],
     },
     
@@ -67,36 +71,11 @@ define([
       for(l in rows){
         rows[l] = this.parseLineCSV(rows[l]);
       }
-      var tableResult = document.createElement("table");
-      tableResult.setAttribute("style","table table-striped table-bordered table-condensed");
       
-      var tablehead = document.createElement("thead");
-      var headerRow = document.createElement("tr");
-      for(var i = 0; i < rows[0].length; i++){
-        var tableCell = document.createElement("th");
-        var input = document.createElement("input");
-        tableCell.appendChild(input);
-        headerRow.appendChild(tableCell);
-      }
-      tablehead.appendChild(headerRow);
-      tableResult.appendChild(tablehead);
-      
-      var tablebody = document.createElement("tbody");
-      tableResult.appendChild(tablebody);
-      for(l in rows){
-        var tableRow = document.createElement("tr");
-        for(c in rows[l]){
-          var tableCell = document.createElement("td");
-          tableCell.innerHTML = rows[l][c];
-          tableRow.appendChild(tableCell);
-        }
-        tablebody.appendChild(tableRow);
-      }
-      if($("#csv-table-area") != []){
-        document.getElementById("csv-table-area").appendChild(tableResult);
-        this.set("asCSV", JSON.stringify(rows));
-      }
+      this.set("asCSV", rows);
     },
+    
+    
     /**
      * http://purbayubudi.wordpress.com/2008/11/09/csv-parser-using-javascript/
      * // -- CSV PARSER --
@@ -182,7 +161,9 @@ define([
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
                 : 'n/a');
         
-        this.readFileIntoRawText(i);
+        this.readFileIntoRawText(i, function(){
+          Utils.debug("Finished reading in the raw text file.")
+        });
 //        this.set("asCSV", this.importCSV(f.getBytes()));
 //      this.set("asXML", this.importCSV(f.getBytes()));
 
@@ -208,17 +189,17 @@ define([
       
     },
     readFileIntoRawText : function(index, callback){
-     this.readBlob(this.get("files")[index]);
-     if(this.get("files")[index].name.split('.').pop() == "csv"){
-       this.importCSV(this.get("rawText"));
-     }else if(this.get("files")[index].name.split('.').pop() == "eaf"){
-       this.importXML(this.get("rawText"));
-     }
-     if(typeof callback == "function"){
-       callback();
-     }
+      var self = this;
+       this.readBlob(this.get("files")[index], function(){
+         if(self.get("files")[index].name.split('.').pop() == "csv"){
+           self.importCSV(self.get("rawText"), callback);
+         }else if(self.get("files")[index].name.split('.').pop() == "eaf"){
+           self.importXML(self.get("rawText"), callback);
+         }
+       });
+     
     },
-    readBlob : function (file, opt_startByte, opt_stopByte) {
+    readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);
       var start = parseInt(opt_startByte) || 0;
       var stop = parseInt(opt_stopByte) || file.size - 1;
@@ -229,8 +210,9 @@ define([
       reader.onloadend = function(evt) {
         if (evt.target.readyState == FileReader.DONE) { // DONE == 2
           self.set("rawText", evt.target.result);
-//          document.getElementById('byte_range').textContent = [ '' ]
-//          .join('');
+          if(typeof callback == "function"){
+            callback();
+          }
         }
       };
       var blob = '';

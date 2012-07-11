@@ -3,7 +3,7 @@
 <h1>
 	Import <small id="import-type-description">{{corpusname}}</small>
 </h1>
-<div class="container-fluid drop-zone">
+<div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span2">
 			<!--Sidebar content-->
@@ -12,11 +12,12 @@
 		</div>
 		<div class="span10">
 			<!--Body content-->
-			<textarea class="export-large-textarea" id="export-text-area">{{rawText}}</textarea>
-			<textarea class="export-large-textarea" id="export-text-area">{{asCSV}}</textarea>
-			<div id="csv-table-area"></div>
+<div>{{status}}</div>
+			<textarea class="export-large-textarea  drop-zone" id="export-text-area">{{rawText}}</textarea>
+
+      <div id="import-datum-field-labels"></div>
+			<table id="csv-table-area" class= "table table-striped table-bordered table-condensed"></table>
 			<textarea class="export-large-textarea" id="export-text-area">{{asXML}}</textarea>
 		</div>
 	</div>
 </div>
-<div>{{status}}</div>
