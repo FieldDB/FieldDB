@@ -380,7 +380,7 @@ define([
      * @param orderedFields the values which correspond to datumfields
      * @param header the header fields which correspond to datumfields
      */
-    importCSV: function(showInImportModal, orderedFields, header){
+    importCSV: function(orderedFields, header){
       for(f in header){
         if(this.get("datumFields").where({label: header[f]})[0] != undefined){
           this.get("datumFields").where({label: header[f]})[0].set("value", orderedFields[f]);
@@ -392,13 +392,7 @@ define([
         }
       }
       var csvDebugResult = this.exportAsCSV(null, null, true);
-      if(showInImportModal != null){
-        $("#import-type-description").html(" as CSV (Excel, Filemaker Pro)");
-        $("#import-text-area").val( $("#import-text-area").val()+
-            csvDebugResult
-                 );
-        $("#import-modal").modal("show");
-      }
+      
       return result;
     }
   });

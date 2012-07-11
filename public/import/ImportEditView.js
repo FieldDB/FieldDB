@@ -16,25 +16,25 @@ define( [
       this._draghoverClassAdded = false;
     },
     events : {
-//      "dragover .modal-body" : function(evt) {
+//      "dragover .drop-zone" : function(evt) {
 //        evt.stopPropagation();
 //        evt.preventDefault();
 //        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
 //      },
-//      "drop .modal-body": function(evt){
+//      "drop .drop-zone": function(evt){
 //        this.dropFile(evt);
 //      }
       
-      "dragover .modal-body" : function(e){
+      "dragover .drop-zone" : function(e){
         this._dragOverEvent(e);
       },
-      "dragenter .modal-body" : function(e){
+      "dragenter .drop-zone" : function(e){
         this._dragEnterEvent(e);
       },
-      "dragleave .modal-body" : function(e){
+      "dragleave .drop-zone" : function(e){
         this._dragLeaveEvent(e);
       },
-      "drop .modal-body" : function(e){
+      "drop .drop-zone" : function(e){
         this._dropEvent(e);
       }
     },
@@ -101,7 +101,7 @@ define( [
     },
     
     model : Import,
-    template: Handlebars.templates.import_edit_modal,
+    template: Handlebars.templates.import_edit_fullscreen,
     dropFile : function(evt) {
       alert("dropped file");
 //      evt.stopPropagation();
@@ -112,7 +112,7 @@ define( [
 //      return false;
     },
     render : function() {
-      this.setElement("#import-modal");
+      this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
       return this;
     }
