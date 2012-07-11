@@ -22,7 +22,7 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .insert-unicode-input" : "insertNewUnicode"
+      "click .add-unicode" : "insertNewUnicode"
     },
 
     classname : "insert-unicode",
@@ -47,11 +47,10 @@ define([
     },
     insertNewUnicode : function() {
       var m = new InsertUnicode({
-        "unicode" : this.$el.children(".insert-unicode-input").val(),
+        "symbol" : this.$el.children(".insert-unicode-input").val(),
       });
-      
       app.get("authentication").get("userPrivate").get("prefs").get("unicodes").add(m);
-      console.log(m);
+
     },
 
     
