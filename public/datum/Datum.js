@@ -296,6 +296,82 @@ define([
       });
       
       return datum;
+    },
+    
+    /**
+     * The LaTeXiT function automatically mark-ups an example in LaTeX code
+     * (\exg. \"a) and then copies it on the expor modal so that when the user
+     * switches over to their LaTeX file they only need to paste it in.
+     * 
+     * We did a poll on Facebook among EGGers, and other linguists we know and
+     * found that Linguex was very popular, and GB4E, so we did the export in
+     * GB4E.
+     */
+    laTeXiT : function(showInExportModal) {
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      var result = "\n \\begin{exe} "
+            + "\n \\ex [*] \\gll "+utterance+" \\\\"
+            + "\n\t"+gloss+" \\\\"
+            + "\n\t\\glt `"+ translation +"'"
+            + "\n\\end{exe}\n\n";
+      if(showInExportModal != null){
+        $("#export-type-description").html(" as LaTeX (GB4E)");
+        $("#export-text-area").val( $("#export-text-area").val()+
+            result
+                 );
+        $("#export-modal").modal("show");
+      }
+      return result;
+    },
+    /**
+     * This function simply takes the utterance gloss and translation and puts
+     * them out as plain text so the user can do as they wish.
+     */
+    exportAsPlainText: function(showInExportModal){
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      var result =  utterance+"\n"
+            +gloss+"\n"
+            +translation
+            +"\n\n";
+      if(showInExportModal != null){
+        $("#export-type-description").html(" as text (Word)");
+        $("#export-text-area").val( $("#export-text-area").val()+
+           result
+                 );
+        $("#export-modal").modal("show");
+      }
+      return result;
+    },
+    /**
+     * This takes as an argument the order of fields and then creates a row of csv.
+     */
+    exportAsCSV: function(showInExportModal, orderedFields, printheader){
+      if(orderedFields == null){
+        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
+      }
+      judgement = this.get("datumFields").where({label: "judgement"})[0].get("value");
+      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("value");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
+      var result = '"'+resultarray.join('","')+'"';
+      if(printheader != null){
+        var header = '"'+orderedFields.join('","')+'"';
+        result = header+"\n"+result;
+      }
+      if(showInExportModal != null){
+        $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
+        $("#export-text-area").val( $("#export-text-area").val()+
+           result
+                 );
+        $("#export-modal").modal("show");
+      }
+      return result;
     }
   });
 
