@@ -1,70 +1,78 @@
 <div class="modal-header">
-	<div class="btn-group pull-right">
-		<button class="btn btn-success sync-sapir-data ">Close and login as Ed Sapir</button>
-		<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-		  <i class="icon-user icon-white"></i> Login 
-			<span class="caret"></span>
-		</a>
-		<ul class="dropdown-menu">
-			<li class="not-a">Username: <input id="welcomeusername" size="16" type="text"></li>
-			<li class="not-a">Password: <input id="welcomepassword" size="16" type="password"></li>
-			<li class="not-a">
-			  <button class="btn btn-success sync-my-data" >Sync my data to this computer</button>
-		  </li>
-		</ul>
-	</div>
-	<div>
-		<h1>
-			Welcome to iField! <small>alpha</small>
-		</h1>
-
-		<i> iField: An offline/online fieldlinguistics database which
-			adapts to its user's I-Language.</i>
-	</div>
+  <div class="btn-group pull-right">
+    <button class="btn btn-success sync-sapir-data ">
+      Close and login as Ed Sapir
+    </button>
+    <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"> 
+      <i class="icon-user icon-white"></i> 
+      Login 
+      <span class="caret"></span> 
+    </a>
+    <ul class="dropdown-menu">
+      <li class="not-a">
+        Username:
+        <input id="welcomeusername" size="16" type="text">
+      </li>
+      <li class="not-a">
+        Password:
+        <input id="welcomepassword" size="16" type="password">
+      </li>
+      <li class="not-a">
+        <button class="btn btn-success sync-my-data" >
+          Sync my data to this computer
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <h1> Welcome to iField! <small>alpha</small></h1>
+    <i> iField: An offline/online fieldlinguistics database which
+    adapts to its user's I-Language.</i>
+  </div>
 </div>
 <div class="modal-body">
-
-	<p>You are logged into Ed Sapir's data. Any time you want to import
-		new data or create a new corpus, just click on New Corpus.</p>
-
-
-	<div class=" alert alert-error hide "></div>
-
-	<div class="well create_new_user_password">
-		<h3>Or create a new user</h3>
-		<p>http://ifield.fieldlinguist.com/{{username}}</p>
-		<label> What is your username going to be? </label> <input
-			class="username" value="{{username}}" />
-
-		<hr />
-		<button class="btn btn-primary new-user-button">New User</button>
-
-
-		<div class="hide confirm-password">
-
-			<!-- <label class="">Email</label> 
-      <input class="email " type="email"></input> -->
-			<label>Password</label> <input class="password" type="password"></input>
-			<label>Confirm Password</label> <input class="to-confirm-password"
-				type="password"></input> <br />
-			<button class="btn btn-success register-new-user">Sign in
-				with password</button>
-			OR
-			<button class="btn btn-success register-twitter">
-				<i class="i icon-twitter"></i> Sign in with Twitter
-			</button>
-			<button class="btn btn-success register-facebook">
-				<i class="i icon-facebook"></i> Sign in with Facebook
-			</button>
-		</div>
-
-	</div>
-
-
-	<div class="alert alert-block">
-		<a class="close" data-dismiss="alert" href="#">×</a>
-		<h4 class="alert-heading">Warning!</h4>
-		This is an alpha version of iField, it might smile and make bubbles
-		but it also burps, vomits and sleeps at inopportune times...
-	</div>
+  <p>
+    You are logged into Ed Sapir's data. Any time you want to import
+    new data or create a new corpus, just click on New Corpus.
+  </p>
+  <div class=" alert alert-error hide "></div>
+  <div class="well create_new_user_password">
+    <h3>Or create a new user</h3>
+    <p>
+      http://ifield.fieldlinguist.com/{{username}}
+    </p>
+    <label> What is your username going to be? </label>
+    <input class="username" value="{{username}}" />
+    <button class="btn btn-primary new-user-button">
+      New User
+    </button>
+    <div class="hide confirm-password">
+      <label>Password</label>
+      <input class="password" type="password">
+      </input>
+      <label>Confirm Password</label>
+      <input class="to-confirm-password"
+      type="password">
+      </input>
+      <br />
+      <button class="btn btn-success register-new-user">
+        Sign in
+        with password
+      </button>
+      <button class="btn btn-success register-twitter">
+        <i class="i icon-twitter"></i> Sign in with Twitter
+      </button>
+      <button class="btn btn-success register-facebook">
+        <i class="i icon-facebook"></i> Sign in with Facebook
+      </button>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="alert alert-block">
+    <a class="close" data-dismiss="alert" href="#">×</a>
+    <h4 class="alert-heading">Warning!</h4>
+    This is an alpha version of iField, it might smile and make bubbles
+    but it also burps, vomits and sleeps at inopportune times...
+  </div>
 </div>
