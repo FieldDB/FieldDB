@@ -263,6 +263,7 @@ define([
       $("#session-embedded").hide();
       $("#session-fullscreen").hide();
       $('#user-fullscreen').hide();
+      $('#import-fullscreen').hide();
     }
   });
 

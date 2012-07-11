@@ -62,10 +62,112 @@ define([
     validate : function(attributes) {
     },
     
-    importCSV : function() {
+    importCSV : function(text) {
+      var rows = text.split("\n");
+      for(l in rows){
+        rows[l] = this.parseLineCSV(rows[l]);
+      }
+      var tableResult = document.createElement("table");
+      tableResult.setAttribute("style","table table-striped table-bordered table-condensed");
+      
+      var tablehead = document.createElement("thead");
+      var headerRow = document.createElement("tr");
+      for(var i = 0; i < rows[0].length; i++){
+        var tableCell = document.createElement("th");
+        var input = document.createElement("input");
+        tableCell.appendChild(input);
+        headerRow.appendChild(tableCell);
+      }
+      tablehead.appendChild(headerRow);
+      tableResult.appendChild(tablehead);
+      
+      var tablebody = document.createElement("tbody");
+      tableResult.appendChild(tablebody);
+      for(l in rows){
+        var tableRow = document.createElement("tr");
+        for(c in rows[l]){
+          var tableCell = document.createElement("td");
+          tableCell.innerHTML = rows[l][c];
+          tableRow.appendChild(tableCell);
+        }
+        tablebody.appendChild(tableRow);
+      }
+      if($("#csv-table-area") != []){
+        document.getElementById("csv-table-area").appendChild(tableResult);
+        this.set("asCSV", JSON.stringify(rows));
+      }
     },
-    
-    importXML : function() {
+    /**
+     * http://purbayubudi.wordpress.com/2008/11/09/csv-parser-using-javascript/
+     * // -- CSV PARSER --
+      // author  : Purbayu, 30Sep2008
+      // email   : purbayubudi@gmail.com
+      //
+      // description :
+      //  This jscript code describes how to load csv file and parse it into fields.
+      //  Additionally, a function to display html table as result is added.
+      //
+      // disclamer:
+      //  To use this code freely, you must put author's name in it.
+     */
+    parseLineCSV : function(lineCSV) {
+      // parse csv line by line into array
+      var CSV = new Array();
+
+      // Insert space before character ",". This is to anticipate
+      // 'split' in IE
+      // try this:
+      //
+      // var a=",,,a,,b,,c,,,,d";
+      // a=a.split(/\,/g);
+      // document.write(a.length);
+      //
+      // You will see unexpected result!
+      //
+      lineCSV = lineCSV.replace(/,/g, " ,");
+
+      lineCSV = lineCSV.split(/,/g);
+
+      // This is continuing of 'split' issue in IE
+      // remove all trailing space in each field
+      for ( var i = 0; i < lineCSV.length; i++) {
+        lineCSV[i] = lineCSV[i].replace(/\s*$/g, "");
+      }
+
+      lineCSV[lineCSV.length - 1] = lineCSV[lineCSV.length - 1]
+      .replace(/^\s*|\s*$/g, "");
+      var fstart = -1;
+
+      for ( var i = 0; i < lineCSV.length; i++) {
+        if (lineCSV[i].match(/"$/)) {
+          if (fstart >= 0) {
+            for ( var j = fstart + 1; j <= i; j++) {
+              lineCSV[fstart] = lineCSV[fstart] + "," + lineCSV[j];
+              lineCSV[j] = "-DELETED-";
+            }
+            fstart = -1;
+          }
+        }
+        fstart = (lineCSV[i].match(/^"/)) ? i : fstart;
+      }
+
+      var j = 0;
+
+      for ( var i = 0; i < lineCSV.length; i++) {
+        if (lineCSV[i] != "-DELETED-") {
+          CSV[j] = lineCSV[i];
+          CSV[j] = CSV[j].replace(/^\s*|\s*$/g, ""); // remove leading & trailing
+          // space
+          CSV[j] = CSV[j].replace(/^"|"$/g, ""); // remove " on the beginning
+          // and end
+          CSV[j] = CSV[j].replace(/""/g, '"'); // replace "" with "
+          j++;
+        }
+      }
+
+      return CSV;
+    },
+    importXML : function(xml) {
     },
     
     importText : function() {
@@ -76,7 +178,7 @@ define([
       Utils.debug(files);
       for ( var i = 0, f; f = files[i]; i++) {
         filedetails.push( escape(f.name), f.type
-            || 'n/a', ') - ', f.size, ' bytes, last modified: ',
+            || 'n/a', ' - ', f.size, ' bytes, last modified: ',
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
                 : 'n/a');
         
@@ -93,28 +195,25 @@ define([
       if (this.get("datalist") == undefined) {
         this.set("datalist",new DataList(
           {
-            title : "Importing workspace",
+            title : "Data from "+files[0].name,
             description : "This is the data list which would result from the import of these files."
-              + this.get("fieldDetails"),
+              + this.get("fileDetails"),
             corpusname: this.get("corpusname")
           }));
       }
       this.dataListView = new DataListEditView({model : this.get("datalist")});
       this.dataListView.format = "import";
       this.dataListView.render();
-      var importDomElement = $(window.appView.importView.el);
       
-      if (importDomElement.requestFullScreen) {  
-        importDomElement.requestFullScreen();  
-      } else if (importDomElement.mozRequestFullScreen) {  
-        importDomElement.mozRequestFullScreen();  
-      } else if (importDomElement.webkitRequestFullScreen) {  
-        importDomElement.webkitRequestFullScreen();  
-      } 
       
     },
     readFileIntoRawText : function(index, callback){
      this.readBlob(this.get("files")[index]);
+     if(this.get("files")[index].name.split('.').pop() == "csv"){
+       this.importCSV(this.get("rawText"));
+     }else if(this.get("files")[index].name.split('.').pop() == "eaf"){
+       this.importXML(this.get("rawText"));
+     }
      if(typeof callback == "function"){
        callback();
      }

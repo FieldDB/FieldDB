@@ -85,35 +85,24 @@ define( [
     dragLeave: function (data, dataTransfer, e) { // optionally override me
       if (this._draghoverClassAdded) $(this.el).removeClass("draghover");
     },
-//    bindEvents : function(){
-//      //https://gist.github.com/1488561
-//      $(this.el).bind("dragover", _.bind(this._dragOverEvent, this));
-//      $(this.el).bind("dragenter", _.bind(this._dragEnterEvent, this));
-//      $(this.el).bind("dragleave", _.bind(this._dragLeaveEvent, this));
-//      $(this.el).bind("drop", _.bind(this._dropEvent, this));
-//      this._draghoverClassAdded = false;
-//    },
     
     drop: function (data, dataTransfer, e) {
-      alert("dropped");
       this.model.set("files", dataTransfer.files);
       this.model.readFiles();
     },
     
     model : Import,
+    
     template: Handlebars.templates.import_edit_fullscreen,
-    dropFile : function(evt) {
-      alert("dropped file");
-//      evt.stopPropagation();
-//      evt.preventDefault();
-//      var draggedfiles = evt.dataTransfer.files; // FileList object.
-////       files is a FileList of File objects. List some properties.
-//      this.model = new Import({files: draggedfiles});
-//      return false;
-    },
+    
     render : function() {
       this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
+      if(this.model.get("datalist") != undefined){
+        if(this.model.dataListView != undefined){
+          this.model.dataListView.render();
+        }
+      }
       return this;
     }
   });
