@@ -5,19 +5,21 @@
 </h1>
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span2">
+		<div class="span2 well">
 			<!--Sidebar content-->
-			<button class="btn btn-success approve-import disabled">Import and Save</button>
+			<button class="btn btn-success approve-import disabled">Import
+				and Save</button>
 			<div id="import-data-list-view"></div>
 		</div>
 		<div class="span10">
 			<!--Body content-->
-<div>{{status}}</div>
-			<textarea class="export-large-textarea  drop-zone" id="export-text-area">{{rawText}}</textarea>
+			<div>{{status}}</div>
+			<textarea class="export-large-textarea  drop-zone"
+				id="export-text-area">{{rawText}}</textarea>
 
-      <div id="import-datum-field-labels"></div>
-			<table id="csv-table-area" class= "table table-striped table-bordered table-condensed"></table>
-			<textarea class="export-large-textarea" id="export-text-area">{{asXML}}</textarea>
+			<div id="import-datum-field-labels"></div>
+			<table id="csv-table-area"
+				class="table table-striped table-bordered table-condensed"></table>
 		</div>
 	</div>
 </div>
