@@ -61,7 +61,8 @@ define([
       "click .btn-search-intersection" : "searchIntersection",
       "click .icon-search" : "searchTop",
       "click .icon-resize-small" : "resizeSmall",
-      "click .icon-resize-full" : 'resizeFullscreen'
+      "click .icon-resize-full" : 'resizeFullscreen',
+      "click .btn-advanced-search" : "resizeSmall"
     },
     
     /**
