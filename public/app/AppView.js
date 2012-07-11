@@ -293,6 +293,9 @@ define([
       "click .icon-refresh" : "replicateDatabases",
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
+      },
+      "click .icon-home" : function() {
+        this.model.router.showDashboard();
       }
     },
     
