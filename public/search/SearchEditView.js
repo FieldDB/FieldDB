@@ -21,7 +21,7 @@ define([
      * @class Search View handles the render of the global search in the corner,
      *        and the advanced power search, as well as their events.
      * 
-     * @property {String} format Valid values are "fullscreen" or "top".
+     * @property {String} format Valid values are "fullscreen", "top", or "centreWell".
      * 
      * @description Starts the Search.
      * 
@@ -42,7 +42,7 @@ define([
         collection           : window.app.get("corpus").get("sessionFields").clone(),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'li',
-        childViewFormat      : "datum"
+        childViewFormat      : "session"
       });
       
       this.model.bind('change', this.render, this);
@@ -59,13 +59,21 @@ define([
     events : {
       "click .btn-search-union" : "searchUnion",
       "click .btn-search-intersection" : "searchIntersection",
-      "click .icon-search" : "searchTop"
+      "click .icon-search" : "searchTop",
+      "click .icon-resize-small" : "resizeSmall",
+      "click .icon-resize-full" : 'resizeFullscreen',
+      "click .btn-advanced-search" : "resizeSmall"
     },
     
     /**
-     * The Handlebars template rendered as the AdvancedSearchView.
+     * The Handlebars template rendered as the embedded AdvancedSearchView.
      */
-    advancedTemplate : Handlebars.templates.search_advanced_edit_embedded,
+    embeddedTemplate : Handlebars.templates.search_advanced_edit_embedded,
+    
+    /**
+     * The Handlebars template rednered as the fullscreen AdvancedSearchView.
+     */
+    fullscreenTemplate : Handlebars.templates.search_advanced_edit_fullscreen,
     
     /**
      * The Handlebars template rendered as the TopSearchView.
@@ -81,7 +89,7 @@ define([
       if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.advancedTemplate(this.model.toJSON()));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
 
         this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
@@ -89,9 +97,17 @@ define([
 
         this.advancedSearchSessionView.el = this.$('.advanced_search_session');
         this.advancedSearchSessionView.render();
-
+      } else if (this.format == "centreWell") {
+        // Display the SearchView
+        this.setElement($("#search-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
-        Utils.debug("\trendering search: "+ this.model.get("searchKeywords"));
+
+        this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
+        this.advancedSearchDatumView.render();
+
+        this.advancedSearchSessionView.el = this.$('.advanced_search_session');
+        this.advancedSearchSessionView.render();
       } else if (this.format == "top") {
         // Display the SearchView
         this.setElement($("#search-top"));
@@ -111,7 +127,7 @@ define([
       var queryString = this.getQueryString("union");
       
       // Update the search box
-      appView.searchView.model.set("searchKeywords", queryString);
+      appView.searchTopView.model.set("searchKeywords", queryString);
       
       // Start the search
       this.search(queryString);
@@ -127,7 +143,7 @@ define([
       var queryString = this.getQueryString("intersection");
       
       // Update the search box
-      appView.searchView.model.set("searchKeywords", queryString);
+      appView.searchTopView.model.set("searchKeywords", queryString);
       
       // Start the search
       this.search(queryString);
@@ -208,6 +224,14 @@ define([
       this.model.set({
         searchKeywords : "naya"
       });
+    },
+      
+    resizeSmall : function(){
+      window.app.router.showEmbeddedSearch();
+    },
+    
+    resizeFullscreen : function(){
+      window.app.router.showFullscreenSearch();
     }
   });
 
