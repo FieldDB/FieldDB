@@ -100,8 +100,18 @@ define([
           }));
       }
       this.dataListView = new DataListEditView({model : this.get("datalist")});
-      this.dataListEditLeftSideView.format = "import";
+      this.dataListView.format = "import";
       this.dataListView.render();
+      var importDomElement = $(window.appView.importView.el);
+      
+      if (importDomElement.requestFullScreen) {  
+        importDomElement.requestFullScreen();  
+      } else if (importDomElement.mozRequestFullScreen) {  
+        importDomElement.mozRequestFullScreen();  
+      } else if (importDomElement.webkitRequestFullScreen) {  
+        importDomElement.webkitRequestFullScreen();  
+      } 
+      
     },
     readFileIntoRawText : function(index, callback){
      this.readBlob(this.get("files")[index]);
