@@ -27,7 +27,7 @@ define([
      
     },
 
-    classname : "insert-unicode",
+//    classname : "insert-unicode",
 
     template : Handlebars.templates.insert_unicode,
 
