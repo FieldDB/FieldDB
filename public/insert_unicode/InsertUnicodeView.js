@@ -37,6 +37,11 @@ define([
       this.el.draggable= "true";
       this.el.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
       $(this.el).after(" ");
+      
+      window.setTimeout(function(){
+        $(".badge").after(" ");
+      }, 500);
+      
       return this;
     },
     

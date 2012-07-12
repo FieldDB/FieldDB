@@ -139,10 +139,16 @@ define([
         window.setTimeout(function(){
           $('.datum-field').each(function(index, item) {
             item.classList.add( $(item).find("label").html() );
+            $("textarea").each(function(index){
+              this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+              this.addEventListener('dragover', window.appView.handleDragOver, false);
+            });
           });
           self.hideRareFields();
         }, 1000);
        
+        
+        
       }
 
       return this;
