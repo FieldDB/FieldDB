@@ -207,7 +207,7 @@ define( [
               tagName : "li"
             });
             view.format = "latex";
-            $('#data_list_content').append(view.render().el);
+            $('.data_list_content').append(view.render().el);
             
             // Keep track of the DatumReadView
             self.datumLatexViews.push(view);

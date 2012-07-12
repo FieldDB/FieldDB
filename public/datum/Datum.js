@@ -344,6 +344,28 @@ define([
         $("#export-modal").modal("show");
       }
       return result;
+    },
+    /**
+     * This function takes in a boolean whether the data should be appended in the import, the fields the data is in, and the header from the data which corresponds to datum fields.
+     * 
+     * @param showInImportModal
+     * @param orderedFields the values which correspond to datumfields
+     * @param header the header fields which correspond to datumfields
+     */
+    importCSV: function(orderedFields, header){
+      for(f in header){
+        if(this.get("datumFields").where({label: header[f]})[0] != undefined){
+          this.get("datumFields").where({label: header[f]})[0].set("value", orderedFields[f]);
+        }else{
+          var n = new DatumField();
+          n.label = header[f];
+          n.value = orderedFields[f];
+          this.get("datumFields").add(n);
+        }
+      }
+      var csvDebugResult = this.exportAsCSV(null, null, true);
+      
+      return result;
     }
   });
 
