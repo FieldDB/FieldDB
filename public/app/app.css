@@ -150,3 +150,13 @@ textarea{
 .halfopacity{
 	opacity: 0.4;
 }
+
+.dropdown-menu .not-a {
+  display: block;
+  padding: 3px 15px;
+  clear: both;
+  font-weight: normal;
+  line-height: 18px;
+  color: #333333;
+  white-space: nowrap;
+}

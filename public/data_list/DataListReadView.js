@@ -106,6 +106,15 @@ define( [
         
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
+      }else if(this.format == "middle"){
+        
+        this.setElement($("#new-data-list-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        // TODO Display the first page of DatumReadViews.
+        // this.renderNewModel();
+      
       }
       
       return this;
@@ -185,16 +194,16 @@ define( [
     addOne : function(datumId) {
       // Get the corresponding Datum from PouchDB 
       var d = new Datum({
-        id : datumId,
         corpusname : window.app.get("corpus").get("corpusname")
       });
+      d.id = datumId;
       var self = this;
       d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
         d.fetch({
-          success : function() {
+          success : function(model, response) {
             // Render a DatumReadView for that Datum at the end of the DataListEditView
             var view = new DatumReadView({
-              model : d,
+              model : model,
               tagName : "li"
             });
             view.format = "latex";

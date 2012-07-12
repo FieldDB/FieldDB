@@ -5,16 +5,18 @@ define([
 ], function(Backbone,
     Handlebars,
     InsertUnicode) {
-    var InsertUnicodeView = Backbone.View.extend(
-  /** @lends InsertUnicodeView.prototype */
+    var InsertUnicodesView = Backbone.View.extend(
+  /** @lends InsertUnicodesView.prototype */
   {
     /**
-     * @class InsertUnicodeView
+     * @class InsertUnicodesView
      *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
+      Utils.debug("INSERT UNICODE VIEW init");
+
     },
 
     model : InsertUnicode,
@@ -22,38 +24,38 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .insert-unicode-input" : "updateUnicode"
+      "click .unicode" : "insertUnicode"
+     
     },
 
-    classname : "insert-unicode",
+//    classname : "insert-unicode",
 
     template : Handlebars.templates.insert_unicode,
 
     render : function() {
-
-      // Display the InsertUnicodeView
-      this.setElement($("#insert-unicode"));
+      Utils.debug("INSERT UNICODE render");
+      
       $(this.el).html(this.template(this.model.toJSON()));
-
+      
       return this;
     },
     
     /**
      * Change the model's state.
      */
-    updateUnicode : function() {
-      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
-      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
-    },
-    insertNewDatumState : function() {
-      var m = new InsertUnicode({
-        "unicode" : this.$el.children(".insert-unicode-input").val(),
-      });
-      this.model.get("datumStates").add(m);
-    },
+//    updateUnicode : function() {
+//      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
+//      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
+//    },
     
+    insertUnicode : function() {
+      var u = this.model.get("symbol");
+      console.log(u);
+      return u;
+    },
+ 
     
   });
 
-  return InsertUnicodeView;
+  return InsertUnicodesView;
 });

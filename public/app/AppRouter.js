@@ -89,6 +89,23 @@ define([
     },
     
     /**
+     * Displays the advanced search in fullscreen form.
+     */
+    showFullscreenSearch : function() {
+      this.hideEverything();
+      $("#search-fullscreen").show();
+    },
+    
+    /**
+     * * Displays the advanced search in embedded form.
+     */
+    showEmbeddedSearch : function(corpusName ) {
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#search-embedded").show();
+    },
+    
+    /**
      * Displays the fullscreen view of the session specified by the given
      * corpusName and the given datumId.
      * 
@@ -178,6 +195,14 @@ define([
       $("#data-list-fullscreen").show();      
     },
     
+    showMiddleDataList : function() {
+      Utils.debug("In showMiddleDataList");
+
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#new-datalist-embedded").show();      
+    },
+    
     /**
      * Display the fullscreen view of search within the corpus specified by the
      * given corpusName.
@@ -264,6 +289,7 @@ define([
       $("#session-fullscreen").hide();
       $('#user-fullscreen').hide();
       $('#import-fullscreen').hide();
+      $('#new-datalist-embedded').hide();
     }
   });
 

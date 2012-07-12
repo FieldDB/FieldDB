@@ -20,6 +20,9 @@ define(	[
   	initialize: function(){
   	}, 
   	
+  	defaults : {
+  	  symbol : "" 
+  	},
   	// Internal models: used by the parse function
     model : {
       // There are no nested models
