@@ -106,11 +106,16 @@ define( [
         this.setElement($("#import-data-list-view"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
+        // Display the DatumFieldsView
+        this.datumsView.el = this.$(".data_list_content");
+        this.datumsView.render();
+        
         // Display the pagination footer
         this.renderUpdatedPagination();
       } else if (this.format == "centreWell") {
         this.setElement($("#new-datalist-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
@@ -207,7 +212,7 @@ define( [
       temporaryDataList = true;
 
       // Render a DatumReadView for that Datum at the end of the DataListEditView
-      this.datumsViews.collection.add(d);
+      this.datumsView.collection.add(d);
 
       // Display the updated DatumReadView
       this.renderUpdatedPagination();

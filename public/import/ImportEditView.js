@@ -210,7 +210,10 @@ define( [
     },
     convertTableIntoDataList : function(){
       //clear out the data list
-      this.model.dataListView.renderNewModel();
+      var coll = this.model.dataListView.datumsView.collection; 
+      while (coll.length > 0) {
+        col.pop();
+      }
       this.model.set("datumArray", []);
       var headers = [];
       $('th').each(function(index, item) {
