@@ -140,7 +140,6 @@ define([
       var self = this;
       var c = this.get("corpus");
       c.set({
-        "id" : appids.corpusid,
         "corpusname" : couchConnection.corpusname,
         couchConnection : couchConnection
       });
@@ -161,7 +160,7 @@ define([
       });
       
       var s = this.get("currentSession");
-      s.set({"id": appids.sessionid,
+      s.set({
         "corpusname" : couchConnection.corpusname});
       s.id = appids.sessionid; //tried setting both ids to match, and it worked!!
 
@@ -183,7 +182,6 @@ define([
       });
       var dl = this.get("currentDataList");
       dl.set({
-        "id" : appids.datalistid, 
         "corpusname" : couchConnection.corpusname});
       dl.id = appids.datalistid; //tried setting both ids to match, and it worked!!
 
