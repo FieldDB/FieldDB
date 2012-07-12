@@ -157,10 +157,17 @@ define([
           success : function(model, response) {
             Utils.debug('Session save success');
             try{
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-              window.app.set("currentSession", self.model);
+              if(window.app.get("currentSession").id != model.id){
+                window.app.get("corpus").get("sessions").unshift(model);
+              }
+              window.app.set("currentSession", model);
               window.appView.renderEditableSessionViews();
               window.appView.renderReadonlySessionViews();
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+              //add session to the users session history if they dont already have it
+              if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
+                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+              }
             }catch(e){
               Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
             }
