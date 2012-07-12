@@ -100,6 +100,8 @@ define([
         // latex, could be put into a function, but not sure if thats
         // necessary...
       } else if (this.format == "latex") {
+        // Clear the el
+        this.$el.empty();
         
         //This gets the fields necessary from the model
         judgement= this.model.get("datumFields").where({label: "judgement"})[0].get("value");
