@@ -151,7 +151,7 @@ define([
      * https://twitter.com/#!/tucker1927
      */
     loadSample : function(appidsIn) {      
-//      this.model.get("userPrivate").set("id","4ffbcacc1bae444d2400001a");
+//      this.model.get("userPrivate").id = "4ffbcacc1bae444d2400001a";
 //      this.model.get("userPrivate").set("username", "sapir");
 //      this.model.get("userPrivate").set("mostRecentIds", appidsIn);
       var couchConnection = {
@@ -202,7 +202,7 @@ define([
       //Set sapir's remote corpus to fetch from
       window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection,"sapir","phoneme", function(){
         //Replicate sapir's corpus down to pouch
-        self.model.get("userPublic").set("id", self.model.get("userPrivate").get("id") );
+        self.model.get("userPublic").id = self.model.get("userPrivate").id ;
         var data = {};
         data.user ={};
         if (data.user.publicSelf == null) {
@@ -345,7 +345,7 @@ define([
 //      if (userid) {
 //        //TODO this needs testing
 //        // Save the  user in our Models
-//        this.model.get("userPublic").set("id", userid);
+//        this.model.get("userPublic").id = userid;
 //        this.model.get("userPublic").fetch();
 //        this.model.syncUserWithServer();
 //        

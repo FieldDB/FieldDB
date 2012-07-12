@@ -228,7 +228,6 @@ define( [
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             this.model.get("datumFields").add(new DatumField({
               label : headers[f],
-              size : "3",
               encrypted: "checked",
               userchooseable: "",
               help: "This field came from file import "+this.model.get("status")
@@ -269,6 +268,8 @@ define( [
           }
         });
         d.set("datumFields", fields);
+        var states = window.app.get("corpus").get("datumStates").clone();
+        d.set("datumStates", states);
         this.model.dataListView.addOneTempDatum(d);
         this.model.get("datumArray").push(d);
       }

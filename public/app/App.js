@@ -60,11 +60,14 @@ define([
         Utils.debug("Error in App: " + error);
       });
       
+      // If there's no authentication, create a new one
+      if (!this.get("authentication")) {
+        this.set("authentication", new Authentication());
+      }
     },
     
     defaults : {
       corpus : Corpus,
-      authentication : new Authentication(),
       currentSession : Session,
       currentDataList : DataList
     },
@@ -140,7 +143,6 @@ define([
       var self = this;
       var c = this.get("corpus");
       c.set({
-        "id" : appids.corpusid,
         "corpusname" : couchConnection.corpusname,
         couchConnection : couchConnection
       });
@@ -161,7 +163,7 @@ define([
       });
       
       var s = this.get("currentSession");
-      s.set({"id": appids.sessionid,
+      s.set({
         "corpusname" : couchConnection.corpusname});
       s.id = appids.sessionid; //tried setting both ids to match, and it worked!!
 
@@ -183,7 +185,6 @@ define([
       });
       var dl = this.get("currentDataList");
       dl.set({
-        "id" : appids.datalistid, 
         "corpusname" : couchConnection.corpusname});
       dl.id = appids.datalistid; //tried setting both ids to match, and it worked!!
 
@@ -232,7 +233,7 @@ define([
         alert("Saved "+ arg+ " to pouch.");
         window.app.savedcount++;
         if( window.app.savedcount == 3){
-          localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").get("id"));//the user private should get their id from mongodb
+          localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
           window.app.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
           //save ids to the user also so that the app can bring them back to where they were
           if(typeof thiscallback == "function"){
@@ -251,9 +252,9 @@ define([
         self.get("currentSession").save(null, {
           success : function(model, response) {
             Utils.debug('Session save success');
-            hub.publish("savedToPouch","session"+model.get("id"));
+            hub.publish("savedToPouch","session"+model.id);
             try{
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.get("id");
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
             }catch(e){
               Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
             }
@@ -261,9 +262,9 @@ define([
               self.get("currentDataList").save(null, {
                 success : function(model, response) {
                   Utils.debug('Datalist save success');
-                  hub.publish("savedToPouch","datalist"+model.get("id"));
+                  hub.publish("savedToPouch","datalist"+model.id);
                   try{
-                    window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.get("id");
+                    window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
                   }catch(e){
                     Utils.debug("Couldnt save the datatlist id to the user's mostrecentids"+e);
                   }
@@ -271,10 +272,10 @@ define([
                     self.get("corpus").save(null, {
                       success : function(model, response) {
                         Utils.debug('Corpus save success');
-                        hub.publish("savedToPouch","corpus"+model.get("id"));
+                        hub.publish("savedToPouch","corpus"+model.id);
                         try{
                           localStorage.setItem("mostRecentCouchConnection", JSON.stringify(model.get("couchConnection")));
-                          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.get("id");
+                          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
                         }catch(e){
                           Utils.debug("Couldnt save the corpus id to the user's mostrecentids"+e);
                         }
