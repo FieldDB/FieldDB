@@ -94,7 +94,6 @@ define([
     },
     
     updateDatums : function() {
-      var previousNumberOfDatum = this.model.length;
       var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
@@ -103,7 +102,7 @@ define([
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
-          for (var i = 0; i < previousNumberOfDatum; i++) {
+          for (var i = 0; i < self.model.length; i++) {
             self.model.pop();
           }
             
@@ -115,8 +114,8 @@ define([
           }));
         } else {
           // If the user has increased the number of Datum to display in the container
-          if (nextNumberOfDatum > previousNumberOfDatum) {
-            for (var i = previousNumberOfDatum; i < nextNumberOfDatum; i++) {
+          if (nextNumberOfDatum > self.model.length) {
+            for (var i = self.model.length; i < nextNumberOfDatum; i++) {
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
               if (rows[rows.length - i - 1]) {
                 var d = new Datum();
@@ -124,10 +123,10 @@ define([
                 self.model.add(d);
               }
             }
-          // If the user has decrease the number of Datum to display in the container
-          } else if (nextNumberOfDatum < previousNumberOfDatum) {
+          // If the user has decreased the number of Datum to display in the container
+          } else if (nextNumberOfDatum < self.model.length) {
             // Pop the excess Datum from the bottom of the stack
-            for (var i = nextNumberOfDatum; i < previousNumberOfDatum; i++) {
+            for (var i = nextNumberOfDatum; i < self.model.length; i++) {
               self.model.pop();
             }
           }

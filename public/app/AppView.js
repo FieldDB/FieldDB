@@ -25,7 +25,8 @@ define([
     "import/Import",
     "import/ImportEditView",
     "insert_unicode/InsertUnicode",
-    "insert_unicode/InsertUnicodeView",
+    "insert_unicode/InsertUnicodes",
+    "insert_unicode/InsertUnicodesView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
     "search/Search",
@@ -65,7 +66,8 @@ define([
     Import,
     ImportEditView,
     InsertUnicode,
-    InsertUnicodeView,
+    InsertUnicodes,
+    InsertUnicodesView,
     UserPreference,
     UserPreferenceEditView,
     Search,
@@ -197,9 +199,19 @@ define([
       });
       
       /*
-       * Set up the four data list views
+       * Set up the six data list views
        */
       var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
+      
+      this.dataListEditMiddleView = new DataListEditView({
+        model : dataListToBePassedAround
+      }); 
+      this.dataListEditMiddleView.format = "centreWell";
+      
+      this.dataListReadMiddleView = new DataListEditView({
+        model : dataListToBePassedAround
+      }); 
+      this.dataListReadMiddleView.format = "centreWell";
       
       this.dataListEditLeftSideView = new DataListEditView({
         model : dataListToBePassedAround
@@ -224,15 +236,21 @@ define([
       /*
        *  Create search views
        */
-      this.searchView = new SearchEditView({
+      this.searchTopView = new SearchEditView({
         model : new Search()
       });
-      this.searchView.format = "top";
+      this.searchTopView.format = "top";
       
-      this.advancedSearchView = new SearchEditView({
-        model : new Search()
+      var searchToBePassedAround = new Search();
+      this.searchFullscreenView = new SearchEditView({
+        model : searchToBePassedAround
       });
-      this.advancedSearchView.format = "fullscreen";
+      this.searchFullscreenView.format = "fullscreen";
+      
+      this.searchEmbeddedView = new SearchEditView({
+        model : searchToBePassedAround
+      });
+      this.searchEmbeddedView.format = "centreWell";
       
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
@@ -243,9 +261,9 @@ define([
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
-      // Create an InsertUnicodeView
-      this.insertUnicodeView = new InsertUnicodeView({
-        model : new InsertUnicode()
+      // Create an InsertUnicodesView
+      this.insertUnicodeView = new InsertUnicodesView({
+        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
       }); 
 
       // Create a HotKeyEditView
@@ -287,6 +305,9 @@ define([
       "click .icon-refresh" : "replicateDatabases",
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
+      },
+      "click .icon-home" : function() {
+        this.model.router.showDashboard();
       }
     },
     
@@ -326,8 +347,9 @@ define([
         this.renderEditableDatumsViews("centreWell");
         
         // Display the Search Views
-        this.searchView.render();
-        this.advancedSearchView.render();
+        this.searchTopView.render();
+        this.searchFullscreenView.render();
+        this.searchEmbeddedView.render();
         
         // Display the AuthView
         this.authView.render();
@@ -352,10 +374,13 @@ define([
         this.hotkeyEditView.render();//.showModal();
 
         // Display Data List Views 
+        this.dataListEditMiddleView.render();
         this.dataListEditLeftSideView.render();
         this.dataListEditFullscreenView.render();
         this.dataListReadLeftSideView.render();
         this.dataListReadFullscreenView.render();
+        this.dataListReadMiddleView.render();
+
          
         // Display the ImportEditView
         this.importView.render();
@@ -435,7 +460,7 @@ define([
       //all the replication etc happens in authView
       this.authView.loadSample(ids);
       
-      this.searchView.loadSample();
+      this.searchTopView.loadSample();
     },
     
     /**
