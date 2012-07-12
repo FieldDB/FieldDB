@@ -1,9 +1,13 @@
 define([ 
     "backbone", 
-    "datum/Datum" 
+    "datum/Datum",
+    "comment/Comment",
+    "comment/Comments"
 ], function(
     Backbone, 
-    Datum
+    Datum,
+    Comment, 
+    Comments
 ) {
   var DataList = Backbone.Model.extend(
   /** @lends DataList.prototype */
@@ -31,6 +35,12 @@ define([
      */
     initialize : function() {
       
+      if(typeof(this.get("comments")) == "function"){
+        this.set("comments", new Comments([ 
+          new Comment()
+          ]));
+      }
+      
       //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
 //      this.bind("change:corpusname", function() {
 //        this.pouch = Backbone.sync
@@ -57,11 +67,12 @@ define([
       dateCreated : "May 29, 2012",
       description : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collegues.",
       datumIds : [],
+      comments: Comments
     },
     
     // Internal models: used by the parse function
     model : {
-      // There are no nested models
+      comments: Comments
     },
     
     //dont define pouch on start, instead, define it once in change corpus

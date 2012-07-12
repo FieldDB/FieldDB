@@ -1,7 +1,9 @@
 define( [
     "backbone",
+    "user/User"
 ], function(
-    Backbone
+    Backbone,
+    User
 ) {
 	var Comment = Backbone.Model.extend(
   /** @lends Comment.prototype */
@@ -23,18 +25,22 @@ define( [
      * @constructs
      */
     initialize : function() {
-      this.set("timestamp", Date.now());
-      this.set("username", window.username);
+      this.set("timestamp", JSON.stringify(new Date()));
+      
+    //  this.set("username", this.authView.model.get("userPrivate").get("username"));
     },
 
     defaults : {
       text : "",
-      username : ""
+      timestamp : ""
     },
+   
+
     
     // Internal models: used by the parse function
     model : {
-      // There are no nested models
+      user : User
+    
     },
 
     /**
