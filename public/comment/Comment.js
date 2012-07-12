@@ -1,7 +1,9 @@
 define( [
     "backbone",
+    "user/UserMask"
 ], function(
-    Backbone
+    Backbone,
+    UserMask
 ) {
 	var Comment = Backbone.Model.extend(
   /** @lends Comment.prototype */
@@ -23,13 +25,18 @@ define( [
      * @constructs
      */
     initialize : function() {
-      this.set("timestamp", Date.now());
-      this.set("username", window.username);
+      var t = JSON.stringify(new Date());
+     
+      this.set("timestamp", new Date(JSON.parse(t)));
+      
+      this.set("gravatar", window.appView.authView.model.get("userPublic").get("gravatar"));
+      this.set("username", window.appView.authView.model.get("userPublic").get("username"));
+
     },
 
     defaults : {
       text : "",
-      username : ""
+     username: ""
     },
     
     // Internal models: used by the parse function

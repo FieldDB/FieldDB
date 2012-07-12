@@ -131,21 +131,16 @@ define([
       
       if(typeof(this.get("sessionFields")) == "function"){
         this.set("sessionFields", new DatumFields([ 
-          new DatumField({
-            label : "user",
-            encrypted: "",
-            userchooseable: "disabled"
-          }),
+           new DatumField({
+             label : "goal",
+             encrypted: "",
+             userchooseable: "disabled",
+             help: "This describes the goals of the session."
+           }),  
           new DatumField({
             label : "consultants",
             encrypted: "",
             userchooseable: "disabled"
-          }),
-          new DatumField({
-            label : "language",
-            encrypted: "",
-            userchooseable: "disabled",
-            help: "This is the langauge (or language family) if you would like to use it."
           }),
           new DatumField({
             label : "dialect",
@@ -154,10 +149,21 @@ define([
             help: "You can use this field to be as precise as you would like about the dialect of this session."
           }),
           new DatumField({
+            label : "language",
+            encrypted: "",
+            userchooseable: "disabled",
+            help: "This is the langauge (or language family) if you would like to use it."
+          }),
+          new DatumField({
             label : "dateElicited",
             encrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session took place."
+          }),
+          new DatumField({
+            label : "user",
+            encrypted: "",
+            userchooseable: "disabled"
           }),
           new DatumField({
             label : "dateSEntered",
@@ -165,26 +171,16 @@ define([
             userchooseable: "disabled",
             help: "This is the date in which the session was entered."
           }),
-          new DatumField({
-            label : "goal",
-            encrypted: "",
-            userchooseable: "disabled",
-            help: "This describes the goals of the session."
-          }),  
         ]));
         
       }//end if to set sessionFields
       
       if(typeof(this.get("comments")) == "function"){
-        this.set("comments", new Comments([ 
-          new Comment()
-          ]));
+        this.set("comments", new Comments());
       }
       
       if(typeof(this.get("dataLists")) == "function"){
-        this.set("dataLists", new Comments([ 
-          new DataLists()
-          ]));
+        this.set("dataLists", new DataLists());
       }
       
 //      this.pouch = Backbone.sync

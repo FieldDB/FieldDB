@@ -1,6 +1,9 @@
 define( [ 
     "backbone", 
     "handlebars",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -9,6 +12,9 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
+    Comment,
+    Comments,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -42,6 +48,13 @@ define( [
           childViewFormat      : "latex"
         });
       }
+      
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
 
       this.model.bind("change", this.showEditable, this);
     },
@@ -55,6 +68,9 @@ define( [
      * Events that the DataListEditView is listening to and their handlers.
      */
     events : {
+      //Add button inserts new Comment
+      "click .add_comment" : 'insertNewComment',
+      
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
@@ -85,6 +101,10 @@ define( [
       if (this.format == "fullscreen") {
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+       
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -99,6 +119,10 @@ define( [
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
+
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the pagination footer
         this.renderUpdatedPagination();
@@ -119,6 +143,10 @@ define( [
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
+       
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the pagination footer
         this.renderUpdatedPagination();
@@ -252,17 +280,6 @@ define( [
       }
     },
     
-    loadSample : function() {
-      this.model.set({
-        "id" : "45444C8F-D707-426D-A422-54CD4041A5A1",
-        "corpusname" : "sapir-firstcorpus"
-      });
-      
-      this.model.changeCorpus("sapir-firstcorpus",function(){
-        this.model.fetch();
-      });
-    },
-    
     resizeSmall : function(){
       window.app.router.showDashboard();
     },
@@ -293,9 +310,42 @@ define( [
       Utils.debug("Saving the DataList");
       var self = this;
       this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
+        self.model.save(null, {
+          success : function(model, response) {
+            Utils.debug('Datalist save success');
+            try{
+              if(window.app.get("currentDataList").id != model.id){
+                window.app.get("corpus").get("dataLists").unshift(model);
+              }
+              window.app.set("currentDataList", model);
+              window.appView.renderEditableDataListViews();
+              window.appView.renderReadonlyDataListViews();
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+              //add datalist to the users datalist history if they dont already have it
+              if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
+                window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+              }
+            }catch(e){
+              Utils.debug("Couldnt save the datalist id to the user's mostrecentids"+e);
+            }
+          },
+          error : function(e) {
+            Alert('Datalist save error' + e);
+          }
+        });
       });
     },
+    
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
+    },
+    
   });
 
   return DataListEditView;

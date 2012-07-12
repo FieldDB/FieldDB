@@ -56,48 +56,8 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS DETAILS init: " + this.el);
-      
-      //Create a CommentEditView     
-      this.commentEditView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
-        childViewTagName     : 'li'
-      });
-      
-      // Create a DataList List
-      this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.get("dataLists"),
-        childViewConstructor : DataListReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "link"
-      });
-
-      //Create a DatumFieldsView     
-      this.datumFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "corpus",
-        childViewClass       : "breadcrumb"
-      });
-          
-      // Create a DatumStatesView    
-      this.datumStatesView = new UpdatingCollectionView({
-        collection           : this.model.get("datumStates"),
-        childViewConstructor : DatumStateEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "corpus"
-      });
-      
-      //Create a Permissions View
-      this.permissionsView = new PermissionsView({
-        collection : this.model.get("permissions")
-      });
-      
-      //Create a Sessions List 
-      // this.sessionsView = new SessionsView({
-        // collection : this.model.get("sessions")
-      // });
+      this.changeViewsOfInternalModels();
+     
       
       // If the model changes, re-render
       this.model.bind('change', this.showEditable, this);
@@ -231,6 +191,49 @@ define([
         
       return this;
     },
+    changeViewsOfInternalModels : function(){
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+      
+      // Create a DataList List
+      this.dataListsView = new UpdatingCollectionView({
+        collection : this.model.get("dataLists"),
+        childViewConstructor : DataListReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "link"
+      });
+
+      //Create a DatumFieldsView     
+      this.datumFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("datumFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus",
+        childViewClass       : "breadcrumb"
+      });
+          
+      // Create a DatumStatesView    
+      this.datumStatesView = new UpdatingCollectionView({
+        collection           : this.model.get("datumStates"),
+        childViewConstructor : DatumStateEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus"
+      });
+      
+      //Create a Permissions View
+      this.permissionsView = new PermissionsView({
+        collection : this.model.get("permissions")
+      });
+      
+      //Create a Sessions List 
+      // this.sessionsView = new SessionsView({
+        // collection : this.model.get("sessions")
+      // });
+    },
     
     updateTitle: function(){
       this.model.set("title",this.$el.find(".corpus-title-input").val());
@@ -251,9 +254,18 @@ define([
     },
     
     newSession : function() {
-      app.router.showEmbeddedSession();
-      app.router.showEditableSession();
-     
+      $("#session-modal").modal("show");
+      //Save the current session just in case
+      window.app.get("currentSession").save();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      window.appView.sessionModalView.model = window.app.get("currentSession").clone();
+      //Give it a null id so that pouch will save it as a new model.
+      //WARNING this might not be a good idea, if you find strange side effects in sessions in the future, it might be due to this way of creating (duplicating) a session.
+      window.appView.sessionModalView.model.id = undefined;
+      window.appView.sessionModalView.model.rev = undefined;
+      window.appView.sessionModalView.model.set("_id", undefined);
+      window.appView.sessionModalView.model.set("_rev", undefined);
+      window.appView.sessionModalView.render();
     },
     
     newCorpus : function(){
@@ -294,7 +306,6 @@ define([
 
       // Add the new DatumField to the Corpus' list for datumFields
       this.model.get("datumFields").add(m);
-      this.datumFieldsView.add(m);
       
       // Reset the line with the add button
       this.$el.find(".choose_add_field").val("");//.children("option:eq(0)").attr("selected", true);
@@ -308,7 +319,6 @@ define([
         "color" : this.$el.find(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
-      this.datumStatesView.add(m);
     },
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
@@ -322,6 +332,8 @@ define([
     },
     //This is the function that is bound to changes
     showEditable :function(){
+      //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
+      this.changeViewsOfInternalModels();
       window.appView.renderEditableCorpusViews();
     },
     updatePouch : function() {
