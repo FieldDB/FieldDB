@@ -1,6 +1,9 @@
 define([
     "backbone", 
     "handlebars", 
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -8,6 +11,9 @@ define([
 ], function(
     Backbone,
     Handlebars, 
+    Comment,
+    Comments,
+    CommentEditView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -42,6 +48,10 @@ define([
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
+      
+      //Add button inserts new Comment
+      "click .add_comment" : 'insertNewComment',
+      
       "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
@@ -112,6 +122,9 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         } else if (this.format == "leftSide") {
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -127,12 +140,18 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         } else if (this.format == "modal") {
           this.setElement("#session-modal");
           this.$el.html(this.templateModal(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -146,6 +165,12 @@ define([
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
         childViewFormat      : "session"
+      });
+      
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
       });
     },
     
@@ -175,7 +200,15 @@ define([
     //bound to book
     showReadonly : function() {
       window.app.router.showReadonlySession();
-    }
+    },
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+      });
+      this.model.get("comments").add(m);
+    },
   });
   
   return SessionEditView;
