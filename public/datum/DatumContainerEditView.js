@@ -168,7 +168,8 @@ define([
       }
       
       if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
-        console.log("new session modal");
+        // Display the new Session modal
+        $("#session-modal").modal("show");
       } else {
         // Set the Datum's Session to the current Session
         datum.set("session", app.get("currentSession"));
