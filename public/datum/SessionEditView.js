@@ -27,13 +27,8 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
-
-      this.sessionFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
-        childViewFormat      : "session"
-      });
+      
+      this.changeViewsOfInternalModels();
       
       this.model.bind('change', this.showEditable, this);
     },
@@ -145,6 +140,15 @@ define([
       return this;
     },    
     
+    changeViewsOfInternalModels : function(){
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : "li",
+        childViewFormat      : "session"
+      });
+    },
+    
     updatePouch : function() {
       Utils.debug("Saving the Session");
       var self = this;
@@ -164,6 +168,7 @@ define([
     
     //bound to changes
     showEditable :function() {
+      this.changeViewsOfInternalModels();
       window.appView.renderEditableSessionViews();
     },
     
