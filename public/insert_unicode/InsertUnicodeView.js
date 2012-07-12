@@ -23,10 +23,6 @@ define([
     /**
      * Events that the InsertUnicode is listening to and their handlers.
      */
-    events : {
-      "click .unicode" : "insertUnicode"
-     
-    },
 
 //    classname : "insert-unicode",
 
@@ -40,7 +36,7 @@ define([
       $(this.el).html(this.template(this.model.toJSON()));
       this.el.draggable= "true";
       this.el.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
-      
+      $(this.el).after(" ");
       return this;
     },
     
@@ -52,11 +48,6 @@ define([
 //      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
 //    },
     
-    insertUnicode : function() {
-      var u = this.model.get("symbol");
-      console.log(u);
-      return u;
-    },
  
     
   });
