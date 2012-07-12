@@ -20,7 +20,6 @@ define( [ "backbone",
 
     model: Comment,
     
- 
     
 //    clone : function() {
 //        var newCollection = new Comments();

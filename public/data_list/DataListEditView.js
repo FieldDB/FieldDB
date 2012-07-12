@@ -1,25 +1,17 @@
 define( [ 
     "backbone", 
     "handlebars",
-    "comment/Comment",
-    "comment/Comments",
-    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
-    "datum/Datums",
-    "app/UpdatingCollectionView"
+    "datum/Datums"
 ], function(
     Backbone, 
     Handlebars, 
-    Comment,
-    Comments,
-    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
-    Datums,
-    UpdatingCollectionView
+    Datums  
 ) {
   var DataListEditView = Backbone.View.extend(
   /** @lends DataListEditView.prototype */
@@ -39,13 +31,6 @@ define( [
      */
     initialize : function() {
       Utils.debug("DATALIST init: " + this.el);
-      
-      //Create a CommentEditView     
-      this.commentEditView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
-        childViewTagName     : 'li'
-      });
 
       this.model.bind("change", this.showEditable, this);
     },
@@ -65,8 +50,6 @@ define( [
      * Events that the DataListEditView is listening to and their handlers.
      */
     events : {
-      
-      "click .add_comment" : 'insertNewComment',
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
@@ -106,10 +89,6 @@ define( [
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         // Display the pagination footer
         this.renderUpdatedPagination();
-        
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
       } else if (this.format == "leftSide") {
@@ -119,10 +98,6 @@ define( [
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         // Display the pagination footer
         this.renderUpdatedPagination();
-        
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
       } else if (this.format == "import"){
@@ -137,10 +112,6 @@ define( [
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         // Display the pagination footer
         this.renderUpdatedPagination();
-        
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
       
@@ -362,16 +333,6 @@ define( [
       this.model.changeCorpus(this.model.get("corpusname"),function(){
         self.model.save();
       });
-    },
-    
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
-      console.log("I'm a new comment!");
-      var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
-
-      });
-      this.model.get("comments").add(m);
     },
   });
 
