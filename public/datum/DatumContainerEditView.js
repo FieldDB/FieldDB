@@ -167,7 +167,7 @@ define([
         }
       }
       
-      if (tooOld && confirm("This session is getting pretty old.\nCreate a new session?")) {
+      if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
         console.log("new session modal");
       } else {
         // Set the Datum's Session to the current Session
@@ -176,11 +176,11 @@ define([
         // Add the new, blank, Datum
         this.model.add(datum, {at:0});
          
-        // If there are too many datum on the screen, remove the bottom one and save it.
+        // If there are too many datum on the screen, remove the bottom one and save it, if necessary
         if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
+          var view = this.datumsView._childViews[this.model.length - 1];
+          view.saveScreen();
           var d = this.model.pop();
-          console.log("Removed the datum with id: " + d._id);
-          d.save();
         }
       }
     }
