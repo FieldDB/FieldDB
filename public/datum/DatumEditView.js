@@ -2,6 +2,9 @@ define([
     "backbone", 
     "handlebars", 
     "audio_video/AudioVideoEditView",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -13,6 +16,9 @@ define([
     Backbone, 
     Handlebars, 
     AudioVideoEditView,
+    Comment,
+    Comments,
+    CommentEditView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -37,7 +43,16 @@ define([
       // Create a AudioVideoEditView
       this.audioVideoView = new AudioVideoEditView({
         model : this.model.get("audioVideo"),
+        
+        
       });
+      
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+      
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -65,6 +80,8 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
+      "click .add_comment" : 'insertNewComment',
+
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "change" : "updatePouch",
@@ -111,6 +128,10 @@ define([
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
         
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
@@ -121,6 +142,7 @@ define([
           });
           self.hideRareFields();
         }, 1000);
+       
       }
 
       return this;
@@ -267,6 +289,15 @@ define([
       this.$el.find(".add_tag").val("");
       
       return false;
+    },
+    
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
     },
     
     updateDatumStates : function() {
