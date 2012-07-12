@@ -229,6 +229,7 @@ define([
         var neverBeenSaved = false;
         if (!this.model.get("dateEntered")) {
           neverBeenSaved = true;
+          
           // Give a dateEntered
           this.model.set("dateEntered", JSON.stringify(new Date()));
         }
@@ -241,11 +242,14 @@ define([
               if (neverBeenSaved) {
                 // Add it to the default data list
                 app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                self.model.changeCorpus(self.model.get("corpusname"), function() {
+                  app.get("corpus").get("dataLists").models[0].save();
+                  app.get("corpus").save();
+                });
                 
                 // If the default data list is the currently visible data list, re-render it
-                if (app.get('corpus').get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
-                  appView.renderEditableDataListViews();
-                  appView.renderReadonlyDataListViews();
+                if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                  // TODO update the views
                 }
               }
             }
@@ -293,7 +297,9 @@ define([
      */
     duplicateDatum : function() {      
       // Add it as a new Datum to the top of the Datum stack
-      appView.datumsView.prependDatum(this.model.clone());
+      var d = this.model.clone();
+      delete d.attributes.dateEntered;
+      appView.datumsView.prependDatum(d);
     },
   });
 

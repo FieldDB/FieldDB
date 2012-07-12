@@ -288,10 +288,7 @@ define( [
             "corpusname" : self.model.get("corpusname")
           });
 
-          // If this Datum has never been saved
-          if (!thatdatum.get("dateEntered")) {
-             thatdatum.set("dateEntered", JSON.stringify(new Date()));
-          }
+          thatdatum.set("dateEntered", JSON.stringify(new Date()));
 
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
@@ -299,6 +296,18 @@ define( [
               success : function(model, response) {
                 Utils.debug('Datum save success in import');
                 self.model.dataListView.addOne(model.id);
+                
+                // Add it to the default data list
+                app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                self.model.changeCorpus(self.model.get("corpusname"), function() {
+                  app.get("corpus").get("dataLists").models[0].save();
+                  app.get("corpus").save();
+                });
+                
+                // If the default data list is the currently visible data list, re-render it
+                if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                  // TODO update the views
+                }
               },
               error : function(e) {
                 alert('Datum save failure in import' + e);
