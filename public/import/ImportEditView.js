@@ -39,7 +39,8 @@ define( [
       },
       "drop .drop-label-zone" : function(e){
         this._dropLabelEvent(e);
-      }
+      },
+      "click .add-column" : "insertDoubleColumnsInTable"
     },
     _dragOverEvent: function (e) {
       if (e.originalEvent) e = e.originalEvent;
@@ -165,11 +166,25 @@ define( [
         var tableRow = document.createElement("tr");
         for(c in rows[l]){
           var tableCell = document.createElement("td");
+          tableCell.contentEditable="true";
           tableCell.innerHTML = rows[l][c];
           tableRow.appendChild(tableCell);
         }
         tablebody.appendChild(tableRow);
       }
+      $(".add-column").show();
+    },
+    /*
+     * Adds double the columns
+     */
+    insertDoubleColumnsInTable : function(){
+      $('td').each(function(index) {
+        $(this).after('<td contenteditable = "true"></td>');
+      });
+      $('th').each(function(index) {
+        $(this).after('<th><input class = "drop-label-zone header"/></th>');
+      });
+      
     },
     dragSrcEl : null,
     /**
