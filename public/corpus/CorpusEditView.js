@@ -142,7 +142,11 @@ define([
       
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
-      "blur .corpus-description-input" : "updateDescription"
+      "blur .corpus-description-input" : "updateDescription",
+        
+        "click .save-corpus" : "updatePouch",
+        "blur .save-corpus-blur" : "updatePouch"
+ 
       
     },
 
@@ -319,7 +323,14 @@ define([
     //This is the function that is bound to changes
     showEditable :function(){
       window.appView.renderEditableCorpusViews();
-    }
+    },
+    updatePouch : function() {
+      Utils.debug("Saving the Corpus");
+      var self = this;
+      this.model.changeCorpus(this.model.get("corpusname"),function(){
+        self.model.save();
+      });
+    },
    
   });
 
