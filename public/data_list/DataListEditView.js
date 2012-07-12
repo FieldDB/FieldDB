@@ -56,7 +56,8 @@ define( [
       "click .icon-resize-full" : "resizeFullscreen",
       "blur .data-list-title": "updateTitle",
       "blur .data-list-description": "updateDescription",
-      "click .icon-book" :"showReadonly"
+      "click .icon-book" :"showReadonly",
+      "click .save-datalist" : "updatePouch"
     },
 
     /**
@@ -325,7 +326,14 @@ define( [
     showEditable :function(){
       window.appView.renderEditableDataListViews();
 
-    }
+    },
+    updatePouch : function() {
+      Utils.debug("Saving the DataList");
+      var self = this;
+      this.model.changeCorpus(this.model.get("corpusname"),function(){
+        self.model.save();
+      });
+    },
   });
 
   return DataListEditView;
