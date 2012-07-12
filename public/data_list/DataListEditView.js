@@ -23,7 +23,7 @@ define( [
      *        data list.
      *        
      * @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide" and
+     * initialized. Valid values are "leftSide", "centreWell",
      * "fullscreen" and "import"
      * 
      * @extends Backbone.View
@@ -61,9 +61,13 @@ define( [
     },
 
     /**
-     * The Handlebars template rendered as the DataListEditView.
+     * The Handlebars template rendered as fullscreen.
      */
     fullscreenTemplate : Handlebars.templates.data_list_edit_fullscreen,
+    
+    /** 
+     * The Handlebars template rendered as embedded.
+     */
     embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
 
     /**
@@ -107,9 +111,10 @@ define( [
       } else if (this.format == "import"){
         this.setElement($("#import-data-list-view"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        
         // Display the pagination footer
         this.renderUpdatedPagination();
-      }else if(this.format == "centreWell"){
+      } else if (this.format == "centreWell") {
         Utils.debug("DATALIST CentreWell render: " + this.el);
 
         this.setElement($("#new-datalist-embedded"));
@@ -119,10 +124,7 @@ define( [
         
         // Display the first page of DatumReadViews.
         this.renderNewModel();
-      
       }
-      
-      
 
       return this;
     },
@@ -229,7 +231,9 @@ define( [
         });
       });
     },
+    
     temporaryDataList : false,
+    
     /**
      * Displays a new DatumReadView for the Datum with the given a full datum. The datum is not saved.
      * and updates the pagination footer.
@@ -252,7 +256,6 @@ define( [
 
       // Display the updated DatumReadView
       this.renderUpdatedPagination();
-
     },
 
     /**
@@ -288,6 +291,7 @@ define( [
         }
       }
     },
+    
     loadSample : function() {
 //      this.model = new DataList(
 //          {
@@ -308,9 +312,11 @@ define( [
         this.model.fetch();
       });
     },
+    
     resizeSmall : function(){
       window.app.router.showDashboard();
     },
+    
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
     },
@@ -322,6 +328,7 @@ define( [
     updateDescription: function(){
       this.model.set("description",this.$el.find(".data-list-description").val());
     },
+    
     //bound to pencil
     showReadonly :function(){
       window.app.router.showReadonlyDataList();
@@ -332,6 +339,7 @@ define( [
       window.appView.renderEditableDataListViews();
 
     },
+    
     updatePouch : function() {
       Utils.debug("Saving the DataList");
       var self = this;

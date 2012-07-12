@@ -319,6 +319,7 @@ define([
      * The Handlebars template rendered as the AppView.
      */
     template : Handlebars.templates.app,
+    
     /**
      * Renders the AppView and all of its child Views.
      */
@@ -389,45 +390,44 @@ define([
          
         // Display the ImportEditView
         this.importView.render();
-        
-        
       } else {
         Utils.debug("\tApp model is not defined");
       }
       
       return this;
     },
+    
     // Display the Corpus Views
-    renderEditableCorpusViews: function(corpusid){
+    renderEditableCorpusViews : function(corpusid) {
       this.corpusEditLeftSideView.render();
       this.corpusEditEmbeddedView.render();
       this.corpusEditFullscreenView.render();
     },
-    renderReadonlyCorpusViews: function(corpusid){
+    renderReadonlyCorpusViews : function(corpusid) {
       this.corpusReadLeftSideView.render();
       this.corpusReadEmbeddedView.render();
       this.corpusReadFullscreenView.render();
     },
       
-    //Display Session Views
-    renderEditableSessionViews: function(sessionid){
+    // Display Session Views
+    renderEditableSessionViews : function(sessionid) {
       this.sessionEditLeftSideView.render();
       this.sessionEditEmbeddedView.render();
       this.sessionEditFullscreenView.render();
       this.sessionModalView.render();
     },
-    renderReadonlySessionViews: function(sessionid){
+    renderReadonlySessionViews : function(sessionid) {
       this.sessionReadLeftSideView.render();
       this.sessionReadEmbeddedView.render();
       this.sessionReadFullscreenView.render();
     },
     
-    //Display DataList Views
-    renderEditableDataListViews: function(datalistid){
+    // Display DataList Views
+    renderEditableDataListViews : function(datalistid) {
       this.dataListEditLeftSideView.render();
       this.dataListEditFullscreenView.render();
     },
-    renderReadonlyDataListViews: function(datalistid){
+    renderReadonlyDataListViews : function(datalistid) {
       this.dataListReadLeftSideView.render();
       this.dataListReadFullscreenView.render();
     },
@@ -438,21 +438,20 @@ define([
       this.datumsView.render();
     },
     renderReadonlyDatumsViews : function(format) {
-      this.datumsReadView.format = format;//TODO what is the format for??
+      this.datumsReadView.format = format;
       this.datumsReadView.render();
     },
     
-    //Display DataList Views
-    renderEditableUserViews: function(userid){
+    // Display DataList Views
+    renderEditableUserViews : function(userid) {
       this.fullScreenEditUserView.render();
       this.modalEditUserView.render();
     },
-    renderReadonlyUserViews: function(userid){
+    renderReadonlyUserViews : function(userid) {
       this.fullScreenReadUserView.render();
       this.modalReadUserView.render();
     },
     
- // Display the User Views
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
