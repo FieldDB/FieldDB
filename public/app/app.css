@@ -112,7 +112,7 @@ textarea{
 }
 
 .zebra li:nth-child(odd){
-	background: #CFECEC;
+	background: #DDD;
 }
 
 .datum-checkboxes{  

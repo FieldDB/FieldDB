@@ -4,13 +4,15 @@ define([
     "data_list/DataList",
     "data_list/DataListEditView",
     "datum/DatumFields",
+    "datum/Session",
     "libs/Utils"
 ], function(
     Backbone,
     Handlebars,
     DataList,
     DataListEditView,
-    DatumFields
+    DatumFields,
+    Session
 ) {
   var Import = Backbone.Model.extend(
 
@@ -22,7 +24,7 @@ define([
      * @property {FileList} files These are the file(s) that were dragged in.
      * @property {String} corpusname This is the corpusid where the data should be imported
      * @property {DatumFields} fields The fields array contains titles of the data columns.
-     * @property {DataList} datalist the datalist imported, to hold the data before it is saved.
+     * @property {DataList} dataList the datalist imported, to hold the data before it is saved.
      * @property {Event} event The drag/drop event.
      * 
      * @description The initialize serves to bind import to all drag and drop events. 
@@ -42,6 +44,7 @@ define([
       status : "",
       fileDetails : "",
       corpusname : "",
+      datumArray : [],
 //      rawText: "",
 //      asCSV : "", //leave undefined
 //      asXML : "",
@@ -52,7 +55,8 @@ define([
     // Internal models: used by the parse function
     model : {
       dataList : DataList,
-      fields : DatumFields
+      fields : DatumFields,
+      session : Session
     },
 
     /**
@@ -173,8 +177,8 @@ define([
       this.set("fileDetails", filedetails.join('') );
       status = status + filedetails.join('');
       this.set("status", status);
-      if (this.get("datalist") == undefined) {
-        this.set("datalist",new DataList(
+      if (this.get("dataList") == undefined) {
+        this.set("dataList",new DataList(
           {
             title : "Data from "+files[0].name,
             description : "This is the data list which would result from the import of these files."
@@ -182,7 +186,7 @@ define([
             corpusname: this.get("corpusname")
           }));
       }
-      this.dataListView = new DataListEditView({model : this.get("datalist")});
+      this.dataListView = new DataListEditView({model : this.get("dataList")});
       this.dataListView.format = "import";
       this.dataListView.render();
       
