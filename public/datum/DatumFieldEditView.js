@@ -72,6 +72,7 @@ define([
         $(this.el).html(this.templateValue(jsonToRender));
       }
       
+      
       return this;
     },
     
@@ -115,6 +116,7 @@ define([
     showHelpConvention : function() {
     	this.$el.children(".help-conventions").popover("show");
     }
+    
     
   });
 
