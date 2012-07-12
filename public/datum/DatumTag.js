@@ -17,10 +17,6 @@ define( [
     initialize : function() {
     },
     
-    defaults : {
-      tag : "defaultTag"
-    },
-    
     // Internal models: used by the parse function
     model : {
       // There are no nested models

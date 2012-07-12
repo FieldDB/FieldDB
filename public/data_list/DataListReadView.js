@@ -1,4 +1,3 @@
-//TODO this is mostly a copy of DataListEditView, we will need to think about what actually needs to go in here and what it will look like.
 define( [ 
   "backbone", 
   "handlebars",
@@ -50,7 +49,6 @@ define( [
     events : {
       'click a.servernext': 'nextResultPage',
       'click .serverhowmany a': 'changeCount',
-      "click #populateDataList" : "renderNewModel",// TODO remove after demo
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable" 
@@ -104,16 +102,18 @@ define( [
         // Display the pagination footer
         this.renderUpdatedPagination();
         
-        // TODO Display the first page of DatumReadViews.
-        // this.renderNewModel();
+        // Display the first page of DatumReadViews.
+        this.renderNewModel();
       }else if(this.format == "middle"){
         
         this.setElement($("#new-data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        
         // Display the pagination footer
         this.renderUpdatedPagination();
-        // TODO Display the first page of DatumReadViews.
-        // this.renderNewModel();
+        
+        // Display the first page of DatumReadViews.
+        this.renderNewModel();
       
       }
       
