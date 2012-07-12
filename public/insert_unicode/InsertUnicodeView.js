@@ -31,11 +31,15 @@ define([
 //    classname : "insert-unicode",
 
     template : Handlebars.templates.insert_unicode,
-
+    tagName: "span",
+    className: "badge",
+    
     render : function() {
       Utils.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
+      this.el.draggable= "true";
+      this.el.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
       
       return this;
     },
