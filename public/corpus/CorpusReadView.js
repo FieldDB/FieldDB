@@ -85,7 +85,13 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       "click .new_datum_read" : "newDatum",
-      "click .icon-edit": "showEditable"
+      "click .icon-edit": "showEditable",
+      
+      //corpus menu buttons
+      "click .new_datum_edit" : "newDatum",
+      "click .data-list-embedded" : "newDataList",
+      "click .new_session" : "newSession",
+      "click .new_corpus" : "newCorpus",
     },
     
     /**
@@ -182,6 +188,32 @@ define([
 
       return this;
     },
+    
+    //Functions assoicate with the corpus menu
+    newDatum : function() {
+      appView.datumsView.newDatum();
+      app.router.showDashboard();
+    },
+    
+    newDataList : function() {
+      app.router.showMiddleDataList();
+    },
+    
+    newSession : function() {
+      app.router.showEmbeddedSession();
+      app.router.showEditableSession();
+     
+    },
+    
+    newCorpus : function(){
+      app.router.showEmbeddedCorpus();
+      app.router.showEditableCorpus();
+     
+    },
+    
+    
+    
+    
     
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();

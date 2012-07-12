@@ -24,7 +24,7 @@ define( [
      *        
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide" and
-     * "fullscreen".
+     * "fullscreen" and "import"
      * 
      * @extends Backbone.View
      * @constructs
@@ -99,7 +99,24 @@ define( [
         this.renderUpdatedPagination();
         // TODO Display the first page of DatumReadViews.
         // this.renderNewModel();
+      } else if (this.format == "import"){
+        this.setElement($("#import-data-list-view"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+      }else if(this.format == "centreWell"){
+        Utils.debug("DATALIST CentreWell render: " + this.el);
+
+        this.setElement($("#new-datalist-embedded"));
+        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        // Display the pagination footer
+        this.renderUpdatedPagination();
+        // TODO Display the first page of DatumReadViews.
+        // this.renderNewModel();
+      
       }
+      
+      
 
       return this;
     },
@@ -191,7 +208,7 @@ define( [
               tagName : "li"
             });
             view.format = "latex";
-            $('#data_list_content').append(view.render().el);
+            $('.data_list_content').append(view.render().el);
             
             // Keep track of the DatumReadView
             self.datumLatexViews.push(view);
@@ -205,6 +222,31 @@ define( [
           }
         });
       });
+    },
+    temporaryDataList : false,
+    /**
+     * Displays a new DatumReadView for the Datum with the given a full datum. The datum is not saved.
+     * and updates the pagination footer.
+     * 
+     * @param {String} datumId The datumId of the Datum to display.
+     */
+    addOneTempDatum : function(d) {
+      temporaryDataList = true;
+      
+      // Render a DatumReadView for that Datum at the end of the DataListEditView
+      var view = new DatumReadView({
+        model : d,
+        tagName : "li"
+      });
+      view.format = "latex";
+      $('.data_list_content').append(view.render().el);
+
+      // Keep track of the DatumReadView
+      this.datumLatexViews.push(view);
+
+      // Display the updated DatumReadView
+      this.renderUpdatedPagination();
+
     },
 
     /**

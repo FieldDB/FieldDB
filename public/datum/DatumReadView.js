@@ -79,6 +79,10 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
+      if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
+        Utils.debug("DATUM fields is undefined, come back later.");
+        return this;
+      }
       if (this.format == "well") {        
         // Display the DatumReadView
         var jsonToRender = this.model.toJSON();
