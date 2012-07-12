@@ -269,11 +269,12 @@ define([
     // triggers a view thats added to
     // the ul
     
+    
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
     	console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
+       "text" : this.$el.children(".insert-comment-input").val(),
 
       });
       this.model.get("comments").add(m);
