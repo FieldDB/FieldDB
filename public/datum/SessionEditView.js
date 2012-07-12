@@ -139,6 +139,7 @@ define([
       }
       return this;
     },    
+    
     changeViewsOfInternalModels : function(){
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
@@ -147,12 +148,31 @@ define([
         childViewFormat      : "session"
       });
     },
+    
     updatePouch : function() {
       Utils.debug("Saving the Session");
       var self = this;
       this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
+        self.model.save(null, {
+          success : function(model, response) {
+            Utils.debug('Session save success');
+            try{
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+              window.app.set("currentSession", self.model);
+              window.appView.renderEditableSessionViews();
+              window.appView.renderReadonlySessionViews();
+            }catch(e){
+              Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
+            }
+          },
+          error : function(e) {
+            Alert('Session save error' + e);
+          }
+        });
       });
+      if(this.format == "modal"){
+        $("#session-modal").modal("hide");
+      }
     },
     
     //functions associated with icons
