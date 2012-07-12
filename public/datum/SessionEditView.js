@@ -42,7 +42,7 @@ define([
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
-      "click #btn-save-session" : "updatePouch",
+      "click .btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
