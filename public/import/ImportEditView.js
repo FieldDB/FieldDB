@@ -299,14 +299,10 @@ define( [
                 
                 // Add it to the default data list
                 app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
-                self.model.changeCorpus(self.model.get("corpusname"), function() {
-                  app.get("corpus").get("dataLists").models[0].save();
-                  app.get("corpus").save();
-                });
                 
                 // If the default data list is the currently visible data list, re-render it
                 if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
-                  // TODO update the views
+                  appView.dataListEditLeftSideView.addOne(model.id);
                 }
               },
               error : function(e) {
@@ -315,12 +311,22 @@ define( [
             });
           });
         }
+        
+        // Save the default DataList
+        Utils.debug("Saving the DataList");
+        app.get("corpus").get("dataLists").models[0].changeCorpus(self.model.get("corpusname"), function() {
+          app.get("corpus").get("dataLists").models[0].save();
+          app.get("corpus").save();
+        });
+        
+        // Save the new DataList
         self.model.get("dataList").changeCorpus(self.model.get("corpusname"), function(){
           self.model.get("dataList").save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
-              window.app.get("corpus").get("dataLists").add(self.model.get("dataList"));
+              window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
+              self.model.dataListView.temporaryDataList = false;
             },
             error : function(e) {
               alert('Data list save failure in import' + e);

@@ -206,34 +206,41 @@ define([
        * Set up the six data list views
        */
       var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
+      var datumsCollectionToBePassedAround = new Datums();
       
       this.dataListEditMiddleView = new DataListEditView({
-        model : dataListToBePassedAround
+        model : dataListToBePassedAround,
+        datumCollection : datumsCollectionToBePassedAround 
       }); 
       this.dataListEditMiddleView.format = "centreWell";
       
       this.dataListReadMiddleView = new DataListEditView({
-        model : dataListToBePassedAround
+        model : dataListToBePassedAround,
+        datumCollection : datumsCollectionToBePassedAround 
       }); 
       this.dataListReadMiddleView.format = "centreWell";
       
       this.dataListEditLeftSideView = new DataListEditView({
-        model : dataListToBePassedAround
+        model : dataListToBePassedAround,
+        datumCollection : datumsCollectionToBePassedAround 
       }); 
       this.dataListEditLeftSideView.format = "leftSide";
    
       this.dataListEditFullscreenView = new DataListEditView({
-        model : this.dataListEditLeftSideView.model
+        model : this.dataListEditLeftSideView.model,
+        datumCollection : datumsCollectionToBePassedAround 
       });  
       this.dataListEditFullscreenView.format = "fullscreen";
 
       this.dataListReadLeftSideView = new DataListReadView({
-        model :  this.dataListEditLeftSideView.model
+        model :  this.dataListEditLeftSideView.model,
+        datumCollection : datumsCollectionToBePassedAround 
       });  
       this.dataListReadLeftSideView.format = "leftSide";
    
       this.dataListReadFullscreenView = new DataListReadView({
-        model :  this.dataListEditLeftSideView.model
+        model :  this.dataListEditLeftSideView.model,
+        datumCollection : datumsCollectionToBePassedAround 
       });  
       this.dataListReadFullscreenView.format = "fullscreen";
       
