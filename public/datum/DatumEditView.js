@@ -51,6 +51,7 @@ define([
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
+        childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
     },
@@ -79,7 +80,10 @@ define([
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null, true);
-      }
+      },
+      "click .icon-th-list" : "hideRareFields",
+      "click .icon-list-alt" : "showRareFields",
+      
     },
 
     /**
@@ -110,11 +114,40 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
+        var self = this;
+        window.setTimeout(function(){
+          $('.datum-field').each(function(index, item) {
+            item.classList.add( $(item).find("label").html() );
+          });
+          self.hideRareFields();
+        }, 1000);
       }
 
       return this;
     },
     
+    rareFields : [],
+    frequentFields: ["judgement","utterance","morphemes","gloss","translation"],
+    hideRareFields : function(){
+      this.rareFields = [];
+      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
+        if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
+          $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
+          this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
+        }
+      }
+      $(this.el).find(".icon-th-list").addClass("icon-list-alt");
+      $(this.el).find(".icon-th-list").removeClass("icon-th-list");
+    },
+    
+    showRareFields : function(){
+      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
+        $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
+      }
+      rareFields = [];
+      $(this.el).find(".icon-list-alt").addClass("icon-th-list");
+      $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
+    },
     /**
      * Encrypts the datum if it is confidential
      * 

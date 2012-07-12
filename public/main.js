@@ -166,7 +166,8 @@ require([
    */
 //  Pouch.destroy('idb://db');
 //  Pouch.destroy('idb://dbdefault');
-//  Pouch.destroy('idb://dbsapir-firstcorpus');
+    Pouch.destroy('idb://dbsapir-firstcorpus');
+    localStorage.clear();
 //  localStorage.removeItem("appids");
 //  localStorage.removeItem("corpusname");
 //  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
