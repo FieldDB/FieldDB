@@ -19,7 +19,7 @@ define([
      * @class Session Edit View is where the user provides new session details.
      *
      ** @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide", "fullscreen", and 
+     * initialized. Valid values are "leftSide", "fullscreen", "modal", and 
      * "embedded" 
      * 
      * @extends Backbone.View
@@ -93,6 +93,11 @@ define([
     templateFullscreen : Handlebars.templates.session_edit_fullscreen,
     
     /**
+     * The Handlebars template rendered as the Modal.
+     */
+    templateModal : Handlebars.templates.session_edit_modal,
+    
+    /**
      * Renders the SessionEditView.
      */
     render : function() {
@@ -124,6 +129,12 @@ define([
         } else if (this.format == "fullscreen") {
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(this.model.toJSON()));
+          
+          this.sessionFieldsView.el = this.$(".session-fields-ul");
+          this.sessionFieldsView.render();
+        } else if (this.format == "modal") {
+          this.setElement("#session-modal");
+          this.$el.html(this.templateModal(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();

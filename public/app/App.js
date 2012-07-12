@@ -60,11 +60,14 @@ define([
         Utils.debug("Error in App: " + error);
       });
       
+      // If there's no authentication, create a new one
+      if (!this.get("authentication")) {
+        this.set("authentication", new Authentication());
+      }
     },
     
     defaults : {
       corpus : Corpus,
-      authentication : new Authentication(),
       currentSession : Session,
       currentDataList : DataList
     },
