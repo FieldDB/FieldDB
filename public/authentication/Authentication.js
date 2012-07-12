@@ -102,11 +102,11 @@ define([
         this.set("userPublic", new UserMask());
       }
       var u = this.get("userPrivate");
-      u.set("id",data.user._id); //set the backbone id to be the same as the mongodb id
+      u.id = data.user._id; //set the backbone id to be the same as the mongodb id
       u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
       // Over write the public copy with any (new) username/gravatar
       // info
-      this.get("userPublic").set("id", this.get("userPrivate").get("id") );
+      this.get("userPublic").id = this.get("userPrivate").id ;
       if (data.user.publicSelf == null) {
         // if the user hasnt already specified their public self, then
         // put in a username and gravatar,however they can add more
