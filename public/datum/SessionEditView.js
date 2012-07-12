@@ -1,6 +1,9 @@
 define([
     "backbone", 
     "handlebars", 
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -8,6 +11,9 @@ define([
 ], function(
     Backbone,
     Handlebars, 
+    Comment,
+    Comments,
+    CommentEditView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -27,13 +33,8 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
-
-      this.sessionFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
-        childViewFormat      : "session"
-      });
+      
+      this.changeViewsOfInternalModels();
       
       this.model.bind('change', this.showEditable, this);
     },
@@ -47,7 +48,11 @@ define([
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
-      "click #btn-save-session" : "updatePouch",
+      "click .btn-save-session" : "updatePouch",
+      
+      //Add button inserts new Comment
+      "click .add_comment" : 'insertNewComment',
+      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
@@ -117,6 +122,9 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         } else if (this.format == "leftSide") {
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -132,12 +140,18 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         } else if (this.format == "modal") {
           this.setElement("#session-modal");
           this.$el.html(this.templateModal(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -145,12 +159,52 @@ define([
       return this;
     },    
     
+    changeViewsOfInternalModels : function(){
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : "li",
+        childViewFormat      : "session"
+      });
+      
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+    },
+    
     updatePouch : function() {
       Utils.debug("Saving the Session");
       var self = this;
       this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
+        self.model.save(null, {
+          success : function(model, response) {
+            Utils.debug('Session save success');
+            try{
+              if(window.app.get("currentSession").id != model.id){
+                window.app.get("corpus").get("sessions").unshift(model);
+              }
+              window.app.set("currentSession", model);
+              window.appView.renderEditableSessionViews();
+              window.appView.renderReadonlySessionViews();
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+              //add session to the users session history if they dont already have it
+              if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
+                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+              }
+            }catch(e){
+              Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
+            }
+          },
+          error : function(e) {
+            Alert('Session save error' + e);
+          }
+        });
       });
+      if(this.format == "modal"){
+        $("#session-modal").modal("hide");
+      }
     },
     
     //functions associated with icons
@@ -164,13 +218,22 @@ define([
     
     //bound to changes
     showEditable :function() {
+      this.changeViewsOfInternalModels();
       window.appView.renderEditableSessionViews();
     },
     
     //bound to book
     showReadonly : function() {
       window.app.router.showReadonlySession();
-    }
+    },
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+      });
+      this.model.get("comments").add(m);
+    },
   });
   
   return SessionEditView;

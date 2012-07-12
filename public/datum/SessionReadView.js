@@ -26,13 +26,7 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
-
-      this.sessionFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldReadView,
-        childViewTagName     : "li",
-        childViewFormat      : "session"
-      });
+      this.model.bind('change', this.changeViewsOfInternalModels, this);
     },
 
     /**
@@ -44,7 +38,6 @@ define([
      * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
-      "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -108,11 +101,12 @@ define([
       return this;
     },
     
-    updatePouch : function() {
-      Utils.debug("Saving the Session");
-      var self = this;
-      this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
+    changeViewsOfInternalModels : function(){
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
+        childViewConstructor : DatumFieldReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "session"
       });
     },
     

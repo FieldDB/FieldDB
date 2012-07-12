@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "comment/Comment",
     "comment/Comments",
     "datum/DatumField",
     "datum/DatumFields",
@@ -8,6 +9,7 @@ define([
     "user/User",
 ], function(
     Backbone,
+    Comment,
     Comments,
     DatumField,
     DatumFields,
@@ -90,7 +92,9 @@ define([
      * @constructs
      */
     initialize: function() {
-     
+      if(this.get("comments") == undefined){
+        this.set("comments", new Comments());
+      }
     //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
 //      this.bind("change:corpusname", function() {
 //        this.pouch = Backbone.sync

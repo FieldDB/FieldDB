@@ -2,6 +2,9 @@ define([
     "backbone", 
     "handlebars", 
     "audio_video/AudioVideoEditView",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -13,6 +16,9 @@ define([
     Backbone, 
     Handlebars, 
     AudioVideoEditView,
+    Comment,
+    Comments,
+    CommentEditView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -37,7 +43,16 @@ define([
       // Create a AudioVideoEditView
       this.audioVideoView = new AudioVideoEditView({
         model : this.model.get("audioVideo"),
+        
+        
       });
+      
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+      
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -65,6 +80,8 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
+      "click .add_comment" : 'insertNewComment',
+
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "change" : "updatePouch",
@@ -111,6 +128,10 @@ define([
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
         
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
@@ -118,9 +139,16 @@ define([
         window.setTimeout(function(){
           $('.datum-field').each(function(index, item) {
             item.classList.add( $(item).find("label").html() );
+            $("textarea").each(function(index){
+              this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+              this.addEventListener('dragover', window.appView.handleDragOver, false);
+            });
           });
           self.hideRareFields();
         }, 1000);
+       
+        
+        
       }
 
       return this;
@@ -138,6 +166,8 @@ define([
       }
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
+      $(this.el).find(".comments-section").hide();
+
     },
     
     showRareFields : function(){
@@ -147,7 +177,12 @@ define([
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
+      $(this.el).find(".comments-section").show();
+
+      showComments();
     },
+    
+  
     /**
      * Encrypts the datum if it is confidential
      * 
@@ -271,6 +306,15 @@ define([
       this.$el.find(".add_tag").val("");
       
       return false;
+    },
+    
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
     },
     
     updateDatumStates : function() {
