@@ -283,30 +283,32 @@ define([
     // collection and the model
     insertNewDatumField : function() {
       // Remember if the encryption check box was checked
-      var checked = this.$el.children(".add_encrypted").is(':checked') ? "checked" : "";
+      var checked = this.$el.find(".add_encrypted").is(':checked') ? "checked" : "";
       
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label" : this.$el.children(".choose_add_field").val(),
+        "label" : this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_"),
         "encrypted" : checked,
-        "help" : this.$el.children(".add_help").val()
+        "help" : this.$el.find(".add_help").val()
       });
 
       // Add the new DatumField to the Corpus' list for datumFields
       this.model.get("datumFields").add(m);
+      this.datumFieldsView.add(m);
       
       // Reset the line with the add button
-      this.$el.children(".choose_add_field").children("option:eq(0)").attr("selected", true);
-      this.$el.children(".add_help").val("");
+      this.$el.find(".choose_add_field").val("");//.children("option:eq(0)").attr("selected", true);
+      this.$el.find(".add_help").val("");
     },
     
     //This the function called by the add button, it adds a new datum state both to the collection and the model
     insertNewDatumState : function() {
       var m = new DatumField({
-        "state" : this.$el.children(".add_input").val(),
-        "color" : this.$el.children(".add_color_chooser").val()
+        "state" : this.$el.find(".add_input").val(),
+        "color" : this.$el.find(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
+      this.datumStatesView.add(m);
     },
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
