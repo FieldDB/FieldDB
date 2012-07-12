@@ -212,7 +212,7 @@ define( [
       //clear out the data list
       var coll = this.model.dataListView.datumsView.collection; 
       while (coll.length > 0) {
-        col.pop();
+        coll.pop();
       }
       this.model.set("datumArray", []);
       var headers = [];
