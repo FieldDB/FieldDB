@@ -249,7 +249,7 @@ define([
                 
                 // If the default data list is the currently visible data list, re-render it
                 if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
-                  // TODO update the views
+                  appView.dataListEditLeftSideView.addOne(model.id, true);
                 }
               }
             }
