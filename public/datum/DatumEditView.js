@@ -205,9 +205,6 @@ define([
       }
     },
     
-    //Functions relating to the row of icon-buttons
-    
-   
     insertNewDatumTag : function() {
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({

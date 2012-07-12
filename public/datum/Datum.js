@@ -41,8 +41,8 @@ define([
      *           the third line in linguistic examples where in general an
      *           English translation. An additional field can be added if
      *           translations into other languages is needed.
-     * @property {DatumField} judgment The judgment is the grammaticality
-     *           judgment associated with the datum, so grammatical,
+     * @property {DatumField} judgement The judgement is the grammaticality
+     *           judgement associated with the datum, so grammatical,
      *           ungrammatical, felicitous, unfelicitous etc.
      * @property {AudioVisual} audioVisual Datums can be associated with an audio or video
      *           file.
@@ -69,26 +69,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      
-    //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-//      this.bind("change:corpusname", function() {
-//        this.pouch = Backbone.sync
-//        .pouch(Utils.androidApp() ? Utils.touchUrl
-//            + this.get("corpusname") : Utils.pouchUrl
-//            + this.get("corpusname"));
-//      }, this);
-//      
-//      try {
-//        if (this.get("corpusname") == undefined) {
-//          this.set("corpusname", app.get("corpus").get("corpusname"));
-//        }
-//        this.pouch = Backbone.sync
-//        .pouch(Utils.androidApp() ? Utils.touchUrl
-//            + this.get("corpusname") : Utils.pouchUrl
-//            + this.get("corpusname"));
-//      } catch(e) {
-//        Utils.debug("Corpusname was undefined on this corpus, the datum will not have a valid corpusname until it is set.");
-//      }
       // Initialially, the first datumState is selected
       if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
         this.get("datumStates").models[0].set("selected", "selected");
@@ -119,6 +99,7 @@ define([
         callback();
       }
     },
+    
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -284,24 +265,24 @@ define([
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
       translation= this.get("datumFields").where({label: "translation"})[0].get("value");
       var result = "\n \\begin{exe} "
-            + "\n \\ex [*] \\gll "+utterance+" \\\\"
-            + "\n\t"+gloss+" \\\\"
-            + "\n\t\\glt `"+ translation +"'"
+            + "\n \\ex [*] \\gll " + utterance + " \\\\"
+            + "\n\t" + gloss + " \\\\"
+            + "\n\t\\glt `" + translation + "'"
             + "\n\\end{exe}\n\n";
-      if(showInExportModal != null){
+      if (showInExportModal != null) {
         $("#export-type-description").html(" as LaTeX (GB4E)");
-        $("#export-text-area").val( $("#export-text-area").val()+
-            result
-                 );
+        $("#export-text-area").val($("#export-text-area").val() + result);
         $("#export-modal").modal("show");
       }
+      
       return result;
     },
+    
     /**
      * This function simply takes the utterance gloss and translation and puts
      * them out as plain text so the user can do as they wish.
      */
-    exportAsPlainText: function(showInExportModal){
+    exportAsPlainText : function(showInExportModal) {
       utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
       translation= this.get("datumFields").where({label: "translation"})[0].get("value");
@@ -318,11 +299,12 @@ define([
       }
       return result;
     },
+    
     /**
      * This takes as an argument the order of fields and then creates a row of csv.
      */
-    exportAsCSV: function(showInExportModal, orderedFields, printheader){
-      if(orderedFields == null){
+    exportAsCSV : function(showInExportModal, orderedFields, printheader) {
+      if (orderedFields == null) {
         orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       }
       judgement = this.get("datumFields").where({label: "judgement"})[0].get("value");
@@ -331,20 +313,19 @@ define([
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
       translation= this.get("datumFields").where({label: "translation"})[0].get("value");
       var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-      var result = '"'+resultarray.join('","')+'"';
-      if(printheader != null){
-        var header = '"'+orderedFields.join('","')+'"';
-        result = header+"\n"+result;
+      var result = '"' + resultarray.join('","') + '"';
+      if (printheader != null) {
+        var header = '"' + orderedFields.join('","') + '"';
+        result = header + "\n" + result;
       }
-      if(showInExportModal != null){
+      if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
-        $("#export-text-area").val( $("#export-text-area").val()+
-           result
-                 );
+        $("#export-text-area").val($("#export-text-area").val() + result);
         $("#export-modal").modal("show");
       }
       return result;
     },
+    
     /**
      * This function takes in a boolean whether the data should be appended in the import, the fields the data is in, and the header from the data which corresponds to datum fields.
      * 
@@ -352,11 +333,11 @@ define([
      * @param orderedFields the values which correspond to datumfields
      * @param header the header fields which correspond to datumfields
      */
-    importCSV: function(orderedFields, header){
-      for(f in header){
-        if(this.get("datumFields").where({label: header[f]})[0] != undefined){
+    importCSV : function(orderedFields, header) {
+      for (f in header) {
+        if (this.get("datumFields").where({label: header[f]})[0] != undefined) {
           this.get("datumFields").where({label: header[f]})[0].set("value", orderedFields[f]);
-        }else{
+        } else {
           var n = new DatumField();
           n.label = header[f];
           n.value = orderedFields[f];
