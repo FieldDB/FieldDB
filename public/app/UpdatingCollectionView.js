@@ -36,6 +36,10 @@ var UpdatingCollectionView = Backbone.View.extend({
         childView.format = this._childViewFormat;
       }
       
+      if(options == undefined || options == null){
+        options = {};
+        options.index = 1;
+      }
       // Add to the top of the list
       if (options.index == 0) {
         this._childViews.unshift(childView);
