@@ -1,6 +1,7 @@
 define([ 
     "backbone",
     "audio_video/AudioVideo", 
+    "comment/Comment",
     "comment/Comments",
     "datum/DatumField", 
     "datum/DatumFields", 
@@ -13,6 +14,7 @@ define([
 ], function(
     Backbone, 
     AudioVideo, 
+    Comment,
     Comments,
     DatumField, 
     DatumFields,
@@ -150,7 +152,7 @@ define([
                 
                 // Progressively determine whether the datum still matches based on
                 // subsequent search criteria
-                for (j = 1; j < queryTokens.length; j += 2) {
+                for (var j = 1; j < queryTokens.length; j += 2) {
                   if (queryTokens[j] == "AND") {
                     // Short circuit: if it's already false then it continues to be false
                     if (!thisDatumIsIn) {
