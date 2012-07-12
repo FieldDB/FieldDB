@@ -337,9 +337,10 @@ define([
     },
     validate: function(attrs){
 //        console.log(attrs);
-//        if(attrs.title != undefined){
-//          this.set("titleAsUrl",encodeURIComponent(attrs.title)); //TODO the validate on corpus was not working.
-//        }
+        if(attrs.title != undefined){
+          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus was not working.
+        }
+        return '';
     }
 
   });
