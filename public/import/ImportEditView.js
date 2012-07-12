@@ -268,6 +268,8 @@ define( [
           }
         });
         d.set("datumFields", fields);
+        var states = window.app.get("corpus").get("datumStates").clone();
+        d.set("datumStates", states);
         this.model.dataListView.addOneTempDatum(d);
         this.model.get("datumArray").push(d);
       }
