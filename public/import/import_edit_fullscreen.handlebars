@@ -13,13 +13,17 @@
 		</div>
 		<div class="span10">
 			<!--Body content-->
-			<div>{{status}}</div>
+			<div class="well">{{status}}</div>
 			<textarea class="export-large-textarea  drop-zone"
-				id="export-text-area">{{rawText}}</textarea>
+				id="export-text-area">Drag and drop files here! {{rawText}}</textarea>
 
+  <div class="well">
 			<div id="import-datum-field-labels"></div>
-			<table id="csv-table-area"
-				class="table table-striped table-bordered table-condensed"></table>
+			<button class="btn btn-primary add-column pull-right hide">Add
+				Extra Columns</button>
+				</div>
 		</div>
 	</div>
 </div>
+<table id="csv-table-area"
+	class="well table table-striped table-bordered table-condensed"></table>
