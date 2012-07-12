@@ -176,15 +176,11 @@ define([
       }//end if to set sessionFields
       
       if(typeof(this.get("comments")) == "function"){
-        this.set("comments", new Comments([ 
-          new Comment()
-          ]));
+        this.set("comments", new Comments());
       }
       
       if(typeof(this.get("dataLists")) == "function"){
-        this.set("dataLists", new Comments([ 
-          new DataLists()
-          ]));
+        this.set("dataLists", new DataLists());
       }
       
 //      this.pouch = Backbone.sync
