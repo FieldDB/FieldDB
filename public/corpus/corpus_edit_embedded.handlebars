@@ -114,7 +114,10 @@
 			<div class="accordion-inner">
 				<ul class="datum_field_settings unstyled"></ul>
 				<div class="breadcrumb">
-					<select class="choose_add_field">
+					<input type="text" class="span3 choose_add_field" data-provide="typeahead" data-items="4" 
+        data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
+        
+        <!-- <select class="choose_add_field">
 						<option value="judgement">Gramaticality/Acceptability Judgement</option>
 						<option value="utterence">Orthography/Utterance</option>
 						<option value="morphemes">Morphemes</option>
@@ -124,7 +127,8 @@
 						<option value="context">Context</option>
 						<option value="semantic_denotation">Semantic Denotation</option>
 						<option value="Create New">Create New</option>
-				</select> Encrypt if confidential: <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
+				</select> -->
+				 Encrypt if confidential: <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
 						<label>Help Text</label>
 							<textarea
 							placeholder="Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
