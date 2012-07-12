@@ -102,6 +102,8 @@ define([
       } else if (this.format == "latex") {
         
         //This gets the fields necessary from the model
+        judgement= this.model.get("datumFields").where({label: "judgement"})[0].get("value");
+
         utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
         gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
         translation= this.model.get("datumFields").where({label: "translation"})[0].get("value");
@@ -117,7 +119,9 @@ define([
           glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
           this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
         };
-        
+        if(judgement !== ""){
+        this.$el.prepend('&nbsp <span class = "latex-judgement">'+judgement+'</span> &nbsp');
+        }
         //adding a checkbox
         this.$el.prepend('<input type="checkbox" class="styled datum-checkboxes"/> &nbsp &nbsp');
         //adding the translation on the final line.
