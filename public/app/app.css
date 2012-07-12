@@ -165,7 +165,14 @@ textarea{
   white-space: nowrap;
 }
 
-
 .small-field{
 	width: 15px !important;
 }
+
+.comment-bubble{
+	margin: 3px;
+	padding: 3px;
+background: #DDDDDD;
+border-radius: 3px;
+}
+
