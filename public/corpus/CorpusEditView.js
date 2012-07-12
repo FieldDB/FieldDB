@@ -254,9 +254,8 @@ define([
     },
     
     newSession : function() {
-      app.router.showEmbeddedSession();
-      app.router.showEditableSession();
-     
+      $("#session-modal").modal("show");
+      window.appView.sessionModalView.render();
     },
     
     newCorpus : function(){

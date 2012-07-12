@@ -26,13 +26,7 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
-
-      this.sessionFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldReadView,
-        childViewTagName     : "li",
-        childViewFormat      : "session"
-      });
+      this.model.bind('change', this.changeViewsOfInternalModels, this);
     },
 
     /**
@@ -106,6 +100,15 @@ define([
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       return this;
+    },
+    
+    changeViewsOfInternalModels : function(){
+      this.sessionFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("sessionFields"),
+        childViewConstructor : DatumFieldReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "session"
+      });
     },
     
     updatePouch : function() {
