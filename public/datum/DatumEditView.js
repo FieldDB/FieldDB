@@ -226,21 +226,34 @@ define([
         });
 
         // If this Datum has never been saved
+        var neverBeenSaved = false;
         if (!this.model.get("dateEntered")) {
+          neverBeenSaved = true;
+          // Give a dateEntered
           this.model.set("dateEntered", JSON.stringify(new Date()));
         }
 
         Utils.debug("Saving the Datum");
         var self = this;
         this.model.changeCorpus(app.get("corpus").get("corpusname"), function(){
-          self.model.save();
+          self.model.save(null, {
+            success : function(model, response) {
+              if (neverBeenSaved) {
+                // Add it to the default data list
+                app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                
+                // If the default data list is the currently visible data list, re-render it
+                if (app.get('corpus').get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                  appView.renderEditableDataListViews();
+                  appView.renderReadonlyDataListViews();
+                }
+              }
+            }
+          });
         });
       }
     },
     
-    //Functions relating to the row of icon-buttons
-    
-   
     insertNewDatumTag : function() {
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
