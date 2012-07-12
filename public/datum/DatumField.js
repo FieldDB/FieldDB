@@ -30,7 +30,6 @@ define([
     },
 
     defaults : {
-      size : "",
       label : "",
       value : "",
       mask : "",

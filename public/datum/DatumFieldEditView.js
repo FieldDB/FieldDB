@@ -113,7 +113,7 @@ define([
      * Show help convention in popover  
      */
     showHelpConvention : function() {
-    	this.$el.children(".help-conventions").popover("show") 
+    	this.$el.children(".help-conventions").popover("show");
     }
     
   });
