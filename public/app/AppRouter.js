@@ -221,8 +221,7 @@ define([
       Utils.debug("In import: ");
 
       this.hideEverything();
-      $("#dashboard-view").show();
-      $('#import-modal').modal("show");
+      $('#import-fullscreen').show();
     },
     
     showExport : function(corpusName) {
@@ -289,6 +288,7 @@ define([
       $("#session-embedded").hide();
       $("#session-fullscreen").hide();
       $('#user-fullscreen').hide();
+      $('#import-fullscreen').hide();
       $('#new-datalist-embedded').hide();
     }
   });
