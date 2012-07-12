@@ -160,6 +160,8 @@ define([
       }
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
       $(this.el).find(".icon-th-list").removeClass("icon-th-list");
+      $(this.el).find(".comments-section").hide();
+
     },
     
     showRareFields : function(){
@@ -169,17 +171,12 @@ define([
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
-    },
-    
-    hideComments : function(){
-      $(this.el).find(".comments-section").hide();
-      
-    },
-    
-    showComments : function(){
       $(this.el).find(".comments-section").show();
 
+      showComments();
     },
+    
+  
     /**
      * Encrypts the datum if it is confidential
      * 
