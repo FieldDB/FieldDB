@@ -390,6 +390,16 @@ define([
         // Display the ImportEditView
         this.importView.render();
         
+        var self = this;
+        //dont do inputs leave them out because the import uses inputs, and none of the fieds taht will recieve uncide are inputs
+//        $("input").each(function(index){
+//          index.addEventListener('drop', window.appView.dragUnicodeToField, false);
+//          index.addEventListener('dragover', window.appView.handleDragOver, false);
+//        });
+        $("textarea").each(function(index){
+          this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+          this.addEventListener('dragover', window.appView.handleDragOver, false);
+        });
         
       } else {
         Utils.debug("\tApp model is not defined");
@@ -402,6 +412,10 @@ define([
       this.corpusEditLeftSideView.render();
       this.corpusEditEmbeddedView.render();
       this.corpusEditFullscreenView.render();
+      $("textarea").each(function(index){
+        this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+        this.addEventListener('dragover', window.appView.handleDragOver, false);
+      });
     },
     renderReadonlyCorpusViews: function(corpusid){
       this.corpusReadLeftSideView.render();
@@ -415,6 +429,10 @@ define([
       this.sessionEditEmbeddedView.render();
       this.sessionEditFullscreenView.render();
       this.sessionModalView.render();
+      $("textarea").each(function(index){
+        this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+        this.addEventListener('dragover', window.appView.handleDragOver, false);
+      });
     },
     renderReadonlySessionViews: function(sessionid){
       this.sessionReadLeftSideView.render();
@@ -426,6 +444,10 @@ define([
     renderEditableDataListViews: function(datalistid){
       this.dataListEditLeftSideView.render();
       this.dataListEditFullscreenView.render();
+      $("textarea").each(function(index){
+        this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+        this.addEventListener('dragover', window.appView.handleDragOver, false);
+      });
     },
     renderReadonlyDataListViews: function(datalistid){
       this.dataListReadLeftSideView.render();
@@ -436,6 +458,10 @@ define([
     renderEditableDatumsViews : function(format) {
       this.datumsView.format = format;
       this.datumsView.render();
+      $("textarea").each(function(index){
+        this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+        this.addEventListener('dragover', window.appView.handleDragOver, false);
+      });
     },
     renderReadonlyDatumsViews : function(format) {
       this.datumsReadView.format = format;//TODO what is the format for??
@@ -446,6 +472,10 @@ define([
     renderEditableUserViews: function(userid){
       this.fullScreenEditUserView.render();
       this.modalEditUserView.render();
+      $("textarea").each(function(index){
+        this.addEventListener('drop', window.appView.dragUnicodeToField, false);
+        this.addEventListener('dragover', window.appView.handleDragOver, false);
+      });
     },
     renderReadonlyUserViews: function(userid){
       this.fullScreenReadUserView.render();
@@ -509,6 +539,34 @@ define([
     saveScreen : function() {
       // Save the Datum pages, if necessary
       this.datumsView.saveScreen();
+    },
+    /**
+     * http://www.html5rocks.com/en/tutorials/dnd/basics/
+     * 
+     * @param e event
+     */
+    dragUnicodeToField : function(e) {
+      Utils.debug("Recieved a drop event ");
+      // this / e.target is current target element.
+      if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from redirecting.
+      }
+      
+   // Don't do anything if dropping the same object we're dragging.
+      if (window.appView.insertUnicodeView.dragSrcEl != this) {
+        // add the innerhtml to the target's values
+//        window.appView.importView.dragSrcEl.innerHTML = e.target.value;
+        e.target.value = e.target.value + window.appView.insertUnicodeView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+      }
+      return false;
+    },
+    
+    handleDragOver : function(e) {
+      if (e.preventDefault) {
+        e.preventDefault(); // Necessary. Allows us to drop.
+      }
+      e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+      return false;
     }
     
   });
