@@ -1,11 +1,23 @@
 define( [ 
     "backbone",
     "handlebars",
-    "import/Import"
+    "import/Import",
+    "datum/Datum",
+    "datum/DatumField",
+    "datum/DatumFields",
+    "datum/DatumTag",
+    "datum/Session",
+    "libs/Utils"
+
 ], function(
     Backbone,
     Handlebars, 
-    Import
+    Import,
+    Datum,
+    DatumField,
+    DatumFields,
+    DatumTag,
+    Session
 ) {
   /**
    * https://gist.github.com/1488561
@@ -16,15 +28,11 @@ define( [
       this._draghoverClassAdded = false;
     },
     events : {
-//      "dragover .drop-zone" : function(evt) {
-//        evt.stopPropagation();
-//        evt.preventDefault();
-//        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-//      },
-//      "drop .drop-zone": function(evt){
-//        this.dropFile(evt);
-//      }
-      
+      "click .approve-save" : "saveDataList",
+      "click .approve-import" : "convertTableIntoDataList",
+      "click .icon-resize-small" : function(){
+        window.app.router.showDashboard();
+      },
       "dragover .drop-zone" : function(e){
         this._dragOverEvent(e);
       },
@@ -112,18 +120,20 @@ define( [
     render : function() {
       this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
-      if(this.model.get("datalist") != undefined){
+      if(this.model.get("dataList") != undefined){
         if(this.model.dataListView != undefined){
           this.model.dataListView.render();
         }
       }
       if(this.model.get("asCSV") != undefined){
         this.showCSVTable();
-        this.renderDatumFieldsLables();
+        this.renderDatumFieldsLabels();
       }
+      $(".icon-book").hide();
+      
       return this;
     },
-    renderDatumFieldsLables : function(){
+    renderDatumFieldsLabels : function(){
       if(this.model.get("datumFields") == undefined){
         return;
       }
@@ -133,15 +143,38 @@ define( [
       for(i in this.model.get("datumFields").models){
         var x = document.createElement("span");
         x.classList.add("label");
-        x.classList.add(colors[colorindex]);
+        x.classList.add(colors[colorindex%colors.length]);
         x.draggable="true";
         x.innerHTML = this.model.get("datumFields").models[i].get("label");
         x.addEventListener('dragover', this.handleDragStart, false);
-       colorindex++;
-       $("#import-datum-field-labels").append(x);
+        colorindex++;
+        $("#import-datum-field-labels").append(x);
       }
+      
+      //add tags
+      var x = document.createElement("span");
+      x.classList.add("label");
+      x.classList.add(colors[colorindex%colors.length]);
+      x.draggable="true";
+      x.innerHTML = "datumTags";
+      x.addEventListener('dragover', this.handleDragStart, false);
+      colorindex++;
+      $("#import-datum-field-labels").append(x);
+      
+      //add date
+      var x = document.createElement("span");
+      x.classList.add("label");
+      x.classList.add(colors[colorindex%colors.length]);
+      x.draggable="true";
+      x.innerHTML = "dateElicited";
+      x.addEventListener('dragover', this.handleDragStart, false);
+      colorindex++;
+      $("#import-datum-field-labels").append(x);
     },
     showCSVTable : function(rows){
+      if(this.model.get("session") == undefined){
+        this.createNewSession();
+      }
       if(rows == undefined){
         rows = this.model.get("asCSV");
       }
@@ -173,6 +206,155 @@ define( [
         tablebody.appendChild(tableRow);
       }
       $(".add-column").show();
+      $(".approve-import").show();
+    },
+    convertTableIntoDataList : function(){
+      //clear out the data list
+      this.model.dataListView.renderNewModel();
+      this.model.set("datumArray", []);
+      var headers = [];
+      $('th').each(function(index, item) {
+          headers[index] = $(item).find(".drop-label-zone").val();
+      });
+      /*
+       * Create new datum fields for new columns
+       */
+      for(f in headers){
+        if (headers[f] == "" || headers[f] == undefined) {
+          //do nothing
+        } else if (headers[f] == "datumTags") {
+          //do nothing
+        } else{
+          if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
+            this.model.get("datumFields").add(new DatumField({
+              label : headers[f],
+              size : "3",
+              encrypted: "checked",
+              userchooseable: "",
+              help: "This field came from file import "+this.model.get("status")
+            }));
+          }
+        }
+      }
+      
+      /*
+       * Cycle through all the rows in table and create a datum with the matching fields.
+       */
+      var array = [];
+      
+      $('tr').has('td').each(function() {
+          var arrayItem = {};
+          $('td', $(this)).each(function(index, item) {
+              arrayItem[headers[index]] = $(item).html();
+          });
+          array.push(arrayItem);
+      });
+      for (a in array) {
+        var d = new Datum({corpusname : this.model.get("corpusname")});
+        var fields = this.model.get("datumFields").clone();
+        $.each(array[a], function(index, value) { 
+          if(index == "" || index == undefined){
+            //do nothing
+          } else if (index == "datumTags") {
+            var tags = value.split(" ");
+            for(g in tags){
+              var t = new DatumTag({
+                "tag" : tags[g]
+              });
+              d.get("datumTags").add(t);
+            }
+          }else{
+            var n = fields.where({label: index})[0];
+            n.set("value", value);
+          }
+        });
+        d.set("datumFields", fields);
+        this.model.dataListView.addOneTempDatum(d);
+        this.model.get("datumArray").push(d);
+      }
+      $(".approve-save").removeAttr("disabled");
+      $(".approve-save").removeClass("disabled");
+    },
+    /**
+     * permanently saves the datalist to the corpus, and all of its datums too.
+     */
+    saveDataList : function(){
+      var self = this;
+      this.createNewSession( function(){
+        //after we have a session
+        for(d in self.model.get("datumArray")){
+          var thatdatum = self.model.get("datumArray")[d];
+          thatdatum.set({
+            "session" : self.model.get("session"),
+            "corpusname" : self.model.get("corpusname")
+          });
+
+          // If this Datum has never been saved
+          if (!thatdatum.get("dateEntered")) {
+             thatdatum.set("dateEntered", JSON.stringify(new Date()));
+          }
+
+          Utils.debug("Saving the Datum");
+          thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
+            thatdatum.save(null, {
+              success : function(model, response) {
+                Utils.debug('Datum save success in import');
+                self.model.dataListView.addOne(model.id);
+              },
+              error : function(e) {
+                alert('Datum save failure in import' + e);
+              }
+            });
+          });
+        }
+        self.model.get("dataList").changeCorpus(self.model.get("corpusname"), function(){
+          self.model.get("dataList").save(null, {
+            success : function(model, response) {
+              Utils.debug('Data list save success in import');
+              window.app.get("corpus").get("dataLists").add(self.model.get("dataList"));
+              window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
+            },
+            error : function(e) {
+              alert('Data list save failure in import' + e);
+            }
+          });
+        });
+      });
+      window.app.router.showDashboard();
+    },
+    /**
+     * For now just creating a session and saving it, not showing it to the user.
+     * 
+     * @param callback
+     */
+    createNewSession : function(callback){
+      this.model.set("session", new Session({
+        sessionFields : window.app.get("corpus").get("sessionFields").clone()
+      }));
+      
+      this.model.get("session").get("sessionFields").where({
+        label : "goal"
+      })[0].set("value", "Goal from file import " + this.model.get("status"));
+     
+      this.model.get("session").get("sessionFields").where({
+        label : "dateElicited"
+      })[0].set("value", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
+          : 'n/a');
+      
+      var sessself = this;
+      this.model.get("session").changeCorpus(this.model.get("corpusname"), function(){
+        sessself.model.get("session").save(null, {
+          success : function(model, response) {
+            Utils.debug('Session save success in import');
+          },
+          error : function(e) {
+            alert('Session save failure in import' + e);
+          }
+        });
+      });
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     /*
      * Adds double the columns
@@ -182,9 +364,12 @@ define( [
         $(this).after('<td contenteditable = "true"></td>');
       });
       $('th').each(function(index) {
-        $(this).after('<th><input class = "drop-label-zone header"/></th>');
+        var tableCell = document.createElement("th");
+        $(tableCell).html('<input class="drop-label-zone header"/>');
+        tableCell.addEventListener('drop', this.dragLabelToColumn, false);
+        tableCell.addEventListener('dragover', this.handleDragOver, false);
+        $(this).after(tableCell);
       });
-      
     },
     dragSrcEl : null,
     /**
@@ -219,25 +404,19 @@ define( [
 //        window.appView.importView.dragSrcEl.innerHTML = e.target.value;
         e.target.value = window.appView.importView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
       }
-      
-//      e.target.value = e.dataTransfer.getData('text/html');
-      console.log(e);
       return false;
     },
     handleDrop : function(e) {
       // this/e.target is current target element.
-
       if (e.stopPropagation) {
         e.stopPropagation(); // Stops some browsers from redirecting.
       }
-
       // Don't do anything if dropping the same column we're dragging.
       if (window.appView.importView.dragSrcEl != this) {
         // Set the source column's HTML to the HTML of the columnwe dropped on.
         window.appView.importView.dragSrcEl.innerHTML = this.innerHTML;
         this.innerHTML = e.dataTransfer.getData('text/html');
       }
-
       return false;
     },
     handleDragOver : function(e) {
