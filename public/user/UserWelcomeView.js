@@ -190,11 +190,11 @@ define([
 //                    auth.staleAuthentication = false;
 //                    
 //                    var u = auth.get("userPrivate");
-//                    u.set("id",data.user._id); //set the backbone id to be the same as the mongodb id
+//                    u.id = data.user._id; //set the backbone id to be the same as the mongodb id
 //                    u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
 //                    
 //                    // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
-//                    auth.get("userPublic").set("id", auth.get("userPrivate").get("id"));
+//                    auth.get("userPublic").id = auth.get("userPrivate").id;
 //                    if (data.user.publicSelf == null) {
 //                      // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
 //                      data.user.publicSelf = {};
