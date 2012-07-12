@@ -159,6 +159,10 @@ define([
         model : this.model.get("currentSession")
       });
       this.sessionReadFullscreenView.format = "fullscreen";
+      this.sessionModalView = new SessionEditView({
+        model : this.model.get("currentSession")
+      });
+      this.sessionModalView.format = "modal";
       
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -361,6 +365,7 @@ define([
         this.sessionReadEmbeddedView.render();
         this.sessionEditFullscreenView.render();
         this.sessionReadFullscreenView.render();
+        this.sessionModalView.render();
         
         // Display the UserPreferenceEditView
         this.userPreferenceView.render();
@@ -409,6 +414,7 @@ define([
       this.sessionEditLeftSideView.render();
       this.sessionEditEmbeddedView.render();
       this.sessionEditFullscreenView.render();
+      this.sessionModalView.render();
     },
     renderReadonlySessionViews: function(sessionid){
       this.sessionReadLeftSideView.render();
