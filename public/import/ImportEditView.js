@@ -228,7 +228,6 @@ define( [
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             this.model.get("datumFields").add(new DatumField({
               label : headers[f],
-              size : "3",
               encrypted: "checked",
               userchooseable: "",
               help: "This field came from file import "+this.model.get("status")
