@@ -48,11 +48,11 @@ define([
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
+      "click .btn-save-session" : "updatePouch",
       
       //Add button inserts new Comment
       "click .add_comment" : 'insertNewComment',
       
-      "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
@@ -178,8 +178,33 @@ define([
       Utils.debug("Saving the Session");
       var self = this;
       this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
+        self.model.save(null, {
+          success : function(model, response) {
+            Utils.debug('Session save success');
+            try{
+              if(window.app.get("currentSession").id != model.id){
+                window.app.get("corpus").get("sessions").unshift(model);
+              }
+              window.app.set("currentSession", model);
+              window.appView.renderEditableSessionViews();
+              window.appView.renderReadonlySessionViews();
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+              //add session to the users session history if they dont already have it
+              if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
+                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+              }
+            }catch(e){
+              Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
+            }
+          },
+          error : function(e) {
+            Alert('Session save error' + e);
+          }
+        });
       });
+      if(this.format == "modal"){
+        $("#session-modal").modal("hide");
+      }
     },
     
     //functions associated with icons
