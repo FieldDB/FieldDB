@@ -1,9 +1,9 @@
 define([ 
     "backbone", 
-    "user/Consultant" 
+    "user/UserMask" 
 ], function(
     Backbone,
-    Consultant
+    UserMask
 ) {
   var DatumState = Backbone.Model.extend(
   /** @lends DatumState.prototype */
@@ -34,14 +34,14 @@ define([
     defaults : {
       state : "Checked",
       color : "success",
-      consultant : Consultant,
+      consultant : UserMask,
       showInSearchResults : true,
       selected : ""
     },
     
     // Internal models: used by the parse function
     model : {
-      consultant : Consultant
+      consultant : UserMask
     }
   });
 
