@@ -5,4 +5,10 @@
   <i class="icon-question-sign"></i>
 </a>
 {{/if}}
+
+{{#if size}}
+<br>
+<input class="datum_field_input small-field">{{value}} </input>
+{{else}}
 <textarea class="datum_field_input">{{value}}</textarea>
+{{/if}}

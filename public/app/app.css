@@ -160,3 +160,8 @@ textarea{
   color: #333333;
   white-space: nowrap;
 }
+
+
+.small-field{
+	width: 15px !important;
+}
