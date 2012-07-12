@@ -283,13 +283,14 @@ define([
       
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label" : this.$el.find(".choose_add_field").val().toLowerCase().replace("/ /g","_"),
+        "label" : this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_"),
         "encrypted" : checked,
         "help" : this.$el.find(".add_help").val()
       });
 
       // Add the new DatumField to the Corpus' list for datumFields
       this.model.get("datumFields").add(m);
+      this.datumFieldsView.add(m);
       
       // Reset the line with the add button
       this.$el.find(".choose_add_field").val("");//.children("option:eq(0)").attr("selected", true);
@@ -303,6 +304,7 @@ define([
         "color" : this.$el.find(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
+      this.datumStatesView.add(m);
     },
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
