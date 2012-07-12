@@ -244,7 +244,8 @@ define([
                 
                 // If the default data list is the currently visible data list, re-render it
                 if (app.get('corpus').get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
-                  appView.dataListReadLeftSideView.renderNewModel();
+                  appView.renderEditableDataListViews();
+                  appView.renderReadonlyDataListViews();
                 }
               }
             }
