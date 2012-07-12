@@ -38,7 +38,6 @@ define([
      * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
-      "click #btn-save-session" : "updatePouch",
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -108,14 +107,6 @@ define([
         childViewConstructor : DatumFieldReadView,
         childViewTagName     : "li",
         childViewFormat      : "session"
-      });
-    },
-    
-    updatePouch : function() {
-      Utils.debug("Saving the Session");
-      var self = this;
-      this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
       });
     },
     
