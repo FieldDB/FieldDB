@@ -139,6 +139,7 @@ define([
       }
       return this;
     },    
+    
     changeViewsOfInternalModels : function(){
       this.sessionFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("sessionFields"),
@@ -147,6 +148,7 @@ define([
         childViewFormat      : "session"
       });
     },
+    
     updatePouch : function() {
       Utils.debug("Saving the Session");
       var self = this;
