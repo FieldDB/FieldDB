@@ -26,7 +26,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Create a DatumTagView
+      // Create a DatumView
       this.datumsView = new UpdatingCollectionView({
         collection           : this.model,
         childViewConstructor : DatumEditView,
@@ -39,16 +39,28 @@ define([
       app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this); //we might have to bind this in the other direction since the user's preferences are craeted later than the datum container.
     },
     
+    /**
+     * The underlying model of the DatumContainerEditView is a Datums.
+     */
     model: Datums,
     
+    /**
+     * Events that the DatumContainerEditView is listening to and their handlers.
+     */
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       "click .icon-book" : "showReadonly"
     },
     
+    /** 
+     * The Handlebars template rendered as embedded.
+     */
     templateEmbedded : Handlebars.templates.datum_container_edit_embedded,
     
+    /**
+     * The Handlebars template rendered as fullscreen.
+     */
     templateFullscreen : Handlebars.templates.datum_container_edit_fullscreen,
     
     render : function() {

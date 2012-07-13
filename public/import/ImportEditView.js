@@ -210,7 +210,10 @@ define( [
     },
     convertTableIntoDataList : function(){
       //clear out the data list
-      this.model.dataListView.renderNewModel();
+      var coll = this.model.dataListView.datumsView.collection; 
+      while (coll.length > 0) {
+        coll.pop();
+      }
       this.model.set("datumArray", []);
       var headers = [];
       $('th').each(function(index, item) {
@@ -290,10 +293,7 @@ define( [
             "corpusname" : self.model.get("corpusname")
           });
 
-          // If this Datum has never been saved
-          if (!thatdatum.get("dateEntered")) {
-             thatdatum.set("dateEntered", JSON.stringify(new Date()));
-          }
+          thatdatum.set("dateEntered", JSON.stringify(new Date()));
 
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
@@ -301,6 +301,14 @@ define( [
               success : function(model, response) {
                 Utils.debug('Datum save success in import');
                 self.model.dataListView.addOne(model.id);
+                
+                // Add it to the default data list
+                app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                
+                // If the default data list is the currently visible data list, re-render it
+                if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                  appView.dataListEditLeftSideView.addOne(model.id);
+                }
               },
               error : function(e) {
                 alert('Datum save failure in import' + e);
@@ -308,12 +316,22 @@ define( [
             });
           });
         }
+        
+        // Save the default DataList
+        Utils.debug("Saving the DataList");
+        app.get("corpus").get("dataLists").models[0].changeCorpus(self.model.get("corpusname"), function() {
+          app.get("corpus").get("dataLists").models[0].save();
+          app.get("corpus").save();
+        });
+        
+        // Save the new DataList
         self.model.get("dataList").changeCorpus(self.model.get("corpusname"), function(){
           self.model.get("dataList").save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
-              window.app.get("corpus").get("dataLists").add(self.model.get("dataList"));
+              window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
+              self.model.dataListView.temporaryDataList = false;
             },
             error : function(e) {
               alert('Data list save failure in import' + e);
