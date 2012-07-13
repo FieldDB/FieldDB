@@ -40,6 +40,10 @@ define([
         this.set("comments", new Comments());
       }
       
+      if (!this.get("dateCreated")) {
+        this.set("dateCreated", (new Date()).toDateString());
+      }
+      
       //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
 //      this.bind("change:corpusname", function() {
 //        this.pouch = Backbone.sync
@@ -62,11 +66,9 @@ define([
     },
 
     defaults : {
-      title : "Untitled Data list",
-      dateCreated : "May 29, 2012",
-      description : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collegues.",
-      datumIds : [],
-//      comments: Comments,
+      title : "Untitled Data List",
+      description : "",
+      datumIds : []
     },
     
     // Internal models: used by the parse function
