@@ -92,9 +92,12 @@ define([
      * @constructs
      */
     initialize: function() {
-      if(this.get("comments") == undefined){
+      
+      // If there are no comments, give it a new one
+      if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
+      
     //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
 //      this.bind("change:corpusname", function() {
 //        this.pouch = Backbone.sync
