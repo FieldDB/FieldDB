@@ -19,7 +19,7 @@ define([
 
     },
     events : {
-      "click .edit-tipa-input" : function(){
+      "click .edit-tipa-input" : function(e){
         //dont collapse the dropdown
         e.stopPropagation();
         return false;
