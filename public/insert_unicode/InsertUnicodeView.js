@@ -18,30 +18,24 @@ define([
       Utils.debug("INSERT UNICODE VIEW init");
 
     },
-
-    model : InsertUnicode,
-    /**
-     * Events that the InsertUnicode is listening to and their handlers.
-     */
     events : {
-     
+      "click .edit-tipa-input" : function(){
+        //dont collapse the dropdown
+        e.stopPropagation();
+        return false;
+      },
+      "keyup .edit-tipa-input" : function(e){
+        this.model.set("tipa", $(e.target).val());
+      }
     },
-
+    model : InsertUnicode,
     template : Handlebars.templates.insert_unicode,
     tagName: "span",
-    className: "badge",
     
     render : function() {
       Utils.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
-      this.el.draggable= "true";
-      this.el.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
-      $(this.el).after(" ");
-      
-      window.setTimeout(function(){
-        $(".badge").after(" ");
-      }, 500);
       
       return this;
     },
