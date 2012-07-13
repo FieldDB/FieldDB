@@ -254,10 +254,12 @@ define([
         // before the saving is done
         this.needsSave = false;
         
-        // Store the current Session in the Datum
+        // Store the current Session, the current corpus, and the current date
+        // in the Datum
         this.model.set({
           "session" : app.get("currentSession"),
-          "corpusname" : app.get("corpus").get("corpusname")
+          "corpusname" : app.get("corpus").get("corpusname"),
+          "dateModified" : JSON.stringify(new Date())
         });
 
         // If this Datum has never been saved
@@ -343,6 +345,7 @@ define([
       // Add it as a new Datum to the top of the Datum stack
       var d = this.model.clone();
       delete d.attributes.dateEntered;
+      delete d.attributes.dateModified;
       appView.datumsView.prependDatum(d);
     },
   });
