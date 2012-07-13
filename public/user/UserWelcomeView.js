@@ -229,9 +229,12 @@ define([
                   
                   var dl = a.get("currentDataList");
                   dl.set({
-                    "title" : data.user.username + "'s untitled data list",
-                    "dateCreated" : "May 29, 2012",
-                    "description" : "You can use datalists to create handouts or to prepare for sessions with consultants, export to LaTeX or to share with collaborators. ",
+                    "title" : "Default Data List",
+                    "dateCreated" : (new Date()).toDateString(),
+                    "description" : "This is the default data list for this corpus. " +
+                      "Any new datum you create is added here. " +
+                      "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+                      "export to LaTeX, or share with collaborators.",
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
                   dl.changeCorpus(data.user.corpuses[0].corpusname);
