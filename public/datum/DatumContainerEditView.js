@@ -122,7 +122,8 @@ define([
           self.prependDatum(new Datum({
             datumFields : app.get("corpus").get("datumFields").clone(),
             datumStates : app.get("corpus").get("datumStates").clone(),
-            corpusname : app.get("corpus").get("corpusname")
+            corpusname : app.get("corpus").get("corpusname"),
+            session : app.get("currentSession")
           }));
         } else {
           // If the user has increased the number of Datum to display in the container
@@ -153,7 +154,8 @@ define([
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
         datumStates : app.get("corpus").get("datumStates").clone(),
-        corpusname : app.get("corpus").get("corpusname")
+        corpusname : app.get("corpus").get("corpusname"),
+        session : app.get("currentSession")
       }));
     },
     
@@ -164,37 +166,53 @@ define([
      * @param {Datm} datum The Datum to preprend.
      */
     prependDatum : function(datum) {
-      // If the corpus' previous Datum is more than 24 hours old,
-      // prompt the user if they want to create a new Session.
-      var tooOld = false;
-      for (var i = 0; i < this.model.length; i++) {
-        var previousDateModified = this.model.models[i].get("dateModified")
-        if (previousDateModified) {
-          var currentDate = new Date();
-          // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
-          if (currentDate - new Date(JSON.parse(previousDateModified)) > 86400000) {
-            tooOld = true;
+      if (datum.isNew()) {
+        // If the corpus' previous Datum is more than 24 hours old,
+        // prompt the user if they want to create a new Session.
+        var tooOld = false;
+        for (var i = 0; i < this.model.length; i++) {
+          var previousDateModified = this.model.models[i].get("dateModified")
+          if (previousDateModified) {
+            var currentDate = new Date();
+            // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
+            if (currentDate - new Date(JSON.parse(previousDateModified)) > 86400000) {
+              tooOld = true;
+              break;
+            }
+          }
+        }
+        
+        if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
+          // Display the new Session modal
+          $("#session-modal").modal("show");
+          
+          return;
+        } 
+      // If the datum is already being displayed by the datumContainer
+      } else if (this.model.get(datum.id)) {
+        // Loop through the currently displayed views
+        for (var i in this.datumsView._childViews) {
+          var view = this.datumsView._childViews[i]
+          if (view.model.id == datum.id) {
+            // Save it
+            view.saveScreen();
+            
+            // Remove it
+            this.model.remove(view.model);
+            
             break;
           }
         }
       }
-      
-      if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
-        // Display the new Session modal
-        $("#session-modal").modal("show");
-      } else {
-        // Set the Datum's Session to the current Session
-        datum.set("session", app.get("currentSession"));
         
-        // Add the new, blank, Datum
-        this.model.add(datum, {at:0});
-         
-        // If there are too many datum on the screen, remove the bottom one and save it, if necessary
-        if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
-          var view = this.datumsView._childViews[this.model.length - 1];
-          view.saveScreen();
-          var d = this.model.pop();
-        }
+      // Add the new, blank, Datum
+      this.model.add(datum, {at:0});
+       
+      // If there are too many datum on the screen, remove the bottom one and save it, if necessary
+      if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
+        var view = this.datumsView._childViews[this.model.length - 1];
+        view.saveScreen();
+        this.model.pop();
       }
     }
   });

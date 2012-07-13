@@ -65,13 +65,26 @@ define([
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
-      "click #clipboard" : "copyDatum"
+      "click #clipboard" : "copyDatum",
+      "dblclick" : function() {
+        // Prepend Datum to the top of the DatumContainer stack
+        var d = this.model.clone();
+        d.id = this.model.id;
+        d.set("_id", this.model.get("_id"));
+        d.set("_rev", this.model.get("_rev"));
+        appView.datumsView.prependDatum(d);
+      }
     },
 
     /**
      * The Handlebars template rendered as the DatumReadView.
      */
     template : Handlebars.templates.datum_read_embedded,
+    
+    /**
+     * The Handlebars template rendered as the DatumLatexView.
+     */
+    latexTemplate : Handlebars.templates.datum_read_latex,
 
     /**
      * Renders the DatumReadView and all of its partials.
@@ -100,35 +113,35 @@ define([
         // latex, could be put into a function, but not sure if thats
         // necessary...
       } else if (this.format == "latex") {
-        // Clear the el
-        this.$el.empty();
-        
         //This gets the fields necessary from the model
-        judgement= this.model.get("datumFields").where({label: "judgement"})[0].get("value");
-
-        utterance= this.model.get("datumFields").where({label: "utterance"})[0].get("value");
-        gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
-        translation= this.model.get("datumFields").where({label: "translation"})[0].get("value");
+        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("value");
+        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("value");
+        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
+        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("value");
         
-        //makes the top two lines into an array of words.
-        utteranceArray = utterance.split(' ');
-        glossArray = gloss.split(' ');
+        // makes the top two lines into an array of words.
+        var utteranceArray = utterance.split(' ');
+        var glossArray = gloss.split(' ');
         
-        //for loop aligns each word in the utterance with a word in the  gloss
-        glossCouplet = [];
-        var i = 0;
-        for (i; i < utteranceArray.length; i++) {
-          glossCouplet = utteranceArray[i] +"<br>"+ glossArray[i];
-          this.$el.append('<span class ="glossCouplet">'+ glossCouplet + '</span>');
-        };
-        if(judgement !== ""){
-        this.$el.prepend('&nbsp <span class = "latex-judgement">'+judgement+'</span> &nbsp');
+        // Form an array of utterance and gloss segments for rendering
+        var couplet = [];
+        for (var i = 0; i < utteranceArray.length; i++) {
+          couplet.push({
+            utteranceSegment : utteranceArray[i],
+            glossSegment : glossArray[i]
+          });
         }
-        //adding a checkbox
-        this.$el.prepend('<input type="checkbox" class="styled datum-checkboxes"/> &nbsp &nbsp');
-        //adding the translation on the final line.
-        this.$el.append('<br>'+translation);
+        
+        var jsonToRender = {};
+        jsonToRender.translation = translation
+        jsonToRender.couplet = couplet;
+        if (judgement !== "") {
+          jsonToRender.judgement = judgement;
+        }
+        
+        $(this.el).html(this.latexTemplate(jsonToRender));
       }
+      
       return this;
     },
     
