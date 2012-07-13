@@ -254,10 +254,12 @@ define([
         // before the saving is done
         this.needsSave = false;
         
-        // Store the current Session in the Datum
+        // Store the current Session, the current corpus, and the current date
+        // in the Datum
         this.model.set({
           "session" : app.get("currentSession"),
-          "corpusname" : app.get("corpus").get("corpusname")
+          "corpusname" : app.get("corpus").get("corpusname"),
+          "dateModified" : JSON.stringify(new Date())
         });
 
         // If this Datum has never been saved
@@ -276,14 +278,15 @@ define([
             success : function(model, response) {
               if (neverBeenSaved) {
                 // Add it to the default data list
-                app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
                 self.model.changeCorpus(self.model.get("corpusname"), function() {
-                  app.get("corpus").get("dataLists").models[0].save();
+                  app.get("corpus").get("dataLists").models[defaultIndex].save();
                   app.get("corpus").save();
                 });
                 
                 // If the default data list is the currently visible data list, re-render it
-                if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
                   appView.dataListEditLeftSideView.addOne(model.id, true);
                 }
               }
@@ -343,6 +346,8 @@ define([
       // Add it as a new Datum to the top of the Datum stack
       var d = this.model.clone();
       delete d.attributes.dateEntered;
+      delete d.attributes.dateModified;
+      d.set("session", app.get("currentSession"));
       appView.datumsView.prependDatum(d);
     },
   });
