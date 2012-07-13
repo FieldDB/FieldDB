@@ -65,7 +65,10 @@ define([
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
-      "click #clipboard" : "copyDatum"
+      "click #clipboard" : "copyDatum",
+      "dblclick" : function() {
+        console.log("double click on " + this.model.id);
+      }
     },
 
     /**
