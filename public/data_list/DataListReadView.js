@@ -41,6 +41,9 @@ define( [
           childViewFormat      : "latex"
         });
       }
+      
+      // Remove options
+      delete this.model.collection;
     },
 
     /**
