@@ -12,9 +12,12 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
+    "permission/Permission",
     "permission/Permissions",
-    "permission/PermissionsView",
+    "permission/PermissionEditView",
+    "datum/Session",
     "datum/Sessions",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -31,12 +34,15 @@ define([
     DatumState,
     DatumStates,
     DatumStateEditView,
+    Permission,
     Permissions,
-    PermissionsView,
+    PermissionEditView,
+    Session,
     Sessions,
+    SessionView,
     UpdatingCollectionView
 ) {
-  var CorpusReadFullscreenView = Backbone.View.extend(
+  var CorpusEditView = Backbone.View.extend(
   /** @lends CorpusReadFullScreenView.prototype */
   {
     /**
@@ -140,9 +146,18 @@ define([
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
           
-          // Display the UpdatingCollectionView
-  //        this.dataListsView.render();
+          // Display the DataListsView
+         this.dataListsView.el = this.$('.datalists'); 
+         this.dataListsView.render();
           
+         // Display the SessionsView
+         this.sessionsView.el = this.$('.sessions'); 
+         this.sessionsView.render();
+         
+         // Display the PermissionsView
+         this.permissionsView.el = this.$('.permissions');
+         this.permissionsView.render();
+         
           // Display the DatumFieldsView
           this.datumFieldsView.el = this.$('.datum_field_settings');
           this.datumFieldsView.render();
@@ -150,13 +165,7 @@ define([
           // Display the DatumStatesView
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
-          
-          // Display the PermissionsView
-          this.permissionsView.render();
-          
-          // Display the SessionsView
-          // this.sessionsView.render();
-          
+   
         } else {
           Utils.debug("\tCorpus model was undefined.");
         }
@@ -167,9 +176,19 @@ define([
         // Display the CommentEditView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
+        
+        // Display the DataListsView
+        this.dataListsView.el = this.$('.datalists'); 
+        this.dataListsView.render();
+        
+        // Display the SessionsView
+        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.el = this.$('.permissions');
+        this.permissionsView.render();
 
-        // Display the UpdatingCollectionView
-        // this.dataListsView.render();
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -179,9 +198,7 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        // Display the PermissionsView
-        this.permissionsView.render();
-
+    
         // Display the SessionsView
         // this.sessionsView.render();
       } else if (this.format == "leftSide"){
@@ -206,6 +223,22 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "link"
       });
+      
+      //Create a Permissions View
+      this.permissionsView = new UpdatingCollectionView({
+        collection : this.model.get("permissions"),
+        childViewConstructor : PermissionEditView,
+        childViewTagName     : 'li',
+      });
+      
+      //Create a Sessions List 
+       this.sessionsView = new UpdatingCollectionView({
+         collection : this.model.get("sessions"),
+         childViewConstructor : SessionView,
+         childViewTagName     : 'li',
+         childViewFormat      : "link"  
+       });
+      
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -224,15 +257,6 @@ define([
         childViewFormat      : "corpus"
       });
       
-      //Create a Permissions View
-      this.permissionsView = new PermissionsView({
-        collection : this.model.get("permissions")
-      });
-      
-      //Create a Sessions List 
-      // this.sessionsView = new SessionsView({
-        // collection : this.model.get("sessions")
-      // });
     },
     
     updateTitle: function(){
@@ -342,9 +366,8 @@ define([
       this.model.changeCorpus(this.model.get("corpusname"),function(){
         self.model.save();
       });
-    },
-   
+    },  
   });
 
-  return CorpusReadFullscreenView;
+  return CorpusEditView;
 });
