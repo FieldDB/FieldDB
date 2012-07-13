@@ -1,12 +1,18 @@
 define([ "backbone", 
          "handlebars", 
          "activity/Activity", 
-         "activity/ActivityFeed"
+         "activity/Activities",
+         "activity/ActivityView",
+         "activity/ActivityFeed",
+         "app/UpdatingCollectionView"
  ],
     function(Backbone, 
         Handlebars, 
         Activity, 
-        ActivityFeed
+        Activities,
+        ActivityView,
+        ActivityFeed,
+        UpdatingCollectionView
         ) {
       var ActivityFeedView = Backbone.View.extend(
       /** @lends ActivityFeedView.prototype */
@@ -19,18 +25,28 @@ define([ "backbone",
          * @constructs
          */
         initialize : function() {
+          this.activityFeed = new UpdatingCollectionView({
+            collection           : this.model.get("activities"),
+            childViewConstructor : ActivityView,
+            childViewTagName     : 'li'
+          });
+          
           //TODO this is how i tested the activity feed database, see the ActivityTest where it is hanging out not being tested.
 //          var a = new Activity();
 //          a.save();
         },
 
         model : ActivityFeed,
-        classname : "activity_feed",
+      //  classname : "activity_feed",
         template : Handlebars.templates.activity_feed,
 
         render : function() {
-          this.setElement($("#activity_feed"));
+          this.setElement($("#activity-feed"));
           $(this.el).html(this.template(this.model.toJSON()));
+          
+          this.activityFeed.el = this.$('.activities');
+          this.activityFeed.render();
+
           return this;
         }
 

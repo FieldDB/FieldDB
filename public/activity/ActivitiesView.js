@@ -18,7 +18,7 @@ function(Backbone, Handlebars, Activities) {
     },
 
     model : Activity,
-    classname : "activities",
+ //   classname : "activities",
     template : Handlebars.templates.activity_feed,
 
     render : function() {
