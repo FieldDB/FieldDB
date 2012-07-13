@@ -62,7 +62,15 @@ define([
       "click .icon-search" : "searchTop",
       "click .icon-resize-small" : "resizeSmall",
       "click .icon-resize-full" : 'resizeFullscreen',
-      "click .btn-advanced-search" : "resizeSmall"
+      "click .btn-advanced-search" : "resizeSmall",
+      "keyup #search_box" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.searchTop();
+        }
+      }
     },
     
     /**
