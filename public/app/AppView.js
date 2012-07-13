@@ -273,7 +273,7 @@ define([
         model : new ActivityFeed()
       }); 
       // Create an InsertUnicodesView
-      this.insertUnicodeView = new InsertUnicodesView({
+      this.insertUnicodesView = new InsertUnicodesView({
         model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
       }); 
 
@@ -381,7 +381,7 @@ define([
         //Display ActivityFeedView
         this.activityFeedView.render();
         
-        this.insertUnicodeView.render();
+        this.insertUnicodesView.render();
         
         // Display HotKeysView
         this.hotkeyEditView.render();//.showModal();
@@ -529,15 +529,23 @@ define([
         e.stopPropagation(); // stops the browser from redirecting.
       }
       
-   // Don't do anything if dropping the same object we're dragging.
-      if (window.appView.insertUnicodeView.dragSrcEl != this) {
-        // add the innerhtml to the target's values
-//        window.appView.importView.dragSrcEl.innerHTML = e.target.value;
-        e.target.value = e.target.value + window.appView.insertUnicodeView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+      //if it's a unicode dragging event
+      if(window.appView.insertUnicodesView.dragSrcEl != null){
+        // Don't do anything if dropping the same object we're dragging.
+        if (window.appView.insertUnicodesView.dragSrcEl != this) {
+          // add the innerhtml to the target's values
+          //if you want to flip the innerHTML of the draggee to the dragger
+          //window.appView.importView.dragSrcEl.innerHTML = e.target.value;
+          e.target.value = e.target.value + window.appView.insertUnicodesView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+          //say that the unicode drag event has been handled
+          window.appView.insertUnicodesView.dragSrcEl = null;
+        }
+        return false;
       }
-      return false;
     },
-    
+    /*
+     * prevent default drag over events on droppable elements in general so that we can drop.
+     */
     handleDragOver : function(e) {
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.

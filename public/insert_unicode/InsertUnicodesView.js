@@ -49,6 +49,10 @@ define([
       this.insertUnicodesView.el = this.$("#unicodes");
       this.insertUnicodesView.render();
 
+        $(this.el).find(".unicode-symbol").each(function(index, item) {
+          this.addEventListener('dragstart', window.appView.insertUnicodesView.handleDragStart, false);
+        });
+      
       return this;
     },
 
@@ -59,7 +63,7 @@ define([
       Utils.debug("Updated unicode to "
           + this.$el.children(".insert-unicode-input").val());
       this.model.set("insertUnicode", this.$el
-          .children(".insert-unicode-input").val());
+          .children(".insert-unicode-input").val());//TODO what is this for, why woudl you save this ot the InsertUnicodes collection's model?
     },
     /**
      * Adds a new unicode to the user's unicode collection
@@ -67,6 +71,7 @@ define([
     insertNewUnicode : function() {
       var m = new InsertUnicode({
         "symbol" : this.$el.children(".insert-unicode-input").val(),
+        "tipa" :  this.$el.children(".insert-unicode-tipa-input").val()
       });
       app.get("authentication").get("userPrivate").get("prefs").get("unicodes")
           .add(m);
@@ -80,10 +85,16 @@ define([
      */
     handleDragStart : function(e) {
       // Target (this) element is the source node.
-      this.classList.add("halfopacity");
-      window.appView.insertUnicodeView.dragSrcEl = this;
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
+      this.classList.remove("halfopacity");
+//      var u = window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").where({symbol: this.innerHTML});
+      //TODO useCount++ increase the user count on that item.
+      
+      //if not already dragging, do a drag start
+      if(window.appView.insertUnicodesView.dragSrcEl == null){
+        window.appView.insertUnicodesView.dragSrcEl = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+      }
     }
   });
   return InsertUnicodesView;
