@@ -172,12 +172,11 @@ textarea{
 .comment-bubble{
 	margin: 3px;
 	padding: 3px;
-background: #DDDDDD;
-border-radius: 3px;
+  background: #DDDDDD;
+  border-radius: 3px;
 }
 
 .contact-us-iframe{
 	height:100em;
 	width:100%;
-}
 }

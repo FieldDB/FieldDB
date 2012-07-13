@@ -21,7 +21,8 @@ define(	[
   	}, 
   	
   	defaults : {
-  	  symbol : "" 
+  	  symbol : "", 
+  	  tipa : ""
   	},
   	// Internal models: used by the parse function
     model : {
