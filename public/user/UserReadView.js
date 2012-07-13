@@ -139,7 +139,6 @@ define([
     },
     showEditable :function(){
       $("#user-edit-modal").show();
-    //  TODO actually save the user
 
     }
   });
