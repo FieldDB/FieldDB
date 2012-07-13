@@ -150,6 +150,14 @@ define([
          this.dataListsView.el = this.$('.datalists'); 
          this.dataListsView.render();
           
+         // Display the SessionsView
+         this.sessionsView.el = this.$('.sessions'); 
+         this.sessionsView.render();
+         
+         // Display the PermissionsView
+         this.permissionsView.el = this.$('.permissions');
+         this.permissionsView.render();
+         
           // Display the DatumFieldsView
           this.datumFieldsView.el = this.$('.datum_field_settings');
           this.datumFieldsView.render();
@@ -157,13 +165,7 @@ define([
           // Display the DatumStatesView
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
-          
-          // Display the PermissionsView
-          this.permissionsView.render();
-          
-          // Display the SessionsView
-          // this.sessionsView.render();
-          
+   
         } else {
           Utils.debug("\tCorpus model was undefined.");
         }
@@ -179,9 +181,14 @@ define([
         this.dataListsView.el = this.$('.datalists'); 
         this.dataListsView.render();
         
-        // Display the DataListsView
+        // Display the SessionsView
         this.sessionsView.el = this.$('.sessions'); 
         this.sessionsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.el = this.$('.permissions');
+        this.permissionsView.render();
+
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -191,11 +198,7 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        // Display the PermissionsView
-        // Display the DatumStatesView
-        this.permissionsView.el = this.$('.permissions');
-        this.permissionsView.render();
-
+    
         // Display the SessionsView
         // this.sessionsView.render();
       } else if (this.format == "leftSide"){
@@ -220,6 +223,22 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "link"
       });
+      
+      //Create a Permissions View
+      this.permissionsView = new UpdatingCollectionView({
+        collection : this.model.get("permissions"),
+        childViewConstructor : PermissionEditView,
+        childViewTagName     : 'li',
+      });
+      
+      //Create a Sessions List 
+       this.sessionsView = new UpdatingCollectionView({
+         collection : this.model.get("sessions"),
+         childViewConstructor : SessionView,
+         childViewTagName     : 'li',
+         childViewFormat      : "link"  
+       });
+      
 
       //Create a DatumFieldsView     
       this.datumFieldsView = new UpdatingCollectionView({
@@ -238,23 +257,6 @@ define([
         childViewFormat      : "corpus"
       });
       
-      //Create a Permissions View
-      this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.get("permissions"),
-        childViewConstructor : PermissionEditView,
-        childViewTagName     : 'li',
-
-      });
-      
-      //Create a Sessions List 
-       this.sessionsView = new UpdatingCollectionView({
-         collection : this.model.get("sessions"),
-         childViewConstructor : SessionView,
-         childViewTagName     : 'li',
-         childViewFormat      : "link"
-
-         
-       });
     },
     
     updateTitle: function(){
@@ -364,8 +366,7 @@ define([
       this.model.changeCorpus(this.model.get("corpusname"),function(){
         self.model.save();
       });
-    },
-   
+    },  
   });
 
   return CorpusReadFullscreenView;
