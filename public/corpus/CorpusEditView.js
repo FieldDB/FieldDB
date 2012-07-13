@@ -42,7 +42,7 @@ define([
     SessionView,
     UpdatingCollectionView
 ) {
-  var CorpusReadFullscreenView = Backbone.View.extend(
+  var CorpusEditView = Backbone.View.extend(
   /** @lends CorpusReadFullScreenView.prototype */
   {
     /**
@@ -369,5 +369,5 @@ define([
     },  
   });
 
-  return CorpusReadFullscreenView;
+  return CorpusEditView;
 });
