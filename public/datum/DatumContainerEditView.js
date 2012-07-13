@@ -168,11 +168,11 @@ define([
       // prompt the user if they want to create a new Session.
       var tooOld = false;
       for (var i = 0; i < this.model.length; i++) {
-        var previousDateEntered = this.model.models[i].get("dateEntered")
-        if (previousDateEntered) {
+        var previousDateModified = this.model.models[i].get("dateModified")
+        if (previousDateModified) {
           var currentDate = new Date();
           // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
-          if (currentDate - new Date(JSON.parse(previousDateEntered)) > 86400000) {
+          if (currentDate - new Date(JSON.parse(previousDateModified)) > 86400000) {
             tooOld = true;
             break;
           }
