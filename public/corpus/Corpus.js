@@ -78,10 +78,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
-//      this.on('all', function(e) {
-//        Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
-//      }); 
 
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
@@ -179,7 +175,7 @@ define([
         
       }//end if to set sessionFields
       
-      // If there are no comments, give it a new one
+      // If there are no comments, create models
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
@@ -196,20 +192,6 @@ define([
         this.set("permissions", new Permissions());
       }
       
-      
-//      this.pouch = Backbone.sync
-//      .pouch(Utils.androidApp() ? Utils.touchUrl
-//          + this.get("corpusname") : Utils.pouchUrl
-//          + this.get("corpusname"));
-//        if(typeof(this.get("searchFields")) == "function"){
-//          this.set("searchFields", 
-//              this.get("datumFields"));
-//          this.set("searchFields",
-//              this.get("sessionFields"));
-//            new DatumFields([ 
-          //TODO add the session fields here too, instead of just the datumFields
-//          ]));
- //     }//end if to set sessionFields
     },
     
     defaults : {
@@ -345,7 +327,7 @@ define([
     validate: function(attrs){
 //        console.log(attrs);
         if(attrs.title != undefined){
-          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus was not working.
+          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
         }
         return '';
     }

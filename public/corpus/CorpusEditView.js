@@ -79,16 +79,6 @@ define([
      */
     events : {
       "click .icon-book": "showReadonly",
-
-//              "click .new_session" : "newSession",
-//              "click .show_data_lists" : "showDataLists",
-//              "click .show_corpus_details" : "showCorpusDetails",
-//              "click .show_sessions" : "showSessions",
-//              "click .show_permissions" : "showPermissions",
-//              "click .show_corpora" : "showCorpora",
-//              "click .import" : "newImport",
-//              "click .export" : "showExport"
-      
       //Add button inserts new Comment
       "click .add-comment" : 'insertNewComment',
     	
@@ -110,10 +100,8 @@ define([
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
         
-        "click .save-corpus" : "updatePouch",
-        "blur .save-corpus-blur" : "updatePouch"
- 
-      
+      "click .save-corpus" : "updatePouch",
+      "blur .save-corpus-blur" : "updatePouch"
     },
 
     /**
@@ -182,7 +170,7 @@ define([
         this.dataListsView.render();
         
         // Display the SessionsView
-        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.el = this.$('.sessions'); //TODO do not use such ambiguous class names, compare this with datum_field_settings below.  there is a highlyily hood that the sesson module will be using the same class name and will overwrite your renders.
         this.sessionsView.render();
         
         // Display the PermissionsView
@@ -198,12 +186,11 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-    
-        // Display the SessionsView
-        // this.sessionsView.render();
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
+      }else {
+        throw("You have not specified a format that the CorpusEditView can understand.");
       }
         
       return this;
@@ -305,9 +292,9 @@ define([
     // triggers a view thats added to
     // the ul
     
+    //TODO this function needs to mean "save" ie insert new comment in the db, not add an empty comment on the screen. this a confusion of the pattern in the datumfilds view where exsting fields are in the  updating collection (just like extisting comments are in the updating collection) and there is a blank one in the corpus_edit_embedded corpus_edit_fullscreen handlebars
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
-    	console.log("I'm a new comment!");
       var m = new Comment({
 //        "label" : this.$el.children(".comment_input").val(),
 
