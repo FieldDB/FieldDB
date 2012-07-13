@@ -50,6 +50,10 @@ define([
       this.insertUnicodesView.el = this.$("#unicodes");
       this.insertUnicodesView.render();
 
+        $(this.el).find(".unicode-symbol").each(function(index, item) {
+          this.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
+        });
+      
       return this;
     },
     
