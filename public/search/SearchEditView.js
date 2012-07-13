@@ -158,10 +158,7 @@ define([
       var allDatumIds = [];
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {
         // Clear the datalist
-        var coll = appView.dataListEditLeftSideView.datumsView.collection; 
-        while (coll.length > 0) {
-          coll.pop();
-        }
+        appView.dataListEditLeftSideView.clearDataList();
         
         // Add corresponding datum to the datalist
         for (var key in datumIds) {
@@ -239,10 +236,7 @@ define([
       var allDatumIds = [];
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, function(datumIds) {        
         // Clear the datalist
-        var coll = appView.dataListEditLeftSideView.datumsView.collection; 
-        while (coll.length > 0) {
-          coll.pop();
-        }
+        appView.dataListEditLeftSideView.clearDataList();
         
         // Add corresponding datum to the datalist
         for (var key in datumIds) {
