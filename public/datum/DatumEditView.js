@@ -278,14 +278,15 @@ define([
             success : function(model, response) {
               if (neverBeenSaved) {
                 // Add it to the default data list
-                app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
                 self.model.changeCorpus(self.model.get("corpusname"), function() {
-                  app.get("corpus").get("dataLists").models[0].save();
+                  app.get("corpus").get("dataLists").models[defaultIndex].save();
                   app.get("corpus").save();
                 });
                 
                 // If the default data list is the currently visible data list, re-render it
-                if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
                   appView.dataListEditLeftSideView.addOne(model.id, true);
                 }
               }
