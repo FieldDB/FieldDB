@@ -161,10 +161,10 @@ define([
         var linktg = document.createElement('link');
         linktg.type = 'text/css';
         linktg.rel = 'stylesheet';
-        linktg.href = './app/app_transparent.css';
-        $(headtg).remove(linktg);
+        linktg.href = './app/app_opaque.css';
+        headtg.appendChild(linktg);
       }catch(e){
-        Utils.debug("Dashboard was already opaque");
+        Utils.debug("Problem loading the opaque");
       }
     }
   });
