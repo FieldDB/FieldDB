@@ -122,7 +122,8 @@ define([
           self.prependDatum(new Datum({
             datumFields : app.get("corpus").get("datumFields").clone(),
             datumStates : app.get("corpus").get("datumStates").clone(),
-            corpusname : app.get("corpus").get("corpusname")
+            corpusname : app.get("corpus").get("corpusname"),
+            session : app.get("currentSession")
           }));
         } else {
           // If the user has increased the number of Datum to display in the container
@@ -153,7 +154,8 @@ define([
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
         datumStates : app.get("corpus").get("datumStates").clone(),
-        corpusname : app.get("corpus").get("corpusname")
+        corpusname : app.get("corpus").get("corpusname"),
+        session : app.get("currentSession")
       }));
     },
     
@@ -183,9 +185,6 @@ define([
         // Display the new Session modal
         $("#session-modal").modal("show");
       } else {
-        // Set the Datum's Session to the current Session
-        datum.set("session", app.get("currentSession"));
-        
         // Add the new, blank, Datum
         this.model.add(datum, {at:0});
          
