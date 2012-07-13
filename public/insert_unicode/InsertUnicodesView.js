@@ -26,8 +26,7 @@ define([
         childViewConstructor : InsertUnicodeView,
         childViewTagName     : "span",
       });
-
-      
+     
     },
 
     /**
@@ -68,7 +67,6 @@ define([
 
     },
 
-    
   });
 
   return InsertUnicodesView;

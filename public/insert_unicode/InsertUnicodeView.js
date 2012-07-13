@@ -24,7 +24,7 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .unicode" : "insertUnicode"
+     // "click .unicode" : "insertUnicode"
      
     },
 
@@ -48,12 +48,12 @@ define([
 //      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
 //    },
     
-    insertUnicode : function() {
-      var u = this.model.get("symbol");
-      console.log(u);
-      return u;
-    },
- 
+//    insertUnicode : function() {
+//      var u = this.model.get("symbol");
+//      console.log(u);
+//      return u;
+//    },
+// 
     
   });
 

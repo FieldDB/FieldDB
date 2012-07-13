@@ -1,11 +1,13 @@
 define([ 
     "backbone", 
     "handlebars", 
-    "activity/Activity"
+    "activity/Activity",
+    "user/UserReadView"
 ], function(
     Backbone, 
     Handlebars, 
-    Activity
+    Activity,
+    UserReadView
 ) {
   var ActivityView = Backbone.View.extend(
   /** @lends ActivityView.prototype */
@@ -20,6 +22,8 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("ACTIVITY VIEW init");
+
     },
 
     model : Activity,
