@@ -62,7 +62,15 @@ define([
       "click .icon-search" : "searchTop",
       "click .icon-resize-small" : "resizeSmall",
       "click .icon-resize-full" : 'resizeFullscreen',
-      "click .btn-advanced-search" : "resizeSmall"
+      "click .btn-advanced-search" : "resizeSmall",
+      "keyup #search_box" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.searchTop();
+        }
+      }
     },
     
     /**
@@ -158,10 +166,7 @@ define([
       var allDatumIds = [];
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {
         // Clear the datalist
-        var coll = appView.dataListEditLeftSideView.datumsView.collection; 
-        while (coll.length > 0) {
-          coll.pop();
-        }
+        appView.dataListEditLeftSideView.clearDataList();
         
         // Add corresponding datum to the datalist
         for (var key in datumIds) {
@@ -239,10 +244,7 @@ define([
       var allDatumIds = [];
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, function(datumIds) {        
         // Clear the datalist
-        var coll = appView.dataListEditLeftSideView.datumsView.collection; 
-        while (coll.length > 0) {
-          coll.pop();
-        }
+        appView.dataListEditLeftSideView.clearDataList();
         
         // Add corresponding datum to the datalist
         for (var key in datumIds) {
