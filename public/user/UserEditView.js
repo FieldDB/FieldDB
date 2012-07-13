@@ -84,7 +84,7 @@ define([
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
       } else if(this.format == "modal") {
-        this.setElement($("#user-modal"));
+        this.setElement($("#user-edit-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }
 
