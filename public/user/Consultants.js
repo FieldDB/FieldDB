@@ -1,15 +1,15 @@
 define([
     "backbone",
-    "user/Consultant"],
+    "user/UserMask"],
 function(
     Backbone, 
-    Consultant
+    UserMask
 ) {  
   var Consultants = Backbone.Collection.extend(   
   /** @lends Consultants.prototype */ 
   {
     /**
-     * @class 
+     * @class  Consultants is a collection of user masks so that only public details get saved into items. 
 
      * @description
      * 
@@ -21,7 +21,7 @@ function(
     initialize : function() {
     },
     
-    model: Consultant,
+    model: UserMask,
   }); 
   
   return Consultants;
