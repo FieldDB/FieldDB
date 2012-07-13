@@ -138,8 +138,8 @@ define([
 //      );
     },
     showEditable :function(){
-    //  window.app.router.showEditableUserProfile();
       $("#user-edit-modal").show();
+    //  TODO actually save the user
 
     }
   });
