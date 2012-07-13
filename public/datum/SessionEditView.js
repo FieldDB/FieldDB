@@ -233,7 +233,7 @@ define([
 //        "label" : this.$el.children(".comment_input").val(),
       });
       this.model.get("comments").add(m);
-    },
+    }
   });
   
   return SessionEditView;
