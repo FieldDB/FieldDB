@@ -109,6 +109,14 @@ define([
       },
       "click #welcomepassword" : function(e) {
         return false;
+      },
+      "keyup #welcomepassword" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
+        }
       }
     },
 
