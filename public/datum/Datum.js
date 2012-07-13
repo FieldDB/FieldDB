@@ -61,6 +61,7 @@ define([
      *           categories without make a hierarchical structure, and make
      *           datum easier for search.
      * @property {Date} dateEntered The date the Datum was first saved.
+     * @property {Date} dateModified The date the Datum was last saved.
      * 
      * @description The initialize function brings up the datum widget in small
      *              view with one set of datum fields. However, the datum widget
@@ -117,8 +118,8 @@ define([
      * @param {Function} callback A function that expects a single parameter. That
      * parameter is the result of calling "get_datum_ids/by_date". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
-     * attribute contains the Datum's dateEntered and the 'value' attribute contains
-     * the Datum's ID.
+     * attribute contains the Datum's dateModified and the 'value' attribute contains
+     * the Datum itself.
      */
     getAllDatumIdsByDate : function(callback) {
       var self = this;
@@ -252,6 +253,7 @@ define([
         audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
+        dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
