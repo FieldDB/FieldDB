@@ -133,17 +133,6 @@ define([
     },
     
     /**
-     * Load sample calls the UserReadView's function to load a sample user, at
-     * this time the sample user is Edward Sapir, a well-known early
-     * fieldlinguist. He is simply loaded as a user, without calling any user
-     * authentication functions.
-     * 
-     * This function pulls sapir's user from a server, then pulls his corpus
-     * from another server, then loads his dashboard using his most recent items
-     * in his user details. In the end, we would like ot package him in the app,
-     * so that the user can be offline and play with sapir's data. TODO we can
-     * only do this once the app can load from JSON. 
-     * 
      * Notes: Sapir's user comes from his time after his PhD and before his
      * foray into the industry. This is when he started getting some results for
      * "phoneme" around 1910. For a similar use of historical users see Morgan
@@ -151,86 +140,7 @@ define([
      * https://twitter.com/#!/tucker1927
      */
     loadSample : function(appidsIn) {      
-//      this.model.get("userPrivate").id = "4ffbcacc1bae444d2400001a";
-//      this.model.get("userPrivate").set("username", "sapir");
-//      this.model.get("userPrivate").set("mostRecentIds", appidsIn);
-      var couchConnection = {
-          protocol : "https://",
-          domain : "ilanguage.iriscouch.com",
-          port : "443",
-          corpusname : "sapir-firstcorpus"
-        };
-      this.model.set(this.model.parse({
-            "id" : "4ffbcacc1bae444d2400001a",
-            "activityHistory" : [],
-            "affiliation" : "U Penn",
-            "corpuses" : [ {
-              "corpusname" : "sapir-firstcorpus",
-              "port" : "443",
-              "domain" : "ilanguage.iriscouch.com",
-              "protocol" : "https://"
-            } ],
-            "dataLists" : [],
-            "description" : "I am currently a PostDoc at U Penn. I'm interested in the mental represenation of sound, I'm currently working with Southern Paiute speakers.",
-            "firstname" : "",
-            "gravatar" : "./../user/sapir_1910_gravatar.png",
-            "hotkeys" : {
-              "description" : "",
-              "secondKey" : "",
-              "firstKey" : ""
-            },
-            "lastname" : "",
-            "login" : "sapir",
-            "mostRecentIds" : {
-              "datalistid" : "1C1F1187-329F-4473-BBC9-3B15D01D6A11",
-              "sessionid" : "1423B167-D728-4315-80DE-A10D28D8C4AE",
-              "corpusid" : "4C1A0D9F-D548-491D-AEE5-19028ED85F2B"
-            },
-            "permissions" : {
-            },
-            "prefs" : {
-              "numVisibleDatum" : 3,
-              "skin" : ""
-            },
-            "researchInterest" : "Phonology",
-            "sessionHistory" : [],
-            "subtitle" : "Ed Sapir",
-            "teams" : [],
-            "username" : "sapir"
-          }));
-      var self = this;
-      //Set sapir's remote corpus to fetch from
-      window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection,"sapir","phoneme", function(){
-        //Replicate sapir's corpus down to pouch
-        self.model.get("userPublic").id = self.model.get("userPrivate").id ;
-        var data = {};
-        data.user ={};
-        if (data.user.publicSelf == null) {
-          // if the user hasnt already specified their public self, then
-          // put in a username and gravatar,however they can add more
-          // details like their affiliation, name, research interests
-          // etc.
-          data.user.publicSelf = {};
-          data.user.publicSelf.username = self.model.get("userPrivate").get(
-          "username");
-          data.user.publicSelf.gravatar = self.model.get("userPrivate").get(
-          "gravatar");
-        }
-        self.model.get("userPublic").set(data.user.publicSelf);
-        self.model.set({
-          username : self.model.get("userPrivate").get("username"),
-          state : "loggedIn",
-          gravatar :  self.model.get("userPrivate").get("gravatar") 
-        });
-        window.app.get("corpus").replicateCorpus(couchConnection, function(){
-          //load the sapir's most recent objects into the existing corpus, datalist, session and user
-          window.app.loadBackboneObjectsById(couchConnection , window.appView.authView.model.get("userPrivate").get("mostRecentIds"));
-          window.appView.renderEditableUserViews();//TODO sapirs details are in the models, but they arent getting rendered
-          window.appView.renderReadonlyUserViews();
-          self.render();
-        });
-      });
-      
+      alert("loading sample");
 
     },
     
@@ -246,20 +156,6 @@ define([
      * @param password {String} The password to authenticate.
      */
     authenticate : function(username, password, callback) {
-      // Current signed in as the public user - special case authentication
-      if (username == "public") {
-        this.authenticateAsPublic();
-        return;
-      }
-      
-      // Currently signed in as Sapir - no authentication needed
-      if (username == "sapir") {
-//        window.appView.loadSample();
-//        if(typeof callback == "function"){
-//          callback();
-//        }
-//        return;
-      }
       
       // Temporarily keep the given's credentials
       var tempuser = new User({
@@ -363,7 +259,16 @@ define([
      */
     showQuickAuthenticateView : function(callback) {
       if( this.model.get("userPrivate").get("username") == "sapir" ){
-        this.authenticate("sapir", "phoneme", callback);
+        $("#quick-authenticate-modal").modal("show");
+        $("#quick-authenticate-password").val("phoneme")
+        window.hub.subscribe("quickAuthenticationClose",function(){
+          //TODO show a modal instead of alert
+//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , callback );
+          $("#quick-authenticate-modal").modal("hide");
+          $("#quick-authenticate-password").val("");
+//          window.hub.unsubscribe("quickAuthenticationClose", null, this);
+        }, this);
       }else{
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){

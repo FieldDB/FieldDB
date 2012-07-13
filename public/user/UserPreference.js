@@ -212,6 +212,8 @@ define([
     defaults : {
       skin : "",
       numVisibleDatum : 3,
+      transparentDashboard: false,
+      alwaysRandomizeSkin : true
     },
     
     // Internal models: used by the parse function

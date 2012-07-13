@@ -49,7 +49,7 @@ define( [
         });
       }
       
-      //Create a CommentEditView     
+      // Create a CommentEditView     
       this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentEditView,
@@ -153,6 +153,14 @@ define( [
       }
 
       return this;
+    },
+    
+    // Clear the view of all its DatumReadViews
+    clearDataList : function() {
+      var coll = this.datumsView.collection; 
+      while (coll.length > 0) {
+        coll.pop();
+      }
     },
 
     /**
