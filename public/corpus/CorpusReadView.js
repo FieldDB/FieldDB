@@ -2,24 +2,34 @@ define([
     "backbone", 
     "handlebars", 
     "corpus/Corpus",
+    "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
     "lexicon/LexiconView",
-    "permission/PermissionsView",
-//    "datum/SessionsView",
+    "permission/Permission",
+    "permission/Permissions",
+    "permission/PermissionReadView",
+    "datum/Session",
+    "datum/Sessions",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     Corpus,
+    DataLists,
     DataListReadView,
     DatumFieldReadView,
     DatumStateReadView, 
     LexiconView,
-    PermissionsView,
-//    SessionsView,
+    Permission,
+    Permissions,
+    PermissionReadView,
+    Session,
+    Sessions,
+    SessionView,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -109,8 +119,7 @@ define([
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
-        // Display the UpdatingCollectionView
-        //        this.dataListsView.render();
+      
      
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -120,11 +129,17 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        // Display the PermissionsView
-        this.permissionsView.render();
-
+        // Display the DataListsView
+        this.dataListsView.el = this.$('.datalists'); 
+        this.dataListsView.render();
+         
         // Display the SessionsView
-        // this.sessionsView.render();
+        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.el = this.$('.permissions');
+        this.permissionsView.render();
 
 
       } else if (this.format == "centreWell"){
@@ -142,11 +157,17 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        // Display the PermissionsView
-        this.permissionsView.render();
-        
+        // Display the DataListsView
+        this.dataListsView.el = this.$('.datalists'); 
+        this.dataListsView.render();
+         
         // Display the SessionsView
-        // this.sessionsView.render();
+        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.el = this.$('.permissions');
+        this.permissionsView.render();
 
 
       }
@@ -180,15 +201,29 @@ define([
         childViewFormat      : "corpus"
       });
       
-      //Create a list of Permissions
-      this.permissionsView = new PermissionsView({
-        collection : this.model.get("permissions")
+      // Create a DataList List
+      this.dataListsView = new UpdatingCollectionView({
+        collection : this.model.get("dataLists"),
+        childViewConstructor : DataListReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "link"
+      });
+      
+      //Create a Permissions View
+      this.permissionsView = new UpdatingCollectionView({
+        collection : this.model.get("permissions"),
+        childViewConstructor : PermissionReadView,
+        childViewTagName     : 'li',
       });
       
       //Create a Sessions List 
-      // this.sessionsView = new SessionsView({
-      // collection : this.model.get("sessions")
-      // });
+       this.sessionsView = new UpdatingCollectionView({
+         collection : this.model.get("sessions"),
+         childViewConstructor : SessionView,
+         childViewTagName     : 'li',
+         childViewFormat      : "link"  
+       });
+      
     },
     //Functions assoicate with the corpus menu
     newDatum : function() {
@@ -211,11 +246,7 @@ define([
       app.router.showEditableCorpus();
      
     },
-    
-    
-    
-    
-    
+     
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
     },
