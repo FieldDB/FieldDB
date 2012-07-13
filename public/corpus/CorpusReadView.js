@@ -9,7 +9,7 @@ define([
     "lexicon/LexiconView",
     "permission/Permission",
     "permission/Permissions",
-    "permission/PermissionEditView",
+    "permission/PermissionReadView",
     "datum/Session",
     "datum/Sessions",
     "datum/SessionReadView",
@@ -26,7 +26,7 @@ define([
     LexiconView,
     Permission,
     Permissions,
-    PermissionEditView,
+    PermissionReadView,
     Session,
     Sessions,
     SessionView,
@@ -212,7 +212,7 @@ define([
       //Create a Permissions View
       this.permissionsView = new UpdatingCollectionView({
         collection : this.model.get("permissions"),
-        childViewConstructor : PermissionEditView,
+        childViewConstructor : PermissionReadView,
         childViewTagName     : 'li',
       });
       
