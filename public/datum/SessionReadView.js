@@ -19,8 +19,8 @@ define([
      * @class Session Edit View is where the user provides new session details.
     
      * @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide", "fullscreen", and
-     * "embedded" 
+     * initialized. Valid values are "leftSide", "fullscreen", 
+     * "embedded"  and link
      * @extends Backbone.View
      * @constructs
      */
@@ -59,6 +59,11 @@ define([
     templateFullscreen : Handlebars.templates.session_read_fullscreen,
     
     /**
+     * The Handlebars template rendered as the link format.
+     */
+    templateLink : Handlebars.templates.session_read_link,
+    
+    /**
      * Renders the SessionReadView.
      */
     render : function() {
@@ -94,6 +99,10 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+        } else if (this.format == "link") {
+          $(this.el).html(this.templateLink(this.model.toJSON()));
+        } else {
+          throw("You have not specified a format that the SessionReadView can understand.");
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
