@@ -140,8 +140,9 @@ define([
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
           
-          // Display the UpdatingCollectionView
-  //        this.dataListsView.render();
+          // Display the DataListsView
+         this.dataListsView.el = this.$('.datalists'); 
+         this.dataListsView.render();
           
           // Display the DatumFieldsView
           this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -168,8 +169,10 @@ define([
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
 
-        // Display the UpdatingCollectionView
-        // this.dataListsView.render();
+        
+        // Display the DataListsView
+        this.dataListsView.el = this.$('.datalists'); 
+        this.dataListsView.render();
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
