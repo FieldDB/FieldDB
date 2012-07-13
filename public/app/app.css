@@ -152,7 +152,7 @@ textarea{
   user-select: none;
 }
 .halfopacity{
-	opacity: 0.4;
+	opacity: 0.5;
 }
 
 .dropdown-menu .not-a {
@@ -166,18 +166,28 @@ textarea{
 }
 
 .small-field{
-	width: 15px !important;
+	width: 2em !important;
 }
 
 .comment-bubble{
 	margin: 3px;
 	padding: 3px;
-background: #DDDDDD;
-border-radius: 3px;
+  background: #DDDDDD;
+  border-radius: 3px;
 }
 
 .contact-us-iframe{
 	height:100em;
 	width:100%;
 }
+.unicode-symbol{
+	cursor: move;
+  font-size: 1.25em;
+}
+.show-unicode-details{
+  width: 2em;	
+}
+.unicode-buttons{
+	line-height: 2em;
+	text-align:center;
 }
