@@ -20,6 +20,6 @@
     "128": "icon128.png" 
   },
   "manifest_version": 2,
-  "content_security_policy": "default-src 'self' https://ifield.fieldlinguist.com/ https://localhost:3001/ https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/; script-src 'self' https://ssl.google-analytics.com/ https://localhost:3001/; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://localhost:3001/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ 'self'; object-src 'self';"
+  "content_security_policy": "default-src 'self' https://docs.google.com/ https://ifield.fieldlinguist.com/ https://localhost:3001/ https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/; script-src 'self' https://ssl.google-analytics.com/ https://localhost:3001/; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://localhost:3001/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ 'self'; object-src 'self';"
   
 }
