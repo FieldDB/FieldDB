@@ -67,7 +67,8 @@ define([
       "click .datum_state_select" : "renderState",
       "click #clipboard" : "copyDatum",
       "dblclick" : function() {
-        console.log("double click on " + this.model.id);
+        // Prepend Datum to the top of the DatumContainer stack
+        appView.datumsView.prependDatum(this.model.clone());
       }
     },
 
