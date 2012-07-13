@@ -69,7 +69,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add_comment" : 'insertNewComment',
+      "click .add-comment" : 'insertNewComment',
       
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
