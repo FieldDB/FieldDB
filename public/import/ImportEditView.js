@@ -304,10 +304,11 @@ define( [
                 self.model.dataListView.addOne(model.id);
                 
                 // Add it to the default data list
-                app.get("corpus").get("dataLists").models[0].get("datumIds").unshift(model.id);
+                var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
                 
                 // If the default data list is the currently visible data list, re-render it
-                if (app.get("corpus").get("dataLists").models[0].cid == app.get("corpus").get("dataLists").models[0].cid) {
+                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
                   appView.dataListEditLeftSideView.addOne(model.id);
                 }
               },
@@ -320,8 +321,9 @@ define( [
         
         // Save the default DataList
         Utils.debug("Saving the DataList");
-        app.get("corpus").get("dataLists").models[0].changeCorpus(self.model.get("corpusname"), function() {
-          app.get("corpus").get("dataLists").models[0].save();
+        var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+        app.get("corpus").get("dataLists").models[defaultIndex].changeCorpus(self.model.get("corpusname"), function() {
+          app.get("corpus").get("dataLists").models[defaultIndex].save();
           app.get("corpus").save();
         });
         
