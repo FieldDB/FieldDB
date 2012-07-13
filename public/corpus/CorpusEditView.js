@@ -90,7 +90,7 @@ define([
 //              "click .export" : "showExport"
       
       //Add button inserts new Comment
-      "click .add_comment" : 'insertNewComment',
+      "click .add-comment" : 'insertNewComment',
     	
       //Add button inserts new Datum State
       "click .add_datum_state" : 'insertNewDatumState',
