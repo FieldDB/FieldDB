@@ -18,8 +18,15 @@ define([
       Utils.debug("INSERT UNICODE VIEW init");
 
     },
-    events :{
-      "click .unicode-symbol-details" : "showSymbolDetails"
+    events : {
+      "click .edit-tipa-input" : function(){
+        //dont collapse the dropdown
+        e.stopPropagation();
+        return false;
+      },
+      "keyup .edit-tipa-input" : function(e){
+        this.model.set("tipa", $(e.target).val());
+      }
     },
     model : InsertUnicode,
     template : Handlebars.templates.insert_unicode,
@@ -32,10 +39,6 @@ define([
       
       return this;
     },
-    showSymbolDetails : function(){
-        this.$el.children(".unicode-symbol-details").popover("show") 
-        this.$el.children(".edit-tipa-input").focus();
-    },
     /**
      * Change the model's state.
      */
@@ -43,7 +46,6 @@ define([
 //      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
 //      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
 //    },
-    
  
     
   });
