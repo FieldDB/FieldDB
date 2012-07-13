@@ -164,27 +164,7 @@ define([
       Utils.debug("Will search for " + $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {
-        // Clear the datalist
-        appView.dataListEditLeftSideView.clearDataList();
-        
-        // Add corresponding datum to the datalist
-        for (var key in datumIds) {
-          var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
-          d.id = datumIds[key];
-          var self = this;
-          d.changeCorpus(app.get("corpus").get("corpusname"), function() {
-            d.fetch({
-              success : function(model, response) {
-                appView.dataListEditLeftSideView.addOneTempDatum(model);              
-              },
-              error : function(model, response) {
-                console.log(model, response);
-              }
-            });
-          });
-        }
-      });
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), this.searchContinued);
     },
     
     
@@ -242,27 +222,18 @@ define([
     search : function(queryString) {
       // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, function(datumIds) {        
-        // Clear the datalist
-        appView.dataListEditLeftSideView.clearDataList();
-        
-        // Add corresponding datum to the datalist
-        for (var key in datumIds) {
-          var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
-          d.id = datumIds[key];
-          var self = this;
-          d.changeCorpus(app.get("corpus").get("corpusname"), function() {
-            d.fetch({
-              success : function(model, response) {
-                appView.dataListEditLeftSideView.addOneTempDatum(model);              
-              },
-              error : function(model, response) {
-                console.log(model, response);
-              }
-            });
-          });
-        }
-      });
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, this.searchContinued);
+    },
+    
+    searchContinued : function(datumIds) {
+      // Create a new data list
+      // TODO Make this a temporary data list
+      appView.dataListEditLeftSideView.newDataList();
+      
+      // Add search results to the data list
+      for (var key in datumIds) {
+        appView.dataListEditLeftSideView.addOneDatumId(datumIds[key]);
+      }
     },
     
     /**
