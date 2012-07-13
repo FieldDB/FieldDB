@@ -52,7 +52,9 @@ define([
       "click #close_user_profile" : function() {
         console.log("hiding user profile");
         this.$el.modal("hide");
-      }
+      },
+      "click .save-user-profile" : "saveProfile"
+
     },
 
     /**
@@ -90,6 +92,12 @@ define([
 
         // Display the CorpusesView
 //        this.corpusesView.render();
+
+    },
+    saveProfile : function(){
+      Utils.debug("Saving session");
+      $("#user-edit-modal").hide();
+      $("#user-modal").show();
 
     }
   });
