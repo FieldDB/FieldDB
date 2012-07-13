@@ -346,6 +346,7 @@ define([
       var d = this.model.clone();
       delete d.attributes.dateEntered;
       delete d.attributes.dateModified;
+      d.set("session", app.get("currentSession"));
       appView.datumsView.prependDatum(d);
     },
   });

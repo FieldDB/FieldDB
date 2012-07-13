@@ -257,8 +257,8 @@ define([
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
-        corpusname : this.get("corpusname")
-        // Don't need to do Session here since it will be overwritten in DatumContainerEditView.prependDatum()
+        corpusname : this.get("corpusname"),
+        session: this.get("session")
       });
       
       return datum;
