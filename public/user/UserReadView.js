@@ -32,7 +32,10 @@ define([
       
       this.model.bind('change', this.render, this);
     },
+    events : {
+      "click .icon-edit": "showEditable",
 
+    },
     /**
      * The underlying model of the UserReadView is a User.
      */
@@ -133,6 +136,11 @@ define([
 //            }
 //          }
 //      );
+    },
+    showEditable :function(){
+      $("#user-edit-modal").show();
+    //  TODO actually save the user
+
     }
   });
 
