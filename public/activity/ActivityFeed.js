@@ -1,9 +1,11 @@
 define([ 
     "backbone", 
-    "activity/Activity"
+    "activity/Activity",
+    "activity/Activities"
 ], function(
     Backbone, 
-    Activity
+    Activity,
+    Activities
 ) {
   var ActivityFeed = Backbone.Model.extend(
   /** @lends ActivityFeed.prototype */
@@ -18,11 +20,18 @@ define([
      * @constructs
      */
     initialize : function() {
+      if(!this.get("activities")) {
+        this.set("activities", new Activities());
+      }
+      
     },
-    
+//    defaults: {
+//      activities: Activities
+//    },
     // Internal models: used by the parse function
     model : {
-      // There are no nested models
+    activities: Activities  
+    
     },
     
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl

@@ -16,28 +16,26 @@ define([
   {
     /**
      * @class InsertUnicodesView
-     *
+     * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       this.insertUnicodesView = new UpdatingCollectionView({
-        collection           :  this.model,
+        collection : this.model,
         childViewConstructor : InsertUnicodeView,
-        childViewTagName     : "span",
+        childViewTagName : "span",
       });
-
-      
     },
 
     /**
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .add-unicode" : "insertNewUnicode"
+      "click .add-unicode" : "insertNewUnicode",
     },
 
-  //  classname : "insert-unicode",
+    // classname : "insert-unicode",
 
     template : Handlebars.templates.insert_unicodes,
 
@@ -46,7 +44,8 @@ define([
       // Display the InsertUnicodesView
       this.setElement($("#insert-unicode"));
       $(this.el).html(this.template({}));
-      
+
+      //Updating Collection View Rendering
       this.insertUnicodesView.el = this.$("#unicodes");
       this.insertUnicodesView.render();
 
@@ -56,21 +55,26 @@ define([
       
       return this;
     },
-    
+
     /**
      * Change the model's state.
      */
     updateUnicode : function() {
-      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
-      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val()); //TODO what is this for?? why save the value into the model of the InsertUnicodes collection?
+      Utils.debug("Updated unicode to "
+          + this.$el.children(".insert-unicode-input").val());
+      this.model.set("insertUnicode", this.$el
+          .children(".insert-unicode-input").val());//TODO what is this for, why woudl you save this ot the InsertUnicodes collection's model?
     },
+    /**
+     * Adds a new unicode to the user's unicode collection
+     */
     insertNewUnicode : function() {
       var m = new InsertUnicode({
         "symbol" : this.$el.children(".insert-unicode-input").val(),
         "tipa" :  this.$el.children(".insert-unicode-tipa-input").val()
       });
-      app.get("authentication").get("userPrivate").get("prefs").get("unicodes").add(m);
-
+      app.get("authentication").get("userPrivate").get("prefs").get("unicodes")
+          .add(m);
     },
 
     dragSrcEl : null,
@@ -92,8 +96,6 @@ define([
         e.dataTransfer.setData('text/html', this.innerHTML);
       }
     }
-    
   });
-
   return InsertUnicodesView;
 });
