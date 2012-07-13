@@ -12,9 +12,12 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
+    "permission/Permission",
     "permission/Permissions",
-    "permission/PermissionsView",
+    "permission/PermissionEditView",
+    "datum/Session",
     "datum/Sessions",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -31,9 +34,12 @@ define([
     DatumState,
     DatumStates,
     DatumStateEditView,
+    Permission,
     Permissions,
-    PermissionsView,
+    PermissionEditView,
+    Session,
     Sessions,
+    SessionView,
     UpdatingCollectionView
 ) {
   var CorpusReadFullscreenView = Backbone.View.extend(
@@ -168,11 +174,14 @@ define([
         // Display the CommentEditView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
-
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists'); 
         this.dataListsView.render();
+        
+        // Display the DataListsView
+        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.render();
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -183,6 +192,8 @@ define([
         this.datumStatesView.render();
 
         // Display the PermissionsView
+        // Display the DatumStatesView
+        this.permissionsView.el = this.$('.permissions');
         this.permissionsView.render();
 
         // Display the SessionsView
@@ -228,14 +239,22 @@ define([
       });
       
       //Create a Permissions View
-      this.permissionsView = new PermissionsView({
-        collection : this.model.get("permissions")
+      this.permissionsView = new UpdatingCollectionView({
+        collection : this.model.get("permissions"),
+        childViewConstructor : PermissionEditView,
+        childViewTagName     : 'li',
+
       });
       
       //Create a Sessions List 
-      // this.sessionsView = new SessionsView({
-        // collection : this.model.get("sessions")
-      // });
+       this.sessionsView = new UpdatingCollectionView({
+         collection : this.model.get("sessions"),
+         childViewConstructor : SessionView,
+         childViewTagName     : 'li',
+         childViewFormat      : "link"
+
+         
+       });
     },
     
     updateTitle: function(){

@@ -7,8 +7,10 @@ define([
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
+    "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
+    "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
     "user/User",
@@ -22,8 +24,10 @@ define([
     DatumFields, 
     DatumState,
     DatumStates,
+    DataList,
     DataLists,
     Consultants,
+    Permission,
     Permissions,
     Sessions,
     User
@@ -179,9 +183,18 @@ define([
         this.set("comments", new Comments());
       }
       
-      if(typeof(this.get("dataLists")) == "function"){
+      if (!this.get("dataLists")) {
         this.set("dataLists", new DataLists());
       }
+      
+      if (!this.get("sessions")) {
+        this.set("sessions", new Sessions());
+      }
+      
+      if (!this.get("permissions")) {
+        this.set("permissions", new Permissions());
+      }
+      
       
 //      this.pouch = Backbone.sync
 //      .pouch(Utils.androidApp() ? Utils.touchUrl
@@ -208,9 +221,6 @@ define([
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      sessions : Sessions, 
-      dataLists : DataLists, 
-      permissions : Permissions,
       comments: Comments,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
       
@@ -224,6 +234,7 @@ define([
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
+      dataLists : DataLists,
       sessions : Sessions, 
       dataLists : DataLists, 
       permissions : Permissions,
