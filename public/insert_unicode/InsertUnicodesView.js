@@ -51,7 +51,7 @@ define([
       this.insertUnicodesView.render();
 
         $(this.el).find(".unicode-symbol").each(function(index, item) {
-          this.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
+          this.addEventListener('dragover', window.appView.insertUnicodesView.handleDragStart, false);
         });
       
       return this;
@@ -82,10 +82,13 @@ define([
       // Target (this) element is the source node.
       this.classList.add("halfopacity");
 
-      window.appView.insertUnicodeView.dragSrcEl = this;
+      //if not already dragging, do a drag start
+      if(window.appView.insertUnicodesView.dragSrcEl == null){
+        window.appView.insertUnicodesView.dragSrcEl = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+      }
 
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
     }
     
   });

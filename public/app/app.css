@@ -180,3 +180,6 @@ textarea{
 	height:100em;
 	width:100%;
 }
+.unicode-symbol{
+	  cursor: move;
+}

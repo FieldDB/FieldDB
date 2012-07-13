@@ -18,7 +18,9 @@ define([
       Utils.debug("INSERT UNICODE VIEW init");
 
     },
-
+    events :{
+      "click .unicode-symbol-details" : "showSymbolDetails"
+    },
     model : InsertUnicode,
     template : Handlebars.templates.insert_unicode,
     tagName: "span",
@@ -30,7 +32,9 @@ define([
       
       return this;
     },
-    
+    showSymbolDetails : function(){
+        this.$el.children(".unicode-symbol-details").popover("show") 
+    },
     /**
      * Change the model's state.
      */
