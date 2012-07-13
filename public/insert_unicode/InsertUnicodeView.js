@@ -34,6 +34,7 @@ define([
     },
     showSymbolDetails : function(){
         this.$el.children(".unicode-symbol-details").popover("show") 
+        this.$el.children(".edit-tipa-input").focus();
     },
     /**
      * Change the model's state.

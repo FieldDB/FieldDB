@@ -62,11 +62,12 @@ define([
      */
     updateUnicode : function() {
       Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
-      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
+      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val()); //TODO what is this for?? why save the value into the model of the InsertUnicodes collection?
     },
     insertNewUnicode : function() {
       var m = new InsertUnicode({
         "symbol" : this.$el.children(".insert-unicode-input").val(),
+        "tipa" :  this.$el.children(".insert-unicode-tipa-input").val()
       });
       app.get("authentication").get("userPrivate").get("prefs").get("unicodes").add(m);
 

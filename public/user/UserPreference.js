@@ -120,10 +120,10 @@ define([
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ʩ"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ʪ"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ʫ"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "λ "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "α "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "β "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∀"}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "\lambda", symbol:  "λ "}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "\alpha", symbol:  "α "}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "\beta", symbol:  "β "}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "\forall", symbol:  "∀"}));
 
         
        
@@ -140,7 +140,7 @@ define([
         
         
       
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∃"}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "\exists", symbol:  "∃"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∄"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∅"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∆"}));
