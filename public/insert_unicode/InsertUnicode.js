@@ -21,12 +21,15 @@ define(	[
   	}, 
   	
   	defaults : {
-  	  symbol : "" 
+  	  symbol : "", 
+  	  tipa : "",
+  	  useCount : 0
   	},
   	// Internal models: used by the parse function
     model : {
       // There are no nested models
     }
+    
 	}); 
 
 	return InsertUnicode;

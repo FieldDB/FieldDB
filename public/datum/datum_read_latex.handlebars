@@ -1,0 +1,16 @@
+<input type="checkbox" class="styled datum-checkboxes"></input>
+&nbsp; &nbsp;
+{{#if judgement}}
+  &nbsp 
+  <span class = "latex-judgement">{{judgement}}</span> 
+  &nbsp
+{{/if}}
+{{#each couplet}}
+  <span class="glossCouplet">
+    {{utteranceSegment}}
+    <br />
+    {{glossSegment}}
+  </span>
+{{/each}}
+<br />
+{{translation}}

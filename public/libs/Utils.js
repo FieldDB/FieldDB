@@ -24,7 +24,7 @@ Utils.touchUrl = "http://localhost:8888/db";
 Utils.pouchUrl = "idb://db";
 
 
-Utils.activityFeedCouchUrl = "http://trisapeace.iriscouch.com/activity_feed";
+Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
