@@ -68,7 +68,11 @@ define([
       "click #clipboard" : "copyDatum",
       "dblclick" : function() {
         // Prepend Datum to the top of the DatumContainer stack
-        appView.datumsView.prependDatum(this.model.clone());
+        var d = this.model.clone();
+        d.id = this.model.id;
+        d.set("_id", this.model.get("_id"));
+        d.set("_rev", this.model.get("_rev"));
+        appView.datumsView.prependDatum(d);
       }
     },
 
