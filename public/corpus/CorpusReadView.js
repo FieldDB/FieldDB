@@ -2,6 +2,9 @@ define([
     "backbone", 
     "handlebars", 
     "corpus/Corpus",
+//    "comment/Comment",
+//    "comment/Comments",
+//    "comment/CommentEditView",
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
@@ -19,6 +22,9 @@ define([
     Backbone, 
     Handlebars, 
     Corpus,
+//    Comment,
+//    Comments,
+//    CommentEditView,
     DataLists,
     DataListReadView,
     DatumFieldReadView,
@@ -60,6 +66,10 @@ define([
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
+      
+      //Add button inserts new Comment
+      "click .add-comment" : 'insertNewComment',
+      
       "click .new_datum_read" : "newDatum",
       "click .icon-edit": "showEditable",
       
@@ -119,7 +129,14 @@ define([
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
-      
+
+        // Display the CommentEditView
+//        this.commentEditView.el = this.$('.comments');
+//        this.commentEditView.render();
+
+        
+        // Display the UpdatingCollectionView
+        //        this.dataListsView.render();
      
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -141,6 +158,10 @@ define([
         this.permissionsView.el = this.$('.permissions');
         this.permissionsView.render();
 
+        // Display the SessionsView
+        // this.sessionsView.render(); 
+        
+        
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
@@ -246,8 +267,19 @@ define([
       app.router.showEditableCorpus();
      
     },
-     
-    resizeSmall : function(){
+    
+//This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+        console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
+    },
+    
+    
+     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
     },
     
