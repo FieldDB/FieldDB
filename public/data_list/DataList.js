@@ -35,7 +35,8 @@ define([
      */
     initialize : function() {
       
-      if(typeof(this.get("comments")) == "function"){
+      // If there are no comments, give it a new one
+      if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
       
@@ -65,7 +66,7 @@ define([
       dateCreated : "May 29, 2012",
       description : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collegues.",
       datumIds : [],
-      comments: Comments,
+//      comments: Comments,
     },
     
     // Internal models: used by the parse function
