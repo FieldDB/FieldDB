@@ -294,6 +294,7 @@ define( [
           });
 
           thatdatum.set("dateEntered", JSON.stringify(new Date()));
+          thatdatum.set("dateModified", JSON.stringify(new Date()));
 
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
