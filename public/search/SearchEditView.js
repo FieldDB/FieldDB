@@ -156,10 +156,29 @@ define([
       Utils.debug("Will search for " + $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {        
-        // Display the results in the DataListReadView
-        appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
-        appView.dataListReadLeftSideView.renderNewModel();
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), function(datumIds) {
+        // Clear the datalist
+        var coll = appView.dataListEditLeftSideView.datumsView.collection; 
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        
+        // Add corresponding datum to the datalist
+        for (var key in datumIds) {
+          var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
+          d.id = datumIds[key];
+          var self = this;
+          d.changeCorpus(app.get("corpus").get("corpusname"), function() {
+            d.fetch({
+              success : function(model, response) {
+                appView.dataListEditLeftSideView.addOneTempDatum(model);              
+              },
+              error : function(model, response) {
+                console.log(model, response);
+              }
+            });
+          });
+        }
       });
     },
     
@@ -219,9 +238,28 @@ define([
       // Search for Datum that match the search criteria      
       var allDatumIds = [];
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, function(datumIds) {        
-        // Display the results in the DataListReadView
-        appView.dataListReadLeftSideView.model.set("datumIds", datumIds);
-        appView.dataListReadLeftSideView.renderNewModel();
+        // Clear the datalist
+        var coll = appView.dataListEditLeftSideView.datumsView.collection; 
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        
+        // Add corresponding datum to the datalist
+        for (var key in datumIds) {
+          var d = new Datum({corpusname : app.get("corpus").get("corpusname")});
+          d.id = datumIds[key];
+          var self = this;
+          d.changeCorpus(app.get("corpus").get("corpusname"), function() {
+            d.fetch({
+              success : function(model, response) {
+                appView.dataListEditLeftSideView.addOneTempDatum(model);              
+              },
+              error : function(model, response) {
+                console.log(model, response);
+              }
+            });
+          });
+        }
       });
     },
     

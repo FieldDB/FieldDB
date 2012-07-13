@@ -5,7 +5,7 @@ define([
 ], function(Backbone,
     Handlebars,
     InsertUnicode) {
-    var InsertUnicodesView = Backbone.View.extend(
+    var InsertUnicodeView = Backbone.View.extend(
   /** @lends InsertUnicodesView.prototype */
   {
     /**
@@ -24,38 +24,27 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-     // "click .unicode" : "insertUnicode"
      
     },
 
-//    classname : "insert-unicode",
-
     template : Handlebars.templates.insert_unicode,
-
+    tagName: "span",
+    className: "badge",
+    
     render : function() {
       Utils.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
+      this.el.draggable= "true";
+      this.el.addEventListener('dragover', window.appView.insertUnicodeView.handleDragStart, false);
+      $(this.el).after(" ");
+      
+      window.setTimeout(function(){
+        $(".badge").after(" ");
+      }, 500);
       
       return this;
     },
-    
-    /**
-     * Change the model's state.
-     */
-//    updateUnicode : function() {
-//      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
-//      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
-//    },
-    
-//    insertUnicode : function() {
-//      var u = this.model.get("symbol");
-//      console.log(u);
-//      return u;
-//    },
-// 
-    
   });
-
-  return InsertUnicodesView;
+  return InsertUnicodeView;
 });
