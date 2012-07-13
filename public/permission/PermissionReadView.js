@@ -8,11 +8,10 @@ define([
       Permission
 ) {
   var PermissionReadView = Backbone.View.extend(
-  /** @lends CommentEditView.prototype */
+  /** @lends PermissionEditView.prototype */
   {
     /**
-     * @class This is the view of the Comment Model. The Comment is a
-     *        textarea that includes a username and a timestamp.
+     * @class This is the view of the Permission Model. The Permission combination of a couchdb user, and their corpusspecific role
      * 
      * @extends Backbone.View
      * @constructs
@@ -22,18 +21,18 @@ define([
     },
     
     /**
-     * The underlying model of the CommentEditView is a Comment.
+     * The underlying model of the PermissionEditView is a Permission.
      */
-    model : Comment,
+    model : Permission,
     
     /**
-     * Events that the CommentEditView is listening to and their handlers.
+     * Events that the PermissionEditView is listening to and their handlers.
      */
     events : {
     },
 
     /**
-     * The Handlebars template rendered as the CommentEditView.
+     * The Handlebars template rendered as the PermissionEditView.
      */
     template : Handlebars.templates.permissions_read_embedded,
     
