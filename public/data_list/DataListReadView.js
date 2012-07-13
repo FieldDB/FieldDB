@@ -1,17 +1,19 @@
 define( [ 
-  "backbone", 
-  "handlebars",
-  "data_list/DataList",
-  "datum/Datum",
-  "datum/DatumReadView",
-  "datum/Datums"
+    "backbone", 
+	  "handlebars",
+  	"data_list/DataList",
+	  "datum/Datum",
+  	"datum/DatumReadView",
+	  "datum/Datums",
+  	"app/UpdatingCollectionView"
 ], function(
     Backbone, 
     Handlebars, 
     DataList, 
     Datum, 
     DatumReadView,
-    Datums  
+    Datums,
+    UpdatingCollectionView
 ) {
   var DataListReadView = Backbone.View.extend(
   /** @lends DataListReadView.prototype */
@@ -27,21 +29,24 @@ define( [
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
+    initialize : function(options) {
       Utils.debug("DATALIST init: " + this.el);
       
+      // Create a DatumView
+      if (options.datumCollection) {
+        this.datumsView = new UpdatingCollectionView({
+          collection           : options.datumCollection,
+          childViewConstructor : DatumReadView,
+          childViewTagName     : "li",
+          childViewFormat      : "latex"
+        });
+      }
     },
 
     /**
      * The underlying model of the DataListReadView is a DataList.
      */    
     model : DataList,
-    
-    /** 
-     * The datumLatexViews array holds all the children of the
-     * DataListReadView.
-     */
-    datumLatexViews : [],
 
     /**
      * Events that the DataListReadView is listening to and their handlers.
@@ -75,14 +80,7 @@ define( [
      */
     footerTemplate : Handlebars.templates.paging_footer,
 
-    /**
-     * Initially renders the DataListReadView. This should only be called by 
-     * this.initialize. To update the current rendering, use renderUpdate()
-     * instead.
-     */
     render : function() {
-      Utils.debug("DATALIST render: " + this.el);
-      
       if (this.format == "link") {
         // Display the Data List
         this.setElement($("#data-list-link"));
@@ -90,68 +88,37 @@ define( [
       } else if (this.format == "leftSide") {
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        
+        // Display the DatumFieldsView
+        this.datumsView.el = this.$(".data_list_content");
+        this.datumsView.render();
           
         // Display the pagination footer
         this.renderUpdatedPagination();
-       
-      }else if (this.format == "fullscreen") {
+      } else if (this.format == "fullscreen") {
         // Display the Data List
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
-          
+        
+        // Display the DatumFieldsView
+        this.datumsView.el = this.$(".data_list_content");
+        this.datumsView.render();
+        
         // Display the pagination footer
         this.renderUpdatedPagination();
-        
-        // Display the first page of DatumReadViews.
-        this.renderNewModel();
-      }else if(this.format == "middle"){
-        
+      } else if(this.format == "middle") {
         this.setElement($("#new-data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
+        // Display the DatumFieldsView
+        this.datumsView.el = this.$(".data_list_content");
+        this.datumsView.render();
+        
         // Display the pagination footer
         this.renderUpdatedPagination();
-        
-        // Display the first page of DatumReadViews.
-        this.renderNewModel();
-      
       }
       
       return this;
-    },
-    
-    /**
-     * Re-renders the datalist header based on the current model.
-     */
-    renderUpdatedDataList : function() {
-      if ((this.format == "leftSide") || (this.format == "fullscreen")) {
-        $(".title").text(this.model.get("title"));
-        $(".dateCreated").text(this.model.get("dateCreated"));
-        $(".description").text(this.model.get("description"));
-      }
-    },
-    
-    /**
-     * Re-renders the datums based on the current model.
-     * Re-renders the pagination footer based on the current pagination data.
-     * 
-     * This should be called whenever the model is replaced (i.e. when you open
-     * a new DataList or perform a new Search).
-     */
-    renderNewModel : function() {
-      // Remove all the DatumReadViews that are currently being displayed
-      while(this.datumLatexViews.length > 0) {
-        var datumLatexView = this.datumLatexViews.pop();
-        datumLatexView.remove();
-      }
-      
-      // Display the first page of Datum and the pagination footer
-      for (var i = 0; i < this.perPage; i++) {
-        var datumId = this.model.get("datumIds")[i];
-        if (datumId) {
-          this.addOne(datumId);
-        }
-      }
     },
     
     /**
@@ -174,8 +141,8 @@ define( [
      * @return {Object} JSON to be sent to the footerTemplate.
      */
     getPaginationInfo : function() {
-      var currentPage = (this.datumLatexViews.length > 0) ? Math.ceil(this.datumLatexViews.length / this.perPage) : 1;
-      var totalPages = (this.datumLatexViews.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 1;
+      var currentPage = (this.datumsView.collection.length > 0) ? Math.ceil(this.datumsView.collection.length / this.perPage) : 1;
+      var totalPages = (this.datumsView.collection.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 1;
       
       return {
         currentPage : currentPage,
@@ -190,8 +157,11 @@ define( [
      * and updates the pagination footer.
      * 
      * @param {String} datumId The datumId of the Datum to display.
+     * @param {Boolean} addToTop If true, adds the new Datum to the top of
+     * the DataList. If it is false or undefined adds the new Datum to the 
+     * bottom of the DataList.
      */
-    addOne : function(datumId) {
+    addOne : function(datumId, addToTop) {
       // Get the corresponding Datum from PouchDB 
       var d = new Datum({
         corpusname : window.app.get("corpus").get("corpusname")
@@ -201,16 +171,14 @@ define( [
       d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
         d.fetch({
           success : function(model, response) {
-            // Render a DatumReadView for that Datum at the end of the DataListEditView
-            var view = new DatumReadView({
-              model : model,
-              tagName : "li"
-            });
-            view.format = "latex";
-            $('.data_list_content').append(view.render().el);
-            
-            // Keep track of the DatumReadView
-            self.datumLatexViews.push(view);
+            // Render a DatumReadView for that Datum
+            if (addToTop) {
+              // Render at the top
+              self.datumsView.collection.add(model, {at:0});
+            } else {
+              // Render at the bottom
+              self.datumsView.collection.add(model);
+            }
             
             // Display the updated DatumReadView
             self.renderUpdatedPagination();
@@ -245,7 +213,7 @@ define( [
       
       // Determine the range of indexes into the model's datumIds array that are 
       // on the page to be displayed
-      var startIndex = this.datumLatexViews.length;
+      var startIndex = this.datumsView.collection.length;
       var endIndex = startIndex + this.perPage;
       
       // Add a DatumReadView for each one

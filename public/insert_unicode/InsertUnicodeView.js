@@ -5,7 +5,7 @@ define([
 ], function(Backbone,
     Handlebars,
     InsertUnicode) {
-    var InsertUnicodesView = Backbone.View.extend(
+    var InsertUnicodeView = Backbone.View.extend(
   /** @lends InsertUnicodesView.prototype */
   {
     /**
@@ -39,16 +39,6 @@ define([
       
       return this;
     },
-    /**
-     * Change the model's state.
-     */
-//    updateUnicode : function() {
-//      Utils.debug("Updated unicode to " + this.$el.children(".insert-unicode-input").val());
-//      this.model.set("insertUnicode", this.$el.children(".insert-unicode-input").val());
-//    },
- 
-    
   });
-
-  return InsertUnicodesView;
+  return InsertUnicodeView;
 });

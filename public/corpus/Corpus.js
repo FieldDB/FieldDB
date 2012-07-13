@@ -175,7 +175,8 @@ define([
         
       }//end if to set sessionFields
       
-      if(typeof(this.get("comments")) == "function"){
+      // If there are no comments, give it a new one
+      if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
       
@@ -211,7 +212,7 @@ define([
       sessions : Sessions, 
       dataLists : DataLists, 
       permissions : Permissions,
-      comments: Comments,
+//      comments: Comments,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
       
     },
