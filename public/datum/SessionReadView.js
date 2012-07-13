@@ -1,6 +1,9 @@
 define([
     "backbone", 
     "handlebars", 
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -8,6 +11,9 @@ define([
 ], function(
     Backbone,
     Handlebars, 
+    Comment,
+    Comments,
+    CommentEditView,
     DatumFieldReadView,
     Session,
     UpdatingCollectionView
@@ -38,6 +44,8 @@ define([
      * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
+      //Add button inserts new Comment
+      "click .add-comment" : 'insertNewComment',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -122,6 +130,14 @@ define([
     //bound to book
     showEditable :function() {
       window.app.router.showEditableSession();
+    }, 
+    
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+      });
+      this.model.get("comments").add(m);
     }
   });
   
