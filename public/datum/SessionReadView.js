@@ -32,6 +32,9 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
+      
+      this.changeViewsOfInternalModels();
+      
       this.model.bind('change', this.changeViewsOfInternalModels, this);
     },
 
@@ -91,7 +94,11 @@ define([
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
-          this.sessionFieldsView.render();
+          this.sessionFieldsView.render(); 
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
+         
         } else if (this.format == "leftSide") {
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -100,15 +107,21 @@ define([
           };
           
           this.setElement("#session-quickview");
-          $(this.el).html(this.templateSummary(jsonToRender));
+          $(this.el).html(this.templateSummary(jsonToRender)); 
+          
         } else if (this.format == "fullscreen") {
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
+          
         } else if (this.format == "link") {
           $(this.el).html(this.templateLink(this.model.toJSON()));
+          
         } else {
           throw("You have not specified a format that the SessionReadView can understand.");
         }
@@ -125,6 +138,13 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "session"
       });
+      
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });     
+      
     },
     
     //functions associated with corner icons
@@ -140,7 +160,8 @@ define([
     showEditable :function() {
       window.app.router.showEditableSession();
     }, 
-    
+ 
+    //TODO this function to be rewritten 
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({

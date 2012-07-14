@@ -2,9 +2,9 @@ define([
     "backbone", 
     "handlebars", 
     "corpus/Corpus",
-//    "comment/Comment",
-//    "comment/Comments",
-//    "comment/CommentEditView",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
@@ -22,9 +22,9 @@ define([
     Backbone, 
     Handlebars, 
     Corpus,
-//    Comment,
-//    Comments,
-//    CommentEditView,
+    Comment,
+    Comments,
+    CommentEditView,
     DataLists,
     DataListReadView,
     DatumFieldReadView,
@@ -131,8 +131,8 @@ define([
         
 
         // Display the CommentEditView
-//        this.commentEditView.el = this.$('.comments');
-//        this.commentEditView.render();
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
 
         
         // Display the UpdatingCollectionView
@@ -169,6 +169,10 @@ define([
         
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();
+
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -197,6 +201,13 @@ define([
       return this;
     },
     changeViewsOfInternalModels : function(){
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+      
       // Create a list of DataLists
       this.dataListsView = new UpdatingCollectionView({
         collection : this.model.get("dataLists"),
@@ -268,15 +279,18 @@ define([
      
     },
     
-//This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
-        console.log("I'm a new comment!");
-      var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
+    //TODO this function needs to mean "save" ie insert new comment in the db, not add an empty comment on the screen. 
+//  this a confusion of the pattern in the datumfilds view where exsting fields are in the  updating collection (just 
+//  like extisting comments are in the updating collection) and there is a blank one in the 
+//  corpus_edit_embedded corpus_edit_fullscreen handlebars
 
-      });
-      this.model.get("comments").add(m);
-    },
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+  insertNewComment : function() {
+    var m = new Comment({
+  //      "label" : this.$el.children(".comment_input").val(),
+   });
+    this.model.get("comments").add(m);
+  },
     
     
      resizeSmall : function(){
