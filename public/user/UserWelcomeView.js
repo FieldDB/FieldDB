@@ -184,6 +184,11 @@ define([
               $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
               $(".alert-error").show();
             } else if (data.user) {
+              $(".alert-error").html("Preparing your first corpus/database for you." );
+              $(".alert-error").addClass("alert-success");
+              $(".alert-error").removeClass("alert-error");
+              $(".alert-error").show();
+
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
                * dismiss modal
@@ -268,7 +273,7 @@ define([
                         },10000);
                         
                       });
-                    }, 5000);
+                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
                     console.log("Loadded app for a new user.");
                   });
                   $('#user-welcome-modal').modal("hide");
@@ -305,6 +310,10 @@ define([
           $(".alert-error").show();
           $('#user-welcome-modal').modal("show");
         }else{
+          $(".alert-error").html("Syncing your data to this tablet/laptop." );
+          $(".alert-error").addClass("alert-success");
+          $(".alert-error").removeClass("alert-error");
+          $(".alert-error").show();
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
             $('#user-welcome-modal').modal("hide");
             window.startApp(a, function(){
