@@ -317,21 +317,24 @@ define([
 
                       },
                       error : function(e) {
-                        Utils.debug('Corpus save error' + e);
+                        Utils.debug('Corpus save error' );
+                        Utils.debug(e);
                         hub.publish("saveFailedToPouch","corpus");
                       }
                     });
                   });
                 },
                 error : function(e) {
-                  Utils.debug('Datalist save error' + e);
+                  Utils.debug('Datalist save error');
+                  Utils.debug(e);
                   hub.publish("saveFailedToPouch","datalist");
                 }
               });
             });
           },
           error : function(e) {
-            Utils.debug('Session save error' + e);
+            Utils.debug('Session save error' );
+            Utils.debug(e);
             hub.publish("saveFailedToPouch","session");
           }
         });
