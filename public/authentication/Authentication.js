@@ -1,10 +1,12 @@
 define([
     "backbone", 
+    "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
     "libs/Utils" 
 ], function(
     Backbone, 
+    Confidential,
     User,
     UserMask
 ) {
@@ -32,6 +34,12 @@ define([
       this.bind('error', function(model, error) {
         Utils.debug("Error in Authentication  : " + error);
       });
+      if(!this.get("confidential")){
+        this.set("confidential", new Confidential());
+        if(Utils.getCookie("token")){
+          this.get("confidential").set("secretkey", Utils.getCookie("token")); //TODO store the token somewhere safer
+        }
+      }
     },
 
     defaults : {
@@ -42,7 +50,8 @@ define([
     // Internal models: used by the parse function
     model : {
       userPrivate : User,
-      userPublic : UserMask
+      userPublic : UserMask,
+      confidential :  Confidential
     },
 
     staleAuthentication: true,
@@ -126,6 +135,20 @@ define([
       if (typeof callback == "function") {
         callback("true"); //tell caller that the user succeeded to authenticate
       }
+      Utils.setCookie("username", data.user.username, 365);
+      Utils.setCookie("token", data.user.hash, 365);
+      this.get("confidential").set("secretkey", data.user.hash);
+      this.saveAndEncryptUserToLocalStorage();
+    },
+    loadEncryptedUser : function(encryptedUserString, callback){
+      var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
+      var data = {};
+      data.user = u;
+      this.saveServerResponseToUser(data, callback);
+    },
+    saveAndEncryptUserToLocalStorage : function(){
+      var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
+      localStorage.setItem("encryptedUser", u);
     },
     /**
      * This function uses the quick authentication view to get the user's
