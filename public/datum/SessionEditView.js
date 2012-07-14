@@ -111,6 +111,7 @@ define([
         Utils.debug("SESSION is undefined, come back later.");
         return this;
       }
+      
       try{
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
           Utils.debug("SESSION fields are undefined, come back later.");
@@ -125,6 +126,7 @@ define([
           // Display the CommentEditView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
+          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -134,6 +136,7 @@ define([
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
+          
         } else if (this.format == "fullscreen") {
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(this.model.toJSON()));
@@ -143,6 +146,7 @@ define([
           // Display the CommentEditView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
+          
         } else if (this.format == "modal") {
           this.setElement("#session-modal");
           this.$el.html(this.templateModal(this.model.toJSON()));
