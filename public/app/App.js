@@ -64,6 +64,11 @@ define([
       if (!this.get("authentication")) {
         this.set("authentication", new Authentication());
       }
+      
+      window.onbeforeunload = this.saveAllStateBeforeUserLeaves;
+      localStorage.setItem("saveStatus", "Not Saved");
+
+      
     },
     
     defaults : {
@@ -210,7 +215,12 @@ define([
       
     },
     router : AppRouter,
-    
+    /**
+     * This function is used to save the entire app state that is needed to load when the app is re-opened.
+     */
+    saveAllStateBeforeUserLeaves : function(e){
+      localStorage.setItem("saveStatus", "Saving...");
+    },
     /**
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync
      * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
