@@ -10,7 +10,7 @@
 }
 
 .grav{
-	height: 30px;
+	width: 30px;
 }
 
 .login{
@@ -79,8 +79,16 @@
 }
 
 .icons{
-	font-size: 20px;
-	margin: 3px;
+	font-size: 1.5em;
+	line-height: 2em !important;
+}
+
+.icon-white {
+  color: #bbb;
+}
+
+.navbar :hover {
+  color: #fff ;
 }
 
 textarea{
@@ -191,8 +199,6 @@ textarea{
 	line-height: 2em;
 	text-align:center;
 }
-
-
 
 .nowrap{
 	  white-space: nowrap;

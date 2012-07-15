@@ -1,19 +1,52 @@
 <!-- Black Navigation Bar Across the Top -->
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
-		<div class="container-fluid">
+		<div class="container">
 			<div class="btn-group pull-right">
 				<ul class="nav">
-					<li><a> <i class="icons icon-home"></i>
-					</a></li>
-					<li><a> <i class="icons icon-refresh icon-white"></i>
-					</a></li>
+					<li><i class="icons icon-home icon-white"></i>
+					</li>
+				  <li>
+					  <div class="btn-group">
+						  <button class="btn dropdown-toggle btn-inverse"
+		            data-toggle="dropdown">
+		            Need save:
+		            <progress class="unsaved-changes" max="100" value="30">
+		              <strong>60% unsaved.</strong>
+		            </progress>
+		            <span class="caret"></span>
+		          </button>
+		          <ul class="dropdown-menu unsaved-changes-status" id="unsaved-changes-status">
+		            <li class="not-a">Recent Changes:</li>
+		          </ul>
+	          </div>
+				  </li>
+				  <li> <i class="icons icon-save icon-white"></i>
+          </li>
+          <li>
+				    <div class="btn-group">
+					  <button class="btn dropdown-toggle btn-inverse"
+	            data-toggle="dropdown">
+	            Need sync: 
+	            <progress class="unsaved-changes" max="100" value="80">
+	              <strong>60% unsaved.</strong>
+	            </progress>
+	            <span class="caret"></span>
+	          </button>
+	          <ul class="dropdown-menu unsynced-changes-status" id="unsynced-changes-status">
+	            <li class="not-a">Differences with the central server:</li>
+	          </ul>
+	          </div>
+				  </li>
+					<li> <i class="icons icon-sitemap icon-white"></i>
+					</li>
+					<li><span id="user-quickview"><i
+              class="icons icon-user icon-white"></i></span>
+					</li>
 					<li>
 						<div class="btn-group">
-							<button class=" btn btn-inverse dropdown-toggle nowrap"
-								data-toggle="dropdown">
-								<span id="user-quickview"><i
-									class="icons icon-user icon-white"></i></span>  <span class="caret"></span> 
+							<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"> 
+								 <span class="caret"></span>  
 							</button>
 							<ul class="dropdown-menu" id="authentication-embedded"></ul>
 						</div>
@@ -23,33 +56,6 @@
 			<div>
 				<!-- This is a div for the top nav bar area -->
 				<span id="search-top" class="search"></span> 
-				<span
-					>
-					<button class="btn dropdown-toggle btn-inverse"
-						data-toggle="dropdown">
-						Need save:
-						<progress class="unsaved-changes" max="100" value="30">
-							<strong>60% unsaved.</strong>
-						</progress>
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" id="unsaved-changes-status">
-						<li>Recent Changes:</li>
-					</ul>
-					</span>
-					<span>
-					<button class="btn dropdown-toggle btn-inverse"
-						data-toggle="dropdown">
-						Need sync: 
-						<progress class="unsaved-changes" max="100" value="80">
-							<strong>60% unsaved.</strong>
-						</progress>
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" id="unsynced-changes-status">
-						<li>Differences with the central server:</li>
-					</ul>
-				</span>
 			</div>
 		</div>
 	</div>
