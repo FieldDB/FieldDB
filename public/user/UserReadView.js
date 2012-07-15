@@ -120,7 +120,7 @@ define([
           "gravatar" : "./../user/public_gravatar.png",
           "prefs" : oldprefs,
         });
-//      var n = new Corpus({title: "test corpus filled in userview", titleAsUrl: "test"});
+//      var n = new Corpus({title: "test corpus filled in userView", titleAsUrl: "test"});
 //      this.model.get("corpuses").push(n.id);
 //      var d = new DataList({});
 //      this.model.get("dataLists").push(d.id); 

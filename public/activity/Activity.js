@@ -1,9 +1,9 @@
 define([ 
     "backbone",
-    "user/User" 
+    "user/UserMask" 
 ], function(
     Backbone, 
-    User
+    UserMask
 ) {
   var Activity = Backbone.Model.extend(
   /** @lends Activity.prototype */
@@ -18,10 +18,12 @@ define([
      * @constructs
      */
     initialize : function() {
+      if(!this.get("user")) {
+        this.set("user", appView.authView.model.get("userPublic"));
+      }
     },
     
     defaults : {
-      user : User,
       verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
       verb : "added",
       directobject : "an entry",
@@ -31,7 +33,7 @@ define([
     
     // Internal models: used by the parse function
     model : {
-      user : User
+      user : UserMask
     },
     
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
