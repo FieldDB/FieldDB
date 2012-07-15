@@ -1,6 +1,7 @@
 define([ 
     "backbone", 
     "handlebars",
+    "activity/Activity",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -23,6 +24,7 @@ define([
 ], function(
     Backbone, 
     Handlebars,
+    Activity,
     Corpus,
     Comment,
     Comments,
@@ -267,6 +269,14 @@ define([
       $("#session-modal").modal("show");
       //Save the current session just in case
       window.app.get("currentSession").save();
+      window.appView.activityFeedView.model.get("activities").add(
+          new Activity({
+            verb : "added",
+            directobject : "a session",
+            indirectobject : "in "+window.app.get("corpus").get("title"),
+            context : "via Offline App",
+            user: window.app.get("authentication").get("userPublic")
+          }));
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
       window.appView.sessionModalView.model = window.app.get("currentSession").clone();
       //Give it a null id so that pouch will save it as a new model.
