@@ -1,14 +1,20 @@
 define( [ 
     "backbone", 
-	  "handlebars",
-  	"data_list/DataList",
-	  "datum/Datum",
+	"handlebars",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
+	"data_list/DataList",
+	"datum/Datum",
   	"datum/DatumReadView",
-	  "datum/Datums",
+	"datum/Datums",
   	"app/UpdatingCollectionView"
 ], function(
     Backbone, 
     Handlebars, 
+    Comment,
+    Comments,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -42,6 +48,13 @@ define( [
         });
       }
       
+      // Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentEditView,
+        childViewTagName     : 'li'
+      });
+      
       // Remove options
       delete this.model.collection;
     },
@@ -55,6 +68,9 @@ define( [
      * Events that the DataListReadView is listening to and their handlers.
      */
     events : {
+      //Add button inserts new Comment
+      "click .add-comment" : 'insertNewComment',
+      
       'click a.servernext': 'nextResultPage',
       'click .serverhowmany a': 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
@@ -88,6 +104,7 @@ define( [
         // Display the Data List
         this.setElement($("#data-list-link"));
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
+      
       } else if (this.format == "leftSide") {
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
@@ -98,7 +115,13 @@ define( [
           
         // Display the pagination footer
         this.renderUpdatedPagination();
+      
       } else if (this.format == "fullscreen") {
+        
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
+
         // Display the Data List
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -109,9 +132,14 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+      
       } else if(this.format == "middle") {
         this.setElement($("#new-data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+      
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -200,7 +228,17 @@ define( [
     //bound to pencil button
     showEditable :function(){
       window.app.router.showEditableDataList();
-    }
+    },
+    
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
+    },
   });
 
   return DataListReadView;
