@@ -10,7 +10,7 @@
 }
 
 .grav{
-	height: 30px;
+	width: 30px;
 }
 
 .login{
@@ -79,8 +79,16 @@
 }
 
 .icons{
-	font-size: 20px;
-	margin: 3px;
+	font-size: 1.5em;
+	line-height: 2em !important;
+}
+
+.icon-white {
+  color: #bbb;
+}
+
+.navbar :hover {
+  color: #fff ;
 }
 
 textarea{
@@ -190,4 +198,53 @@ textarea{
 .unicode-buttons{
 	line-height: 2em;
 	text-align:center;
+}
+
+.nowrap{
+	  white-space: nowrap;
+}
+
+
+/*
+ * Gradient Shadow HTML5 progress bars 
+ http://www.useragentman.com/blog/2012/01/03/cross-browser-html5-progress-bars-in-depth/
+ */
+
+/* All HTML5 progress enabled browsers */
+progress.unsaved-changes {
+  /* Turns off styling - not usually needed, but good to know. */
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  /* gets rid of default border in Firefox and Opera. */
+  border: solid #333 1px;
+  border-radius: 5px;
+  /* Dimensions */
+  width: 10em;
+  height: 1em;
+}
+
+
+/* Chrome */
+progress.unsaved-changes::-webkit-progress-bar {
+  background: #333;
+}
+
+/*
+ * Background of the progress bar value
+/* Chrome */
+progress.unsaved-changes::-webkit-progress-value {
+  border-radius: 5px;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(120,100,4)),
+    color-stop(1, rgb(248,148,5))
+  );
+  background-image: -webkit-linear-gradient(
+    center bottom,
+    rgb(120,100,4) 37%,
+    rgb(248,148,5) 69%
+  );
 }
