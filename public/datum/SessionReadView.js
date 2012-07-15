@@ -109,6 +109,7 @@ define([
           this.sessionFieldsView.render();
         } else if (this.format == "link") {
           var jsonToRender = {
+              _id : this.model.get("_id"),
               goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
               consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
               dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
