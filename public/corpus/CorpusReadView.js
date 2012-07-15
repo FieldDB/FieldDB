@@ -35,7 +35,7 @@ define([
     PermissionReadView,
     Session,
     Sessions,
-    SessionView,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -175,15 +175,15 @@ define([
         this.datumStatesView.render();
 
         // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists'); 
+        this.dataListsView.el = this.$('.datalists-updating-collection'); 
         this.dataListsView.render();
          
         // Display the SessionsView
-        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.el = this.$('.sessions-updating-collection'); 
         this.sessionsView.render();
         
         // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions');
+        this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();
 
 
@@ -236,7 +236,7 @@ define([
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
          collection : this.model.get("sessions"),
-         childViewConstructor : SessionView,
+         childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
          childViewFormat      : "link"  
        });
