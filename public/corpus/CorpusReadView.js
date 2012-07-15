@@ -35,7 +35,7 @@ define([
     PermissionReadView,
     Session,
     Sessions,
-    SessionView,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -74,10 +74,10 @@ define([
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
-      "click .new_datum_edit" : "newDatum",
-      "click .data-list-embedded" : "newDataList",
-      "click .new_session" : "newSession",
-      "click .new_corpus" : "newCorpus",
+      "click .new-datum" : "newDatum",
+      "click .new-data-list" : "newDataList",
+      "click .new-session" : "newSession",
+      "click .new-corpus" : "newCorpus",
     },
     
     /**
@@ -179,15 +179,15 @@ define([
         this.datumStatesView.render();
 
         // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists'); 
+        this.dataListsView.el = this.$('.datalists-updating-collection'); 
         this.dataListsView.render();
          
         // Display the SessionsView
-        this.sessionsView.el = this.$('.sessions'); 
+        this.sessionsView.el = this.$('.sessions-updating-collection'); 
         this.sessionsView.render();
         
         // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions');
+        this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();
 
 
@@ -247,7 +247,7 @@ define([
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
          collection : this.model.get("sessions"),
-         childViewConstructor : SessionView,
+         childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
          childViewFormat      : "link"  
        });
