@@ -578,6 +578,7 @@ define([
     setTotalPouchDocs: function(numberOfTotalDocs){
       if(!numberOfTotalDocs){
         //TODO ask pouch how many docs there are?
+        numberOfTotalDocs = 100;
       }
       this.totalPouchDocs = numberOfTotalDocs;
       $(".unsynced-changes").attr("max", this.totalPouchDocs);
@@ -585,6 +586,7 @@ define([
     setTotalBackboneDocs: function(numberOfTotalDocs){
       if(!numberOfTotalDocs){
         //TODO ask backbone how many docs there are?
+        numberOfTotalDocs = 100;
       }
       this.totalBackboneDocs = numberOfTotalDocs;
       $(".unsaved-changes").attr("max", this.totalBackboneDocs);
