@@ -23,22 +23,26 @@ define([
      */
     initialize : function() {
       Utils.debug("ACTIVITY VIEW init");
+      this.userView = new UserReadView({
+        model : this.model.get("user")
+      });
+      this.userView.format = "link";
 
+      
     },
 
     model : Activity,
     
-    userview : UserReadView,
-    
+    userView : UserReadView,
+       
     classname : "activity",
     
-    template : Handlebars.template.activity,
+    template : Handlebars.templates.activity,
     
     render : function() {
-      Handlebars.registerPartial("user", this.userview
-          .template(this.userview.model.toJSON()));
-
       $(this.el).html(this.template(this.model.toJSON()));
+      this.userView.setElement(this.$(".activity-feed-user-link"));
+      this.userView.render();
       
       return this;
     }
