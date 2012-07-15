@@ -26,9 +26,28 @@
           </li>
         </ul>
       </div>
-      <div id="search-top" class="search"></div>
-    </div>
-  </div>
+      <div ><!-- This is a div for the top nav bar area -->
+	      <span id="search-top" class="search"></span>
+	      <span class="save-and-sync-status-area">
+						<button class="btn dropdown-toggle btn-inverse"
+              data-toggle="dropdown">Need save:<span class="caret"></span>
+						<progress class="unsaved-changes" max="100" value="30">
+							<strong>60% unsaved.</strong>
+						</progress></button>
+						<ul class="dropdown-menu" id="unsaved-changes-status">
+						<li>Recent Changes:</li>
+						</ul>
+						<button class="btn dropdown-toggle btn-inverse"
+              data-toggle="dropdown">Need save:<span class="caret"></span>
+            <progress class="unsaved-changes" max="100" value="30">
+              <strong>60% unsaved.</strong>
+            </progress></button>
+            <ul class="dropdown-menu" id="unsaved-changes-status">
+            <li>Differences with the central server:</li>
+            </ul>
+	      </span>
+			</div>
+		</div>
 </div>
 <!-- The rest of the page -->
 <div  class="container-fluid main">
