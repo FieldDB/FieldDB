@@ -552,7 +552,44 @@ define([
       }
       e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
       return false;
+    },
+    
+    /**
+     * Helper functions to modify the status bars for unsaved and unsynced info
+     */
+    totalUnsaved: 0,
+    totalUnsynced: 0,
+    totalPouchDocs: 0,
+    totalBackboneDocs: 0,
+    addUnsavedDoc : function(numberOfUnsavedItems){
+      if(!numberOfUnsavedItems){
+        numberOfUnsavedItems = 1;
+      }
+      this.totalUnsaved += numberOfUnsavedItems;
+      $(".unsaved-changes").val(this.totalUnsaved);
+    },
+    addUnsyncedDoc : function(numberOfUnsyncedItems){
+      if(!numberOfUnsyncedItems){
+        numberOfUnsyncedItems = 1;
+      }
+      this.totalUnsynced += numberOfUnsyncedItems;
+      $(".unsynced-changes").val(this.totalUnsynced);
+    },
+    setTotalPouchDocs: function(numberOfTotalDocs){
+      if(!numberOfTotalDocs){
+        //TODO ask pouch how many docs there are?
+      }
+      this.totalPouchDocs = numberOfTotalDocs;
+      $(".unsynced-changes").attr("max", this.totalPouchDocs);
+    },
+    setTotalBackboneDocs: function(numberOfTotalDocs){
+      if(!numberOfTotalDocs){
+        //TODO ask backbone how many docs there are?
+      }
+      this.totalBackboneDocs = numberOfTotalDocs;
+      $(".unsaved-changes").attr("max", this.totalBackboneDocs);
     }
+    
     
   });
 

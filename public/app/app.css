@@ -82,11 +82,9 @@
 	font-size: 1.5em;
 	line-height: 2em !important;
 }
-
 .icon-white {
   color: #bbb;
 }
-
 .navbar :hover {
   color: #fff ;
 }
@@ -211,7 +209,7 @@ textarea{
  */
 
 /* All HTML5 progress enabled browsers */
-progress.unsaved-changes {
+.navbar progress {
   /* Turns off styling - not usually needed, but good to know. */
   appearance: none;
   -moz-appearance: none;
@@ -226,14 +224,14 @@ progress.unsaved-changes {
 
 
 /* Chrome */
-progress.unsaved-changes::-webkit-progress-bar {
+.navbar progress::-webkit-progress-bar {
   background: #333;
 }
 
 /*
  * Background of the progress bar value
 /* Chrome */
-progress.unsaved-changes::-webkit-progress-value {
+.navbar progress::-webkit-progress-value {
   border-radius: 5px;
   background-image: -webkit-gradient(
     linear,
