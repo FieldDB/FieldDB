@@ -238,7 +238,7 @@ define( [
 
       });
       this.model.get("comments").add(m);
-    },
+    }
   });
 
   return DataListReadView;

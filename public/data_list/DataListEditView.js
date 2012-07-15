@@ -447,7 +447,7 @@ define( [
 
       });
       this.model.get("comments").add(m);
-    },
+    }
     
   });
 
