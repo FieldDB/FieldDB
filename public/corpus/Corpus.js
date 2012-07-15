@@ -216,7 +216,6 @@ define([
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      dataLists : DataLists,
       sessions : Sessions, 
       dataLists : DataLists, 
       permissions : Permissions,

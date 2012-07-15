@@ -1,6 +1,7 @@
 define([ 
     "backbone", 
     "handlebars",
+    "activity/Activity",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -23,6 +24,7 @@ define([
 ], function(
     Backbone, 
     Handlebars,
+    Activity,
     Corpus,
     Comment,
     Comments,
@@ -39,7 +41,7 @@ define([
     PermissionEditView,
     Session,
     Sessions,
-    SessionView,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var CorpusEditView = Backbone.View.extend(
@@ -91,10 +93,10 @@ define([
       "click .icon-resize-full" : "resizeFullscreen",
       
       //corpus menu buttons
-      "click .new_datum_edit" : "newDatum",
-      "click .data-list-embedded" : "newDataList",
-      "click .new_session" : "newSession",
-      "click .new_corpus" : "newCorpus",
+      "click .new-datum" : "newDatum",
+      "click .new-data-list" : "newDataList",
+      "click .new-session" : "newSession",
+      "click .new-corpus" : "newCorpus",
       
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
@@ -135,15 +137,15 @@ define([
           this.commentEditView.render();
           
           // Display the DataListsView
-         this.dataListsView.el = this.$('.datalists'); 
+         this.dataListsView.el = this.$('.datalists-updating-collection'); 
          this.dataListsView.render();
           
          // Display the SessionsView
-         this.sessionsView.el = this.$('.sessions'); 
+         this.sessionsView.el = this.$('.sessions-updating-collection'); 
          this.sessionsView.render();
          
          // Display the PermissionsView
-         this.permissionsView.el = this.$('.permissions');
+         this.permissionsView.el = this.$('.permissions-updating-collection');
          this.permissionsView.render();
          
           // Display the DatumFieldsView
@@ -176,7 +178,6 @@ define([
         // Display the PermissionsView
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();
-
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -221,7 +222,7 @@ define([
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
          collection : this.model.get("sessions"),
-         childViewConstructor : SessionView,
+         childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
          childViewFormat      : "link"  
        });
@@ -268,6 +269,14 @@ define([
       $("#session-modal").modal("show");
       //Save the current session just in case
       window.app.get("currentSession").save();
+      window.appView.activityFeedView.model.get("activities").add(
+          new Activity({
+            verb : "added",
+            directobject : "a session",
+            indirectobject : "in "+window.app.get("corpus").get("title"),
+            context : "via Offline App",
+            user: window.app.get("authentication").get("userPublic")
+          }));
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
       window.appView.sessionModalView.model = window.app.get("currentSession").clone();
       //Give it a null id so that pouch will save it as a new model.
