@@ -230,8 +230,8 @@ define([
       //TODO, this doesn't work.
       //this.storeCurrentDashboardIdsToLocalStorage();
       
-      return "We will attempt to save your dashboard to your computer. \n\n"
-      +"If you want backup/share your data with your collaborators click Cancel, then click the Sync button.\n\n"
+      return "You have unsaved changes, click cancel to save them. \n\n"
+      +"You have unbacked up data. \n\nIf you want backup/share your data with your collaborators click Cancel, then click the Sync button.\n\n"
       +"Your data currently saved on your local tablet/laptop only.";
     },
     /**
@@ -250,8 +250,6 @@ define([
        * Turn on pub sub to find out when all three have saved, then call the callback
        */
       var thiscallback = callback;
-      window.hub.unsubscribe("savedToPouch", null, this);
-      window.hub.unsubscribe("saveFailedToPouch", null, this);
       
       this.savedcount = 0;
       this.savefailedcount = 0;
@@ -339,6 +337,8 @@ define([
           }
         });
       });
+      window.hub.unsubscribe("savedToPouch", null, this);
+      window.hub.unsubscribe("saveFailedToPouch", null, this);
       localStorage.setItem("saveStatus", "Saving in unload...end store function");
 
       return "Returning before the save is done.";
