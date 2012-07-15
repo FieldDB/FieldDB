@@ -318,7 +318,8 @@ define([
         window.hub.publish("quickAuthenticationClose","no message");
       },
       "click .icon-home" : function() {
-        this.model.router.showDashboard();
+//        this.model.router.showDashboard();
+        window.location.href = "#";
       }
     },
     

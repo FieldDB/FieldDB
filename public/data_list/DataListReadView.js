@@ -86,7 +86,6 @@ define( [
     render : function() {
       if (this.format == "link") {
         // Display the Data List
-        this.setElement($("#data-list-link"));
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
       } else if (this.format == "leftSide") {
         this.setElement($("#data-list-embedded"));
@@ -119,6 +118,8 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+      } else {
+        throw("You have not specified a format that the SessionReadView can understand.");
       }
       
       return this;
