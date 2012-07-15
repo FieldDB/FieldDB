@@ -91,10 +91,10 @@ define([
       "click .icon-resize-full" : "resizeFullscreen",
       
       //corpus menu buttons
-      "click .new_datum_edit" : "newDatum",
-      "click .data-list-embedded" : "newDataList",
-      "click .new_session" : "newSession",
-      "click .new_corpus" : "newCorpus",
+      "click .new-datum" : "newDatum",
+      "click .new-data-list" : "newDataList",
+      "click .new-session" : "newSession",
+      "click .new-corpus" : "newCorpus",
       
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
