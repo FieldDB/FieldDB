@@ -286,10 +286,11 @@ define([
                 new Activity({
                   verb : "synced",
                   directobject : window.app.get("corpus").get("title"),
-                  indirectobject : "to their team server",
+                  indirectobject : "with their team server",
                   context : "via Offline App",
                   user: window.app.get("authentication").get("userPublic")
                 }));
+            window.appView.activityFeedView.model.replicateActivityFeed();
           });
         });
       });
