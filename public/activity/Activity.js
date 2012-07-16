@@ -21,7 +21,15 @@ define([
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
       }
-      this.set("timestamp",JSON.stringify(new Date()) );
+      if(!this.get("timestamp")){
+        this.set("timestamp",JSON.stringify(new Date()) );
+      }
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
+          : Utils.activityFeedPouchUrl);
+      
+      if(this.isNew()){
+        this.save();
+      }
     },
     
     defaults : {
@@ -38,6 +46,7 @@ define([
       user : UserMask
     },
     
+    //TODO getting error  has no method 'pouch' when this is specified in the initialize
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
 //        : Utils.activityFeedPouchUrl),
         
