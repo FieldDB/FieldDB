@@ -6,6 +6,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentEditView",
+    "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumField",
@@ -29,6 +30,7 @@ define([
     Comment,
     Comments,
     CommentEditView,
+    DataList,
     DataLists,
     DataListReadView,
     DatumField,
@@ -384,18 +386,19 @@ define([
       var self = this;
       if(this.model.id == undefined){
         this.model.set("corpusname", window.app.get("authentication").get("userPrivate").get("username")
-          +"-"+encodeURIComponent(this.model.get("title").replace(/ /g,"")) );
+          +"-"+encodeURIComponent(this.model.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) );
         this.model.get("couchConnection").corpusname = window.app.get("authentication").get("userPrivate").get("username")
-          +"-"+encodeURIComponent(this.model.get("title").replace(/ /g,"")) ;
+          +"-"+encodeURIComponent(this.model.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
       }
-      this.model.changeCorpus(this.model.get("corpusname"),function(){
+      this.model.changeCorpus(window.app.get("authentication").get("userPrivate").get("username")
+          +"-"+encodeURIComponent(this.model.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")), function(){
         self.model.save(null, {
           success : function(model, response) {
             Utils.debug('Corpus save success');
-            try{
+//            try{
               if(window.app.get("corpus").id != model.id){
                 //add corpus to user
-                this.model.set("titleAsUrl", encodeURIComponent(this.model.get("title")));
+                model.set("titleAsUrl", encodeURIComponent(model.get("title")));
                 window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
                 window.appView.activityFeedView.model.get("activities").add(
                     new Activity({
@@ -406,8 +409,11 @@ define([
                       user: window.app.get("authentication").get("userPublic")
                     }));
                 //create the first session and datalist for this corpus.
-                var s = new Session(); //MUST be a new model, other wise it wont save in a new pouch.
-                s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") );
+                var s = new Session({
+                  corpusname : model.get("corpusname"),
+                  sessionFields : model.get("sessionFields").clone()
+                }); //MUST be a new model, other wise it wont save in a new pouch.
+                s.get("sessionFields").where({label: "user"})[0].set("value", window.app.get("authentication").get("userPrivate").get("username") );
                 s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
                 s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
                 s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
@@ -418,7 +424,8 @@ define([
                 app.set("currentSession", s);//TODO this will probably require the appView to reinitialize.
                 window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
 
-                var dl = new DataList(); //MUST be a new model, other wise it wont save in a new pouch.
+                var dl = new DataList({
+                  corpusname : model.get("corpusname")}); //MUST be a new model, other wise it wont save in a new pouch.
                 dl.set({
                   "title" : "Default Data List",
                   "dateCreated" : (new Date()).toDateString(),
@@ -442,9 +449,9 @@ define([
               }
               window.app.set("corpus", model);
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
-            }catch(e){
-              Utils.debug("Couldnt save the corpus somewhere"+e);
-            }
+//            }catch(e){
+//              Utils.debug("Couldnt save the corpus somewhere"+e);
+//            }
             if(this.format == "modal"){
               $("#new-corpus-modal").modal("hide");
               window.app.router.showFullscreenCorpus();
