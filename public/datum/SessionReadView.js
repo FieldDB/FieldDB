@@ -174,7 +174,7 @@ define([
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-        "text" : this.$el.find(".comment-text").val(),
+        "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
     }

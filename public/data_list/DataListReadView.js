@@ -48,15 +48,12 @@ define( [
         });
       }
       
-      // Create a CommentReadView     
-      this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
-      });
-      
+      this.changeViewsOfInternalModels();
+      this.model.bind('change', this.changeViewsOfInternalModels, this);
+
       // Remove options
       delete this.model.collection;
+      
     },
 
     /**
@@ -157,6 +154,15 @@ define( [
       return this;
     },
     
+    changeViewsOfInternalModels : function() {
+      // Create a CommentReadView     
+      this.commentReadView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentReadView,
+        childViewTagName     : 'li'
+      });
+    },
+ 
     /**
      * Re-calculates the pagination values and re-renders the pagination footer.
      */
@@ -239,7 +245,7 @@ define( [
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-        "text" : this.$el.find(".comment-text").val(),
+        "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
     }
