@@ -1,10 +1,11 @@
 
 <!-- This div aligns the title with the icons in the corner -->
 <div>
-	<div>
-		<i class="icons icon-resize-full pull-right"></i> 
-		<i	class="icons icon-book pull-right"></i>
-	</div>
+	<div class="pull-right">
+    <i class="icons icon-book"></i>
+    <spacer></spacer>
+    <i class="icons icon-resize-full"></i>
+  </div>
 	<div id="corpus-title">
 		<label>Title:</label>
 		<textarea class="corpus-title-input save-corpus-blur">{{title}}</textarea>
@@ -25,20 +26,20 @@
 				New <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
-				<li class="new_datum_edit"><a>New Datum</a></li>
-				<li><a class="data-list-embedded">New Data List</a></li>
-				<li><a class="new_session">New Session</a></li>
-				<li><a class="new_corpus">New Corpus</a></li>
-			</ul>
+	      <li class="new-datum"><a href="#">New Datum</a></li>
+	      <li class="new-data-list"><a href="#">New Data List</a></li>
+	      <li class="new-session"><a href="#">New Session</a></li>
+	      <li class="new-corpus"><a href="#">New Corpus</a></li>
+	    </ul>
 		</div>
 		<div>
 			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
 				Data <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
-				<li><a class="" href="#import">Import</a></li>
-				<li><a class="" href="#corpus/{{titleAsUrl}}/export">Export</a></li>
-			</ul>
+	      <li><a href="#import">Import Data</a></li>
+	      <li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
+	    </ul>
 		</div>
 	</div>
 </div>

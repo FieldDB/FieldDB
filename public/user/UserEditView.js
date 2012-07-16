@@ -52,7 +52,9 @@ define([
       "click #close_user_profile" : function() {
         console.log("hiding user profile");
         this.$el.modal("hide");
-      }
+      },
+      "click .save-user-profile" : "saveProfile"
+
     },
 
     /**
@@ -84,12 +86,20 @@ define([
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
       } else if(this.format == "modal") {
-        this.setElement($("#user-modal"));
+        this.setElement($("#user-edit-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }
 
         // Display the CorpusesView
 //        this.corpusesView.render();
+
+    },
+    saveProfile : function(){
+      Utils.debug("Saving session");
+      $("#user-edit-modal").modal("hide");
+      $("#user-modal").modal("show");
+      //  TODO actually save the user
+
 
     }
   });

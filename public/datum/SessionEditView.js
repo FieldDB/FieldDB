@@ -144,7 +144,7 @@ define([
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
         } else if (this.format == "modal") {
-          this.setElement("#session-modal");
+          this.setElement("#new-session-modal");
           this.$el.html(this.templateModal(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
@@ -173,7 +173,9 @@ define([
         childViewTagName     : 'li'
       });
     },
-    
+    /**
+     * creates a new session if the app's session id doesnt match this session's id after saving.
+     */
     updatePouch : function() {
       Utils.debug("Saving the Session");
       var self = this;
@@ -184,6 +186,14 @@ define([
             try{
               if(window.app.get("currentSession").id != model.id){
                 window.app.get("corpus").get("sessions").unshift(model);
+                window.appView.activityFeedView.model.get("activities").add(
+                    new Activity({
+                      verb : "added",
+                      directobject : "a session",
+                      indirectobject : "in "+window.app.get("corpus").get("title"),
+                      context : "via Offline App",
+                      user: window.app.get("authentication").get("userPublic")
+                    }));
               }
               window.app.set("currentSession", model);
               window.appView.renderEditableSessionViews();
@@ -203,7 +213,7 @@ define([
         });
       });
       if(this.format == "modal"){
-        $("#session-modal").modal("hide");
+        $("#new-session-modal").modal("hide");
       }
     },
     
@@ -233,7 +243,7 @@ define([
 //        "label" : this.$el.children(".comment_input").val(),
       });
       this.model.get("comments").add(m);
-    },
+    }
   });
   
   return SessionEditView;

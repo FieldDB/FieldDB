@@ -49,12 +49,15 @@ define( [
         });
       }
       
-      //Create a CommentEditView     
+      // Create a CommentEditView     
       this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
+      
+      // Remove options
+      delete this.model.collection;
 
       this.model.bind("change", this.showEditable, this);
     },
@@ -154,6 +157,14 @@ define( [
 
       return this;
     },
+    
+    // Clear the view of all its DatumReadViews
+    clearDataList : function() {
+      var coll = this.datumsView.collection; 
+      while (coll.length > 0) {
+        coll.pop();
+      }
+    },
 
     /**
      * Re-calculates the pagination values and re-renders the pagination footer.
@@ -187,6 +198,98 @@ define( [
         perPage : this.perPage,
         morePages : currentPage < totalPages
       };
+    },
+    
+    /**
+     * Create a permanent data list in the current corpus.
+     */
+    newDataList : function() {
+      // Clear the current data list
+      this.model.attributes = {};
+      this.model.set((new DataList()).toJSON());
+      this.model.set("datumIds", []);
+      this.model.set("corpusname", app.get("corpus").get("corpusname"));
+      
+      // Clear the view
+      app.get("corpus").get("datalists");
+      var coll = this.datumsView.collection;
+      while (coll.length > 0) {
+        coll.pop();
+      }
+      
+      // Display the new data list
+      appView.renderReadonlyDataListViews();
+      appView.renderEditableDataListViews();
+    },
+    
+    /**
+     * Add the given datum ID to the data list.
+     * Determine whether to add the Datum to the datumsView.
+     * Re-render.
+     * 
+     * @param {String} datumId The datumId of the Datum to add.
+     * @param {Boolean} addToTop If true, adds the new Datum to the top of
+     * the DataList. If it is false or undefined adds the new Datum to the 
+     * bottom of the DataList.
+     */
+    addOneDatumId : function(datumId, addToTop) {
+      if (addToTop) {
+        // Add it to the front of the model's list of datum ids
+        this.model.get("datumIds").unshift(datumId);
+        
+        // Fetch its model from the database
+        var d = new Datum({
+          corpusname : window.app.get("corpus").get("corpusname")
+        });
+        d.id = datumId;
+        var self = this;
+        d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+          d.fetch({
+            success : function(model, response) {
+              // Render at the top
+              self.datumsView.collection.add(model, {at:0});
+              
+              // Display the updated data list
+              appView.renderReadonlyDataListViews();
+              appView.renderEditableDataListViews();
+            }
+          });
+        });
+      } else {
+        // Add it to the back of the model's list of datum ids
+        this.model.get("datumIds").push(datumId);
+        
+        // If there is room on the current page
+        var numDatumCurrentlyDisplayed = this.datumsView.collection.length
+        if ((numDatumCurrentlyDisplayed == 0) || (numDatumCurrentlyDisplayed % this.perPage != 0)) {
+          // Fetch its model from the database
+          var d = new Datum({
+            corpusname : window.app.get("corpus").get("corpusname")
+          });
+          d.id = datumId;
+          var self = this;
+          d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+            d.fetch({
+              success : function(model, response) {
+                // If there is still room on the current page
+                var numDatumCurrentlyDisplayed = self.datumsView.collection.length
+                if ((numDatumCurrentlyDisplayed == 0) || (numDatumCurrentlyDisplayed % self.perPage != 0)) {
+                  // Render at the bottom
+                  self.datumsView.collection.add(model);
+                  
+                  // Display the updated data list
+                  appView.renderReadonlyDataListViews();
+                  appView.renderEditableDataListViews();
+                }
+              }
+            });
+          });
+        } else {
+          // Display the updated data list
+          appView.renderReadonlyDataListViews();
+          appView.renderEditableDataListViews();
+        }
+      }
     },
 
     /**

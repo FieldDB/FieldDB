@@ -1,34 +1,64 @@
 <!-- Black Navigation Bar Across the Top -->
 <div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <div class="btn-group pull-right">
-        <ul class="nav">
-          <li>
-            <a>
-              <i class="icons icon-home"></i>
-            </a>
+	<div class="navbar-inner">
+		<div class="container">
+			<div class="btn-group pull-right">
+				<ul class="nav">
+					<li><i class="icons icon-home icon-white"></i>
+					</li>
+				  <li>
+					  <div class="btn-group">
+						  <button class="btn dropdown-toggle btn-inverse"
+		            data-toggle="dropdown">
+		            Need save:
+		            <progress class="unsaved-changes" max="100" value="30">
+		              <strong>60% unsaved.</strong>
+		            </progress>
+		            <span class="caret"></span>
+		          </button>
+		          <ul class="dropdown-menu unsaved-changes-status" id="unsaved-changes-status">
+		            <li class="not-a">Recent Changes:</li>
+		          </ul>
+	          </div>
+				  </li>
+				  <li> <i class="icons icon-save icon-white"></i>
           </li>
           <li>
-            <a>
-              <i class="icons icon-refresh icon-white"></i>
-            </a>
-          </li>
-          <li>
-            <div class="btn-group">
-              <button class="btn dropdown-toggle btn-inverse"
-              data-toggle="dropdown">
-                <span id="user-quickview"><i class="icons icon-user icon-white"></i></span>
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" id="authentication-embedded"></ul>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div id="search-top" class="search"></div>
-    </div>
-  </div>
+				    <div class="btn-group">
+					  <button class="btn dropdown-toggle btn-inverse"
+	            data-toggle="dropdown">
+	            Need sync: 
+	            <progress class="unsynced-changes" max="100" value="80">
+	              <strong>60% unsaved.</strong>
+	            </progress>
+	            <span class="caret"></span>
+	          </button>
+	          <ul class="dropdown-menu unsynced-changes-status" id="unsynced-changes-status">
+	            <li class="not-a">Differences with the central server:</li>
+	          </ul>
+	          </div>
+				  </li>
+					<li> <i class="icons icon-sitemap icon-white"></i>
+					</li>
+					<li><span id="user-quickview"><i
+              class="icons icon-user icon-white"></i></span>
+					</li>
+					<li>
+						<div class="btn-group">
+							<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"> 
+								 <span class="caret"></span>  
+							</button>
+							<ul class="dropdown-menu" id="authentication-embedded"></ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<!-- This is a div for the top nav bar area -->
+				<span id="search-top" class="search"></span> 
+			</div>
+		</div>
+	</div>
 </div>
 <!-- The rest of the page -->
 <div  class="container-fluid main">
@@ -42,7 +72,7 @@
     <!--Elements in the middle (things that get hidden)  -->
     <div class="span6">
 			
-			<div id="datums-embedded" class="middle ">
+			<div id="datums-embedded" class="middle well">
 			  <div>Datums</div>
 			</div>
 			
@@ -67,8 +97,9 @@
     <!--/span-->
     <!-- right hand side -->
     <div class="span3">
-      <div id="activity-feed"  class="well sidebar-nav">Activity Feed</div>
-      <div id="insert-unicode"  class="well sidebar-nav">Insert Unicode</div>
+      <div id="insert-unicode"  class="well">Insert Unicode</div>
+            <div id="activity-feed"  class="well">Activity Feed</div>
+      
     </div>
   
     
@@ -92,7 +123,7 @@
 	<div id="data-list-fullscreen" class="well">
 		<div>Data List</div>
 	</div>
-	<div id="datum-container-fullscreen" class="">
+	<div id="datum-container-fullscreen" class="well">
 	  <div>Datum Container</div>
 	</div>
 	<div id="import-fullscreen" class="">
@@ -103,12 +134,14 @@
 
 
 <!-- Modals are windows which pop over the active app to take focus -->
-<div id="corpus-settings-modal" class="modal hide"></div>
 <div id="hotkey-settings-modal" class="modal hide"></div>
 <div id="user-modal" class="modal hide"></div>
+<div id="user-edit-modal" class="modal hide"></div>
+
 <div id="user-preferences-modal" class="modal hide"></div>
 <div id="export-modal" class="modal hide"></div>
-<div id="session-modal" data-backdrop="static" class="modal hide"></div>
+<div id="new-session-modal" data-backdrop="static" class="modal hide"></div>
+<div id="new-corpus-modal" data-backdrop="static" class="modal hide"></div>
 <div id="quick-authenticate-modal" data-backdrop="static" class="modal hide">
 <div class="modal-header">
   <h4>We need to make sure it's you...</h4>

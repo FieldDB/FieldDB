@@ -25,7 +25,7 @@ define([ "backbone",
          * @constructs
          */
         initialize : function() {
-          this.activityFeed = new UpdatingCollectionView({
+          this.activitiesView = new UpdatingCollectionView({
             collection           : this.model.get("activities"),
             childViewConstructor : ActivityView,
             childViewTagName     : 'li'
@@ -44,8 +44,8 @@ define([ "backbone",
           this.setElement($("#activity-feed"));
           $(this.el).html(this.template(this.model.toJSON()));
           
-          this.activityFeed.el = this.$('.activities');
-          this.activityFeed.render();
+          this.activitiesView.el = this.$('.activities-updating-collection');
+          this.activitiesView.render();
 
           return this;
         }

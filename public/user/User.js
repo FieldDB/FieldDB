@@ -48,6 +48,7 @@ define([
       if (!this.get("hotkeys")) {
         this.set("hotkeys", new HotKey());
       }
+      this.bind("change", this.checkPrefsChanged, this);
     },
     
     defaults : {
@@ -84,6 +85,14 @@ define([
       }
       
       return this.get("firstname") + " " + this.get("lastname");
+    },
+    checkPrefsChanged : function(){
+      try{
+        window.appView.userPreferenceView.model = this.get("prefs");
+        window.appView.userPreferenceView.render();
+      }catch(e){
+        
+      }
     }
   });
 

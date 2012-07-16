@@ -158,6 +158,33 @@ Utils.makePublisher = function(o) {
 };
 
 /**
+ * http://www.w3schools.com/js/js_cookies.asp
+ * name of the cookie, the value of the cookie, and the number of days until the cookie expires.
+ * 
+ * @param c_name
+ * @param value
+ * @param exdays
+ */
+Utils.setCookie = function(c_name, value, exdays){
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  document.cookie = c_name + "=" + c_value;
+};
+Utils.getCookie = function(c_name){
+  var i, x, y, ARRcookies = document.cookie.split(";");
+  for (i = 0; i < ARRcookies.length; i++){
+    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+    x = x.replace(/^\s+|\s+$/g,"");
+    if (x == c_name){
+      return unescape(y);
+    }
+  }
+};
+
+
+/**
  * Detects whether we are running offline on an Android app.
  * 
  * Note: to Android app developers, append this to your user agent string to

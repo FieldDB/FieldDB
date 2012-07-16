@@ -1,30 +1,33 @@
-
-<i class="icons icon-resize-full pull-right"></i>
-<i class="icons icon-edit pull-right"></i>
-<div class="corpusMenu">
-
+<div class="pull-right">
+    <i class="icons icon-edit"></i>
+    <spacer></spacer>
+    <i class="icons icon-resize-full"></i>
+  </div>
+</div>
+<div class="btn-toolbar ">
+  <!-- /btn-group -->
   <div class="btn-group">
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
       New <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-        <li class="new_datum_edit"><a>New Datum</a></li>
-        <li><a class="data-list-embedded">New Data List</a></li>
-        <li><a class="new_session">New Session</a></li>
-        <li><a class="new_corpus">New Corpus</a></li>
- 
+      <li class="new-datum"><a href="#">New Datum</a></li>
+      <li class="new-data-list"><a href="#">New Data List</a></li>
+      <li class="new-session"><a href="#">New Session</a></li>
+      <li class="new-corpus"><a href="#">New Corpus</a></li>
     </ul>
   </div>
-
+  <!-- /btn-group -->
   <div class="btn-group">
     <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
       Data <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li><a class="" href="#import">Import</a></li>
-      <li><a class="" href="#corpus/{{titleAsUrl}}/export">Export</a></li>
+      <li><a href="#import">Import Data</a></li>
+      <li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
     </ul>
   </div>
+  <!-- /btn-group -->
 </div>
 
 <h2>{{title}}</h2>
@@ -40,17 +43,9 @@
 		</div>
 		<div id="collapseSessionsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
-				<ul>
-				<li>Session 1</li>
-				<li>Session 2</li>
-				<li>Session 3</li>
-				<li>Session 4</li>
-				<li>Session 5</li>
-				<li>Session 6</li>
-				<li>Session 7</li>
-				<li>Session 8</li>
-				<li>Session 9</li>
-				</ul>
+			   <ul class = "sessions-updating-collection unstyled">
+                <!-- Updating Sessions Collection -->
+        </ul>
 			</div>
 		</div>
 	</div>
@@ -63,17 +58,9 @@
 		</div>
 		<div id="collapseDatalistsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
-				<ul>
-				<li>Datalist 1</li>
-				<li>Datalist 2</li>
-				<li>Datalist 3</li>
-				<li>Datalist 4</li>
-				<li>Datalist 5</li>
-				<li>Datalist 6</li>
-				<li>Datalist 7</li>
-				<li>Datalist 8</li>
-				<li>Datalist 9</li>
-				</ul>
+				<ul class = "datalists-updating-collection unstyled">
+                <!-- Updating DataLists Collection -->
+        </ul>
 			</div>
 		</div>
 	</div>
@@ -81,21 +68,14 @@
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
 				data-parent="#accordion-read-embedded" href="#collapsePermissionsRE">
-				<h4>Permissins associated with this corpus</h4>
+				<h4>Permissions associated with this corpus</h4>
 				</a>
 		</div>
 		<div id="collapsePermissionsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
-				<ul>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				<li>Permission 1</li>
-				</ul>
+			<ul class = "permissions-updating-collection unstyled">
+                      <!-- Updating Permissions Collection -->
+        </ul>
 			</div>
 		</div>
 	</div>
@@ -110,26 +90,6 @@
 		<div id="collapseDatumFieldSettingsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<ul class="datum_field_settings unstyled"></ul>
-				<!--  <div class="breadcrumb">
-					<select class="choose_add_field">
-						<option value="judgement">Gramaticality/Acceptability Judgement</option>
-						<option value="utterence">Orthography/Utterance</option>
-						<option value="morphemes">Morphemes</option>
-						<option value="gloss">Gloss</option>
-						<option value="translation">Translation</option>
-						<option value="transcription">IPA Transcription</option>
-						<option value="context">Context</option>
-						<option value="semantic_denotation">Semantic Denotation</option>
-						<option value="Create New">Create New</option>
-				</select> Encrypt if confidential: <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
-						<label>Help Text</label>
-							<textarea
-							placeholder="Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
-							class="add_help">
-							</textarea>
-					<button class="btn btn-primary add_datum_field" value="Add">Add</button>
-				</div>  -->
-
 			</div>
 		</div>
 	</div>
@@ -143,18 +103,6 @@
 		<div id="collapseDatumStateSettingsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<ul class="datum_state_settings unstyled"></ul>
-				<!-- <input class="add_input" value="" placeholder="Add..."></input>
-						<select class="add_color_chooser">
-						  <option value="success">Green</option>
-						  <option value="warning">Orange</option>
-						  <option value="important">Red</option>
-						  <option value="primary">Blue</option>
-						  <option value="info">Teal</option>
-						  <option value="inverse">Black</option>
-						  <option value="">Default</option>
-						</select>
-						<button class="btn btn-primary add_datum_state" value="Add">Add</button>
-				 -->	
 			</div>
 		</div>
 	</div>

@@ -101,7 +101,7 @@ define([
 //      var userToBePassedAround = new User();
      
       
-      // Create five corpus views
+      // Create seven corpus views
       this.corpusEditLeftSideView = new CorpusEditView({
         model : this.model.get("corpus")
       });
@@ -131,6 +131,11 @@ define([
         model : this.model.get("corpus")
       });
       this.corpusReadFullscreenView.format = "fullscreen";
+      
+      this.corpusNewModalView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusNewModalView.format = "modal";
       
       /*
        * Set up four session views
@@ -313,12 +318,13 @@ define([
      * Events that the AppView is listening to and their handlers.
      */
     events : {
-      "click .icon-refresh" : "replicateDatabases",
+      "click .icon-sitemap" : "replicateDatabases",
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
       },
       "click .icon-home" : function() {
-        this.model.router.showDashboard();
+//        this.model.router.showDashboard();
+        window.location.href = "#";
       }
     },
     
@@ -344,6 +350,7 @@ define([
         this.corpusReadEmbeddedView.render();
         this.corpusEditFullscreenView.render();
         this.corpusReadFullscreenView.render();
+        this.corpusNewModalView.render();
         
         // Display the ExportView
         this.exportView.render();
@@ -409,7 +416,7 @@ define([
       this.corpusEditLeftSideView.render();
       this.corpusEditEmbeddedView.render();
       this.corpusEditFullscreenView.render();
-      
+      this.corpusNewModalView.render();
     },
     renderReadonlyCorpusViews : function(corpusid) {
       this.corpusReadLeftSideView.render();
@@ -552,7 +559,46 @@ define([
       }
       e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
       return false;
+    },
+    
+    /**
+     * Helper functions to modify the status bars for unsaved and unsynced info
+     */
+    totalUnsaved: 0,
+    totalUnsynced: 0,
+    totalPouchDocs: 0,
+    totalBackboneDocs: 0,
+    addUnsavedDoc : function(numberOfUnsavedItems){
+      if(!numberOfUnsavedItems){
+        numberOfUnsavedItems = 1;
+      }
+      this.totalUnsaved += numberOfUnsavedItems;
+      $(".unsaved-changes").val(this.totalUnsaved);
+    },
+    addUnsyncedDoc : function(numberOfUnsyncedItems){
+      if(!numberOfUnsyncedItems){
+        numberOfUnsyncedItems = 1;
+      }
+      this.totalUnsynced += numberOfUnsyncedItems;
+      $(".unsynced-changes").val(this.totalUnsynced);
+    },
+    setTotalPouchDocs: function(numberOfTotalDocs){
+      if(!numberOfTotalDocs){
+        //TODO ask pouch how many docs there are?
+        numberOfTotalDocs = 100;
+      }
+      this.totalPouchDocs = numberOfTotalDocs;
+      $(".unsynced-changes").attr("max", this.totalPouchDocs);
+    },
+    setTotalBackboneDocs: function(numberOfTotalDocs){
+      if(!numberOfTotalDocs){
+        //TODO ask backbone how many docs there are?
+        numberOfTotalDocs = 100;
+      }
+      this.totalBackboneDocs = numberOfTotalDocs;
+      $(".unsaved-changes").attr("max", this.totalBackboneDocs);
     }
+    
     
   });
 

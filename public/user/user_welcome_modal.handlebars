@@ -42,10 +42,10 @@
       http://ifield.fieldlinguist.com/{{username}}
     </p>
     <label> What is your username going to be? </label>
-    <input class="username" value="{{username}}" />
-    <button class="btn btn-primary new-user-button">
-      New User
-    </button>
+    <form class="form-inline">
+      <input class="username" placeholder="Your New Username Goes Here" type="text"/>
+      <button class="btn btn-primary new-user-button">New User</button>
+    </form>
     <div class="hide confirm-password">
       <label>Password</label>
       <input class="password" type="password">
@@ -59,12 +59,12 @@
         Sign in
         with password
       </button>
-      <button class="btn btn-success register-twitter">
+      <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class="btn btn-success register-twitter">
         <i class="i icon-twitter"></i> Sign in with Twitter
       </button>
       <button class="btn btn-success register-facebook">
         <i class="i icon-facebook"></i> Sign in with Facebook
-      </button>
+      </button> -->
     </div>
   </div>
 </div>

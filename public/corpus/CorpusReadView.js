@@ -2,24 +2,40 @@ define([
     "backbone", 
     "handlebars", 
     "corpus/Corpus",
+//    "comment/Comment",
+//    "comment/Comments",
+//    "comment/CommentEditView",
+    "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
     "lexicon/LexiconView",
-    "permission/PermissionsView",
-//    "datum/SessionsView",
+    "permission/Permission",
+    "permission/Permissions",
+    "permission/PermissionReadView",
+    "datum/Session",
+    "datum/Sessions",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     Corpus,
+//    Comment,
+//    Comments,
+//    CommentEditView,
+    DataLists,
     DataListReadView,
     DatumFieldReadView,
     DatumStateReadView, 
     LexiconView,
-    PermissionsView,
-//    SessionsView,
+    Permission,
+    Permissions,
+    PermissionReadView,
+    Session,
+    Sessions,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -50,14 +66,18 @@ define([
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
+      
+      //Add button inserts new Comment
+      "click .add-comment" : 'insertNewComment',
+      
       "click .new_datum_read" : "newDatum",
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
-      "click .new_datum_edit" : "newDatum",
-      "click .data-list-embedded" : "newDataList",
-      "click .new_session" : "newSession",
-      "click .new_corpus" : "newCorpus",
+      "click .new-datum" : "newDatum",
+      "click .new-data-list" : "newDataList",
+      "click .new-session" : "newSession",
+      "click .new-corpus" : "newCorpus",
     },
     
     /**
@@ -109,6 +129,12 @@ define([
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
+
+        // Display the CommentEditView
+//        this.commentEditView.el = this.$('.comments');
+//        this.commentEditView.render();
+
+        
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();
      
@@ -120,12 +146,18 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        // Display the PermissionsView
-        this.permissionsView.render();
-
+        // Display the DataListsView
+        this.dataListsView.el = this.$('.datalists-updating-collection'); 
+        this.dataListsView.render();
+        
         // Display the SessionsView
-        // this.sessionsView.render();
-
+        this.sessionsView.el = this.$('.sessions-updating-collection'); //TODO do not use such ambiguous class names, compare this with datum_field_settings below.  there is a highlyily hood that the sesson module will be using the same class name and will overwrite your renders.
+        this.sessionsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.el = this.$('.permissions-updating-collection');
+        this.permissionsView.render();        
+        
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
@@ -142,11 +174,17 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        // Display the PermissionsView
-        this.permissionsView.render();
-        
+        // Display the DataListsView
+        this.dataListsView.el = this.$('.datalists-updating-collection'); 
+        this.dataListsView.render();
+         
         // Display the SessionsView
-        // this.sessionsView.render();
+        this.sessionsView.el = this.$('.sessions-updating-collection'); 
+        this.sessionsView.render();
+        
+        // Display the PermissionsView
+        this.permissionsView.el = this.$('.permissions-updating-collection');
+        this.permissionsView.render();
 
 
       }
@@ -180,15 +218,29 @@ define([
         childViewFormat      : "corpus"
       });
       
-      //Create a list of Permissions
-      this.permissionsView = new PermissionsView({
-        collection : this.model.get("permissions")
+      // Create a DataList List
+      this.dataListsView = new UpdatingCollectionView({
+        collection : this.model.get("dataLists"),
+        childViewConstructor : DataListReadView,
+        childViewTagName     : 'li',
+        childViewFormat      : "link"
+      });
+      
+      //Create a Permissions View
+      this.permissionsView = new UpdatingCollectionView({
+        collection : this.model.get("permissions"),
+        childViewConstructor : PermissionReadView,
+        childViewTagName     : 'li',
       });
       
       //Create a Sessions List 
-      // this.sessionsView = new SessionsView({
-      // collection : this.model.get("sessions")
-      // });
+       this.sessionsView = new UpdatingCollectionView({
+         collection : this.model.get("sessions"),
+         childViewConstructor : SessionReadView,
+         childViewTagName     : 'li',
+         childViewFormat      : "link"  
+       });
+      
     },
     //Functions assoicate with the corpus menu
     newDatum : function() {
@@ -197,26 +249,58 @@ define([
     },
     
     newDataList : function() {
-      app.router.showMiddleDataList();
+      //take the user to the search so they can create a data list using the search feature.
+      app.router.showEmbeddedSearch();
     },
     
     newSession : function() {
-      app.router.showEmbeddedSession();
-      app.router.showEditableSession();
-     
+      $("#new-session-modal").modal("show");
+      //Save the current session just in case
+      window.app.get("currentSession").save();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      window.appView.sessionModalView.model = window.app.get("currentSession").clone();
+      //Give it a null id so that pouch will save it as a new model.
+      //WARNING this might not be a good idea, if you find strange side effects in sessions in the future, it might be due to this way of creating (duplicating) a session.
+      window.appView.sessionModalView.model.id = undefined;
+      window.appView.sessionModalView.model.rev = undefined;
+      window.appView.sessionModalView.model.set("_id", undefined);
+      window.appView.sessionModalView.model.set("_rev", undefined);
+      window.appView.sessionModalView.render();
     },
     
     newCorpus : function(){
-      app.router.showEmbeddedCorpus();
-      app.router.showEditableCorpus();
-     
+      $("#new-corpus-modal").modal("show");
+      //Save the current session just in case
+      window.app.get("corpus").save();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      window.appView.corpusNewModalView.model = window.app.get("corpus").clone(); //MUST be a new model, other wise it wont save in a new pouch.
+      //Give it a null id so that pouch will save it as a new model.
+      window.appView.corpusNewModalView.model.id = undefined;
+      window.appView.corpusNewModalView.model.rev = undefined;
+      window.appView.corpusNewModalView.model.set("_id", undefined);
+      //WARNING this might not be a good idea, if you find strange side effects in corpora in the future, it might be due to this way of creating (duplicating) a corpus. However with a corpus it is a good idea to duplicate the permissions and settings so that the user won't have to redo them.
+      window.appView.corpusNewModalView.model.set("title", window.app.get("corpus").get("title")+ " copy");
+      window.appView.corpusNewModalView.model.set("titleAsUrl", window.app.get("corpus").get("title")+"Copy");
+      window.appView.corpusNewModalView.model.set("corpusname", window.app.get("corpus").get("corpusname")+"copy");
+      window.appView.corpusNewModalView.model.get("couchConnection").corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      window.appView.corpusNewModalView.model.set("description", "Copy of: "+window.app.get("corpus").get("description"));
+      window.appView.corpusNewModalView.model.set("dataLists", new DataLists());
+      window.appView.corpusNewModalView.model.set("sessions", new Sessions());
+      window.appView.corpusNewModalView.render();
+    },
+    
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+        console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+
+      });
+      this.model.get("comments").add(m);
     },
     
     
-    
-    
-    
-    resizeSmall : function(){
+     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
     },
     

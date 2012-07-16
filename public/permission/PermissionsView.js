@@ -7,11 +7,11 @@ define( [
             Handlebars, 
             Permission,
             Permissions) {
-    var Permissions = Backbone.View.extend(
+    var PermissionsView = Backbone.View.extend(
   /** @lends PermissionsView.prototype */
   {
     /**
-     * @class Permissions
+     * @class PermissionsView
      * 
      * @extends Backbone.View
      * @constructs
@@ -39,5 +39,5 @@ define( [
     }
   });
 
-  return Permissions;
+  return PermissionsView;
 });
