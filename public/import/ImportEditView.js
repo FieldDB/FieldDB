@@ -137,7 +137,7 @@ define( [
       $(this.el).find(".icon-book").hide();
       $(this.el).find(".icon-resize-full").hide();
       $(this.el).find(".save-datalist").hide();
-      $(this.el).find(".save-resize-small").hide();
+      $(this.el).find(".icon-resize-small").hide();
       return this;
     },
     renderDatumFieldsLabels : function(){
