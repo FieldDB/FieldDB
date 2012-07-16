@@ -239,13 +239,13 @@ textarea{
     linear,
     left bottom,
     left top,
-    color-stop(0, rgb(120,100,4)),
-    color-stop(1, rgb(248,148,5))
+    color-stop(0, rgb(120,120,0)),
+    color-stop(1, rgb(255,255,1))
   );
   background-image: -webkit-linear-gradient(
     center bottom,
-    rgb(120,100,4) 37%,
-    rgb(248,148,5) 69%
+    rgb(120,120,0) 37%,
+    rgb(255,255,1) 69%
   );
 }
 
