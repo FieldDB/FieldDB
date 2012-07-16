@@ -269,6 +269,8 @@ define([
       
       this.savedcount = 0;
       this.savefailedcount = 0;
+      window.hub.unsubscribe("savedToPouch", null, this);
+      window.hub.unsubscribe("saveFailedToPouch", null, this);
       window.hub.subscribe("savedToPouch",function(arg){
         alert("Saved "+ arg+ " to pouch.");
         window.app.savedcount++;
@@ -281,6 +283,7 @@ define([
           if(typeof thiscallback == "function"){
             thiscallback();
           }
+//          maybe this was breaking the replicate corpus ?
           if(window.appView){
             window.appView.renderReadonlyDataListViews();
             window.appView.renderReadonlySessionViews();
@@ -385,8 +388,6 @@ define([
           }
         });
       });
-      window.hub.unsubscribe("savedToPouch", null, this);
-      window.hub.unsubscribe("saveFailedToPouch", null, this);
       localStorage.setItem("saveStatus", "Saving in unload...end store function");
 
       return "Returning before the save is done.";
