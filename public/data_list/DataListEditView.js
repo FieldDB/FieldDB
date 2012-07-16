@@ -124,7 +124,8 @@ define( [
       } else if (this.format == "leftSide") {
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
-                
+
+        
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
