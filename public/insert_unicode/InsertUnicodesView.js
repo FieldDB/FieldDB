@@ -32,7 +32,23 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .add-unicode" : "insertNewUnicodeSymbol"
+      "click .add-unicode" : "insertNewUnicodeSymbol",
+      "keyup .insert-unicode-input" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.insertNewUnicodeSymbol()
+        }
+      },
+      "keyup .insert-unicode-tipa-input" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.insertNewUnicodeSymbol()
+        }
+      }
     },
 
     template : Handlebars.templates.insert_unicodes,
