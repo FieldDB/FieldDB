@@ -253,7 +253,7 @@ define([
         // happens
         // before the saving is done
         this.needsSave = false;
-        
+
         // Store the current Session, the current corpus, and the current date
         // in the Datum
         this.model.set({
@@ -276,6 +276,7 @@ define([
         this.model.changeCorpus(app.get("corpus").get("corpusname"), function(){
           self.model.save(null, {
             success : function(model, response) {
+              window.appView.addSavedDoc(this.model.id);
               if (neverBeenSaved) {
                 // Add it to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
