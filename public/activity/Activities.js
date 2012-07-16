@@ -20,11 +20,11 @@ define([ "backbone",
       });
 
       
-      model : Activity;
+//      model : Activity; TODO this is in the wrong spot
 
     },
 
-  //  model : Activity
+    model : Activity
 
 
   });

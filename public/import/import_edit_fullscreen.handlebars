@@ -14,9 +14,18 @@
 				<h1>
 					Import <small id="import-type-description">{{corpusname}}</small>
 				</h1>
-				<progress class="import-progress" max="100" value="30">
-              <strong>60% unsaved.</strong>
+				<progress class="import-progress" max="5" value="0">
+              <strong>0% completed.</strong>
             </progress>
+            <ol>
+	            <li>Drag and drop a file to the area below.</li>
+	            <li>Drag the datum fields to the appropriate columns.</li>
+	            <li>Name any other columns that you want to keep in your imported data, the app will automatically create datum fields for these in your corpus.</li>
+	            <li>Click on the Attempt Import button.</li>
+	            <li>Review the data list to see if the import looks good.</li>
+	            <li>(Edit the table cells as needed, click Attempt Import and review data list as many times as you would like).</li>
+	            <li>When satisfied with the data list, click Save and your data will be imported into your corpus, and a new data list will be created with this data.</li>
+            </ol>
             
 				<div>{{status}}</div>
 			</div>

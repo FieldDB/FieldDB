@@ -19,7 +19,7 @@ define([
      */
     initialize : function() {
       if(!this.get("user")) {
-        this.set("user", appView.authView.model.get("userPublic"));
+        this.set("user", window.app.get("authentication").get("userPublic"));
       }
     },
     
