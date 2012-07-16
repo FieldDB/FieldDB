@@ -50,7 +50,7 @@ define( [
       }
       
       // Create a CommentReadView     
-      this.commentEditView = new UpdatingCollectionView({
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
@@ -111,8 +111,8 @@ define( [
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
        
         // Display the CommentReadView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -153,8 +153,8 @@ define( [
         this.datumsView.render();
        
         // Display the CommentReadView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the pagination footer
         this.renderUpdatedPagination();

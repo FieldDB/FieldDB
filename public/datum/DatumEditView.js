@@ -47,7 +47,7 @@ define([
         
       });
       
-      this.commentEditView = new UpdatingCollectionView({
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
@@ -129,8 +129,8 @@ define([
         this.datumTagsView.render();
         
         // Display the CommentReadView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
