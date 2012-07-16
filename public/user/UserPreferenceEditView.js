@@ -20,12 +20,9 @@ define([
      */
     initialize : function() {
       this.model.bind("change:skin", this.renderSkin, this);
-      
-      if (this.model.get("skin") == "") {
-        this.randomSkin();
-      }
+          
+      this.model.bind("change", this.render, this);
     },
-
     /**
      * The underlying model of the UserPreferenceEditView is a UserPreference.
      */
@@ -36,7 +33,25 @@ define([
      */
     events:{
       "click #skin" : "nextSkin",
-      "change .num_datum_dropdown" : "updateNumVisibleDatum" 
+      "change .num_datum_dropdown" : "updateNumVisibleDatum",
+      "click .randomize-backgound" : function(){
+        if(this.model.get("alwaysRandomizeSkin")){
+          this.model.set("alwaysRandomizeSkin",false);
+        }else{
+          this.model.set("alwaysRandomizeSkin",true);
+        }
+        this.render();
+      },
+      "click .transparent-dashboard" : function(){
+        if(this.model.get("transparentDashboard")){
+          this.model.set("transparentDashboard", false);
+          this.makeDashboardOpaque();
+        }else{
+          this.model.set("transparentDashboard", true);
+          this.makeDashboardTransparent();
+        }
+        this.render();
+      }
     },
  
     /**
@@ -51,6 +66,30 @@ define([
         this.setElement($("#user-preferences-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         this.$el.find(".num_datum_dropdown").val(this.model.get("numVisibleDatum"));
+        
+        
+        if(this.model.get("alwaysRandomizeSkin")){
+          $(".randomize-backgound").addClass("btn-success");
+        }else{
+          $(".randomize-backgound").removeClass("btn-success");
+        }
+        
+        if(this.model.get("transparentDashboard")){
+          $(".transparent-dashboard").addClass("btn-success");
+        }else{
+          $(".transparent-dashboard").removeClass("btn-success");
+        }
+        
+        if (this.model.get("skin") == "") {
+          this.randomSkin();
+        }else{
+          this.renderSkin();
+        }
+        if(this.model.get("transparentDashboard")){
+          this.makeDashboardTransparent();
+        }else{
+          this.makeDashboardOpaque();
+        }
       }
       
       return this;
@@ -60,6 +99,7 @@ define([
      * The index into the skins array that is the current skin.
      */
     currentSkin : 0,
+   
     
     /*
      * Available backgrounds 
@@ -100,6 +140,36 @@ define([
     
     updateNumVisibleDatum : function() {
       this.model.set("numVisibleDatum", this.$el.find(".num_datum_dropdown").val());
+    },
+    makeDashboardTransparent : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      
+      var oldlink = document.getElementsByTagName("link").item(5);
+      
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "./app/app_transparent.css");
+ 
+      headtg.replaceChild(newlink, oldlink);
+    },
+    makeDashboardOpaque : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      
+      var oldlink = document.getElementsByTagName("link").item(5);
+      
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "./app/app_opaque.css");
+ 
+      headtg.replaceChild(newlink, oldlink);
     }
   });
   

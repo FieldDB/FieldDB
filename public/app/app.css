@@ -1,5 +1,5 @@
 .llama{
-  background-image: url('../images/skins/machu_picchu2.jpg'); 
+  background-image: url('../images/skins/bamboo_garden.jpg'); 
   background-repeat:no-repeat;
   background-attachment:fixed;  
   background-position:center;
@@ -10,9 +10,16 @@
 }
 
 .grav{
-	height: 30px;
+	width: 30px;
 }
+.activity_direct_object{
+	color: #300;
+}
+.activity_verb{
 
+}
+.activity_indirect_object{
+}
 .login{
 	margin-left: 5px;
 
@@ -79,8 +86,14 @@
 }
 
 .icons{
-	font-size: 20px;
-	margin: 3px;
+	font-size: 1.5em;
+	line-height: 2em !important;
+}
+.icon-white {
+  color: #bbb;
+}
+.navbar :hover {
+  color: #fff ;
 }
 
 textarea{
@@ -135,11 +148,6 @@ textarea{
   clear:both;
 }
 
-.activity-inner{
-  float:left;
-  white-space:wrap;
-  padding:5px;
-}
 .export-large-textarea{
 	width: 100%;
 	height: 30em;
@@ -151,9 +159,9 @@ textarea{
   -webkit-user-select: none;
   user-select: none;
 }
-.halfopacity{
+/* .halfopacity{
 	opacity: 0.5;
-}
+} */
 
 .dropdown-menu .not-a {
   display: block;
@@ -183,11 +191,68 @@ textarea{
 .unicode-symbol{
 	cursor: move;
   font-size: 1.25em;
+  color: white;
+  font-weight:normal !important;
 }
 .show-unicode-details{
   width: 2em;	
+  
 }
 .unicode-buttons{
 	line-height: 2em;
 	text-align:center;
+
+}
+
+.nowrap{
+	  white-space: nowrap;
+}
+
+
+/*
+ * Gradient Shadow HTML5 progress bars 
+ http://www.useragentman.com/blog/2012/01/03/cross-browser-html5-progress-bars-in-depth/
+ */
+
+/* All HTML5 progress enabled browsers */
+.navbar progress {
+  /* Turns off styling - not usually needed, but good to know. */
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  /* gets rid of default border in Firefox and Opera. */
+  border: solid #333 1px;
+  border-radius: 5px;
+  /* Dimensions */
+  width: 10em;
+  height: 1em;
+}
+
+
+/* Chrome */
+.navbar progress::-webkit-progress-bar {
+  background: #333;
+}
+
+/*
+ * Background of the progress bar value
+/* Chrome */
+.navbar progress::-webkit-progress-value {
+  border-radius: 5px;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(120,100,4)),
+    color-stop(1, rgb(248,148,5))
+  );
+  background-image: -webkit-linear-gradient(
+    center bottom,
+    rgb(120,100,4) 37%,
+    rgb(248,148,5) 69%
+  );
+}
+
+spacer{
+	size: 1em;
 }

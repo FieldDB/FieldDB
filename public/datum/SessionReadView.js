@@ -1,6 +1,9 @@
 define([
     "backbone", 
     "handlebars", 
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentEditView",
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -8,6 +11,9 @@ define([
 ], function(
     Backbone,
     Handlebars, 
+    Comment,
+    Comments,
+    CommentEditView,
     DatumFieldReadView,
     Session,
     UpdatingCollectionView
@@ -19,8 +25,8 @@ define([
      * @class Session Edit View is where the user provides new session details.
     
      * @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide", "fullscreen", and
-     * "embedded" 
+     * initialized. Valid values are "leftSide", "fullscreen", 
+     * "embedded"  and link
      * @extends Backbone.View
      * @constructs
      */
@@ -38,6 +44,8 @@ define([
      * Events that the SessionReadView is listening to and their handlers.
      */
     events : {
+      //Add button inserts new Comment
+      "click .add-comment" : 'insertNewComment',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -57,6 +65,11 @@ define([
      * The Handlebars template rendered as the Fullscreen.
      */
     templateFullscreen : Handlebars.templates.session_read_fullscreen,
+    
+    /**
+     * The Handlebars template rendered as the link format.
+     */
+    templateLink : Handlebars.templates.session_read_link,
     
     /**
      * Renders the SessionReadView.
@@ -94,6 +107,16 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+        } else if (this.format == "link") {
+          var jsonToRender = {
+              _id : this.model.get("_id"),
+              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
+              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
+              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+            };
+          $(this.el).html(this.templateLink(jsonToRender));
+        } else {
+          throw("You have not specified a format that the SessionReadView can understand.");
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -122,6 +145,14 @@ define([
     //bound to book
     showEditable :function() {
       window.app.router.showEditableSession();
+    }, 
+    
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+//        "label" : this.$el.children(".comment_input").val(),
+      });
+      this.model.get("comments").add(m);
     }
   });
   

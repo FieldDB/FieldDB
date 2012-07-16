@@ -1,34 +1,43 @@
-
-<i class="icons icon-resize-full pull-right"></i>
-<i class="icons icon-book pull-right"></i>
-<button class="btn btn-success pull-right save-corpus" value="Save">Save</button>
-<div class="corpusMenu">
-
+<div class="pull-right">
+    <i class="icons icon-book"></i>
+    <spacer></spacer>
+    <i class="icons icon-resize-full"></i>
+</div>
+<div class="btn-toolbar ">
+	<!-- /btn-group -->
 	<div class="btn-group">
 		<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 			New <span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-	       <li class="new_datum_edit"><a>New Datum</a></li>
-        <li><a class="data-list-embedded">New Data List</a></li>
-        <li><a class="new_session">New Session</a></li>
-        <li><a class="new_corpus">New Corpus</a></li>
+			<li class="new-datum"><a href="#">New Datum</a></li>
+			<li class="new-data-list"><a href="#">New Data List</a></li>
+			<li class="new-session"><a href="#">New Session</a></li>
+			<li class="new-corpus"><a href="#">New Corpus</a></li>
 		</ul>
 	</div>
-
+	<!-- /btn-group -->
 	<div class="btn-group">
 		<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
 			Data <span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li><a class="" href="#import">Import</a></li>
-			<li><a class="" href="#corpus/{{titleAsUrl}}/export">Export</a></li>
+			<li><a href="#import">Import Data</a></li>
+			<li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
 		</ul>
+	</div>
+	<!-- /btn-group -->
+
+	<!-- Toggle to readonly -->
+	<div class="btn-group">
+		<button class="btn btn-success save-corpus">
+			Save</button>
 	</div>
 </div>
 
+
 <label>Title:</label>
-<textarea class="corpus-title-input">{{title}}</textarea>
+<input class="corpus-title-input" value="{{title}}" type="text"/>
 <label>Description:</label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
@@ -42,16 +51,8 @@
 		</div>
 		<div class="accordion-body collapse" id="collapseSessionsEE">
 			<div class="accordion-inner">
-				<ul>
-				<li>Session 1</li>
-				<li>Session 2</li>
-				<li>Session 3</li>
-				<li>Session 3</li>
-				<li>Session 3</li>
-				<li>Session 3</li>
-				<li>Session 7</li>
-				<li>Session 8</li>
-				<li>Session 9</li>
+				<ul class = "sessions-updating-collection unstyled">
+				        <!-- Updating Sessions Collection -->
 				</ul>
 			</div>
 		</div>
@@ -66,17 +67,9 @@
 		</div>
 		<div class="accordion-body collapse" id="collapseDatalistsEE" >
 			<div class="accordion-inner">
-				<ul>
-				<li>Datalist 1</li>
-				<li>Datalist 2</li>
-				<li>Datalist 3</li>
-				<li>Datalist 4</li>
-				<li>Datalist 5</li>
-				<li>Datalist 6</li>
-				<li>Datalist 7</li>
-				<li>Datalist 8</li>
-				<li>Datalist 9</li>
-				</ul>
+				 <ul class = "datalists-updating-collection unstyled">
+                <!-- Updating DataLists Collection -->
+        </ul>
 			</div>
 		</div>
 	</div>
@@ -85,20 +78,13 @@
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
 				data-parent="accordion-edit-embedded" href="#collapsePermissionsEE">
-				<h4>Permissins associated with this corpus</h4>
+				<h4>Permissions associated with this corpus</h4>
 				</a>
 		</div>
 		<div class="accordion-body collapse" id="collapsePermissionsEE">
 			<div class="accordion-inner">
-				<ul>
-				<li>Permission 1</li>
-				<li>Permission 2</li>
-				<li>Permission 3</li>
-				<li>Permission 4</li>
-				<li>Permission 5</li>
-				<li>Permission 6</li>
-				<li>Permission 7</li>
-				<li>Permission 8</li>
+				<ul class = "permissions-updating-collection unstyled">
+			                <!-- Updating Permissions Collection -->
 				</ul>
 			</div>
 		</div>
@@ -150,7 +136,7 @@
 		</div>
 		<div class="accordion-body collapse" id="collapseDatumStateSettingsEE">
 				<ul class="datum_state_settings unstyled"></ul>
-				<input class="add_input" value="" placeholder="Add..."></input>
+				<input class="add_input" value="" placeholder="Add..." type="text"></input>
 				<select class="add_color_chooser">
 					<option value="success">Green</option>
 					<option value="warning">Orange</option>

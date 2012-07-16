@@ -7,8 +7,10 @@ define([
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
+    "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
+    "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
     "user/User",
@@ -22,8 +24,10 @@ define([
     DatumFields, 
     DatumState,
     DatumStates,
+    DataList,
     DataLists,
     Consultants,
+    Permission,
     Permissions,
     Sessions,
     User
@@ -74,10 +78,6 @@ define([
      * @constructs
      */
     initialize : function() {
-      // http://www.joezimjs.com/javascript/introduction-to-backbone-js-part-5-ajax-video-tutorial/
-//      this.on('all', function(e) {
-//        Utils.debug(this.get('title') + " event: " + JSON.stringify(e));
-//      }); 
 
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
@@ -85,11 +85,11 @@ define([
           ,new DatumState({
             state : "To be checked",
             color : "warning"
-          })
+          }),
           , new DatumState({
             state : "Deleted",
             color : "important"
-          }) 
+          }),
         ]));
       }//end if to set datumStates
       
@@ -175,28 +175,23 @@ define([
         
       }//end if to set sessionFields
       
-      // If there are no comments, give it a new one
+      // If there are no comments, create models
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
       
-      if(typeof(this.get("dataLists")) == "function"){
+      if (!this.get("dataLists")) {
         this.set("dataLists", new DataLists());
       }
       
-//      this.pouch = Backbone.sync
-//      .pouch(Utils.androidApp() ? Utils.touchUrl
-//          + this.get("corpusname") : Utils.pouchUrl
-//          + this.get("corpusname"));
-//        if(typeof(this.get("searchFields")) == "function"){
-//          this.set("searchFields", 
-//              this.get("datumFields"));
-//          this.set("searchFields",
-//              this.get("sessionFields"));
-//            new DatumFields([ 
-          //TODO add the session fields here too, instead of just the datumFields
-//          ]));
- //     }//end if to set sessionFields
+      if (!this.get("sessions")) {
+        this.set("sessions", new Sessions());
+      }
+      
+      if (!this.get("permissions")) {
+        this.set("permissions", new Permissions());
+      }
+      
     },
     
     defaults : {
@@ -209,10 +204,6 @@ define([
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      sessions : Sessions, 
-      dataLists : DataLists, 
-      permissions : Permissions,
-//      comments: Comments,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
       
     },
@@ -326,16 +317,32 @@ define([
           }
         },
         error : function(data){
-          alert("I couldn't log you into your corpus.");
-          Utils.debug(data);
-          window.app.get("authentication").set("staleAuthentication", true);
+          window.setTimeout(function(){
+            //try one more time 5 seconds later
+            $.ajax({
+              type : 'POST',
+              url : couchurl ,
+              data : corpusloginparams,
+              success : function(data) {
+                alert("I logged you into your corpus server automatically.");
+                if (typeof callback == "function") {
+                  callback(data);
+                }
+              },
+              error : function(data){
+                alert("I couldn't log you into your corpus.");
+                Utils.debug(data);
+                window.app.get("authentication").set("staleAuthentication", true);
+              }
+            });
+          }, 5000);
         }
       });
     },
     validate: function(attrs){
 //        console.log(attrs);
         if(attrs.title != undefined){
-          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus was not working.
+          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
         }
         return '';
     }

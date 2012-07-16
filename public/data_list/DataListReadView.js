@@ -41,6 +41,9 @@ define( [
           childViewFormat      : "latex"
         });
       }
+      
+      // Remove options
+      delete this.model.collection;
     },
 
     /**
@@ -83,7 +86,6 @@ define( [
     render : function() {
       if (this.format == "link") {
         // Display the Data List
-        this.setElement($("#data-list-link"));
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
       } else if (this.format == "leftSide") {
         this.setElement($("#data-list-embedded"));
@@ -116,6 +118,8 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+      } else {
+        throw("You have not specified a format that the SessionReadView can understand.");
       }
       
       return this;
@@ -153,45 +157,6 @@ define( [
     },
     
     /**
-     * Displays a new DatumReadView for the Datum with the given datumId
-     * and updates the pagination footer.
-     * 
-     * @param {String} datumId The datumId of the Datum to display.
-     * @param {Boolean} addToTop If true, adds the new Datum to the top of
-     * the DataList. If it is false or undefined adds the new Datum to the 
-     * bottom of the DataList.
-     */
-    addOne : function(datumId, addToTop) {
-      // Get the corresponding Datum from PouchDB 
-      var d = new Datum({
-        corpusname : window.app.get("corpus").get("corpusname")
-      });
-      d.id = datumId;
-      var self = this;
-      d.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
-        d.fetch({
-          success : function(model, response) {
-            // Render a DatumReadView for that Datum
-            if (addToTop) {
-              // Render at the top
-              self.datumsView.collection.add(model, {at:0});
-            } else {
-              // Render at the bottom
-              self.datumsView.collection.add(model);
-            }
-            
-            // Display the updated DatumReadView
-            self.renderUpdatedPagination();
-          },
-          
-          error : function() {
-            Utils.debug("Error fetching datum: " + datumId);
-          }
-        });
-      });
-    },
-    
-    /**
      * Change the number of items per page.
      * 
      * @param {Object} e The event that triggered this method.
@@ -220,16 +185,19 @@ define( [
       for (var i = startIndex; i < endIndex; i++) {
         var datumId = this.model.get("datumIds")[i]; 
         if (datumId) {
-          this.addOne(datumId);
+          appView.dataListEditLeftSideView.addOne(datumId);
         }
       }
     },
+    
     resizeSmall : function(){
       window.app.router.showDashboard();
     },
+    
     resizeFullscreen : function(){
       window.app.router.showFullscreenDataList();
     },
+    
     //bound to pencil button
     showEditable :function(){
       window.app.router.showEditableDataList();

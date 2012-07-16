@@ -62,14 +62,15 @@ define([
         
         // code == 13 is the enter key
         if ((code == 13) && (this.$el.find(".username").val() != "YourNewUserNameGoesHere")) {
-          this.model.set("username",$(".username").val());      
+          this.model.set("username", $(".username").val());
           $(".confirm-password").show();
-          $(".password").focus()
+          $(".password").focus();
         }
       },
       "click .new-user-button" : function() {
+        this.model.set("username", $(".username").val());
         $(".confirm-password").show();
-        $(".password").focus()
+        $(".password").focus();
       },
       "click .register-new-user" : "registerNewUser",
       "keyup .to-confirm-password" : function(e) {
@@ -109,6 +110,14 @@ define([
       },
       "click #welcomepassword" : function(e) {
         return false;
+      },
+      "keyup #welcomepassword" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
+        }
       }
     },
 
@@ -176,6 +185,11 @@ define([
               $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
               $(".alert-error").show();
             } else if (data.user) {
+              $(".alert-error").html("Preparing your first corpus/database for you." );
+              $(".alert-error").addClass("alert-success");
+              $(".alert-error").removeClass("alert-error");
+              $(".alert-error").show();
+
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
                * dismiss modal
@@ -253,8 +267,14 @@ define([
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
                         c.replicateCorpus(couchConnection);
+                        
+                        //save the users' first dashboard so at least they will have it if they close the app.
+                        window.setTimeout(function(){
+                          window.app.storeCurrentDashboardIdsToLocalStorage();
+                        },10000);
+                        
                       });
-                    }, 5000);
+                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
                     console.log("Loadded app for a new user.");
                   });
                   $('#user-welcome-modal').modal("hide");
@@ -291,6 +311,10 @@ define([
           $(".alert-error").show();
           $('#user-welcome-modal').modal("show");
         }else{
+          $(".alert-error").html("Syncing your data to this tablet/laptop." );
+          $(".alert-error").addClass("alert-success");
+          $(".alert-error").removeClass("alert-error");
+          $(".alert-error").show();
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
             $('#user-welcome-modal').modal("hide");
             window.startApp(a, function(){
