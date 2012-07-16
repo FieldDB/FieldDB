@@ -30,7 +30,7 @@ define([
      * Events that the CommentReadView is listening to and their handlers.
      */
     events : {
-      "blur .comment-input" : "updateComment",
+      "blur .comment-text" : "updateComment",
     },
 
     /**
@@ -53,7 +53,7 @@ define([
      * Change the model's state.
      */
     updateComment : function() {
-      this.model.set("value", this.$el.children(".comment-input").val());
+      this.model.set("value", this.$el.children(".comment-text").val());
     }
   });
 
