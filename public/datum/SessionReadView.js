@@ -96,8 +96,8 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render(); 
           // Display the CommentReadView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
@@ -116,8 +116,8 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           // Display the CommentReadView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
           
         } else if (this.format == "link") {
 
@@ -148,7 +148,7 @@ define([
         childViewFormat      : "session"
       });
       
-      this.commentEditView = new UpdatingCollectionView({
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'

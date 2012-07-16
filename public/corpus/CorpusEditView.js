@@ -137,8 +137,8 @@ define([
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
           // Display the CommentReadView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
           
           // Display the DataListsView
          this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -168,8 +168,8 @@ define([
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
 
         // Display the CommentReadView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -207,7 +207,7 @@ define([
     },
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView     
-      this.commentEditView = new UpdatingCollectionView({
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
