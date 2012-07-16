@@ -187,7 +187,7 @@ define([
               $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
               $(".alert-error").show();
             } else if (data.user) {
-              $(".alert-error").html("<p>Preparing your first corpus/database for you, please wait...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+              $(".alert-error").html("<p><strong>Please wait:</strong>Preparing your first corpus/database for you, this'll just take a minute...</p> <progress max='100'> <strong>Progress: working...</strong>" );
               $(".alert-error").addClass("alert-success");
               $(".alert-error").show();
               $(".alert-error").removeClass("alert-error");
