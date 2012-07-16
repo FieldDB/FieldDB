@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "activity/Activities",
     "hotkey/HotKey",
     "user/UserGeneric",
     "permission/Permission",
@@ -7,6 +8,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Activities,
     HotKey,
     UserGeneric,
     Permission,
@@ -46,7 +48,12 @@ define([
       
       // If there is no hotkeys, create a new one
       if (!this.get("hotkeys")) {
-        this.set("hotkeys", new HotKey());
+        this.set("hotkeys", new HotKey());//TODO this needs to become plural
+      }
+      
+      //If there are not activities create a new collection
+      if (!this.get("activities")) {
+        this.set("activities", new Activities());
       }
       this.bind("change", this.checkPrefsChanged, this);
     },
@@ -69,7 +76,7 @@ define([
       lastname : "",
       teams : [],
       sessionHistory : [],
-      activityHistory : []
+//      activities : []
     },
 
     /**

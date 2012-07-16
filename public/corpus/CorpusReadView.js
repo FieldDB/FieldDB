@@ -70,11 +70,10 @@ define([
       //Add button inserts new Comment
       "click .add-comment-read" : 'insertNewComment',
       
-      "click .new_datum_read" : "newDatum",
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
-      "click .new-datum" : "newDatum",
+      "click .new-datum-read" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
