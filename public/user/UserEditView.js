@@ -96,8 +96,8 @@ define([
     },
     saveProfile : function(){
       Utils.debug("Saving session");
-      $("#user-edit-modal").hide();
-      $("#user-modal").show();
+      $("#user-edit-modal").modal("hide");
+      $("#user-modal").modal("show");
       //  TODO actually save the user
 
 
