@@ -188,8 +188,8 @@ define([
             } else if (data.user) {
               $(".alert-error").html("Preparing your first corpus/database for you." );
               $(".alert-error").addClass("alert-success");
-              $(".alert-error").removeClass("alert-error");
               $(".alert-error").show();
+              $(".alert-error").removeClass("alert-error");
 
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
