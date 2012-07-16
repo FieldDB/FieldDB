@@ -1,6 +1,7 @@
 define([
     "backbone", 
     "handlebars", 
+    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -11,6 +12,7 @@ define([
 ], function(
     Backbone,
     Handlebars, 
+    Activity,
     Comment,
     Comments,
     CommentReadView,
@@ -66,6 +68,9 @@ define([
         label : "consultants"
       })[0].set("value", this.$el.find(".session-consultant-input")
           .val());
+      
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     updateElicitedDate : function(){
@@ -73,6 +78,9 @@ define([
         label : "dateElicited"
       })[0].set("value", this.$el.find(".session-elicitation-date-input")
           .val());
+      
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     updateGoal : function(){
@@ -80,6 +88,9 @@ define([
         label : "goal"
       })[0].set("value", this.$el.find(".session-goal-input")
           .val());
+      
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     /**
@@ -192,10 +203,10 @@ define([
             try{
               if(window.app.get("currentSession").id != model.id){
                 window.app.get("corpus").get("sessions").unshift(model);
-                window.appView.activityFeedView.model.get("activities").add(
+                window.app.get("authentication").get("userPrivate").get("activities").unshift(
                     new Activity({
                       verb : "added",
-                      directobject : "a session",
+                      directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
                       indirectobject : "in "+window.app.get("corpus").get("title"),
                       context : "via Offline App",
                       user: window.app.get("authentication").get("userPublic")
@@ -204,6 +215,7 @@ define([
               window.app.set("currentSession", model);
               window.appView.renderEditableSessionViews();
               window.appView.renderReadonlySessionViews();
+              window.appView.addSavedDoc(model.id);
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
               //add session to the users session history if they dont already have it
               if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
@@ -249,6 +261,8 @@ define([
         "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.model.id);
+
     }
   });
   

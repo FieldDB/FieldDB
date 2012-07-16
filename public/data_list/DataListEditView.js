@@ -1,6 +1,7 @@
 define( [ 
     "backbone", 
     "handlebars",
+    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -12,6 +13,7 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
+    Activity,
     Comment,
     Comments,
     CommentReadView,
@@ -180,7 +182,7 @@ define( [
      */
     renderUpdatedPagination : function() {
       // Replace the old pagination footer
-      $("#data_list_footer").html(this.footerTemplate(this.getPaginationInfo()));
+      $(".data-list-footer").html(this.footerTemplate(this.getPaginationInfo()));
     },
 
     /**
@@ -402,10 +404,12 @@ define( [
 
     updateTitle: function(){
       this.model.set("title",this.$el.find(".data-list-title").val());
+      window.appView.addUnsavedDoc(this.model.id);
     },
     
     updateDescription: function(){
       this.model.set("description",this.$el.find(".data-list-description").val());
+      window.appView.addUnsavedDoc(this.model.id);
     },
     
     //bound to pencil
@@ -431,10 +435,19 @@ define( [
             try{
               if(window.app.get("currentDataList").id != model.id){
                 window.app.get("corpus").get("dataLists").unshift(model);
+                window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                    new Activity({
+                      verb : "added",
+                      directobject : "data list "+model.get("title"),
+                      indirectobject : "in "+window.app.get("corpus").get("title"),
+                      context : "via Offline App",
+                      user: window.app.get("authentication").get("userPublic")
+                    }));
               }
               window.app.set("currentDataList", model);
               window.appView.renderEditableDataListViews();
               window.appView.renderReadonlyDataListViews();
+              window.appView.addSavedDoc(model.id);
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
               //add datalist to the users datalist history if they dont already have it
               if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
@@ -455,10 +468,15 @@ define( [
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-        "text" : this.$el.find(".comment-text").val(),
+        "text" : this.$el.find(".comment-new-text").val(),
+
+//        "label" : this.$el.children(".comment_input").val(),//TODO turn this back on
+
       });
       this.model.get("comments").add(m);
-    }
+      window.appView.addUnsavedDoc(this.model.id);
+
+    },
     
   });
 

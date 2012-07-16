@@ -1,6 +1,7 @@
 define([
     "backbone", 
     "handlebars", 
+    "activity/Activity",
     "audio_video/AudioVideoEditView",
     "comment/Comment",
     "comment/Comments",
@@ -15,6 +16,7 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
+    Activity,
     AudioVideoEditView,
     Comment,
     Comments,
@@ -261,7 +263,7 @@ define([
         // happens
         // before the saving is done
         this.needsSave = false;
-        
+
         // Store the current Session, the current corpus, and the current date
         // in the Datum
         this.model.set({
@@ -284,7 +286,16 @@ define([
         this.model.changeCorpus(app.get("corpus").get("corpusname"), function(){
           self.model.save(null, {
             success : function(model, response) {
+              window.appView.addSavedDoc(model.id);
               if (neverBeenSaved) {
+                window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                    new Activity({
+                      verb : "added",
+                      directobject : "a datum",
+                      indirectobject : "in "+window.app.get("corpus").get("title"),
+                      context : "via Offline App",
+                      user: window.app.get("authentication").get("userPublic")
+                    }));
                 // Add it to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
                 app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);

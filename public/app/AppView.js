@@ -325,7 +325,11 @@ define([
       "click .icon-home" : function() {
 //        this.model.router.showDashboard();
         window.location.href = "#";
-      }
+      },
+      "click .save-dashboard": function(){
+        window.app.storeCurrentDashboardIdsToLocalStorage();
+      },
+      "click .sync-everything" : "replicateDatabases"
     },
     
     /**
@@ -407,6 +411,9 @@ define([
       } else {
         Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
       }
+      
+      this.setTotalPouchDocs();
+      this.setTotalBackboneDocs();
       
       return this;
     },
@@ -564,39 +571,62 @@ define([
     /**
      * Helper functions to modify the status bars for unsaved and unsynced info
      */
-    totalUnsaved: 0,
-    totalUnsynced: 0,
-    totalPouchDocs: 0,
-    totalBackboneDocs: 0,
-    addUnsavedDoc : function(numberOfUnsavedItems){
-      if(!numberOfUnsavedItems){
-        numberOfUnsavedItems = 1;
+    totalUnsaved: [],
+    totalUnsynced: [],
+    totalPouchDocs: [],//TODO find out how to do this?
+    totalBackboneDocs: [],
+    addUnsavedDoc : function(id){
+      if(this.totalUnsaved.indexOf(id) == -1){
+        this.totalUnsaved.push(id);
       }
-      this.totalUnsaved += numberOfUnsavedItems;
-      $(".unsaved-changes").val(this.totalUnsaved);
+      $(".unsaved-changes").val(this.totalUnsaved.length);
+      this.addUnsyncedDoc(id);
+      this.addBackboneDoc(id);
     },
-    addUnsyncedDoc : function(numberOfUnsyncedItems){
-      if(!numberOfUnsyncedItems){
-        numberOfUnsyncedItems = 1;
+    addSavedDoc : function(id){
+      var pos = this.totalUnsaved.indexOf(id);
+      if(pos > -1){
+        this.totalUnsaved.splice(pos, 1);
       }
-      this.totalUnsynced += numberOfUnsyncedItems;
-      $(".unsynced-changes").val(this.totalUnsynced);
+      $(".unsaved-changes").val(this.totalUnsaved.length);
+      this.addUnsyncedDoc(id);
+      this.addBackboneDoc(id);
     },
-    setTotalPouchDocs: function(numberOfTotalDocs){
-      if(!numberOfTotalDocs){
-        //TODO ask pouch how many docs there are?
-        numberOfTotalDocs = 100;
+    addUnsyncedDoc : function(id){
+      if(this.totalUnsynced.indexOf(id) == -1){
+        this.totalUnsynced.push(id);
       }
-      this.totalPouchDocs = numberOfTotalDocs;
-      $(".unsynced-changes").attr("max", this.totalPouchDocs);
+      $(".unsynced-changes").val(this.totalUnsynced.length);
+      this.addPouchDoc(id);
     },
-    setTotalBackboneDocs: function(numberOfTotalDocs){
-      if(!numberOfTotalDocs){
-        //TODO ask backbone how many docs there are?
-        numberOfTotalDocs = 100;
+    allSyncedDoc : function(){
+      for(i in this.totalUnsynced){
+        this.addPouchDoc(this.totalUnsynced[i]);
+        this.addBackboneDoc(this.totalUnsynced[i]);
       }
-      this.totalBackboneDocs = numberOfTotalDocs;
-      $(".unsaved-changes").attr("max", this.totalBackboneDocs);
+      this.totalUnsynced = [];
+      $(".unsynced-changes").val(this.totalUnsynced.length);
+    },
+    addPouchDoc : function(id){
+      if(this.totalPouchDocs.indexOf(id) == -1){
+        this.totalPouchDocs.push(id);
+      }
+      this.setTotalPouchDocs();      
+    },
+    addBackboneDoc : function(id){
+      if(this.totalBackboneDocs.indexOf(id) == -1){
+        this.totalBackboneDocs.push(id);
+      }
+      this.setTotalBackboneDocs();      
+    },
+    setTotalPouchDocs: function(){
+      $(".unsynced-changes").attr("max", this.totalPouchDocs.length);
+      $(".unsynced-changes").val(this.totalUnsynced.length);
+    },
+    setTotalBackboneDocs: function(){
+      $(".unsaved-changes").attr("max", this.totalBackboneDocs.length);
+      $(".unsaved-changes").val(this.totalUnsaved.length);
+
     }
     
     

@@ -1,11 +1,13 @@
 define([
     "backbone", 
     "handlebars", 
+    "activity/Activity",
     "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
+    Activity,
     User
 ) {
   var UserEditView = Backbone.View.extend(
@@ -27,7 +29,7 @@ define([
     initialize : function() {
       Utils.debug("USER init: " + this.el);
 
-      this.model.bind("change", this.render, this);
+//      this.model.bind("change", this.render, this); //this breaks the save. we should only render the corpus updating collection view.
 
       //TODO replace this code with a Updating Collections View
       
@@ -53,7 +55,8 @@ define([
         console.log("hiding user profile");
         this.$el.modal("hide");
       },
-      "click .save-user-profile" : "saveProfile"
+      "click .save-user-profile" : "saveProfile",
+      "blur .gravatar" : "updateGravatar"
 
     },
 
@@ -95,12 +98,31 @@ define([
 
     },
     saveProfile : function(){
-      Utils.debug("Saving session");
-      $("#user-edit-modal").modal("hide");
-      $("#user-modal").modal("show");
-      //  TODO actually save the user
-
-
+      Utils.debug("Saving user");
+      $("#user-edit-modal").hide();
+      $("#user-modal").show();
+      
+      this.model.set("email", $(this.el).find(".email").val());
+      this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
+      this.model.set("affiliation", $(this.el).find(".affiliation").val());
+      this.model.set("description", $(this.el).find(".description").val());
+      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+      window.app.get("authentication").get("userPublic").set("gravatar", $(this.el).find(".gravatar").val());
+      window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+      window.appView.renderEditableUserViews();
+      window.appView.renderReadonlyUserViews();
+      window.app.get("authentication").get("userPrivate").get("activities").unshift(
+          new Activity({
+            verb : "modified",
+            directobject : "their profile",
+            indirectobject : "",
+            context : "via Offline App",
+            user: window.app.get("authentication").get("userPublic")
+          }));
+    },
+    updateGravatar : function(){
+      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+      $(this.el).find(".gravatar").attr("src",$(this.el).find(".gravatar").val());
     }
   });
 
