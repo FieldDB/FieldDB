@@ -320,6 +320,7 @@ define( [
       var self = this;
       this.createNewSession( function(){
         //after we have a session
+        $(".approve-save").addClass("disabled");
         for(d in self.model.get("datumArray")){
           var thatdatum = self.model.get("datumArray")[d];
           thatdatum.set({
