@@ -72,7 +72,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-datalist-edit" : 'insertNewComment',
       
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
@@ -448,8 +448,7 @@ define( [
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
-
+        "text" : this.$el.find(".comment-input").val(),
       });
       this.model.get("comments").add(m);
     }

@@ -36,95 +36,80 @@
 
 
 <div class="accordion" id="accordion-read-fullscreen">
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion-read-fullscreen" href="#collapseSessionsRF">
-				<h4>Sessions associated with this corpus</h4>
-				 </a>
-		</div>
-		<div id="collapseSessionsRF" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<ul class = "sessions-updating-collection unstyled">
-        <!-- Updating Sessions Collection -->
-        </ul>
-			</div>
-		</div>
-	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion-read-fullscreen" href="#collapseDatalistsRF">
-				<h4>Datalists associated with this corpus</h4>
-				</a>
-		</div>
-		<div id="collapseDatalistsRF" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<ul class = "datalists-updating-collection unstyled">
-                <!-- Updating DataLists Collection -->
-        </ul>
-			</div>
-		</div>
-	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion-read-fullscreen" href="#collapsePermissionsRF">
-				<h4>Permissions associated with this corpus</h4>
-				</a>
-		</div>
-		<div id="collapsePermissionsRF" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<ul class = "permissions-updating-collection unstyled">
-             <!-- Updating Permissions Collection -->
-        </ul>
-			</div>
-		</div>
-	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion-read-fullscreen" href="#collapseDatumFieldSettingsRF">
-				<h4>Datum field settings</h4>
-				</a>
-		</div>
-		<div id="collapseDatumFieldSettingsRF" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<ul class="datum_field_settings unstyled"></ul>
-			</div>
-		</div>
-	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse"
-				data-parent="#accordion-read-fullscreen" href="#collapseDatumStateSettingsRF">
-				<h4>Datum state settings</h4>
-				</a>
-		</div>
-		<div id="collapseDatumStateSettingsRF" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<ul class="datum_state_settings unstyled"></ul>
-			</div>
-		</div>
-	</div>
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-fullscreen" href="#collapseCommentsEF">
-        <h4>Comments</h4>
-        </a>
+        data-parent="#accordion-read-fullscreen" href="#collapseSessionsRF">
+        <h4>Sessions associated with this corpus</h4>
+         </a>
     </div>
-    <div id="collapseCommentsEF" class="accordion-body collapse">
+    <div id="collapseSessionsRF" class="accordion-body collapse">
       <div class="accordion-inner">
-        <ul class="comments unstyled"></ul>
-        <div class="breadcrumb">
-        <label>New Comment</label>
-              <textarea
-              class="add-comment" placeholder=""></textarea>
-          <button class="btn btn-primary add-comment-read" value="Add">Add Comment</button>
-        </div>
+        <ul class = "sessions-updating-collection unstyled">
+        <!-- Updating Sessions Collection -->
+        </ul>
       </div>
     </div>
   </div>
-</div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-read-fullscreen" href="#collapseDatalistsRF">
+        <h4>Datalists associated with this corpus</h4>
+        </a>
+    </div>
+    <div id="collapseDatalistsRF" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <ul class = "datalists-updating-collection unstyled">
+                <!-- Updating DataLists Collection -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-read-fullscreen" href="#collapsePermissionsRF">
+        <h4>Permissions associated with this corpus</h4>
+        </a>
+    </div>
+    <div id="collapsePermissionsRF" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <ul class = "permissions-updating-collection unstyled">
+             <!-- Updating Permissions Collection -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-read-fullscreen" href="#collapseDatumFieldSettingsRF">
+        <h4>Datum field settings</h4>
+        </a>
+    </div>
+    <div id="collapseDatumFieldSettingsRF" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <ul class="datum_field_settings unstyled"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-read-fullscreen" href="#collapseDatumStateSettingsRF">
+        <h4>Datum state settings</h4>
+        </a>
+    </div>
+    <div id="collapseDatumStateSettingsRF" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <ul class="datum_state_settings unstyled"></ul>
+      </div>
+    </div>
+  </div>
+</div> 
 
+<h3>Comments</h3>
+<ul class="comments unstyled"></ul>
+<button class="btn btn-primary add-comment-read" value="Add">Add
+  Comment</button>
