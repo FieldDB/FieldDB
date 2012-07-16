@@ -55,7 +55,8 @@ define([
         console.log("hiding user profile");
         this.$el.modal("hide");
       },
-      "click .save-user-profile" : "saveProfile"
+      "click .save-user-profile" : "saveProfile",
+      "blur .gravatar" : "updateGravatar"
 
     },
 
@@ -105,7 +106,8 @@ define([
       this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
-      
+      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+
       window.app.get("authentication").saveAndEncryptUserToLocalStorage();
       window.appView.renderEditableUserViews();
       window.appView.renderReadonlyUserViews();
@@ -117,6 +119,10 @@ define([
             context : "via Offline App",
             user: window.app.get("authentication").get("userPublic")
           }));
+    },
+    updateGravatar : function(){
+      this.model.set("gravatar", $(this.el).find(".gravatar").val());
+      $(this.el).find(".gravatar").attr("src",$(this.el).find(".gravatar").val());
     }
   });
 
