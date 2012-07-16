@@ -366,6 +366,7 @@ define( [
           self.model.get("dataList").save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
+              $(".import-progress").val($(".import-progress").val()+1);
               window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
               self.model.dataListView.temporaryDataList = false;
@@ -387,11 +388,15 @@ define( [
                   }));
               
               //Save the session too
-              var sessself = self.model.get("session");
-              this.model.get("session").changeCorpus(this.model.get("corpusname"), function(){
-                sessself.model.get("session").save(null, {
+              self.model.get("session").changeCorpus(self.model.get("corpusname"), function(){
+                self.model.get("session").save(null, {
                   success : function(model, response) {
                     Utils.debug('Session save success in import');
+                    $(".import-progress").val($(".import-progress").val()+1);
+                    window.app.get("corpus").get("sessions").unshift(model);
+                    if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
+                      window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+                    }
                     window.app.get("authentication").get("userPrivate").get("activities").unshift(
                         new Activity({
                           verb : "added",
@@ -400,11 +405,7 @@ define( [
                           context : "via Offline App",
                           user: window.app.get("authentication").get("userPublic")
                         }));
-                    if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(self.model.get("session").id) == -1){
-                      window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(self.model.get("session").id);
-                    }
-                    window.app.get("corpus").get("sessions").unshift(self.model.get("session"));
-                    
+                    window.location.replace("#"); //go back to dashboard after all suceeds
                   },
                   error : function(e) {
                     alert('Session save failure in import' + e);
@@ -419,7 +420,6 @@ define( [
           });
         });
       });
-      window.location.replace("#"); //go back to dashboard
     },
     /**
      * For now just creating a session and saving it, not showing it to the user.
@@ -427,18 +427,20 @@ define( [
      * @param callback
      */
     createNewSession : function(callback){
-      this.model.set("session", new Session({
-        sessionFields : window.app.get("corpus").get("sessionFields").clone()
-      }));
-      
-      this.model.get("session").get("sessionFields").where({
-        label : "goal"
-      })[0].set("value", "Goal from file import " + this.model.get("status"));
-     
-      this.model.get("session").get("sessionFields").where({
-        label : "dateElicited"
-      })[0].set("value", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
-          : 'n/a');
+      if(this.model.get("session") == undefined){
+        this.model.set("session", new Session({
+          sessionFields : window.app.get("corpus").get("sessionFields").clone()
+        }));
+        
+        this.model.get("session").get("sessionFields").where({
+          label : "goal"
+        })[0].set("value", "Goal from file import " + this.model.get("status"));
+       
+        this.model.get("session").get("sessionFields").where({
+          label : "dateElicited"
+        })[0].set("value", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
+            : 'n/a');
+      }
       
       //DONT save now, save only when import is approved.
       if(typeof callback == "function"){
