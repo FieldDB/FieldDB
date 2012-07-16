@@ -82,7 +82,7 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-datum-edit" : 'insertNewComment',
 
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
