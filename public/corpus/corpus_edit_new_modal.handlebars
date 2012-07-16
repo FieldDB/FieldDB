@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h1>New Corpus <small>{{corpusname}}</small></h1>
+  <p>Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus.</p>
+  <p class="alert alert-danger"><strong>Warning!</strong> The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental.</p>
+</div>
+<div class="modal-body">
+  
+	<label>Title:</label>
+	<textarea class="corpus-title-input">{{title}}</textarea>
+	<label>Description:</label>
+	<textarea class="corpus-description-input">{{description}}</textarea>
+  
+</div>
+<div class="modal-footer">
+  <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+   <button class="btn btn-success pull-right save-corpus" disabled="true" value="Save">Save</button>  
+</div>
