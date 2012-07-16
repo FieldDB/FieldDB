@@ -21,6 +21,15 @@ define([
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
       }
+      if(!this.get("timestamp")){
+        this.set("timestamp",JSON.stringify(new Date()) );
+      }
+      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
+          : Utils.activityFeedPouchUrl);
+      
+      if(this.isNew()){
+        this.save();
+      }
     },
     
     defaults : {
@@ -28,7 +37,8 @@ define([
       verb : "added",
       directobject : "an entry",
       indirectobject : "with Consultant-SJ",
-      context : "via Android/ Offline Chrome App"  
+      context : "via Android/ Offline Chrome App" ,
+//      timestamp: timestamp
     },
     
     // Internal models: used by the parse function
@@ -36,6 +46,7 @@ define([
       user : UserMask
     },
     
+    //TODO getting error  has no method 'pouch' when this is specified in the initialize
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
 //        : Utils.activityFeedPouchUrl),
         

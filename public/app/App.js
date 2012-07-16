@@ -240,16 +240,17 @@ define([
       //TODO, this doesn't work.
       //this.storeCurrentDashboardIdsToLocalStorage();
       var returntext = "";
-      if(window.appView.totalUnsaved.length >1){
+      if(window.appView.totalUnsaved.length >= 1){
         returntext = "You have unsaved changes, click cancel to save them. \n\n";
       }
-      if(window.appView.totalUnsaved.length >1){
+      if(window.appView.totalUnsaved.length >= 1){
         returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
       }
       if(returntext == ""){
         return; //dont show a pop up
+      }else{
+        return returntext;
       }
-      return returntext;
     },
     /**
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync
