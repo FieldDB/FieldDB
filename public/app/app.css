@@ -13,7 +13,7 @@
 	width: 30px;
 }
 .activity_direct_object{
-	color: #300;
+	color: #055;
 }
 .activity_verb{
 
@@ -147,7 +147,7 @@ textarea{
 
 .export-large-textarea{
 	width: 100%;
-	height: 30em;
+	height: 15em;
 }
 /* Prevent the text contents of draggable elements from being selectable. */
 [draggable] {
@@ -241,13 +241,13 @@ textarea{
     linear,
     left bottom,
     left top,
-    color-stop(0, rgb(120,100,4)),
-    color-stop(1, rgb(248,148,5))
+    color-stop(0, rgb(120,120,0)),
+    color-stop(1, rgb(255,255,1))
   );
   background-image: -webkit-linear-gradient(
     center bottom,
-    rgb(120,100,4) 37%,
-    rgb(248,148,5) 69%
+    rgb(120,120,0) 37%,
+    rgb(255,255,1) 69%
   );
 }
 
