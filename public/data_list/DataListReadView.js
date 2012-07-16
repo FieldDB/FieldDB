@@ -248,6 +248,7 @@ define( [
         "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
+      this.$el.find(".comment-new-text").val("");
     }
   });
 

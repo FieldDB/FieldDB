@@ -311,9 +311,9 @@ define([
         console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
-//          "username" :
       });
       this.model.get("comments").add(m);
+      this.$el.find(".comment-new-text").val("");
      },
     
     
