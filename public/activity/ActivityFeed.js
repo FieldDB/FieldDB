@@ -30,8 +30,7 @@ define([
 //    },
     // Internal models: used by the parse function
     model : {
-    activities: Activities  
-    
+      activities: Activities  
     },
     
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
