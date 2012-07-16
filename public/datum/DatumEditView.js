@@ -86,6 +86,14 @@ define([
       "click .icon-unlock" : "decryptDatum",
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
+      "keyup .add_tag" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.insertNewDatumTag()
+        }
+      },
       "click #duplicate" : "duplicateDatum",
       "click .icon-plus" : "newDatum",
       "change .datum_state_select" : "updateDatumStates",
