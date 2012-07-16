@@ -12,11 +12,13 @@
 <!-- list for the tags -->
 <ul class="datum_tags_ul unstyled"></ul>
 <!-- way to add new tags -->
-<span class="pull-right">
-  <input class="add_tag input-small" placeholder="New Tag..."></input>
-  <button class="btn btn-primary add_datum_tag" value="Add"><i class = "icon-tag icon-white"></i>  Add</button>
-</span>
-
+<form class="pull-right form-inline">
+  <input class="add_tag input-small" placeholder="New Tag..." type="text"></input>
+  <button class="btn btn-primary add_datum_tag" value="Add">
+    <i class = "icon-tag icon-white"></i>
+    Add
+  </button>
+</form>
 
 <!-- Buttons for various actions -->
 <div>
@@ -26,21 +28,17 @@
     </button>
     <button class="btn btn-primary LaTeX">LaTeX</button>
     <button class="btn btn-primary CSV">CSV/Excel</button>
-  
     <a id="playDatum">
       <i class="icons icon-bullhorn"></i>
     </a>
-    <a
-    id="clipboard">
+    <a id="clipboard">
       <i class="icons icon-paste"></i>
     </a>
-    <a
-    id="duplicate">
+    <a id="duplicate">
       <i class="icons icon-copy"></i>
     </a>
     <a id="encrypt">
-      <i
-      class="icons icon-lock"></i>
+      <i class="icons icon-lock"></i>
     </a>
     <div class="audio_video pull-right"></div>
   </div>
@@ -50,9 +48,7 @@
 <div class="comments-section">
 	<h3>Comments</h3>
 	<ul class="comments unstyled"></ul>
-	<button class="btn btn-primary add-comment" value="Add">Add
-		Comment</button>
-
-
+	<button class="btn btn-primary add-comment" value="Add">
+	  Add Comment
+  </button>
 </div>
-

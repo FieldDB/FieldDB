@@ -62,14 +62,15 @@ define([
         
         // code == 13 is the enter key
         if ((code == 13) && (this.$el.find(".username").val() != "YourNewUserNameGoesHere")) {
-          this.model.set("username",$(".username").val());      
+          this.model.set("username", $(".username").val());
           $(".confirm-password").show();
-          $(".password").focus()
+          $(".password").focus();
         }
       },
       "click .new-user-button" : function() {
+        this.model.set("username", $(".username").val());
         $(".confirm-password").show();
-        $(".password").focus()
+        $(".password").focus();
       },
       "click .register-new-user" : "registerNewUser",
       "keyup .to-confirm-password" : function(e) {
