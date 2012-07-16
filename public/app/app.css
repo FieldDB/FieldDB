@@ -83,6 +83,7 @@ width: 100%;
 .icons{
 	font-size: 1.5em;
 	line-height: 2em !important;
+	padding-left: .25em;
 }
 .icon-white {
   color: #bbb;
