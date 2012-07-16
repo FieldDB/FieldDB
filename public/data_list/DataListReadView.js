@@ -3,7 +3,7 @@ define( [
 	"handlebars",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
 	"data_list/DataList",
 	"datum/Datum",
   	"datum/DatumReadView",
@@ -14,7 +14,7 @@ define( [
     Handlebars, 
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -48,10 +48,10 @@ define( [
         });
       }
       
-      // Create a CommentEditView     
-      this.commentEditView = new UpdatingCollectionView({
+      // Create a CommentReadView     
+      this.CommentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
       
@@ -69,7 +69,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-datalist-read" : 'insertNewComment',
       
       'click a.servernext': 'nextResultPage',
       'click .serverhowmany a': 'changeCount',
@@ -125,9 +125,9 @@ define( [
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        // Display the CommentReadView
+        this.CommentReadView.el = this.$('.comments');
+        this.CommentReadView.render();
 
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -140,9 +140,9 @@ define( [
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.templateEmbedded(this.model.toJSON()));
       
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        // Display the CommentReadView
+        this.CommentReadView.el = this.$('.comments');
+        this.CommentReadView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -239,8 +239,8 @@ define( [
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
-
+        "text" : this.$el.find(".add-comment").val(),
+//        "username" : 
       });
       this.model.get("comments").add(m);
     }
