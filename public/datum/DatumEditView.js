@@ -4,7 +4,7 @@ define([
     "audio_video/AudioVideoEditView",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -18,7 +18,7 @@ define([
     AudioVideoEditView,
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -49,7 +49,7 @@ define([
       
       this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
       
@@ -128,7 +128,7 @@ define([
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
         
-        // Display the CommentEditView
+        // Display the CommentReadView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
         

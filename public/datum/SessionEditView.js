@@ -3,7 +3,7 @@ define([
     "handlebars", 
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -13,7 +13,7 @@ define([
     Handlebars, 
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -124,7 +124,7 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
-          // Display the CommentEditView
+          // Display the CommentReadView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
           
@@ -145,7 +145,7 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
          
-          // Display the CommentEditView
+          // Display the CommentReadView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
           
@@ -155,7 +155,7 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentEditView
+          // Display the CommentReadView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
         }
@@ -175,7 +175,7 @@ define([
       
       this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
     },
