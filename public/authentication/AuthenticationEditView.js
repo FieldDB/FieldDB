@@ -173,7 +173,7 @@ define([
       var self = this;
       this.model.authenticate(tempuser, function(success) {
         if (success == null) {
-          alert("Authentication failed. Authenticating as public.");
+//          alert("Authentication failed. Authenticating as public."); //TODO cant use this anymore as a hook
 //          self.authenticateAsPublic();
           return;
         }
