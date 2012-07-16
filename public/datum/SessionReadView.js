@@ -48,7 +48,7 @@ define([
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-session-read" : 'insertNewComment',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -174,7 +174,7 @@ define([
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
+        "text" : this.$el.find(".add-comment").val(),
       });
       this.model.get("comments").add(m);
     }
