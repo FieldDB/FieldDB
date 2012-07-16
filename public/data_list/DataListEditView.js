@@ -173,7 +173,7 @@ define( [
      */
     renderUpdatedPagination : function() {
       // Replace the old pagination footer
-      $("#data_list_footer").html(this.footerTemplate(this.getPaginationInfo()));
+      $(".data-list-footer").html(this.footerTemplate(this.getPaginationInfo()));
     },
 
     /**

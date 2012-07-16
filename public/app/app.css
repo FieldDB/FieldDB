@@ -41,8 +41,8 @@
 }
 
 #corpus-quickview{
-/* 	height: 150px;	
- */
+	min-height: 10em;	
+ 
  overflow: auto;
  }
 
@@ -53,6 +53,7 @@ width: 100%;
 
 .corpusMenu{
 	float: left;
+	margin: 0em;
 }
 
 .corpusMenu button{
@@ -155,9 +156,10 @@ textarea{
   -webkit-user-select: none;
   user-select: none;
 }
-/* .halfopacity{
-	opacity: 0.5;
-} */
+
+.halfopacity{
+	opacity: 0.75;
+} 
 
 .dropdown-menu .not-a {
   display: block;
