@@ -3,7 +3,7 @@ define( [
 	"handlebars",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
 	"data_list/DataList",
 	"datum/Datum",
   	"datum/DatumReadView",
@@ -14,7 +14,7 @@ define( [
     Handlebars, 
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -48,10 +48,10 @@ define( [
         });
       }
       
-      // Create a CommentEditView     
+      // Create a CommentReadView     
       this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
       
@@ -125,7 +125,7 @@ define( [
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
-        // Display the CommentEditView
+        // Display the CommentReadView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
 
@@ -140,7 +140,7 @@ define( [
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.templateEmbedded(this.model.toJSON()));
       
-        // Display the CommentEditView
+        // Display the CommentReadView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
         

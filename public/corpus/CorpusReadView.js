@@ -4,7 +4,7 @@ define([
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
@@ -24,7 +24,7 @@ define([
     Corpus,
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DataLists,
     DataListReadView,
     DatumFieldReadView,
@@ -130,7 +130,7 @@ define([
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
 
-        // Display the CommentEditView
+        // Display the CommentReadView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
 
@@ -166,7 +166,7 @@ define([
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();
 
-        // Display the CommentEditView
+        // Display the CommentReadView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
         
@@ -197,10 +197,10 @@ define([
       return this;
     },
     changeViewsOfInternalModels : function(){
-      //Create a CommentEditView     
+      //Create a CommentReadView     
       this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
       
