@@ -30,7 +30,7 @@ define([
      * Events that the CommentEditView is listening to and their handlers.
      */
     events : {
-      "blur .comment-input" : "updateComment",
+      "blur .comment_input" : "updateComment",
     },
 
     /**
@@ -57,7 +57,7 @@ define([
      * Change the model's state.
      */
     updateComment : function() {
-      this.model.set("value", this.$el.children(".comment-input").val());
+      this.model.set("value", this.$el.children(".comment_input").val());
     }
   });
 

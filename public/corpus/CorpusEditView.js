@@ -5,7 +5,7 @@ define([
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
@@ -29,7 +29,7 @@ define([
     Corpus,
     Comment,
     Comments,
-    CommentReadView,
+    CommentEditView,
     DataList,
     DataLists,
     DataListReadView,
@@ -136,9 +136,9 @@ define([
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
-          // Display the CommentReadView
-          this.CommentReadView.el = this.$('.comments');
-          this.CommentReadView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
           
           // Display the DataListsView
          this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -167,9 +167,9 @@ define([
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
 
-        // Display the CommentReadView
-        this.CommentReadView.el = this.$('.comments');
-        this.CommentReadView.render();
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -206,10 +206,10 @@ define([
       return this;
     },
     changeViewsOfInternalModels : function(){
-      //Create a CommentReadView     
-      this.CommentReadView = new UpdatingCollectionView({
+      //Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
+        childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
       

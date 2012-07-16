@@ -3,7 +3,7 @@ define( [
     "handlebars",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -14,7 +14,7 @@ define( [
     Handlebars, 
     Comment,
     Comments,
-    CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -49,10 +49,10 @@ define( [
         });
       }
       
-      // Create a CommentReadView     
-      this.CommentReadView = new UpdatingCollectionView({
+      // Create a CommentEditView     
+      this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
+        childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
       
@@ -72,7 +72,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist-edit" : 'insertNewComment',
+      "click .add-comment" : 'insertNewComment',
       
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
@@ -110,9 +110,9 @@ define( [
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
        
-        // Display the CommentReadView
-        this.CommentReadView.el = this.$('.comments');
-        this.CommentReadView.render();
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -152,9 +152,9 @@ define( [
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
        
-        // Display the CommentReadView
-        this.CommentReadView.el = this.$('.comments');
-        this.CommentReadView.render();
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.comments');
+        this.commentEditView.render();
         
         // Display the pagination footer
         this.renderUpdatedPagination();
@@ -448,8 +448,7 @@ define( [
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-      "text" : this.$el.find(".add-comment").val(),
-//      "username" : 
+//        "label" : this.$el.children(".comment_input").val(),
 
       });
       this.model.get("comments").add(m);
