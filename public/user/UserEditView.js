@@ -107,7 +107,7 @@ define([
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
       this.model.set("gravatar", $(this.el).find(".gravatar").val());
-
+      window.app.get("authentication").get("userPublic").set("gravatar", $(this.el).find(".gravatar").val());
       window.app.get("authentication").saveAndEncryptUserToLocalStorage();
       window.appView.renderEditableUserViews();
       window.appView.renderReadonlyUserViews();
