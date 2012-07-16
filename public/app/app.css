@@ -41,27 +41,22 @@
 }
 
 #corpus-quickview{
-	height: 150px;	
-}
+/* 	height: 150px;	
+ */
+ overflow: auto;
+ }
 
-#corpus-description{
-	width: 170px;
-	float: left;
-	overflow: auto;
+.corpus-description{
+float: left;
+width: 100%;
 }
-
-#corpus-title{
-  width: 170px;
-  float: left;
-}
-
 
 .corpusMenu{
-	float: right;
+	float: left;
 }
 
-.corpusMenu div{
-	 margin: 5px 0px 5px 0px;
+.corpusMenu button{
+	  margin: 5px 0px 5px 0px;
 	
 }
 
@@ -88,6 +83,7 @@
 .icons{
 	font-size: 1.5em;
 	line-height: 2em !important;
+	padding-left: .25em;
 }
 .icon-white {
   color: #bbb;
