@@ -54,7 +54,7 @@ define([
       prefs : UserPreference,
       permissions : Permission,
       hotkeys : HotKey,
-      activities : Activities
+      activities : Activities //TODO how do we parse collections.  i tried them as plural and kept getting baddly shaped usermasks in activity
     },
 
     addCurrentCorpusToUser : function(){
