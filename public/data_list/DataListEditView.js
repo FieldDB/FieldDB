@@ -38,7 +38,7 @@ define( [
      */
     initialize : function(options) {
       Utils.debug("DATALIST init: " + this.el);
-            
+      
       // Create a DatumView
       if (options.datumCollection) {
         this.datumsView = new UpdatingCollectionView({
@@ -49,12 +49,7 @@ define( [
         });
       }
       
-      // Create a CommentReadView     
-      this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
-      });
+      this.changeViewsOfInternalModels();
       
       // Remove options
       delete this.model.collection;
@@ -161,6 +156,15 @@ define( [
       }
 
       return this;
+    },
+    
+    changeViewsOfInternalModels : function() {
+      // Create a CommentReadView     
+      this.commentReadView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentReadView,
+        childViewTagName     : 'li'
+      });
     },
     
     // Clear the view of all its DatumReadViews
@@ -411,6 +415,9 @@ define( [
     
     //bound to change
     showEditable :function(){
+      //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
+      this.changeViewsOfInternalModels();
+      
       window.appView.renderEditableDataListViews();
     },
     
