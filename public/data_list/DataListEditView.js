@@ -423,7 +423,7 @@ define( [
             try{
               if(window.app.get("currentDataList").id != model.id){
                 window.app.get("corpus").get("dataLists").unshift(model);
-                window.app.get("authentication").get("userPrivate").get("activities").add(
+                window.app.get("authentication").get("userPrivate").get("activities").unshift(
                     new Activity({
                       verb : "added",
                       directobject : "data list "+model.get("title"),
