@@ -146,26 +146,30 @@ define([
       if (!headtg) {
           return;
       }
-      var linktg = document.createElement('link');
-      linktg.type = 'text/css';
-      linktg.rel = 'stylesheet';
-      linktg.href = './app/app_transparent.css';
-      headtg.appendChild(linktg);
+      
+      var oldlink = document.getElementsByTagName("link").item(5);
+      
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "./app/app_transparent.css");
+ 
+      headtg.replaceChild(newlink, oldlink);
     },
     makeDashboardOpaque : function(){
-      try{
-        var headtg = document.getElementsByTagName('head')[0];
-        if (!headtg) {
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
           return;
-        }
-        var linktg = document.createElement('link');
-        linktg.type = 'text/css';
-        linktg.rel = 'stylesheet';
-        linktg.href = './app/app_opaque.css';
-        headtg.appendChild(linktg);
-      }catch(e){
-        Utils.debug("Problem loading the opaque");
       }
+      
+      var oldlink = document.getElementsByTagName("link").item(5);
+      
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "./app/app_opaque.css");
+ 
+      headtg.replaceChild(newlink, oldlink);
     }
   });
   
