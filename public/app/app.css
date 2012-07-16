@@ -253,3 +253,21 @@ textarea{
 spacer{
 	size: 1em;
 }
+
+.like-form-inline {
+  margin: 0 0 18px;
+  display: block
+}
+
+.like-form-inline input,
+.like-form-inline textarea,
+.like-form-inline select,
+.like-form-inline .help-inline,
+.like-form-inline .uneditable-input,
+.like-form-inline .input-prepend,
+.like-form-inline .input-append {
+  display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  *zoom: 1;
+}
