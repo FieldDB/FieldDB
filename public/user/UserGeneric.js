@@ -52,9 +52,9 @@ define([
     // Internal models: used by the parse function
     model : {
       prefs : UserPreference,
-      permissions : Permission,
-      hotkeys : HotKey,
-      activities : Activities //TODO how do we parse collections.  i tried them as plural and kept getting baddly shaped usermasks in activity
+      permissions : Permission, //TODO this needs to become plural
+      hotkeys : HotKey, //TODO this needs to become plural
+      activities : Activities 
     },
 
     addCurrentCorpusToUser : function(){
