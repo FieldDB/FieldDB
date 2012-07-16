@@ -105,7 +105,7 @@ define([
       "blur .corpus-description-input" : "updateDescription",
         
       "click .save-corpus" : "updatePouch",
-      "blur .save-corpus-blur" : "updatePouch"
+//      "blur .save-corpus-blur" : "updatePouch"//TODO why was someone saving the corpus to pouch on blur!? this will make a ton of revisions.
     },
 
     /**
