@@ -42,9 +42,7 @@ define([
     },
     
     removeUnicode : function(){
-      
-      window.appView.authView.model.get("userPrivate").get("prefs").get("unicodes").remove(this.model);
-    
+      window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").remove(this.model);    
     }
   });
   return InsertUnicodeView;
