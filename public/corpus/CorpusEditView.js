@@ -337,6 +337,7 @@ define([
       // Add new comment to the db ? 
       this.model.get("comments").add(m);
       window.appView.addUnsavedDoc(this.model.id);
+      this.$el.find(".comment-new-text").val("");
 
     },
     
