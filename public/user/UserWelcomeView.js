@@ -272,13 +272,13 @@ define([
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
                           window.app.storeCurrentDashboardIdsToLocalStorage();
+                          $('#user-welcome-modal').modal("hide");
                         },10000);
                         
                       });
                     }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
                     console.log("Loadded app for a new user.");
                   });
-                  $('#user-welcome-modal').modal("hide");
                 });
 //                });
             }
