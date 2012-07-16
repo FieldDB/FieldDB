@@ -326,7 +326,7 @@ define([
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
       var m = new Comment({
-        "text" : this.$el.find(".comment-text").val(),
+        "text" : this.$el.find(".comment-new-text").val(),
 //        "username" : 
      });
       
