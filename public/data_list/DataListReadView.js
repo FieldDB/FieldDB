@@ -81,17 +81,22 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    fullscreenTemplate : Handlebars.templates.data_list_read_fullscreen,
+    templateFullscreen : Handlebars.templates.data_list_read_fullscreen,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
      */
-    embeddedTemplate : Handlebars.templates.data_list_read_embedded,
+    templateEmbedded : Handlebars.templates.data_list_read_embedded,
+    
+    /** 
+     * The Handlebars template rendered as Summary.
+     */
+    templateSummary : Handlebars.templates.data_list_summary_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListLinkReadView.
      */
-    linkTemplate : Handlebars.templates.data_list_read_link,
+    templateLink : Handlebars.templates.data_list_read_link,
 
     /**
      * The Handlebars template of the pagination footer, which is used
@@ -102,11 +107,11 @@ define( [
     render : function() {
       if (this.format == "link") {
         // Display the Data List
-        $(this.el).html(this.linkTemplate(this.model.toJSON()));
+        $(this.el).html(this.templateLink(this.model.toJSON()));
       
       } else if (this.format == "leftSide") {
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        this.setElement($("#data-list-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -116,15 +121,14 @@ define( [
         this.renderUpdatedPagination();
       
       } else if (this.format == "fullscreen") {
+        // Display the Data List
+        this.setElement($("#data-list-fullscreen"));
+        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
         // Display the CommentEditView
         this.commentEditView.el = this.$('.comments');
         this.commentEditView.render();
 
-        // Display the Data List
-        this.setElement($("#data-list-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
-        
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
@@ -133,8 +137,8 @@ define( [
         this.renderUpdatedPagination();
       
       } else if(this.format == "middle") {
-        this.setElement($("#new-data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        this.setElement($("#data-list-embedded"));
+        $(this.el).html(this.templateEmbedded(this.model.toJSON()));
       
         // Display the CommentEditView
         this.commentEditView.el = this.$('.comments');
