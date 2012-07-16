@@ -1,11 +1,13 @@
 define([
     "backbone", 
     "handlebars", 
+    "activity/Activity",
     "user/User",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
+    Activity,
     User
 ) {
   var UserEditView = Backbone.View.extend(
@@ -107,6 +109,14 @@ define([
       window.app.get("authentication").saveAndEncryptUserToLocalStorage();
       window.appView.renderEditableUserViews();
       window.appView.renderReadonlyUserViews();
+      window.app.get("authentication").get("userPrivate").get("activities").add(
+          new Activity({
+            verb : "modified",
+            directobject : "their profile",
+            indirectobject : "",
+            context : "via Offline App",
+            user: window.app.get("authentication").get("userPublic")
+          }));
     }
   });
 

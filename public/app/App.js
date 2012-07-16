@@ -1,5 +1,6 @@
 define([
     "backbone", 
+    "activity/Activity",
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
@@ -13,6 +14,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Activity,
     Authentication, 
     Corpus,
     DataList,
@@ -300,6 +302,14 @@ define([
             window.appView.addSavedDoc(model.id);
             try{
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+              window.app.get("authentication").get("userPrivate").get("activities").add(
+                  new Activity({
+                    verb : "saved",
+                    directobject : "session "+ model.get("sessionFields").where({label: "goal"})[0].get("value"),
+                    indirectobject : "in "+window.app.get("corpus").get("title"),
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
             }catch(e){
               Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
             }
@@ -313,6 +323,14 @@ define([
                   window.appView.addSavedDoc(model.id);
                   try{
                     window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+                    window.app.get("authentication").get("userPrivate").get("activities").add(
+                        new Activity({
+                          verb : "saved",
+                          directobject : "datalist "+ model.get("title"),
+                          indirectobject : "in "+window.app.get("corpus").get("title"),
+                          context : "via Offline App",
+                          user: window.app.get("authentication").get("userPublic")
+                        }));
                   }catch(e){
                     Utils.debug("Couldnt save the datatlist id to the user's mostrecentids"+e);
                   }
@@ -327,6 +345,14 @@ define([
                         try{
                           window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
                           localStorage.setItem("mostRecentCouchConnection", JSON.stringify(model.get("couchConnection")));
+                          window.app.get("authentication").get("userPrivate").get("activities").add(
+                              new Activity({
+                                verb : "saved",
+                                directobject : "corpus "+ model.get("title"),
+                                indirectobject : "",
+                                context : "via Offline App",
+                                user: window.app.get("authentication").get("userPublic")
+                              }));
                         }catch(e){
                           Utils.debug("Couldnt save the corpus id to the user's mostrecentids"+e);
                         }

@@ -325,7 +325,11 @@ define([
       "click .icon-home" : function() {
 //        this.model.router.showDashboard();
         window.location.href = "#";
-      }
+      },
+      "click .save-dashboard": function(){
+        window.app.storeCurrentDashboardIdsToLocalStorage();
+      },
+      "click .sync-everything" : "replicateDatabases"
     },
     
     /**

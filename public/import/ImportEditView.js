@@ -1,6 +1,7 @@
 define( [ 
     "backbone",
     "handlebars",
+    "activity/Activity",
     "import/Import",
     "datum/Datum",
     "datum/DatumField",
@@ -12,6 +13,7 @@ define( [
 ], function(
     Backbone,
     Handlebars, 
+    Activity,
     Import,
     Datum,
     DatumField,
@@ -111,6 +113,9 @@ define( [
     drop: function (data, dataTransfer, e) {
       this.model.set("files", dataTransfer.files);
       this.model.readFiles();
+      $(".import-progress").val(1);
+      $(".import-progress").attr("max", 4);
+
     },
     
     model : Import,
@@ -129,8 +134,10 @@ define( [
         this.showCSVTable();
         this.renderDatumFieldsLabels();
       }
-      $(".icon-book").hide();
-      
+      $(this.el).find(".icon-book").hide();
+      $(this.el).find(".icon-resize-full").hide();
+      $(this.el).find(".save-datalist").hide();
+      $(this.el).find(".save-resize-small").hide();
       return this;
     },
     renderDatumFieldsLabels : function(){
@@ -149,6 +156,7 @@ define( [
         x.addEventListener('dragover', this.handleDragStart, false);
         colorindex++;
         $("#import-datum-field-labels").append(x);
+        $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
       }
       
       //add tags
@@ -160,7 +168,8 @@ define( [
       x.addEventListener('dragover', this.handleDragStart, false);
       colorindex++;
       $("#import-datum-field-labels").append(x);
-      
+      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
+
       //add date
       var x = document.createElement("span");
       x.classList.add("label");
@@ -170,8 +179,22 @@ define( [
       x.addEventListener('dragover', this.handleDragStart, false);
       colorindex++;
       $("#import-datum-field-labels").append(x);
+      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
+      
+    //add checkedWithConsultant
+      var x = document.createElement("span");
+      x.classList.add("label");
+      x.classList.add(colors[colorindex%colors.length]);
+      x.draggable="true";
+      x.innerHTML = "checkedWithConsultant";
+      x.addEventListener('dragover', this.handleDragStart, false);
+      colorindex++;
+      $("#import-datum-field-labels").append(x);
+      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
     },
     showCSVTable : function(rows){
+      $(".import-progress").val($(".import-progress").val()+1);
+
       if(this.model.get("session") == undefined){
         this.createNewSession();
       }
@@ -209,6 +232,8 @@ define( [
       $(".approve-import").show();
     },
     convertTableIntoDataList : function(){
+      $(".import-progress").val($(".import-progress").val()+1);
+
       //clear out the data list
       this.model.dataListView.clearDataList();
       this.model.set("datumArray", []);
@@ -262,7 +287,19 @@ define( [
               });
               d.get("datumTags").add(t);
             }
-          }else{
+          }
+          //TODO turn the checkedwithconsultant into a checked, with that string as the person
+//          else if (index == "checkedWithConsultant") {
+//            var consultants = value.split(" ");
+//            for(g in consultants){
+//              var c = new UserMask({
+//                "username" : consultants[g]
+//              });
+//              var state = new DatumState({consultant: c});
+//              d.get("datumStates").add(state);
+//            }
+//          }
+          else{
             var n = fields.where({label: index})[0];
             n.set("value", value);
           }
@@ -332,6 +369,23 @@ define( [
               window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
               self.model.dataListView.temporaryDataList = false;
+              window.app.get("authentication").get("userPrivate").get("activities").add(
+                  new Activity({
+                    verb : "imported",
+                    directobject : self.model.get("datumArray").length + " data entries",
+                    indirectobject : "in "+window.app.get("corpus").get("title"),
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
+              window.app.get("authentication").get("userPrivate").get("activities").add(
+                  new Activity({
+                    verb : "added",
+                    directobject : "data list "+model.get("title"),
+                    indirectobject : "in "+window.app.get("corpus").get("title"),
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
+              
             },
             error : function(e) {
               alert('Data list save failure in import' + e);
@@ -339,7 +393,7 @@ define( [
           });
         });
       });
-      window.app.router.showDashboard();
+      window.location.replace("#"); //go back to dashboard
     },
     /**
      * For now just creating a session and saving it, not showing it to the user.
@@ -365,6 +419,14 @@ define( [
         sessself.model.get("session").save(null, {
           success : function(model, response) {
             Utils.debug('Session save success in import');
+            window.app.get("authentication").get("userPrivate").get("activities").add(
+                new Activity({
+                  verb : "added",
+                  directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  context : "via Offline App",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
           },
           error : function(e) {
             alert('Session save failure in import' + e);
@@ -400,10 +462,12 @@ define( [
       // Target (this) element is the source node.
       this.classList.add("halfopacity");
 
-      window.appView.importView.dragSrcEl = this;
-
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
+      //if not already dragging, do a drag start
+      if(window.appView.importView.dragSrcEl == null){
+        window.appView.importView.dragSrcEl = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+      }
     },
     /**
      * http://www.html5rocks.com/en/tutorials/dnd/basics/
@@ -422,6 +486,8 @@ define( [
         // Set the source column's HTML to the HTML of the columnwe dropped on.
 //        window.appView.importView.dragSrcEl.innerHTML = e.target.value;
         e.target.value = window.appView.importView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+        window.appView.importView.dragSrcEl = null;
+        $(".import-progress").val($(".import-progress").val()+1);
       }
       return false;
     },

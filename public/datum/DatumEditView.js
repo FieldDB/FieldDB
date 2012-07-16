@@ -280,7 +280,7 @@ define([
             success : function(model, response) {
               window.appView.addSavedDoc(model.id);
               if (neverBeenSaved) {
-                window.appView.activityFeedView.model.get("activities").add(
+                window.app.get("authentication").get("userPrivate").get("activities").add(
                     new Activity({
                       verb : "added",
                       directobject : "a datum",
