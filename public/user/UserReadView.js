@@ -138,7 +138,7 @@ define([
 //      );
     },
     showEditable :function(){
-      $("#user-edit-modal").show();
+      $("#user-edit-modal").modal("show");
 
     }
   });
