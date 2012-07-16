@@ -3,7 +3,7 @@ define([
     "handlebars", 
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -13,7 +13,7 @@ define([
     Handlebars, 
     Comment,
     Comments,
-    CommentReadView,
+    CommentEditView,
     DatumFieldReadView,
     Session,
     UpdatingCollectionView
@@ -95,9 +95,9 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render(); 
-          // Display the CommentReadView
-          this.CommentReadView.el = this.$('.comments');
-          this.CommentReadView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
@@ -115,9 +115,9 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentReadView
-          this.CommentReadView.el = this.$('.comments');
-          this.CommentReadView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
           
         } else if (this.format == "link") {
 
@@ -148,9 +148,9 @@ define([
         childViewFormat      : "session"
       });
       
-      this.CommentReadView = new UpdatingCollectionView({
+      this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
+        childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });     
       

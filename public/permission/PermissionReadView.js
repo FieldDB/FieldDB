@@ -55,7 +55,7 @@ define([
      * Change the model's state.
      */
     updatePermission : function() {
-     // this.model.set("value", this.$el.children(".comment-input").val());
+     // this.model.set("value", this.$el.children(".comment_input").val());
     }
   });
 

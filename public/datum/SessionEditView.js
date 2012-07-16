@@ -3,7 +3,7 @@ define([
     "handlebars", 
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -13,7 +13,7 @@ define([
     Handlebars, 
     Comment,
     Comments,
-    CommentReadView,
+    CommentEditView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -124,9 +124,9 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
-          // Display the CommentReadView
-          this.CommentReadView.el = this.$('.comments');
-          this.CommentReadView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
           
         } else if (this.format == "leftSide") {
           var jsonToRender = {
@@ -145,9 +145,9 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
          
-          // Display the CommentReadView
-          this.CommentReadView.el = this.$('.comments');
-          this.CommentReadView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
           
         } else if (this.format == "modal") {
           this.setElement("#new-session-modal");
@@ -155,9 +155,9 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentReadView
-          this.CommentReadView.el = this.$('.comments');
-          this.CommentReadView.render();
+          // Display the CommentEditView
+          this.commentEditView.el = this.$('.comments');
+          this.commentEditView.render();
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -173,9 +173,9 @@ define([
         childViewFormat      : "session"
       });
       
-      this.CommentReadView = new UpdatingCollectionView({
+      this.commentEditView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
+        childViewConstructor : CommentEditView,
         childViewTagName     : 'li'
       });
     },
