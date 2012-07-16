@@ -87,13 +87,18 @@ define( [
     /**
      * The Handlebars template rendered as fullscreen.
      */
-    fullscreenTemplate : Handlebars.templates.data_list_edit_fullscreen,
+    templateFullscreen : Handlebars.templates.data_list_edit_fullscreen,
     
     /** 
      * The Handlebars template rendered as embedded.
      */
     embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
 
+    /** 
+     * The Handlebars template rendered as Summary.
+     */
+    templateSummary : Handlebars.templates.data_list_summary_edit_embedded,
+    
     /**
      * The Handlebars template of the pagination footer, which is used
      * as a partial.
@@ -103,7 +108,7 @@ define( [
     render : function() {
       if (this.format == "fullscreen") {
         this.setElement($("#data-list-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
        
         // Display the CommentEditView
         this.commentEditView.el = this.$('.comments');
@@ -115,20 +120,18 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+     
       } else if (this.format == "leftSide") {
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-        
+        this.setElement($("#data-list-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
+                
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
 
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
-        
         // Display the pagination footer
         this.renderUpdatedPagination();
+
       } else if (this.format == "import"){
         this.setElement($("#import-data-list-view"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
@@ -139,8 +142,9 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+        
       } else if (this.format == "centreWell") {
-        this.setElement($("#new-datalist-embedded"));
+        this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
         // Display the DatumFieldsView

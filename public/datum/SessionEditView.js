@@ -123,6 +123,7 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          
           // Display the CommentEditView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
@@ -143,6 +144,7 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+         
           // Display the CommentEditView
           this.commentEditView.el = this.$('.comments');
           this.commentEditView.render();
