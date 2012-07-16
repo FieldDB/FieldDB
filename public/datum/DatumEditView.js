@@ -189,7 +189,7 @@ define([
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
       $(this.el).find(".comments-section").show();
 
-      showComments();
+      this.showComments();
     },
     
   
@@ -296,9 +296,15 @@ define([
                       context : "via Offline App",
                       user: window.app.get("authentication").get("userPublic")
                     }));
-                // Add it to the default data list
+                
+                // If the default data list is the currently visible data list, add this datum to the view
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
+                  appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
+                } else {
+                  // Add it to the default data list
+                  app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+                }
                 
                 // Save the default data list
                 app.get("corpus").get("dataLists").models[defaultIndex].changeCorpus(app.get("corpus").get("corpusname"), function() {
@@ -309,11 +315,6 @@ define([
                 app.get("corpus").changeCorpus(app.get("corpus").get("couchConnection"), function() {
                   app.get("corpus").save();
                 });
-                
-                // If the default data list is the currently visible data list, add this datum to the view
-                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
-                  appView.dataListEditLeftSideView.addOne(model.id, true);
-                }
               }
             }
           });
