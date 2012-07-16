@@ -408,6 +408,9 @@ define([
         Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
       }
       
+      this.setTotalPouchDocs();
+      this.setTotalBackboneDocs();
+      
       return this;
     },
     
@@ -566,8 +569,8 @@ define([
      */
     totalUnsaved: [],
     totalUnsynced: [],
-    totalPouchDocs: [1,2,3,4,5,7,8],//TODO find out how to do this?
-    totalBackboneDocs: [1,2,3,4,5,6],
+    totalPouchDocs: [],//TODO find out how to do this?
+    totalBackboneDocs: [],
     addUnsavedDoc : function(id){
       if(this.totalUnsaved.indexOf(id) == -1){
         this.totalUnsaved.push(id);
@@ -598,7 +601,7 @@ define([
         this.addBackboneDoc(this.totalUnsynced[i]);
       }
       this.totalUnsynced = [];
-      $(".unsaved-changes").val(this.totalUnsynced.length);
+      $(".unsynced-changes").val(this.totalUnsynced.length);
     },
     addPouchDoc : function(id){
       if(this.totalPouchDocs.indexOf(id) == -1){
@@ -614,9 +617,12 @@ define([
     },
     setTotalPouchDocs: function(){
       $(".unsynced-changes").attr("max", this.totalPouchDocs.length);
+      $(".unsynced-changes").val(this.totalUnsynced.length);
     },
     setTotalBackboneDocs: function(){
       $(".unsaved-changes").attr("max", this.totalBackboneDocs.length);
+      $(".unsaved-changes").val(this.totalUnsaved.length);
+
     }
     
     

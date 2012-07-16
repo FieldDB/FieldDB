@@ -157,8 +157,11 @@ define([
       c.changeCorpus(couchConnection, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         c.fetch({
-          success : function(e) {
-            Utils.debug("Corpus fetched successfully" + e);
+          success : function(model) {
+            Utils.debug("Corpus fetched successfully" + model);
+            window.appView.addBackboneDoc(model.id);
+            window.appView.addPouchDoc(model.id);
+
             //show pretty views after loading everything.
             window.appView.renderReadonlyCorpusViews();
           },
@@ -176,8 +179,10 @@ define([
       s.changeCorpus(couchConnection.corpusname, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         s.fetch({
-          success : function(e) {
-            Utils.debug("Session fetched successfully" +e);
+          success : function(model) {
+            Utils.debug("Session fetched successfully" +model);
+            window.appView.addBackboneDoc(model.id);
+            window.appView.addPouchDoc(model.id);
             //show pretty views after loading everything.
             window.appView.renderReadonlySessionViews();
           },
@@ -197,8 +202,10 @@ define([
       dl.changeCorpus(couchConnection.corpusname, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         dl.fetch({
-          success : function(e) {
-            Utils.debug("Data list fetched successfully" +e);
+          success : function(model) {
+            Utils.debug("Data list fetched successfully" +model);
+            window.appView.addBackboneDoc(model.id);
+            window.appView.addPouchDoc(model.id);
             //show pretty views after loading everything.
             window.appView.renderReadonlyDataListViews();
           },
@@ -234,7 +241,10 @@ define([
         returntext = "You have unsaved changes, click cancel to save them. \n\n";
       }
       if(window.appView.totalUnsaved.length >1){
-        returntext = returntext+"You have unsynced changes, click cancel and then click the sycn button to sync them, this is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
+        returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
+      }
+      if(returntext == ""){
+        return; //dont show a pop up
       }
       return returntext;
     },

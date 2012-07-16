@@ -21,7 +21,7 @@ define([
      */
     initialize : function() {
       if(!this.get("activities")) {
-        this.set("activities", new Activities());
+        this.set("activities", window.get("authentication").get("userPrivate").get("activities"));
       }
       
     },

@@ -27,7 +27,7 @@ define([
     initialize : function() {
       Utils.debug("USER init: " + this.el);
 
-      this.model.bind("change", this.render, this);
+//      this.model.bind("change", this.render, this); //this breaks the save. we should only render the corpus updating collection view.
 
       //TODO replace this code with a Updating Collections View
       
@@ -95,11 +95,18 @@ define([
 
     },
     saveProfile : function(){
-      Utils.debug("Saving session");
+      Utils.debug("Saving user");
       $("#user-edit-modal").hide();
       $("#user-modal").show();
-      this.model.saveAndEncryptUserToLocalStorage();
-
+      
+      this.model.set("email", $(this.el).find(".email").val());
+      this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
+      this.model.set("affiliation", $(this.el).find(".affiliation").val());
+      this.model.set("description", $(this.el).find(".description").val());
+      
+      window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+      window.appView.renderEditableUserViews();
+      window.appView.renderReadonlyUserViews();
     }
   });
 

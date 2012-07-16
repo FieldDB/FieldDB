@@ -276,7 +276,7 @@ define([
         this.model.changeCorpus(app.get("corpus").get("corpusname"), function(){
           self.model.save(null, {
             success : function(model, response) {
-              window.appView.addSavedDoc(this.model.id);
+              window.appView.addSavedDoc(model.id);
               if (neverBeenSaved) {
                 // Add it to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;

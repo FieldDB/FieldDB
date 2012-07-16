@@ -1,11 +1,13 @@
 define([ 
     "backbone", 
+    "activity/Activities",
     "hotkey/HotKey",
     "permission/Permission",
     "user/UserPreference",
     "libs/Utils"
 ], function(
     Backbone,
+    Activities,
     HotKey,
     Permission,
     UserPreference
@@ -51,7 +53,8 @@ define([
     model : {
       prefs : UserPreference,
       permissions : Permission,
-      hotkeys : HotKey
+      hotkeys : HotKey,
+      activities : Activities
     },
 
     addCurrentCorpusToUser : function(){
