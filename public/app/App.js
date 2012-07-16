@@ -279,6 +279,11 @@ define([
           if(typeof thiscallback == "function"){
             thiscallback();
           }
+          if(window.appView){
+            window.appView.renderReadonlyDataListViews();
+            window.appView.renderReadonlySessionViews();
+            window.appView.renderReadonlyCorpusViews();
+          }
           window.hub.unsubscribe("savedToPouch", null, window.app);
         }
       },this);
