@@ -32,15 +32,28 @@ define([
      * Events that the InsertUnicode is listening to and their handlers.
      */
     events : {
-      "click .add-unicode" : "insertNewUnicode",
+      "click .add-unicode" : "insertNewUnicodeSymbol",
+      "keyup .insert-unicode-input" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.insertNewUnicodeSymbol()
+        }
+      },
+      "keyup .insert-unicode-tipa-input" : function(e) {
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.insertNewUnicodeSymbol()
+        }
+      }
     },
-
-    // classname : "insert-unicode",
 
     template : Handlebars.templates.insert_unicodes,
 
     render : function() {
-
       // Display the InsertUnicodesView
       this.setElement($("#insert-unicode"));
       $(this.el).html(this.template({}));
@@ -55,29 +68,24 @@ define([
       
       return this;
     },
-
-    /**
-     * Change the model's state.
-     */
-    updateUnicode : function() {
-      Utils.debug("Updated unicode to "
-          + this.$el.children(".insert-unicode-input").val());
-      this.model.set("insertUnicode", this.$el
-          .children(".insert-unicode-input").val());//TODO what is this for, why woudl you save this ot the InsertUnicodes collection's model?
-    },
+    
     /**
      * Adds a new unicode to the user's unicode collection
      */
-    insertNewUnicode : function() {
+    insertNewUnicodeSymbol : function() {
       var m = new InsertUnicode({
-        "symbol" : this.$el.children(".insert-unicode-input").val(),
-        "tipa" :  this.$el.children(".insert-unicode-tipa-input").val()
+        "symbol" : this.$el.find(".insert-unicode-input").val(),
+        "tipa" :  this.$el.find(".insert-unicode-tipa-input").val()
       });
-      app.get("authentication").get("userPrivate").get("prefs").get("unicodes")
-          .add(m);
+      app.get("authentication").get("userPrivate").get("prefs").get("unicodes").add(m);
+      
+      // Clear the textfields
+      this.$el.find(".insert-unicode-input").val("");
+      this.$el.find(".insert-unicode-tipa-input").val("");
     },
 
     dragSrcEl : null,
+    
     /**
      * http://www.html5rocks.com/en/tutorials/dnd/basics/
      * 

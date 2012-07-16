@@ -41,27 +41,22 @@
 }
 
 #corpus-quickview{
-	height: 150px;	
-}
+/* 	height: 150px;	
+ */
+ overflow: auto;
+ }
 
-#corpus-description{
-	width: 170px;
-	float: left;
-	overflow: auto;
+.corpus-description{
+float: left;
+width: 100%;
 }
-
-#corpus-title{
-  width: 170px;
-  float: left;
-}
-
 
 .corpusMenu{
-	float: right;
+	float: left;
 }
 
-.corpusMenu div{
-	 margin: 5px 0px 5px 0px;
+.corpusMenu button{
+	  margin: 5px 0px 5px 0px;
 	
 }
 
@@ -88,6 +83,7 @@
 .icons{
 	font-size: 1.5em;
 	line-height: 2em !important;
+	padding-left: .25em;
 }
 .icon-white {
   color: #bbb;
@@ -159,9 +155,9 @@ textarea{
   -webkit-user-select: none;
   user-select: none;
 }
-.halfopacity{
+/* .halfopacity{
 	opacity: 0.5;
-}
+} */
 
 .dropdown-menu .not-a {
   display: block;
@@ -191,13 +187,17 @@ textarea{
 .unicode-symbol{
 	cursor: move;
   font-size: 1.25em;
+  color: white;
+  font-weight:normal !important;
 }
 .show-unicode-details{
   width: 2em;	
+  
 }
 .unicode-buttons{
 	line-height: 2em;
 	text-align:center;
+
 }
 
 .nowrap{
@@ -247,4 +247,26 @@ textarea{
     rgb(120,100,4) 37%,
     rgb(248,148,5) 69%
   );
+}
+
+spacer{
+	size: 1em;
+}
+
+.like-form-inline {
+  margin: 0 0 18px;
+  display: block
+}
+
+.like-form-inline input,
+.like-form-inline textarea,
+.like-form-inline select,
+.like-form-inline .help-inline,
+.like-form-inline .uneditable-input,
+.like-form-inline .input-prepend,
+.like-form-inline .input-append {
+  display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  *zoom: 1;
 }
