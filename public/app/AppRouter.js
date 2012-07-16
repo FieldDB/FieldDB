@@ -196,7 +196,7 @@ define([
             success : function(e) {
               Utils.debug("Session fetched successfully" +e);
               //show pretty views after loading everything.
-              window.appView.renderSessionReadonlyViews();
+              window.appView.renderReadonlySessionViews();
             },
             error : function(e) {
               alert("There was an error fetching the sessions. Loading defaults..."+e);

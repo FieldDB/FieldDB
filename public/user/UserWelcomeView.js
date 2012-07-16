@@ -1,6 +1,7 @@
 define([
     "backbone", 
     "handlebars", 
+    "activity/Activity",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -15,6 +16,7 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
+    Activity,
     App,
     Authentication,
     Corpus,
@@ -185,10 +187,11 @@ define([
               $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
               $(".alert-error").show();
             } else if (data.user) {
-              $(".alert-error").html("Preparing your first corpus/database for you." );
+              $(".alert-error").html("<p>Preparing your first corpus/database for you, please wait...</p> <progress max='100'> <strong>Progress: working...</strong>" );
               $(".alert-error").addClass("alert-success");
-              $(".alert-error").removeClass("alert-error");
               $(".alert-error").show();
+              $(".alert-error").removeClass("alert-error");
+              $(".register-new-user").addClass("disabled");
 
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
@@ -271,13 +274,13 @@ define([
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
                           window.app.storeCurrentDashboardIdsToLocalStorage();
+                          $('#user-welcome-modal').modal("hide");
                         },10000);
                         
                       });
                     }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
                     console.log("Loadded app for a new user.");
                   });
-                  $('#user-welcome-modal').modal("hide");
                 });
 //                });
             }
