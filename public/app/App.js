@@ -208,8 +208,9 @@ define([
             Utils.debug("Data list fetched successfully" +model);
             window.appView.addBackboneDoc(model.id);
             window.appView.addPouchDoc(model.id);
-            //show pretty views after loading everything.
-            window.appView.renderReadonlyDataListViews();
+            
+            // Render the read version of the first page of the datalist
+            window.appView.renderFirstPageReadonlyDataListViews();
           },
           error : function(e) {
             Utils.debug("There was an error fetching the data list. Loading defaults..."+e);
