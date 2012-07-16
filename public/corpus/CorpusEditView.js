@@ -256,10 +256,14 @@ define([
     
     updateTitle: function(){
       this.model.set("title",this.$el.find(".corpus-title-input").val());
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     updateDescription: function(){
       this.model.set("description",this.$el.find(".corpus-description-input").val());
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
    
     //Functions assoicate with the corpus menu
@@ -324,6 +328,8 @@ define([
 
       });
       this.model.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     // This the function called by the add button, it adds a new datum field both to the 
@@ -345,6 +351,8 @@ define([
       // Reset the line with the add button
       this.$el.find(".choose_add_field").val("");//.children("option:eq(0)").attr("selected", true);
       this.$el.find(".add_help").val("");
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     //This the function called by the add button, it adds a new datum state both to the collection and the model
@@ -354,6 +362,8 @@ define([
         "color" : this.$el.find(".add_color_chooser").val()
       });
       this.model.get("datumStates").add(m);
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     resizeSmall : function(){
       window.app.router.showEmbeddedCorpus();
@@ -448,8 +458,11 @@ define([
                 });
               }
               window.app.set("corpus", model);
+              window.appView.renderEditableCorpusViews();
+              window.appView.renderReadonlyCorpusViews();
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
-//            }catch(e){
+              window.appView.addSavedDoc(model.id);
+              //            }catch(e){
 //              Utils.debug("Couldnt save the corpus somewhere"+e);
 //            }
             if(this.format == "modal"){
@@ -457,6 +470,8 @@ define([
               window.app.router.showFullscreenCorpus();
               alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
             }
+            
+            
           },
           error : function(e) {
             Alert('Corpus save error' + e);

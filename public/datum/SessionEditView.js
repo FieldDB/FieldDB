@@ -66,6 +66,9 @@ define([
         label : "consultants"
       })[0].set("value", this.$el.find(".session-consultant-input")
           .val());
+      
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     updateElicitedDate : function(){
@@ -73,6 +76,9 @@ define([
         label : "dateElicited"
       })[0].set("value", this.$el.find(".session-elicitation-date-input")
           .val());
+      
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     updateGoal : function(){
@@ -80,6 +86,9 @@ define([
         label : "goal"
       })[0].set("value", this.$el.find(".session-goal-input")
           .val());
+      
+      window.appView.addUnsavedDoc(this.model.id);
+
     },
     
     /**
@@ -198,6 +207,7 @@ define([
               window.app.set("currentSession", model);
               window.appView.renderEditableSessionViews();
               window.appView.renderReadonlySessionViews();
+              window.appView.addSavedDoc(model.id);
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
               //add session to the users session history if they dont already have it
               if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
@@ -243,6 +253,8 @@ define([
 //        "label" : this.$el.children(".comment_input").val(),
       });
       this.model.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.model.id);
+
     }
   });
   

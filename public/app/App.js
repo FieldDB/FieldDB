@@ -229,10 +229,14 @@ define([
       
       //TODO, this doesn't work.
       //this.storeCurrentDashboardIdsToLocalStorage();
-      
-      return "You have unsaved changes, click cancel to save them. \n\n"
-      +"You have unbacked up data. \n\nIf you want backup/share your data with your collaborators click Cancel, then click the Sync button.\n\n"
-      +"Your data currently saved on your local tablet/laptop only.";
+      var returntext = "";
+      if(window.appView.totalUnsaved.length >1){
+        returntext = "You have unsaved changes, click cancel to save them. \n\n";
+      }
+      if(window.appView.totalUnsaved.length >1){
+        returntext = returntext+"You have unsynced changes, click cancel and then click the sycn button to sync them, this is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
+      }
+      return returntext;
     },
     /**
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync
@@ -278,6 +282,7 @@ define([
         self.get("currentSession").save(null, {
           success : function(model, response) {
             Utils.debug('Session save success');
+            window.appView.addSavedDoc(model.id);
             try{
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
             }catch(e){
@@ -290,6 +295,7 @@ define([
               self.get("currentDataList").save(null, {
                 success : function(model, response) {
                   Utils.debug('Datalist save success');
+                  window.appView.addSavedDoc(model.id);
                   try{
                     window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
                   }catch(e){
@@ -302,6 +308,7 @@ define([
                     self.get("corpus").save(null, {
                       success : function(model, response) {
                         Utils.debug('Corpus save success');
+                        window.appView.addSavedDoc(model.id);
                         try{
                           window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
                           localStorage.setItem("mostRecentCouchConnection", JSON.stringify(model.get("couchConnection")));

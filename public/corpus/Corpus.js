@@ -278,6 +278,7 @@ define([
             if(typeof fromcallback == "function"){
               fromcallback();
             }
+            window.appView.allSyncedDoc();
           });
         });
       });
