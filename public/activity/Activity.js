@@ -21,6 +21,7 @@ define([
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
       }
+      this.set("timestamp",JSON.stringify(new Date()) );
     },
     
     defaults : {
@@ -28,7 +29,8 @@ define([
       verb : "added",
       directobject : "an entry",
       indirectobject : "with Consultant-SJ",
-      context : "via Android/ Offline Chrome App"  
+      context : "via Android/ Offline Chrome App" ,
+//      timestamp: timestamp
     },
     
     // Internal models: used by the parse function
