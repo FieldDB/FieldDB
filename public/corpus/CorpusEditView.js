@@ -84,7 +84,7 @@ define([
     events : {
       "click .icon-book": "showReadonly",
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-edit" : 'insertNewComment',
     	
       //Add button inserts new Datum State
       "click .add_datum_state" : 'insertNewDatumState',
@@ -194,9 +194,11 @@ define([
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
+      
       }else if (this.format == "modal"){
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
+      
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
@@ -324,8 +326,11 @@ define([
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
+        "text" : this.$el.find(".add-comment").val(),
+//        "username" : 
      });
+      
+      // Add new comment to the db ? 
       this.model.get("comments").add(m);
     },
     
