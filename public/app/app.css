@@ -159,9 +159,9 @@ textarea{
   -webkit-user-select: none;
   user-select: none;
 }
-.halfopacity{
+/* .halfopacity{
 	opacity: 0.5;
-}
+} */
 
 .dropdown-menu .not-a {
   display: block;
@@ -191,13 +191,17 @@ textarea{
 .unicode-symbol{
 	cursor: move;
   font-size: 1.25em;
+  color: white;
+  font-weight:normal !important;
 }
 .show-unicode-details{
   width: 2em;	
+  
 }
 .unicode-buttons{
 	line-height: 2em;
 	text-align:center;
+
 }
 
 .nowrap{
