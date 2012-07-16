@@ -109,7 +109,7 @@ define([
       window.app.get("authentication").saveAndEncryptUserToLocalStorage();
       window.appView.renderEditableUserViews();
       window.appView.renderReadonlyUserViews();
-      window.app.get("authentication").get("userPrivate").get("activities").add(
+      window.app.get("authentication").get("userPrivate").get("activities").unshift(
           new Activity({
             verb : "modified",
             directobject : "their profile",

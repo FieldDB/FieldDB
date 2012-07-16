@@ -302,7 +302,7 @@ define([
             window.appView.addSavedDoc(model.id);
             try{
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-              window.app.get("authentication").get("userPrivate").get("activities").add(
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
                   new Activity({
                     verb : "saved",
                     directobject : "session "+ model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -323,7 +323,7 @@ define([
                   window.appView.addSavedDoc(model.id);
                   try{
                     window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
-                    window.app.get("authentication").get("userPrivate").get("activities").add(
+                    window.app.get("authentication").get("userPrivate").get("activities").unshift(
                         new Activity({
                           verb : "saved",
                           directobject : "datalist "+ model.get("title"),
@@ -345,7 +345,7 @@ define([
                         try{
                           window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
                           localStorage.setItem("mostRecentCouchConnection", JSON.stringify(model.get("couchConnection")));
-                          window.app.get("authentication").get("userPrivate").get("activities").add(
+                          window.app.get("authentication").get("userPrivate").get("activities").unshift(
                               new Activity({
                                 verb : "saved",
                                 directobject : "corpus "+ model.get("title"),

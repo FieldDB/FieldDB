@@ -282,7 +282,7 @@ define([
             }
             window.appView.allSyncedDoc();
             
-            window.app.get("authentication").get("userPrivate").get("activities").add(
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
                 new Activity({
                   verb : "synced",
                   directobject : window.app.get("corpus").get("title"),

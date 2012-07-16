@@ -197,7 +197,7 @@ define([
             try{
               if(window.app.get("currentSession").id != model.id){
                 window.app.get("corpus").get("sessions").unshift(model);
-                window.app.get("authentication").get("userPrivate").get("activities").add(
+                window.app.get("authentication").get("userPrivate").get("activities").unshift(
                     new Activity({
                       verb : "added",
                       directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
