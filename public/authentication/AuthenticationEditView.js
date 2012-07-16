@@ -58,8 +58,10 @@ define([
       "click .login" : "login",
       "click #login_form" : function(e) {
         e.stopPropagation();
+      },
+      "click .corpus-settings" : function() {
+        app.router.showEmbeddedCorpus();
       }
-      
     },
     
     /**
