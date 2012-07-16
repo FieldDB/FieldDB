@@ -124,23 +124,23 @@ define([
         this.get("unicodes").add(new InsertUnicode({tipa: "\alpha", symbol:  "α "}));
         this.get("unicodes").add(new InsertUnicode({tipa: "\beta", symbol:  "β "}));
         this.get("unicodes").add(new InsertUnicode({tipa: "\forall", symbol:  "∀"}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "\exists", symbol:  "∃"}));
 
         
        
-
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "γ "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "δ "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ε "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ζ "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "η "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "θ "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ι "}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "κ "}));
+//
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "γ "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "δ "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ε "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ζ "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "η "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "θ "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ι "}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "κ "}));
         
         
         
       
-        this.get("unicodes").add(new InsertUnicode({tipa: "\exists", symbol:  "∃"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∄"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∅"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∆"}));
@@ -150,47 +150,47 @@ define([
     
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∋"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∌"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∍"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "∍"}));
        
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≁"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≂"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≃"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≄"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≅"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≆"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≇"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≆"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≇"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≈"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≉"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≊"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≋"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≌"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≍"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≎"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≏"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≐"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≑"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≒"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≓"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≔"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≕"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≉"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≊"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≋"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≌"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≍"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≎"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≏"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≐"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≑"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≒"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≓"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≔"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≕"}));
      
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≤"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≥"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≦"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≧"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≨"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≩"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≪"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≫"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≬"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≭"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≮"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≯"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≦"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≧"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≨"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≩"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≪"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≫"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≬"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≭"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≮"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≯"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≰"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≱"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≲"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≳"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≴"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≲"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≳"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "≴"}));
       
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊂"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊃"}));
@@ -200,11 +200,11 @@ define([
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊇"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊈"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊉"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊊"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊋"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊌"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊍"}));
-        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊎"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊊"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊋"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊌"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊍"}));
+//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "⊎"}));
       }
       
     },

@@ -1,8 +1,7 @@
 <div class="pull-right">
-	<div>
-		<i class="icons icon-book"></i> 
-		<i class="icons icon-resize-full"></i>
-	</div>
+    <i class="icons icon-book"></i>
+    <spacer></spacer>
+    <i class="icons icon-resize-full"></i>
 </div>
 <div class="btn-toolbar ">
 	<!-- /btn-group -->
@@ -38,7 +37,7 @@
 
 
 <label>Title:</label>
-<textarea class="corpus-title-input">{{title}}</textarea>
+<input class="corpus-title-input" value="{{title}}" type="text"/>
 <label>Description:</label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
@@ -137,7 +136,7 @@
 		</div>
 		<div class="accordion-body collapse" id="collapseDatumStateSettingsEE">
 				<ul class="datum_state_settings unstyled"></ul>
-				<input class="add_input" value="" placeholder="Add..."></input>
+				<input class="add_input" value="" placeholder="Add..." type="text"></input>
 				<select class="add_color_chooser">
 					<option value="success">Green</option>
 					<option value="warning">Orange</option>
