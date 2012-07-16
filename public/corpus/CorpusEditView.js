@@ -410,7 +410,7 @@ define([
                 //add corpus to user
                 model.set("titleAsUrl", encodeURIComponent(model.get("title")));
                 window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
-                window.appView.activityFeedView.model.get("activities").add(
+                window.app.get("authentication").get("userPrivate").get("activities").add(
                     new Activity({
                       verb : "added",
                       directobject : "a corpus",

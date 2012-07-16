@@ -423,10 +423,10 @@ define( [
             try{
               if(window.app.get("currentDataList").id != model.id){
                 window.app.get("corpus").get("dataLists").unshift(model);
-                window.appView.activityFeedView.model.get("activities").add(
+                window.app.get("authentication").get("userPrivate").get("activities").add(
                     new Activity({
                       verb : "added",
-                      directobject : "a data list",
+                      directobject : "data list "+model.get("title"),
                       indirectobject : "in "+window.app.get("corpus").get("title"),
                       context : "via Offline App",
                       user: window.app.get("authentication").get("userPublic")

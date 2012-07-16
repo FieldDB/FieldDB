@@ -13,7 +13,7 @@
 	width: 30px;
 }
 .activity_direct_object{
-	color: #300;
+	color: #055;
 }
 .activity_verb{
 
@@ -150,7 +150,7 @@ textarea{
 
 .export-large-textarea{
 	width: 100%;
-	height: 30em;
+	height: 15em;
 }
 /* Prevent the text contents of draggable elements from being selectable. */
 [draggable] {

@@ -34,7 +34,7 @@ define([
     defaults : {
       state : "Checked",
       color : "success",
-      consultant : UserMask,
+      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
       showInSearchResults : true,
       selected : ""
     },

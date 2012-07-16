@@ -1,5 +1,6 @@
 define([ 
     "backbone",
+    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "confidentiality_encryption/Confidential",
@@ -17,6 +18,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Activity,
     Comment, 
     Comments,
     Confidential,
@@ -279,6 +281,15 @@ define([
               fromcallback();
             }
             window.appView.allSyncedDoc();
+            
+            window.app.get("authentication").get("userPrivate").get("activities").add(
+                new Activity({
+                  verb : "synced",
+                  directobject : window.app.get("corpus").get("title"),
+                  indirectobject : "to their team server",
+                  context : "via Offline App",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
           });
         });
       });
