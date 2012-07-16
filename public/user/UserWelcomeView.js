@@ -186,10 +186,11 @@ define([
               $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
               $(".alert-error").show();
             } else if (data.user) {
-              $(".alert-error").html("Preparing your first corpus/database for you." );
+              $(".alert-error").html("Preparing your first corpus/database for you, please wait... " );
               $(".alert-error").addClass("alert-success");
               $(".alert-error").show();
               $(".alert-error").removeClass("alert-error");
+              $(".register-new-user").addClass("disabled");
 
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
