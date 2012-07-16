@@ -95,7 +95,7 @@ define([
       "click .icon-resize-full" : "resizeFullscreen",
       
       //corpus menu buttons
-      "click .new-datum" : "newDatum",
+      "click .new-datum-edit" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
