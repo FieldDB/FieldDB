@@ -252,3 +252,7 @@ textarea{
     rgb(248,148,5) 69%
   );
 }
+
+spacer{
+	size: 1em;
+}

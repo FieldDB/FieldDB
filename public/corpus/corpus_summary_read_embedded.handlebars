@@ -1,8 +1,9 @@
 <!-- This div aligns the title with the icons in the corner -->
 <div>
-	<div>
-		<i class="icons icon-resize-full pull-right"></i> 
-		<i class="icons icon-edit pull-right"></i>
+	<div class="pull-right">
+		<i class="icons icon-edit"></i>
+		<spacer></spacer>
+		<i class="icons icon-resize-full"></i>
 	</div>
 	<div>
 		<h3>{{title}}</h3>
@@ -13,28 +14,29 @@
 <div>
 	<div id="corpus-description">
 		<p>{{description}}</p>
-	</div>	
+	</div>
 	<div class="btn-group corpusMenu">
-	 <!-- This div is necessary so that the menu appears below the buttons -->
-		<div class= "btn-group">
-			<button class="btn btn-primary dropdown-toggle"	data-toggle="dropdown">
+		<!-- This div is necessary so that the menu appears below the buttons -->
+		<div class="btn-group">
+			<button class="btn btn-primary dropdown-toggle"
+				data-toggle="dropdown">
 				New <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
-        <li class="new-datum"><a href="#">New Datum</a></li>
-        <li class="new-data-list"><a href="#">New Data List</a></li>
-        <li class="new-session"><a href="#">New Session</a></li>
-        <li class="new-corpus"><a href="#">New Corpus</a></li>
-      </ul>
+				<li class="new-datum"><a href="#">New Datum</a></li>
+				<li class="new-data-list"><a href="#">New Data List</a></li>
+				<li class="new-session"><a href="#">New Session</a></li>
+				<li class="new-corpus"><a href="#">New Corpus</a></li>
+			</ul>
 		</div>
 		<div>
 			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
 				Data <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
-	      <li><a href="#import">Import Data</a></li>
-	      <li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
-	    </ul>
+				<li><a href="#import">Import Data</a></li>
+				<li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
+			</ul>
 		</div>
 	</div>
 </div>
