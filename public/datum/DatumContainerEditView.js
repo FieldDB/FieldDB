@@ -184,7 +184,7 @@ define([
         
         if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
           // Display the new Session modal
-          $("#session-modal").modal("show");
+          $("#new-session-modal").modal("show");
           
           return;
         } 

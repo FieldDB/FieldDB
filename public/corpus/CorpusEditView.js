@@ -55,7 +55,7 @@ define([
      * 
      * @property {String} format Must be set when the CorpusEditView is
      * initialized. Valid values are "centreWell" and
-     * "fullscreen" and "leftSide"
+     * "fullscreen" and "leftSide" and "modal"
      * 
      * @description Starts the Corpus and initializes all its children.
      * 
@@ -121,6 +121,8 @@ define([
      */
     templateSummary : Handlebars.templates.corpus_summary_edit_embedded,
     
+    
+    templateNewCorpus : Handlebars.templates.corpus_edit_new_modal,
     /**
      * Renders the CorpusReadFullScreenView and all of its child Views.
      */
@@ -190,6 +192,9 @@ define([
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
+      }else if (this.format == "modal"){
+        this.setElement($("#new-corpus-modal"));
+        $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
@@ -262,21 +267,14 @@ define([
     },
     
     newDataList : function() {
-      app.router.showMiddleDataList();
+      //take the user to the search so they can create a data list using the search feature.
+      app.router.showEmbeddedSearch();
     },
     
     newSession : function() {
-      $("#session-modal").modal("show");
+      $("#new-session-modal").modal("show");
       //Save the current session just in case
       window.app.get("currentSession").save();
-      window.appView.activityFeedView.model.get("activities").add(
-          new Activity({
-            verb : "added",
-            directobject : "a session",
-            indirectobject : "in "+window.app.get("corpus").get("title"),
-            context : "via Offline App",
-            user: window.app.get("authentication").get("userPublic")
-          }));
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
       window.appView.sessionModalView.model = window.app.get("currentSession").clone();
       //Give it a null id so that pouch will save it as a new model.
@@ -289,11 +287,26 @@ define([
     },
     
     newCorpus : function(){
-      app.router.showEmbeddedCorpus();
-      app.router.showEditableCorpus();
-     
+      $("#new-corpus-modal").modal("show");
+      //Save the current session just in case
+      window.app.get("corpus").save();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      window.appView.corpusNewModalView.model = window.app.get("corpus").clone(); //MUST be a new model, other wise it wont save in a new pouch.
+      //Give it a null id so that pouch will save it as a new model.
+      window.appView.corpusNewModalView.model.id = undefined;
+      window.appView.corpusNewModalView.model.rev = undefined;
+      window.appView.corpusNewModalView.model.set("_id", undefined);
+      //WARNING this might not be a good idea, if you find strange side effects in corpora in the future, it might be due to this way of creating (duplicating) a corpus. However with a corpus it is a good idea to duplicate the permissions and settings so that the user won't have to redo them.
+      window.appView.corpusNewModalView.model.set("title", window.app.get("corpus").get("title")+ " copy");
+      window.appView.corpusNewModalView.model.set("titleAsUrl", window.app.get("corpus").get("titleAsUrl")+"Copy");
+      window.appView.corpusNewModalView.model.set("corpusname", window.app.get("corpus").get("corpusname")+"copy");
+      window.appView.corpusNewModalView.model.get("couchConnection").corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      window.appView.corpusNewModalView.model.set("description", "Copy of: "+window.app.get("corpus").get("description"));
+      window.appView.corpusNewModalView.model.set("dataLists", new DataLists());
+      window.appView.corpusNewModalView.model.set("sessions", new Sessions());
+      window.appView.corpusNewModalView.render();
     },
-    
+      
     
 
      //Insert functions associate the values chosen with a new
@@ -356,11 +369,97 @@ define([
       this.changeViewsOfInternalModels();
       window.appView.renderEditableCorpusViews();
     },
+    /**
+     * saves the current corpus to pouch, if the corpus id doesnt match the
+     * corpus in the app, It attempts to save it to to its pouch, and create new
+     * session and data lists, and then save them to pouch. The new session and
+     * datalist are set to the current ones, but the views are not reloaded yet,
+     * then the corpus and session and data lists are saved via the
+     * app.storeCurrentDashboardIdsToLocalStorage function. after that the app
+     * needs to be reloaded entirely (page refresh), or we can attempt to attach
+     * the views to these new models.
+     */
     updatePouch : function() {
       Utils.debug("Saving the Corpus");
       var self = this;
+      if(this.model.id == undefined){
+        this.model.set("corpusname", window.app.get("authentication").get("userPrivate").get("username")
+          +"-"+encodeURIComponent(this.model.get("title").replace(/ /g,"")) );
+        this.model.get("couchConnection").corpusname = window.app.get("authentication").get("userPrivate").get("username")
+          +"-"+encodeURIComponent(this.model.get("title").replace(/ /g,"")) ;
+      }
       this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save();
+        self.model.save(null, {
+          success : function(model, response) {
+            Utils.debug('Corpus save success');
+            try{
+              if(window.app.get("corpus").id != model.id){
+                //add corpus to user
+                this.model.set("titleAsUrl", encodeURIComponent(this.model.get("title")));
+                window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
+                window.appView.activityFeedView.model.get("activities").add(
+                    new Activity({
+                      verb : "added",
+                      directobject : "a corpus",
+                      indirectobject : "",
+                      context : "via Offline App",
+                      user: window.app.get("authentication").get("userPublic")
+                    }));
+                //create the first session and datalist for this corpus.
+                var s = new Session(); //MUST be a new model, other wise it wont save in a new pouch.
+                s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") );
+                s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
+                s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
+                s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
+                s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                s.set("corpusname", model.get("corpusname"));
+                s.changeCorpus(model.get("corpusname"));
+                model.get("sessions").add(s);
+                app.set("currentSession", s);//TODO this will probably require the appView to reinitialize.
+                window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+
+                var dl = new DataList(); //MUST be a new model, other wise it wont save in a new pouch.
+                dl.set({
+                  "title" : "Default Data List",
+                  "dateCreated" : (new Date()).toDateString(),
+                  "description" : "This is the default data list for this corpus. " +
+                    "Any new datum you create is added here. " +
+                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+                    "export to LaTeX, or share with collaborators.",
+                  "corpusname" : model.get("corpusname")
+                });
+                dl.changeCorpus(model.get("corpusname"));
+                model.get("dataLists").add(dl);
+                window.app.set("currentDataList", dl);
+                window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+                window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                window.app.set("corpus", model);
+                window.app.storeCurrentDashboardIdsToLocalStorage(function(){
+                  //force the app to reload with the new corpus as the main corpus, this is require dbecause otherwise we cannot garentee that the new models will end up in the right pouches and in the right views will let go of the old models. 
+                  //another alternative would be to implement switchSession and switchDataList functions in the appView
+                  window.location.redirect("/");
+                });
+              }
+              window.app.set("corpus", model);
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+            }catch(e){
+              Utils.debug("Couldnt save the corpus somewhere"+e);
+            }
+            if(this.format == "modal"){
+              $("#new-corpus-modal").modal("hide");
+              window.app.router.showFullscreenCorpus();
+              alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+            }
+          },
+          error : function(e) {
+            Alert('Corpus save error' + e);
+            if(this.format == "modal"){
+              $("#new-corpus-modal").modal("hide");
+              window.app.router.showFullscreenCorpus();
+              alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+            }
+          }
+        });
       });
     },  
   });

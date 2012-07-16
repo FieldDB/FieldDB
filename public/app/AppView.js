@@ -101,7 +101,7 @@ define([
 //      var userToBePassedAround = new User();
      
       
-      // Create five corpus views
+      // Create seven corpus views
       this.corpusEditLeftSideView = new CorpusEditView({
         model : this.model.get("corpus")
       });
@@ -131,6 +131,11 @@ define([
         model : this.model.get("corpus")
       });
       this.corpusReadFullscreenView.format = "fullscreen";
+      
+      this.corpusNewModalView = new CorpusEditView({
+        model : this.model.get("corpus")
+      });
+      this.corpusNewModalView.format = "modal";
       
       /*
        * Set up four session views
@@ -345,6 +350,7 @@ define([
         this.corpusReadEmbeddedView.render();
         this.corpusEditFullscreenView.render();
         this.corpusReadFullscreenView.render();
+        this.corpusNewModalView.render();
         
         // Display the ExportView
         this.exportView.render();
@@ -410,7 +416,7 @@ define([
       this.corpusEditLeftSideView.render();
       this.corpusEditEmbeddedView.render();
       this.corpusEditFullscreenView.render();
-      
+      this.corpusNewModalView.render();
     },
     renderReadonlyCorpusViews : function(corpusid) {
       this.corpusReadLeftSideView.render();

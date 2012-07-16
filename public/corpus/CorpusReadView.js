@@ -249,22 +249,47 @@ define([
     },
     
     newDataList : function() {
-      app.router.showMiddleDataList();
+      //take the user to the search so they can create a data list using the search feature.
+      app.router.showEmbeddedSearch();
     },
     
     newSession : function() {
-      app.router.showEmbeddedSession();
-      app.router.showEditableSession();
-     
+      $("#new-session-modal").modal("show");
+      //Save the current session just in case
+      window.app.get("currentSession").save();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      window.appView.sessionModalView.model = window.app.get("currentSession").clone();
+      //Give it a null id so that pouch will save it as a new model.
+      //WARNING this might not be a good idea, if you find strange side effects in sessions in the future, it might be due to this way of creating (duplicating) a session.
+      window.appView.sessionModalView.model.id = undefined;
+      window.appView.sessionModalView.model.rev = undefined;
+      window.appView.sessionModalView.model.set("_id", undefined);
+      window.appView.sessionModalView.model.set("_rev", undefined);
+      window.appView.sessionModalView.render();
     },
     
     newCorpus : function(){
-      app.router.showEmbeddedCorpus();
-      app.router.showEditableCorpus();
-     
+      $("#new-corpus-modal").modal("show");
+      //Save the current session just in case
+      window.app.get("corpus").save();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      window.appView.corpusNewModalView.model = window.app.get("corpus").clone(); //MUST be a new model, other wise it wont save in a new pouch.
+      //Give it a null id so that pouch will save it as a new model.
+      window.appView.corpusNewModalView.model.id = undefined;
+      window.appView.corpusNewModalView.model.rev = undefined;
+      window.appView.corpusNewModalView.model.set("_id", undefined);
+      //WARNING this might not be a good idea, if you find strange side effects in corpora in the future, it might be due to this way of creating (duplicating) a corpus. However with a corpus it is a good idea to duplicate the permissions and settings so that the user won't have to redo them.
+      window.appView.corpusNewModalView.model.set("title", window.app.get("corpus").get("title")+ " copy");
+      window.appView.corpusNewModalView.model.set("titleAsUrl", window.app.get("corpus").get("title")+"Copy");
+      window.appView.corpusNewModalView.model.set("corpusname", window.app.get("corpus").get("corpusname")+"copy");
+      window.appView.corpusNewModalView.model.get("couchConnection").corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      window.appView.corpusNewModalView.model.set("description", "Copy of: "+window.app.get("corpus").get("description"));
+      window.appView.corpusNewModalView.model.set("dataLists", new DataLists());
+      window.appView.corpusNewModalView.model.set("sessions", new Sessions());
+      window.appView.corpusNewModalView.render();
     },
     
-//This the function called by the add button, it adds a new comment state both to the collection and the model
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
         console.log("I'm a new comment!");
       var m = new Comment({
