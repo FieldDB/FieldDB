@@ -29,8 +29,6 @@ define([
      */
     initialize : function() {
       Utils.debug("USER init: " + this.el);
-      
-      this.model.bind('change', this.render, this);
     },
     events : {
       "click .icon-edit": "showEditable",
@@ -68,6 +66,7 @@ define([
         Utils.debug("\User model was undefined");
         return this;
       }
+      this.model.bind('change:gravatar', this.render, this); //moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
       Utils.debug("\tRendering user: " + this.model.get("username"));
 
       if (this.format == "fullscreen") {

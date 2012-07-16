@@ -140,6 +140,8 @@ define([
       Utils.setCookie("token", data.user.hash, 365);
       this.get("confidential").set("secretkey", data.user.hash);
       this.saveAndEncryptUserToLocalStorage();
+      window.appView.addBackboneDoc(this.get("userPublic").id);
+      window.appView.addPouchDoc(this.get("userPublic").id);
     },
     loadEncryptedUser : function(encryptedUserString, callback){
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
@@ -150,6 +152,7 @@ define([
     saveAndEncryptUserToLocalStorage : function(){
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u);
+      window.appView.addSavedDoc(this.get("userPrivate").id);
     },
     /**
      * This function uses the quick authentication view to get the user's

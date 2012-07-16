@@ -1,5 +1,6 @@
 define([
     "backbone", 
+    "activity/Activity",
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
@@ -13,6 +14,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Activity,
     Authentication, 
     Corpus,
     DataList,
@@ -157,8 +159,11 @@ define([
       c.changeCorpus(couchConnection, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         c.fetch({
-          success : function(e) {
-            Utils.debug("Corpus fetched successfully" + e);
+          success : function(model) {
+            Utils.debug("Corpus fetched successfully" + model);
+            window.appView.addBackboneDoc(model.id);
+            window.appView.addPouchDoc(model.id);
+
             //show pretty views after loading everything.
             window.appView.renderReadonlyCorpusViews();
           },
@@ -176,8 +181,10 @@ define([
       s.changeCorpus(couchConnection.corpusname, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         s.fetch({
-          success : function(e) {
-            Utils.debug("Session fetched successfully" +e);
+          success : function(model) {
+            Utils.debug("Session fetched successfully" +model);
+            window.appView.addBackboneDoc(model.id);
+            window.appView.addPouchDoc(model.id);
             //show pretty views after loading everything.
             window.appView.renderReadonlySessionViews();
           },
@@ -197,8 +204,10 @@ define([
       dl.changeCorpus(couchConnection.corpusname, function(){
         //fetch only after having setting the right pouch which is what changeCorpus does.
         dl.fetch({
-          success : function(e) {
-            Utils.debug("Data list fetched successfully" +e);
+          success : function(model) {
+            Utils.debug("Data list fetched successfully" +model);
+            window.appView.addBackboneDoc(model.id);
+            window.appView.addPouchDoc(model.id);
             //show pretty views after loading everything.
             window.appView.renderReadonlyDataListViews();
           },
@@ -229,10 +238,17 @@ define([
       
       //TODO, this doesn't work.
       //this.storeCurrentDashboardIdsToLocalStorage();
-      
-      return "You have unsaved changes, click cancel to save them. \n\n"
-      +"You have unbacked up data. \n\nIf you want backup/share your data with your collaborators click Cancel, then click the Sync button.\n\n"
-      +"Your data currently saved on your local tablet/laptop only.";
+      var returntext = "";
+      if(window.appView.totalUnsaved.length >1){
+        returntext = "You have unsaved changes, click cancel to save them. \n\n";
+      }
+      if(window.appView.totalUnsaved.length >1){
+        returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
+      }
+      if(returntext == ""){
+        return; //dont show a pop up
+      }
+      return returntext;
     },
     /**
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync
@@ -253,6 +269,8 @@ define([
       
       this.savedcount = 0;
       this.savefailedcount = 0;
+      window.hub.unsubscribe("savedToPouch", null, this);
+      window.hub.unsubscribe("saveFailedToPouch", null, this);
       window.hub.subscribe("savedToPouch",function(arg){
         alert("Saved "+ arg+ " to pouch.");
         window.app.savedcount++;
@@ -264,6 +282,12 @@ define([
           //save ids to the user also so that the app can bring them back to where they were
           if(typeof thiscallback == "function"){
             thiscallback();
+          }
+//          maybe this was breaking the replicate corpus ?
+          if(window.appView){
+            window.appView.renderReadonlyDataListViews();
+            window.appView.renderReadonlySessionViews();
+            window.appView.renderReadonlyCorpusViews();
           }
           window.hub.unsubscribe("savedToPouch", null, window.app);
         }
@@ -278,8 +302,17 @@ define([
         self.get("currentSession").save(null, {
           success : function(model, response) {
             Utils.debug('Session save success');
+            window.appView.addSavedDoc(model.id);
             try{
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                  new Activity({
+                    verb : "saved",
+                    directobject : "session "+ model.get("sessionFields").where({label: "goal"})[0].get("value"),
+                    indirectobject : "in "+window.app.get("corpus").get("title"),
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
             }catch(e){
               Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
             }
@@ -290,8 +323,17 @@ define([
               self.get("currentDataList").save(null, {
                 success : function(model, response) {
                   Utils.debug('Datalist save success');
+                  window.appView.addSavedDoc(model.id);
                   try{
                     window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+                    window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                        new Activity({
+                          verb : "saved",
+                          directobject : "datalist "+ model.get("title"),
+                          indirectobject : "in "+window.app.get("corpus").get("title"),
+                          context : "via Offline App",
+                          user: window.app.get("authentication").get("userPublic")
+                        }));
                   }catch(e){
                     Utils.debug("Couldnt save the datatlist id to the user's mostrecentids"+e);
                   }
@@ -302,9 +344,18 @@ define([
                     self.get("corpus").save(null, {
                       success : function(model, response) {
                         Utils.debug('Corpus save success');
+                        window.appView.addSavedDoc(model.id);
                         try{
                           window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
                           localStorage.setItem("mostRecentCouchConnection", JSON.stringify(model.get("couchConnection")));
+                          window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                              new Activity({
+                                verb : "saved",
+                                directobject : "corpus "+ model.get("title"),
+                                indirectobject : "",
+                                context : "via Offline App",
+                                user: window.app.get("authentication").get("userPublic")
+                              }));
                         }catch(e){
                           Utils.debug("Couldnt save the corpus id to the user's mostrecentids"+e);
                         }
@@ -337,8 +388,6 @@ define([
           }
         });
       });
-      window.hub.unsubscribe("savedToPouch", null, this);
-      window.hub.unsubscribe("saveFailedToPouch", null, this);
       localStorage.setItem("saveStatus", "Saving in unload...end store function");
 
       return "Returning before the save is done.";
