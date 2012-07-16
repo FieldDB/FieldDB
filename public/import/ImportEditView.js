@@ -321,6 +321,9 @@ define( [
       this.createNewSession( function(){
         //after we have a session
         $(".approve-save").addClass("disabled");
+        //add the datums to the progress bar, so that we can augment for each that is saved.
+        $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
+
         for(d in self.model.get("datumArray")){
           var thatdatum = self.model.get("datumArray")[d];
           thatdatum.set({
@@ -336,6 +339,8 @@ define( [
             thatdatum.save(null, {
               success : function(model, response) {
                 Utils.debug('Datum save success in import');
+                $(".import-progress").val($(".import-progress").val()+1);
+
                 self.model.dataListView.addOne(model.id);
                 
                 // Add it to the default data list
