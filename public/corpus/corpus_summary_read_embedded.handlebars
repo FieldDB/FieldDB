@@ -1,21 +1,7 @@
-<!-- This div aligns the title with the icons in the corner -->
+  <!-- This div aligns the icons and the buttons-->
 <div>
-	<div class="pull-right">
-		<i class="icons icon-edit"></i>
-		<spacer></spacer>
-		<i class="icons icon-resize-full"></i>
-	</div>
-	<div>
-		<h3>{{title}}</h3>
-	</div>
-</div>
-
-<!-- This div aligns the description with the menu buttons -->
-<div>
-	<div id="corpus-description">
-		<p>{{description}}</p>
-	</div>
-	<div class="btn-group corpusMenu">
+	<!-- This div makes a buttons toolbar and puts buttons in the left corner -->
+	<div class="btn-group btn-toolbar corpusMenu">
 		<!-- This div is necessary so that the menu appears below the buttons -->
 		<div class="btn-group">
 			<button class="btn btn-primary dropdown-toggle"
@@ -29,7 +15,8 @@
 				<li class="new-corpus"><a href="#">New Corpus</a></li>
 			</ul>
 		</div>
-		<div>
+		<!-- This div is necessary so that the menu appears below the buttons -->
+		<div class="btn-group">
 			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
 				Data <span class="caret"></span>
 			</button>
@@ -39,6 +26,18 @@
 			</ul>
 		</div>
 	</div>
+
+	<div class="pull-right">
+		<i class="icons icon-edit"></i>
+		<spacer></spacer>
+		<i class="icons icon-resize-full"></i>
+	</div>
 </div>
+
+<div class="corpus-description">
+	<h3>{{title}}</h3>
+	<p>{{description}}</p>
+</div>
+
 
 
