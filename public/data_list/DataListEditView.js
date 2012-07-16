@@ -160,6 +160,17 @@ define( [
       return this;
     },
     
+    /**
+     * Renders only the first page of the Data List.
+     */
+    renderFirstPage : function() {
+      this.clearDataList();
+      
+      for (var i = 0; i < this.perPage; i++) {
+        this.addOne(this.model.get("datumIds")[i]);
+      }
+    },
+    
     // Clear the view of all its DatumReadViews
     clearDataList : function() {
       var coll = this.datumsView.collection; 
