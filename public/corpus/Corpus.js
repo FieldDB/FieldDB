@@ -83,8 +83,8 @@ define([
 
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
-          new DatumState()
-          ,new DatumState({
+//          new DatumState(),
+          new DatumState({
             state : "To be checked",
             color : "warning"
           }),

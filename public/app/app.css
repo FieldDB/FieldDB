@@ -8,9 +8,17 @@
 .search{
 	padding: 10px
 }
-
-.grav{
-	width: 30px;
+.navbar input:hover{
+  color: #000;
+}
+.gravatar-small{
+	width: 2em;
+}
+.gravatar-medium{
+  width: 4em;
+}
+.gravatar-large{
+  width: 8em;
 }
 .activity_direct_object{
 	color: #055;
