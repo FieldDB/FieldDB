@@ -10,14 +10,29 @@
 {{description}}
 
 <div class="icons">
-	<a href="#playDatum"><i class="icons icon-bullhorn"></i></a> <a
-		href="#clipboard"><i class="icons icon-paste"></i></a> <a
-		href="#duplicate"><i class="icons icon-copy"></i></a> <a id="encrypt"><i
-		class="icons icon-lock"></i></a>
-	<button class="btn btn-primary" id="LaTeX">LaTeX</button>
+  <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> <a
+    href="#clipboard"><i class="icons icon-paste"></i></a> <a
+    href="#duplicate"><i class="icons icon-copy"></i></a> <a id="encrypt"><i
+    class="icons icon-lock"></i></a>
+  <button class="btn btn-primary" id="LaTeX">LaTeX</button>
 </div>
 
 <div>
 	<ul class="unstyled zebra data_list_content"></ul>
 	<div class="data-list-footer"></div>
 </div>
+  
+<h3>Comments</h3>
+<ul class="comments unstyled"></ul>
+
+<div class="alert alert-info">
+  <span> <img src="{{gravatar}}"/></span>
+  <span>{{username}} new comment: </span>
+  <i class="icons icon-comment"></i>
+  <div class= "pull-right">  {{timestamp}}</div>
+  <textarea class="comment-new-text">{{text}}</textarea>
+</div>
+  
+<button class="btn btn-primary add-comment-datalist-read" value="Add">Add
+    Comment</button>
+

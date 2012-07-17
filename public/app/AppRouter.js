@@ -260,7 +260,7 @@ define([
 
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#new-datalist-embedded").show();      
+      $("#data-list-embedded").show();      
     },
     
     /**
@@ -349,7 +349,7 @@ define([
       $("#session-fullscreen").hide();
       $('#user-fullscreen').hide();
       $('#import-fullscreen').hide();
-      $('#new-datalist-embedded').hide();
+      $('#data-list-embedded').hide();
     }
   });
 

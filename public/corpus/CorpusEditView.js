@@ -5,7 +5,7 @@ define([
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
@@ -29,7 +29,7 @@ define([
     Corpus,
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DataList,
     DataLists,
     DataListReadView,
@@ -84,7 +84,7 @@ define([
     events : {
       "click .icon-book": "showReadonly",
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-edit" : 'insertNewComment',
     	
       //Add button inserts new Datum State
       "click .add_datum_state" : 'insertNewDatumState',
@@ -136,9 +136,9 @@ define([
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
           
-          // Display the CommentEditView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
           
           // Display the DataListsView
          this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -167,9 +167,9 @@ define([
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
 
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        // Display the CommentReadView
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -194,9 +194,11 @@ define([
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
+      
       }else if (this.format == "modal"){
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
+      
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
@@ -204,10 +206,10 @@ define([
       return this;
     },
     changeViewsOfInternalModels : function(){
-      //Create a CommentEditView     
-      this.commentEditView = new UpdatingCollectionView({
+      //Create a CommentReadView     
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
       
@@ -320,15 +322,22 @@ define([
     // triggers a view thats added to
     // the ul
     
-    //TODO this function needs to mean "save" ie insert new comment in the db, not add an empty comment on the screen. this a confusion of the pattern in the datumfilds view where exsting fields are in the  updating collection (just like extisting comments are in the updating collection) and there is a blank one in the corpus_edit_embedded corpus_edit_fullscreen handlebars
-  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    //TODO this function needs to mean "save" ie insert new comment in the db, not add an empty comment on the screen. 
+//    this a confusion of the pattern in the datumfilds view where exsting fields are in the  updating collection (just 
+//    like extisting comments are in the updating collection) and there is a blank one in the 
+//    corpus_edit_embedded corpus_edit_fullscreen handlebars
+
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
-
-      });
+        "text" : this.$el.find(".comment-new-text").val(),
+//        "username" : 
+     });
+      
+      // Add new comment to the db ? 
       this.model.get("comments").add(m);
       window.appView.addUnsavedDoc(this.model.id);
+      this.$el.find(".comment-new-text").val("");
 
     },
     

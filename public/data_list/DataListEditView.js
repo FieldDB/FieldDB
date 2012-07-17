@@ -4,7 +4,7 @@ define( [
     "activity/Activity",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -16,7 +16,7 @@ define( [
     Activity,
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -40,7 +40,7 @@ define( [
      */
     initialize : function(options) {
       Utils.debug("DATALIST init: " + this.el);
-            
+      
       // Create a DatumView
       if (options.datumCollection) {
         this.datumsView = new UpdatingCollectionView({
@@ -51,12 +51,7 @@ define( [
         });
       }
       
-      // Create a CommentEditView     
-      this.commentEditView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
-        childViewTagName     : 'li'
-      });
+      this.changeViewsOfInternalModels();
       
       // Remove options
       delete this.model.collection;
@@ -74,7 +69,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-datalist-edit" : 'insertNewComment',
       
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
@@ -89,13 +84,18 @@ define( [
     /**
      * The Handlebars template rendered as fullscreen.
      */
-    fullscreenTemplate : Handlebars.templates.data_list_edit_fullscreen,
+    templateFullscreen : Handlebars.templates.data_list_edit_fullscreen,
     
     /** 
      * The Handlebars template rendered as embedded.
      */
     embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
 
+    /** 
+     * The Handlebars template rendered as Summary.
+     */
+    templateSummary : Handlebars.templates.data_list_summary_edit_embedded,
+    
     /**
      * The Handlebars template of the pagination footer, which is used
      * as a partial.
@@ -105,11 +105,11 @@ define( [
     render : function() {
       if (this.format == "fullscreen") {
         this.setElement($("#data-list-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
        
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        // Display the CommentReadView
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -117,20 +117,19 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+     
       } else if (this.format == "leftSide") {
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        this.setElement($("#data-list-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
+
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
 
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
-        
         // Display the pagination footer
         this.renderUpdatedPagination();
+
       } else if (this.format == "import"){
         this.setElement($("#import-data-list-view"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
@@ -141,23 +140,34 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+        
       } else if (this.format == "centreWell") {
-        this.setElement($("#new-datalist-embedded"));
+        this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
        
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        // Display the CommentReadView
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the pagination footer
         this.renderUpdatedPagination();
       }
 
       return this;
+    },
+    
+
+    changeViewsOfInternalModels : function() {
+      // Create a CommentReadView     
+      this.commentReadView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentReadView,
+        childViewTagName     : 'li'
+      });  
     },
     
     /**
@@ -421,6 +431,9 @@ define( [
     
     //bound to change
     showEditable :function(){
+      //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
+      this.changeViewsOfInternalModels();
+      
       window.appView.renderEditableDataListViews();
     },
     
@@ -467,12 +480,14 @@ define( [
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
+        "text" : this.$el.find(".comment-new-text").val(),
+
 //        "label" : this.$el.children(".comment_input").val(),//TODO turn this back on
 
       });
       this.model.get("comments").add(m);
       window.appView.addUnsavedDoc(this.model.id);
-
+      this.$el.find(".comment-new-text").val("");
     },
     
   });
