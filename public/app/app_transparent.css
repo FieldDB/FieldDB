@@ -2,3 +2,8 @@
 	color: #fff;
 	background-color:rgba(0,0,0,0.3);
 }
+.breadcrumb{
+  color: #fff;
+  background-color:rgba(0,0,0,0.3);
+  background-image: none;
+}
