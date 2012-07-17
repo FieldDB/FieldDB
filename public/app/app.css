@@ -8,7 +8,9 @@
 .search{
 	padding: 10px
 }
-
+.navbar input:hover{
+  color: #000;
+}
 .gravatar-small{
 	width: 2em;
 }
