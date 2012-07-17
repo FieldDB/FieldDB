@@ -3,7 +3,7 @@ define([
     "handlebars", 
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -13,7 +13,7 @@ define([
     Handlebars, 
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DatumFieldReadView,
     Session,
     UpdatingCollectionView
@@ -32,6 +32,9 @@ define([
      */
     initialize : function() {
       Utils.debug("SESSION init: " + this.el);
+      
+      this.changeViewsOfInternalModels();
+      
       this.model.bind('change', this.changeViewsOfInternalModels, this);
     },
 
@@ -45,7 +48,7 @@ define([
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-session-read" : 'insertNewComment',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -91,7 +94,11 @@ define([
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
-          this.sessionFieldsView.render();
+          this.sessionFieldsView.render(); 
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+         
         } else if (this.format == "leftSide") {
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -100,14 +107,22 @@ define([
           };
           
           this.setElement("#session-quickview");
-          $(this.el).html(this.templateSummary(jsonToRender));
+          $(this.el).html(this.templateSummary(jsonToRender)); 
+          
         } else if (this.format == "fullscreen") {
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+          
         } else if (this.format == "link") {
+
+          $(this.el).html(this.templateLink(this.model.toJSON()));
+       
           var jsonToRender = {
               _id : this.model.get("_id"),
               goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -115,6 +130,7 @@ define([
               dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
             };
           $(this.el).html(this.templateLink(jsonToRender));
+
         } else {
           throw("You have not specified a format that the SessionReadView can understand.");
         }
@@ -131,6 +147,13 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "session"
       });
+      
+      this.commentReadView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentReadView,
+        childViewTagName     : 'li'
+      });     
+      
     },
     
     //functions associated with corner icons
@@ -146,13 +169,15 @@ define([
     showEditable :function() {
       window.app.router.showEditableSession();
     }, 
-    
+ 
+    //TODO this function to be rewritten 
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
+        "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
+      this.$el.find(".comment-new-text").val("");
     }
   });
   

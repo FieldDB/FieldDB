@@ -1,14 +1,20 @@
 define( [ 
     "backbone", 
-	  "handlebars",
-  	"data_list/DataList",
-	  "datum/Datum",
+	"handlebars",
+    "comment/Comment",
+    "comment/Comments",
+    "comment/CommentReadView",
+	"data_list/DataList",
+	"datum/Datum",
   	"datum/DatumReadView",
-	  "datum/Datums",
+	"datum/Datums",
   	"app/UpdatingCollectionView"
 ], function(
     Backbone, 
     Handlebars, 
+    Comment,
+    Comments,
+    CommentReadView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -42,8 +48,12 @@ define( [
         });
       }
       
+      this.changeViewsOfInternalModels();
+      this.model.bind('change', this.changeViewsOfInternalModels, this);
+
       // Remove options
       delete this.model.collection;
+      
     },
 
     /**
@@ -55,6 +65,9 @@ define( [
      * Events that the DataListReadView is listening to and their handlers.
      */
     events : {
+      //Add button inserts new Comment
+      "click .add-comment-datalist-read" : 'insertNewComment',
+      
       'click a.servernext': 'nextResultPage',
       'click .serverhowmany a': 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
@@ -65,17 +78,22 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    fullscreenTemplate : Handlebars.templates.data_list_read_fullscreen,
+    templateFullscreen : Handlebars.templates.data_list_read_fullscreen,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
      */
-    embeddedTemplate : Handlebars.templates.data_list_read_embedded,
+    templateEmbedded : Handlebars.templates.data_list_read_embedded,
+    
+    /** 
+     * The Handlebars template rendered as Summary.
+     */
+    templateSummary : Handlebars.templates.data_list_summary_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListLinkReadView.
      */
-    linkTemplate : Handlebars.templates.data_list_read_link,
+    templateLink : Handlebars.templates.data_list_read_link,
 
     /**
      * The Handlebars template of the pagination footer, which is used
@@ -86,10 +104,11 @@ define( [
     render : function() {
       if (this.format == "link") {
         // Display the Data List
-        $(this.el).html(this.linkTemplate(this.model.toJSON()));
+        $(this.el).html(this.templateLink(this.model.toJSON()));
+      
       } else if (this.format == "leftSide") {
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        this.setElement($("#data-list-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -97,20 +116,30 @@ define( [
           
         // Display the pagination footer
         this.renderUpdatedPagination();
+      
       } else if (this.format == "fullscreen") {
         // Display the Data List
         this.setElement($("#data-list-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
+        // Display the CommentReadView
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
+
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
         this.datumsView.render();
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+      
       } else if(this.format == "middle") {
-        this.setElement($("#new-data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        this.setElement($("#data-list-embedded"));
+        $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+      
+        // Display the CommentReadView
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
@@ -125,6 +154,15 @@ define( [
       return this;
     },
     
+    changeViewsOfInternalModels : function() {
+      // Create a CommentReadView     
+      this.commentReadView = new UpdatingCollectionView({
+        collection           : this.model.get("comments"),
+        childViewConstructor : CommentReadView,
+        childViewTagName     : 'li'
+      });
+    },
+ 
     /**
      * Re-calculates the pagination values and re-renders the pagination footer.
      */
@@ -201,6 +239,16 @@ define( [
     //bound to pencil button
     showEditable :function(){
       window.app.router.showEditableDataList();
+    },
+    
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function() {
+      console.log("I'm a new comment!");
+      var m = new Comment({
+        "text" : this.$el.find(".comment-new-text").val(),
+      });
+      this.model.get("comments").add(m);
+      this.$el.find(".comment-new-text").val("");
     }
   });
 

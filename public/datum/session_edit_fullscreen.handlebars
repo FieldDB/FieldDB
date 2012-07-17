@@ -4,12 +4,21 @@
 	<i class="icons icon-resize-small"></i>	
 </div>
 
-
   <button class="btn btn-success pull-right btn-save-session pull-left" value="Save">Save</button>
   <br><br>
 <h1>Session</h1>
 <ul class="session-fields-ul unstyled"></ul>
+
 <h3>Comments</h3>
 <ul class="comments unstyled"></ul>
-<button class="btn btn-primary add-comment" value="Add">Add
-	Comment</button>
+
+<div class="alert alert-info">
+  <span> <img src="{{gravatar}}"/></span>
+  <span>{{username}} new comment: </span>
+  <i class="icons icon-comment"></i>
+  <div class= "pull-right">  {{timestamp}}</div>
+  <textarea class="comment-new-text">{{text}}</textarea>
+</div>
+
+<button class="btn btn-primary add-comment-session-edit" value="Add">Add
+  Comment</button>
