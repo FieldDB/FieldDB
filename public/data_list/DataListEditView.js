@@ -160,13 +160,25 @@ define( [
       return this;
     },
     
+
     changeViewsOfInternalModels : function() {
       // Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
-      });
+      });  
+    },
+    
+    /**
+     * Renders only the first page of the Data List.
+     */
+    renderFirstPage : function() {
+      this.clearDataList();
+      
+      for (var i = 0; i < this.perPage; i++) {
+        this.addOne(this.model.get("datumIds")[i]);
+      }
     },
     
     // Clear the view of all its DatumReadViews
