@@ -71,6 +71,8 @@ define([
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
       });
+      
+      this.bind("change:audioVideo", this.playAudio, this);
     },
 
     /**
@@ -110,7 +112,7 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      
+      "click .icon-bullhorn " : "playAudio"
     },
 
     /**
@@ -375,6 +377,14 @@ define([
       d.set("session", app.get("currentSession"));
       appView.datumsView.prependDatum(d);
     },
+    playAudio : function(){
+      if(this.model.get("audioVideo")){
+        if(this.model.get("audioVideo").get("filename")){
+          this.$el.find(".audio-file").attr("src", this.model.get("audioVideo").get("filename"));
+          this.$el.find(".audio-file").play();
+        }
+      }
+    }
   });
 
   return DatumEditView;

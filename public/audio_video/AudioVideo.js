@@ -20,7 +20,7 @@ define([
     
     defaults : {
       URL : "",
-      FileName : "",
+//      filename : "",
       type: "audio" //or video
     },
     
