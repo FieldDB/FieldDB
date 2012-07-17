@@ -325,6 +325,7 @@ define([
       "click .icon-home" : function() {
 //        this.model.router.showDashboard();
         window.location.href = "#";
+        app.router.showDashboard(); //the above line wasnt working
       },
       "click .save-dashboard": function(){
         window.app.storeCurrentDashboardIdsToLocalStorage();
