@@ -207,7 +207,7 @@ require([
       Utils.debug("Loading app from localStorage");
       var corpusname = null;
       var couchConnection = null;
-      if(!localStorage.getItem("mostRecentCouchConnection")){
+      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
         alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
         loadFreshApp();
       }else{
