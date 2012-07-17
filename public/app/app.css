@@ -10,13 +10,13 @@
 }
 
 .gravatar-small{
-	width: 30px;
+	width: 2em;
 }
 .gravatar-medium{
-  width: 2em;
+  width: 4em;
 }
 .gravatar-large{
-  width: 3em;
+  width: 8em;
 }
 .activity_direct_object{
 	color: #055;
