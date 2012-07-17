@@ -46,7 +46,7 @@ define([
      * @property {DatumField} judgement The judgement is the grammaticality
      *           judgement associated with the datum, so grammatical,
      *           ungrammatical, felicitous, unfelicitous etc.
-     * @property {AudioVisual} audioVisual Datums can be associated with an audio or video
+     * @property {AudioVisual} audioVideo Datums can be associated with an audio or video
      *           file.
      * @property {Session} session The session provides details about the set of
      *           data elicited. The session will contain details such as date,
