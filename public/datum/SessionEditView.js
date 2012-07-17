@@ -4,7 +4,7 @@ define([
     "activity/Activity",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -15,7 +15,7 @@ define([
     Activity,
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -53,7 +53,7 @@ define([
       "click .btn-save-session" : "updatePouch",
       
       //Add button inserts new Comment
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-session-edit" : 'insertNewComment',
       
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
@@ -122,6 +122,7 @@ define([
         Utils.debug("SESSION is undefined, come back later.");
         return this;
       }
+      
       try{
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
           Utils.debug("SESSION fields are undefined, come back later.");
@@ -133,9 +134,11 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentEditView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+          
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
@@ -145,24 +148,27 @@ define([
           
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
+          
         } else if (this.format == "fullscreen") {
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentEditView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+         
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+          
         } else if (this.format == "modal") {
           this.setElement("#new-session-modal");
           this.$el.html(this.templateModal(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
-          // Display the CommentEditView
-          this.commentEditView.el = this.$('.comments');
-          this.commentEditView.render();
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
@@ -178,9 +184,9 @@ define([
         childViewFormat      : "session"
       });
       
-      this.commentEditView = new UpdatingCollectionView({
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
     },
@@ -252,10 +258,11 @@ define([
     insertNewComment : function() {
       console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
+        "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
       window.appView.addUnsavedDoc(this.model.id);
+      this.$el.find(".comment-new-text").val("");
 
     }
   });

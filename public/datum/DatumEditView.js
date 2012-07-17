@@ -5,7 +5,7 @@ define([
     "audio_video/AudioVideoEditView",
     "comment/Comment",
     "comment/Comments",
-    "comment/CommentEditView",
+    "comment/CommentReadView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -20,7 +20,7 @@ define([
     AudioVideoEditView,
     Comment,
     Comments,
-    CommentEditView,
+    CommentReadView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -49,9 +49,9 @@ define([
         
       });
       
-      this.commentEditView = new UpdatingCollectionView({
+      this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
-        childViewConstructor : CommentEditView,
+        childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
       
@@ -82,7 +82,7 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      "click .add-comment" : 'insertNewComment',
+      "click .add-comment-datum-edit" : 'insertNewComment',
 
       "click .icon-lock" : "encryptDatum",
       "click .icon-unlock" : "decryptDatum",
@@ -138,9 +138,9 @@ define([
         this.datumTagsView.el = this.$(".datum_tags_ul");
         this.datumTagsView.render();
         
-        // Display the CommentEditView
-        this.commentEditView.el = this.$('.comments');
-        this.commentEditView.render();
+        // Display the CommentReadView
+        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
@@ -338,12 +338,11 @@ define([
     },
     
     insertNewComment : function() {
-      console.log("I'm a new comment!");
       var m = new Comment({
-//        "label" : this.$el.children(".comment_input").val(),
-
+        "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
+      this.$el.find(".comment-new-text").val("");
     },
     
     updateDatumStates : function() {
