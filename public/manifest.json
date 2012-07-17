@@ -1,18 +1,17 @@
 {
-  "name": "iField",
-  "version": "1.11.2.1",
+  "name": "iField beta",
+  "version": "1.12.1",
   "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
   "app": {
     "launch": {
-      "local_path": "dev.html"
+      "local_path": "index.html"
     }
   },
   "offline_enabled": true,
   "permissions": [
     "unlimitedStorage",
     "https://ifield.fieldlinguist.com/*",
-    "https://ilanguage.iriscouch.com/*",
-    "https://localhost:3001/*"
+    "https://ilanguage.iriscouch.com/*"
   ],
    "icons": { 
     "16": "icon16.png",
@@ -20,6 +19,6 @@
     "128": "icon128.png" 
   },
   "manifest_version": 2,
-  "content_security_policy": "default-src 'self' https://docs.google.com/ https://ifield.fieldlinguist.com/ https://localhost:3001/ https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/; script-src 'self' https://ssl.google-analytics.com/ https://localhost:3001/; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://localhost:3001/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ 'self'; object-src 'self';"
+  "content_security_policy": "default-src 'self' https://docs.google.com/ https://ifield.fieldlinguist.com/  https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/; script-src 'self' https://ssl.google-analytics.com/ ; connect-src  https://www.youtube.com/ https://ifield.fieldlinguist.com/ https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ 'self'; object-src 'self';"
   
 }

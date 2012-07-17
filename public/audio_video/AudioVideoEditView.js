@@ -20,10 +20,18 @@ define([
     },
     
     events : {
-      "dragenter" : "dragEnterAudio",
-      "dragover" : "dragOverAudio",
-      "dragleave" : "dragLeave",
-      "drop": "dropAudio"
+      "dragenter" : function(e){
+        this.dragEnterAudio(e);
+      },
+      "dragover" : function(e){
+        this.dragOverAudio(e);
+      },
+      "dragleave" : function(e){
+        this.dragLeave(e);
+      },
+      "drop": function(e){
+        this.dropAudio(e);
+      }
     },
     
     model : AudioVideo,
@@ -33,33 +41,42 @@ define([
     template : Handlebars.templates.audio_video_edit_embedded,
 
     render : function() {
-      $(this.el).html(this.template(this.model.toJSON()));
-      
+      var dropzone = document.createElement("input");
+      dropzone.classList.add("drop-zone");
+      dropzone.classList.add("pull-right");
+      dropzone.addEventListener('drop', this.dropAudio, false);
+      dropzone.addEventListener('dragover', this.dragOverAudio, false);
+      $(this.el).html(dropzone);
       return this;
     },
     
     dragEnterAudio: function(e) {
       e.stopPropagation();
       e.preventDefault();
-//      this.classList.add('dropping');
+      this.classList.add('halfopacity');
     },
     
     dragOverAudio : function(e) {
-      e.stopPropagation();
+//      e.stopPropagation();
       e.preventDefault();
-      e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+      e.dataTransfer.dropEffect = 'move'; // Explicitly show this is a copy.
+      return false;
     },
     
     dragLeave: function(e) {
-//      this.classList.remove('dropping');
+      this.classList.remove('halfopacity');
     },
     
     dropAudio: function(e) {
+      Utils.debug("Recieved a drop event ");
       e.stopPropagation();
-      e.preventDefault();
-//      this.classList.remove('dropping');
+//      e.preventDefault();
+      this.classList.remove('halfopacity');
       window.appView.term.addDroppedFiles(e.dataTransfer.files);
       window.appView.term.output('<div>File(s) added!</div>');
+      this.model.set("filename",e.dataTransfer.files[0]);
+      alert("Audio file was copied! (cant play yet)");
+      return false;
     }
   });
 
