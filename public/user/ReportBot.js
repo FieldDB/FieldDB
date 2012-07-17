@@ -50,7 +50,7 @@ define(["backbone"], function(Backbone) {
       
       // Create my view document
       var view = {
-         "_id" : "_design/something",
+         "_id" : "_design/something2",
          "language": "javascript",
          "views": {
              "play": {
@@ -67,9 +67,13 @@ define(["backbone"], function(Backbone) {
       this.changeCorpus(this.get("corpusname"), function() {
         self.pouch(function(err, db) {
           db.post(view, function(error, response) {
-            console.log("error: ", error, " response: ", response);
-          })
-        })
+            if (!error) {
+              db.query("something/play", {reduce: false}, function(err, resp) {
+                console.log("err: ", err, "resp: ", resp);
+              }); 
+            }
+          });
+        });
       });
     }
   });
