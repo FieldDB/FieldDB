@@ -453,6 +453,10 @@ define([
       this.dataListReadLeftSideView.render();
       this.dataListReadFullscreenView.render();
     },
+    renderFirstPageReadonlyDataListViews : function() {
+      this.dataListEditLeftSideView.renderFirstPage();
+      this.renderReadonlyDataListViews();
+    },
     
     // Display Datums View
     renderEditableDatumsViews : function(format) {
