@@ -74,8 +74,27 @@ define([
     
     importCSV : function(text) {
       var rows = text.split("\n");
+      if(rows.length < 3){
+        rows = text.split("\r");
+        this.set("status", this.get("status","Detected a MAC line ending."));
+      }
+      var hasQuotes = false;
+      //If it looks like it already has quotes:
+      if( rows[0].split('","').length > 2 && rows[5].split('","').length > 2){
+        hasQuotes = true;
+        this.set("status", this.get("status","Detected text was already surrounded in quotes."));
+      }
       for(l in rows){
-        rows[l] = this.parseLineCSV(rows[l]);
+        if(hasQuotes){
+          rows[l] = rows[l].trim().replace(/^"/,"").replace(/"$/,"").split('","');
+//          var withoutQuotes = [];
+//          _.each(rows[l],function(d){
+//            withoutQuotes.push(d.replace(/"/g,""));
+//          });
+//          rows[l] = withoutQuotes;
+        }else{
+          rows[l] = this.parseLineCSV(rows[l]);
+        }
       }
       
       this.set("asCSV", rows);
