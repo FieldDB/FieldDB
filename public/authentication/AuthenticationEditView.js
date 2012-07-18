@@ -194,6 +194,23 @@ define([
             }                    
           });
         });
+        
+        //wait a bit and load user's dashboard even if they can't replicate, its possible they are running in the CORS lacking web app. TODO remove this if and when we get CORS on iriscouch
+        window.setTimeout( function(){
+          //If the user has an untitled corpus, there is a high chance that their dashboard didn't load because they cant sync with couch but they do have their first local ones, attempt to look it up in their user, and laod it.
+          if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
+            if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+              //do nothing because they have no recent ids
+              Utils.debug("User does not have most recent ids, doing nothing.");
+            }else{
+              /*
+               *  Load their last corpus, session, datalist etc
+               */
+              var appids = self.model.get("userPrivate").get("mostRecentIds");
+              window.app.loadBackboneObjectsById(couchConnection, appids);
+            }
+          }
+        },5000);
 
 
         

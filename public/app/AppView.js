@@ -547,6 +547,9 @@ define([
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
       }
+      if (e.preventDefault) {
+        e.preventDefault(); 
+      }
       
       //if it's a unicode dragging event
       if(window.appView.insertUnicodesView.dragSrcEl != null){
