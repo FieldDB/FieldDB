@@ -18,7 +18,7 @@ var app = express.createServer(httpsOptions);
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
@@ -36,7 +36,7 @@ app.configure(function() {
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
 app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
  });
