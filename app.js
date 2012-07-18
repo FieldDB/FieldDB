@@ -15,6 +15,14 @@ var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
     cert: fs.readFileSync('ifield.crt')};
 var app = express.createServer(httpsOptions);
+
+//http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.configure(function() {
   app.use(express.logger());
   app.use(express.bodyParser());
@@ -25,6 +33,13 @@ app.configure(function() {
   app.use(mongooseAuth.middleware());
   app.use(express.errorHandler());
 });
+
+//http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
 
 app.post('/usernamelogin/:username', function(req,res){
   console.log("User wants to log in "+req.params.username);
