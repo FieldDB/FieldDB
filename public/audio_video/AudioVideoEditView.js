@@ -69,8 +69,12 @@ define([
     
     dropAudio: function(e) {
       Utils.debug("Recieved a drop event ");
-      e.stopPropagation();
-//      e.preventDefault();
+      if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from redirecting.
+      }
+      if (e.preventDefault) {
+        e.preventDefault(); 
+      }      
       this.classList.remove('halfopacity');
       window.appView.term.addDroppedFiles(e.dataTransfer.files);
       window.appView.term.output('<div>File(s) added!</div>');

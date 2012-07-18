@@ -266,6 +266,7 @@ define([
                        * Use the corpus just created to log the user into that corpus's couch server
                        */
                       var couchConnection = data.user.corpuses[0];
+                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
@@ -274,7 +275,6 @@ define([
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
                           window.app.storeCurrentDashboardIdsToLocalStorage();
-                          $('#user-welcome-modal').modal("hide");
                         },10000);
                         
                       });
