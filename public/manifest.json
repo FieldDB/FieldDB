@@ -1,6 +1,6 @@
 {
   "name": "iField beta",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
   "app": {
     "launch": {
@@ -17,8 +17,5 @@
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png" 
-  },
-  "manifest_version": 2,
-  "content_security_policy": "default-src 'self' https://docs.google.com/ https://ifield.fieldlinguist.com/ https://ifield.fieldlinguist.com/login https://ifield.fieldlinguist.com/register  https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/ https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA&amp;hl=en_US; script-src 'self' https://ssl.google-analytics.com/ ; connect-src  https://www.youtube.com/ https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA&amp;hl=en_US https://ifield.fieldlinguist.com/ https://ifield.fieldlinguist.com/login https://ifield.fieldlinguist.com/register https://ilanguage.iriscouch.com/ https://ilanguage.iriscouch.com:443/ https://ilanguage.iriscouch.com/_session https://ilanguage.iriscouch.com:443/_session 'self'; object-src 'self';"
-  
+  }
 }
