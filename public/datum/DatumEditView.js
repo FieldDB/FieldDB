@@ -12,6 +12,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
+    "glosser/Glosser",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -112,7 +113,16 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      "click .icon-bullhorn " : "playAudio"
+      "click .icon-bullhorn " : "playAudio",
+      "blur .utterance .datum_field_input" : function(e) {
+        var utteranceLine = $(e.currentTarget).val();
+        if (utteranceLine) {
+          var self = this;
+          Glosser.morphemefinder(utteranceLine, this.model.get("corpusname"), function(morphemes) {
+            self.$el.find(".morphemes .datum_field_input").val(morphemes);
+          });
+        }
+      }
     },
 
     /**
