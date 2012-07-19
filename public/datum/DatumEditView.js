@@ -122,6 +122,8 @@ define([
             if (morphemesLine != utteranceLine) {
               if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
                 self.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+                
+                this.needsSave = true;
               }
             }
           });
