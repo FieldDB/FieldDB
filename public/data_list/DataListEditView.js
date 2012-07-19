@@ -177,7 +177,9 @@ define( [
       this.clearDataList();
       
       for (var i = 0; i < this.perPage; i++) {
-        this.addOne(this.model.get("datumIds")[i]);
+        if (this.model.get("datumIds")[i]) {
+          this.addOne(this.model.get("datumIds")[i]);
+        }
       }
     },
     
