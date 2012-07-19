@@ -102,6 +102,8 @@ define([
       $("#user-edit-modal").hide();
       $("#user-modal").show();
       
+      this.model.set("firstname", $(this.el).find(".firstname").val());
+      this.model.set("lastname", $(this.el).find(".lastname").val());
       this.model.set("email", $(this.el).find(".email").val());
       this.model.set("researchInterest", $(this.el).find(".researchInterest").val());
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
