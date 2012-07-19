@@ -428,9 +428,13 @@ define( [
                           context : "via Offline App",
                           user: window.app.get("authentication").get("userPublic")
                         }));
+
+                    // Render the first page of the new data list
+                    window.appView.dataListEditLeftSideView.renderFirstPage();
                     
                     // Go back to the dashboard after all succeeds
                     window.location.replace("#");
+
                   },
                   error : function(e) {
                     alert('Session save failure in import' + e);
