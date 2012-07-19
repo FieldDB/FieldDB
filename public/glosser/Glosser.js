@@ -1,9 +1,11 @@
-var morphemefinder = function(unparsedword, corpusname, callback) {
+var Glosser = Glosser || {};
+
+Glosser.morphemefinder = function(unparsedword, corpusname, callback) {
   unparsedword = "@" + unparsedword + "@";
   var potentialParsePromise = '';
   $.ajax({
     type : 'GET',
-    url : "http://ilanguage.iriscouch.com/" + corpusname
+    url : "https://ilanguage.iriscouch.com/" + corpusname
         + "/_design/play/_view/precedence?group=true",
     success : function(rules) {
       // console.log(rules);
@@ -101,7 +103,10 @@ var morphemefinder = function(unparsedword, corpusname, callback) {
         callback(potentialParsePromise);
       }
 
-    },// end successful login
+    },// end successful login\
+    error : function(data) {
+      console.log(data);
+    },
     dataType : ""
   });
 
@@ -112,7 +117,7 @@ var morphemefinder = function(unparsedword, corpusname, callback) {
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
  */
-var generateForceDirectedRulesJsonForD3 = function(rules) {
+Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
 
   /*
    * Cycle through the precedence rules, convert them into graph edges with the morpheme index in the morpheme array as the source/target values
@@ -164,7 +169,7 @@ var generateForceDirectedRulesJsonForD3 = function(rules) {
  * Some sample D3 from the force-html.html example
  * 
  */
-var visualizeMorphemesAsForceDirectedGraph = function(){
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(){
   
   var width = 960,
       height = 500,
