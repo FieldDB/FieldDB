@@ -212,7 +212,7 @@ define( [
       var headerRow = document.createElement("tr");
       for(var i = 0; i < rows[0].length; i++){
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input class="drop-label-zone header'+i+'"/>');
+        $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
         tableCell.addEventListener('dragover', this.handleDragOver, false);
         headerRow.appendChild(tableCell);
@@ -360,7 +360,6 @@ define( [
                 
                 // Add Datum to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-                alert("default index: " + defaultIndex);
                 app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
               },
               error : function(e) {
@@ -376,7 +375,6 @@ define( [
             success : function(model, response) {
               Utils.debug('Data list save success in import');
               $(".import-progress").val($(".import-progress").val()+1);
-              // window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
               self.model.dataListView.temporaryDataList = false;
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
@@ -465,7 +463,7 @@ define( [
       });
       $('th').each(function(index) {
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input class="drop-label-zone header"/>');
+        $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
         tableCell.addEventListener('dragover', this.handleDragOver, false);
         $(this).after(tableCell);
