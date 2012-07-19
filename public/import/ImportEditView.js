@@ -212,7 +212,7 @@ define( [
       var headerRow = document.createElement("tr");
       for(var i = 0; i < rows[0].length; i++){
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input class="drop-label-zone header'+i+'"/>');
+        $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
         tableCell.addEventListener('dragover', this.handleDragOver, false);
         headerRow.appendChild(tableCell);
@@ -333,34 +333,34 @@ define( [
         $(".approve-save").addClass("disabled");
         //add the datums to the progress bar, so that we can augment for each that is saved.
         $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
+        
+        // Create a new permanent data list in the corpus
+        appView.dataListEditLeftSideView.newDataList();
 
-        for(d in self.model.get("datumArray")){
+        for (d in self.model.get("datumArray")) {
           var thatdatum = self.model.get("datumArray")[d];
           thatdatum.set({
             "session" : self.model.get("session"),
-            "corpusname" : self.model.get("corpusname")
+            "corpusname" : self.model.get("corpusname"),
+            "dateEntered" : JSON.stringify(new Date()),
+            "dateModified" : JSON.stringify(new Date())
           });
-
-          thatdatum.set("dateEntered", JSON.stringify(new Date()));
-          thatdatum.set("dateModified", JSON.stringify(new Date()));
-
+          
+          // Save the datum
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
             thatdatum.save(null, {
               success : function(model, response) {
                 Utils.debug('Datum save success in import');
+                // Update progress bar
                 $(".import-progress").val($(".import-progress").val()+1);
 
-                self.model.dataListView.addOne(model.id);
+                // Add Datum to the new datalist and render it
+                appView.dataListEditLeftSideView.addOneDatumId(model.id);
                 
-                // Add it to the default data list
+                // Add Datum to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
                 app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-                
-                // If the default data list is the currently visible data list, re-render it
-                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
-                  appView.dataListEditLeftSideView.addOne(model.id);
-                }
               },
               error : function(e) {
                 alert('Datum save failure in import' + e);
@@ -369,21 +369,12 @@ define( [
           });
         }
         
-        // Save the default DataList
-        Utils.debug("Saving the DataList");
-        var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-        app.get("corpus").get("dataLists").models[defaultIndex].changeCorpus(self.model.get("corpusname"), function() {
-          app.get("corpus").get("dataLists").models[defaultIndex].save();
-          app.get("corpus").save();
-        });
-        
         // Save the new DataList
         self.model.get("dataList").changeCorpus(self.model.get("corpusname"), function(){
           self.model.get("dataList").save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
               $(".import-progress").val($(".import-progress").val()+1);
-              window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
               self.model.dataListView.temporaryDataList = false;
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
@@ -472,7 +463,7 @@ define( [
       });
       $('th').each(function(index) {
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input class="drop-label-zone header"/>');
+        $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
         tableCell.addEventListener('dragover', this.handleDragOver, false);
         $(this).after(tableCell);
