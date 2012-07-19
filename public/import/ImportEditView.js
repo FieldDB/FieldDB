@@ -370,13 +370,21 @@ define( [
         }
         
         // Save the new DataList
-        self.model.get("dataList").changeCorpus(self.model.get("corpusname"), function(){
-          self.model.get("dataList").save(null, {
+        app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("dataLists").models[0].get("corpusname"), function(){
+          app.get("corpus").get("dataLists").models[0].save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
+              
+              // Update the progress bar
               $(".import-progress").val($(".import-progress").val()+1);
-              window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
+              
+              // Save the datalist ID in the userPrivate
+              window.app.get("authentication").get("userPrivate").get("dataLists").push(model.id);
+              
+              // Mark the datalist as no longer temporary
               self.model.dataListView.temporaryDataList = false;
+              
+              // Add the "imported" activity to the ActivityFeed
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
                   new Activity({
                     verb : "imported",
@@ -394,16 +402,24 @@ define( [
                     user: window.app.get("authentication").get("userPublic")
                   }));
               
-              //Save the session too
+              // Save the session
               self.model.get("session").changeCorpus(self.model.get("corpusname"), function(){
                 self.model.get("session").save(null, {
                   success : function(model, response) {
                     Utils.debug('Session save success in import');
+                    
+                    // Update progress bar
                     $(".import-progress").val($(".import-progress").val()+1);
+                    
+                    // Add the new session to the corpus
                     window.app.get("corpus").get("sessions").unshift(model);
+                    
+                    // Add the new session to the userPrivate
                     if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
                       window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
                     }
+                    
+                    // Add the "added session" activity to the ActivityFeed
                     window.app.get("authentication").get("userPrivate").get("activities").unshift(
                         new Activity({
                           verb : "added",
@@ -412,7 +428,13 @@ define( [
                           context : "via Offline App",
                           user: window.app.get("authentication").get("userPublic")
                         }));
-                    window.location.replace("#"); //go back to dashboard after all suceeds
+
+                    // Render the first page of the new data list
+                    window.appView.dataListEditLeftSideView.renderFirstPage();
+                    
+                    // Go back to the dashboard after all succeeds
+                    window.location.replace("#");
+
                   },
                   error : function(e) {
                     alert('Session save failure in import' + e);
