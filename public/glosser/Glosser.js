@@ -6,7 +6,7 @@ Glosser.morphemefinder = function(unparsedword, corpusname, callback) {
   $.ajax({
     type : 'GET',
     url : "https://ilanguage.iriscouch.com/" + corpusname
-        + "/_design/play/_view/precedence?group=true",
+        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
       // console.log(rules);
       rules = JSON.parse(rules);
