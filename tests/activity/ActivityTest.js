@@ -8,14 +8,9 @@ require(
             it("should have an id if it gets inserted into pouch.",
                 function() {
               
-                  /*
-                   * TODO this is how i tested it in a view, turn this into a 
-                   * jamine test once we know how to deal with views in jasmine/phantom
-                   */
-                  var a = new Activity();
-//                a.save();
-//                appView.replicateActivityFeedDatabase();
-                  var hasId = (a.id != null);
+//                  var a = new Activity();
+//                  a.save();
+//                  var hasId = (a.id != null);
                   expect(true).toBeTruthy();
                 });
             

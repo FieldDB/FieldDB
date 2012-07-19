@@ -4,51 +4,105 @@ require.config({
   baseUrl: "./../public",
   
   paths : {
-      "text" : "libs/text",
-      "jquery" : "libs/jquery",
-      "hotkeys" : "libs/jquery.hotkeys",
-      "underscore" : "libs/underscore",
-      "backbone" : "libs/backbone",
-      "handlebars" : "libs/handlebars-1.0.0.beta.6",
-      "paginator" : "libs/backbone.paginator",
-      "crypto" : "libs/Crypto_AES",
-      "pouch" : "libs/pouch.alpha"
+    "text" : "libs/text",
+    "jquery" : "libs/jquery",
+    "hotkeys" : "libs/jquery.hotkeys",
+    "terminal" : "libs/terminal/terminal",
+    "underscore" : "libs/underscore",
+    "backbone" : "libs/backbone",
+    "handlebars" : "libs/handlebars.runtime",
+    "compiledTemplates" : "libs/compiled_handlebars",
+    "crypto" : "libs/Crypto_AES",
+    "pouch" : "libs/pouch.alpha",
+    "backbone_pouchdb" : "libs/backbone-pouchdb",
+    "backbone_couchdb" : "libs/backbone-couchdb",
+    "bootstrap" : "bootstrap/js/bootstrap",
+    "bootstrap-transition" : "bootstrap/js/bootstrap-transition",
+    "bootstrap-alert" : "bootstrap/js/bootstrap-alert",
+    "bootstrap-modal" : "bootstrap/js/bootstrap-modal",
+    "bootstrap-dropdown" : "bootstrap/js/bootstrap-dropdown",
+    "bootstrap-scrollspy" : "bootstrap/js/bootstrap-scrollspy",
+    "bootstrap-tab" : "bootstrap/js/bootstrap-tab",
+    "bootstrap-tooltip" : "bootstrap/js/bootstrap-tooltip",
+    "bootstrap-popover" : "bootstrap/js/bootstrap-popover",
+    "bootstrap-button" : "bootstrap/js/bootstrap-button",
+    "bootstrap-collapse" : "bootstrap/js/bootstrap-collapse",
+    "bootstrap-carousel" : "bootstrap/js/bootstrap-carousel",
+    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead"
 
      // "jquery.couch" : "libs/jquery.couch"
   },
   shim : {
-      "underscore" : {
-        exports : "_"
-      },
+    "underscore" : {
+      exports : "_"
+    },
+    
+    "jquery" : {
+      exports : "$"
+    },
 
-      "backbone" : {
-          deps : ["underscore", "jquery", "libs/backbone-pouchdb", "libs/backbone-couchdb"],
-          exports : function(_, $) {
-              return Backbone;
-          }
-      },
-
-      "handlebars" : {
-        exports: "Handlebars"
-      },
-      
-      "crypto" :{
-        exports: "CryptoJS"
-      },
-      "paginator":{
-        deps : ["underscore", "backbone", "jquery", "libs/backbone-couchdb"],
-        exports: "paginator"
-      },
-      
-      "hotkeys":{
-          deps : ["jquery"],
-          exports: "hotkeys"
-      },
-      
-      "compiledTemplates":{
-        deps :["handlebars"],
-        exports: "compiledTemplates"
+    "bootstrap" :{
+      deps : [ "jquery" ],
+      exports : function($) {
+        return $;
       }
+    },
+    
+    "bootstrap-typeahead" :{
+      deps : [ "jquery", "bootstrap","bootstrap-transition", "bootstrap-alert",
+          "bootstrap-modal", "bootstrap-dropdown", "bootstrap-scrollspy",
+          "bootstrap-tab", "bootstrap-tooltip", "bootstrap-popover",
+          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel"
+           ],
+      exports : function($) {
+        return $;
+      }
+    },
+    
+    "pouch" :{
+      exports: "Pouch"
+    },
+
+    "backbone" : {
+      deps : [ "underscore", "jquery", "compiledTemplates" ],
+      exports : function(_, $) {
+        return Backbone;
+      }
+    },
+    "backbone_pouchdb" :{
+      deps : ["backbone", "pouch", "backbone_couchdb"],
+      exports : function(Backbone, Pouch, backbone_couchdb) {
+        return Backbone;
+      }
+    },
+    
+    "backbone_couchdb" :{
+      deps : ["backbone", "pouch"],
+      exports : function(Backbone, Pouch) {
+        return Backbone;
+      }
+    },
+
+    "handlebars" : {
+      deps : ["bootstrap","jquery"],
+      exports : "Handlebars"
+    },
+
+    "crypto" : {
+      exports : "CryptoJS"
+    },
+
+    "compiledTemplates" : {
+      deps : [ "handlebars" ],
+      exports : function(Handlebars) {
+        return Handlebars;
+      }
+    },
+    "terminal" : {
+      deps : ["bootstrap","jquery"],
+      exports : "Terminal"
+    }
+    
   }
 });
 // Run the tests!
