@@ -200,7 +200,7 @@ define( [
     /**
      * For paging, the number of items per page.
      */
-    perPage : 3,
+    perPage : 12,
 
     /**
      * Based on the number of items per page and the current page, calculate the current
