@@ -41,7 +41,7 @@ define([
     initialize : function() {
       Utils.debug("USER welcome init: " + this.el);
       this.model = new User();
-      this.model.set("username","YourNewUserNameGoesHere");
+      this.model.set("username","yourusernamegoeshere");
       this.model.bind("change", this.render, this);
     },
 
@@ -136,7 +136,7 @@ define([
       Utils.debug("USER render: " + this.el);
 
       if (this.model != undefined) {
-       
+        this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
         // Display the UserWelcomeView
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
@@ -158,9 +158,10 @@ define([
        * {"username":"bob3","password":"","email":"","gravatar":"./../user/tilohash_gravatar.png","researchInterest":"","affiliation":"","description":"","subtitle":"","corpuses":[{"corpusname":"bob3-firstcorpus","port":"443","domain":"ilanguage.iriscouch.com","protocol":"https://"}],"dataLists":[],"prefs":{"skin":"images/skins/stone_figurines.jpg","numVisibleDatum":3},"mostRecentIds":{"corpusid":"2DD73120-F4E5-4A9C-97F7-8F064C5CD6A8","sessionid":"40490877-F8B3-4390-901D-E5838535B01C","datalistid":"AD0B8232-C362-4B0E-80B2-4C3FBBE97421"},"firstname":"","lastname":"","teams":[],"sessionHistory":[],"activityHistory":[],"permissions":{},"hotkeys":{"firstKey":"","secondKey":"","description":""},"id":"4ffb3c6470fbe6d209000005","hash":"$2a$10$9XybfL5OeR4BFJtrifu9H.3MPjJQQnl9uTbXeBdajrjCyABExQId.","salt":"$2a$10$9XybfL5OeR4BFJtrifu9H.","login":"bob3","google":{},"github":{"plan":{}},"twit":{},"fb":{"name":{}},"_id":"4ffb3c6470fbe6d209000005"}
        */
       var dataToPost = {};
-      dataToPost.login = $(".username").val();
+      $(".username").val( $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"") );
+      dataToPost.login = $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.email = $(".email").val();
-      dataToPost.username = $(".username").val();
+      dataToPost.username = $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".password").val();
       //Send a corpusname to create
       var corpusConnection = Utils.defaultCouchConnection();
