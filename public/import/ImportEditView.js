@@ -338,12 +338,11 @@ define( [
           var thatdatum = self.model.get("datumArray")[d];
           thatdatum.set({
             "session" : self.model.get("session"),
-            "corpusname" : self.model.get("corpusname")
+            "corpusname" : self.model.get("corpusname"),
+            "dateEntered" : JSON.stringify(new Date()),
+            "dateModified" : json.stringify(new Date())
           });
-
-          thatdatum.set("dateEntered", JSON.stringify(new Date()));
-          thatdatum.set("dateModified", JSON.stringify(new Date()));
-
+          
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
             thatdatum.save(null, {
