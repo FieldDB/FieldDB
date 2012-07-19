@@ -370,13 +370,21 @@ define( [
         }
         
         // Save the new DataList
-        self.model.get("dataList").changeCorpus(self.model.get("corpusname"), function(){
-          self.model.get("dataList").save(null, {
+        app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("dataLists").models[0].get("corpusname"), function(){
+          app.get("corpus").get("dataLists").models[0].save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
+              
+              // Update the progress bar
               $(".import-progress").val($(".import-progress").val()+1);
-              window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
+              
+              // Save the datalist ID in the userPrivate
+              window.app.get("authentication").get("userPrivate").get("dataLists").push(model.id);
+              
+              // Mark the datalist as no longer temporary
               self.model.dataListView.temporaryDataList = false;
+              
+              // Add the "imported" activity to the ActivityFeed
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
                   new Activity({
                     verb : "imported",
