@@ -50,7 +50,8 @@ define( [
       "drop .drop-label-zone" : function(e){
         this._dropLabelEvent(e);
       },
-      "click .add-column" : "insertDoubleColumnsInTable"
+      "click .add-column" : "insertDoubleColumnsInTable",
+      "blur .export-large-textarea" : "updateRawText"
     },
     _dragOverEvent: function (e) {
       if (e.originalEvent) e = e.originalEvent;
@@ -121,7 +122,10 @@ define( [
     model : Import,
     
     template: Handlebars.templates.import_edit_fullscreen,
-    
+    updateRawText : function(){
+      this.model.set("rawText", $(".export-large-textarea").val());
+      this.model.guessFormatAndImport();
+    },
     render : function() {
       this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
@@ -303,7 +307,11 @@ define( [
 //          }
           else{
             var n = fields.where({label: index})[0];
-            n.set("value", value);
+            if(n != undefined){
+              console.log(value);
+              console.log(index);
+              n.set("value", value);
+            }
           }
         });
         d.set("datumFields", fields);

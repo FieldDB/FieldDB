@@ -71,12 +71,21 @@ define([
      */
     validate : function(attributes) {
     },
-    
+    /**
+     * This function tries to guess if you have \n or \r as line endings
+     * and then tries to determine if you have "surounding your text".
+     * 
+     * CSV is a common export format for Filemaker, Microsoft Excel and
+     * OpenOffice Spreadsheets, and could be a good format to export
+     * from these sources and import into iField.
+     * 
+     * @param text
+     */
     importCSV : function(text) {
       var rows = text.split("\n");
       if(rows.length < 3){
         rows = text.split("\r");
-        this.set("status", this.get("status","Detected a MAC line ending."));
+        this.set("status", this.get("status","Detected a \r line ending."));
       }
       var hasQuotes = false;
       //If it looks like it already has quotes:
@@ -173,8 +182,55 @@ define([
     },
     importXML : function(xml) {
     },
-    
-    importText : function() {
+    /**
+     * This function accepts text which uses \t tabs between columns. If
+     * you have your data in ELAN or in Microsoft Excel or OpenOffice
+     * spreadsheets, this will most likely be a good format to export
+     * your data, and import into iField. This function is triggered if
+     * your file has more than 100 tabs in it, iField guesses that it
+     * should try this function.
+     * 
+     * @param tabbed
+     */
+    importTabbed : function(text) {
+      var rows = text.split("\n");
+      if(rows.length < 3){
+        rows = text.split("\r");
+        this.set("status", this.get("status","Detected a \n line ending."));
+      }
+      for(l in rows){
+        rows[l] = rows[l].split("\t");
+      }
+      
+      this.set("asCSV", rows);
+    },
+    /**
+     * This function accepts text using double spaces to indicate
+     * separate datum. Each line in the block is treated as a column in
+     * the table.
+     * 
+     * If you have your data in Microsoft word or OpenOffice or plain
+     * text, then this will be the easiest format for you to import your
+     * data in.
+     * 
+     * @param text
+     */
+    importText : function(text) {
+      var rows = text.split("\n\n");
+      var macLineEndings = false;
+      if(rows.length < 3){
+        rows = text.split("\r\r");
+        macLineEndings = true;
+        this.set("status", this.get("status","Detected a MAC line ending."));
+      }
+      for(l in rows){
+        if(macLineEndings){
+          rows[l] = rows[l].replace(/  +/g," ").split("\r");
+        }else{
+          rows[l] = rows[l].replace(/  +/g," ").split("\n");
+        }
+      }
+      this.set("asCSV", rows);
     },
     readFiles : function(){
       var filedetails = [];
@@ -220,14 +276,30 @@ define([
     },
     readFileIntoRawText : function(index, callback){
       var self = this;
-       this.readBlob(this.get("files")[index], function(){
-         if(self.get("files")[index].name.split('.').pop() == "csv"){
-           self.importCSV(self.get("rawText"), callback);
-         }else if(self.get("files")[index].name.split('.').pop() == "eaf"){
-           self.importXML(self.get("rawText"), callback);
-         }
-       });
-     
+      this.readBlob(this.get("files")[index], function(){
+        self.guessFormatAndImport(0, callback); 
+      });
+    },
+    /**
+     * This function attempts to guess the format of the file, and calls the appropriate import handler.
+     */
+    guessFormatAndImport : function(fileIndex, callback){
+      var self = this;
+      if(fileIndex == null){
+        fileIndex = 0;
+      }
+      if(self.get("files")[fileIndex].name.split('.').pop() == "csv"){
+        self.importCSV(self.get("rawText"), callback);
+      }else if(self.get("files")[fileIndex].name.split('.').pop() == "txt"){
+        //If there are more than 100 tabs in the file, try tabbed.
+        if(self.get("rawText").split("\t").length > 100){
+          self.importTabbed(self.get("rawText"), callback);
+        }else{
+          self.importText(self.get("rawText"), callback);
+        }
+      }else if(self.get("files")[fileIndex].name.split('.').pop() == "eaf"){
+        self.importXML(self.get("rawText"), callback);
+      }
     },
     readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);
