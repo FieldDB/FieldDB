@@ -1,13 +1,13 @@
 define( [ 
     "backbone", 
-	"handlebars",
+    "handlebars",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
-	"data_list/DataList",
-	"datum/Datum",
+	  "data_list/DataList",
+	  "datum/Datum",
   	"datum/DatumReadView",
-	"datum/Datums",
+	  "datum/Datums",
   	"app/UpdatingCollectionView"
 ], function(
     Backbone, 
