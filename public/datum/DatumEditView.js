@@ -118,8 +118,12 @@ define([
         var utteranceLine = $(e.currentTarget).val();
         if (utteranceLine) {
           var self = this;
-          Glosser.morphemefinder(utteranceLine, this.model.get("corpusname"), function(morphemes) {
-            self.$el.find(".morphemes .datum_field_input").val(morphemes);
+          Glosser.morphemefinder(utteranceLine, this.model.get("corpusname"), function(morphemesLine) {  
+            if (morphemesLine != utteranceLine) {
+              if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
+                self.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+              }
+            }
           });
         }
       }
