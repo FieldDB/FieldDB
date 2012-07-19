@@ -333,43 +333,35 @@ define( [
         $(".approve-save").addClass("disabled");
         //add the datums to the progress bar, so that we can augment for each that is saved.
         $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
+        
+        // Create a new permanent data list in the corpus
+        appView.dataListEditLeftSideView.newDataList();
 
-        for(d in self.model.get("datumArray")){
+        for (d in self.model.get("datumArray")) {
           var thatdatum = self.model.get("datumArray")[d];
           thatdatum.set({
             "session" : self.model.get("session"),
             "corpusname" : self.model.get("corpusname"),
             "dateEntered" : JSON.stringify(new Date()),
-            "dateModified" : json.stringify(new Date())
+            "dateModified" : JSON.stringify(new Date())
           });
           
+          // Save the datum
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
             thatdatum.save(null, {
               success : function(model, response) {
                 Utils.debug('Datum save success in import');
+                // Update progress bar
                 $(".import-progress").val($(".import-progress").val()+1);
 
-                self.model.dataListView.addOneDatumId(model.id);
+                // Add Datum to the new datalist and render it
+                appView.dataListEditLeftSideView.addOneDatumId(model.id);
                 
-                // If the default data list is the currently visible data list, add this datum to the view
+                // Add Datum to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
-                  appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
-                } else {
-                  // Add it to the default data list
-                  app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-                }
-                
-                // Save the default data list
-                app.get("corpus").get("dataLists").models[defaultIndex].changeCorpus(app.get("corpus").get("corpusname"), function() {
-                  app.get("corpus").get("dataLists").models[defaultIndex].save();
-                });
-                
-                // Save the corpus
-                app.get("corpus").changeCorpus(app.get("corpus").get("couchConnection"), function() {
-                  app.get("corpus").save();
-                });
+                alert("default index: " + defaultIndex);
+                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
               },
               error : function(e) {
                 alert('Datum save failure in import' + e);
@@ -384,7 +376,7 @@ define( [
             success : function(model, response) {
               Utils.debug('Data list save success in import');
               $(".import-progress").val($(".import-progress").val()+1);
-              window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
+              // window.app.get("corpus").get("dataLists").unshift(self.model.get("dataList"));
               window.app.get("authentication").get("userPrivate").get("dataLists").push(self.model.get("dataList").id);
               self.model.dataListView.temporaryDataList = false;
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
