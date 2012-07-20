@@ -276,6 +276,7 @@ define([
     
     newDataList : function() {
       //take the user to the search so they can create a data list using the search feature.
+      window.appView.toastUser("Taking you to the Advanced Search, this is the easiest way to make a new Data List","alert-info","How to make a new Data List");
       app.router.showEmbeddedSearch();
     },
     
