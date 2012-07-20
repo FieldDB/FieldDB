@@ -110,7 +110,38 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   
   return parsedWords.join(" ");
 }
-
+Glosser.glossFinder = function(morphemesLine){
+  //Guess a gloss
+  var morphemeGroup = morphemesLine.split(/ +/);
+  var glossGroups = [];
+  if(! window.app.get("corpus")){
+    return "";
+  }
+  if(! window.app.get("corpus").lexicon.get("lexiconNodes")){
+    alert("If you sync your data with the team server then you would get the latest automatic glosser for your corpus.")
+    return "";
+  }
+  var lexiconNodes = window.app.get("corpus").lexicon.get("lexiconNodes");
+  for (var group in morphemeGroup) {
+    var morphemes = morphemeGroup[group].split("-");
+    var glosses = [];
+    for (var m in morphemes) {
+      // Take the first gloss for this morpheme
+      var matchingNode = _.max(lexiconNodes.where({morpheme: morphemes[m]}), function(node) { return node.get("value"); });
+//      console.log(matchingNode);
+      var gloss = "?";   // If there's no matching gloss, use question marks
+      if (matchingNode) {
+        gloss = matchingNode.get("gloss");
+      }
+      glosses.push(gloss);
+    }
+    
+    glossGroups.push(glosses.join("-"));
+  }
+  
+  // Replace the gloss line with the guessed glosses
+  return glossGroups.join(" ");
+}
 /**
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
