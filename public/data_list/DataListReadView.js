@@ -28,7 +28,8 @@ define( [
      * @class A list of datum that are returned as a search result. It will have
      *        check-boxes on the side and a datum menu on the bottom.
      * 
-     * @property {String} format Valid formats are "link", "fullscreen", or "leftSide".
+     * @property {String} format Valid formats are "link", "fullscreen", 
+     * "leftSide", and "minimized".
      * 
      * @description Starts the DataListReadView with no children.
      * 
@@ -72,7 +73,15 @@ define( [
       'click .serverhowmany a': 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
-      "click .icon-edit" : "showEditable" 
+      "click .icon-edit" : "showEditable",
+      "click .icon-minus-sign" : function() {
+        this.format = "minimized";
+        this.render();
+      },
+      "click .icon-plus-sign" : function() {
+        this.format = "leftSide";
+        this.render();
+      } 
     },
     
     /**
@@ -100,7 +109,12 @@ define( [
      * as a partial.
      */
     footerTemplate : Handlebars.templates.paging_footer,
-
+    
+    /**
+     * The Handlebars template of the minimized version
+     */
+    templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
+    
     render : function() {
       if (this.format == "link") {
         // Display the Data List
@@ -147,8 +161,10 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
-      } else {
-        throw("You have not specified a format that the SessionReadView can understand.");
+        
+      } else if (this.format == "minimized") {
+        this.setElement($("#data-list-quickview"));
+        $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }
       
       return this;
