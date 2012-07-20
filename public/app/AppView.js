@@ -506,13 +506,15 @@ define([
     replicateDatabases : function(callback) {
       var self = this;
       this.model.storeCurrentDashboardIdsToLocalStorage(function(){
-        self.model.get("authentication").syncUserWithServer();
-        var corpusConnection = self.model.get("corpus").get("couchConnection");
-        if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
-          && app.get("corpus").get("couchConnection").corpusname == "default"){
-          corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
-        }
-        self.model.get("corpus").replicateCorpus(corpusConnection, callback);
+        //syncUserWithServer will prompt for password, then run the corpus replication.
+        self.model.get("authentication").syncUserWithServer(function(){
+          var corpusConnection = self.model.get("corpus").get("couchConnection");
+          if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
+            && app.get("corpus").get("couchConnection").corpusname == "default"){
+            corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+          }
+          self.model.get("corpus").replicateCorpus(corpusConnection, callback);
+        });
       });
     },
     /**
@@ -527,11 +529,12 @@ define([
           Utils.debug(resp);
           Utils.debug(err);
         });
-        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
+        //TODO when activity feed becomes useful, ie a team feed, then replicate from as well.
+//        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate from");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//        });
       });
     },
     
