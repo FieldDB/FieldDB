@@ -280,3 +280,6 @@ spacer{
   margin-bottom: 0;
   *zoom: 1;
 }
+.datum-audio-player{
+	width:100%;
+}
