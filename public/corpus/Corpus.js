@@ -337,7 +337,7 @@ define([
         url : couchurl ,
         data : corpusloginparams,
         success : function(data) {
-          window.appView.toastUser("I logged you into your team server automatically, your syncs will be sucessfull.", "alert-info","Online:");
+          window.appView.toastUser("I logged you into your team server automatically, your syncs will be sucessfull.", "alert-info","Online Mode:");
           if (typeof callback == "function") {
             callback(data);
           }
@@ -356,7 +356,7 @@ define([
                 }
               },
               error : function(data){
-                window.appView.toastUser("I couldn't log you into your corpus.","","'Offline Mode:'");
+                window.appView.toastUser("I couldn't log you into your corpus.","","Offline Mode:");
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
