@@ -1,47 +1,52 @@
-var morphemefinder = function(unparsedword, corpusname, callback) {
-  unparsedword = "@" + unparsedword + "@";
-  var potentialParsePromise = '';
-  $.ajax({
-    type : 'GET',
-    url : "http://ilanguage.iriscouch.com/" + corpusname
-        + "/_design/play/_view/precedence?group=true",
-    success : function(rules) {
-      // console.log(rules);
-      rules = JSON.parse(rules);
+var Glosser = Glosser || {};
 
-      /*
-       * Reduce the rules such that rules which are found in multiple source
-       * words are only used/included once.
-       */
-      var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
-        return rule.key.x + "-" + rule.key.y;
-      }).value();
+/**
+ * Takes in an utterance line and, based on our current set of precendence
+ * rules, guesses what the morpheme line would be. The algorithm is
+ * very conservative.
+ * 
+ * @param {String} unparsedUtterance The raw utterance line.
+ *
+ * @return {String} The guessed morphemes line. 
+ */
+Glosser.morphemefinder = function(unparsedUtterance) {
+  var potentialParse = '';
+  
+  // Get the precedence rules from localStorage
+  var rules = localStorage.getItem("precendenceRules");
+  
+  if (rules) {
+    // Parse the rules from JSON into an object
+    rules = JSON.parse(rules);
 
-      /*
-       * Find the rules which match in local precedence in the unparsedword
-       */
+    // Divide the utterance line into words
+    var unparsedWords = unparsedUtterance.trim().split(/ +/);
+    
+    var parsedWords = [];
+    for (var word in unparsedWords) {
+      // Add the start/end-of-word character to the word
+      unparsedWords[word] = "@" + unparsedWords[word] + "@";
+
+      // Find the rules which match in local precedence
       var matchedRules = [];
-      for ( var r in reducedRules) {
-        if (unparsedword.indexOf(r.replace(/-/, "")) >= 0) {
+      for (var r in rules) {
+        if (unparsedWords[word].indexOf(r.replace(/-/, "")) >= 0) {
           matchedRules.push({
-            r : reducedRules[r]
+            r : rules[r]
           })
         }
       }
 
-      /*
-       * Attempt to find the longest template which the matching rules can
-       * generate from start to end
-       */
+      // Attempt to find the longest template which the matching rules can
+      // generate from start to end
       var prefixtemplate = [];
       prefixtemplate.push("@");
-      for ( var i = 0; i < 10; i++) {
-        console.log(prefixtemplate[i]);
-        if (prefixtemplate[i] == undefined)
+      for (var i = 0; i < 10; i++) {
+        if (prefixtemplate[i] == undefined) {
           break;
-        for ( var j in matchedRules) {
+        }
+        for (var j in matchedRules) {
           if (prefixtemplate[i] == matchedRules[j].r[0].key.x) {
-            console.log(matchedRules[j].r[0].key.x);
             if (prefixtemplate[i + 1]) { // ambiguity (two potential following
                                           // morphemes)
               prefixtemplate.pop();
@@ -53,22 +58,18 @@ var morphemefinder = function(unparsedword, corpusname, callback) {
         }
       }
 
-      /*
-       * If the prefix template hit ambiguity in the middle, try from the suffix
-       * in until it hits ambiguity
-       */
+      // If the prefix template hit ambiguity in the middle, try from the suffix
+      // in until it hits ambiguity
       var suffixtemplate = [];
-      if (prefixtemplate[prefixtemplate.length - 1] != "@"
-          || prefixtemplate.length == 1) {
+      if (prefixtemplate[prefixtemplate.length - 1] != "@" || prefixtemplate.length == 1) {
         // Suffix:
         suffixtemplate.push("@")
-        for ( var i = 0; i < 10; i++) {
-          console.log(suffixtemplate[i]);
-          if (suffixtemplate[i] == undefined)
+        for (var i = 0; i < 10; i++) {
+          if (suffixtemplate[i] == undefined) {
             break;
-          for ( var j in matchedRules) {
+          }
+          for (var j in matchedRules) {
             if (suffixtemplate[i] == matchedRules[j].r[0].key.y) {
-              console.log(matchedRules[j].r[0].key.y);
               if (suffixtemplate[i + 1]) { // ambiguity (two potential
                                             // following morphemes)
                 suffixtemplate.pop();
@@ -80,39 +81,41 @@ var morphemefinder = function(unparsedword, corpusname, callback) {
           }
         }
       }
-      /*
-       * Combine prefix and suffix templates into one regular expression which
-       * can be tested against the word to find a potential parse
-       */
+      
+      // Combine prefix and suffix templates into one regular expression which
+      // can be tested against the word to find a potential parse.
+      // Regular expressions will look something like
+      //    (@)(.*)(hall)(.*)(o)(.*)(wa)(.*)(n)(.*)(@)
       var template = [];
       template = prefixtemplate.concat(suffixtemplate.reverse())
-      for ( var slot in template) {
+      for (var slot in template) {
         template[slot] = "(" + template[slot] + ")";
       }
       var regex = new RegExp(template.join("(.*)"), "");
-      console.log(unparsedword.replace(regex, "$1-$2-$3-$4-$5-$6-$7-$8-$9"));
-      potentialParsePromise = unparsedword.replace(regex,
-          "$1-$2-$3-$4-$5-$6-$7-$8-$9").replace(/\$[0-9]/g, "").replace(/@/g,
-          "").replace(/--+/g, "-").replace(/^-/, "").replace(/-$/, "")
-      /* "hall-pa-nay-wan" */
-      console.log("Potential parse of " + unparsedword.replace(/@/g, "")
-          + " is " + potentialParsePromise);
-      if (typeof callback == "function") {
-        callback(potentialParsePromise);
-      }
-
-    },// end successful login
-    dataType : ""
-  });
-
-  return potentialParsePromise;
+    
+      // Use the regular expression to find a guessed morphemes line
+      potentialParse = unparsedWords[word]
+          .replace(regex, "$1-$2-$3-$4-$5-$6-$7-$8-$9") // Use backreferences to parse into morphemes
+          .replace(/\$[0-9]/g, "")// Remove any backreferences that weren't used
+          .replace(/@/g, "")      // Remove the start/end-of-line symbol
+          .replace(/--+/g, "-")   // Ensure that there is only ever one "-" in a row
+          .replace(/^-/, "")      // Remove "-" at the start of the word
+          .replace(/-$/, "");     // Remove "-" at the end of the word
+      Utils.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
+          + " is " + potentialParse);
+          
+      parsedWords.push(potentialParse);
+    }
+  }
+  
+  return parsedWords.join(" ");
 }
 
 /**
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
  */
-var generateForceDirectedRulesJsonForD3 = function(rules) {
+Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
 
   /*
    * Cycle through the precedence rules, convert them into graph edges with the morpheme index in the morpheme array as the source/target values
@@ -164,7 +167,7 @@ var generateForceDirectedRulesJsonForD3 = function(rules) {
  * Some sample D3 from the force-html.html example
  * 
  */
-var visualizeMorphemesAsForceDirectedGraph = function(){
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(){
   
   var width = 960,
       height = 500,
