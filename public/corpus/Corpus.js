@@ -181,6 +181,7 @@ define([
         
       }//end if to set sessionFields
       
+      
       // If there are no comments, create models
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -222,14 +223,13 @@ define([
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      glosser: Glosser,
-      lexicon: Lexicon,
       sessions : Sessions, 
       dataLists : DataLists, 
       permissions : Permissions,
       comments: Comments
     },
-
+//    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
+    lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     changeCorpus : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
@@ -366,7 +366,7 @@ define([
         return '';
     },
     buildLexiconFromTeamServer : function(corpusname, callback){
-      this.get("lexicon").buildLexiconFromCouch(corpusname,callback);
+      this.lexicon.buildLexiconFromCouch(corpusname,callback);
     }
 
   });
