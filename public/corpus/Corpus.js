@@ -11,12 +11,12 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
-    "glosser/Glosser",
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
     "user/User",
+    "glosser/Glosser",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -31,7 +31,6 @@ define([
     DataList,
     DataLists,
     Consultants,
-    Glosser,
     Lexicon,
     Permission,
     Permissions,
