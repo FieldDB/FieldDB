@@ -11,6 +11,8 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
+    "glosser/Glosser",
+    "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
@@ -29,6 +31,8 @@ define([
     DataList,
     DataLists,
     Consultants,
+    Glosser,
+    Lexicon,
     Permission,
     Permissions,
     Sessions,
@@ -177,6 +181,7 @@ define([
         
       }//end if to set sessionFields
       
+      
       // If there are no comments, create models
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -223,7 +228,8 @@ define([
       permissions : Permissions,
       comments: Comments
     },
-
+//    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
+    lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     changeCorpus : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
@@ -358,6 +364,9 @@ define([
           attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
         }
         return '';
+    },
+    buildLexiconFromTeamServer : function(corpusname, callback){
+      this.lexicon.buildLexiconFromCouch(corpusname,callback);
     }
 
   });
