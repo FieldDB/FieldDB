@@ -478,7 +478,7 @@ define([
             if(this.format == "modal"){
               $("#new-corpus-modal").modal("hide");
               window.app.router.showFullscreenCorpus();
-              alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+              window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
             }
             
             
@@ -488,7 +488,7 @@ define([
             if(this.format == "modal"){
               $("#new-corpus-modal").modal("hide");
               window.app.router.showFullscreenCorpus();
-              alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+              window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
             }
           }
         });
