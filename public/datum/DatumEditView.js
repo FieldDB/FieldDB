@@ -111,11 +111,7 @@ define([
         this.model.exportAsCSV(true, null, true);
       },
       "click .icon-th-list" : "hideRareFields",
-      "click .icon-list-alt" : "showRareFields",
-      "click .icon-bullhorn " : "playAudio",
-      "mouseup .audio-filename" : function(){
-        alert("mouseup");
-      }
+      "click .icon-list-alt" : "showRareFields"
     },
 
     /**
@@ -380,12 +376,12 @@ define([
       d.set("session", app.get("currentSession"));
       appView.datumsView.prependDatum(d);
     },
+    /*
+     * this function can be used to play datum automatically
+     */
     playAudio : function(){
       if(this.model.get("audioVideo")){
-        this.model.get("audioVideo").set("filename", this.$el.find(".audio-filename"));
-          this.$el.find(".audio-file").attr("src", "filesystem:" + window.location.origin +"/temporary/"+this.$el.find(".audio-filename"));
-          this.$el.find(".audio-file").play();
-        
+          this.$el.find(".datum-audio-player")[0].play();
       }
     }
   });
