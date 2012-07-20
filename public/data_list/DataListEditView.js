@@ -33,7 +33,7 @@ define( [
      *        
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide", "centreWell",
-     * "fullscreen" and "import"
+     * "fullscreen", "import", and "minimized."
      * 
      * @extends Backbone.View
      * @constructs
@@ -78,7 +78,15 @@ define( [
       "blur .data-list-title": "updateTitle",
       "blur .data-list-description": "updateDescription",
       "click .icon-book" :"showReadonly",
-      "click .save-datalist" : "updatePouch"
+      "click .save-datalist" : "updatePouch",
+      "click .icon-minus-sign" : function() {
+        this.format = "minimized";
+        this.render();
+      },
+      "click .icon-plus-sign" : function() {
+        this.format = "leftSide";
+        this.render();
+      }
     },
 
     /**
@@ -101,6 +109,11 @@ define( [
      * as a partial.
      */
     footerTemplate : Handlebars.templates.paging_footer,
+    
+    /**
+     * The Handlebars template of the minimized version
+     */
+    templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
       if (this.format == "fullscreen") {
@@ -155,6 +168,10 @@ define( [
         
         // Display the pagination footer
         this.renderUpdatedPagination();
+        
+      } else if (this.format == "minimized") {
+        this.setElement($("#data-list-quickview"));
+        $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }
 
       return this;
