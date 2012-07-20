@@ -11,6 +11,8 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
+    "glosser/Glosser",
+    "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
@@ -29,6 +31,8 @@ define([
     DataList,
     DataLists,
     Consultants,
+    Glosser,
+    Lexicon,
     Permission,
     Permissions,
     Sessions,
@@ -218,6 +222,8 @@ define([
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
+      glosser: Glosser,
+      lexicon: Lexicon,
       sessions : Sessions, 
       dataLists : DataLists, 
       permissions : Permissions,
@@ -358,6 +364,9 @@ define([
           attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
         }
         return '';
+    },
+    buildLexiconFromTeamServer : function(corpusname, callback){
+      this.get("lexicon").buildLexiconFromCouch(corpusname,callback);
     }
 
   });
