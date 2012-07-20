@@ -110,7 +110,6 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      "click .icon-bullhorn " : "playAudio",
       "blur .utterance .datum_field_input" : function(e) {
         var utteranceLine = $(e.currentTarget).val();
         if (utteranceLine) {
@@ -397,12 +396,12 @@ define([
       d.set("session", app.get("currentSession"));
       appView.datumsView.prependDatum(d);
     },
+    /*
+     * this function can be used to play datum automatically
+     */
     playAudio : function(){
       if(this.model.get("audioVideo")){
-        if(this.model.get("audioVideo").get("filename") != undefined){
-          this.$el.find(".audio-file").attr("src", "filesystem:" + window.location.origin +"/temporary/"+this.model.get("audioVideo").get("filename"));
-          this.$el.find(".audio-file").play();
-        }
+          this.$el.find(".datum-audio-player")[0].play();
       }
     }
   });
