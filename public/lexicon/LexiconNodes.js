@@ -18,16 +18,20 @@ define("lexicon/LexiconNodes",
        * @constructs
        * 
        */
-    model: LexiconNode,
+    model : LexiconNode,
+    defaultOptions : {unique: true},
     //https://github.com/documentcloud/backbone/pull/808
     add : function(model, options) {
-    	console.log("Overriding add");
-        options || (options = {});
+//    	console.log("Overriding add");
+        options || defaultOptions;
         model = this._prepareModel(model, options);
         if (!model) return false;
         if (options.unique) {
           var already = this.getByCid(model) || this.get(model.id);
-          if (already) throw new Error(["Can't add the same model to a set twice", already.id]);
+          if (already) {
+            console.log("This LexiconNode already existed", model);
+//            throw new Error(["Can't add the same model to a set twice", already.id]);
+          }
         }
         this._byId[model.id] = model;
         this._byCid[model.cid] = model;
