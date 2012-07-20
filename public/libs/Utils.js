@@ -9,7 +9,7 @@
  */
 var Utils = Utils || {};
 
-Utils.debugMode = true;
+Utils.debugMode = false;
 
 
 Utils.couchUrl = "https://ilanguage.iriscouch.com/sapir-firstcorpus";
