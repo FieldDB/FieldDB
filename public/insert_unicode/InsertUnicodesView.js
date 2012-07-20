@@ -16,6 +16,8 @@ define([
     /**
      * @class InsertUnicodesView
      * 
+     * @property {String} format Valid values are "rightSide" or "minimized".
+     * 
      * @extends Backbone.View
      * @constructs
      */
@@ -47,23 +49,39 @@ define([
         if (code == 13) {
           this.insertNewUnicodeSymbol()
         }
+      },
+      "click .icon-minus-sign" : function() {
+        this.format = "minimized";
+        this.render();
+      },
+      "click .icon-plus-sign" : function() {
+        this.format = "rightSide";
+        this.render();
       }
     },
 
     template : Handlebars.templates.insert_unicodes,
+    
+    minimizedTemplate : Handlebars.templates.insert_unicodes_minimized,
 
     render : function() {
-      // Display the InsertUnicodesView
-      this.setElement($("#insert-unicode"));
-      $(this.el).html(this.template({}));
-
-      //Updating Collection View Rendering
-      this.insertUnicodesView.el = this.$("#unicodes");
-      this.insertUnicodesView.render();
-
+      if (this.format == "rightSide") {
+        // Display the maximized InsertUnicodesView
+        this.setElement($("#insert-unicode"));
+        $(this.el).html(this.template({}));
+  
+        //Updating Collection View Rendering
+        this.insertUnicodesView.el = this.$("#unicodes");
+        this.insertUnicodesView.render();
+  
         $(this.el).find(".unicode-symbol").each(function(index, item) {
           this.addEventListener('dragstart', window.appView.insertUnicodesView.handleDragStart, false);
         });
+      } else if (this.format == "minimized") {
+        // Display the minimized InsertUnicodesView
+        this.setElement($("#insert-unicode"));
+        $(this.el).html(this.minimizedTemplate({}));
+      }
       
       return this;
     },
