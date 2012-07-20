@@ -110,6 +110,8 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   
   return parsedWords.join(" ");
 }
+Glosser.toastedUserToSync = false;
+Glosser.toastedUserToImport = 0;
 Glosser.glossFinder = function(morphemesLine){
   //Guess a gloss
   var morphemeGroup = morphemesLine.split(/ +/);
@@ -118,7 +120,16 @@ Glosser.glossFinder = function(morphemesLine){
     return "";
   }
   if(! window.app.get("corpus").lexicon.get("lexiconNodes")){
-    alert("If you sync your data with the team server then you would get the latest automatic glosser for your corpus.")
+    var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
+    if(corpusSize > 30 && !Glosser.toastedUserToSync){
+      Glosser.toastedUserToSync = true;
+      alert("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then this will automatically run the auto glosser.");
+    }else{
+      Glosser.toastedUserToImport ++;
+      if(Glosser.toastedUserToImport % 10 == 0){
+        alert("You have "+corpusSize+" datum, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.");
+      }
+    }
     return "";
   }
   var lexiconNodes = window.app.get("corpus").lexicon.get("lexiconNodes");
