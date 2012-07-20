@@ -4,14 +4,13 @@ define([
     "insert_unicode/InsertUnicode",
     "insert_unicode/InsertUnicodeView",
     "app/UpdatingCollectionView",
-
 ], function(Backbone,
     Handlebars,
     InsertUnicode,
     InsertUnicodeView,
     UpdatingCollectionView
 ) {
-    var InsertUnicodesView = Backbone.View.extend(
+  var InsertUnicodesView = Backbone.View.extend(
   /** @lends InsertUnicodesView.prototype */
   {
     /**
