@@ -130,6 +130,29 @@ define([
               this.needsSave = true;
             }
           }
+          
+          // Guess a gloss
+          var morphemeGroup = morphemesLine.split(/ +/);
+          var glossGroups = [];
+          var lexiconNodes = window.app.get("corpus").lexicon.get("lexiconNodes");
+          for (var group in morphemeGroup) {
+            var morphemes = morphemeGroup[group].split("-");
+            var glosses = [];
+            for (var m in morphemes) {
+              // Take the first gloss for this morpheme
+              var matchingNode = lexiconNodes.where({morpheme: morphemes[m]})[0];
+              var gloss = "??";   // If there's no matching gloss, use question marks
+              if (matchingNode) {
+                gloss = matchingNode.get("gloss");
+              }
+              glosses.push(gloss);
+            }
+            
+            glossGroups.push(glosses.join("-"));
+          }
+          
+          // Replace the gloss line with the guessed glosses
+          this.$el.find(".gloss .datum_field_input").val(glossGroups.join(" "));
         }
       }
     },
