@@ -647,13 +647,12 @@ define([
         alertType = "";
       }
       if(!heading){
-        heading = "Warning!"
+        heading = "Warning!";
       }
       $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"
           +"<h4 class='alert-heading'>"+heading+"</h4>"
-          +"<p>" +message
-          +"</p>"
+          + message
         +"</div>")
     }
     
