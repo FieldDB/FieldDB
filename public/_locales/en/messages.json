@@ -1,0 +1,12 @@
+{
+  "application_title": {
+    "message": "iField",
+    "description": "The title of the application, displayed in the web store."
+  },
+  "application_description": {
+    "message": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
+    "description": "The description of the application, displayed in the web store."
+  }
+}
+
+
