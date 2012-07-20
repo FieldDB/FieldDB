@@ -323,6 +323,9 @@ define([
           },
           dataType : ""
         });
+        
+        // Build the lexicon
+        self.buildLexiconFromTeamServer(self.get("corpusname"));
       });
     },
     /**
@@ -389,10 +392,10 @@ define([
         }
         return '';
     },
+
     buildLexiconFromTeamServer : function(corpusname, callback){
       this.lexicon.buildLexiconFromCouch(corpusname,callback);
     }
-
   });
     
   return Corpus;
