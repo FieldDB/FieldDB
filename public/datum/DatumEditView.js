@@ -112,7 +112,10 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      "click .icon-bullhorn " : "playAudio"
+      "click .icon-bullhorn " : "playAudio",
+      "mouseup .audio-filename" : function(){
+        alert("mouseup");
+      }
     },
 
     /**
@@ -379,10 +382,10 @@ define([
     },
     playAudio : function(){
       if(this.model.get("audioVideo")){
-        if(this.model.get("audioVideo").get("filename") != undefined){
-          this.$el.find(".audio-file").attr("src", "filesystem:" + window.location.origin +"/temporary/"+this.model.get("audioVideo").get("filename"));
+        this.model.get("audioVideo").set("filename", this.$el.find(".audio-filename"));
+          this.$el.find(".audio-file").attr("src", "filesystem:" + window.location.origin +"/temporary/"+this.$el.find(".audio-filename"));
           this.$el.find(".audio-file").play();
-        }
+        
       }
     }
   });
