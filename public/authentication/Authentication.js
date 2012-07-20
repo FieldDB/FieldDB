@@ -86,6 +86,8 @@ define([
             $(".alert-error").html(
                 data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
+            window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
+
             if (typeof callback == "function") {
               callback(null, data.errors); // tell caller that the user failed to
               // authenticate

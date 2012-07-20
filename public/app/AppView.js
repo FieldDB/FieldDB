@@ -641,6 +641,19 @@ define([
       $(".unsaved-changes").attr("max", this.totalBackboneDocs.length);
       $(".unsaved-changes").val(this.totalUnsaved.length);
 
+    },
+    toastUser : function(message, alertType, heading){
+      if(!alertType){
+        alertType = "";
+      }
+      if(!heading){
+        heading = "Warning!";
+      }
+      $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
+          +"<a class='close' data-dismiss='alert' href='#'>×</a>"
+          +"<h4 class='alert-heading'>"+heading+"</h4>"
+          + message
+        +"</div>")
     }
     
     
