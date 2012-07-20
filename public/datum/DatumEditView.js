@@ -112,6 +112,10 @@ define([
       "click .icon-list-alt" : "showRareFields",
       "blur .utterance .datum_field_input" : function(e) {
         var utteranceLine = $(e.currentTarget).val();
+        if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
+          //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
+          window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        }
         if (utteranceLine) {
           var morphemesLine = Glosser.morphemefinder(utteranceLine);
           if (this.$el.find(".morphemes .datum_field_input").val() == "") {
