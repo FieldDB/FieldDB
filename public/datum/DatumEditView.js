@@ -12,6 +12,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "app/UpdatingCollectionView",
+    "glosser/Glosser",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -44,9 +45,7 @@ define([
     initialize : function() {
       // Create a AudioVideoEditView
       this.audioVideoView = new AudioVideoEditView({
-        model : this.model.get("audioVideo"),
-        
-        
+        model : this.model.get("audioVideo")
       });
       
       this.commentReadView = new UpdatingCollectionView({
@@ -54,7 +53,6 @@ define([
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
@@ -111,7 +109,29 @@ define([
         this.model.exportAsCSV(true, null, true);
       },
       "click .icon-th-list" : "hideRareFields",
-      "click .icon-list-alt" : "showRareFields"
+      "click .icon-list-alt" : "showRareFields",
+      "blur .utterance .datum_field_input" : function(e) {
+        var utteranceLine = $(e.currentTarget).val();
+        if (utteranceLine) {
+          var morphemesLine = Glosser.morphemefinder(utteranceLine);
+          if (this.$el.find(".morphemes .datum_field_input").val() == "") {
+            // If the morphemes line is empty, make it a copy of the utterance
+            this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
+            
+            this.needsSave = true;
+          }
+          // If the guessed morphemes is different than the unparsed utterance 
+          if (morphemesLine != utteranceLine) {
+            // Ask the user if they want to use the guessed morphemes
+            if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
+              // Replace the morphemes line with the guessed morphemes
+              this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+              
+              this.needsSave = true;
+            }
+          }
+        }
+      }
     },
 
     /**
