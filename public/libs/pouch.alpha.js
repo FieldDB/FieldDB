@@ -2319,12 +2319,28 @@ var IdbPouch = function(opts, callback) {
         break;
       }
     }
+    if (typeof fun.map != "function") {
+      for (var view in window.validCouchViews) {
+        if (fun.map.toString() == window.validCouchViews[view].toString()) {
+          fun.map = window.validCouchViews[view];
+          break;
+        }
+      }
+    }
     if (fun.reduce) {
       // eval('fun.reduce = ' + fun.reduce.toString() + ';');
       for (var view in validCouchViews) {
         if (fun.reduce.toString() == validCouchViews[view].toString()) {
           fun.reduce = validCouchViews[view];
           break;
+        }
+      }
+      if (typeof fun.reduce != "function") {
+        for (var view in window.validCouchViews) {
+          if (fun.reduce.toString() == window.validCouchViews[view].toString()) {
+            fun.reduce = window.validCouchViews[view];
+            break;
+          }
         }
       }
     }
@@ -2368,7 +2384,7 @@ var IdbPouch = function(opts, callback) {
                                     current.metadata.rev_tree[0].ids);
 
       if (options.complete && !current.metadata.deleted) {
-        fun.map.apply(this, [current.doc]);
+        fun.map.apply(this, [current.doc], emit);
       }
       cursor['continue']();
     }
@@ -2452,7 +2468,7 @@ IdbPouch.Changes = (function() {
   }
 
   return api;
-})();
+})(myvar);
 
 Pouch.adapter('idb', IdbPouch);
  })(this);
