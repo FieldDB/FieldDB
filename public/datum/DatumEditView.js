@@ -45,9 +45,7 @@ define([
     initialize : function() {
       // Create a AudioVideoEditView
       this.audioVideoView = new AudioVideoEditView({
-        model : this.model.get("audioVideo"),
-        
-        
+        model : this.model.get("audioVideo")
       });
       
       this.commentReadView = new UpdatingCollectionView({
@@ -55,7 +53,6 @@ define([
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
       });
-      
       
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
