@@ -65,7 +65,7 @@ define([
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen",
+      "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
       "click .add-comment-read" : 'insertNewComment',

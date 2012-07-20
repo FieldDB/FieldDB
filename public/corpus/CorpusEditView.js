@@ -92,7 +92,7 @@ define([
       //Add button inserts new Datum Field
       "click .add_datum_field" : 'insertNewDatumField',
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen",
+      "click .resize-full" : "resizeFullscreen",
       
       //corpus menu buttons
       "click .new-datum-edit" : "newDatum",
