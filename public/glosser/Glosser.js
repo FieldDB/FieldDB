@@ -1,5 +1,32 @@
 var Glosser = Glosser || {};
 
+Glosser.downloadPrecedenceRules = function(corpusname, callback){
+  $.ajax({
+    type : 'GET',
+    url : "https://ilanguage.iriscouch.com/" + corpusname
+        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    success : function(rules) {
+      // Parse the rules from JSON into an object
+      rules = JSON.parse(rules);
+    
+      // Reduce the rules such that rules which are found in multiple source
+      // words are only used/included once.
+      var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
+        return rule.key.x + "-" + rule.key.y;
+      }).value();
+      
+      // Save the reduced precedence rules in localStorage
+      localStorage.setItem("precendenceRules", JSON.stringify(reducedRules));
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    error : function(e) {
+      console.log("error getting precedence rules:", e);
+    },
+    dataType : ""
+  });
+}
 /**
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
