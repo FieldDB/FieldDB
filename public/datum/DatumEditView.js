@@ -183,9 +183,9 @@ define([
         this.datumFieldsView.render();
         var self = this;
         window.setTimeout(function(){
-          $('.datum-field').each(function(index, item) {
+          $(this.el).find('.datum-field').each(function(index, item) {
             item.classList.add( $(item).find("label").html() );
-            $(".datum_field_input").each(function(index){
+            $(this.el).find(".datum_field_input").each(function(index){
               this.addEventListener('drop', window.appView.dragUnicodeToField, false);
               this.addEventListener('dragover', window.appView.handleDragOver, false);
             });
