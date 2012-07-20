@@ -1,5 +1,33 @@
 var Glosser = Glosser || {};
-
+Glosser.currentCorpusName = "";
+Glosser.downloadPrecedenceRules = function(corpusname, callback){
+  $.ajax({
+    type : 'GET',
+    url : "https://ilanguage.iriscouch.com/" + corpusname
+        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    success : function(rules) {
+      // Parse the rules from JSON into an object
+      rules = JSON.parse(rules);
+    
+      // Reduce the rules such that rules which are found in multiple source
+      // words are only used/included once.
+      var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
+        return rule.key.x + "-" + rule.key.y;
+      }).value();
+      
+      // Save the reduced precedence rules in localStorage
+      localStorage.setItem(corpusname+"PrecendenceRules", JSON.stringify(reducedRules));
+      Glosser.currentCorpusName = corpusname;
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    error : function(e) {
+      console.log("error getting precedence rules:", e);
+    },
+    dataType : ""
+  });
+}
 /**
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
@@ -13,8 +41,9 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   var potentialParse = '';
   
   // Get the precedence rules from localStorage
-  var rules = localStorage.getItem("precendenceRules");
+  var rules = localStorage.getItem(Glosser.currentCorpusName+"precendenceRules");
   
+  var parsedWords = [];
   if (rules) {
     // Parse the rules from JSON into an object
     rules = JSON.parse(rules);
@@ -22,7 +51,6 @@ Glosser.morphemefinder = function(unparsedUtterance) {
     // Divide the utterance line into words
     var unparsedWords = unparsedUtterance.trim().split(/ +/);
     
-    var parsedWords = [];
     for (var word in unparsedWords) {
       // Add the start/end-of-word character to the word
       unparsedWords[word] = "@" + unparsedWords[word] + "@";
@@ -110,7 +138,49 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   
   return parsedWords.join(" ");
 }
-
+Glosser.toastedUserToSync = false;
+Glosser.toastedUserToImport = 0;
+Glosser.glossFinder = function(morphemesLine){
+  //Guess a gloss
+  var morphemeGroup = morphemesLine.split(/ +/);
+  var glossGroups = [];
+  if(! window.app.get("corpus")){
+    return "";
+  }
+  if(! window.app.get("corpus").lexicon.get("lexiconNodes")){
+    var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
+    if(corpusSize > 30 && !Glosser.toastedUserToSync){
+      Glosser.toastedUserToSync = true;
+      alert("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.");
+    }else{
+      Glosser.toastedUserToImport ++;
+      if(Glosser.toastedUserToImport % 10 == 1 && corpusSize < 30){
+        alert("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.");
+      }
+    }
+    return "";
+  }
+  var lexiconNodes = window.app.get("corpus").lexicon.get("lexiconNodes");
+  for (var group in morphemeGroup) {
+    var morphemes = morphemeGroup[group].split("-");
+    var glosses = [];
+    for (var m in morphemes) {
+      // Take the first gloss for this morpheme
+      var matchingNode = _.max(lexiconNodes.where({morpheme: morphemes[m]}), function(node) { return node.get("value"); });
+//      console.log(matchingNode);
+      var gloss = "?";   // If there's no matching gloss, use question marks
+      if (matchingNode) {
+        gloss = matchingNode.get("gloss");
+      }
+      glosses.push(gloss);
+    }
+    
+    glossGroups.push(glosses.join("-"));
+  }
+  
+  // Replace the gloss line with the guessed glosses
+  return glossGroups.join(" ");
+}
 /**
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
