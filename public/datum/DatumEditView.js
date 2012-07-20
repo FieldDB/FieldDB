@@ -140,7 +140,9 @@ define([
             var glosses = [];
             for (var m in morphemes) {
               // Take the first gloss for this morpheme
-              var matchingNode = lexiconNodes.where({morpheme: morphemes[m]})[0];
+              var matchingNode = _.max(lexiconNodes.where({morpheme: morphemes[m]}), function(node) { return node.get("value"); });
+              console.log(matchingNode);
+              // var matchingNode = lexiconNodes.where({morpheme: morphemes[m]})[0];
               var gloss = "??";   // If there's no matching gloss, use question marks
               if (matchingNode) {
                 gloss = matchingNode.get("gloss");

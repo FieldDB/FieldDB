@@ -325,7 +325,7 @@ define([
         });
         
         // Build the lexicon
-        buildLexiconFromTeamServer(this.get("corpusname"));
+        self.buildLexiconFromTeamServer(self.get("corpusname"));
       });
     },
     /**
