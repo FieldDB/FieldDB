@@ -2384,7 +2384,7 @@ var IdbPouch = function(opts, callback) {
                                     current.metadata.rev_tree[0].ids);
 
       if (options.complete && !current.metadata.deleted) {
-        fun.map.apply(this, [current.doc], emit);
+        fun.map.apply(this, [current.doc]);
       }
       cursor['continue']();
     }
@@ -2468,7 +2468,7 @@ IdbPouch.Changes = (function() {
   }
 
   return api;
-})(myvar);
+})();
 
 Pouch.adapter('idb', IdbPouch);
  })(this);
