@@ -21,8 +21,10 @@ define([
     },
     
     defaults: {
-      key: "",
-      value: "",
+      morpheme: "",
+      allomorphs: [],
+      gloss: "",
+      value: 0,
       data: []  
     },
     
