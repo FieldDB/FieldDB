@@ -300,7 +300,7 @@ define([
             window.appView.activityFeedView.model.replicateActivityFeed();
             
             // Get the corpus' current precedence rules
-            self.buildMorphologicalAnalyizerFromTeamServer(self.get("corpusname"));
+            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
             
             // Build the lexicon
             self.buildLexiconFromTeamServer(self.get("corpusname"));
@@ -373,7 +373,7 @@ define([
         }
         return '';
     },
-    buildMorphologicalAnalyizerFromTeamServer : function(corpusname, callback){
+    buildMorphologicalAnalyzerFromTeamServer : function(corpusname, callback){
       Glosser.downloadPrecedenceRules(corpusname, callback);
     },
     buildLexiconFromTeamServer : function(corpusname, callback){
