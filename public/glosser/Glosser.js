@@ -1,5 +1,5 @@
 var Glosser = Glosser || {};
-
+Glosser.currentCorpusName = "";
 Glosser.downloadPrecedenceRules = function(corpusname, callback){
   $.ajax({
     type : 'GET',
@@ -16,7 +16,8 @@ Glosser.downloadPrecedenceRules = function(corpusname, callback){
       }).value();
       
       // Save the reduced precedence rules in localStorage
-      localStorage.setItem("precendenceRules", JSON.stringify(reducedRules));
+      localStorage.setItem(corpusname+"PrecendenceRules", JSON.stringify(reducedRules));
+      Glosser.currentCorpusName = corpusname;
       if(typeof callback == "function"){
         callback();
       }
@@ -40,7 +41,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   var potentialParse = '';
   
   // Get the precedence rules from localStorage
-  var rules = localStorage.getItem("precendenceRules");
+  var rules = localStorage.getItem(Glosser.currentCorpusName+"precendenceRules");
   
   if (rules) {
     // Parse the rules from JSON into an object
@@ -150,11 +151,11 @@ Glosser.glossFinder = function(morphemesLine){
     var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
     if(corpusSize > 30 && !Glosser.toastedUserToSync){
       Glosser.toastedUserToSync = true;
-      alert("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then this will automatically run the auto glosser.");
+      alert("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.");
     }else{
       Glosser.toastedUserToImport ++;
-      if(Glosser.toastedUserToImport % 10 == 0){
-        alert("You have "+corpusSize+" datum, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.");
+      if(Glosser.toastedUserToImport % 10 == 1){
+        alert("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.");
       }
     }
     return "";
