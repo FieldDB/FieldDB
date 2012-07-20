@@ -249,7 +249,7 @@ define([
       if(returntext == ""){
         return; //dont show a pop up
       }else{
-        return returntext;
+        return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
     },
     /**
