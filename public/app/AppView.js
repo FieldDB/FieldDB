@@ -277,10 +277,13 @@ define([
       this.activityFeedView = new ActivityFeedView({
         model : new ActivityFeed()
       }); 
+      this.activityFeedView.format = "rightSide";
+      
       // Create an InsertUnicodesView
       this.insertUnicodesView = new InsertUnicodesView({
         model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
-      }); 
+      });
+      this.insertUnicodesView.format = "rightSide"; 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
