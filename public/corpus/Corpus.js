@@ -11,12 +11,12 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
-    "glosser/Glosser",
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
     "user/User",
+    "glosser/Glosser",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -31,7 +31,6 @@ define([
     DataList,
     DataLists,
     Consultants,
-    Glosser,
     Lexicon,
     Permission,
     Permissions,
@@ -296,36 +295,17 @@ define([
                   context : "via Offline App",
                   user: window.app.get("authentication").get("userPublic")
                 }));
+            //Replicate the team's activity feed
             window.appView.activityFeedView.model.replicateActivityFeed();
+            
+            // Get the corpus' current precedence rules
+            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
+            
+            // Build the lexicon
+            self.buildLexiconFromTeamServer(self.get("corpusname"));
           });
         });
         
-        // Get the corpus' current precedence rules
-        $.ajax({
-          type : 'GET',
-          url : "https://ilanguage.iriscouch.com/" + self.get("corpusname")
-              + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
-          success : function(rules) {
-            // Parse the rules from JSON into an object
-            rules = JSON.parse(rules);
-          
-            // Reduce the rules such that rules which are found in multiple source
-            // words are only used/included once.
-            var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
-              return rule.key.x + "-" + rule.key.y;
-            }).value();
-            
-            // Save the reduced precedence rules in localStorage
-            localStorage.setItem("precendenceRules", JSON.stringify(reducedRules));
-          },
-          error : function(e) {
-            console.log("error getting precedence rules:", e);
-          },
-          dataType : ""
-        });
-        
-        // Build the lexicon
-        self.buildLexiconFromTeamServer(self.get("corpusname"));
       });
     },
     /**
@@ -392,8 +372,38 @@ define([
         }
         return '';
     },
-
+    /**
+     * This function takes in a corpusname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more/better monolingual data.
+     * 
+     * @param corpusname
+     * @param callback
+     */
+    buildMorphologicalAnalyzerFromTeamServer : function(corpusname, callback){
+      if(!corpusname){
+        this.get("corpusname");
+      }
+      if(!callback){
+        callback = null;
+      }
+      Glosser.downloadPrecedenceRules(corpusname, callback);
+    },
+    /**
+     * This function takes in a corpusname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more/better monolingual data.
+     * 
+     * @param corpusname
+     * @param callback
+     */
     buildLexiconFromTeamServer : function(corpusname, callback){
+      if(!corpusname){
+        this.get("corpusname");
+      }
+      if(!callback){
+        callback = null;
+      }
       this.lexicon.buildLexiconFromCouch(corpusname,callback);
     }
   });
