@@ -373,10 +373,38 @@ define([
         }
         return '';
     },
+    /**
+     * This function takes in a corpusname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more/better monolingual data.
+     * 
+     * @param corpusname
+     * @param callback
+     */
     buildMorphologicalAnalyzerFromTeamServer : function(corpusname, callback){
+      if(!corpusname){
+        this.get("corpusname");
+      }
+      if(!callback){
+        callback = null;
+      }
       Glosser.downloadPrecedenceRules(corpusname, callback);
     },
+    /**
+     * This function takes in a corpusname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more/better monolingual data.
+     * 
+     * @param corpusname
+     * @param callback
+     */
     buildLexiconFromTeamServer : function(corpusname, callback){
+      if(!corpusname){
+        this.get("corpusname");
+      }
+      if(!callback){
+        callback = null;
+      }
       this.lexicon.buildLexiconFromCouch(corpusname,callback);
     }
   });
