@@ -63,7 +63,7 @@ define([
         cc.corpusid =  window.app.get("corpus").id;
         this.get("corpuses").push(cc);
       }else{
-        alert("The corpus has no id, cant add it to the user.");
+        window.appView.toastUser("The corpus has no id, cant add it to the user.","alert-danger","Bug!");
       }
     }
   });

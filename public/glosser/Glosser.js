@@ -151,11 +151,11 @@ Glosser.glossFinder = function(morphemesLine){
     var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
     if(corpusSize > 30 && !Glosser.toastedUserToSync){
       Glosser.toastedUserToSync = true;
-      alert("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.");
+      window.appView.toastUser("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.","alert-success","Sync to train your auto-glosser:");
     }else{
       Glosser.toastedUserToImport ++;
       if(Glosser.toastedUserToImport % 10 == 1 && corpusSize < 30){
-        alert("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.");
+        window.appView.toastUser("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.","alert-info","");
       }
     }
     return "";
