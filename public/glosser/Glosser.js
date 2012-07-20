@@ -43,6 +43,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   // Get the precedence rules from localStorage
   var rules = localStorage.getItem(Glosser.currentCorpusName+"precendenceRules");
   
+  var parsedWords = [];
   if (rules) {
     // Parse the rules from JSON into an object
     rules = JSON.parse(rules);
@@ -50,7 +51,6 @@ Glosser.morphemefinder = function(unparsedUtterance) {
     // Divide the utterance line into words
     var unparsedWords = unparsedUtterance.trim().split(/ +/);
     
-    var parsedWords = [];
     for (var word in unparsedWords) {
       // Add the start/end-of-word character to the word
       unparsedWords[word] = "@" + unparsedWords[word] + "@";
@@ -154,7 +154,7 @@ Glosser.glossFinder = function(morphemesLine){
       alert("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.");
     }else{
       Glosser.toastedUserToImport ++;
-      if(Glosser.toastedUserToImport % 10 == 1){
+      if(Glosser.toastedUserToImport % 10 == 1 && corpusSize < 30){
         alert("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.");
       }
     }

@@ -45,7 +45,7 @@ define([
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(corpusname+"lexiconResults");
+          localStorage.setItem(corpusname+"lexiconResults", results);
           var lexiconTriples = JSON.parse(results).rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
