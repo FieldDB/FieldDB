@@ -11,3 +11,5 @@ while read NAME ;
 		cat "${NAME}.js" >> libs/compiled_handlebars.js; 
 		rm "${NAME}.js" 
 	done
+
+date;
