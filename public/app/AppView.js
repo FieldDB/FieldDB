@@ -590,6 +590,9 @@ define([
     totalPouchDocs: [],//TODO find out how to do this?
     totalBackboneDocs: [],
     addUnsavedDoc : function(id){
+      if(!id){
+        alert("This is a bug: something is trying ot save an undefined item.");
+      }
       if(this.totalUnsaved.indexOf(id) == -1){
         this.totalUnsaved.push(id);
       }
