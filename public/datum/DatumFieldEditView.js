@@ -80,8 +80,8 @@ define([
      * Change the model's state.
      */
     updateFieldLabel : function() {
-      Utils.debug("Updated label to " + this.$el.children(".datum_field_input").val());
-      this.model.set("label", this.$el.children(".datum_field_input").val());
+      Utils.debug("Updated label to " + this.$el.children(".choose-field").val());
+      this.model.set("label", this.$el.children(".choose-field").val());
     },
     
     // TODO Add description
