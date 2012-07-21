@@ -190,6 +190,8 @@ define([
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
+        
+        
 
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));

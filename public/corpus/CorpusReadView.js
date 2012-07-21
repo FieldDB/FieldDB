@@ -157,6 +157,7 @@ define([
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();        
         
+        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization"));
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
