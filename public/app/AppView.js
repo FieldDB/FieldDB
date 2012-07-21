@@ -647,7 +647,7 @@ define([
       if(message == "Automatically saving visible datum entries every 10 seconds."){
         this.toastSavingDatumsCount++;
         if(this.toastSavingDatumsCount == 5){
-          message = message+"<p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
+          message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
         }if(this.toastSavingDatumsCount > 5){
           return;
         }
