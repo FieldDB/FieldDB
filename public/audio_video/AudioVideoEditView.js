@@ -44,18 +44,28 @@ define([
 
     classname : "audio_video",
 
-    template : Handlebars.templates.audio_video_edit_embedded,
+//    template : Handlebars.templates.audio_video_edit_embedded,
 
+    /**
+     * Builds the entire handlebars here, not in the template because of drag and drop listeners.
+     * @returns {___anonymous235_4788}
+     */
     render : function() {
       //http://www.terrillthompson.com/tests/html5-audio.html
       //users must download lame to make mp3 because html5 audio cant play wav? http://lame1.buanzo.com.ar/Lame_Library_v3.98.2_for_Audacity_on_OSX.dmg
       var dropzone = document.createElement("audio");
+      var audiofilespan ="";
+      
       if(this.model.get("filename")){
+        audiofilespan ="<small class='datum-audio-filename pull-right'>"+this.model.get("filename")+"</span>";
         var sourceaudio = document.createElement("source");
-        sourceaudio.setAttribute("src",  "filesystem:" + window.location.origin +"/temporary/"+this.model.get("filename"));
+        sourceaudio.setAttribute("src",  this.model.get("URL"));
         sourceaudio.setAttribute("type", "audio/"+this.model.get("filename").split('.').pop() );
         dropzone.appendChild(sourceaudio);
         dropzone.setAttribute("preload","");
+        dropzone.pause();
+        dropzone.load();//suspends and restores all audio element
+        dropzone.play();
       }
       dropzone.setAttribute("controls", "");
 //      dropzone.setAttribute("tabindex","0"); //needed to play it using tab, this puts it first...
@@ -64,9 +74,21 @@ define([
 //      dropzone.classList.add("drop-zone");
 //      dropzone.classList.add("pull-right");
       dropzone.classList.add("datum-audio-player");
-      dropzone.addEventListener('drop', this.dropAudio, false);
+      var self = this;
+      dropzone.addEventListener('drop', function(e){
+        if (e.stopPropagation) {
+          e.stopPropagation(); // stops the browser from redirecting.
+        }
+        if (e.preventDefault) {
+          e.preventDefault(); 
+        }  
+        var audio = this;
+        self.dropAudio(e, audio, self);
+        return false;
+      }, false);
       dropzone.addEventListener('dragover', this.dragOverAudio, false);
       $(this.el).html(dropzone);
+      $(this.el).append(audiofilespan);
       return this;
     },
     
@@ -87,27 +109,48 @@ define([
       this.classList.remove('halfopacity');
     },
     
-    dropAudio: function(e) {
+    dropAudio: function(e, audio, self) {
       Utils.debug("Recieved a drop event ");
-      if (e.stopPropagation) {
-        e.stopPropagation(); // stops the browser from redirecting.
+//      if (e.stopPropagation) {
+//        e.stopPropagation(); // stops the browser from redirecting.
+//      }
+//      if (e.preventDefault) {
+//        e.preventDefault(); 
+//      }      
+      audio.classList.remove('halfopacity');
+      //its a url, paste it.
+      if(!e.dataTransfer.files.name){
+        //"{"items":{"0":{"kind":"string","type":"text/plain"},"1":{"kind":"string","type":"text/uri-list"},"length":2},"dropEffect":"move","files":{"length":0},"types":["text/uri-list","text/plain"],"effectAllowed":"copyMove"}"
+        var filename = "";
+        var url =  "filesystem:" + window.location.origin +"/temporary/"+filename;
+        if(filename.indexOf("http") > 0){
+          filename = url;
+        }
+      }else{
+        //Use the terminal to save the file into the chrome file system
+        window.appView.term.addDroppedFiles(e.dataTransfer.files);
+        window.appView.term.output('<div>File(s) added!</div>');
+        var filename = e.dataTransfer.files[0].name;
+        var url =  "filesystem:" + window.location.origin +"/temporary/"+filename;
+        if(filename.indexOf("http") > 0){
+          filename = url;
+        }
       }
-      if (e.preventDefault) {
-        e.preventDefault(); 
-      }      
-      this.classList.remove('halfopacity');
-      //Use the terminal to put the file into the file system
-      window.appView.term.addDroppedFiles(e.dataTransfer.files);
-      window.appView.term.output('<div>File(s) added!</div>');
-      var audio = $(this);
-      audio.empty();
+      
+      var audiojs = $(audio);
+      audiojs.empty();
       //http://stackoverflow.com/questions/7953593/change-source-to-audio-html5-element
-      var newSrc = $("<source>").attr("src", "filesystem:" + window.location.origin +"/temporary/"+e.dataTransfer.files[0].name).appendTo(audio);
+//      var newSrc = $("<source>").attr("src", url).appendTo(audiojs);
+      self.model.set("filename", filename);
+      self.model.set("URL",url);
+      self.render(); //this will do the audio source thing for us.
       /****************/
       audio.pause();
-      audio.load();//suspends and restores all audio element
+//      audio.load();//suspends and restores all audio element
+//      audio.play();
       /****************/
-      return false;
+      
+//      return false;
     }
   });
 
