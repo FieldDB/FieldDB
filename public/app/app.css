@@ -294,3 +294,11 @@ line.link {
   stroke: #999;
   stroke-opacity: .6;
 }
+.corpus-precedence-rules-visualization{
+	background-color: #333;
+  text-align:center;	
+}
+.vis-title{
+	font-size: 2em;
+	color: #fff;
+}

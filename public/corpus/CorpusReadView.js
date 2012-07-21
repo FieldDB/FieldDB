@@ -157,9 +157,8 @@ define([
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();        
         
-        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("corpusname"));
         try{
-          //TODO load viz here
+          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("corpusname"));
         }catch(e){
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
