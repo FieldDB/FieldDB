@@ -645,10 +645,10 @@ define([
     toastSavingDatumsCount : 0,
     toastUser : function(message, alertType, heading){
       if(message == "Automatically saving visible datum entries every 10 seconds."){
-        toastSavingDatumsCount++;
-        if(toastSavingDatumsCount == 5){
+        this.toastSavingDatumsCount++;
+        if(this.toastSavingDatumsCount == 5){
           message = message+"<p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
-        }if(toastSavingDatumsCount > 5){
+        }if(this.toastSavingDatumsCount > 5){
           return;
         }
       }
