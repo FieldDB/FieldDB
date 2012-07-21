@@ -103,7 +103,7 @@ define([
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
-      "blur .update-datum-field" : "updateDatumField",
+//      "blur .update-datum-field" : "updateDatumField",
       "click .save-corpus" : "updatePouch",
 //      "blur .save-corpus-blur" : "updatePouch"//TODO why was someone saving the corpus to pouch on blur!? this will make a ton of revisions.
     },
@@ -368,20 +368,24 @@ define([
       window.appView.addUnsavedDoc(this.model.id);
 
     },
-    //needed to be able to change datum fields
-    updateDatumField : function(e) {
-      var datumField = e.target.parentElement;
-      var checked = datumField.find(".encrypted").is(':checked') ? "checked" : "";
-      var oldLabel = e.target.parentElement.classList[1];
-      // Create the new DatumField based on what the user entered
-      var m = this.model.get("datumFields").where({"label" : oldLabel })[0]; //TODO if this doesnt work could maybe count from top.
-      m.set({
-        "label" : datumField.find(".choose-field").val().toLowerCase().replace(/ /g,"_"),
-        "encrypted" : checked,
-        "help" : datumField.find(".help-text").val()
-      });
-      window.appView.addUnsavedDoc(this.model.id);
-    },
+    //needed to be able to change datum fields NO, this already exists in the DatumFieldEditView.js
+//    updateDatumField : function(e) {
+//      var datumField = $(e.target.parentElement);
+//      var checked = datumField.find(".encrypted").is(':checked') ? "checked" : "";
+//      var oldLabel = e.target.parentElement.firstChild.classList[1]; //get the old label from the span
+//      // Create the new DatumField based on what the user entered
+//      var m = this.model.get("datumFields").where({"label" : oldLabel })[0]; //TODO if this doesnt work could maybe count from top.
+//      if(!m){
+//        window.appView.toastUser("Couldn't find your datum field to modify it."); 
+//        return;
+//      }
+//      m.set({
+//        "label" : datumField.find(".choose-field").val().toLowerCase().replace(/ /g,"_"),
+//        "encrypted" : checked,
+//        "help" : datumField.find(".help-text").val()
+//      });
+//      window.appView.addUnsavedDoc(this.model.id);
+//    },
 
     
     //This the function called by the add button, it adds a new datum state both to the collection and the model
