@@ -93,7 +93,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewDatumTag()
+          this.insertNewDatumTag();
         }
       },
       "click #duplicate" : "duplicateDatum",
@@ -183,9 +183,9 @@ define([
         this.datumFieldsView.render();
         var self = this;
         window.setTimeout(function(){
-          $(this.el).find('.datum-field').each(function(index, item) {
+          $('.datum-field').each(function(index, item) {
             item.classList.add( $(item).find("label").html() );
-            $(this.el).find(".datum_field_input").each(function(index){
+            $(".datum_field_input").each(function(index){
               this.addEventListener('drop', window.appView.dragUnicodeToField, false);
               this.addEventListener('dragover', window.appView.handleDragOver, false);
             });
@@ -225,7 +225,6 @@ define([
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
       $(this.el).find(".comments-section").show();
 
-      this.showComments();
     },
     
   
