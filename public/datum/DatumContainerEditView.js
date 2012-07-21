@@ -90,6 +90,7 @@ define([
       for (var i in this.datumsView._childViews) {
         this.datumsView._childViews[i].saveScreen();
       }
+      window.appView.toastUser("Automatically saving visible datum entries every 10 seconds.","alert-success","Saved!");
     },
     
     resizeSmall : function() {

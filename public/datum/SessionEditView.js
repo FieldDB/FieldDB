@@ -200,6 +200,8 @@ define([
         self.model.save(null, {
           success : function(model, response) {
             Utils.debug('Session save success');
+            window.appView.toastUser("Sucessfully saved session.","alert-success","Saved!");
+
             try{
               if(window.app.get("currentSession").id != model.id){
                 window.app.get("corpus").get("sessions").unshift(model);

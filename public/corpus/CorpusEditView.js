@@ -438,6 +438,8 @@ define([
         self.model.save(null, {
           success : function(model, response) {
             Utils.debug('Corpus save success');
+            window.appView.toastUser("Sucessfully saved corpus.","alert-success","Saved!");
+
 //            try{
               if(window.app.get("corpus").id != model.id){
                 //add corpus to user

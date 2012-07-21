@@ -467,6 +467,8 @@ define( [
         self.model.save(null, {
           success : function(model, response) {
             Utils.debug('Datalist save success');
+            window.appView.toastUser("Sucessfully saved data list.","alert-success","Saved!");
+
             try{
               if(window.app.get("currentDataList").id != model.id){
                 window.app.get("corpus").get("dataLists").unshift(model);
