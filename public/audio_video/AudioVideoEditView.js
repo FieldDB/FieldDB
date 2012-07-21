@@ -25,19 +25,7 @@ define([
     },
     
     events : {
-      "dragenter .drop-zone" : function(e){
-        this.dragEnterAudio(e);
-      },
-      "dragover .drop-zone" : function(e){
-        this.dragOverAudio(e);
-      },
-      "dragleave .drop-zone" : function(e){
-        this.dragLeave(e);
-      },
-      "drop .drop-zone": function(e){
-        this.model.set("filename", e.dataTransfer.files[0].name);
-        this.dropAudio(e);
-      }
+      
     },
     
     model : AudioVideo,
@@ -62,6 +50,15 @@ define([
         dropzone.pause();
         dropzone.load();//suspends and restores all audio element
         dropzone.play();
+      }else{
+        //TODO not working yet.
+//        audiofilespan = '<input type="file" id="files1" name="files1[]" multiple="">';
+//        var self = this;
+//        $(audiofilespan).change = function(e){
+//          console.log("changing audio file");
+//          self.handleFileSelect(e, self);
+//          return false;
+//        }
       }
       dropzone.setAttribute("controls", "");
 //      dropzone.setAttribute("tabindex","0"); //needed to play it using tab, this puts it first...
@@ -84,6 +81,7 @@ define([
       }, false);
       dropzone.addEventListener('dragover', this.dragOverAudio, false);
       $(this.el).html(dropzone);
+      
       $(this.el).append(audiofilespan);
       return this;
     },
@@ -136,6 +134,18 @@ define([
       /****************/
       
 //      return false;
+    },
+    handleFileSelect : function(evt, self) {
+      var files = evt.target.files; // FileList object
+
+      var filename = files[0].name;
+      var url =  "filesystem:" + window.location.origin +"/temporary/"+filename;
+      if(filename.indexOf("http") > 0){
+        filename = url;
+      }
+      self.model.set("filename", filename);
+      self.model.set("URL",url);
+      self.render();
     }
   });
 
