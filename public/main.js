@@ -210,12 +210,12 @@ require([
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
-  //var username = Utils.getCookie("username");
+  var username = Utils.getCookie("username");
   //if(username == "sapir"){
   //  loadFreshApp();
   //  return;
   //}
-  //if (username != null && username != "") {
+  if (username != null && username != "") {
 //    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
     var appjson = localStorage.getItem("mostRecentDashboard");
     appjson = JSON.parse(appjson);
