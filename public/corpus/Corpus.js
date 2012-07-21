@@ -356,7 +356,13 @@ define([
                 }
               },
               error : function(data){
-                window.appView.toastUser("I couldn't log you into your corpus.","","Offline Mode:");
+                window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
+                		"This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
+                		"You also can't share your data with team members. Chances are if you are in offline mode, " +
+                		"it is because you are using our website version instead of the Chrome Store app https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm?  " +
+                		"Our website version has a bug which we are waiting for IrisCouch (our database hosting company) to fix," +
+                		" they said they would fix it soon. If your computer is online and you are the Chrome Store app, then this is a bug... please report it to us :)","alert-danger","Offline Mode:");
+                appView.datumsView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
