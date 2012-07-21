@@ -205,22 +205,28 @@ require([
 //  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
 //  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
 //  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
-  
-  
+    
+
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
-  var username = Utils.getCookie("username");
-  if (username != null && username != "") {
+  //var username = Utils.getCookie("username");
+  //if(username == "sapir"){
+  //  loadFreshApp();
+  //  return;
+  //}
+  //if (username != null && username != "") {
 //    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
     var appjson = localStorage.getItem("mostRecentDashboard");
     appjson = JSON.parse(appjson);
     if (appjson == null){
       alert("We don't know what dashbaord to load for you. Please login and it should fix this problem.");
       loadFreshApp();
+      return;
     }else if (appjson.length < 3) {
       alert("There was something inconsistent with your prevous dashboard. Please login and it should fix the problem.");
       loadFreshApp();
+      return;
     }else{
       Utils.debug("Loading app from localStorage");
       var corpusname = null;
@@ -228,16 +234,19 @@ require([
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
         alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
         loadFreshApp();
+        return;
       }else{
         corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
         couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
         if(!localStorage.getItem("db"+corpusname+"_id")){
           alert("We couldn't open your local database. Please login and it should fix the problem.");
-          loadFreshApp();
+          loadFreshApp(); 
+          return;
         }else{
           if(!localStorage.getItem("encryptedUser")){
             alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
             loadFreshApp();
+            return;
           }else{
             a = new App();
             var auth = a.get("authentication");
@@ -246,6 +255,7 @@ require([
               if(success == null){
                 alert("We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
                 loadFreshApp();
+                return;
               }else{
                 a.createAppBackboneObjects(corpusname, function(){
                   window.startApp(a, function(){
