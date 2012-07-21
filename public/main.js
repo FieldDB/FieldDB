@@ -212,7 +212,7 @@ require([
    */
   var username = Utils.getCookie("username");
   if (username != null && username != "") {
-    alert("Welcome again " + username);
+//    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
     var appjson = localStorage.getItem("mostRecentDashboard");
     appjson = JSON.parse(appjson);
     if (appjson == null){
