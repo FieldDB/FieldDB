@@ -308,8 +308,8 @@ define( [
           else{
             var n = fields.where({label: index})[0];
             if(n != undefined){
-              console.log(value);
-              console.log(index);
+//              console.log(value);
+//              console.log(index);
               n.set("value", value);
             }
           }
