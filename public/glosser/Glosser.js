@@ -241,6 +241,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, corpusname) {
   var rulesGraph = {};
   rulesGraph.links = morphemeLinks;
   rulesGraph.nodes = morphemenodes;
+  Glosser.rulesGraph = rulesGraph;
   
   return rulesGraph;
 }
@@ -249,6 +250,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, corpusname) {
  * Some sample D3 from the force-html.html example
  * 
  */
+//Glosser.rulesGraph = Glosser.rulesGraph || {};
 Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, corpusname){
 
   if(corpusname){
@@ -257,7 +259,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     throw("Must provide corpus name to be able to visualize morphemes");
   }
   if(!rulesGraph){
-    rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
+    rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();//Glosser.rulesGraph || Glosser.generateForceDirectedRulesJsonForD3();
   }
   if(!rulesGraph){
     return;
@@ -265,78 +267,142 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   if(rulesGraph.length <1 ){
     return;
   }
+//  
+//  var width = 660,
+//      height = 400,
+//      radius = 6,
+//      fill = d3.scale.category20();
+//
+//  var force = d3.layout.force()
+//      .charge(-120)
+//      .linkDistance(30)
+//      .size([width, height]);
+//
+//  var vis = d3.select(divElement).append("svg")
+//      .style("width", width + "px")
+//      .style("height", height + "px");
+//      
+//  var tooltip = null;
+ json = rulesGraph;
+//  d3.json("./libs/rules.json", function(json) {
+//    var link = vis.selectAll("div.link")
+//        .data(json.links)
+//      .enter().append("div")
+//        .attr("class", "link");
+//
+//    var node = vis.selectAll("div.node")
+//        .data(json.nodes)
+//      .enter().append("div")
+//        .attr("class", "node")
+//        .style("background", function(d) { return fill(d.group); })
+//        .style("border-color", function(d) { return d3.rgb(fill(d.group)).darker(); })
+//      .on("mouseover", function(d) {
+//        tooltip = d3.select("body")
+//          .append("div")
+//          .style("position", "absolute")
+//          .style("z-index", "10")
+//          .style("visibility", "visible")
+//          .text(d.name)
+//        })
+//      .on("mouseout", function() {
+//          tooltip.style("visibility", "hidden");
+//        })
+//      .call(force.drag);
+//
+//    force
+//        .nodes(json.nodes)
+//        .links(json.links)
+//        .on("tick", tick)
+//        .start();
+//
+//    function tick() {
+//      node.style("left", function(d) { return (d.x = Math.max(radius, Math.min(width - radius, d.x))) + "px"; })
+//          .style("top", function(d) { return (d.y = Math.max(radius, Math.min(height - radius, d.y))) + "px"; });
+//
+//      link.style("left", function(d) { return d.source.x + "px"; })
+//          .style("top", function(d) { return d.source.y + "px"; })
+//          .style("width", length)
+//          .style("-webkit-transform", transform)
+//          .style("-moz-transform", transform)
+//          .style("-ms-transform", transform)
+//          .style("-o-transform", transform)
+//          .style("transform", transform);
+//    }
+//
+//    function transform(d) {
+//      return "rotate(" + Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) * 180 / Math.PI + "deg)";
+//    }
+//
+//    function length(d) {
+//      var dx = d.target.x - d.source.x,
+//          dy = d.target.y - d.source.y;
+//      return Math.sqrt(dx * dx + dy * dy) + "px";
+//    }
+//  });
   
-  var width = 660,
-      height = 400,
-      radius = 6,
-      fill = d3.scale.category20();
-
-  var force = d3.layout.force()
-      .charge(-120)
-      .linkDistance(30)
-      .size([width, height]);
-
-  var vis = d3.select(divElement).append("div")
-      .style("width", width + "px")
-      .style("height", height + "px");
-      
-  var tooltip = null;
-
-  d3.entries(rulesGraph, function(json) {
-    var link = vis.selectAll("div.link")
-        .data(json.links)
-      .enter().append("div")
-        .attr("class", "link");
-
-    var node = vis.selectAll("div.node")
-        .data(json.nodes)
-      .enter().append("div")
-        .attr("class", "node")
-        .style("background", function(d) { return fill(d.group); })
-        .style("border-color", function(d) { return d3.rgb(fill(d.group)).darker(); })
-      .on("mouseover", function(d) {
-        tooltip = d3.select("body")
-          .append("div")
-          .style("position", "absolute")
-          .style("z-index", "10")
-          .style("visibility", "visible")
-          .text(d.name)
-        })
-      .on("mouseout", function() {
-          tooltip.style("visibility", "hidden");
-        })
-      .call(force.drag);
-
-    force
-        .nodes(json.nodes)
-        .links(json.links)
-        .on("tick", tick)
-        .start();
-
-    function tick() {
-      node.style("left", function(d) { return (d.x = Math.max(radius, Math.min(width - radius, d.x))) + "px"; })
-          .style("top", function(d) { return (d.y = Math.max(radius, Math.min(height - radius, d.y))) + "px"; });
-
-      link.style("left", function(d) { return d.source.x + "px"; })
-          .style("top", function(d) { return d.source.y + "px"; })
-          .style("width", length)
-          .style("-webkit-transform", transform)
-          .style("-moz-transform", transform)
-          .style("-ms-transform", transform)
-          .style("-o-transform", transform)
-          .style("transform", transform);
-    }
-
-    function transform(d) {
-      return "rotate(" + Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) * 180 / Math.PI + "deg)";
-    }
-
-    function length(d) {
-      var dx = d.target.x - d.source.x,
-          dy = d.target.y - d.source.y;
-      return Math.sqrt(dx * dx + dy * dy) + "px";
-    }
-  });
   
+  //forece
+  var width = 600,
+  height = 300;
+
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+  .charge(-120)
+  .linkDistance(30)
+  .size([width, height]);
+
+var svg = d3.select("#chart").append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+var tooltip = null;
+
+//d3.json("./libs/rules.json", function(json) {
+force
+    .nodes(json.nodes)
+    .links(json.links)
+    .start();
+
+var link = svg.selectAll("line.link")
+    .data(json.links)
+  .enter().append("line")
+    .attr("class", "link")
+    .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+var node = svg.selectAll("circle.node")
+    .data(json.nodes)
+  .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", 5)
+    .style("fill", function(d) { return color(d.group); })
+    .on("mouseover", function(d) {
+      tooltip = d3.select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "visible")
+      .style("color","#fff")
+      .text(d.name)
+    })
+    .on("mouseout", function() {
+      tooltip.style("visibility", "hidden");
+    })
+    .call(force.drag);
+
+node.append("title")
+    .text(function(d) { return d.name; });
+
+force.on("tick", function() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+});
+//});
+
   
 }

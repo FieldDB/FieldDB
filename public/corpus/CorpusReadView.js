@@ -158,6 +158,11 @@ define([
         this.permissionsView.render();        
         
         Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("corpusname"));
+        try{
+          //TODO load viz here
+        }catch(e){
+          window.appView.toastUser("There was a problem loading your corpus visualization.");
+        }
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
