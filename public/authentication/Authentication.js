@@ -154,7 +154,10 @@ define([
     saveAndEncryptUserToLocalStorage : function(){
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u);
-      window.appView.addSavedDoc(this.get("userPrivate").id);
+      if(window.appView){
+        window.appView.addSavedDoc(this.get("userPrivate").id);
+        window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
+      }
     },
     /**
      * This function uses the quick authentication view to get the user's
