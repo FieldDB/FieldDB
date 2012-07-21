@@ -288,6 +288,11 @@ define([
       if(fileIndex == null){
         fileIndex = 0;
       }
+      //if the user is just typing, try raw text
+      if(!self.get("files")[fileIndex]){
+        self.importText(self.get("rawText"), callback);
+        return;
+      }
       if(self.get("files")[fileIndex].name.split('.').pop() == "csv"){
         self.importCSV(self.get("rawText"), callback);
       }else if(self.get("files")[fileIndex].name.split('.').pop() == "txt"){

@@ -93,7 +93,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewDatumTag()
+          this.insertNewDatumTag();
         }
       },
       "click #duplicate" : "duplicateDatum",
@@ -225,7 +225,6 @@ define([
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
       $(this.el).find(".comments-section").show();
 
-      this.showComments();
     },
     
   
