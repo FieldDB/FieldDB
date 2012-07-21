@@ -187,6 +187,12 @@ Glosser.glossFinder = function(morphemesLine){
  */
 Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
 
+  if(!rules){
+    rules = localStorage.getItem(Glosser.currentCorpusName+"precendenceRules");
+  }
+  if(!rules || rules == undefined || rules == null || rules == "" || rules == []){
+    return;
+  }
   /*
    * Cycle through the precedence rules, convert them into graph edges with the morpheme index in the morpheme array as the source/target values
    */
@@ -237,7 +243,14 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
  * Some sample D3 from the force-html.html example
  * 
  */
-Glosser.visualizeMorphemesAsForceDirectedGraph = function(){
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement){
+
+  if(!rulesGraph){
+    rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
+  }
+  if(!rulesGraph || rulesGraph == undefined || rulesGraph == null || rulesGraph == "" || rulesGraph == []){
+    return;
+  }
   
   var width = 960,
       height = 500,
@@ -249,13 +262,13 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(){
       .linkDistance(30)
       .size([width, height]);
 
-  var vis = d3.select("body").append("div")
+  var vis = d3.select(divElement).append("div")
       .style("width", width + "px")
       .style("height", height + "px");
       
   var tooltip = null;
 
-  d3.json("rules.json", function(json) {
+  d3.data(rulesGraph, function(json) {
     var link = vis.selectAll("div.link")
         .data(json.links)
       .enter().append("div")
