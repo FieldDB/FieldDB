@@ -238,9 +238,9 @@ define([
       Utils.debug(files);
       for ( var i = 0, f; f = files[i]; i++) {
         filedetails.push( escape(f.name), f.type
-            || 'n/a', ' - ', f.size, ' bytes, last modified: ',
+            || ' n/a', ' - ', f.size, ' bytes, last modified: ',
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
-                : 'n/a');
+                : ' n/a');
         
         this.readFileIntoRawText(i, function(){
           Utils.debug("Finished reading in the raw text file.")
