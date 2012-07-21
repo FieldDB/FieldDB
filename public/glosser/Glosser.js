@@ -259,8 +259,11 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     throw("Must provide corpus name to be able to visualize morphemes");
   }
   if(!rulesGraph){
-    if(Glosser.rulesGraph){
-      rulesGraph = Glosser.rulesGraph;
+    rulesGraph = Glosser.rulesGraph;
+    if(rulesGraph){
+      if(rulesGraph.links.length == 0){
+        rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
+      }
     }else{
       rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
     }
@@ -268,7 +271,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   if(!rulesGraph){
     return;
   }
-  if(rulesGraph.length <1 ){
+  if( Glosser.rulesGraph.links.length == 0 ){
     return;
   }
  json = rulesGraph;
