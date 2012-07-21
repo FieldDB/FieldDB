@@ -44,12 +44,8 @@ define([
 
     classname : "audio_video",
 
-//    template : Handlebars.templates.audio_video_edit_embedded,
+    template : Handlebars.templates.audio_video_edit_embedded,
 
-    /**
-     * Builds the entire handlebars here, not in the template because of drag and drop listeners.
-     * @returns {___anonymous235_4788}
-     */
     render : function() {
       //http://www.terrillthompson.com/tests/html5-audio.html
       //users must download lame to make mp3 because html5 audio cant play wav? http://lame1.buanzo.com.ar/Lame_Library_v3.98.2_for_Audacity_on_OSX.dmg
@@ -118,28 +114,17 @@ define([
 //        e.preventDefault(); 
 //      }      
       audio.classList.remove('halfopacity');
-      //its a url, paste it.
-      if(!e.dataTransfer.files.name){
-        //"{"items":{"0":{"kind":"string","type":"text/plain"},"1":{"kind":"string","type":"text/uri-list"},"length":2},"dropEffect":"move","files":{"length":0},"types":["text/uri-list","text/plain"],"effectAllowed":"copyMove"}"
-        var filename = "";
-        var url =  "filesystem:" + window.location.origin +"/temporary/"+filename;
-        if(filename.indexOf("http") > 0){
-          filename = url;
-        }
-      }else{
-        //Use the terminal to save the file into the chrome file system
-        window.appView.term.addDroppedFiles(e.dataTransfer.files);
-        window.appView.term.output('<div>File(s) added!</div>');
-        var filename = e.dataTransfer.files[0].name;
-        var url =  "filesystem:" + window.location.origin +"/temporary/"+filename;
-        if(filename.indexOf("http") > 0){
-          filename = url;
-        }
-      }
-      
+      //Use the terminal to put the file into the file system
+      window.appView.term.addDroppedFiles(e.dataTransfer.files);
+      window.appView.term.output('<div>File(s) added!</div>');
       var audiojs = $(audio);
       audiojs.empty();
       //http://stackoverflow.com/questions/7953593/change-source-to-audio-html5-element
+      var filename = e.dataTransfer.files[0].name;
+      var url =  "filesystem:" + window.location.origin +"/temporary/"+filename;
+      if(filename.indexOf("http") > 0){
+        filename = url;
+      }
 //      var newSrc = $("<source>").attr("src", url).appendTo(audiojs);
       self.model.set("filename", filename);
       self.model.set("URL",url);
