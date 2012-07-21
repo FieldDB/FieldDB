@@ -8,7 +8,8 @@ Glosser.downloadPrecedenceRules = function(corpusname, callback){
     success : function(rules) {
       // Parse the rules from JSON into an object
       rules = JSON.parse(rules);
-    
+      localStorage.setItem(corpusname+"precendenceRules", JSON.stringify(rules.rows));
+
       // Reduce the rules such that rules which are found in multiple source
       // words are only used/included once.
       var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
@@ -16,7 +17,7 @@ Glosser.downloadPrecedenceRules = function(corpusname, callback){
       }).value();
       
       // Save the reduced precedence rules in localStorage
-      localStorage.setItem(corpusname+"PrecendenceRules", JSON.stringify(reducedRules));
+      localStorage.setItem(corpusname+"reducedRules", JSON.stringify(reducedRules));
       Glosser.currentCorpusName = corpusname;
       if(typeof callback == "function"){
         callback();
@@ -41,7 +42,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   var potentialParse = '';
   
   // Get the precedence rules from localStorage
-  var rules = localStorage.getItem(Glosser.currentCorpusName+"precendenceRules");
+  var rules = localStorage.getItem(Glosser.currentCorpusName+"reducedRules");
   
   var parsedWords = [];
   if (rules) {
@@ -185,12 +186,17 @@ Glosser.glossFinder = function(morphemesLine){
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
  */
-Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
-
-  if(!rules){
-    rules = localStorage.getItem(Glosser.currentCorpusName+"precendenceRules");
+Glosser.generateForceDirectedRulesJsonForD3 = function(rules, corpusname) {
+  if(!corpusname){
+    corpusname = Glosser.currentCorpusName;
   }
-  if(!rules || rules == undefined || rules == null || rules == "" || rules == []){
+  if(!rules){
+    rules = localStorage.getItem(corpusname+"precendenceRules");
+    if(rules){
+      rules = JSON.parse(rules);
+    }
+  }
+  if(!rules ){
     return;
   }
   /*
@@ -243,17 +249,25 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
  * Some sample D3 from the force-html.html example
  * 
  */
-Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement){
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, corpusname){
 
+  if(corpusname){
+    Glosser.currentCorpusName = corpusname;
+  }else{
+    throw("Must provide corpus name to be able to visualize morphemes");
+  }
   if(!rulesGraph){
     rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
   }
-  if(!rulesGraph || rulesGraph == undefined || rulesGraph == null || rulesGraph == "" || rulesGraph == []){
+  if(!rulesGraph){
+    return;
+  }
+  if(rulesGraph.length <1 ){
     return;
   }
   
-  var width = 960,
-      height = 500,
+  var width = 660,
+      height = 400,
       radius = 6,
       fill = d3.scale.category20();
 
@@ -268,7 +282,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
       
   var tooltip = null;
 
-  d3.data(rulesGraph, function(json) {
+  d3.entries(rulesGraph, function(json) {
     var link = vis.selectAll("div.link")
         .data(json.links)
       .enter().append("div")

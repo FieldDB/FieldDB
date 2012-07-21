@@ -283,3 +283,14 @@ spacer{
 .datum-audio-player{
 	width:100%;
 }
+
+/* D3 force directed graph */
+circle.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+line.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
