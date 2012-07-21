@@ -351,6 +351,11 @@ define([
                   app.get("corpus").save();
                 });
               }
+              window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+model.id,"alert-success","Saved!");
+
+            },
+            error : function(model){
+              window.appView.toastUser("Unable to save datum: "+model.id,"alert-danger","Not saved!");
             }
           });
         });
