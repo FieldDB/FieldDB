@@ -181,6 +181,7 @@ define([
       return CSV;
     },
     importXML : function(xml) {
+      alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet.");
     },
     /**
      * This function accepts text which uses \t tabs between columns. If
@@ -203,6 +204,15 @@ define([
       }
       
       this.set("asCSV", rows);
+    },
+    importToolbox : function(text){
+      alert("The app thinks this might be a ToolBox file, but we haven't implemented this kind of import yet.");
+    },
+    importTextGrid : function(text){
+      alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet.");
+    },
+    importLatex : function(text){
+      alert("The app thinks this might be a LaTeX file, but we haven't implemented this kind of import yet.");
     },
     /**
      * This function accepts text using double spaces to indicate
@@ -281,30 +291,50 @@ define([
       });
     },
     /**
-     * This function attempts to guess the format of the file, and calls the appropriate import handler.
+     * This function attempts to guess the format of the file/textarea, and calls the appropriate import handler.
      */
     guessFormatAndImport : function(fileIndex, callback){
       var self = this;
       if(fileIndex == null){
         fileIndex = 0;
       }
+      var importType = {
+        csv: { confidence: 0, importFunction : this.importCSV }
+        ,tabbed: { confidence: 0, importFunction : this.importTabbed }
+        ,handout: { confidence: 0, importFunction : this.importText }
+        ,xml: { confidence: 0, importFunction : this.importXML }
+        ,toolbox: { confidence: 0, importFunction : this.importToolbox }
+        ,elanXML: { confidence: 0, importFunction : this.importXML }
+        ,praatTextgrid: { confidence: 0, importFunction : this.importTextGrid }
+        ,latex: { confidence: 0, importFunction : this.importLatex }
+      };
+      
       //if the user is just typing, try raw text
-      if(!self.get("files")[fileIndex]){
-        self.importText(self.get("rawText"), callback);
-        return;
-      }
-      if(self.get("files")[fileIndex].name.split('.').pop() == "csv"){
-        self.importCSV(self.get("rawText"), callback);
-      }else if(self.get("files")[fileIndex].name.split('.').pop() == "txt"){
-        //If there are more than 100 tabs in the file, try tabbed.
-        if(self.get("rawText").split("\t").length > 100){
-          self.importTabbed(self.get("rawText"), callback);
-        }else{
-          self.importText(self.get("rawText"), callback);
+      if(self.get("files")[fileIndex]){
+        var fileExtension = self.get("files")[fileIndex].name.split('.').pop().toLowerCase();
+        if(fileExtension == "csv"){
+          importType.csv.confidence++;
+        }else if(fileExtension == "txt"){
+          //If there are more than 100 tabs in the file, try tabbed.
+          if(self.get("rawText").split("\t").length > 100){
+            importType.tabbed.confidence++;
+          }else{
+            importType.handout.confidence++;
+          }
+        }else if(fileExtension == "eaf"){
+          importType.elanXML.confidence++;
+        }else if(fileExtension == "xml"){
+          importType.xml.confidence++;
+        }else if(fileExtension == "sf"){
+          importType.toolbox.confidence++;
+        }else if(fileExtension == "tex"){
+          importType.latex.confidence++;
+        }else if(fileExtension == "textgrid"){
+          importType.praatTextgrid.confidence++;
         }
-      }else if(self.get("files")[fileIndex].name.split('.').pop() == "eaf"){
-        self.importXML(self.get("rawText"), callback);
       }
+      var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });
+      mostLikelyImport.importFunction.apply(self.get("rawText"), callback);
     },
     readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);
