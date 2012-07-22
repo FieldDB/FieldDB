@@ -33,7 +33,8 @@ define([
     model : DatumField,
 
     events : {
-      "click .icon-question-sign" : "showHelpConvention"
+      "click .icon-question-sign" : "showHelpConvention",
+      "hover .icon-question-sign" : "hideHelpConvention"  
     },    
     
     
@@ -72,11 +73,19 @@ define([
     },
     
     /**
-     * Show help convention in popover  
+     * Show help convention in popover when clicked 
      */
     showHelpConvention : function() {
         this.$el.children(".help-conventions").popover("show");
-    }
+    }, 
+
+    /**
+     * Don't show help convention in popover if only hover 
+     */
+    hideHelpConvention : function() {
+        this.$el.children(".help-conventions").popover("hide");
+    }    
+    
     
   });
 
