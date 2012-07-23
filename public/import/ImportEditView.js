@@ -461,7 +461,8 @@ define( [
                     window.appView.dataListEditLeftSideView.renderFirstPage();//TODO is there a reason why we cant do this automatically in the data lists themselves.
                     window.appView.renderReadonlyDataListViews();
 //                    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data lists dont have htis function, should we put it in...
-
+                    //Update the search fields with the new datum fields from import
+                    window.appView.searchEmbeddedView.render();
                     // Go back to the dashboard after all succeeds
                     $(".import-progress").val( $(".import-progress").attr("max") );
                     $(".approve-save").html("Finished");
