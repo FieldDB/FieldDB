@@ -435,13 +435,17 @@ define([
         this.model.get("couchConnection").corpusname = window.app.get("authentication").get("userPrivate").get("username")
           +"-"+encodeURIComponent(this.model.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
       }
-      this.model.changeCorpus(window.app.get("authentication").get("userPrivate").get("username")
-          +"-"+encodeURIComponent(this.model.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")), function(){
+      this.model.changeCorpus(null, function(){
         self.model.save(null, {
           success : function(model, response) {
             Utils.debug('Corpus save success');
             window.appView.toastUser("Sucessfully saved corpus.","alert-success","Saved!");
 
+            //save the public self to the corpus pouch
+            var publicSelf = new CorpusMask(model.get("publicSelf"));
+            publicSelf.changeCorpus( model.get("couchConnection"), function(){
+              publicSelf.save();
+            });
 //            try{
               if(window.app.get("corpus").id != model.id){
                 //add corpus to user
