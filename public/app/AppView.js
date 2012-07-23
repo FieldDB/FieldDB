@@ -8,6 +8,7 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationEditView",
     "corpus/Corpus", 
+    "corpus/CorpusMask", 
     "corpus/CorpusEditView",
     "corpus/CorpusReadView",
     "data_list/DataList",
@@ -49,6 +50,7 @@ define([
     Authentication,
     AuthenticationEditView,
     Corpus, 
+    CorpusMask,
     CorpusEditView,
     CorpusReadView,
     DataList,
@@ -152,6 +154,8 @@ define([
       this.corpusNewModalView.format = "modal";
    
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
+      
+      
       //TODO not sure if we should do this here
       // Create an ImportEditView
       this.importView = new ImportEditView({
@@ -253,7 +257,7 @@ define([
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
-      setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(this.model.get("authentication").get("userPublic") );
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(this.model.get("authentication").get("userPublic") );
       
       this.modalEditUserView = new UserEditView({
         model : this.model.get("authentication").get("userPrivate")
