@@ -404,6 +404,9 @@ define( [
       
       $(".import-progress").val( $(".import-progress").attr("max") );
       $(".approve-save").html("Finished");
+      
+      // Go back to the dashboard while saving datum in the background
+      window.location.replace("#");
     },
     /**
      * permanently saves the datalist to the corpus, and all of its datums too.
@@ -447,8 +450,8 @@ define( [
         window.hub.subscribe("savedDatumToPouch", function(arg){
           this.savedindex[arg.d] = true;
           this.savedcount++;
-          window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
-          if( arg.d >= this.model.get("datumArray").length - 1){
+//          window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
+          if( arg.d <= 0 ){
             /*
              * If we are at the final index in the import's datum
              */
@@ -457,7 +460,7 @@ define( [
             /*
              * Save another datum when the previous succeeds
              */
-            var next = parseInt(arg.d) + 1;
+            var next = parseInt(arg.d) - 1;
             this.saveADatumAndLoop(next);
           }
         }, window.appView.importView);
@@ -465,19 +468,27 @@ define( [
         window.hub.subscribe("saveDatumFailedToPouch",function(arg){
           this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
           this.savefailedcount++;
-          window.appView.toastUser("Save failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
-          /*
-           * Save another datum when the previous fails
-           */
-          var next = parseInt(arg.d) + 1;
-          this.saveADatumAndLoop(next);
+          window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
+          
+          if( arg.d <= 0 ){
+            /*
+             * If we are at the final index in the import's datum
+             */
+            this.importCompleted();
+          }else{
+            /*
+             * Save another datum when the previous fails
+             */
+            var next = parseInt(arg.d) - 1;
+            this.saveADatumAndLoop(next);
+          }
           
         }, window.appView.importView);
 
         /*
-         * Begin the datum saving loop with datum 0
+         * Begin the datum saving loop with the last datum 
          */
-        window.appView.importView.saveADatumAndLoop(0);
+        window.appView.importView.saveADatumAndLoop(this.model.get("datumArray").length - 1);
         
         // Save the new DataList since we created it above, as the new leftside
         // data list, it will be in position 0
@@ -543,8 +554,7 @@ define( [
                     // save the user
                     window.app.get("authentication").saveAndEncryptUserToLocalStorage();
                     
-                    // Go back to the dashboard while saving datum in the background
-                    window.location.replace("#");
+                   
 
                   },
                   error : function(e) {
