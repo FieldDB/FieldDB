@@ -491,10 +491,14 @@ define([
     renderEditableDataListViews : function(datalistid) {
       this.dataListEditLeftSideView.render();
       this.dataListEditFullscreenView.render();
+      //    TODO why not render first page??          self.renderFirstPage();
+
     },
     renderReadonlyDataListViews : function(datalistid) {
       this.dataListReadLeftSideView.render();
       this.dataListReadFullscreenView.render();
+      //    TODO why not render first page??          self.renderFirstPage();
+
     },
     renderFirstPageReadonlyDataListViews : function() {
       this.dataListEditLeftSideView.renderFirstPage();

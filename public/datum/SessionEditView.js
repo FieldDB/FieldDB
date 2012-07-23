@@ -194,49 +194,14 @@ define([
      * creates a new session if the app's session id doesnt match this session's id after saving.
      */
     updatePouch : function() {
-      Utils.debug("Saving the Session");
-      var self = this;
-      this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save(null, {
-          success : function(model, response) {
-            Utils.debug('Session save success');
-            window.appView.toastUser("Sucessfully saved session.","alert-success","Saved!");
-
-            try{
-              if(window.app.get("currentSession").id != model.id){
-                window.app.get("corpus").get("sessions").unshift(model);
-                window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                    new Activity({
-                      verb : "added",
-                      directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
-                      indirectobject : "in "+window.app.get("corpus").get("title"),
-                      context : "via Offline App",
-                      user: window.app.get("authentication").get("userPublic")
-                    }));
-              }
-              window.app.set("currentSession", model);
-              window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                window.appView.renderEditableSessionViews();
-                window.appView.renderReadonlySessionViews();
-              });
-              window.appView.addSavedDoc(model.id);
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-              //add session to the users session history if they dont already have it
-              if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
-                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-              }
-            }catch(e){
-              Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
-            }
-          },
-          error : function(e) {
-            Alert('Session save error' + e);
-          }
-        });
+      this.model.saveAndInterConnectInApp(function(){
+        /* If it is in the modal, then it is a new session */
+        if(this.format == "modal"){
+          this.model.setAsCurrentSession(function(){
+            $("#new-session-modal").modal("hide");
+          });
+        }
       });
-      if(this.format == "modal"){
-        $("#new-session-modal").modal("hide");
-      }
     },
     
     //functions associated with icons
