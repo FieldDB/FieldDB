@@ -7,6 +7,10 @@
     "message": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
     "description": "The description of the application, displayed in the web store."
   }
+  "Close-and-login-as-Ed-Sapir" : {
+     "message" : "Close and login as Ed Sapir",
+     "description" : "button"
+   }
 }
 
 
