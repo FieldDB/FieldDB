@@ -221,21 +221,20 @@ define([
         callback();
       }
     }, 
+
+    /**
+     * this function makes it possible to save the CorpusMask with a
+     * hardcoded id, it uses pouch's API directly
+     */
     updateToPouch : function(){
       var self = this;
       this.changeCorpus(null, function(){
-        self.save(null, {
-          success : function(model, response) {
-            //we got the model back, now lets put it into pouch with the hard coded id.
-            model._id = "corpus";
-            self.pouch(function(err,db){
-              db.put(model.toJSON(), function(err, response) {
-               console.log(response);
-              });
-            });
-          },
-          error : function(e) {
-          }
+        self.pouch(function(err,db){
+          var modelwithhardcodedid = self.toJSON();
+          modelwithhardcodedid._id = "corpus";
+          db.put(modelwithhardcodedid, function(err, response) {
+            console.log(response);
+          });
         });
       });
     },
