@@ -90,7 +90,7 @@ define([
       "click .add_datum_state" : 'insertNewDatumState',
       
       //Add button inserts new Datum Field
-      "click .add_datum_field" : 'insertNewDatumField',
+      "click .add-datum-field" : 'insertNewDatumField',
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
       
