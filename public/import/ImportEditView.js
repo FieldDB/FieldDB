@@ -198,7 +198,7 @@ define( [
     },
     showCSVTable : function(rows){
       $(".import-progress").val($(".import-progress").val()+1);
-
+      $(".approve-save").html("Save and Finish Importing")
       if(this.model.get("session") == undefined){
         this.createNewSession();
       }
@@ -308,8 +308,8 @@ define( [
           else{
             var n = fields.where({label: index})[0];
             if(n != undefined){
-              console.log(value);
-              console.log(index);
+//              console.log(value);
+//              console.log(index);
               n.set("value", value);
             }
           }
@@ -337,6 +337,9 @@ define( [
         // Create a new permanent data list in the corpus
         appView.dataListEditLeftSideView.newDataList();
 
+      //import data in reverse order from normal so that the user will get their data in the order they are used to. 
+//        for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
+        
         for (d in self.model.get("datumArray")) {
           var thatdatum = self.model.get("datumArray")[d];
           thatdatum.set({
@@ -355,7 +358,7 @@ define( [
                 // Update progress bar
                 $(".import-progress").val($(".import-progress").val()+1);
 
-                // Add Datum to the new datalist and render it
+                // Add Datum to the new datalist and render it this should work because the datum is saved in the pouch and can be fetched
                 appView.dataListEditLeftSideView.addOneDatumId(model.id);
                 
                 // Add Datum to the default data list
@@ -368,18 +371,24 @@ define( [
             });
           });
         }
+        //Bring the title and description from the temporary data list, to the new one. 
+        app.get("corpus").get("dataLists").models[0].set({
+          title: appView.importView.model.dataListView.model.get("title"),
+          description: appView.importView.model.dataListView.model.get("description")
+        });
         
-        // Save the new DataList
-        app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("dataLists").models[0].get("corpusname"), function(){
+        // Save the new DataList since we created it above, as the new leftside data list, it will be in position 0
+        app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("corpusname"), function(){
           app.get("corpus").get("dataLists").models[0].save(null, {
             success : function(model, response) {
               Utils.debug('Data list save success in import');
-              
+              window.appView.toastUser("Sucessfully saved data list.","alert-success","Saved!");
+
               // Update the progress bar
               $(".import-progress").val($(".import-progress").val()+1);
               
               // Save the datalist ID in the userPrivate
-              window.app.get("authentication").get("userPrivate").get("dataLists").push(model.id);
+              window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
               
               // Mark the datalist as no longer temporary
               self.model.dataListView.temporaryDataList = false;
@@ -407,7 +416,8 @@ define( [
                 self.model.get("session").save(null, {
                   success : function(model, response) {
                     Utils.debug('Session save success in import');
-                    
+                    window.appView.toastUser("Sucessfully saved session.","alert-success","Saved!");
+
                     // Update progress bar
                     $(".import-progress").val($(".import-progress").val()+1);
                     
@@ -430,13 +440,25 @@ define( [
                         }));
 
                     // Render the first page of the new data list
-                    window.appView.dataListEditLeftSideView.renderFirstPage();
-                    
+                    window.appView.renderEditableDataListViews();
+                    window.appView.dataListEditLeftSideView.renderFirstPage();//TODO is there a reason why we cant do this automatically in the data lists themselves.
+                    window.appView.renderReadonlyDataListViews();
+//                    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data lists dont have htis function, should we put it in...
+
                     // Go back to the dashboard after all succeeds
+                    $(".import-progress").val( $(".import-progress").attr("max") );
+                    $(".approve-save").html("Finished");
+                    
+                    //save the corpus
+                    window.appView.corpusEditLeftSideView.updatePouch();
+                    
+                    //save the user
+                    window.app.get("authentication").saveAndEncryptUserToLocalStorage();
                     window.location.replace("#");
 
                   },
                   error : function(e) {
+                    window.appView.toastUser("Error in saving session.","alert-danger","Not saved!");
                     alert('Session save failure in import' + e);
                   }
                 });
@@ -444,6 +466,7 @@ define( [
 
             },
             error : function(e) {
+              window.appView.toastUser("Error in saving data list.","alert-danger","Not saved!");
               alert('Data list save failure in import' + e);
             }
           });

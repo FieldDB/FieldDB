@@ -136,6 +136,24 @@ require([
    * Helper functions
    */
   
+  /* if they are browsing online, and not using the App version, bring them to the app version */
+  if( window.location.href.indexOf("chrome-extension") == -1 ){
+    var x = window.confirm("iField works best in the Chrome Store where it has unlimited space to store your data, " +
+    		"and can go online and offline. " +
+    		"\n\nNote: This is an HTML5 webapp, not a webpage. It uses a database called 'IndexedDB'." +
+    		"\n Safari doesn't let you save a database in the browser. " +
+    		"\n Firefox almost works but not quite. It might work in a year or so." +
+    		"\n Internet Exporer 10 might work, but not IE 6-9."+
+    		"\n\nClick cancel to try it out here, but we can't guarentee your data will be saved in a database. " +
+    		"\nClick OK to go to the Chrome Store App." 
+    );
+    if (x){
+        window.location = "https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm";
+    }else{
+      //let them stay
+    }
+  }
+
   /**
    * This function is the only place that starts the app, notably the app view and app router. 
    * It is called either by the main.js or by the UserWelcomeView.js
@@ -194,7 +212,7 @@ require([
    */
   var username = Utils.getCookie("username");
   if (username != null && username != "") {
-    alert("Welcome again " + username);
+//    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
     var appjson = localStorage.getItem("mostRecentDashboard");
     appjson = JSON.parse(appjson);
     if (appjson == null){

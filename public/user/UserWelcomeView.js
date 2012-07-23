@@ -149,6 +149,8 @@ define([
     },
     
     registerNewUser : function() {
+      $(".register-new-user").addClass("disabled");
+
       Utils.debug("Attempting to register a new user: " + this.el);
       /*
        * Set defaults for new user registration here,
@@ -292,6 +294,8 @@ define([
         Utils.debug("User has not entered good info. ");
           $(".alert-error").html("Your passwords don't seem to match. " + Utils.contactUs );
           $(".alert-error").show();
+          $(".register-new-user").removeClass("disabled");
+
       }
     },
     /**

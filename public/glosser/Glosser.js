@@ -1,5 +1,34 @@
 var Glosser = Glosser || {};
+Glosser.currentCorpusName = "";
+Glosser.downloadPrecedenceRules = function(corpusname, callback){
+  $.ajax({
+    type : 'GET',
+    url : "https://ilanguage.iriscouch.com/" + corpusname
+        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    success : function(rules) {
+      // Parse the rules from JSON into an object
+      rules = JSON.parse(rules);
+      localStorage.setItem(corpusname+"precendenceRules", JSON.stringify(rules.rows));
 
+      // Reduce the rules such that rules which are found in multiple source
+      // words are only used/included once.
+      var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
+        return rule.key.x + "-" + rule.key.y;
+      }).value();
+      
+      // Save the reduced precedence rules in localStorage
+      localStorage.setItem(corpusname+"reducedRules", JSON.stringify(reducedRules));
+      Glosser.currentCorpusName = corpusname;
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    error : function(e) {
+      console.log("error getting precedence rules:", e);
+    },
+    dataType : ""
+  });
+}
 /**
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
@@ -13,8 +42,9 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   var potentialParse = '';
   
   // Get the precedence rules from localStorage
-  var rules = localStorage.getItem("precendenceRules");
+  var rules = localStorage.getItem(Glosser.currentCorpusName+"reducedRules");
   
+  var parsedWords = [];
   if (rules) {
     // Parse the rules from JSON into an object
     rules = JSON.parse(rules);
@@ -22,7 +52,6 @@ Glosser.morphemefinder = function(unparsedUtterance) {
     // Divide the utterance line into words
     var unparsedWords = unparsedUtterance.trim().split(/ +/);
     
-    var parsedWords = [];
     for (var word in unparsedWords) {
       // Add the start/end-of-word character to the word
       unparsedWords[word] = "@" + unparsedWords[word] + "@";
@@ -110,13 +139,66 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   
   return parsedWords.join(" ");
 }
-
+Glosser.toastedUserToSync = false;
+Glosser.toastedUserToImport = 0;
+Glosser.glossFinder = function(morphemesLine){
+  //Guess a gloss
+  var morphemeGroup = morphemesLine.split(/ +/);
+  var glossGroups = [];
+  if(! window.app.get("corpus")){
+    return "";
+  }
+  if(! window.app.get("corpus").lexicon.get("lexiconNodes")){
+    var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
+    if(corpusSize > 30 && !Glosser.toastedUserToSync){
+      Glosser.toastedUserToSync = true;
+      window.appView.toastUser("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.","alert-success","Sync to train your auto-glosser:");
+    }else{
+      Glosser.toastedUserToImport ++;
+      if(Glosser.toastedUserToImport % 10 == 1 && corpusSize < 30){
+        window.appView.toastUser("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.","alert-info","");
+      }
+    }
+    return "";
+  }
+  var lexiconNodes = window.app.get("corpus").lexicon.get("lexiconNodes");
+  for (var group in morphemeGroup) {
+    var morphemes = morphemeGroup[group].split("-");
+    var glosses = [];
+    for (var m in morphemes) {
+      // Take the first gloss for this morpheme
+      var matchingNode = _.max(lexiconNodes.where({morpheme: morphemes[m]}), function(node) { return node.get("value"); });
+//      console.log(matchingNode);
+      var gloss = "?";   // If there's no matching gloss, use question marks
+      if (matchingNode) {
+        gloss = matchingNode.get("gloss");
+      }
+      glosses.push(gloss);
+    }
+    
+    glossGroups.push(glosses.join("-"));
+  }
+  
+  // Replace the gloss line with the guessed glosses
+  return glossGroups.join(" ");
+}
 /**
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
  */
-Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
-
+Glosser.generateForceDirectedRulesJsonForD3 = function(rules, corpusname) {
+  if(!corpusname){
+    corpusname = Glosser.currentCorpusName;
+  }
+  if(!rules){
+    rules = localStorage.getItem(corpusname+"precendenceRules");
+    if(rules){
+      rules = JSON.parse(rules);
+    }
+  }
+  if(!rules ){
+    return;
+  }
   /*
    * Cycle through the precedence rules, convert them into graph edges with the morpheme index in the morpheme array as the source/target values
    */
@@ -159,6 +241,7 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
   var rulesGraph = {};
   rulesGraph.links = morphemeLinks;
   rulesGraph.nodes = morphemenodes;
+  Glosser.rulesGraph = rulesGraph;
   
   return rulesGraph;
 }
@@ -167,79 +250,109 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules) {
  * Some sample D3 from the force-html.html example
  * 
  */
-Glosser.visualizeMorphemesAsForceDirectedGraph = function(){
+//Glosser.rulesGraph = Glosser.rulesGraph || {};
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, corpusname){
+
+  if(corpusname){
+    Glosser.currentCorpusName = corpusname;
+  }else{
+    throw("Must provide corpus name to be able to visualize morphemes");
+  }
+  if(!rulesGraph){
+    rulesGraph = Glosser.rulesGraph;
+    if(rulesGraph){
+      if(rulesGraph.links.length == 0){
+        rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
+      }
+    }else{
+      rulesGraph = Glosser.generateForceDirectedRulesJsonForD3();
+    }
+  }
+  if(!rulesGraph){
+    return;
+  }
+  if( Glosser.rulesGraph.links.length == 0 ){
+    return;
+  }
+ json = rulesGraph;
+  var width = 800,
+  height = 300;
+
+  var color = d3.scale.category20();
   
-  var width = 960,
-      height = 500,
-      radius = 6,
-      fill = d3.scale.category20();
-
+  var x = d3.scale.linear()
+     .range([0, width]);
+   
+  var y = d3.scale.linear()
+       .range([0, height - 40]);
+  
   var force = d3.layout.force()
-      .charge(-120)
-      .linkDistance(30)
-      .size([width, height]);
-
-  var vis = d3.select("body").append("div")
-      .style("width", width + "px")
-      .style("height", height + "px");
-      
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+  
+  var svg = d3.select("#corpus-precedence-rules-visualization-fullscreen").append("svg")
+    .attr("width", width)
+    .attr('title', "Morphology Visualization for "+ corpusname)
+    .attr("height", height);
+  
+  var titletext = "Explore the precedence relations of morphemes in your corpus";
+  if(rulesGraph.nodes.length < 3){
+    titletext = "Your morpheme visualizer will appear here after you have synced.";
+  }
+  //A label for the current year.
+  var title = svg.append("text")
+    .attr("class", "vis-title")
+    .attr("dy", "2em")
+    .attr("dx", "2em")
+//    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
+    .text(titletext);
+  
   var tooltip = null;
-
-  d3.json("rules.json", function(json) {
-    var link = vis.selectAll("div.link")
-        .data(json.links)
-      .enter().append("div")
-        .attr("class", "link");
-
-    var node = vis.selectAll("div.node")
-        .data(json.nodes)
-      .enter().append("div")
-        .attr("class", "node")
-        .style("background", function(d) { return fill(d.group); })
-        .style("border-color", function(d) { return d3.rgb(fill(d.group)).darker(); })
+  
+  //d3.json("./libs/rules.json", function(json) {
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+  
+  var link = svg.selectAll("line.link")
+      .data(json.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+  
+  var node = svg.selectAll("circle.node")
+      .data(json.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
       .on("mouseover", function(d) {
         tooltip = d3.select("body")
-          .append("div")
-          .style("position", "absolute")
-          .style("z-index", "10")
-          .style("visibility", "visible")
-          .text(d.name)
-        })
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "visible")
+        .style("color","#fff")
+        .text(d.name)
+      })
       .on("mouseout", function() {
-          tooltip.style("visibility", "hidden");
-        })
+        tooltip.style("visibility", "hidden");
+      })
       .call(force.drag);
-
-    force
-        .nodes(json.nodes)
-        .links(json.links)
-        .on("tick", tick)
-        .start();
-
-    function tick() {
-      node.style("left", function(d) { return (d.x = Math.max(radius, Math.min(width - radius, d.x))) + "px"; })
-          .style("top", function(d) { return (d.y = Math.max(radius, Math.min(height - radius, d.y))) + "px"; });
-
-      link.style("left", function(d) { return d.source.x + "px"; })
-          .style("top", function(d) { return d.source.y + "px"; })
-          .style("width", length)
-          .style("-webkit-transform", transform)
-          .style("-moz-transform", transform)
-          .style("-ms-transform", transform)
-          .style("-o-transform", transform)
-          .style("transform", transform);
-    }
-
-    function transform(d) {
-      return "rotate(" + Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) * 180 / Math.PI + "deg)";
-    }
-
-    function length(d) {
-      var dx = d.target.x - d.source.x,
-          dy = d.target.y - d.source.y;
-      return Math.sqrt(dx * dx + dy * dy) + "px";
-    }
+  
+  node.append("title")
+      .text(function(d) { return d.name; });
+  
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+  
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
   });
-  
-  
+  //});
 }

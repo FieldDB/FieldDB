@@ -506,13 +506,15 @@ define([
     replicateDatabases : function(callback) {
       var self = this;
       this.model.storeCurrentDashboardIdsToLocalStorage(function(){
-        self.model.get("authentication").syncUserWithServer();
-        var corpusConnection = self.model.get("corpus").get("couchConnection");
-        if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
-          && app.get("corpus").get("couchConnection").corpusname == "default"){
-          corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
-        }
-        self.model.get("corpus").replicateCorpus(corpusConnection, callback);
+        //syncUserWithServer will prompt for password, then run the corpus replication.
+        self.model.get("authentication").syncUserWithServer(function(){
+          var corpusConnection = self.model.get("corpus").get("couchConnection");
+          if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
+            && app.get("corpus").get("couchConnection").corpusname == "default"){
+            corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+          }
+          self.model.get("corpus").replicateCorpus(corpusConnection, callback);
+        });
       });
     },
     /**
@@ -527,11 +529,12 @@ define([
           Utils.debug(resp);
           Utils.debug(err);
         });
-        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate from");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
+        //TODO when activity feed becomes useful, ie a team feed, then replicate from as well.
+//        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
+//          Utils.debug("Replicate from");
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//        });
       });
     },
     
@@ -587,6 +590,9 @@ define([
     totalPouchDocs: [],//TODO find out how to do this?
     totalBackboneDocs: [],
     addUnsavedDoc : function(id){
+      if(!id){
+        alert("This is a bug: something is trying ot save an undefined item.");
+      }
       if(this.totalUnsaved.indexOf(id) == -1){
         this.totalUnsaved.push(id);
       }
@@ -638,6 +644,28 @@ define([
       $(".unsaved-changes").attr("max", this.totalBackboneDocs.length);
       $(".unsaved-changes").val(this.totalUnsaved.length);
 
+    },
+    toastSavingDatumsCount : 0,
+    toastUser : function(message, alertType, heading){
+      if(message.indexOf( "Automatically saving visible datum entries every 10 seconds. ") > 0){
+        this.toastSavingDatumsCount++;
+        if(this.toastSavingDatumsCount == 5){
+          message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
+        }if(this.toastSavingDatumsCount > 5){
+          return;
+        }
+      }
+      if(!alertType){
+        alertType = "";
+      }
+      if(!heading){
+        heading = "Warning!";
+      }
+      $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
+          +"<a class='close' data-dismiss='alert' href='#'>×</a>"
+          +"<strong class='alert-heading'>"+heading+"</strong> "
+          + message
+        +"</div>")
     }
     
     

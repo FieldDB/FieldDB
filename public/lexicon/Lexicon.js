@@ -29,18 +29,31 @@ define([
     model : {
       lexiconNodes : LexiconNodes
     },
+    /**
+     * Overwrite/build the lexicon from the corpus server if it is there, saves
+     * the results to local storage so they can be reused offline.
+     * 
+     * @param corpusname
+     * @param callback
+     */
     buildLexiconFromCouch : function(corpusname, callback){
       var self = this;
       $.ajax({
         type : 'GET',
         url : "https://ilanguage.iriscouch.com/"+corpusname+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
+          if (! self.get("lexiconNodes")){
+            self.set("lexiconNodes", new LexiconNodes());
+          }
+          localStorage.setItem(corpusname+"lexiconResults", results);
           var lexiconTriples = JSON.parse(results).rows;
-          for(triple in lexiconTriples){
-            if (! self.get("lexiconNodes")){
-              self.set("lexiconNodes", new LexiconNodes());
-            }
-            self.get("lexiconNodes").add(new LexiconNode({morpheme: lexiconTriples[triple].key.morpheme , allomorphs: [lexiconTriples[triple].key.morpheme], gloss: lexiconTriples[triple].key.gloss, value: lexiconTriples[triple].value}));
+          for (triple in lexiconTriples) {
+            self.get("lexiconNodes").add(new LexiconNode({
+              morpheme : lexiconTriples[triple].key.morpheme,
+              allomorphs : [ lexiconTriples[triple].key.morpheme ],
+              gloss : lexiconTriples[triple].key.gloss,
+              value : lexiconTriples[triple].value
+            }));
           }
           if (typeof callback == "function"){
             callback();
@@ -48,6 +61,28 @@ define([
         },// end successful response
         dataType : ""
       });
+    },
+    /**
+     * Overwrite/build the lexicon from local storage if it is there.
+     * 
+     * @param corpusname
+     * @param callback
+     */
+    buildLexiconFromLocalStorage  : function(corpusname, callback){
+      var results = localStorage.getItem(corpusname+"lexiconResults");
+      if(!results){
+        return;
+      }
+      if (! this.get("lexiconNodes")){
+        this.set("lexiconNodes", new LexiconNodes());
+      }
+      var lexiconTriples = JSON.parse(results).rows;
+      for(triple in lexiconTriples){
+        this.get("lexiconNodes").add(new LexiconNode({morpheme: lexiconTriples[triple].key.morpheme , allomorphs: [lexiconTriples[triple].key.morpheme], gloss: lexiconTriples[triple].key.gloss, value: lexiconTriples[triple].value}));
+      }
+      if (typeof callback == "function"){
+        callback();
+      }
     }
     
 	}); 

@@ -92,7 +92,7 @@ define([
       //Add button inserts new Datum Field
       "click .add_datum_field" : 'insertNewDatumField',
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen",
+      "click .resize-full" : "resizeFullscreen",
       
       //corpus menu buttons
       "click .new-datum-edit" : "newDatum",
@@ -103,7 +103,7 @@ define([
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
-        
+//      "blur .update-datum-field" : "updateDatumField",
       "click .save-corpus" : "updatePouch",
 //      "blur .save-corpus-blur" : "updatePouch"//TODO why was someone saving the corpus to pouch on blur!? this will make a ton of revisions.
     },
@@ -190,6 +190,8 @@ define([
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
+        
+        
 
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
@@ -276,6 +278,7 @@ define([
     
     newDataList : function() {
       //take the user to the search so they can create a data list using the search feature.
+      window.appView.toastUser("Taking you to the Advanced Search, this is the easiest way to make a new Data List","alert-info","How to make a new Data List");
       app.router.showEmbeddedSearch();
     },
     
@@ -344,6 +347,10 @@ define([
     // This the function called by the add button, it adds a new datum field both to the 
     // collection and the model
     insertNewDatumField : function() {
+      //don't add blank fields
+      if(this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_") == ""){
+        return;
+      }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_encrypted").is(':checked') ? "checked" : "";
       
@@ -363,6 +370,25 @@ define([
       window.appView.addUnsavedDoc(this.model.id);
 
     },
+    //needed to be able to change datum fields NO, this already exists in the DatumFieldEditView.js
+//    updateDatumField : function(e) {
+//      var datumField = $(e.target.parentElement);
+//      var checked = datumField.find(".encrypted").is(':checked') ? "checked" : "";
+//      var oldLabel = e.target.parentElement.firstChild.classList[1]; //get the old label from the span
+//      // Create the new DatumField based on what the user entered
+//      var m = this.model.get("datumFields").where({"label" : oldLabel })[0]; //TODO if this doesnt work could maybe count from top.
+//      if(!m){
+//        window.appView.toastUser("Couldn't find your datum field to modify it."); 
+//        return;
+//      }
+//      m.set({
+//        "label" : datumField.find(".choose-field").val().toLowerCase().replace(/ /g,"_"),
+//        "encrypted" : checked,
+//        "help" : datumField.find(".help-text").val()
+//      });
+//      window.appView.addUnsavedDoc(this.model.id);
+//    },
+
     
     //This the function called by the add button, it adds a new datum state both to the collection and the model
     insertNewDatumState : function() {
@@ -414,6 +440,8 @@ define([
         self.model.save(null, {
           success : function(model, response) {
             Utils.debug('Corpus save success');
+            window.appView.toastUser("Sucessfully saved corpus.","alert-success","Saved!");
+
 //            try{
               if(window.app.get("corpus").id != model.id){
                 //add corpus to user
@@ -477,7 +505,7 @@ define([
             if(this.format == "modal"){
               $("#new-corpus-modal").modal("hide");
               window.app.router.showFullscreenCorpus();
-              alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+              window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
             }
             
             
@@ -487,7 +515,7 @@ define([
             if(this.format == "modal"){
               $("#new-corpus-modal").modal("hide");
               window.app.router.showFullscreenCorpus();
-              alert("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+              window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
             }
           }
         });

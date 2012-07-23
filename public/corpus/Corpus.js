@@ -11,12 +11,12 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
-    "glosser/Glosser",
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
     "user/User",
+    "glosser/Glosser",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -31,7 +31,6 @@ define([
     DataList,
     DataLists,
     Consultants,
-    Glosser,
     Lexicon,
     Permission,
     Permissions,
@@ -296,33 +295,17 @@ define([
                   context : "via Offline App",
                   user: window.app.get("authentication").get("userPublic")
                 }));
+            //Replicate the team's activity feed
             window.appView.activityFeedView.model.replicateActivityFeed();
+            
+            // Get the corpus' current precedence rules
+            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
+            
+            // Build the lexicon
+            self.buildLexiconFromTeamServer(self.get("corpusname"));
           });
         });
         
-        // Get the corpus' current precedence rules
-        $.ajax({
-          type : 'GET',
-          url : "https://ilanguage.iriscouch.com/" + self.get("corpusname")
-              + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
-          success : function(rules) {
-            // Parse the rules from JSON into an object
-            rules = JSON.parse(rules);
-          
-            // Reduce the rules such that rules which are found in multiple source
-            // words are only used/included once.
-            var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
-              return rule.key.x + "-" + rule.key.y;
-            }).value();
-            
-            // Save the reduced precedence rules in localStorage
-            localStorage.setItem("precendenceRules", JSON.stringify(reducedRules));
-          },
-          error : function(e) {
-            console.log("error getting precedence rules:", e);
-          },
-          dataType : ""
-        });
       });
     },
     /**
@@ -354,26 +337,34 @@ define([
         url : couchurl ,
         data : corpusloginparams,
         success : function(data) {
-          alert("I logged you into your corpus server automatically.");
+          window.appView.toastUser("I logged you into your team server automatically, your syncs will be sucessfull.", "alert-info","Online Mode:");
           if (typeof callback == "function") {
             callback(data);
           }
         },
         error : function(data){
           window.setTimeout(function(){
-            //try one more time 5 seconds later
+            //try one more time 5 seconds later 
             $.ajax({
               type : 'POST',
               url : couchurl ,
               data : corpusloginparams,
               success : function(data) {
-                alert("I logged you into your corpus server automatically.");
+                window.appView.toastUser("I logged you into your team server automatically, your syncs will be sucessfull.", "alert-info","Online Mode:");
                 if (typeof callback == "function") {
                   callback(data);
                 }
               },
               error : function(data){
-                alert("I couldn't log you into your corpus.");
+                window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
+                		"This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
+                		"You also can't share your data with team members. Chances are if you are in offline mode, " +
+                		"it is because you are using our website version instead of the Chrome Store app " +
+                		"<a href='https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm'>" +
+                		"https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm </a>  " +
+                		"Our website version has a bug which we are waiting for IrisCouch (our database hosting company) to fix," +
+                		" they said they would fix it soon. If your computer is online and you are the Chrome Store app, then this is a bug... please report it to us :)","alert-danger","Offline Mode:");
+                appView.datumsView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
@@ -389,10 +380,40 @@ define([
         }
         return '';
     },
+    /**
+     * This function takes in a corpusname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more/better monolingual data.
+     * 
+     * @param corpusname
+     * @param callback
+     */
+    buildMorphologicalAnalyzerFromTeamServer : function(corpusname, callback){
+      if(!corpusname){
+        this.get("corpusname");
+      }
+      if(!callback){
+        callback = null;
+      }
+      Glosser.downloadPrecedenceRules(corpusname, callback);
+    },
+    /**
+     * This function takes in a corpusname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more/better monolingual data.
+     * 
+     * @param corpusname
+     * @param callback
+     */
     buildLexiconFromTeamServer : function(corpusname, callback){
+      if(!corpusname){
+        this.get("corpusname");
+      }
+      if(!callback){
+        callback = null;
+      }
       this.lexicon.buildLexiconFromCouch(corpusname,callback);
     }
-
   });
     
   return Corpus;
