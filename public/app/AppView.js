@@ -246,10 +246,7 @@ define([
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
-      this.fullScreenReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("userPrivate")
-      });
-      this.fullScreenReadUserView.format = "fullscreen";
+      setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(this.model.get("authentication").get("userPublic") );
       
       this.modalEditUserView = new UserEditView({
         model : this.model.get("authentication").get("userPrivate")
@@ -287,6 +284,12 @@ define([
       if(typeof callback == "function"){
         callback();
       }
+    },
+    setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask : function(model, callback){
+      this.fullScreenReadUserView = new UserReadView({
+        model : model
+      });
+      this.fullScreenReadUserView.format = "fullscreen";
     },
     setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
       /*

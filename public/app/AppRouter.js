@@ -2,11 +2,13 @@ define([
     "backbone",
     "datum/Session",
     "datum/SessionEditView",
+    "user/UserMask",
     "libs/Utils"
 ], function(
     Backbone,
     Session,
-    SessionEditView
+    SessionEditView,
+    UserMask
 ) {
   var AppRouter = Backbone.Router.extend(
   /** @lends AppRouter.prototype */
@@ -33,7 +35,7 @@ define([
       "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListId"                : "showFullscreenDataList",
       "session/:sessionId"              : "showFullscreenSession",
-      "user/:username"                  : "showFullscreenUser",
+      "user/:userid"                    : "showFullscreenUser",
       "import"                          : "showImport",
       ""                                : "showDashboard"
     },
@@ -45,20 +47,41 @@ define([
      * @param {String}
      *          corpusName (Optional) The name of the corpus to display.
      */
-    showDashboard : function(corpusName) {
-      Utils.debug("In showDashboard: " + corpusName);
+    showDashboard : function() {
+      Utils.debug("In showDashboard: " );
 
       this.hideEverything();
       $("#dashboard-view").show();
       $("#datums-embedded").show();
-      
+      window.location.href = "#"; //TODO this is to clear the parameters in the url
     },
     /**
-     * Displays the fullscreen user page view of the given user
+     * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
-    showFullscreenUser : function(userName) {
-      Utils.debug("In showFullscreenUser: " + userName);
+    showFullscreenUser : function(userid, corpusname) {
+      Utils.debug("In showFullscreenUser: " + userid);
 
+      if(userid){
+        if(!corpusname){
+          corpusname = app.get("corpus").get("corpusname");
+        }
+        //if it is someone different, then change the model.
+        if(userid != window.appView.fullScreenReadUserView.model.id){
+          var userToShow = new UserMask();
+          userToShow.changeCorpus(corpusname, function(){
+            //fetch only after having setting the right pouch which is what changeCorpus does.
+            userToShow.fetch({
+              success : function(model) {
+                Utils.debug("Corpus member fetched successfully" +model);
+                window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
+              },
+              error : function(e) {
+                alert("User not found in this corpus.");
+              }
+            });
+          });
+        }
+      }
       this.hideEverything();
       $("#user-fullscreen").show();
     },
