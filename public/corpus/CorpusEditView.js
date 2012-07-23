@@ -468,6 +468,7 @@ define([
                 s.set("corpusname", model.get("corpusname"));
                 s.changeCorpus(model.get("corpusname"));
                 model.get("sessions").add(s);
+
                 app.set("currentSession", s);//TODO this will probably require the appView to reinitialize.
                 window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
 
@@ -489,7 +490,7 @@ define([
                 window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
                 window.app.set("corpus", model);
                 window.app.storeCurrentDashboardIdsToLocalStorage(function(){
-                  //force the app to reload with the new corpus as the main corpus, this is require dbecause otherwise we cannot garentee that the new models will end up in the right pouches and in the right views will let go of the old models. 
+                  //force the app to reload with the new corpus as the main corpus, this is required because otherwise we cannot garentee that the new models will end up in the right pouches and in the right views will let go of the old models. 
                   //another alternative would be to implement switchSession and switchDataList functions in the appView
                   window.location.redirect("/");
                 });
