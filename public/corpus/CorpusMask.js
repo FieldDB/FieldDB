@@ -221,7 +221,24 @@ define([
         callback();
       }
     }, 
-      
+    updateToPouch : function(){
+      var self = this;
+      this.changeCorpus(null, function(){
+        self.save(null, {
+          success : function(model, response) {
+            //we got the model back, now lets put it into pouch with the hard coded id.
+            model._id = "corpus";
+            self.pouch(function(err,db){
+              db.put(model.toJSON(), function(err, response) {
+               console.log(response);
+              });
+            });
+          },
+          error : function(e) {
+          }
+        });
+      });
+    },
     /**
      * This function takes in a corpusname, which could be different
      * from the current corpus incase there is a master corpus wiht

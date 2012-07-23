@@ -87,7 +87,10 @@ define([
     initialize : function() {
 
       if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask());
+        this.set("publicSelf", new CorpusMask({
+          "couchConnection" : this.get("couchConnection"),
+          "corpusname" : this.get("corpusname")
+        }));
       }
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
