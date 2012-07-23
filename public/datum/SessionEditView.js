@@ -215,8 +215,10 @@ define([
                     }));
               }
               window.app.set("currentSession", model);
-              window.appView.renderEditableSessionViews();
-              window.appView.renderReadonlySessionViews();
+              window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
+                window.appView.renderEditableSessionViews();
+                window.appView.renderReadonlySessionViews();
+              });
               window.appView.addSavedDoc(model.id);
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
               //add session to the users session history if they dont already have it
