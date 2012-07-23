@@ -65,7 +65,7 @@ define([
     
     events : {
       "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen",
+      "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
       "click .add-comment-read" : 'insertNewComment',
@@ -157,6 +157,11 @@ define([
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();        
         
+        try{
+          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("corpusname"));
+        }catch(e){
+          window.appView.toastUser("There was a problem loading your corpus visualization.");
+        }
 
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));

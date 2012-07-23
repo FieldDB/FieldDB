@@ -249,7 +249,7 @@ define([
       if(returntext == ""){
         return; //dont show a pop up
       }else{
-        return returntext;
+        return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
     },
     /**
@@ -274,13 +274,13 @@ define([
       window.hub.unsubscribe("savedToPouch", null, this);
       window.hub.unsubscribe("saveFailedToPouch", null, this);
       window.hub.subscribe("savedToPouch",function(arg){
-        alert("Saved "+ arg+ " to pouch.");
+        window.appView.toastUser("Saved "+ arg+ " to pouch.","alert-success","Saved!");
         window.app.savedcount++;
         if( window.app.savedcount > 2){
 //       dont need, now using all details   localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
           window.app.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
           localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
-          alert("Your dashboard has been saved, you can exit the page at anytime and return to this state.");
+          window.appView.toastUser("Your dashboard has been saved, you can exit the page at anytime and return to this state.","alert-success","Exit at anytime:");
           //save ids to the user also so that the app can bring them back to where they were
           if(typeof thiscallback == "function"){
             thiscallback();
@@ -297,7 +297,7 @@ define([
       window.hub.subscribe("saveFailedToPouch",function(arg){
         Utils.debug("Saved "+ arg+ " to pouch.");
         window.app.savefailedcount++;
-        alert("Save failed "+arg);
+        window.appView.toastUser("Save failed "+arg,"alert-danger","Failure:");
       },this);
       var self = this;
       this.get("currentSession").changeCorpus( self.get("corpus").get("couchConnection").corpusname, function(){

@@ -121,6 +121,8 @@ define([
             context : "via Offline App",
             user: window.app.get("authentication").get("userPublic")
           }));
+      window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");
+
     },
     updateGravatar : function(){
       this.model.set("gravatar", $(this.el).find(".gravatar").val());

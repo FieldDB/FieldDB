@@ -93,7 +93,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewDatumTag()
+          this.insertNewDatumTag();
         }
       },
       "click #duplicate" : "duplicateDatum",
@@ -112,6 +112,10 @@ define([
       "click .icon-list-alt" : "showRareFields",
       "blur .utterance .datum_field_input" : function(e) {
         var utteranceLine = $(e.currentTarget).val();
+        if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
+          //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
+          window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        }
         if (utteranceLine) {
           var morphemesLine = Glosser.morphemefinder(utteranceLine);
           if (this.$el.find(".morphemes .datum_field_input").val() == "") {
@@ -121,16 +125,27 @@ define([
             this.needsSave = true;
           }
           // If the guessed morphemes is different than the unparsed utterance 
-          if (morphemesLine != utteranceLine) {
+          if (morphemesLine != utteranceLine && morphemesLine != "") {
+            //trigger the gloss guessing
+            this.guessGlosses(morphemesLine);
             // Ask the user if they want to use the guessed morphemes
             if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
               // Replace the morphemes line with the guessed morphemes
               this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+              //redo the gloss guessing
+              this.guessGlosses(morphemesLine);
               
               this.needsSave = true;
             }
           }
         }
+      },
+      "blur .morphemes .datum_field_input" : function(e){
+        if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
+          //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
+          window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        }
+        this.guessGlosses($(e.currentTarget).val());
       }
     },
 
@@ -210,7 +225,6 @@ define([
       $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
       $(this.el).find(".comments-section").show();
 
-      this.showComments();
     },
     
   
@@ -337,6 +351,11 @@ define([
                   app.get("corpus").save();
                 });
               }
+              window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+model.id,"alert-success","Saved!");
+
+            },
+            error : function(model){
+              window.appView.toastUser("Unable to save datum: "+model.id,"alert-danger","Not saved!");
             }
           });
         });
@@ -402,6 +421,27 @@ define([
     playAudio : function(){
       if(this.model.get("audioVideo")){
           this.$el.find(".datum-audio-player")[0].play();
+      }
+    },
+    guessGlosses : function(morphemesLine) {
+      if (morphemesLine) {
+        var glossLine = Glosser.glossFinder(morphemesLine);
+        if (this.$el.find(".gloss .datum_field_input").val() == "") {
+          // If the gloss line is empty, make it a copy of the morphemes
+          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+          
+          this.needsSave = true;
+        }
+        // If the guessed gloss is different than the existing glosses
+        if (glossLine != morphemesLine && glossLine != "") {
+          // Ask the user if they want to use the guessed gloss
+          if (confirm("Would you like to use this gloss:\n" + glossLine)) {
+            // Replace the gloss line with the guessed gloss
+            this.$el.find(".gloss .datum_field_input").val(glossLine);
+            
+            this.needsSave = true;
+          }
+        }
       }
     }
   });
