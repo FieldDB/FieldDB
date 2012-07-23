@@ -16,6 +16,7 @@ define([
     "permission/Permission",
     "permission/Permissions",
     "datum/Sessions",
+    "user/Team",
     "user/User",
     "glosser/Glosser",
     "libs/Utils"
@@ -37,6 +38,7 @@ define([
     Permission,
     Permissions,
     Sessions,
+    Team,
     User
 ) {
   var Corpus = Backbone.Model.extend(
@@ -206,6 +208,9 @@ define([
         this.set("permissions", new Permissions());
       }
       
+      if (!this.get("team")){
+        this.set("team", window.app.get("authentication").get("userPublic"));
+      }
     },
     
     defaults : {
@@ -234,7 +239,8 @@ define([
       dataLists : DataLists, 
       permissions : Permissions,
       publicSelf : CorpusMask,
-      comments: Comments
+      comments: Comments,
+      team: Team
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
@@ -253,11 +259,168 @@ define([
         callback();
       }
     }, 
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
+    /**
+     * Accepts two functions to call back when save is successful or
+     * fails. If the fail callback is not overridden it will alert
+     * failure to the user.
+     * 
+     * - Adds the corpus to the corpus if it is in the right corpus, and wasn't already there
+     * - Adds the corpus to the user if it wasn't already there
+     * - Adds an activity to the logged in user with diff in what the user changed. 
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      Utils.debug("Saving the Corpus");
+      var self = this;
+      var newModel = false;
+      if(!this.id){
+        newModel = true;
+        //uses the conventions to set the corpusname off of the team's username 
+        this.set("titleAsUrl", encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"")));
+        this.set("corpusname", this.get("team").get("username")
+          +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) );
+        this.get("couchConnection").corpusname = this.get("team").get("username")
+          +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
       }
+      var oldrev = this._rev;
+      this.changeCorpus(null,function(){
+        self.save(null, {
+          success : function(model, response) {
+            Utils.debug('Corpus save success');
+            var title = model.get("title");
+            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+title+"</a>";
+            //TODO add privacy for corpus in corpus
+//            if(window.app.get("corpus").get("keepCorpusDetailsPrivate")){
+//              title = "";
+//              differences = "";
+//            }
+            var publicSelf = new CorpusMask(model.get("publicSelf"));
+            publicSelf.changeCorpus(model.get("couchConnection"), function(){
+              publicSelf.save();
+            });
+            
+            if(window.appView){
+              window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");
+              window.appView.addSavedDoc(model.id);
+            }
+            var verb = "updated";
+            if(newModel){
+              verb = "added";
+            }
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : verb,
+                  directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
+                  indirectobject : "owned by <a href='#user/"+model.get("team").id+"'>"+model.get("team").get("username")+"</a>",
+                  context : differences+" via Offline App.",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
+            
+            //make sure the corpus is in the history of the user
+            if(window.app.get("authentication").get("userPrivate").get("corpuses").indexOf(model.get("couchConnection")) == -1){
+              window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
+            }
+            
+            if(newModel){
+              //TODO something similar to saving the current dashboard so the user can go back.
+//              window.app.storeCurrentDashboardIdsToLocalStorage(function(){
+               
+              self.setAsCurrentCorpus(function(){
+
+                //create the first session for this corpus.
+                var s = new Session({
+                  corpusname : model.get("corpusname"),
+                  sessionFields : model.get("sessionFields").clone()
+                }); //MUST be a new model, other wise it wont save in a new pouch.
+                s.get("sessionFields").where({label: "user"})[0].set("value", window.app.get("authentication").get("userPrivate").get("username") );
+                s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
+                s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
+                s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
+                s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                s.set("corpusname", model.get("corpusname"));
+                s.saveAndInterConnectInApp(function(){
+                  s.setAsCurrentSession(function(){
+                    
+                    //create the first datalist for this corpus.
+                    var dl = new DataList({
+                      corpusname : model.get("corpusname")}); //MUST be a new model, other wise it wont save in a new pouch.
+                    dl.set({
+                      "title" : "Default Data List",
+                      "dateCreated" : (new Date()).toDateString(),
+                      "description" : "This is the default data list for this corpus. " +
+                      "Any new datum you create is added here. " +
+                      "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+                      "export to LaTeX, or share with collaborators.",
+                      "corpusname" : model.get("corpusname")
+                    });
+                    dl.saveAndInterConnectInApp(function(){
+                      dl.setAsCurrentDataList(function(){
+                        window.appView.render();
+                        window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
+                        if(typeof successcallback == "function"){
+                          successcallback();
+                        }
+                      });
+                    });
+                  });
+                });
+              });
+            }else{
+              //if an existing corpus
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            }
+          },
+          error : function(e) {
+            if(typeof failurecallback == "function"){
+              failurecallback();
+            }else{
+              alert('Corpus save error' + e);
+            }
+          }
+        });
+      });
+    },
+    /**
+     * Accepts two functions success will be called if successful,
+     * otherwise it will attempt to render the current corpus views. If
+     * the corpus isn't in the current corpus it will call the fail
+     * callback or it will alert a bug to the user. Override the fail
+     * callback if you don't want the alert.
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    setAsCurrentCorpus : function(successcallback, failurecallback){
+      //TODO think about how to switch corpuses... maybe take the most recent session and data list and set those at the same time, it should be okay.
+//      if( window.app.get("corpusname") != this.get("corpusname") ){
+//        if (typeof failurecallback == "function") {
+//          failurecallback();
+//        }else{
+//          alert("This is a bug, cannot load the corpus you asked for, it is not in this corpus. This will make the app reload.");
+//        }
+//        return;
+//      }else{
+        if (window.app.get("currentCorpus").id != this.id ) {
+          window.app.set("currentCorpus", this);
+        }
+        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+        if (typeof successcallback == "function") {
+          successcallback();
+        }else{
+          try{
+            window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
+              window.appView.renderEditableCorpusViews();
+              window.appView.renderReadonlyCorpusViews();
+            });
+          }catch(e){
+            alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current corpus.");
+          }
+        }
+//      }
     },
     /**
      * Synchronize the server and local databases.

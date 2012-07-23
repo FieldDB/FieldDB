@@ -252,11 +252,21 @@ define([
         return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
     },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
+    /**
+     * This function sequentially saves first the session, datalist and then corpus. Its success callback is called if all saves succeed, its fail is called if any fail. 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      this.get("currentSession").saveAndInterConnectInApp(function(){
+        this.get("currentDataList").saveAndInterConnectInApp(function(){
+          this.get("corpus").saveAndInterConnectInApp(function(){
+            if(typeof successcallback == "function"){
+              successcallback();
+            }
+          },failurecallback);
+        }, failurecallback);
+      }, failurecallback);
     },
     /**
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync

@@ -475,45 +475,16 @@ define( [
     },
     
     updatePouch : function() {
-      Utils.debug("Saving the DataList");
+      var newDataList = true;
+      if(this.model.id){
+        newDataList = false;
+      }
       var self = this;
-      this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save(null, {
-          success : function(model, response) {
-            Utils.debug('Datalist save success');
-            window.appView.toastUser("Sucessfully saved data list.","alert-success","Saved!");
-
-            try{
-              if(window.app.get("currentDataList").id != model.id){
-                window.app.get("corpus").get("dataLists").unshift(model);
-                window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                    new Activity({
-                      verb : "added",
-                      directobject : "data list "+model.get("title"),
-                      indirectobject : "in "+window.app.get("corpus").get("title"),
-                      context : "via Offline App",
-                      user: window.app.get("authentication").get("userPublic")
-                    }));
-              }
-              window.app.set("currentDataList", model);
-              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                window.appView.renderEditableDataListViews();
-                window.appView.renderReadonlyDataListViews();
-              });
-              window.appView.addSavedDoc(model.id);
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
-              //add datalist to the users datalist history if they dont already have it
-              if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
-                window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-              }
-            }catch(e){
-              Utils.debug("Couldnt save the datalist id to the user's mostrecentids"+e);
-            }
-          },
-          error : function(e) {
-            alert('Datalist save error' + e);
-          }
-        });
+      this.model.saveAndInterConnectInApp(function(){
+        /* If it is in the modal, then it is a new session */
+        if(newDataList){
+          this.model.setAsCurrentDataList();
+        }
       });
     },
     
