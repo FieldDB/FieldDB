@@ -94,6 +94,7 @@ define([
      */
     showFullscreenSearch : function() {
       this.hideEverything();
+      window.appView.searchFullscreenView.render();
       $("#search-fullscreen").show();
     },
     
@@ -103,6 +104,7 @@ define([
     showEmbeddedSearch : function(corpusName ) {
       this.hideEverything();
       $("#dashboard-view").show();
+      window.appView.searchEmbeddedView.render();
       $("#search-embedded").show();
     },
     
