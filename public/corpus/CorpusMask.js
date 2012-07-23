@@ -3,7 +3,6 @@ define([
     "activity/Activity",
     "comment/Comment",
     "comment/Comments",
-    "corpus/CorpusMask",
     "confidentiality_encryption/Confidential",
     "datum/DatumField",
     "datum/DatumFields",
@@ -24,7 +23,6 @@ define([
     Activity,
     Comment, 
     Comments,
-    CorpusMask,
     Confidential,
     DatumField,
     DatumFields, 
@@ -39,19 +37,11 @@ define([
     Sessions,
     User
 ) {
-  var Corpus = Backbone.Model.extend(
-  /** @lends Corpus.prototype */
+  var CorpusMask = Backbone.Model.extend(
+  /** @lends CorpusMask.prototype */
   {
     /**
-     * @class A corpus is like a git repository, it has a remote, a title
-     *        a description and perhaps a readme When the user hits sync
-     *        their "branch" of the corpus will be pushed to the central
-     *        remote, and we will show them a "diff" of what has
-     *        changed.
-     * 
-     * The Corpus may or may not be a git repository, so this class is
-     * to abstract the functions we would expect the corpus to have,
-     * regardless of how it is really stored on the disk.
+     * @class The CorpusMask is saved as corpusmask in the Couch repository, it is the publicly visible version of a corpus. By default it just says private but lets users see the data lists and sessions.
      * 
      * 
      * @property {String} title This is used to refer to the corpus, and
@@ -86,23 +76,17 @@ define([
      */
     initialize : function() {
 
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask());
-      }
+      //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
+      this.id = "corpus";
+      
+      //TODO use these states to show what is public and what is not.
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
-//          new DatumState(),
-          new DatumState({
-            state : "To be checked",
-            color : "warning"
-          }),
-          , new DatumState({
-            state : "Deleted",
-            color : "important"
-          }),
+          new DatumState()
         ]));
       }//end if to set datumStates
       
+      //Keeping all items since this seems okay for public viewing if the user wants to let the public see it. 
       if(typeof(this.get("datumFields")) == "function"){
         this.set("datumFields", new DatumFields([ 
           new DatumField({
@@ -139,19 +123,9 @@ define([
         ]));
       }//end if to set datumFields
       
+      //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
       if(typeof(this.get("sessionFields")) == "function"){
         this.set("sessionFields", new DatumFields([ 
-           new DatumField({
-             label : "goal",
-             encrypted: "",
-             userchooseable: "disabled",
-             help: "This describes the goals of the session."
-           }),  
-          new DatumField({
-            label : "consultants",
-            encrypted: "",
-            userchooseable: "disabled"
-          }),
           new DatumField({
             label : "dialect",
             encrypted: "",
@@ -206,22 +180,20 @@ define([
     },
     
     defaults : {
-      title : "Untitled Corpus",
-      titleAsUrl :"UntitledCorpus",
-      description : "This is an untitled corpus, created by default.",
-      confidential :  Confidential,
+      title : "Private Corpus",
+      titleAsUrl :"PrivateCorpus",
+      description : "The details of this corpus are not public.",
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
-      
     },
     
     // Internal models: used by the parse function
     model : {
-      confidential :  Confidential,
+      //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 
@@ -230,7 +202,6 @@ define([
       sessions : Sessions, 
       dataLists : DataLists, 
       permissions : Permissions,
-      publicSelf : CorpusMask,
       comments: Comments
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
@@ -251,141 +222,6 @@ define([
       }
     }, 
       
-    /**
-     * Synchronize the server and local databases.
-     */
-    replicateCorpus : function(couchConnection, fromcallback, tocallback) {
-      var self = this;
-      
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = self.get("couchConnection");
-      }
-      this.changeCorpus(couchConnection, function(){
-        self.pouch(function(err, db) {
-          var couchurl = couchConnection.protocol+couchConnection.domain;
-          if(couchConnection.port != null){
-            couchurl = couchurl+":"+couchConnection.port;
-          }
-          couchurl = couchurl +"/"+ couchConnection.corpusname;
-          
-          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
-            Utils.debug("Replicate to " + couchurl);
-            Utils.debug(resp);
-            Utils.debug(err);
-            if(typeof tocallback == "function"){
-              tocallback();
-            }
-          });
-          //We can leave the to and from replication async, and make two callbacks. 
-          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
-            Utils.debug("Replicate from " + couchurl);
-            Utils.debug(resp);
-            Utils.debug(err);
-            if(err == null || err == undefined){
-              //This was a valid connection, lets save it into localstorage.
-              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
-              
-              // Display the most recent datum in this corpus
-              appView.datumsView.updateDatums();
-            }
-            if(typeof fromcallback == "function"){
-              fromcallback();
-            }
-            window.appView.allSyncedDoc();
-            
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                new Activity({
-                  verb : "synced",
-                  directobject : window.app.get("corpus").get("title"),
-                  indirectobject : "with their team server",
-                  context : "via Offline App",
-                  user: window.app.get("authentication").get("userPublic")
-                }));
-            //Replicate the team's activity feed
-            window.appView.activityFeedView.model.replicateActivityFeed();
-            
-            // Get the corpus' current precedence rules
-            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
-            
-            // Build the lexicon
-            self.buildLexiconFromTeamServer(self.get("corpusname"));
-          });
-        });
-        
-      });
-    },
-    /**
-     * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
-     * "http://localhost:5984/_session";
-     * 
-     * References:
-     * http://guide.couchdb.org/draft/security.html
-     * 
-     * @param username this can come from a username field in a login, or from the User model.
-     * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
-     * @param callback A function to call upon success, it receives the data back from the post request.
-     */
-    logUserIntoTheirCorpusServer : function(couchConnection, username, password, callback) {
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = this.get("couchConnection");
-      }
-      
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
-      }
-      couchurl = couchurl + "/_session";
-      var corpusloginparams = {};
-      corpusloginparams.name = username;
-      corpusloginparams.password = password;
-      $.ajax({
-        type : 'POST',
-        url : couchurl ,
-        data : corpusloginparams,
-        success : function(data) {
-          window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-          if (typeof callback == "function") {
-            callback(data);
-          }
-        },
-        error : function(data){
-          window.setTimeout(function(){
-            //try one more time 5 seconds later 
-            $.ajax({
-              type : 'POST',
-              url : couchurl ,
-              data : corpusloginparams,
-              success : function(data) {
-                window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-                if (typeof callback == "function") {
-                  callback(data);
-                }
-              },
-              error : function(data){
-                window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
-                		"This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
-                		"You also can't share your data with team members. Chances are if you are in offline mode, " +
-                		"it is because you are using our website version instead of the Chrome Store app " +
-                		"<a href='https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm'>" +
-                		"https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm </a>  " +
-                		"Our website version has a bug which we are waiting for IrisCouch (our database hosting company) to fix," +
-                		" they said they would fix it soon. If your computer is online and you are the Chrome Store app, then this is a bug... please report it to us :)","alert-danger","Offline Mode:");
-                appView.datumsView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
-                Utils.debug(data);
-                window.app.get("authentication").set("staleAuthentication", true);
-              }
-            });
-          }, 5000);
-        }
-      });
-    },
-    validate: function(attrs){
-//        console.log(attrs);
-        if(attrs.title != undefined){
-          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
-        }
-        return '';
-    },
     /**
      * This function takes in a corpusname, which could be different
      * from the current corpus incase there is a master corpus wiht
@@ -422,5 +258,5 @@ define([
     }
   });
     
-  return Corpus;
+  return CorpusMask;
 });

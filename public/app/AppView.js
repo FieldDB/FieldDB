@@ -151,6 +151,7 @@ define([
       });
       this.corpusNewModalView.format = "modal";
    
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
       //TODO not sure if we should do this here
       // Create an ImportEditView
       this.importView = new ImportEditView({
@@ -194,6 +195,12 @@ define([
       if(typeof callback == "function"){
         callback();
       }
+    },
+    setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask : function(model, callback){
+      this.publicCorpusReadEmbeddedView = new CorpusReadView({
+        model : model
+      });
+      this.publicCorpusReadEmbeddedView.format = "public";
     },
     setUpAndAssociateViewsAndModelsWithCurrentSession : function(callback){
       /*
@@ -382,6 +389,7 @@ define([
         this.corpusReadLeftSideView.render();
         this.corpusEditEmbeddedView.render();
         this.corpusReadEmbeddedView.render();
+        this.publicCorpusReadEmbeddedView.render();
         this.corpusEditFullscreenView.render();
         this.corpusReadFullscreenView.render();
         this.corpusNewModalView.render();
@@ -458,6 +466,7 @@ define([
     renderReadonlyCorpusViews : function(corpusid) {
       this.corpusReadLeftSideView.render();
       this.corpusReadEmbeddedView.render();
+      this.publicCorpusReadEmbeddedView.render();
       this.corpusReadFullscreenView.render();
     },
       
