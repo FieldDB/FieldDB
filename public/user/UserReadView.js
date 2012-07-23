@@ -20,7 +20,7 @@ define([
      *        feeds, it is also embedable in the UserEditView.
      *        
      * @property {String} format Must be set when the view is initialized. Valid
-     *           values are "link" "modal" and "fullscreen".
+     *           values are "link" "modal" "fullscreen" and "public"
      * 
      * @description Starts the UserView.
      * 
@@ -77,6 +77,11 @@ define([
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       } else if (this.format == "link") {
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
+      } else if (this.format == "public") {
+        this.setElement($("#public-user-page"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+      }else{
+        throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
 
       return this;

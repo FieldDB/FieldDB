@@ -286,10 +286,10 @@ define([
       }
     },
     setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask : function(model, callback){
-      this.fullScreenReadUserView = new UserReadView({
+      this.publicReadUserView = new UserReadView({
         model : model
       });
-      this.fullScreenReadUserView.format = "fullscreen";
+      this.publicReadUserView.format = "public";
     },
     setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
       /*
@@ -391,7 +391,7 @@ define([
         
         // Display the User Views
         this.fullScreenEditUserView.render();
-        this.fullScreenReadUserView.render();
+        this.publicReadUserView.render();
         this.modalEditUserView.render();
         this.modalReadUserView.render();
         
@@ -504,7 +504,7 @@ define([
       this.modalEditUserView.render();
     },
     renderReadonlyUserViews : function(userid) {
-      this.fullScreenReadUserView.render();
+      this.publicReadUserView.render();
       this.modalReadUserView.render();
     },
     
