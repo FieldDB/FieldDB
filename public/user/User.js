@@ -100,6 +100,12 @@ define([
       }catch(e){
         
       }
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

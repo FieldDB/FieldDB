@@ -341,6 +341,7 @@ define([
     
     /**
      * This function takes in a boolean whether the data should be appended in the import, the fields the data is in, and the header from the data which corresponds to datum fields.
+     * TODO this function is not being used.
      * 
      * @param showInImportModal
      * @param orderedFields the values which correspond to datumfields
@@ -360,6 +361,12 @@ define([
       var csvDebugResult = this.exportAsCSV(null, null, true);
       
       return result;
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

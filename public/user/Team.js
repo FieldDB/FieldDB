@@ -1,55 +1,106 @@
-define(
-		["backbone"],
-		function(Backbone){
-	var Team = Backbone.Collection.extend(
-			
-			/** @lends Team.prototype */ 
-			{
-				/**
-				 * @class A Team is a collection of users. A team can have many users, and many corpora. 
-				 * It has a name but can not login.  
-				 * 
-				 * 
-				 * @property {String} teamname This is team's name    
-				 *  
-				 *  
-				 * @description The initialize function probably checks to see if a team exists and 
-				 * creates a new one if there is one. 
-				 * 
-				 * @extends User.Collection
-				 * @constructs
-				 */
-				
-				
-				initialize : function() {
-					// this.bind('error', function(model, error) {
-		              // // TODO Handle validation errors
-		              // });
-					
-				}, 
-				
-				// This is a list of attributes and their default values. 
-				defaults : {
-				
-					teamname: "", 
-					
-					
-				},
-				
-				/** Describe the validation here. 
-				 * 
-				 * @param {Object} 
-				 * 			attributes the set of attributes to validate 
-				 * 
-				 * @returns {String} The validation error if there is one. Otherwise 
-				 * 			doesn't return anything. 
-				 */
-				
-				validate : function(attributes) {
-					
-				} 
-			});
-	
-	return Team; 
-	
+define([
+    "backbone",
+    "activity/Activities",
+    "hotkey/HotKey",
+    "user/UserGeneric",
+    "permission/Permission",
+    "user/UserPreference",
+    "libs/Utils"
+], function(
+    Backbone, 
+    Activities,
+    HotKey,
+    UserGeneric,
+    Permission,
+    UserPreference
+) {
+  var Team = UserGeneric.extend(
+  /** @lends Team.prototype */
+  {
+    /**
+     * @class Team extends from UserGeneric. It inherits the same attributes as UserGeneric but can 
+     * login. 
+     * 
+     * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
+     * 
+     * @extends Backbone.Model
+     * @constructs
+     */
+    initialize: function(attributes) {
+      User.__super__.initialize.call(this, attributes);
+      
+      // If there is no prefs, create a new one
+      if (!this.get("prefs")) {
+        this.set("prefs", new UserPreference());
+      }
+      
+      // If there is no permissions, create a new one
+      if (!this.get("permissions")) {
+        this.set("permissions", new Permission());
+      }
+      
+      // If there is no hotkeys, create a new one
+      if (!this.get("hotkeys")) {
+        this.set("hotkeys", new HotKey());//TODO this needs to become plural
+      }
+      
+      //If there are not activities create a new collection
+      if (!this.get("activities")) {
+        this.set("activities", new Activities());
+      }
+      this.bind("change", this.checkPrefsChanged, this);
+    },
+    
+    defaults : {
+      // Defaults from UserGeneric
+      username : "",
+      password : "",
+      email : "",
+      gravatar : "./../user/user_gravatar.png",
+      researchInterest : "",
+      affiliation : "",
+      description : "",
+      subtitle : "",
+      corpuses : [],
+      dataLists : [],
+      mostRecentIds : {},
+      // Defaults from User
+      firstname : "",
+      lastname : "",
+      teams : [],
+      sessionHistory : [],
+//      activities : []
+    },
+
+    /**
+     * The subtitle function returns user's first and last names. 
+     */
+    subtitle: function () {
+      if (this.get("firstname") == undefined) {
+        this.set("firstname","");
+      }
+      
+      if (this.get("lastname") == undefined) {
+        this.set("lastname","");
+      }
+      
+      return this.get("firstname") + " " + this.get("lastname");
+    },
+    checkPrefsChanged : function(){
+      try{
+        window.appView.userPreferenceView.model = this.get("prefs");
+        window.appView.userPreferenceView.render();
+      }catch(e){
+        
+      }
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    }
+  });
+
+  return Team;
 });

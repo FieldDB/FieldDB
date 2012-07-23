@@ -40,6 +40,12 @@ define([
     
     saveKeyword: function(){
       this.set("searchKeywords","hihi");
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

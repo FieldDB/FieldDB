@@ -42,6 +42,12 @@ define([
     // Internal models: used by the parse function
     model : {
       consultant : UserMask
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

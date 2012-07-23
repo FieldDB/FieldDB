@@ -133,7 +133,12 @@ define([
         callback();
       }
     },
-    
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * Validation functions will verify that the session ID is unique and
      * that the consultant,users, and teams are all correspond to people in

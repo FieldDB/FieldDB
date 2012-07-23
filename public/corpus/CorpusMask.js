@@ -221,7 +221,12 @@ define([
         callback();
       }
     }, 
-
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
