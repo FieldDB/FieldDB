@@ -496,8 +496,10 @@ define( [
                     }));
               }
               window.app.set("currentDataList", model);
-              window.appView.renderEditableDataListViews();
-              window.appView.renderReadonlyDataListViews();
+              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                window.appView.renderEditableDataListViews();
+                window.appView.renderReadonlyDataListViews();
+              });
               window.appView.addSavedDoc(model.id);
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
               //add datalist to the users datalist history if they dont already have it

@@ -98,9 +98,23 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
 
-//      var userToBePassedAround = new User();
-     
+      this.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
       
+      this.setUpAndAssociateViewsAndModelsWithCurrentSession();
+      
+      this.setUpAndAssociateViewsAndModelsWithCurrentUser();
+      
+      this.setUpAndAssociateViewsAndModelsWithCurrentDataList();
+
+      // Create and initialize a Terminal
+      this.term = new Terminal('terminal');
+      this.term.initFS(false, 1024 * 1024);
+      
+      // Set up a timeout event every 10sec
+      _.bindAll(this, "saveScreen");
+      window.setInterval(this.saveScreen, 10000);     
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
       // Create seven corpus views
       this.corpusEditLeftSideView = new CorpusEditView({
         model : this.model.get("corpus")
@@ -111,7 +125,7 @@ define([
         model : this.model.get("corpus")
       });
       this.corpusReadLeftSideView.format = "leftSide";
-
+      
       this.corpusEditEmbeddedView = new CorpusEditView({
         model : this.model.get("corpus")
       });
@@ -136,7 +150,52 @@ define([
         model : this.model.get("corpus")
       });
       this.corpusNewModalView.format = "modal";
+   
+      //TODO not sure if we should do this here
+      // Create an ImportEditView
+      this.importView = new ImportEditView({
+        model : new Import()
+      });
       
+      //TODO not sure if we should do this here
+      // Create an ExportReadView
+      this.exportView = new ExportReadView({
+        model : new Export()
+      });
+      
+      /*
+       *  Create search views
+       */
+      this.searchTopView = new SearchEditView({
+        model : new Search()
+      });
+      this.searchTopView.format = "top";
+      
+      var searchToBePassedAround = new Search();
+      this.searchFullscreenView = new SearchEditView({
+        model : searchToBePassedAround
+      });
+      this.searchFullscreenView.format = "fullscreen";
+      
+      this.searchEmbeddedView = new SearchEditView({
+        model : searchToBePassedAround
+      });
+      this.searchEmbeddedView.format = "centreWell";
+      
+      // Create the embedded and fullscreen DatumContainerEditView
+      var datumsToBePassedAround = new Datums();
+      this.datumsView = new DatumContainerEditView({
+        model : datumsToBePassedAround
+      });
+      this.datumsReadView = new DatumContainerReadView({
+        model : datumsToBePassedAround
+      });
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentSession : function(callback){
       /*
        * Set up four session views
        */ 
@@ -169,6 +228,11 @@ define([
       });
       this.sessionModalView.format = "modal";
       
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentUser : function(callback){
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
         model : this.model.get("authentication")
@@ -186,7 +250,7 @@ define([
         model : this.model.get("authentication").get("userPrivate")
       });
       this.fullScreenReadUserView.format = "fullscreen";
-
+      
       this.modalEditUserView = new UserEditView({
         model : this.model.get("authentication").get("userPrivate")
       });
@@ -196,17 +260,35 @@ define([
         model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
+      
 
-      
-      // Create the embedded and fullscreen DatumContainerEditView
-      var datumsToBePassedAround = new Datums();
-      this.datumsView = new DatumContainerEditView({
-        model : datumsToBePassedAround
-      });
-      this.datumsReadView = new DatumContainerReadView({
-        model : datumsToBePassedAround
+      // Create a UserPreferenceEditView
+      this.userPreferenceView = new UserPreferenceEditView({
+        model : this.authView.model.get("userPrivate").get("prefs")
       });
       
+      // Create an ActivityFeedView
+      this.activityFeedView = new ActivityFeedView({
+        model : new ActivityFeed()
+      }); 
+      this.activityFeedView.format = "rightSide";
+      
+      // Create an InsertUnicodesView
+      this.insertUnicodesView = new InsertUnicodesView({
+        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
+      });
+      this.insertUnicodesView.format = "rightSide"; 
+
+      // Create a HotKeyEditView
+      this.hotkeyEditView = new HotKeyEditView({
+        model : this.authView.model.get("userPrivate").get("hotkeys")
+      });
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
       /*
        * Set up the six data list views
        */
@@ -230,88 +312,29 @@ define([
         datumCollection : datumsCollectionToBePassedAround 
       }); 
       this.dataListEditLeftSideView.format = "leftSide";
-   
+      
       this.dataListEditFullscreenView = new DataListEditView({
         model : this.dataListEditLeftSideView.model,
         datumCollection : datumsCollectionToBePassedAround 
       });  
       this.dataListEditFullscreenView.format = "fullscreen";
-
+      
       this.dataListReadLeftSideView = new DataListReadView({
         model :  this.dataListEditLeftSideView.model,
         datumCollection : datumsCollectionToBePassedAround 
       });  
       this.dataListReadLeftSideView.format = "leftSide";
-   
+      
       this.dataListReadFullscreenView = new DataListReadView({
         model :  this.dataListEditLeftSideView.model,
         datumCollection : datumsCollectionToBePassedAround 
       });  
       this.dataListReadFullscreenView.format = "fullscreen";
       
-      /*
-       *  Create search views
-       */
-      this.searchTopView = new SearchEditView({
-        model : new Search()
-      });
-      this.searchTopView.format = "top";
-      
-      var searchToBePassedAround = new Search();
-      this.searchFullscreenView = new SearchEditView({
-        model : searchToBePassedAround
-      });
-      this.searchFullscreenView.format = "fullscreen";
-      
-      this.searchEmbeddedView = new SearchEditView({
-        model : searchToBePassedAround
-      });
-      this.searchEmbeddedView.format = "centreWell";
-      
-      // Create a UserPreferenceEditView
-      this.userPreferenceView = new UserPreferenceEditView({
-        model : this.authView.model.get("userPrivate").get("prefs")
-      });
-      
-      // Create an ActivityFeedView
-      this.activityFeedView = new ActivityFeedView({
-        model : new ActivityFeed()
-      }); 
-      this.activityFeedView.format = "rightSide";
-      
-      // Create an InsertUnicodesView
-      this.insertUnicodesView = new InsertUnicodesView({
-        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
-      });
-      this.insertUnicodesView.format = "rightSide"; 
-
-      // Create a HotKeyEditView
-      this.hotkeyEditView = new HotKeyEditView({
-        model : this.authView.model.get("userPrivate").get("hotkeys")
-      });   
-      
-      // Create an ExportREadView
-      this.exportView = new ExportReadView({
-        model : new Export()
-      });
-
-     
-      
-      // Create an ImportEditView
-      this.importView = new ImportEditView({
-        model : new Import()
-      });
-
-      // Create and initialize a Terminal
-      this.term = new Terminal('terminal');
-      this.term.initFS(false, 1024 * 1024);
-      
-      
-      // Set up a timeout event every 10sec
-      _.bindAll(this, "saveScreen");
-      window.setInterval(this.saveScreen, 10000);     
+      if(typeof callback == "function"){
+        callback();
+      }
     },
-    
     /**
      * The underlying model of the AppView is an App.
      */
