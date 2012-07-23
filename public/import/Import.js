@@ -215,6 +215,19 @@ define([
         callback();
       }
     },
+    /**
+     * This function takes in a text block, splits it on lines and then
+     * takes the first word with a \firstword as the data type/column
+     * heading and then walks through the file looking for lines that
+     * start with \ge and creates a new datum each time it finds \ge
+     * This works for verb lexicons but would be \ref if an interlinear
+     * gloss. TODO figure out how Toolbox knows when one data entry
+     * stops and another starts. It doesn't appear to be double spaces...
+     * 
+     * @param text
+     * @param self
+     * @param callback
+     */
     importToolbox : function(text, self, callback){
       var lines = text.split("\n");
       var macLineEndings = false;

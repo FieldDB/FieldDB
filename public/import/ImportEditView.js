@@ -488,7 +488,7 @@ define( [
         /*
          * Begin the datum saving loop with the last datum 
          */
-        window.appView.importView.saveADatumAndLoop(this.model.get("datumArray").length - 1);
+        window.appView.importView.saveADatumAndLoop(window.appView.importView.model.get("datumArray").length - 1);
         
         // Save the new DataList since we created it above, as the new leftside
         // data list, it will be in position 0
