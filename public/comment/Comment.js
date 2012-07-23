@@ -49,7 +49,12 @@ define( [
      */
     remove : function() {
     },
-
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * The edit function allows users to edit a comment.
      * 

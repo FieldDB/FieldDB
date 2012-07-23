@@ -220,7 +220,12 @@ define([
     model : {
       unicodes : InsertUnicodes
     },
-    
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    }
     
   });
 

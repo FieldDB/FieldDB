@@ -447,6 +447,7 @@ define([
               publicSelf.save();
             });
 //            try{
+              //If this is a new corpus
               if(window.app.get("corpus").id != model.id){
                 //add corpus to user
                 model.set("titleAsUrl", encodeURIComponent(model.get("title")));

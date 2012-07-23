@@ -47,6 +47,12 @@ define([
       if (!attrs.mask) {
         attrs.mask = "hi empty mask";
       }
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

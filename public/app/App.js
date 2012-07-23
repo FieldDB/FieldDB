@@ -252,6 +252,12 @@ define([
         return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
     },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * This function should be called before the user leaves the page, it should also be called before the user clicks sync
      * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload

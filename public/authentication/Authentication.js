@@ -159,6 +159,12 @@ define([
         window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
       }
     },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * This function uses the quick authentication view to get the user's
      * password and authenticate them. The authenticate process brings

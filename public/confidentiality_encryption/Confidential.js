@@ -54,7 +54,12 @@ define( [
     model : {
       // There are no nested models
     },
-    
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
      * encoding so that it looks like a string, and can be saved as a string in

@@ -253,7 +253,12 @@ define([
         callback();
       }
     }, 
+    saveAndInterConnectInApp : function(callback){
       
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * Synchronize the server and local databases.
      */

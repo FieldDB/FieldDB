@@ -34,7 +34,12 @@ define([
     model : {
       activities: Activities  
     },
-    
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     
      
     /**
