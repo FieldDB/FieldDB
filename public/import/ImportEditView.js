@@ -372,6 +372,16 @@ define( [
         // their data in the order they are used to.
 //      for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
 
+     // Add the "imported" activity to the ActivityFeed
+        window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            new Activity({
+              verb : "attempted to import",
+              directobject : window.appView.importView.model.get("datumArray").length + " data entries",
+              indirectobject : "in "+window.app.get("corpus").get("title"),
+              context : "via Offline App",
+              user: window.app.get("authentication").get("userPublic")
+            }));
+        
         window.hub.unsubscribe("savedDatumToPouch", null, this);
         window.hub.unsubscribe("saveDatumFailedToPouch", null, this);
         window.hub.subscribe("savedDatumToPouch",function(arg){
@@ -435,7 +445,7 @@ define( [
 
         window.hub.subscribe("saveDatumFailedToPouch",function(arg){
           Utils.debug("Saved failed "+ arg+ " to pouch.");
-          window.appView.importView.savefailedindex[nextsavedatum] = window.appView.importView.model.get("datumArray")[nextsavedatum];
+          window.appView.importView.savefailedindex[window.appView.importView.savefailedindex.nextsavedatum] = window.appView.importView.model.get("datumArray")[window.appView.importView.savefailedindex.nextsavedatum];
           window.appView.importView.savefailedcount++;
           window.appView.importView.nextsavedatum++;
 
@@ -473,14 +483,52 @@ define( [
                 app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
               },
               error : function(e) {
-                alert('Datum save failure in import' + e);
+//                alert('Datum save failure in import' + e);
                 hub.publish("saveDatumFailedToPouch","datum"+ JSON.stringify(e));
               }
             });
-
           });
+          
         },this);
 
+        /*
+         * Save another datum when the previous fails, duplicate of success
+         * above
+         */
+        d = window.appView.importView.nextsavedatum;
+        var thatdatum = window.appView.importView.model.get("datumArray")[d];
+        thatdatum.set({
+          "session" : window.appView.importView.model.get("session"),
+          "corpusname" : window.appView.importView.model.get("corpusname"),
+          "dateEntered" : JSON.stringify(new Date()),
+          "dateModified" : JSON.stringify(new Date())
+        });
+        // Save the datum
+        Utils.debug("Saving the Datum");
+        thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
+          thatdatum.save(null, {
+            success : function(model, response) {
+              Utils.debug('Datum save success in import');
+              hub.publish("savedDatumToPouch"," datum "+model.id);
+
+              // Update progress bar
+              $(".import-progress").val($(".import-progress").val()+1);
+
+              // Add Datum to the new datalist and render it this should work
+              // because the datum is saved in the pouch and can be fetched
+              appView.dataListEditLeftSideView.addOneDatumId(model.id);
+
+              // Add Datum to the default data list
+              var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+              app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+            },
+            error : function(e) {
+//              alert('Datum save failure in import' + e);
+              hub.publish("saveDatumFailedToPouch","datum"+ JSON.stringify(e));
+            }
+          });
+        });
+        
         // Save the new DataList since we created it above, as the new leftside
         // data list, it will be in position 0
         app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("corpusname"), function(){
