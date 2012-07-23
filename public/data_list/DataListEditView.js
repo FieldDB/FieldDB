@@ -449,12 +449,16 @@ define( [
 
     updateTitle: function(){
       this.model.set("title",this.$el.find(".data-list-title").val());
-      window.appView.addUnsavedDoc(this.model.id);
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
     
     updateDescription: function(){
       this.model.set("description",this.$el.find(".data-list-description").val());
-      window.appView.addUnsavedDoc(this.model.id);
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
     
     //bound to pencil
@@ -521,7 +525,9 @@ define( [
 
       });
       this.model.get("comments").add(m);
-      window.appView.addUnsavedDoc(this.model.id);
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
       this.$el.find(".comment-new-text").val("");
     },
     

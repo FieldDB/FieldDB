@@ -120,7 +120,6 @@ define( [
     },
     
     model : Import,
-    
     template: Handlebars.templates.import_edit_fullscreen,
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
@@ -210,9 +209,14 @@ define( [
       
       var tablehead = document.createElement("thead");
       var headerRow = document.createElement("tr");
+      var extractedHeader = this.model.get("extractedHeader");
       for(var i = 0; i < rows[0].length; i++){
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'"/>');
+        var headercelltext = "";
+        if(extractedHeader){
+          headercelltext = extractedHeader[i];
+        }
+        $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'" value="'+headercelltext+'"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
         tableCell.addEventListener('dragover', this.handleDragOver, false);
         headerRow.appendChild(tableCell);
@@ -271,14 +275,27 @@ define( [
        * Cycle through all the rows in table and create a datum with the matching fields.
        */
       var array = [];
-      
-      $('tr').has('td').each(function() {
-          var arrayItem = {};
+      try{
+        //Import from html table that the user might have edited.
+        $('tr').has('td').each(function() {
+          var datumObject = {};
           $('td', $(this)).each(function(index, item) {
-              arrayItem[headers[index]] = $(item).html();
+            datumObject[headers[index]] = $(item).html();
           });
-          array.push(arrayItem);
-      });
+          array.push(datumObject);
+        });
+      }catch(e){
+        //Import from the array instead of using jquery and html
+        alert(JSON.stringify(e));
+        var rows = this.model.get("asCSV");
+        for(var r in rows){
+          var datumObject = {};
+          for( var c in headers){
+            datumObject[headers[c]] = rows[r][c];
+          }
+          array.push(datumObject);
+        }
+      }
       for (a in array) {
         var d = new Datum({corpusname : this.model.get("corpusname")});
         var fields = this.model.get("datumFields").clone();
@@ -323,61 +340,158 @@ define( [
       $(".approve-save").removeAttr("disabled");
       $(".approve-save").removeClass("disabled");
     },
+    savedcount : 0,
+    savedindex : [],
+    savefailedcount : 0,
+    savefailedindex : [],
+    nextsavedatum : 0,
+    saveADatumAndLoop : function(d){
+      var thatdatum = this.model.get("datumArray")[d];
+      thatdatum.set({
+        "session" : this.model.get("session"),
+        "corpusname" : this.model.get("corpusname"),
+        "dateEntered" : JSON.stringify(new Date()),
+        "dateModified" : JSON.stringify(new Date())
+      });
+      thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
+        thatdatum.save(null, {
+          success : function(model, response) {
+            hub.publish("savedDatumToPouch",{d: d, message: " datum "+model.id});
+
+            // Update progress bar
+            $(".import-progress").val($(".import-progress").val()+1);
+
+            // Add Datum to the new datalist and render it this should work
+            // because the datum is saved in the pouch and can be fetched
+            appView.dataListEditLeftSideView.addOneDatumId(model.id);
+
+            // Add Datum to the default data list
+            var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+            app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+          },
+          error : function(e) {
+            hub.publish("saveDatumFailedToPouch",{d: d, message: "datum "+ JSON.stringify(e) });
+          }
+        });
+      });
+    },
+    importCompleted : function(){
+      window.appView.toastUser( this.savedcount + " of your "
+          +this.model.get("datumArray").length 
+          +" datum have been imported. "
+          +this.savefailedcount+" didn't import. "
+          ,"alert-success","Import successful:");
+
+      // Add the "imported" activity to the ActivityFeed
+      window.app.get("authentication").get("userPrivate").get("activities").unshift(
+          new Activity({
+            verb : "imported",
+            directobject : this.savedcount + " data entries",
+            indirectobject : "in "+window.app.get("corpus").get("title"),
+            context : "via Offline App",
+            user: window.app.get("authentication").get("userPublic")
+          }));
+
+      window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
+      window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
+      
+      // Render the first page of the new data list
+      window.appView.renderEditableDataListViews();
+      window.appView.dataListEditLeftSideView.renderFirstPage();// TODO why not do automatically in datalist?
+      window.appView.renderReadonlyDataListViews();
+//    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
+//    lists dont have this function, should we put it in...
+      
+      $(".import-progress").val( $(".import-progress").attr("max") );
+      $(".approve-save").html("Finished");
+      
+      // Go back to the dashboard while saving datum in the background
+      window.location.replace("#");
+    },
     /**
      * permanently saves the datalist to the corpus, and all of its datums too.
      */
     saveDataList : function(){
       var self = this;
       this.createNewSession( function(){
-        //after we have a session
-        $(".approve-save").addClass("disabled");
-        //add the datums to the progress bar, so that we can augment for each that is saved.
-        $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
+        window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
+        window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
         
+        // after we have a session
+        $(".approve-save").addClass("disabled");
+        // add the datums to the progress bar, so that we can augment for each
+        // that is saved.
+        $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
+
         // Create a new permanent data list in the corpus
         appView.dataListEditLeftSideView.newDataList();
 
-      //import data in reverse order from normal so that the user will get their data in the order they are used to. 
-//        for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
-        
-        for (d in self.model.get("datumArray")) {
-          var thatdatum = self.model.get("datumArray")[d];
-          thatdatum.set({
-            "session" : self.model.get("session"),
-            "corpusname" : self.model.get("corpusname"),
-            "dateEntered" : JSON.stringify(new Date()),
-            "dateModified" : JSON.stringify(new Date())
-          });
-          
-          // Save the datum
-          Utils.debug("Saving the Datum");
-          thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
-            thatdatum.save(null, {
-              success : function(model, response) {
-                Utils.debug('Datum save success in import');
-                // Update progress bar
-                $(".import-progress").val($(".import-progress").val()+1);
-
-                // Add Datum to the new datalist and render it this should work because the datum is saved in the pouch and can be fetched
-                appView.dataListEditLeftSideView.addOneDatumId(model.id);
-                
-                // Add Datum to the default data list
-                var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-              },
-              error : function(e) {
-                alert('Datum save failure in import' + e);
-              }
-            });
-          });
-        }
-        //Bring the title and description from the temporary data list, to the new one. 
+        // Bring the title and description from the temporary data list, to the
+        // new one.
         app.get("corpus").get("dataLists").models[0].set({
           title: appView.importView.model.dataListView.model.get("title"),
           description: appView.importView.model.dataListView.model.get("description")
         });
+
+        // import data in reverse order from normal so that the user will get
+        // their data in the order they are used to.
+//      for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
+
+     // Add the "imported" activity to the ActivityFeed
+        window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            new Activity({
+              verb : "attempted to import",
+              directobject : window.appView.importView.model.get("datumArray").length + " data entries",
+              indirectobject : "in "+window.app.get("corpus").get("title"),
+              context : "via Offline App",
+              user: window.app.get("authentication").get("userPublic")
+            }));
         
-        // Save the new DataList since we created it above, as the new leftside data list, it will be in position 0
+        window.hub.subscribe("savedDatumToPouch", function(arg){
+          this.savedindex[arg.d] = true;
+          this.savedcount++;
+//          window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
+          if( arg.d <= 0 ){
+            /*
+             * If we are at the final index in the import's datum
+             */
+            this.importCompleted();
+          }else{
+            /*
+             * Save another datum when the previous succeeds
+             */
+            var next = parseInt(arg.d) - 1;
+            this.saveADatumAndLoop(next);
+          }
+        }, window.appView.importView);
+
+        window.hub.subscribe("saveDatumFailedToPouch",function(arg){
+          this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
+          this.savefailedcount++;
+          window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
+          
+          if( arg.d <= 0 ){
+            /*
+             * If we are at the final index in the import's datum
+             */
+            this.importCompleted();
+          }else{
+            /*
+             * Save another datum when the previous fails
+             */
+            var next = parseInt(arg.d) - 1;
+            this.saveADatumAndLoop(next);
+          }
+          
+        }, window.appView.importView);
+
+        /*
+         * Begin the datum saving loop with the last datum 
+         */
+        window.appView.importView.saveADatumAndLoop(window.appView.importView.model.get("datumArray").length - 1);
+        
+        // Save the new DataList since we created it above, as the new leftside
+        // data list, it will be in position 0
         app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("corpusname"), function(){
           app.get("corpus").get("dataLists").models[0].save(null, {
             success : function(model, response) {
@@ -386,22 +500,13 @@ define( [
 
               // Update the progress bar
               $(".import-progress").val($(".import-progress").val()+1);
-              
+
               // Save the datalist ID in the userPrivate
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-              
+
               // Mark the datalist as no longer temporary
               self.model.dataListView.temporaryDataList = false;
-              
-              // Add the "imported" activity to the ActivityFeed
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                  new Activity({
-                    verb : "imported",
-                    directobject : self.model.get("datumArray").length + " data entries",
-                    indirectobject : "in "+window.app.get("corpus").get("title"),
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
-                  }));
+
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
                   new Activity({
                     verb : "added",
@@ -410,7 +515,7 @@ define( [
                     context : "via Offline App",
                     user: window.app.get("authentication").get("userPublic")
                   }));
-              
+
               // Save the session
               self.model.get("session").changeCorpus(self.model.get("corpusname"), function(){
                 self.model.get("session").save(null, {
@@ -420,15 +525,15 @@ define( [
 
                     // Update progress bar
                     $(".import-progress").val($(".import-progress").val()+1);
-                    
+
                     // Add the new session to the corpus
                     window.app.get("corpus").get("sessions").unshift(model);
-                    
+
                     // Add the new session to the userPrivate
                     if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
                       window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
                     }
-                    
+
                     // Add the "added session" activity to the ActivityFeed
                     window.app.get("authentication").get("userPrivate").get("activities").unshift(
                         new Activity({
@@ -439,26 +544,21 @@ define( [
                           user: window.app.get("authentication").get("userPublic")
                         }));
 
-                    // Render the first page of the new data list
-                    window.appView.renderEditableDataListViews();
-                    window.appView.dataListEditLeftSideView.renderFirstPage();//TODO is there a reason why we cant do this automatically in the data lists themselves.
-                    window.appView.renderReadonlyDataListViews();
-//                    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data lists dont have htis function, should we put it in...
+                   
+                    // Update the search fields with the new datum fields from import
+                    window.appView.searchEmbeddedView.render();
 
-                    // Go back to the dashboard after all succeeds
-                    $(".import-progress").val( $(".import-progress").attr("max") );
-                    $(".approve-save").html("Finished");
-                    
-                    //save the corpus
+                    // save the corpus
                     window.appView.corpusEditLeftSideView.updatePouch();
-                    
-                    //save the user
+
+                    // save the user
                     window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-                    window.location.replace("#");
+                    
+                   
 
                   },
                   error : function(e) {
-                    window.appView.toastUser("Error in saving session.","alert-danger","Not saved!");
+                    window.appView.toastUser("Error in saving session in import.","alert-danger","Not saved!");
                     alert('Session save failure in import' + e);
                   }
                 });
@@ -466,7 +566,7 @@ define( [
 
             },
             error : function(e) {
-              window.appView.toastUser("Error in saving data list.","alert-danger","Not saved!");
+              window.appView.toastUser("Error in saving data list in import.","alert-danger","Not saved!");
               alert('Data list save failure in import' + e);
             }
           });
