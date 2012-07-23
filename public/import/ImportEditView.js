@@ -120,7 +120,6 @@ define( [
     },
     
     model : Import,
-    
     template: Handlebars.templates.import_edit_fullscreen,
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
@@ -210,9 +209,14 @@ define( [
       
       var tablehead = document.createElement("thead");
       var headerRow = document.createElement("tr");
+      var extractedHeader = this.model.get("extractedHeader");
       for(var i = 0; i < rows[0].length; i++){
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'"/>');
+        var headercelltext = "";
+        if(extractedHeader){
+          headercelltext = extractedHeader[i];
+        }
+        $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'" value="'+headercelltext+'"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
         tableCell.addEventListener('dragover', this.handleDragOver, false);
         headerRow.appendChild(tableCell);
@@ -271,14 +275,27 @@ define( [
        * Cycle through all the rows in table and create a datum with the matching fields.
        */
       var array = [];
-      
-      $('tr').has('td').each(function() {
-          var arrayItem = {};
+      try{
+        //Import from html table that the user might have edited.
+        $('tr').has('td').each(function() {
+          var datumObject = {};
           $('td', $(this)).each(function(index, item) {
-              arrayItem[headers[index]] = $(item).html();
+            datumObject[headers[index]] = $(item).html();
           });
-          array.push(arrayItem);
-      });
+          array.push(datumObject);
+        });
+      }catch(e){
+        //Import from the array instead of using jquery and html
+        alert(JSON.stringify(e));
+        var rows = this.model.get("asCSV");
+        for(var r in rows){
+          var datumObject = {};
+          for( var c in headers){
+            datumObject[headers[c]] = rows[r][c];
+          }
+          array.push(datumObject);
+        }
+      }
       for (a in array) {
         var d = new Datum({corpusname : this.model.get("corpusname")});
         var fields = this.model.get("datumFields").clone();

@@ -81,17 +81,17 @@ define([
      * 
      * @param text
      */
-    importCSV : function(text) {
+    importCSV : function(text, self, callback) {
       var rows = text.split("\n");
       if(rows.length < 3){
         rows = text.split("\r");
-        this.set("status", this.get("status","Detected a \r line ending."));
+        self.set("status", self.get("status","Detected a \r line ending."));
       }
       var hasQuotes = false;
       //If it looks like it already has quotes:
       if( rows[0].split('","').length > 2 && rows[5].split('","').length > 2){
         hasQuotes = true;
-        this.set("status", this.get("status","Detected text was already surrounded in quotes."));
+        self.set("status", self.get("status","Detected text was already surrounded in quotes."));
       }
       for(l in rows){
         if(hasQuotes){
@@ -102,11 +102,14 @@ define([
 //          });
 //          rows[l] = withoutQuotes;
         }else{
-          rows[l] = this.parseLineCSV(rows[l]);
+          rows[l] = self.parseLineCSV(rows[l]);
         }
       }
       
-      this.set("asCSV", rows);
+      self.set("asCSV", rows);
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     
     
@@ -180,8 +183,12 @@ define([
 
       return CSV;
     },
-    importXML : function(xml) {
-      alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet.");
+    importXML : function(text, selftext, self, callback) {
+      alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     /**
      * This function accepts text which uses \t tabs between columns. If
@@ -193,29 +200,98 @@ define([
      * 
      * @param tabbed
      */
-    importTabbed : function(text) {
+    importTabbed : function(text, self, callback) {
       var rows = text.split("\n");
       if(rows.length < 3){
         rows = text.split("\r");
-        this.set("status", this.get("status","Detected a \n line ending."));
+        self.set("status", self.get("status","Detected a \n line ending."));
       }
       for(l in rows){
         rows[l] = rows[l].split("\t");
       }
       
-      this.set("asCSV", rows);
+      self.set("asCSV", rows);
+      if(typeof callback == "function"){
+        callback();
+      }
     },
-    importToolbox : function(text){
-      alert("The app thinks this might be a ToolBox file, but we haven't implemented this kind of import yet.");
+    importToolbox : function(text, self, callback){
+      var lines = text.split("\n");
+      var macLineEndings = false;
+      if(lines.length < 3){
+        lines = text.split("\r");
+        macLineEndings = true;
+        self.set("status", self.get("status","Detected a \r line ending."));
+      }
+      
+      var matrix = [];
+      var currentDatum = -1;
+      var header = [];
+      var columnhead = "";
+      for(l in lines){
+        //Its a new row
+        if( lines[l].indexOf("\\ge ") == 0 ){
+          currentDatum += 1;
+          matrix[currentDatum] = {};
+          matrix[currentDatum]["ge"] = lines[l].replace("\\ge ","");;
+          header.push("ge");
+        }else{
+          if(currentDatum > 0){
+            //If the line starts with \ its a column 
+            if(lines[l].match(/^\\/) ){
+              var pieces = lines[l].split(/ +/);
+              columnhead = pieces[0].replace('\\',"");
+              matrix[currentDatum][columnhead] = lines[l].replace(pieces[0],"");
+              header.push(columnhead);
+            }else{
+              //add it to the current column head in the current datum, its just another line.
+              if(lines[1].trim() != ""){
+                matrix[currentDatum][columnhead] += lines[l];
+              }
+            }
+          }
+        }
+      }
+      //only keep the unique headers
+      header = _.unique(header);
+      var rows = [];
+      for(var d in matrix){
+        var cells = [];
+        //loop through all the column headings, find the data for that header and put it into a row of cells
+        for(var h in header){
+          var cell = matrix[d][header[h]];
+          if(cell){
+            cells.push(cell);
+          }else{
+            //fill the cell with a blank if that datum didn't have a header
+            cells.push("");
+          }
+        }
+        rows.push(cells);
+      }
+      if(rows == []){
+        rows.push("");
+      }
+      self.set("extractedHeader",header);
+      self.set("asCSV", rows);
+      if(typeof callback == "function"){
+        callback();
+      }
     },
-    importTextGrid : function(text){
-      alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet.");
+    importTextGrid : function(text, self, callback){
+      alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      if(typeof callback == "function"){
+        callback();
+      }
     },
-    importLatex : function(text){
-      alert("The app thinks this might be a LaTeX file, but we haven't implemented this kind of import yet.");
+    importLatex : function(text, self, callback){
+      alert("The app thinks this might be a LaTeX file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     /**
-     * This function accepts text using double spaces to indicate
+     * This function accepts text using double (or triple etc) spaces to indicate
      * separate datum. Each line in the block is treated as a column in
      * the table.
      * 
@@ -225,13 +301,13 @@ define([
      * 
      * @param text
      */
-    importText : function(text) {
-      var rows = text.split("\n\n");
+    importText : function(text, self) {
+      var rows = text.split(/\n\n+/);
       var macLineEndings = false;
       if(rows.length < 3){
         rows = text.split("\r\r");
         macLineEndings = true;
-        this.set("status", this.get("status","Detected a MAC line ending."));
+        self.set("status", self.get("status","Detected a MAC line ending."));
       }
       for(l in rows){
         if(macLineEndings){
@@ -240,7 +316,10 @@ define([
           rows[l] = rows[l].replace(/  +/g," ").split("\n");
         }
       }
-      this.set("asCSV", rows);
+      self.set("asCSV", rows);
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     readFiles : function(){
       var filedetails = [];
@@ -334,7 +413,7 @@ define([
         }
       }
       var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });
-      mostLikelyImport.importFunction.apply(self.get("rawText"), callback);
+      mostLikelyImport.importFunction(self.get("rawText"), self, callback);
     },
     readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);
