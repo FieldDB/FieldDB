@@ -340,61 +340,149 @@ define( [
       $(".approve-save").removeAttr("disabled");
       $(".approve-save").removeClass("disabled");
     },
+    savedcount : 0,
+    savedindex : [],
+    savefailedcount : 0,
+    savefailedindex : [],
+    nextsavedatum : 0,
+    
     /**
      * permanently saves the datalist to the corpus, and all of its datums too.
      */
     saveDataList : function(){
       var self = this;
       this.createNewSession( function(){
-        //after we have a session
+        // after we have a session
         $(".approve-save").addClass("disabled");
-        //add the datums to the progress bar, so that we can augment for each that is saved.
+        // add the datums to the progress bar, so that we can augment for each
+        // that is saved.
         $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
-        
+
         // Create a new permanent data list in the corpus
         appView.dataListEditLeftSideView.newDataList();
 
-      //import data in reverse order from normal so that the user will get their data in the order they are used to. 
-//        for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
-        
-        for (d in self.model.get("datumArray")) {
-          var thatdatum = self.model.get("datumArray")[d];
+        // Bring the title and description from the temporary data list, to the
+        // new one.
+        app.get("corpus").get("dataLists").models[0].set({
+          title: appView.importView.model.dataListView.model.get("title"),
+          description: appView.importView.model.dataListView.model.get("description")
+        });
+
+        // import data in reverse order from normal so that the user will get
+        // their data in the order they are used to.
+//      for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
+
+        window.hub.unsubscribe("savedDatumToPouch", null, this);
+        window.hub.unsubscribe("saveDatumFailedToPouch", null, this);
+        window.hub.subscribe("savedDatumToPouch",function(arg){
+          window.appView.importView.savedindex[nextsavedatum] = true;
+          window.appView.importView.savedcount++;
+          window.appView.importView.nextsavedatum++;
+          if( window.appView.importView.nextsavedatum >= window.appView.importView.model.get("datumArray").length - 1){
+            window.appView.toastUser( window.appView.importView.nextsavedatum + "of your "+window.appView.importView.model.get("datumArray").length +" datum have been imported. "+window.appView.importView.savefailedcount+" might not have worked. ","alert-success","Import successful:");
+
+            // Add the "imported" activity to the ActivityFeed
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : "imported",
+                  directobject : window.appView.importView.savedcount + " data entries",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  context : "via Offline App",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
+
+            window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
+            window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
+          }
+
+          /*
+           * Save another datum when the previous succeeds
+           */
+          d = window.appView.importView.nextsavedatum;
+          var thatdatum = window.appView.importView.model.get("datumArray")[d];
           thatdatum.set({
-            "session" : self.model.get("session"),
-            "corpusname" : self.model.get("corpusname"),
+            "session" : window.appView.importView.model.get("session"),
+            "corpusname" : window.appView.importView.model.get("corpusname"),
             "dateEntered" : JSON.stringify(new Date()),
             "dateModified" : JSON.stringify(new Date())
           });
-          
           // Save the datum
           Utils.debug("Saving the Datum");
           thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
             thatdatum.save(null, {
               success : function(model, response) {
                 Utils.debug('Datum save success in import');
+                hub.publish("savedDatumToPouch"," datum "+model.id);
+
                 // Update progress bar
                 $(".import-progress").val($(".import-progress").val()+1);
 
-                // Add Datum to the new datalist and render it this should work because the datum is saved in the pouch and can be fetched
+                // Add Datum to the new datalist and render it this should work
+                // because the datum is saved in the pouch and can be fetched
                 appView.dataListEditLeftSideView.addOneDatumId(model.id);
-                
+
                 // Add Datum to the default data list
                 var defaultIndex = app.get("corpus").get("dataLists").length - 1;
                 app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
               },
               error : function(e) {
                 alert('Datum save failure in import' + e);
+                hub.publish("saveDatumFailedToPouch","datum"+ JSON.stringify(e));
               }
             });
           });
-        }
-        //Bring the title and description from the temporary data list, to the new one. 
-        app.get("corpus").get("dataLists").models[0].set({
-          title: appView.importView.model.dataListView.model.get("title"),
-          description: appView.importView.model.dataListView.model.get("description")
-        });
-        
-        // Save the new DataList since we created it above, as the new leftside data list, it will be in position 0
+        },this);
+
+        window.hub.subscribe("saveDatumFailedToPouch",function(arg){
+          Utils.debug("Saved failed "+ arg+ " to pouch.");
+          window.appView.importView.savefailedindex[nextsavedatum] = window.appView.importView.model.get("datumArray")[nextsavedatum];
+          window.appView.importView.savefailedcount++;
+          window.appView.importView.nextsavedatum++;
+
+          window.appView.toastUser("Save failed "+arg,"alert-danger","Failure:");
+
+          /*
+           * Save another datum when the previous fails, duplicate of success
+           * above
+           */
+          d = window.appView.importView.nextsavedatum;
+          var thatdatum = window.appView.importView.model.get("datumArray")[d];
+          thatdatum.set({
+            "session" : window.appView.importView.model.get("session"),
+            "corpusname" : window.appView.importView.model.get("corpusname"),
+            "dateEntered" : JSON.stringify(new Date()),
+            "dateModified" : JSON.stringify(new Date())
+          });
+          // Save the datum
+          Utils.debug("Saving the Datum");
+          thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
+            thatdatum.save(null, {
+              success : function(model, response) {
+                Utils.debug('Datum save success in import');
+                hub.publish("savedDatumToPouch"," datum "+model.id);
+
+                // Update progress bar
+                $(".import-progress").val($(".import-progress").val()+1);
+
+                // Add Datum to the new datalist and render it this should work
+                // because the datum is saved in the pouch and can be fetched
+                appView.dataListEditLeftSideView.addOneDatumId(model.id);
+
+                // Add Datum to the default data list
+                var defaultIndex = app.get("corpus").get("dataLists").length - 1;
+                app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+              },
+              error : function(e) {
+                alert('Datum save failure in import' + e);
+                hub.publish("saveDatumFailedToPouch","datum"+ JSON.stringify(e));
+              }
+            });
+
+          });
+        },this);
+
+        // Save the new DataList since we created it above, as the new leftside
+        // data list, it will be in position 0
         app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("corpusname"), function(){
           app.get("corpus").get("dataLists").models[0].save(null, {
             success : function(model, response) {
@@ -403,22 +491,14 @@ define( [
 
               // Update the progress bar
               $(".import-progress").val($(".import-progress").val()+1);
-              
+
               // Save the datalist ID in the userPrivate
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-              
+
               // Mark the datalist as no longer temporary
               self.model.dataListView.temporaryDataList = false;
-              
-              // Add the "imported" activity to the ActivityFeed
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                  new Activity({
-                    verb : "imported",
-                    directobject : self.model.get("datumArray").length + " data entries",
-                    indirectobject : "in "+window.app.get("corpus").get("title"),
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
-                  }));
+
+
               window.app.get("authentication").get("userPrivate").get("activities").unshift(
                   new Activity({
                     verb : "added",
@@ -427,7 +507,7 @@ define( [
                     context : "via Offline App",
                     user: window.app.get("authentication").get("userPublic")
                   }));
-              
+
               // Save the session
               self.model.get("session").changeCorpus(self.model.get("corpusname"), function(){
                 self.model.get("session").save(null, {
@@ -437,15 +517,15 @@ define( [
 
                     // Update progress bar
                     $(".import-progress").val($(".import-progress").val()+1);
-                    
+
                     // Add the new session to the corpus
                     window.app.get("corpus").get("sessions").unshift(model);
-                    
+
                     // Add the new session to the userPrivate
                     if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
                       window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
                     }
-                    
+
                     // Add the "added session" activity to the ActivityFeed
                     window.app.get("authentication").get("userPrivate").get("activities").unshift(
                         new Activity({
@@ -458,19 +538,36 @@ define( [
 
                     // Render the first page of the new data list
                     window.appView.renderEditableDataListViews();
-                    window.appView.dataListEditLeftSideView.renderFirstPage();//TODO is there a reason why we cant do this automatically in the data lists themselves.
+                    window.appView.dataListEditLeftSideView.renderFirstPage();// TODO
+                    // is
+                    // there
+                    // a
+                    // reason
+                    // why
+                    // we
+                    // cant
+                    // do
+                    // this
+                    // automatically
+                    // in
+                    // the
+                    // data
+                    // lists
+                    // themselves.
                     window.appView.renderReadonlyDataListViews();
-//                    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data lists dont have htis function, should we put it in...
-                    //Update the search fields with the new datum fields from import
+//                  window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
+//                  lists dont have htis function, should we put it in...
+                    // Update the search fields with the new datum fields from
+                    // import
                     window.appView.searchEmbeddedView.render();
                     // Go back to the dashboard after all succeeds
                     $(".import-progress").val( $(".import-progress").attr("max") );
                     $(".approve-save").html("Finished");
-                    
-                    //save the corpus
+
+                    // save the corpus
                     window.appView.corpusEditLeftSideView.updatePouch();
-                    
-                    //save the user
+
+                    // save the user
                     window.app.get("authentication").saveAndEncryptUserToLocalStorage();
                     window.location.replace("#");
 
