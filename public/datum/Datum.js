@@ -409,7 +409,7 @@ define([
         "dateModified" : JSON.stringify(new Date())
       });
       
-      var oldrev = this._rev;
+      var oldrev = this.get("_rev");
       this.changeCorpus(null,function(){
         self.save(null, {
           success : function(model, response) {

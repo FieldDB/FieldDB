@@ -343,7 +343,7 @@ define([
                       window.app.loadBackboneObjectsById(couchConnection, appids);
                     }                    
                   });
-                },5000);
+                },3000);
               });
             });
           });
