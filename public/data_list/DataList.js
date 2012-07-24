@@ -126,6 +126,7 @@ define([
             //make sure the dataList is in this corpus, if it is the same corpusname
             if(window.app.get("corpus").get("dataLists").indexOf(model.id) == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
               window.app.get("corpus").get("dataLists").unshift(model.id);
+              window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
