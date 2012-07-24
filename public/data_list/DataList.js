@@ -1,10 +1,12 @@
 define([ 
     "backbone", 
+    "activity/Activity",
     "datum/Datum",
     "comment/Comment",
     "comment/Comments"
 ], function(
     Backbone, 
+    Activity,
     Datum,
     Comment,
     Comments
@@ -124,8 +126,8 @@ define([
                 }));
             
             //make sure the dataList is in this corpus, if it is the same corpusname
-            if(window.app.get("corpus").get("dataLists").indexOf(model.id) == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
-              window.app.get("corpus").get("dataLists").unshift(model.id);
+            if(window.app.get("corpus").get("dataLists").getByCid(model.cid) != undefined && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+              window.app.get("corpus").get("dataLists").unshift(model);
               window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }
             //make sure the dataList is in the history of the user
@@ -170,15 +172,15 @@ define([
         if (window.app.get("currentDataList").id != this.id ) {
           window.app.set("currentDataList", this);
         }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+        window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
         if (typeof successcallback == "function") {
           successcallback();
         }else{
           try{
             window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
-              window.appView.renderEditableDataListViews();
-              window.appView.renderReadonlyDataListViews();
+//              window.appView.renderEditableDataListViews();
+//              window.appView.renderReadonlyDataListViews();
             });
           }catch(e){
             alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current dataList.");

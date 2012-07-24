@@ -49,12 +49,12 @@ define( [
         });
       }
       
-      this.changeViewsOfInternalModels();
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
 
       // Remove options
       delete this.model.collection;
       
+      this.changeViewsOfInternalModels();
+      this.model.bind('change:title', this.changeViewsOfInternalModels, this);
     },
 
     /**
@@ -117,10 +117,14 @@ define( [
     
     render : function() {
       if (this.format == "link") {
+        Utils.debug("DATALIST READ LINK render: " + this.el);
+
         // Display the Data List
         $(this.el).html(this.templateLink(this.model.toJSON()));
       
       } else if (this.format == "leftSide") {
+        Utils.debug("DATALIST READ LEFTSIDE render: " + this.el);
+
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
         
@@ -132,6 +136,8 @@ define( [
         this.renderUpdatedPagination();
       
       } else if (this.format == "fullscreen") {
+        Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
+
         // Display the Data List
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
@@ -148,6 +154,8 @@ define( [
         this.renderUpdatedPagination();
       
       } else if(this.format == "middle") {
+        Utils.debug("DATALIST READ CENTER render: " + this.el);
+
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.templateEmbedded(this.model.toJSON()));
       
@@ -163,6 +171,8 @@ define( [
         this.renderUpdatedPagination();
         
       } else if (this.format == "minimized") {
+        Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
+
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }

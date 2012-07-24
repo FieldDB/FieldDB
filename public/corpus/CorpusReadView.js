@@ -59,10 +59,9 @@ define([
       Utils.debug("CORPUS init: " + this.el);
   
       this.changeViewsOfInternalModels();
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
+      this.model.bind('change:title', this.changeViewsOfInternalModels, this);
 
     },
-    
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
@@ -117,14 +116,20 @@ define([
         return this;
       }
       if (this.format == "leftSide") {
+        Utils.debug("CORPUS LEFTSIDE render: " + this.el);
+
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(this.model.toJSON()));
       } else if (this.format == "link") {
+        Utils.debug("CORPUS LINK render: " + this.el);
+
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(this.model.toJSON()));
         
       } else if (this.format == "fullscreen"){
+        Utils.debug("CORPUS FULLSCREEN render: " + this.el);
+
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
@@ -164,12 +169,11 @@ define([
         }
 
       } else if (this.format == "centreWell"){
+        Utils.debug("CORPUS READ CENTER render: " + this.el);
+
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(this.model.toJSON()));
         
-        // Display the UpdatingCollectionView
-        //        this.dataListsView.render();
-
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();

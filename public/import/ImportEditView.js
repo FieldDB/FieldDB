@@ -545,9 +545,6 @@ define( [
                         }));
 
                    
-                    // Update the search fields with the new datum fields from import
-                    window.appView.searchEmbeddedView.render();
-
                     // save the corpus
                     window.appView.corpusEditLeftSideView.updatePouch();
 

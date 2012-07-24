@@ -38,11 +38,11 @@ define([
       
       this.changeViewsOfInternalModels();
       
-      var self = this;
-      this.model.bind('change:sessionFields', function(){
-        self.changeViewsOfInternalModels();
-        self.render();
-        }, this);
+//      var self = this;
+//      this.model.bind('change:sessionFields', function(){
+//        self.changeViewsOfInternalModels();
+//        self.render();
+//        }, this);
 //      this.model.bind('change', this.showEditable, this);
     },
 
