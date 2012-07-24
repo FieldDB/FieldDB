@@ -350,6 +350,8 @@ define([
         // Display the AppView
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        
+        //localization
         $("#Need_save").append(chrome.i18n.getMessage("Need_save"));
         $("#60_unsaved").prepend(chrome.i18n.getMessage("60_unsaved"));
         $("#Recent_Changes").prepend(chrome.i18n.getMessage("Recent_Changes"));
@@ -363,31 +365,6 @@ define([
         $("#Password2").append(chrome.i18n.getMessage("Password"));
         $("#Yep_its_me").append(chrome.i18n.getMessage("Yep_its_me"));
 
-
-
-
-
-
-
-
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         // Display the Corpus Views
         this.corpusEditLeftSideView.render();

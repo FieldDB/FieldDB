@@ -60,6 +60,7 @@ define([
       if (this.format == "rightSide") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.template(this.model.toJSON()));
+        //localization
         $("#Activity_Feed1").append(chrome.i18n.getMessage("Activity_Feed"));
 
         this.activitiesView.el = this.$('.activities-updating-collection');
@@ -67,6 +68,7 @@ define([
       } else if (this.format == "minimized") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.minimizedTemplate(this.model.toJSON()));
+        //localization
         $("#Activity_Feed").append(chrome.i18n.getMessage("Activity_Feed"));
 
       }
