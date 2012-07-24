@@ -291,29 +291,23 @@ define([
     newSession : function() {
       $("#new-session-modal").modal("show");
       //Save the current session just in case
-      window.app.get("currentSession").save();
+      window.app.get("currentSession").saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      window.appView.sessionModalView.model = window.app.get("currentSession").clone();
-      //Give it a null id so that pouch will save it as a new model.
-      //WARNING this might not be a good idea, if you find strange side effects in sessions in the future, it might be due to this way of creating (duplicating) a session.
+      window.appView.sessionModalView.model = new Session({
+        corpusname : model.get("corpusname"),
+        sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+      });
       window.appView.sessionModalView.model.comments = new Comments();
-      window.appView.sessionModalView.model.id = undefined;
-      window.appView.sessionModalView.model.rev = undefined;
-      window.appView.sessionModalView.model.set("_id", undefined);
-      window.appView.sessionModalView.model.set("_rev", undefined);
       window.appView.sessionModalView.render();
     },
     
     newCorpus : function(){
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
-      window.app.get("corpus").save();
+      window.app.get("corpus").saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      window.appView.corpusNewModalView.model = window.app.get("corpus").clone(); //MUST be a new model, other wise it wont save in a new pouch.
+      window.appView.corpusNewModalView.model = new Corpus(window.app.get("corpus").toJSON()); //MUST be a new model, other wise it wont save in a new pouch.
       //Give it a null id so that pouch will save it as a new model.
-      window.appView.corpusNewModalView.model.id = undefined;
-      window.appView.corpusNewModalView.model.rev = undefined;
-      window.appView.corpusNewModalView.model.set("_id", undefined);
       //WARNING this might not be a good idea, if you find strange side effects in corpora in the future, it might be due to this way of creating (duplicating) a corpus. However with a corpus it is a good idea to duplicate the permissions and settings so that the user won't have to redo them.
       window.appView.corpusNewModalView.model.set("title", window.app.get("corpus").get("title")+ " copy");
       window.appView.corpusNewModalView.model.set("titleAsUrl", window.app.get("corpus").get("titleAsUrl")+"Copy");
@@ -322,6 +316,7 @@ define([
       window.appView.corpusNewModalView.model.set("description", "Copy of: "+window.app.get("corpus").get("description"));
       window.appView.corpusNewModalView.model.set("dataLists", new DataLists());
       window.appView.corpusNewModalView.model.set("sessions", new Sessions());
+      window.appView.corpusNewModalView.model.set("comments", new Comments());
       window.appView.corpusNewModalView.render();
     },
       
