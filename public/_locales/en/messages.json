@@ -109,7 +109,101 @@
    },
     "Terminal_Power_Users" : {
       "message" : "Terminal - Power Users"
+   },
+    "new_comment" : {
+      "message" : "new comment:"
+   },
+    "commented" : {
+      "message" : "commented:"
+   },
+   
+    "New_Datum" : {
+      "message" : "New Datum"
+   },
+    "New_menu" : {
+      "message" : "New"
+   },
+     "New_Data_List" : {
+      "message" : "New Data List"
+   },
+    "New_Session" : {
+      "message" : "New Session"
+   },
+    "New_Corpus" : {
+      "message" : "New Corpus"
+   },
+    "Data_menu" : {
+      "message" : "Data"
+   },
+    "Import_Data" : {
+      "message" : "Import Data"
+   },
+    "Export_Data" : {
+      "message" : "Export Data"
+   },
+    "Save" : {
+      "message" : "Save"
+   },
+    "Title" : {
+      "message" : "Title:"
+   },
+    "Description" : {
+      "message" : "Description:"
+   },
+    "Sessions_associated" : {
+      "message" : "Sessions associated with this corpus"
+   },
+    "Datalists_associated" : {
+      "message" : "Datalists associated with this corpus"
+   },
+    "Permissions_associated" : {
+      "message" : "Permissions associated with this corpus"
+   },
+   "Datum_field_settings" : {
+      "message" : "Datum Field Settings"
+   },
+    "Encrypt_if_confidential" : {
+      "message" : "Encrypt if confidential:"
+   },
+    "Help_Text" : {
+      "message" : "Help Text:"
+   },
+    "Add" : {
+      "message" : "Add"
+   },
+    "Datum_state_settings" : {
+      "message" : "Datum State Settings"
+   },
+    "Green" : {
+      "message" : "Green"
+   },
+    "Orange" : {
+      "message" : "Orange"
+   },
+    "Red" : {
+      "message" : "Red"
+   },
+    "Blue" : {
+      "message" : "Blue"
+   },
+     "Teal" : {
+      "message" : "Teal"
+   },
+    "Black" : {
+      "message" : "Black"
+   },
+    "Default" : {
+      "message" : "Default"
+   },
+    "Comments" : {
+      "message" : "Comments"
    }
+   
+   
+   
+   
+
+   
    
    
    

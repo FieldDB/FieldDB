@@ -132,9 +132,63 @@ define([
       if (this.format == "centreWell") {
         Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
         if (this.model != undefined) {
-          // Display the CorpusReadFullScreenView
+          // Display the CorpusEditEmbeddedView
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
+          
+          //localization
+          $(".New_menu").append(chrome.i18n.getMessage("New_menu"));
+          $(".New_Datum").append(chrome.i18n.getMessage("New_Datum"));
+          $(".New_Data_List").append(chrome.i18n.getMessage("New_Data_List"));
+          $(".New_Session").append(chrome.i18n.getMessage("New_Session"));
+          $(".New_Corpus").append(chrome.i18n.getMessage("New_Corpus"));
+          $(".Data_menu").append(chrome.i18n.getMessage("Data_menu"));
+          $(".Import_Data").append(chrome.i18n.getMessage("Import_Data"));
+          $(".Export_Data").append(chrome.i18n.getMessage("Export_Data"));
+          $(".Save").append(chrome.i18n.getMessage("Save"));
+          $(".Title").append(chrome.i18n.getMessage("Title"));
+          $(".Description").append(chrome.i18n.getMessage("Description"));
+          $(".Sessions_associated").append(chrome.i18n.getMessage("Sessions_associated"));
+          $(".Datalists_associated").append(chrome.i18n.getMessage("Datalists_associated"));
+          $(".Permissions_associated").append(chrome.i18n.getMessage("Permissions_associated"));
+          $(".Datum_field_settings").append(chrome.i18n.getMessage("Datum_field_settings"));
+          $(".Encrypt_if_confidential").prepend(chrome.i18n.getMessage("Encrypt_if_confidential"));
+          $(".Help_Text").append(chrome.i18n.getMessage("Help_Text"));
+          $(".Add").append(chrome.i18n.getMessage("Add"));
+          $(".Datum_state_settings").append(chrome.i18n.getMessage("Datum_state_settings"));
+          $(".Green").append(chrome.i18n.getMessage("Green"));
+          $(".Orange").append(chrome.i18n.getMessage("Orange"));
+          $(".Red").append(chrome.i18n.getMessage("Red"));
+          $(".Blue").append(chrome.i18n.getMessage("Blue"));
+          $(".Teal").append(chrome.i18n.getMessage("Teal"));
+          $(".Black").append(chrome.i18n.getMessage("Black"));
+          $(".Default").append(chrome.i18n.getMessage("Default"));
+          $(".Comments").append(chrome.i18n.getMessage("Comments"));
+          $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
