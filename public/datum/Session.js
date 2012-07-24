@@ -213,7 +213,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentSession : function(successcallback, failurecallback){
-      if( window.app.get("corpusname") != this.get("corpusname") ){
+      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
         if (typeof failurecallback == "function") {
           failurecallback();
         }else{

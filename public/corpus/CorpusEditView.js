@@ -10,6 +10,7 @@ define([
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumField",
+    "datum/DatumFields",
     "datum/DatumFieldEditView",
     "datum/DatumState",
     "datum/DatumStates",
@@ -34,6 +35,7 @@ define([
     DataLists,
     DataListReadView,
     DatumField,
+    DatumFields,
     DatumFieldEditView,
     DatumState,
     DatumStates,
@@ -294,8 +296,8 @@ define([
       window.app.get("currentSession").saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
       window.appView.sessionModalView.model = new Session({
-        corpusname : model.get("corpusname"),
-        sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+        corpusname : window.app.get("corpus").get("corpusname"),
+        sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON())
       });
       window.appView.sessionModalView.model.comments = new Comments();
       window.appView.sessionModalView.render();

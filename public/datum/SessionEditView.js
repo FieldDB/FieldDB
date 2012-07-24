@@ -55,7 +55,7 @@ define([
      * Events that the SessionEditView is listening to and their handlers.
      */
     events : {
-      "click .btn-save-session" : "updatePouch",
+      "click .btn-save-session" : "saveFieldsToPouch",
       
       //Add button inserts new Comment
       "click .add-comment-session-edit" : 'insertNewComment',
@@ -199,16 +199,30 @@ define([
      * creates a new session if the app's session id doesnt match this session's id after saving.
      */
     updatePouch : function() {
+      var self = this;
       this.model.saveAndInterConnectInApp(function(){
         /* If it is in the modal, then it is a new session */
-        if(this.format == "modal"){
-          this.model.setAsCurrentSession(function(){
+        if(self.format == "modal"){
+          self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
           });
         }
       });
     },
-    
+    saveFieldsToPouch : function() {
+      this.updateConsultant();
+      this.updateElicitedDate(); 
+      this.updateGoal();
+      var self = this;
+      this.model.saveAndInterConnectInApp(function(){
+        /* If it is in the modal, then it is a new session */
+        if(self.format == "modal"){
+          self.model.setAsCurrentSession(function(){
+            $("#new-session-modal").modal("hide");
+          });
+        }
+      });
+    },
     //functions associated with icons
     resizeSmall : function() {
       window.app.router.showEmbeddedSession();
