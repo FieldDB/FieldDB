@@ -67,31 +67,31 @@ define([
           if (typeof tocallback == "function") {
             tocallback();
           }
-        });
-        // We can leave the to and from replication async, and make two
-        // callbacks.
-        db.replicate.from(couchurl, {
-          continuous : false
-        }, function(err, resp) {
-          Utils.debug("Replicate from " + couchurl);
-          Utils.debug(resp);
-          Utils.debug(err);
-          if (err == null || err == undefined) {
-            
-          }
-          if (typeof fromcallback == "function") {
-            fromcallback();
-          }
-
           window.app.get("authentication").get("userPrivate").get(
           "activities").unshift(new Activity({
             verb : "synced",
             directobject : "their activity feed",
-            indirectobject : "with their team server",
+            indirectobject : "to their team server",
             context : "via Offline App",
             user : window.app.get("authentication").get("userPublic")
           }));
         });
+        // We can leave the to and from replication async, and make two
+        // callbacks.
+//        db.replicate.from(couchurl, {
+//          continuous : false
+//        }, function(err, resp) {
+//          Utils.debug("Replicate from " + couchurl);
+//          Utils.debug(resp);
+//          Utils.debug(err);
+//          if (err == null || err == undefined) {
+//            
+//          }
+//          if (typeof fromcallback == "function") {
+//            fromcallback();
+//          }
+//
+//        });
       });
     }
   });
