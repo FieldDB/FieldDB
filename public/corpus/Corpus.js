@@ -18,6 +18,7 @@ define([
     "datum/Sessions",
     "user/Team",
     "user/User",
+    "user/UserMask",
     "glosser/Glosser",
     "libs/Utils"
 ], function(
@@ -39,7 +40,8 @@ define([
     Permissions,
     Sessions,
     Team,
-    User
+    User,
+    UserMask
 ) {
   var Corpus = Backbone.Model.extend(
   /** @lends Corpus.prototype */
@@ -209,7 +211,12 @@ define([
       }
       
       if (!this.get("team")){
-        this.set("team", window.app.get("authentication").get("userPublic"));
+        //If app is completed loaded use the user, otherwise put a blank user
+        if(window.appView){
+          this.set("team", window.app.get("authentication").get("userPublic"));
+        }else{
+          this.set("team", new UserMask());
+        }
       }
     },
     
