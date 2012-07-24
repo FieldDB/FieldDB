@@ -445,7 +445,7 @@ define([
      */
     setAsCurrentCorpus : function(successcallback, failurecallback){
       //TODO think about how to switch corpuses... maybe take the most recent session and data list and set those at the same time, it should be okay.
-//      if( window.app.get("corpusname") != this.get("corpusname") ){
+//      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
 //        if (typeof failurecallback == "function") {
 //          failurecallback();
 //        }else{
