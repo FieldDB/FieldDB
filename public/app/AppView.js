@@ -350,6 +350,44 @@ define([
         // Display the AppView
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
+        $("#Need_save").append(chrome.i18n.getMessage("Need_save"));
+        $("#60_unsaved").prepend(chrome.i18n.getMessage("60_unsaved"));
+        $("#Recent_Changes").prepend(chrome.i18n.getMessage("Recent_Changes"));
+        $("#Need_sync").append(chrome.i18n.getMessage("Need_sync"));
+        $("#60_unsaved1").prepend(chrome.i18n.getMessage("60_unsaved"));
+        $("#Differences_with_the_central_server").append(chrome.i18n.getMessage("Differences_with_the_central_server"));
+        $("#Warning1").append(chrome.i18n.getMessage("Warning"));
+        $("#This_is_a_beta_version1").append(chrome.i18n.getMessage("This_is_a_beta_version"));
+        $("#to_beta_testers").append(chrome.i18n.getMessage("to_beta_testers"));
+        $("#We_need_to_make_sure_its_you").append(chrome.i18n.getMessage("We_need_to_make_sure_its_you"));
+        $("#Password2").append(chrome.i18n.getMessage("Password"));
+        $("#Yep_its_me").append(chrome.i18n.getMessage("Yep_its_me"));
+
+
+
+
+
+
+
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         // Display the Corpus Views
         this.corpusEditLeftSideView.render();

@@ -61,6 +61,33 @@
    },
     "Activity_Feed" : {
       "message" : "Activity Feed"
+   },
+   "Need_save" : {
+      "message" : " Need save:"
+   },
+    "60_unsaved" : {
+      "message" : "<strong>60% unsaved.</strong>"
+   },
+    "Recent_Changes" : {
+      "message" : "Recent Changes:"
+   }, 
+    "Need_sync" : {
+      "message" : "Need sync:"
+   },
+    "Differences_with_the_central_server" : {
+      "message" : "Differences with the central server:"
+   },
+   "to_beta_testers" : {
+      "message" : "These messages are here to communicate to beta testers what the app is
+            doing, we will gradually reduce the number of messages as
+            the app becomes more stable.
+          <p>You can close these messages by clicking on their x.</p>"
+   },
+   "We_need_to_make_sure_its_you" : {
+      "message" : "We need to make sure it's you..."
+   },
+    "Yep_its_me" : {
+      "message" : "Yep, it's me"
    }
    
    

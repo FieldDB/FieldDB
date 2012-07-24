@@ -10,14 +10,15 @@
 					  <div class="btn-group">
 						  <button class="btn dropdown-toggle btn-inverse"
 		            data-toggle="dropdown">
-		            Need save:
+		        <span id = "Need_save"></span>   
 		            <progress class="unsaved-changes" max="100" value="30">
-		              <strong>60% unsaved.</strong>
+		            <span id = "60_unsaved"></span>
+		              
 		            </progress>
 		            <span class="caret"></span>
 		          </button>
 		          <ul class="dropdown-menu unsaved-changes-status" id="unsaved-changes-status">
-		            <li class="not-a">Recent Changes:</li>
+		            <li class="not-a"><span id = "Recent_Changes"></span></li>
 		          </ul>
 	          </div>
 				  </li>
@@ -27,14 +28,14 @@
 				    <div class="btn-group">
 					  <button class="btn dropdown-toggle btn-inverse"
 	            data-toggle="dropdown">
-	            Need sync: 
+	             <span id = "Need_sync"></span>  
 	            <progress class="unsynced-changes" max="100" value="80">
-	              <strong>60% unsaved.</strong>
+	              <span id = "60_unsaved1"></span>
 	            </progress>
 	            <span class="caret"></span>
 	          </button>
 	          <ul class="dropdown-menu unsynced-changes-status" id="unsynced-changes-status">
-	            <li class="not-a">Differences with the central server:</li>
+	            <li class="not-a"><span id = "Differences_with_the_central_server"></span></li>
 	          </ul>
 	          </div>
 				  </li>
@@ -74,73 +75,42 @@
 			<div id="toast-user-area">
 				<div class="alert alert-block">
 			    <a class="close" data-dismiss="alert" href="#">×</a>
-			    <strong class="alert-heading">Warning!</strong> 
-					This is an beta version of iField, it might smile and make
-						bubbles but it also burps, vomits and sleeps at inopportune
-						times... These messages are here to communicate what the app is
-						doing to beta testers, we will gradually reduce the number of messages as
-						the app becomes more stable.
-					<p>You can close these messages by clicking on their x.</p>
+			    <strong class="alert-heading"><span id="Warning1"></span></strong> 
+					<span id = "This_is_a_beta_version1"></span>
+					<span id = "to_beta_testers"></span>
 				</div>
 			</div>
   
-			<div id="datums-embedded" class="middle well">
-			  <div>Datums</div>
-			</div>
+			<div id="datums-embedded" class="middle well"></div>
 			
-			<div id="data-list-embedded" class="middle well">
-        <div>DataList</div>
-      </div>
+			<div id="data-list-embedded" class="middle well"></div>
 			
 
-			<div id="session-embedded" class="middle well">
-        <div>Session</div>
-      </div>
+			<div id="session-embedded" class="middle well"></div>
 
-      <div id="corpus-embedded" class="middle well">
-        <div>Corpus</div>
-      </div>
+      <div id="corpus-embedded" class="middle well"></div>
 
-      <div id="search-embedded" class="middle well">
-        <div>Search</div>
-      </div>
+      <div id="search-embedded" class="middle well"></div>
 
     </div>
     <!--/span-->
     <!-- right hand side -->
     <div class="span3">
-      <div id="insert-unicode"  class="well">Insert Unicode</div>
-            <div id="activity-feed"  class="well">Activity Feed</div>
-      
-    </div>
-  
-    
+      <div id="insert-unicode"  class="well"></div>
+            <div id="activity-feed"  class="well"></div>
+    </div>  
     <!--/span-->
   </div>
   <!--/row-->
 
 	<!-- FullScreen Views -->
-	<div id="user-fullscreen" class="well">
-		<div>User</div>
-	</div>
-	<div id="corpus-fullscreen" class="well">
-		<div>Corpus</div>
-	</div>
-	<div id="session-fullscreen" class="well">
-	  <div>Session</div>
-	</div>
-	<div id="search-fullscreen" class="well">
-		<div>Search</div>
-	</div>
-	<div id="data-list-fullscreen" class="well">
-		<div>Data List</div>
-	</div>
-	<div id="datum-container-fullscreen" class="well">
-	  <div>Datum Container</div>
-	</div>
-	<div id="import-fullscreen" class="">
-	 <h1>Import</h1>
-  </div>
+	<div id="user-fullscreen" class="well">	</div>
+	<div id="corpus-fullscreen" class="well">	</div>
+	<div id="session-fullscreen" class="well">	</div>
+	<div id="search-fullscreen" class="well">	</div>
+	<div id="data-list-fullscreen" class="well">	</div>
+	<div id="datum-container-fullscreen" class="well">	</div>
+	<div id="import-fullscreen" class="">  </div>
 </div>
 <!--/row-->
 
@@ -156,13 +126,13 @@
 <div id="new-corpus-modal" data-backdrop="static" class="modal hide"></div>
 <div id="quick-authenticate-modal" data-backdrop="static" class="modal hide">
 <div class="modal-header">
-  <h4>We need to make sure it's you...</h4>
+  <h4 id = "We_need_to_make_sure_its_you"></h4>
 </div>
 <div class="modal-body">
-<label>Password:</label>
+<label id = "Password2"></label>
     <input type="password" id="quick-authenticate-password"/>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-success" id="quick-authentication-okay-btn">Yep, it's me</button>
+  <button class="btn btn-success" id="quick-authentication-okay-btn"><span id = "Yep_its_me"></span></button>
 </div>
 </div>
