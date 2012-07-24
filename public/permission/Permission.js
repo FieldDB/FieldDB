@@ -1,7 +1,9 @@
 define([
-    "backbone"
+    "backbone",
+    "user/Users"
 ], function(
-    Backbone
+    Backbone,
+    Users
 ) {
   var Permission = Backbone.Model.extend(
   /** @lends Permission.prototype 	*/
@@ -34,14 +36,14 @@ define([
     },
   
     defaults : {
-//      usernames: [],
+//      users: Users,
 //      role: "", //admin, contributor, collaborator
 //      corpusname: "",
     },
     
     // Internal models: used by the parse function
     model : {
-      // There are no nested models
+      users: Users
     },
     saveAndInterConnectInApp : function(callback){
       if(typeof callback == "function"){

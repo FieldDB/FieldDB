@@ -19,6 +19,7 @@ define([
     initialize : function() {
       try {
         if (this.get("corpusname") == undefined) {
+          if(window.app)
           this.set("corpusname", window.app.get("corpus").get("corpusname"));
           //this.changeCorpus(window.app.get("corpus").get("corpusname"));
         }

@@ -1,3 +1,6 @@
-<label>{{role}}</label>
-<span>{{usernames}}</span>
-
+<h4>{{role}}s</h4>
+<ul>
+  {{#each users}}
+  <li>{{username}}</li> 
+  {{/each}}
+</ul>

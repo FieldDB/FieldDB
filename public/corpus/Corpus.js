@@ -15,9 +15,11 @@ define([
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
+    "datum/Session",
     "datum/Sessions",
     "user/Team",
     "user/User",
+    "user/Users",
     "user/UserMask",
     "glosser/Glosser",
     "libs/Utils"
@@ -38,9 +40,11 @@ define([
     Lexicon,
     Permission,
     Permissions,
+    Session,
     Sessions,
     Team,
     User,
+    Users,
     UserMask
 ) {
   var Corpus = Backbone.Model.extend(
@@ -99,6 +103,8 @@ define([
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Public");
       }
+      this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
+      
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
 //          new DatumState(),
@@ -208,35 +214,37 @@ define([
       if (!this.get("sessions")) {
         this.set("sessions", new Sessions());
       }
+      //this.loadPermissions();
       
+    },
+    loadPermissions: function(){
       if (!this.get("team")){
         //If app is completed loaded use the user, otherwise put a blank user
         if(window.appView){
           this.set("team", window.app.get("authentication").get("userPublic"));
         }else{
-          this.set("team", new UserMask());
+//          this.set("team", new UserMask({corpusname: this.get("corpusname")}));
         }
       }
+      this.permissions = new Permissions();
+      var admins = new Users();
+      admins.models.push(this.get("team"));
+      this.permissions.add(new Permission({
+        users: admins,
+        role: "admin",
+        corpusname: this.get("corpusname")
+      }));
       
-      if (!this.permissions) {
-        this.permissions = new Permissions();
-        this.permissions.add(new Permission({
-          usernames: [this.get("team").get("username")],
-          role: "admin",
-          corpusname: this.get("corpusname")
-        }));
-        this.permissions.add(new Permission({
-          usernames: [],
-          role: "contributor",
-          corpusname: this.get("corpusname")
-        }));
-        this.permissions.add(new Permission({
-          usernames: [], //"ifieldpublicuser"
-          role: "collaborator",
-          corpusname: this.get("corpusname")
-        }));
-      }
-      
+      this.permissions.add(new Permission({
+        users: new Users(),
+        role: "contributor",
+        corpusname: this.get("corpusname")
+      }));
+      this.permissions.add(new Permission({
+        users: new Users(), //"ifieldpublicuser"
+        role: "collaborator",
+        corpusname: this.get("corpusname")
+      }));
     },
     
     defaults : {
@@ -250,7 +258,6 @@ define([
       sessionFields : DatumFields,
       searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
-      
     },
     
     // Internal models: used by the parse function
@@ -263,10 +270,9 @@ define([
       searchFields : DatumFields,
       sessions : Sessions, 
       dataLists : DataLists, 
-      permissions : Permissions,
       publicSelf : CorpusMask,
       comments: Comments,
-      team: Team
+      team: UserMask
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
@@ -631,6 +637,9 @@ define([
         callback = null;
       }
       this.lexicon.buildLexiconFromCouch(corpusname,callback);
+    },
+    changeCorpusPublicPrivate : function(){
+      alert("TODO contact server to change the public private of the corpus");
     }
   });
     
