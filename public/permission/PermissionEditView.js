@@ -50,7 +50,7 @@ define([
       }
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(this.template(jsonToRender));
       return this;
     },
     
