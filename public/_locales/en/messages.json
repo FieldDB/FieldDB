@@ -88,7 +88,63 @@
    },
     "Yep_its_me" : {
       "message" : "Yep, it's me"
+   },
+    "Log_Out" : {
+      "message" : "Log Out"
+   },
+    "Log_In" : {
+      "message" : "Log In"
+   },
+    "User_Profile" : {
+      "message" : "User Profile"
+   },
+    "User_Settings" : {
+      "message" : "User Settings"
+   },
+    "Keyboard_Shortcuts" : {
+      "message" : "Keyboard Shortcuts"
+   },
+    "Corpus_Settings" : {
+      "message" : "Corpus Settings"
+   },
+    "Terminal_Power_Users" : {
+      "message" : "Terminal - Power Users"
    }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    
    
    
