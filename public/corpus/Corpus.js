@@ -285,11 +285,17 @@ define([
       if(!this.id){
         newModel = true;
         //uses the conventions to set the corpusname off of the team's username 
-        this.set("titleAsUrl", encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"")));
-        this.set("corpusname", this.get("team").get("username")
-          +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) );
-        this.get("couchConnection").corpusname = this.get("team").get("username")
+        if(!this.get("titleAsUrl")){
+          this.set("titleAsUrl", encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"")));
+        }
+        if(!this.get("corpusname")){
+          this.set("corpusname", this.get("team").get("username")
+              +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) );
+        }
+        if(!this.get("couchConnection")){
+          this.get("couchConnection").corpusname = this.get("team").get("username")
           +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
+        }
       }
       var oldrev = this._rev;
       this.changeCorpus(null,function(){
