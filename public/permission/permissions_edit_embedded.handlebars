@@ -1,13 +1,13 @@
-<div class="pull-left">
-<label>Add/Remove User:</label>
-	<input type="text" class="choose-add-permission-username"
-		data-provide="typeahead" data-items="4" data-source="{{friends}}">
-	<button class="btn btn-primary delete-user-permission-role" value="Add">Delete</button>
-	<button class="btn btn-primary add-user-to-permission-role" value="Add">Add</button>
-</div>
+
+<button class="btn btn-primary pull-left add-user-to-permission-role"
+	value="Add">Add</button>
+<button class="btn btn-primary pull-left delete-user-permission-role"
+	value="Add">Delete</button>
+<input type="text" class=" pull-left choose-add-permission-username"
+	data-provide="typeahead" data-items="4" data-source="{{friends}}">
+<label class="pull-left">Add/Remove User:</label>
 <h4>{{role}}s</h4>
 <ul>
 	{{#each users}}
-	<li>{{username}}</li> 
-	{{/each}}
+	<li>{{username}}</li> {{/each}}
 </ul>

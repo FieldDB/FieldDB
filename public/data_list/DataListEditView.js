@@ -261,30 +261,23 @@ define( [
      */
     newDataList : function() {
       //save the current data list
-      this.model.save();
+      this.model.saveAndInterConnectInApp();
       //clone it
-      this.model = this.model.clone();
+      this.model = new DataList(this.model.toJSON());
       // Clear the current data list
-      this.model.attributes = {};
-      this.model.set((new DataList()).toJSON()); //TODO is this a creative way of wipeing the current data list? i just cloned them
       this.model.set("datumIds", []);
       this.model.set("corpusname", app.get("corpus").get("corpusname"));
-      delete this.model.id;
-      delete this.model.rev;
-//      window.appView.sessionModalView.model.id = undefined;
-//      window.appView.sessionModalView.model.rev = undefined; //TODO this is how i did it in the new session new corpus buttons
-      this.model.set("_id", undefined);
-      this.model.set("_rev", undefined);
-      
-      // Clear the view
-      app.get("corpus").get("dataLists");//TODO what is this line for?
+      this.model.set("title", this.model.get("title")+ " copy");
+      this.model.set("description",  "Copy of: "+this.model.get("description"));
+      this.model.set("comments", new Comments());
+
       var coll = this.datumsView.collection;
       while (coll.length > 0) {
         coll.pop();
       }
       
       // Add the new data list to the corpus
-      app.get("corpus").get("dataLists").unshift(this.model);
+//      app.get("corpus").get("dataLists").unshift(this.model);
       
       
       // Display the new data list
