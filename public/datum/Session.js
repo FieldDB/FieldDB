@@ -225,19 +225,19 @@ define([
           window.app.set("currentSession", this);
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp();
+        window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-        if (typeof successcallback == "function") {
-          successcallback();
-        }else{
-          try{
-            window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
-//              window.appView.renderEditableSessionViews();
-//              window.appView.renderReadonlySessionViews();
-            });
-          }catch(e){
-            alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");
-          }
+        try{
+          window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
+            if (typeof successcallback == "function") {
+              successcallback();
+            }else{
+  //          window.appView.renderEditableSessionViews();
+  //          window.appView.renderReadonlySessionViews();
+            }
+          });
+        }catch(e){
+          alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");
         }
       }
     },

@@ -458,19 +458,19 @@ define([
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
-        if (typeof successcallback == "function") {
-          successcallback();
-        }else{
-          try{
-            window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
-//              window.appView.renderEditableCorpusViews();
-//              window.appView.renderReadonlyCorpusViews();
-            });
-          }catch(e){
-            alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current corpus.");
-          }
+        
+        try{
+          window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
+            if (typeof successcallback == "function") {
+              successcallback();
+            }else{
+//            window.appView.renderEditableCorpusViews();
+//            window.appView.renderReadonlyCorpusViews();
+            }
+          });
+        }catch(e){
+          alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current session.");
         }
-//      }
     },
     /**
      * Synchronize the server and local databases.
