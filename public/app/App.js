@@ -259,7 +259,7 @@ define([
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       var self = this;
-      this.get("currentSession").saveAndInterConnectInApp(function(){
+      self.get("currentSession").saveAndInterConnectInApp(function(){
         self.get("currentDataList").saveAndInterConnectInApp(function(){
           self.get("corpus").saveAndInterConnectInApp(function(){
             self.get("authentication").saveAndInterConnectInApp(function(){

@@ -35,7 +35,11 @@ define([
       
       this.changeViewsOfInternalModels();
       
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
+      var self = this;
+      this.model.bind('change:sessionFields', function(){
+        self.changeViewsOfInternalModels();
+        self.render();
+        }, this);
     },
 
     /**
