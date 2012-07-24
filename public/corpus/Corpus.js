@@ -228,7 +228,9 @@ define([
       }
       this.permissions = new Permissions();
       var admins = new Users();
-      admins.models.push(this.get("team"));
+      if(this.get("team")){
+        admins.models.push(this.get("team"));
+      }
       this.permissions.add(new Permission({
         users: admins,
         role: "admin",
@@ -245,6 +247,7 @@ define([
         role: "collaborator",
         corpusname: this.get("corpusname")
       }));
+      //TODO load the permissions in from the server.
     },
     
     defaults : {
