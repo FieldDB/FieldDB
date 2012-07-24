@@ -42,12 +42,6 @@ define([
      */
     render : function() {
       Utils.debug("PERMISSION EDIT render");
-      if(!this.model){
-        return this;
-      }
-      if(!this.model.get("users")){
-        return this;
-      }
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(jsonToRender));

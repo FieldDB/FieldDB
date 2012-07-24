@@ -41,12 +41,6 @@ define([
      */
     render : function() {
       Utils.debug("PERMISSION READ render");
-      if(!this.model){
-        return;
-      }
-      if(!this.model.get("users")){
-        return;
-      }
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(jsonToRender));
