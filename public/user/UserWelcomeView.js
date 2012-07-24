@@ -142,6 +142,25 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
         $("#Close_and_login_as_Ed_Sapir").append(chrome.i18n.getMessage("Close_and_login_as_Ed_Sapir"));
+        $("#Username").prepend(chrome.i18n.getMessage("Username"));
+        $("#Password").prepend(chrome.i18n.getMessage("Password"));
+        $("#Sync_my_data_to_this_computer").append(chrome.i18n.getMessage("Sync_my_data_to_this_computer"));
+        $("#Welcome_to_iField").prepend(chrome.i18n.getMessage("Welcome_to_iField"));
+        $("#An_offline_online_fieldlinguistics_database").append(chrome.i18n.getMessage("An_offline_online_fieldlinguistics_database"));
+        $("#Welcome_Beta_Testers").prepend(chrome.i18n.getMessage("Welcome_Beta_Testers"));
+        $("#Or_create_a_new_user").prepend(chrome.i18n.getMessage("Or_create_a_new_user"));
+        $("#What_is_your_username_going_to_be").append(chrome.i18n.getMessage("What_is_your_username_going_to_be"));
+        $("#Password1").prepend(chrome.i18n.getMessage("Password"));
+        $("#Confirm_Password").prepend(chrome.i18n.getMessage("Confirm_Password"));
+        $("#Sign_in_with_password").append(chrome.i18n.getMessage("Sign_in_with_password"));
+        $("#Warning").prepend(chrome.i18n.getMessage("Warning"));
+        $("#This_is_a_beta_version").prepend(chrome.i18n.getMessage("This_is_a_beta_version"));
+
+
+
+
+
+
 
       } else {
         Utils.debug("\User model was undefined");

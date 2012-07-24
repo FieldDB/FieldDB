@@ -10,7 +10,58 @@
   "Close_and_login_as_Ed_Sapir" : {
      "message" : "Close and login as Ed Sapir",
      "description" : "button"
+   },
+   "Username" : {
+      "message" : "Username:"
+   },
+    "Password" : {
+      "message" : "Password:"
+   },
+   "Sync_my_data_to_this_computer" : {
+      "message" : "Sync my data to this computer"
+   },
+    "Welcome_to_iField" : {
+      "message" : "Welcome to iField! <small>beta</small>"
+   },
+    "An_offline_online_fieldlinguistics_database" : {
+      "message" : "<i> iField: An offline/online fieldlinguistics database which
+    adapts to its user's I-Language.</i>"
+   },
+   "Welcome_Beta_Testers" : {
+      "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and
+    watch this play list before you begin testing iField. Leave us notes,
+    bugs, comments, suggestions etc in the Contact Us/Bug Report form at
+    the bottom of the page. We will try to address all your comments
+    before August 1st. Scroll down to create a new user.</p>
+      <p>Have fun and happy bug hunting!</p>
+      <p>If you cannot see the videos below, you can watch them here "
+   }, 
+  "Or_create_a_new_user" : {
+      "message" : "Or create a new user"
+   },
+    "What_is_your_username_going_to_be" : {
+      "message" : "What is your username going to be?"
+   },
+    "Confirm_Password" : {
+      "message" : "Confirm Password:"
+   },
+    "Sign_in_with_password" : {
+      "message" : "Sign in
+        with password"
+   },
+    "Warning" : {
+      "message" : "Warning!"
+   },
+    "This_is_a_beta_version" : {
+      "message" : "This is a beta version of iField, it might smile and make bubbles
+    but it also burps, vomits and sleeps at inopportune times..."
    }
+   
+   
+   
+   
+   
+   
 }
 
 
