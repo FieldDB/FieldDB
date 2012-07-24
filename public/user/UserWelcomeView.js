@@ -141,7 +141,7 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
-        $("#Close-and-login-as-Ed-Sapir").append(chrome.i18n.getMessage("Close-and-login-as-Ed-Sapir"));
+        $("#Close_and_login_as_Ed_Sapir").append(chrome.i18n.getMessage("Close_and_login_as_Ed_Sapir"));
 
       } else {
         Utils.debug("\User model was undefined");
