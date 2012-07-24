@@ -40,7 +40,10 @@
 <input class="corpus-title-input" value="{{title}}" type="text"/>
 <label>Description:</label>
 <textarea class="corpus-description-input">{{description}}</textarea>
-
+<label>Public or Private:</label>
+<input type="text" value="{{publicCorpus}}" class=" public-or-private" data-provide="typeahead" data-items="4" 
+        data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
+ 
 <div class="accordion" id="accordion-edit-fullscreen">
   <div class="accordion-group">
     <div class="accordion-heading">

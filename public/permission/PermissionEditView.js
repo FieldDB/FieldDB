@@ -42,13 +42,7 @@ define([
      */
     render : function() {
       Utils.debug("PERMISSION render");
-//      var JSONtorender = {};
-//      if ( typeof this.model != undefined){
-//        JSONtorender.timestamp = this.model.timestamp.toString();
-//        JSONtorender.username = this.model.username;
-//      }
       $(this.el).html(this.template(this.model.toJSON()));
-      
       return this;
     },
     

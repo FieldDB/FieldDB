@@ -247,7 +247,7 @@ define([
       
       //Create a Permissions View
       this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.get("permissions"),
+        collection : this.model.permissions,
         childViewConstructor : PermissionReadView,
         childViewTagName     : 'li',
       });

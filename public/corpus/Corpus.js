@@ -96,6 +96,9 @@ define([
           "corpusname" : this.get("corpusname")
         }));
       }
+      if(!this.get("publicCorpus")){
+        this.set("publicCorpus", "Public");
+      }
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
 //          new DatumState(),
@@ -206,10 +209,6 @@ define([
         this.set("sessions", new Sessions());
       }
       
-      if (!this.get("permissions")) {
-        this.set("permissions", new Permissions());
-      }
-      
       if (!this.get("team")){
         //If app is completed loaded use the user, otherwise put a blank user
         if(window.appView){
@@ -218,6 +217,26 @@ define([
           this.set("team", new UserMask());
         }
       }
+      
+      if (!this.permissions) {
+        this.permissions = new Permissions();
+        this.permissions.add(new Permission({
+          usernames: [this.get("team").get("username")],
+          role: "admin",
+          corpusname: this.get("corpusname")
+        }));
+        this.permissions.add(new Permission({
+          usernames: [],
+          role: "contributor",
+          corpusname: this.get("corpusname")
+        }));
+        this.permissions.add(new Permission({
+          usernames: [], //"ifieldpublicuser"
+          role: "collaborator",
+          corpusname: this.get("corpusname")
+        }));
+      }
+      
     },
     
     defaults : {

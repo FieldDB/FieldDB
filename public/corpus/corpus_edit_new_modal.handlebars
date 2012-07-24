@@ -9,7 +9,10 @@
 	<textarea class="corpus-title-input">{{title}}</textarea>
 	<label>Description:</label>
 	<textarea class="corpus-description-input">{{description}}</textarea>
-  
+  <label>Public or Private:</label>
+  <input type="text" value="{{publicCorpus}}"  class=" public-or-private" data-provide="typeahead" data-items="4" 
+        data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
+ 
 </div>
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal">Cancel</a>
