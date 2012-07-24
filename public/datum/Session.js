@@ -198,7 +198,9 @@ define([
             //make sure the session is in this corpus, if it is the same corpusname
             if(window.app.get("corpus").get("sessions").indexOf(model.id) == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
               window.app.get("corpus").get("sessions").unshift(model.id);
+              window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }
+            
             //make sure the session is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);

@@ -104,6 +104,12 @@ define([
     },
 
     changeCorpus : function(corpusname, callback) {
+      if(!corpusname){
+        corpusname = this.get("corpusname");
+        if(corpusname == undefined){
+          corpusname = window.app.get("corpus").get("corpusname");
+        }
+      }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
       }
@@ -362,10 +368,127 @@ define([
       
       return result;
     },
-    saveAndInterConnectInApp : function(callback){
+    /**
+     * Accepts two functions to call back when save is successful or
+     * fails. If the fail callback is not overridden it will alert
+     * failure to the user.
+     * 
+     * - Adds the datum to the top of the default data list in the corpus if it is in the right corpus
+     * - Adds the datum to the datums container if it wasnt there already
+     * - Adds an activity to the logged in user with diff in what the user changed. 
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      Utils.debug("Saving a Datum");
+      var self = this;
+      var newModel = true;
+      if(this.id){
+        newModel = false;
+      }else{
+        this.set("dateEntered", JSON.stringify(new Date()));
+      }
+      //protect against users moving datums from one corpus to another on purpose or accidentially
+      if(window.app.get("corpus").get("corpusname") != this.get("corpusname")){
+        if(typeof failurecallback == "function"){
+          failurecallback();
+        }else{
+          alert('Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ' );
+        }
+        return;
+      }
       
-      if(typeof callback == "function"){
-        callback();
+      // Store the current Session, the current corpus, and the current date
+      // in the Datum
+      this.set({
+        "session" : app.get("currentSession"),
+        "corpusname" : app.get("corpus").get("corpusname"),
+        "dateModified" : JSON.stringify(new Date())
+      });
+      
+      var oldrev = this._rev;
+      this.changeCorpus(null,function(){
+        self.save(null, {
+          success : function(model, response) {
+            Utils.debug('Datum save success');
+            var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
+            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+utterance+"</a>";
+            //TODO add privacy for datum goals in corpus
+//            if(window.app.get("corpus").get("keepDatumDetailsPrivate")){
+//              utterance = "";
+//              differences = "";
+//            }
+            if(window.appView){
+              window.appView.toastUser("Sucessfully saved datum: "+ utterance,"alert-success","Saved!");
+              window.appView.addSavedDoc(model.id);
+            }
+            var verb = "updated";
+            if(newModel){
+              verb = "added";
+            }
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : verb,
+                  directobject : "<a href='#corpus/"+model.get("corpusname")+"/datum/"+model.id+"'>datum</a> ",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  context : differences+" via Offline App.",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
+            //make sure the datum is in this corpus, if it is the same corpusname
+            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
+            var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
+            if(positionInDefaultDataList == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+            }else{
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+            }
+            window.appView.addUnsavedDoc(window.app.get("corpus").get("dataLists").models[defaultIndex].id);
+            window.appView.addUnsavedDoc(window.app.get("corpus").id);
+            //TODO make the datalist listen to additions if the default is showing?
+            window.app.get("authentication").saveAndInterConnectInApp();
+
+            if(typeof successcallback == "function"){
+              successcallback();
+            }
+          },
+          error : function(e) {
+            if(typeof failurecallback == "function"){
+              failurecallback();
+            }else{
+              alert('Datum save error' + e);
+            }
+          }
+        });
+      });
+    },
+    /**
+     * Accepts two functions success will be called if sucessfull,
+     * otherwise it will attempt to render the current datum views. If
+     * the datum isn't in the current corpus it will call the fail
+     * callback or it will alert a bug to the user. Override the fail
+     * callback if you don't want the alert.
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    setAsCurrentDatum : function(successcallback, failurecallback){
+      if( window.app.get("corpusname") != this.get("corpusname") ){
+        if (typeof failurecallback == "function") {
+          failurecallback();
+        }else{
+          alert("This is a bug, cannot load the datum you asked for, it is not in this corpus.");
+        }
+        return;
+      }else{
+        if (window.appView.datumsView.datumsView.collection.models[0].id != this.id ) {
+          window.appView.datumsView.datumsView.prependDatum(this);
+          //TODO might not need to do it on the Read one since it is the same model?
+        }
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
       }
     }
   });
