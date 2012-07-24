@@ -359,6 +359,7 @@ define([
                       dl.setAsCurrentDataList(function(){
                         window.appView.render();
                         window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
+                        window.app.get("authentication").saveAndInterConnectInApp();
                         if(typeof successcallback == "function"){
                           successcallback();
                         }
@@ -369,6 +370,7 @@ define([
               });
             }else{
               //if an existing corpus
+              window.app.get("authentication").saveAndInterConnectInApp();
               if(typeof successcallback == "function"){
                 successcallback();
               }
@@ -408,6 +410,7 @@ define([
           window.app.set("currentCorpus", this);
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+        window.app.get("authentication").saveAndInterConnectInApp();
         if (typeof successcallback == "function") {
           successcallback();
         }else{

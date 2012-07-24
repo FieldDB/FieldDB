@@ -203,7 +203,8 @@ define([
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
             }
-            
+            window.app.get("authentication").saveAndInterConnectInApp();
+
             if(typeof successcallback == "function"){
               successcallback();
             }
@@ -241,6 +242,8 @@ define([
           window.app.set("currentSession", this);
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+        window.app.get("authentication").saveAndInterConnectInApp();
+
         if (typeof successcallback == "function") {
           successcallback();
         }else{

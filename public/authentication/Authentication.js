@@ -151,19 +151,24 @@ define([
       data.user = u;
       this.saveServerResponseToUser(data, callback);
     },
-    saveAndEncryptUserToLocalStorage : function(){
+    saveAndEncryptUserToLocalStorage : function(callback){
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u);
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
         window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
       }
-    },
-    saveAndInterConnectInApp : function(callback){
-      
       if(typeof callback == "function"){
         callback();
       }
+    },
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      this.saveAndEncryptUserToLocalStorage(function(){
+        if(typeof callback == "function"){
+          callback();
+        }
+      });
+      
     },
     /**
      * This function uses the quick authentication view to get the user's

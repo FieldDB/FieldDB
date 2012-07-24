@@ -131,7 +131,8 @@ define([
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
             }
-            
+            window.app.get("authentication").saveAndInterConnectInApp();
+
             if(typeof successcallback == "function"){
               successcallback();
             }
@@ -169,6 +170,7 @@ define([
           window.app.set("currentDataList", this);
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+        window.app.get("authentication").saveAndInterConnectInApp();
         if (typeof successcallback == "function") {
           successcallback();
         }else{
