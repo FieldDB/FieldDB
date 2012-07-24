@@ -1,5 +1,6 @@
 define([ 
     "backbone",
+    "activity/Activity",
     "audio_video/AudioVideo", 
     "comment/Comment",
     "comment/Comments",
@@ -13,6 +14,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Activity,
     AudioVideo, 
     Comment,
     Comments,

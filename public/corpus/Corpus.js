@@ -336,44 +336,50 @@ define([
                
               self.setAsCurrentCorpus(function(){
 
-                //create the first session for this corpus.
-                var s = new Session({
-                  corpusname : model.get("corpusname"),
-                  sessionFields : model.get("sessionFields").clone()
-                }); //MUST be a new model, other wise it wont save in a new pouch.
-                s.get("sessionFields").where({label: "user"})[0].set("value", window.app.get("authentication").get("userPrivate").get("username") );
-                s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
-                s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
-                s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
-                s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
-                s.set("corpusname", model.get("corpusname"));
-                s.saveAndInterConnectInApp(function(){
-                  s.setAsCurrentSession(function(){
-                    
-                    //create the first datalist for this corpus.
-                    var dl = new DataList({
-                      corpusname : model.get("corpusname")}); //MUST be a new model, other wise it wont save in a new pouch.
-                    dl.set({
-                      "title" : "Default Data List",
-                      "dateCreated" : (new Date()).toDateString(),
-                      "description" : "This is the default data list for this corpus. " +
-                      "Any new datum you create is added here. " +
-                      "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                      "export to LaTeX, or share with collaborators.",
-                      "corpusname" : model.get("corpusname")
-                    });
-                    dl.saveAndInterConnectInApp(function(){
-                      dl.setAsCurrentDataList(function(){
-                        window.appView.render();
-                        window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
-                        window.app.get("authentication").saveAndInterConnectInApp();
-                        if(typeof successcallback == "function"){
-                          successcallback();
-                        }
+                if(model.get("sessions").models.length == 0 && model.get("dataLists").models.length == 0){
+                  //create the first session for this corpus.
+                  var s = new Session({
+                    corpusname : model.get("corpusname"),
+                    sessionFields : model.get("sessionFields").clone()
+                  }); //MUST be a new model, other wise it wont save in a new pouch.
+                  s.get("sessionFields").where({label: "user"})[0].set("value", window.app.get("authentication").get("userPrivate").get("username") );
+                  s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
+                  s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                  s.set("corpusname", model.get("corpusname"));
+                  s.saveAndInterConnectInApp(function(){
+                    s.setAsCurrentSession(function(){
+                      
+                      //create the first datalist for this corpus.
+                      var dl = new DataList({
+                        corpusname : model.get("corpusname")}); //MUST be a new model, other wise it wont save in a new pouch.
+                      dl.set({
+                        "title" : "Default Data List",
+                        "dateCreated" : (new Date()).toDateString(),
+                        "description" : "This is the default data list for this corpus. " +
+                        "Any new datum you create is added here. " +
+                        "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+                        "export to LaTeX, or share with collaborators.",
+                        "corpusname" : model.get("corpusname")
+                      });
+                      dl.saveAndInterConnectInApp(function(){
+                        dl.setAsCurrentDataList(function(){
+                          window.appView.render();
+                          window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
+                          window.app.get("authentication").saveAndInterConnectInApp();
+                          if(typeof successcallback == "function"){
+                            successcallback();
+                          }
+                        });
                       });
                     });
                   });
-                });
+                }else{
+                  if(typeof successcallback == "function"){
+                    successcallback();
+                  }
+                }
               });
             }else{
               //if an existing corpus
@@ -413,18 +419,18 @@ define([
 //        }
 //        return;
 //      }else{
-        if (window.app.get("currentCorpus").id != this.id ) {
-          window.app.set("currentCorpus", this);
+        if (window.app.get("corpus").id != this.id ) {
+          window.app.set("corpus", this);
         }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
         if (typeof successcallback == "function") {
           successcallback();
         }else{
           try{
             window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
-              window.appView.renderEditableCorpusViews();
-              window.appView.renderReadonlyCorpusViews();
+//              window.appView.renderEditableCorpusViews();
+//              window.appView.renderReadonlyCorpusViews();
             });
           }catch(e){
             alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current corpus.");

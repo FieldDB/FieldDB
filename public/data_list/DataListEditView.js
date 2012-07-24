@@ -51,12 +51,16 @@ define( [
         });
       }
       
-      this.changeViewsOfInternalModels();
-      
       // Remove options
       delete this.model.collection;
 
-      this.model.bind("change", this.showEditable, this);
+      this.changeViewsOfInternalModels();
+      // If the model's title changes, chances are its a new datalist, re-render its internal models.
+      this.model.bind('change:title', function(){
+        this.changeViewsOfInternalModels();
+        this.render();
+      }, this);
+      
     },
 
     /**
@@ -117,6 +121,8 @@ define( [
 
     render : function() {
       if (this.format == "fullscreen") {
+        Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
+
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
        
@@ -132,6 +138,8 @@ define( [
         this.renderUpdatedPagination();
      
       } else if (this.format == "leftSide") {
+        Utils.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
+
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
 
@@ -144,6 +152,8 @@ define( [
         this.renderUpdatedPagination();
 
       } else if (this.format == "import"){
+        Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
+
         this.setElement($("#import-data-list-view"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
@@ -155,6 +165,8 @@ define( [
         this.renderUpdatedPagination();
         
       } else if (this.format == "centreWell") {
+        Utils.debug("DATALIST EDIT CENTER render: " + this.el);
+
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
@@ -170,6 +182,8 @@ define( [
         this.renderUpdatedPagination();
         
       } else if (this.format == "minimized") {
+        Utils.debug("DATALIST EDIT MINIMIZED render: " + this.el);
+
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }

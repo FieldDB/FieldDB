@@ -100,25 +100,6 @@ define([
         this.set("comments", new Comments());
       }
       
-    //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-//      this.bind("change:corpusname", function() {
-//        this.pouch = Backbone.sync
-//        .pouch(Utils.androidApp() ? Utils.touchUrl
-//            + this.get("corpusname") : Utils.pouchUrl
-//            + this.get("corpusname"));
-//      }, this);
-//      
-//      try {
-//        if (this.get("corpusname") == undefined) {
-//          this.set("corpusname", app.get("corpus").get("corpusname"));
-//        }
-//        this.pouch = Backbone.sync
-//        .pouch(Utils.androidApp() ? Utils.touchUrl
-//            + this.get("corpusname") : Utils.pouchUrl
-//            + this.get("corpusname"));
-//      } catch(e) {
-//        Utils.debug("Corpusname was undefined on this corpus, the session will not have a valid corpusname until it is set.");
-//      }
     },
     
     // Internal models: used by the parse function
@@ -196,8 +177,8 @@ define([
                 }));
             
             //make sure the session is in this corpus, if it is the same corpusname
-            if(window.app.get("corpus").get("sessions").indexOf(model.id) == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
-              window.app.get("corpus").get("sessions").unshift(model.id);
+            if(window.app.get("corpus").get("sessions").getByCid(model.cid) != undefined && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+              window.app.get("corpus").get("sessions").unshift(model);
               window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }
             
@@ -243,7 +224,7 @@ define([
         if (window.app.get("currentSession").id != this.id ) {
           window.app.set("currentSession", this);
         }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+        window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
 
         if (typeof successcallback == "function") {
@@ -251,8 +232,8 @@ define([
         }else{
           try{
             window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
-              window.appView.renderEditableSessionViews();
-              window.appView.renderReadonlySessionViews();
+//              window.appView.renderEditableSessionViews();
+//              window.appView.renderReadonlySessionViews();
             });
           }catch(e){
             alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");

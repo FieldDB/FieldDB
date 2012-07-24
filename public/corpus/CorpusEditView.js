@@ -69,8 +69,11 @@ define([
       this.changeViewsOfInternalModels();
      
       
-      // If the model changes, re-render
-      this.model.bind('change', this.showEditable, this);
+      // If the model's title changes, chances are its a new corpus, re-render its internal models.
+      this.model.bind('change:title', function(){
+        this.changeViewsOfInternalModels();
+        this.render();
+      }, this);
     },
 
     /**
@@ -129,9 +132,12 @@ define([
      * Renders the CorpusReadFullScreenView and all of its child Views.
      */
     render : function() {
+      if (this.model == undefined) {
+        Utils.debug("\tCorpus model was undefined.");
+        return this;
+      }
       if (this.format == "centreWell") {
-        Utils.debug("CORPUS READ FULLSCREEN render: " + this.el);
-        if (this.model != undefined) {
+        Utils.debug("CORPUS Edit center render: " + this.el);
           // Display the CorpusReadFullScreenView
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
@@ -159,11 +165,9 @@ define([
           // Display the DatumStatesView
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
-   
-        } else {
-          Utils.debug("\tCorpus model was undefined.");
-        }
       } else if (this.format == "fullscreen") {
+        Utils.debug("CORPUS EDIT FULLSCREEN render: " + this.el);
+
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
 
@@ -290,6 +294,7 @@ define([
       window.appView.sessionModalView.model = window.app.get("currentSession").clone();
       //Give it a null id so that pouch will save it as a new model.
       //WARNING this might not be a good idea, if you find strange side effects in sessions in the future, it might be due to this way of creating (duplicating) a session.
+      window.appView.sessionModalView.model.comments = new Comments();
       window.appView.sessionModalView.model.id = undefined;
       window.appView.sessionModalView.model.rev = undefined;
       window.appView.sessionModalView.model.set("_id", undefined);

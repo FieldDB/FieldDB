@@ -635,6 +635,7 @@ define([
     addUnsavedDoc : function(id){
       if(!id){
         alert("This is a bug: something is trying ot save an undefined item.");
+        return;
       }
       if(this.totalUnsaved.indexOf(id) == -1){
         this.totalUnsaved.push(id);
