@@ -227,11 +227,13 @@ define([
         childViewFormat      : "link"
       });
       
+      this.model.loadPermissions();
       //Create a Permissions View
       this.permissionsView = new UpdatingCollectionView({
         collection : this.model.permissions,
         childViewConstructor : PermissionEditView,
         childViewTagName     : 'li',
+        childViewClass       : "breadcrumb"
       });
       
       //Create a Sessions List 

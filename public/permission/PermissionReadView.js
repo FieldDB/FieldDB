@@ -40,14 +40,16 @@ define([
      * Renders the DatumFieldView.
      */
     render : function() {
-      Utils.debug("PERMISSION render");
-//      var JSONtorender = {};
-//      if ( typeof this.model != undefined){
-//        JSONtorender.timestamp = this.model.timestamp.toString();
-//        JSONtorender.username = this.model.username;
-//      }
+      Utils.debug("PERMISSION READ render");
+      if(!this.model){
+        return;
+      }
+      if(!this.model.get("users")){
+        return;
+      }
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(this.model.toJSON()));
-      
       return this;
     },
     

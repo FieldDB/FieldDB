@@ -250,6 +250,7 @@ define([
         collection : this.model.permissions,
         childViewConstructor : PermissionReadView,
         childViewTagName     : 'li',
+        childViewClass       : "breadcrumb"
       });
       
       //Create a Sessions List 
