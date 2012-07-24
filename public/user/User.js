@@ -42,8 +42,8 @@ define([
       }
       
       // If there is no permissions, create a new one
-      if (!this.get("permissions")) {
-        this.set("permissions", new Permission());
+      if (!this.permissions) {
+        this.permissions = new Permissions();
       }
       
       // If there is no hotkeys, create a new one

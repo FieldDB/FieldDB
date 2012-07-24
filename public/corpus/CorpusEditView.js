@@ -229,7 +229,7 @@ define([
       
       //Create a Permissions View
       this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.get("permissions"),
+        collection : this.model.permissions,
         childViewConstructor : PermissionEditView,
         childViewTagName     : 'li',
       });
@@ -403,6 +403,15 @@ define([
       });
       this.model.get("datumStates").add(m);
       window.appView.addUnsavedDoc(this.model.id);
+
+    },
+  //This the function called by the add button, it adds a new datum state both to the collection and the model
+    insertNewPermission : function() {
+      //TODO perform a server call to do this, and display the the results/errors
+      var p = this.model.permissions.where({role: this.$el.find(".choose-add-permission-role").val()})[0];
+      if(p){
+        p.get("usernames").push(this.$el.find(".choose-add-permission-username").val());
+      }
 
     },
     resizeSmall : function(){

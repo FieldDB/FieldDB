@@ -173,8 +173,8 @@ define([
         this.set("sessions", new Sessions());
       }
       
-      if (!this.get("permissions")) {
-        this.set("permissions", new Permissions());
+      if (!this.permissions) {
+        this.permissions = new Permissions();
       }
       
     },
