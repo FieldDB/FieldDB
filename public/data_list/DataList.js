@@ -174,17 +174,18 @@ define([
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
-        if (typeof successcallback == "function") {
-          successcallback();
-        }else{
-          try{
-            window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
-//              window.appView.renderEditableDataListViews();
-//              window.appView.renderReadonlyDataListViews();
-            });
-          }catch(e){
-            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current dataList.");
-          }
+        
+        try{
+          window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
+            if (typeof successcallback == "function") {
+              successcallback();
+            }else{
+//            window.appView.renderEditableDataListViews();
+//            window.appView.renderReadonlyDataListViews();
+            }
+          });
+        }catch(e){
+          alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session.");
         }
       }
     }
