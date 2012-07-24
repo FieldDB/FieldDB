@@ -536,6 +536,100 @@ define([
       });
     },
     /**
+     * Synchronize the server and local databases.
+     */
+    replicateToCorpus : function(couchConnection, fromcallback, tocallback) {
+      var self = this;
+      
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = self.get("couchConnection");
+      }
+      this.changeCorpus(couchConnection, function(){
+        self.pouch(function(err, db) {
+          var couchurl = couchConnection.protocol+couchConnection.domain;
+          if(couchConnection.port != null){
+            couchurl = couchurl+":"+couchConnection.port;
+          }
+          couchurl = couchurl +"/"+ couchConnection.corpusname;
+          
+          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate to " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+            if(typeof tocallback == "function"){
+              tocallback();
+            }
+            window.appView.allSyncedDoc();
+          });
+
+          window.app.get("authentication").get("userPrivate").get("activities").unshift(
+              new Activity({
+                verb : "synced",
+                directobject : window.app.get("corpus").get("title"),
+                indirectobject : "to their team server",
+                context : "via Offline App",
+                user: window.app.get("authentication").get("userPublic")
+              }));
+          //Replicate the team's activity feed
+          window.appView.activityFeedView.model.replicateActivityFeed();
+        });
+      });
+    },
+    /**
+     * Synchronize the server and local databases.
+     */
+    replicateFromCorpus : function(couchConnection, fromcallback, tocallback) {
+      var self = this;
+      
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = self.get("couchConnection");
+      }
+      this.changeCorpus(couchConnection, function(){
+        self.pouch(function(err, db) {
+          var couchurl = couchConnection.protocol+couchConnection.domain;
+          if(couchConnection.port != null){
+            couchurl = couchurl+":"+couchConnection.port;
+          }
+          couchurl = couchurl +"/"+ couchConnection.corpusname;
+          
+          
+          //We can leave the to and from replication async, and make two callbacks. 
+          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+            Utils.debug("Replicate from " + couchurl);
+            Utils.debug(resp);
+            Utils.debug(err);
+            if(err == null || err == undefined){
+              //This was a valid connection, lets save it into localstorage.
+              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
+              
+              // Display the most recent datum in this corpus
+              appView.datumsView.updateDatums();
+            }
+            if(typeof fromcallback == "function"){
+              fromcallback();
+            }
+//            window.appView.allSyncedDoc();
+            
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : "synced",
+                  directobject : window.app.get("corpus").get("title"),
+                  indirectobject : "from their team server",
+                  context : "via Offline App",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
+            
+            // Get the corpus' current precedence rules
+            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
+            
+            // Build the lexicon
+            self.buildLexiconFromTeamServer(self.get("corpusname"));
+          });
+        });
+        
+      });
+    },
+    /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
      * 
