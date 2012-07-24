@@ -27,7 +27,7 @@ define([
      * @constructs
      */
     initialize: function(attributes) {
-      User.__super__.initialize.call(this, attributes);
+      UserGeneric.__super__.initialize.call(this, attributes);
       
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
