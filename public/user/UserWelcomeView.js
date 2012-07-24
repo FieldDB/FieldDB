@@ -274,7 +274,7 @@ define([
                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateCorpus(couchConnection);
+                        c.replicateToCorpus(couchConnection);
                         
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
@@ -331,7 +331,7 @@ define([
               window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
                 //Replicate user's corpus down to pouch
                 window.setTimeout(function(){
-                  window.app.get("corpus").replicateCorpus(couchConnection, function(){
+                  window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
                     if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                       //do nothing because they have no recent ids
                       Utils.debug("User does not have most recent ids, doing nothing.");
