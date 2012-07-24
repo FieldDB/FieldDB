@@ -180,7 +180,7 @@ require([
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
     $('#user-welcome-modal').modal("show");
-  }
+  };
   /*
    * End functions
    */
