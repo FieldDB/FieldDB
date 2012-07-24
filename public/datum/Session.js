@@ -177,7 +177,7 @@ define([
                 }));
             
             //make sure the session is in this corpus, if it is the same corpusname
-            if(window.app.get("corpus").get("sessions").getByCid(model.cid) != undefined && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+            if(window.app.get("corpus").get("sessions").getByCid(model.cid) == undefined && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
               window.app.get("corpus").get("sessions").unshift(model);
               window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }

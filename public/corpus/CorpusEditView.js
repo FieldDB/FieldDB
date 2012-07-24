@@ -299,7 +299,7 @@ define([
         corpusname : window.app.get("corpus").get("corpusname"),
         sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON())
       });
-      window.appView.sessionModalView.model.comments = new Comments();
+      window.appView.sessionModalView.model.set("comments", new Comments());
       window.appView.sessionModalView.render();
     },
     
