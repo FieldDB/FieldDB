@@ -319,18 +319,11 @@ define([
       window.appView.corpusNewModalView.model.set("comments", new Comments());
       window.appView.corpusNewModalView.render();
     },
-      
-    
 
      //Insert functions associate the values chosen with a new
     // model in the collection, adding it to the collection, which in turn
     // triggers a view thats added to
     // the ul
-    
-    //TODO this function needs to mean "save" ie insert new comment in the db, not add an empty comment on the screen. 
-//    this a confusion of the pattern in the datumfilds view where exsting fields are in the  updating collection (just 
-//    like extisting comments are in the updating collection) and there is a blank one in the 
-//    corpus_edit_embedded corpus_edit_fullscreen handlebars
 
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {

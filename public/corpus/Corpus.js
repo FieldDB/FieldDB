@@ -325,7 +325,7 @@ define([
           +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
         }
       }
-      var oldrev = this._rev;
+      var oldrev = this.get("_rev");
       this.changeCorpus(null,function(){
         self.save(null, {
           success : function(model, response) {
