@@ -73,7 +73,8 @@ define([
         d.set("_id", this.model.get("_id"));
         d.set("_rev", this.model.get("_rev"));
         appView.datumsView.prependDatum(d);
-      }
+      } 
+//      "hover .icon-paste" : "showButtonHelp"
     },
 
     /**
@@ -227,6 +228,10 @@ define([
       console.log(text);
  
       return "";
+//    }, 
+//    
+//    showButtonHelp : function(){
+//      this.$(".button-help").tooltip("show");
     }
   });
 
