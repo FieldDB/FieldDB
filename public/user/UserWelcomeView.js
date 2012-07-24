@@ -232,6 +232,7 @@ define([
                     "description" : "This is an untitled corpus, created by default.",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
+                    "team" : auth.get("userPublic"),
                     "couchConnection" : data.user.corpuses[0],
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
@@ -277,7 +278,7 @@ define([
                         
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
-                          window.app.storeCurrentDashboardIdsToLocalStorage();
+                          window.app.saveAndInterConnectInApp();
                         },10000);
                         
                       });

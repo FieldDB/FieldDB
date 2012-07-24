@@ -142,8 +142,10 @@ define([
       Utils.setCookie("token", data.user.hash, 365);
       this.get("confidential").set("secretkey", data.user.hash);
       this.saveAndEncryptUserToLocalStorage();
-      window.appView.addBackboneDoc(this.get("userPublic").id);
-      window.appView.addPouchDoc(this.get("userPublic").id);
+      if(window.appView){
+        window.appView.addBackboneDoc(this.get("userPublic").id);
+        window.appView.addPouchDoc(this.get("userPublic").id);
+      }
     },
     loadEncryptedUser : function(encryptedUserString, callback){
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));

@@ -258,12 +258,19 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
+      var self = this;
       this.get("currentSession").saveAndInterConnectInApp(function(){
-        this.get("currentDataList").saveAndInterConnectInApp(function(){
-          this.get("corpus").saveAndInterConnectInApp(function(){
-            if(typeof successcallback == "function"){
-              successcallback();
-            }
+        self.get("currentDataList").saveAndInterConnectInApp(function(){
+          self.get("corpus").saveAndInterConnectInApp(function(){
+            self.get("authentication").saveAndInterConnectInApp(function(){
+              self.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+              window.appView.renderReadonlyDataListViews();
+              window.appView.renderReadonlySessionViews();
+              window.appView.renderReadonlyCorpusViews();
+            },failurecallback);
           },failurecallback);
         }, failurecallback);
       }, failurecallback);

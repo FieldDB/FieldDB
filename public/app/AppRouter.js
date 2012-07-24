@@ -95,8 +95,8 @@ define([
      * @param {String}
      *          corpusname The name of the corpus this datum is from.
      */
-    showFullscreenCorpus : function(corpusname, corpusid ) {
-      Utils.debug("In showFullscreenCorpus: " + corpusname);
+    showFullscreenCorpus : function() {
+      Utils.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
       
@@ -107,7 +107,7 @@ define([
      * Displays all of the corpus details and settings. 
      * 
      */
-    showEmbeddedCorpus : function( ) {
+    showEmbeddedCorpus : function() {
       Utils.debug("In showEmbeddedCorpus: " );
 
       this.hideEverything();
@@ -146,7 +146,6 @@ define([
     showEmbeddedSession : function(sessionid, corpusname) {
       Utils.debug("In showEmbeddedSession: " + corpusname + " *** "
           + sessionid);
-
       if(sessionid){
         if(!corpusname){
           corpusname = window.app.get("corpus").get("corpusname");
@@ -166,10 +165,11 @@ define([
             cs.fetch({
               success : function(model) {
                 Utils.debug("Session fetched successfully" +model);
-                window.app.set("currentSession", model);
-                window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                  window.appView.renderEditableSessionViews();
-                  window.appView.renderReadonlySessionViews();
+                cs.setAsCurrentSession( function(){
+                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
+                    window.appView.renderEditableSessionViews();
+                    window.appView.renderReadonlySessionViews();
+                  });
                 });
               },
               error : function(e) {
@@ -177,12 +177,11 @@ define([
               }
             });
           });      
-          
         }
       }
       
       // Display the edit session view and hide all the other views
-      self.hideEverything();
+      this.hideEverything();
       $("#dashboard-view").show();
       $("#session-embedded").show();
       
@@ -194,7 +193,6 @@ define([
     showFullscreenSession : function(sessionid, corpusname) {
       Utils.debug("In showFullscreenSession"  + corpusname + " *** "
           + sessionid);
-      
       if(sessionid){
         if(!corpusname){
           corpusname = window.app.get("corpus").get("corpusname");
@@ -214,10 +212,11 @@ define([
             cs.fetch({
               success : function(model) {
                 Utils.debug("Session fetched successfully" +model);
-                window.app.set("currentSession", model);
-                window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                  window.appView.renderEditableSessionViews();
-                  window.appView.renderReadonlySessionViews();
+                cs.setAsCurrentSession( function(){
+                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
+                    window.appView.renderEditableSessionViews();
+                    window.appView.renderReadonlySessionViews();
+                  });
                 });
               },
               error : function(e) {
@@ -225,10 +224,9 @@ define([
               }
             });
           });      
-          
         }
       }
-       
+      
       this.hideEverything();
       $("#session-fullscreen").show();
     },
@@ -264,10 +262,11 @@ define([
           dl.fetch({
             success : function(e) {
               Utils.debug("Datalist fetched successfully" +e);
-              window.app.set("currentDataList", model);
-              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                window.appView.renderEditableDataListViews();
-                window.appView.renderReadonlyDataListViews();
+              dl.setAsCurrentSession( function(){
+                window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                  window.appView.renderEditableDataListViews();
+                  window.appView.renderReadonlyDataListViews();
+                });
               });
             },
             error : function(e) {
@@ -276,7 +275,7 @@ define([
           });
         });
       }
-      app.router.hideEverything();
+      this.hideEverything();
       $("#data-list-fullscreen").show();      
     },
     
@@ -301,10 +300,11 @@ define([
           dl.fetch({
             success : function(e) {
               Utils.debug("Datalist fetched successfully" +e);
-              window.app.set("currentDataList", model);
-              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                window.appView.renderEditableDataListViews();
-                window.appView.renderReadonlyDataListViews();
+              dl.setAsCurrentSession( function(){
+                window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                  window.appView.renderEditableDataListViews();
+                  window.appView.renderReadonlyDataListViews();
+                });
               });
             },
             error : function(e) {
