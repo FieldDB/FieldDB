@@ -155,6 +155,7 @@ define([
         $("#Sign_in_with_password").append(chrome.i18n.getMessage("Sign_in_with_password"));
         $("#Warning").prepend(chrome.i18n.getMessage("Warning"));
         $("#This_is_a_beta_version").prepend(chrome.i18n.getMessage("This_is_a_beta_version"));
+        $("#New_User").append(chrome.i18n.getMessage("New_User"));
 
 
 

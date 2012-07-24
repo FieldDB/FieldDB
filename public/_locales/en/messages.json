@@ -55,6 +55,12 @@
     "This_is_a_beta_version" : {
       "message" : "This is a beta version of iField, it might smile and make bubbles
     but it also burps, vomits and sleeps at inopportune times..."
+   },
+    "New_User" : {
+      "message" : "New User"
+   },
+    "Activity_Feed" : {
+      "message" : "Activity Feed"
    }
    
    
