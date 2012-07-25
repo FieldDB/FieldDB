@@ -249,12 +249,11 @@ define( [
     },
     
     /**
-     * Create a temporary data list in the current corpus. If permanent = "permanent" then it will save it into the corpus.
+     * Create a permanent data list in the current corpus. 
      * 
      * @param callback
-     * @param permanent
      */
-    newDataList : function(callback, permanent) {
+    newDataList : function(callback) {
       //save the current data list
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
@@ -270,6 +269,7 @@ define( [
         attributes.datumIds = [];
         self.model = new DataList(attributes);
         
+        //TODO see if this destroys the collection in the default data list, technically it doesn't matter because this will need to be emptied and filled,a and the collciton is just part of the view, not part of the data list.
         var coll = self.datumsView.collection;
         while (coll.length > 0) {
           coll.pop();
@@ -278,22 +278,16 @@ define( [
         // Display the new data list
 //        appView.renderReadonlyDataListViews();
 //        appView.renderEditableDataListViews();
-        //Why call all data lists to render, this is a temp data list until the user hits save.
+        //Why call all data lists to render?
         self.render();
-        if(permanent == "permanent"){
-          self.model.saveAndInterConnectInApp(function(){
-            //TOOD check this, this is used by the import to make the final datalist
-            self.model.setAsCurrentDataList(function(){
-              if(typeof callback == "function"){
-                callback();
-              }
-            });
+        self.model.saveAndInterConnectInApp(function(){
+          //TOOD check this, this is used by the import to make the final datalist
+          self.model.setAsCurrentDataList(function(){
+            if(typeof callback == "function"){
+              callback();
+            }
           });
-        }else{
-          if(typeof callback == "function"){
-            callback();
-          }
-        }
+        });
       });
     },
     
@@ -335,7 +329,7 @@ define( [
         this.model.get("datumIds").push(datumId);
         
         // If there is room on the current page
-        var numDatumCurrentlyDisplayed = this.datumsView.collection.length
+        var numDatumCurrentlyDisplayed = this.datumsView.collection.length;
         if ((numDatumCurrentlyDisplayed == 0) || (numDatumCurrentlyDisplayed % this.perPage != 0)) {
           // Fetch its model from the database
           var d = new Datum({
@@ -347,7 +341,7 @@ define( [
             d.fetch({
               success : function(model, response) {
                 // If there is still room on the current page
-                var numDatumCurrentlyDisplayed = self.datumsView.collection.length
+                var numDatumCurrentlyDisplayed = self.datumsView.collection.length;
                 if ((numDatumCurrentlyDisplayed == 0) || (numDatumCurrentlyDisplayed % self.perPage != 0)) {
                   // Render at the bottom
                   self.datumsView.collection.add(model);
