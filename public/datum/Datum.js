@@ -145,7 +145,7 @@ define([
         });
         
       }catch(e){
-        appView.datumsView.newDatum();
+//        appView.datumsView.newDatum();
         appView.datumsView.render();
         alert("Couldnt show the most recent datums "+JSON.stringify(e));
         

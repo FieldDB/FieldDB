@@ -689,7 +689,9 @@ define([
                 		"https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm </a>  " +
                 		"Our website version has a bug which we are waiting for IrisCouch (our database hosting company) to fix," +
                 		" they said they would fix it soon. If your computer is online and you are the Chrome Store app, then this is a bug... please report it to us :)","alert-danger","Offline Mode:");
-                appView.datumsView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
+//                appView.datumsView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
+                appView.datumsView.render();
+
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
