@@ -262,7 +262,7 @@ define( [
       //save the current data list
       this.model.currentSearchDataList = false;
       var self = this;
-      this.saveAndInterConnectInApp(function(){
+      this.model.saveAndInterConnectInApp(function(){
         //clone it
         self.model = new DataList(self.model.toJSON());
         // Clear the current data list
