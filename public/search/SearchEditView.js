@@ -196,11 +196,8 @@ define([
       this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      try{
-        (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), this.searchContinued);
-      }catch(e){
-        alert("Bug: There was a problem searching. it might be that your computer didnt pull down the files from the server that it needs to search. this has to happen once before search will work. ");
-      }
+      this.search($("#search_box").val());
+      
     },
     
     
@@ -277,9 +274,14 @@ define([
           // Add search results to the data list
           for (var key in datumIds) {
             searchself.searchDataListEditLeftSideView.addOneDatumId(datumIds[key]);
+            Utils.debug("Successfully got data back from search and put it into the temp search data list");
           }
         });
       });
+      
+//    }catch(e){
+//      alert("Bug: There was a problem searching. it might be that your computer didnt pull down the files from the server that it needs to search. this has to happen once before search will work. ");
+//    }
     },
     
     searchContinued : function(datumIds) {
