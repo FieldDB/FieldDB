@@ -31,13 +31,13 @@ define([
             $(".Actions").append(chrome.i18n.getMessage("Actions"));
             $(".Navigation").append(chrome.i18n.getMessage("Navigation"));
             $(".Favorite").append(chrome.i18n.getMessage("Favorite"));
-//            $(".New_Datum").append(chrome.i18n.getMessage("New_Datum"));
+            $("#New_Datum").append(chrome.i18n.getMessage("New_Datum"));
             $(".Next_Datum").append(chrome.i18n.getMessage("Next_Datum"));
             $(".Previous_Datum").append(chrome.i18n.getMessage("Previous_Datum"));
-            $(".New_Session").append(chrome.i18n.getMessage("New_Session"));
+            $("#New_Session").append(chrome.i18n.getMessage("New_Session"));
             $(".Search").append(chrome.i18n.getMessage("Search"));
             $(".Close").append(chrome.i18n.getMessage("Close"));
-            $(".Save").append(chrome.i18n.getMessage("Save"));
+            $("#Save").append(chrome.i18n.getMessage("Save"));
 
 
 
