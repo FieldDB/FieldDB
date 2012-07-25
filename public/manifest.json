@@ -11,7 +11,8 @@
   "permissions": [
     "unlimitedStorage",
     "https://ifield.fieldlinguist.com/*",
-    "https://ilanguage.iriscouch.com/*"
+    "https://ilanguage.iriscouch.com/*",
+    "https://localhost:3001/*"
   ],
    "icons": { 
     "16": "icon16.png",

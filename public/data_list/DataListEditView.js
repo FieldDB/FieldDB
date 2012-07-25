@@ -258,32 +258,32 @@ define( [
     /**
      * Create a permanent data list in the current corpus.
      */
-    newDataList : function() {
+    newDataList : function(callback) {
       //save the current data list
       this.model.currentSearchDataList = false;
-      var dltobesaved = this.model;
-      dltobesaved.saveAndInterConnectInApp();
-      //clone it
-      this.model = new DataList(this.model.toJSON());
-      // Clear the current data list
-      this.model.set("datumIds", []);
-      this.model.set("corpusname", app.get("corpus").get("corpusname"));
-      this.model.set("title", this.model.get("title")+ " copy");
-      this.model.set("description",  "Copy of: "+this.model.get("description"));
-      this.model.set("comments", new Comments());
-
-      var coll = this.datumsView.collection;
-      while (coll.length > 0) {
-        coll.pop();
-      }
-      
-      // Add the new data list to the corpus
-//      app.get("corpus").get("dataLists").unshift(this.model);
-      
-      
-      // Display the new data list
-      appView.renderReadonlyDataListViews();
-      appView.renderEditableDataListViews();
+      var self = this;
+      this.saveAndInterConnectInApp(function(){
+        //clone it
+        self.model = new DataList(self.model.toJSON());
+        // Clear the current data list
+        self.model.set("datumIds", []);
+        self.model.set("corpusname", app.get("corpus").get("corpusname"));
+        self.model.set("title", self.model.get("title")+ " copy");
+        self.model.set("description",  "Copy of: "+self.model.get("description"));
+        self.model.set("comments", new Comments());
+        
+        var coll = self.datumsView.collection;
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        
+        // Display the new data list
+        appView.renderReadonlyDataListViews();
+        appView.renderEditableDataListViews();
+        if(typeof callback == "function"){
+          callback();
+        }
+      });
     },
     
     /**

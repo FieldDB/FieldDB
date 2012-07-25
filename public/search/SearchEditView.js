@@ -236,22 +236,23 @@ define([
     
     searchContinued : function(datumIds) {
       // Create a new temporary data list in editable datalist on the LeftSide
-      appView.dataListEditLeftSideView.newDataList();
-      appView.dataListEditLeftSideView.model.set("title"
-          , $("#search_box").val()
-          + " search result");
-      appView.dataListEditLeftSideView.model.set("description"
-          ,  "This is the result of searching for : " 
-          + $("#search_box").val()
-          + " in " 
-          + window.app.get("corpus").get("title") 
-          + " on "+ JSON.stringify(new Date()) );
-      appView.dataListEditLeftSideView.currentSearchDataList = true;
-      
-      // Add search results to the data list
-      for (var key in datumIds) {
-        appView.dataListEditLeftSideView.addOneDatumId(datumIds[key]);
-      }
+      appView.dataListEditLeftSideView.newDataList(function(){
+        appView.dataListEditLeftSideView.model.set("title"
+            , $("#search_box").val()
+            + " search result");
+        appView.dataListEditLeftSideView.model.set("description"
+            ,  "This is the result of searching for : " 
+            + $("#search_box").val()
+            + " in " 
+            + window.app.get("corpus").get("title") 
+            + " on "+ JSON.stringify(new Date()) );
+        appView.dataListEditLeftSideView.currentSearchDataList = true;
+        
+        // Add search results to the data list
+        for (var key in datumIds) {
+          appView.dataListEditLeftSideView.addOneDatumId(datumIds[key]);
+        }
+      });
     },
     
     /**

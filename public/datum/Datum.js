@@ -477,7 +477,7 @@ define([
                 var datumJson = appView.datumsView.datumsView._childViews[0].model.get("datumFields").toJSON()
                 var datumAsDBResponseRow = {};
                 for (var x in datumJson){ 
-                  datumAsDBResponseRow[datumJson[x].label] = datumJson[x].value;
+                  datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
                 }
                 var queryTokens = model.processQueryString($("#search_box").val());
                 var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
