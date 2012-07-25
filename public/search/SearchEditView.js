@@ -121,13 +121,15 @@ define([
 
       return this;
     },
-    newTempDataList : function(){
+    newTempDataList : function(callback){
       this.searchDataListEditLeftSideView = new DataListEditView({
         model : new DataList(),
         datumCollection : new Datums() 
       }); 
       this.searchDataListEditLeftSideView.format = "search-minimized";
-      
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     changeViewsOfInternalModels : function(){
       
@@ -254,21 +256,22 @@ define([
     
     searchContinued : function(datumIds) {
       // Create a new temporary data list in editable datalist on the LeftSide
-      appView.dataListEditLeftSideView.newDataList(function(){
-        appView.dataListEditLeftSideView.model.set("title"
+      var self = this;
+      this.newTempDataList(function(){
+        self.searchDataListEditLeftSideView.model.set("title"
             , $("#search_box").val()
             + " search result");
-        appView.dataListEditLeftSideView.model.set("description"
+        self.searchDataListEditLeftSideView.model.set("description"
             ,  "This is the result of searching for : " 
             + $("#search_box").val()
             + " in " 
             + window.app.get("corpus").get("title") 
             + " on "+ JSON.stringify(new Date()) );
-        appView.dataListEditLeftSideView.currentSearchDataList = true;
-        
+        self.searchDataListEditLeftSideView.format = "search";
+        self.searchDataListEditLeftSideView.render();
         // Add search results to the data list
         for (var key in datumIds) {
-          appView.dataListEditLeftSideView.addOneDatumId(datumIds[key]);
+          self.searchDataListEditLeftSideView.addOneDatumId(datumIds[key]);
         }
       });
     },
