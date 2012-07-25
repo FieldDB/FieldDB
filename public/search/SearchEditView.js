@@ -257,30 +257,33 @@ define([
      */
     search : function(queryString) {
       // Search for Datum that match the search criteria      
-      var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, this.searchContinued);
+      var searchself = this;
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString
+          , function(datumIds){
+        //this will take in matchIds from its caller
+        // Create a new temporary data list in editable datalist on the LeftSide
+        searchself.newTempDataList(function(){
+          searchself.searchDataListEditLeftSideView.model.set("title"
+              , $("#search_box").val()
+              + " search result");
+          searchself.searchDataListEditLeftSideView.model.set("description"
+              ,  "This is the result of searching for : " 
+              + $("#search_box").val()
+              + " in " 
+              + window.app.get("corpus").get("title") 
+              + " on "+ JSON.stringify(new Date()) );
+          searchself.searchDataListEditLeftSideView.format = "search";
+          searchself.searchDataListEditLeftSideView.render();
+          // Add search results to the data list
+          for (var key in datumIds) {
+            searchself.searchDataListEditLeftSideView.addOneDatumId(datumIds[key]);
+          }
+        });
+      });
     },
     
     searchContinued : function(datumIds) {
-      // Create a new temporary data list in editable datalist on the LeftSide
-      var self = this;
-      this.newTempDataList(function(){
-        self.searchDataListEditLeftSideView.model.set("title"
-            , $("#search_box").val()
-            + " search result");
-        self.searchDataListEditLeftSideView.model.set("description"
-            ,  "This is the result of searching for : " 
-            + $("#search_box").val()
-            + " in " 
-            + window.app.get("corpus").get("title") 
-            + " on "+ JSON.stringify(new Date()) );
-        self.searchDataListEditLeftSideView.format = "search";
-        self.searchDataListEditLeftSideView.render();
-        // Add search results to the data list
-        for (var key in datumIds) {
-          self.searchDataListEditLeftSideView.addOneDatumId(datumIds[key]);
-        }
-      });
+     //put in to the search function to get the context of the proper seracheditview
     },
     
     /**
