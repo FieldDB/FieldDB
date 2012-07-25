@@ -27,7 +27,7 @@ define([
      * @class Search View handles the render of the global search in the corner,
      *        and the advanced power search, as well as their events.
      * 
-     * @property {String} format Valid values are "fullscreen", "top", or "centreWell".
+     * @property {String} format Valid values are "fullscreen", "top", or "centreWell" 
      * 
      * @description Starts the Search.
      * 
@@ -119,32 +119,34 @@ define([
         $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
       
-      if(this.format == "centreWell"){
-        if(!this.searchDataListEditLeftSideView.format){
-          this.searchDataListEditLeftSideView.format = "search-minimized";
-        }
+      if(this.format == "top"){
+        try{
+          if(!this.searchDataListEditLeftSideView.format){
+            this.searchDataListEditLeftSideView.format = "search-minimized";
+          }
 //      this.searchDataListEditLeftSideView.format = "search";
-        this.searchDataListEditLeftSideView.render();
+          this.searchDataListEditLeftSideView.render();
+        }catch(e){
+          Utils.debug("Trying to set the searchDataListEditLeftSideView too early.");
+        }
       }
 
       return this;
     },
     newTempDataList : function(callback){
-      //Only do this if it is the embedded center search. otherwise it seems that all thre search edit views are making a data list, and their three data lists are listening to the same events and doing them three times, which migh tmean we g will get three resulting saved ata lsits if the user pushes save?
-      if(this.format != "centreWell"){
-        return; 
-      }
-      
-      this.searchDataListEditLeftSideView = new DataListEditView({
-        model : new DataList(),
-        datumCollection : new Datums() 
-      }); 
-      this.searchDataListEditLeftSideView.model.set("title","Temporary Search Results");
-      this.searchDataListEditLeftSideView.model.set("description","You can use search to create data lists for handouts.");
-      this.searchDataListEditLeftSideView.model.set("corpusname", window.app.get("corpus").get("corpusname"));
-      this.searchDataListEditLeftSideView.format = "search-minimized";
-      if(typeof callback == "function"){
-        callback();
+      //Only do this if it is the top search. otherwise it seems that all three search edit views are making a data list, and their three data lists are listening to the same events and doing them three times, which migh tmean we g will get three resulting saved ata lsits if the user pushes save?
+      if(this.format == "top"){
+        this.searchDataListEditLeftSideView = new DataListEditView({
+          model : new DataList(),
+          datumCollection : new Datums() 
+        }); 
+        this.searchDataListEditLeftSideView.model.set("title","Temporary Search Results");
+        this.searchDataListEditLeftSideView.model.set("description","You can use search to create data lists for handouts.");
+        this.searchDataListEditLeftSideView.model.set("corpusname", window.app.get("corpus").get("corpusname"));
+        this.searchDataListEditLeftSideView.format = "search-minimized";
+        if(typeof callback == "function"){
+          callback();
+        }
       }
     },
     changeViewsOfInternalModels : function(){
@@ -268,8 +270,9 @@ define([
           , function(datumIds){
         //this will take in matchIds from its caller
         // Create a new temporary data list in editable datalist on the LeftSide
-        if(searchself.format != "centreWell"){
-          return; //dont try to put dat in unless you have a data list, and its the centerwell one who controls the temp serach results
+        if(searchself.format != "top"){
+          searchself = window.appView.searchTopView;
+//          return; //dont try to put dat in unless you have a data list, and its the centerwell one who controls the temp serach results
         }
         searchself.newTempDataList(function(){
           searchself.searchDataListEditLeftSideView.model.set("title"
