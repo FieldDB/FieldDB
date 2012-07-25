@@ -184,7 +184,8 @@ define([
               successcallback();
             }else{
               //TODO remove this when done debugging and it is working all the time.
-              window.appView.toastUser("Sucessfully connected all views up to data list: "+ this.id,"alert-success","Connected!");
+              var self = this;
+              window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
 //            window.appView.renderEditableDataListViews();
 //            window.appView.renderReadonlyDataListViews();
             }
