@@ -536,7 +536,7 @@ define( [
                     window.app.get("authentication").get("userPrivate").get("activities").unshift(
                         new Activity({
                           verb : "added",
-                          directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
+                          directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("mask"),
                           indirectobject : "in "+window.app.get("corpus").get("title"),
                           context : "via Offline App",
                           user: window.app.get("authentication").get("userPublic")

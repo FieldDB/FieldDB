@@ -105,9 +105,9 @@ define([
          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
           };
           
           this.setElement("#session-quickview");
@@ -129,9 +129,9 @@ define([
        
           var jsonToRender = {
               _id : this.model.get("_id"),
-              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
             };
           $(this.el).html(this.templateLink(jsonToRender));
 
