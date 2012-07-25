@@ -170,6 +170,7 @@ define([
      */
     searchTop : function() {
       Utils.debug("Will search for " + $("#search_box").val());
+      this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), this.searchContinued);
@@ -237,10 +238,11 @@ define([
       // Create a new temporary data list in editable datalist on the LeftSide
       appView.dataListEditLeftSideView.newDataList();
       appView.dataListEditLeftSideView.model.set("title"
-          , this.model.get("searchKeywords") +" search result");
+          , $("#search_box").val()
+          + " search result");
       appView.dataListEditLeftSideView.model.set("description"
           ,  "This is the result of searching for : " 
-          + this.model.get("searchKeywords")
+          + $("#search_box").val()
           + " in " 
           + window.app.get("corpus").get("title") 
           + " on "+ JSON.stringify(new Date()) );

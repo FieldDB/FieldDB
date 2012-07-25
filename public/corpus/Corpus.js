@@ -699,7 +699,7 @@ define([
         if(attrs.title != undefined){
           attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
         }
-        return '';
+//        return '';
     },
     /**
      * This function takes in a corpusname, which could be different

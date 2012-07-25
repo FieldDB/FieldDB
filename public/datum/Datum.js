@@ -456,7 +456,7 @@ define([
              */
             var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
             //If the leftside data list is the default list, use it to add the datum to the default list.
-            if(window.appView.dataListEditLeftSideView.model.cid == window.app.get("corpus").get("dataLists").models[defaultIndex].cid){
+            if(window.appView.dataListEditLeftSideView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
               window.appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
             }else{
               //Otherwise add it to the default datalist by hand.
