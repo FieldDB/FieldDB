@@ -43,7 +43,8 @@ define([
         self.changeViewsOfInternalModels();
         self.render();
         }, this);
-      this.model.bind('change', this.showEditable, this);
+      
+//      this.model.bind('change', this.showEditable, this);
     },
 
     /**
