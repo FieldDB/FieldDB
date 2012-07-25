@@ -314,7 +314,19 @@ define( [
     addOneDatumId : function(datumId, addToTop) {
       if (addToTop) {
         // Add it to the front of the model's list of datum ids
-        this.model.get("datumIds").unshift(datumId);
+        var positionInThisDataList = this.model.get("datumIds").indexOf(datumId);
+        
+        if( positionInThisDataList == -1 ){
+          this.model.get("datumIds").unshift(datumId);
+        }else{
+          /*
+           * We only reorder the data list to be in the order that this
+           * goes on top, other data lists can stay in the order teh usr
+           * designed them.
+           */
+//          this.model.get("datumIds").splice(positionInThisDataList, 1);
+//          this.model.get("datumIds").unshift(model.id);
+        }
         
         // Fetch its model from the database
         var d = new Datum({
@@ -336,7 +348,20 @@ define( [
         });
       } else {
         // Add it to the back of the model's list of datum ids
-        this.model.get("datumIds").push(datumId);
+        var positionInThisDataList = this.model.get("datumIds").indexOf(datumId);
+        
+        if( positionInThisDataList == -1 ){
+          this.model.get("datumIds").push(datumId);
+        }else{
+          /*
+           * We only reorder the data list to be in the order that this
+           * goes on top, other data lists can stay in the order teh usr
+           * designed them.
+           */
+//          this.model.get("datumIds").splice(positionInThisDataList, 1);
+//          this.model.get("datumIds").push(model.id);
+        }
+        
         
         // If there is room on the current page
         var numDatumCurrentlyDisplayed = this.datumsView.collection.length;
