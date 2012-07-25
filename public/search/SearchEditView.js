@@ -1,7 +1,9 @@
 define([ 
     "backbone", 
     "handlebars", 
+    "data_list/DataList",
     "datum/Datum",
+    "datum/Datums",
     "datum/DatumFieldEditView",
     "search/Search",
     "app/UpdatingCollectionView",
@@ -9,7 +11,9 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
+    DataList,
     Datum,
+    Datums,
     DatumFieldEditView,
     Search,
     UpdatingCollectionView
@@ -31,9 +35,9 @@ define([
     initialize : function() {
       Utils.debug("SEARCH init: " + this.el);
       
+      this.newTempDataList();
       this.changeViewsOfInternalModels();
 
-      
       this.model.bind('change', this.render, this);
     },
     
@@ -112,11 +116,21 @@ define([
         this.setElement($("#search-top"));
         $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
-      
+      this.searchDataListEditLeftSideView.format = "search";
+      this.searchDataListEditLeftSideView.render();
+
       return this;
     },
-    
+    newTempDataList : function(){
+      this.searchDataListEditLeftSideView = new DataListEditView({
+        model : new DataList(),
+        datumCollection : new Datums() 
+      }); 
+      this.searchDataListEditLeftSideView.format = "search-minimized";
+      
+    },
     changeViewsOfInternalModels : function(){
+      
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
