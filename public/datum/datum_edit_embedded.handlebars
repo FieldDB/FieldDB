@@ -1,6 +1,7 @@
 <!-- list for the fields -->
 <ul class="datum_fields_ul unstyled"></ul>
-<i class="icon-list-alt pull-right"> </i>
+<a  href="#" rel="tooltip" title="See more/less fields" >
+  <i class="icon-list-alt pull-right"> </i></a>
 <!-- drop down for the states -->
 <div class="datum_state">
     <select class="datum_state_select">
@@ -14,30 +15,32 @@
 <!-- way to add new tags -->
 <span class="like-form-inline">
   <input class="add_tag" placeholder="New Tag..." type="text"></input>
-  <button class="btn btn-primary add_datum_tag" value="Add">
+  <a href="#" rel="tooltip" title="Add tags">
+    <button class="btn btn-primary add_datum_tag" value="Add">
     <i class = "icon-tag icon-white"></i>
     Add
-  </button>
+    </button></a>
 </span>
 
 <!-- Buttons for various actions -->
 <div>
   <div class="icons btn-group">
-    <button class="btn btn-primary">
-      <i class="icon-white icon-plus"></i>
-    </button>
-    <button class="btn btn-primary LaTeX">LaTeX</button>
-    <button class="btn btn-primary CSV">CSV/Excel</button>
-    <a id="clipboard">
-      <i class="icons icon-paste"></i>
-    </a>
-    <a id="duplicate">
-      <i class="icons icon-copy"></i>
-    </a>
-    <a id="encrypt">
-      <i class="icons icon-lock"></i>
-    </a>
-    
+    <a><button class="btn btn-primary">
+      <i class="icon-white icon-plus"></i></button></a>
+    <a href="#" rel="tooltip" title="Export to LaTex format">
+        <button class="btn btn-primary LaTeX">LaTeX</button></a>
+    <a href="#" rel="tooltip" title="Export to CSV/Excel format">
+        <button class="btn btn-primary CSV">CSV/Excel</button></a>
+    <a  id="clipboard" href="#" rel="tooltip" title="Copy to clipboard" >
+       <i class="icons icon-paste"></i></a>
+    <a  id="duplicate" href="#" rel="tooltip" title="Duplicate" >
+      <i class="icons icon-copy"></i></a>
+    <a  id="encrypt" href="#" rel="tooltip" title="Encrypt/Decrypt" >
+      <i class="icons icon-lock"></i></a>       
+<!--     <a id="clipboard"><i class="icons icon-paste"></i></a>
+    <a id="duplicate"><i class="icons icon-copy"></i></a>
+    <a id="encrypt"><i class="icons icon-lock"></i></a>
+ -->    
   </div>
 </div>
 <div class="audio_video"></div>

@@ -1,8 +1,9 @@
 <div class="pull-right">
-    <i class="icons icon-edit"></i>
-    
-    <i class="icons icon-resize-full"></i>
-  </div>
+  <a href="#" rel="tooltip" title="Edit data list">
+    <i class="icons icon-edit"></i></a>
+  <a href="#" rel="tooltip" title="Show full screen">    
+    <i class="icons icon-resize-full"></i></a>
+</div>
 
 <h3>{{title}}</h3>
 <h4>{{dateCreated}}</h4>
@@ -10,11 +11,21 @@
 {{description}}
 
 <div class="icons">
-  <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> <a
+    <a  href="#playDatum" rel="tooltip" title="Play audio" >
+       <i class="icons icon-bullhorn"></i></a>
+    <a  href="#clipboard" rel="tooltip" title="Copy to clipboard" >
+       <i class="icons icon-paste"></i></a>
+    <a  href="#duplicate" rel="tooltip" title="Duplicate" >
+      <i class="icons icon-copy"></i></a>
+    <a  id="encrypt" href="#" rel="tooltip" title="Encrypt/Decrypt" >
+      <i class="icons icon-lock"></i></a>   
+<!--   <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> <a
     href="#clipboard"><i class="icons icon-paste"></i></a> <a
     href="#duplicate"><i class="icons icon-copy"></i></a> <a id="encrypt"><i
     class="icons icon-lock"></i></a>
-  <button class="btn btn-primary" id="LaTeX">LaTeX</button>
+ -->
+  <a href="#" rel="tooltip" title="Export datalist to Latex format">
+      <button class="btn btn-primary" id="LaTeX">LaTeX</button></a>
 </div>
 
 <div>

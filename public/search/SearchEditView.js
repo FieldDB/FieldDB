@@ -31,19 +31,8 @@ define([
     initialize : function() {
       Utils.debug("SEARCH init: " + this.el);
       
-      this.advancedSearchDatumView = new UpdatingCollectionView({
-        collection           : window.app.get("corpus").get("datumFields").clone(),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "datum"
-      });
-      
-      this.advancedSearchSessionView = new UpdatingCollectionView({
-        collection           : window.app.get("corpus").get("sessionFields").clone(),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : 'li',
-        childViewFormat      : "session"
-      });
+      this.changeViewsOfInternalModels();
+
       
       this.model.bind('change', this.render, this);
     },
@@ -93,7 +82,9 @@ define([
      */
     render : function() {
       Utils.debug("SEARCH render: " + this.el);
-      
+      //make sure the datum fields and session fields match the current corpus
+      this.changeViewsOfInternalModels();
+
       if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
@@ -125,6 +116,23 @@ define([
       return this;
     },
     
+    changeViewsOfInternalModels : function(){
+      //TODO, why clone? with clones they are never up to date with what is in the corpus.
+      this.advancedSearchDatumView = new UpdatingCollectionView({
+        collection           : window.app.get("corpus").get("datumFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "datum"
+      });
+      
+      this.advancedSearchSessionView = new UpdatingCollectionView({
+        collection           : window.app.get("corpus").get("sessionFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "session"
+      });
+      
+    },
     /**
      * Perform a search that finds the union of all the criteria.
      */
