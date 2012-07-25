@@ -128,31 +128,31 @@ define([
           new DatumField({
             label : "judgement",
             size : "3",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
           }),
           new DatumField({
             label : "utterance",
-            encrypted: "checked",
+            shouldBeEncrypted: "checked",
             userchooseable: "disabled",
             help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
           }),
           new DatumField({
             label : "morphemes",
-            encrypted: "checked",
+            shouldBeEncrypted: "checked",
             userchooseable: "disabled",
             help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
           }),
           new DatumField({
             label : "gloss",
-            encrypted: "checked",
+            shouldBeEncrypted: "checked",
             userchooseable: "disabled",
             help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
           }),
           new DatumField({
             label : "translation",
-            encrypted: "checked",
+            shouldBeEncrypted: "checked",
             userchooseable: "disabled",
             help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
           })
@@ -163,41 +163,41 @@ define([
         this.set("sessionFields", new DatumFields([ 
            new DatumField({
              label : "goal",
-             encrypted: "",
+             shouldBeEncrypted: "",
              userchooseable: "disabled",
              help: "This describes the goals of the session."
            }),  
           new DatumField({
             label : "consultants",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "dialect",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "You can use this field to be as precise as you would like about the dialect of this session."
           }),
           new DatumField({
             label : "language",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the langauge (or language family) if you would like to use it."
           }),
           new DatumField({
             label : "dateElicited",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session took place."
           }),
           new DatumField({
             label : "user",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "dateSEntered",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session was entered."
           }),
