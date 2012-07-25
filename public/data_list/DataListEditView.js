@@ -495,15 +495,17 @@ define( [
     },
     
     updatePouch : function() {
-      var newDataList = true;
-      if(this.model.id){
-        newDataList = false;
+      var newDataListFromSearch = true;
+      if(this.format != "search"){
+        newDataListFromSearch = false;
       }
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
-        /* If it is in the modal, then it is a new session */
-        if(newDataList){
-          this.model.setAsCurrentDataList();
+        /* If it is in the search, then it is a new datalist */
+        if(newDataListFromSearch){
+          self.format = "search-minimized";
+          self.render();
+          self.model.setAsCurrentDataList();
         }
         window.appView.renderReadonlyDataListViews();
       });
