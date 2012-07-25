@@ -471,8 +471,8 @@ define([
                 window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
               }
               
-              //If the Leftside data list is a search result, then see if this datum matches the search, and add it to the top.
-              if(window.appView.dataListEditLeftSideView.currentSearchDataList == true){
+              //See if this datum matches the search, and add it to the top of the search list
+              if($("#search_box").val() != ""){
                 //TODO check this
                 var datumJson = appView.datumsView.datumsView._childViews[0].model.get("datumFields").toJSON()
                 var datumAsDBResponseRow = {};
@@ -498,7 +498,7 @@ define([
                 }
                 if (thisDatumIsIn) {
                   // Insert the datum at the top of the search data list
-                  window.appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
+                  window.appView.searchEmbeddedView.searchDataListEditLeftSideView.addOneDatumId(model.id, true);
                 }
               }//end of if search is open and running for Alan
             }//end else if the left side is not the default
