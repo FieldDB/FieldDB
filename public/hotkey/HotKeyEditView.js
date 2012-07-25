@@ -36,6 +36,8 @@ define([
             $(".Previous_Datum").append(chrome.i18n.getMessage("Previous_Datum"));
             $(".New_Session").append(chrome.i18n.getMessage("New_Session"));
             $(".Search").append(chrome.i18n.getMessage("Search"));
+            $(".Close").append(chrome.i18n.getMessage("Close"));
+            $(".Save").append(chrome.i18n.getMessage("Save"));
 
 
 
