@@ -493,6 +493,7 @@ define( [
         if(newDataList){
           this.model.setAsCurrentDataList();
         }
+        window.appView.renderReadonlyDataListViews();
       });
     },
     
