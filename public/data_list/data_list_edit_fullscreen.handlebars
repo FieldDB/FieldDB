@@ -3,14 +3,14 @@
 	
 	<i class="icons icon-resize-small"></i>
 </div>
-<button class="btn btn-success pull-left save-datalist" value="Save">Save</button>
+<button class="btn btn-success pull-right save-datalist" value="Save">Save</button>
 <br>
 <br>
-<label>Title:</label>
-<textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
 <h4>{{dateCreated}}</h4>
+<label class = "Title"></label>
+<textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
 
-<label>Description</label>
+<label class = "Description"></label>
 <textarea class="data-list-description"
 	placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
 
@@ -20,15 +20,15 @@
   <div class="data-list-footer"></div>
 </div>
 
-<h3>Comments</h3>
+<h3 class = "Comments"></h3>
 <ul class="comments unstyled"></ul>
 
 <div class="alert alert-info">
-  <span> new comment: </span>
+  <span class ="new_comment"> </span>
   <i class="icons icon-comment"></i>
   <div class= "pull-right"> </div>
   <textarea class="comment-new-text"></textarea>
 </div>
   
-<button class="btn btn-primary add-comment-datalist-edit" value="Add">Add
-    Comment</button>
+<button class="btn btn-primary add-comment-edit" value="Add"><span class = "Add"></span></button>
+  

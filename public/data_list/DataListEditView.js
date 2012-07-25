@@ -119,6 +119,16 @@ define( [
       if (this.format == "fullscreen") {
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+        $(".Title").append(chrome.i18n.getMessage("Title"));
+        $(".Description").append(chrome.i18n.getMessage("Description"));
+        $(".Comments").append(chrome.i18n.getMessage("Comments"));
+        $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
+        $(".Add").append(chrome.i18n.getMessage("Add"));
+
+
+
+
+
        
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
@@ -157,6 +167,7 @@ define( [
       } else if (this.format == "centreWell") {
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+
         
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".data_list_content");
