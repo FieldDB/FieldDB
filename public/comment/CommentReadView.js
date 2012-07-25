@@ -45,8 +45,7 @@ define([
       Utils.debug("COMMENT render");
 
       $(this.el).html(this.template(this.model.toJSON()));
-      //for some reason this only appears on the second one, four times
-    //  $(".commented").append(chrome.i18n.getMessage("commented"));
+     
 
       
       return this;
