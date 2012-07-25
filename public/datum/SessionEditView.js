@@ -147,9 +147,9 @@ define([
           
         } else if (this.format == "leftSide") {
           var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
           };
           
           this.setElement("#session-quickview");

@@ -152,7 +152,7 @@ define([
         self.save(null, {
           success : function(model, response) {
             Utils.debug('Session save success');
-            var goal = model.get("sessionFields").where({label: "goal"})[0].get("value");
+            var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
             var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+goal+"</a>";
             //TODO add privacy for session goals in corpus
 //            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){

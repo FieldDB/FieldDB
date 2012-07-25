@@ -114,10 +114,10 @@ define([
         // necessary...
       } else if (this.format == "latex") {
         //This gets the fields necessary from the model
-        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("value");
-        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("value");
-        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
-        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("value");
+        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("mask");
+        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
+        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
         
         // makes the top two lines into an array of words.
         var utteranceArray = utterance.split(' ');

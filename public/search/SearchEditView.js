@@ -197,13 +197,13 @@ define([
       // Get all the search criteria
       var searchCriteria = [];
       datumFieldsViews.each(function(datumField) {
-        var value = datumField.get("value");
+        var value = datumField.get("mask");
         if (value && value != "") {
           searchCriteria.push(datumField.get("label") + ":" + value);
         }
       });
       sessionFieldsView.each(function(sessionField) {
-        var value = sessionField.get("value");
+        var value = sessionField.get("mask");
         if (value && value != "") {
           searchCriteria.push(sessionField.get("label") + ":" + value);
         }

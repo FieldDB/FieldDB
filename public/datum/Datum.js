@@ -296,9 +296,9 @@ define([
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
             + "\n \\ex [*] \\gll " + utterance + " \\\\"
             + "\n\t" + gloss + " \\\\"
@@ -318,9 +318,9 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result =  utterance+"\n"
             +gloss+"\n"
             +translation
@@ -342,11 +342,11 @@ define([
       if (orderedFields == null) {
         orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       }
-      judgement = this.get("datumFields").where({label: "judgement"})[0].get("value");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("value");
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
+      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var resultarray =  [judgement,utterance,morphemes,gloss,translation];
       var result = '"' + resultarray.join('","') + '"';
       if (printheader != null) {
