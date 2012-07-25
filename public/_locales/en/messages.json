@@ -199,7 +199,38 @@
    },
     "Session" : {
       "message" : "Session"
+   },
+   "Export" : {
+      "message" : "Export"
+   },
+    "Actions" : {
+      "message" : "Actions"
+   },
+    "Navigation" : {
+      "message" : "Navigation"
+   },
+    "Favorite" : {
+      "message" : "Favorite"
+   },
+    "Next_Datum" : {
+      "message" : "Next Datum"
+   },
+    "Previous_Datum" : {
+      "message" : "Previous Datum"
+   },
+    "Search" : {
+      "message" : "Search"
    }
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
    
    
    

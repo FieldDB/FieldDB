@@ -131,6 +131,7 @@ define([
         if (this.format == "embedded") {
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+          //localization
           $(".Session").append(chrome.i18n.getMessage("Session"));
           $(".Comments").append(chrome.i18n.getMessage("Comments"));
           $(".new_comment").append(chrome.i18n.getMessage("new_comment"));

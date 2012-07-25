@@ -93,6 +93,7 @@ define([
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
+          
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render(); 
           // Display the CommentReadView
