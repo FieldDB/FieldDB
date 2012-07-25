@@ -354,7 +354,7 @@ define([
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
         "label" : this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_"),
-        "encrypted" : checked,
+        "shouldBeEncrypted" : checked,
         "help" : this.$el.find(".add_help").val()
       });
 
@@ -380,7 +380,7 @@ define([
 //      }
 //      m.set({
 //        "label" : datumField.find(".choose-field").val().toLowerCase().replace(/ /g,"_"),
-//        "encrypted" : checked,
+//        "shouldBeEncrypted" : checked,
 //        "help" : datumField.find(".help-text").val()
 //      });
 //      window.appView.addUnsavedDoc(this.model.id);
