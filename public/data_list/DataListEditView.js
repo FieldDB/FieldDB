@@ -33,7 +33,7 @@ define( [
      *        
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide", "centreWell",
-     * "fullscreen", "import", and "minimized."
+     * "fullscreen", "import", "minimized" "search" "search-minimized"
      * 
      * @extends Backbone.View
      * @constructs
@@ -103,7 +103,7 @@ define( [
     embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
 
     /** 
-     * The Handlebars template rendered as Summary.
+     * The Handlebars template rendered as Summary, this one can be minimized.
      */
     templateSummary : Handlebars.templates.data_list_summary_edit_embedded,
     
@@ -124,44 +124,30 @@ define( [
 
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
-       
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
         
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-        
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-     
       } else if (this.format == "leftSide") {
         Utils.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
 
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
+      }else if (this.format == "search") {
+        Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
 
-        // Display the pagination footer
-        this.renderUpdatedPagination();
+        this.setElement($("#search-data-list-quickview"));
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
 
-      } else if (this.format == "import"){
+      }else if (this.format == "search-minimized") {
+        Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
+
+        this.setElement($("#search-data-list-quickview"));
+        $(this.el).html(this.templateMinimized(this.model.toJSON()));
+
+      }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-view"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-        
-        // Display the pagination footer
-        this.renderUpdatedPagination();
+        $(this.el).html(this.templateSummary(this.model.toJSON()));
         
       } else if (this.format == "centreWell") {
         Utils.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -169,22 +155,29 @@ define( [
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
         
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-       
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
-        
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-        
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
+      }else{
+        throw("Bug: no format was specified for DataListEditView, nothing was rendered");
+      }
+      try{
+        if (this.format && this.format.indexOf("minimized") == -1){
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+          
+          // Display the DatumFieldsView
+          this.datumsView.el = this.$(".data_list_content");
+          this.datumsView.render();
+          
+          // Display the pagination footer
+          this.renderUpdatedPagination();
+        }
+      }catch(e){
+        alert("bug, there was a problem rendering the contents of the data list format: "+this.format)
       }
 
       return this;
