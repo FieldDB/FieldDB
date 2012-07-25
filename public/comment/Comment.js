@@ -64,14 +64,8 @@ define( [
      */
     edit : function(newtext) {
       this.set("text", newtext);
-    },
-    
-    // in your Model validate function
-    validate : function(attrs) {
-      if (!attrs.mask) {
-        attrs.mask = "hi empty mask";
-      }
     }
+    
   });
 
   return Comment;

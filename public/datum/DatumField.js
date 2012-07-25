@@ -42,13 +42,24 @@ define([
       // There are no nested models
     },
    
-    // in your Model validate function
-    validate: function(attrs) {
-      //TODO if its encrypted, encrypt incoming values, create masks etc. 
-//      make sure the values and masks are both set because we will render masks to the users. 
-//      this will make search exciting...
-      if (!attrs.mask) {
-        attrs.mask = "hi empty mask";
+    /**
+     * Called before set and save, checks the attributes that the user is
+     * attempting to set or save, In the case of the datumfield, if the datum
+     * field is not encrypted, then the mask and value are essentially the same.
+     * If however the datum is supposed to be encrypted, the value needs to
+     * start with confidential, and the mask should be xxxx representign
+     * words/morphemes which are allowed to be shown.
+     * 
+     * @param attributes
+     */
+    validate: function(attributes) {
+      if(attributes.encrypted == ""){
+        this.set("mask", attributes.value);
+      }else{
+        this.set("mask","xxx xxx xxx");
+        if(attributes.value.indexOf("confidential") != 0){
+          this.set("value", window.app.get("corpus").get("confidential").encrypt(attributes.value));
+        }
       }
     },
     saveAndInterConnectInApp : function(callback){

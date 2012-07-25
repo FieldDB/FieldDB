@@ -232,8 +232,9 @@ define([
             if (typeof successcallback == "function") {
               successcallback();
             }else{
-  //          window.appView.renderEditableSessionViews();
-  //          window.appView.renderReadonlySessionViews();
+              window.appView.sessionReadLeftSideView.render();
+//            window.appView.renderEditableSessionViews();
+//            window.appView.renderReadonlySessionViews();
             }
           });
         }catch(e){
