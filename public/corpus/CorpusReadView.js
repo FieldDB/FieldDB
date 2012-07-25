@@ -166,6 +166,24 @@ define([
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(this.model.toJSON()));
+      //localization
+        $(".New_menu").append(chrome.i18n.getMessage("New_menu"));
+        $(".New_Datum").append(chrome.i18n.getMessage("New_Datum"));
+        $(".New_Data_List").append(chrome.i18n.getMessage("New_Data_List"));
+        $(".New_Session").append(chrome.i18n.getMessage("New_Session"));
+        $(".New_Corpus").append(chrome.i18n.getMessage("New_Corpus"));
+        $(".Data_menu").append(chrome.i18n.getMessage("Data_menu"));
+        $(".Import_Data").append(chrome.i18n.getMessage("Import_Data"));
+        $(".Export_Data").append(chrome.i18n.getMessage("Export_Data"));
+        $(".Sessions_associated").append(chrome.i18n.getMessage("Sessions_associated"));
+        $(".Datalists_associated").append(chrome.i18n.getMessage("Datalists_associated"));
+        $(".Permissions_associated").append(chrome.i18n.getMessage("Permissions_associated"));
+        $(".Datum_field_settings").append(chrome.i18n.getMessage("Datum_field_settings"));
+        $(".Add").append(chrome.i18n.getMessage("Add"));
+        $(".Datum_state_settings").append(chrome.i18n.getMessage("Datum_state_settings"));
+        $(".Comments").append(chrome.i18n.getMessage("Comments"));
+        $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
+
         
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();

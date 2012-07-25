@@ -1,29 +1,28 @@
 <div class="pull-right">
     <i class="icons icon-book"></i>
-    <spacer></spacer>
     <i class="icons icon-resize-small"></i>
 </div>
 <div class="btn-toolbar ">
   <!-- /btn-group -->
   <div class="btn-group">
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-      New <span class="caret"></span>
+    <span class ="New_menu"></span>  <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li class="new-datum-edit"><a href="#">New Datum</a></li>
-      <li class="new-data-list"><a href="#">New Data List</a></li>
-      <li class="new-session"><a href="#">New Session</a></li>
-      <li class="new-corpus"><a href="#">New Corpus</a></li>
+      <li class="new-datum-edit"><a href="#"><span class = "New_Datum"></span></a></li>
+      <li class="new-data-list"><a href="#"><span class = "New_Data_List"></span></a></li>
+      <li class="new-session"><a href="#"><span class = "New_Session"></span></a></li>
+      <li class="new-corpus"><a href="#"><span class = "New_Corpus"></span></a></li>
     </ul>
   </div>
   <!-- /btn-group -->
   <div class="btn-group">
     <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-      Data <span class="caret"></span>
+      <span class ="Data_menu"></span> <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li><a href="#import">Import Data</a></li>
-      <li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
+      <li><a href="#import"><span class = "Import_Data"></span></a></li>
+      <li><a href="#corpus/{{titleAsUrl}}/export"><span class = "Export_Data"></span></a></li>
     </ul>
   </div>
   <!-- /btn-group -->
@@ -31,58 +30,60 @@
   <!-- Toggle to readonly -->
   <div class="btn-group">
     <button class="btn btn-success save-corpus">
-      Save</button>
+     <span class="Save"></span></button>
   </div>
 </div>
 
 
-<label>Title:</label>
+<label class = "Title"></label>
 <input class="corpus-title-input" value="{{title}}" type="text"/>
-<label>Description:</label>
+<label class = "Description"></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
-<div class="accordion" id="accordion-edit-fullscreen">
+<div class="accordion" id="accordion-edit-embedded">
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-fullscreen" href="#collapseSessionsEF">
-        <h4>Sessions associated with this corpus</h4>
+        data-parent="#accordion-edit-embedded" href="#collapseSessionsEE">
+        <h4 class="Sessions_associated"></h4>
          </a>
     </div>
-    <div id="collapseSessionsEF" class="accordion-body collapse">
+    <div class="accordion-body collapse" id="collapseSessionsEE">
       <div class="accordion-inner">
         <ul class = "sessions-updating-collection unstyled">
-           <!-- Updating Sessions Collection -->
+                <!-- Updating Sessions Collection -->
         </ul>
       </div>
     </div>
   </div>
+  
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-fullscreen" href="#collapseDatalistsEF">
-        <h4>Datalists associated with this corpus</h4>
-        </a>
+        data-parent="#accordion-edit-embedded" href="#collapseDatalistsEE">
+          <h4 class="Datalists_associated"></h4>
+      </a>
     </div>
-    <div id="collapseDatalistsEF" class="accordion-body collapse">
+    <div class="accordion-body collapse" id="collapseDatalistsEE" >
       <div class="accordion-inner">
-        <ul class = "datalists-updating-collection unstyled">
-           <!-- Updating DataLists Collection -->
+         <ul class = "datalists-updating-collection unstyled">
+                <!-- Updating DataLists Collection -->
         </ul>
       </div>
     </div>
   </div>
+  
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-fullscreen" href="#collapsePermissionsEF">
-        <h4>Permissions associated with this corpus</h4>
-        </a>
+        data-parent="accordion-edit-embedded" href="#collapsePermissionsEE">
+        <h4 class="Permissions_associated"></h4>
+      </a>
     </div>
-    <div id="collapsePermissionsEF" class="accordion-body collapse">
+    <div class="accordion-body collapse" id="collapsePermissionsEE">
       <div class="accordion-inner">
         <ul class = "permissions-updating-collection unstyled">
-            <!-- Updating Permissions Collection -->
+                      <!-- Updating Permissions Collection -->
         </ul>
       </div>
     </div>
@@ -91,18 +92,16 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-fullscreen" href="#collapseDatumFieldSettingsEF">
-        <h4>Datum field settings</h4>
+        data-parent="#accordion-edit-embedded" href="#collapseDatumFieldSettingsEE">
+           <h4 class="Datum_field_settings"></h4>
         </a>
     </div>
-    <div id="collapseDatumFieldSettingsEF" class="accordion-body collapse">
+    <div class="accordion-body collapse" id="collapseDatumFieldSettingsEE">
       <div class="accordion-inner">
         <ul class="datum_field_settings unstyled"></ul>
         <div class="breadcrumb">
-        <input type="text" class="span3 choose_add_field" data-provide="typeahead" data-items="4" 
-        data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
-        
-          <!-- <select class="choose_add_fields">
+         
+        <!-- <select class="choose_add_field">
             <option value="judgement">Gramaticality/Acceptability Judgement</option>
             <option value="utterence">Orthography/Utterance</option>
             <option value="morphemes">Morphemes</option>
@@ -112,13 +111,19 @@
             <option value="context">Context</option>
             <option value="semantic_denotation">Semantic Denotation</option>
             <option value="Create New">Create New</option>
-        </select>  -->
-        Encrypt if confidential: <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
-            <label>Help Text</label>
+        </select> -->
+        <span class="pull-right">
+      <span class = "Encrypt_if_confidential"></span> <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
+      </span>
+       <input type="text" class="span3 choose_add_field" data-provide="typeahead" data-items="4" 
+        data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
+        
+            <label class = "Help_Text"></label>
               <textarea
               placeholder="Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
-              class="add_help"></textarea>
-          <button class="btn btn-primary add_datum_field" value="Add">Add</button>
+              class="add_help">
+              </textarea>
+          <button class="btn btn-primary add_datum_field" value="Add"><span class = "Add"></span></button>
         </div>
       </div>
     </div>
@@ -127,37 +132,35 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-fullscreen" href="#collapseDatumStateSettingsEF">
-        <h4>Datum state settings</h4>
+        data-parent="#accordion-edit-embedded" href="#collapseDatumStateSettingsEE">
+        <h4 class="Datum_state_settings"></h4>
       </a>
     </div>
-    <div class="accordion-body collapse" id="collapseDatumStateSettingsEF">
+    <div class="accordion-body collapse" id="collapseDatumStateSettingsEE">
         <ul class="datum_state_settings unstyled"></ul>
         <input class="add_input" value="" placeholder="Add..." type="text"></input>
         <select class="add_color_chooser">
-          <option value="success">Green</option>
-          <option value="warning">Orange</option>
-          <option value="important">Red</option>
-          <option value="primary">Blue</option>
-          <option value="info">Teal</option>
-          <option value="inverse">Black</option>
-          <option value="">Default</option>
+          <option value="success" class = "Green"></option>
+          <option value="warning" class = "Orange"></option>
+          <option value="important" class = "Red"></option>
+          <option value="primary" class = "Blue"></option>
+          <option value="info" class = "Teal"></option>
+          <option value="inverse" class = "Black"></option>
+          <option value="" class = "Default"></option>
         </select>
-        <button class="btn btn-primary add_datum_state" value="Add">Add</button>
+        <button class="btn btn-primary add_datum_state" value="Add"><span class = "Add"></span></button>
     </div>
   </div>      
-</div>        
+</div>
 
-<h3>Comments</h3>
+<h3 class = "Comments"></h3>
 <ul class="comments unstyled"></ul>
 
 <div class="alert alert-info">
-  <span> new comment: </span>
+  <span class = "new_comment"> </span>
   <i class="icons icon-comment"></i>
   <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>
 </div>
 
-<button class="btn btn-primary add-comment-edit" value="Add">Add
-  Comment</button>
-
+<button class="btn btn-primary add-comment-edit" value="Add"><span class = "Add"></span></button>
