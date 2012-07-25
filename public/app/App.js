@@ -166,9 +166,12 @@ define([
 
             //show pretty views after loading everything.
             window.appView.renderReadonlyCorpusViews();
+            
+            appView.datumsView.render();
+            appView.datumsView.updateDatums();
           },
           error : function(e) {
-            Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
+            alert("There was an error fetching corpus. Loading defaults..."+e);
           }
         });
       });
@@ -189,7 +192,7 @@ define([
             window.appView.renderReadonlySessionViews();
           },
           error : function(e) {
-            Utils.debug("There was an error fetching the session. Loading defaults..."+e);
+           alert("There was an error fetching the session. Loading defaults..."+e);
             s.set(
                 "sessionFields", self.get("corpus").get("sessionFields").clone()
             );
@@ -213,7 +216,7 @@ define([
             window.appView.renderFirstPageReadonlyDataListViews();
           },
           error : function(e) {
-            Utils.debug("There was an error fetching the data list. Loading defaults..."+e);
+            alert("There was an error fetching the data list. Loading defaults..."+e);
           }
         });
       });

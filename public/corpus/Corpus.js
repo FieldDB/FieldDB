@@ -507,7 +507,7 @@ define([
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
               
               // Display the most recent datum in this corpus
-              appView.datumsView.updateDatums();
+//              appView.datumsView.updateDatums(); //Im not sure i want to do this.. lets leave htem where they were.
             }
             if(typeof fromcallback == "function"){
               fromcallback();
@@ -603,7 +603,7 @@ define([
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
               
               // Display the most recent datum in this corpus
-              appView.datumsView.updateDatums();
+//              appView.datumsView.updateDatums();//TODO cesine: im not sure i want to do this, lets let the user stay where they were. we will update datums only when we load the dashboard by ids.
             }
             if(typeof fromcallback == "function"){
               fromcallback();
