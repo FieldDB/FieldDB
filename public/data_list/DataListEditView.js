@@ -256,21 +256,27 @@ define( [
     },
     
     /**
-     * Create a permanent data list in the current corpus.
+     * Create a temporary data list in the current corpus. If permanent = "permanent" then it will save it into the corpus.
+     * 
+     * @param callback
+     * @param permanent
      */
-    newDataList : function(callback) {
+    newDataList : function(callback, permanent) {
       //save the current data list
       this.model.currentSearchDataList = false;
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         //clone it
-        self.model = new DataList(self.model.toJSON());
-        // Clear the current data list
-        self.model.set("datumIds", []);
-        self.model.set("corpusname", app.get("corpus").get("corpusname"));
-        self.model.set("title", self.model.get("title")+ " copy");
-        self.model.set("description",  "Copy of: "+self.model.get("description"));
-        self.model.set("comments", new Comments());
+        var attributes = JSON.parse(JSON.stringify(self.model.attributes));
+        // Clear the current data list's backbone info and info which we shouldnt clone
+        attributes._id = undefined;
+        attributes._rev = undefined;
+        attributes.comments = undefined;
+        attributes.title = self.model.get("title")+ " copy";
+        attributes.description = "Copy of: "+self.model.get("description");
+        attributes.corpusname = app.get("corpus").get("corpusname");
+        attributes.datumIds = [];
+        self.model = new DataList(attributes);
         
         var coll = self.datumsView.collection;
         while (coll.length > 0) {
@@ -278,10 +284,23 @@ define( [
         }
         
         // Display the new data list
-        appView.renderReadonlyDataListViews();
-        appView.renderEditableDataListViews();
-        if(typeof callback == "function"){
-          callback();
+//        appView.renderReadonlyDataListViews();
+//        appView.renderEditableDataListViews();
+        //Why call all data lists to render, this is a temp data list until the user hits save.
+        self.render();
+        if(permanent == "permanent"){
+          self.model.saveAndInterConnectInApp(function(){
+            //TOOD check this, this is used by the import to make the final datalist
+            self.model.setAsCurrentDataList(function(){
+              if(typeof callback == "function"){
+                callback();
+              }
+            });
+          });
+        }else{
+          if(typeof callback == "function"){
+            callback();
+          }
         }
       });
     },

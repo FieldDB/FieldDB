@@ -183,12 +183,18 @@ define([
             if (typeof successcallback == "function") {
               successcallback();
             }else{
+              //TODO remove this when done debugging and it is working all the time.
+              window.appView.toastUser("Sucessfully connected all views up to data list: "+ this.id,"alert-success","Connected!");
 //            window.appView.renderEditableDataListViews();
 //            window.appView.renderReadonlyDataListViews();
             }
           });
         }catch(e){
-          alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session.");
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          }else{
+            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session.");
+          }
         }
       }
     }

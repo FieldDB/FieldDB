@@ -468,12 +468,17 @@ define([
             if (typeof successcallback == "function") {
               successcallback();
             }else{
+              window.appView.toastUser("Sucessfully connected all views up to corpus: "+ this.id,"alert-success","Connected!");
 //            window.appView.renderEditableCorpusViews();
 //            window.appView.renderReadonlyCorpusViews();
             }
           });
         }catch(e){
-          alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current session.");
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          }else{
+            alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current session.");
+          }
         }
     },
     /**
