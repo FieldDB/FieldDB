@@ -60,7 +60,6 @@ define( [
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
-      
     },
 
     /**

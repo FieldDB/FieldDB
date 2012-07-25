@@ -234,9 +234,17 @@ define([
     },
     
     searchContinued : function(datumIds) {
-      // Create a new data list
-      // TODO Make this a temporary data list
+      // Create a new temporary data list in editable datalist on the LeftSide
       appView.dataListEditLeftSideView.newDataList();
+      appView.dataListEditLeftSideView.model.set("title"
+          , this.model.get("searchKeywords") +" search result");
+      appView.dataListEditLeftSideView.model.set("description"
+          ,  "This is the result of searching for : " 
+          + this.model.get("searchKeywords")
+          + " in " 
+          + window.app.get("corpus").get("title") 
+          + " on "+ JSON.stringify(new Date()) );
+      
       
       // Add search results to the data list
       for (var key in datumIds) {

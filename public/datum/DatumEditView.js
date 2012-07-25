@@ -298,11 +298,11 @@ define([
         // happens
         // before the saving is done
         this.needsSave = false;
-
+        var self = this;
         this.model.saveAndInterConnectInApp(function(){
-          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+model.id,"alert-success","Saved!");
+          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+self.model.id,"alert-success","Saved!");
         },function(){
-          window.appView.toastUser("Unable to save datum: "+model.id,"alert-danger","Not saved!");
+          window.appView.toastUser("Unable to save datum: "+self.model.id,"alert-danger","Not saved!");
         });
       }
     },

@@ -353,26 +353,24 @@ define( [
         "dateEntered" : JSON.stringify(new Date()),
         "dateModified" : JSON.stringify(new Date())
       });
-      thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
-        thatdatum.save(null, {
-          success : function(model, response) {
-            hub.publish("savedDatumToPouch",{d: d, message: " datum "+model.id});
+      
+      thatdatum.saveAndInterConnectInApp(function(){
+        hub.publish("savedDatumToPouch",{d: d, message: " datum "+thatdatum.id});
 
-            // Update progress bar
-            $(".import-progress").val($(".import-progress").val()+1);
+        // Update progress bar
+        $(".import-progress").val($(".import-progress").val()+1);
+     
+        // Add Datum to the new datalist and render it this should work
+        // because the datum is saved in the pouch and can be fetched, 
+        // this will also not be the default data list because it is the data list for this import
+        appView.dataListEditLeftSideView.addOneDatumId(thatdatum.id, true);
 
-            // Add Datum to the new datalist and render it this should work
-            // because the datum is saved in the pouch and can be fetched
-            appView.dataListEditLeftSideView.addOneDatumId(model.id);
-
-            // Add Datum to the default data list
-            var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-            app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-          },
-          error : function(e) {
-            hub.publish("saveDatumFailedToPouch",{d: d, message: "datum "+ JSON.stringify(e) });
-          }
-        });
+      },function(){
+        //The e error should be from the error callback
+        if(!e){
+          e = {};
+        }
+        hub.publish("saveDatumFailedToPouch",{d: d, message: "datum "+ JSON.stringify(e) });
       });
     },
     importCompleted : function(){
