@@ -173,7 +173,11 @@ define([
       this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
       var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), this.searchContinued);
+      try{
+        (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), this.searchContinued);
+      }catch(e){
+        alert("Bug: There was a problem searching. it might be that your computer didnt pull down the files from the server that it needs to search. this has to happen once before search will work. ");
+      }
     },
     
     

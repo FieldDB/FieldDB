@@ -506,7 +506,8 @@ define([
             window.appView.addUnsavedDoc(window.app.get("corpus").get("dataLists").models[defaultIndex].id);
             window.appView.addUnsavedDoc(window.app.get("corpus").id);
 
-            window.app.get("authentication").saveAndInterConnectInApp();
+            //dont need to save the user when we change a datum.
+//            window.app.get("authentication").saveAndInterConnectInApp();
 
             if(typeof successcallback == "function"){
               successcallback();

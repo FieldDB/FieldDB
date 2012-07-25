@@ -136,8 +136,8 @@ define([
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+              window.app.get("authentication").saveAndInterConnectInApp();
             }
-            window.app.get("authentication").saveAndInterConnectInApp();
 
             if(typeof successcallback == "function"){
               successcallback();
