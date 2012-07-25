@@ -171,7 +171,7 @@ define([
         // prompt the user if they want to create a new Session.
         var tooOld = false;
         for (var i = 0; i < this.model.length; i++) {
-          var previousDateModified = this.model.models[i].get("dateModified")
+          var previousDateModified = this.model.models[i].get("dateModified");
           if (previousDateModified) {
             var currentDate = new Date();
             // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
@@ -192,7 +192,7 @@ define([
       } else if (this.model.get(datum.id)) {
         // Loop through the currently displayed views
         for (var i in this.datumsView._childViews) {
-          var view = this.datumsView._childViews[i]
+          var view = this.datumsView._childViews[i];
           if (view.model.id == datum.id) {
             // Save it
             view.saveScreen();
