@@ -44,6 +44,9 @@ define([
    
     // in your Model validate function
     validate: function(attrs) {
+      //TODO if its encrypted, encrypt incoming values, create masks etc. 
+//      make sure the values and masks are both set because we will render masks to the users. 
+//      this will make search exciting...
       if (!attrs.mask) {
         attrs.mask = "hi empty mask";
       }
