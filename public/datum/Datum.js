@@ -456,7 +456,38 @@ define([
                 window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
                 window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
               }
-            }
+              
+              //If the Leftside data list is a search result, then see if this datum matches the search, and add it to the top.
+              if(window.appView.dataListEditLeftSideView.temporaryDataList == true){
+                //TODO check this
+                var datumJson = appView.datumsView.datumsView._childViews[0].model.get("datumFields").toJSON()
+                var datumAsDBResponseRow = {};
+                for (var x in datumJson){ 
+                  datumAsDBResponseRow[datumJson[x].label] = datumJson[x].value;
+                }
+                var queryTokens = model.processQueryString($("#search_box").val());
+                var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
+                
+                for (var j = 1; j < queryTokens.length; j += 2) {
+                  if (queryTokens[j] == "AND") {
+                    // Short circuit: if it's already false then it continues to be false
+                    if (!thisDatumIsIn) {
+                      break;
+                    }
+                    
+                    // Do an intersection
+                    thisDatumIsIn = thisDatumIsIn && model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+                  } else {
+                    // Do a union
+                    thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+                  }
+                }
+                if (thisDatumIsIn) {
+                  // Insert the datum at the top of the search data list
+                  window.appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
+                }
+              }//end of if search is open and running for Alan
+            }//end else if the left side is not the default
             
             window.appView.addUnsavedDoc(window.app.get("corpus").get("dataLists").models[defaultIndex].id);
             window.appView.addUnsavedDoc(window.app.get("corpus").id);
