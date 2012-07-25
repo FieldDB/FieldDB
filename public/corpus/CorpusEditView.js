@@ -448,7 +448,9 @@ define([
         if(this.format == "modal"){
           $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+          //TOOD check this, shouldn't we do the set as current also?
         }
+        
       },function(){
         if(this.format == "modal"){
           $("#new-corpus-modal").modal("hide");
