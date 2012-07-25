@@ -166,6 +166,10 @@ define([
         jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
         
+        //localization
+    //    $(".Add").append(chrome.i18n.getMessage("Add"));
+
+        
         // Display audioVideo View
         this.audioVideoView.el = this.$(".audio_video");
         this.audioVideoView.render();
