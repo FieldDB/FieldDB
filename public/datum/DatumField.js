@@ -33,7 +33,8 @@ define([
       label : "",
       value : "",
       mask : "",
-      encrypted : false,
+      encrypted : "",
+      shouldBeEncrypted : "",
       help : "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
     },
     
@@ -82,15 +83,19 @@ define([
 
       options = options || {};
       // do any other custom property changes here
-      if(attributes[value] != ""){
-        if( this.get("encrypted") == "checked" && this.get("shouldBeEncrypted") == "checked" ){
-          attributes["mask"] = "xxx xxx xxx";
+//      if(attributes.mask && attributes.mask != ""){
+//        alert("Bug: something is trying to set the mask for this datum field."); 
+//      }
+      
+      if(attributes.value != ""){
+        if( attributes.encrypted == "checked" && attributes.shouldBeEncrypted == "checked" ){
+          attributes.mask = "xxx xxx xxx";
           
-          if( attributes["value"].indexOf("confidential") != 0 && window.appView){
-            attributes["value"] = window.app.get("corpus").get("confidential").encrypt(attributes["value"]);
+          if( attributes.value.indexOf("confidential") != 0 && window.appView){
+            attributes.value = window.app.get("corpus").get("confidential").encrypt(attributes.value);
           }
         }else{
-          attributes["mask"] = attributes["value"] || this.get("value");
+          attributes.mask = attributes.value ;
         }
       }
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
