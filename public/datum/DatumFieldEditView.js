@@ -86,14 +86,14 @@ define([
     
     // TODO Add description
     updateEncrypted : function() {
-      var checked = this.$el.children(".encrypted").is(':checked');
+      var checked = this.$el.children(".shouldBeEncrypted").is(':checked');
       if (checked ) {
         checked = "checked";
       } else {
         checked = "";
       }
       Utils.debug("Updated encrypted to " + checked);
-      this.model.set("encrypted", checked);
+      this.model.set("shouldBeEncrypted", checked);
     },
     
     // TODO Add description

@@ -94,6 +94,10 @@ define([
      */
     initialize : function() {
 
+      if(!this.get("confidential")){
+        this.set("confidential", new Confidential() )
+      }
+      
       if(!this.get("publicSelf")){
         this.set("publicSelf", new CorpusMask({
           "couchConnection" : this.get("couchConnection"),
@@ -254,7 +258,7 @@ define([
       title : "Untitled Corpus",
       titleAsUrl :"UntitledCorpus",
       description : "This is an untitled corpus, created by default.",
-      confidential :  Confidential,
+//      confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 

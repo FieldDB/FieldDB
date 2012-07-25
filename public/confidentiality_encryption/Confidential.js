@@ -39,7 +39,7 @@ define( [
       console.log("encrypted" + encryptedMessage);
 
       var decryptedMessage = this.decrypt(encryptedMessage);
-      console.log("decrypted:" + decryptedMessage);
+//      console.log("decrypted:" + decryptedMessage);
 
       if (this.get("secretkey") == "This should be a top secret pass phrase.") {
         this.set("secretkey", this.secretKeyGenerator());

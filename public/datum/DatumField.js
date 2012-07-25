@@ -53,14 +53,47 @@ define([
      * @param attributes
      */
     validate: function(attributes) {
-      if(attributes.encrypted == ""){
-        this.set("mask", attributes.value);
+//      if(attributes.encrypted == ""){
+////        this.set("mask", attributes.value);
+//        attributes.mask = attributes.value;
+//      }else{
+////        this.set("mask","xxx xxx xxx");
+//        attributes.mask = "xxx xxx xxx";
+//        if(attributes.value.indexOf("confidential") != 0){
+////          this.set("value", window.app.get("corpus").get("confidential").encrypt(attributes.value));
+//          attributes.value = window.app.get("corpus").get("confidential").encrypt(attributes.value);
+//        }
+//      }
+      
+    },
+    //http://stackoverflow.com/questions/11315844/what-is-the-correct-way-in-backbone-js-to-listen-and-modify-a-model-property
+    set: function(key, value, options) {
+      var attributes;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (_.isObject(key) || key == null) {
+        attributes = key;
+        options = value;
+      } else {
+        attributes = {};
+        attributes[key] = value;
+      }
+
+      options = options || {};
+      if ( options.settingsversion ) {
       }else{
-        this.set("mask","xxx xxx xxx");
-        if(attributes.value.indexOf("confidential") != 0){
-          this.set("value", window.app.get("corpus").get("confidential").encrypt(attributes.value));
+        // do any other custom property changes here
+        if( this.get("encrypted") == ""){ //TODO this should be an attribute of the datum?
+          attributes["mask"] = attributes["value"] || this.get("value");
+        }else{
+          attributes["mask"] = "xxx xxx xxx";
+          
+          if( attributes["value"].indexOf("confidential") != 0 && window.appView){
+            attributes["value"] = window.app.get("corpus").get("confidential").encrypt(attributes["value"]);
+          }
         }
       }
+      return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
     saveAndInterConnectInApp : function(callback){
       
