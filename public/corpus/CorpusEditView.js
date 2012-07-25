@@ -297,7 +297,7 @@ define([
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
       window.appView.sessionModalView.model = new Session({
         corpusname : window.app.get("corpus").get("corpusname"),
-        sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON())
+        sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON()) //This is okay, there will be no backbone ids since datumFields are not saved to pouch
       });
       window.appView.sessionModalView.model.set("comments", new Comments());
       window.appView.sessionModalView.render();
@@ -308,17 +308,27 @@ define([
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      window.appView.corpusNewModalView.model = new Corpus(window.app.get("corpus").toJSON()); //MUST be a new model, other wise it wont save in a new pouch.
-      //Give it a null id so that pouch will save it as a new model.
-      //WARNING this might not be a good idea, if you find strange side effects in corpora in the future, it might be due to this way of creating (duplicating) a corpus. However with a corpus it is a good idea to duplicate the permissions and settings so that the user won't have to redo them.
-      window.appView.corpusNewModalView.model.set("title", window.app.get("corpus").get("title")+ " copy");
-      window.appView.corpusNewModalView.model.set("titleAsUrl", window.app.get("corpus").get("titleAsUrl")+"Copy");
-      window.appView.corpusNewModalView.model.set("corpusname", window.app.get("corpus").get("corpusname")+"copy");
-      window.appView.corpusNewModalView.model.get("couchConnection").corpusname = window.app.get("corpus").get("corpusname")+"copy";
-      window.appView.corpusNewModalView.model.set("description", "Copy of: "+window.app.get("corpus").get("description"));
-      window.appView.corpusNewModalView.model.set("dataLists", new DataLists());
-      window.appView.corpusNewModalView.model.set("sessions", new Sessions());
-      window.appView.corpusNewModalView.model.set("comments", new Comments());
+      var attributes = JSON.parse(JSON.stringify(window.app.get("corpus").attributes));
+      // Clear the current data list's backbone info and info which we shouldnt clone
+      attributes._id = undefined;
+      attributes._rev = undefined;
+      /*
+       * WARNING this might not be a good idea, if you find strange side
+       * effects in corpora in the future, it might be due to this way
+       * of creating (duplicating) a corpus. However with a corpus it is
+       * a good idea to duplicate the permissions and settings so that
+       * the user won't have to redo them.
+       */
+      attributes.title = window.app.get("corpus").get("title")+ " copy";
+      attributes.titleAsUrl = window.app.get("corpus").get("titleAsUrl")+"Copy";
+      attributes.description = "Copy of: "+window.app.get("corpus").get("description");
+      attributes.corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      attributes.couchConnection.corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      attributes.dataLists = new DataLists();
+      attributes.sessions = new Sessions();
+      attributes.comments = new Comments();
+
+      window.appView.corpusNewModalView.model = new Corpus(attributes);
       window.appView.corpusNewModalView.render();
     },
 
