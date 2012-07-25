@@ -233,12 +233,17 @@ define([
               successcallback();
             }else{
               window.appView.sessionReadLeftSideView.render();
+              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id,"alert-success","Connected!");
 //            window.appView.renderEditableSessionViews();
 //            window.appView.renderReadonlySessionViews();
             }
           });
         }catch(e){
-          alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          }else{
+            alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");
+          }
         }
       }
     },
