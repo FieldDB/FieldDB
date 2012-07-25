@@ -49,7 +49,6 @@ define([
 //    	  JSONtorender.username = this.model.username;
 //      }
       $(this.el).html(this.template(this.model.toJSON()));
-      $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
 
       
       return this;
