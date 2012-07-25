@@ -83,11 +83,19 @@ define( [
       "click .icon-book" :"showReadonly",
       "click .save-datalist" : "updatePouch",
       "click .icon-minus-sign" : function() {
-        this.format = "minimized";
+        if(this.format == "search"){
+          this.format = "search-minimized";
+        }else{
+          this.format = "minimized";
+        }
         this.render();
       },
       "click .icon-plus-sign" : function() {
-        this.format = "leftSide";
+        if(this.format == "search-minimized"){
+          this.format = "search";
+        }else{
+          this.format = "leftSide";
+        }
         this.render();
       }
     },
@@ -161,7 +169,7 @@ define( [
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }else{
-        throw("Bug: no format was specified for DataListEditView, nothing was rendered");
+        Utils.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
