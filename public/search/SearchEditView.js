@@ -2,6 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "data_list/DataList",
+    "data_list/DataListEditView",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumFieldEditView",
@@ -12,6 +13,7 @@ define([
     Backbone, 
     Handlebars, 
     DataList,
+    DataListEditView,
     Datum,
     Datums,
     DatumFieldEditView,
@@ -116,7 +118,10 @@ define([
         this.setElement($("#search-top"));
         $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
-      this.searchDataListEditLeftSideView.format = "search";
+      if(!this.searchDataListEditLeftSideView.format){
+        this.searchDataListEditLeftSideView.format = "search-minimized";
+      }
+//      this.searchDataListEditLeftSideView.format = "search";
       this.searchDataListEditLeftSideView.render();
 
       return this;
@@ -126,6 +131,8 @@ define([
         model : new DataList(),
         datumCollection : new Datums() 
       }); 
+      this.searchDataListEditLeftSideView.model.set("title","Temporary Search Results");
+      this.searchDataListEditLeftSideView.model.set("description","You can use search to create data lists for handouts.");
       this.searchDataListEditLeftSideView.format = "search-minimized";
       if(typeof callback == "function"){
         callback();
