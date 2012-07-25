@@ -460,6 +460,7 @@ define([
             //If the leftside data list is the default list, use it to add the datum to the default list.
             if(window.appView.dataListEditLeftSideView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
               window.appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
+              window.appView.dataListReadLeftSideView.render();
             }else{
               //Otherwise add it to the default datalist by hand.
               //make sure the datum is in this corpus, if it is the same corpusname
