@@ -275,7 +275,7 @@ define([
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
                         c.replicateFromCorpus(couchConnection);
-                        appView.datumsView.newDatum();
+//                        appView.datumsView.newDatum();
                         appView.datumsView.render();
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
@@ -336,7 +336,7 @@ define([
                     if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                       //do nothing because they have no recent ids
                       alert("Bug: User does not have most recent ids, not showing your dashbaord.");
-                      appView.datumsView.newDatum();
+//                      appView.datumsView.newDatum();
                       appView.datumsView.render();
                     }else{
                       /*

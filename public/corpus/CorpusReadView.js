@@ -334,11 +334,7 @@ define([
     resizeFullscreen : function(){
       window.app.router.showFullscreenCorpus();
     } ,
-       
-    newDatum : function(e) {
-      appView.datumsView.newDatum();
-      app.router.showDashboard();
-    },
+   
     //This is bound to the little pencil function
     showEditable :function(){
       window.app.router.showEditableCorpus();
