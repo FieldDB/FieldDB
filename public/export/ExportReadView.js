@@ -29,6 +29,8 @@ define([
      // Display the ExportView
     	this.setElement($("#export-modal")); 
     	$(this.el).html(this.template(this.model.toJSON()));
+//    	$(".Export").append(chrome.i18n.getMessage("Export"));
+
   	      
       return this;
     }
