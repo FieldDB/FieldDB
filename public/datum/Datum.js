@@ -458,7 +458,7 @@ define([
               }
               
               //If the Leftside data list is a search result, then see if this datum matches the search, and add it to the top.
-              if(window.appView.dataListEditLeftSideView.temporaryDataList == true){
+              if(window.appView.dataListEditLeftSideView.currentSearchDataList == true){
                 //TODO check this
                 var datumJson = appView.datumsView.datumsView._childViews[0].model.get("datumFields").toJSON()
                 var datumAsDBResponseRow = {};
