@@ -194,8 +194,10 @@ define([
                   }
                 }
               }
-              
-              callback(matchIds);
+              if(typeof callback == "function"){
+                callback(matchIds);
+//                callback(matchIds); //loosing my this in SearchEditView
+              }
             });
           });
         });
