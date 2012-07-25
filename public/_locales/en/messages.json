@@ -220,6 +220,9 @@
    },
     "Search" : {
       "message" : "Search"
+   },
+     "Close" : {
+      "message" : "Close"
    }
    
    
