@@ -32,6 +32,12 @@ define([
      */
     model : DatumField,
 
+    events : {
+      "click .icon-question-sign" : "showHelpConvention",
+      "hover .icon-question-sign" : "hideHelpConvention"  
+    },    
+    
+    
     /**
      * The Handlebars template rendered as the DatumFieldSettingsReadView.
      */
@@ -64,7 +70,23 @@ define([
       }
       
       return this;
-    }
+    },
+    
+    /**
+     * Show help convention in popover when clicked 
+     */
+    showHelpConvention : function() {
+        this.$el.children(".help-conventions").popover("show");
+    }, 
+
+    /**
+     * Don't show help convention in popover if only hover 
+     */
+    hideHelpConvention : function() {
+        this.$el.children(".help-conventions").popover("hide");
+    }    
+    
+    
   });
 
   return DatumFieldReadView;
