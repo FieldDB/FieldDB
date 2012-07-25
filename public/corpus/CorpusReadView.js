@@ -166,25 +166,7 @@ define([
       } else if (this.format == "centreWell"){
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(this.model.toJSON()));
-      //localization
-        $(".New_menu").append(chrome.i18n.getMessage("New_menu"));
-        $(".New_Datum").append(chrome.i18n.getMessage("New_Datum"));
-        $(".New_Data_List").append(chrome.i18n.getMessage("New_Data_List"));
-        $(".New_Session").append(chrome.i18n.getMessage("New_Session"));
-        $(".New_Corpus").append(chrome.i18n.getMessage("New_Corpus"));
-        $(".Data_menu").append(chrome.i18n.getMessage("Data_menu"));
-        $(".Import_Data").append(chrome.i18n.getMessage("Import_Data"));
-        $(".Export_Data").append(chrome.i18n.getMessage("Export_Data"));
-        $(".Sessions_associated").append(chrome.i18n.getMessage("Sessions_associated"));
-        $(".Datalists_associated").append(chrome.i18n.getMessage("Datalists_associated"));
-        $(".Permissions_associated").append(chrome.i18n.getMessage("Permissions_associated"));
-        $(".Datum_field_settings").append(chrome.i18n.getMessage("Datum_field_settings"));
-        $(".Add").append(chrome.i18n.getMessage("Add"));
-        $(".Datum_state_settings").append(chrome.i18n.getMessage("Datum_state_settings"));
-        $(".Comments").append(chrome.i18n.getMessage("Comments"));
-        $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
-
-        
+       
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();
 
@@ -212,10 +194,42 @@ define([
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();
 
-
       }
       
+      //localization
+      $(".New_menu").html(chrome.i18n.getMessage("New_menu"));
+      $(".New_Datum").html(chrome.i18n.getMessage("New_Datum"));
+      $(".New_Data_List").html(chrome.i18n.getMessage("New_Data_List"));
+      $(".New_Session").html(chrome.i18n.getMessage("New_Session"));
+      $(".New_Corpus").html(chrome.i18n.getMessage("New_Corpus"));
+      $(".Data_menu").html(chrome.i18n.getMessage("Data_menu"));
+      $(".Import_Data").html(chrome.i18n.getMessage("Import_Data"));
+      $(".Export_Data").html(chrome.i18n.getMessage("Export_Data"));
+      $(".Save").html(chrome.i18n.getMessage("Save"));
+      $(".Title").html(chrome.i18n.getMessage("Title"));
+      $(".Description").html(chrome.i18n.getMessage("Description"));
+      $(".Sessions_associated").html(chrome.i18n.getMessage("Sessions_associated"));
+      $(".Datalists_associated").html(chrome.i18n.getMessage("Datalists_associated"));
+      $(".Permissions_associated").html(chrome.i18n.getMessage("Permissions_associated"));
+      $(".Datum_field_settings").html(chrome.i18n.getMessage("Datum_field_settings"));
+      $(".Encrypt_if_confidential").prepend(chrome.i18n.getMessage("Encrypt_if_confidential"));
+      $(".Help_Text").html(chrome.i18n.getMessage("Help_Text"));
+      $(".Add").html(chrome.i18n.getMessage("Add"));
+      $(".Datum_state_settings").html(chrome.i18n.getMessage("Datum_state_settings"));
+      $(".Green").html(chrome.i18n.getMessage("Green"));
+      $(".Orange").html(chrome.i18n.getMessage("Orange"));
+      $(".Red").html(chrome.i18n.getMessage("Red"));
+      $(".Blue").html(chrome.i18n.getMessage("Blue"));
+      $(".Teal").html(chrome.i18n.getMessage("Teal"));
+      $(".Black").html(chrome.i18n.getMessage("Black"));
+      $(".Default").html(chrome.i18n.getMessage("Default"));
+   
 
+      
+      
+      
+      
+      
       return this;
     },
     changeViewsOfInternalModels : function(){

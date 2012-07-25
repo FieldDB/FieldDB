@@ -135,11 +135,7 @@ define([
           // Display the CorpusEditEmbeddedView
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
-//          $(this.el).find(".icon-resize-full").hide();
 
-       
-
-          
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
@@ -170,8 +166,6 @@ define([
       } else if (this.format == "fullscreen") {
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
- 
-
 
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
@@ -196,8 +190,6 @@ define([
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
-        
-        
 
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
@@ -245,7 +237,8 @@ define([
       $(".Title1").html(chrome.i18n.getMessage("Title"));
       $(".Description1").html(chrome.i18n.getMessage("Description"));
       $(".Cancel").html(chrome.i18n.getMessage("Cancel"));
-
+      $(".Title_Summary_Edit").html(chrome.i18n.getMessage("Title"));
+      $(".Description_Summary_Edit").html(chrome.i18n.getMessage("Description"));
 
 
 

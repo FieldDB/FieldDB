@@ -4,27 +4,26 @@
 	<div class="btn-group btn-toolbar corpusMenu">
 		<!-- This div is necessary so that the menu appears below the buttons -->
 		<div class="btn-group">
-			<button class="btn btn-primary dropdown-toggle"
-				data-toggle="dropdown">
-				New <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li class="new-datum-read"><a href="#">New Datum</a></li>
-				<li class="new-data-list"><a href="#">New Data List</a></li>
-				<li class="new-session"><a href="#">New Session</a></li>
-				<li class="new-corpus"><a href="#">New Corpus</a></li>
-			</ul>
-		</div>
-		<!-- This div is necessary so that the menu appears below the buttons -->
-		<div class="btn-group">
-			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-				Data <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li><a href="#import">Import Data</a></li>
-				<li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
-			</ul>
-		</div>
+    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    <span class ="New_menu"></span>  <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li class="new-datum-edit"><a href="#"><span class = "New_Datum"></span></a></li>
+      <li class="new-data-list"><a href="#"><span class = "New_Data_List"></span></a></li>
+      <li class="new-session"><a href="#"><span class = "New_Session"></span></a></li>
+      <li class="new-corpus"><a href="#"><span class = "New_Corpus"></span></a></li>
+    </ul>
+  </div>
+  <!-- /btn-group -->
+  <div class="btn-group">
+    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+      <span class ="Data_menu"></span> <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="#import"><span class = "Import_Data"></span></a></li>
+      <li><a href="#corpus/{{titleAsUrl}}/export"><span class = "Export_Data"></span></a></li>
+    </ul>
+  </div>
 	</div>
 
 	<div class="pull-right">
