@@ -195,7 +195,8 @@ define([
                 }
               }
               if(typeof callback == "function"){
-                callback(matchIds);
+                //callback with the unique members of the array
+                callback(_.unique(matchIds));
 //                callback(matchIds); //loosing my this in SearchEditView
               }
             });

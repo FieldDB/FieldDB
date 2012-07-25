@@ -128,6 +128,10 @@ define([
           this.searchDataListEditLeftSideView.render();
         }catch(e){
           Utils.debug("Trying to set the searchDataListEditLeftSideView too early.");
+//          var self = this;
+//          newTempDataList(function(){ 
+//            self.render();
+//          }); //dont need this eventually it shows up
         }
       }
 

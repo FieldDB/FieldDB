@@ -144,12 +144,14 @@ define( [
 
         this.setElement($("#search-data-list-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
+        $(this.el).addClass("well");
 
       }else if (this.format == "search-minimized") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
-
+        
         this.setElement($("#search-data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
+        $(this.el).addClass("well");
 
       }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
@@ -174,11 +176,11 @@ define( [
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = this.$el.find(".comments");
           this.commentReadView.render();
           
           // Display the DatumFieldsView
-          this.datumsView.el = this.$(".data_list_content");
+          this.datumsView.el = this.$el.find(".data_list_content");
           this.datumsView.render();
           
           // Display the pagination footer
@@ -227,7 +229,7 @@ define( [
      */
     renderUpdatedPagination : function() {
       // Replace the old pagination footer
-      $(".data-list-footer").html(this.footerTemplate(this.getPaginationInfo()));
+      this.$el.find(".data-list-footer").html(this.footerTemplate(this.getPaginationInfo()));
     },
 
     /**
