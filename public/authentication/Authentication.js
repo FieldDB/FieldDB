@@ -166,8 +166,8 @@ define([
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       this.saveAndEncryptUserToLocalStorage(function(){
-        if(typeof callback == "function"){
-          callback();
+        if(typeof successcallback == "function"){
+          successcallback();
         }
       });
       
