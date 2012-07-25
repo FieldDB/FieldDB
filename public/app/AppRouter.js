@@ -51,11 +51,7 @@ define([
      */
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
-
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#datums-embedded").show();
-      window.location.href = "#"; //TODO this is to clear the parameters in the url
+      this.showEditableDatums("centreWell");
     },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
@@ -374,19 +370,25 @@ define([
     // Functions that toggle between editable and readonly datums view
     showEditableDatums : function(format) {
       window.appView.renderEditableDatumsViews(format);
-      this.hideEverything();
       if (format == "centreWell") {
-        this.showDashboard();
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $("#datums-embedded").show();
+        window.location.href = "#"; //TODO this is to clear the parameters in the url
       } else if (format == "fullscreen") {
+        this.hideEverything();
         $("#datum-container-fullscreen").show();
       }
     },
     showReadonlyDatums : function(format) {
       window.appView.renderReadonlyDatumsViews(format);
-      this.hideEverything();
       if (format == "centreWell") {
-        this.showDashboard();
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $("#datums-embedded").show();
+        window.location.href = "#"; //TODO this is to clear the parameters in the url
       } else if (format == "fullscreen") {
+        this.hideEverything();
         $("#datum-container-fullscreen").show();
       }
     },
