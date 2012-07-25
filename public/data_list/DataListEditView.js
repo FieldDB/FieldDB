@@ -260,7 +260,9 @@ define( [
      */
     newDataList : function() {
       //save the current data list
-      this.model.saveAndInterConnectInApp();
+      this.model.currentSearchDataList = false;
+      var dltobesaved = this.model;
+      dltobesaved.saveAndInterConnectInApp();
       //clone it
       this.model = new DataList(this.model.toJSON());
       // Clear the current data list
@@ -394,7 +396,7 @@ define( [
     },
     
     temporaryDataList : false,
-    
+    currentSearchDataList : false,
     /**
      * Displays a new DatumReadView for the Datum with the given a full datum. The datum is not saved.
      * and updates the pagination footer.

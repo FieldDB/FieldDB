@@ -244,7 +244,7 @@ define([
           + " in " 
           + window.app.get("corpus").get("title") 
           + " on "+ JSON.stringify(new Date()) );
-      appView.dataListEditLeftSideView.temporaryDataList = true;
+      appView.dataListEditLeftSideView.currentSearchDataList = true;
       
       // Add search results to the data list
       for (var key in datumIds) {
