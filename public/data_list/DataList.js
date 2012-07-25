@@ -60,6 +60,9 @@ define([
     changeCorpus : function(corpusname, callback) {
       if(!corpusname){
         corpusname = this.get("corpusname");
+        if(corpusname == undefined){
+          corpusname = window.app.get("corpus").get("corpusname");
+        }
       }
       if(this.pouch == undefined){
         this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
@@ -97,7 +100,7 @@ define([
         return;
       }
       var oldrev = this.get("_rev");
-      this.changeCorpus(null,function(){
+      this.changeCorpus(null, function(){
         self.save(null, {
           success : function(model, response) {
             Utils.debug('DataList save success');
