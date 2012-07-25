@@ -349,7 +349,7 @@ define([
         return;
       }
       // Remember if the encryption check box was checked
-      var checked = this.$el.find(".add_encrypted").is(':checked') ? "checked" : "";
+      var checked = this.$el.find(".add_shouldBeEncrypted").is(':checked') ? "checked" : "";
       
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
@@ -370,7 +370,7 @@ define([
     //needed to be able to change datum fields NO, this already exists in the DatumFieldEditView.js
 //    updateDatumField : function(e) {
 //      var datumField = $(e.target.parentElement);
-//      var checked = datumField.find(".encrypted").is(':checked') ? "checked" : "";
+//      var checked = datumField.find(".shouldBeEncrypted").is(':checked') ? "checked" : "";
 //      var oldLabel = e.target.parentElement.firstChild.classList[1]; //get the old label from the span
 //      // Create the new DatumField based on what the user entered
 //      var m = this.model.get("datumFields").where({"label" : oldLabel })[0]; //TODO if this doesnt work could maybe count from top.

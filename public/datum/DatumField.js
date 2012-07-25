@@ -19,7 +19,7 @@ define([
      * @property value This is what the user will enter when entering data into
      *           the data fields.
      * @property mask This allows users to mask fields for confidentiality.
-     * @property encrypted This is whether the field is masked or not.
+     * @property shouldBeEncrypted This is whether the field is masked or not.
      * @property help This is a pop up that tells other users how to use the
      *           field the user has created.
      * @extends Backbone.Model
@@ -66,6 +66,7 @@ define([
 //      }
       
     },
+    
     //http://stackoverflow.com/questions/11315844/what-is-the-correct-way-in-backbone-js-to-listen-and-modify-a-model-property
     set: function(key, value, options) {
       var attributes;
@@ -80,21 +81,21 @@ define([
       }
 
       options = options || {};
-      if ( options.settingsversion ) {
-      }else{
-        // do any other custom property changes here
-        if( this.get("encrypted") == ""){ //TODO this should be an attribute of the datum?
-          attributes["mask"] = attributes["value"] || this.get("value");
-        }else{
+      // do any other custom property changes here
+      if(attributes[value] != ""){
+        if( this.get("encrypted") == "checked" && this.get("shouldBeEncrypted") == "checked" ){
           attributes["mask"] = "xxx xxx xxx";
           
           if( attributes["value"].indexOf("confidential") != 0 && window.appView){
             attributes["value"] = window.app.get("corpus").get("confidential").encrypt(attributes["value"]);
           }
+        }else{
+          attributes["mask"] = attributes["value"] || this.get("value");
         }
       }
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
+    
     saveAndInterConnectInApp : function(callback){
       
       if(typeof callback == "function"){

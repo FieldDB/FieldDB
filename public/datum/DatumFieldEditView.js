@@ -35,7 +35,7 @@ define([
      */
     events : {
       "blur .choose-field" : "updateFieldLabel",
-      "click .encrypted" : "updateEncrypted",
+      "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
       "click .icon-question-sign" : "showHelpConvention"
@@ -92,7 +92,7 @@ define([
       } else {
         checked = "";
       }
-      Utils.debug("Updated encrypted to " + checked);
+      Utils.debug("Updated shouldBeEncrypted to " + checked);
       this.model.set("shouldBeEncrypted", checked);
     },
     

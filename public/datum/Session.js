@@ -45,41 +45,41 @@ define([
      * 
      *  new DatumField({
             label : "user",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "consultants",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "language",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the langauge (or language family) if you would like to use it."
           }),
           new DatumField({
             label : "dialect",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "You can use this field to be as precise as you would like about the dialect of this session."
           }),
           new DatumField({
             label : "dateElicited",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session took place."
           }),
           new DatumField({
             label : "dateSEntered",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session was entered."
           }),
           new DatumField({
             label : "goal",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This describes the goals of the session."
           }),  

@@ -261,7 +261,7 @@ define( [
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
               label : headers[f],
-              encrypted: "checked",
+              shouldBeEncrypted: "checked",
               userchooseable: "",
               help: "This field came from file import "+this.model.get("status")
             });
