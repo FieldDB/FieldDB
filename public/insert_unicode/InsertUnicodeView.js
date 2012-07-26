@@ -37,6 +37,14 @@ define([
       Utils.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
+      //localization
+      $(".LaTeX_Code").html(chrome.i18n.getMessage("LaTeX_Code"));
+      $(".Unicode_Instructions").html(chrome.i18n.getMessage("Unicode_Instructions"));
+      $(".Keyboard_Shortcuts").html(chrome.i18n.getMessage("Keyboard_Shortcuts"));
+      $(".Remove_Unicode").html(chrome.i18n.getMessage("Remove_Unicode"));
+
+
+
       
       return this;
     },

@@ -276,7 +276,26 @@
     },
     "Attempt_Import" : {
       "message" : "Attempt Import"
+    },
+     "LaTeX_Code" : {
+      "message" : "LaTeX Code:"
+    },
+    "Unicode_Instructions" : {
+      "message" :   "By default this is also a keyboard shortcut to type this
+      character in a datum field. To customize the shortcut:"
+    },
+     "Remove_Unicode" : {
+      "message" : "Remove Unicode"
+    },
+     "Unicode" : {
+      "message" : "Unicode"
+     },  
+     "Drag_and_Drop" : {
+      "message" : "<small>Drag and Drop</small>"
     }
+    
+  
+    
    
    
    
