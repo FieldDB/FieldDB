@@ -111,49 +111,52 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumCount = this.get("datumIds").length;
+      
       if (this.format == "fullscreen") {
         Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#data-list-fullscreen"));
-        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
         
       } else if (this.format == "leftSide") {
         Utils.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview"));
-        $(this.el).html(this.templateSummary(this.model.toJSON()));
+        $(this.el).html(this.templateSummary(jsonToRender));
 
       }else if (this.format == "search") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
 
         this.setElement($("#search-data-list-quickview"));
-        $(this.el).html(this.templateSummary(this.model.toJSON()));
+        $(this.el).html(this.templateSummary(jsonToRender));
         $(this.el).addClass("well");
 
       }else if (this.format == "search-minimized") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
         
         this.setElement($("#search-data-list-quickview"));
-        $(this.el).html(this.templateMinimized(this.model.toJSON()));
+        $(this.el).html(this.templateMinimized(jsonToRender));
         $(this.el).addClass("well");
 
       }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-view"));
-        $(this.el).html(this.importTemplate(this.model.toJSON()));
+        $(this.el).html(this.importTemplate(jsonToRender));
         
       } else if (this.format == "centreWell") {
         Utils.debug("DATALIST EDIT CENTER render: " + this.el);
 
         this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+        $(this.el).html(this.embeddedTemplate(jsonToRender));
         
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview"));
-        $(this.el).html(this.templateMinimized(this.model.toJSON()));
+        $(this.el).html(this.templateMinimized(jsonToRender));
       }else{
         Utils.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
