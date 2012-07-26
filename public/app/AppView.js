@@ -488,11 +488,11 @@ define([
     
     // Display DataList Views
     renderEditableDataListViews : function(format) {
-      this.currentEditDataListView = format;
+      this.currentEditDataListView.format = format;
       this.currentEditDataListView.render();
     },
     renderReadonlyDataListViews : function(format) {
-      this.currentReadDataListView = format;
+      this.currentReadDataListView.format = format;
       this.currentReadDataListView.render();
     },
 
