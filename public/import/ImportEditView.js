@@ -141,6 +141,21 @@ define( [
       $(this.el).find(".icon-resize-full").hide();
       $(this.el).find(".save-datalist").hide();
       $(this.el).find(".icon-resize-small").hide();
+      
+      //localization
+      $(".Save_And_Import").html(chrome.i18n.getMessage("Save_And_Import"));
+      $(".Import").html(chrome.i18n.getMessage("Import"));
+      $(".percent_completed").html(chrome.i18n.getMessage("percent_completed"));
+      $(".Import_Instructions").html(chrome.i18n.getMessage("Import_Instructions"));
+      $(".Add_Extra_Columns").html(chrome.i18n.getMessage("Add_Extra_Columns"));
+      $(".Attempt_Import").html(chrome.i18n.getMessage("Attempt_Import"));
+      
+
+
+
+
+
+      
       return this;
     },
     renderDatumFieldsLabels : function(){

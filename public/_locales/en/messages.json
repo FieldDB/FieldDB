@@ -248,7 +248,35 @@
    },
      "When" : {
       "message" : "When:"
-   }
+   },
+   "Save_And_Import" : {
+      "message" : "Save and Finish Importing"
+   },
+    "Import" : {
+      "message" : "Import"
+   },
+   "percent_completed" : {
+      "message" : "0% completed."
+   },
+   "Import_Instructions" : {
+      "message" :  
+           " <ol>
+              <li>Drag and drop a file (csv, txt, tabed, xml, text) to the area below.</li>
+              <li>(Edit/type in the text area to correct information as needed.)</li>
+              <li>Drag/type the datum fields in the column headings which match. The columns will become fields in your database.</li>
+              <li>Type in any other column headings that you want to keep in your imported data, the app will automatically create datum fields for these in your corpus.</li>
+              <li>Click on the Attempt Import button.</li>
+              <li>Review the data list to see if the import looks good.</li>
+              <li>(Edit the table cells as needed, click Attempt Import and review data list as many times as you would like).</li>
+              <li>When satisfied with the data list, click Save and your data will be imported into your corpus, and a new data list will be created with this data.</li>
+            </ol>"
+    },
+    "Add_Extra_Columns" : {
+      "message" : " Add Extra Columns"
+    },
+    "Attempt_Import" : {
+      "message" : "Attempt Import"
+    }
    
    
    
