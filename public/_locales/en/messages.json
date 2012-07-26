@@ -227,6 +227,27 @@
    },
       "Cancel" : {
       "message" : "Cancel"
+   },
+    "Next" : {
+      "message" : "Next"
+   },
+    "Show" : {
+      "message" : "Show"
+   },
+    "per_page" : {
+      "message" : "per page"
+   },
+   "New_Session_Instructions" :{
+       "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"
+   },
+    "Consultants" : {
+      "message" : "Consultant(s):"
+   },
+    "Goal" : {
+      "message" : "Goal:"
+   },
+     "When" : {
+      "message" : "When:"
    }
    
    

@@ -138,6 +138,14 @@ define([
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
+      
+      //localization
+      $(".Session").html(chrome.i18n.getMessage("Session"));
+      $(".Add").html(chrome.i18n.getMessage("Add"));
+      $(".Consultants").html(chrome.i18n.getMessage("Consultants"));
+      $(".Goal").html(chrome.i18n.getMessage("Goal"));
+      $(".When").html(chrome.i18n.getMessage("When"));
+      
       return this;
     },
     
