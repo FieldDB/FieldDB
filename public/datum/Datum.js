@@ -454,60 +454,69 @@ define([
                   context : differences+" via Offline App.",
                   user: window.app.get("authentication").get("userPublic")
                 }));
+
             /*
-             * Make sure the datum is at the top of the default data list
+             * Make sure the datum is at the top of the default data list which is in the corpus,
+             * this is in case the default data list is not being displayed
              */
-            
-            //Add it to the default datalist.
             var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
             var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
-            
-            //make sure the datum is in this corpus, if it is the same corpusname
-            if(positionInDefaultDataList == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
-              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-            }else{
-              //We only reorder the default data list to be in the order of the most recent, other data lists can stay in the order teh usr designed them. 
+            if(positionInDefaultDataList != -1 ){
+              //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
               window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
-              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
             }
-            //If the current data list is the default list, render the datum there too.
+            window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+            /*
+             * If the current data list is the default
+             * list, render the datum there too since is the "Active" copy
+             * that will eventually overwrite the default in the
+             * corpus if the user saves the current data list
+             */
             if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
+              //Put it into the current data list views
               window.appView.currentPaginatedDataListDatumsView.collection.unshift(model);
-            }else{
-              //See if this datum matches the search, and add it to the top of the search list
-              if($("#search_box").val() != ""){
-                //TODO check this
-                var datumJson = model.get("datumFields").toJSON()
-                var datumAsDBResponseRow = {};
-                for (var x in datumJson){ 
-                  datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
-                }
-                var queryTokens = self.processQueryString($("#search_box").val());
-                var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
-                
-                for (var j = 1; j < queryTokens.length; j += 2) {
-                  if (queryTokens[j] == "AND") {
-                    // Short circuit: if it's already false then it continues to be false
-                    if (!thisDatumIsIn) {
-                      break;
-                    }
-                    
-                    // Do an intersection
-                    thisDatumIsIn = thisDatumIsIn && model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
-                  } else {
-                    // Do a union
-                    thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+              //Put it into the ids of the current data list
+              var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
+              if(positionInCurrentDataList != -1){
+                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInCurrentDataList, 1);
+              }
+              window.app.get("currentDataList").get("datumIds").unshift(model.id);
+            }
+            /*
+             * If the current data list isnt the default, see if this datum matches the search datalist, and add it to the top of the search list
+             */
+            if($("#search_box").val() != ""){
+              //TODO check this
+              var datumJson = model.get("datumFields").toJSON()
+              var datumAsDBResponseRow = {};
+              for (var x in datumJson){ 
+                datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
+              }
+              var queryTokens = self.processQueryString($("#search_box").val());
+              var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
+
+              for (var j = 1; j < queryTokens.length; j += 2) {
+                if (queryTokens[j] == "AND") {
+                  // Short circuit: if it's already false then it continues to be false
+                  if (!thisDatumIsIn) {
+                    break;
                   }
+
+                  // Do an intersection
+                  thisDatumIsIn = thisDatumIsIn && model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+                } else {
+                  // Do a union
+                  thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
                 }
-                if (thisDatumIsIn) {
-                  // Insert the datum at the top of the search data list
-//       TODO check this           window.appView.searchEmbeddedView.searchDataListEditLeftSideView.addOneDatumId(model.id, true);
-                }
-              }//end of if search is open and running for Alan
-            }//end else if the left side is not the default
+              }
+              if (thisDatumIsIn) {
+                // Insert the datum at the top of the search data list
+//              TODO check this           window.appView.searchEmbeddedView.searchDataListEditLeftSideView.addOneDatumId(model.id, true);
+              }
+            }//end of if search is open and running for Alan
             
-            window.appView.addUnsavedDoc(window.app.get("corpus").get("dataLists").models[defaultIndex].id);
-//            window.appView.addUnsavedDoc(window.app.get("corpus").id); //why corpus needs saving?
+            window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
+            window.appView.addUnsavedDoc(window.app.get("corpus").id); //the corpus needs saving because it might have the only default data list with this datum in it
 
             //dont need to save the user every time when we change a datum.
 //            window.app.get("authentication").saveAndInterConnectInApp();
