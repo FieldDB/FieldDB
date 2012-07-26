@@ -383,9 +383,9 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
 
         //The authView is the dropdown in the top right corner which holds all the user menus
-        this.authView.render();
-        this.userPreferenceView.render();
-        this.hotkeyEditView.render();//.showModal();
+//        this.authView.render();
+//        this.userPreferenceView.render();
+//        this.hotkeyEditView.render();//.showModal();
         
         //This forces the top search to render.
         this.searchEditView.format = "centreWell";
