@@ -209,6 +209,8 @@ define([
     changeCorpus : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
+      }else{
+        this.set("couchConnection", couchConnection);
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
