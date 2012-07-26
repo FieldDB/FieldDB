@@ -302,46 +302,49 @@ define([
       });
       this.publicReadUserView.format = "public";
     },
+    /*
+     * Set up the six data list views
+     */
     setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
+      
       /*
-       * Set up the six data list views
+       * This holds the ordered datums of the current data list, and is the important place to keep the
+       * datum, it's ids will be saved into the currentdatalist when the currentdatalist is saved
        */
-      var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
-      var datumsCollectionToBePassedAround = new Datums();
+      this.currentPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+        collection           : new Datums(),
+        childViewConstructor : DatumReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "latex"
+      });  
       
       this.dataListEditMiddleView = new DataListEditView({
-        model : dataListToBePassedAround,
-        datumCollection : datumsCollectionToBePassedAround 
+        model : this.model.get("currentDataList"),
       }); 
       this.dataListEditMiddleView.format = "centreWell";
       
       this.dataListReadMiddleView = new DataListEditView({
-        model : dataListToBePassedAround,
-        datumCollection : datumsCollectionToBePassedAround 
+        model : this.model.get("currentDataList"),
       }); 
       this.dataListReadMiddleView.format = "centreWell";
       
       this.dataListEditLeftSideView = new DataListEditView({
-        model : dataListToBePassedAround,
-        datumCollection : datumsCollectionToBePassedAround 
+        model : this.model.get("currentDataList"),
       }); 
       this.dataListEditLeftSideView.format = "leftSide";
       
-      this.dataListEditFullscreenView = new DataListEditView({
-        model : this.dataListEditLeftSideView.model,
-        datumCollection : datumsCollectionToBePassedAround 
-      });  
-      this.dataListEditFullscreenView.format = "fullscreen";
-      
       this.dataListReadLeftSideView = new DataListReadView({
-        model :  this.dataListEditLeftSideView.model,
-        datumCollection : datumsCollectionToBePassedAround 
+        model :  this.model.get("currentDataList"),
       });  
       this.dataListReadLeftSideView.format = "leftSide";
       
+      this.dataListEditFullscreenView = new DataListEditView({
+        model : this.model.get("currentDataList"),
+      });  
+      this.dataListEditFullscreenView.format = "fullscreen";
+      
       this.dataListReadFullscreenView = new DataListReadView({
-        model :  this.dataListEditLeftSideView.model,
-        datumCollection : datumsCollectionToBePassedAround 
+        model :  this.model.get("currentDataList"),
       });  
       this.dataListReadFullscreenView.format = "fullscreen";
       
