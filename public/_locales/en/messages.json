@@ -301,7 +301,63 @@
     },
     "Advanced_Search" : {
           "message" : "Advanced Search"
-    }
+    },
+     "User_Profile" : {
+      "message" : "User Profile"
+   },
+    "Email" : {
+      "message" : "Email:"
+   },
+    "Research_Interests" : {
+      "message" : "Research Interests"
+   },
+    "Affiliation" : {
+      "message" : "Affiliation"
+   },
+    "Corpora" : {
+      "message" : "Corpora"
+   },
+    "Gravatar" : {
+      "message" : "Gravatar"
+   },
+    "Gravatar_URL" : {
+      "message" : "Gravatar URL"
+   },
+    "Firstname" : {
+      "message" : "First name:"
+   },
+    "Lastname" : {
+      "message" : "Last name:"
+   },
+    "Skin" : {
+      "message" : "Skin:"
+   },
+    "Background_on_Random" : {
+      "message" : "Background on Random"
+   },
+    "Transparent_Dashboard" : {
+      "message" : "Transparent Dashboard"
+   },
+    "Change_Background" : {
+      "message" : "Change Background"
+   },
+    "Number_Datum" : {
+      "message" : "Number of Datum to appear at a time:"
+   }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    
     
   
     

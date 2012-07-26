@@ -91,6 +91,21 @@ define([
           this.makeDashboardOpaque();
         }
       }
+      //localization
+      $(".User_Settings").html(chrome.i18n.getMessage("User_Settings"));
+      $(".Skin").html(chrome.i18n.getMessage("Skin"));
+      $(".Change_Background").html(chrome.i18n.getMessage("Change_Background"));
+      $(".Background_on_Random").html(chrome.i18n.getMessage("Background_on_Random"));
+      $(".Transparent_Dashboard").html(chrome.i18n.getMessage("Transparent_Dashboard"));
+      $(".Datum_Number").html(chrome.i18n.getMessage("Datum_Number"));
+      $(".Close").html(chrome.i18n.getMessage("Close"));
+
+
+
+
+
+
+
       
       return this;
     },

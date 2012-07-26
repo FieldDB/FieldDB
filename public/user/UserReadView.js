@@ -78,7 +78,18 @@ define([
       } else if (this.format == "link") {
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
       }
-
+      //localization
+      $(".User_Profile").html(chrome.i18n.getMessage("User_Profile"));
+      $(".Email").html(chrome.i18n.getMessage("Email"));
+      $(".Research_Interest").html(chrome.i18n.getMessage("Research_Interest"));
+      $(".Affiliation").html(chrome.i18n.getMessage("Affiliation"));
+      $(".Description").html(chrome.i18n.getMessage("Description"));
+      $(".Corpora").html(chrome.i18n.getMessage("Corpora"));
+      $(".Gravatar").html(chrome.i18n.getMessage("Gravatar"));
+      $(".Gravatar_URL").html(chrome.i18n.getMessage("Gravatar_URL"));
+      $(".Firstname").html(chrome.i18n.getMessage("Firstname"));
+      $(".Lastname").html(chrome.i18n.getMessage("Lastname"));
+      
       return this;
     },
     
