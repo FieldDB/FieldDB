@@ -68,9 +68,10 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         childView.format = this._childViewFormat;
       }
       
+      //Add to top by default
       if(options == undefined || options == null){
         options = {};
-        options.index = 1;
+        options.index = 0;
       }
       // Add to the top of the list
       if (options.index == 0) {

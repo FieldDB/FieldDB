@@ -457,33 +457,32 @@ define([
             /*
              * Make sure the datum is at the top of the default data list
              */
+            
+            //Add it to the default datalist.
             var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
-            //If the leftside data list is the default list, use it to add the datum to the default list.
-            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
-        //TODO check this      window.appView.currentPaginatedDataListDatumsView.add(model.id, true);
-//              window.appView.dataListReadLeftSideView.render();
+            var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
+            
+            //make sure the datum is in this corpus, if it is the same corpusname
+            if(positionInDefaultDataList == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
             }else{
-              //Otherwise add it to the default datalist by hand.
-              //make sure the datum is in this corpus, if it is the same corpusname
-              var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
-              
-              if(positionInDefaultDataList == -1 && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
-                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-              }else{
-                //We only reorder the default data list to be in the order of the most recent, other data lists can stay in the order teh usr designed them. 
-                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
-                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-              }
-              
+              //We only reorder the default data list to be in the order of the most recent, other data lists can stay in the order teh usr designed them. 
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+            }
+            //If the current data list is the default list, render the datum there too.
+            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
+              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model);
+            }else{
               //See if this datum matches the search, and add it to the top of the search list
               if($("#search_box").val() != ""){
                 //TODO check this
-                var datumJson = appView.datumsEditView.datumsView._childViews[0].model.get("datumFields").toJSON()
+                var datumJson = model.get("datumFields").toJSON()
                 var datumAsDBResponseRow = {};
                 for (var x in datumJson){ 
                   datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
                 }
-                var queryTokens = model.processQueryString($("#search_box").val());
+                var queryTokens = self.processQueryString($("#search_box").val());
                 var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
                 
                 for (var j = 1; j < queryTokens.length; j += 2) {
@@ -508,9 +507,9 @@ define([
             }//end else if the left side is not the default
             
             window.appView.addUnsavedDoc(window.app.get("corpus").get("dataLists").models[defaultIndex].id);
-            window.appView.addUnsavedDoc(window.app.get("corpus").id);
+//            window.appView.addUnsavedDoc(window.app.get("corpus").id); //why corpus needs saving?
 
-            //dont need to save the user when we change a datum.
+            //dont need to save the user every time when we change a datum.
 //            window.app.get("authentication").saveAndInterConnectInApp();
 
             if(typeof successcallback == "function"){

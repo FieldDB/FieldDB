@@ -462,7 +462,7 @@ define([
       this.corpusReadLeftSideView.render();
       this.sessionReadLeftSideView.render();
       this.renderReadonlyDataListViews("leftSide");
-      this.renderReadonlyDatumsViews("centreWell");
+      this.renderEditableDatumsViews("centreWell");
     },
     
     // Display the Corpus Views
