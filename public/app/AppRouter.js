@@ -52,8 +52,10 @@ define([
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
       window.appView.renderReadonlyDashboardViews();
+      this.hideEverything();
+      $("#dashboard-view").show();
+      $("#datums-embedded").show();
       window.location.href = "#"; //TODO this is to clear the parameters in the url
-
     },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
