@@ -119,57 +119,11 @@ define([
         $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
       
-      if(this.format == "top"){
-        try{
-          if(!this.searchDataListEditLeftSideView.format){
-            this.searchDataListEditLeftSideView.format = "search-minimized";
-          }
-//      this.searchDataListEditLeftSideView.format = "search";
-          this.searchDataListEditLeftSideView.render();
-        }catch(e){
-          Utils.debug("Trying to set the searchDataListEditLeftSideView too early.");
-//          var self = this;
-//          newTempDataList(function(){ 
-//            self.render();
-//          }); //dont need this eventually it shows up
-        }
-      }
 
       return this;
     },
     newTempDataList : function(callback){
-      //Only do this if it is the top search. otherwise it seems that all three search edit views are making a data list, and their three data lists are listening to the same events and doing them three times, which migh tmean we g will get three resulting saved ata lsits if the user pushes save?
-      if(this.format == "top"){
-        // Scrub this better pouch is still saving it as a revision.
-        var attributes = JSON.parse(JSON.stringify(new DataList({datumIds: []})));
-        // Clear the current data list's backbone info and info which we shouldnt clone
-        attributes._id = undefined;
-        attributes._rev = undefined;
-        attributes.comments = undefined;
-        attributes.title = self.model.get("title")+ " copy";
-        attributes.description = "Copy of: "+self.model.get("description");
-        attributes.corpusname = app.get("corpus").get("corpusname");
-        attributes.datumIds = [];
-        
-        var coll = this.searchDataListEditLeftSideView.datumsView.collection;
-        while (coll.length > 0) {
-          coll.pop();
-        }
-        
-        this.searchDataListEditLeftSideView = new DataListEditView({
-          model : new DataList({datumIds: []}),
-          datumCollection : new Datums() 
-        }); 
-        this.searchDataListEditLeftSideView.model = new DataList(attributes);
-        this.searchDataListEditLeftSideView.clearDataList();
-        this.searchDataListEditLeftSideView.model.set("title","Temporary Search Results");
-        this.searchDataListEditLeftSideView.model.set("description","You can use search to create data lists for handouts.");
-        this.searchDataListEditLeftSideView.model.set("corpusname", window.app.get("corpus").get("corpusname"));
-        this.searchDataListEditLeftSideView.format = "search-minimized";
-        if(typeof callback == "function"){
-          callback();
-        }
-      }
+    
     },
     changeViewsOfInternalModels : function(){
       
@@ -290,36 +244,8 @@ define([
       var searchself = this;
       (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString
           , function(datumIds){
-        //this will take in matchIds from its caller
-        // Create a new temporary data list in editable datalist on the LeftSide
-        if(searchself.format != "top"){
-          searchself = window.appView.searchTopView;
-//          return; //dont try to put dat in unless you have a data list, and its the centerwell one who controls the temp serach results
-        }
-        searchself.newTempDataList(function(){
-          searchself.searchDataListEditLeftSideView.model.set("title"
-              , $("#search_box").val()
-              + " search result");
-          searchself.searchDataListEditLeftSideView.model.set("description"
-              ,  "This is the result of searching for : " 
-              + $("#search_box").val()
-              + " in " 
-              + window.app.get("corpus").get("title") 
-              + " on "+ JSON.stringify(new Date()) );
-          searchself.searchDataListEditLeftSideView.clearDataList();
-          searchself.searchDataListEditLeftSideView.format = "search";
-          searchself.searchDataListEditLeftSideView.render();
-          // Add search results to the data list
-          for (var key in datumIds) {
-            searchself.searchDataListEditLeftSideView.addOneDatumId(datumIds[key]);
-            Utils.debug("Successfully got data back from search and put it into the temp search data list");
-          }
-        });
+        
       });
-      
-//    }catch(e){
-//      alert("Bug: There was a problem searching. it might be that your computer didnt pull down the files from the server that it needs to search. this has to happen once before search will work. ");
-//    }
     },
     
     searchContinued : function(datumIds) {
