@@ -363,7 +363,7 @@ define( [
         // Add Datum to the new datalist and render it this should work
         // because the datum is saved in the pouch and can be fetched, 
         // this will also not be the default data list because it is the data list for this import
-        appView.dataListEditLeftSideView.addOneDatumId(thatdatum.id, true);
+//     TODO checkthis   appView.currentPaginatedDataListDatumsView.add(thatdatum, true);
 
       },function(){
         //The e error should be from the error callback
@@ -394,9 +394,10 @@ define( [
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
       
       // Render the first page of the new data list
-      window.appView.renderEditableDataListViews();
-      window.appView.dataListEditLeftSideView.renderFirstPage();// TODO why not do automatically in datalist?
-      window.appView.renderReadonlyDataListViews();
+      this.currentReadDataListView.format = "leftSide";
+      window.appView.currentReadDataListView.render();
+//      window.appView.cur?`rentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
+//      window.appView.renderReadonlyDataListViews();
 //    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
 //    lists dont have this function, should we put it in...
       
@@ -422,7 +423,7 @@ define( [
         $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
 
         // Create a new permanent data list in the corpus, then do the rest
-        appView.dataListEditLeftSideView.newDataList(function(){
+        appView.currentEditDataListView.newDataList(function(){
 
           // Bring the title and description from the temporary data list, to the
           // new one.
