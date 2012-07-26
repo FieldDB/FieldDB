@@ -37,7 +37,7 @@ define( [
      * @constructs
      */
     initialize : function(options) {
-      Utils.debug("DATALIST init: " + this.el);
+      Utils.debug("DATALIST READ VIEW init: " + this.el);
       
       this.changeViewsOfInternalModels();
       this.model.bind('change:title', this.changeViewsOfInternalModels, this);
@@ -111,26 +111,26 @@ define( [
       } else if (this.format == "leftSide") {
         Utils.debug("DATALIST READ LEFTSIDE render: " + this.el);
 
-        this.setElement($("#data-list-quickview"));
+        this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
 
       } else if (this.format == "fullscreen") {
         Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
 
         // Display the Data List
-        this.setElement($("#data-list-fullscreen"));
+        this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
         
       } else if(this.format == "middle") {
         Utils.debug("DATALIST READ CENTER render: " + this.el);
 
-        this.setElement($("#data-list-embedded"));
+        this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
         
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
 
-        this.setElement($("#data-list-quickview"));
+        this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
       }
       try{
@@ -138,8 +138,6 @@ define( [
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
-          
-          window.appView.currentPaginatedDataListDatumsView.renderInElement(this.$el.find(".data_list_content"));
           
         }
       }catch(e){

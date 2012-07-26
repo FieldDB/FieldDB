@@ -90,7 +90,7 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      Utils.debug("DATUM render: " + this.el);
+      Utils.debug("DATUM READ render: " + this.model.get("datumFields")[1].get("mask") );
       
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
         Utils.debug("DATUM fields is undefined, come back later.");
