@@ -191,11 +191,11 @@ define([
             }else{
               window.app.get("corpus").get("dataLists").unshift(model);
             }
-            window.appView.addUnsavedDoc(window.app.get("corpus").id);
+//            window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-              window.app.get("authentication").saveAndInterConnectInApp();
+//              window.app.get("authentication").saveAndInterConnectInApp();
             }
 
             if(typeof successcallback == "function"){

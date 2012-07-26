@@ -370,7 +370,7 @@ define([
             /*
              * Save the default data list, in case it has changed without being saved in pouch. 
              */
-            var defaultDatalist = model.get("dataLists").models[model.get("dataLists").length];
+            var defaultDatalist = model.get("dataLists").models[model.get("dataLists").length - 1];
             if(defaultDatalist.needsSave == true){
               defaultDatalist.changeCorpus(null, function(){
                 Utils.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
