@@ -157,8 +157,8 @@ define( [
       if(e){
         e.stopPropagation();
       }
-      this.format == "leftSide";
-      this.render();
+//      this.format = "leftSide";
+//      this.render();
       window.app.router.showDashboard();
     },
     
@@ -166,7 +166,7 @@ define( [
       if(e){
         e.stopPropagation();
       }
-      this.format == "fullscreen";
+      this.format = "fullscreen";
       this.render();
       window.app.router.showFullscreenDataList();
     },
