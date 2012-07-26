@@ -72,7 +72,7 @@ define([
     },
     
     resizeSmall : function() {
-      window.app.router.showReadonlyDatums("centreWell");
+//      window.app.router.showReadonlyDatums("centreWell");
       window.app.router.showDashboard();
     },
     
