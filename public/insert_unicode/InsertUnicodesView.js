@@ -39,7 +39,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewUnicodeSymbol()
+          this.insertNewUnicodeSymbol();
         }
       },
       "keyup .insert-unicode-tipa-input" : function(e) {
@@ -47,7 +47,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewUnicodeSymbol()
+          this.insertNewUnicodeSymbol();
         }
       },
       "click .icon-minus-sign" : function() {
@@ -82,6 +82,13 @@ define([
         this.setElement($("#insert-unicode"));
         $(this.el).html(this.minimizedTemplate({}));
       }
+      //localization
+      $(".Unicode").html(chrome.i18n.getMessage("Unicode"));
+      $(".Drag_and_Drop").html(chrome.i18n.getMessage("Drag_and_Drop"));
+      $(".Add").html(chrome.i18n.getMessage("Add"));
+
+
+
       
       return this;
     },
