@@ -113,7 +113,10 @@ define( [
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
-
+        
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-quickview").find(".current-data-list-paginated-view") );
+        
       } else if (this.format == "fullscreen") {
         Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
 
@@ -121,12 +124,18 @@ define( [
         this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
         
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
+        
       } else if(this.format == "middle") {
         Utils.debug("DATALIST READ CENTER render: " + this.el);
 
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
         
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-embedded").find(".current-data-list-paginated-view") );
+       
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
 
