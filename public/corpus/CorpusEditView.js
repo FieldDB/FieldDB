@@ -197,7 +197,6 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
         
-        
 
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
@@ -279,18 +278,28 @@ define([
     },
    
     //Functions assoicate with the corpus menu
-    newDatum : function() {
+    newDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       appView.datumsEditView.newDatum();
       app.router.showDashboard();
+      Utils.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },
     
-    newDataList : function() {
+    newDataList : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
       app.router.showEmbeddedSearch();
     },
     
-    newSession : function() {
+    newSession : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       $("#new-session-modal").modal("show");
       //Save the current session just in case
       window.app.get("currentSession").saveAndInterConnectInApp();
@@ -301,9 +310,13 @@ define([
       });
       window.appView.sessionModalView.model.set("comments", new Comments());
       window.appView.sessionModalView.render();
+      
     },
     
-    newCorpus : function(){
+    newCorpus : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();
@@ -338,7 +351,10 @@ define([
     // the ul
 
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
 //        "username" : 
@@ -416,18 +432,30 @@ define([
       }
 
     },
-    resizeSmall : function(){
+    resizeSmall : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showEmbeddedCorpus();
     },
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenCorpus();
     },
     //This is the function that is  bound to the book button
-    showReadonly : function(){
+    showReadonly : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       window.appView.renderReadonlyCorpusViews();
     },
     //This is the function that is bound to changes
-    showEditable :function(){
+    showEditable :function(e){
+      if(e){
+        e.stopPropagation();
+      }
       //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
       this.changeViewsOfInternalModels();
       window.appView.renderEditableCorpusViews();

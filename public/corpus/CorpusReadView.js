@@ -262,19 +262,29 @@ define([
        });
       
     },
-    //Functions assoicate with the corpus menu
-    newDatum : function() {
+  //Functions assoicate with the corpus menu
+    newDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+      } 
       appView.datumsEditView.newDatum();
       app.router.showDashboard();
+      Utils.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
     
-    newDataList : function() {
+    newDataList : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
       app.router.showEmbeddedSearch();
     },
     
-    newSession : function() {
+    newSession : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       $("#new-session-modal").modal("show");
       //Save the current session just in case
       window.app.get("currentSession").save();
@@ -289,7 +299,10 @@ define([
       window.appView.sessionModalView.render();
     },
     
-    newCorpus : function(){
+    newCorpus : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").save();
@@ -318,7 +331,10 @@ define([
 
 
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
         console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
@@ -328,16 +344,25 @@ define([
      },
     
     
-     resizeSmall : function(){
+     resizeSmall : function(e){
+       if(e){
+         e.stopPropagation();
+       }
       window.app.router.showEmbeddedCorpus();
     },
     
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenCorpus();
-    } ,
+    },
    
     //This is bound to the little pencil function
-    showEditable :function(){
+    showEditable :function(e){
+      if(e){
+        e.stopPropagation();
+      }
       window.appView.renderEditableCorpusViews();
     }
   });
