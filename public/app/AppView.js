@@ -297,9 +297,21 @@ define([
       this.publicReadUserView.format = "public";
     },
     /*
-     * Set up the six data list views
+     * Set up the six data list views, kills all collection in the currentPaginatedDataListDatumsView
      */
     setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
+
+      if( this.currentPaginatedDataListDatumsView ){
+        if( this.currentPaginatedDataListDatumsView.filledBasedOnModels ){
+          alert("The current paginated datum collection was filled iwth models. some info might be lost by doing this overwrite.")
+        }
+        
+        if( this.currentPaginatedDataListDatumsView.collection.length > this.model.get("currentDataList").get("datumIds").length){
+          alert("The currentPaginatedDataListDatumsView already has more datum than the current datalist.");
+        }
+        //Convenience function for removing the view from the DOM.
+        this.currentPaginatedDataListDatumsView.remove();
+      }
       
       /*
        * This holds the ordered datums of the current data list, and is the important place to keep the
@@ -311,8 +323,18 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "latex"
       });  
-//    this.currentPaginatedDataListDatumsView.renderInElement(this.$el.find(".data_list_content"));
- 
+      /*
+       * Render paginated data collection view in all related elements
+       */
+      $(".current-data-list-paginated-view").each(function(element){
+        window.appView.currentPaginatedDataListDatumsView.renderInElement($(".current-data-list-paginated-view")[element]);
+      });
+
+      /*
+       * fill collection with datum, this will render them at the same time.
+       */
+      this.currentPaginatedDataListDatumsView.fillWithIds(this.model.get("currentDataList").get("datumIds"), Datum);
+      
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 

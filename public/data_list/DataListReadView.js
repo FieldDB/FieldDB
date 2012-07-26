@@ -138,6 +138,9 @@ define( [
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
+          
+          window.appView.currentPaginatedDataListDatumsView.renderInElement(this.$el.find(".data_list_content"));
+          
         }
       }catch(e){
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format)
