@@ -127,11 +127,11 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       Utils.debug("Saving the DataList");
       var self = this;
-      var idsInCollection = [];
-      for(d in this.datumCollection.models){
-        idsInCollection.push( this.datumCollection.models[d] );
-      }
-      this.set("datumIds", idsInCollection);
+//      var idsInCollection = [];
+//      for(d in this.datumCollection.models){
+//        idsInCollection.push( this.datumCollection.models[d] );
+//      }
+//      this.set("datumIds", idsInCollection);
       var newModel = true;
       if(this.id){
         newModel = false;
