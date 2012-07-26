@@ -68,8 +68,15 @@
       <div id="corpus-quickview" class="well sidebar-nav"></div>
       <div id="session-quickview" class="well sidebar-nav"></div>
       <div id="search-data-list-quickview" class=" sidebar-nav"></div>
-      <div id="data-list-quickview" class="well sidebar-nav"></div>
-    </div>
+			<div class="well">
+				<div id="data-list-quickview" class=" sidebar-nav"></div>
+				<div>
+					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+					<div class="current-data-list-pagination-control"></div>
+				</div>
+			</div>
+
+		</div>
     <!--Elements in the middle (things that get hidden)  -->
     <div class="span6">
 			<div id="toast-user-area">
@@ -88,11 +95,16 @@
 			<div id="datums-embedded" class="middle well">
 			  <div>Datums</div>
 			</div>
-			
-			<div id="data-list-embedded" class="middle well">
-        <div>DataList</div>
-      </div>
-			
+
+			<div class="well">
+				<div id="data-list-embedded" class="middle ">
+					<div>DataList</div>
+				</div>
+				<div>
+					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+					<div class="current-data-list-pagination-control"></div>
+				</div>
+			</div>
 
 			<div id="session-embedded" class="middle well">
         <div>Session</div>
@@ -136,8 +148,14 @@
 	<div id="search-fullscreen" class="well">
 		<div>Search</div>
 	</div>
-	<div id="data-list-fullscreen" class="well">
-		<div>Data List</div>
+	<div class="well">
+		<div id="data-list-fullscreen">
+			<div>DataList</div>
+		</div>
+		<div>
+			<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+			<div class="current-data-list-pagination-control"></div>
+		</div>
 	</div>
 	<div id="datum-container-fullscreen" class="well">
 	  <div>Datum Container</div>

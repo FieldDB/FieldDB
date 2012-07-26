@@ -55,6 +55,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
     
     add : function(model, collection, options) {
+      this.filledBasedOnModels = true;
       var childView = new this._childViewConstructor({
         tagName : this._childViewTagName,
         className : this._childViewClass,
@@ -144,7 +145,30 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         }
       }
     },
-    
+    filledBasedOnIds: false,
+    filledBasedOnModels : false,
+    /**
+     * Takes in an array of ids, and turns them all into elements in the collection.
+     */
+    fillWithIds : function(objectIds, Model){
+      if(this.filledBasedOnModels){
+        alert("mixing a collection from id and models!");
+      }
+      for(var id in objectIds){
+        var obj = new Model({corpusname: app.get("corpus").get("corpusname")});
+        obj.id  = objectIds[id];
+        var self = this;
+        obj.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              // Render at the bottom
+              self.add(model);
+              self.filledBasedOnIds = true;
+            }
+          });
+        });
+      }
+    },
     // Clear the view of all its DatumReadViews
     clearChildViews : function() {
       while (this.collection.length > 0) {
