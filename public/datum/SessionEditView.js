@@ -200,7 +200,10 @@ define([
     /**
      * creates a new session if the app's session id doesnt match this session's id after saving.
      */
-    updatePouch : function() {
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         /* If it is in the modal, then it is a new session */
@@ -212,26 +215,41 @@ define([
       });
     },
     //functions associated with icons
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showEmbeddedSession();
     },
     
-    resizeLarge : function() {
+    resizeLarge : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenSession();
     },
     
     //bound to changes
-    showEditable :function() {
+    showEditable :function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       this.changeViewsOfInternalModels();
       window.appView.renderEditableSessionViews();
     },
     
     //bound to book
-    showReadonly : function() {
+    showReadonly : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.appView.renderReadonlySessionViews();
     },
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),

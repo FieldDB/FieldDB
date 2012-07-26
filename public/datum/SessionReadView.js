@@ -161,22 +161,32 @@ define([
     },
     
     //functions associated with corner icons
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showEmbeddedSession();
     },
     
-    resizeLarge : function() {
+    resizeLarge : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenSession();
     },
     
     //bound to book
-    showEditable :function() {
+    showEditable :function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.appView.renderEditableSessionViews();
     }, 
  
-    //TODO this function to be rewritten 
-    insertNewComment : function() {
-      console.log("I'm a new comment!");
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });

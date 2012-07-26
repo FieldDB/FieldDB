@@ -73,6 +73,7 @@ define( [
       
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
+      "click .save-import-datalist" : "saveImportDataList",
       
       "click .icon-minus-sign" : function() {
         if(this.format == "search"){
@@ -98,8 +99,15 @@ define( [
 
     templateSummary : Handlebars.templates.data_list_summary_edit_embedded,
 
+    /*
+     * search has no readonly, or fullscreen buttons
+     */
     searchTemplate : Handlebars.templates.data_list_search_edit_embedded,
-    
+    /*
+     * import has no minimize, fullscreen or readonly buttons
+     */
+    importTemplate : Handlebars.templates.data_list_import_edit_embedded,
+
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
@@ -133,7 +141,7 @@ define( [
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-view"));
-        $(this.el).html(this.templateSummary(this.model.toJSON()));
+        $(this.el).html(this.importTemplate(this.model.toJSON()));
         
       } else if (this.format == "centreWell") {
         Utils.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -173,11 +181,21 @@ define( [
       });  
     },
     
-    resizeSmall : function(){
+    resizeSmall : function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      this.format == "leftSide";
+      this.render();
       window.app.router.showDashboard();
     },
     
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenDataList();
     },
 
@@ -196,25 +214,27 @@ define( [
     },
     
     //bound to pencil
-    showReadonly :function(){
+    showReadonly :function(e){
+      if(e){
+        e.stopPropagation();
+      }
       window.appView.currentReadDataListView.format = this.format;
       window.appView.currentReadDataListView.render();
     },
     
-    //bound to change
-    showEditable :function(){
-      //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
-      this.changeViewsOfInternalModels();
-      this.render();
-    },
-    
-    updatePouch : function() {
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       this.model.saveAndInterConnectInApp(function(){
         window.appView.renderReadonlyDataListViews();
       });
     },
     
-    saveSearchDataList : function(){
+    saveSearchDataList : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
           self.format = "search-minimized";
@@ -223,10 +243,18 @@ define( [
         window.appView.renderReadonlyDataListViews();
       });
     },
-    
+    saveImportDataList : function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      alert("TODO");
+    },
     
   //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
