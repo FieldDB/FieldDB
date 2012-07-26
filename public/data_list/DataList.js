@@ -174,9 +174,24 @@ define([
                   user: window.app.get("authentication").get("userPublic")
                 }));
             
-            //make sure the dataList is in this corpus, if it is the same corpusname
-            if(window.app.get("corpus").get("dataLists").get(model.id) == undefined && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
-              window.app.get("corpus").get("dataLists").unshift(model);
+            //If this is part of the current corpus, overwrite its corresponding data list in the corpus.
+            if(window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+              var thisisthedefaultdatalist = false;
+              //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
+              if(window.app.get("corpus").get("dataLists").get(model.id) != undefined ){
+                var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
+                if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
+                  thisisthedefaultdatalist = true;
+                }
+                var corpusversion = window.app.get("corpus").get("dataLists").get(model.id);
+                window.app.get("corpus").get("dataLists").pop(corpusversion);
+              }
+              //Put this dataList on top of the corpus, if it is the same corpusname
+              if(thisisthedefaultdatalist){
+                window.app.get("corpus").get("dataLists").add(model);
+              }else{
+                window.app.get("corpus").get("dataLists").unshift(model);
+              }
               window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }
             //make sure the dataList is in the history of the user
@@ -219,7 +234,8 @@ define([
         return;
       }else{
         if (window.app.get("currentDataList").id != this.id ) {
-          window.app.set("currentDataList", this);
+          window.app.set("currentDataList", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes. 
+//          window.app.set("currentDataList", app.get("corpus").get("dataLists").get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();

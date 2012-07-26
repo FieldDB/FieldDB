@@ -186,7 +186,8 @@ define([
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
             }
-            window.app.get("authentication").saveAndInterConnectInApp();
+            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
+//            window.app.get("authentication").saveAndInterConnectInApp();
 
             if(typeof successcallback == "function"){
               successcallback();
@@ -222,7 +223,9 @@ define([
         return;
       }else{
         if (window.app.get("currentSession").id != this.id ) {
-          window.app.set("currentSession", this);
+//          window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
+          window.app.set("currentSession", app.get("corpus").get("sessions").get(this.id));
+
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
