@@ -370,7 +370,7 @@ define([
             
             if(newModel){
               //TODO something similar to saving the current dashboard so the user can go back.
-//              window.app.storeCurrentDashboardIdsToLocalStorage(function(){
+//              window.app.saveAndInterConnectInApp(function(){
                
               self.setAsCurrentCorpus(function(){
 

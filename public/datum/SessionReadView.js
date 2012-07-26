@@ -171,7 +171,7 @@ define([
     
     //bound to book
     showEditable :function() {
-      window.app.router.showEditableSession();
+      window.appView.renderEditableSessionViews();
     }, 
  
     //TODO this function to be rewritten 

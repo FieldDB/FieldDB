@@ -228,7 +228,7 @@ define([
     
     //bound to book
     showReadonly : function() {
-      window.app.router.showReadonlySession();
+      window.appView.renderReadonlySessionViews();
     },
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
