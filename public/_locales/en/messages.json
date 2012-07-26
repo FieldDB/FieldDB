@@ -292,6 +292,15 @@
      },  
      "Drag_and_Drop" : {
       "message" : "<small>Drag and Drop</small>"
+    },
+      "AND" : {
+      "message" : "AND"
+    },
+       "OR" : {
+      "message" : "OR"
+    },
+    "Advanced_Search" : {
+          "message" : "Advanced Search"
     }
     
   

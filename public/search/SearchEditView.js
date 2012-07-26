@@ -112,6 +112,13 @@ define([
         this.setElement($("#search-top"));
         $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
+      //localization
+      $(".Advanced_Search").html(chrome.i18n.getMessage("Advanced_Search"));
+      $(".AND").html(chrome.i18n.getMessage("AND"));
+      $(".OR").html(chrome.i18n.getMessage("OR"));
+
+
+
       
       return this;
     },
