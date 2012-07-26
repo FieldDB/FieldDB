@@ -145,8 +145,8 @@ define([
         });
         
       }catch(e){
-//        appView.datumsView.newDatum();
-        appView.datumsView.render();
+//        appView.datumsEditView.newDatum();
+        appView.datumsEditView.render();
         alert("Couldnt show the most recent datums "+JSON.stringify(e));
         
       }
@@ -478,7 +478,7 @@ define([
               //See if this datum matches the search, and add it to the top of the search list
               if($("#search_box").val() != ""){
                 //TODO check this
-                var datumJson = appView.datumsView.datumsView._childViews[0].model.get("datumFields").toJSON()
+                var datumJson = appView.datumsEditView.datumsView._childViews[0].model.get("datumFields").toJSON()
                 var datumAsDBResponseRow = {};
                 for (var x in datumJson){ 
                   datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
@@ -546,8 +546,8 @@ define([
         }
         return;
       }else{
-        if (window.appView.datumsView.datumsView.collection.models[0].id != this.id ) {
-          window.appView.datumsView.datumsView.prependDatum(this);
+        if (window.appView.datumsEditView.datumsView.collection.models[0].id != this.id ) {
+          window.appView.datumsEditView.datumsView.prependDatum(this);
           //TODO might not need to do it on the Read one since it is the same model?
         }
         if (typeof successcallback == "function") {

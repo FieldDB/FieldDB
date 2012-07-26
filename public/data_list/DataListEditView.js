@@ -8,7 +8,8 @@ define( [
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
-    "datum/Datums"
+    "datum/Datums",
+    "app/UpdatingCollectionView"
 ], function(
     Backbone, 
     Handlebars, 
@@ -19,7 +20,8 @@ define( [
     DataList, 
     Datum, 
     DatumReadView,
-    Datums
+    Datums,
+    UpdatingCollectionView
 ) {
   var DataListEditView = Backbone.View.extend(
   /** @lends DataListEditView.prototype */
@@ -66,8 +68,6 @@ define( [
       
       "blur .data-list-title": "updateTitle",
       "blur .data-list-description": "updateDescription",
-
-      "click .checked-datum" : "checkDatum",
 
       "click .icon-book" :"showReadonly",
       
@@ -223,9 +223,7 @@ define( [
       });
     },
     
-    checkDatum : function(e){
-      alert("checked a datum "+JSON.stringify(e));
-    },
+    
   //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function() {
       console.log("I'm a new comment!");

@@ -39,20 +39,6 @@ define( [
     initialize : function(options) {
       Utils.debug("DATALIST init: " + this.el);
       
-      // Create a DatumView
-      if (options.datumCollection) {
-        this.datumsView = new UpdatingCollectionView({
-          collection           : options.datumCollection,
-          childViewConstructor : DatumReadView,
-          childViewTagName     : "li",
-          childViewFormat      : "latex"
-        });
-      }
-      
-
-      // Remove options
-      delete this.model.collection;
-      
       this.changeViewsOfInternalModels();
       this.model.bind('change:title', this.changeViewsOfInternalModels, this);
     },
@@ -69,8 +55,6 @@ define( [
       //Add button inserts new Comment
       "click .add-comment-datalist-read" : 'insertNewComment',
       
-      'click a.servernext': 'nextResultPage',
-      'click .serverhowmany a': 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable",
@@ -127,14 +111,7 @@ define( [
 
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-          
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-      
+
       } else if (this.format == "fullscreen") {
         Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
 
@@ -142,39 +119,26 @@ define( [
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
-
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-        
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-      
       } else if(this.format == "middle") {
         Utils.debug("DATALIST READ CENTER render: " + this.el);
 
         this.setElement($("#data-list-embedded"));
         $(this.el).html(this.templateEmbedded(this.model.toJSON()));
-      
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-        
-        // Display the pagination footer
-        this.renderUpdatedPagination();
         
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
+      }
+      try{
+        if (this.format && this.format.indexOf("minimized") == -1){
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+        }
+      }catch(e){
+        alert("Bug, there was a problem rendering the contents of the data list format: "+this.format)
       }
       
       return this;
@@ -188,83 +152,22 @@ define( [
         childViewTagName     : 'li'
       });
     },
- 
-    /**
-     * Re-calculates the pagination values and re-renders the pagination footer.
-     */
-    renderUpdatedPagination : function() {
-      // Replace the old pagination footer
-      $(".data-list-footer").html(this.footerTemplate(this.getPaginationInfo()));
-    },
-    
-    /**
-     * For paging, the number of items per page.
-     */
-    perPage : 12,
-    
-    /**
-     * Based on the number of items per page and the current page, calculate the current
-     * pagination info.
-     * 
-     * @return {Object} JSON to be sent to the footerTemplate.
-     */
-    getPaginationInfo : function() {
-      var currentPage = (this.datumsView.collection.length > 0) ? Math.ceil(this.datumsView.collection.length / this.perPage) : 1;
-      var totalPages = (this.datumsView.collection.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 1;
-      
-      return {
-        currentPage : currentPage,
-        totalPages : totalPages,
-        perPage : this.perPage,
-        morePages : currentPage < totalPages
-      };
-    },
-    
-    /**
-     * Change the number of items per page.
-     * 
-     * @param {Object} e The event that triggered this method.
-     */
-    changeCount : function(e) {
-      e.preventDefault();
-      
-      // Change the number of items per page
-      this.perPage = parseInt($(e.target).text());
-    },
-
-    /**
-     * Add one page worth of DatumReadViews from the DataList.
-     * 
-     * @param {Object} e The event that triggered this method.
-     */
-    nextResultPage: function (e) {
-      e.preventDefault();
-      
-      // Determine the range of indexes into the model's datumIds array that are 
-      // on the page to be displayed
-      var startIndex = this.datumsView.collection.length;
-      var endIndex = startIndex + this.perPage;
-      
-      // Add a DatumReadView for each one
-      for (var i = startIndex; i < endIndex; i++) {
-        var datumId = this.model.get("datumIds")[i]; 
-        if (datumId) {
-          appView.dataListEditLeftSideView.addOne(datumId);
-        }
-      }
-    },
     
     resizeSmall : function(){
+      this.format == "leftSide";
+      this.render();
       window.app.router.showDashboard();
     },
     
     resizeFullscreen : function(){
+      this.format == "fullscreen";
+      this.render();
       window.app.router.showFullscreenDataList();
     },
     
     //bound to pencil button
     showEditable :function(){
-      window.app.router.showEditableDataList();
+      window.appView.currentDataListEditView.render();
     },
     
     //This the function called by the add button, it adds a new comment state both to the collection and the model

@@ -45,6 +45,13 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     events : {
       'click a.servernext' : 'nextResultPage',
       'click .serverhowmany a' : 'changeCount',
+      'click .collection-checkbox' : 'clickedCheckbox'
+    },
+    /*
+     * TODO decide here or in childviews
+     */
+    clickedCheckbox : function(e){
+      alert("checked a checkbox "+JSON.stringify(e));
     },
     
     add : function(model, collection, options) {
@@ -118,6 +125,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
 //      this.renderUpdatedPagination();
       
       return this;
+    },
+    renderInElement: function(htmlElement){
+      this.el = htmlElement;
+      this.render();
+      this.renderUpdatedPagination();
     },
     
     /**

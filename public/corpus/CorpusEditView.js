@@ -280,7 +280,7 @@ define([
    
     //Functions assoicate with the corpus menu
     newDatum : function() {
-      appView.datumsView.newDatum();
+      appView.datumsEditView.newDatum();
       app.router.showDashboard();
     },
     
