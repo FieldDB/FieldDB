@@ -456,22 +456,12 @@ define([
                 }));
 
             /*
-             * Make sure the datum is at the top of the default data list which is in the corpus,
-             * this is in case the default data list is not being displayed
-             */
-            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
-            var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
-            if(positionInDefaultDataList != -1 ){
-              //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
-              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
-            }
-            window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-            /*
              * If the current data list is the default
-             * list, render the datum there too since is the "Active" copy
+             * list, render the datum there since is the "Active" copy
              * that will eventually overwrite the default in the
              * corpus if the user saves the current data list
              */
+            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
             if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
               //Put it into the current data list views
               window.appView.currentPaginatedDataListDatumsView.collection.unshift(model);
@@ -481,9 +471,23 @@ define([
                 window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInCurrentDataList, 1);
               }
               window.app.get("currentDataList").get("datumIds").unshift(model.id);
+              window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
+            }else{
+              /*
+               * Make sure the datum is at the top of the default data list which is in the corpus,
+               * this is in case the default data list is not being displayed
+               */
+              var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
+              if(positionInDefaultDataList != -1 ){
+                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
+                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+              }
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+              window.app.get("corpus").get("dataLists").models[defaultIndex].needsSave  = true;
+              window.appView.addUnsavedDoc(window.app.get("corpus").id);
             }
             /*
-             * If the current data list isnt the default, see if this datum matches the search datalist, and add it to the top of the search list
+             * Also, see if this datum matches the search datalist, and add it to the top of the search list
              */
             if($("#search_box").val() != ""){
               //TODO check this
@@ -515,8 +519,6 @@ define([
               }
             }//end of if search is open and running for Alan
             
-            window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
-            window.appView.addUnsavedDoc(window.app.get("corpus").id); //the corpus needs saving because it might have the only default data list with this datum in it
 
             //dont need to save the user every time when we change a datum.
 //            window.app.get("authentication").saveAndInterConnectInApp();
