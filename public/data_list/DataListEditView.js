@@ -185,8 +185,8 @@ define( [
       if(e){
         e.stopPropagation();
       }
-      this.format == "leftSide";
-      this.render();
+//      this.format = "leftSide";
+//      this.render();
       window.app.router.showDashboard();
     },
     
