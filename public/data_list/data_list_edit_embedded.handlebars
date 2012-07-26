@@ -1,34 +1,36 @@
 <div class="pull-right">
-
-  <a href="#" rel="tooltip" title="Show read only">
-	   <i class="icons icon-book"></i></a>
-  <a href="#" rel="tooltip" title="Show full screen">	
-	   <i class="icons icon-resize-full"></i></a>
+	<a href="#" rel="tooltip" title="Show read only"> <i
+		class="icons icon-book"></i></a> <a href="#" rel="tooltip"
+		title="Show full screen"> <i class="icons icon-resize-full"></i></a>
 </div>
-
-<button class="btn btn-success pull-left save-datalist" value="Save">Save</button>
 <br>
 <br>
-<label>Title:</label>
+<button class="btn btn-success pull-right save-datalist" value="Save">
+	<span class="Save"></span>
+</button>
+<label class="Title"></label>
 <textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
-<label>Description</label>
+<label class="Description"></label>
+
 <textarea class="data-list-description"
-  placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
+	placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
 <div>
-  <ul class="unstyled zebra data_list_content"></ul>
-  <p></p>
-  <div class="data-list-footer"></div>
+	<ul class="unstyled zebra data_list_content"></ul>
+	<p></p>
+	<div class="data-list-footer"></div>
 </div>
 
-<h3>Comments</h3>
+
 <ul class="comments unstyled"></ul>
 
 <div class="alert alert-info">
-  <span> new comment: </span>
-  <i class="icons icon-comment"></i>
-  <div class= "pull-right">  </div>
-  <textarea class="comment-new-text"></textarea>
+
+	<i class="icons icon-comment"></i>
+	<div class="pull-right"></div>
+	<textarea class="comment-new-text"></textarea>
 </div>
-  
-<button class="btn btn-primary add-comment-datalist-edit" value="Add">Add
-    Comment</button>
+
+<button class="btn btn-primary add-comment-edit" value="Add">
+	<span class="Add"></span>
+</button>
+

@@ -68,7 +68,8 @@ define([
         jsonToRender.helpText = false;
         $(this.el).html(this.templateValue(jsonToRender));
       }
-      
+    
+      $(".Encrypt_if_confidential").html(chrome.i18n.getMessage("Encrypt_if_confidential"));
       return this;
     },
     

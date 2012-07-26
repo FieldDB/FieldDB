@@ -60,6 +60,10 @@ define([
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
+        //localization
+        $(".Encrypt_if_confidential").html(chrome.i18n.getMessage("Encrypt_if_confidential"));
+        $(".Help_Text").html(chrome.i18n.getMessage("Help_Text"));
+
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));

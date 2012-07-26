@@ -200,6 +200,7 @@ define([
         
         
       }
+      $(".Add").html(chrome.i18n.getMessage("Add"));
 
       return this;
     },

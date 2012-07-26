@@ -212,7 +212,7 @@ define([
       $(".Datalists_associated").html(chrome.i18n.getMessage("Datalists_associated"));
       $(".Permissions_associated").html(chrome.i18n.getMessage("Permissions_associated"));
       $(".Datum_field_settings").html(chrome.i18n.getMessage("Datum_field_settings"));
-      $(".Encrypt_if_confidential").prepend(chrome.i18n.getMessage("Encrypt_if_confidential"));
+      $(".Encrypt_if_confidential").html(chrome.i18n.getMessage("Encrypt_if_confidential"));
       $(".Help_Text").html(chrome.i18n.getMessage("Help_Text"));
       $(".Add").html(chrome.i18n.getMessage("Add"));
       $(".Datum_state_settings").html(chrome.i18n.getMessage("Datum_state_settings"));
