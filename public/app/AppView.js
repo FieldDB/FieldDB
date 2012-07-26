@@ -381,14 +381,20 @@ define([
         // Display the AppView
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
+
+        //The authView is the dropdown in the top right corner which holds all the user menus
+        this.authView.render();
+        this.userPreferenceView.render();
+        this.hotkeyEditView.render();//.showModal();
         
-        //This forces the top serach to render.
+        //This forces the top search to render.
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
         
         this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
         this.insertUnicodesView.render();
+        
 //        // Display the Corpus Views
 //        this.corpusEditLeftSideView.render();
 //        this.corpusReadLeftSideView.render();
@@ -418,7 +424,6 @@ define([
 //        this.searchEmbeddedView.render();
 //        
 //        // Display the AuthView
-//        this.authView.render();
 //        
 //        // Display the Session Views
 //        this.sessionEditLeftSideView.render();
@@ -430,7 +435,6 @@ define([
 //        this.sessionModalView.render();
 //        
 //        // Display the UserPreferenceEditView
-//        this.userPreferenceView.render();
 //        
 //        //Display ActivityFeedView
 //        this.activityFeedView.render();
@@ -438,7 +442,6 @@ define([
 //        this.insertUnicodesView.render();
 //        
 //        // Display HotKeysView
-//        this.hotkeyEditView.render();//.showModal();
 //
 //        // Display Data List Views 
 //        this.currentEditDataListView.render();

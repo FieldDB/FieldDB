@@ -60,7 +60,7 @@ define([
         e.stopPropagation();
       },
       "click .corpus-settings" : function() {
-        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info");
+        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info","How to find the corpus settings:");
         app.router.showEmbeddedCorpus();
       }
     },

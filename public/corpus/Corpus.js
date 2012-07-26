@@ -367,7 +367,16 @@ define([
             if(window.app.get("authentication").get("userPrivate").get("corpuses").indexOf(model.get("couchConnection")) == -1){
               window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
             }
-            
+            /*
+             * Save the default data list, in case it has changed without being saved in pouch. 
+             */
+            var defaultDatalist = model.get("dataLists").models[model.get("dataLists").length];
+            if(defaultDatalist.needsSave == true){
+              defaultDatalist.changeCorpus(null, function(){
+                Utils.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
+                defaultDatalist.save();
+              });
+            }
             if(newModel){
               //TODO something similar to saving the current dashboard so the user can go back.
 //              window.app.saveAndInterConnectInApp(function(){
