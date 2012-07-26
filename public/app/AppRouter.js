@@ -33,7 +33,7 @@ define([
     routes : {
       "corpus/:corpusid"                : "showFullscreenCorpus", 
       "corpus/:corpusname/datum/:id"    : "showEmbeddedDatum", //corpusname has to match the pouch of the datum
-      "corpus/:corpusname/search"       : "showAdvancedSearch",//corpusname has to match the pouch of the corpus
+      "corpus/:corpusname/search"       : "showEmbeddedSearch",//corpusname has to match the pouch of the corpus
       "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListid"                : "showFullscreenDataList",
       "session/:sessionid"              : "showFullscreenSession",
@@ -51,7 +51,9 @@ define([
      */
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
-      this.showEditableDatums("centreWell");
+      window.appView.renderReadonlyDashboardViews();
+      window.location.href = "#"; //TODO this is to clear the parameters in the url
+
     },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
@@ -111,24 +113,7 @@ define([
       $("#corpus-embedded").show();
     },
     
-    /**
-     * Displays the advanced search in fullscreen form.
-     */
-    showFullscreenSearch : function(corpusname, corpusid) {
-      this.hideEverything();
-      window.appView.searchFullscreenView.render();
-      $("#search-fullscreen").show();
-    },
-    
-    /**
-     * Displays the advanced search in embedded form.
-     */
-    showEmbeddedSearch : function(corpusname, corpusid) {
-      this.hideEverything();
-      $("#dashboard-view").show();
-      window.appView.searchEmbeddedView.render();
-      $("#search-embedded").show();
-    },
+   
     
     /**
      * Displays the fullscreen view of the session specified by the given
@@ -258,10 +243,9 @@ define([
           dl.fetch({
             success : function(e) {
               Utils.debug("Datalist fetched successfully" +e);
-              dl.setAsCurrentSession( function(){
+              dl.setAsCurrentDataList( function(){
                 window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                  window.appView.renderEditableDataListViews();
-                  window.appView.renderReadonlyDataListViews();
+                  window.appView.renderReadonlyDashboardViews();
                 });
               });
             },
@@ -296,10 +280,9 @@ define([
           dl.fetch({
             success : function(e) {
               Utils.debug("Datalist fetched successfully" +e);
-              dl.setAsCurrentSession( function(){
+              dl.setAsCurrentDataList( function(){
                 window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                  window.appView.renderEditableDataListViews();
-                  window.appView.renderReadonlyDataListViews();
+                  window.appView.renderReadonlyDashboardViews();
                 });
               });
             },
@@ -315,56 +298,39 @@ define([
     },
     
     /**
-     * Display the fullscreen view of search within the corpus specified by the
-     * given corpusname.
-     * 
-     * @param {String}
-     *          corpusname The name of the corpus to search in.
+     * Displays the advanced search in fullscreen form.
      */
-    showAdvancedSearch : function(corpusname) {
-      Utils.debug("In showAdvancedSearch: " + corpusname);
-
+    showFullscreenSearch : function(corpusname, corpusid) {
       this.hideEverything();
+      window.appView.searchEditView.format = "fullscreen";
+      window.appView.searchEditView.render();
       $("#search-fullscreen").show();
     },
-
+    
+    /**
+     * Displays the advanced search in embedded form.
+     */
+    showEmbeddedSearch : function(corpusname, corpusid) {
+      this.hideEverything();
+      $("#dashboard-view").show();
+      window.appView.searchEditView.format = "centreWell";
+      window.appView.searchEditView.render();
+      $("#search-embedded").show();
+    },
+    
     showImport : function() {
       Utils.debug("In import: ");
-
+      //DONT render here, that way the user can come and go to the import dashboard
       this.hideEverything();
       $('#import-fullscreen').show();
     },
     
     showExport : function(corpusname) {
       Utils.debug("In showExport: " + corpusname);
-
+      //DONT render here, that way the user can come and go to the import dashboard
       this.hideEverything();
       $("#dashboard-view").show();
       $('#export-modal').modal("show");
-    },
-    
-    //Functions that toggle between editable and readonly corpus views
-    showEditableCorpus : function(corpusid){
-      window.appView.renderEditableCorpusViews(corpusid);
-    },
-    showReadonlyCorpus : function(corpusid){
-      window.appView.renderReadonlyCorpusViews(corpusid);
-    },
-    
-    //Functions that toggle between editable and readonly session views
-    showEditableSession : function(sessionid){
-      window.appView.renderEditableSessionViews(sessionid);
-    },
-    showReadonlySession : function(sessionid){
-      window.appView.renderReadonlySessionViews(sessionid);
-    },
-    
-    //Functions that toggle between editable and readonly session views
-    showEditableDataList : function(datalistid){
-      window.appView.renderEditableDataListViews(datalistid);
-    },
-    showReadonlyDataList : function(datalistid){
-      window.appView.renderReadonlyDataListViews(datalistid);
     },
     
     // Functions that toggle between editable and readonly datums view

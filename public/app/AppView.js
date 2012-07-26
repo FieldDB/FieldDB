@@ -175,21 +175,11 @@ define([
       /*
        *  Create search views
        */
-      this.searchTopView = new SearchEditView({
-        model : new Search()
+      this.searchEditView = new SearchEditView({
+        model : this.model.get("search")
       });
-      this.searchTopView.format = "top";
       
-      var searchToBePassedAround = new Search();
-      this.searchFullscreenView = new SearchEditView({
-        model : searchToBePassedAround
-      });
-      this.searchFullscreenView.format = "fullscreen";
       
-      this.searchEmbeddedView = new SearchEditView({
-        model : searchToBePassedAround
-      });
-      this.searchEmbeddedView.format = "centreWell";
       
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
@@ -356,7 +346,7 @@ define([
         app.router.showDashboard(); //the above line wasnt working
       },
       "click .save-dashboard": function(){
-        window.app.storeCurrentDashboardIdsToLocalStorage();
+        window.app.saveAndInterConnectInApp();
       },
       "click .sync-everything" : "replicateDatabases"
     },
@@ -376,63 +366,70 @@ define([
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
         
-        // Display the Corpus Views
-        this.corpusEditLeftSideView.render();
-        this.corpusReadLeftSideView.render();
-        this.corpusEditEmbeddedView.render();
-        this.corpusReadEmbeddedView.render();
-        this.publicCorpusReadEmbeddedView.render();
-        this.corpusEditFullscreenView.render();
-        this.corpusReadFullscreenView.render();
-        this.corpusNewModalView.render();
+        //This forces the top serach to render.
+        this.searchEditView.format = "centreWell";
+        this.searchEditView.render();
         
-        // Display the ExportView
-        this.exportView.render();
-        
-        // Display the User Views
-        this.fullScreenEditUserView.render();
-        this.publicReadUserView.render();
-        this.modalEditUserView.render();
-        this.modalReadUserView.render();
-        
-        // Display the Datum Container Views
-        this.renderReadonlyDatumsViews("centreWell");
-        this.renderEditableDatumsViews("centreWell");
-        
-        // Display the Search Views
-        this.searchTopView.render();
-        this.searchFullscreenView.render();
-        this.searchEmbeddedView.render();
-        
-        // Display the AuthView
-        this.authView.render();
-        
-        // Display the Session Views
-        this.sessionEditLeftSideView.render();
-        this.sessionReadLeftSideView.render();
-        this.sessionEditEmbeddedView.render();
-        this.sessionReadEmbeddedView.render();
-        this.sessionEditFullscreenView.render();
-        this.sessionReadFullscreenView.render();
-        this.sessionModalView.render();
-        
-        // Display the UserPreferenceEditView
-        this.userPreferenceView.render();
-        
-        //Display ActivityFeedView
+        this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
-        
         this.insertUnicodesView.render();
-        
-        // Display HotKeysView
-        this.hotkeyEditView.render();//.showModal();
-
-        // Display Data List Views 
-        this.currentEditDataListView.render();
-        this.currentReadDataListView.render();
+//        // Display the Corpus Views
+//        this.corpusEditLeftSideView.render();
+//        this.corpusReadLeftSideView.render();
+//        this.corpusEditEmbeddedView.render();
+//        this.corpusReadEmbeddedView.render();
+//        this.publicCorpusReadEmbeddedView.render();
+//        this.corpusEditFullscreenView.render();
+//        this.corpusReadFullscreenView.render();
+//        this.corpusNewModalView.render();
+//        
+//        // Display the ExportView
+//        this.exportView.render();
+//        
+//        // Display the User Views
+//        this.fullScreenEditUserView.render();
+//        this.publicReadUserView.render();
+//        this.modalEditUserView.render();
+//        this.modalReadUserView.render();
+//        
+//        // Display the Datum Container Views
+//        this.renderReadonlyDatumsViews("centreWell");
+//        this.renderEditableDatumsViews("centreWell");
+//        
+//        // Display the Search Views
+//        this.searchTopView.render();
+//        this.searchFullscreenView.render();
+//        this.searchEmbeddedView.render();
+//        
+//        // Display the AuthView
+//        this.authView.render();
+//        
+//        // Display the Session Views
+//        this.sessionEditLeftSideView.render();
+//        this.sessionReadLeftSideView.render();
+//        this.sessionEditEmbeddedView.render();
+//        this.sessionReadEmbeddedView.render();
+//        this.sessionEditFullscreenView.render();
+//        this.sessionReadFullscreenView.render();
+//        this.sessionModalView.render();
+//        
+//        // Display the UserPreferenceEditView
+//        this.userPreferenceView.render();
+//        
+//        //Display ActivityFeedView
+//        this.activityFeedView.render();
+//        
+//        this.insertUnicodesView.render();
+//        
+//        // Display HotKeysView
+//        this.hotkeyEditView.render();//.showModal();
+//
+//        // Display Data List Views 
+//        this.currentEditDataListView.render();
+//        this.currentReadDataListView.render();
          
         // Display the ImportEditView
-        this.importView.render();
+//        this.importView.render();
       } else {
         Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
       }
@@ -449,9 +446,7 @@ define([
       this.corpusReadLeftSideView.render();
       this.sessionReadLeftSideView.render();
       this.renderReadonlyDataListViews("leftSide");
-      this.renderEditableDatumsViews("centreWell");
-      this.activityFeedView.render();
-      this.insertUnicodesView.render();
+      this.renderReadonlyDatumsViews("centreWell");
     },
     
     // Display the Corpus Views
@@ -536,7 +531,7 @@ define([
      */
     replicateDatabases : function(callback) {
       var self = this;
-      this.model.storeCurrentDashboardIdsToLocalStorage(function(){
+      this.model.saveAndInterConnectInApp(function(){
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){
           var corpusConnection = self.model.get("corpus").get("couchConnection");

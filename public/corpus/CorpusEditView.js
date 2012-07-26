@@ -424,7 +424,7 @@ define([
     },
     //This is the function that is  bound to the book button
     showReadonly : function(){
-      window.app.router.showReadonlyCorpus();
+      window.appView.renderReadonlyCorpusViews();
     },
     //This is the function that is bound to changes
     showEditable :function(){
@@ -438,7 +438,7 @@ define([
      * session and data lists, and then save them to pouch. The new session and
      * datalist are set to the current ones, but the views are not reloaded yet,
      * then the corpus and session and data lists are saved via the
-     * app.storeCurrentDashboardIdsToLocalStorage function. after that the app
+     * app.saveAndInterConnectInApp function. after that the app
      * needs to be reloaded entirely (page refresh), or we can attempt to attach
      * the views to these new models.
      */

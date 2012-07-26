@@ -197,14 +197,15 @@ define( [
     
     //bound to pencil
     showReadonly :function(){
-      window.app.router.showReadonlyDataList();
+      window.appView.currentReadDataListView.format = this.format;
+      window.appView.currentReadDataListView.render();
     },
     
     //bound to change
     showEditable :function(){
       //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
       this.changeViewsOfInternalModels();
-      window.appView.renderEditableDataListViews();
+      this.render();
     },
     
     updatePouch : function() {

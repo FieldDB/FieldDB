@@ -338,7 +338,7 @@ define([
    
     //This is bound to the little pencil function
     showEditable :function(){
-      window.app.router.showEditableCorpus();
+      window.appView.renderEditableCorpusViews();
     }
   });
 
