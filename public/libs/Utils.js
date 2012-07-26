@@ -59,12 +59,15 @@ Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey
  * Console logs out, if not on Internet Explorer. Only logs out if
  * debugMode is true.
  */
-Utils.debug = function(message) {
+Utils.debug = function(message, secondmessage) {
 	if(navigator.appName == 'Microsoft Internet Explorer') {
 		return;
 	}
 	if(this.debugMode) {
 		console.log(message);
+		if(secondmessage){
+	    console.log(secondmessage);
+		}
 	}
 };
 

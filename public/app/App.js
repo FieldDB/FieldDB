@@ -196,6 +196,7 @@ define([
                          * After all fetches have succeeded show the pretty dashboard
                          */
                         window.appView.renderReadonlyDashboardViews();
+                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList();
                         if (typeof callback == "function") {
                           callback();
                         }
