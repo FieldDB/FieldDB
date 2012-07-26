@@ -135,10 +135,6 @@ define( [
         // Display the Data List
         this.setElement($("#data-list-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
-        $(".Comments").append(chrome.i18n.getMessage("Comments"));
-        $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
-        $(".Add").append(chrome.i18n.getMessage("Add"));
-
         
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
@@ -170,7 +166,9 @@ define( [
         this.setElement($("#data-list-quickview"));
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }
-      
+      //localization
+      $(".Add").html(chrome.i18n.getMessage("Add"));
+
       return this;
     },
     

@@ -60,6 +60,14 @@ define( [
         this.$el.children(".color_chooser").val(this.model.get("color"));
       }
       
+      //localization
+      $(".Green").html(chrome.i18n.getMessage("Green"));
+      $(".Orange").html(chrome.i18n.getMessage("Orange"));
+      $(".Red").html(chrome.i18n.getMessage("Red"));
+      $(".Blue").html(chrome.i18n.getMessage("Blue"));
+      $(".Teal").html(chrome.i18n.getMessage("Teal"));
+      $(".Black").html(chrome.i18n.getMessage("Black"));
+      $(".Default").html(chrome.i18n.getMessage("Default"));
       return this;
     },
     

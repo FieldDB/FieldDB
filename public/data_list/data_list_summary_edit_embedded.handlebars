@@ -1,16 +1,19 @@
 <div class="pull-right">
-  <button class="btn btn-success save-datalist" value="Save">Save</button>  
   <a href="#" rel="tooltip" title="Hide data list">
       <i class="icons icon-minus-sign"></i></a>      
   <a href="#" rel="tooltip" title="Show read only">    
       <i class="icons icon-book"></i></a>      
   <a href="#" rel="tooltip" title="Show full screen">
       <i class="icons icon-resize-full"></i></a>
+      
 </div>
-
-<label>Title:</label>
+<br>
+<br>
+<button class="pull-right btn btn-success save-datalist" value="Save">Save</button>  
+<br>
+<label class = "Title"></label>
 <textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
-<label>Description:</label>
+<label class = "Description"></label>
 <textarea class="data-list-description" placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
 <div>
   <ul class="unstyled zebra data_list_content"></ul>

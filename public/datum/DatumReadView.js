@@ -134,7 +134,7 @@ define([
         }
         
         var jsonToRender = {};
-        jsonToRender.translation = translation
+        jsonToRender.translation = translation;
         jsonToRender.couplet = couplet;
         if (judgement !== "") {
           jsonToRender.judgement = judgement;
@@ -143,6 +143,7 @@ define([
         $(this.el).html(this.latexTemplate(jsonToRender));
       }
       
+      $(".Add").html(chrome.i18n.getMessage("Add"));
       return this;
     },
     
