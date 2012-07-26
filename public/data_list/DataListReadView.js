@@ -153,25 +153,38 @@ define( [
       });
     },
     
-    resizeSmall : function(){
+    resizeSmall : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       this.format == "leftSide";
       this.render();
       window.app.router.showDashboard();
     },
     
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       this.format == "fullscreen";
       this.render();
       window.app.router.showFullscreenDataList();
     },
     
     //bound to pencil button
-    showEditable :function(){
-      window.appView.currentDataListEditView.render();
+    showEditable :function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      window.appView.currentEditDataListView.format = this.format;
+      window.appView.currentEditDataListView.render();
     },
     
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
