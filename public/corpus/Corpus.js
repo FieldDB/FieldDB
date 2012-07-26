@@ -516,7 +516,7 @@ define([
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
               
               // Display the most recent datum in this corpus
-//              appView.datumsView.updateDatums(); //Im not sure i want to do this.. lets leave htem where they were.
+//              appView.datumsEditView.updateDatums(); //Im not sure i want to do this.. lets leave htem where they were.
             }
             if(typeof fromcallback == "function"){
               fromcallback();
@@ -612,7 +612,7 @@ define([
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
               
               // Display the most recent datum in this corpus
-//              appView.datumsView.updateDatums();//TODO cesine: im not sure i want to do this, lets let the user stay where they were. we will update datums only when we load the dashboard by ids.
+//              appView.datumsEditView.updateDatums();//TODO cesine: im not sure i want to do this, lets let the user stay where they were. we will update datums only when we load the dashboard by ids.
             }
             if(typeof fromcallback == "function"){
               fromcallback();
@@ -694,8 +694,8 @@ define([
                 		"https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm </a>  " +
                 		"Our website version has a bug which we are waiting for IrisCouch (our database hosting company) to fix," +
                 		" they said they would fix it soon. If your computer is online and you are the Chrome Store app, then this is a bug... please report it to us :)","alert-danger","Offline Mode:");
-//                appView.datumsView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
-                appView.datumsView.render();
+//                appView.datumsEditView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
+                appView.datumsEditView.render();
 
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);

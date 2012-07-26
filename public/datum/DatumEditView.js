@@ -345,7 +345,7 @@ define([
      */
     newDatum : function() {
       // Add a new Datum to the top of the Datum stack
-      appView.datumsView.newDatum();
+      appView.datumsEditView.newDatum();
     },
     
     /** 
@@ -358,7 +358,7 @@ define([
       delete d.attributes.dateEntered;
       delete d.attributes.dateModified;
       d.set("session", app.get("currentSession"));
-      appView.datumsView.prependDatum(d);
+      appView.datumsEditView.prependDatum(d);
     },
     /*
      * this function can be used to play datum automatically

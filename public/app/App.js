@@ -167,8 +167,8 @@ define([
             //show pretty views after loading everything.
             window.appView.renderReadonlyCorpusViews();
             
-            appView.datumsView.render();
-            appView.datumsView.updateDatums();
+            appView.datumsEditView.render();
+            appView.datumsEditView.updateDatums();
           },
           error : function(e) {
             alert("There was an error fetching corpus. Loading defaults..."+e);
@@ -212,8 +212,6 @@ define([
             window.appView.addBackboneDoc(model.id);
             window.appView.addPouchDoc(model.id);
             
-            // Render the read version of the first page of the datalist
-            window.appView.renderFirstPageReadonlyDataListViews();
           },
           error : function(e) {
             alert("There was an error fetching the data list. Loading defaults..."+e);
@@ -270,9 +268,7 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }
-              window.appView.renderReadonlyDataListViews();
-              window.appView.renderReadonlySessionViews();
-              window.appView.renderReadonlyCorpusViews();
+              window.appView.renderReadonlyDashboardViews();
             },failurecallback);
           },failurecallback);
         }, failurecallback);

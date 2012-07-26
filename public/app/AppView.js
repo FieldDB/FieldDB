@@ -18,6 +18,7 @@ define([
     "datum/Datums",
     "datum/DatumContainerEditView",
     "datum/DatumContainerReadView",
+    "datum/DatumReadView",
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
@@ -30,6 +31,7 @@ define([
     "insert_unicode/InsertUnicodesView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
+    "app/PaginatedUpdatingCollectionView",
     "search/Search",
     "search/SearchEditView",
     "datum/Session",
@@ -60,6 +62,7 @@ define([
     Datums,
     DatumContainerEditView,
     DatumContainerReadView,
+    DatumReadView,
     DatumFields,
     Export,
     ExportReadView,
@@ -72,6 +75,7 @@ define([
     InsertUnicodesView,
     UserPreference,
     UserPreferenceEditView,
+    PaginatedUpdatingCollectionView,
     Search,
     SearchEditView,
     Session,
@@ -189,7 +193,7 @@ define([
       
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
-      this.datumsView = new DatumContainerEditView({
+      this.datumsEditView = new DatumContainerEditView({
         model : datumsToBePassedAround
       });
       this.datumsReadView = new DatumContainerReadView({
@@ -317,36 +321,17 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "latex"
       });  
-      
-      this.dataListEditMiddleView = new DataListEditView({
+//    this.currentPaginatedDataListDatumsView.renderInElement(this.$el.find(".data_list_content"));
+ 
+      this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
-      this.dataListEditMiddleView.format = "centreWell";
+      this.currentEditDataListView.format = "leftSide";
       
-      this.dataListReadMiddleView = new DataListEditView({
-        model : this.model.get("currentDataList"),
-      }); 
-      this.dataListReadMiddleView.format = "centreWell";
-      
-      this.dataListEditLeftSideView = new DataListEditView({
-        model : this.model.get("currentDataList"),
-      }); 
-      this.dataListEditLeftSideView.format = "leftSide";
-      
-      this.dataListReadLeftSideView = new DataListReadView({
+      this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
-      this.dataListReadLeftSideView.format = "leftSide";
-      
-      this.dataListEditFullscreenView = new DataListEditView({
-        model : this.model.get("currentDataList"),
-      });  
-      this.dataListEditFullscreenView.format = "fullscreen";
-      
-      this.dataListReadFullscreenView = new DataListReadView({
-        model :  this.model.get("currentDataList"),
-      });  
-      this.dataListReadFullscreenView.format = "fullscreen";
+      this.currentReadDataListView.format = "leftSide";
       
       if(typeof callback == "function"){
         callback();
@@ -443,13 +428,8 @@ define([
         this.hotkeyEditView.render();//.showModal();
 
         // Display Data List Views 
-        this.dataListEditMiddleView.render();
-        this.dataListEditLeftSideView.render();
-        this.dataListEditFullscreenView.render();
-        this.dataListReadLeftSideView.render();
-        this.dataListReadFullscreenView.render();
-        this.dataListReadMiddleView.render();
-
+        this.currentEditDataListView.render();
+        this.currentReadDataListView.render();
          
         // Display the ImportEditView
         this.importView.render();
@@ -461,6 +441,17 @@ define([
       this.setTotalBackboneDocs();
       
       return this;
+    },
+    /**
+     * This should be the primary function to show the dashboard with updated views.
+     */
+    renderReadonlyDashboardViews : function() {
+      this.corpusReadLeftSideView.render();
+      this.sessionReadLeftSideView.render();
+      this.renderReadonlyDataListViews("leftSide");
+      this.renderEditableDatumsViews("centreWell");
+      this.activityFeedView.render();
+      this.insertUnicodesView.render();
     },
     
     // Display the Corpus Views
@@ -490,28 +481,10 @@ define([
       this.sessionReadFullscreenView.render();
     },
     
-    // Display DataList Views
-    renderEditableDataListViews : function(datalistid) {
-      this.dataListEditLeftSideView.render();
-      this.dataListEditFullscreenView.render();
-      //    TODO why not render first page??          self.renderFirstPage();
-
-    },
-    renderReadonlyDataListViews : function(datalistid) {
-      this.dataListReadLeftSideView.render();
-      this.dataListReadFullscreenView.render();
-      //    TODO why not render first page??          self.renderFirstPage();
-
-    },
-    renderFirstPageReadonlyDataListViews : function() {
-      this.dataListEditLeftSideView.renderFirstPage();
-      this.renderReadonlyDataListViews();
-    },
-    
     // Display Datums View
     renderEditableDatumsViews : function(format) {
-      this.datumsView.format = format;
-      this.datumsView.render();
+      this.datumsEditView.format = format;
+      this.datumsEditView.render();
     },
     renderReadonlyDatumsViews : function(format) {
       this.datumsReadView.format = format;
@@ -519,6 +492,18 @@ define([
     },
     
     // Display DataList Views
+    renderEditableDataListViews : function(format) {
+      this.currentEditDataListView = format;
+      this.currentEditDataListView.render();
+    },
+    renderReadonlyDataListViews : function(format) {
+      this.currentReadDataListView = format;
+      this.currentReadDataListView.render();
+    },
+
+   
+    
+    // Display User Views
     renderEditableUserViews : function(userid) {
       this.fullScreenEditUserView.render();
       this.modalEditUserView.render();
@@ -586,7 +571,7 @@ define([
     
     saveScreen : function() {
       // Save the Datum pages, if necessary
-      this.datumsView.saveScreen();
+      this.datumsEditView.saveScreen();
     },
     /**
      * http://www.html5rocks.com/en/tutorials/dnd/basics/

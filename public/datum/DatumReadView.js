@@ -72,7 +72,7 @@ define([
         d.id = this.model.id;
         d.set("_id", this.model.get("_id"));
         d.set("_rev", this.model.get("_rev"));
-        appView.datumsView.prependDatum(d);
+        appView.datumsEditView.prependDatum(d);
       }
     },
 
