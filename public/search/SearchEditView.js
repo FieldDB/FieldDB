@@ -140,10 +140,28 @@ define([
     newTempDataList : function(callback){
       //Only do this if it is the top search. otherwise it seems that all three search edit views are making a data list, and their three data lists are listening to the same events and doing them three times, which migh tmean we g will get three resulting saved ata lsits if the user pushes save?
       if(this.format == "top"){
+        // Scrub this better pouch is still saving it as a revision.
+        var attributes = JSON.parse(JSON.stringify(new DataList({datumIds: []})));
+        // Clear the current data list's backbone info and info which we shouldnt clone
+        attributes._id = undefined;
+        attributes._rev = undefined;
+        attributes.comments = undefined;
+        attributes.title = self.model.get("title")+ " copy";
+        attributes.description = "Copy of: "+self.model.get("description");
+        attributes.corpusname = app.get("corpus").get("corpusname");
+        attributes.datumIds = [];
+        
+        var coll = this.searchDataListEditLeftSideView.datumsView.collection;
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        
         this.searchDataListEditLeftSideView = new DataListEditView({
-          model : new DataList(),
+          model : new DataList({datumIds: []}),
           datumCollection : new Datums() 
         }); 
+        this.searchDataListEditLeftSideView.model = new DataList(attributes);
+        this.searchDataListEditLeftSideView.clearDataList();
         this.searchDataListEditLeftSideView.model.set("title","Temporary Search Results");
         this.searchDataListEditLeftSideView.model.set("description","You can use search to create data lists for handouts.");
         this.searchDataListEditLeftSideView.model.set("corpusname", window.app.get("corpus").get("corpusname"));
@@ -288,6 +306,7 @@ define([
               + " in " 
               + window.app.get("corpus").get("title") 
               + " on "+ JSON.stringify(new Date()) );
+          searchself.searchDataListEditLeftSideView.clearDataList();
           searchself.searchDataListEditLeftSideView.format = "search";
           searchself.searchDataListEditLeftSideView.render();
           // Add search results to the data list
