@@ -178,9 +178,10 @@ define( [
       $(".Description").html(chrome.i18n.getMessage("Description"));
       $(".Add").html(chrome.i18n.getMessage("Add"));
       $(".Save").html(chrome.i18n.getMessage("Save"));
-
-      
-      
+      $(".Next").html(chrome.i18n.getMessage("Next"));
+      $(".Show").html(chrome.i18n.getMessage("Show"));
+      $(".per_page").html(chrome.i18n.getMessage("per_page"));
+    
       return this;
     },
     

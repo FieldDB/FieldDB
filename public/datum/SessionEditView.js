@@ -131,14 +131,7 @@ define([
         if (this.format == "embedded") {
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
-          //localization
-          $(".Session").append(chrome.i18n.getMessage("Session"));
-          $(".Comments").append(chrome.i18n.getMessage("Comments"));
-          $(".new_comment").append(chrome.i18n.getMessage("new_comment"));
-          $(".Add").append(chrome.i18n.getMessage("Add"));
-
-
-          
+   
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
@@ -180,6 +173,23 @@ define([
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
+      
+      //localization
+      $(".Session").html(chrome.i18n.getMessage("Session"));
+      $(".Save").html(chrome.i18n.getMessage("Save"));
+      $(".Add").html(chrome.i18n.getMessage("Add"));
+      $(".New_Session").html(chrome.i18n.getMessage("New_Session"));
+      $(".New_Session_Instructions").html(chrome.i18n.getMessage("New_Session_Instructions"));
+      $(".Cancel").html(chrome.i18n.getMessage("Cancel"));
+      $(".Consultants").html(chrome.i18n.getMessage("Consultants"));
+      $(".Goal").html(chrome.i18n.getMessage("Goal"));
+      $(".When").html(chrome.i18n.getMessage("When"));
+
+
+
+
+      
+      
       return this;
     },    
     
