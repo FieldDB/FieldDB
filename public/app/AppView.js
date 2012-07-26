@@ -323,13 +323,7 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "latex"
       });  
-      /*
-       * Render paginated data collection view in all related elements
-       */
-      $(".current-data-list-paginated-view").each(function(element){
-        window.appView.currentPaginatedDataListDatumsView.renderInElement($(".current-data-list-paginated-view")[element]);
-      });
-
+      
       /*
        * fill collection with datum, this will render them at the same time.
        */

@@ -39,7 +39,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATALIST init: " + this.el);
+      Utils.debug("DATALIST EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
       
@@ -117,15 +117,30 @@ define( [
       if (this.format == "fullscreen") {
         Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
-        this.setElement($("#data-list-fullscreen"));
+        this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
+        
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
         
       } else if (this.format == "leftSide") {
         Utils.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
-        this.setElement($("#data-list-quickview"));
+        this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
-
+        
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-quickview").find(".current-data-list-paginated-view") );
+        
+      } else if (this.format == "centreWell") {
+        Utils.debug("DATALIST EDIT CENTER render: " + this.el);
+        
+        this.setElement($("#data-list-embedded-header"));
+        $(this.el).html(this.embeddedTemplate(jsonToRender));
+        
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-embedded").find(".current-data-list-paginated-view") );
+        
       }else if (this.format == "search") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
 
@@ -146,16 +161,10 @@ define( [
         this.setElement($("#import-data-list-view"));
         $(this.el).html(this.importTemplate(jsonToRender));
         
-      } else if (this.format == "centreWell") {
-        Utils.debug("DATALIST EDIT CENTER render: " + this.el);
-
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.embeddedTemplate(jsonToRender));
-        
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
-        this.setElement($("#data-list-quickview"));
+        this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
       }else{
         Utils.debug("Bug: no format was specified for DataListEditView, nothing was rendered");

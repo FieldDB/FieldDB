@@ -55,6 +55,8 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
     
     add : function(model, collection, options) {
+      Utils.debug("PAGINATED UPDATING COLLECTION add: " , model);
+
       this.filledBasedOnModels = true;
       var childView = new this._childViewConstructor({
         tagName : this._childViewTagName,
@@ -108,6 +110,8 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
 
     render : function() {
+      Utils.debug("PAGINATED UPDATING COLLECTION render: " , this.el);
+
       var that = this;
       this._rendered = true;
 
