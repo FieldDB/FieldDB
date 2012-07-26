@@ -112,7 +112,7 @@ define( [
 
     render : function() {
       var jsonToRender = this.model.toJSON();
-      jsonToRender.datumCount = this.get("datumIds").length;
+      jsonToRender.datumCount = this.model.get("datumIds").length;
       
       if (this.format == "fullscreen") {
         Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);

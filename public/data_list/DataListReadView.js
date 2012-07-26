@@ -101,7 +101,7 @@ define( [
     
     render : function() {
       var jsonToRender = this.model.toJSON();
-      jsonToRender.datumCount = this.get("datumIds").length;
+      jsonToRender.datumCount = this.model.get("datumIds").length;
       if (this.format == "link") {
         Utils.debug("DATALIST READ LINK render: " + this.el);
 
