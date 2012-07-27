@@ -210,6 +210,7 @@ define([
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
+            window.appView.sessionReadLeftSideView.render();
           });
         }
       });
