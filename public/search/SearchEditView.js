@@ -140,6 +140,7 @@ define([
         if( this.searchPaginatedDataListDatumsView ){
           this.searchPaginatedDataListDatumsView.remove(); //backbone to remove from dom
           var coll = this.searchPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+          //this.searchPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
           while (coll.length > 0) {
             coll.pop();
           }

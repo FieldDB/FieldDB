@@ -308,7 +308,12 @@ define([
         }
         //TODO might need to do more scrubbing
         //Convenience function for removing the view from the DOM.
-        this.currentPaginatedDataListDatumsView.remove();
+        this.currentPaginatedDataListDatumsView.remove();//this seems okay, its not removing the ul we need for the next render
+//        while (appView.currentPaginatedDataListDatumsView.collection.length > 0) {
+//          appView.currentPaginatedDataListDatumsView.collection.pop();
+//        }
+        this.currentPaginatedDataListDatumsView.collection.reset(); //could also use backbone's reset which will empty the collection, or fill it with a new group.
+
       }
       
       /*

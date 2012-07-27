@@ -227,35 +227,84 @@ define([
       Utils.debug("In showFullscreenDataList: " + corpusname + " *** "
           + dataListid);
 
-      if(dataListid){
+      //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
+      if(dataListid &&  dataListid != app.get("currentDataList").id ){
         if(!corpusname){
           corpusname = window.app.get("corpus").get("corpusname");
         }
         var dl = new DataList({
           "corpusname" : corpusname});
         dl.id = dataListid;
-
         //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
         if(window.app.get("corpus").get("corpusname") != corpusname ){
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
+          return;
+        }
+
+        if(app.get("corpus").get("dataLists").length > 0){
+          /*
+           * If it is the defualt we want to fetch, which might have its
+           * mostrecent version in the corpus, we will save the corpus's
+           * default data list so that it will be the one we fetch.
+           */
+          if(dataListid == app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].id){
+            app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].changeCorpus(null, function(){
+              app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].save(null, {
+                success : function(model, response) {
+                  
+                  //wait until the corpus copy is saved before fetching.
+                  dl.changeCorpus(corpusname, function(){
+                    //fetch only after having setting the right pouch which is what changeCorpus does.
+                    dl.fetch({
+                      success : function(e) {
+                        Utils.debug("Datalist fetched successfully" +e);
+                        app.get("currentDataList").saveAndInterConnectInApp(function(){
+                          dl.setAsCurrentDataList( function(){
+                            window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                              window.appView.renderReadonlyDashboardViews();
+                            });
+                          });
+                        });
+                      },
+                      error : function(e) {
+                        alert("There was an error fetching the data list. Loading defaults..."+e);
+                      }
+                    });
+                  });
+                  
+                }
+              ,error : function(){
+              }
+              });
+            
+            
+            });
+          }else{
+            /*
+             * If it isnt the default data list, just fetch it.
+             */
+            dl.changeCorpus(corpusname, function(){
+              //fetch only after having setting the right pouch which is what changeCorpus does.
+              dl.fetch({
+                success : function(e) {
+                  Utils.debug("Datalist fetched successfully" +e);
+                  app.get("currentDataList").saveAndInterConnectInApp(function(){
+                    dl.setAsCurrentDataList( function(){
+                      window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                        window.appView.renderReadonlyDashboardViews();
+                      });
+                    });
+                  });
+                },
+                error : function(e) {
+                  alert("There was an error fetching the data list. Loading defaults..."+e);
+                }
+              });
+            });
+            
+          }
         }
         
-        dl.changeCorpus(corpusname, function(){
-          //fetch only after having setting the right pouch which is what changeCorpus does.
-          dl.fetch({
-            success : function(e) {
-              Utils.debug("Datalist fetched successfully" +e);
-              dl.setAsCurrentDataList( function(){
-                window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                  window.appView.renderReadonlyDashboardViews();
-                });
-              });
-            },
-            error : function(e) {
-              alert("There was an error fetching the data list. Loading defaults..."+e);
-            }
-          });
-        });
       }
       this.hideEverything();
       $("#data-list-fullscreen").show();      

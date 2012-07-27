@@ -174,34 +174,39 @@ define([
                   user: window.app.get("authentication").get("userPublic")
                 }));
             
-            //If this is part of the current corpus, overwrite its corresponding data list in the corpus.
-            var thisisthedefaultdatalist = false;
-            //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
-//            Put this dataList on top of the corpus, if it is the same corpusname
-            if(window.app.get("corpus").get("dataLists").length == 1){
+            /*
+             * If the corpus has no data lists in it, just save this one.
+             */
+            if(window.app.get("corpus").get("dataLists").length == 0){
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
-              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
-              if(previousversionincorpus !== model){//if they are the same there is no reason to overwrite them.
-                window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
-              }
+              window.app.get("corpus").get("dataLists").unshift(model);//TODO need to test
+//            }else if(window.app.get("corpus").get("dataLists").length > 1){
+//              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
+//              //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
+//              if(previousversionincorpus !== model){//if they are the same there is no reason to overwrite them.
+//                window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
             }else{
-              if(window.app.get("corpus").get("dataLists").get(model.id) != undefined ){
+              if(window.app.get("corpus").id) window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
+              /*
+               * If there is more than one datalist in the corpus, we need to find this one and replace it.
+               */
+              var previousversionincorpus = window.app.get("corpus").get("dataLists").get(model.id);
+              if(previousversionincorpus == undefined ){
+                window.app.get("corpus").get("dataLists").unshift(model);
+              }else{
                 var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
                 if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
-                  thisisthedefaultdatalist = true;
+                  //this is the default, put it last
+                  window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
+                  window.app.get("corpus").get("dataLists").add(model);
+                }else{
+                  //this is a normal data list, put it first
+                  window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
+                  window.app.get("corpus").get("dataLists").unshift(model);
                 }
-                var corpusversion = window.app.get("corpus").get("dataLists").get(model.id);
-                window.app.get("corpus").get("dataLists").remove(corpusversion);
-              }
-              
-              if(thisisthedefaultdatalist){
-                window.app.get("corpus").get("dataLists").add(model);
-              }else{
-                window.app.get("corpus").get("dataLists").unshift(model);//TODO need to test
               }
             }
             
-//            window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
@@ -242,29 +247,32 @@ define([
         return;
       }else{
         if (window.app.get("currentDataList").id != this.id ) {
+          //remove reference between current dataList and the model  TODO check this..
+//          delete window.app.attributes.currentDataList; //this seems to delte the datalist from the corpus too. :(
+//          window.app.attributes.currentDataList = this; //trying to get backbone not to notice we are switching the current data list.
           window.app.set("currentDataList", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes. 
 //          window.app.set("currentDataList", app.get("corpus").get("dataLists").get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
 //        window.app.get("authentication").saveAndInterConnectInApp();
-        
+        var self = this;
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
             if (typeof successcallback == "function") {
               successcallback();
             }else{
               //TODO remove this when done debugging and it is working all the time.
-              var self = this;
               window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
-//            window.appView.renderEditableDataListViews();
-//            window.appView.renderReadonlyDataListViews();
+              window.appView.renderEditableDataListViews();
+              window.appView.renderReadonlyDataListViews();
             }
           });
         }catch(e){
           if (typeof failurecallback == "function") {
+            alert("Calling the failure callback in the set as current data list."+self.id);
             failurecallback();
           }else{
-            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session.");
+            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session."+self.id);
           }
         }
       }
