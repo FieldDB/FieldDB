@@ -464,7 +464,8 @@ define([
             var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
             if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
               //Put it into the current data list views
-              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model);
+              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
               //Put it into the ids of the current data list
               var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
               if(positionInCurrentDataList != -1){
