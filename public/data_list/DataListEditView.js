@@ -148,7 +148,7 @@ define( [
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
 
         this.setElement($("#search-data-list-quickview-header"));
-        $(this.el).html(this.templateSummary(jsonToRender));
+        $(this.el).html(this.searchTemplate(jsonToRender));
         $("#search-data-list-quickview").addClass("well");
 
         window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
@@ -258,11 +258,19 @@ define( [
       if(e){
         e.stopPropagation();
       }
-      var self = this;
-      this.model.saveAndInterConnectInApp(function(){
-          self.format = "search-minimized";
-          self.render();
-          self.model.setAsCurrentDataList();
+//      var self = this;
+//      this.model.saveAndInterConnectInApp(function(){
+//          self.format = "search-minimized";
+//          self.render();
+//          self.model.setAsCurrentDataList();
+//        window.appView.renderReadonlyDataListViews("leftSide");
+//      });
+      
+      var searchself = appView.searchEditView.searchDataListView; //TODO this was because the wrong tempalte was in the serach data list.for some reason the model is a function here when i click on the save button on the temp serach data list. this is a workaround.
+      searchself.model.saveAndInterConnectInApp(function(){
+        searchself.format = "search-minimized";
+        searchself.render();
+        searchself.model.setAsCurrentDataList();
         window.appView.renderReadonlyDataListViews();
       });
     },
@@ -288,7 +296,23 @@ define( [
       }
       this.$el.find(".comment-new-text").val("");
     }
-    
+    ,
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+      this.remove();  
+      Backbone.View.prototype.remove.call(this);
+
+      }
   });
 
   return DataListEditView;

@@ -40,7 +40,14 @@ define( [
       Utils.debug("DATALIST READ VIEW init: " + this.el);
       
       this.changeViewsOfInternalModels();
-      this.model.bind('change:title', this.changeViewsOfInternalModels, this);
+      this.model.bind('change:title', function(){
+        this.changeViewsOfInternalModels();
+        this.render();
+      }, this);
+      
+      this.model.bind('change:datumIds', function(){
+        this.render();
+      }, this);
     },
 
     /**
