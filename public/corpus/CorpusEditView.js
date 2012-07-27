@@ -239,6 +239,8 @@ define([
       $(".Cancel").html(chrome.i18n.getMessage("Cancel"));
       $(".Title_Summary_Edit").html(chrome.i18n.getMessage("Title"));
       $(".Description_Summary_Edit").html(chrome.i18n.getMessage("Description"));
+      $(".Help_Text_Placeholder").placeholder = chrome.i18n.getMessage("Help_Text_Placeholder");
+
 
 
 
