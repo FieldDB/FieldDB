@@ -182,8 +182,10 @@ define([
               window.app.get("corpus").get("sessions").unshift(model);
 //              window.appView.addUnsavedDoc(window.app.get("corpus").id);//this is undefined the first time session is saved.
             }else{
-              //overwrite new details in the corpus' version.
-              previousversionincorpus = model;
+              //overwrite new details in the corpus' version, unless they are the same, then it is unnecesary.
+              if(previousversionincorpus !== model){
+                previousversionincorpus = model;
+              }
             }
             if(window.app.get("corpus").get("sessions").length == 1){
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
