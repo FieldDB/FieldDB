@@ -186,8 +186,8 @@ define([
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
             }
-            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
-//            window.app.get("authentication").saveAndInterConnectInApp();
+//            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
+            window.app.get("authentication").saveAndInterConnectInApp();
 
             if(typeof successcallback == "function"){
               successcallback();
