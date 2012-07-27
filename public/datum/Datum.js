@@ -515,8 +515,15 @@ define([
                 }
               }
               if (thisDatumIsIn) {
-                // Insert the datum at the top of the search data list
-//              TODO check this           window.appView.searchEmbeddedView.searchDataListEditLeftSideView.addOneDatumId(model.id, true);
+                // Insert the datum at the top of the search datums collection view
+                window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+                window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.unshift(model);
+                //Do the same to the datumids in the search data list itself
+                var positioninsearchresults = window.appView.searchEditView.searchDataListView.model.get("datumIds").indexOf(model.id);
+                if(positioninsearchresults != -1){
+                  window.appView.searchEditView.searchDataListView.model.get("datumIds").splice(positioninsearchresults, 1);
+                }
+                window.appView.searchEditView.searchDataListView.model.get("datumIds").unshift(model.id);
               }
             }//end of if search is open and running for Alan
             

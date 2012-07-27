@@ -48,6 +48,9 @@ define( [
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
+      this.model.bind('change:datumIds', function(){
+        this.render();
+      }, this);
     },
 
     /**
@@ -144,16 +147,24 @@ define( [
       }else if (this.format == "search") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
 
-        this.setElement($("#search-data-list-quickview"));
+        this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
-        $(this.el).addClass("well");
+        $("#search-data-list-quickview").addClass("well");
 
+        window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
+            $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
+        
       }else if (this.format == "search-minimized") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
         
-        this.setElement($("#search-data-list-quickview"));
+        this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
-        $(this.el).addClass("well");
+//        $(this.el).addClass("well");
+        try{
+          $(".search-data-list-paginated-view").html("");
+        }catch(e){
+          Utils.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
+        }
 
       }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
