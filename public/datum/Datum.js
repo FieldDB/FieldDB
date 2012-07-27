@@ -468,7 +468,7 @@ define([
               //Put it into the ids of the current data list
               var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
               if(positionInCurrentDataList != -1){
-                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInCurrentDataList, 1);
+                window.app.get("currentDataList").get("datumIds").splice(positionInCurrentDataList, 1);
               }
               window.app.get("currentDataList").get("datumIds").unshift(model.id);
               window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
