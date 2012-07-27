@@ -177,20 +177,27 @@ define([
             //If this is part of the current corpus, overwrite its corresponding data list in the corpus.
             var thisisthedefaultdatalist = false;
             //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
-            if(window.app.get("corpus").get("dataLists").get(model.id) != undefined ){
-              var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
-              if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
-                thisisthedefaultdatalist = true;
-              }
-              var corpusversion = window.app.get("corpus").get("dataLists").get(model.id);
-              window.app.get("corpus").get("dataLists").pop(corpusversion);
-            }
-            //Put this dataList on top of the corpus, if it is the same corpusname
-            if(thisisthedefaultdatalist){
-              window.app.get("corpus").get("dataLists").add(model);
+//            Put this dataList on top of the corpus, if it is the same corpusname
+            if(window.app.get("corpus").get("dataLists").length == 1){
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+//              window.app.get("corpus").get("dataLists").models[0] = model;
             }else{
-              window.app.get("corpus").get("dataLists").unshift(model);
+              if(window.app.get("corpus").get("dataLists").get(model.id) != undefined ){
+                var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
+                if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
+                  thisisthedefaultdatalist = true;
+                }
+                var corpusversion = window.app.get("corpus").get("dataLists").get(model.id);
+                window.app.get("corpus").get("dataLists").remove(corpusversion);
+              }
+              
+              if(thisisthedefaultdatalist){
+                window.app.get("corpus").get("dataLists").add(model);
+              }else{
+                window.app.get("corpus").get("dataLists").unshift(model);
+              }
             }
+            
 //            window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
@@ -236,7 +243,7 @@ define([
 //          window.app.set("currentDataList", app.get("corpus").get("dataLists").get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp();
+//        window.app.get("authentication").saveAndInterConnectInApp();
         
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
