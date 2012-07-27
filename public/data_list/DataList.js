@@ -180,7 +180,10 @@ define([
 //            Put this dataList on top of the corpus, if it is the same corpusname
             if(window.app.get("corpus").get("dataLists").length == 1){
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
-              window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
+              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
+              if(previousversionincorpus !== model){//if they are the same there is no reason to overwrite them.
+                window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
+              }
             }else{
               if(window.app.get("corpus").get("dataLists").get(model.id) != undefined ){
                 var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
