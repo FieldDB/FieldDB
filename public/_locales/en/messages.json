@@ -343,7 +343,11 @@
    },
     "Number_Datum" : {
       "message" : "Number of Datum to appear at a time:"
+   },
+    "Help_Text_Placeholder" : {
+      "message" : "Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
    }
+   
    
    
    
