@@ -33,6 +33,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       this.collection.each(this.addChildView);
 
       this.collection.bind('add', this.addChildView);
+      this.collection.bind('unshift', this.addChildView);
       this.collection.bind('remove', this.removeChildView);
     },
     
