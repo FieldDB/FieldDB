@@ -165,6 +165,7 @@ define([
       }
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
+      localStorage.setItem("mostRecentDashboard", JSON.stringify(this.get("userPrivate").get("mostRecentIds")) );
       this.saveAndEncryptUserToLocalStorage(function(){
         if(typeof successcallback == "function"){
           successcallback();
