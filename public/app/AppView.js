@@ -306,6 +306,7 @@ define([
         if( this.currentPaginatedDataListDatumsView.collection.length > this.model.get("currentDataList").get("datumIds").length){
           alert("The currentPaginatedDataListDatumsView already has more datum than the current datalist.");
         }
+        //TODO might need to do more scrubbing
         //Convenience function for removing the view from the DOM.
         this.currentPaginatedDataListDatumsView.remove();
       }
@@ -361,7 +362,35 @@ define([
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
-      "click .sync-everything" : "replicateDatabases"
+      "click .sync-everything" : "replicateDatabases",
+      /*
+       * These functions come from the top search template, it is
+       * renderd by seacheditview whenever a search is renderd, but its
+       * events cannot be handled there but are easily global events
+       * that can be controlled by teh appview. which is also
+       * responsible for many functions on the navbar
+       */
+      "click .btn-advanced-search" : function(e){
+        window.app.router.showEmbeddedSearch();
+      },
+      "click .icon-search" : function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        this.searchEditView.searchTop();
+      },
+      "keyup #search_box" : function(e) {
+//        if(e){
+//          e.stopPropagation();
+//        }
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.searchEditView.searchTop();
+        }
+//        return false;
+      }
     },
     
     /**
@@ -384,14 +413,14 @@ define([
         this.userPreferenceView.render();
         this.hotkeyEditView.render();//.showModal();
         
-        //This forces the top search to render.
-        this.searchEditView.format = "centreWell";
-        this.searchEditView.render();
         
         this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
         this.insertUnicodesView.render();
         
+        //This forces the top search to render.
+        this.searchEditView.format = "centreWell";
+        this.searchEditView.render();
 //        // Display the Corpus Views
 //        this.corpusEditLeftSideView.render();
 //        this.corpusReadLeftSideView.render();
