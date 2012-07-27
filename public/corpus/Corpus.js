@@ -370,18 +370,17 @@ define([
             /*
              * Save the default data list, in case it has changed without being saved in pouch. 
              */
-            try{
+            if(model.get("dataLists").length > 0){
               var defaultDatalist = model.get("dataLists").models[model.get("dataLists").length - 1];
-              if(defaultDatalist.needsSave == true){
-                defaultDatalist.changeCorpus(null, function(){
-                  Utils.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
-                  defaultDatalist.save();
-                });
-              }
-            }catch(e){
-              Utils.debug("there was a problem saving the default data list in the corpus, it proabbly wasnt there yet.",e);
-            }
 
+              if(defaultDatalist.needsSave){
+//                defaultDatalist.changeCorpus(null, function(){
+//                  Utils.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
+//                  defaultDatalist.save();
+                //TODO uncomment this
+//                });
+              }
+            }
             if(newModel){
               //TODO something similar to saving the current dashboard so the user can go back.
 //              window.app.saveAndInterConnectInApp(function(){

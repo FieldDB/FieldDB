@@ -172,16 +172,18 @@ define([
                   verb : verb,
                   directobject : "<a href='#session/"+model.id+"'>session</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App.",
-                  user: window.app.get("authentication").get("userPublic")
+                  context : differences+" via Offline App."
+//                  user: window.app.get("authentication").get("userPublic")
                 }));
             
             //make sure the session is in this corpus, if it is the same corpusname
-            if(window.app.get("corpus").get("sessions").getByCid(model.cid) == undefined && window.app.get("corpus").get("corpusname") == model.get("corpusname")){
+            if( window.app.get("corpus").get("sessions").getByCid(model.cid) == undefined ){
               window.app.get("corpus").get("sessions").unshift(model);
-              window.appView.addUnsavedDoc(window.app.get("corpus").id);
+//              window.appView.addUnsavedDoc(window.app.get("corpus").id);//this is undefined the first time session is saved.
             }
-            
+            if(window.app.get("corpus").get("sessions").length == 1){
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+            }
             //make sure the session is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
