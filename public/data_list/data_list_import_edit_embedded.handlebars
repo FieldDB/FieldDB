@@ -5,18 +5,17 @@
 <textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
 <label>Description</label>
 <textarea class="data-list-description" placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
-</small>{{datumCount}}</small>
+<small>{{datumCount}}</small>
 
-<div>
-  <ul class="unstyled zebra data_list_content"></ul>
-  <p></p>
-  <div class="data-list-footer"></div>
+<div class="icons">
+  <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> 
+  <a href="#clipboard"><i class="icons icon-paste"></i></a> 
+  <a id="encrypt"><i class="icons icon-lock"></i></a>
+  <button class="btn btn-primary latex-export-datalist" id="LaTeX">LaTeX</button>
 </div>
 
 
-
 <ul class="comments unstyled"></ul>
-
 <div class="alert alert-info">
   <span> new comment: </span>
   <i class="icons icon-comment"></i>

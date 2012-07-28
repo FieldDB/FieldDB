@@ -95,6 +95,9 @@ define( [
         this.render();
       },
       "click .latex-export-datalist": function(e){
+        if(e){
+          e.stopPropagation();
+        }
         this.datumIdsChecked = [];
 
         for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
@@ -102,12 +105,11 @@ define( [
             this.datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
           }
         }
-        Utils.debug("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(this.datumIdsChecked));
+        alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(this.datumIdsChecked));
 
         this.model.laTeXDatumIds(this.datumIdsChecked);
-        if(e){
-          e.stopPropagation();
-        }
+        return false;
+
       }
     },
 
@@ -129,6 +131,9 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
+      appView.currentEditDataListView.destroy_view();
+      appView.currentReadDataListView.destroy_view();
+      
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
       
@@ -317,16 +322,14 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
       $(this.el).removeData().unbind(); 
 
       //Remove view from DOM
-      this.remove();  
-      Backbone.View.prototype.remove.call(this);
-
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
       }
   });
 
