@@ -76,7 +76,7 @@ define([
       }
       $("#export-modal").modal("show");
 //      $("#export-text-area").val("");
-      alert("DATA LIST datumIdsToLaTeX " +JSON.stringify(datumIdsToLaTeX));
+      Utils.debug("DATA LIST datumIdsToLaTeX " +JSON.stringify(datumIdsToLaTeX));
       for(var id in datumIdsToLaTeX){
         var obj = new Datum({corpusname: app.get("corpus").get("corpusname")});
         obj.id  = datumIdsToLaTeX[id];
