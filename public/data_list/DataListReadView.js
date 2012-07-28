@@ -72,7 +72,21 @@ define( [
       "click .icon-plus-sign" : function() {
         this.format = "leftSide";
         this.render();
-      } 
+      },
+      "click .latex-export-datalist": function(e){
+        this.datumIdsChecked = [];
+
+        for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
+          if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
+            this.datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
+          }
+        }
+        Utils.debug("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(this.datumIdsChecked));
+       this.model.laTeXDatumIds(this.datumIdsChecked);
+        if(e){
+          e.stopPropagation();
+        }
+      }
     },
     
     /**

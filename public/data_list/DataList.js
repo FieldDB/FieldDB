@@ -67,7 +67,29 @@ define([
         callback();
       }
     },
-    
+    laTeXDatumIds : function(datumIdsToLaTeX){
+      if(!datumIdsToLaTeX){
+        datumIdsToLaTeX = this.get("datumIds");
+      }
+      if(datumIdsToLaTeX.length == 0){
+        datumIdsToLaTeX = this.get("datumIds");
+      }
+      $("#export-modal").modal("show");
+//      $("#export-text-area").val("");
+      alert("DATA LIST datumIdsToLaTeX " +JSON.stringify(datumIdsToLaTeX));
+      for(var id in datumIdsToLaTeX){
+        var obj = new Datum({corpusname: app.get("corpus").get("corpusname")});
+        obj.id  = datumIdsToLaTeX[id];
+        obj.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              model.laTeXiT(true);
+            }
+          });
+        });
+        
+      }
+    },
 
     /**
      * Create a permanent data list in the current corpus. 
