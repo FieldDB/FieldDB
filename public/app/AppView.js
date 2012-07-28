@@ -426,6 +426,9 @@ define([
         //This forces the top search to render.
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
+        
+        this.importView.render();
+        this.exportView.render();
 //        // Display the Corpus Views
 //        this.corpusEditLeftSideView.render();
 //        this.corpusReadLeftSideView.render();
@@ -437,7 +440,6 @@ define([
 //        this.corpusNewModalView.render();
 //        
 //        // Display the ExportView
-//        this.exportView.render();
 //        
 //        // Display the User Views
 //        this.fullScreenEditUserView.render();
@@ -479,7 +481,6 @@ define([
 //        this.currentReadDataListView.render();
          
         // Display the ImportEditView
-//        this.importView.render();
       } else {
         Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
       }
