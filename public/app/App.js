@@ -265,7 +265,8 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }
-              window.appView.renderReadonlyDashboardViews();
+//              window.appView.renderReadonlyDashboardViews();
+              app.router.showDashboard();
             },failurecallback);
           },failurecallback);
         }, failurecallback);
