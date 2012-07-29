@@ -307,11 +307,10 @@ define([
 
     },
     updatePublicOrPrivate : function(){
-      this.model.set("description",this.$el.find(".public-or-private").val());
+      this.model.set("publicCorpus",this.$el.find(".public-or-private").val());
       window.appView.addUnsavedDoc(this.model.id);
 
     },
-//    public-or-private
    
     //Functions assoicate with the corpus menu
     newDatum : function(e) {
