@@ -213,7 +213,8 @@ define([
       skin : "",
       numVisibleDatum : 3,
       transparentDashboard: false,
-      alwaysRandomizeSkin : true
+      alwaysRandomizeSkin : true,
+      numberOfItemsInPaginatedViews : 12
     },
     
     // Internal models: used by the parse function
