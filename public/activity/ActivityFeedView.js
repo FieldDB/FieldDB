@@ -5,7 +5,7 @@ define([
     "activity/Activities",
     "activity/ActivityView",
     "activity/ActivityFeed",
-    "app/UpdatingCollectionView"
+    "app/PaginatedUpdatingCollectionView"
  ], function(
     Backbone, 
     Handlebars, 
@@ -13,7 +13,7 @@ define([
     Activities,
     ActivityView,
     ActivityFeed,
-    UpdatingCollectionView
+    PaginatedUpdatingCollectionView
 ) {
   var ActivityFeedView = Backbone.View.extend(
   /** @lends ActivityFeedView.prototype */
@@ -28,7 +28,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.activitiesView = new UpdatingCollectionView({
+      this.activitiesView = new PaginatedUpdatingCollectionView({
         collection           : this.model.get("activities"),
         childViewConstructor : ActivityView,
         childViewTagName     : 'li'
