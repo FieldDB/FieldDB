@@ -161,9 +161,11 @@ define([
         
         // Scrub this better pouch it was still saving it as a revision.
         if(this.searchDataListView){
+          this.searchDataListView.destroy_view();
+
 //          this.searchDataListView.remove(); //backbone to remove from dom this is removing my id div too.
           delete this.searchDataListView.model; //tell the garbage collector we are done.
-          delete this.searchDataListView;
+//          delete this.searchDataListView;
         }
         
 //        var attributes = JSON.parse(JSON.stringify(new DataList({datumIds: []})));

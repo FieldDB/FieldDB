@@ -175,6 +175,8 @@ define( [
 
         window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
             $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
+        $(".search-data-list-paginated-view").show();
+        $("#search-data-list-quickview-header").parent().find(".pagination-control").show("");
         
       }else if (this.format == "search-minimized") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -183,8 +185,8 @@ define( [
         $(this.el).html(this.templateMinimized(jsonToRender));
 //        $(this.el).addClass("well");
         try{
-          $(".search-data-list-paginated-view").html("");
-          $("#search-data-list-quickview-header").parent().find(".pagination-control").html("");
+          $(".search-data-list-paginated-view").hide();
+          $("#search-data-list-quickview-header").parent().find(".pagination-control").hide("");
 
         }catch(e){
           Utils.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
