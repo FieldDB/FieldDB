@@ -167,23 +167,29 @@ define([
                 
                 // Go through all the rows of results
                 for (i in response.rows) {
-                  // Determine if this datum matches the first search criteria
-                  var thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
-                  
-                  // Progressively determine whether the datum still matches based on
-                  // subsequent search criteria
-                  for (var j = 1; j < queryTokens.length; j += 2) {
-                    if (queryTokens[j] == "AND") {
-                      // Short circuit: if it's already false then it continues to be false
-                      if (!thisDatumIsIn) {
-                        break;
+                  var thisDatumIsIn = false;
+                  // If the query string is null, include all datumIds
+                  if(queryString.trim() == ""){
+                    thisDatumIsIn = true;
+                  }else{
+                    // Determine if this datum matches the first search criteria
+                    thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
+                    
+                    // Progressively determine whether the datum still matches based on
+                    // subsequent search criteria
+                    for (var j = 1; j < queryTokens.length; j += 2) {
+                      if (queryTokens[j] == "AND") {
+                        // Short circuit: if it's already false then it continues to be false
+                        if (!thisDatumIsIn) {
+                          break;
+                        }
+                        
+                        // Do an intersection
+                        thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
+                      } else {
+                        // Do a union
+                        thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
                       }
-                      
-                      // Do an intersection
-                      thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
-                    } else {
-                      // Do a union
-                      thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
                     }
                   }
                   
