@@ -101,12 +101,15 @@ define([
       "change .datum_state_select" : "updateDatumStates",
       "click .LaTeX" : function(){
         this.model.laTeXiT(true);
+        $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
         this.model.exportAsPlainText(true);
+        $("#export-modal").modal("show");
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null, true);
+        $("#export-modal").modal("show");
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
@@ -230,59 +233,22 @@ define([
   
     /**
      * Encrypts the datum if it is confidential
-     * 
-     * @returns {Boolean}
      */
     encryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      // console.log("Fake encrypting");
-      var confidential = appView.corpusView.model.confidential;
-
-      if (confidential == undefined) {
-        appView.corpusView.model.confidential = new Confidential();
-        confidential = appView.corpusView.model.confidential;
-      }
-
-      this.model.set("utterance", confidential.encrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.encrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.encrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.encrypt(this.model
-          .get("translation")));
-
-      // this.model.set("utterance", this.model.get("utterance").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("morphemes", this.model.get("morphemes").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("gloss", this.model.get("gloss").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("translation", this.model.get("translation").replace(/[^
-      // -.]/g,"x"));
+      this.model.encrypt();
       this.render();
       $(".icon-lock").toggleClass("icon-lock icon-unlock");
-
-      // console.log(confidential);
-      // this.model.set()
     },
-    
+
     /**
      * Decrypts the datum if it was encrypted
      */
     decryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      var confidential = appView.corpusView.model.confidential;
-      this.model.set("utterance", confidential.decrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.decrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.decrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.decrypt(this.model
-          .get("translation")));
+      this.model.decrypt();
       this.render();
       $(".icon-lock").toggleClass("icon-lock icon-unlock");
     },
-    
+
     needsSave : false,
     
     updatePouch : function() {
