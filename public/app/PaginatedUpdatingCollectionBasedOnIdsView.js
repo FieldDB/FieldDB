@@ -48,8 +48,8 @@ var PaginatedUpdatingCollectionBasedOnIdsView = Backbone.View.extend(
      * Events that the view is listening to and their handlers.
      */
     events : {
-      'click a.servernext' : 'nextResultPage',
-      'click .serverhowmany a' : 'changeCount',
+      'click a.nextinfinitepagination' : 'nextResultPage',
+      'click .howmanyperpagination a' : 'changeCount',
     },
     
     add : function(model, collection, options) {

@@ -35,29 +35,41 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       this.collection.bind('add', this.addChildView);
       this.collection.bind('unshift', this.addChildView);
       this.collection.bind('remove', this.removeChildView);
+      
+      try{
+        this.perPage = app.get("authentication").get("userPrivate").get("prefs").get("numberOfItemsInPaginatedViews");
+        this.currentVisibleEnd = this.perPage - 1;
+
+      }catch(e){
+        Utils.debug("there was a problem getting the number of items per page for the user, using default of 12.");
+      }
+      
     },
     
     tagName: "ul",
     
     paginationControlTemplate : Handlebars.templates.paging_footer,
    
+
     /**
      * Events that the view is listening to and their handlers.
+     * These events are fired from the pagination control, which is
+     * not in this element but in the sister of this element. see jquery
+     * binding in the render pagination control.
      */
     events : {
-//      'click a.servernext' : 'nextResultPage',
-//      'click .serverhowmany a' : 'changeCount',
-      'click .collection-checkbox' : 'clickedCheckbox'
+//      'click a.nextinfinitepagination' : 'nextResultPage',
+//      'click .howmanyperpagination a' : 'changeCount',
     },
-    /*
-     * TODO decide here or in childviews
-     */
-    clickedCheckbox : function(e){
-      alert("checked a checkbox "+JSON.stringify(e));
-    },
+    
     addChildView : function(model, collection, options) {
       Utils.debug("PAGINATED UPDATING COLLECTION add: " , this._childViews.length);
 
+      //If the model is not supposed to be visible, don't run this function.
+      if(this.collection.indexOf(model) > this.currentVisibleEnd){
+        return;
+      }
+      
       this.filledBasedOnModels = true;
       var childView = new this._childViewConstructor({
         tagName : this._childViewTagName,
@@ -89,13 +101,13 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         
         if( positionInChildViews == -1 ){
           this._childViews.unshift(childView);
+          if (this._rendered) {
+            $(this.el).prepend(childView.render().el);
+          }
         }else{
           //dont add it?
         }
   
-        if (this._rendered) {
-          $(this.el).prepend(childView.render().el);
-        }
       // Add to the bottom of the list
       } else {
         var positionInChildViews = -1;
@@ -108,21 +120,29 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
           }
         }
         if( positionInChildViews == -1 ){
-          this._childViews.push(childView);
+          this._childViews.push(childView); //TODO put in its index position
+          if (this._rendered) {
+            $(this.el).append(childView.render().el);
+          }
         }else{
           //dont add it?
         }
   
-        if (this._rendered) {
-          $(this.el).append(childView.render().el);
-        }
       }
+      if(this._childViews.length > this.currentVisibleEnd + 1){
+        this.removeChildView(this._childViews[this.currentVisibleEnd + 1].model);
+      }
+      
     },
 
     removeChildView : function(model) {
       var viewToRemove = _(this._childViews).select(function(cv) {
         return cv.model === model;
       })[0];
+      //If the view wasnt displayed anyway because it was outside the pagination, dont bother removing the view.
+      if(!viewToRemove){
+        return;
+      }
       this._childViews = _(this._childViews).without(viewToRemove);
 
       if (this._rendered)
@@ -142,32 +162,37 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         childView.delegateEvents();
       });
 
-//      // Display the DatumFieldsView
-//      this.datumsView.el = this.$el.find(".data_list_content");
-//      this.datumsView.render();
-//      
-//      // Display the pagination footer
-//      this.renderUpdatedPagination();
+      /*
+       * This wont add the view if it is already in the views, but to
+       * avoid extra processing, only run this if the number of child
+       * views is an unexpected value compared to the current visible
+       * views.
+       */
+      if(this._childViews.length != this.currentVisibleEnd + 1){
+        this.renderFirstPage();
+      }
+      // Display the pagination footer
+      this.renderUpdatedPaginationControl();
       
       return this;
+    },
+    /**
+     * Renders only the first page of the Data List.
+     */
+    renderFirstPage : function() {
+//      this.clearChildViews(); //The addChildView wont add it if it is already there, so we dont need to clear it.
+      
+      for (var i = 0; i < this.currentVisibleEnd; i++) {
+        if (this.collection.models[i]) {
+          this.addChildView(this.collection.models[i], this.collection, {index: i});
+        }
+      }
     },
     renderInElement: function(htmlElement){
       this.el = htmlElement;
       this.render();
     },
-    
-//    /**
-//     * Renders only the first page of the Data List.
-//     */
-//    renderFirstPage : function() {
-//      this.clearChildViews();
-//      
-//      for (var i = 0; i < this.perPage; i++) {
-//        if (this.model.get("datumIds")[i]) {
-//          this.addOne(this.model.get("datumIds")[i]);
-//        }
-//      }
-//    },
+   
     filledBasedOnIds: false,
     filledBasedOnModels : false,
     /**
@@ -192,80 +217,123 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         });
       }
     },
-    // Clear the view of all its DatumReadViews
+    // Clear the view of all its ChildViews
     clearChildViews : function() {
-      while (this.collection.length > 0) {
-        var m = this.collection.pop();
-        removeChildView(m); //TODO might not be necessary?
+      while (this._childViews.length > 0) {
+        var viewToRemove = this._childViews.pop();
+        $(viewToRemove.el).remove();
       }
     },
-//
-//    /**
-//     * Re-calculates the pagination values and re-renders the pagination footer.
-//     */
-//    renderUpdatedPagination : function() {
-//      // Replace the old pagination footer
-//      this.$el.find(".pagination-control").html(this.paginationControlTemplate(this.getPaginationInfo()));
-//    },
-//
-//    /**
-//     * For paging, the number of items per page.
-//     */
-//    perPage : 12,
-//
-//    /**
-//     * Based on the number of items per page and the current page, calculate the current
-//     * pagination info.
-//     * 
-//     * @return {Object} JSON to be sent to the footerTemplate.
-//     */
-//    getPaginationInfo : function() {
-//      var currentPage = (this.collection.length > 0) ? Math
-//          .ceil(this.collection.length / this.perPage) : 1;
-//      var totalPages = (this.collection.length > 0) ? Math.ceil(this.collection.length
-//          / this.perPage) : 1;
-//
-//      return {
-//        currentPage : currentPage,
-//        totalPages : totalPages,
-//        perPage : this.perPage,
-//        morePages : currentPage < totalPages
-//      };
-//    },
-//
-//    /**
-//     * Change the number of items per page.
-//     * 
-//     * @param {Object} e The event that triggered this method.
-//     */
-//    changeCount : function(e) {
-//      e.preventDefault();
-//
-//      // Change the number of items per page
-//      this.perPage = parseInt($(e.target).text());
-//    },
-//
-//    /**
-//     * Add one page worth of child views from the collection.
-//     * 
-//     * @param {Object} e The event that triggered this method.
-//     */
-//    nextResultPage : function(e) {
-//      e.preventDefault();
-//
-//      // Determine the range of indexes into the model's datumIds array that are 
-//      // on the page to be displayed
-//      var startIndex = this.collection.length;
-//      var endIndex = startIndex + this.perPage;
-//
-//      // Add a DatumReadView for each one
-//      for (var i = startIndex; i < endIndex; i++) {
-//        var m = this.collection[i];
-//        if (m) {
-//          this.add(m);
-//        }
-//      }
-//    }
+
+    /**
+     * Re-calculates the pagination values and re-renders the pagination footer and binds its events using jquery binding instead of backbone binding
+//      'click a.nextinfinitepagination' : 'nextResultPage',
+//      'click .howmanyperpagination a' : 'changeCount',
+     */
+    renderUpdatedPaginationControl : function() {
+      var paginatedSelf = this;
+      //Remove events and old footer
+      this.el.parent().find(".nextinfinitepagination").unbind('click', function(e){
+        paginatedSelf.nextResultPage(e, paginatedSelf);
+      });
+      this.el.parent().find(".howmanyperpagination").unbind('click', function(e){
+        paginatedSelf.changeCount(e, paginatedSelf);
+      });
+      this.el.parent().find(".pagination-control").empty();
+      
+      // Put in new footer and bind events again
+      this.el.parent().find(".pagination-control").html(this.paginationControlTemplate(this.getPaginationInfo()));
+      this.el.parent().find(".nextinfinitepagination").bind('click', function(e){
+        paginatedSelf.nextResultPage(e, paginatedSelf);
+      });
+      this.el.parent().find(".howmanyperpagination").bind('click', function(e){
+        paginatedSelf.changeCount(e, paginatedSelf);
+      });
+      
+    },
+
+    /**
+     * For paging, the number of items per page.
+     */
+    perPage : 12,
+    currentVisibleStart : 0,
+    currentVisibleEnd: 11,
+    /**
+     * Based on the number of items per page and the current page, calculate the current
+     * pagination info.
+     * 
+     * @return {Object} JSON to be sent to the footerTemplate.
+     */
+    getPaginationInfo : function() {
+      var currentPage = (this._childViews.length > 0) ? Math
+          .ceil(this._childViews.length / this.perPage) : 1;
+      var totalPages = (this.collection.length > 0) ? Math.ceil(this.collection.length
+          / this.perPage) : 1;
+
+      return {
+        currentPage : currentPage,
+        totalPages : totalPages,
+        perPage : this.perPage,
+        morePages : currentPage < totalPages,
+        allShown : this.currentVisibleEnd >= this.collection.length
+      };
+    },
+
+    /**
+     * Change the number of items per page.
+     * 
+     * @param {Object} e The event that triggered this method.
+     */
+    changeCount : function(e, self) {
+      e.preventDefault();
+
+      var previousPerPage = self.perPage;
+      var previousVisibleEnd = self.currentVisibleEnd;
+      // Change the number of items per page
+      self.perPage = parseInt($(e.target).text());
+      try{
+        app.get("authentication").get("userPrivate").get("prefs").set("numberOfItemsInPaginatedViews", self.perPage);
+        self.currentVisibleEnd = self.perPage - 1;
+      }catch(e){
+        Utils.debug("There was a problem trying to save the number of items per page to the user's preferences.",e);
+      }
+      //If the user is trying to see less, render.
+      if( self.perPage < previousVisibleEnd ){
+        self.clearChildViews();
+        self.render();
+      }
+      //If the user is trying to see more, render. 
+      if( self.perPage > previousVisibleEnd ){
+        self.nextResultPage(null, self);
+      }
+
+    },
+
+    /**
+     * Add one page worth of child views from the collection.
+     * 
+     * @param {Object} e The event that triggered this method.
+     */
+    nextResultPage : function(e, self) {
+      if(e){
+        e.preventDefault();
+      }
+      if(!self){
+        self = this;
+      }
+      self.currentVisibleEnd = self.currentVisibleEnd + self.perPage;
+      // Determine the range of indexes into the model's datumIds array that are 
+      // on the page to be displayed
+
+      // Add a ChildView for each one that is not visible
+      for (var i = self._childViews.length; i < self.currentVisibleEnd; i++) {
+        var m = self.collection.models[i];
+        if (m) {
+          self.addChildView(m, self.collection, {index: i});
+        }
+      }
+      self.renderUpdatedPaginationControl();
+    }
     
   });
   return PaginatedUpdatingCollectionView;
