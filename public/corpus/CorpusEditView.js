@@ -77,10 +77,10 @@ define([
       }, this);
       
       //TODO test this
-      this.model.bind('error', function(e){
-        window.appView.toastUser(e);
-
-      });
+//      this.model.bind('error', function(e){
+//        window.appView.toastUser(e); //The e is the model itself, not sure how to get the erros out. At the moment they are only produced by validating public vs  private
+//
+//      });
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
 //        this.render();
