@@ -545,7 +545,7 @@ define( [
 
 
                       // save the corpus
-                      window.appView.corpusEditLeftSideView.updatePouch();
+                      window.appView.currentCorpusEditView.updatePouch();
 
                       // save the user
                       window.app.get("authentication").saveAndEncryptUserToLocalStorage();

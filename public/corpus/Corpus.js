@@ -723,6 +723,15 @@ define([
         if(attrs.title != undefined){
           attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
         }
+        
+        if(attrs.publicCorpus){
+          if(attrs.publicCorpus != "Public"){
+            if(attrs.publicCorpus != "Private"){
+              return "Corpus must be either Public or Private"; //TODO test this.
+            }
+          }
+        }
+        
 //        return '';
     },
     /**
