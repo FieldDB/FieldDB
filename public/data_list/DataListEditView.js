@@ -184,6 +184,8 @@ define( [
 //        $(this.el).addClass("well");
         try{
           $(".search-data-list-paginated-view").html("");
+          $("#search-data-list-quickview-header").parent().find(".pagination-control").html("");
+
         }catch(e){
           Utils.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
