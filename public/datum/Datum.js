@@ -316,9 +316,7 @@ define([
       if (showInExportModal != null) {
         $("#export-type-description").html(" as LaTeX (GB4E)");
         $("#export-text-area").val($("#export-text-area").val() + result);
-        $("#export-modal").modal("show");
       }
-      
       return result;
     },
     
@@ -336,10 +334,9 @@ define([
             +"\n\n";
       if(showInExportModal != null){
         $("#export-type-description").html(" as text (Word)");
-        $("#export-text-area").val( $("#export-text-area").val()+
-           result
-                 );
-        $("#export-modal").modal("show");
+        $("#export-text-area").val(
+            $("#export-text-area").val() + result
+        );
       }
       return result;
     },
@@ -357,17 +354,75 @@ define([
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-      var result = '"' + resultarray.join('","') + '"';
-      if (printheader != null) {
+      var result = '"' + resultarray.join('","') + '"\n';
+      if (printheader) {
         var header = '"' + orderedFields.join('","') + '"';
         result = header + "\n" + result;
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
-        $("#export-text-area").val($("#export-text-area").val() + result);
-        $("#export-modal").modal("show");
+        $("#export-text-area").val(
+            $("#export-text-area").val() + result);
       }
       return result;
+    },
+    
+    /**
+     * Encrypts the datum if it is confidential
+     * 
+     * @returns {Boolean}
+     */
+    encrypt : function() {
+      // TODO Redo to make it loop through the this.get("datumFields")
+      // console.log("Fake encrypting");
+      var confidential = app.get("corpus").get("confidential");
+
+      if (confidential == undefined) {
+        app.get("corpus").set("confidential", new Confidential() );
+        confidential = app.get("corpus").get("confidential");
+      }
+//
+//      this.set("utterance", confidential.encrypt(this
+//          .get("utterance")));
+//      this.set("morphemes", confidential.encrypt(this
+//          .get("morphemes")));
+//      this.set("gloss", confidential.encrypt(this.get("gloss")));
+//      this.set("translation", confidential.encrypt(this
+//          .get("translation")));
+
+      // this.set("utterance", this.get("utterance").replace(/[^
+      // -.]/g,"x"));
+      // this.set("morphemes", this.get("morphemes").replace(/[^
+      // -.]/g,"x"));
+      // this.set("gloss", this.get("gloss").replace(/[^
+      // -.]/g,"x"));
+      // this.set("translation", this.get("translation").replace(/[^
+      // -.]/g,"x"));
+//      this.render();
+//      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+
+      // console.log(confidential);
+      // this.set()
+    },
+    
+    /**
+     * Decrypts the datum if it was encrypted
+     */
+    decrypt : function() {
+      // TODO Redo to make it loop through the this.get("datumFields")
+      var confidential = app.get("corpus").get("confidential");
+      if(!confidential){
+        alert("This is a bug: cannot find decryption module for your corpus.")
+      }
+//      this.set("utterance", confidential.decrypt(this
+//          .get("utterance")));
+//      this.set("morphemes", confidential.decrypt(this
+//          .get("morphemes")));
+//      this.set("gloss", confidential.decrypt(this.get("gloss")));
+//      this.set("translation", confidential.decrypt(this
+//          .get("translation")));
+//      this.render();
+//      $(".icon-lock").toggleClass("icon-lock icon-unlock");
     },
     
     /**

@@ -67,23 +67,30 @@ define([
         callback();
       }
     },
-    laTeXDatumIds : function(datumIdsToLaTeX){
-      if(!datumIdsToLaTeX){
-        datumIdsToLaTeX = this.get("datumIds");
+    getAllAudioAndVideoFiles : function(datumIdsToGetAudioVideo, callback){
+      if(!datumIdsToGetAudioVideo){
+        datumIdsToGetAudioVideo = this.get("datumIds");
       }
-      if(datumIdsToLaTeX.length == 0){
-        datumIdsToLaTeX = this.get("datumIds");
+      if(datumIdsToGetAudioVideo.length == 0){
+        datumIdsToGetAudioVideo = this.get("datumIds");
       }
-      $("#export-modal").modal("show");
-//      $("#export-text-area").val("");
-      Utils.debug("DATA LIST datumIdsToLaTeX " +JSON.stringify(datumIdsToLaTeX));
-      for(var id in datumIdsToLaTeX){
+      var audioVideoFiles = [];
+      
+      Utils.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
+      for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({corpusname: app.get("corpus").get("corpusname")});
-        obj.id  = datumIdsToLaTeX[id];
+        obj.id  = datumIdsToGetAudioVideo[id];
+        var thisobjid = id;
         obj.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
           obj.fetch({
             success : function(model, response) {
-              model.laTeXiT(true);
+              audioVideoFiles.push(model.get("audioVideo").get("URL"));
+              
+              if(thisobjid == datumIdsToGetAudioVideo.length - 1){
+                if(typeof callback == "function"){
+                  callback(audioVideoFiles);
+                }
+              }
             }
           });
         });
@@ -91,6 +98,33 @@ define([
       }
     },
 
+    applyFunctionToAllIds : function(datumIdsToApplyFunction, functionToAppy, functionArguments){
+      if(!datumIdsToApplyFunction){
+        datumIdsToApplyFunction = this.get("datumIds");
+      }
+      if(datumIdsToApplyFunction.length == 0){
+        datumIdsToApplyFunction = this.get("datumIds");
+      }
+      if(!functionToAppy){
+        functionToAppy = "laTeXiT";
+      }
+      if(!functionArguments){
+//        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
+      }
+      Utils.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
+      for(var id in datumIdsToApplyFunction){
+        var obj = new Datum({corpusname: app.get("corpus").get("corpusname")});
+        obj.id  = datumIdsToApplyFunction[id];
+        obj.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              model[functionToAppy](functionArguments);
+            }
+          });
+        });
+        
+      }
+    },
     /**
      * Create a permanent data list in the current corpus. 
      * 

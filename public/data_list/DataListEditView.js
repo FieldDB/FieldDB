@@ -100,21 +100,59 @@ define( [
         if(e){
           e.stopPropagation();
         }
-        this.datumIdsChecked = [];
-
-        for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
-          if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
-            this.datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
-          }
-        }
-        alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(this.datumIdsChecked));
-
-        this.model.laTeXDatumIds(this.datumIdsChecked);
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "laTeXiT", true);
         return false;
+      },
+      "click .icon-paste": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsPlainText", true);
+        return false;
+      },
+      "click .CSV": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
+        return false;
+      },
+      "click .icon-bullhorn": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
+        return false;
+      },
+      "click .icon-lock": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
+        $(".icon-lock").toggleClass("icon-lock icon-unlock");
 
-      }
+        return false;
+      },
+      "click .icon-unlock": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
+        $(".icon-unlock").toggleClass("icon-lock icon-unlock");
+
+        return false;
+      },
     },
-
+    
     templateFullscreen : Handlebars.templates.data_list_edit_fullscreen,
    
     embeddedTemplate : Handlebars.templates.data_list_edit_embedded,
@@ -229,7 +267,27 @@ define( [
         childViewTagName     : 'li'
       });  
     },
-    
+    /**
+     * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 
+     * @returns {Array}
+     */
+    getAllCheckedDatums : function(){
+      var datumIdsChecked = [];
+
+      for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
+        if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
+          datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
+        }
+      }
+      alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+
+      return datumIdsChecked;
+    },
+    createPlaylistAndPlayAudioVideo : function(datumIds){
+      this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths){
+        alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
+      });
+    },
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
