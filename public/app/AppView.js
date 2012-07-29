@@ -118,36 +118,17 @@ define([
       window.setInterval(this.saveScreen, 10000);     
     },
     setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
-      // Create seven corpus views
-      this.corpusEditLeftSideView = new CorpusEditView({
+      // Create four corpus views
+      this.currentCorpusEditView = new CorpusEditView({
         model : this.model.get("corpus")
       });
-      this.corpusEditLeftSideView.format = "leftSide";
+      this.currentCorpusEditView.format = "leftSide";
       
-      this.corpusReadLeftSideView = new CorpusReadView({
+      this.currentCorpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
-      this.corpusReadLeftSideView.format = "leftSide";
+      this.currentCorpusReadView.format = "leftSide";
       
-      this.corpusEditEmbeddedView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusEditEmbeddedView.format = "centreWell";
-      
-      this.corpusReadEmbeddedView = new CorpusReadView({
-        model : this.model.get("corpus")
-      });
-      this.corpusReadEmbeddedView.format = "centreWell";
-      
-      this.corpusEditFullscreenView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusEditFullscreenView.format = "fullscreen";
-      
-      this.corpusReadFullscreenView = new CorpusReadView({
-        model : this.model.get("corpus")
-      });
-      this.corpusReadFullscreenView.format = "fullscreen";
       
       this.corpusNewModalView = new CorpusEditView({
         model : this.model.get("corpus")
@@ -155,7 +136,6 @@ define([
       this.corpusNewModalView.format = "modal";
    
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
-      
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
@@ -175,7 +155,6 @@ define([
       this.searchEditView = new SearchEditView({
         model : this.model.get("search")
       });
-      
       
       
       // Create the embedded and fullscreen DatumContainerEditView
@@ -430,14 +409,14 @@ define([
         this.importView.render();
         this.exportView.render();
 //        // Display the Corpus Views
-//        this.corpusEditLeftSideView.render();
-//        this.corpusReadLeftSideView.render();
-//        this.corpusEditEmbeddedView.render();
-//        this.corpusReadEmbeddedView.render();
-//        this.publicCorpusReadEmbeddedView.render();
-//        this.corpusEditFullscreenView.render();
-//        this.corpusReadFullscreenView.render();
 //        this.corpusNewModalView.render();
+//        this.currentCorpusEditView.render();
+//        this.currentCorpusReadView.render();
+//        this.currentCorpusEditView.render();
+//        this.currentCorpusReadView.render();
+//        this.publicCorpusReadEmbeddedView.render();
+//        this.currentCorpusEditView.render();
+//        this.currentCorpusReadView.render();
 //        
 //        // Display the ExportView
 //        
@@ -494,24 +473,20 @@ define([
      * This should be the primary function to show the dashboard with updated views.
      */
     renderReadonlyDashboardViews : function() {
-      this.corpusReadLeftSideView.render();
+      this.renderReadonlyCorpusViews("leftSide");
       this.sessionReadLeftSideView.render();
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
     },
     
     // Display the Corpus Views
-    renderEditableCorpusViews : function(corpusid) {
-      this.corpusEditLeftSideView.render();
-      this.corpusEditEmbeddedView.render();
-      this.corpusEditFullscreenView.render();
-      this.corpusNewModalView.render();
+    renderEditableCorpusViews : function(format) {
+      this.currentCorpusEditView.format = format;
+      this.currentCorpusEditView.render();
     },
-    renderReadonlyCorpusViews : function(corpusid) {
-      this.corpusReadLeftSideView.render();
-      this.corpusReadEmbeddedView.render();
-      this.publicCorpusReadEmbeddedView.render();
-      this.corpusReadFullscreenView.render();
+    renderReadonlyCorpusViews : function(format) {
+      this.currentCorpusReadView.format = format;
+      this.currentCorpusReadView.render();
     },
       
     // Display Session Views

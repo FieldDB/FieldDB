@@ -48,9 +48,11 @@ define( [
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
+      
       this.model.bind('change:datumIds', function(){
         this.render();
       }, this);
+      
     },
 
     /**
@@ -270,7 +272,8 @@ define( [
         e.stopPropagation();
       }
       this.model.saveAndInterConnectInApp(function(){
-        window.appView.renderReadonlyDataListViews();
+        window.appView.currentReadDataListView.format = this.format;
+        window.appView.currentReadDataListView.render();
       });
     },
     
@@ -291,7 +294,8 @@ define( [
         searchself.format = "search-minimized";
         searchself.render();
         searchself.model.setAsCurrentDataList();
-        window.appView.renderReadonlyDataListViews();
+        window.app.router.showDashboard();
+
       });
     },
     saveImportDataList : function(e){

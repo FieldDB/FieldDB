@@ -70,12 +70,24 @@ define([
       Utils.debug("CORPUS DETAILS init: " + this.el);
       this.changeViewsOfInternalModels();
      
-      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
       this.model.bind('change:title', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
+      
+      //TODO test this
+      this.model.bind('error', function(e){
+        window.appView.toastUser(e);
+
+      });
+      //TOOD if the sessions and data lists arent up-to-date, turn these on
+//      this.model.bind('change:sessions', function(){
+//        this.render();
+//      }, this);
+//      this.model.bind('change:dataLists', function(){
+//        this.render();
+//      }, this);
     },
 
     /**
@@ -108,9 +120,8 @@ define([
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
-//      "blur .update-datum-field" : "updateDatumField",
+      "blur .public-or-private" : "updatePublicOrPrivate",
       "click .save-corpus" : "updatePouch",
-//      "blur .save-corpus-blur" : "updatePouch"//TODO why was someone saving the corpus to pouch on blur!? this will make a ton of revisions.
     },
 
     /**
@@ -138,6 +149,10 @@ define([
         Utils.debug("\tCorpus model was undefined.");
         return this;
       }
+      window.appView.currentCorpusEditView.destroy_view();
+      window.appView.currentCorpusReadView.destroy_view();
+
+      Utils.debug("CORPUS READ render: " + this.el);
       if (this.format == "centreWell") {
         Utils.debug("CORPUS Edit center render: " + this.el);
           // Display the CorpusReadFullScreenView
@@ -209,8 +224,23 @@ define([
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
+      
         
       return this;
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//    this.remove();  
+//    Backbone.View.prototype.remove.call(this);
     },
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView     
@@ -276,6 +306,12 @@ define([
       window.appView.addUnsavedDoc(this.model.id);
 
     },
+    updatePublicOrPrivate : function(){
+      this.model.set("description",this.$el.find(".public-or-private").val());
+      window.appView.addUnsavedDoc(this.model.id);
+
+    },
+//    public-or-private
    
     //Functions assoicate with the corpus menu
     newDatum : function(e) {
@@ -345,10 +381,6 @@ define([
       window.appView.corpusNewModalView.render();
     },
 
-     //Insert functions associate the values chosen with a new
-    // model in the collection, adding it to the collection, which in turn
-    // triggers a view thats added to
-    // the ul
 
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(e) {
@@ -357,13 +389,12 @@ define([
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
-//        "username" : 
      });
       
       // Add new comment to the db ? 
       this.model.get("comments").add(m);
-      window.appView.addUnsavedDoc(this.model.id);
       this.$el.find(".comment-new-text").val("");
+      window.appView.addUnsavedDoc(this.model.id);
 
     },
     
@@ -393,24 +424,6 @@ define([
       window.appView.addUnsavedDoc(this.model.id);
 
     },
-    //needed to be able to change datum fields NO, this already exists in the DatumFieldEditView.js
-//    updateDatumField : function(e) {
-//      var datumField = $(e.target.parentElement);
-//      var checked = datumField.find(".shouldBeEncrypted").is(':checked') ? "checked" : "";
-//      var oldLabel = e.target.parentElement.firstChild.classList[1]; //get the old label from the span
-//      // Create the new DatumField based on what the user entered
-//      var m = this.model.get("datumFields").where({"label" : oldLabel })[0]; //TODO if this doesnt work could maybe count from top.
-//      if(!m){
-//        window.appView.toastUser("Couldn't find your datum field to modify it."); 
-//        return;
-//      }
-//      m.set({
-//        "label" : datumField.find(".choose-field").val().toLowerCase().replace(/ /g,"_"),
-//        "shouldBeEncrypted" : checked,
-//        "help" : datumField.find(".help-text").val()
-//      });
-//      window.appView.addUnsavedDoc(this.model.id);
-//    },
 
     
     //This the function called by the add button, it adds a new datum state both to the collection and the model
@@ -436,12 +449,14 @@ define([
       if(e){
         e.stopPropagation();
       }
-      window.app.router.showEmbeddedCorpus();
+      window.app.router.showDashboard();
     },
     resizeFullscreen : function(e){
       if(e){
         e.stopPropagation();
       }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenCorpus();
     },
     //This is the function that is  bound to the book button
@@ -449,17 +464,10 @@ define([
       if(e){
         e.stopPropagation();
       }
-      window.appView.renderReadonlyCorpusViews();
+      window.appView.currentCorpusReadView.format = this.format;
+      window.appView.currentCorpusReadView.render();
     },
-    //This is the function that is bound to changes
-    showEditable :function(e){
-      if(e){
-        e.stopPropagation();
-      }
-      //If the model has changed, then change the views of the internal models because they are no longer connected with this corpus's models
-      this.changeViewsOfInternalModels();
-      window.appView.renderEditableCorpusViews();
-    },
+    
     /**
      * saves the current corpus to pouch, if the corpus id doesnt match the
      * corpus in the app, It attempts to save it to to its pouch, and create new
@@ -471,12 +479,11 @@ define([
      * the views to these new models.
      */
     updatePouch : function() {
-      var self = this;
       this.model.saveAndInterConnectInApp(function(){
         if(this.format == "modal"){
           $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
-          //TOOD check this, shouldn't we do the set as current also?
+          alert("TODO check if new corpus succeeds, will set as current also.");
         }
         
       },function(){
