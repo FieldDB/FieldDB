@@ -122,10 +122,12 @@ define([
         Utils.debug("DATUM fields is undefined, come back later.");
         return this;
       }
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+
       if (this.format == "well") {        
         // Display the DatumReadView
-        var jsonToRender = this.model.toJSON();
-        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
         
         // Display the DatumTagsView
