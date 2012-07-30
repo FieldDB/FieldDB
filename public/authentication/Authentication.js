@@ -36,6 +36,7 @@ define([
       });
       if(!this.get("confidential")){
         this.set("confidential", new Confidential());
+        this.get("confidential").decryptedMode = true;
         if(Utils.getCookie("token")){
           this.get("confidential").set("secretkey", Utils.getCookie("token")); //TODO store the token somewhere safer
         }

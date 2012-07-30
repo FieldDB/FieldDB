@@ -281,7 +281,7 @@ define([
     },
     
     /**
-     * TODO the ShowQuickAuthentication view popups up a password entry view.
+     * ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
      * like removing a corpus. It is also used if the user hasn't confirmed their
      * identity in a while.
