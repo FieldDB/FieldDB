@@ -93,7 +93,7 @@ define([
         }
         var self = this;
         confidential.turnOnDecryptedMode(function(){
-          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+          self.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
         });
 
         return false;
@@ -104,7 +104,7 @@ define([
           alert("This is a bug: cannot find decryption module for your corpus.")
         }
         confidential.turnOffDecryptedMode();
-        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+        this.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
 
         return false;
       },
@@ -186,10 +186,12 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+      
       if (this.format == "well") {
         // Display the DatumEditView
-        var jsonToRender = this.model.toJSON();
-        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
         
         // Display audioVideo View
