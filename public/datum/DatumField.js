@@ -54,39 +54,39 @@ define([
      */
     validate: function(attributes) {
 
-      if(attributes.mask){
-        if(attributes.shouldBeEncrypted != "checked" ){
-          //user can modify the mask, no problem.
-        }else if(attributes.encrypted != "checked" ){
-          //user can modify the mask, no problem.
-        }else if( attributes.encrypted == "checked" &&
-//            attributes.tempEncryptedVisible == "checked"  &&
-            attributes.shouldBeEncrypted == "checked" &&
-              window.app.get("corpus").get("confidential").decryptedMode ){
-          //user can modify the mask, no problem.
-        }else if( attributes.mask != this.get("mask") ){
-          return "The datum is presently encrypted, the mask cannot be set by anything other than the model itself.";
-        }
-      }
-      if( attributes.value ){
-        
-        if(this.get("value").indexOf("confidential") == 0){
-          return "Cannot modify the value of a confidential datum field directly";
-        }
-        
-        if(attributes.shouldBeEncrypted != "checked" ){
-          //user can modify the value, no problem.
-        }else if(attributes.encrypted != "checked" ){
-          //user can modify the value, no problem.
-        }else if( attributes.encrypted == "checked" &&
-//            attributes.tempEncryptedVisible == "checked"  &&
-            attributes.shouldBeEncrypted == "checked" &&
-              window.app.get("corpus").get("confidential").decryptedMode ){
-          //the user/app can modify the value, no problem.
-        }else if( attributes.value != this.get("value") ){
-          return "The value cannot be set by anything other than the model itself, from a mask.";
-        }
-      }
+//      if(attributes.mask){
+//        if(attributes.shouldBeEncrypted != "checked" ){
+//          //user can modify the mask, no problem.
+//        }else if(attributes.encrypted != "checked" ){
+//          //user can modify the mask, no problem.
+//        }else if( attributes.encrypted == "checked" &&
+////            attributes.tempEncryptedVisible == "checked"  &&
+//            attributes.shouldBeEncrypted == "checked" &&
+//              window.app.get("corpus").get("confidential").decryptedMode ){
+//          //user can modify the mask, no problem.
+//        }else if( attributes.mask != this.get("mask") ){
+//          return "The datum is presently encrypted, the mask cannot be set by anything other than the model itself.";
+//        }
+//      }
+//      if( attributes.value ){
+//        
+//        if(this.get("value") && this.get("value").indexOf("confidential") == 0){
+//          return "Cannot modify the value of a confidential datum field directly";
+//        }
+//        
+//        if(attributes.shouldBeEncrypted != "checked" ){
+//          //user can modify the value, no problem.
+//        }else if(attributes.encrypted != "checked" ){
+//          //user can modify the value, no problem.
+//        }else if( attributes.encrypted == "checked" &&
+////            attributes.tempEncryptedVisible == "checked"  &&
+//            attributes.shouldBeEncrypted == "checked" &&
+//              window.app.get("corpus").get("confidential").decryptedMode ){
+//          //the user/app can modify the value, no problem.
+//        }else if( attributes.value != this.get("value") ){
+//          return "The value cannot be set by anything other than the model itself, from a mask.";
+//        }
+//      }
     },
     
     /**
@@ -116,51 +116,130 @@ define([
 
       options = options || {};
       // do any other custom property changes here
-      //Don't let the user take off encryption if they are not in decryptedMode
-      if( this.get("encrypted") == "checked" ){
-        if( true && attributes.encrypted != "checked" && !window.app.get("corpus").get("confidential").decryptedMode ){
-          attributes.encrypted = "checked";
-        }
-      }
+      
       /*
-       * trying to change the value triggers the temporary or permanent encryption/decryption process
+       * Copy the mask, value and shouldBeEncrypted and encrypted from the object if it is not being set.
        */
-      if( (attributes.value && attributes.value != "") ){
-        //User turns on the tempEncryptedVisible
-        if( attributes.shouldBeEncrypted == "checked" ){
-          if( true &&
-//            attributes.tempEncryptedVisible == "checked"  &&
-            attributes.encrypted  == "checked" &&
-              window.app.get("corpus").get("confidential").decryptedMode ){
-            // If it wasn't encrypted, encrypt the value, and leave the mask as the original value for now
-            if( this.get("value").indexOf("confidential") != 0 && window.appView ){
-              attributes.mask = this.get("value");
-              attributes.value = window.app.get("corpus").get("confidential").encrypt(this.get("value"));
-            }else if( attributes.value.indexOf("confidential") == 0 && window.appView ){
-              // If it was encrypted, turn the mask into the decrypted version so the user can see it.
-              attributes.mask = window.app.get("corpus").get("confidential").decrypt(this.get("value"));
-            }
-            
-          }else if( attributes.encrypted == "checked" 
-            && attributes.shouldBeEncrypted == "checked" ){
-            
-            if( this.get("value").indexOf("confidential") != 0 && window.appView ){
-              attributes.value = window.app.get("corpus").get("confidential").encrypt(this.get("value"));
-              attributes.mask = "xxx xxx xxx";//use value to make mask
-            }else{
-              //Don't let user change value of confidential or mask: see validate function
-              attributes.mask = this.get("mask");
-              attributes.value = this.get("mask");
+      if(!attributes.mask && this.get("mask")){
+        attributes.mask = this.get("mask");
+      }
+      if(!attributes.value && this.get("value")){
+        attributes.value = this.get("value");
+      }
+      if(!attributes.shouldBeEncrypted && this.get("shouldBeEncrypted")){
+        attributes.shouldBeEncrypted = this.get("shouldBeEncrypted");
+      }
+      if(!attributes.encrypted && this.get("encrypted")){
+        attributes.encrypted = this.get("encrypted");
+      }
+      
+      if( (attributes.mask && attributes.mask != "") ){
+        
+        if( attributes.shouldBeEncrypted != "checked" ){
+          //Don't do anything special, this field doesnt get encrypted when the data is confidential
+          attributes.value = attributes.mask;
+        }else if( attributes.encrypted != "checked" ){
+          //Don't do anything special, this datum isn't confidential
+          attributes.value = attributes.mask;
+          
+          
+        /*
+         * A, B, C, D: If we are supposed to be encrypted, and we are encrypted, but we want to let the user see the data to change it.
+         * 
+         */
+        }else if( window.app.get("corpus").get("confidential").decryptedMode ){
+
+          /*
+           * A: If it wasn't encrypted, encrypt the value, and leave the mask as the original value for now,
+           * can happen when the user clicks on the lock button for the first time. 
+           */
+          if( attributes.mask.indexOf("confidential:") != 0 && window.appView ){
+//          attributes.mask = attributes.mask;//leave mask open
+            //save the mask encrpyted as the new value, this is triggered when the user modifies the data 
+            attributes.value = window.app.get("corpus").get("confidential").encrypt(attributes.mask);
+          /*
+           * B: A strange case which is used by the Datum Save function, to trigger the mask into the xxx version of the current value that it will be saved in the data base with xxx.
+           */
+          }else if( attributes.mask.indexOf("confidential:") == 0 && window.appView ){
+            attributes.mask = this.mask(window.app.get("corpus").get("confidential").decrypt(this.get("value")));
+            attributes.value = this.get("value"); //don't let the user modify the value.
+          }
+
+          /*
+           * C & D: this should never be called since the value is supposed to come from the mask only.
+           */
+
+          /*
+           * C: If the value wasn't encrypted, encrypt the value, and leave the mask as the original value since we are in decryptedMode
+           */
+          if( attributes.value && attributes.value.indexOf("confidential") != 0 && window.appView ){
+//          attributes.mask = attributes.mask;//leave mask open
+            attributes.value = window.app.get("corpus").get("confidential").encrypt(attributes.mask);
+          /*
+           * D: If the value was encrypted, there is some sort of bug, leave the value as it was, decrypt it and put it in to the mask since we are in decryptedMode
+           */
+          }else if( attributes.value && attributes.value.indexOf("confidential") == 0 && window.appView ){
+            // If it was encrypted, turn the mask into the decrypted version of the current value so the user can see it.
+            //this might get called at the same time as the first mask if above
+            attributes.mask = window.app.get("corpus").get("confidential").decrypt(this.get("value"));
+            attributes.value = this.get("value"); //don't let the user modify the value.
+          }
+
+          /*
+           * E, F, G, H: If we are supposed to be encrypted and we are encrypted, but we are not in decrypted mode.
+           */
+        }else {
+
+          //Don't let the user take off encryption if they are not in decryptedMode
+          if( this.get("encrypted") == "checked" ){
+            if( true && attributes.encrypted != "checked" && !window.app.get("corpus").get("confidential").decryptedMode ){
+              attributes.encrypted = "checked";
             }
           }
-        }else{
-          attributes.value = this.get("mask");
+          
+          /*
+           * E: A strange case which is used by the Datum Save function, to trigger the mask into the xxx version of the current value that it will be saved in the data base with xxx.
+           *  (Same as B above)
+           */
+          if( attributes.mask && attributes.mask.indexOf("confidential") == 0 && window.appView ){
+            attributes.mask = this.mask(window.app.get("corpus").get("confidential").decrypt(this.get("value")));
+            attributes.value = this.get("value"); //don't let the user modify the value.
+          /*
+           * F: If the value is encrypted, then the mask is probably set, don't let the user change anything since they shouldn't be able to see the data anyway.s
+           */
+          }else{
+            //Don't let user change value of confidential or mask: see validate function
+            attributes.mask = this.get("mask");
+            attributes.value = this.get("value");
+          }
+          
+          /*
+           * G: If the data is not encrypted, encrypt it and mask it in the mask. This might be called the first time a user clicks on the lock to first encrypts the value.
+           * (Similar to C above, except that we mask the mask)
+           */
+          if( attributes.value && attributes.value.indexOf("confidential") != 0 && window.appView ){
+            attributes.mask = this.mask(this.get("value"));//use value to make mask
+            attributes.value = window.app.get("corpus").get("confidential").encrypt(this.get("value"));
+          /*
+           * H: If the value is encrypted, then the mask is probably set, don't let the user change anything since they shouldn't be able to see the data anyway.s
+           */
+          }else{
+            //Don't let user change value of confidential or mask: see validate function
+            attributes.mask = this.get("mask");
+            attributes.value = this.get("value");
+          }
         }
-        
+
+      }else{
+//        alert("The datum field has no mask, there is a bug somewhere.");
+        attributes.value ="";
+        attributes.mask = "";
       }
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
-    
+    mask : function(stringToMask){
+      return stringToMask.replace(/[A-Za-z]/g, "x");
+    },
     saveAndInterConnectInApp : function(callback){
       
       if(typeof callback == "function"){
