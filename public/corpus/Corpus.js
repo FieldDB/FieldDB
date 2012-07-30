@@ -393,11 +393,11 @@ define([
                     corpusname : model.get("corpusname"),
                     sessionFields : model.get("sessionFields").clone()
                   }); //MUST be a new model, other wise it wont save in a new pouch.
-                  s.get("sessionFields").where({label: "user"})[0].set("value", window.app.get("authentication").get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                  s.get("sessionFields").where({label: "user"})[0].set("mask", window.app.get("authentication").get("userPrivate").get("username") );
+                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
+                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
                   s.set("corpusname", model.get("corpusname"));
                   s.saveAndInterConnectInApp(function(){
                     s.setAsCurrentSession(function(){

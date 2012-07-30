@@ -72,7 +72,7 @@ define([
     updateConsultant : function(){
       this.model.get("sessionFields").where({
         label : "consultants"
-      })[0].set("value", this.$el.find(".session-consultant-input")
+      })[0].set("mask", this.$el.find(".session-consultant-input")
           .val());
       
       window.appView.addUnsavedDoc(this.model.id);
@@ -82,7 +82,7 @@ define([
     updateElicitedDate : function(){
       this.model.get("sessionFields").where({
         label : "dateElicited"
-      })[0].set("value", this.$el.find(".session-elicitation-date-input")
+      })[0].set("mask", this.$el.find(".session-elicitation-date-input")
           .val());
       
       window.appView.addUnsavedDoc(this.model.id);
@@ -92,7 +92,7 @@ define([
     updateGoal : function(){
       this.model.get("sessionFields").where({
         label : "goal"
-      })[0].set("value", this.$el.find(".session-goal-input")
+      })[0].set("mask", this.$el.find(".session-goal-input")
           .val());
       
       window.appView.addUnsavedDoc(this.model.id);
