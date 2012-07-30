@@ -52,6 +52,7 @@ define([
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
       window.appView.renderReadonlyDashboardViews();
+//      window.app.router.hideEverything(); //TODO there is a loss of this somewhere in the app, using the hardcoded varible is a workaround.
       this.hideEverything();
       $("#dashboard-view").show();
       $("#datums-embedded").show();
@@ -261,6 +262,8 @@ define([
                         app.get("currentDataList").saveAndInterConnectInApp(function(){
                           dl.setAsCurrentDataList( function(){
                             window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+//                              window.app.router.showDashboard();
+//                              window.appView.renderReadonlyDataListViews("fullscreen");
                               window.appView.renderReadonlyDashboardViews();
                             });
                           });
