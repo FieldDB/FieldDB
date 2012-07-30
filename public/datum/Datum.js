@@ -373,6 +373,7 @@ define([
      * @returns {Boolean}
      */
     encrypt : function() {
+      this.set("confidential", true);
       this.get("datumFields").each(function(dIndex){
         dIndex.set("encrypted", "checked");
       });
@@ -384,37 +385,11 @@ define([
      * Decrypts the datum if it was encrypted
      */
     decrypt : function() {
-      var confidential = app.get("corpus").get("confidential");
-      if(!confidential){
-        alert("This is a bug: cannot find decryption module for your corpus.")
-      }
+      this.set("confidential", false);
+
       this.get("datumFields").each(function(dIndex){
         dIndex.set("encrypted", "");
       });
-    },
-    
-    /**
-     * This function takes in a boolean whether the data should be appended in the import, the fields the data is in, and the header from the data which corresponds to datum fields.
-     * TODO this function is not being used.
-     * 
-     * @param showInImportModal
-     * @param orderedFields the values which correspond to datumfields
-     * @param header the header fields which correspond to datumfields
-     */
-    importCSV : function(orderedFields, header) {
-      for (f in header) {
-        if (this.get("datumFields").where({label: header[f]})[0] != undefined) {
-          this.get("datumFields").where({label: header[f]})[0].set("value", orderedFields[f]);
-        } else {
-          var n = new DatumField();
-          n.label = header[f];
-          n.value = orderedFields[f];
-          this.get("datumFields").add(n);
-        }
-      }
-      var csvDebugResult = this.exportAsCSV(null, null, true);
-      
-      return result;
     },
     /**
      * Accepts two functions to call back when save is successful or
