@@ -238,11 +238,11 @@ define([
                   });
                   
                   var s = a.get("currentSession");
-                  s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
+                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
+                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
                   s.set("corpusname", data.user.corpuses[0].corpusname);
                   s.changeCorpus(data.user.corpuses[0].corpusname);
                   
