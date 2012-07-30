@@ -8,8 +8,8 @@ var express     = require('express')
     ,crypto     = require('crypto')
     ,fs         = require('fs');
 
-//var apphttpsdomain = "https://localhost:3001";
-var apphttpsdomain = "https://ifield.fieldlinguist.com";
+var apphttpsdomain = "https://localhost:3001";
+//var apphttpsdomain = "https://ifield.fieldlinguist.com";
 
 var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
@@ -17,11 +17,11 @@ var httpsOptions ={
 var app = express.createServer(httpsOptions);
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+//app.use(function(req, res, next) {
+//  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
+//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//  next();
+//});
 
 app.configure(function() {
   app.use(express.logger());
@@ -35,11 +35,11 @@ app.configure(function() {
 });
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
+//app.all('/', function(req, res, next) {
+//  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
+//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//  next();
+// });
 
 app.post('/usernamelogin/:username', function(req,res){
   console.log("User wants to log in "+req.params.username);
