@@ -84,8 +84,31 @@ define([
     events : {
       "click .add-comment-datum-edit" : 'insertNewComment',
 
-      "click .icon-lock" : "encryptDatum",
-      "click .icon-unlock" : "decryptDatum",
+      "click .icon-unlock" : "encryptDatum",
+      "click .icon-lock" : "decryptDatum",
+      "click .icon-eye-open" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        var self = this;
+        confidential.turnOnDecryptedMode(function(){
+          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+        });
+
+        return false;
+      },
+      "click .icon-eye-close" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        confidential.turnOffDecryptedMode();
+        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+
+        return false;
+      },
+
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
       "keyup .add_tag" : function(e) {
@@ -237,7 +260,7 @@ define([
     encryptDatum : function() {
       this.model.encrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-unlock").toggleClass("icon-unlock icon-lock");
     },
 
     /**
@@ -246,7 +269,7 @@ define([
     decryptDatum : function() {
       this.model.decrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
 
     needsSave : false,

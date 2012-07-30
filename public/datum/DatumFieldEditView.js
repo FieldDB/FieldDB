@@ -107,7 +107,7 @@ define([
      * Change the model's state.
      */
     updateFieldValue : function() {
-      this.model.set("value", this.$el.children(".datum_field_input").val());
+      this.model.set("mask", this.$el.children(".datum_field_input").val());
     }, 
     
     /**

@@ -373,56 +373,24 @@ define([
      * @returns {Boolean}
      */
     encrypt : function() {
-      // TODO Redo to make it loop through the this.get("datumFields")
-      // console.log("Fake encrypting");
-      var confidential = app.get("corpus").get("confidential");
-
-      if (confidential == undefined) {
-        app.get("corpus").set("confidential", new Confidential() );
-        confidential = app.get("corpus").get("confidential");
-      }
-//
-//      this.set("utterance", confidential.encrypt(this
-//          .get("utterance")));
-//      this.set("morphemes", confidential.encrypt(this
-//          .get("morphemes")));
-//      this.set("gloss", confidential.encrypt(this.get("gloss")));
-//      this.set("translation", confidential.encrypt(this
-//          .get("translation")));
-
-      // this.set("utterance", this.get("utterance").replace(/[^
-      // -.]/g,"x"));
-      // this.set("morphemes", this.get("morphemes").replace(/[^
-      // -.]/g,"x"));
-      // this.set("gloss", this.get("gloss").replace(/[^
-      // -.]/g,"x"));
-      // this.set("translation", this.get("translation").replace(/[^
-      // -.]/g,"x"));
-//      this.render();
-//      $(".icon-lock").toggleClass("icon-lock icon-unlock");
-
-      // console.log(confidential);
-      // this.set()
+      this.get("datumFields").each(function(dIndex){
+        dIndex.set("encrypted", "checked");
+      });
+      //TODO scrub version history to get rid of all unencrypted versions.
+      this.saveAndInterConnectInApp(window.app.router.showDashboard, window.app.router.showDashboard);
     },
     
     /**
      * Decrypts the datum if it was encrypted
      */
     decrypt : function() {
-      // TODO Redo to make it loop through the this.get("datumFields")
       var confidential = app.get("corpus").get("confidential");
       if(!confidential){
         alert("This is a bug: cannot find decryption module for your corpus.")
       }
-//      this.set("utterance", confidential.decrypt(this
-//          .get("utterance")));
-//      this.set("morphemes", confidential.decrypt(this
-//          .get("morphemes")));
-//      this.set("gloss", confidential.decrypt(this.get("gloss")));
-//      this.set("translation", confidential.decrypt(this
-//          .get("translation")));
-//      this.render();
-//      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      this.get("datumFields").each(function(dIndex){
+        dIndex.set("encrypted", "");
+      });
     },
     
     /**
@@ -478,6 +446,12 @@ define([
         }
         return;
       }
+      //If it was decrypted, this will save the changes before we go into encryptedMode
+      
+      this.get("datumFields").each(function(dIndex){
+        //Anything can be done here, it is the set function which does all the work.
+        dIndex.set("value", dIndex.get("mask"));
+      });
       
       // Store the current Session, the current corpus, and the current date
       // in the Datum

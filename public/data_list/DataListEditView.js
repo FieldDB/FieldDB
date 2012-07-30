@@ -131,26 +131,48 @@ define( [
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
         return false;
       },
-      "click .icon-lock": function(e){
-        if(e){
-          e.stopPropagation();
-        }
-        
-        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
-        $(".icon-lock").toggleClass("icon-lock icon-unlock");
-
-        return false;
-      },
       "click .icon-unlock": function(e){
         if(e){
           e.stopPropagation();
         }
         
-        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
-        $(".icon-unlock").toggleClass("icon-lock icon-unlock");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
+        $(".icon-unlock").toggleClass("icon-unlock icon-lock");
 
         return false;
       },
+      "click .icon-lock": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
+        $(".icon-lock").toggleClass("icon-unlock icon-lock");
+
+        return false;
+      },
+      "click .icon-eye-open" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        var self = this;
+        confidential.turnOnDecryptedMode(function(){
+          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+        });
+
+        return false;
+      },
+      "click .icon-eye-close" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        confidential.turnOffDecryptedMode();
+        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+
+        return false;
+      }
     },
     
     templateFullscreen : Handlebars.templates.data_list_edit_fullscreen,

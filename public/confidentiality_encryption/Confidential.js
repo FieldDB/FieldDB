@@ -35,11 +35,11 @@ define( [
     initialize : function() {
       console.log("Initializing confidentiality module");
 
-      var encryptedMessage = this.encrypt("hi this is a longer message.");
-      console.log("encrypted" + encryptedMessage);
-
-      var decryptedMessage = this.decrypt(encryptedMessage);
-//      console.log("decrypted:" + decryptedMessage);
+//      var encryptedMessage = this.encrypt("hi this is a longer message.");
+//      console.log("encrypted" + encryptedMessage);
+//
+//      var decryptedMessage = this.decrypt(encryptedMessage);
+////      console.log("decrypted:" + decryptedMessage);
 
       if (this.get("secretkey") == "This should be a top secret pass phrase.") {
         this.set("secretkey", this.secretKeyGenerator());
@@ -49,7 +49,26 @@ define( [
     defaults : {
       secretkey : "This should be a top secret pass phrase."
     },    
-    
+    decryptedMode : false,
+    turnOnDecryptedMode : function(callback){
+      this.decryptedMode = false;
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    turnOnDecryptedMode : function(callback){
+      if(!this.decryptedMode){
+        if(window.appView){
+          window.appView.authView.showQuickAuthenticateView( function(){
+            //This happens after the user has been authenticated. 
+            this.decryptedMode = true;
+            if(typeof callback == "function"){
+              callback();
+            }
+          });
+        }
+      }
+    },
     // Internal models: used by the parse function
     model : {
       // There are no nested models
@@ -78,7 +97,7 @@ define( [
     },
     
     /**
-     * Decrypt uses this object's secret key to decode its paramater using the
+     * Decrypt uses this object's secret key to decode its parameter using the
      * AES algorithm.
      * 
      * @param encrypted
@@ -86,11 +105,25 @@ define( [
      * @returns Returns the encrypted result as a UTF8 string.
      */
     decrypt : function(encrypted) {
-      encrypted = encrypted.replace("confidential:", "");
-      // decode base64
-      encrypted = atob(encrypted);
-      return CryptoJS.AES.decrypt(encrypted, this.get("secretkey")).toString(
-          CryptoJS.enc.Utf8);
+      var resultpromise = encrypted;
+      if(!this.decryptedMode){
+        var confid = this;
+        this.turnOnDecryptedMode(function(){
+          encrypted = encrypted.replace("confidential:", "");
+          // decode base64
+          encrypted = atob(encrypted);
+          resultpromise =  CryptoJS.AES.decrypt(encrypted, confid.get("secretkey")).toString(
+              CryptoJS.enc.Utf8);
+          return resultpromise;
+        });
+      }else{
+        encrypted = encrypted.replace("confidential:", "");
+        // decode base64
+        encrypted = atob(encrypted);
+        resultpromise =  CryptoJS.AES.decrypt(encrypted, this.get("secretkey")).toString(
+            CryptoJS.enc.Utf8);
+        return resultpromise;
+      }
     },
     
     /**

@@ -62,8 +62,8 @@ define([
      * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
-      "click .icon-lock" : "encryptDatum",
-      "click .icon-unlock" : "decryptDatum",
+      "click .icon-unlock" : "encryptDatum",
+      "click .icon-lock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
       "click #clipboard" : "copyDatum",
       "dblclick" : function() {
@@ -77,6 +77,28 @@ define([
       "click .datum-checkboxes": function(e){
         alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
+      },
+      "click .icon-eye-open" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        var self = this;
+        confidential.turnOnDecryptedMode(function(){
+          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+        });
+
+        return false;
+      },
+      "click .icon-eye-close" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        confidential.turnOffDecryptedMode();
+        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+
+        return false;
       }
     },
 
@@ -162,7 +184,7 @@ define([
     encryptDatum : function() {
       this.model.encrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-unlock").toggleClass("icon-unlock icon-lock");
     },
 
     /**
@@ -171,7 +193,7 @@ define([
     decryptDatum : function() {
       this.model.decrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
     
     //Functions relating to the row of icon-buttons
