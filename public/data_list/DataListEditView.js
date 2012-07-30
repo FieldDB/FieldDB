@@ -198,7 +198,9 @@ define( [
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
-      
+      jsonToRender.confidential = false; //TODO should we show both lock and unlock if the data are mixed?
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+
       if (this.format == "fullscreen") {
         Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
