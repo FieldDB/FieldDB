@@ -57,11 +57,12 @@ define( [
       }
     },
     turnOnDecryptedMode : function(callback){
+      var self = this;
       if(!this.decryptedMode){
         if(window.appView){
           window.appView.authView.showQuickAuthenticateView( function(){
             //This happens after the user has been authenticated. 
-            this.decryptedMode = true;
+            self.decryptedMode = true;
             if(typeof callback == "function"){
               callback();
             }
