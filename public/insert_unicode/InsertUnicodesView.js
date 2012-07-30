@@ -86,6 +86,12 @@ define([
       $(".Unicode").html(chrome.i18n.getMessage("Unicode"));
       $(".Drag_and_Drop").html(chrome.i18n.getMessage("Drag_and_Drop"));
       $(".Add").html(chrome.i18n.getMessage("Add"));
+      $(".loc_Show_Unicode_Palette").attr("title", chrome.i18n.getMessage("loc_Show_Unicode_Palette"));
+      $(".loc_Hide_Unicode_Palette").attr("title", chrome.i18n.getMessage("loc_Hide_Unicode_Palette"));
+      $(".loc_Add_new_symbol").attr("title", chrome.i18n.getMessage("loc_Add_new_symbol"));
+      $(".loc_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("loc_Paste_Type_Unicode_Symbol_Placeholder"));
+      $(".loc_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("loc_TIPA_shortcut"));
+
 
 
 

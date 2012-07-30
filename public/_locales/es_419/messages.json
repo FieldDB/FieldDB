@@ -3,7 +3,7 @@
     "message": "iCampo"
   },
   "application_description": {
-    "message": "Un aplicacion de coleccion de datos linguisticos."
+    "message": "Un aplicacion de colección de datos linguisticos."
   },
   
   "Close_and_login_as_Ed_Sapir" : {
@@ -30,7 +30,7 @@
        Dejanos notas, comentarios, sugerencias en la forma abajo.  Si no puedes ver los videos, ve a este URL"
    }, 
   "Or_create_a_new_user" : {
-      "message" : "Crea un nuevo usuario"
+      "message" : "Crear un nuevo usuario"
    },
     "What_is_your_username_going_to_be" : {
       "message" : "¿Que quieres por su usuario?"
@@ -55,7 +55,7 @@
       "message" : "Canal de Actividad"
    },
    "Need_save" : {
-      "message" : " Ocupa Guadar:"
+      "message" : "Se ocupa Guadar:"
    },
     "60_unsaved" : {
       "message" : "<strong>60% sin guardar.</strong>"
@@ -64,7 +64,7 @@
       "message" : "Cambios Recientes:"
    }, 
     "Need_sync" : {
-      "message" : "Ocupa Sincronisar:"
+      "message" : "Se ocupa Sincronisar:"
    },
     "Differences_with_the_central_server" : {
       "message" : "Diferencias con el servidor central:"
@@ -100,8 +100,7 @@
    },
     "Terminal_Power_Users" : {
       "message" : "Terminal"
-   },
-   
+   },  
     "New_Datum" : {
       "message" : "Dato Nuevo"
    },
@@ -223,7 +222,7 @@
       "message" : "Próximo"
    },
     "Show" : {
-      "message" : "Muestra"
+      "message" : "Mostrar"
    },
     "per_page" : {
       "message" : "por pagina"
@@ -331,7 +330,7 @@
     "Number_Datum" : {
       "message" : "Numbero de Datos a la vez:"
    },
-       "loc_Add_Placeholder" : {
+    "loc_Add_Placeholder" : {
       "message" : "Añadir...."
    },
      "loc_Datalist_Description" : {
@@ -353,25 +352,25 @@
       "message" : "Función rapida de teclado"
    },
      "loc_Show_Activities" : {
-      "message" : "Muestra actividades"
+      "message" : "Mostrar actividades"
    },
       "loc_Hide_Activities" : {
-      "message" : "Esconda actividades"
+      "message" : "Esconder actividades"
    },
       "loc_Show_Dashboard" : {
-      "message" : "Muestra "
+      "message" : "Mostrar Tablero"
    },
     "loc_Save_on_this_Computer" : {
-      "message" : "Guarde en la computadora"
+      "message" : "Guardar en la computadora"
    },
      "loc_Sync_and_Share" : {
-      "message" : "Sincroniza y comparte con el equipo" 
+      "message" : "Sincronizar y compartir con el equipo" 
    },
      "loc_Show_Readonly" : {
-      "message" : "Muestra  " 
+      "message" : "Mostrar  " 
    },
        "loc_Show_Fullscreen" : {
-      "message" : "Muestra en pantalla completa " 
+      "message" : "Mostrar en pantalla completa " 
    },
      "loc_Add_New_Datum_Field" : {
       "message" : "Añadir un nuevo detaille de dato" 
@@ -380,16 +379,16 @@
       "message" : "Añadir un estado de dato" 
    },
      "loc_Show_in_Dashboard" : {
-      "message" : "Muestra en " 
+      "message" : "Mostrar en Tablero" 
    },
       "loc_Edit_corpus" : {
       "message" : "Edita Corpus" 
    },
      "loc_Show_corpus_settings" : {
-      "message" : "Muestra Configuración de Corpus" 
+      "message" : "Mostrar Configuración de Corpus" 
    },
     "loc_Play_Audio" : {
-      "message" : "Toca audio" 
+      "message" : "Tocar audio" 
    },
      "loc_Copy" : {
       "message" : "Copiar" 
@@ -401,16 +400,16 @@
       "message" : "Encriptar/Decriptar" 
    },
      "loc_Edit_Datalist" : {
-      "message" : "Edit Data List" 
+      "message" : "Editar lista de datos" 
    },
     "loc_Export_Datalist" : {
-      "message" : "Exporta lista de datos en forma LaTeX" 
+      "message" : "Exportar lista de datos en forma LaTeX" 
    },
     "loc_Hide_Datalist" : {
-      "message" : "Esconde lista de datos" 
+      "message" : "Esconder lista de datos" 
    },
        "loc_Show_Datalist" : {
-      "message" : "Muestra lista de  datos" 
+      "message" : "Mostrar lista de datos" 
    },
       "loc_Edit_Datum" : {
       "message" : "Editar Datos" 
@@ -423,6 +422,15 @@
    },
      "loc_Edit_Session" : {
       "message" : "Editar Sesión"
+   },
+      "loc_Show_Unicode_Palette" : {
+      "message" : "Mostrar los Unicodes"
+   },
+     "loc_Hide_Unicode_Palette" : {
+      "message" : "Esconder los Unicodes"
+   },
+      "loc_Add_new_symbol" : {
+      "message" : "Añadir un símbulo nuevo"
    }
  
    

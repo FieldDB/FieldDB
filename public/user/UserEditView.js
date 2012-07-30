@@ -103,7 +103,8 @@ define([
       $(".Gravatar_URL").html(chrome.i18n.getMessage("Gravatar_URL"));
       $(".Firstname").html(chrome.i18n.getMessage("Firstname"));
       $(".Lastname").html(chrome.i18n.getMessage("Lastname"));
-      
+      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
+
         // Display the CorpusesView
 //        this.corpusesView.render();
 

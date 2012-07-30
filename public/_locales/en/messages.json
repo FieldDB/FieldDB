@@ -436,7 +436,17 @@
    },
      "loc_Edit_Session" : {
       "message" : "Edit Session"
+   },
+     "loc_Show_Unicode_Palette" : {
+      "message" : "Show Unicode Palette"
+   },
+     "loc_Hide_Unicode_Palette" : {
+      "message" : "Hide Unicode Palette"
+   },
+      "loc_Add_new_symbol" : {
+      "message" : "Add new symbol"
    }
+   
    
    
    
