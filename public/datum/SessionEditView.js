@@ -184,6 +184,9 @@ define([
       $(".Consultants").html(chrome.i18n.getMessage("Consultants"));
       $(".Goal").html(chrome.i18n.getMessage("Goal"));
       $(".When").html(chrome.i18n.getMessage("When"));
+      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+
 
 
 

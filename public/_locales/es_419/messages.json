@@ -330,6 +330,99 @@
    },
     "Number_Datum" : {
       "message" : "Numbero de Datos a la vez:"
+   },
+       "loc_Add_Placeholder" : {
+      "message" : "Añadir...."
+   },
+     "loc_Datalist_Description" : {
+      "message" : "Se puede usar las lista de datos para preparar para sesiones con consultantes o  compartir con colaboradores."      
+   },
+     "loc_Add_Tag" : {
+      "message" : "Etiqueta Nueva..."
+   },
+    "loc_Help_Text" : {
+      "message" : "Se puede incluir text de ayuda aqui (opcional)"
+   },
+   "loc_Drag_and_Drop_Placeholder" : {
+      "message" : "Jale y Suelta achivos o textos aqui!"
+   },
+   "loc_Paste_Type_Unicode_Symbol_Placeholder" : {
+      "message" : "Tecla o pega símbulo de unicode" 
+   },
+     "loc_TIPA_shortcut" : {
+      "message" : "Función rapida de teclado"
+   },
+     "loc_Show_Activities" : {
+      "message" : "Muestra actividades"
+   },
+      "loc_Hide_Activities" : {
+      "message" : "Esconda actividades"
+   },
+      "loc_Show_Dashboard" : {
+      "message" : "Muestra "
+   },
+    "loc_Save_on_this_Computer" : {
+      "message" : "Guarde en la computadora"
+   },
+     "loc_Sync_and_Share" : {
+      "message" : "Sincroniza y comparte con el equipo" 
+   },
+     "loc_Show_Readonly" : {
+      "message" : "Muestra  " 
+   },
+       "loc_Show_Fullscreen" : {
+      "message" : "Muestra en pantalla completa " 
+   },
+     "loc_Add_New_Datum_Field" : {
+      "message" : "Añadir un nuevo detaille de dato" 
+   },
+    "loc_Add_New_Datum_State" : {
+      "message" : "Añadir un estado de dato" 
+   },
+     "loc_Show_in_Dashboard" : {
+      "message" : "Muestra en " 
+   },
+      "loc_Edit_corpus" : {
+      "message" : "Edita Corpus" 
+   },
+     "loc_Show_corpus_settings" : {
+      "message" : "Muestra Configuración de Corpus" 
+   },
+    "loc_Play_Audio" : {
+      "message" : "Toca audio" 
+   },
+     "loc_Copy" : {
+      "message" : "Copiar" 
+   },
+     "loc_Duplicate" : {
+      "message" : "Duplicar Dato" 
+   },
+     "loc_Encrypt" : {
+      "message" : "Encriptar/Decriptar" 
+   },
+     "loc_Edit_Datalist" : {
+      "message" : "Edit Data List" 
+   },
+    "loc_Export_Datalist" : {
+      "message" : "Exporta lista de datos en forma LaTeX" 
+   },
+    "loc_Hide_Datalist" : {
+      "message" : "Esconde lista de datos" 
+   },
+       "loc_Show_Datalist" : {
+      "message" : "Muestra lista de  datos" 
+   },
+      "loc_Edit_Datum" : {
+      "message" : "Editar Datos" 
+   },
+     "loc_See_Fields" : {
+      "message" : "más o menos detailles" 
+   },
+     "loc_Add_Tags" : {
+      "message" : "Añadir etiquetas"
+   },
+     "loc_Edit_Session" : {
+      "message" : "Editar Sesión"
    }
  
    

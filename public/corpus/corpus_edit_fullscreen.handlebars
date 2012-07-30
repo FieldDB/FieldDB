@@ -1,7 +1,7 @@
 <div class="pull-right">
-  <a href="#" rel="tooltip" title="Show read only">
+   <a href="#" class= "loc_Show_Readonly" rel="tooltip">
     <i class="icons icon-book"></i></a>
-  <a href="#" rel="tooltip" title="Show dashboard">    
+  <a href="#" class= "Show_in_Dashboard" rel="tooltip" >
     <i class="icons icon-resize-small"></i></a>
 </div>
 
@@ -43,15 +43,15 @@
 <label class = "Description"></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
-<div class="accordion" id="accordion-edit-embedded">
+<div class="accordion" id="accordion-edit-fullscreen">
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-embedded" href="#collapseSessionsEE">
+        data-parent="#accordion-edit-fullscreen" href="#collapseSessionsEF">
         <h4 class="Sessions_associated"></h4>
          </a>
     </div>
-    <div class="accordion-body collapse" id="collapseSessionsEE">
+    <div class="accordion-body collapse" id="collapseSessionsEF">
       <div class="accordion-inner">
         <ul class = "sessions-updating-collection unstyled">
                 <!-- Updating Sessions Collection -->
@@ -63,11 +63,11 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-embedded" href="#collapseDatalistsEE">
+        data-parent="#accordion-edit-fullscreen" href="#collapseDatalistsEF">
           <h4 class="Datalists_associated"></h4>
       </a>
     </div>
-    <div class="accordion-body collapse" id="collapseDatalistsEE" >
+    <div class="accordion-body collapse" id="collapseDatalistsEF" >
       <div class="accordion-inner">
          <ul class = "datalists-updating-collection unstyled">
                 <!-- Updating DataLists Collection -->
@@ -79,11 +79,11 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="accordion-edit-embedded" href="#collapsePermissionsEE">
+        data-parent="accordion-edit-fullscreen" href="#collapsePermissionsEF">
         <h4 class="Permissions_associated"></h4>
       </a>
     </div>
-    <div class="accordion-body collapse" id="collapsePermissionsEE">
+    <div class="accordion-body collapse" id="collapsePermissionsEF">
       <div class="accordion-inner">
         <ul class = "permissions-updating-collection unstyled">
                       <!-- Updating Permissions Collection -->
@@ -95,11 +95,11 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-embedded" href="#collapseDatumFieldSettingsEE">
+        data-parent="#accordion-edit-fullscreen" href="#collapseDatumFieldSettingsEF">
            <h4 class="Datum_field_settings"></h4>
         </a>
     </div>
-    <div class="accordion-body collapse" id="collapseDatumFieldSettingsEE">
+    <div class="accordion-body collapse" id="collapseDatumFieldSettingsEF">
       <div class="accordion-inner">
         <ul class="datum_field_settings unstyled"></ul>
         <div class="breadcrumb">
@@ -119,14 +119,12 @@
       <span class = "Encrypt_if_confidential"></span> <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
       </span>
        <input type="text" class="span3 choose_add_field" data-provide="typeahead" data-items="4" 
-        data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
-        
+        data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">        
             <label class = "Help_Text"></label>
-              <textarea
-              placeholder="Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
-              class="add_help"></textarea>
-              <a href="#" rel="tooltip" title="Add new datum field">
-          <button class="btn btn-primary add_datum_field" value="Add"><span class = "Add"></span></button>
+              <textarea            
+              class="add_help Help_Text_Placeholder"></textarea>
+             <a href="#" class= "loc_Add_New_Datum_Field" rel="tooltip">
+               <button class="btn btn-primary add_datum_field" value="Add"><span class = "Add"></span></button></a>
         </div>
       </div>
     </div>
@@ -135,13 +133,13 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
-        data-parent="#accordion-edit-embedded" href="#collapseDatumStateSettingsEE">
+        data-parent="#accordion-edit-fullscreen" href="#collapseDatumStateSettingsEF">
         <h4 class="Datum_state_settings"></h4>
       </a>
     </div>
-    <div class="accordion-body collapse" id="collapseDatumStateSettingsEE">
+    <div class="accordion-body collapse" id="collapseDatumStateSettingsEF">
         <ul class="datum_state_settings unstyled"></ul>
-        <input class="add_input" value="" placeholder="Add..." type="text"></input>
+     <input class="add_input loc_Add_Placeholder" value="" type="text"></input>
         <select class="add_color_chooser">
           <option value="success" class = "Green"></option>
           <option value="warning" class = "Orange"></option>
@@ -151,14 +149,12 @@
           <option value="inverse" class = "Black"></option>
           <option value="" class = "Default"></option>
         </select>
-        <a href="#" rel="tooltip" title="Add new datum state">        
+        <a href="#" class =  "loc_Add_New_Datum_State" rel="tooltip">
         <button class="btn btn-primary add_datum_state" value="Add"><span class = "Add"></span></button></a>
     </div>
   </div>      
 </div>
-
 <ul class="comments unstyled"></ul>
-
 <div class="alert alert-info">
   <i class="icons icon-comment"></i>
   <div class= "pull-right">  </div>

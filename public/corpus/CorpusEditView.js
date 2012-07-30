@@ -231,15 +231,22 @@ define([
       $(".Black").html(chrome.i18n.getMessage("Black"));
       $(".Default").html(chrome.i18n.getMessage("Default"));
       $(".Warning").html(chrome.i18n.getMessage("Warning"));
-      $("#New_Corpus").html(chrome.i18n.getMessage("New_Corpus"));
+      $(".New_Corpus").html(chrome.i18n.getMessage("New_Corpus"));
       $(".New_Corpus_Instructions").html(chrome.i18n.getMessage("New_Corpus_Instructions"));
       $(".New_Corpus_Warning").html(chrome.i18n.getMessage("New_Corpus_Warning"));
-      $(".Title1").html(chrome.i18n.getMessage("Title"));
-      $(".Description1").html(chrome.i18n.getMessage("Description"));
       $(".Cancel").html(chrome.i18n.getMessage("Cancel"));
       $(".Title_Summary_Edit").html(chrome.i18n.getMessage("Title"));
       $(".Description_Summary_Edit").html(chrome.i18n.getMessage("Description"));
-      $(".Help_Text_Placeholder").placeholder = chrome.i18n.getMessage("Help_Text_Placeholder");
+      $(".Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("Help_Text_Placeholder"));
+      $(".loc_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("loc_Add_Placeholder"));
+      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".loc_Add_New_Datum_Field").attr("title", chrome.i18n.getMessage("loc_Add_New_Datum_Field"));
+      $(".loc_Add_New_Datum_State").attr("title", chrome.i18n.getMessage("loc_Add_New_Datum_State"));
+      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
+      $(".loc_Edit_corpus").attr("title", chrome.i18n.getMessage("loc_Edit_corpus"));
+      $(".loc_Show_corpus_settings").attr("title", chrome.i18n.getMessage("loc_Show_corpus_settings"));
+
 
 
 

@@ -38,15 +38,19 @@ Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 /**
  * The url of the authentication server.
  */
-Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
+Utils.authUrl = "https://localhost:3001";
+ // "https://ifield.fieldlinguist.com";//"https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
 Utils.defaultCouchConnection = function() {
   return {
-    protocol : "https://",
-    domain : "ilanguage.iriscouch.com",
-    port : "443",
+    protocol :" http://",
+      //"https://",
+    domain : "localhost",
+    //  "ilanguage.iriscouch.com",
+    port : 5984,
+      //"443",
     corpusname : "sapir-firstcorpus"
   }; 
 };

@@ -81,6 +81,9 @@ define([
         this.datumsView.el = this.$(".datum-embedded-ul");
         this.datumsView.render();
       }
+      //localization
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
     },
     
     /**

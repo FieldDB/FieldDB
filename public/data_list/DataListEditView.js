@@ -181,6 +181,13 @@ define( [
       $(".Next").html(chrome.i18n.getMessage("Next"));
       $(".Show").html(chrome.i18n.getMessage("Show"));
       $(".per_page").html(chrome.i18n.getMessage("per_page"));
+      $(".loc_Title").attr("placeholder", chrome.i18n.getMessage("Title"));
+      $(".loc_Datalist_Description").attr("placeholder", chrome.i18n.getMessage("loc_Datalist_Description"));
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
+      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
+      $(".loc_Hide_Datalist").attr("title", chrome.i18n.getMessage("loc_Hide_Datalist"));
+
     
       return this;
     },

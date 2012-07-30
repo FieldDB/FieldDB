@@ -60,18 +60,19 @@ define([
       if (this.format == "rightSide") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.template(this.model.toJSON()));
-        //localization
-        $("#Activity_Feed1").append(chrome.i18n.getMessage("Activity_Feed"));
-
+       
         this.activitiesView.el = this.$('.activities-updating-collection');
         this.activitiesView.render();
       } else if (this.format == "minimized") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.minimizedTemplate(this.model.toJSON()));
-        //localization
-        $("#Activity_Feed").append(chrome.i18n.getMessage("Activity_Feed"));
 
       }
+      //localization
+      $(".Activity_Feed").html(chrome.i18n.getMessage("Activity_Feed"));
+      $(".loc_Show_Activities").attr("title", chrome.i18n.getMessage("loc_Show_Activities"));
+      $(".loc_Hide_Activities").attr("title", chrome.i18n.getMessage("loc_Hide_Activities"));
+
 
       return this;
     }

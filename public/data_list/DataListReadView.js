@@ -171,6 +171,19 @@ define( [
       $(".Next").html(chrome.i18n.getMessage("Next"));
       $(".Show").html(chrome.i18n.getMessage("Show"));
       $(".per_page").html(chrome.i18n.getMessage("per_page"));
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
+      $(".loc_Edit_Datalist").attr("title", chrome.i18n.getMessage("loc_Edit_Datalist"));
+      $(".loc_Play_Audio").attr("title", chrome.i18n.getMessage("loc_Play_Audio"));
+      $(".loc_Copy").attr("title", chrome.i18n.getMessage("loc_Copy"));
+      $(".loc_Duplicate").attr("title", chrome.i18n.getMessage("loc_Duplicate"));
+      $(".loc_Encrypt").attr("title", chrome.i18n.getMessage("loc_Encrypt"));
+      $(".loc_Hide_Datalist").attr("title", chrome.i18n.getMessage("loc_Hide_Datalist"));
+      $(".loc_Show_Datalist").attr("title", chrome.i18n.getMessage("loc_Show_Datalist"));
+
+
+
+
       return this;
     },
     

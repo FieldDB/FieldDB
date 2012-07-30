@@ -63,7 +63,7 @@ define([
         //localization
         $(".Encrypt_if_confidential").html(chrome.i18n.getMessage("Encrypt_if_confidential"));
         $(".Help_Text").html(chrome.i18n.getMessage("Help_Text"));
-
+        $(".loc_Help_Text").attr("placeholder", chrome.i18n.getMessage("loc_Help_Text"));
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));

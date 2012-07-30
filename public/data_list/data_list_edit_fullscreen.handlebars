@@ -1,7 +1,7 @@
 <div class="pull-right">
-  <a href="#" rel="tooltip" title="Show read only">
+  <a href="#" class= "loc_Show_Readonly" rel="tooltip">
     	<i class="icons icon-book"></i></a>
-  <a href="#" rel="tooltip" title="Show dashboard">	
+  <a href="#" class= "loc_Show_in_Dashboard" rel="tooltip" >
     	<i class="icons icon-resize-small"></i></a>
 </div>
 <button class="btn btn-success pull-right save-datalist" value="Save"><span class = "Save"></span></button>
@@ -9,12 +9,10 @@
 <br>
 <h4>{{dateCreated}}</h4>
 <label class = "Title"></label>
-<textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
-
+<textarea class="data-list-title loc_Title">{{title}}</textarea>
 <label class = "Description"></label>
-<textarea class="data-list-description"
-	placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
-
+<textarea class="data-list-description loc_Datalist_Description"
+>{{description}}</textarea>
 <div>
   <ul class="unstyled zebra data_list_content"></ul>
   <p></p>
@@ -26,5 +24,6 @@
   <div class= "pull-right"> </div>
   <textarea class="comment-new-text"></textarea>
 </div>  
-<button class="btn btn-primary add-comment-edit" value="Add"><span class = "Add"></span></button>
+<button class="btn btn-primary add-comment-edit" value="Add">
+<span class = "Add"></span></button>
   

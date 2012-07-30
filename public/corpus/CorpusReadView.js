@@ -223,7 +223,11 @@ define([
       $(".Teal").html(chrome.i18n.getMessage("Teal"));
       $(".Black").html(chrome.i18n.getMessage("Black"));
       $(".Default").html(chrome.i18n.getMessage("Default"));
-   
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
+      $(".loc_Edit_corpus").attr("title", chrome.i18n.getMessage("loc_Edit_corpus"));
+      $(".loc_Show_corpus_settings").attr("title", chrome.i18n.getMessage("loc_Show_corpus_settings"));
+
 
       
       
