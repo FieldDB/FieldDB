@@ -327,7 +327,7 @@ define( [
             if(n != undefined){
 //              console.log(value);
 //              console.log(index);
-              n.set("value", value);
+              n.set("mask", value);
             }
           }
         });
@@ -584,11 +584,11 @@ define( [
         
         this.model.get("session").get("sessionFields").where({
           label : "goal"
-        })[0].set("value", "Goal from file import " + this.model.get("status"));
+        })[0].set("mask", "Goal from file import " + this.model.get("status"));
        
         this.model.get("session").get("sessionFields").where({
           label : "dateElicited"
-        })[0].set("value", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
+        })[0].set("mask", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
             : 'n/a');
       }
       
