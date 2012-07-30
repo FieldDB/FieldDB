@@ -95,9 +95,6 @@
     "Log_In" : {
       "message" : "Log In"
    },
-    "User_Profile" : {
-      "message" : "User Profile"
-   },
     "User_Settings" : {
       "message" : "User Settings"
    },
@@ -346,7 +343,106 @@
    },
     "Help_Text_Placeholder" : {
       "message" : "Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
+   },   
+    "loc_Add_Placeholder" : {
+      "message" : "Add...."
+   },
+     "loc_Datalist_Description" : {
+      "message" : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."
+   },
+     "loc_Add_Tag" : {
+      "message" : "New Tag..."
+   },
+    "loc_Help_Text" : {
+      "message" : "Put some help text here (optional)"
+   },
+   "loc_Drag_and_Drop_Placeholder" : {
+      "message" : "Drag and drop files/text here!"
+   },
+   "loc_Paste_Type_Unicode_Symbol_Placeholder" : {
+      "message" : "Paste/type unicode symbol"
+   },
+     "loc_TIPA_shortcut" : {
+      "message" : "TIPA/keyboard shortcut"
+   },
+     "loc_Show_Activities" : {
+      "message" : "Show Activities"
+   },
+      "loc_Hide_Activities" : {
+      "message" : "Hide Activities"
+   },
+      "loc_Show_Dashboard" : {
+      "message" : "Show dashboard with data entry form"
+   },
+    "loc_Save_on_this_Computer" : {
+      "message" : "Save on this computer."
+   },
+     "loc_Sync_and_Share" : {
+      "message" : "Sync and share with team" 
+   },
+     "loc_Show_Readonly" : {
+      "message" : "Show read only" 
+   },
+       "loc_Show_Fullscreen" : {
+      "message" : "Show full screen" 
+   },
+     "loc_Add_New_Datum_Field" : {
+      "message" : "Add new datum field" 
+   },
+    "loc_Add_New_Datum_State" : {
+      "message" : "Add new datum state" 
+   },
+     "loc_Show_in_Dashboard" : {
+      "message" : "Show in dashboard" 
+   },
+      "loc_Edit_corpus" : {
+      "message" : "Edit Corpus" 
+   },
+     "loc_Show_corpus_settings" : {
+      "message" : "Show Corpus Settings" 
+   },
+    "loc_Play_Audio" : {
+      "message" : "Play audio" 
+   },
+     "loc_Copy" : {
+      "message" : "Copy" 
+   },
+     "loc_Duplicate" : {
+      "message" : "Duplicate Datum" 
+   },
+     "loc_Encrypt" : {
+      "message" : "Encrypt/Decrypt" 
+   },
+     "loc_Edit_Datalist" : {
+      "message" : "Edit Data List" 
+   },
+    "loc_Export_Datalist" : {
+      "message" : "Export datalist to Latex format" 
+   },
+    "loc_Hide_Datalist" : {
+      "message" : "Hide datalist" 
+   },
+       "loc_Show_Datalist" : {
+      "message" : "Show datalist" 
+   },
+      "loc_Edit_Datum" : {
+      "message" : "Edit Datum" 
+   },
+     "loc_See_Fields" : {
+      "message" : "See more/less fields" 
+   },
+     "loc_Add_Tags" : {
+      "message" : "Add Tags"
+   },
+     "loc_Edit_Session" : {
+      "message" : "Edit Session"
    }
+   
+   
+   
+   
+   
+   
    
    
    

@@ -42,6 +42,8 @@ define([
       $(".Unicode_Instructions").html(chrome.i18n.getMessage("Unicode_Instructions"));
       $(".Keyboard_Shortcuts").html(chrome.i18n.getMessage("Keyboard_Shortcuts"));
       $(".Remove_Unicode").html(chrome.i18n.getMessage("Remove_Unicode"));
+      $(".loc_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("loc_Paste_Type_Unicode_Symbol_Placeholder"));
+      $(".loc_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("loc_TIPA_shortcut"));
 
 
 

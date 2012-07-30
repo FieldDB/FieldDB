@@ -149,6 +149,7 @@ define( [
       $(".Import_Instructions").html(chrome.i18n.getMessage("Import_Instructions"));
       $(".Add_Extra_Columns").html(chrome.i18n.getMessage("Add_Extra_Columns"));
       $(".Attempt_Import").html(chrome.i18n.getMessage("Attempt_Import"));
+      $(".loc_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("loc_Drag_and_Drop_Placeholder"));
       
 
 

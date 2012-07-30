@@ -83,24 +83,7 @@ define([
         // Display the AuthenticationEditView
         this.setElement($("#authentication-embedded"));
         $(this.el).html(this.template(this.model.toJSON()));
-        $("#Username2").append(chrome.i18n.getMessage("Username"));
-        $("#Password2").append(chrome.i18n.getMessage("Password"));
-        $("#Log_Out").append(chrome.i18n.getMessage("Log_Out"));
-        $("#Log_In").append(chrome.i18n.getMessage("Log_In"));
-        $("#User_Profile").append(chrome.i18n.getMessage("User_Profile"));
-        $("#User_Settings").append(chrome.i18n.getMessage("User_Settings"));
-        $("#Keyboard_Shortcuts").append(chrome.i18n.getMessage("Keyboard_Shortcuts"));
-        $("#Corpus_Settings").append(chrome.i18n.getMessage("Corpus_Settings"));
-        $("#Terminal_Power_Users").append(chrome.i18n.getMessage("Terminal_Power_Users"));
-
-
-        
-        
-        
-        
-        
-
-        
+     
         if (this.model.get("state") == "loggedIn") {
           $("#logout").show();
           $("#login").hide();
@@ -128,6 +111,18 @@ define([
       } else {
         Utils.debug("\tAuthentication model was undefined.");
       }
+      
+      //localization
+      $(".Username").html(chrome.i18n.getMessage("Username"));
+      $(".Password").html(chrome.i18n.getMessage("Password"));
+      $(".Log_Out").html(chrome.i18n.getMessage("Log_Out"));
+      $(".Log_In").html(chrome.i18n.getMessage("Log_In"));
+      $(".User_Profile").html(chrome.i18n.getMessage("User_Profile"));
+      $(".User_Settings").html(chrome.i18n.getMessage("User_Settings"));
+      $(".Keyboard_Shortcuts").html(chrome.i18n.getMessage("Keyboard_Shortcuts"));
+      $(".Corpus_Settings").html(chrome.i18n.getMessage("Corpus_Settings"));
+      $(".Terminal_Power_Users").html(chrome.i18n.getMessage("Terminal_Power_Users"));
+      
       
       return this;
     },

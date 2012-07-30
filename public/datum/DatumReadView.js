@@ -143,7 +143,15 @@ define([
         $(this.el).html(this.latexTemplate(jsonToRender));
       }
       
+      //localization
       $(".Add").html(chrome.i18n.getMessage("Add"));
+      $(".loc_Add_Tag").attr("placeholder", chrome.i18n.getMessage("loc_Add_Tag"));
+      $(".loc_Add_Tags").attr("title", chrome.i18n.getMessage("loc_Add_Tag"));
+      $(".loc_Play_Audio").attr("title", chrome.i18n.getMessage("loc_Play_Audio"));
+      $(".loc_Copy").attr("title", chrome.i18n.getMessage("loc_Copy"));
+      $(".loc_Duplicate").attr("title", chrome.i18n.getMessage("loc_Duplicate"));
+      $(".loc_Encrypt").attr("title", chrome.i18n.getMessage("loc_Encrypt"));
+      
       return this;
     },
     

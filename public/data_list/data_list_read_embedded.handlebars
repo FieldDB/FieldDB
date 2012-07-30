@@ -1,7 +1,7 @@
 <div class="pull-right">
   <a href="#" rel="tooltip" title="Edit data list">
     <i class="icons icon-edit"></i></a>
-  <a href="#" rel="tooltip" title="Show full screen">    
+  <a href="#" class = "loc_Show_fullscreen" rel="tooltip">    
     <i class="icons icon-resize-full"></i></a>
 </div>
 
@@ -11,20 +11,15 @@
 {{description}}
 
 <div class="icons">
-    <a  href="#playDatum" rel="tooltip" title="Play audio" >
+    <a  href="#playDatum" class = "loc_Play_Audio" rel="tooltip" >
        <i class="icons icon-bullhorn"></i></a>
-    <a  href="#clipboard" rel="tooltip" title="Copy to clipboard" >
+    <a  href="#clipboard" class = "loc_Copy" rel="tooltip" >
        <i class="icons icon-paste"></i></a>
-    <a  href="#duplicate" rel="tooltip" title="Duplicate" >
+    <a  href="#duplicate" class = "loc_Duplicate" rel="tooltip">
       <i class="icons icon-copy"></i></a>
-    <a  id="encrypt" href="#" rel="tooltip" title="Encrypt/Decrypt" >
+    <a  id="encrypt" href="#" class= "loc_Encrypt" rel="tooltip">
       <i class="icons icon-lock"></i></a>   
-<!--   <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> <a
-    href="#clipboard"><i class="icons icon-paste"></i></a> <a
-    href="#duplicate"><i class="icons icon-copy"></i></a> <a id="encrypt"><i
-    class="icons icon-lock"></i></a>
- -->
-  <a href="#" rel="tooltip" title="Export datalist to Latex format">
+  <a href="#" class = "loc_Export_Datalist" rel="tooltip">
       <button class="btn btn-primary" id="LaTeX">LaTeX</button></a>
 </div>
 
@@ -37,7 +32,6 @@
 <ul class="comments unstyled"></ul>
 
 <div class="alert alert-info">
-
   <i class="icons icon-comment"></i>
   <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>

@@ -1,7 +1,8 @@
 <div class="pull-right">
-	<a href="#" rel="tooltip" title="Show read only"> <i
-		class="icons icon-book"></i></a> <a href="#" rel="tooltip"
-		title="Show full screen"> <i class="icons icon-resize-full"></i></a>
+	  <a href="#" class= "loc_Show_Readonly" rel="tooltip">
+    <i class="icons icon-book"></i></a>
+  <a href="#" class = "loc_Show_fullscreen" rel="tooltip" title="Show full screen">    
+    <i class="icons icon-resize-full resize-full"></i></a>
 </div>
 <br>
 <br>
@@ -9,27 +10,21 @@
 	<span class="Save"></span>
 </button>
 <label class="Title"></label>
-<textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
+<textarea class="data-list-title loc_Title">{{title}}</textarea>
 <label class="Description"></label>
-
-<textarea class="data-list-description"
-	placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
+<textarea class="data-list-description loc_Datalist_Description"
+>{{description}}</textarea>
 <div>
 	<ul class="unstyled zebra data_list_content"></ul>
 	<p></p>
 	<div class="data-list-footer"></div>
 </div>
-
-
 <ul class="comments unstyled"></ul>
-
 <div class="alert alert-info">
-
 	<i class="icons icon-comment"></i>
 	<div class="pull-right"></div>
 	<textarea class="comment-new-text"></textarea>
 </div>
-
 <button class="btn btn-primary add-comment-edit" value="Add">
 	<span class="Add"></span>
 </button>
