@@ -146,6 +146,8 @@ define([
       $(".Goal").html(chrome.i18n.getMessage("Goal"));
       $(".When").html(chrome.i18n.getMessage("When"));
       $(".loc_Edit_Session").attr("title", chrome.i18n.getMessage("loc_Edit_Session"));
+      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
 
       
       
