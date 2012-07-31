@@ -20,7 +20,7 @@
       "message" : "Sincronisa mis datos con esta computadora"
    },
     "locale_Welcome_to_iField" : {
-      "message" ¡Bienvenido a iCampo! <small>beta</small>"
+      "message" : "¡Bienvenido a iCampo! <small>beta</small>"
    },
     "locale_An_offline_online_fieldlinguistics_database" : {
       "message" : "<i> Un aplicacion de coleccion de datos linguisticos..</i>"
@@ -209,7 +209,7 @@
    "locale_New_Corpus_Instructions" : {
       "message" : "Edite la forma abajo para crear un nuevo corpus, o presione ESC para entrar más datos en el corpus presente."
    },
-     "locale_New_Corpus_Warning" : {
+    "locale_New_Corpus_Warning" : {
       "message" : "La funcionalidad del corpus nuevo aún necesita más pruebas, este mensaje desaparecerá cuando Corpus Nuevo no es experimental."  
    },
     "locale_Cancel"" : {
