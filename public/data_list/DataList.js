@@ -230,11 +230,12 @@ define([
                   user: window.app.get("authentication").get("userPublic")
                 }));
             
+            window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
+
             /*
              * If the corpus has no data lists in it, just save this one.
              */
             if(window.app.get("corpus").get("dataLists").length == 0){
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
               window.app.get("corpus").get("dataLists").unshift(model);//TODO need to test
 //            }else if(window.app.get("corpus").get("dataLists").length > 1){
 //              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
@@ -310,7 +311,7 @@ define([
 //          window.app.set("currentDataList", app.get("corpus").get("dataLists").get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
-//        window.app.get("authentication").saveAndInterConnectInApp();
+        window.app.get("authentication").saveAndInterConnectInApp();
         var self = this;
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
