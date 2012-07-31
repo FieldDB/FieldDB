@@ -4,15 +4,18 @@
   <p class="alert alert-danger"><strong><span class="locale_Warning"></span></strong> 
   <span class = "locale_New_Corpus_Warning"></span>
 </div>
+
 <div class="modal-body">
-  
 	<label class = "locale_Title"></label>
 	<textarea class="corpus-title-input">{{title}}</textarea>
 	<label class = "locale_Description">Description:</label>
 	<textarea class="corpus-description-input">{{description}}</textarea>
-  
+  <label>Public or Private:</label>
+  <input type="text" value="{{publicCorpus}}"  class=" public-or-private" data-provide="typeahead" data-items="4" 
+        data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
 </div>
+
 <div class="modal-footer">
   <a href="#" class="btn" data-dismiss="modal"><span class = "locale_Cancel"></span></a>
-   <button class="btn btn-success pull-right save-corpus" disabled="true" value="Save"><span class = "locale_Save"></span></button>  
+   <button class="btn btn-success pull-right save-corpus" value="Save"><span class = "locale_Save"></span></button>  
 </div>

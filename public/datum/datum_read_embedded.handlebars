@@ -12,51 +12,37 @@
 <ul class="datum_tags_ul unstyled"></ul>
 <!-- Buttons for various actions -->
 <div>
-  <div class="icons btn-group ">
-    <button class="btn btn-primary" id="LaTeX">LaTeX</button>
-    <button class="btn btn-primary dropdown-toggle"
-    data-toggle="dropdown">
-      ə
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a>ə</a>
-      </li>
-    </ul>
-   <a  href="#playDatum" class = "locale_Play_Audio" rel="tooltip" >
-       <i class="icons icon-bullhorn"></i></a>
-    <a  href="#clipboard" class = "locale_Copy" rel="tooltip" >
-       <i class="icons icon-paste"></i></a>
-    <a  href="#duplicate" class = "locale_Duplicate" rel="tooltip">
-      <i class="icons icon-copy"></i></a>
-    <a  id="encrypt" href="#" class= "locale_Encrypt" rel="tooltip">
-      <i class="icons icon-lock"></i></a>   
-  <a href="#" class = "locale_Export_Datalist" rel="tooltip">
+  <div class="icons btn-group">
+     <a href="#" class = "locale_Insert_New_Datum" rel="tooltip" title="Insert a new datum on top of this area"><button class="btn btn-primary">
+       <i class="icon-white icon-plus"></i></button></a>
+    <a href="#" class = "locale_LaTeX" rel="tooltip">
       <button class="btn btn-primary" id="LaTeX">LaTeX</button></a>
-
-<!--     <a id="playDatum"><i class="icons icon-bullhorn"></i></a> 
-     <a id="clipboard"><i class="icons icon-paste"></i></a> 
-     <a id="duplicate"><i class="icons icon-copy"></i></a>
-     <a id="encrypt"><i class="icons icon-lock"></i></a>  
--->
+     <a href="#" class = "locale_CSV" rel="tooltip">
+      <button class="btn btn-primary" id="LaTeX">CSV/Excel</button></a>
+     <a  href="#clipboard" class = "locale_Copy" rel="tooltip" >
+       <i class="icons icon-paste"></i></a>
+     <a  href="#duplicate" class = "locale_Duplicate" rel="tooltip">
+      <i class="icons icon-copy"></i></a>  
+     <a  id="encrypt" href="#" class= "locale_Encrypt" rel="tooltip">
+      <i class="icons icon-lock"></i></a>   
+      <a href="#" class = "locale_Decrypt_checked" rel="tooltip">
+      <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
+    </a>
   </div>
 </div>
+<div class="audio_video"></div>
 
 <!--Comments Section  -->
 <div class="comments-section">
-
-<ul class="comments unstyled"></ul>
-
-<div class="alert alert-info">
-
-  <i class="icons icon-comment"></i>
-  <div class= "pull-right">  </div>
-  <textarea class="comment-new-text"></textarea>
+	<ul class="comments unstyled"></ul>
+	<div class="alert alert-info">
+		<i class="icons icon-comment"></i>
+		<div class="pull-right"></div>
+		<textarea class="comment-new-text"></textarea>
+	</div>
+	<button class="btn btn-primary add-comment-edit" value="Add">
+		<span class="locale_Add"></span>
+	</button>
 </div>
 
 
-<button class="btn btn-primary add-comment-edit" value="Add">
-  <span class = "locale_Add"></span>
-</button>
-</div>

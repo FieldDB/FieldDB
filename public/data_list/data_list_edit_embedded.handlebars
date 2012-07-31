@@ -12,13 +12,27 @@
 <label class="locale_Title"></label>
 <textarea class="data-list-title locale_Title">{{title}}</textarea>
 <label class="locale_Description"></label>
-<textarea class="data-list-description locale_Datalist_Description"
->{{description}}</textarea>
-<div>
-	<ul class="unstyled zebra data_list_content"></ul>
-	<p></p>
-	<div class="data-list-footer"></div>
+<textarea class="data-list-description locale_Datalist_Description">
+{{description}}</textarea>
+
+<!--DataList Menu  -->
+<div class="icons">
+    <a  href="#playDatum" class = "locale_Play_Audio_checked" rel="tooltip" >
+       <i class="icons icon-bullhorn"></i></a>
+    <a  href="#clipboard" class = "locale_Copy_checked" rel="tooltip" >
+       <i class="icons icon-paste"></i></a>
+    <a  id="encrypt" href="#" class= "locale_Encrypt_checked" rel="tooltip">
+      <i class="icons icon-lock"></i></a> 
+    <a href="#" class = "locale_Decrypt_checked" rel="tooltip">
+      <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
+    </a>
+    <a href="#" class = "locale_Export_Datalist" rel="tooltip">
+    <button class="btn btn-primary" id="LaTeX">LaTeX</button></a>
+          <a href="#" rel="tooltip" title="Export checked items to CSV format">
+    <button class="btn btn-primary" >CSV</button>
 </div>
+
+<!-- comments -->
 <ul class="comments unstyled"></ul>
 <div class="alert alert-info">
 	<i class="icons icon-comment"></i>

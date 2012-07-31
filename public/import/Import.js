@@ -71,6 +71,12 @@ define([
      */
     validate : function(attributes) {
     },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * This function tries to guess if you have \n or \r as line endings
      * and then tries to determine if you have "surounding your text".

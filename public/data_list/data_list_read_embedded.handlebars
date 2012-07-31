@@ -5,38 +5,35 @@
     <i class="icons icon-resize-full"></i></a>
 </div>
 
-<h3>{{title}}</h3>
+<h3>{{title}}<small> {{datumCount}}</small></h3>
 <h4>{{dateCreated}}</h4>
 
 {{description}}
 
 <div class="icons">
-    <a  href="#playDatum" class = "locale_Play_Audio" rel="tooltip" >
+    <a  href="#playDatum" class = "locale_Play_Audio_checked" rel="tooltip" >
        <i class="icons icon-bullhorn"></i></a>
-    <a  href="#clipboard" class = "locale_Copy" rel="tooltip" >
+    <a  href="#clipboard" class = "locale_Copy_checked" rel="tooltip" >
        <i class="icons icon-paste"></i></a>
-    <a  href="#duplicate" class = "locale_Duplicate" rel="tooltip">
-      <i class="icons icon-copy"></i></a>
-    <a  id="encrypt" href="#" class= "locale_Encrypt" rel="tooltip">
-      <i class="icons icon-lock"></i></a>   
-  <a href="#" class = "locale_Export_Datalist" rel="tooltip">
+    <a  id="encrypt" href="#" class= "locale_Encrypt_checked" rel="tooltip">
+      <i class="icons icon-lock"></i></a> 
+    <a href="#" class = "locale_Decrypt_checked" rel="tooltip">
+      <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
+    </a>
+     <a href="#" class = "locale_Export_Datalist" rel="tooltip">
       <button class="btn btn-primary" id="LaTeX">LaTeX</button></a>
+          <a href="#" rel="tooltip" title="Export checked items to CSV format">
+      <button class="btn btn-primary" >CSV</button>
 </div>
-
-<div>
-  <ul class="unstyled zebra data_list_content"></ul>
-  <div class="data-list-footer"></div>
-</div>
-
 
 <ul class="comments unstyled"></ul>
-
 <div class="alert alert-info">
   <i class="icons icon-comment"></i>
   <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>
 </div>
   
-<button class="btn btn-primary add-comment-edit" value="Add"><span class = "locale_Add"></span></button>
+<button class="btn btn-primary add-comment-datalist-read" value="Add"><span class = "locale_Add"></span></button>
+
 
 

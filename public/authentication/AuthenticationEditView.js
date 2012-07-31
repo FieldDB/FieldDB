@@ -60,7 +60,7 @@ define([
         e.stopPropagation();
       },
       "click .corpus-settings" : function() {
-        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info");
+        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info","How to find the corpus settings:");
         app.router.showEmbeddedCorpus();
       }
     },
@@ -194,10 +194,12 @@ define([
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           //Replicate user's corpus down to pouch
-          window.app.get("corpus").replicateCorpus(couchConnection, function(){
+          window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              Utils.debug("User does not have most recent ids, doing nothing.");
+              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+//              appView.datumsEditView.newDatum();
+              appView.datumsEditView.render();
             }else{
               /*
                *  Load their last corpus, session, datalist etc
@@ -214,7 +216,9 @@ define([
           if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              Utils.debug("User does not have most recent ids, doing nothing.");
+              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+//              appView.datumsEditView.newDatum();
+              appView.datumsEditView.render();
             }else{
               /*
                *  Load their last corpus, session, datalist etc
@@ -289,7 +293,7 @@ define([
     },
     
     /**
-     * TODO the ShowQuickAuthentication view popups up a password entry view.
+     * ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
      * like removing a corpus. It is also used if the user hasn't confirmed their
      * identity in a while.

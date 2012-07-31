@@ -57,12 +57,22 @@ define([
      */
     initialize : function() {
       Utils.debug("CORPUS init: " + this.el);
-  
       this.changeViewsOfInternalModels();
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
-
+      
+   // If the model's title changes, chances are its a new corpus, re-render its internal models.
+      this.model.bind('change:title', function(){
+        this.changeViewsOfInternalModels();
+        this.render();
+      }, this);
+      
+      //TOOD if the sessions and data lists arent up-to-date, turn these on
+//      this.model.bind('change:sessions', function(){
+//        this.render();
+//      }, this);
+//      this.model.bind('change:dataLists', function(){
+//        this.render();
+//      }, this);
     },
-    
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
@@ -111,20 +121,30 @@ define([
      * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
-      Utils.debug("CORPUS render: " + this.el);
+      
+      window.appView.currentCorpusEditView.destroy_view();
+      window.appView.currentCorpusReadView.destroy_view();
+      
+      Utils.debug("CORPUS READ render: " + this.el);
       if (this.model == undefined) {
         Utils.debug("\tCorpus model was undefined.");
         return this;
       }
       if (this.format == "leftSide") {
+        Utils.debug("CORPUS LEFTSIDE render: " + this.el);
+
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(this.model.toJSON()));
       } else if (this.format == "link") {
+        Utils.debug("CORPUS LINK render: " + this.el);
+
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(this.model.toJSON()));
         
       } else if (this.format == "fullscreen"){
+        Utils.debug("CORPUS FULLSCREEN render: " + this.el);
+
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
         
@@ -132,8 +152,7 @@ define([
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
-
-        
+ 
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();
      
@@ -164,11 +183,10 @@ define([
         }
 
       } else if (this.format == "centreWell"){
+        Utils.debug("CORPUS READ CENTER render: " + this.el);
+
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(this.model.toJSON()));
-       
-        // Display the UpdatingCollectionView
-        //        this.dataListsView.render();
 
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
@@ -226,15 +244,22 @@ define([
       $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
       $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
       $(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
-      $(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
-
-
-      
-      
-      
-      
-      
+      $(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));  
       return this;
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//    this.remove();  
+//    Backbone.View.prototype.remove.call(this);
     },
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView     
@@ -279,9 +304,10 @@ define([
       
       //Create a Permissions View
       this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.get("permissions"),
+        collection : this.model.permissions,
         childViewConstructor : PermissionReadView,
         childViewTagName     : 'li',
+        childViewClass       : "breadcrumb"
       });
       
       //Create a Sessions List 
@@ -293,86 +319,113 @@ define([
        });
       
     },
-    //Functions assoicate with the corpus menu
-    newDatum : function() {
-      appView.datumsView.newDatum();
+  //Functions assoicate with the corpus menu
+    newDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+      } 
+      appView.datumsEditView.newDatum();
       app.router.showDashboard();
+      Utils.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
     
-    newDataList : function() {
+    newDataList : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       //take the user to the search so they can create a data list using the search feature.
+      window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
       app.router.showEmbeddedSearch();
     },
     
-    newSession : function() {
+    newSession : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       $("#new-session-modal").modal("show");
       //Save the current session just in case
-      window.app.get("currentSession").save();
-      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      window.appView.sessionModalView.model = window.app.get("currentSession").clone();
-      //Give it a null id so that pouch will save it as a new model.
-      //WARNING this might not be a good idea, if you find strange side effects in sessions in the future, it might be due to this way of creating (duplicating) a session.
-      window.appView.sessionModalView.model.id = undefined;
-      window.appView.sessionModalView.model.rev = undefined;
-      window.appView.sessionModalView.model.set("_id", undefined);
-      window.appView.sessionModalView.model.set("_rev", undefined);
-      window.appView.sessionModalView.render();
+      window.app.get("currentSession").saveAndInterConnectInApp(function(){
+        //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+        window.appView.sessionModalView.model = new Session({
+          corpusname : window.app.get("corpus").get("corpusname"),
+          sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON()) //This is okay, there will be no backbone ids since datumFields are not saved to pouch
+        });
+        window.appView.sessionModalView.model.set("comments", new Comments());
+        window.appView.sessionModalView.render();
+      });
     },
     
-    newCorpus : function(){
+    newCorpus : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
-      window.app.get("corpus").save();
+      window.app.get("corpus").saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      window.appView.corpusNewModalView.model = window.app.get("corpus").clone(); //MUST be a new model, other wise it wont save in a new pouch.
-      //Give it a null id so that pouch will save it as a new model.
-      window.appView.corpusNewModalView.model.id = undefined;
-      window.appView.corpusNewModalView.model.rev = undefined;
-      window.appView.corpusNewModalView.model.set("_id", undefined);
-      //WARNING this might not be a good idea, if you find strange side effects in corpora in the future, it might be due to this way of creating (duplicating) a corpus. However with a corpus it is a good idea to duplicate the permissions and settings so that the user won't have to redo them.
-      window.appView.corpusNewModalView.model.set("title", window.app.get("corpus").get("title")+ " copy");
-      window.appView.corpusNewModalView.model.set("titleAsUrl", window.app.get("corpus").get("title")+"Copy");
-      window.appView.corpusNewModalView.model.set("corpusname", window.app.get("corpus").get("corpusname")+"copy");
-      window.appView.corpusNewModalView.model.get("couchConnection").corpusname = window.app.get("corpus").get("corpusname")+"copy";
-      window.appView.corpusNewModalView.model.set("description", "Copy of: "+window.app.get("corpus").get("description"));
-      window.appView.corpusNewModalView.model.set("dataLists", new DataLists());
-      window.appView.corpusNewModalView.model.set("sessions", new Sessions());
+      var attributes = JSON.parse(JSON.stringify(window.app.get("corpus").attributes));
+      // Clear the current data list's backbone info and info which we shouldnt clone
+      attributes._id = undefined;
+      attributes._rev = undefined;
+      /*
+       * WARNING this might not be a good idea, if you find strange side
+       * effects in corpora in the future, it might be due to this way
+       * of creating (duplicating) a corpus. However with a corpus it is
+       * a good idea to duplicate the permissions and settings so that
+       * the user won't have to redo them.
+       */
+      attributes.title = window.app.get("corpus").get("title")+ " copy";
+      attributes.titleAsUrl = window.app.get("corpus").get("titleAsUrl")+"Copy";
+      attributes.description = "Copy of: "+window.app.get("corpus").get("description");
+      attributes.corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      attributes.couchConnection.corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      attributes.dataLists = new DataLists();
+      attributes.sessions = new Sessions();
+      attributes.comments = new Comments();
+
+      window.appView.corpusNewModalView.model = new Corpus(attributes);
       window.appView.corpusNewModalView.render();
     },
 
 
-    //TODO this function needs to mean "save" ie insert new comment in the db, not add an empty comment on the screen. 
-//  this a confusion of the pattern in the datumfilds view where exsting fields are in the  updating collection (just 
-//  like extisting comments are in the updating collection) and there is a blank one in the 
-//  corpus_edit_embedded corpus_edit_fullscreen handlebars
-
-
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
         console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
+      window.appView.addUnsavedDoc(this.model.id);
+
      },
     
-    
-     resizeSmall : function(){
-      window.app.router.showEmbeddedCorpus();
+     resizeSmall : function(e){
+       if(e){
+         e.stopPropagation();
+       }
+       window.app.router.showDashboard();
     },
     
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenCorpus();
-    } ,
-       
-    newDatum : function(e) {
-      appView.datumsView.newDatum();
-      app.router.showDashboard();
     },
+   
     //This is bound to the little pencil function
-    showEditable :function(){
-      window.app.router.showEditableCorpus();
+    showEditable :function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      window.appView.currentCorpusEditView.format = this.format;
+      window.appView.currentCorpusEditView.render();
     }
   });
 

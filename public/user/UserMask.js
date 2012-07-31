@@ -19,15 +19,23 @@ define([
     initialize : function() {
       try {
         if (this.get("corpusname") == undefined) {
-          this.changeCorpus(app.get("corpus").get("corpusname"));
+          if(window.app)
+          this.set("corpusname", window.app.get("corpus").get("corpusname"));
+          //this.changeCorpus(window.app.get("corpus").get("corpusname"));
         }
       } catch(e) {
-        Utils.debug("Corpusname was undefined on this corpus, the user mask will not have a valid corpusname until it is set.");
+        Utils.debug("Corpusname was undefined on this corpus, the user mask will not have a valid corpusname until it is set."+e);
       }
     },
     
     changeCorpus : function(corpusname) {
       this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

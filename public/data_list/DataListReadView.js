@@ -37,24 +37,17 @@ define( [
      * @constructs
      */
     initialize : function(options) {
-      Utils.debug("DATALIST init: " + this.el);
-      
-      // Create a DatumView
-      if (options.datumCollection) {
-        this.datumsView = new UpdatingCollectionView({
-          collection           : options.datumCollection,
-          childViewConstructor : DatumReadView,
-          childViewTagName     : "li",
-          childViewFormat      : "latex"
-        });
-      }
+      Utils.debug("DATALIST READ VIEW init: " + this.el);
       
       this.changeViewsOfInternalModels();
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
-
-      // Remove options
-      delete this.model.collection;
+      this.model.bind('change:title', function(){
+        this.changeViewsOfInternalModels();
+        this.render();
+      }, this);
       
+      this.model.bind('change:datumIds', function(){
+        this.render();
+      }, this);
     },
 
     /**
@@ -69,8 +62,6 @@ define( [
       //Add button inserts new Comment
       "click .add-comment-datalist-read" : 'insertNewComment',
       
-      'click a.servernext': 'nextResultPage',
-      'click .serverhowmany a': 'changeCount',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable",
@@ -81,7 +72,86 @@ define( [
       "click .icon-plus-sign" : function() {
         this.format = "leftSide";
         this.render();
-      } 
+      },
+      "click .latex-export-datalist": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "laTeXiT", true);
+        return false;
+      },
+      "click .icon-paste": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsPlainText", true);
+        return false;
+      },
+      "click .CSV": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        $("#export-modal").modal("show");
+        $("#export-text-area").val("");
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
+        return false;
+      },
+      "click .icon-bullhorn": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
+        return false;
+      },
+      "click .icon-unlock": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
+        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
+        this.render();
+
+        return false;
+      },
+      "click .icon-lock": function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
+        this.$el.find(".icon-lock").toggleClass("icon-unlock icon-lock");
+        this.render();
+
+        return false;
+      },
+      "click .icon-eye-open" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        var self = this;
+        confidential.turnOnDecryptedMode(function(){
+          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+        });
+
+        return false;
+      },
+      "click .icon-eye-close" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        confidential.turnOffDecryptedMode();
+        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+
+        return false;
+      }
     },
     
     /**
@@ -116,68 +186,74 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
     
     render : function() {
+      appView.currentReadDataListView.destroy_view();
+      appView.currentEditDataListView.destroy_view();
+      
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumCount = this.model.get("datumIds").length;
+      jsonToRender.confidential = false; //TODO should we show both lock and unlock if the data are mixed?
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+
       if (this.format == "link") {
+        Utils.debug("DATALIST READ LINK render: " + this.el);
+
         // Display the Data List
-        $(this.el).html(this.templateLink(this.model.toJSON()));
+        $(this.el).html(this.templateLink(jsonToRender));
       
       } else if (this.format == "leftSide") {
-        this.setElement($("#data-list-quickview"));
-        $(this.el).html(this.templateSummary(this.model.toJSON()));
-        
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-          
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-      
-      } else if (this.format == "fullscreen") {
-        // Display the Data List
-        this.setElement($("#data-list-fullscreen"));
-        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
-        
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
+        Utils.debug("DATALIST READ LEFTSIDE render: " + this.el);
 
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
+        this.setElement($("#data-list-quickview-header"));
+        $(this.el).html(this.templateSummary(jsonToRender));
         
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-      
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-quickview").find(".current-data-list-paginated-view") );
+        
+      } else if (this.format == "fullscreen") {
+        Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
+
+        // Display the Data List
+        this.setElement($("#data-list-fullscreen-header"));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
+        
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
+        
       } else if(this.format == "middle") {
-        this.setElement($("#data-list-embedded"));
-        $(this.el).html(this.templateEmbedded(this.model.toJSON()));
-      
-        // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
-        this.commentReadView.render();
+        Utils.debug("DATALIST READ CENTER render: " + this.el);
+
+        this.setElement($("#data-list-embedded-header"));
+        $(this.el).html(this.templateEmbedded(jsonToRender));
         
-        // Display the DatumFieldsView
-        this.datumsView.el = this.$(".data_list_content");
-        this.datumsView.render();
-        
-        // Display the pagination footer
-        this.renderUpdatedPagination();
-        
+        window.appView.currentPaginatedDataListDatumsView.renderInElement(
+            $("#data-list-embedded").find(".current-data-list-paginated-view") );
+       
       } else if (this.format == "minimized") {
-        this.setElement($("#data-list-quickview"));
-        $(this.el).html(this.templateMinimized(this.model.toJSON()));
+        Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
+
+        this.setElement($("#data-list-quickview-header"));
+        $(this.el).html(this.templateMinimized(jsonToRender));
+      }
+      try{
+        if (this.format && this.format.indexOf("minimized") == -1){
+          // Display the CommentReadView
+          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.render();
+          
+        }
+      }catch(e){
+        alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
       //localization
       $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
       $(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
-      $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
-      $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
       $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
       $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
       $(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
-      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      $(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      $(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      $(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
       $(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
       $(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
 
@@ -195,94 +271,80 @@ define( [
         childViewTagName     : 'li'
       });
     },
- 
     /**
-     * Re-calculates the pagination values and re-renders the pagination footer.
+     * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 
+     * @returns {Array}
      */
-    renderUpdatedPagination : function() {
-      // Replace the old pagination footer
-      $(".data-list-footer").html(this.footerTemplate(this.getPaginationInfo()));
-    },
-    
-    /**
-     * For paging, the number of items per page.
-     */
-    perPage : 12,
-    
-    /**
-     * Based on the number of items per page and the current page, calculate the current
-     * pagination info.
-     * 
-     * @return {Object} JSON to be sent to the footerTemplate.
-     */
-    getPaginationInfo : function() {
-      var currentPage = (this.datumsView.collection.length > 0) ? Math.ceil(this.datumsView.collection.length / this.perPage) : 1;
-      var totalPages = (this.datumsView.collection.length > 0) ? Math.ceil(this.model.get("datumIds").length / this.perPage) : 1;
-      
-      return {
-        currentPage : currentPage,
-        totalPages : totalPages,
-        perPage : this.perPage,
-        morePages : currentPage < totalPages
-      };
-    },
-    
-    /**
-     * Change the number of items per page.
-     * 
-     * @param {Object} e The event that triggered this method.
-     */
-    changeCount : function(e) {
-      e.preventDefault();
-      
-      // Change the number of items per page
-      this.perPage = parseInt($(e.target).text());
-    },
+    getAllCheckedDatums : function(){
+      var datumIdsChecked = [];
 
-    /**
-     * Add one page worth of DatumReadViews from the DataList.
-     * 
-     * @param {Object} e The event that triggered this method.
-     */
-    nextResultPage: function (e) {
-      e.preventDefault();
-      
-      // Determine the range of indexes into the model's datumIds array that are 
-      // on the page to be displayed
-      var startIndex = this.datumsView.collection.length;
-      var endIndex = startIndex + this.perPage;
-      
-      // Add a DatumReadView for each one
-      for (var i = startIndex; i < endIndex; i++) {
-        var datumId = this.model.get("datumIds")[i]; 
-        if (datumId) {
-          appView.dataListEditLeftSideView.addOne(datumId);
+      for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
+        if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
+          datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
         }
       }
+      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+
+      return datumIdsChecked;
     },
-    
-    resizeSmall : function(){
+    createPlaylistAndPlayAudioVideo : function(datumIds){
+      this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths){
+        alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
+      });
+    },
+    resizeSmall : function(e){
+      if(e){
+        e.stopPropagation();
+      }
+//      this.format = "leftSide";
+//      this.render();
       window.app.router.showDashboard();
     },
     
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenDataList();
     },
     
     //bound to pencil button
-    showEditable :function(){
-      window.app.router.showEditableDataList();
+    showEditable :function(e){
+      if(e){
+        e.stopPropagation();
+      }
+      window.appView.currentEditDataListView.format = this.format;
+      window.appView.currentEditDataListView.render();
     },
     
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
 
   return DataListReadView;

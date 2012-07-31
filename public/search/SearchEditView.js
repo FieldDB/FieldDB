@@ -1,18 +1,28 @@
 define([ 
     "backbone", 
     "handlebars", 
+    "data_list/DataList",
+    "data_list/DataListEditView",
     "datum/Datum",
+    "datum/Datums",
     "datum/DatumFieldEditView",
+    "datum/DatumReadView",
     "search/Search",
     "app/UpdatingCollectionView",
+    "app/PaginatedUpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
+    DataList,
+    DataListEditView,
     Datum,
+    Datums,
     DatumFieldEditView,
+    DatumReadView,
     Search,
-    UpdatingCollectionView
+    UpdatingCollectionView,
+    PaginatedUpdatingCollectionView
 ) {
   var SearchEditView = Backbone.View.extend(
   /** @lends SearchEditView.prototype */
@@ -21,7 +31,7 @@ define([
      * @class Search View handles the render of the global search in the corner,
      *        and the advanced power search, as well as their events.
      * 
-     * @property {String} format Valid values are "fullscreen", "top", or "centreWell".
+     * @property {String} format Valid values are "fullscreen", "top", or "centreWell" 
      * 
      * @description Starts the Search.
      * 
@@ -31,9 +41,9 @@ define([
     initialize : function() {
       Utils.debug("SEARCH init: " + this.el);
       
+      this.newTempDataList();
       this.changeViewsOfInternalModels();
 
-      
       this.model.bind('change', this.render, this);
     },
     
@@ -51,15 +61,26 @@ define([
       "click .icon-search" : "searchTop",
       "click .icon-resize-small" : "resizeSmall",
       "click .icon-resize-full" : 'resizeFullscreen',
-      "click .btn-advanced-search" : "resizeSmall",
-      "keyup #search_box" : function(e) {
-        var code = e.keyCode || e.which;
-        
-        // code == 13 is the enter key
-        if (code == 13) {
-          this.searchTop();
-        }
-      }
+      //These functions are now in the AppView since it can listen for these events, and the search editview is rendering the top search and embedded serach.
+//      "click .btn-advanced-search" : "resizeSmall",
+//      "click .icon-search" : function(e){
+//        if(e){
+//          e.stopPropagation();
+//        }
+//        this.searchTop();
+//      },
+//      "keyup #search_box" : function(e) {
+////        if(e){
+////          e.stopPropagation();
+////        }
+//        var code = e.keyCode || e.which;
+//        
+//        // code == 13 is the enter key
+//        if (code == 13) {
+//          this.searchTop();
+//        }
+////        return false;
+//      }
     },
     
     /**
@@ -90,40 +111,96 @@ define([
         this.setElement($("#search-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
-
-        this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
-        this.advancedSearchDatumView.render();
-
-        this.advancedSearchSessionView.el = this.$('.advanced_search_session');
-        this.advancedSearchSessionView.render();
       } else if (this.format == "centreWell") {
         // Display the SearchView
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-        
+      } 
+      
+      this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
+      this.advancedSearchDatumView.render();
+      
+      this.advancedSearchSessionView.el = this.$('.advanced_search_session');
+      this.advancedSearchSessionView.render();
 
-        this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
-        this.advancedSearchDatumView.render();
-
-        this.advancedSearchSessionView.el = this.$('.advanced_search_session');
-        this.advancedSearchSessionView.render();
-      } else if (this.format == "top") {
-        // Display the SearchView
-        this.setElement($("#search-top"));
-        $(this.el).html(this.topTemplate(this.model.toJSON()));
-      }
+this.setElement($("#search-top"));
+      $("#search-top").html(this.topTemplate(this.model.toJSON()));
+      
       //localization
       $(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
       $(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
       $(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
-
-
-
       
       return this;
     },
-    
+    newTempDataList : function(callback){
+      /*
+       * Only do this if it is the top search. otherwise it seems that all three
+       * search edit views are making a data list, and their three data lists
+       * are listening to the same events and doing them three times, which migh
+       * tmean we g will get three resulting saved ata lsits if the user pushes
+       * save?
+       */
+//      if(this.format == "top"){ //now there is only one search
+        if( this.searchPaginatedDataListDatumsView ){
+          this.searchPaginatedDataListDatumsView.remove(); //backbone to remove from dom
+          var coll = this.searchPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+          //this.searchPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
+          while (coll.length > 0) {
+            coll.pop();
+          }
+          delete this.searchPaginatedDataListDatumsView.collection;
+          delete this.searchPaginatedDataListDatumsView; //tell garbage collecter we arent using it
+        }
+        
+        /*
+         * This holds the ordered datums of the temp search data list, and is the important place to keep the
+         * datum, it's ids will be saved into the resulting data list if and when the data list is saved
+         */
+        this.searchPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+          collection           : new Datums(),
+          childViewConstructor : DatumReadView,
+          childViewTagName     : "li",
+          childViewFormat      : "latex"
+        }); 
+        
+        // Scrub this better pouch it was still saving it as a revision.
+        if(this.searchDataListView){
+          this.searchDataListView.destroy_view();
+
+//          this.searchDataListView.remove(); //backbone to remove from dom this is removing my id div too.
+          delete this.searchDataListView.model; //tell the garbage collector we are done.
+//          delete this.searchDataListView;
+        }
+        
+//        var attributes = JSON.parse(JSON.stringify(new DataList({datumIds: []})));
+//        // Clear the current data list's backbone info and info which we shouldnt clone
+//        attributes._id = undefined;
+//        attributes._rev = undefined;
+//        attributes.comments = undefined;
+//        attributes.title = self.model.get("title")+ " copy";
+//        attributes.description = "Copy of: "+self.model.get("description");
+//        attributes.corpusname = app.get("corpus").get("corpusname");
+//        attributes.datumIds = [];
+        
+        
+        this.searchDataListView = new DataListEditView({
+//          model : new DataList(attributes),
+          model : new DataList({
+            "corpusname" : window.app.get("corpus").get("corpusname"),
+            "title" : "Temporary Search Results",
+            "description":"You can use search to create data lists for handouts."
+          }),
+        }); 
+        this.searchDataListView.format = "search-minimized";
+        
+        if(typeof callback == "function"){
+          callback();
+        }
+//      }
+    },
     changeViewsOfInternalModels : function(){
+      
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
@@ -150,7 +227,7 @@ define([
       var queryString = this.getQueryString("union");
       
       // Update the search box
-      appView.searchTopView.model.set("searchKeywords", queryString);
+      this.model.set("searchKeywords", queryString);
       
       // Start the search
       this.search(queryString);
@@ -166,7 +243,7 @@ define([
       var queryString = this.getQueryString("intersection");
       
       // Update the search box
-      appView.searchTopView.model.set("searchKeywords", queryString);
+      this.model.set("searchKeywords", queryString);
       
       // Start the search
       this.search(queryString);
@@ -177,9 +254,10 @@ define([
      */
     searchTop : function() {
       Utils.debug("Will search for " + $("#search_box").val());
+      this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
-      var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString($("#search_box").val(), this.searchContinued);
+      this.search($("#search_box").val());
+      
     },
     
     
@@ -203,13 +281,13 @@ define([
       // Get all the search criteria
       var searchCriteria = [];
       datumFieldsViews.each(function(datumField) {
-        var value = datumField.get("value");
+        var value = datumField.get("mask");
         if (value && value != "") {
           searchCriteria.push(datumField.get("label") + ":" + value);
         }
       });
       sessionFieldsView.each(function(sessionField) {
-        var value = sessionField.get("value");
+        var value = sessionField.get("mask");
         if (value && value != "") {
           searchCriteria.push(sessionField.get("label") + ":" + value);
         }
@@ -236,19 +314,36 @@ define([
      */
     search : function(queryString) {
       // Search for Datum that match the search criteria      
-      var allDatumIds = [];
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString, this.searchContinued);
-    },
-    
-    searchContinued : function(datumIds) {
-      // Create a new data list
-      // TODO Make this a temporary data list
-      appView.dataListEditLeftSideView.newDataList();
-      
-      // Add search results to the data list
-      for (var key in datumIds) {
-        appView.dataListEditLeftSideView.addOneDatumId(datumIds[key]);
-      }
+      var searchself = this;
+      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString
+          , function(datumIds){
+        
+        //this will take in datumIds from its caller
+        // Create a new temporary data list in search datalist on the LeftSide
+//        if(searchself.format != "top"){
+//          searchself = window.appView.searchTopView; //now there is only one serach
+//          return; //dont try to put dat in unless you have a data list, and its the centerwell one who controls the temp serach results
+//        }
+        searchself.newTempDataList(function(){
+          searchself.searchDataListView.model.set("title"
+              , $("#search_box").val()
+              + " search result");
+          searchself.searchDataListView.model.set("description"
+              ,  "This is the result of searching for : " 
+              + $("#search_box").val()
+              + " in " 
+              + window.app.get("corpus").get("title") 
+              + " on "+ JSON.stringify(new Date()) );
+          searchself.searchDataListView.format = "search";
+          searchself.searchDataListView.render();
+//          searchself.searchPaginatedDataListDatumsView.renderInElement(
+//              $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
+          // Add search results to the data list
+          searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
+          searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
+          Utils.debug("Successfully got data back from search and put it into the temp search data list");
+        });
+      });
     },
     
     /**
@@ -260,11 +355,21 @@ define([
       });
     },
       
-    resizeSmall : function(){
+    resizeSmall : function(e){
+      if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from running same command twice
+      }
+//      this.format = "centreWell";
+//      this.render(); this is done in the router
       window.app.router.showEmbeddedSearch();
     },
     
-    resizeFullscreen : function(){
+    resizeFullscreen : function(e){
+      if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from running same command twice.
+      }
+//      this.format = "fullscreeen";
+//      this.render(); //this is done in the router
       window.app.router.showFullscreenSearch();
     }
   });

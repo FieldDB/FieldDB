@@ -213,14 +213,20 @@ define([
       skin : "",
       numVisibleDatum : 3,
       transparentDashboard: false,
-      alwaysRandomizeSkin : true
+      alwaysRandomizeSkin : true,
+      numberOfItemsInPaginatedViews : 12
     },
     
     // Internal models: used by the parse function
     model : {
       unicodes : InsertUnicodes
     },
-    
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    }
     
   });
 

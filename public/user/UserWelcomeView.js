@@ -253,16 +253,17 @@ define([
                     "description" : "This is an untitled corpus, created by default.",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
+                    "team" : auth.get("userPublic"),
                     "couchConnection" : data.user.corpuses[0],
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
                   
                   var s = a.get("currentSession");
-                  s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
+                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
+                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
                   s.set("corpusname", data.user.corpuses[0].corpusname);
                   s.changeCorpus(data.user.corpuses[0].corpusname);
                   
@@ -294,11 +295,12 @@ define([
                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateCorpus(couchConnection);
-                        
+                        c.replicateFromCorpus(couchConnection);
+//                        appView.datumsEditView.newDatum();
+                        appView.datumsEditView.render();
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
-                          window.app.storeCurrentDashboardIdsToLocalStorage();
+                          window.app.saveAndInterConnectInApp();
                         },10000);
                         
                       });
@@ -351,10 +353,12 @@ define([
               window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
                 //Replicate user's corpus down to pouch
                 window.setTimeout(function(){
-                  window.app.get("corpus").replicateCorpus(couchConnection, function(){
+                  window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
                     if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                       //do nothing because they have no recent ids
-                      Utils.debug("User does not have most recent ids, doing nothing.");
+                      alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+//                      appView.datumsEditView.newDatum();
+                      appView.datumsEditView.render();
                     }else{
                       /*
                        *  Load their last corpus, session, datalist etc
@@ -363,7 +367,7 @@ define([
                       window.app.loadBackboneObjectsById(couchConnection, appids);
                     }                    
                   });
-                },5000);
+                },3000);
               });
             });
           });
