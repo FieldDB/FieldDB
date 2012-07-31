@@ -259,7 +259,7 @@ require([
               }else{
                 a.createAppBackboneObjects(corpusname, function(){
                   window.startApp(a, function(){
-                    window.app.loadBackboneObjectsById(couchConnection, appjson);
+                    window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
                   });
                 });
               }
