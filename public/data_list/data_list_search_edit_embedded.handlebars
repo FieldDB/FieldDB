@@ -1,0 +1,19 @@
+<div class="pull-right">
+  <button class="btn btn-success save-search-datalist" value="Save">Save</button>
+  <i class="icons icon-minus-sign"></i>
+</div>
+<label>Title:</label>
+<small> {{datumCount}}</small>
+<textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
+<label>Description</label>
+<textarea class="data-list-description" placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
+
+<div class="icons">
+  <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> 
+  <a href="#clipboard"><i class="icons icon-paste"></i></a> 
+  <a id="encrypt"><i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>  <a ><i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
+
+
+  <button class="btn btn-primary latex-export-datalist" id="LaTeX">LaTeX</button>  
+  <button class="btn btn-primary CSV">CSV/Excel</button>
+</div>
