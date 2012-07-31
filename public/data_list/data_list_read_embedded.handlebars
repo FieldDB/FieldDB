@@ -1,7 +1,9 @@
 <div class="pull-right">
-    <i class="icons icon-edit"></i>
-    <i class="icons icon-resize-full"></i>
-  </div>
+  <a href="#" rel="tooltip" title="Edit data list">
+    <i class="icons icon-edit"></i></a>
+  <a href="#" rel="tooltip" title="Show full screen">    
+    <i class="icons icon-resize-full"></i></a>
+</div>
 
 <h3>{{title}}<small> {{datumCount}}</small></h3>
 <h4>{{dateCreated}}</h4>
@@ -9,13 +11,22 @@
 {{description}}
 
 <div class="icons">
-  <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> 
-  <a href="#clipboard"><i class="icons icon-paste"></i></a> 
-  <a id="encrypt"><i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>  <a ><i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
-
-
-  <button class="btn btn-primary latex-export-datalist" id="LaTeX">LaTeX</button>
-	<button class="btn btn-primary CSV">CSV/Excel</button>
+    <a href="#" rel="tooltip" title="Play audio of checked items" >
+       <i class="icons icon-bullhorn"></i></a>
+    <a href="#" rel="tooltip" title="Copy checked items to clipboard" >
+       <i class="icons icon-paste"></i></a>
+    <a href="#" rel="tooltip" title="Make checked items confidential/encrypted">
+      <i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i>
+    </a>  
+    <a href="#" rel="tooltip" title="Show confidential/encrypted items">
+      <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
+    </a>
+    <a href="#" rel="tooltip" title="Export checked items to Latex format">
+      <button class="btn btn-primary latex-export-datalist" id="LaTeX">LaTeX</button>
+    </a>
+    <a href="#" rel="tooltip" title="Export checked items to CSV format">
+      <button class="btn btn-primary" >CSV</button>
+    </a>
 </div>
 
 <ul class="comments unstyled"></ul>
