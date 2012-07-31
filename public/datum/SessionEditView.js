@@ -175,17 +175,17 @@ define([
       }
       
       //localization
-      $(".Session").html(chrome.i18n.getMessage("Session"));
-      $(".Save").html(chrome.i18n.getMessage("Save"));
-      $(".Add").html(chrome.i18n.getMessage("Add"));
-      $(".New_Session").html(chrome.i18n.getMessage("New_Session"));
-      $(".New_Session_Instructions").html(chrome.i18n.getMessage("New_Session_Instructions"));
-      $(".Cancel").html(chrome.i18n.getMessage("Cancel"));
-      $(".Consultants").html(chrome.i18n.getMessage("Consultants"));
-      $(".Goal").html(chrome.i18n.getMessage("Goal"));
-      $(".When").html(chrome.i18n.getMessage("When"));
-      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
-      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
+      $(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
+      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+      $(".locale_New_Session_Instructions").html(chrome.i18n.getMessage("locale_New_Session_Instructions"));
+      $(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
+      $(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+      $(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+      $(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+      $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
 
 
 

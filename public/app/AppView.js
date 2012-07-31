@@ -420,21 +420,21 @@ define([
       this.setTotalBackboneDocs();
       
       //localization
-      $(".Need_save").html(chrome.i18n.getMessage("Need_save"));
-      $(".60_unsaved").prepend(chrome.i18n.getMessage("60_unsaved"));
-      $(".Recent_Changes").prepend(chrome.i18n.getMessage("Recent_Changes"));
-      $(".Need_sync").html(chrome.i18n.getMessage("Need_sync"));
-      $(".60_unsaved").prepend(chrome.i18n.getMessage("60_unsaved"));
-      $(".Differences_with_the_central_server").html(chrome.i18n.getMessage("Differences_with_the_central_server"));
-      $(".Warning").html(chrome.i18n.getMessage("Warning"));
-      $(".This_is_a_beta_version").html(chrome.i18n.getMessage("This_is_a_beta_version"));
-      $(".to_beta_testers").html(chrome.i18n.getMessage("to_beta_testers"));
-      $(".We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("We_need_to_make_sure_its_you"));
+      $(".locale_Need_save").html(chrome.i18n.getMessage("locale_Need_save"));
+      $(".locale_60_unsaved").prepend(chrome.i18n.getMessage("locale_60_unsaved"));
+      $(".locale_Recent_Changes").prepend(chrome.i18n.getMessage("locale_Recent_Changes"));
+      $(".locale_Need_sync").html(chrome.i18n.getMessage("locale_Need_sync"));
+      $(".locale_60_unsaved").prepend(chrome.i18n.getMessage("locale_60_unsaved"));
+      $(".locale_Differences_with_the_central_server").html(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
+      $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+      $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+      $(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
+      $(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
       $(".Password").html(chrome.i18n.getMessage("Password"));
-      $(".Yep_its_me").html(chrome.i18n.getMessage("Yep_its_me"));
-      $(".loc_Show_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_Dashboard"));
-      $(".loc_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("loc_Save_on_this_Computer"));
-      $(".loc_Sync_and_Share").attr("title", chrome.i18n.getMessage("loc_Sync_and_Share"));
+      $(".locale_Yep_its_me").html(chrome.i18n.getMessage("locale_Yep_its_me"));
+      $(".locale_Show_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_Dashboard"));
+      $(".locale_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("locale_Save_on_this_Computer"));
+      $(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
 
 
       
@@ -678,7 +678,7 @@ define([
         alertType = "";
       }
       if(!heading){
-        heading = "Warning!";
+        heading = "locale_Warning!";
       }
       $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"

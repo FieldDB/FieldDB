@@ -197,13 +197,13 @@ define([
         
       }
       //localization
-      $(".Add").html(chrome.i18n.getMessage("Add"));
-      $(".loc_Add_Tag").attr("placeholder", chrome.i18n.getMessage("loc_Add_Tag"));
-      $(".loc_Add_Tags").attr("title", chrome.i18n.getMessage("loc_Add_Tag"));
-      $(".loc_Play_Audio").attr("title", chrome.i18n.getMessage("loc_Play_Audio"));
-      $(".loc_Copy").attr("title", chrome.i18n.getMessage("loc_Copy"));
-      $(".loc_Duplicate").attr("title", chrome.i18n.getMessage("loc_Duplicate"));
-      $(".loc_Encrypt").attr("title", chrome.i18n.getMessage("loc_Encrypt"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
       
       return this;
     },

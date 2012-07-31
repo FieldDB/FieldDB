@@ -167,19 +167,19 @@ define( [
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }
       //localization
-      $(".Add").html(chrome.i18n.getMessage("Add"));
-      $(".Next").html(chrome.i18n.getMessage("Next"));
-      $(".Show").html(chrome.i18n.getMessage("Show"));
-      $(".per_page").html(chrome.i18n.getMessage("per_page"));
-      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
-      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
-      $(".loc_Edit_Datalist").attr("title", chrome.i18n.getMessage("loc_Edit_Datalist"));
-      $(".loc_Play_Audio").attr("title", chrome.i18n.getMessage("loc_Play_Audio"));
-      $(".loc_Copy").attr("title", chrome.i18n.getMessage("loc_Copy"));
-      $(".loc_Duplicate").attr("title", chrome.i18n.getMessage("loc_Duplicate"));
-      $(".loc_Encrypt").attr("title", chrome.i18n.getMessage("loc_Encrypt"));
-      $(".loc_Hide_Datalist").attr("title", chrome.i18n.getMessage("loc_Hide_Datalist"));
-      $(".loc_Show_Datalist").attr("title", chrome.i18n.getMessage("loc_Show_Datalist"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
+      $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
+      $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
+      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+      $(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      $(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
+      $(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
 
 
 

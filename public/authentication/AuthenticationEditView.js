@@ -113,15 +113,15 @@ define([
       }
       
       //localization
-      $(".Username").html(chrome.i18n.getMessage("Username"));
-      $(".Password").html(chrome.i18n.getMessage("Password"));
-      $(".Log_Out").html(chrome.i18n.getMessage("Log_Out"));
-      $(".Log_In").html(chrome.i18n.getMessage("Log_In"));
-      $(".User_Profile").html(chrome.i18n.getMessage("User_Profile"));
-      $(".User_Settings").html(chrome.i18n.getMessage("User_Settings"));
-      $(".Keyboard_Shortcuts").html(chrome.i18n.getMessage("Keyboard_Shortcuts"));
-      $(".Corpus_Settings").html(chrome.i18n.getMessage("Corpus_Settings"));
-      $(".Terminal_Power_Users").html(chrome.i18n.getMessage("Terminal_Power_Users"));
+      $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+      $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
+      $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
+      $(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
       
       
       return this;

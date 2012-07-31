@@ -69,9 +69,9 @@ define([
 
       }
       //localization
-      $(".Activity_Feed").html(chrome.i18n.getMessage("Activity_Feed"));
-      $(".loc_Show_Activities").attr("title", chrome.i18n.getMessage("loc_Show_Activities"));
-      $(".loc_Hide_Activities").attr("title", chrome.i18n.getMessage("loc_Hide_Activities"));
+      $(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed"));
+      $(".locale_Show_Activities").attr("title", chrome.i18n.getMessage("locale_Show_Activities"));
+      $(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
 
 
       return this;

@@ -2,34 +2,32 @@
 	<div class="row-fluid">
 		<div class="span4 well">
 			<!--Sidebar content-->
-			<button class="btn btn-success approve-save disabled"><span class = "Save_And_Import"></span></button>
+			<button class="btn btn-success approve-save disabled"><span class = "locale_Save_And_Import"></span></button>
 			<div id="import-data-list-view"></div>
 		</div>
 		<div class="span8">
 			<!--Body content-->
 			<div class="well">
 				<i class="icons icon-resize-small pull-right"></i>
-				<h1><span class="Import"></span>
+				<h1><span class="locale_Import"></span>
 					 <small id="import-type-description">{{corpusname}}</small>
 				</h1>
 				<progress class="import-progress" max="5" value="0">
               <strong><span class = "percent_completed"></span></strong>
             </progress>
-            <span class = "Import_Instructions">
-           
-            </span>
+            <span class = "locale_Import_Instructions"></span>
 				<div>{{status}}</div>
 			</div>
-			<textarea class="export-large-textarea  drop-zone loc_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
+			<textarea class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
 			<div class="well">
 				<button class="btn btn-primary add-column pull-right hide">
-				<span class = "Add_Extra_Columns"></span>
+				<span class = "locale_Add_Extra_Columns"></span>
 			</button>
 				<div id="import-datum-field-labels"></div>
 			</div>
 		</div>
 	</div>
 </div>
-	<button class="btn btn-success approve-import hide"><span class = "Attempt_Import"></span></button>
+	<button class="btn btn-success approve-import hide"><span class = "locale_Attempt_Import"></span></button>
 	<table id="csv-table-area"
 		class=" table well table-striped table-bordered table-condensed"></table>

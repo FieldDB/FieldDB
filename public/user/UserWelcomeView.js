@@ -141,21 +141,20 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
-        $("#Close_and_login_as_Ed_Sapir").append(chrome.i18n.getMessage("Close_and_login_as_Ed_Sapir"));
-        $("#Username").prepend(chrome.i18n.getMessage("Username"));
-        $("#Password").prepend(chrome.i18n.getMessage("Password"));
-        $("#Sync_my_data_to_this_computer").append(chrome.i18n.getMessage("Sync_my_data_to_this_computer"));
-        $("#Welcome_to_iField").prepend(chrome.i18n.getMessage("Welcome_to_iField"));
-        $("#An_offline_online_fieldlinguistics_database").append(chrome.i18n.getMessage("An_offline_online_fieldlinguistics_database"));
-        $("#Welcome_Beta_Testers").prepend(chrome.i18n.getMessage("Welcome_Beta_Testers"));
-        $("#Or_create_a_new_user").prepend(chrome.i18n.getMessage("Or_create_a_new_user"));
-        $("#What_is_your_username_going_to_be").append(chrome.i18n.getMessage("What_is_your_username_going_to_be"));
-        $("#Password1").prepend(chrome.i18n.getMessage("Password"));
-        $("#Confirm_Password").prepend(chrome.i18n.getMessage("Confirm_Password"));
-        $("#Sign_in_with_password").append(chrome.i18n.getMessage("Sign_in_with_password"));
-        $("#Warning").prepend(chrome.i18n.getMessage("Warning"));
-        $("#This_is_a_beta_version").prepend(chrome.i18n.getMessage("This_is_a_beta_version"));
-        $("#New_User").append(chrome.i18n.getMessage("New_User"));
+        $(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
+        $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+        $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+        $(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
+        $(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
+        $(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
+        $(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+        $(".locale_Or_create_a_new_user").html(chrome.i18n.getMessage("locale_Or_create_a_new_user"));
+        $(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+        $(".locale_Confirm_Password").html(chrome.i18n.getMessage("locale_Confirm_Password"));
+        $(".locale_Sign_in_with_password").html(chrome.i18n.getMessage("locale_Sign_in_with_password"));
+        $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+        $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+        $(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
 
 
 
