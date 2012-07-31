@@ -30,9 +30,14 @@ define([
     initialize : function() {
       Utils.debug("USER init: " + this.el);
     },
+    
     events : {
-      "click .icon-edit": "showEditable",
-
+      "click .edit-user-profile-modal" : function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        window.appView.modalEditUserView.render();
+      }
     },
     /**
      * The underlying model of the UserReadView is a User.
@@ -140,10 +145,6 @@ define([
 //            }
 //          }
 //      );
-    },
-    showEditable :function(){
-      $("#user-edit-modal").modal("show");
-
     }
   });
 
