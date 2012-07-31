@@ -2,16 +2,17 @@
   <button class="btn btn-success save-import-datalist" value="Save">Save</button>
 </div>
 <label class = "locale_Title"></label>
+<small>{{datumCount}}</small>
 <textarea class="data-list-title locale_Title">{{title}}</textarea>
 <label class = "locale_Description"></label>
 <textarea class="data-list-description locale_Datalist_Description">
 {{description}}</textarea>
-<small>{{datumCount}}</small>
 
 <div class="icons">
-  <a href="#clipboard"><i class="icons icon-paste"></i></a> 
-  <a id="encrypt"><i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>  <a ><i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
-  <button class="btn btn-primary latex-export-datalist" id="LaTeX">LaTeX</button>
+  <a href="#"><i class="icons icon-paste"></i></a> 
+  <a href="#"><i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a> 
+  <a ><i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
+  <button class="btn btn-primary latex-export-datalist LaTeX">LaTeX</button>
   <button class="btn btn-primary CSV">CSV/Excel</button>
 </div>
 
@@ -19,8 +20,7 @@
 
 <div class="alert alert-info">
   <i class="icons icon-comment"></i>
-  <div class= "pull-right"> </div>
   <textarea class="comment-new-text"></textarea>
 </div>  
-<button class="btn btn-primary add-comment-edit" value="Add">
+<button class="btn btn-primary add-comment-datalist-edit" value="Add">
 <span class = "locale_Add"></span></button>
