@@ -69,7 +69,7 @@ define([
       }
       
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
-      window.onunload = this.saveAndInterConnectInApp;
+//      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
       
     },
     
@@ -133,6 +133,8 @@ define([
     },
    
     /**
+     * @Deprecated
+     * 
      * Accepts the ids to load the app. This is a helper function which is called
      * at the three entry points, main (if there is json in the localstorage
      * from where the user was last working), Welcome new user has a similar
@@ -145,7 +147,6 @@ define([
      * Preconditions:
      * The user must already  be authenticated with their corpus server,
      * The corpus server has sent down (replicated) the data.
-    
      * @param couchConnection
      * @param appids
      * @param callback
@@ -195,10 +196,11 @@ define([
                         /*
                          * After all fetches have succeeded show the pretty dashboard
                          */
-                        window.appView.renderReadonlyDashboardViews();
+                        //TODO turn these on, technically they should be called when we change the session's model.
 //                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession();
 //                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList();
 //                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
+                        window.appView.renderReadonlyDashboardViews();
                         if (typeof callback == "function") {
                           callback();
                         }
@@ -225,6 +227,97 @@ define([
         });
       });
     },
+    
+    loadBackboneObjectsByIdAndSetAsCurrentDashboard : function(couchConnection, appids, callback) {
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = this.get("corpus").get("couchConnection");
+      }
+      var c = new Corpus({
+        "corpusname" : couchConnection.corpusname,
+        "couchConnection" : couchConnection
+      });
+      c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
+      c.changeCorpus(couchConnection, function(){
+        //fetch only after having setting the right pouch which is what changeCorpus does.
+        c.fetch({
+          success : function(corpusModel) {
+            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+            Utils.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            window.appView.addBackboneDoc(corpusModel.id);
+            window.appView.addPouchDoc(corpusModel.id);
+            c.setAsCurrentCorpus(function(){
+              
+              var dl = new DataList({
+                "corpusname" : couchConnection.corpusname
+              });
+              dl.id = appids.datalistid; 
+              dl.changeCorpus(couchConnection.corpusname, function(){
+                dl.fetch({
+                  success : function(dataListModel) {
+                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                    Utils.debug("Data list fetched successfully", dataListModel);
+                    window.appView.addBackboneDoc(dataListModel.id);
+                    window.appView.addPouchDoc(dataListModel.id);
+                    dl.setAsCurrentDataList(function(){
+                      
+                      var s = new Session({
+                        "corpusname" : couchConnection.corpusname
+                      });
+                      s.id = appids.sessionid; 
+                      s.changeCorpus(couchConnection.corpusname, function(){
+                        s.fetch({
+                          success : function(sessionModel) {
+                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                            Utils.debug("Session fetched successfully", sessionModel);
+                            window.appView.addBackboneDoc(sessionModel.id);
+                            window.appView.addPouchDoc(sessionModel.id);
+                            s.setAsCurrentSession(function(){
+                              
+                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
+
+                              /*
+                               * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
+                               */
+                              window.appView.renderReadonlyDashboardViews();
+                              if (typeof callback == "function") {
+                                callback();
+                              }
+                            }, function(){
+                              alert("Failure to set as current session in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                            });
+                          },
+                          error : function(e) {
+                            alert("There was an error fetching the session. Loading defaults..."+e);
+                            s.set(
+                                "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+                            );
+                          }
+                        });//end session fetch
+                      });//end session change corpus
+
+                    },function(){
+                      alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                    });
+                  },
+                  error : function(e) {
+                    alert("There was an error fetching the data list. Loading defaults..."+e);
+                  }
+                }); //end fetch data list
+              });//end data list change corpus
+
+            }, function(){
+              alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+            });//end setAsCurrentCorpus
+          },
+          error : function(e) {
+            alert("There was an error fetching corpus. Loading defaults..."+e);
+          }
+        }); //end corpus fetch
+      }); //end corpus change corpus
+    },
+    
     router : AppRouter,
     /**
      * This function is used to save the entire app state that is needed to load when the app is re-opened.
@@ -245,7 +338,7 @@ define([
         returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
       }
       if(returntext == ""){
-        return; //dont show a pop up
+        return; //don't show a pop up
       }else{
         return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
@@ -256,17 +349,27 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      var self = this;
-      self.get("currentSession").saveAndInterConnectInApp(function(){
-        self.get("currentDataList").saveAndInterConnectInApp(function(){
-          self.get("corpus").saveAndInterConnectInApp(function(){
-            self.get("authentication").saveAndInterConnectInApp(function(){
-              self.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
+      if(!failurecallback){
+        failurecallback = function(){
+          alert("There was a bug/problem in the saveAndInterConnectInApp in App.js, somewhere along the save call. The Session is saved first, if it succeeds, then the datalist, then the corpus. The failure is somewhere along there.");
+        }
+      }
+      var appSelf = this;
+      appSelf.get("currentSession").saveAndInterConnectInApp(function(){
+        appSelf.get("currentDataList").saveAndInterConnectInApp(function(){
+          appSelf.get("corpus").saveAndInterConnectInApp(function(){
+            appSelf.get("authentication").saveAndInterConnectInApp(function(){
+              
+              appSelf.get("authentication").staleAuthentication = true;
+              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
+              window.appView.toastUser("Your dashboard has been saved, you can exit the page at anytime and return to this state.","alert-success","Exit at anytime:");
+              appSelf.router.showDashboard();
+              
               if(typeof successcallback == "function"){
+                alert("The dashboard saved successfully, now calling the successcallback.");
                 successcallback();
               }
-//              window.appView.renderReadonlyDashboardViews();
-              app.router.showDashboard();
+              
             },failurecallback);
           },failurecallback);
         }, failurecallback);
