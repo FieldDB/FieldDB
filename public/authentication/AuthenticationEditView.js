@@ -193,7 +193,7 @@ define([
                *  Load their last corpus, session, datalist etc
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsById(couchConnection, appids);
+              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
             }                    
           });
         });
@@ -212,7 +212,7 @@ define([
                *  Load their last corpus, session, datalist etc
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsById(couchConnection, appids);
+              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
             }
           }
         },5000);

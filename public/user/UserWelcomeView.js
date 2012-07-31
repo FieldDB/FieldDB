@@ -343,7 +343,7 @@ define([
                        *  Load their last corpus, session, datalist etc
                        */
                       var appids = auth.get("userPrivate").get("mostRecentIds");
-                      window.app.loadBackboneObjectsById(couchConnection, appids);
+                      window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
                     }                    
                   });
                 },3000);
