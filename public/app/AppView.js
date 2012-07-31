@@ -396,7 +396,7 @@ define([
         this.authView.render();
         this.userPreferenceView.render();
         this.hotkeyEditView.render();//.showModal();
-        
+        this.renderReadonlyUserViews();
         
         this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
