@@ -1,30 +1,30 @@
 <div class="pull-right">
-  <a href="#" class= "loc_Show_Readonly" rel="tooltip">
+  <a href="#" class= "locale_Show_Readonly" rel="tooltip">
     <i class="icons icon-book"></i></a>
-  <a href="#" class = "loc_Show_fullscreen" rel="tooltip">    
+  <a href="#" class = "locale_Show_fullscreen" rel="tooltip">    
     <i class="icons icon-resize-full resize-full"></i></a>
 </div>
 <div class="btn-toolbar ">
 	<!-- /btn-group -->
 	<div class="btn-group">
 		<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-		<span class ="New_menu"></span>	 <span class="caret"></span>
+		<span class ="locale_New_menu"></span>	 <span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li class="new-datum-edit"><a href="#"><span class = "New_Datum"></span></a></li>
-			<li class="new-data-list"><a href="#"><span class = "New_Data_List"></span></a></li>
-			<li class="new-session"><a href="#"><span class = "New_Session"></span></a></li>
-			<li class="new-corpus"><a href="#"><span class = "New_Corpus"></span></a></li>
+			<li class="new-datum-edit"><a href="#"><span class = "locale_New_Datum"></span></a></li>
+			<li class="new-data-list"><a href="#"><span class = "locale_New_Data_List"></span></a></li>
+			<li class="new-session"><a href="#"><span class = "locale_New_Session"></span></a></li>
+			<li class="new-corpus"><a href="#"><span class = "locale_New_Corpus"></span></a></li>
 		</ul>
 	</div>
 	<!-- /btn-group -->
 	<div class="btn-group">
 		<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-			<span class ="Data_menu"></span> <span class="caret"></span>
+			<span class ="locale_Data_menu"></span> <span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li><a href="#import"><span class = "Import_Data"></span></a></li>
-			<li><a href="#corpus/{{titleAsUrl}}/export"><span class = "Export_Data"></span></a></li>
+			<li><a href="#import"><span class = "locale_Import_Data"></span></a></li>
+			<li><a href="#corpus/{{titleAsUrl}}/export"><span class = "locale_Export_Data"></span></a></li>
 		</ul>
 	</div>
 	<!-- /btn-group -->
@@ -32,14 +32,14 @@
   <!-- Toggle to readonly -->
   <div class="btn-group">
     <button class="btn btn-success save-corpus">
-     <span class="Save"></span></button>
+     <span class="locale_Save"></span></button>
   </div>
 </div>
 
 
-<label class = "Title"></label>
+<label class = "locale_Title"></label>
 <input class="corpus-title-input" value="{{title}}" type="text"/>
-<label class = "Description"></label>
+<label class = "locale_Description"></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
 <div class="accordion" id="accordion-edit-embedded">
@@ -47,7 +47,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-edit-embedded" href="#collapseSessionsEE">
-        <h4 class="Sessions_associated"></h4>
+        <h4 class="locale_Sessions_associated"></h4>
          </a>
     </div>
     <div class="accordion-body collapse" id="collapseSessionsEE">
@@ -63,7 +63,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-edit-embedded" href="#collapseDatalistsEE">
-          <h4 class="Datalists_associated"></h4>
+          <h4 class="locale_Datalists_associated"></h4>
       </a>
     </div>
     <div class="accordion-body collapse" id="collapseDatalistsEE" >
@@ -79,7 +79,7 @@
     <div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
 				data-parent="accordion-edit-embedded" href="#collapsePermissionsEE">
-				<h4 class="Permissions_associated"></h4>
+				<h4 class="locale_Permissions_associated"></h4>
 			</a>
 		</div>
     <div class="accordion-body collapse" id="collapsePermissionsEE">
@@ -94,7 +94,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-edit-embedded" href="#collapseDatumFieldSettingsEE">
-           <h4 class="Datum_field_settings"></h4>
+           <h4 class="locale_Datum_field_settings"></h4>
         </a>
     </div>
     <div class="accordion-body collapse" id="collapseDatumFieldSettingsEE">
@@ -114,16 +114,16 @@
             <option value="Create New">Create New</option>
         </select> -->
         <span class="pull-right">
-      <span class = "Encrypt_if_confidential"></span> <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
+      <span class = "locale_Encrypt_if_confidential"></span> <input type="checkbox" class="add_encrypted"{{encrypted}}></input>
       </span>
        <input type="text" class="span3 choose_add_field" data-provide="typeahead" data-items="4" 
         data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
         
-            <label class = "Help_Text"></label>
+            <label class = "locale_Help_Text"></label>
              <textarea            
-              class="add_help Help_Text_Placeholder"></textarea>
-             <a href="#" class= "loc_Add_New_Datum_Field" rel="tooltip">
-                <button class="btn btn-primary add_datum_field" value="Add"><span class = "Add"></span></button></a>
+              class="add_help locale_Help_Text_Placeholder"></textarea>
+             <a href="#" class= "locale_Add_locale_New_Datum_Field" rel="tooltip">
+                <button class="btn btn-primary add_datum_field" value="Add"><span class = "locale_Add"></span></button></a>
         </div>
       </div>
     </div>
@@ -132,23 +132,23 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-edit-embedded" href="#collapseDatumStateSettingsEE">
-        <h4 class="Datum_state_settings"></h4>
+        <h4 class="locale_Datum_state_settings"></h4>
       </a>
     </div>
     <div class="accordion-body collapse" id="collapseDatumStateSettingsEE">
         <ul class="datum_state_settings unstyled"></ul>
-        <input class="add_input loc_Add_Placeholder" value="" type="text"></input>
+        <input class="add_input locale_Add_Placeholder" value="" type="text"></input>
         <select class="add_color_chooser">
-          <option value="success" class = "Green"></option>
-          <option value="warning" class = "Orange"></option>
-          <option value="important" class = "Red"></option>
-          <option value="primary" class = "Blue"></option>
-          <option value="info" class = "Teal"></option>
-          <option value="inverse" class = "Black"></option>
-          <option value="" class = "Default"></option>
+          <option value="success" class = "locale_Green"></option>
+          <option value="warning" class = "locale_Orange"></option>
+          <option value="important" class = "locale_Red"></option>
+          <option value="primary" class = "locale_Blue"></option>
+          <option value="info" class = "locale_Teal"></option>
+          <option value="inverse" class = "locale_Black"></option>
+          <option value="" class = "locale_Default"></option>
         </select>
-        <a href="#" class =  "loc_Add_New_Datum_State" rel="tooltip">
-        <button class="btn btn-primary add_datum_state" value="Add"><span class = "Add"></span></button></a>
+        <a href="#" class =  "locale_Add_locale_New_Datum_State" rel="tooltip">
+        <button class="btn btn-primary add_datum_state" value="Add"><span class = "locale_Add"></span></button></a>
     </div>
   </div>      
 </div>
@@ -159,4 +159,4 @@
   <textarea class="comment-new-text"></textarea>
 </div>
 
-<button class="btn btn-primary add-comment-edit" value="Add"><span class = "Add"></span></button>
+<button class="btn btn-primary add-comment-edit" value="Add"><span class = "locale_Add"></span></button>

@@ -113,9 +113,9 @@ define([
         $(this.el).html(this.topTemplate(this.model.toJSON()));
       }
       //localization
-      $(".Advanced_Search").html(chrome.i18n.getMessage("Advanced_Search"));
-      $(".AND").html(chrome.i18n.getMessage("AND"));
-      $(".OR").html(chrome.i18n.getMessage("OR"));
+      $(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
+      $(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
+      $(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
 
 
 

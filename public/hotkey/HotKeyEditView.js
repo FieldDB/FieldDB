@@ -29,17 +29,17 @@ define([
             $(this.el).html(this.template(this.model.toJSON()));
            
             //localization
-            $(".Keyboard_Shortcuts").html(chrome.i18n.getMessage("Keyboard_Shortcuts"));
-            $(".Actions").html(chrome.i18n.getMessage("Actions"));
-            $(".Navigation").html(chrome.i18n.getMessage("Navigation"));
-            $(".Favorite").html(chrome.i18n.getMessage("Favorite"));
-            $(".New_Datum").html(chrome.i18n.getMessage("New_Datum"));
-            $(".Next_Datum").html(chrome.i18n.getMessage("Next_Datum"));
-            $(".Previous_Datum").html(chrome.i18n.getMessage("Previous_Datum"));
-            $(".New_Session").html(chrome.i18n.getMessage("New_Session"));
-            $(".Search").html(chrome.i18n.getMessage("Search"));
-            $(".Close").html(chrome.i18n.getMessage("Close"));
-            $("#Save").html(chrome.i18n.getMessage("Save"));
+            $(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+            $(".locale_Actions").html(chrome.i18n.getMessage("locale_Actions"));
+            $(".locale_Navigation").html(chrome.i18n.getMessage("locale_Navigation"));
+            $(".locale_Favorite").html(chrome.i18n.getMessage("locale_Favorite"));
+            $(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+            $(".locale_Next_Datum").html(chrome.i18n.getMessage("locale_Next_Datum"));
+            $(".locale_Previous_Datum").html(chrome.i18n.getMessage("locale_Previous_Datum"));
+            $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+            $(".locale_Search").html(chrome.i18n.getMessage("locale_Search"));
+            $(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+            $("#locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
 
 

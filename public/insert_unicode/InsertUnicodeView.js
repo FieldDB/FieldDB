@@ -38,12 +38,12 @@ define([
       
       $(this.el).html(this.template(this.model.toJSON()));
       //localization
-      $(".LaTeX_Code").html(chrome.i18n.getMessage("LaTeX_Code"));
-      $(".Unicode_Instructions").html(chrome.i18n.getMessage("Unicode_Instructions"));
-      $(".Keyboard_Shortcuts").html(chrome.i18n.getMessage("Keyboard_Shortcuts"));
-      $(".Remove_Unicode").html(chrome.i18n.getMessage("Remove_Unicode"));
-      $(".loc_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("loc_Paste_Type_Unicode_Symbol_Placeholder"));
-      $(".loc_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("loc_TIPA_shortcut"));
+      $(".locale_LaTeX_Code").html(chrome.i18n.getMessage("locale_LaTeX_Code"));
+      $(".locale_Unicode_Instructions").html(chrome.i18n.getMessage("locale_Unicode_Instructions"));
+      $(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(".locale_Remove_Unicode").html(chrome.i18n.getMessage("locale_Remove_Unicode"));
+      $(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Paste_Type_Unicode_Symbol_Placeholder"));
+      $(".locale_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("locale_TIPA_shortcut"));
 
 
 

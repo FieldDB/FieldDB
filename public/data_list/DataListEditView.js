@@ -174,19 +174,19 @@ define( [
         $(this.el).html(this.templateMinimized(this.model.toJSON()));
       }
       //localization
-      $(".Title").html(chrome.i18n.getMessage("Title"));
-      $(".Description").html(chrome.i18n.getMessage("Description"));
-      $(".Add").html(chrome.i18n.getMessage("Add"));
-      $(".Save").html(chrome.i18n.getMessage("Save"));
-      $(".Next").html(chrome.i18n.getMessage("Next"));
-      $(".Show").html(chrome.i18n.getMessage("Show"));
-      $(".per_page").html(chrome.i18n.getMessage("per_page"));
-      $(".loc_Title").attr("placeholder", chrome.i18n.getMessage("Title"));
-      $(".loc_Datalist_Description").attr("placeholder", chrome.i18n.getMessage("loc_Datalist_Description"));
-      $(".loc_Show_fullscreen").attr("title", chrome.i18n.getMessage("loc_Show_fullscreen"));
-      $(".loc_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("loc_Show_in_Dashboard"));
-      $(".loc_Show_Readonly").attr("title", chrome.i18n.getMessage("loc_Show_Readonly"));
-      $(".loc_Hide_Datalist").attr("title", chrome.i18n.getMessage("loc_Hide_Datalist"));
+      $(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
+      $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+      $(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
+      $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
+      $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
+      $(".locale_Title").attr("placeholder", chrome.i18n.getMessage("locale_Title"));
+      $(".locale_Datalist_Description").attr("placeholder", chrome.i18n.getMessage("locale_Datalist_Description"));
+      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+      $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      $(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
 
     
       return this;
