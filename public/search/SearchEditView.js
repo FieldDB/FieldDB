@@ -123,7 +123,7 @@ define([
       this.advancedSearchSessionView.el = this.$('.advanced_search_session');
       this.advancedSearchSessionView.render();
 
-this.setElement($("#search-top"));
+     //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization

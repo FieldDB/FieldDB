@@ -109,6 +109,7 @@ define([
       $(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
       $(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
       $(".locale_Lastname").html(chrome.i18n.getMessage("locale_Lastname"));
+      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
       $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
 
         // Display the CorpusesView

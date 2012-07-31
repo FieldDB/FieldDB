@@ -39,13 +39,7 @@ define([
             $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
             $(".locale_Search").html(chrome.i18n.getMessage("locale_Search"));
             $(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
-            $("#locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-
-
-
-
-
-
+            $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 //
 //            $(document).bind('keydown', 'ctrl+j', function() {
 //                alert('You found the hotkey!');

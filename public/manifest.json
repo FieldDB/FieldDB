@@ -1,10 +1,8 @@
 {
-
-  
-    "name": "__MSG_iField beta__",
-     "version": "1.13.1",
-    "description": "__MSG_An on/offline fieldlinguistics database app which adapts to its user's I-Language.__",
-    "default_locale": "en",
+  "name": "application_title",
+  "version": "1.13.1",
+  "description": "application_description",
+  "default_locale": "en",
   
   "app": {
     "launch": {
@@ -22,6 +20,6 @@
    "icons": { 
     "16": "icon16.png",
     "48": "icon48.png",
-    "128": "icon128.png" 
+    "128": "icon128.png"
   }
 }

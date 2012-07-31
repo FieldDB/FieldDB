@@ -1,37 +1,44 @@
   <!-- This div aligns the icons and the buttons-->
 <div>
-	<!-- This div makes a buttons toolbar and puts buttons in the left corner -->
-	<div class="btn-group btn-toolbar corpusMenu">
-		<!-- This div is necessary so that the menu appears below the buttons -->
-		<div class="btn-group">
-    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    <span class ="locale_New_menu"></span>  <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li class="new-datum-edit"><a href="#"><span class = "locale_New_Datum"></span></a></li>
-      <li class="new-data-list"><a href="#"><span class = "locale_New_Data_List"></span></a></li>
-      <li class="new-session"><a href="#"><span class = "locale_New_Session"></span></a></li>
-      <li class="new-corpus"><a href="#"><span class = "locale_New_Corpus"></span></a></li>
-    </ul>
+  <!-- This div makes a buttons toolbar and puts buttons in the left corner -->
+  <div class="btn-group btn-toolbar corpusMenu">
+    <!-- This div is necessary so that the menu appears below the buttons -->
+    <div class="btn-group">
+      <button class="btn btn-primary dropdown-toggle"
+        data-toggle="dropdown">
+        <span class="locale_New_menu"></span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="new-datum-edit"><a href="#"><span
+            class="locale_New_Datum"></span></a></li>
+        <li class="new-data-list"><a href="#"><span
+            class="locale_New_Data_List"></span></a></li>
+        <li class="new-session"><a href="#"><span
+            class="locale_New_Session"></span></a></li>
+        <li class="new-corpus"><a href="#"><span
+            class="locale_New_Corpus"></span></a></li>
+      </ul>
+    </div>
+    <!-- /btn-group -->
+    <div class="btn-group">
+      <button class="btn btn-info dropdown-toggle"
+        data-toggle="dropdown">
+        <span class="locale_Data_menu"></span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#import"><span class="locale_Import_Data"></span></a></li>
+        <li><a href="#corpus/{{titleAsUrl}}/export"><span
+            class="locale_Export_Data"></span></a></li>
+      </ul>
+    </div>
   </div>
-  <!-- /btn-group -->
-  <div class="btn-group">
-    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-      <span class ="locale_Data_menu"></span> <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a href="#import"><span class = "locale_Import_Data"></span></a></li>
-      <li><a href="#corpus/{{titleAsUrl}}/export"><span class = "locale_Export_Data"></span></a></li>
-    </ul>
-  </div>
-	</div>
 
-	<div class="pull-right">
-	    <a href="#" class = "locale_Edit_corpus" rel="tooltip">
-  		<i class="icons icon-edit"></i></a>		
-	 <a href="#" class = "locale_Show_corpus_settings" rel="tooltip">
-		  <i class="icons icon-cogs resize-full"></i></a>
-	</div>
+  <div class="pull-right">
+    <a href="#" class="locale_Edit_corpus" rel="tooltip"> <i
+      class="icons icon-edit"></i></a> <a href="#"
+      class="locale_Show_corpus_settings" rel="tooltip"> <i
+      class="icons icon-cogs resize-full"></i></a>
+  </div>
 </div>
 
 <div class="corpus-description">

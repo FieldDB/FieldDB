@@ -27,7 +27,7 @@
    },
    "locale_Welcome_Beta_Testers" : {
       "message" : "<p> ¡Bienvenidos! Por favor vea estos tutoriales antes de empezar de probar iCampo. 
-       Dejanos notas, comentarios, sugerencias en la forma abajo.  Si no puedes ver los videos, ve a este URL"
+       Dejanos notas, comentarios, sugerencias en la forma abajo.  Si no puedes ver los videos, ve a este URL</p>"
    }, 
   "locale_Or_create_a_new_user" : {
       "message" : "Crear un nuevo usuario"
@@ -75,10 +75,10 @@
           <p>Puedes cerrar los mensajes con el x.</p>"
    },
    "locale_We_need_to_make_sure_its_you" : {
-      "message" : "Ocupamos asegurar que es ustèd..."
+      "message" : "Ocupamos asegurar que es ustéd..."
    },
     "locale_Yep_its_me" : {
-      "message" : "¡Si, so yo!"
+      "message" : "¡Si, soy yo!"
    },
     "locale_Log_Out" : {
       "message" : "Salir"
@@ -364,7 +364,7 @@
       "message" : "Sincronizar y compartir con el equipo" 
    },
      "locale_Show_Readonly" : {
-      "message" : "Mostrar  " 
+      "message" : "Mostrar en forma para leer " 
    },
        "locale_Show_Fullscreen" : {
       "message" : "Mostrar en pantalla completa " 
@@ -400,7 +400,7 @@
       "message" : "Editar lista de datos" 
    },
     "locale_Export_Datalist" : {
-      "message" : "Exportar lista de datos seleccionados" 
+      "message" : "Exportar lista de datos seleccionados en formato LaTeX" 
    },
     "locale_Hide_Datalist" : {
       "message" : "Esconder lista de datos" 

@@ -62,10 +62,25 @@ define([
      * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
-      "click .icon-unlock" : "encryptDatum",
-      "click .icon-lock" : "decryptDatum",
-      "click .datum_state_select" : "renderState",
-      "click #clipboard" : "copyDatum",
+      
+      /* Menu */
+      "click .LaTeX" : function(){
+        this.model.laTeXiT(true);
+        $("#export-modal").modal("show");
+      },
+      "click .icon-paste" : function(){
+        this.model.exportAsPlainText(true);
+        $("#export-modal").modal("show");
+      },
+      "click .CSV" : function(){
+        this.model.exportAsCSV(true, null, true);
+        $("#export-modal").modal("show");
+      },
+      "click .icon-th-list" : "hideRareFields",
+      "click .icon-list-alt" : "showRareFields",
+      
+      
+      /* Read Only Menu */
       "dblclick" : function() {
         // Prepend Datum to the top of the DatumContainer stack
         var d = this.model.clone();
@@ -77,28 +92,6 @@ define([
       "click .datum-checkboxes": function(e){
         alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
-      },
-      "click .icon-eye-open" : function(e){
-        var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
-          alert("This is a bug: cannot find decryption module for your corpus.")
-        }
-        var self = this;
-        confidential.turnOnDecryptedMode(function(){
-          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
-        });
-
-        return false;
-      },
-      "click .icon-eye-close" : function(e){
-        var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
-          alert("This is a bug: cannot find decryption module for your corpus.")
-        }
-        confidential.turnOffDecryptedMode();
-        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
-
-        return false;
       }
     },
 

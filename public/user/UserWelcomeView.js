@@ -156,12 +156,6 @@ define([
         $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
         $(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
 
-
-
-
-
-
-
       } else {
         Utils.debug("\User model was undefined");
       }

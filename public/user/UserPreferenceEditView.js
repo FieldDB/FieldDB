@@ -32,7 +32,7 @@ define([
      * Events that the UserPreferenceEditView is listening to and their handlers.
      */
     events:{
-      "click #skin" : "nextSkin",
+      "click .change-skin" : "nextSkin",
       "change .num_datum_dropdown" : "updateNumVisibleDatum",
       "click .randomize-backgound" : function(){
         if(this.model.get("alwaysRandomizeSkin")){

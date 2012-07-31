@@ -34,10 +34,10 @@
     the bottom of the page. We will try to address all your comments
     before August 1st. Scroll down to create a new user.</p>
       <p>Have fun and happy bug hunting!</p>
-      <p>If you cannot see the videos below, you can watch them here "
+      <p>If you cannot see the videos below, you can watch them here </p>"
    }, 
   "locale_Or_create_a_new_user" : {
-      "message" : "Or create a new user"
+      "message" : "Create a new user"
    },
     "locale_What_is_your_username_going_to_be" : {
       "message" : "What is your username going to be?"
@@ -428,7 +428,7 @@
       "message" : "Edit Data List" 
    },
     "locale_Export_Datalist" : {
-      "message" : "Export checked items" 
+      "message" : "Export checked as LaTeX" 
    },
     "locale_Hide_Datalist" : {
       "message" : "Hide datalist" 
@@ -478,92 +478,6 @@
      "locale_More" : {
       "message" : "More"
    }
-     
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-    
-    
-  
-    
-   
-   
-   
-   
-   
-   
-
-   
-   
-   
-   
-   
-   
-   
-   
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-}
+ }
 
 
