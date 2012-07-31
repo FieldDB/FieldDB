@@ -46,8 +46,7 @@
       "message" : "Confirm Password:"
    },
     "locale_Sign_in_with_password" : {
-      "message" : "Sign in
-        with password"
+      "message" : "Register"
    },
     "locale_Warning" : {
       "message" : "Warning!"
@@ -401,20 +400,35 @@
     "locale_Play_Audio" : {
       "message" : "Play audio" 
    },
+    "locale_Play_Audio_checked" : {
+      "message" : "Play audio of checked items" 
+   },
      "locale_Copy" : {
-      "message" : "Copy" 
+      "message" : "Copy to clipboard" 
+   },
+     "locale_Copy_checked" : {
+      "message" : "Copy checked items to clipboard" 
    },
      "locale_Duplicate" : {
-      "message" : "Duplicate Datum" 
+      "message" : "Duplicate datum to create a minimal pair" 
    },
      "locale_Encrypt" : {
       "message" : "Encrypt/Decrypt" 
+   },
+    "locale_Encrypt_checked" : {
+      "message" : "Make checked items confidential/encrypted" 
+   },
+    "locale_Decrypt_checked" : {
+      "message" : "Show confidential/encrypted items" 
+   },
+   "locale_Decrypt" : {
+      "message" : "Show confidential/encrypted datum" 
    },
      "locale_Edit_Datalist" : {
       "message" : "Edit Data List" 
    },
     "locale_Export_Datalist" : {
-      "message" : "Export datalist to Latex format" 
+      "message" : "Export checked items" 
    },
     "locale_Hide_Datalist" : {
       "message" : "Hide datalist" 
@@ -440,9 +454,33 @@
      "locale_Hide_Unicode_Palette" : {
       "message" : "Hide Unicode Palette"
    },
-      "locale_Add_new_symbol" : {
+    "locale_Add_new_symbol" : {
       "message" : "Add new symbol"
+   },
+    "locale_Public_or_Private" : {
+      "message" : "Public or Private:"
+   },
+     "locale_Insert_New_Datum" : {
+      "message" : "Insert a new datum on top of the dashboard center"
+   },
+     "locale_LaTeX" : {
+      "message" : "Export datum to LaTeX"
+   },
+    "locale_CSV" : {
+      "message" : "Export datum to CSV"
+   }, 
+     "locale_of" : {
+      "message" : "of"
+   },
+      "locale_pages_shown" : {
+      "message" : "pages shown"
+   },  
+     "locale_More" : {
+      "message" : "More"
    }
+     
+   
+   
    
    
    

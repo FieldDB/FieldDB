@@ -1,15 +1,13 @@
 <div class="pull-right">
-  <a href="#" rel="tooltip" title="Edit data list">
-    <i class="icons icon-edit"></i></a>    
-  <a href="#" class= "Show_in_Dashboard" rel="tooltip" >
-    <i class="icons icon-resize-small"></i></a> 
+  <button class="btn btn-success save-search-datalist" value="Save">Save</button>
+  <i class="icons icon-minus-sign"></i>
 </div>
-
-<h2>{{title}} <small> {{datumCount}}</small></h2>
-<h4>{{dateCreated}}</h4>
-{{description}}
-
-<!--DataList Menu  -->
+<label class="locale_Title"></label>
+<small> {{datumCount}}</small>
+<textarea class="data-list-title locale_Title">{{title}}</textarea>
+<label class="locale_Description"></label>
+<textarea class="data-list-description locale_Datalist_Description">
+{{description}}</textarea>
 <div class="icons">
     <a  href="#playDatum" class = "locale_Play_Audio_checked" rel="tooltip" >
        <i class="icons icon-bullhorn"></i></a>
@@ -26,13 +24,3 @@
     <button class="btn btn-primary" >CSV</button>
 </div>
 
-<ul class="comments unstyled"></ul>
-<div class="alert alert-info">
-  <i class="icons icon-comment"></i>
-  <div class= "pull-right"> </div>
-  <textarea class="comment-new-text"></textarea>
-</div>
-  
-
-<button class="btn btn-primary add-comment-datalist-read" value="Add"><span class = "locale_Add"></span></button>
-  

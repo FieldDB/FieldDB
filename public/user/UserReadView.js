@@ -20,7 +20,7 @@ define([
      *        feeds, it is also embedable in the UserEditView.
      *        
      * @property {String} format Must be set when the view is initialized. Valid
-     *           values are "link" "modal" and "fullscreen".
+     *           values are "link" "modal" "fullscreen" and "public"
      * 
      * @description Starts the UserView.
      * 
@@ -30,9 +30,14 @@ define([
     initialize : function() {
       Utils.debug("USER init: " + this.el);
     },
+    
     events : {
-      "click .icon-edit": "showEditable",
-
+      "click .edit-user-profile-modal" : function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        window.appView.modalEditUserView.render();
+      }
     },
     /**
      * The underlying model of the UserReadView is a User.
@@ -77,6 +82,11 @@ define([
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       } else if (this.format == "link") {
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
+      } else if (this.format == "public") {
+        this.setElement($("#public-user-page"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+      }else{
+        throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
       //localization
       $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
@@ -146,10 +156,6 @@ define([
 //            }
 //          }
 //      );
-    },
-    showEditable :function(){
-      $("#user-edit-modal").modal("show");
-
     }
   });
 

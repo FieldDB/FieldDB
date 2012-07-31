@@ -56,7 +56,13 @@ define([
         this.$el.modal("hide");
       },
       "click .save-user-profile" : "saveProfile",
-      "blur .gravatar" : "updateGravatar"
+      "blur .gravatar" : "updateGravatar",
+      "click .icon-book" : function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        window.appView.modalReadUserView.render();
+      }
 
     },
 
@@ -89,7 +95,7 @@ define([
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
       } else if(this.format == "modal") {
-        this.setElement($("#user-edit-modal"));
+        this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }
       //localization
@@ -111,8 +117,9 @@ define([
     },
     saveProfile : function(){
       Utils.debug("Saving user");
-      $("#user-edit-modal").hide();
-      $("#user-modal").show();
+      window.appView.modalReadUserView.render();
+
+      $("#user-modal").modal("hide");
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());

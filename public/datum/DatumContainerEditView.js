@@ -96,7 +96,7 @@ define([
     },
     
     resizeSmall : function() {
-      window.app.router.showEditableDatums("centreWell");
+//      window.app.router.showEditableDatums("centreWell");
       window.app.router.showDashboard();
     },
     

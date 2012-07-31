@@ -39,7 +39,7 @@
       "message" : "Confirme su contraseña:"
    },
     "locale_Sign_in_with_password" : {
-      "message" : "Entrar con contraseña"
+      "message" : "Registrar"
    },
     "locale_Warning" : {
       "message" : "¡Aviso!"
@@ -391,7 +391,7 @@
       "message" : "Copiar" 
    },
      "locale_Duplicate" : {
-      "message" : "Duplicar Dato" 
+      "message" : "Duplicar Dato por hacer un contraste minimál" 
    },
      "locale_Encrypt" : {
       "message" : "Encriptar/Decriptar" 
@@ -400,7 +400,7 @@
       "message" : "Editar lista de datos" 
    },
     "locale_Export_Datalist" : {
-      "message" : "Exportar lista de datos en forma LaTeX" 
+      "message" : "Exportar lista de datos seleccionados" 
    },
     "locale_Hide_Datalist" : {
       "message" : "Esconder lista de datos" 
@@ -428,6 +428,42 @@
    },
       "locale_Add_new_symbol" : {
       "message" : "Añadir un símbulo nuevo"
+   },
+    "locale_Public_or_Private" : {
+      "message" : "Publico o Privado:"
+   },
+    "locale_Copy_checked" : {
+      "message" : "Copiar los seleccionados" 
+   },
+   "locale_Play_Audio_checked" : {
+      "message" : "Tocar audio de los seleccionados" 
+   },
+     "locale_Encrypt_checked" : {
+      "message" : "Encriptar los datos seleccionados" 
+   },
+      "locale_Decrypt_checked" : {
+      "message" : "Mostrar datos confidenciales seleccionados" 
+   },
+     "locale_Insert_New_Datum" : {
+      "message" : "Insertar un nuevo dato arriba"
+   },
+      "locale_LaTeX" : {
+      "message" : "Exportar dato en formato LaTeX"
+   },
+   "locale_CSV" : {
+      "message" : "Exportar dato en formato CSV "
+   }, 
+    "locale_Decrypt" : {
+      "message" : "Mostrar dato confidencial/encriptado" 
+   },
+       "locale_of" : {
+      "message" : "de"
+   }, 
+       "locale_pages_shown" : {
+      "message" : "pagínas mostradas"
+   },  
+     "locale_More" : {
+      "message" : "Más"
    }
  
    

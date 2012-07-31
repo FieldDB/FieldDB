@@ -65,6 +65,12 @@ define([
       }else{
         window.appView.toastUser("The corpus has no id, cant add it to the user.","alert-danger","Bug!");
       }
+    },
+    saveAndInterConnectInApp : function(callback){
+      //TODO override in derived classes?
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 
