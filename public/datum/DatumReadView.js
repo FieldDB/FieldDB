@@ -219,6 +219,10 @@ define([
       console.log(text);
  
       return "";
+//    }, 
+//    
+//    showButtonHelp : function(){
+//      this.$(".button-help").tooltip("show");
     }
   });
 

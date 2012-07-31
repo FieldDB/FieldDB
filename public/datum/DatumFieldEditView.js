@@ -38,7 +38,8 @@ define([
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
-      "click .icon-question-sign" : "showHelpConvention"
+      "click .icon-question-sign" : "showHelpConvention",
+      "hover .icon-question-sign" : "hideHelpConvention"  
     },
 
     /**
@@ -115,9 +116,15 @@ define([
      */
     showHelpConvention : function() {
     	this.$el.children(".help-conventions").popover("show");
-    }
+    },
     
-    
+    /**
+     * Don't show help convention in popover if only hover 
+     */
+    hideHelpConvention : function() {
+        this.$el.children(".help-conventions").popover("hide");
+    }    
+   
   });
 
   return DatumFieldEditView;
