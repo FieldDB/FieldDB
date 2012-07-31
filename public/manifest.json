@@ -1,9 +1,8 @@
 {
-  "name": "application_title",
+  "name": "ifield",
   "version": "1.13.1",
-  "description": "application_description",
+  "description": " ",
   "default_locale": "en",
-  
   "app": {
     "launch": {
       "local_path": "dashboard.html"

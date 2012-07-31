@@ -209,7 +209,7 @@
     "locale_Search" : {
       "message" : "Search"
    },
-     "locale_Close" : {
+    "locale_Close" : {
       "message" : "Close"
    },
    "locale_New_Corpus_Instructions" : {
