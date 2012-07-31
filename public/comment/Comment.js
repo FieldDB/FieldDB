@@ -49,7 +49,12 @@ define( [
      */
     remove : function() {
     },
-
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * The edit function allows users to edit a comment.
      * 
@@ -59,14 +64,8 @@ define( [
      */
     edit : function(newtext) {
       this.set("text", newtext);
-    },
-    
-    // in your Model validate function
-    validate : function(attrs) {
-      if (!attrs.mask) {
-        attrs.mask = "hi empty mask";
-      }
     }
+    
   });
 
   return Comment;

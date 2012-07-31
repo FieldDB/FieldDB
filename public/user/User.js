@@ -3,7 +3,6 @@ define([
     "activity/Activities",
     "hotkey/HotKey",
     "user/UserGeneric",
-    "permission/Permission",
     "user/UserPreference",
     "libs/Utils"
 ], function(
@@ -11,7 +10,6 @@ define([
     Activities,
     HotKey,
     UserGeneric,
-    Permission,
     UserPreference
 ) {
   var User = UserGeneric.extend(
@@ -39,11 +37,6 @@ define([
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
         this.set("prefs", new UserPreference());
-      }
-      
-      // If there is no permissions, create a new one
-      if (!this.get("permissions")) {
-        this.set("permissions", new Permission());
       }
       
       // If there is no hotkeys, create a new one
@@ -99,6 +92,12 @@ define([
         window.appView.userPreferenceView.render();
       }catch(e){
         
+      }
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
       }
     }
   });

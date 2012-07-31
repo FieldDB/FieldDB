@@ -62,8 +62,8 @@ define([
      * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
-      "click .icon-lock" : "encryptDatum",
-      "click .icon-unlock" : "decryptDatum",
+      "click .icon-unlock" : "encryptDatum",
+      "click .icon-lock" : "decryptDatum",
       "click .datum_state_select" : "renderState",
       "click #clipboard" : "copyDatum",
       "dblclick" : function() {
@@ -72,9 +72,34 @@ define([
         d.id = this.model.id;
         d.set("_id", this.model.get("_id"));
         d.set("_rev", this.model.get("_rev"));
-        appView.datumsView.prependDatum(d);
-      } 
-//      "hover .icon-paste" : "showButtonHelp"
+        appView.datumsEditView.prependDatum(d);
+      },
+      "click .datum-checkboxes": function(e){
+        alert("Checked box " + this.model.id);
+        this.checked = e.target.checked;
+      },
+      "click .icon-eye-open" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        var self = this;
+        confidential.turnOnDecryptedMode(function(){
+          self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+        });
+
+        return false;
+      },
+      "click .icon-eye-close" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        confidential.turnOffDecryptedMode();
+        this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+
+        return false;
+      }
     },
 
     /**
@@ -91,16 +116,18 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      Utils.debug("DATUM render: " + this.el);
+      Utils.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
       
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
         Utils.debug("DATUM fields is undefined, come back later.");
         return this;
       }
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+
       if (this.format == "well") {        
         // Display the DatumReadView
-        var jsonToRender = this.model.toJSON();
-        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
         
         // Display the DatumTagsView
@@ -115,10 +142,10 @@ define([
         // necessary...
       } else if (this.format == "latex") {
         //This gets the fields necessary from the model
-        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("value");
-        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("value");
-        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
-        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("value");
+        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("mask");
+        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
+        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
         
         // makes the top two lines into an array of words.
         var utteranceArray = utterance.split(' ');
@@ -155,56 +182,20 @@ define([
     /**
      * Encrypts the datum if it is confidential
      * 
-     * @returns {Boolean}
      */
     encryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      // console.log("Fake encrypting");
-      var confidential = appView.corpusView.model.confidential;
-
-      if (confidential == undefined) {
-        appView.corpusView.model.confidential = new Confidential();
-        confidential = appView.corpusView.model.confidential;
-      }
-
-      this.model.set("utterance", confidential.encrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.encrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.encrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.encrypt(this.model
-          .get("translation")));
-
-      // this.model.set("utterance", this.model.get("utterance").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("morphemes", this.model.get("morphemes").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("gloss", this.model.get("gloss").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("translation", this.model.get("translation").replace(/[^
-      // -.]/g,"x"));
+      this.model.encrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
-
-      // console.log(confidential);
-      // this.model.set()
+      $(".icon-unlock").toggleClass("icon-unlock icon-lock");
     },
-    
+
     /**
      * Decrypts the datum if it was encrypted
      */
     decryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      var confidential = appView.corpusView.model.confidential;
-      this.model.set("utterance", confidential.decrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.decrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.decrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.decrypt(this.model
-          .get("translation")));
+      this.model.decrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
     
     //Functions relating to the row of icon-buttons

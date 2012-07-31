@@ -8,6 +8,7 @@ define([
     "authentication/Authentication",
     "authentication/AuthenticationEditView",
     "corpus/Corpus", 
+    "corpus/CorpusMask", 
     "corpus/CorpusEditView",
     "corpus/CorpusReadView",
     "data_list/DataList",
@@ -17,6 +18,7 @@ define([
     "datum/Datums",
     "datum/DatumContainerEditView",
     "datum/DatumContainerReadView",
+    "datum/DatumReadView",
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
@@ -29,6 +31,7 @@ define([
     "insert_unicode/InsertUnicodesView",
     "user/UserPreference",
     "user/UserPreferenceEditView",
+    "app/PaginatedUpdatingCollectionView",
     "search/Search",
     "search/SearchEditView",
     "datum/Session",
@@ -49,6 +52,7 @@ define([
     Authentication,
     AuthenticationEditView,
     Corpus, 
+    CorpusMask,
     CorpusEditView,
     CorpusReadView,
     DataList,
@@ -58,6 +62,7 @@ define([
     Datums,
     DatumContainerEditView,
     DatumContainerReadView,
+    DatumReadView,
     DatumFields,
     Export,
     ExportReadView,
@@ -70,6 +75,7 @@ define([
     InsertUnicodesView,
     UserPreference,
     UserPreferenceEditView,
+    PaginatedUpdatingCollectionView,
     Search,
     SearchEditView,
     Session,
@@ -98,45 +104,79 @@ define([
     initialize : function() {
       Utils.debug("APP init: " + this.el);
 
-//      var userToBePassedAround = new User();
-     
-      
-      // Create seven corpus views
-      this.corpusEditLeftSideView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusEditLeftSideView.format = "leftSide";
-      
-      this.corpusReadLeftSideView = new CorpusReadView({
-        model : this.model.get("corpus")
-      });
-      this.corpusReadLeftSideView.format = "leftSide";
+      this.setUpAndAssociateViewsAndModelsWithCurrentUser();
+      this.setUpAndAssociateViewsAndModelsWithCurrentSession();
+      this.setUpAndAssociateViewsAndModelsWithCurrentDataList();
+      this.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
 
-      this.corpusEditEmbeddedView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusEditEmbeddedView.format = "centreWell";
+      // Create and initialize a Terminal
+      this.term = new Terminal('terminal');
+      this.term.initFS(false, 1024 * 1024);
       
-      this.corpusReadEmbeddedView = new CorpusReadView({
+      // Set up a timeout event every 10sec
+      _.bindAll(this, "saveScreen");
+      window.setInterval(this.saveScreen, 10000);     
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
+      // Create four corpus views
+      this.currentCorpusEditView = new CorpusEditView({
         model : this.model.get("corpus")
       });
-      this.corpusReadEmbeddedView.format = "centreWell";
+      this.currentCorpusEditView.format = "leftSide";
       
-      this.corpusEditFullscreenView = new CorpusEditView({
+      this.currentCorpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
-      this.corpusEditFullscreenView.format = "fullscreen";
+      this.currentCorpusReadView.format = "leftSide";
       
-      this.corpusReadFullscreenView = new CorpusReadView({
-        model : this.model.get("corpus")
-      });
-      this.corpusReadFullscreenView.format = "fullscreen";
       
       this.corpusNewModalView = new CorpusEditView({
         model : this.model.get("corpus")
       });
       this.corpusNewModalView.format = "modal";
+   
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
       
+      //TODO not sure if we should do this here
+      // Create an ImportEditView
+      this.importView = new ImportEditView({
+        model : new Import()
+      });
+      
+      //TODO not sure if we should do this here
+      // Create an ExportReadView
+      this.exportView = new ExportReadView({
+        model : new Export()
+      });
+      
+      /*
+       *  Create search views
+       */
+      this.searchEditView = new SearchEditView({
+        model : this.model.get("search")
+      });
+      
+      
+      // Create the embedded and fullscreen DatumContainerEditView
+      var datumsToBePassedAround = new Datums();
+      this.datumsEditView = new DatumContainerEditView({
+        model : datumsToBePassedAround
+      });
+      this.datumsReadView = new DatumContainerReadView({
+        model : datumsToBePassedAround
+      });
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask : function(model, callback){
+      this.publicCorpusReadEmbeddedView = new CorpusReadView({
+        model : model
+      });
+      this.publicCorpusReadEmbeddedView.format = "public";
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentSession : function(callback){
       /*
        * Set up four session views
        */ 
@@ -169,6 +209,11 @@ define([
       });
       this.sessionModalView.format = "modal";
       
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    setUpAndAssociateViewsAndModelsWithCurrentUser : function(callback){
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
         model : this.model.get("authentication")
@@ -182,11 +227,8 @@ define([
       });
       this.fullScreenEditUserView.format = "fullscreen";
       
-      this.fullScreenReadUserView = new UserReadView({
-        model : this.model.get("authentication").get("userPrivate")
-      });
-      this.fullScreenReadUserView.format = "fullscreen";
-
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(this.model.get("authentication").get("userPublic") );
+      
       this.modalEditUserView = new UserEditView({
         model : this.model.get("authentication").get("userPrivate")
       });
@@ -196,78 +238,8 @@ define([
         model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
+      
 
-      
-      // Create the embedded and fullscreen DatumContainerEditView
-      var datumsToBePassedAround = new Datums();
-      this.datumsView = new DatumContainerEditView({
-        model : datumsToBePassedAround
-      });
-      this.datumsReadView = new DatumContainerReadView({
-        model : datumsToBePassedAround
-      });
-      
-      /*
-       * Set up the six data list views
-       */
-      var dataListToBePassedAround = this.model.get("currentDataList") || new DataList();
-      var datumsCollectionToBePassedAround = new Datums();
-      
-      this.dataListEditMiddleView = new DataListEditView({
-        model : dataListToBePassedAround,
-        datumCollection : datumsCollectionToBePassedAround 
-      }); 
-      this.dataListEditMiddleView.format = "centreWell";
-      
-      this.dataListReadMiddleView = new DataListEditView({
-        model : dataListToBePassedAround,
-        datumCollection : datumsCollectionToBePassedAround 
-      }); 
-      this.dataListReadMiddleView.format = "centreWell";
-      
-      this.dataListEditLeftSideView = new DataListEditView({
-        model : dataListToBePassedAround,
-        datumCollection : datumsCollectionToBePassedAround 
-      }); 
-      this.dataListEditLeftSideView.format = "leftSide";
-   
-      this.dataListEditFullscreenView = new DataListEditView({
-        model : this.dataListEditLeftSideView.model,
-        datumCollection : datumsCollectionToBePassedAround 
-      });  
-      this.dataListEditFullscreenView.format = "fullscreen";
-
-      this.dataListReadLeftSideView = new DataListReadView({
-        model :  this.dataListEditLeftSideView.model,
-        datumCollection : datumsCollectionToBePassedAround 
-      });  
-      this.dataListReadLeftSideView.format = "leftSide";
-   
-      this.dataListReadFullscreenView = new DataListReadView({
-        model :  this.dataListEditLeftSideView.model,
-        datumCollection : datumsCollectionToBePassedAround 
-      });  
-      this.dataListReadFullscreenView.format = "fullscreen";
-      
-      /*
-       *  Create search views
-       */
-      this.searchTopView = new SearchEditView({
-        model : new Search()
-      });
-      this.searchTopView.format = "top";
-      
-      var searchToBePassedAround = new Search();
-      this.searchFullscreenView = new SearchEditView({
-        model : searchToBePassedAround
-      });
-      this.searchFullscreenView.format = "fullscreen";
-      
-      this.searchEmbeddedView = new SearchEditView({
-        model : searchToBePassedAround
-      });
-      this.searchEmbeddedView.format = "centreWell";
-      
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
         model : this.authView.model.get("userPrivate").get("prefs")
@@ -288,30 +260,71 @@ define([
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
         model : this.authView.model.get("userPrivate").get("hotkeys")
-      });   
-      
-      // Create an ExportREadView
-      this.exportView = new ExportReadView({
-        model : new Export()
       });
-
-     
       
-      // Create an ImportEditView
-      this.importView = new ImportEditView({
-        model : new Import()
-      });
-
-      // Create and initialize a Terminal
-      this.term = new Terminal('terminal');
-      this.term.initFS(false, 1024 * 1024);
-      
-      
-      // Set up a timeout event every 10sec
-      _.bindAll(this, "saveScreen");
-      window.setInterval(this.saveScreen, 10000);     
+      if(typeof callback == "function"){
+        callback();
+      }
     },
-    
+    setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask : function(model, callback){
+      this.publicReadUserView = new UserReadView({
+        model : model
+      });
+      this.publicReadUserView.format = "public";
+    },
+    /*
+     * Set up the six data list views, kills all collection in the currentPaginatedDataListDatumsView
+     */
+    setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
+
+      if( this.currentPaginatedDataListDatumsView ){
+        if( this.currentPaginatedDataListDatumsView.filledBasedOnModels ){
+          alert("The current paginated datum collection was filled iwth models. some info might be lost by doing this overwrite.")
+        }
+        
+        if( this.currentPaginatedDataListDatumsView.collection.length > this.model.get("currentDataList").get("datumIds").length){
+          alert("The currentPaginatedDataListDatumsView already has more datum than the current datalist.");
+        }
+        //TODO might need to do more scrubbing
+        //Convenience function for removing the view from the DOM.
+        this.currentPaginatedDataListDatumsView.remove();//this seems okay, its not removing the ul we need for the next render
+//        while (appView.currentPaginatedDataListDatumsView.collection.length > 0) {
+//          appView.currentPaginatedDataListDatumsView.collection.pop();
+//        }
+        this.currentPaginatedDataListDatumsView.collection.reset(); //could also use backbone's reset which will empty the collection, or fill it with a new group.
+
+      }
+      
+      /*
+       * This holds the ordered datums of the current data list, and is the important place to keep the
+       * datum, it's ids will be saved into the currentdatalist when the currentdatalist is saved
+       */
+      this.currentPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+        collection           : new Datums(),
+        childViewConstructor : DatumReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "latex"
+      });  
+      
+      /*
+       * fill collection with datum, this will render them at the same time.
+       */
+      this.currentPaginatedDataListDatumsView.fillWithIds(this.model.get("currentDataList").get("datumIds"), Datum);
+      
+      this.currentEditDataListView = new DataListEditView({
+        model : this.model.get("currentDataList"),
+      }); 
+      this.currentEditDataListView.format = "leftSide";
+      
+      this.currentReadDataListView = new DataListReadView({
+        model :  this.model.get("currentDataList"),
+      });  
+      this.currentReadDataListView.format = "leftSide";
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     /**
      * The underlying model of the AppView is an App.
      */
@@ -331,9 +344,37 @@ define([
         app.router.showDashboard(); //the above line wasnt working
       },
       "click .save-dashboard": function(){
-        window.app.storeCurrentDashboardIdsToLocalStorage();
+        window.app.saveAndInterConnectInApp();
       },
-      "click .sync-everything" : "replicateDatabases"
+      "click .sync-everything" : "replicateDatabases",
+      /*
+       * These functions come from the top search template, it is
+       * renderd by seacheditview whenever a search is renderd, but its
+       * events cannot be handled there but are easily global events
+       * that can be controlled by teh appview. which is also
+       * responsible for many functions on the navbar
+       */
+      "click .btn-advanced-search" : function(e){
+        window.app.router.showEmbeddedSearch();
+      },
+      "click .icon-search" : function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        this.searchEditView.searchTop();
+      },
+      "keyup #search_box" : function(e) {
+//        if(e){
+//          e.stopPropagation();
+//        }
+        var code = e.keyCode || e.which;
+        
+        // code == 13 is the enter key
+        if (code == 13) {
+          this.searchEditView.searchTop();
+        }
+//        return false;
+      }
     },
     
     /**
@@ -350,68 +391,75 @@ define([
         // Display the AppView
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
-        // Display the Corpus Views
-        this.corpusEditLeftSideView.render();
-        this.corpusReadLeftSideView.render();
-        this.corpusEditEmbeddedView.render();
-        this.corpusReadEmbeddedView.render();
-        this.corpusEditFullscreenView.render();
-        this.corpusReadFullscreenView.render();
-        this.corpusNewModalView.render();
-        
-        // Display the ExportView
-        this.exportView.render();
-        
-        // Display the User Views
-        this.fullScreenEditUserView.render();
-        this.fullScreenReadUserView.render();
-        this.modalEditUserView.render();
-        this.modalReadUserView.render();
-        
-        // Display the Datum Container Views
-        this.renderReadonlyDatumsViews("centreWell");
-        this.renderEditableDatumsViews("centreWell");
-        
-        // Display the Search Views
-        this.searchTopView.render();
-        this.searchFullscreenView.render();
-        this.searchEmbeddedView.render();
-        
-        // Display the AuthView
+
+        //The authView is the dropdown in the top right corner which holds all the user menus
         this.authView.render();
-        
-        // Display the Session Views
-        this.sessionEditLeftSideView.render();
-        this.sessionReadLeftSideView.render();
-        this.sessionEditEmbeddedView.render();
-        this.sessionReadEmbeddedView.render();
-        this.sessionEditFullscreenView.render();
-        this.sessionReadFullscreenView.render();
-        this.sessionModalView.render();
-        
-        // Display the UserPreferenceEditView
         this.userPreferenceView.render();
+        this.hotkeyEditView.render();//.showModal();
+        this.renderReadonlyUserViews();
         
-        //Display ActivityFeedView
+        this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
-        
         this.insertUnicodesView.render();
         
-        // Display HotKeysView
-        this.hotkeyEditView.render();//.showModal();
-
-        // Display Data List Views 
-        this.dataListEditMiddleView.render();
-        this.dataListEditLeftSideView.render();
-        this.dataListEditFullscreenView.render();
-        this.dataListReadLeftSideView.render();
-        this.dataListReadFullscreenView.render();
-        this.dataListReadMiddleView.render();
-
+        //This forces the top search to render.
+        this.searchEditView.format = "centreWell";
+        this.searchEditView.render();
+        
+        this.importView.render();
+        this.exportView.render();
+//        // Display the Corpus Views
+//        this.corpusNewModalView.render();
+//        this.currentCorpusEditView.render();
+//        this.currentCorpusReadView.render();
+//        this.currentCorpusEditView.render();
+//        this.currentCorpusReadView.render();
+//        this.publicCorpusReadEmbeddedView.render();
+//        this.currentCorpusEditView.render();
+//        this.currentCorpusReadView.render();
+//        
+//        // Display the ExportView
+//        
+//        // Display the User Views
+//        this.fullScreenEditUserView.render();
+//        this.publicReadUserView.render();
+//        this.modalEditUserView.render();
+//        this.modalReadUserView.render();
+//        
+//        // Display the Datum Container Views
+//        this.renderReadonlyDatumsViews("centreWell");
+//        this.renderEditableDatumsViews("centreWell");
+//        
+//        // Display the Search Views
+//        this.searchTopView.render();
+//        this.searchFullscreenView.render();
+//        this.searchEmbeddedView.render();
+//        
+//        // Display the AuthView
+//        
+//        // Display the Session Views
+//        this.sessionEditLeftSideView.render();
+//        this.sessionReadLeftSideView.render();
+//        this.sessionEditEmbeddedView.render();
+//        this.sessionReadEmbeddedView.render();
+//        this.sessionEditFullscreenView.render();
+//        this.sessionReadFullscreenView.render();
+//        this.sessionModalView.render();
+//        
+//        // Display the UserPreferenceEditView
+//        
+//        //Display ActivityFeedView
+//        this.activityFeedView.render();
+//        
+//        this.insertUnicodesView.render();
+//        
+//        // Display HotKeysView
+//
+//        // Display Data List Views 
+//        this.currentEditDataListView.render();
+//        this.currentReadDataListView.render();
          
         // Display the ImportEditView
-        this.importView.render();
       } else {
         Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
       }
@@ -421,18 +469,24 @@ define([
       
       return this;
     },
+    /**
+     * This should be the primary function to show the dashboard with updated views.
+     */
+    renderReadonlyDashboardViews : function() {
+      this.renderReadonlyCorpusViews("leftSide");
+      this.sessionReadLeftSideView.render();
+      this.renderReadonlyDataListViews("leftSide");
+      this.renderEditableDatumsViews("centreWell");
+    },
     
     // Display the Corpus Views
-    renderEditableCorpusViews : function(corpusid) {
-      this.corpusEditLeftSideView.render();
-      this.corpusEditEmbeddedView.render();
-      this.corpusEditFullscreenView.render();
-      this.corpusNewModalView.render();
+    renderEditableCorpusViews : function(format) {
+      this.currentCorpusEditView.format = format;
+      this.currentCorpusEditView.render();
     },
-    renderReadonlyCorpusViews : function(corpusid) {
-      this.corpusReadLeftSideView.render();
-      this.corpusReadEmbeddedView.render();
-      this.corpusReadFullscreenView.render();
+    renderReadonlyCorpusViews : function(format) {
+      this.currentCorpusReadView.format = format;
+      this.currentCorpusReadView.render();
     },
       
     // Display Session Views
@@ -448,24 +502,10 @@ define([
       this.sessionReadFullscreenView.render();
     },
     
-    // Display DataList Views
-    renderEditableDataListViews : function(datalistid) {
-      this.dataListEditLeftSideView.render();
-      this.dataListEditFullscreenView.render();
-    },
-    renderReadonlyDataListViews : function(datalistid) {
-      this.dataListReadLeftSideView.render();
-      this.dataListReadFullscreenView.render();
-    },
-    renderFirstPageReadonlyDataListViews : function() {
-      this.dataListEditLeftSideView.renderFirstPage();
-      this.renderReadonlyDataListViews();
-    },
-    
     // Display Datums View
     renderEditableDatumsViews : function(format) {
-      this.datumsView.format = format;
-      this.datumsView.render();
+      this.datumsEditView.format = format;
+      this.datumsEditView.render();
     },
     renderReadonlyDatumsViews : function(format) {
       this.datumsReadView.format = format;
@@ -473,12 +513,24 @@ define([
     },
     
     // Display DataList Views
+    renderEditableDataListViews : function(format) {
+      this.currentEditDataListView.format = format;
+      this.currentEditDataListView.render();
+    },
+    renderReadonlyDataListViews : function(format) {
+      this.currentReadDataListView.format = format;
+      this.currentReadDataListView.render();
+    },
+
+   
+    
+    // Display User Views
     renderEditableUserViews : function(userid) {
       this.fullScreenEditUserView.render();
       this.modalEditUserView.render();
     },
     renderReadonlyUserViews : function(userid) {
-      this.fullScreenReadUserView.render();
+      this.publicReadUserView.render();
       this.modalReadUserView.render();
     },
     
@@ -505,7 +557,7 @@ define([
      */
     replicateDatabases : function(callback) {
       var self = this;
-      this.model.storeCurrentDashboardIdsToLocalStorage(function(){
+      this.model.saveAndInterConnectInApp(function(){
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){
           var corpusConnection = self.model.get("corpus").get("couchConnection");
@@ -540,7 +592,7 @@ define([
     
     saveScreen : function() {
       // Save the Datum pages, if necessary
-      this.datumsView.saveScreen();
+      this.datumsEditView.saveScreen();
     },
     /**
      * http://www.html5rocks.com/en/tutorials/dnd/basics/
@@ -592,6 +644,7 @@ define([
     addUnsavedDoc : function(id){
       if(!id){
         alert("This is a bug: something is trying ot save an undefined item.");
+        return;
       }
       if(this.totalUnsaved.indexOf(id) == -1){
         this.totalUnsaved.push(id);
@@ -647,7 +700,7 @@ define([
     },
     toastSavingDatumsCount : 0,
     toastUser : function(message, alertType, heading){
-      if(message.indexOf( "Automatically saving visible datum entries every 10 seconds. ") > 0){
+      if(message.indexOf("Automatically saving visible datum entries every 10 seconds") != -1 ){
         this.toastSavingDatumsCount++;
         if(this.toastSavingDatumsCount == 5){
           message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";

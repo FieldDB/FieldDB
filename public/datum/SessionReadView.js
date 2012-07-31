@@ -35,7 +35,11 @@ define([
       
       this.changeViewsOfInternalModels();
       
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
+      var self = this;
+      this.model.bind('change:sessionFields', function(){
+        self.changeViewsOfInternalModels();
+        self.render();
+        }, this);
     },
 
     /**
@@ -101,9 +105,9 @@ define([
          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
           };
           
           this.setElement("#session-quickview");
@@ -125,9 +129,9 @@ define([
        
           var jsonToRender = {
               _id : this.model.get("_id"),
-              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
             };
           $(this.el).html(this.templateLink(jsonToRender));
 
@@ -157,22 +161,32 @@ define([
     },
     
     //functions associated with corner icons
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showEmbeddedSession();
     },
     
-    resizeLarge : function() {
+    resizeLarge : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenSession();
     },
     
     //bound to book
-    showEditable :function() {
-      window.app.router.showEditableSession();
+    showEditable :function(e) {
+      if(e){
+        e.stopPropagation();
+      }
+      window.appView.renderEditableSessionViews();
     }, 
  
-    //TODO this function to be rewritten 
-    insertNewComment : function() {
-      console.log("I'm a new comment!");
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });
