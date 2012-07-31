@@ -229,11 +229,10 @@ define([
             attributes.value = this.get("value");
           }
         }
-
       }else{
 //        alert("The datum field has no mask, there is a bug somewhere.");
-        attributes.value ="";
-        attributes.mask = "";
+//        attributes.value ="";
+//        attributes.mask = "";
       }
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
