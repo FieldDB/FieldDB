@@ -69,7 +69,7 @@ define([
       }
       
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
-      window.onunload = this.saveAndInterConnectInApp;
+//      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
       
     },
     
@@ -241,7 +241,8 @@ define([
         //fetch only after having setting the right pouch which is what changeCorpus does.
         c.fetch({
           success : function(corpusModel) {
-            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+            Utils.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
             c.setAsCurrentCorpus(function(){
@@ -253,7 +254,8 @@ define([
               dl.changeCorpus(couchConnection.corpusname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
-                    alert("Data list fetched successfully", dataListModel);
+                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                    Utils.debug("Data list fetched successfully", dataListModel);
                     window.appView.addBackboneDoc(dataListModel.id);
                     window.appView.addPouchDoc(dataListModel.id);
                     dl.setAsCurrentDataList(function(){
@@ -265,10 +267,16 @@ define([
                       s.changeCorpus(couchConnection.corpusname, function(){
                         s.fetch({
                           success : function(sessionModel) {
+                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                             Utils.debug("Session fetched successfully", sessionModel);
                             window.appView.addBackboneDoc(sessionModel.id);
                             window.appView.addPouchDoc(sessionModel.id);
                             s.setAsCurrentSession(function(){
+                              
+                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
+
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
