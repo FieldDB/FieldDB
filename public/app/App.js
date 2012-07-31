@@ -245,7 +245,7 @@ define([
         returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
       }
       if(returntext == ""){
-        return; //dont show a pop up
+        return; //don't show a pop up
       }else{
         return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
@@ -256,17 +256,27 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      var self = this;
-      self.get("currentSession").saveAndInterConnectInApp(function(){
-        self.get("currentDataList").saveAndInterConnectInApp(function(){
-          self.get("corpus").saveAndInterConnectInApp(function(){
-            self.get("authentication").saveAndInterConnectInApp(function(){
-              self.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
+      if(!failurecallback){
+        failurecallback = function(){
+          alert("There was a bug/problem in the saveAndInterConnectInApp in App.js, somewhere along the save call. The Session is saved first, if it succeeds, then the datalist, then the corpus. The failure is somewhere along there.");
+        }
+      }
+      var appSelf = this;
+      appSelf.get("currentSession").saveAndInterConnectInApp(function(){
+        appSelf.get("currentDataList").saveAndInterConnectInApp(function(){
+          appSelf.get("corpus").saveAndInterConnectInApp(function(){
+            appSelf.get("authentication").saveAndInterConnectInApp(function(){
+              
+              appSelf.get("authentication").staleAuthentication = true;
+              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
+              window.appView.toastUser("Your dashboard has been saved, you can exit the page at anytime and return to this state.","alert-success","Exit at anytime:");
+              appSelf.router.showDashboard();
+              
               if(typeof successcallback == "function"){
+                alert("The dashboard saved successfully, now calling the successcallback.");
                 successcallback();
               }
-//              window.appView.renderReadonlyDashboardViews();
-              app.router.showDashboard();
+              
             },failurecallback);
           },failurecallback);
         }, failurecallback);
