@@ -1,15 +1,15 @@
 <div class="breadcrumb">
   <span class="cell">
     {{#if morePages}}
-    <a href="#" class="servernext">Next</a>
+    <a href="#" class="nextinfinitepagination">Next</a>
     {{/if}}
-    <span class="cell serverhowmany">
+    <span class="cell howmanyperpagination">
       Show
-      <a href="#" class="">3</a>
-      |
-      <a href="#" class="">9</a>
-      |
       <a href="#" class="selected">12</a>
+      |
+      <a href="#" class="">50</a>
+      |
+      <a href="#" class="">100</a>
       per page
     </span>
     <span class="divider">/</span>
@@ -18,7 +18,9 @@
       of
       <span class="total">{{totalPages}}</span>
       pages shown
-      shown
+      {{#if allShown}}
+        (All)
+      {{/if}}
     </span>
   </span>
 </div>

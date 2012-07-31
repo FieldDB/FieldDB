@@ -38,7 +38,13 @@ define([
       
       this.changeViewsOfInternalModels();
       
-      this.model.bind('change', this.showEditable, this);
+      var self = this;
+      this.model.bind('change:sessionFields', function(){
+        self.changeViewsOfInternalModels();
+        self.render();
+        }, this);
+      
+//      this.model.bind('change', this.showEditable, this);
     },
 
     /**
@@ -66,7 +72,7 @@ define([
     updateConsultant : function(){
       this.model.get("sessionFields").where({
         label : "consultants"
-      })[0].set("value", this.$el.find(".session-consultant-input")
+      })[0].set("mask", this.$el.find(".session-consultant-input")
           .val());
       
       window.appView.addUnsavedDoc(this.model.id);
@@ -76,7 +82,7 @@ define([
     updateElicitedDate : function(){
       this.model.get("sessionFields").where({
         label : "dateElicited"
-      })[0].set("value", this.$el.find(".session-elicitation-date-input")
+      })[0].set("mask", this.$el.find(".session-elicitation-date-input")
           .val());
       
       window.appView.addUnsavedDoc(this.model.id);
@@ -86,7 +92,7 @@ define([
     updateGoal : function(){
       this.model.get("sessionFields").where({
         label : "goal"
-      })[0].set("value", this.$el.find(".session-goal-input")
+      })[0].set("mask", this.$el.find(".session-goal-input")
           .val());
       
       window.appView.addUnsavedDoc(this.model.id);
@@ -141,9 +147,9 @@ define([
           
         } else if (this.format == "leftSide") {
           var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
           };
           
           this.setElement("#session-quickview");
@@ -162,6 +168,7 @@ define([
           
         } else if (this.format == "modal") {
           this.setElement("#new-session-modal");
+          this.changeViewsOfInternalModels();
           this.$el.html(this.templateModal(this.model.toJSON()));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
@@ -193,71 +200,57 @@ define([
     /**
      * creates a new session if the app's session id doesnt match this session's id after saving.
      */
-    updatePouch : function() {
-      Utils.debug("Saving the Session");
-      var self = this;
-      this.model.changeCorpus(this.model.get("corpusname"),function(){
-        self.model.save(null, {
-          success : function(model, response) {
-            Utils.debug('Session save success');
-            window.appView.toastUser("Sucessfully saved session.","alert-success","Saved!");
-
-            try{
-              if(window.app.get("currentSession").id != model.id){
-                window.app.get("corpus").get("sessions").unshift(model);
-                window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                    new Activity({
-                      verb : "added",
-                      directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
-                      indirectobject : "in "+window.app.get("corpus").get("title"),
-                      context : "via Offline App",
-                      user: window.app.get("authentication").get("userPublic")
-                    }));
-              }
-              window.app.set("currentSession", model);
-              window.appView.renderEditableSessionViews();
-              window.appView.renderReadonlySessionViews();
-              window.appView.addSavedDoc(model.id);
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-              //add session to the users session history if they dont already have it
-              if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
-                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-              }
-            }catch(e){
-              Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
-            }
-          },
-          error : function(e) {
-            Alert('Session save error' + e);
-          }
-        });
-      });
-      if(this.format == "modal"){
-        $("#new-session-modal").modal("hide");
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
       }
+      var self = this;
+      this.model.saveAndInterConnectInApp(function(){
+        /* If it is in the modal, then it is a new session */
+        if(self.format == "modal"){
+          self.model.setAsCurrentSession(function(){
+            $("#new-session-modal").modal("hide");
+            window.appView.sessionReadLeftSideView.render();
+          });
+        }
+      });
     },
-    
     //functions associated with icons
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showEmbeddedSession();
     },
     
-    resizeLarge : function() {
+    resizeLarge : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenSession();
     },
     
     //bound to changes
-    showEditable :function() {
+    showEditable :function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       this.changeViewsOfInternalModels();
       window.appView.renderEditableSessionViews();
     },
     
     //bound to book
-    showReadonly : function() {
-      window.app.router.showReadonlySession();
+    showReadonly : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
+      window.appView.renderReadonlySessionViews();
     },
     //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       console.log("I'm a new comment!");
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),

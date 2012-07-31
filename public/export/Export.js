@@ -56,6 +56,12 @@ define([
     },
     
     exportLaTex : function() {
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

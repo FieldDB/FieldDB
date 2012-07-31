@@ -11,48 +11,37 @@
 <!-- list for the tags -->
 <ul class="datum_tags_ul unstyled"></ul>
 <!-- Buttons for various actions -->
-<div>
-  <div class="icons btn-group ">
-    <button class="btn btn-primary" id="LaTeX">LaTeX</button>
-    <button class="btn btn-primary dropdown-toggle"
-    data-toggle="dropdown">
-      ə
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a>ə</a>
-      </li>
-    </ul>
-    <a  id="playDatum" href="#" rel="tooltip" title="Play audio" >
-       <i class="icons icon-bullhorn"></i></a>
-    <a  id="clipboard" href="#" rel="tooltip" title="Copy to clipboard" >
-       <i class="icons icon-paste"></i></a>
-    <a  id="duplicate" href="#" rel="tooltip" title="Duplicate" >
-      <i class="icons icon-copy"></i></a>
-    <a  id="encrypt" href="#" rel="tooltip" title="Encrypt/Decrypt" >
-      <i class="icons icon-lock"></i></a>   
-
-<!--     <a id="playDatum"><i class="icons icon-bullhorn"></i></a> 
-     <a id="clipboard"><i class="icons icon-paste"></i></a> 
-     <a id="duplicate"><i class="icons icon-copy"></i></a>
-     <a id="encrypt"><i class="icons icon-lock"></i></a>  
--->
-  </div>
+<div class="icons btn-group">
+  <a href="#" rel="tooltip" title="Insert a new datum on top of this area"><button class="btn btn-primary">
+    <i class="icon-white icon-plus"></i></button></a>
+  <a href="#" rel="tooltip" title="Export to LaTeX format">
+      <button class="btn btn-primary LaTeX">LaTeX</button></a>
+  <a href="#" rel="tooltip" title="Export to CSV/Excel format">
+      <button class="btn btn-primary CSV">CSV/Excel</button></a>
+  <a  id="clipboard" href="#" rel="tooltip" title="Copy data to clipboard" >
+     <i class="icons icon-paste"></i></a>
+  <a  id="duplicate" href="#" rel="tooltip" title="Duplicate datum to create a minimal pair" >
+    <i class="icons icon-copy"></i></a>
+  <a  id="encrypt" href="#" rel="tooltip" title="Make this data confidential/encrypted">
+    <i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>       
+  <a  id="encrypt" href="#" rel="tooltip" title="Show confidential/encrypted data" >
+    <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>   
 </div>
+<div class="audio_video"></div>
 
 <!--Comments Section  -->
 <div class="comments-section">
-<h3>Comments</h3>
-<ul class="comments unstyled"></ul>
-
-<div class="alert alert-info">
-  <span> new comment: </span>
-  <i class="icons icon-comment"></i>
-  <div class= "pull-right">  </div>
-  <textarea class="comment-new-text"></textarea>
-</div>
-
-<button class="btn btn-primary add-comment-datum-edit" value="Add">Add
-  Comment</button>
+	<h3>Comments</h3>
+	
+	<ul class="comments unstyled"></ul>
+	
+	<div class="alert alert-info">
+	  <span> new comment: </span>
+	  <i class="icons icon-comment"></i>
+	  <div class= "pull-right">  </div>
+	  <textarea class="comment-new-text"></textarea>
+	</div>
+	
+	<button class="btn btn-primary add-comment-datum-edit" value="Add">Add
+	  Comment</button>
 </div>

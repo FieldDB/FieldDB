@@ -83,6 +83,12 @@ define([
       if (typeof callback == "function"){
         callback();
       }
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
     
 	}); 

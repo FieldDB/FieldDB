@@ -35,7 +35,13 @@ define(["backbone"], function(Backbone) {
         callback();
       }
     },
-    
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+
     /**
      * Schedule the bot to run the given MapReduce functions at the
      * given location on the given crontab schedule.

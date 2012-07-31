@@ -84,8 +84,31 @@ define([
     events : {
       "click .add-comment-datum-edit" : 'insertNewComment',
 
-      "click .icon-lock" : "encryptDatum",
-      "click .icon-unlock" : "decryptDatum",
+      "click .icon-unlock" : "encryptDatum",
+      "click .icon-lock" : "decryptDatum",
+      "click .icon-eye-open" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        var self = this;
+        confidential.turnOnDecryptedMode(function(){
+          self.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
+        });
+
+        return false;
+      },
+      "click .icon-eye-close" : function(e){
+        var confidential = app.get("corpus").get("confidential");
+        if(!confidential){
+          alert("This is a bug: cannot find decryption module for your corpus.")
+        }
+        confidential.turnOffDecryptedMode();
+        this.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+
+        return false;
+      },
+
       "change" : "updatePouch",
       "click .add_datum_tag" : "insertNewDatumTag",
       "keyup .add_tag" : function(e) {
@@ -101,12 +124,15 @@ define([
       "change .datum_state_select" : "updateDatumStates",
       "click .LaTeX" : function(){
         this.model.laTeXiT(true);
+        $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
         this.model.exportAsPlainText(true);
+        $("#export-modal").modal("show");
       },
       "click .CSV" : function(){
         this.model.exportAsCSV(true, null, true);
+        $("#export-modal").modal("show");
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
@@ -160,10 +186,12 @@ define([
     render : function() {
       Utils.debug("DATUM render: " + this.el);
       
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+      
       if (this.format == "well") {
         // Display the DatumEditView
-        var jsonToRender = this.model.toJSON();
-        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
         
         // Display audioVideo View
@@ -230,59 +258,22 @@ define([
   
     /**
      * Encrypts the datum if it is confidential
-     * 
-     * @returns {Boolean}
      */
     encryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      // console.log("Fake encrypting");
-      var confidential = appView.corpusView.model.confidential;
-
-      if (confidential == undefined) {
-        appView.corpusView.model.confidential = new Confidential();
-        confidential = appView.corpusView.model.confidential;
-      }
-
-      this.model.set("utterance", confidential.encrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.encrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.encrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.encrypt(this.model
-          .get("translation")));
-
-      // this.model.set("utterance", this.model.get("utterance").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("morphemes", this.model.get("morphemes").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("gloss", this.model.get("gloss").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("translation", this.model.get("translation").replace(/[^
-      // -.]/g,"x"));
+      this.model.encrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
-
-      // console.log(confidential);
-      // this.model.set()
+      $(".icon-unlock").toggleClass("icon-unlock icon-lock");
     },
-    
+
     /**
      * Decrypts the datum if it was encrypted
      */
     decryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      var confidential = appView.corpusView.model.confidential;
-      this.model.set("utterance", confidential.decrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.decrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.decrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.decrypt(this.model
-          .get("translation")));
+      this.model.decrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
-    
+
     needsSave : false,
     
     updatePouch : function() {
@@ -298,66 +289,11 @@ define([
         // happens
         // before the saving is done
         this.needsSave = false;
-
-        // Store the current Session, the current corpus, and the current date
-        // in the Datum
-        this.model.set({
-          "session" : app.get("currentSession"),
-          "corpusname" : app.get("corpus").get("corpusname"),
-          "dateModified" : JSON.stringify(new Date())
-        });
-
-        // If this Datum has never been saved
-        var neverBeenSaved = false;
-        if (!this.model.get("dateEntered")) {
-          neverBeenSaved = true;
-          
-          // Give a dateEntered
-          this.model.set("dateEntered", JSON.stringify(new Date()));
-        }
-
-        Utils.debug("Saving the Datum");
         var self = this;
-        this.model.changeCorpus(app.get("corpus").get("corpusname"), function(){
-          self.model.save(null, {
-            success : function(model, response) {
-              window.appView.addSavedDoc(model.id);
-              if (neverBeenSaved) {
-                window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                    new Activity({
-                      verb : "added",
-                      directobject : "a datum",
-                      indirectobject : "in "+window.app.get("corpus").get("title"),
-                      context : "via Offline App",
-                      user: window.app.get("authentication").get("userPublic")
-                    }));
-                
-                // If the default data list is the currently visible data list, add this datum to the view
-                var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-                if (app.get("corpus").get("dataLists").models[defaultIndex].cid == app.get("corpus").get("dataLists").models[defaultIndex].cid) {
-                  appView.dataListEditLeftSideView.addOneDatumId(model.id, true);
-                } else {
-                  // Add it to the default data list
-                  app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-                }
-                
-                // Save the default data list
-                app.get("corpus").get("dataLists").models[defaultIndex].changeCorpus(app.get("corpus").get("corpusname"), function() {
-                  app.get("corpus").get("dataLists").models[defaultIndex].save();
-                });
-                
-                // Save the corpus
-                app.get("corpus").changeCorpus(app.get("corpus").get("couchConnection"), function() {
-                  app.get("corpus").save();
-                });
-              }
-              window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+model.id,"alert-success","Saved!");
-
-            },
-            error : function(model){
-              window.appView.toastUser("Unable to save datum: "+model.id,"alert-danger","Not saved!");
-            }
-          });
+        this.model.saveAndInterConnectInApp(function(){
+          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+self.model.id,"alert-success","Saved!");
+        },function(){
+          window.appView.toastUser("Unable to save datum: "+self.model.id,"alert-danger","Not saved!");
         });
       }
     },
@@ -400,7 +336,7 @@ define([
      */
     newDatum : function() {
       // Add a new Datum to the top of the Datum stack
-      appView.datumsView.newDatum();
+      appView.datumsEditView.newDatum();
     },
     
     /** 
@@ -413,7 +349,7 @@ define([
       delete d.attributes.dateEntered;
       delete d.attributes.dateModified;
       d.set("session", app.get("currentSession"));
-      appView.datumsView.prependDatum(d);
+      appView.datumsEditView.prependDatum(d);
     },
     /*
      * this function can be used to play datum automatically
@@ -427,13 +363,13 @@ define([
       if (morphemesLine) {
         var glossLine = Glosser.glossFinder(morphemesLine);
         if (this.$el.find(".gloss .datum_field_input").val() == "") {
-          // If the gloss line is empty, make it a copy of the morphemes
-          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+          // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
+//          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
           
           this.needsSave = true;
         }
-        // If the guessed gloss is different than the existing glosses
-        if (glossLine != morphemesLine && glossLine != "") {
+        // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
+        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?]/g,"") != "") {
           // Ask the user if they want to use the guessed gloss
           if (confirm("Would you like to use this gloss:\n" + glossLine)) {
             // Replace the gloss line with the guessed gloss
