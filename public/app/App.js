@@ -40,19 +40,20 @@ define([
      * @property {Authentication} authentication The auth member variable is an
      *           Authentication object permits access to the login and logout
      *           functions, and the database of users depending on whether the
-     *           app is online or not.
+     *           app is online or not. The authentication is the primary way to access the current user.
      * 
      * @property {Corpus} corpus The corpus is a Corpus object which will permit
-     *           access to the datum, and the data lists. The corpus feeds the
+     *           access to the datum, the data lists and the sessions. The corpus feeds the
      *           search object with indexes and fields for advanced search, the
      *           corpus has datalists, has teams with permissions, has a
      *           confidentiality_encryption key, it's datum have sessions, its
-     *           datalists have export.
+     *           datalists and datum have export.
      * 
-     * @property {Search} search The search is the primary surface where the
-     *           global search features will attach.
+     * @property {Search} search The current search details.
      * 
      * @property {Session} currentSession The session that is currently open.
+     * 
+     * @property {DataList} currentDataList The datalist that is currently open.
      * 
      * @extends Backbone.Model
      * @constructs
@@ -67,17 +68,9 @@ define([
         this.set("authentication", new Authentication());
       }
       
-      window.onbeforeunload = this.saveAllStateBeforeUserLeaves;
-      window.onunload = this.storeCurrentDashboardIdsToLocalStorage;
-      localStorage.setItem("saveStatus", "Not Saved");
-
+      window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
+      window.onunload = this.saveAndInterConnectInApp;
       
-    },
-    
-    defaults : {
-      corpus : Corpus,
-      currentSession : Session,
-      currentDataList : DataList
     },
     
     // Internal models: used by the parse function
@@ -85,7 +78,8 @@ define([
       corpus : Corpus,
       authentication : Authentication,
       currentSession : Session,
-      currentDataList : DataList
+      currentDataList : DataList,
+      search : Search
     },
     
     /**
@@ -99,18 +93,22 @@ define([
      * @param callback
      */
     createAppBackboneObjects : function(optionalcorpusname, callback){
-      if(optionalcorpusname == null){
+      if (optionalcorpusname == null) {
         optionalcorpusname == "";
       }
       if (this.get("authentication").get("userPublic") == undefined) {
-        var u = new UserMask({corpusname: optionalcorpusname});
+        var u = new UserMask({
+          corpusname : optionalcorpusname
+        });
         this.get("authentication").set("userPublic", u);
       }
       if (this.get("authentication").get("userPrivate") == undefined) {
         var u2 = new User();
         this.get("authentication").set("userPrivate", u2);
       }
-      var c = new Corpus({corpusname : optionalcorpusname});
+      var c = new Corpus({
+        corpusname : optionalcorpusname
+      });
       this.set("corpus", c);
 
       var s = new Session({
@@ -119,30 +117,38 @@ define([
       });
       this.set("currentSession", s);
 
-      var dl = new DataList({corpusname: optionalcorpusname});
+      var dl = new DataList({
+        corpusname : optionalcorpusname
+      });
       this.set("currentDataList", dl);
-      
+
+      var search = new Search({
+        corpusname : optionalcorpusname
+      });
+      this.set("search", search);
+
       if (typeof callback == "function") {
         callback();
       }
     },
+   
     /**
-     * Accepts the ids to load the app. This is a helper function which is caled
+     * Accepts the ids to load the app. This is a helper function which is called
      * at the three entry points, main (if there is json in the localstorage
      * from where the user was last working), Welcome new user has a similar
      * function but which creates a user and their recent data, and
      * authentication calls this function to load the users most recent work
      * after they have authenticated (if they were the user who was logged in,
-     * they take it frmo local storage, if they were not then the data will have
+     * they take it from local storage, if they were not then the data will have
      * to be synced.)
      * 
      * Preconditions:
-     * The user is already authenticated with their corpus server,
-     * The corpus server has sent down(replicated) the data.
-     * 
-     * @param corpusid
-     * @param sessionid
-     * @param datalistid
+     * The user must already  be authenticated with their corpus server,
+     * The corpus server has sent down (replicated) the data.
+    
+     * @param couchConnection
+     * @param appids
+     * @param callback
      */
     loadBackboneObjectsById : function(couchConnection, appids, callback) {
       if(couchConnection == null || couchConnection == undefined){
@@ -160,70 +166,64 @@ define([
         //fetch only after having setting the right pouch which is what changeCorpus does.
         c.fetch({
           success : function(model) {
-            Utils.debug("Corpus fetched successfully" + model);
+            Utils.debug("Corpus fetched successfully", model);
             window.appView.addBackboneDoc(model.id);
             window.appView.addPouchDoc(model.id);
 
-            //show pretty views after loading everything.
-            window.appView.renderReadonlyCorpusViews();
+            var s = self.get("currentSession");
+            s.set({
+              "corpusname" : couchConnection.corpusname});
+            s.id = appids.sessionid; 
+            s.changeCorpus(couchConnection.corpusname, function(){
+              s.fetch({
+                success : function(model) {
+                  Utils.debug("Session fetched successfully", model);
+                  window.appView.addBackboneDoc(model.id);
+                  window.appView.addPouchDoc(model.id);
+                  
+                  var dl = self.get("currentDataList");
+                  dl.set({
+                    "corpusname" : couchConnection.corpusname});
+                  dl.id = appids.datalistid; 
+                  dl.changeCorpus(couchConnection.corpusname, function(){
+                    dl.fetch({
+                      success : function(model) {
+                        Utils.debug("Data list fetched successfully", model);
+                        window.appView.addBackboneDoc(model.id);
+                        window.appView.addPouchDoc(model.id);
+                        
+                        /*
+                         * After all fetches have succeeded show the pretty dashboard
+                         */
+                        window.appView.renderReadonlyDashboardViews();
+//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession();
+//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList();
+//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
+                        if (typeof callback == "function") {
+                          callback();
+                        }
+                        
+                      },
+                      error : function(e) {
+                        alert("There was an error fetching the data list. Loading defaults..."+e);
+                      }
+                    });
+                  });
+                },
+                error : function(e) {
+                  alert("There was an error fetching the session. Loading defaults..."+e);
+                  s.set(
+                      "sessionFields", self.get("corpus").get("sessionFields").clone()
+                  );
+                }
+              });
+            });
           },
           error : function(e) {
-            Utils.debug("There was an error fetching corpus. Loading defaults..."+e);
+            alert("There was an error fetching corpus. Loading defaults..."+e);
           }
         });
       });
-      
-      var s = this.get("currentSession");
-      s.set({
-        "corpusname" : couchConnection.corpusname});
-      s.id = appids.sessionid; //tried setting both ids to match, and it worked!!
-
-      s.changeCorpus(couchConnection.corpusname, function(){
-        //fetch only after having setting the right pouch which is what changeCorpus does.
-        s.fetch({
-          success : function(model) {
-            Utils.debug("Session fetched successfully" +model);
-            window.appView.addBackboneDoc(model.id);
-            window.appView.addPouchDoc(model.id);
-            //show pretty views after loading everything.
-            window.appView.renderReadonlySessionViews();
-          },
-          error : function(e) {
-            Utils.debug("There was an error fetching the session. Loading defaults..."+e);
-            s.set(
-                "sessionFields", self.get("corpus").get("sessionFields").clone()
-            );
-          }
-        });
-      });
-      var dl = this.get("currentDataList");
-      dl.set({
-        "corpusname" : couchConnection.corpusname});
-      dl.id = appids.datalistid; //tried setting both ids to match, and it worked!!
-
-      dl.changeCorpus(couchConnection.corpusname, function(){
-        //fetch only after having setting the right pouch which is what changeCorpus does.
-        dl.fetch({
-          success : function(model) {
-            Utils.debug("Data list fetched successfully" +model);
-            window.appView.addBackboneDoc(model.id);
-            window.appView.addPouchDoc(model.id);
-            
-            // Render the read version of the first page of the datalist
-            window.appView.renderFirstPageReadonlyDataListViews();
-          },
-          error : function(e) {
-            Utils.debug("There was an error fetching the data list. Loading defaults..."+e);
-          }
-        });
-      });
-      
-      //TODO move this callback after the fetch succeeds?
-      if (typeof callback == "function") {
-        callback();
-        //show pretty views after loading everything.
-      }
-      
     },
     router : AppRouter,
     /**
@@ -234,11 +234,9 @@ define([
         return 'Your own message goes here...';
       });
      */
-    saveAllStateBeforeUserLeaves : function(e){
+    warnUserAboutSavedSyncedStateBeforeUserLeaves : function(e){
       localStorage.setItem("saveStatus", "Saving in unload...");
       
-      //TODO, this doesn't work.
-      //this.storeCurrentDashboardIdsToLocalStorage();
       var returntext = "";
       if(window.appView.totalUnsaved.length >= 1){
         returntext = "You have unsaved changes, click cancel to save them. \n\n";
@@ -253,147 +251,29 @@ define([
       }
     },
     /**
-     * This function should be called before the user leaves the page, it should also be called before the user clicks sync
-     * It helps to maintain where the user was, what corpus they were working on etc. It creates the json that is used to reload
-     * a users' dashboard from localstorage, or to load a fresh install when the user clicks sync my data.
-     * 
-     * Note: its callback is only called if saving the corpus worked. 
-     * 
+     * This function sequentially saves first the session, datalist and then corpus. Its success callback is called if all saves succeed, its fail is called if any fail. 
+     * @param successcallback
+     * @param failurecallback
      */
-    storeCurrentDashboardIdsToLocalStorage : function(callback){
-      localStorage.setItem("saveStatus", "Saving in unload...in store function");
-      window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-
-      /*
-       * Turn on pub sub to find out when all three have saved, then call the callback
-       */
-      var thiscallback = callback;
-      
-      this.savedcount = 0;
-      this.savefailedcount = 0;
-      window.hub.unsubscribe("savedToPouch", null, this);
-      window.hub.unsubscribe("saveFailedToPouch", null, this);
-      window.hub.subscribe("savedToPouch",function(arg){
-        window.appView.toastUser("Saved "+ arg+ " to pouch.","alert-success","Saved!");
-        window.app.savedcount++;
-        if( window.app.savedcount > 2){
-//       dont need, now using all details   localStorage.setItem("userid", window.app.get("authentication").get("userPrivate").id);//the user private should get their id from mongodb
-          window.app.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
-          localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
-          window.appView.toastUser("Your dashboard has been saved, you can exit the page at anytime and return to this state.","alert-success","Exit at anytime:");
-          //save ids to the user also so that the app can bring them back to where they were
-          if(typeof thiscallback == "function"){
-            thiscallback();
-          }
-//          maybe this was breaking the replicate corpus ?
-          if(window.appView){
-            window.appView.renderReadonlyDataListViews();
-            window.appView.renderReadonlySessionViews();
-            window.appView.renderReadonlyCorpusViews();
-          }
-          window.hub.unsubscribe("savedToPouch", null, window.app);
-        }
-      },this);
-      window.hub.subscribe("saveFailedToPouch",function(arg){
-        Utils.debug("Saved "+ arg+ " to pouch.");
-        window.app.savefailedcount++;
-        window.appView.toastUser("Save failed "+arg,"alert-danger","Failure:");
-      },this);
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
       var self = this;
-      this.get("currentSession").changeCorpus( self.get("corpus").get("couchConnection").corpusname, function(){
-        self.get("currentSession").save(null, {
-          success : function(model, response) {
-            Utils.debug('Session save success');
-            window.appView.addSavedDoc(model.id);
-            try{
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                  new Activity({
-                    verb : "saved",
-                    directobject : "session "+ model.get("sessionFields").where({label: "goal"})[0].get("value"),
-                    indirectobject : "in "+window.app.get("corpus").get("title"),
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
-                  }));
-            }catch(e){
-              Utils.debug("Couldnt save the session id to the user's mostrecentids"+e);
-            }
-            hub.publish("savedToPouch","session"+model.id);
-            localStorage.setItem("saveStatus", "Saving in unload...saved session");
-
-            self.get("currentDataList").changeCorpus( self.get("corpus").get("couchConnection").corpusname, function(){
-              self.get("currentDataList").save(null, {
-                success : function(model, response) {
-                  Utils.debug('Datalist save success');
-                  window.appView.addSavedDoc(model.id);
-                  try{
-                    window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
-                    window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                        new Activity({
-                          verb : "saved",
-                          directobject : "datalist "+ model.get("title"),
-                          indirectobject : "in "+window.app.get("corpus").get("title"),
-                          context : "via Offline App",
-                          user: window.app.get("authentication").get("userPublic")
-                        }));
-                  }catch(e){
-                    Utils.debug("Couldnt save the datatlist id to the user's mostrecentids"+e);
-                  }
-                  hub.publish("savedToPouch","datalist"+model.id);
-                  localStorage.setItem("saveStatus", "Saving in unload...saved datalist");
-
-                  self.get("corpus").changeCorpus( self.get("corpus").get("couchConnection"), function(){
-                    self.get("corpus").save(null, {
-                      success : function(model, response) {
-                        Utils.debug('Corpus save success');
-                        window.appView.addSavedDoc(model.id);
-                        try{
-                          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
-                          localStorage.setItem("mostRecentCouchConnection", JSON.stringify(model.get("couchConnection")));
-                          window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                              new Activity({
-                                verb : "saved",
-                                directobject : "corpus "+ model.get("title"),
-                                indirectobject : "",
-                                context : "via Offline App",
-                                user: window.app.get("authentication").get("userPublic")
-                              }));
-                        }catch(e){
-                          Utils.debug("Couldnt save the corpus id to the user's mostrecentids"+e);
-                        }
-                        hub.publish("savedToPouch","corpus"+model.id);
-                        localStorage.setItem("saveStatus", "Saving in unload...saved corpus");
-                        localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
-                        localStorage.setItem("saveStatus", "Saving in unload...saved entire dashboard");
-
-                      },
-                      error : function(e) {
-                        Utils.debug('Corpus save error' );
-                        Utils.debug(e);
-                        hub.publish("saveFailedToPouch","corpus");
-                      }
-                    });
-                  });
-                },
-                error : function(e) {
-                  Utils.debug('Datalist save error');
-                  Utils.debug(e);
-                  hub.publish("saveFailedToPouch","datalist");
-                }
-              });
-            });
-          },
-          error : function(e) {
-            Utils.debug('Session save error' );
-            Utils.debug(e);
-            hub.publish("saveFailedToPouch","session");
-          }
-        });
-      });
-      localStorage.setItem("saveStatus", "Saving in unload...end store function");
-
-      return "Returning before the save is done.";
+      self.get("currentSession").saveAndInterConnectInApp(function(){
+        self.get("currentDataList").saveAndInterConnectInApp(function(){
+          self.get("corpus").saveAndInterConnectInApp(function(){
+            self.get("authentication").saveAndInterConnectInApp(function(){
+              self.get("authentication").staleAuthentication = true;//TODO turn this on when the pouch stops making duplicates for all the corpus session datalists that we call save on, this will also trigger a sync of the user details to the server, and ask them to use their password to confim that they want to replcate to their corpus.
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+//              window.appView.renderReadonlyDashboardViews();
+              app.router.showDashboard();
+            },failurecallback);
+          },failurecallback);
+        }, failurecallback);
+      }, failurecallback);
     }
+    
+   
   });
 
   return App;

@@ -1,7 +1,9 @@
 define([
-    "backbone"
+    "backbone",
+    "user/Users"
 ], function(
-    Backbone
+    Backbone,
+    Users
 ) {
   var Permission = Backbone.Model.extend(
   /** @lends Permission.prototype 	*/
@@ -31,30 +33,22 @@ define([
      * @constructs
      */
     intialize : function() {
-      //    var mayi = new MotherMayI("localhost", 6379, 0); 
     },
   
-    // Default: all action-component combinations are permitted to 
-    // every user? (think about a user working on by him/herself on his/her 
-    // own corpus, and hasn't made it public).     
     defaults : {
-      //mayi.may("userid", "admin", "corpusid", function(may){
-      //	if(may) {
-      //    	} else {    		
-      //    	}
-          	
-      // })    	
-          	
-      // mayi.grant("userid", "admin", "", function(success) {});     	
-      // mayi.grant("userid", "read", "corpusid", function(success) {});     	
-      // mayi.grant("userid", "edit", "corpusid", function(success) {});     	
-      // mayi.grant("userid", "comment", "corpusid", function(success) {});     	
-      // mayi.grant("userid", "export", "corpusid", function(success) {});
+//      users: Users,
+//      role: "", //admin, contributor, collaborator
+//      corpusname: "",
     },
     
     // Internal models: used by the parse function
     model : {
-      // There are no nested models
+      users: Users
+    },
+    saveAndInterConnectInApp : function(callback){
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

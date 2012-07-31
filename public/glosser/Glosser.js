@@ -245,7 +245,12 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, corpusname) {
   
   return rulesGraph;
 }
-
+Glosser.saveAndInterConnectInApp = function(callback){
+  
+  if(typeof callback == "function"){
+    callback();
+  }
+}
 /*
  * Some sample D3 from the force-html.html example
  * 

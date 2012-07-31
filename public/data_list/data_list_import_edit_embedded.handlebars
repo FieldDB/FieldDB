@@ -1,37 +1,27 @@
 <div class="pull-right">
-  <a href="#" rel="tooltip" title="Show read only">
-    	<i class="icons icon-book"></i></a>
-  <a href="#" rel="tooltip" title="Show dashboard">	
-    	<i class="icons icon-resize-small"></i></a>
+  <button class="btn btn-success save-import-datalist" value="Save">Save</button>
 </div>
-
-<button class="btn btn-success pull-left save-datalist" value="Save">Save</button>
-<br>
-<br>
 <label>Title:</label>
-<small>{{datumCount}}</small>
 <textarea placeholder="Title" class="data-list-title">{{title}}</textarea>
-<h4>{{dateCreated}}</h4>
-
 <label>Description</label>
-<textarea class="data-list-description"
-	placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
+<textarea class="data-list-description" placeholder="You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators.">{{description}}</textarea>
+<small>{{datumCount}}</small>
 
 <div class="icons">
-  <a href="#playDatum"><i class="icons icon-bullhorn"></i></a> 
   <a href="#clipboard"><i class="icons icon-paste"></i></a> 
   <a id="encrypt"><i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a>  <a ><i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
 
 
   <button class="btn btn-primary latex-export-datalist" id="LaTeX">LaTeX</button>
-	<button class="btn btn-primary CSV">CSV/Excel</button>
+  <button class="btn btn-primary CSV">CSV/Excel</button>
 </div>
+
 
 <ul class="comments unstyled"></ul>
 <div class="alert alert-info">
   <span> new comment: </span>
   <i class="icons icon-comment"></i>
-  <div class= "pull-right"> </div>
+  <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>
 </div>
   

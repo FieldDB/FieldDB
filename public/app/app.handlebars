@@ -73,8 +73,21 @@
     <div class="span3">
       <div id="corpus-quickview" class="well sidebar-nav"></div>
       <div id="session-quickview" class="well sidebar-nav"></div>
-      <div id="data-list-quickview" class="well sidebar-nav"></div>
-    </div>
+      <div id="search-data-list-quickview" class=" sidebar-nav">
+        <div id="search-data-list-quickview-header" class=" sidebar-nav"></div>
+        <div>
+          <ul class="unstyled zebra search-data-list-paginated-view"></ul>
+          <div class="pagination-control"></div>
+        </div>
+      </div>
+			<div id="data-list-quickview" class="well">
+				<div id="data-list-quickview-header" class=" sidebar-nav"></div>
+				<div>
+					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+					<div class="pagination-control"></div>
+				</div>
+			</div>
+		</div>
     <!--Elements in the middle (things that get hidden)  -->
     <div class="span6">
 			<div id="toast-user-area">
@@ -93,11 +106,16 @@
 			<div id="datums-embedded" class="middle well">
 			  <div>Datums</div>
 			</div>
-			
-			<div id="data-list-embedded" class="middle well">
-        <div>DataList</div>
-      </div>
-			
+
+			<div id="data-list-embedded"  class="well">
+				<div id="data-list-embedded-header" class="middle ">
+					<div>DataList</div>
+				</div>
+				<div>
+					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+					<div class="pagination-control"></div>
+				</div>
+			</div>
 
 			<div id="session-embedded" class="middle well">
         <div>Session</div>
@@ -129,6 +147,9 @@
 	<div id="user-fullscreen" class="well">
 		<div>User</div>
 	</div>
+	<div id="public-user-page" class="well">
+    <div>User</div>
+  </div>
 	<div id="corpus-fullscreen" class="well">
 		<div>Corpus</div>
 	</div>
@@ -139,7 +160,13 @@
 		<div>Search</div>
 	</div>
 	<div id="data-list-fullscreen" class="well">
-		<div>Data List</div>
+		<div id="data-list-fullscreen-header">
+			<div>DataList</div>
+		</div>
+		<div>
+			<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+			<div class="pagination-control"></div>
+		</div>
 	</div>
 	<div id="datum-container-fullscreen" class="well">
 	  <div>Datum Container</div>
@@ -154,8 +181,6 @@
 <!-- Modals are windows which pop over the active app to take focus -->
 <div id="hotkey-settings-modal" class="modal hide"></div>
 <div id="user-modal" class="modal hide"></div>
-<div id="user-edit-modal" class="modal hide"></div>
-
 <div id="user-preferences-modal" class="modal hide"></div>
 <div id="export-modal" class="modal hide"></div>
 <div id="new-session-modal" data-backdrop="static" class="modal hide"></div>

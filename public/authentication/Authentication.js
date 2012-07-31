@@ -36,6 +36,7 @@ define([
       });
       if(!this.get("confidential")){
         this.set("confidential", new Confidential());
+        this.get("confidential").decryptedMode = true;
         if(Utils.getCookie("token")){
           this.get("confidential").set("secretkey", Utils.getCookie("token")); //TODO store the token somewhere safer
         }
@@ -142,8 +143,10 @@ define([
       Utils.setCookie("token", data.user.hash, 365);
       this.get("confidential").set("secretkey", data.user.hash);
       this.saveAndEncryptUserToLocalStorage();
-      window.appView.addBackboneDoc(this.get("userPublic").id);
-      window.appView.addPouchDoc(this.get("userPublic").id);
+      if(window.appView){
+        window.appView.addBackboneDoc(this.get("userPublic").id);
+        window.appView.addPouchDoc(this.get("userPublic").id);
+      }
     },
     loadEncryptedUser : function(encryptedUserString, callback){
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
@@ -151,13 +154,25 @@ define([
       data.user = u;
       this.saveServerResponseToUser(data, callback);
     },
-    saveAndEncryptUserToLocalStorage : function(){
+    saveAndEncryptUserToLocalStorage : function(callback){
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u);
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
         window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
       }
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      localStorage.setItem("mostRecentDashboard", JSON.stringify(this.get("userPrivate").get("mostRecentIds")) );
+      this.saveAndEncryptUserToLocalStorage(function(){
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+      });
+      
     },
     /**
      * This function uses the quick authentication view to get the user's
