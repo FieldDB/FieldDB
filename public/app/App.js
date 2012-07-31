@@ -197,7 +197,7 @@ define([
                          */
                         window.appView.renderReadonlyDashboardViews();
 //                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession();
-                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList();
+//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList();
 //                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
                         if (typeof callback == "function") {
                           callback();
