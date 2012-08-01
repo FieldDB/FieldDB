@@ -90,7 +90,7 @@ define([
         appView.datumsEditView.prependDatum(d);
       },
       "click .datum-checkboxes": function(e){
-        alert("Checked box " + this.model.id);
+    //    alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
       }
     },

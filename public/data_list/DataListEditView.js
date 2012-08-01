@@ -154,7 +154,7 @@ define( [
       "click .icon-eye-open" : function(e){
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
-          alert("This is a bug: cannot find decryption module for your corpus.")
+          alert("This is a bug: cannot find decryption module for your corpus.");
         }
         var self = this;
         confidential.turnOnDecryptedMode(function(){
@@ -166,7 +166,7 @@ define( [
       "click .icon-eye-close" : function(e){
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
-          alert("This is a bug: cannot find decryption module for your corpus.")
+          alert("This is a bug: cannot find decryption module for your corpus.");
         }
         confidential.turnOffDecryptedMode();
         this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");

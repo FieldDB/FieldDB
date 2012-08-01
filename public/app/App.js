@@ -254,7 +254,7 @@ define([
               dl.changeCorpus(couchConnection.corpusname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
-                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                   // alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                     Utils.debug("Data list fetched successfully", dataListModel);
                     window.appView.addBackboneDoc(dataListModel.id);
                     window.appView.addPouchDoc(dataListModel.id);
@@ -267,13 +267,13 @@ define([
                       s.changeCorpus(couchConnection.corpusname, function(){
                         s.fetch({
                           success : function(sessionModel) {
-                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+                          //  alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                             Utils.debug("Session fetched successfully", sessionModel);
                             window.appView.addBackboneDoc(sessionModel.id);
                             window.appView.addPouchDoc(sessionModel.id);
                             s.setAsCurrentSession(function(){
                               
-                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
+                            //  alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                               Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
 
@@ -352,7 +352,7 @@ define([
       if(!failurecallback){
         failurecallback = function(){
           alert("There was a bug/problem in the saveAndInterConnectInApp in App.js, somewhere along the save call. The Session is saved first, if it succeeds, then the datalist, then the corpus. The failure is somewhere along there.");
-        }
+        };
       }
       var appSelf = this;
       appSelf.get("currentSession").saveAndInterConnectInApp(function(){
@@ -366,7 +366,7 @@ define([
               appSelf.router.showDashboard();
               
               if(typeof successcallback == "function"){
-                alert("The dashboard saved successfully, now calling the successcallback.");
+              //  alert("The dashboard saved successfully, now calling the successcallback.");
                 successcallback();
               }
               
