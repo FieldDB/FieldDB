@@ -1,8 +1,9 @@
 {
-  "name": "ifield",
+  "name": "__MSG_application_title__",
   "version": "1.13.1",
-  "description": " ",
+  "description": "__MSG_application_description__",
   "default_locale": "en",
+  
   "app": {
     "launch": {
       "local_path": "dashboard.html"
@@ -19,6 +20,6 @@
    "icons": { 
     "16": "icon16.png",
     "48": "icon48.png",
-    "128": "icon128.png"
+    "128": "icon128.png" 
   }
 }
