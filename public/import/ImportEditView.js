@@ -139,9 +139,12 @@ define( [
     render : function() {
       this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
-      if(this.model.get("dataList") != undefined){
-        if(this.model.dataListView != undefined){
-          this.model.dataListView.render();
+      if(this.dataListView != undefined){
+        this.dataListView.format = "import";
+        this.dataListView.render();
+        if(this.importPaginatedDataListDatumsView){
+          this.importPaginatedDataListDatumsView.renderInElement(
+              $("#import-data-list").find(".import-data-list-paginated-view") );
         }
       }
       if(this.model.get("asCSV") != undefined){
@@ -268,29 +271,29 @@ define( [
        * 
        * Copied from SearchEditView 
        */
-      if( this.model.importPaginatedDataListDatumsView ){
-        this.model.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
-        var coll = this.model.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
-        //this.model.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
+      if( this.importPaginatedDataListDatumsView ){
+        this.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
+        var coll = this.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+        //this.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
         while (coll.length > 0) {
           coll.pop();
         }
-        delete this.model.importPaginatedDataListDatumsView.collection;
-        delete this.model.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
+        delete this.importPaginatedDataListDatumsView.collection;
+        delete this.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
       }
       /*
        * This holds the ordered datums of the temp import data list
        */
-      this.model.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+      this.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
         collection           : new Datums(),
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
         childViewFormat      : "latex"
       }); 
 
-      if(this.model.dataListView){
-        this.model.dataListView.destroy_view();
-        delete this.model.dataListView.model; //tell the garbage collector we are done.
+      if(this.dataListView){
+        this.dataListView.destroy_view();
+        delete this.dataListView.model; //tell the garbage collector we are done.
       }
       
       var filename = " typing/copy paste into text area";
@@ -302,16 +305,16 @@ define( [
         //do nothing
       }
       
-      this.model.dataListView = new DataListEditView({
+      this.dataListView = new DataListEditView({
         model : new DataList({
           "corpusname" : window.app.get("corpus").get("corpusname"),
           "title" : "Data from "+filename,
-          "description": discript
+          "description": descript
         }),
       }); 
-      this.model.dataListView.format = "import";
-      this.model.dataListView.render();
-      this.model.importPaginatedDataListDatumsView.renderInElement(
+      this.dataListView.format = "import";
+      this.dataListView.render();
+      this.importPaginatedDataListDatumsView.renderInElement(
         $("#import-data-list").find(".import-data-list-paginated-view") );
       
       /* end views set up */
@@ -408,8 +411,8 @@ define( [
         d.set("datumStates", states);
         
         //these are temp datums, dont save them until the user saves the data list
-        this.model.importPaginatedDataListDatumsView.collection.add(d);
-//        this.model.dataListView.model.get("datumIds").push(d.id);
+        this.importPaginatedDataListDatumsView.collection.add(d);
+//        this.dataListView.model.get("datumIds").push(d.id);
 
         this.model.get("datumArray").push(d);
       }
@@ -501,8 +504,8 @@ define( [
 
         var dl = new DataList({
           "corpusname" : window.app.get("corpus").get("corpusname"),
-          "title" : appView.importView.model.dataListView.model.get("title"),
-          "description": appView.importView.model.dataListView.model.get("description")
+          "title" : appView.importView.dataListView.model.get("title"),
+          "description": appView.importView.dataListView.model.get("description")
         });
         dl.saveAndInterConnectInApp(function(){
           dl.setAsCurrentDataList(function(){
