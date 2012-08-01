@@ -141,6 +141,22 @@ define( [
       $(this.el).find(".icon-resize-full").hide();
       $(this.el).find(".save-datalist").hide();
       $(this.el).find(".icon-resize-small").hide();
+      
+      //localization
+      $(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
+      $(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
+      $(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
+      $(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
+      $(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
+      $(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
+      $(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
+      
+
+
+
+
+
+      
       return this;
     },
     renderDatumFieldsLabels : function(){

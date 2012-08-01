@@ -1,0 +1,453 @@
+{
+  "application_title" : {
+    "message" : "iCampo"
+  },
+  "application_description" : {
+    "message" : "Un aplicacion de colección de datos linguisticos."
+  },
+  "locale_Close_and_login_as_Ed_Sapir" : {
+    "message" : "Cerrar y Entrar como Ed Sapir",
+    "description" : "button"
+  },
+  "locale_Username" : {
+    "message" : "Usuario:"
+  },
+  "locale_Password" : {
+    "message" : "Contraseña:"
+  },
+  "locale_Sync_my_data_to_this_computer" : {
+    "message" : "Sincronisa mis datos con esta computadora"
+  },
+  "locale_Welcome_to_iField" : {
+    "message" : "¡Bienvenido a iCampo! <small>beta</small>"
+  },
+  "locale_An_offline_online_fieldlinguistics_database" : {
+    "message" : "<i> Un aplicacion de coleccion de datos linguisticos..</i>"
+  },
+  "locale_Welcome_Beta_Testers" : {
+    "message" : "<p> ¡Bienvenidos! Por favor vea estos tutoriales antes de empezar de probar iCampo. Dejanos notas, comentarios, sugerencias en la forma abajo. Si no puedes ver los videos, ve a este URL</p>"
+  },
+  "locale_Or_create_a_new_user" : {
+    "message" : "Crear un nuevo usuario"
+  },
+  "locale_What_is_your_username_going_to_be" : {
+    "message" : "¿Que quieres por su usuario?"
+  },
+  "locale_Confirm_Password" : {
+    "message" : "Confirme su contraseña:"
+  },
+  "locale_Sign_in_with_password" : {
+    "message" : "Registrar"
+  },
+  "locale_Warning" : {
+    "message" : "¡Aviso!"
+  },
+  "locale_This_is_a_beta_version" : {
+    "message" : "Esta es una versión beta de iCampo, podría sonreír y hacer burbujas pero también eructa, vomita y duerme en momentos inoportunos ..."
+  },
+  "locale_New_User" : {
+    "message" : "Usuario Nuevo"
+  },
+  "locale_Activity_Feed" : {
+    "message" : "Canal de Actividad"
+  },
+  "locale_Need_save" : {
+    "message" : "Se ocupa guadar:"
+  },
+  "locale_60_unsaved" : {
+    "message" : "<strong>60% sin guardar.</strong>"
+  },
+  "locale_Recent_Changes" : {
+    "message" : "Cambios Recientes:"
+  },
+  "locale_Need_sync" : {
+    "message" : "Se ocupa sincronisar:"
+  },
+  "locale_Differences_with_the_central_server" : {
+    "message" : "Diferencias con el servidor central:"
+  },
+  "locale_to_beta_testers" : {
+    "message" : "Estos mensajes son para comunicar con los provadores que hace la aplicación. Los mensajes se desapareserán cuando la aplicación esta mas estable. <p>Puedes cerrar los mensajes con el x.</p>"
+  },
+  "locale_We_need_to_make_sure_its_you" : {
+    "message" : "Ocupamos asegurar que es ustéd..."
+  },
+  "locale_Yep_its_me" : {
+    "message" : "¡Si, soy yo!"
+  },
+  "locale_Log_Out" : {
+    "message" : "Salir"
+  },
+  "locale_Log_In" : {
+    "message" : "Entrar"
+  },
+  "locale_User_Profile" : {
+    "message" : "Perfil de Usuario"
+  },
+  "locale_User_Settings" : {
+    "message" : "Configuración de Usuario"
+  },
+  "locale_Keyboard_Shortcuts" : {
+    "message" : "Funciones ràpidas de teclado"
+  },
+  "locale_Corpus_Settings" : {
+    "message" : "Configuración de Corpus"
+  },
+  "locale_Terminal_Power_Users" : {
+    "message" : "Terminal"
+  },
+  "locale_New_Datum" : {
+    "message" : "Dato Nuevo"
+  },
+  "locale_New_menu" : {
+    "message" : "Nuevo"
+  },
+  "locale_New_Data_List" : {
+    "message" : "Lista de Datos Nuevo"
+  },
+  "locale_New_Session" : {
+    "message" : "Sesión Nuevo"
+  },
+  "locale_New_Corpus" : {
+    "message" : "Corpus Nuevo"
+  },
+  "locale_Data_menu" : {
+    "message" : "Datos"
+  },
+  "locale_Import_Data" : {
+    "message" : "Importe de Datos"
+  },
+  "locale_Export_Data" : {
+    "message" : "Exporte de Datos"
+  },
+  "locale_Save" : {
+    "message" : "Guadar"
+  },
+  "locale_Title" : {
+    "message" : "Título:"
+  },
+  "locale_Description" : {
+    "message" : "Descripción:"
+  },
+  "locale_Sessions_associated" : {
+    "message" : "Sesiónes asociados con el corpus"
+  },
+  "locale_Datalists_associated" : {
+    "message" : "Listas de datos asociados con el corpus"
+  },
+  "locale_Permissions_associated" : {
+    "message" : "Permisos asociados con el corpus"
+  },
+  "locale_Datum_field_settings" : {
+    "message" : "Configuración de los detailles de datos"
+  },
+  "locale_Encrypt_if_confidential" : {
+    "message" : "Encripta si es confidencial:"
+  },
+  "locale_Help_Text" : {
+    "message" : "Texto de Ayuda:"
+  },
+  "locale_Add" : {
+    "message" : "Añadir"
+  },
+  "locale_Datum_state_settings" : {
+    "message" : "Configuración de Estado de Datos"
+  },
+  "locale_Green" : {
+    "message" : "Verde"
+  },
+  "locale_Orange" : {
+    "message" : "Naranjado"
+  },
+  "locale_Red" : {
+    "message" : "Rojo"
+  },
+  "locale_Blue" : {
+    "message" : "Azul"
+  },
+  "locale_Teal" : {
+    "message" : "Verde Azulado"
+  },
+  "locale_Black" : {
+    "message" : "Negro"
+  },
+  "locale_Default" : {
+    "message" : "Gris"
+  },
+  "locale_Session" : {
+    "message" : "Sesión"
+  },
+  "locale_Export" : {
+    "message" : "Exportar"
+  },
+  "locale_Actions" : {
+    "message" : "Acciónes"
+  },
+  "locale_Navigation" : {
+    "message" : "Navegación"
+  },
+  "locale_Favorite" : {
+    "message" : "Favorito"
+  },
+  "locale_Next_Datum" : {
+    "message" : "Próximo Dato"
+  },
+  "locale_Previous_Datum" : {
+    "message" : "Último Dato"
+  },
+  "locale_Search" : {
+    "message" : "Búzqueda"
+  },
+  "locale_Close" : {
+    "message" : "Cerrar"
+  },
+  "locale_New_Corpus_Instructions" : {
+    "message" : "Edite la forma abajo para crear un nuevo corpus, o presione ESC para entrar más datos en el corpus presente."
+  },
+  "locale_New_Corpus_Warning" : {
+    "message" : "La funcionalidad del corpus nuevo aún necesita más pruebas, este mensaje desaparecerá cuando Corpus Nuevo no es experimental."
+  },
+  "locale_Cancel" : {
+    "message" : "Cancel"
+  },
+  "locale_Next" : {
+    "message" : "Próximo"
+  },
+  "locale_Show" : {
+    "message" : "Mostrar"
+  },
+  "locale_per_page" : {
+    "message" : "por pagina"
+  },
+  "locale_New_Session_Instructions" : {
+    "message" : "<p> Edite los forma abajo para crear una sesión, o presionar ESC para entrar más datos en la sesión presente. </ p> "
+  },
+  "locale_Consultants" : {
+    "message" : "Consultor(es):"
+  },
+  "locale_Goal" : {
+    "message" : "Objectivo:"
+  },
+  "locale_When" : {
+    "message" : "Fecha:"
+  },
+  "locale_Save_And_Import" : {
+    "message" : "Guardar y Terminar de Importar"
+  },
+  "locale_Import" : {
+    "message" : "Importar"
+  },
+  "locale_percent_completed" : {
+    "message" : "0% completo."
+  },
+  "locale_Import_Instructions" : {
+    "message" : " <ol> <li> Jalar y Soltar un archivo (csv, txt, tabed, xml, text) a la zona abajo..</li> <li>(Modificar su información como necesario.)</li> <li> Jalar o escribe los detailles de datos arriba de los columnos que coinciden. Las columnas se convertirán en filas de su pagina de datos. .</li> <li>Precionar el botón Intenta Importar.</li> <li>Revisa la lista de datos y averigua que su importe se ve bien. </li> <li>Modifica la tabla como necesario, oprime Intentar Importar cuando la lista esta listo, puede hacer este paso las veces que quiere. </li> <li>Cuando esta sastifecho con la lista de datos, oprime Guadar y su lista de datos serían importados a su corpus y un nuevo lista de datos será creado. </li> </ol>"
+  },
+  "locale_Add_Extra_Columns" : {
+    "message" : " Agrega Columnas Extras"
+  },
+  "locale_Attempt_Import" : {
+    "message" : "Intenta Importar"
+  },
+  "locale_LaTeX_Code" : {
+    "message" : "Codigo de LaTeX:"
+  },
+  "locale_Unicode_Instructions" : {
+    "message" : "Esto es un función rápida de teclado para entrar esta letra en un fila de datos. Para cambiar el función:"
+  },
+  "locale_Remove_Unicode" : {
+    "message" : "Quite Unicode"
+  },
+  "locale_Unicode" : {
+    "message" : "Unicode"
+  },
+  "locale_Drag_and_Drop" : {
+    "message" : "<small>Jalar y Soltar</small>"
+  },
+  "locale_AND" : {
+    "message" : "Y"
+  },
+  "locale_OR" : {
+    "message" : "O"
+  },
+  "locale_Advanced_Search" : {
+    "message" : "Búsqueda Advanzada"
+  },
+  "locale_Email" : {
+    "message" : "Correo Electronico:"
+  },
+  "locale_Research_Interests" : {
+    "message" : "Intereses de Investigación"
+  },
+  "locale_Affiliation" : {
+    "message" : "Afiliación"
+  },
+  "locale_Corpora" : {
+    "message" : "Corpora"
+  },
+  "locale_Gravatar" : {
+    "message" : "Gravatar"
+  },
+  "locale_Gravatar_URL" : {
+    "message" : "Gravatar URL"
+  },
+  "locale_Firstname" : {
+    "message" : "Primer nombre:"
+  },
+  "locale_Lastname" : {
+    "message" : "Apellido:"
+  },
+  "locale_Skin" : {
+    "message" : "Foro:"
+  },
+  "locale_Background_on_Random" : {
+    "message" : "Aleatorio de Foro"
+  },
+  "locale_Transparent_Dashboard" : {
+    "message" : "Tablero Transparente"
+  },
+  "locale_Change_Background" : {
+    "message" : "Cambiar Foro"
+  },
+  "locale_Number_Datum" : {
+    "message" : "Numbero de Datos a la vez:"
+  },
+  "locale_Add_Placeholder" : {
+    "message" : "Añadir...."
+  },
+  "locale_Datalist_Description" : {
+    "message" : "Se puede usar las lista de datos para preparar para sesiones con consultantes o compartir con colaboradores."
+  },
+  "locale_Add_Tag" : {
+    "message" : "Etiqueta Nueva..."
+  },
+  "locale_locale_Help_Text" : {
+    "message" : "Se puede incluir text de ayuda aqui (opcional)"
+  },
+  "locale_Drag_and_Drop_Placeholder" : {
+    "message" : "Jale y Suelta achivos o textos aqui!"
+  },
+  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {
+    "message" : "Tecla o pega símbulo de unicode"
+  },
+  "locale_TIPA_shortcut" : {
+    "message" : "Función rapida de teclado"
+  },
+  "locale_Show_Activities" : {
+    "message" : "Mostrar actividades"
+  },
+  "locale_Hide_Activities" : {
+    "message" : "Esconder actividades"
+  },
+  "locale_Show_Dashboard" : {
+    "message" : "Mostrar Tablero"
+  },
+  "locale_Save_on_this_Computer" : {
+    "message" : "Guardar en la computadora"
+  },
+  "locale_Sync_and_Share" : {
+    "message" : "Sincronizar y compartir con el equipo"
+  },
+  "locale_Show_Readonly" : {
+    "message" : "Mostrar en forma para leer "
+  },
+  "locale_Show_Fullscreen" : {
+    "message" : "Mostrar en pantalla completa "
+  },
+  "locale_Add_locale_New_Datum_Field" : {
+    "message" : "Añadir un nuevo detaille de dato"
+  },
+  "locale_Add_locale_New_Datum_State" : {
+    "message" : "Añadir un estado de dato"
+  },
+  "locale_Show_in_Dashboard" : {
+    "message" : "Mostrar en Tablero"
+  },
+  "locale_Edit_corpus" : {
+    "message" : "Edita Corpus"
+  },
+  "locale_Show_corpus_settings" : {
+    "message" : "Mostrar Configuración de Corpus"
+  },
+  "locale_Play_Audio" : {
+    "message" : "Tocar audio"
+  },
+  "locale_Copy" : {
+    "message" : "Copiar"
+  },
+  "locale_Duplicate" : {
+    "message" : "Duplicar Dato por hacer un contraste minimál"
+  },
+  "locale_Encrypt" : {
+    "message" : "Encriptar/Decriptar"
+  },
+  "locale_Edit_Datalist" : {
+    "message" : "Editar lista de datos"
+  },
+  "locale_Export_Datalist" : {
+    "message" : "Exportar lista de datos seleccionados en formato LaTeX"
+  },
+  "locale_Hide_Datalist" : {
+    "message" : "Esconder lista de datos"
+  },
+  "locale_Show_Datalist" : {
+    "message" : "Mostrar lista de datos"
+  },
+  "locale_Edit_Datum" : {
+    "message" : "Editar Datos"
+  },
+  "locale_See_Fields" : {
+    "message" : "más o menos detailles"
+  },
+  "locale_Add_Tags" : {
+    "message" : "Añadir etiquetas"
+  },
+  "locale_Edit_Session" : {
+    "message" : "Editar Sesión"
+  },
+  "locale_Show_Unicode_Palette" : {
+    "message" : "Mostrar los Unicodes"
+  },
+  "locale_Hide_Unicode_Palette" : {
+    "message" : "Esconder los Unicodes"
+  },
+  "locale_Add_new_symbol" : {
+    "message" : "Añadir un símbulo nuevo"
+  },
+  "locale_Public_or_Private" : {
+    "message" : "Publico o Privado:"
+  },
+  "locale_Copy_checked" : {
+    "message" : "Copiar los seleccionados"
+  },
+  "locale_Play_Audio_checked" : {
+    "message" : "Tocar audio de los seleccionados"
+  },
+  "locale_Encrypt_checked" : {
+    "message" : "Encriptar los datos seleccionados"
+  },
+  "locale_Decrypt_checked" : {
+    "message" : "Mostrar datos confidenciales seleccionados"
+  },
+  "locale_Insert_New_Datum" : {
+    "message" : "Insertar un nuevo dato arriba"
+  },
+  "locale_LaTeX" : {
+    "message" : "Exportar dato en formato LaTeX"
+  },
+  "locale_CSV" : {
+    "message" : "Exportar dato en formato CSV "
+  },
+  "locale_Decrypt" : {
+    "message" : "Mostrar dato confidencial/encriptado"
+  },
+  "locale_of" : {
+    "message" : "de"
+  },
+  "locale_pages_shown" : {
+    "message" : "pagínas mostradas"
+  },
+  "locale_More" : {
+    "message" : "Más"
+  }
+}

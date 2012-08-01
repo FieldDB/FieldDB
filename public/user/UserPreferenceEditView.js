@@ -32,7 +32,7 @@ define([
      * Events that the UserPreferenceEditView is listening to and their handlers.
      */
     events:{
-      "click #skin" : "nextSkin",
+      "click .change-skin" : "nextSkin",
       "change .num_datum_dropdown" : "updateNumVisibleDatum",
       "click .randomize-backgound" : function(){
         if(this.model.get("alwaysRandomizeSkin")){
@@ -91,7 +91,14 @@ define([
           this.makeDashboardOpaque();
         }
       }
-      
+      //localization
+      $(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $(".locale_Skin").html(chrome.i18n.getMessage("locale_Skin"));
+      $(".locale_Change_Background").html(chrome.i18n.getMessage("locale_Change_Background"));
+      $(".locale_Background_on_Random").html(chrome.i18n.getMessage("locale_Background_on_Random"));
+      $(".locale_Transparent_Dashboard").html(chrome.i18n.getMessage("locale_Transparent_Dashboard"));
+      $(".locale_Datum_Number").html(chrome.i18n.getMessage("locale_Datum_Number"));
+      $(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));  
       return this;
     },
     
