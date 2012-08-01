@@ -405,11 +405,7 @@ define([
       if(fileIndex == null){
         fileIndex = 0;
       }
-      if(!callback){
-        callback = function(){
-          window.appView.importView.render();
-        }
-      }
+      
       var importType = {
         csv: { confidence: 0, importFunction : this.importCSV }
         ,tabbed: { confidence: 0, importFunction : this.importTabbed }
