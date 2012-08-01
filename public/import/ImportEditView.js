@@ -474,7 +474,7 @@ define( [
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
       
       // Render the first page of the new data list
-      this.currentReadDataListView.format = "leftSide";
+      window.appView.currentReadDataListView.format = "leftSide";
       window.appView.currentReadDataListView.render();
 //      window.appView.cur?`rentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
 //      window.appView.renderReadonlyDataListViews();
@@ -591,7 +591,8 @@ define( [
     createNewSession : function(callback){
       if(this.model.get("session") == undefined){
         this.model.set("session", new Session({
-          sessionFields : window.app.get("corpus").get("sessionFields").clone()
+          sessionFields : window.app.get("corpus").get("sessionFields").clone(),
+          "corpusname" : window.app.get("corpus").get("corpusname"),
         }));
         
         this.model.get("session").get("sessionFields").where({
