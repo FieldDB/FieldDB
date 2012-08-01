@@ -1,0 +1,458 @@
+{
+  "application_title" : {
+    "message" : "iField",
+    "description" : "The title of the application, displayed in the web store."
+  },
+  "application_description" : {
+    "message" : "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
+    "description" : "The description of the application, displayed in the web store."
+  },
+  "locale_Close_and_login_as_Ed_Sapir" : {
+    "message" : "Close and login as Ed Sapir",
+    "description" : "button"
+  },
+  "locale_Username" : {
+    "message" : "Username:"
+  },
+  "locale_Password" : {
+    "message" : "Password:"
+  },
+  "locale_Sync_my_data_to_this_computer" : {
+    "message" : "Sync my data to this computer"
+  },
+  "locale_Welcome_to_iField" : {
+    "message" : "Welcome to iField! <small>beta</small>"
+  },
+  "locale_An_offline_online_fieldlinguistics_database" : {
+    "message" : "<i> iField: An offline/online fieldlinguistics database which adapts to its user's I-Language.</i>"
+  },
+  "locale_Welcome_Beta_Testers" : {
+    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and watch this play list before you begin testing iField. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form at the bottom of the page. We will try to address all your comments before August 1st. Scroll down to create a new user.</p> <p>Have fun and happy bug hunting!</p> <p>If you cannot see the videos below, you can watch them here </p>"
+  },
+  "locale_Or_create_a_new_user" : {
+    "message" : "Create a new user"
+  },
+  "locale_What_is_your_username_going_to_be" : {
+    "message" : "What is your username going to be?"
+  },
+  "locale_Confirm_Password" : {
+    "message" : "Confirm Password:"
+  },
+  "locale_Sign_in_with_password" : {
+    "message" : "Register"
+  },
+  "locale_Warning" : {
+    "message" : "Warning!"
+  },
+  "locale_This_is_a_beta_version" : {
+    "message" : "This is a beta version of iField, it might smile and make bubbles but it also burps, vomits and sleeps at inopportune times..."
+  },
+  "locale_New_User" : {
+    "message" : "New User"
+  },
+  "locale_Activity_Feed" : {
+    "message" : "Activity Feed"
+  },
+  "locale_Need_save" : {
+    "message" : " Need save:"
+  },
+  "locale_60_unsaved" : {
+    "message" : "<strong>60% unsaved.</strong>"
+  },
+  "locale_Recent_Changes" : {
+    "message" : "Recent Changes:"
+  },
+  "locale_Need_sync" : {
+    "message" : "Need sync:"
+  },
+  "locale_Differences_with_the_central_server" : {
+    "message" : "Differences with the central server:"
+  },
+  "locale_to_beta_testers" : {
+    "message" : "These messages are here to communicate to beta testers what the app is doing, we will gradually reduce the number of messages as the app becomes more stable. <p>You can close these messages by clicking on their x.</p>"
+  },
+  "locale_We_need_to_make_sure_its_you" : {
+    "message" : "We need to make sure it's you..."
+  },
+  "locale_Yep_its_me" : {
+    "message" : "Yep, it's me"
+  },
+  "locale_Log_Out" : {
+    "message" : "Log Out"
+  },
+  "locale_Log_In" : {
+    "message" : "Log In"
+  },
+  "locale_User_Settings" : {
+    "message" : "User Settings"
+  },
+  "locale_Keyboard_Shortcuts" : {
+    "message" : "Keyboard Shortcuts"
+  },
+  "locale_Corpus_Settings" : {
+    "message" : "Corpus Settings"
+  },
+  "locale_Terminal_Power_Users" : {
+    "message" : "Terminal - Power Users"
+  },
+  "locale_New_Datum" : {
+    "message" : "New Datum"
+  },
+  "locale_New_menu" : {
+    "message" : "New"
+  },
+  "locale_New_Data_List" : {
+    "message" : "New Data List"
+  },
+  "locale_New_Session" : {
+    "message" : "New Session"
+  },
+  "locale_New_Corpus" : {
+    "message" : "New Corpus"
+  },
+  "locale_Data_menu" : {
+    "message" : "Data"
+  },
+  "locale_Import_Data" : {
+    "message" : "Import Data"
+  },
+  "locale_Export_Data" : {
+    "message" : "Export Data"
+  },
+  "locale_Save" : {
+    "message" : "Save"
+  },
+  "locale_Title" : {
+    "message" : "Title:"
+  },
+  "locale_Description" : {
+    "message" : "Description:"
+  },
+  "locale_Sessions_associated" : {
+    "message" : "Sessions associated with this corpus"
+  },
+  "locale_Datalists_associated" : {
+    "message" : "Datalists associated with this corpus"
+  },
+  "locale_Permissions_associated" : {
+    "message" : "Permissions associated with this corpus"
+  },
+  "locale_Datum_field_settings" : {
+    "message" : "Datum Field Settings"
+  },
+  "locale_Encrypt_if_confidential" : {
+    "message" : "Encrypt if confidential:"
+  },
+  "locale_Help_Text" : {
+    "message" : "Help Text:"
+  },
+  "locale_Add" : {
+    "message" : "Add"
+  },
+  "locale_Datum_state_settings" : {
+    "message" : "Datum State Settings"
+  },
+  "locale_Green" : {
+    "message" : "Green"
+  },
+  "locale_Orange" : {
+    "message" : "Orange"
+  },
+  "locale_Red" : {
+    "message" : "Red"
+  },
+  "locale_Blue" : {
+    "message" : "Blue"
+  },
+  "locale_Teal" : {
+    "message" : "Teal"
+  },
+  "locale_Black" : {
+    "message" : "locale_Black"
+  },
+  "locale_Default" : {
+    "message" : "Default"
+  },
+  "locale_Session" : {
+    "message" : "Session"
+  },
+  "locale_Export" : {
+    "message" : "Export"
+  },
+  "locale_Actions" : {
+    "message" : "Actions"
+  },
+  "locale_Navigation" : {
+    "message" : "Navigation"
+  },
+  "locale_Favorite" : {
+    "message" : "Favorite"
+  },
+  "locale_Next_Datum" : {
+    "message" : "Next Datum"
+  },
+  "locale_Previous_Datum" : {
+    "message" : "Previous Datum"
+  },
+  "locale_Search" : {
+    "message" : "Search"
+  },
+  "locale_Close" : {
+    "message" : "Close"
+  },
+  "locale_New_Corpus_Instructions" : {
+    "message" : "Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus"
+  },
+  "locale_New_Corpus_Warning" : {
+    "message" : " The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental."
+  },
+  "locale_Cancel" : {
+    "message" : "Cancel"
+  },
+  "locale_Next" : {
+    "message" : "Next"
+  },
+  "locale_Show" : {
+    "message" : "Show"
+  },
+  "locale_per_page" : {
+    "message" : "per page"
+  },
+  "locale_New_Session_Instructions" : {
+    "message" : "<p>Edit the fields below to create a new elicitation session, or push ESC to enter more data in the current session.</p>"
+  },
+  "locale_Consultants" : {
+    "message" : "Consultant(s):"
+  },
+  "locale_Goal" : {
+    "message" : "Goal:"
+  },
+  "locale_When" : {
+    "message" : "When:"
+  },
+  "locale_Save_And_Import" : {
+    "message" : "Save and Finish Importing"
+  },
+  "locale_Import" : {
+    "message" : "Import"
+  },
+  "locale_percent_completed" : {
+    "message" : "0% completed."
+  },
+  "locale_Import_Instructions" : {
+    "message" : " <ol> <li>Drag and drop a file (csv, txt, tabed, xml, text) to the area below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Drag/type the datum fields in the column headings which match. The columns will become fields in your database.</li> <li>Type in any other column headings that you want to keep in your imported data, the app will automatically create datum fields for these in your corpus.</li> <li>Click on the Attempt Import button.</li> <li>Review the data list to see if the import looks good.</li> <li>(Edit the table cells as needed, click Attempt Import and review data list as many times as you would like).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus, and a new data list will be created with this data.</li> </ol>"
+  },
+  "locale_Add_Extra_Columns" : {
+    "message" : " Add Extra Columns"
+  },
+  "locale_Attempt_Import" : {
+    "message" : "Attempt Import"
+  },
+  "locale_LaTeX_Code" : {
+    "message" : "LaTeX Code:"
+  },
+  "locale_Unicode_Instructions" : {
+    "message" : "By default this is also a keyboard shortcut to type this character in a datum field. To customize the shortcut:"
+  },
+  "locale_Remove_Unicode" : {
+    "message" : "Remove Unicode"
+  },
+  "locale_Unicode" : {
+    "message" : "Unicode"
+  },
+  "locale_Drag_and_Drop" : {
+    "message" : "<small>Drag and Drop</small>"
+  },
+  "locale_AND" : {
+    "message" : "AND"
+  },
+  "locale_OR" : {
+    "message" : "OR"
+  },
+  "locale_Advanced_Search" : {
+    "message" : "Advanced Search"
+  },
+  "locale_User_Profile" : {
+    "message" : "User Profile"
+  },
+  "locale_Email" : {
+    "message" : "Email:"
+  },
+  "locale_Research_Interests" : {
+    "message" : "Research Interests:"
+  },
+  "locale_Affiliation" : {
+    "message" : "Affiliation:"
+  },
+  "locale_Corpora" : {
+    "message" : "Corpora:"
+  },
+  "locale_Gravatar" : {
+    "message" : "Gravatar"
+  },
+  "locale_Gravatar_URL" : {
+    "message" : "Gravatar URL:"
+  },
+  "locale_Firstname" : {
+    "message" : "First name:"
+  },
+  "locale_Lastname" : {
+    "message" : "Last name:"
+  },
+  "locale_Skin" : {
+    "message" : "Skin:"
+  },
+  "locale_Background_on_Random" : {
+    "message" : "Background on Random"
+  },
+  "locale_Transparent_Dashboard" : {
+    "message" : "Transparent Dashboard"
+  },
+  "locale_Change_Background" : {
+    "message" : "Change Background"
+  },
+  "locale_Number_Datum" : {
+    "message" : "Number of Datum to appear at a time:"
+  },
+  "locale_Help_Text_Placeholder" : {
+    "message" : "Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
+  },
+  "locale_Add_Placeholder" : {
+    "message" : "Add...."
+  },
+  "locale_Datalist_Description" : {
+    "message" : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."
+  },
+  "locale_Add_Tag" : {
+    "message" : "New Tag..."
+  },
+  "locale_locale_Help_Text" : {
+    "message" : "Put some help text here (optional)"
+  },
+  "locale_Drag_and_Drop_Placeholder" : {
+    "message" : "Drag and drop files/text here!"
+  },
+  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {
+    "message" : "Paste/type unicode symbol"
+  },
+  "locale_TIPA_shortcut" : {
+    "message" : "TIPA/keyboard shortcut"
+  },
+  "locale_Show_Activities" : {
+    "message" : "Show Activities"
+  },
+  "locale_Hide_Activities" : {
+    "message" : "Hide Activities"
+  },
+  "locale_Show_Dashboard" : {
+    "message" : "Show dashboard with data entry form"
+  },
+  "locale_Save_on_this_Computer" : {
+    "message" : "Save on this computer."
+  },
+  "locale_Sync_and_Share" : {
+    "message" : "Sync and share with team"
+  },
+  "locale_Show_Readonly" : {
+    "message" : "Show read only"
+  },
+  "locale_Show_Fullscreen" : {
+    "message" : "Show full screen"
+  },
+  "locale_Add_locale_New_Datum_Field" : {
+    "message" : "Add new datum field"
+  },
+  "locale_Add_locale_New_Datum_State" : {
+    "message" : "Add new datum state"
+  },
+  "locale_Show_in_Dashboard" : {
+    "message" : "Show in dashboard"
+  },
+  "locale_Edit_corpus" : {
+    "message" : "Edit Corpus"
+  },
+  "locale_Show_corpus_settings" : {
+    "message" : "Show Corpus Settings"
+  },
+  "locale_Play_Audio" : {
+    "message" : "Play audio"
+  },
+  "locale_Play_Audio_checked" : {
+    "message" : "Play audio of checked items"
+  },
+  "locale_Copy" : {
+    "message" : "Copy to clipboard"
+  },
+  "locale_Copy_checked" : {
+    "message" : "Copy checked items to clipboard"
+  },
+  "locale_Duplicate" : {
+    "message" : "Duplicate datum to create a minimal pair"
+  },
+  "locale_Encrypt" : {
+    "message" : "Encrypt/Decrypt"
+  },
+  "locale_Encrypt_checked" : {
+    "message" : "Make checked items confidential/encrypted"
+  },
+  "locale_Decrypt_checked" : {
+    "message" : "Show confidential/encrypted items"
+  },
+  "locale_Decrypt" : {
+    "message" : "Show confidential/encrypted datum"
+  },
+  "locale_Edit_Datalist" : {
+    "message" : "Edit Data List"
+  },
+  "locale_Export_Datalist" : {
+    "message" : "Export checked as LaTeX"
+  },
+  "locale_Hide_Datalist" : {
+    "message" : "Hide datalist"
+  },
+  "locale_Show_Datalist" : {
+    "message" : "Show datalist"
+  },
+  "locale_Edit_Datum" : {
+    "message" : "Edit Datum"
+  },
+  "locale_See_Fields" : {
+    "message" : "See more/less fields"
+  },
+  "locale_Add_Tags" : {
+    "message" : "Add Tags"
+  },
+  "locale_Edit_Session" : {
+    "message" : "Edit Session"
+  },
+  "locale_Show_Unicode_Palette" : {
+    "message" : "Show Unicode Palette"
+  },
+  "locale_Hide_Unicode_Palette" : {
+    "message" : "Hide Unicode Palette"
+  },
+  "locale_Add_new_symbol" : {
+    "message" : "Add new symbol"
+  },
+  "locale_Public_or_Private" : {
+    "message" : "Public or Private:"
+  },
+  "locale_Insert_New_Datum" : {
+    "message" : "Insert a new datum on top of the dashboard center"
+  },
+  "locale_LaTeX" : {
+    "message" : "Export datum to LaTeX"
+  },
+  "locale_CSV" : {
+    "message" : "Export datum to CSV"
+  },
+  "locale_of" : {
+    "message" : "of"
+  },
+  "locale_pages_shown" : {
+    "message" : "pages shown"
+  },
+  "locale_More" : {
+    "message" : "More"
+  }
+}

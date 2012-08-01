@@ -83,7 +83,7 @@ define([
         // Display the AuthenticationEditView
         this.setElement($("#authentication-embedded"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
+     
         if (this.model.get("state") == "loggedIn") {
           $("#logout").show();
           $("#login").hide();
@@ -111,6 +111,18 @@ define([
       } else {
         Utils.debug("\tAuthentication model was undefined.");
       }
+      
+      //localization
+      $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+      $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
+      $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
+      $(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
+      
       
       return this;
     },

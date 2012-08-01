@@ -49,6 +49,7 @@ define([
 //    	  JSONtorender.username = this.model.username;
 //      }
       $(this.el).html(this.template(this.model.toJSON()));
+
       
       return this;
     },

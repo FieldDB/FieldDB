@@ -1,7 +1,9 @@
 {
-  "name": "iField beta",
+  "name": "__MSG_application_title__",
   "version": "1.13.1",
-  "description": "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
+  "description": "__MSG_application_description__",
+  "default_locale": "en",
+  
   "app": {
     "launch": {
       "local_path": "dashboard.html"

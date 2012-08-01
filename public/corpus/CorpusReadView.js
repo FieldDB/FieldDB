@@ -83,7 +83,7 @@ define([
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
-      "click .new-datum-read" : "newDatum",
+      "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
@@ -152,8 +152,7 @@ define([
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
-
-        
+ 
         // Display the UpdatingCollectionView
         //        this.dataListsView.render();
      
@@ -188,7 +187,7 @@ define([
 
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(this.model.toJSON()));
-        
+
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
@@ -213,10 +212,39 @@ define([
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();
 
-
       }
       
-
+      //localization
+      $(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
+      $(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+      $(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
+      $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+      $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+      $(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
+      $(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
+      $(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+      $(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
+      $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+      $(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+      $(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+      $(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+      $(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+      $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+      $(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+      $(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+      $(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+      $(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+      $(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
+      $(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+      $(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+      $(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+      $(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
+      $(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));  
       return this;
     },
     /**
