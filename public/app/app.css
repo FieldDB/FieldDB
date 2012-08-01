@@ -11,6 +11,9 @@
 .navbar input:hover{
   color: #000;
 }
+.width100 {
+ width: 100%;
+}
 .gravatar-small{
 	width: 2em;
 }

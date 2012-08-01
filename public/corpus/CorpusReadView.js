@@ -83,7 +83,7 @@ define([
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
-      "click .new-datum-read" : "newDatum",
+      "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
