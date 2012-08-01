@@ -3,18 +3,22 @@ define([
     "handlebars",
     "data_list/DataList",
     "data_list/DataListEditView",
+    "datum/DatumReadView",
     "datum/Datums",
     "datum/DatumFields",
     "datum/Session",
+    "app/PaginatedUpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
     Handlebars,
     DataList,
     DataListEditView,
+    DatumReadView,
     Datums,
     DatumFields,
-    Session
+    Session,
+    PaginatedUpdatingCollectionView
 ) {
   var Import = Backbone.Model.extend(
 
@@ -373,9 +377,19 @@ define([
         })
       });
       window.appView.importView.dataListView.format = "import";
-
+      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+        collection           : new Datums(),
+        childViewConstructor : DatumReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "latex"
+      }); 
+      
       // Render the DataList
+      window.appView.importView.dataListView.format = "import";
       window.appView.importView.dataListView.render();
+      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
+        $("#import-data-list").find(".import-data-list-paginated-view") );
+      
     },
     readFileIntoRawText : function(index, callback){
       var self = this;
@@ -390,6 +404,11 @@ define([
       var self = this;
       if(fileIndex == null){
         fileIndex = 0;
+      }
+      if(!callback){
+        callback = function(){
+          window.appView.importView.render();
+        }
       }
       var importType = {
         csv: { confidence: 0, importFunction : this.importCSV }
