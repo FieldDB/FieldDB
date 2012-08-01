@@ -1,6 +1,6 @@
 {
   "application_title" : {
-    "message" : "iCampo"
+    "message" : "iCampo beta"
   },
   "application_description" : {
     "message" : "Un aplicacion de colección de datos linguisticos."
@@ -25,7 +25,7 @@
     "message" : "<i> Un aplicacion de coleccion de datos linguisticos..</i>"
   },
   "locale_Welcome_Beta_Testers" : {
-    "message" : "<p> ¡Bienvenidos! Por favor vea estos tutoriales antes de empezar de probar iCampo. Dejanos notas, comentarios, sugerencias en la forma abajo. Si no puedes ver los videos, ve a este URL</p>"
+    "message" : "<p> ¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo.</p>"
   },
   "locale_Or_create_a_new_user" : {
     "message" : "Crear un nuevo usuario"

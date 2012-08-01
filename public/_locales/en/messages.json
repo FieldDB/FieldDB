@@ -1,6 +1,6 @@
 {
   "application_title" : {
-    "message" : "iField",
+    "message" : "iField beta",
     "description" : "The title of the application, displayed in the web store."
   },
   "application_description" : {
@@ -27,7 +27,7 @@
     "message" : "<i> iField: An offline/online fieldlinguistics database which adapts to its user's I-Language.</i>"
   },
   "locale_Welcome_Beta_Testers" : {
-    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and watch this play list before you begin testing iField. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form at the bottom of the page. We will try to address all your comments before August 1st. Scroll down to create a new user.</p> <p>Have fun and happy bug hunting!</p> <p>If you cannot see the videos below, you can watch them here </p>"
+    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing iField</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form at the bottom of the page. We will try to address all your comments before August 1st.</p> <p>Have fun and happy bug hunting!</p>"
   },
   "locale_Or_create_a_new_user" : {
     "message" : "Create a new user"
