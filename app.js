@@ -8,8 +8,8 @@ var express     = require('express')
     ,crypto     = require('crypto')
     ,fs         = require('fs');
 
-var apphttpsdomain = "https://localhost:3001";
-//var apphttpsdomain = "https://ifield.fieldlinguist.com";
+//var apphttpsdomain = "https://localhost:3001";
+var apphttpsdomain = "https://ifield.fieldlinguist.com";
 
 var httpsOptions ={
     key: fs.readFileSync('ifield.key'),
