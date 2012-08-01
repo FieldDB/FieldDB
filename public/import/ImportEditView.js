@@ -37,7 +37,7 @@ define( [
    */
   var ImportEditView = Backbone.View.extend({
     initialize : function(){
-      this.model.bind("change:asCSV", this.render, this);
+      this.model.bind("change", this.render, this);
       this._draghoverClassAdded = false;
     },
     events : {
@@ -134,18 +134,16 @@ define( [
     template: Handlebars.templates.import_edit_fullscreen,
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
-      this.model.guessFormatAndImport(function(){
-        window.appView.importView.render();
-      });
+      this.model.guessFormatAndImport();
     },
     render : function() {
       this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
-      if(window.appView.importView.dataListView != undefined){
-        window.appView.importView.dataListView.format = "import";
-        window.appView.importView.dataListView.render();
-        if(window.appView.importView.importPaginatedDataListDatumsView){
-          window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
+      if(this.dataListView != undefined){
+        this.dataListView.format = "import";
+        this.dataListView.render();
+        if(this.importPaginatedDataListDatumsView){
+          this.importPaginatedDataListDatumsView.renderInElement(
               $("#import-data-list").find(".import-data-list-paginated-view") );
         }
       }
@@ -266,61 +264,62 @@ define( [
       $(".add-column").show();
       $(".approve-import").show();
     },
-    convertTableIntoDataList : function(e){
-      if(e){
-        e.stopPropagation();
-      }
+    convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
 
       /* clear out the data list views and datum views
        * 
        * Copied from SearchEditView 
        */
-      if( window.appView.importView.importPaginatedDataListDatumsView ){
-//        window.appView.importView.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
-//        window.appView.importView.importPaginatedDataListDatumsView.collection.reset(); //could also use backbone's reset which will empty the collection, or fill it with a new group.
-//        delete window.appView.importView.importPaginatedDataListDatumsView.collection;
-//        delete window.appView.importView.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
+      if( this.importPaginatedDataListDatumsView ){
+        this.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
+        var coll = this.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+        //this.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        delete this.importPaginatedDataListDatumsView.collection;
+        delete this.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
       }
       /*
        * This holds the ordered datums of the temp import data list
        */
-      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+      this.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
         collection           : new Datums(),
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
         childViewFormat      : "latex"
       }); 
 
-      if(window.appView.importView.dataListView){
-//        window.appView.importView.dataListView.destroy_view();
-//        delete window.appView.importView.dataListView.model; //tell the garbage collector we are done.
+      if(this.dataListView){
+        this.dataListView.destroy_view();
+        delete this.dataListView.model; //tell the garbage collector we are done.
       }
       
       var filename = " typing/copy paste into text area";
       var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
       try {
-        filename = window.appView.importView.model.files[0].name;
-        descript = "This is the data list which results from the import of these files." + window.appView.importView.model.get("fileDetails");
+        filename = this.model.files[0].name;
+        descript = "This is the data list which results from the import of these files." + this.model.get("fileDetails");
       }catch(e){
         //do nothing
       }
       
-      window.appView.importView.dataListView = new DataListEditView({
+      this.dataListView = new DataListEditView({
         model : new DataList({
           "corpusname" : window.app.get("corpus").get("corpusname"),
           "title" : "Data from "+filename,
           "description": descript
         }),
       }); 
-      window.appView.importView.dataListView.format = "import";
-      window.appView.importView.dataListView.render();
-      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
+      this.dataListView.format = "import";
+      this.dataListView.render();
+      this.importPaginatedDataListDatumsView.renderInElement(
         $("#import-data-list").find(".import-data-list-paginated-view") );
       
       /* end views set up */
       
-      window.appView.importView.model.set("datumArray", []);
+      this.model.set("datumArray", []);
       var headers = [];
       $('th').each(function(index, item) {
           headers[index] = $(item).find(".drop-label-zone").val();
@@ -334,14 +333,14 @@ define( [
         } else if (headers[f] == "datumTags") {
           //do nothing
         } else{
-          if(window.appView.importView.model.get("datumFields").where({label: headers[f]})[0] == undefined){
+          if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
               label : headers[f],
               shouldBeEncrypted: "checked",
               userchooseable: "",
-              help: "This field came from file import "+window.appView.importView.model.get("status")
+              help: "This field came from file import "+this.model.get("status")
             });
-            window.appView.importView.model.get("datumFields").add(newfield);
+            this.model.get("datumFields").add(newfield);
             window.app.get("corpus").get("datumFields").add(newfield);
           }
         }
@@ -355,7 +354,7 @@ define( [
         //Import from html table that the user might have edited.
         $('tr').has('td').each(function() {
           var datumObject = {};
-          $('td', $(window.appView.importView)).each(function(index, item) {
+          $('td', $(this)).each(function(index, item) {
             datumObject[headers[index]] = $(item).html();
           });
           array.push(datumObject);
@@ -363,7 +362,7 @@ define( [
       }catch(e){
         //Import from the array instead of using jquery and html
         alert(JSON.stringify(e));
-        var rows = window.appView.importView.model.get("asCSV");
+        var rows = this.model.get("asCSV");
         for(var r in rows){
           var datumObject = {};
           for( var c in headers){
@@ -373,8 +372,8 @@ define( [
         }
       }
       for (a in array) {
-        var d = new Datum({corpusname : window.appView.importView.model.get("corpusname")});
-        var fields = window.appView.importView.model.get("datumFields").clone();
+        var d = new Datum({corpusname : this.model.get("corpusname")});
+        var fields = this.model.get("datumFields").clone();
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
@@ -412,10 +411,10 @@ define( [
         d.set("datumStates", states);
         
         //these are temp datums, dont save them until the user saves the data list
-        window.appView.importView.importPaginatedDataListDatumsView.collection.unshift(d);
-//        window.appView.importView.dataListView.model.get("datumIds").push(d.id);
+        this.importPaginatedDataListDatumsView.collection.add(d);
+//        this.dataListView.model.get("datumIds").push(d.id);
 
-        window.appView.importView.model.get("datumArray").push(d);
+        this.model.get("datumArray").push(d);
       }
       $(".approve-save").removeAttr("disabled");
       $(".approve-save").removeClass("disabled");
@@ -443,7 +442,7 @@ define( [
         // Add Datum to the new datalist and render it this should work
         // because the datum is saved in the pouch and can be fetched, 
         // this will also not be the default data list because has been replaced by the data list for this import
-        window.appView.currentPaginatedDataListDatumsView.collection.unshift(thatdatum);
+        window.appView.currentPaginatedDataListDatumsView.collection.add(thatdatum);
         window.app.get("currentDataList").get("datumIds").push(thatdatum.id);
 
       },function(){
