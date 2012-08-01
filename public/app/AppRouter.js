@@ -55,10 +55,10 @@ define([
       //Re-render the dashboard, if either the corpus or the datalist read views arent already renderd on the side.
       if(window.appView.currentCorpusReadView.format != "leftSide" || window.appView.currentReadDataListView.format != "leftSide" ){
         window.appView.renderReadonlyDashboardViews();
-      }else{
-        //Just render the datums container
-        window.appView.datumsEditView.render();
       }
+        //Just render the datums container
+      window.appView.datumsEditView.format = "centerWell";
+      window.appView.datumsEditView.render();
 //      window.app.router.hideEverything(); //TODO there is a loss of this somewhere in the app, using the hardcoded varible is a workaround.
       this.hideEverything();
       $("#dashboard-view").show();
