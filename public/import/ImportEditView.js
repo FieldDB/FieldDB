@@ -3,11 +3,16 @@ define( [
     "handlebars",
     "activity/Activity",
     "import/Import",
+    "data_list/DataList",
+    "data_list/DataListEditView",
     "datum/Datum",
+    "datum/Datums",
     "datum/DatumField",
     "datum/DatumFields",
+    "datum/DatumReadView",
     "datum/DatumTag",
     "datum/Session",
+    "app/PaginatedUpdatingCollectionView",
     "libs/Utils"
 
 ], function(
@@ -15,11 +20,17 @@ define( [
     Handlebars, 
     Activity,
     Import,
+    DataList,
+    DataListEditView,
     Datum,
+    Datums,
     DatumField,
     DatumFields,
+    DatumReadView,
     DatumTag,
-    Session
+    Session,
+    PaginatedUpdatingCollectionView
+
 ) {
   /**
    * https://gist.github.com/1488561
@@ -151,11 +162,6 @@ define( [
       $(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
       $(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
       
-
-
-
-
-
       
       return this;
     },
@@ -258,8 +264,58 @@ define( [
     convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
 
-      //clear out the data list
-      this.model.dataListView.clearDataList();
+      /* clear out the data list views and datum views
+       * 
+       * Copied from SearchEditView 
+       */
+      if( this.model.importPaginatedDataListDatumsView ){
+        this.model.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
+        var coll = this.model.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+        //this.model.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        delete this.model.importPaginatedDataListDatumsView.collection;
+        delete this.model.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
+      }
+      /*
+       * This holds the ordered datums of the temp import data list
+       */
+      this.model.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+        collection           : new Datums(),
+        childViewConstructor : DatumReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "latex"
+      }); 
+
+      if(this.model.dataListView){
+        this.model.dataListView.destroy_view();
+        delete this.model.dataListView.model; //tell the garbage collector we are done.
+      }
+      
+      var filename = " typing/copy paste into text area";
+      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
+      try {
+        filename = this.model.files[0].name;
+        descript = "This is the data list which results from the import of these files." + this.model.get("fileDetails");
+      }catch(e){
+        //do nothing
+      }
+      
+      this.model.dataListView = new DataListEditView({
+        model : new DataList({
+          "corpusname" : window.app.get("corpus").get("corpusname"),
+          "title" : "Data from "+filename,
+          "description": discript
+        }),
+      }); 
+      this.model.dataListView.format = "import";
+      this.model.dataListView.render();
+      this.model.importPaginatedDataListDatumsView.renderInElement(
+        $("#import-data-list").find(".import-data-list-paginated-view") );
+      
+      /* end views set up */
+      
       this.model.set("datumArray", []);
       var headers = [];
       $('th').each(function(index, item) {
@@ -350,7 +406,11 @@ define( [
         d.set("datumFields", fields);
         var states = window.app.get("corpus").get("datumStates").clone();
         d.set("datumStates", states);
-        this.model.dataListView.addOneTempDatum(d);
+        
+        //these are temp datums, dont save them until the user saves the data list
+        this.model.importPaginatedDataListDatumsView.collection.add(d);
+//        this.model.dataListView.model.get("datumIds").push(d.id);
+
         this.model.get("datumArray").push(d);
       }
       $(".approve-save").removeAttr("disabled");
@@ -379,7 +439,8 @@ define( [
         // Add Datum to the new datalist and render it this should work
         // because the datum is saved in the pouch and can be fetched, 
         // this will also not be the default data list because has been replaced by the data list for this import
-        window.appView.currentPaginatedDataListDatumsView.collection.unshift(thatdatum, true);
+        window.appView.currentPaginatedDataListDatumsView.collection.add(thatdatum);
+        window.app.get("currentDataList").get("datumIds").push(thatdatum.id);
 
       },function(){
         //The e error should be from the error callback

@@ -377,6 +377,7 @@ define([
           datumCollection : new Datums()
         });
         this.dataListView.format = "import";
+        
       }
       
       // Render the DataList
