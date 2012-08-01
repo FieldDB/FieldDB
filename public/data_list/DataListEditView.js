@@ -287,7 +287,6 @@ define( [
       $(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
       $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
       $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
-      $(".locale_Title").attr("placeholder", chrome.i18n.getMessage("locale_Title"));
       $(".locale_Datalist_Description").attr("placeholder", chrome.i18n.getMessage("locale_Datalist_Description"));
       $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
       $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
