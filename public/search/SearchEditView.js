@@ -154,8 +154,7 @@ define([
         }
         
         /*
-         * This holds the ordered datums of the temp search data list, and is the important place to keep the
-         * datum, it's ids will be saved into the resulting data list if and when the data list is saved
+         * This holds the ordered datums of the temp search data list
          */
         this.searchPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
           collection           : new Datums(),
