@@ -97,6 +97,7 @@ define([
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
+          
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render(); 
           // Display the CommentReadView
@@ -141,6 +142,17 @@ define([
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
+      
+      //localization
+      $(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+      $(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+      $(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+      $(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
+      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+ 
       return this;
     },
     

@@ -1,20 +1,21 @@
 <div class="modal-header">
-  <h1>New Corpus <small>{{corpusname}}</small></h1>
-  <p>Edit the fields below to create a new corpus, or push ESC to enter more data in the current corpus.</p>
-  <p class="alert alert-danger"><strong>Warning!</strong> The New Corpus functionality still needs more testing, this message will disappear when New Corpus is not experimental.</p>
+  <h1> <span class = "locale_New_Corpus"></span> <small>{{corpusname}}</small></h1>
+  <p><span class = "locale_New_Corpus_Instructions"></span></p>
+  <p class="alert alert-danger"><strong><span class="locale_Warning"></span></strong> 
+  <span class = "locale_New_Corpus_Warning"></span>
 </div>
+
 <div class="modal-body">
-  
-	<label>Title:</label>
+	<label class = "locale_Title"></label>
 	<textarea class="corpus-title-input">{{title}}</textarea>
-	<label>Description:</label>
+	<label class = "locale_Description">Description:</label>
 	<textarea class="corpus-description-input">{{description}}</textarea>
-  <label>Public or Private:</label>
+  <label class = "locale_Public_or_Private"></label>
   <input type="text" value="{{publicCorpus}}"  class=" public-or-private" data-provide="typeahead" data-items="4" 
         data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
- 
 </div>
+
 <div class="modal-footer">
-  <a href="#" class="btn" data-dismiss="modal">Cancel</a>
-   <button class="btn btn-success pull-right save-corpus"  value="Save">Save</button>  
+  <a href="#" class="btn" data-dismiss="modal"><span class = "locale_Cancel"></span></a>
+   <button class="btn btn-success pull-right save-corpus" value="Save"><span class = "locale_Save"></span></button>  
 </div>

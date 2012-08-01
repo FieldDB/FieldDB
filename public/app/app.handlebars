@@ -1,69 +1,65 @@
 <!-- Black Navigation Bar Across the Top -->
-<div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<div class="btn-group pull-right">
-				<ul class="nav">
-					<li>
-					 <a href="#" rel="tooltip" title="Show dashboard with data entry form">
-					     <i class="icons icon-home icon-white"></i></a>
-					</li>
-				  <li>
-					  <div class="btn-group">
-						  <button class="btn dropdown-toggle btn-inverse"
-		            data-toggle="dropdown">
-		            Need save:
-		            <progress class="unsaved-changes" max="100" value="30">
-		              <strong>60% unsaved.</strong>
-		            </progress>
-		            <span class="caret"></span>
-		          </button>
-		          <ul class="dropdown-menu unsaved-changes-status" id="unsaved-changes-status">
-		            <li class="not-a">Recent Changes:</li>
-		          </ul>
-	          </div>
-				  </li>
-				  <li> 
-				    <a href="#" rel="tooltip" title="Save on this computer">
-    				  <i class="icons icon-save save-dashboard icon-white"></i></a>
-          </li>
-          <li>
-				    <div class="btn-group">
-					  <button class="btn dropdown-toggle btn-inverse"
-	            data-toggle="dropdown">
-	            Need sync: 
-	            <progress class="unsynced-changes" max="100" value="80">
-	              <strong>60% unsaved.</strong>
-	            </progress>
-	            <span class="caret"></span>
-	          </button>
-	          <ul class="dropdown-menu unsynced-changes-status" id="unsynced-changes-status">
-	            <li class="not-a">Differences with the central server:</li>
-	          </ul>
-	          </div>
-				  </li>
-					<li> 
-					 <a href="#" rel="tooltip" title="Sync and share with team">
-    					<i class="icons icon-sitemap  sync-everything icon-white"></i></a>
-					</li>
-					<li><span id="user-quickview"><i
-              class="icons icon-user icon-white"></i></span>
-					</li>
-					<li>
-						<div class="btn-group">
-							<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"> 
-								 <span class="caret"></span>  
-							</button>
-							<ul class="dropdown-menu" id="authentication-embedded"></ul>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div>
-				<!-- This is a div for the top nav bar area -->
-				<span id="search-top" class="search"></span> 
-			</div>
-		</div>
+<div class="navbar navbar-fixed-top navbar-inner width100">
+	<div class="btn-group pull-right">
+		<ul class="nav">
+			<li>
+			 <a href="#" class = "locale_Show_Dashboard" rel="tooltip" title="Show dashboard with data entry form">
+			     <i class="icons icon-home icon-white"></i></a>
+			</li>
+		  <li>
+			  <div class="btn-group">
+				  <button class="btn dropdown-toggle btn-inverse"
+            data-toggle="dropdown">
+        <span class = "locale_Need_save"></span>   
+            <progress class="unsaved-changes" max="100" value="30">
+            <span class = "locale_60_unsaved"></span>
+            </progress>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu unsaved-changes-status" id="unsaved-changes-status">
+            <li class="not-a"><span class = "locale_Recent_Changes"></span></li>
+          </ul>
+        </div>
+		  </li>
+		  <li> 
+		    <a href="#" class = "locale_Save_on_this_Computer" rel="tooltip">
+				  <i class="icons icon-save save-dashboard icon-white"></i></a>
+      </li>
+      <li>
+		    <div class="btn-group">
+			  <button class="btn dropdown-toggle btn-inverse"
+          data-toggle="dropdown">
+           <span class = "locale_Need_sync"></span>  
+          <progress class="unsynced-changes" max="100" value="80">
+            <span class = "locale_60_unsaved"></span>
+          </progress>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu unsynced-changes-status" id="unsynced-changes-status">
+          <li class="not-a"><span class = "locale_Differences_with_the_central_server"></span></li>
+        </ul>
+        </div>
+		  </li>
+			<li> 
+			 <a href="#" class = "locale_Sync_and_Share" rel="tooltip">
+					<i class="icons icon-sitemap  sync-everything icon-white"></i></a>
+			</li>
+			<li><span id="user-quickview"><i
+          class="icons icon-user icon-white"></i></span>
+			</li>
+			<li>
+				<div class="btn-group">
+					<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"> 
+						 <span class="caret"></span>  
+					</button>
+					<ul class="dropdown-menu" id="authentication-embedded"></ul>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<!-- This is a div for the top nav bar area -->
+		<span id="search-top" class="search"></span> 
 	</div>
 </div>
 <!-- The rest of the page -->
@@ -93,92 +89,52 @@
 			<div id="toast-user-area">
 				<div class="alert alert-block">
 			    <a class="close" data-dismiss="alert" href="#">×</a>
-			    <strong class="alert-heading">Warning!</strong> 
-					This is an beta version of iField, it might smile and make
-						bubbles but it also burps, vomits and sleeps at inopportune
-						times... These messages are here to communicate what the app is
-						doing to beta testers, we will gradually reduce the number of messages as
-						the app becomes more stable.
-					<p>You can close these messages by clicking on their x.</p>
+			    <strong class="alert-heading"><span class= locale_Warning"></span></strong> 
+					<span class = "locale_This_is_a_beta_version"></span>
+					<span class = "locale_to_beta_testers"></span>
 				</div>
 			</div>
-  
-			<div id="datums-embedded" class="middle well">
-			  <div>Datums</div>
-			</div>
-
+			<div id="datums-embedded" class="middle well"></div>
 			<div id="data-list-embedded"  class="well">
-				<div id="data-list-embedded-header" class="middle ">
-					<div>DataList</div>
-				</div>
+				<div id="data-list-embedded-header" class="middle "></div>
 				<div>
 					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
 					<div class="pagination-control"></div>
 				</div>
 			</div>
-
-			<div id="session-embedded" class="middle well">
-        <div>Session</div>
-      </div>
-
-      <div id="corpus-embedded" class="middle well">
-        <div>Corpus</div>
-      </div>
-
-      <div id="search-embedded" class="middle well">
-        <div>Search</div>
-      </div>
-
+			<div id="session-embedded" class="middle well"></div>
+      <div id="corpus-embedded" class="middle well"></div>
+      <div id="search-embedded" class="middle well"></div>
     </div>
     <!--/span-->
     <!-- right hand side -->
     <div class="span3">
-      <div id="insert-unicode"  class="well">Insert Unicode</div>
-            <div id="activity-feed"  class="well">Activity Feed</div>
-      
-    </div>
-  
-    
+      <div id="insert-unicode"  class="well"></div>
+      <div id="activity-feed"  class="well"></div>
+    </div>  
     <!--/span-->
   </div>
   <!--/row-->
 
-	<!-- FullScreen Views -->
-	<div id="user-fullscreen" class="well">
-		<div>User</div>
-	</div>
-	<div id="public-user-page" class="well">
-    <div>User</div>
+  <!-- FullScreen Views -->
+  <div id="user-fullscreen" class="well"></div>
+  <div id="public-user-page" class="well">
+    <div id="corpus-fullscreen" class="well"></div>
+    <div id="session-fullscreen" class="well"></div>
+    <div id="search-fullscreen" class="well"></div>
+    <div id="data-list-fullscreen" class="well">
+      <div id="data-list-fullscreen-header"></div>
+      <div>
+        <ul class="unstyled zebra current-data-list-paginated-view"></ul>
+        <div class="pagination-control"></div>
+      </div>
+    </div>
+    <div id="datum-container-fullscreen" class="well"></div>
+    <div id="import-fullscreen" class=""></div>
   </div>
-	<div id="corpus-fullscreen" class="well">
-		<div>Corpus</div>
-	</div>
-	<div id="session-fullscreen" class="well">
-	  <div>Session</div>
-	</div>
-	<div id="search-fullscreen" class="well">
-		<div>Search</div>
-	</div>
-	<div id="data-list-fullscreen" class="well">
-		<div id="data-list-fullscreen-header">
-			<div>DataList</div>
-		</div>
-		<div>
-			<ul class="unstyled zebra current-data-list-paginated-view"></ul>
-			<div class="pagination-control"></div>
-		</div>
-	</div>
-	<div id="datum-container-fullscreen" class="well">
-	  <div>Datum Container</div>
-	</div>
-	<div id="import-fullscreen" class="">
-	 <h1>Import</h1>
-  </div>
+  <!--/row-->
 </div>
-<!--/row-->
-
-
-<!-- Modals are windows which pop over the active app to take focus -->
+  <!-- Modals are windows which pop over the active app to take focus -->
 <div id="hotkey-settings-modal" class="modal hide"></div>
 <div id="user-modal" class="modal hide"></div>
 <div id="user-preferences-modal" class="modal hide"></div>
@@ -187,13 +143,13 @@
 <div id="new-corpus-modal" data-backdrop="static" class="modal hide"></div>
 <div id="quick-authenticate-modal" data-backdrop="static" class="modal hide">
 <div class="modal-header">
-  <h4>We need to make sure it's you...</h4>
+  <h4 class = "locale_We_need_to_make_sure_its_you"></h4>
 </div>
 <div class="modal-body">
-<label>Password:</label>
+<label class = "Password"></label>
     <input type="password" id="quick-authenticate-password"/>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-success" id="quick-authentication-okay-btn">Yep, it's me</button>
+  <button class="btn btn-success" id="quick-authentication-okay-btn"><span class = "locale_Yep_its_me"></span></button>
 </div>
 </div>

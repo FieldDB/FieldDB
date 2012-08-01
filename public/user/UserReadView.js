@@ -88,7 +88,18 @@ define([
       }else{
         throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
-
+      //localization
+      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
+      $(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
+      $(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
+      $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+      $(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
+      $(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
+      $(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
+      $(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
+      $(".locale_Lastname").html(chrome.i18n.getMessage("locale_Lastname"));
+      
       return this;
     },
     

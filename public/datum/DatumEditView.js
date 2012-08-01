@@ -82,8 +82,24 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      "click .add-comment-datum-edit" : 'insertNewComment',
-
+      
+      /* Menu */
+      "click .LaTeX" : function(){
+        this.model.laTeXiT(true);
+        $("#export-modal").modal("show");
+      },
+      "click .icon-paste" : function(){
+        this.model.exportAsPlainText(true);
+        $("#export-modal").modal("show");
+      },
+      "click .CSV" : function(){
+        this.model.exportAsCSV(true, null, true);
+        $("#export-modal").modal("show");
+      },
+      "click .icon-th-list" : "hideRareFields",
+      "click .icon-list-alt" : "showRareFields",
+      
+      /* Edit Only Menu */
       "click .icon-unlock" : "encryptDatum",
       "click .icon-lock" : "decryptDatum",
       "click .icon-eye-open" : function(e){
@@ -108,8 +124,8 @@ define([
 
         return false;
       },
-
-      "change" : "updatePouch",
+      "click .icon-copy" : "duplicateDatum",
+      "click .icon-plus" : "newDatum",
       "click .add_datum_tag" : "insertNewDatumTag",
       "keyup .add_tag" : function(e) {
         var code = e.keyCode || e.which;
@@ -119,60 +135,13 @@ define([
           this.insertNewDatumTag();
         }
       },
-      "click #duplicate" : "duplicateDatum",
-      "click .icon-plus" : "newDatum",
       "change .datum_state_select" : "updateDatumStates",
-      "click .LaTeX" : function(){
-        this.model.laTeXiT(true);
-        $("#export-modal").modal("show");
-      },
-      "click .icon-paste" : function(){
-        this.model.exportAsPlainText(true);
-        $("#export-modal").modal("show");
-      },
-      "click .CSV" : function(){
-        this.model.exportAsCSV(true, null, true);
-        $("#export-modal").modal("show");
-      },
-      "click .icon-th-list" : "hideRareFields",
-      "click .icon-list-alt" : "showRareFields",
-      "blur .utterance .datum_field_input" : function(e) {
-        var utteranceLine = $(e.currentTarget).val();
-        if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-          //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-          window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
-        }
-        if (utteranceLine) {
-          var morphemesLine = Glosser.morphemefinder(utteranceLine);
-          if (this.$el.find(".morphemes .datum_field_input").val() == "") {
-            // If the morphemes line is empty, make it a copy of the utterance
-            this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
-            
-            this.needsSave = true;
-          }
-          // If the guessed morphemes is different than the unparsed utterance 
-          if (morphemesLine != utteranceLine && morphemesLine != "") {
-            //trigger the gloss guessing
-            this.guessGlosses(morphemesLine);
-            // Ask the user if they want to use the guessed morphemes
-            if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
-              // Replace the morphemes line with the guessed morphemes
-              this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
-              //redo the gloss guessing
-              this.guessGlosses(morphemesLine);
-              
-              this.needsSave = true;
-            }
-          }
-        }
-      },
-      "blur .morphemes .datum_field_input" : function(e){
-        if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-          //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-          window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
-        }
-        this.guessGlosses($(e.currentTarget).val());
-      }
+      "click .add-comment-datum-edit" : 'insertNewComment',
+      
+      "change" : "updatePouch",//TODO this shouldnt be happening?
+      
+      "blur .utterance .datum_field_input" : "utteranceBlur",
+      "blur .morphemes .datum_field_input" : "morphemesBlur"
     },
 
     /**
@@ -193,7 +162,7 @@ define([
       if (this.format == "well") {
         // Display the DatumEditView
         $(this.el).html(this.template(jsonToRender));
-        
+         
         // Display audioVideo View
         this.audioVideoView.el = this.$(".audio_video");
         this.audioVideoView.render();
@@ -220,10 +189,20 @@ define([
           });
           self.hideRareFields();
         }, 1000);
-       
-        
-        
+            
       }
+      //localization
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      $(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
+      $(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
+      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+      $(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
 
       return this;
     },
@@ -358,6 +337,43 @@ define([
       if(this.model.get("audioVideo")){
           this.$el.find(".datum-audio-player")[0].play();
       }
+    },
+    utteranceBlur : function(e){
+      var utteranceLine = $(e.currentTarget).val();
+      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
+        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+      }
+      if (utteranceLine) {
+        var morphemesLine = Glosser.morphemefinder(utteranceLine);
+        if (this.$el.find(".morphemes .datum_field_input").val() == "") {
+          // If the morphemes line is empty, make it a copy of the utterance
+          this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
+
+          this.needsSave = true;
+        }
+        // If the guessed morphemes is different than the unparsed utterance 
+        if (morphemesLine != utteranceLine && morphemesLine != "") {
+          //trigger the gloss guessing
+          this.guessGlosses(morphemesLine);
+          // Ask the user if they want to use the guessed morphemes
+          if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
+            // Replace the morphemes line with the guessed morphemes
+            this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+            //redo the gloss guessing
+            this.guessGlosses(morphemesLine);
+
+            this.needsSave = true;
+          }
+        }
+      }
+    },
+    morphemesBlur : function(e){
+      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
+        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+      }
+      this.guessGlosses($(e.currentTarget).val());
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
