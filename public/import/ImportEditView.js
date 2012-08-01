@@ -151,10 +151,6 @@ define( [
         this.showCSVTable();
         this.renderDatumFieldsLabels();
       }
-      $(this.el).find(".icon-book").hide();
-      $(this.el).find(".icon-resize-full").hide();
-      $(this.el).find(".save-datalist").hide();
-      $(this.el).find(".icon-resize-small").hide();
       
       //localization
       $(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
