@@ -38,9 +38,12 @@ define([
      */
     buildLexiconFromCouch : function(corpusname, callback){
       var self = this;
+      var couchConnection = Utils.defaultCouchConnection();
+      var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port+"/";
+
       $.ajax({
         type : 'GET',
-        url : "https://ilanguage.iriscouch.com/"+corpusname+"/_design/lexicon/_view/create_triples?group=true",
+        url : couchurl+corpusname+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
