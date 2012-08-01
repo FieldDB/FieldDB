@@ -731,7 +731,7 @@ define([
         alertType = "";
       }
       if(!heading){
-        heading = "locale_Warning!";
+        heading = chrome.i18n.getMessage("locale_Warning");
       }
       $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"
