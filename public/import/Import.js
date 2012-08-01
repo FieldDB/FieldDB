@@ -362,26 +362,20 @@ define([
       this.set("fileDetails", filedetails.join('') );
       status = status + filedetails.join('');
       this.set("status", status);
-      if (this.get("dataList") == undefined) {
-        // Create a new DataList
-        this.set("dataList", new DataList({
+
+      // Create a new DataListEditView
+      window.appView.importView.dataListView = new DataListEditView({
+        model : new DataList({
           title : "Data from "+files[0].name,
           description : "This is the data list which would result from the import of these files."
             + this.get("fileDetails"),
-          corpusname: this.get("corpusname")
-        }));
-        
-        // Create a new DataListEditView
-        this.dataListView = new DataListEditView({
-          model : this.get("dataList"),
-          datumCollection : new Datums()
-        });
-        this.dataListView.format = "import";
-        
-      }
-      
+            corpusname: this.get("corpusname")
+        })
+      });
+      window.appView.importView.dataListView.format = "import";
+
       // Render the DataList
-      this.dataListView.render();
+      window.appView.importView.dataListView.render();
     },
     readFileIntoRawText : function(index, callback){
       var self = this;
