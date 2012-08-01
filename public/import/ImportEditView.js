@@ -37,7 +37,7 @@ define( [
    */
   var ImportEditView = Backbone.View.extend({
     initialize : function(){
-      this.model.bind("change", this.render, this);
+      this.model.bind("change:asCSV", this.render, this);
       this._draghoverClassAdded = false;
     },
     events : {
@@ -493,8 +493,8 @@ define( [
     saveDataList : function(){
       var self = this;
       this.createNewSession( function(){
-        window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
-        window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
+        window.hub.unsubscribe("savedDatumToPouch", null, self);
+        window.hub.unsubscribe("saveDatumFailedToPouch", null, self);
         
         // after we have a session
         $(".approve-save").addClass("disabled");
@@ -504,8 +504,8 @@ define( [
 
         var dl = new DataList({
           "corpusname" : window.app.get("corpus").get("corpusname"),
-          "title" : appView.importView.dataListView.model.get("title"),
-          "description": appView.importView.dataListView.model.get("description")
+          "title" : self.dataListView.model.get("title"),
+          "description": self.dataListView.model.get("description")
         });
         dl.saveAndInterConnectInApp(function(){
           dl.setAsCurrentDataList(function(){
@@ -517,7 +517,7 @@ define( [
             window.app.get("authentication").get("userPrivate").get("activities").unshift(
                 new Activity({
                   verb : "attempted to import",
-                  directobject : window.appView.importView.model.get("datumArray").length + " data entries",
+                  directobject : self.model.get("datumArray").length + " data entries",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
                   context : "via Offline App",
                   user: window.app.get("authentication").get("userPublic")
@@ -539,7 +539,7 @@ define( [
                 var next = parseInt(arg.d) - 1;
                 this.saveADatumAndLoop(next);
               }
-            }, window.appView.importView);
+            }, self);
 
             window.hub.subscribe("saveDatumFailedToPouch",function(arg){
               this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
@@ -559,14 +559,14 @@ define( [
                 this.saveADatumAndLoop(next);
               }
 
-            }, window.appView.importView);
+            }, self);
             
             /*
              * Begin the datum saving loop with the last datum 
              */
-            window.appView.importView.saveADatumAndLoop(window.appView.importView.model.get("datumArray").length - 1);
+            self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
             
-            window.appView.importView.model.get("session").saveAndInterConnectInApp(function(){
+            self.model.get("session").saveAndInterConnectInApp(function(){
               //one more thing done.
               $(".import-progress").val($(".import-progress").val()+1);
             }, function(){
