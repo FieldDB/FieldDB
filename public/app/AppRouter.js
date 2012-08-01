@@ -39,6 +39,7 @@ define([
       "session/:sessionid"              : "showFullscreenSession",
       "user/:userid"                    : "showFullscreenUser",
       "import"                          : "showImport",
+      "corpus/:corpusname/export"       : "showExport",
       ""                                : "showDashboard"
     },
     

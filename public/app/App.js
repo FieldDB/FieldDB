@@ -355,7 +355,7 @@ define([
       if(!failurecallback){
         failurecallback = function(){
           alert("There was a bug/problem in the saveAndInterConnectInApp in App.js, somewhere along the save call. The Session is saved first, if it succeeds, then the datalist, then the corpus. The failure is somewhere along there.");
-        }
+        };
       }
       var appSelf = this;
       appSelf.get("currentSession").saveAndInterConnectInApp(function(){
@@ -369,7 +369,7 @@ define([
               appSelf.router.showDashboard();
               
               if(typeof successcallback == "function"){
-                alert("The dashboard saved successfully, now calling the successcallback.");
+              //  alert("The dashboard saved successfully, now calling the successcallback.");
                 successcallback();
               }
               
