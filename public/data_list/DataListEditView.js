@@ -257,7 +257,7 @@ define( [
       }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
 
-        this.setElement($("#import-data-list-view"));
+        this.setElement($("#import-data-list-header"));
         $(this.el).html(this.importTemplate(jsonToRender));
         
       } else if (this.format == "minimized") {
