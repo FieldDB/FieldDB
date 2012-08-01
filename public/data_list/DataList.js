@@ -326,22 +326,22 @@ define([
           });
         }catch(e){
           Utils.debug(e);
-          /*TODO  putting this her so that import works of rhte presenation, but there is some bug */
-          if (typeof successcallback == "function") {
-            successcallback();
-          }else{
-            //TODO remove this when done debugging and it is working all the time.
-            window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
-            window.appView.renderEditableDataListViews("leftSide");
-            window.appView.renderReadonlyDataListViews("leftSide");
-          }
-          
-//          if (typeof failurecallback == "function") {
-//            alert("Calling the failure callback in the set as current data list."+self.id);
-//            failurecallback();
+//          /*TODO  putting this her so that import works of rhte presenation, but there is some bug */
+//          if (typeof successcallback == "function") {
+//            successcallback();
 //          }else{
-//            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session."+self.id);
+//            //TODO remove this when done debugging and it is working all the time.
+//            window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
+//            window.appView.renderEditableDataListViews("leftSide");
+//            window.appView.renderReadonlyDataListViews("leftSide");
 //          }
+          
+          if (typeof failurecallback == "function") {
+            alert("Calling the failure callback in the set as current data list."+self.id);
+            failurecallback();
+          }else{
+            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session."+self.id);
+          }
         }
       }
     }

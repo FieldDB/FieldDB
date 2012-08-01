@@ -281,7 +281,8 @@ define([
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
                               window.appView.renderReadonlyDashboardViews();
-                              appView.datumsEditView.render();
+                              window.appView.datumsEditView.format = "centerWell";
+                              window.appView.datumsEditView.render();
                               
                               if (typeof callback == "function") {
                                 callback();
