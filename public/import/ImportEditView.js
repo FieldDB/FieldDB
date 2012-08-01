@@ -372,7 +372,7 @@ define( [
         }
       }
       for (a in array) {
-        var d = new Datum({corpusname : this.model.get("corpusname")});
+        var d = new Datum({corpusname : window.app.get("corpus").get("corpusname")});
         var fields = this.model.get("datumFields").clone();
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
@@ -428,7 +428,7 @@ define( [
       var thatdatum = this.model.get("datumArray")[d];
       thatdatum.set({
         "session" : this.model.get("session"),
-        "corpusname" : this.model.get("corpusname"),
+        "corpusname" : window.app.get("corpus").get("corpusname"),
         "dateEntered" : JSON.stringify(new Date()),
         "dateModified" : JSON.stringify(new Date())
       });
