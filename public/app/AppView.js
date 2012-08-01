@@ -278,13 +278,13 @@ define([
     setUpAndAssociateViewsAndModelsWithCurrentDataList : function(callback){
 
       if( this.currentPaginatedDataListDatumsView ){
-        if( this.currentPaginatedDataListDatumsView.filledBasedOnModels ){
-          alert("The current paginated datum collection was filled iwth models. some info might be lost by doing this overwrite.")
-        }
-        
-        if( this.currentPaginatedDataListDatumsView.collection.length > this.model.get("currentDataList").get("datumIds").length){
-          alert("The currentPaginatedDataListDatumsView already has more datum than the current datalist.");
-        }
+//        if( this.currentPaginatedDataListDatumsView.filledBasedOnModels ){
+//          alert("The current paginated datum collection was filled iwth models. some info might be lost by doing this overwrite.")
+//        }
+//        
+//        if( this.currentPaginatedDataListDatumsView.collection.length > this.model.get("currentDataList").get("datumIds").length){
+//          alert("The currentPaginatedDataListDatumsView already has more datum than the current datalist.");
+//        }
         //TODO might need to do more scrubbing
         //Convenience function for removing the view from the DOM.
         this.currentPaginatedDataListDatumsView.remove();//this seems okay, its not removing the ul we need for the next render
@@ -726,6 +726,9 @@ define([
         }if(this.toastSavingDatumsCount > 5){
           return;
         }
+      }
+      if(message.indexOf("Sucessfully saved") != -1){
+        return; //dont show the mesages like "Sucessfully saved ..."
       }
       if(!alertType){
         alertType = "";
