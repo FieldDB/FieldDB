@@ -397,7 +397,8 @@ define([
         this.userPreferenceView.render();
         this.hotkeyEditView.render();//.showModal();
         this.renderReadonlyUserViews();
-        
+        this.sessionModalView.render();
+
         this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
         this.insertUnicodesView.render();

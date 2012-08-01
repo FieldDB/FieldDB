@@ -9,7 +9,7 @@
  */
 var Utils = Utils || {};
 
-Utils.debugMode = true;
+Utils.debugMode = false;
 
 
 Utils.couchUrl = "http://localhost:5984/default";//"https://ilanguage.iriscouch.com/default";

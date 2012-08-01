@@ -223,49 +223,54 @@ define([
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
              
-      //localization
-      $(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
-      $(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-      $(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
-      $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-      $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-      $(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
-      $(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
-      $(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
-      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-      $(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
-      $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-      $(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-      $(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-      $(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-      $(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-      $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
-      $(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-      $(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
-      $(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
-      $(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
-      $(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
-      $(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
-      $(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
-      $(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
-      $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-      $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-      $(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
-      $(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
-      $(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
-      $(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
-      $(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
-      $(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
-      $(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
-      $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Add_locale_New_Datum_Field").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_Field"));
-      $(".locale_Add_locale_New_Datum_State").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_State"));
-      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      $(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
-      $(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
+      try{
+        //localization
+        $(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
+        $(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+        $(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
+        $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+        $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+        $(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
+        $(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
+        $(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+        $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+        $(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
+        $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+        $(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+        $(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+        $(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+        $(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+        $(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+//        $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+        $(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+        $(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+        $(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
+        $(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+        $(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+        $(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+        $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+        $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+        $(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
+        $(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
+        $(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
+        $(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
+        $(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+        $(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
+        $(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
+        $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+        $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+        $(".locale_Add_locale_New_Datum_Field").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_Field"));
+        $(".locale_Add_locale_New_Datum_State").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_State"));
+        $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+        $(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
+        $(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
+      }catch(e){
+        alert("Localization of mising item perhaps");
+        console.log(e);
+      }
       
       return this;
     },
@@ -440,7 +445,10 @@ define([
     
     // This the function called by the add button, it adds a new datum field both to the 
     // collection and the model
-    insertNewDatumField : function() {
+    insertNewDatumField : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       //don't add blank fields
       if(this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_") == ""){
         return;
@@ -466,7 +474,10 @@ define([
     },
  
     //This the function called by the add button, it adds a new datum state both to the collection and the model
-    insertNewDatumState : function() {
+    insertNewDatumState : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var m = new DatumField({
         "state" : this.$el.find(".add_input").val(),
         "color" : this.$el.find(".add_color_chooser").val()
@@ -476,7 +487,10 @@ define([
 
     },
   //This the function called by the add button, it adds a new datum state both to the collection and the model
-    insertNewPermission : function() {
+    insertNewPermission : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       //TODO perform a server call to do this, and display the the results/errors
       var p = this.model.permissions.where({role: this.$el.find(".choose-add-permission-role").val()})[0];
       if(p){
@@ -524,6 +538,9 @@ define([
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
+//        
+//        window.appView.currentCorpusReadView.format = this.format;
+//        window.appView.currentCorpusReadView.render();
         
       },function(){
         if(this.format == "modal"){
@@ -531,6 +548,8 @@ define([
           alert("There was a problem somewhere loading and saving the new corpus.");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }
+//        window.appView.currentCorpusReadView.format = this.format;
+//        window.appView.currentCorpusReadView.render();
       });
     }
   });
