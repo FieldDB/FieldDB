@@ -354,9 +354,7 @@ define([
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
                 : ' n/a');
         
-        this.readFileIntoRawText(i, function(){
-          Utils.debug("Finished reading in the raw text file.")
-        });
+        this.readFileIntoRawText(i);
 //        this.set("asCSV", this.importCSV(f.getBytes()));
 //      this.set("asXML", this.importCSV(f.getBytes()));
 
@@ -367,29 +365,29 @@ define([
       status = status + filedetails.join('');
       this.set("status", status);
 
-      // Create a new DataListEditView
-      window.appView.importView.dataListView = new DataListEditView({
-        model : new DataList({
-          title : "Data from "+files[0].name,
-          description : "This is the data list which would result from the import of these files."
-            + this.get("fileDetails"),
-            corpusname: this.get("corpusname")
-        })
-      });
-      window.appView.importView.dataListView.format = "import";
-      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
-        collection           : new Datums(),
-        childViewConstructor : DatumReadView,
-        childViewTagName     : "li",
-        childViewFormat      : "latex"
-      }); 
-      
-      // Render the DataList
-      window.appView.importView.dataListView.format = "import";
-      window.appView.importView.dataListView.render();
-      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
-        $("#import-data-list").find(".import-data-list-paginated-view") );
-      
+//      // Create a new DataListEditView
+//      window.appView.importView.dataListView = new DataListEditView({
+//        model : new DataList({
+//          title : "Data from "+files[0].name,
+//          description : "This is the data list which would result from the import of these files."
+//            + this.get("fileDetails"),
+//            corpusname: this.get("corpusname")
+//        })
+//      });
+//      window.appView.importView.dataListView.format = "import";
+//      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+//        collection           : new Datums(),
+//        childViewConstructor : DatumReadView,
+//        childViewTagName     : "li",
+//        childViewFormat      : "latex"
+//      }); 
+//      
+//      // Render the DataList
+//      window.appView.importView.dataListView.format = "import";
+//      window.appView.importView.dataListView.render();
+//      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
+//        $("#import-data-list").find(".import-data-list-paginated-view") );
+//      
     },
     readFileIntoRawText : function(index, callback){
       var self = this;
@@ -442,7 +440,7 @@ define([
         }
       }
       var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });
-      mostLikelyImport.importFunction(self.get("rawText"), self, callback);
+      mostLikelyImport.importFunction(self.get("rawText"), self, null); //no callback, TODO strange loss of reference in importview
     },
     readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);
