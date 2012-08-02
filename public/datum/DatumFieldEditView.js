@@ -35,7 +35,7 @@ define([
      */
     events : {
       "blur .choose-field" : "updateFieldLabel",
-      "click .encrypted" : "updateEncrypted",
+      "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
       "click .icon-question-sign" : "showHelpConvention",
@@ -60,6 +60,10 @@ define([
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
+        //localization
+        $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+        $(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+        $(".locale_locale_Help_Text").attr("placeholder", chrome.i18n.getMessage("locale_locale_Help_Text"));
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
@@ -87,14 +91,14 @@ define([
     
     // TODO Add description
     updateEncrypted : function() {
-      var checked = this.$el.children(".encrypted").is(':checked');
+      var checked = this.$el.children(".shouldBeEncrypted").is(':checked');
       if (checked ) {
         checked = "checked";
       } else {
         checked = "";
       }
-      Utils.debug("Updated encrypted to " + checked);
-      this.model.set("encrypted", checked);
+      Utils.debug("Updated shouldBeEncrypted to " + checked);
+      this.model.set("shouldBeEncrypted", checked);
     },
     
     // TODO Add description
@@ -108,7 +112,7 @@ define([
      * Change the model's state.
      */
     updateFieldValue : function() {
-      this.model.set("value", this.$el.children(".datum_field_input").val());
+      this.model.set("mask", this.$el.children(".datum_field_input").val());
     }, 
     
     /**

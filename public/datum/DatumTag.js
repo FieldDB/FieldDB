@@ -20,6 +20,12 @@ define( [
     // Internal models: used by the parse function
     model : {
       // There are no nested models
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     }
   });
 

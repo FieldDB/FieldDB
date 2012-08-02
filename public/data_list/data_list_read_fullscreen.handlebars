@@ -1,48 +1,35 @@
 <div class="pull-right">
   <a href="#" rel="tooltip" title="Edit data list">
     <i class="icons icon-edit"></i></a>    
-  <a href="#" rel="tooltip" title="Show dashboard">  
+  <a href="#" class= "Show_in_Dashboard" rel="tooltip" >
     <i class="icons icon-resize-small"></i></a> 
 </div>
 
-<h2>{{title}}</h2>
+<h2>{{title}} <small> {{datumCount}}</small></h2>
 <h4>{{dateCreated}}</h4>
-
 {{description}}
 
+<!--DataList Menu  -->
 <div class="icons">
-    <a  href="#playDatum" rel="tooltip" title="Play audio" >
+    <a  href="#" class = "locale_Play_Audio_checked" rel="tooltip" >
        <i class="icons icon-bullhorn"></i></a>
-    <a  href="#clipboard" class="button-help" rel="tooltip" title="Copy to clipboard" >
+    <a  href="#" class = "locale_Copy_checked" rel="tooltip" >
        <i class="icons icon-paste"></i></a>
-    <a  href="#duplicate" class="button-help" rel="tooltip" title="Duplicate" >
-      <i class="icons icon-copy"></i></a>
-    <a  id="encrypt" href="#" class="button-help" rel="tooltip" title="Encrypt/Decrypt" >
-      <i class="icons icon-lock"></i></a>   
-<!--   <a href="#playDatum"><i class="icons icon-bullhorn"></i></a>  
-   <a href="#clipboard"><i class="icons icon-paste"></i></a> 
-   <a href="#duplicate"><i class="icons icon-copy"></i></a> 
-   <a id="encrypt"><i class="icons icon-lock"></i></a>  
--->
-   <a href="#" rel="tooltip" title="Export datalist to Latex format">
-      <button class="btn btn-primary" id="LaTeX">LaTeX</button></a>
+    <a href="#" class= "locale_Encrypt_checked" rel="tooltip">
+      <i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a> 
+    <a href="#" class = "locale_Decrypt_checked" rel="tooltip">
+      <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
+    <a href="#" class = "locale_Export_Datalist" rel="tooltip">
+      <button class="btn btn-primary latex-export-datalist LaTeX">LaTeX</button></a>
+    <a href="#" class = "locale_CSV" rel="tooltip">
+      <button class="btn btn-primary CSV" >CSV</button></a>
 </div>
 
-<div>
-	<ul class="unstyled zebra data_list_content"></ul>
-	<div class="data-list-footer"></div>
-</div>
-  
-<h3>Comments</h3>
 <ul class="comments unstyled"></ul>
-
 <div class="alert alert-info">
-  <span> new comment: </span>
   <i class="icons icon-comment"></i>
-  <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>
 </div>
   
-<button class="btn btn-primary add-comment-datalist-read" value="Add">Add
-    Comment</button>
-
+<button class="btn btn-primary add-comment-datalist-read" value="Add"><span class = "locale_Add"></span></button>
+  

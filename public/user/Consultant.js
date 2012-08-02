@@ -1,11 +1,11 @@
 define( [ 
     "backbone", 
-    "user/User" 
+    "user/UserMask" 
 ], function(
     Backbone,
-    User
+    UserMask
 ) {
-  var Consultant = User.extend(
+  var Consultant = UserMask.extend(
   /** @lends Consultant.prototype */
   {
     /**
@@ -31,7 +31,7 @@ define( [
       Consultant.__super__.initialize.call(this, attributes);
 
       this.set("consultantcode" , "");
-      this.set("birthDate", "");
+//      this.set("birthDate", "");
       this.set("language", "");
       this.set("dialect", "");
     },
@@ -39,18 +39,12 @@ define( [
     model : {
       // There are no nested models
     },
-    
-    parse : function(response) {
-      if (response.ok === undefined) {
-        for (var key in this.model) {
-          var embeddedClass = this.model[key];
-          var embeddedData = response[key];
-          response[key] = new embeddedClass(embeddedData, {parse:true});
-        }
-      }
+    saveAndInterConnectInApp : function(callback){
       
-      return response;
-    },
+      if(typeof callback == "function"){
+        callback();
+      }
+    }
   });
 
   return Consultant;

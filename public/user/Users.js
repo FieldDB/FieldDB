@@ -1,7 +1,7 @@
 define(
     ["backbone",
-     "user/User"],
-    function(Backbone, User) {
+     "user/UserMask"],
+    function(Backbone, UserMask) {
   
   var Users = Backbone.Collection.extend(
       
@@ -18,7 +18,7 @@ define(
        * @constructs
        * 
        */
-    model: User,
+    model: UserMask,
     add : function(model, options) {
      
       }

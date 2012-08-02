@@ -35,7 +35,11 @@ define([
       
       this.changeViewsOfInternalModels();
       
-      this.model.bind('change', this.changeViewsOfInternalModels, this);
+      var self = this;
+      this.model.bind('change:sessionFields', function(){
+        self.changeViewsOfInternalModels();
+        self.render();
+        }, this);
     },
 
     /**
@@ -93,6 +97,7 @@ define([
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
+          
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render(); 
           // Display the CommentReadView
@@ -101,9 +106,9 @@ define([
          
         } else if (this.format == "leftSide") {
           var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
           };
           
           this.setElement("#session-quickview");
@@ -125,9 +130,9 @@ define([
        
           var jsonToRender = {
               _id : this.model.get("_id"),
-              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("value"),
-              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("value"),
-              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("value")
+              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
             };
           $(this.el).html(this.templateLink(jsonToRender));
 
@@ -137,6 +142,17 @@ define([
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
+      
+      //localization
+      $(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+      $(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+      $(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+      $(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
+      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+ 
       return this;
     },
     
@@ -157,22 +173,32 @@ define([
     },
     
     //functions associated with corner icons
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showEmbeddedSession();
     },
     
-    resizeLarge : function() {
+    resizeLarge : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       window.app.router.showFullscreenSession();
     },
     
     //bound to book
-    showEditable :function() {
-      window.app.router.showEditableSession();
+    showEditable :function(e) {
+      if(e){
+        e.stopPropagation();
+      }
+      window.appView.renderEditableSessionViews();
     }, 
  
-    //TODO this function to be rewritten 
-    insertNewComment : function() {
-      console.log("I'm a new comment!");
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });

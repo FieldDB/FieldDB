@@ -1,5 +1,6 @@
 define([
     "backbone",
+    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "datum/DatumField",
@@ -9,6 +10,7 @@ define([
     "user/User",
 ], function(
     Backbone,
+    Activity,
     Comment,
     Comments,
     DatumField,
@@ -43,41 +45,41 @@ define([
      * 
      *  new DatumField({
             label : "user",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "consultants",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
           new DatumField({
             label : "language",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the langauge (or language family) if you would like to use it."
           }),
           new DatumField({
             label : "dialect",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "You can use this field to be as precise as you would like about the dialect of this session."
           }),
           new DatumField({
             label : "dateElicited",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session took place."
           }),
           new DatumField({
             label : "dateSEntered",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session was entered."
           }),
           new DatumField({
             label : "goal",
-            encrypted: "",
+            shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This describes the goals of the session."
           }),  
@@ -98,25 +100,6 @@ define([
         this.set("comments", new Comments());
       }
       
-    //if the corpusname changes, change the pouch as well so that this object goes with its corpus's local pouchdb
-//      this.bind("change:corpusname", function() {
-//        this.pouch = Backbone.sync
-//        .pouch(Utils.androidApp() ? Utils.touchUrl
-//            + this.get("corpusname") : Utils.pouchUrl
-//            + this.get("corpusname"));
-//      }, this);
-//      
-//      try {
-//        if (this.get("corpusname") == undefined) {
-//          this.set("corpusname", app.get("corpus").get("corpusname"));
-//        }
-//        this.pouch = Backbone.sync
-//        .pouch(Utils.androidApp() ? Utils.touchUrl
-//            + this.get("corpusname") : Utils.pouchUrl
-//            + this.get("corpusname"));
-//      } catch(e) {
-//        Utils.debug("Corpusname was undefined on this corpus, the session will not have a valid corpusname until it is set.");
-//      }
     },
     
     // Internal models: used by the parse function
@@ -126,6 +109,9 @@ define([
     },
     
     changeCorpus : function(corpusname, callback) {
+      if(!corpusname){
+        corpusname = this.get("corpusname");
+      }
       if(this.pouch == undefined){
         this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
       }
@@ -133,7 +119,145 @@ define([
         callback();
       }
     },
-    
+    /**
+     * Accepts two functions to call back when save is successful or
+     * fails. If the fail callback is not overridden it will alert
+     * failure to the user.
+     * 
+     * - Adds the session to the corpus if it is in the right corpus, and wasnt already there
+     * - Adds the session to the user if it wasn't already there
+     * - Adds an activity to the logged in user with diff in what the user changed. 
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      Utils.debug("Saving the Session");
+      var self = this;
+      var newModel = true;
+      if(this.id){
+        newModel = false;
+      }
+      //protect against users moving sessions from one corpus to another on purpose or accidentially
+      if(window.app.get("corpus").get("corpusname") != this.get("corpusname")){
+        if(typeof failurecallback == "function"){
+          failurecallback();
+        }else{
+          alert('Session save error. I cant save this session in this corpus, it belongs to another corpus. ' );
+        }
+        return;
+      }
+      var oldrev = this.get("_rev");
+      this.changeCorpus(null,function(){
+        self.save(null, {
+          success : function(model, response) {
+            Utils.debug('Session save success');
+            var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
+            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+goal+"</a>";
+            //TODO add privacy for session goals in corpus
+//            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){
+//              goal = "";
+//              differences = "";
+//            }
+            if(window.appView){
+              window.appView.toastUser("Sucessfully saved session: "+ goal,"alert-success","Saved!");
+              window.appView.addSavedDoc(model.id);
+            }
+            var verb = "updated";
+            if(newModel){
+              verb = "added";
+            }
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : verb,
+                  directobject : "<a href='#session/"+model.id+"'>session</a> ",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  context : differences+" via Offline App."
+//                  user: window.app.get("authentication").get("userPublic")
+                }));
+            
+            //make sure the session is in this corpus, if it is the same corpusname
+            var previousversionincorpus = window.app.get("corpus").get("sessions").getByCid(model.cid);
+            if( previousversionincorpus == undefined ){
+              window.app.get("corpus").get("sessions").unshift(model);
+//              window.appView.addUnsavedDoc(window.app.get("corpus").id);//this is undefined the first time session is saved.
+            }else{
+              //overwrite new details in the corpus' version, unless they are the same, then it is unnecesary.
+              if(previousversionincorpus !== model){
+                previousversionincorpus = model;
+              }
+            }
+            if(window.app.get("corpus").get("sessions").length == 1){
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+            }
+            //make sure the session is in the history of the user
+            if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
+              window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+            }
+//            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
+            window.app.get("authentication").saveAndInterConnectInApp();
+
+            if(typeof successcallback == "function"){
+              successcallback();
+            }
+          },
+          error : function(e) {
+            if(typeof failurecallback == "function"){
+              failurecallback();
+            }else{
+              alert('Session save error' + e);
+            }
+          }
+        });
+      });
+    },
+    /**
+     * Accepts two functions success will be called if sucessfull,
+     * otherwise it will attempt to render the current session views. If
+     * the session isn't in the current corpus it will call the fail
+     * callback or it will alert a bug to the user. Override the fail
+     * callback if you don't want the alert.
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    setAsCurrentSession : function(successcallback, failurecallback){
+      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
+        if (typeof failurecallback == "function") {
+          failurecallback();
+        }else{
+          alert("This is a bug, cannot load the session you asked for, it is not in this corpus.");
+        }
+        return;
+      }else{
+        if (window.app.get("currentSession").id != this.id ) {
+          window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
+//          window.app.set("currentSession", app.get("corpus").get("sessions").get(this.id)); //this is a bad idea too, use above instead
+
+        }
+        window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
+        window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
+
+        try{
+          window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
+            if (typeof successcallback == "function") {
+              successcallback();
+            }else{
+              window.appView.sessionReadLeftSideView.render();
+              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id,"alert-success","Connected!");
+//            window.appView.renderEditableSessionViews();
+//            window.appView.renderReadonlySessionViews();
+            }
+          });
+        }catch(e){
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          }else{
+            alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");
+          }
+        }
+      }
+    },
     /**
      * Validation functions will verify that the session ID is unique and
      * that the consultant,users, and teams are all correspond to people in

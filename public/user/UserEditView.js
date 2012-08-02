@@ -56,7 +56,13 @@ define([
         this.$el.modal("hide");
       },
       "click .save-user-profile" : "saveProfile",
-      "blur .gravatar" : "updateGravatar"
+      "blur .gravatar" : "updateGravatar",
+      "click .icon-book" : function(e){
+        if(e){
+          e.stopPropagation();
+        }
+        window.appView.modalReadUserView.render();
+      }
 
     },
 
@@ -89,9 +95,22 @@ define([
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
       } else if(this.format == "modal") {
-        this.setElement($("#user-edit-modal"));
+        this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }
+      //localization
+      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
+      $(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
+      $(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
+      $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+      $(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
+      $(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
+      $(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
+      $(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
+      $(".locale_Lastname").html(chrome.i18n.getMessage("locale_Lastname"));
+      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+      $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
 
         // Display the CorpusesView
 //        this.corpusesView.render();
@@ -99,8 +118,9 @@ define([
     },
     saveProfile : function(){
       Utils.debug("Saving user");
-      $("#user-edit-modal").hide();
-      $("#user-modal").show();
+      window.appView.modalReadUserView.render();
+
+      $("#user-modal").modal("hide");
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());

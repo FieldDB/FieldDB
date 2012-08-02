@@ -1,8 +1,7 @@
 <div class="pull-right">
-  <a href="#" rel="tooltip" title="Edit corpus">
+  <a href="#" class = "locale_Edit_corpus" rel="tooltip">
     <i class="icons icon-edit"></i></a>
-    <spacer></spacer>
-  <a href="#" rel="tooltip" title="Show full screen">
+  <a href="#" class = "locale_Show_Fullscreen" rel="tooltip">
     <i class="icons icon-resize-full resize-full"></i></a>
 </div>
 
@@ -10,29 +9,30 @@
   <!-- /btn-group -->
   <div class="btn-group">
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-      New <span class="caret"></span>
+    <span class ="locale_New_menu"></span>  <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li class="new-datum-read"><a href="#">New Datum</a></li>
-      <li class="new-data-list"><a href="#">New Data List</a></li>
-      <li class="new-session"><a href="#">New Session</a></li>
-      <li class="new-corpus"><a href="#">New Corpus</a></li>
+      <li class="new-datum"><a href="#"><span class = "locale_New_Datum"></span></a></li>
+      <li class="new-data-list"><a href="#"><span class = "locale_New_Data_List"></span></a></li>
+      <li class="new-session"><a href="#"><span class = "locale_New_Session"></span></a></li>
+      <li class="new-corpus"><a href="#"><span class = "locale_New_Corpus"></span></a></li>
     </ul>
   </div>
   <!-- /btn-group -->
   <div class="btn-group">
     <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-      Data <span class="caret"></span>
+      <span class ="locale_Data_menu"></span> <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li><a href="#import">Import Data</a></li>
-      <li><a href="#corpus/{{titleAsUrl}}/export">Export Data</a></li>
+      <li><a href="#import"><span class = "locale_Import_Data"></span></a></li>
+      <li><a href="#corpus/{{titleAsUrl}}/export"><span class = "locale_Export_Data"></span></a></li>
     </ul>
   </div>
   <!-- /btn-group -->
+
 </div>
 
-<h2>{{title}}</h2>
+<h2>{{title}} <small>{{publicCorpus}}</small></h2>
 <div class="description">{{description}}</div>
 
 <div class="accordion" id="accordion-read-embedded">
@@ -40,7 +40,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-read-embedded" href="#collapseSessionsRE">
-        <h4>Sessions associated with this corpus</h4>
+        <strong class="locale_Sessions_associated"></strong>
          </a>
     </div>
     <div id="collapseSessionsRE" class="accordion-body collapse">
@@ -55,7 +55,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-read-embedded" href="#collapseDatalistsRE">
-        <h4>Datalists associated with this corpus</h4>
+          <strong class="locale_Datalists_associated"></strong>
         </a>
     </div>
     <div id="collapseDatalistsRE" class="accordion-body collapse">
@@ -70,7 +70,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-read-embedded" href="#collapsePermissionsRE">
-        <h4>Permissions associated with this corpus</h4>
+        <strong class="locale_Permissions_associated"></strong>
         </a>
     </div>
     <div id="collapsePermissionsRE" class="accordion-body collapse">
@@ -86,7 +86,7 @@
     <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-read-embedded" href="#collapseDatumFieldSettingsRE">
-        <h4>Datum field settings</h4>
+           <strong class="locale_Datum_field_settings"></strong>
         </a>
     </div>
     <div id="collapseDatumFieldSettingsRE" class="accordion-body collapse">
@@ -99,7 +99,7 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-read-embedded" href="#collapseDatumStateSettingsRE">
-        <h4>Datum state settings</h4>
+        <strong class="locale_Datum_state_settings"></strong>
         </a>
     </div>
     <div id="collapseDatumStateSettingsRE" class="accordion-body collapse">
@@ -110,16 +110,14 @@
   </div>
 </div> 
 
-<h3>Comments</h3>
 <ul class="comments unstyled"></ul>
 
 <div class="alert alert-info">
-  <span> new comment: </span>
   <i class="icons icon-comment"></i>
   <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>
 </div>
 
-<button class="btn btn-primary add-comment-read" value="Add">Add
-  Comment</button>
+<button class="btn btn-primary add-comment-edit" value="Add"><span class = "locale_Add"></span></button>
+
 

@@ -45,7 +45,15 @@ define([
     model : {
       user : UserMask
     },
-    
+    changeCorpus : function(couchConnection, callback) {
+      alert("The change corpus doesnt work yet for activity feeds")
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     //TODO getting error  has no method 'pouch' when this is specified in the initialize
 //    pouch : Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
 //        : Utils.activityFeedPouchUrl),

@@ -39,7 +39,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewUnicodeSymbol()
+          this.insertNewUnicodeSymbol();
         }
       },
       "keyup .insert-unicode-tipa-input" : function(e) {
@@ -47,7 +47,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.insertNewUnicodeSymbol()
+          this.insertNewUnicodeSymbol();
         }
       },
       "click .icon-minus-sign" : function() {
@@ -82,6 +82,19 @@ define([
         this.setElement($("#insert-unicode"));
         $(this.el).html(this.minimizedTemplate({}));
       }
+      //localization
+      $(".locale_Unicode").html(chrome.i18n.getMessage("locale_Unicode"));
+      $(".locale_Drag_and_Drop").html(chrome.i18n.getMessage("locale_Drag_and_Drop"));
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Show_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Show_Unicode_Palette"));
+      $(".locale_Hide_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Hide_Unicode_Palette"));
+      $(".locale_Add_new_symbol").attr("title", chrome.i18n.getMessage("locale_Add_new_symbol"));
+      $(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Paste_Type_Unicode_Symbol_Placeholder"));
+      $(".locale_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("locale_TIPA_shortcut"));
+
+
+
+
       
       return this;
     },

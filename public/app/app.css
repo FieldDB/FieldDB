@@ -11,6 +11,9 @@
 .navbar input:hover{
   color: #000;
 }
+.width100 {
+ width: 100%;
+}
 .gravatar-small{
 	width: 2em;
 }
@@ -214,7 +217,9 @@ textarea{
 	  white-space: nowrap;
 }
 
-
+progress{
+	width: 100%;
+}
 /*
  * Gradient Shadow HTML5 progress bars 
  http://www.useragentman.com/blog/2012/01/03/cross-browser-html5-progress-bars-in-depth/
@@ -230,7 +235,7 @@ textarea{
   border: solid #333 1px;
   border-radius: 5px;
   /* Dimensions */
-  width: 10em;
+  width: 8em;
   height: 1em;
 }
 

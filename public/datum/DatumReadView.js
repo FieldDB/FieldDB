@@ -62,19 +62,37 @@ define([
      * Events that the DatumReadView is listening to and their handlers.
      */
     events : {
-      "click .icon-lock" : "encryptDatum",
-      "click .icon-unlock" : "decryptDatum",
-      "click .datum_state_select" : "renderState",
-      "click #clipboard" : "copyDatum",
+      
+      /* Menu */
+      "click .LaTeX" : function(){
+        this.model.laTeXiT(true);
+        $("#export-modal").modal("show");
+      },
+      "click .icon-paste" : function(){
+        this.model.exportAsPlainText(true);
+        $("#export-modal").modal("show");
+      },
+      "click .CSV" : function(){
+        this.model.exportAsCSV(true, null, true);
+        $("#export-modal").modal("show");
+      },
+      "click .icon-th-list" : "hideRareFields",
+      "click .icon-list-alt" : "showRareFields",
+      
+      
+      /* Read Only Menu */
       "dblclick" : function() {
         // Prepend Datum to the top of the DatumContainer stack
         var d = this.model.clone();
         d.id = this.model.id;
         d.set("_id", this.model.get("_id"));
         d.set("_rev", this.model.get("_rev"));
-        appView.datumsView.prependDatum(d);
-      } 
-//      "hover .icon-paste" : "showButtonHelp"
+        appView.datumsEditView.prependDatum(d);
+      },
+      "click .datum-checkboxes": function(e){
+    //    alert("Checked box " + this.model.id);
+        this.checked = e.target.checked;
+      }
     },
 
     /**
@@ -91,16 +109,18 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      Utils.debug("DATUM render: " + this.el);
+      Utils.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
       
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
         Utils.debug("DATUM fields is undefined, come back later.");
         return this;
       }
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+
       if (this.format == "well") {        
         // Display the DatumReadView
-        var jsonToRender = this.model.toJSON();
-        jsonToRender.datumStates = this.model.get("datumStates").toJSON();
         $(this.el).html(this.template(jsonToRender));
         
         // Display the DatumTagsView
@@ -115,10 +135,10 @@ define([
         // necessary...
       } else if (this.format == "latex") {
         //This gets the fields necessary from the model
-        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("value");
-        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("value");
-        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("value");
-        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("value");
+        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("mask");
+        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
+        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
         
         // makes the top two lines into an array of words.
         var utteranceArray = utterance.split(' ');
@@ -134,7 +154,7 @@ define([
         }
         
         var jsonToRender = {};
-        jsonToRender.translation = translation
+        jsonToRender.translation = translation;
         jsonToRender.couplet = couplet;
         if (judgement !== "") {
           jsonToRender.judgement = judgement;
@@ -142,6 +162,15 @@ define([
         
         $(this.el).html(this.latexTemplate(jsonToRender));
       }
+      
+      //localization
+      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
       
       return this;
     },
@@ -151,60 +180,50 @@ define([
         this.stateView.render();
       }
     },
+    rareFields : [],
+    frequentFields: ["judgement","utterance","morphemes","gloss","translation"],
+    hideRareFields : function(){
+      this.rareFields = [];
+      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
+        if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
+          $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
+          this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
+        }
+      }
+      $(this.el).find(".icon-th-list").addClass("icon-list-alt");
+      $(this.el).find(".icon-th-list").removeClass("icon-th-list");
+      $(this.el).find(".comments-section").hide();
+
+    },
+    
+    showRareFields : function(){
+      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
+        $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
+      }
+      rareFields = [];
+      $(this.el).find(".icon-list-alt").addClass("icon-th-list");
+      $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
+      $(this.el).find(".comments-section").show();
+
+    },
     
     /**
      * Encrypts the datum if it is confidential
      * 
-     * @returns {Boolean}
      */
     encryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      // console.log("Fake encrypting");
-      var confidential = appView.corpusView.model.confidential;
-
-      if (confidential == undefined) {
-        appView.corpusView.model.confidential = new Confidential();
-        confidential = appView.corpusView.model.confidential;
-      }
-
-      this.model.set("utterance", confidential.encrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.encrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.encrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.encrypt(this.model
-          .get("translation")));
-
-      // this.model.set("utterance", this.model.get("utterance").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("morphemes", this.model.get("morphemes").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("gloss", this.model.get("gloss").replace(/[^
-      // -.]/g,"x"));
-      // this.model.set("translation", this.model.get("translation").replace(/[^
-      // -.]/g,"x"));
+      this.model.encrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
-
-      // console.log(confidential);
-      // this.model.set()
+      $(".icon-unlock").toggleClass("icon-unlock icon-lock");
     },
-    
+
     /**
      * Decrypts the datum if it was encrypted
      */
     decryptDatum : function() {
-      // TODO Redo to make it loop through the this.model.get("datumFields")
-      var confidential = appView.corpusView.model.confidential;
-      this.model.set("utterance", confidential.decrypt(this.model
-          .get("utterance")));
-      this.model.set("morphemes", confidential.decrypt(this.model
-          .get("morphemes")));
-      this.model.set("gloss", confidential.decrypt(this.model.get("gloss")));
-      this.model.set("translation", confidential.decrypt(this.model
-          .get("translation")));
+      this.model.decrypt();
       this.render();
-      $(".icon-lock").toggleClass("icon-lock icon-unlock");
+      $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
     
     //Functions relating to the row of icon-buttons
