@@ -469,23 +469,19 @@ define([
       this.setTotalBackboneDocs();
       
       //localization
-      //$(".locale_Need_save").html(chrome.i18n.getMessage("locale_Need_save"));
-      //$(".locale_60_unsaved").prepend(chrome.i18n.getMessage("locale_60_unsaved"));
-      //$(".locale_Recent_Changes").prepend(chrome.i18n.getMessage("locale_Recent_Changes"));
-      //$(".locale_Need_sync").html(chrome.i18n.getMessage("locale_Need_sync"));
-      //$(".locale_60_unsaved").prepend(chrome.i18n.getMessage("locale_60_unsaved"));
-      //$(".locale_Differences_with_the_central_server").html(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
-      //$(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-      //$(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
-      //$(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
-      //$(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
-      $(".Password").html(chrome.i18n.getMessage("Password"));
-      //$(".locale_Yep_its_me").html(chrome.i18n.getMessage("locale_Yep_its_me"));
-      //$(".locale_Show_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_Dashboard"));
-      //$(".locale_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("locale_Save_on_this_Computer"));
-      //$(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
-
-
+      $(this.el).find(".locale_Show_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_Dashboard"));
+      $(this.el).find(".locale_Need_save").text(chrome.i18n.getMessage("locale_Need_save"));
+      $(this.el).find(".locale_Recent_Changes").text(chrome.i18n.getMessage("locale_Recent_Changes"));
+      $(this.el).find(".locale_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("locale_Save_on_this_Computer"));
+      $(this.el).find(".locale_Need_sync").text(chrome.i18n.getMessage("locale_Need_sync"));
+      $(this.el).find(".locale_Differences_with_the_central_server").text(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
+      $(this.el).find(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
+      $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+      $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+      $(this.el).find(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
+      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
+      $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(this.el).find(".locale_Yep_its_me").text(chrome.i18n.getMessage("locale_Yep_its_me"));
       
       return this;
     },

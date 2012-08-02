@@ -8,16 +8,14 @@
 			</li>
 		  <li>
 			  <div class="btn-group">
-				  <button class="btn dropdown-toggle btn-inverse"
-            data-toggle="dropdown">
-        <span class = "locale_Need_save"></span>   
+				  <button class="btn dropdown-toggle btn-inverse" data-toggle="dropdown">
+            <span class = "locale_Need_save"></span>   
             <progress class="unsaved-changes" max="100" value="30">
-            <span class = "locale_60_unsaved"></span>
             </progress>
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu unsaved-changes-status" id="unsaved-changes-status">
-            <li class="not-a"><span class = "locale_Recent_Changes"></span></li>
+            <li class="not-a locale_Recent_Changes"></li>
           </ul>
         </div>
 		  </li>
@@ -27,21 +25,19 @@
       </li>
       <li>
 		    <div class="btn-group">
-			  <button class="btn dropdown-toggle btn-inverse"
-          data-toggle="dropdown">
-           <span class = "locale_Need_sync"></span>  
+			  <button class="btn dropdown-toggle btn-inverse" data-toggle="dropdown">
+          <span class = "locale_Need_sync"></span>  
           <progress class="unsynced-changes" max="100" value="80">
-            <span class = "locale_60_unsaved"></span>
           </progress>
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu unsynced-changes-status" id="unsynced-changes-status">
-          <li class="not-a"><span class = "locale_Differences_with_the_central_server"></span></li>
+          <li class="not-a locale_Differences_with_the_central_server"></li>
         </ul>
         </div>
 		  </li>
 			<li> 
-			 <a href="#" class = "locale_Sync_and_Share" rel="tooltip">
+			  <a href="#" class = "locale_Sync_and_Share" rel="tooltip">
 					<i class="icons icon-sitemap  sync-everything icon-white"></i></a>
 			</li>
 			<li><span id="user-quickview"><i
@@ -88,10 +84,10 @@
     <div class="span6">
       <div id="toast-user-area">
         <div class="alert alert-block">
-          <a class="close" data-dismiss="alert" href="#">×</a> <strong
-            class="alert-heading"><span class=locale_Warning"></span></strong>
-          <span class="locale_This_is_a_beta_version"></span> <span
-            class="locale_to_beta_testers"></span>
+          <a class="close" data-dismiss="alert" href="#">×</a> 
+          <strong class="alert-heading locale_Warning"></strong>
+          <span class="locale_This_is_a_beta_version"></span> 
+          <span class="locale_to_beta_testers"></span>
         </div>
       </div>
       <div id="datums-embedded" class="middle well"></div>
@@ -141,14 +137,14 @@
 <div id="new-session-modal" data-backdrop="static" class="modal hide"></div>
 <div id="new-corpus-modal" data-backdrop="static" class="modal hide"></div>
 <div id="quick-authenticate-modal" data-backdrop="static" class="modal hide">
-<div class="modal-header">
-  <h4 class = "locale_We_need_to_make_sure_its_you"></h4>
-</div>
-<div class="modal-body">
-<label class = "Password"></label>
-    <input type="password" id="quick-authenticate-password"/>
-</div>
-<div class="modal-footer">
-  <button class="btn btn-success" id="quick-authentication-okay-btn"><span class = "locale_Yep_its_me"></span></button>
-</div>
+	<div class="modal-header">
+	  <h4 class = "locale_We_need_to_make_sure_its_you"></h4>
+	</div>
+	<div class="modal-body">
+	<label class = "locale_Password"></label>
+	    <input type="password" id="quick-authenticate-password"/>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn btn-success locale_Yep_its_me" id="quick-authentication-okay-btn"></button>
+	</div>
 </div>
