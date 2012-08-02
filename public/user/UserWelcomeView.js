@@ -105,20 +105,20 @@ define([
       },
 
       "click .sync-my-data" : function() {
-        this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
+        this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val());
       },
-      "click #welcomeusername" : function(e) {
+      "click .welcomeusername" : function(e) {
         return false;
       },
-      "click #welcomepassword" : function(e) {
+      "click .welcomepassword" : function(e) {
         return false;
       },
-      "keyup #welcomepassword" : function(e) {
+      "keyup .welcomepassword" : function(e) {
         var code = e.keyCode || e.which;
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
+          this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val());
         }
       }
     },
@@ -141,21 +141,21 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
-        //$(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
-        //$(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-        //$(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-        //$(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-        //$(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
-        //$(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
-        //$(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
-        //$(".locale_Or_create_a_new_user").html(chrome.i18n.getMessage("locale_Or_create_a_new_user"));
-        //$(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
-        //$(".locale_Confirm_Password").html(chrome.i18n.getMessage("locale_Confirm_Password"));
-        //$(".locale_Sign_in_with_password").html(chrome.i18n.getMessage("locale_Sign_in_with_password"));
-        //$(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-        //$(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
-        //$(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
-        //$(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
+        $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+        $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+        $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
+        $(this.el).find(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
+        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
+        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+        $(this.el).find(".locale_Create_a_new_user").html(chrome.i18n.getMessage("locale_Create_a_new_user"));
+        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+        $(this.el).find(".locale_New_User").text(chrome.i18n.getMessage("locale_New_User"));
+        $(this.el).find(".locale_Confirm_Password").text(chrome.i18n.getMessage("locale_Confirm_Password"));
+        $(this.el).find(".locale_Sign_in_with_password").text(chrome.i18n.getMessage("locale_Sign_in_with_password"));
+        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
 
 
       } else {

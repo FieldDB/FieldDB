@@ -24,12 +24,12 @@
     "message" : "Welcome to iField! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "<i> iField: An offline/online fieldlinguistics database which adapts to its user's I-Language.</i>"
+    "message" : "iField: An offline/online fieldlinguistics database which adapts to its user's I-Language."
   },
   "locale_Welcome_Beta_Testers" : {
     "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing iField</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form at the bottom of the page. We will try to address all your comments before August 1st.</p> <p>Have fun and happy bug hunting!</p>"
   },
-  "locale_Or_create_a_new_user" : {
+  "locale_Create_a_new_user" : {
     "message" : "Create a new user"
   },
   "locale_What_is_your_username_going_to_be" : {
