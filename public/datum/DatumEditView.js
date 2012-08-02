@@ -193,15 +193,17 @@ define([
       }
       //localization
       $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+//      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
       $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+//      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
       $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
       $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
       $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
       $(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
       $(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+//      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+      $(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
+
       $(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
 
       return this;
@@ -209,7 +211,10 @@ define([
     
     rareFields : [],
     frequentFields: ["judgement","utterance","morphemes","gloss","translation"],
-    hideRareFields : function(){
+    hideRareFields : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       this.rareFields = [];
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
@@ -223,7 +228,10 @@ define([
 
     },
     
-    showRareFields : function(){
+    showRareFields : function(e){
+      if(e){
+        e.stopPropagation();
+      }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
       }
@@ -238,7 +246,10 @@ define([
     /**
      * Encrypts the datum if it is confidential
      */
-    encryptDatum : function() {
+    encryptDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       this.model.encrypt();
       this.render();
       $(".icon-unlock").toggleClass("icon-unlock icon-lock");
@@ -247,7 +258,10 @@ define([
     /**
      * Decrypts the datum if it was encrypted
      */
-    decryptDatum : function() {
+    decryptDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       this.model.decrypt();
       this.render();
       $(".icon-lock").toggleClass("icon-unlock icon-lock");
@@ -277,7 +291,10 @@ define([
       }
     },
     
-    insertNewDatumTag : function() {
+    insertNewDatumTag : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
         "tag" : this.$el.find(".add_tag").val()
@@ -292,7 +309,10 @@ define([
       return false;
     },
     
-    insertNewComment : function() {
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });

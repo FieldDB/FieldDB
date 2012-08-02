@@ -81,7 +81,10 @@ define([
       
       
       /* Read Only Menu */
-      "dblclick" : function() {
+      "dblclick" : function(e) {
+        if(e){
+          e.stopPropagation();
+        }
         // Prepend Datum to the top of the DatumContainer stack
         var d = this.model.clone();
         d.id = this.model.id;
@@ -90,6 +93,9 @@ define([
         appView.datumsEditView.prependDatum(d);
       },
       "click .datum-checkboxes": function(e){
+        if(e){
+          e.stopPropagation();
+        }
     //    alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
       }
@@ -164,13 +170,13 @@ define([
       }
       
       //localization
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+//      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+//      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+//      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+//      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+//      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+//      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+//      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
       
       return this;
     },

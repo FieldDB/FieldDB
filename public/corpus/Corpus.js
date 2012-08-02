@@ -769,7 +769,7 @@ define([
       this.lexicon.buildLexiconFromCouch(corpusname,callback);
     },
     changeCorpusPublicPrivate : function(){
-      alert("TODO contact server to change the public private of the corpus");
+//      alert("TODO contact server to change the public private of the corpus");
     }
   });
     
