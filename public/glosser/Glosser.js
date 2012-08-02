@@ -1,9 +1,12 @@
 var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
 Glosser.downloadPrecedenceRules = function(corpusname, callback){
+  var couchConnection = Utils.defaultCouchConnection();
+  var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port+"/";
+
   $.ajax({
     type : 'GET',
-    url : "https://ilanguage.iriscouch.com/" + corpusname
+    url : couchurl + corpusname
         + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
       // Parse the rules from JSON into an object

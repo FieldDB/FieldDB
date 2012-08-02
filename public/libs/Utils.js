@@ -9,10 +9,10 @@
  */
 var Utils = Utils || {};
 
-Utils.debugMode = true;
+Utils.debugMode = false;
 
 
-Utils.couchUrl = "https://ilanguage.iriscouch.com/default"; //"http://localhost:5984/default";
+Utils.couchUrl = "http://localhost:5984/default";//"https://ilanguage.iriscouch.com/default";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -24,7 +24,7 @@ Utils.touchUrl = "http://localhost:8888/db";
 Utils.pouchUrl = "idb://db";
 
 
-Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
+Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -39,22 +39,24 @@ Utils.activityFeedPouchUrl = "idb://activity_feed_db";
  * The url of the authentication server.
  */
 
-Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
+Utils.authUrl = "https://localhost:3001"; //"https://ifield.fieldlinguist.com";//"https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
 Utils.defaultCouchConnection = function() {
   return {
-//    protocol : "http://",
-//    domain : "localhost",
-//    port : "5984",
-//    corpusname : "default"
-//  }; 
-    protocol : "https://",
-    domain : "ilanguage.iriscouch.com",
-    port : "443",
+
+    protocol : "http://",
+    domain : "localhost",
+    port : "5984",
     corpusname : "default"
   }; 
+//  return {
+//    protocol : "https://",
+//    domain : "ilanguage.iriscouch.com",
+//    port : "443",
+//    corpusname : "default"
+//  }; 
 };
 /**
  * A message for users if they need help which brings them to our contact us form

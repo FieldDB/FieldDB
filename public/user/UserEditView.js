@@ -118,9 +118,6 @@ define([
     },
     saveProfile : function(){
       Utils.debug("Saving user");
-      window.appView.modalReadUserView.render();
-
-      $("#user-modal").modal("hide");
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
@@ -143,6 +140,8 @@ define([
           }));
       window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");
 
+      window.appView.modalReadUserView.render();
+      $("#user-modal").modal("hide");
     },
     updateGravatar : function(){
       this.model.set("gravatar", $(this.el).find(".gravatar").val());
