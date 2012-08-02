@@ -9,56 +9,49 @@
       <span class="caret"></span> 
     </a>
     <ul class="dropdown-menu">
-      <li class="not-a"><span class = "locale_Username"></span>
-        
-        <input id="welcomeusername" size="16" type="text">
+      <li class="not-a">
+        <span class = "locale_Username"></span>
+        <input class="welcomeusername" size="16" type="text" />
       </li>
-      <li class="not-a"> <span class = "locale_Password"></span>
-       
-        <input id="welcomepassword" size="16" type="password">
+      <li class="not-a"> 
+        <span class = "locale_Password"></span>
+        <input class="welcomepassword" size="16" type="password" />
       </li>
       <li class="not-a">
         <button class="btn btn-success sync-my-data">
-        <span class = "locale_Sync_my_data_to_this_computer"></span>
+          <span class = "locale_Sync_my_data_to_this_computer"></span>
         </button>
       </li>
     </ul>
   </div>
   <div>
     <h1 class = "locale_Welcome_to_iField"></h1>
- <span class = "locale_An_offline_online_fieldlinguistics_database"
- ></span>  
+    <i class = "locale_An_offline_online_fieldlinguistics_database"></i>  
   </div>
 </div>
 
 <div class="modal-body">
-  <span class = "locale_Welcome_Beta_Testers"></span>
+  <div class = "locale_Welcome_Beta_Testers"></div>
  
 <!--   <iframe width="420" height="315" src="https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA" frameborder="0" allowfullscreen></iframe>
  -->  <div class=" alert alert-error hide "></div>
   <div class="breadcrumb create_new_user_password">
-    <h3 class = "locale_Or_create_a_new_user"></h3>
+    <h3 class = "locale_Create_a_new_user"></h3>
     <p>
       http://ifield.fieldlinguist.com/{{username}}
     </p>
     <label class = "locale_What_is_your_username_going_to_be">  </label>
     <span class="like-form-inline">
       <input class="username" value="{{username}}" type="text"/>
-      <button class="btn btn-primary new-user-button" value="">
-      <span class = "locale_New_User"></span></button>
+      <button class="btn btn-primary new-user-button locale_New_User"></button>
     </span>
     <div class="hide confirm-password">
       <label class = "locale_Password"></label>
-      <input class="password" type="password">
-      </input>
+      <input class="password" type="password"/>
       <label class = "locale_Confirm_Password"></label>
-      <input class="to-confirm-password"
-      type="password">
-      </input>
+      <input class="to-confirm-password" type="password"/>
       <br />
-      <button class="btn btn-success register-new-user">
-      <span class = "locale_Sign_in_with_password"> </span>  
-
+      <button class="btn btn-success register-new-user locale_Sign_in_with_password">
       </button>
       <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class="btn btn-success register-twitter">
         <i class="i icon-twitter"></i> Sign in with Twitter

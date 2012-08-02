@@ -22,12 +22,12 @@
     "message" : "¡Bienvenido a iCampo! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "<i> Un aplicacion de coleccion de datos linguisticos..</i>"
+    "message" : "Un aplicacion de coleccion de datos linguisticos..."
   },
   "locale_Welcome_Beta_Testers" : {
-    "message" : "<p> ¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo.</p>"
+    "message" : "¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo."
   },
-  "locale_Or_create_a_new_user" : {
+  "locale_Create_a_new_user" : {
     "message" : "Crear un nuevo usuario"
   },
   "locale_What_is_your_username_going_to_be" : {
