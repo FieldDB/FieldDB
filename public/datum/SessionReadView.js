@@ -144,14 +144,14 @@ define([
       }
       
       //localization
-      $(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
-      $(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
-      $(".locale_When").html(chrome.i18n.getMessage("locale_When"));
-      $(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+      //$(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
+      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      //$(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+      //$(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+      //$(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+      //$(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
+      //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
  
       return this;
     },

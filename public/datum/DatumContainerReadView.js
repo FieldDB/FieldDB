@@ -70,8 +70,8 @@ define([
         this.datumsView.render();
       }
       //localization
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Edit_Datum").attr("title", chrome.i18n.getMessage("locale_Edit_Datum"));      
+      //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      //$(".locale_Edit_Datum").attr("title", chrome.i18n.getMessage("locale_Edit_Datum"));      
     },
     
     resizeSmall : function() {

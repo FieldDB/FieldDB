@@ -141,21 +141,21 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
-        $(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
-        $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-        $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-        $(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-        $(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
-        $(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
-        $(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
-        $(".locale_Or_create_a_new_user").html(chrome.i18n.getMessage("locale_Or_create_a_new_user"));
-        $(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
-        $(".locale_Confirm_Password").html(chrome.i18n.getMessage("locale_Confirm_Password"));
-        $(".locale_Sign_in_with_password").html(chrome.i18n.getMessage("locale_Sign_in_with_password"));
-        $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-        $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
-        $(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
-        $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+        //$(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
+        //$(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+        //$(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+        //$(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
+        //$(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
+        //$(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
+        //$(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+        //$(".locale_Or_create_a_new_user").html(chrome.i18n.getMessage("locale_Or_create_a_new_user"));
+        //$(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+        //$(".locale_Confirm_Password").html(chrome.i18n.getMessage("locale_Confirm_Password"));
+        //$(".locale_Sign_in_with_password").html(chrome.i18n.getMessage("locale_Sign_in_with_password"));
+        //$(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+        //$(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+        //$(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
+        //$(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
 
 
       } else {

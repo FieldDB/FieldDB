@@ -69,7 +69,7 @@ define([
         $(this.el).html(this.templateValue(jsonToRender));
       }
     
-      $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+      //$(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
       return this;
     },
     

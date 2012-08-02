@@ -82,8 +82,8 @@ define([
         this.datumsView.render();
       }
       //localization
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      //$(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
     },
     
     /**

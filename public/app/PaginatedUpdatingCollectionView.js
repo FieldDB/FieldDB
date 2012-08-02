@@ -259,11 +259,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       });
       
       //localization
-      $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
-      $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
-      $(".locale_More").html(chrome.i18n.getMessage("locale_More"));
-      $(".locale_of").html(chrome.i18n.getMessage("locale_of"));
-      $(".locale_pages_shown").html(chrome.i18n.getMessage("locale_pages_shown"));
+      //$(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
+      //$(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
+      //$(".locale_More").html(chrome.i18n.getMessage("locale_More"));
+      //$(".locale_of").html(chrome.i18n.getMessage("locale_of"));
+      //$(".locale_pages_shown").html(chrome.i18n.getMessage("locale_pages_shown"));
 
     },
 

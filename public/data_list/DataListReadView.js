@@ -245,17 +245,17 @@ define( [
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
       //localization
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      $(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
-      $(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      $(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-      $(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
-      $(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
+      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      //$(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
+      //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+      //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+      //$(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+      //$(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      //$(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      //$(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      //$(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+      //$(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
+      //$(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
 
 
 
