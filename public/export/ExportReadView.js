@@ -29,8 +29,8 @@ define([
      // Display the ExportView
     	this.setElement($("#export-modal")); 
     	$(this.el).html(this.template(this.model.toJSON()));
-    	$(".locale_Export").html(chrome.i18n.getMessage("locale_Export"));
-      $(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+    	//$(".locale_Export").html(chrome.i18n.getMessage("locale_Export"));
+      //$(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
 
 
   	      

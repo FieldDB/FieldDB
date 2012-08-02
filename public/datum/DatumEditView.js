@@ -192,19 +192,19 @@ define([
             
       }
       //localization
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-//      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-//      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      $(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
-      $(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-//      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
-      $(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
+      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+//      //$(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+      //$(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+//      //$(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      //$(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      //$(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      //$(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      //$(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
+      //$(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
+//      //$(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+      //$(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
 
-      $(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
+      //$(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
 
       return this;
     },

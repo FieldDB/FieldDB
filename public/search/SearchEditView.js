@@ -127,9 +127,9 @@ define([
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization
-      $(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-      $(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
+      //$(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
+      //$(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
+      //$(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
       
       return this;
     },
