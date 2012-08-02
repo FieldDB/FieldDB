@@ -60,8 +60,10 @@ define([
         e.stopPropagation();
       },
       "click .corpus-settings" : function() {
-        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info");
-        app.router.showEmbeddedCorpus();
+        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info","How to find the corpus settings:");
+        window.appView.currentCorpusReadView.format = "fullscreen";
+        window.appView.currentCorpusReadView.render();
+        app.router.showFullscreenCorpus();
       }
     },
     
@@ -83,7 +85,7 @@ define([
         // Display the AuthenticationEditView
         this.setElement($("#authentication-embedded"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
+     
         if (this.model.get("state") == "loggedIn") {
           $("#logout").show();
           $("#login").hide();
@@ -111,6 +113,18 @@ define([
       } else {
         Utils.debug("\tAuthentication model was undefined.");
       }
+      
+      //localization
+      $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+      $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
+      $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
+      $(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
+      
       
       return this;
     },
@@ -148,7 +162,7 @@ define([
      * https://twitter.com/#!/tucker1927
      */
     loadSample : function(appidsIn) {      
-      alert("loading sample");
+    //  alert("loading sample");
 
     },
     
@@ -182,16 +196,18 @@ define([
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           //Replicate user's corpus down to pouch
-          window.app.get("corpus").replicateCorpus(couchConnection, function(){
+          window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              Utils.debug("User does not have most recent ids, doing nothing.");
+              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+//              appView.datumsEditView.newDatum();
+              appView.datumsEditView.render();
             }else{
               /*
                *  Load their last corpus, session, datalist etc
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsById(couchConnection, appids);
+              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
             }                    
           });
         });
@@ -202,13 +218,15 @@ define([
           if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              Utils.debug("User does not have most recent ids, doing nothing.");
+              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+//              appView.datumsEditView.newDatum();
+              appView.datumsEditView.render();
             }else{
               /*
                *  Load their last corpus, session, datalist etc
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsById(couchConnection, appids);
+              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
             }
           }
         },5000);
@@ -277,7 +295,7 @@ define([
     },
     
     /**
-     * TODO the ShowQuickAuthentication view popups up a password entry view.
+     * ShowQuickAuthentication view popups up a password entry view.
      * This is used to unlock confidential datum, or to unlock dangerous settings
      * like removing a corpus. It is also used if the user hasn't confirmed their
      * identity in a while.

@@ -1,5 +1,6 @@
 define([ 
     "backbone",
+    "activity/Activity",
     "audio_video/AudioVideo", 
     "comment/Comment",
     "comment/Comments",
@@ -13,6 +14,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    Activity,
     AudioVideo, 
     Comment,
     Comments,
@@ -104,6 +106,12 @@ define([
     },
 
     changeCorpus : function(corpusname, callback) {
+      if(!corpusname){
+        corpusname = this.get("corpusname");
+        if(corpusname == undefined){
+          corpusname = window.app.get("corpus").get("corpusname");
+        }
+      }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
       }
@@ -123,63 +131,86 @@ define([
      */
     getAllDatumIdsByDate : function(callback) {
       var self = this;
-      this.changeCorpus(this.get("corpusname"),function(){
-        self.pouch(function(err, db) {
-          db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
-            if ((!err) && (typeof callback == "function"))  {
-              console.log("Callback with: ", response.rows);
-              callback(response.rows);
-            }
+      
+      try{
+        this.changeCorpus(this.get("corpusname"),function(){
+          self.pouch(function(err, db) {
+            db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
+              if ((!err) && (typeof callback == "function"))  {
+                console.log("Callback with: ", response.rows);
+                callback(response.rows);
+              }
+            });
           });
         });
-      });
+        
+      }catch(e){
+//        appView.datumsEditView.newDatum();
+        appView.datumsEditView.render();
+        alert("Couldnt show the most recent datums "+JSON.stringify(e));
+        
+      }
     },
     
     searchByQueryString : function(queryString, callback) {
       var self = this;
-      this.changeCorpus(this.get("corpusname"), function() {
-        self.pouch(function(err, db) {
-          db.query("get_datum_field/get_datum_fields", {reduce: false}, function(err, response) {
-            var matchIds = [];
-            
-            if (!err) {
-              // Process the given query string into tokens
-              var queryTokens = self.processQueryString(queryString);
+      
+      try{
+        this.changeCorpus(this.get("corpusname"), function() {
+          self.pouch(function(err, db) {
+            db.query("get_datum_field/get_datum_fields", {reduce: false}, function(err, response) {
+              var matchIds = [];
               
-              // Go through all the rows of results
-              for (i in response.rows) {
-                // Determine if this datum matches the first search criteria
-                var thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
+              if (!err) {
+                // Process the given query string into tokens
+                var queryTokens = self.processQueryString(queryString);
                 
-                // Progressively determine whether the datum still matches based on
-                // subsequent search criteria
-                for (var j = 1; j < queryTokens.length; j += 2) {
-                  if (queryTokens[j] == "AND") {
-                    // Short circuit: if it's already false then it continues to be false
-                    if (!thisDatumIsIn) {
-                      break;
-                    }
+                // Go through all the rows of results
+                for (i in response.rows) {
+                  var thisDatumIsIn = false;
+                  // If the query string is null, include all datumIds
+                  if(queryString.trim() == ""){
+                    thisDatumIsIn = true;
+                  }else{
+                    // Determine if this datum matches the first search criteria
+                    thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
                     
-                    // Do an intersection
-                    thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
-                  } else {
-                    // Do a union
-                    thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
+                    // Progressively determine whether the datum still matches based on
+                    // subsequent search criteria
+                    for (var j = 1; j < queryTokens.length; j += 2) {
+                      if (queryTokens[j] == "AND") {
+                        // Short circuit: if it's already false then it continues to be false
+                        if (!thisDatumIsIn) {
+                          break;
+                        }
+                        
+                        // Do an intersection
+                        thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
+                      } else {
+                        // Do a union
+                        thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
+                      }
+                    }
+                  }
+                  
+                  // If the row's datum matches the given query string
+                  if (thisDatumIsIn) {
+                    // Keep its datum's ID, which is the value
+                    matchIds.push(response.rows[i].value);
                   }
                 }
-                
-                // If the row's datum matches the given query string
-                if (thisDatumIsIn) {
-                  // Keep its datum's ID, which is the value
-                  matchIds.push(response.rows[i].value);
-                }
               }
-            }
-            
-            callback(matchIds);
+              if(typeof callback == "function"){
+                //callback with the unique members of the array
+                callback(_.unique(matchIds));
+//                callback(matchIds); //loosing my this in SearchEditView
+              }
+            });
           });
         });
-      });
+      }catch(e){
+        alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
+      }
     },
     
     /**
@@ -274,9 +305,9 @@ define([
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
             + "\n \\ex [*] \\gll " + utterance + " \\\\"
             + "\n\t" + gloss + " \\\\"
@@ -285,9 +316,7 @@ define([
       if (showInExportModal != null) {
         $("#export-type-description").html(" as LaTeX (GB4E)");
         $("#export-text-area").val($("#export-text-area").val() + result);
-        $("#export-modal").modal("show");
       }
-      
       return result;
     },
     
@@ -296,19 +325,18 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result =  utterance+"\n"
             +gloss+"\n"
             +translation
             +"\n\n";
       if(showInExportModal != null){
         $("#export-type-description").html(" as text (Word)");
-        $("#export-text-area").val( $("#export-text-area").val()+
-           result
-                 );
-        $("#export-modal").modal("show");
+        $("#export-text-area").val(
+            $("#export-text-area").val() + result
+        );
       }
       return result;
     },
@@ -320,46 +348,240 @@ define([
       if (orderedFields == null) {
         orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       }
-      judgement = this.get("datumFields").where({label: "judgement"})[0].get("value");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("value");
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("value");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("value");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("value");
+      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
+      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-      var result = '"' + resultarray.join('","') + '"';
-      if (printheader != null) {
+      var result = '"' + resultarray.join('","') + '"\n';
+      if (printheader) {
         var header = '"' + orderedFields.join('","') + '"';
         result = header + "\n" + result;
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
-        $("#export-text-area").val($("#export-text-area").val() + result);
-        $("#export-modal").modal("show");
+        $("#export-text-area").val(
+            $("#export-text-area").val() + result);
       }
       return result;
     },
     
     /**
-     * This function takes in a boolean whether the data should be appended in the import, the fields the data is in, and the header from the data which corresponds to datum fields.
+     * Encrypts the datum if it is confidential
      * 
-     * @param showInImportModal
-     * @param orderedFields the values which correspond to datumfields
-     * @param header the header fields which correspond to datumfields
+     * @returns {Boolean}
      */
-    importCSV : function(orderedFields, header) {
-      for (f in header) {
-        if (this.get("datumFields").where({label: header[f]})[0] != undefined) {
-          this.get("datumFields").where({label: header[f]})[0].set("value", orderedFields[f]);
-        } else {
-          var n = new DatumField();
-          n.label = header[f];
-          n.value = orderedFields[f];
-          this.get("datumFields").add(n);
+    encrypt : function() {
+      this.set("confidential", true);
+      this.get("datumFields").each(function(dIndex){
+        dIndex.set("encrypted", "checked");
+      });
+      //TODO scrub version history to get rid of all unencrypted versions.
+      this.saveAndInterConnectInApp(window.app.router.showDashboard, window.app.router.showDashboard);
+    },
+    
+    /**
+     * Decrypts the datum if it was encrypted
+     */
+    decrypt : function() {
+      this.set("confidential", false);
+
+      this.get("datumFields").each(function(dIndex){
+        dIndex.set("encrypted", "");
+      });
+    },
+    /**
+     * Accepts two functions to call back when save is successful or
+     * fails. If the fail callback is not overridden it will alert
+     * failure to the user.
+     * 
+     * - Adds the datum to the top of the default data list in the corpus if it is in the right corpus
+     * - Adds the datum to the datums container if it wasnt there already
+     * - Adds an activity to the logged in user with diff in what the user changed. 
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      Utils.debug("Saving a Datum");
+      var self = this;
+      var newModel = true;
+      if(this.id){
+        newModel = false;
+      }else{
+        this.set("dateEntered", JSON.stringify(new Date()));
+      }
+      //protect against users moving datums from one corpus to another on purpose or accidentially
+      if(window.app.get("corpus").get("corpusname") != this.get("corpusname")){
+        if(typeof failurecallback == "function"){
+          failurecallback();
+        }else{
+          alert('Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ' );
+        }
+        return;
+      }
+      //If it was decrypted, this will save the changes before we go into encryptedMode
+      
+      this.get("datumFields").each(function(dIndex){
+        //Anything can be done here, it is the set function which does all the work.
+        dIndex.set("value", dIndex.get("mask"));
+      });
+      
+      // Store the current Session, the current corpus, and the current date
+      // in the Datum
+      this.set({
+        "session" : app.get("currentSession"),
+        "corpusname" : app.get("corpus").get("corpusname"),
+        "dateModified" : JSON.stringify(new Date())
+      });
+      
+      var oldrev = this.get("_rev");
+      this.changeCorpus(null,function(){
+        self.save(null, {
+          success : function(model, response) {
+            Utils.debug('Datum save success');
+            var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
+            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+utterance+"</a>";
+            //TODO add privacy for datum goals in corpus
+//            if(window.app.get("corpus").get("keepDatumDetailsPrivate")){
+//              utterance = "";
+//              differences = "";
+//            }
+            if(window.appView){
+              window.appView.toastUser("Sucessfully saved datum: "+ utterance,"alert-success","Saved!");
+              window.appView.addSavedDoc(model.id);
+            }
+            var verb = "updated";
+            if(newModel){
+              verb = "added";
+            }
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : verb,
+                  directobject : "<a href='#corpus/"+model.get("corpusname")+"/datum/"+model.id+"'>datum</a> ",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  context : differences+" via Offline App.",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
+
+            /*
+             * If the current data list is the default
+             * list, render the datum there since is the "Active" copy
+             * that will eventually overwrite the default in the
+             * corpus if the user saves the current data list
+             */
+            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
+            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
+              //Put it into the current data list views
+              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
+              //Put it into the ids of the current data list
+              var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
+              if(positionInCurrentDataList != -1){
+                window.app.get("currentDataList").get("datumIds").splice(positionInCurrentDataList, 1);
+              }
+              window.app.get("currentDataList").get("datumIds").unshift(model.id);
+              window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
+            }else{
+              /*
+               * Make sure the datum is at the top of the default data list which is in the corpus,
+               * this is in case the default data list is not being displayed
+               */
+              var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
+              if(positionInDefaultDataList != -1 ){
+                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
+                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+              }
+              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+              window.app.get("corpus").get("dataLists").models[defaultIndex].needsSave  = true;
+              window.appView.addUnsavedDoc(window.app.get("corpus").id);
+            }
+            /*
+             * Also, see if this datum matches the search datalist, and add it to the top of the search list
+             */
+            if($("#search_box").val() != ""){
+              //TODO check this
+              var datumJson = model.get("datumFields").toJSON()
+              var datumAsDBResponseRow = {};
+              for (var x in datumJson){ 
+                datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
+              }
+              var queryTokens = self.processQueryString($("#search_box").val());
+              var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
+
+              for (var j = 1; j < queryTokens.length; j += 2) {
+                if (queryTokens[j] == "AND") {
+                  // Short circuit: if it's already false then it continues to be false
+                  if (!thisDatumIsIn) {
+                    break;
+                  }
+
+                  // Do an intersection
+                  thisDatumIsIn = thisDatumIsIn && model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+                } else {
+                  // Do a union
+                  thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+                }
+              }
+              if (thisDatumIsIn) {
+                // Insert the datum at the top of the search datums collection view
+                window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+                window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.unshift(model);
+                //Do the same to the datumids in the search data list itself
+                var positioninsearchresults = window.appView.searchEditView.searchDataListView.model.get("datumIds").indexOf(model.id);
+                if(positioninsearchresults != -1){
+                  window.appView.searchEditView.searchDataListView.model.get("datumIds").splice(positioninsearchresults, 1);
+                }
+                window.appView.searchEditView.searchDataListView.model.get("datumIds").unshift(model.id);
+              }
+            }//end of if search is open and running for Alan
+            
+
+            //dont need to save the user every time when we change a datum.
+//            window.app.get("authentication").saveAndInterConnectInApp();
+
+            if(typeof successcallback == "function"){
+              successcallback();
+            }
+          },
+          error : function(e) {
+            if(typeof failurecallback == "function"){
+              failurecallback();
+            }else{
+              alert('Datum save error' + e);
+            }
+          }
+        });
+      });
+    },
+    /**
+     * Accepts two functions success will be called if sucessfull,
+     * otherwise it will attempt to render the current datum views. If
+     * the datum isn't in the current corpus it will call the fail
+     * callback or it will alert a bug to the user. Override the fail
+     * callback if you don't want the alert.
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    setAsCurrentDatum : function(successcallback, failurecallback){
+      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
+        if (typeof failurecallback == "function") {
+          failurecallback();
+        }else{
+          alert("This is a bug, cannot load the datum you asked for, it is not in this corpus.");
+        }
+        return;
+      }else{
+        if (window.appView.datumsEditView.datumsView.collection.models[0].id != this.id ) {
+          window.appView.datumsEditView.datumsView.prependDatum(this);
+          //TODO might not need to do it on the Read one since it is the same model?
+        }
+        if (typeof successcallback == "function") {
+          successcallback();
         }
       }
-      var csvDebugResult = this.exportAsCSV(null, null, true);
-      
-      return result;
     }
   });
 

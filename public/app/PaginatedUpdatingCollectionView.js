@@ -91,11 +91,15 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         
         var positionInChildViews = -1;
         for (var x in this._childViews){ 
-          if(this._childViews[x].model.cid == model.cid){
-            positionInChildViews = x;
+          if(model.cid){
+            if(this._childViews[x].model.cid == model.cid){
+              positionInChildViews = x;
+            }
           }
-          if(this._childViews[x].model.id == model.id){
-            positionInChildViews = x;
+          if(model.id){
+            if(this._childViews[x].model.id == model.id){
+              positionInChildViews = x;
+            }
           }
         }
         
@@ -112,11 +116,15 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       } else {
         var positionInChildViews = -1;
         for (var x in this._childViews){ 
-          if(this._childViews[x].model.cid == model.cid){
-            positionInChildViews = x;
+          if(model.cid){
+            if(this._childViews[x].model.cid == model.cid){
+              positionInChildViews = x;
+            }
           }
-          if(this._childViews[x].model.id == model.id){
-            positionInChildViews = x;
+          if(model.id){
+            if(this._childViews[x].model.id == model.id){
+              positionInChildViews = x;
+            }
           }
         }
         if( positionInChildViews == -1 ){
@@ -173,7 +181,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       // Display the pagination footer
       this.renderUpdatedPaginationControl();
-      
+
       return this;
     },
     /**
@@ -250,6 +258,13 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         paginatedSelf.changeCount(e, paginatedSelf);
       });
       
+      //localization
+      $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
+      $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
+      $(".locale_More").html(chrome.i18n.getMessage("locale_More"));
+      $(".locale_of").html(chrome.i18n.getMessage("locale_of"));
+      $(".locale_pages_shown").html(chrome.i18n.getMessage("locale_pages_shown"));
+
     },
 
     /**

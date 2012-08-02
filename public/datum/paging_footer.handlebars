@@ -1,24 +1,26 @@
 <div class="breadcrumb">
   <span class="cell">
     {{#if morePages}}
-    <a href="#" class="servernext">Next</a>
+    <a href="#" class="nextinfinitepagination"><span class = "locale_More"></span></a>
     {{/if}}
-    <span class="cell serverhowmany">
-      Show
-      <a href="#" class="">3</a>
-      |
-      <a href="#" class="">9</a>
-      |
-      <a href="#" class="selected">12</a>
-      per page
+    <span class="cell howmanyperpagination">
+        <span class = "locale_Show"></span>
+      <a href="#" class="selected">12</a>      |
+      <a href="#" class="">50</a>
+     |
+      <a href="#" class="">100</a>
+       <span class = "locale_per_page"></span>
     </span>
     <span class="divider">/</span>
     <span class="cell first records">
       <span class="current">{{currentPage}}</span>
-      of
+
+ <span class = "locale_of"></span>
       <span class="total">{{totalPages}}</span>
-      pages shown
-      shown
+  <span class = "locale_pages_shown"></span>
+      {{#if allShown}}
+        (All)
+      {{/if}}
     </span>
   </span>
 </div>

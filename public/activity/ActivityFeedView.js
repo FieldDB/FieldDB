@@ -5,7 +5,7 @@ define([
     "activity/Activities",
     "activity/ActivityView",
     "activity/ActivityFeed",
-    "app/UpdatingCollectionView"
+    "app/PaginatedUpdatingCollectionView"
  ], function(
     Backbone, 
     Handlebars, 
@@ -13,7 +13,7 @@ define([
     Activities,
     ActivityView,
     ActivityFeed,
-    UpdatingCollectionView
+    PaginatedUpdatingCollectionView
 ) {
   var ActivityFeedView = Backbone.View.extend(
   /** @lends ActivityFeedView.prototype */
@@ -28,7 +28,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.activitiesView = new UpdatingCollectionView({
+      this.activitiesView = new PaginatedUpdatingCollectionView({
         collection           : this.model.get("activities"),
         childViewConstructor : ActivityView,
         childViewTagName     : 'li'
@@ -60,13 +60,19 @@ define([
       if (this.format == "rightSide") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.template(this.model.toJSON()));
-        
+       
         this.activitiesView.el = this.$('.activities-updating-collection');
         this.activitiesView.render();
       } else if (this.format == "minimized") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.minimizedTemplate(this.model.toJSON()));
+
       }
+      //localization
+      $(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed"));
+      $(".locale_Show_Activities").attr("title", chrome.i18n.getMessage("locale_Show_Activities"));
+      $(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
+
 
       return this;
     }

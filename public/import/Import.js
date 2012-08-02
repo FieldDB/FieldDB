@@ -3,18 +3,22 @@ define([
     "handlebars",
     "data_list/DataList",
     "data_list/DataListEditView",
+    "datum/DatumReadView",
     "datum/Datums",
     "datum/DatumFields",
     "datum/Session",
+    "app/PaginatedUpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone,
     Handlebars,
     DataList,
     DataListEditView,
+    DatumReadView,
     Datums,
     DatumFields,
-    Session
+    Session,
+    PaginatedUpdatingCollectionView
 ) {
   var Import = Backbone.Model.extend(
 
@@ -70,6 +74,12 @@ define([
      * return anything.
      */
     validate : function(attributes) {
+    },
+    saveAndInterConnectInApp : function(callback){
+      
+      if(typeof callback == "function"){
+        callback();
+      }
     },
     /**
      * This function tries to guess if you have \n or \r as line endings
@@ -344,9 +354,7 @@ define([
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
                 : ' n/a');
         
-        this.readFileIntoRawText(i, function(){
-          Utils.debug("Finished reading in the raw text file.")
-        });
+        this.readFileIntoRawText(i);
 //        this.set("asCSV", this.importCSV(f.getBytes()));
 //      this.set("asXML", this.importCSV(f.getBytes()));
 
@@ -356,25 +364,30 @@ define([
       this.set("fileDetails", filedetails.join('') );
       status = status + filedetails.join('');
       this.set("status", status);
-      if (this.get("dataList") == undefined) {
-        // Create a new DataList
-        this.set("dataList", new DataList({
-          title : "Data from "+files[0].name,
-          description : "This is the data list which would result from the import of these files."
-            + this.get("fileDetails"),
-          corpusname: this.get("corpusname")
-        }));
-        
-        // Create a new DataListEditView
-        this.dataListView = new DataListEditView({
-          model : this.get("dataList"),
-          datumCollection : new Datums()
-        });
-        this.dataListView.format = "import";
-      }
-      
-      // Render the DataList
-      this.dataListView.render();
+
+//      // Create a new DataListEditView
+//      window.appView.importView.dataListView = new DataListEditView({
+//        model : new DataList({
+//          title : "Data from "+files[0].name,
+//          description : "This is the data list which would result from the import of these files."
+//            + this.get("fileDetails"),
+//            corpusname: this.get("corpusname")
+//        })
+//      });
+//      window.appView.importView.dataListView.format = "import";
+//      window.appView.importView.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+//        collection           : new Datums(),
+//        childViewConstructor : DatumReadView,
+//        childViewTagName     : "li",
+//        childViewFormat      : "latex"
+//      }); 
+//      
+//      // Render the DataList
+//      window.appView.importView.dataListView.format = "import";
+//      window.appView.importView.dataListView.render();
+//      window.appView.importView.importPaginatedDataListDatumsView.renderInElement(
+//        $("#import-data-list").find(".import-data-list-paginated-view") );
+//      
     },
     readFileIntoRawText : function(index, callback){
       var self = this;
@@ -390,6 +403,7 @@ define([
       if(fileIndex == null){
         fileIndex = 0;
       }
+      
       var importType = {
         csv: { confidence: 0, importFunction : this.importCSV }
         ,tabbed: { confidence: 0, importFunction : this.importTabbed }
@@ -426,7 +440,7 @@ define([
         }
       }
       var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });
-      mostLikelyImport.importFunction(self.get("rawText"), self, callback);
+      mostLikelyImport.importFunction(self.get("rawText"), self, null); //no callback, TODO strange loss of reference in importview
     },
     readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);

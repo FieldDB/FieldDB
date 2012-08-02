@@ -1,46 +1,39 @@
-
-
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span4 well">
 			<!--Sidebar content-->
-			<button class="btn btn-success approve-save disabled">Save and Finish Importing</button>
-			<div id="import-data-list-view"></div>
+			<button class="btn btn-success approve-save disabled"><span class = "locale_Save_And_Import"></span></button>
+			<div id="import-data-list" class="well">
+        <div id="import-data-list-header" class="middle "></div>
+        <div>
+          <ul class="unstyled zebra import-data-list-paginated-view"></ul>
+          <div class="pagination-control"></div>
+        </div>
+      </div>
 		</div>
 		<div class="span8">
 			<!--Body content-->
 			<div class="well">
 				<i class="icons icon-resize-small pull-right"></i>
-				<h1>
-					Import <small id="import-type-description">{{corpusname}}</small>
+				<h1><span class="locale_Import"></span>
+					 <small id="import-type-description">{{corpusname}}</small>
 				</h1>
 				<progress class="import-progress" max="5" value="0">
-              <strong>0% completed.</strong>
+              <strong><span class = "percent_completed"></span></strong>
             </progress>
-            <ol>
-	            <li>Drag and drop a file (csv, txt, tabed, xml, text) to the area below.</li>
-	            <li>(Edit/type in the text area to correct information as needed.)</li>
-	            <li>Drag/type the datum fields in the column headings which match. The columns will become fields in your database.</li>
-	            <li>Type in any other column headings that you want to keep in your imported data, the app will automatically create datum fields for these in your corpus.</li>
-	            <li>Click on the Attempt Import button.</li>
-	            <li>Review the data list to see if the import looks good.</li>
-	            <li>(Edit the table cells as needed, click Attempt Import and review data list as many times as you would like).</li>
-	            <li>When satisfied with the data list, click Save and your data will be imported into your corpus, and a new data list will be created with this data.</li>
-            </ol>
-            
+            <span class = "locale_Import_Instructions"></span>
 				<div>{{status}}</div>
 			</div>
-			<textarea class="export-large-textarea  drop-zone" placeholder="Drag and drop files/text here!">{{rawText}}</textarea>
-
+			<textarea class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
 			<div class="well">
-				<button class="btn btn-primary add-column pull-right hide">Add
-					Extra Columns</button>
+				<button class="btn btn-primary add-column pull-right hide">
+				<span class = "locale_Add_Extra_Columns"></span>
+			</button>
 				<div id="import-datum-field-labels"></div>
 			</div>
 		</div>
 	</div>
 </div>
-	<button class="btn btn-success approve-import hide">Attempt Import</button>
-
+	<button class="btn btn-success approve-import hide"><span class = "locale_Attempt_Import"></span></button>
 	<table id="csv-table-area"
 		class=" table well table-striped table-bordered table-condensed"></table>

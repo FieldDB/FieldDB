@@ -141,6 +141,23 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
+        $(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
+        $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+        $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+        $(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
+        $(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
+        $(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
+        $(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+        $(".locale_Or_create_a_new_user").html(chrome.i18n.getMessage("locale_Or_create_a_new_user"));
+        $(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+        $(".locale_Confirm_Password").html(chrome.i18n.getMessage("locale_Confirm_Password"));
+        $(".locale_Sign_in_with_password").html(chrome.i18n.getMessage("locale_Sign_in_with_password"));
+        $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+        $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+        $(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
+        $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+
+
       } else {
         Utils.debug("\User model was undefined");
       }
@@ -232,16 +249,17 @@ define([
                     "description" : "This is an untitled corpus, created by default.",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
+                    "team" : auth.get("userPublic"),
                     "couchConnection" : data.user.corpuses[0],
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
                   
                   var s = a.get("currentSession");
-                  s.get("sessionFields").where({label: "user"})[0].set("value", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("value", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("value", "To explore the app and try entering/importing data");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("value", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("value", "A few months ago, probably on a Monday night.");
+                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
+                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
+                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
                   s.set("corpusname", data.user.corpuses[0].corpusname);
                   s.changeCorpus(data.user.corpuses[0].corpusname);
                   
@@ -273,11 +291,12 @@ define([
                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateCorpus(couchConnection);
-                        
+                        c.replicateFromCorpus(couchConnection);
+//                        appView.datumsEditView.newDatum();
+                        appView.datumsEditView.render();
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
-                          window.app.storeCurrentDashboardIdsToLocalStorage();
+                          window.app.saveAndInterConnectInApp();
                         },10000);
                         
                       });
@@ -330,19 +349,21 @@ define([
               window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
                 //Replicate user's corpus down to pouch
                 window.setTimeout(function(){
-                  window.app.get("corpus").replicateCorpus(couchConnection, function(){
+                  window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
                     if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                       //do nothing because they have no recent ids
-                      Utils.debug("User does not have most recent ids, doing nothing.");
+                      alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+//                      appView.datumsEditView.newDatum();
+                      appView.datumsEditView.render();
                     }else{
                       /*
                        *  Load their last corpus, session, datalist etc
                        */
                       var appids = auth.get("userPrivate").get("mostRecentIds");
-                      window.app.loadBackboneObjectsById(couchConnection, appids);
+                      window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
                     }                    
                   });
-                },5000);
+                },3000);
               });
             });
           });

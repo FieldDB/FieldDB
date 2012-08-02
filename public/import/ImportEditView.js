@@ -3,11 +3,16 @@ define( [
     "handlebars",
     "activity/Activity",
     "import/Import",
+    "data_list/DataList",
+    "data_list/DataListEditView",
     "datum/Datum",
+    "datum/Datums",
     "datum/DatumField",
     "datum/DatumFields",
+    "datum/DatumReadView",
     "datum/DatumTag",
     "datum/Session",
+    "app/PaginatedUpdatingCollectionView",
     "libs/Utils"
 
 ], function(
@@ -15,18 +20,24 @@ define( [
     Handlebars, 
     Activity,
     Import,
+    DataList,
+    DataListEditView,
     Datum,
+    Datums,
     DatumField,
     DatumFields,
+    DatumReadView,
     DatumTag,
-    Session
+    Session,
+    PaginatedUpdatingCollectionView
+
 ) {
   /**
    * https://gist.github.com/1488561
    */
   var ImportEditView = Backbone.View.extend({
     initialize : function(){
-      this.model.bind("change", this.render, this);
+      this.model.bind("change:asCSV", this.render, this);
       this._draghoverClassAdded = false;
     },
     events : {
@@ -128,19 +139,29 @@ define( [
     render : function() {
       this.setElement("#import-fullscreen");
       $(this.el).html(this.template(this.model.toJSON()));
-      if(this.model.get("dataList") != undefined){
-        if(this.model.dataListView != undefined){
-          this.model.dataListView.render();
+      if(this.dataListView != undefined){
+        this.dataListView.format = "import";
+        this.dataListView.render();
+        if(this.importPaginatedDataListDatumsView){
+          this.importPaginatedDataListDatumsView.renderInElement(
+              $("#import-data-list").find(".import-data-list-paginated-view") );
         }
       }
       if(this.model.get("asCSV") != undefined){
         this.showCSVTable();
         this.renderDatumFieldsLabels();
       }
-      $(this.el).find(".icon-book").hide();
-      $(this.el).find(".icon-resize-full").hide();
-      $(this.el).find(".save-datalist").hide();
-      $(this.el).find(".icon-resize-small").hide();
+      
+      //localization
+      $(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
+      $(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
+      $(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
+      $(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
+      $(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
+      $(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
+      $(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
+      
+      
       return this;
     },
     renderDatumFieldsLabels : function(){
@@ -242,8 +263,58 @@ define( [
     convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
 
-      //clear out the data list
-      this.model.dataListView.clearDataList();
+      /* clear out the data list views and datum views
+       * 
+       * Copied from SearchEditView 
+       */
+      if( this.importPaginatedDataListDatumsView ){
+        this.importPaginatedDataListDatumsView.remove(); //backbone to remove from dom
+        var coll = this.importPaginatedDataListDatumsView.collection; //try to be sure the collection is empty
+        //this.importPaginatedDataListDatumsView.collection.reset(); could also use backbone's reset which will empty the collection, or fill it with a new group.
+        while (coll.length > 0) {
+          coll.pop();
+        }
+        delete this.importPaginatedDataListDatumsView.collection;
+        delete this.importPaginatedDataListDatumsView; //tell garbage collecter we arent using it
+      }
+      /*
+       * This holds the ordered datums of the temp import data list
+       */
+      this.importPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+        collection           : new Datums(),
+        childViewConstructor : DatumReadView,
+        childViewTagName     : "li",
+        childViewFormat      : "latex"
+      }); 
+
+      if(this.dataListView){
+        this.dataListView.destroy_view();
+        delete this.dataListView.model; //tell the garbage collector we are done.
+      }
+      
+      var filename = " typing/copy paste into text area";
+      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
+      try {
+        filename = this.model.files[0].name;
+        descript = "This is the data list which results from the import of these files." + this.model.get("fileDetails");
+      }catch(e){
+        //do nothing
+      }
+      
+      this.dataListView = new DataListEditView({
+        model : new DataList({
+          "corpusname" : window.app.get("corpus").get("corpusname"),
+          "title" : "Data from "+filename,
+          "description": descript
+        }),
+      }); 
+      this.dataListView.format = "import";
+      this.dataListView.render();
+      this.importPaginatedDataListDatumsView.renderInElement(
+        $("#import-data-list").find(".import-data-list-paginated-view") );
+      
+      /* end views set up */
+      
       this.model.set("datumArray", []);
       var headers = [];
       $('th').each(function(index, item) {
@@ -261,7 +332,7 @@ define( [
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
               label : headers[f],
-              encrypted: "checked",
+              shouldBeEncrypted: "checked",
               userchooseable: "",
               help: "This field came from file import "+this.model.get("status")
             });
@@ -297,7 +368,7 @@ define( [
         }
       }
       for (a in array) {
-        var d = new Datum({corpusname : this.model.get("corpusname")});
+        var d = new Datum({corpusname : window.app.get("corpus").get("corpusname")});
         var fields = this.model.get("datumFields").clone();
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
@@ -327,14 +398,18 @@ define( [
             if(n != undefined){
 //              console.log(value);
 //              console.log(index);
-              n.set("value", value);
+              n.set("mask", value);
             }
           }
         });
         d.set("datumFields", fields);
         var states = window.app.get("corpus").get("datumStates").clone();
         d.set("datumStates", states);
-        this.model.dataListView.addOneTempDatum(d);
+        
+        //these are temp datums, dont save them until the user saves the data list
+        this.importPaginatedDataListDatumsView.collection.add(d);
+//        this.dataListView.model.get("datumIds").push(d.id);
+
         this.model.get("datumArray").push(d);
       }
       $(".approve-save").removeAttr("disabled");
@@ -349,30 +424,29 @@ define( [
       var thatdatum = this.model.get("datumArray")[d];
       thatdatum.set({
         "session" : this.model.get("session"),
-        "corpusname" : this.model.get("corpusname"),
+        "corpusname" : window.app.get("corpus").get("corpusname"),
         "dateEntered" : JSON.stringify(new Date()),
         "dateModified" : JSON.stringify(new Date())
       });
-      thatdatum.changeCorpus(app.get("corpus").get("corpusname"), function(){
-        thatdatum.save(null, {
-          success : function(model, response) {
-            hub.publish("savedDatumToPouch",{d: d, message: " datum "+model.id});
+      
+      thatdatum.saveAndInterConnectInApp(function(){
+        hub.publish("savedDatumToPouch",{d: d, message: " datum "+thatdatum.id});
 
-            // Update progress bar
-            $(".import-progress").val($(".import-progress").val()+1);
+        // Update progress bar
+        $(".import-progress").val($(".import-progress").val()+1);
+     
+        // Add Datum to the new datalist and render it this should work
+        // because the datum is saved in the pouch and can be fetched, 
+        // this will also not be the default data list because has been replaced by the data list for this import
+        window.appView.currentPaginatedDataListDatumsView.collection.add(thatdatum);
+        window.app.get("currentDataList").get("datumIds").push(thatdatum.id);
 
-            // Add Datum to the new datalist and render it this should work
-            // because the datum is saved in the pouch and can be fetched
-            appView.dataListEditLeftSideView.addOneDatumId(model.id);
-
-            // Add Datum to the default data list
-            var defaultIndex = app.get("corpus").get("dataLists").length - 1;
-            app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-          },
-          error : function(e) {
-            hub.publish("saveDatumFailedToPouch",{d: d, message: "datum "+ JSON.stringify(e) });
-          }
-        });
+      },function(){
+        //The e error should be from the error callback
+        if(!e){
+          e = {};
+        }
+        hub.publish("saveDatumFailedToPouch",{d: d, message: "datum "+ JSON.stringify(e) });
       });
     },
     importCompleted : function(){
@@ -396,9 +470,10 @@ define( [
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
       
       // Render the first page of the new data list
-      window.appView.renderEditableDataListViews();
-      window.appView.dataListEditLeftSideView.renderFirstPage();// TODO why not do automatically in datalist?
-      window.appView.renderReadonlyDataListViews();
+      window.appView.currentReadDataListView.format = "leftSide";
+      window.appView.currentReadDataListView.render();
+//      window.appView.cur?`rentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
+//      window.appView.renderReadonlyDataListViews();
 //    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
 //    lists dont have this function, should we put it in...
       
@@ -414,8 +489,8 @@ define( [
     saveDataList : function(){
       var self = this;
       this.createNewSession( function(){
-        window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
-        window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
+        window.hub.unsubscribe("savedDatumToPouch", null, self);
+        window.hub.unsubscribe("saveDatumFailedToPouch", null, self);
         
         // after we have a session
         $(".approve-save").addClass("disabled");
@@ -423,153 +498,84 @@ define( [
         // that is saved.
         $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
 
-        // Create a new permanent data list in the corpus
-        appView.dataListEditLeftSideView.newDataList();
-
-        // Bring the title and description from the temporary data list, to the
-        // new one.
-        app.get("corpus").get("dataLists").models[0].set({
-          title: appView.importView.model.dataListView.model.get("title"),
-          description: appView.importView.model.dataListView.model.get("description")
+        var dl = new DataList({
+          "corpusname" : window.app.get("corpus").get("corpusname"),
+          "title" : self.dataListView.model.get("title"),
+          "description": self.dataListView.model.get("description")
         });
+        dl.saveAndInterConnectInApp(function(){
+          dl.setAsCurrentDataList(function(){
+            
+            // Update the progress bar, one more thing is done.
+            $(".import-progress").val($(".import-progress").val()+1);
+            
+         // Add the "imported" activity to the ActivityFeed
+            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                new Activity({
+                  verb : "attempted to import",
+                  directobject : self.model.get("datumArray").length + " data entries",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  context : "via Offline App",
+                  user: window.app.get("authentication").get("userPublic")
+                }));
 
-        // import data in reverse order from normal so that the user will get
-        // their data in the order they are used to.
-//      for (var d = self.model.get("datumArray").length -1; d >= 0; d++) {
+            window.hub.subscribe("savedDatumToPouch", function(arg){
+              this.savedindex[arg.d] = true;
+              this.savedcount++;
+//            window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
+              if( arg.d <= 0 ){
+                /*
+                 * If we are at the final index in the import's datum
+                 */
+                this.importCompleted();
+              }else{
+                /*
+                 * Save another datum when the previous succeeds
+                 */
+                var next = parseInt(arg.d) - 1;
+                this.saveADatumAndLoop(next);
+              }
+            }, self);
 
-     // Add the "imported" activity to the ActivityFeed
-        window.app.get("authentication").get("userPrivate").get("activities").unshift(
-            new Activity({
-              verb : "attempted to import",
-              directobject : window.appView.importView.model.get("datumArray").length + " data entries",
-              indirectobject : "in "+window.app.get("corpus").get("title"),
-              context : "via Offline App",
-              user: window.app.get("authentication").get("userPublic")
-            }));
-        
-        window.hub.subscribe("savedDatumToPouch", function(arg){
-          this.savedindex[arg.d] = true;
-          this.savedcount++;
-//          window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
-          if( arg.d <= 0 ){
+            window.hub.subscribe("saveDatumFailedToPouch",function(arg){
+              this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
+              this.savefailedcount++;
+              window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
+
+              if( arg.d <= 0 ){
+                /*
+                 * If we are at the final index in the import's datum
+                 */
+                this.importCompleted();
+              }else{
+                /*
+                 * Save another datum when the previous fails
+                 */
+                var next = parseInt(arg.d) - 1;
+                this.saveADatumAndLoop(next);
+              }
+
+            }, self);
+            
             /*
-             * If we are at the final index in the import's datum
+             * Begin the datum saving loop with the last datum 
              */
-            this.importCompleted();
-          }else{
-            /*
-             * Save another datum when the previous succeeds
-             */
-            var next = parseInt(arg.d) - 1;
-            this.saveADatumAndLoop(next);
-          }
-        }, window.appView.importView);
-
-        window.hub.subscribe("saveDatumFailedToPouch",function(arg){
-          this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
-          this.savefailedcount++;
-          window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
-          
-          if( arg.d <= 0 ){
-            /*
-             * If we are at the final index in the import's datum
-             */
-            this.importCompleted();
-          }else{
-            /*
-             * Save another datum when the previous fails
-             */
-            var next = parseInt(arg.d) - 1;
-            this.saveADatumAndLoop(next);
-          }
-          
-        }, window.appView.importView);
-
-        /*
-         * Begin the datum saving loop with the last datum 
-         */
-        window.appView.importView.saveADatumAndLoop(window.appView.importView.model.get("datumArray").length - 1);
-        
-        // Save the new DataList since we created it above, as the new leftside
-        // data list, it will be in position 0
-        app.get("corpus").get("dataLists").models[0].changeCorpus(app.get("corpus").get("corpusname"), function(){
-          app.get("corpus").get("dataLists").models[0].save(null, {
-            success : function(model, response) {
-              Utils.debug('Data list save success in import');
-              window.appView.toastUser("Sucessfully saved data list.","alert-success","Saved!");
-
-              // Update the progress bar
+            self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+            
+            self.model.get("session").saveAndInterConnectInApp(function(){
+              //one more thing done.
               $(".import-progress").val($(".import-progress").val()+1);
-
-              // Save the datalist ID in the userPrivate
-              window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-
-              // Mark the datalist as no longer temporary
-              self.model.dataListView.temporaryDataList = false;
-
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                  new Activity({
-                    verb : "added",
-                    directobject : "data list "+model.get("title"),
-                    indirectobject : "in "+window.app.get("corpus").get("title"),
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
-                  }));
-
-              // Save the session
-              self.model.get("session").changeCorpus(self.model.get("corpusname"), function(){
-                self.model.get("session").save(null, {
-                  success : function(model, response) {
-                    Utils.debug('Session save success in import');
-                    window.appView.toastUser("Sucessfully saved session.","alert-success","Saved!");
-
-                    // Update progress bar
-                    $(".import-progress").val($(".import-progress").val()+1);
-
-                    // Add the new session to the corpus
-                    window.app.get("corpus").get("sessions").unshift(model);
-
-                    // Add the new session to the userPrivate
-                    if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
-                      window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-                    }
-
-                    // Add the "added session" activity to the ActivityFeed
-                    window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                        new Activity({
-                          verb : "added",
-                          directobject : "session "+model.get("sessionFields").where({label: "goal"})[0].get("value"),
-                          indirectobject : "in "+window.app.get("corpus").get("title"),
-                          context : "via Offline App",
-                          user: window.app.get("authentication").get("userPublic")
-                        }));
-
-                   
-                    // Update the search fields with the new datum fields from import
-                    window.appView.searchEmbeddedView.render();
-
-                    // save the corpus
-                    window.appView.corpusEditLeftSideView.updatePouch();
-
-                    // save the user
-                    window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-                    
-                   
-
-                  },
-                  error : function(e) {
-                    window.appView.toastUser("Error in saving session in import.","alert-danger","Not saved!");
-                    alert('Session save failure in import' + e);
-                  }
-                });
-              });
-
-            },
-            error : function(e) {
-              window.appView.toastUser("Error in saving data list in import.","alert-danger","Not saved!");
-              alert('Data list save failure in import' + e);
-            }
+            }, function(){
+              alert("Bug: Import session save failed. ");
+            });
+            
+            /* end successful save of datalist and session */
+            
+          },function(){
+            alert("Bug: couldnt set the import data list as the current data list.");
           });
+        },function(){
+          alert("Bug: couldnt save the import datalist.");
         });
       });
     },
@@ -581,16 +587,17 @@ define( [
     createNewSession : function(callback){
       if(this.model.get("session") == undefined){
         this.model.set("session", new Session({
-          sessionFields : window.app.get("corpus").get("sessionFields").clone()
+          sessionFields : window.app.get("corpus").get("sessionFields").clone(),
+          "corpusname" : window.app.get("corpus").get("corpusname"),
         }));
         
         this.model.get("session").get("sessionFields").where({
           label : "goal"
-        })[0].set("value", "Goal from file import " + this.model.get("status"));
+        })[0].set("mask", "Goal from file import " + this.model.get("status"));
        
         this.model.get("session").get("sessionFields").where({
           label : "dateElicited"
-        })[0].set("value", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
+        })[0].set("mask", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
             : 'n/a');
       }
       

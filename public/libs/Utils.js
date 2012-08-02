@@ -9,10 +9,10 @@
  */
 var Utils = Utils || {};
 
-Utils.debugMode = false;
+Utils.debugMode = true;
 
 
-Utils.couchUrl = "https://ilanguage.iriscouch.com/sapir-firstcorpus";
+Utils.couchUrl = "https://ilanguage.iriscouch.com/default"; //"http://localhost:5984/default";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -38,16 +38,22 @@ Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 /**
  * The url of the authentication server.
  */
+
 Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
 Utils.defaultCouchConnection = function() {
   return {
+//    protocol : "http://",
+//    domain : "localhost",
+//    port : "5984",
+//    corpusname : "default"
+//  }; 
     protocol : "https://",
     domain : "ilanguage.iriscouch.com",
     port : "443",
-    corpusname : "sapir-firstcorpus"
+    corpusname : "default"
   }; 
 };
 /**
@@ -59,12 +65,15 @@ Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey
  * Console logs out, if not on Internet Explorer. Only logs out if
  * debugMode is true.
  */
-Utils.debug = function(message) {
+Utils.debug = function(message, secondmessage) {
 	if(navigator.appName == 'Microsoft Internet Explorer') {
 		return;
 	}
 	if(this.debugMode) {
 		console.log(message);
+		if(secondmessage){
+	    console.log(secondmessage);
+		}
 	}
 };
 
