@@ -354,10 +354,10 @@
   "locale_Show_Fullscreen" : {
     "message" : "Mostrar en pantalla completa "
   },
-  "locale_Add_locale_New_Datum_Field" : {
+  "locale_Add_New_Datum_Field_Tooltip" : {
     "message" : "Añadir un nuevo detaille de dato"
   },
-  "locale_Add_locale_New_Datum_State" : {
+  "locale_Add_New_Datum_State_Tooltip" : {
     "message" : "Añadir un estado de dato"
   },
   "locale_Show_in_Dashboard" : {

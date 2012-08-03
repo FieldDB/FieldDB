@@ -1,45 +1,47 @@
-<div class="pull-right">
-  <a href="#" class= "locale_Show_Readonly" rel="tooltip">
-    <i class="icons icon-book"></i></a>
-  <a href="#" class = "locale_Show_fullscreen" rel="tooltip">    
-    <i class="icons icon-resize-full resize-full"></i></a>
-</div>
-<div class="btn-toolbar ">
-	<!-- /btn-group -->
-	<div class="btn-group">
-		<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-		<span class ="locale_New_menu"></span>	 <span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu">
-			<li class="new-datum"><a href="#"><span class = "locale_New_Datum"></span></a></li>
-			<li class="new-data-list"><a href="#"><span class = "locale_New_Data_List"></span></a></li>
-			<li class="new-session"><a href="#"><span class = "locale_New_Session"></span></a></li>
-			<li class="new-corpus"><a href="#"><span class = "locale_New_Corpus"></span></a></li>
-		</ul>
-	</div>
-	<!-- /btn-group -->
-	<div class="btn-group">
-		<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-			<span class ="locale_Data_menu"></span> <span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu">
-			<li><a href="#import"><span class = "locale_Import_Data"></span></a></li>
-			<li><a href="#corpus/{{titleAsUrl}}/export"><span class = "locale_Export_Data"></span></a></li>
-		</ul>
-	</div>
-	<!-- /btn-group -->
-
-  <!-- Toggle to readonly -->
-  <div class="btn-group">
-    <button class="btn btn-success save-corpus">
-     <span class="locale_Save"></span></button>
+<!-- Corpus Menu - Identical for all Corpus Handlebars -->
+<div>
+<!-- This div puts the buttons in the left corner -->
+  <div class="btn-group btn-toolbar corpusMenu">
+    <!-- This div is necessary so that the menu appears below the buttons -->
+    <div class="btn-group">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <span class ="locale_New_menu"></span>  <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="new-datum"><a href="#" class = "locale_New_Datum"></a></li>
+        <li class="new-data-list"><a href="#" class = "locale_New_Data_List"></a></li>
+        <li class="new-session"><a href="#" class = "locale_New_Session"></a></li>
+        <li class="new-corpus"><a href="#" class = "locale_New_Corpus"></a></li>
+      </ul>
+    </div>
+    <!-- /btn-group -->
+    <div class="btn-group">
+      <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+        <span class ="locale_Data_menu"></span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#import" class = "locale_Import_Data"></a></li>
+        <li><a href="#corpus/{{titleAsUrl}}/export" class = "locale_Export_Data"></a></li>
+      </ul>
+    </div>
+    <!-- /btn-group -->
+  </div>
+  
+  <!-- Corpus icons - Different for all Corpus Handlebars -->
+  <div class="pull-right">
+    <a href="#" class= "locale_Show_Readonly" rel="tooltip">
+      <i class="icons icon-book"></i></a>
+    <a href="#" class = "locale_Show_in_Dashboard" rel="tooltip">
+      <i class="icons icon-resize-small"></i></a>
   </div>
 </div>
 
 <label class = "locale_Title"></label>
 <input class="corpus-title-input" value="{{title}}" type="text"/>
-<label class = "locale_Description"></label>
+
+<label class = locale_Description_Summary_Edit></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
+
 <label class = "locale_Public_or_Private"></label>
 <input type="text" value="{{publicCorpus}}" class=" public-or-private" data-provide="typeahead" data-items="4" 
         data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
@@ -110,10 +112,7 @@
           <input type="text" class="span3 choose_add_field"  data-provide="typeahead" data-items="4" data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
           <label class="locale_Help_Text"></label>
           <textarea class="add_help locale_Help_Text_Placeholder"></textarea>
-          <a href="#" class="locale_Add_locale_New_Datum_Field" rel="tooltip">
-            <button class="btn btn-primary add-datum-field" value="Add">
-              <span class="locale_Add"></span>
-            </button>
+          <a href="#" class="locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add" rel="tooltip">
           </a>
         </div>
       </div>
@@ -138,16 +137,15 @@
           <option value="inverse" class = "locale_Black"></option>
           <option value="" class = "locale_Default"></option>
         </select>
-        <a href="#" class =  "locale_Add_locale_New_Datum_State" rel="tooltip">
-        <button class="btn btn-primary add_datum_state" value="Add"><span class = "locale_Add"></span></button></a>
+        <a href="#" class = "locale_Add_New_Datum_State_Tooltip btn btn-primary add_datum_state locale_Add" rel="tooltip">
+        </a>
     </div>
   </div>      
 </div>
 <ul class="comments unstyled"></ul>
 <div class="alert alert-info">
   <i class="icons icon-comment"></i>
-  <div class= "pull-right">  </div>
   <textarea class="comment-new-text"></textarea>
 </div>
 
-<button class="btn btn-primary add-comment-edit" value="Add"><span class = "locale_Add"></span></button>
+<button class="btn btn-primary add-comment-edit locale_Add" value="Add"></button>
