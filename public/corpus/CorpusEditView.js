@@ -181,6 +181,10 @@ define([
           // Display the DatumStatesView
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
+          
+        //Localize embedded view
+          $("#corpus-fullscreen").find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+        
       } else if (this.format == "fullscreen") {
         Utils.debug("CORPUS EDIT FULLSCREEN render: " + this.el);
 
@@ -211,67 +215,68 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
+        //Localize fullscreen view
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+        $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+        $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+        $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_Field_Tooltip"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(this.el).find(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
+        $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+        $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+        $(this.el).find(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+        $(this.el).find(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
+        $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+        $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+        $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+        $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_State_Tooltip"));
+      
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
       
+        //Localize left side edit view
+        $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
+      
       }else if (this.format == "modal"){
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
-      
+        
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
-             
-      try{
-        //localization
-        //$(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
-        //$(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-        //$(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
-        //$(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-        //$(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-        //$(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
-        //$(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
-        //$(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
-        //$(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-        //$(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
-        //$(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-        //$(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-        //$(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-        //$(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-        //$(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-        //$(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
-        //$(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
-//        //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-        //$(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-        //$(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
-        //$(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
-        //$(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
-        //$(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
-        //$(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
-        //$(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
-        //$(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
-        //$(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-        //$(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-        //$(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
-        //$(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
-        //$(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
-        //$(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
-        //$(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
-        //$(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
-        //$(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
-        //$(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-        //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-        //$(".locale_Add_locale_New_Datum_Field").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_Field"));
-        //$(".locale_Add_locale_New_Datum_State").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_State"));
-        //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        //$(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
-        //$(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
-      }catch(e){
-        alert("Localization of mising item perhaps");
-        console.log(e);
-      }
+      //Localize corpus menu for all corpus views
+      $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
+      $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+      $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
+      $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+      $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+      $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
+      $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
+      $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+      $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
       
+      $(this.el).find(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
+      $(this.el).find(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
+      
+      //localization unused TODO
+//      $("#corpus-fullscreen").find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+//      $("#corpus-fullscreen").find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+//      $("#corpus-fullscreen").find(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+//      $("#corpus-fullscreen").find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+//      $("#corpus-fullscreen").find(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
+//      $("#corpus-fullscreen").find(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
+//      $("#corpus-fullscreen").find(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
+//      $("#corpus-fullscreen").find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
+//      $("#corpus-fullscreen").find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+//      $("#corpus-fullscreen").find(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
+
       return this;
     },
     /**
