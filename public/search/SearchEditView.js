@@ -89,14 +89,14 @@ define([
     embeddedTemplate : Handlebars.templates.search_advanced_edit_embedded,
     
     /**
-     * The Handlebars template rednered as the fullscreen AdvancedSearchView.
+     * The Handlebars template rendered as the fullscreen AdvancedSearchView.
      */
-    fullscreenTemplate : Handlebars.templates.search_advanced_edit_fullscreen,
+    fullscreenTemplate : Handlebars.templates.search_advanced_edit_embedded,
     
     /**
      * The Handlebars template rendered as the TopSearchView.
      */
-    topTemplate : Handlebars.templates.search_edit_embedded,
+    topTemplate : Handlebars.templates.search_top,
    
     /**
      * Renders the SearchEditView.
@@ -106,12 +106,7 @@ define([
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
-      if (this.format == "fullscreen") {
-        // Display the SearchView
-        this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
-        
-      } else if (this.format == "centreWell") {
+      if (this.format == "centreWell") {
         // Display the SearchView
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
@@ -127,9 +122,9 @@ define([
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization
-      //$(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      //$(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-      //$(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
+      $("#search-top").find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
+      $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
+      $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
       
       return this;
     },
