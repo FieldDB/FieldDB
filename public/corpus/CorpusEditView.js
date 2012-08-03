@@ -127,7 +127,7 @@ define([
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.templates.corpus_edit_fullscreen,
+    templateFullscreen : Handlebars.templates.corpus_edit_embedded,
     
     /**
      * The Handlebars template rendered as the CorpusWellView.
@@ -183,7 +183,7 @@ define([
           this.datumStatesView.render();
           
         //Localize embedded view
-          $("#corpus-fullscreen").find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
         
       } else if (this.format == "fullscreen") {
         Utils.debug("CORPUS EDIT FULLSCREEN render: " + this.el);
@@ -236,6 +236,7 @@ define([
         $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
         $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
         $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_State_Tooltip"));
+        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
       
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
@@ -266,7 +267,6 @@ define([
       $(this.el).find(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
       
       //localization unused TODO
-//      $("#corpus-fullscreen").find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 //      $("#corpus-fullscreen").find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
 //      $("#corpus-fullscreen").find(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
 //      $("#corpus-fullscreen").find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
@@ -536,25 +536,28 @@ define([
      * needs to be reloaded entirely (page refresh), or we can attempt to attach
      * the views to these new models.
      */
-    updatePouch : function() {
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
+      var self = this;
       this.model.saveAndInterConnectInApp(function(){
         if(this.format == "modal"){
           $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
-//        
-//        window.appView.currentCorpusReadView.format = this.format;
-//        window.appView.currentCorpusReadView.render();
+        window.appView.currentCorpusReadView.format = self.format;
+        window.appView.currentCorpusReadView.render();
         
       },function(){
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal("hide");
+          $("#new-corpus-modal").modal( "hide");
           alert("There was a problem somewhere loading and saving the new corpus.");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }
-//        window.appView.currentCorpusReadView.format = this.format;
-//        window.appView.currentCorpusReadView.render();
+        window.appView.currentCorpusReadView.format = self.format;
+        window.appView.currentCorpusReadView.render();
       });
     }
   });

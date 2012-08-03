@@ -1,8 +1,13 @@
-<!-- Corpus Menu - Identical for all Corpus Handlebars -->
-<div>
-<!-- This div puts the buttons in the left corner -->
-  <div class="btn-group btn-toolbar corpusMenu">
-    <!-- This div is necessary so that the menu appears below the buttons -->
+<!-- Corpus icons - Different for all Corpus Handlebars -->
+<div class="pull-right">
+   <a href="#" class= "locale_Show_Readonly" rel="tooltip">
+    <i class="icons icon-book"></i></a>
+  <a href="#" class= "locale_Show_in_Dashboard" rel="tooltip" >
+    <i class="icons icon-resize-small"></i></a>
+</div>
+<div class="btn-toolbar ">
+  <!-- Corpus Menu - Identical for all Corpus Handlebars -->
+  <div class="btn-toolbar">
     <div class="btn-group">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         <span class ="locale_New_menu"></span>  <span class="caret"></span>
@@ -14,7 +19,6 @@
         <li class="new-corpus"><a href="#" class = "locale_New_Corpus"></a></li>
       </ul>
     </div>
-    <!-- /btn-group -->
     <div class="btn-group">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
         <span class ="locale_Data_menu"></span> <span class="caret"></span>
@@ -24,17 +28,16 @@
         <li><a href="#corpus/{{titleAsUrl}}/export" class = "locale_Export_Data"></a></li>
       </ul>
     </div>
-    <!-- /btn-group -->
-  </div>
-  
-  <!-- Corpus icons - Different for all Corpus Handlebars -->
-  <div class="pull-right">
-    <a href="#" class= "locale_Show_Readonly" rel="tooltip">
-      <i class="icons icon-book"></i></a>
-    <a href="#" class = "locale_Show_in_Dashboard" rel="tooltip">
-      <i class="icons icon-resize-small"></i></a>
+	  <!-- /Corpus Men - Identical for all Corpus Handlebars -->
+	  <!-- Corpus Save and Toggle to Readonly - Edit View Only-->
+	  <div class="btn-group">
+	    <button class="btn btn-success save-corpus">
+	     <span class="locale_Save"></span></button>
+	  </div>
   </div>
 </div>
+
+	
 
 <label class = "locale_Title"></label>
 <input class="corpus-title-input" value="{{title}}" type="text"/>
