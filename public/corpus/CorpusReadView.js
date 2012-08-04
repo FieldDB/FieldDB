@@ -56,7 +56,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS init: " + this.el);
+      Utils.debug("CORPUS init: " );
       this.changeViewsOfInternalModels();
       
    // If the model's title changes, chances are its a new corpus, re-render its internal models.
@@ -121,17 +121,16 @@ define([
      * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
-      
+      Utils.debug("CORPUS READ render: ");
       window.appView.currentCorpusEditView.destroy_view();
       window.appView.currentCorpusReadView.destroy_view();
       
-      Utils.debug("CORPUS READ render: " + this.el);
       if (this.model == undefined) {
         Utils.debug("\tCorpus model was undefined.");
         return this;
       }
       if (this.format == "leftSide") {
-        Utils.debug("CORPUS LEFTSIDE render: " + this.el);
+        Utils.debug("CORPUS READ LEFTSIDE render: " );
 
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
@@ -140,13 +139,13 @@ define([
           $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
 
       } else if (this.format == "link") {
-        Utils.debug("CORPUS LINK render: " + this.el);
+        Utils.debug("CORPUS READ LINK render: " );
 
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(this.model.toJSON()));
         
       } else if (this.format == "fullscreen"){
-        Utils.debug("CORPUS FULLSCREEN render: " + this.el);
+        Utils.debug("CORPUS READ FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
@@ -182,7 +181,7 @@ define([
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
 
-      //Localize for all fullscreen view 
+        //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
         $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
         $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
@@ -193,7 +192,7 @@ define([
       
         
       } else if (this.format == "centreWell"){
-        Utils.debug("CORPUS READ CENTER render: " + this.el);
+        Utils.debug("CORPUS READ CENTER render: " );
 
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(this.model.toJSON()));
@@ -284,6 +283,8 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING CORPUS READ VIEW");
+
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -388,9 +389,9 @@ define([
     },
     
     newCorpus : function(e){
-      if(e){
-        e.stopPropagation();
-      }
+//      if(e){
+//        e.stopPropagation();
+//      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();
@@ -443,6 +444,7 @@ define([
     },
     
     resizeFullscreen : function(e){
+      Utils.debug("CORPUS READ starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
       }
