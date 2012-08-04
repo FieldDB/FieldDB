@@ -100,7 +100,7 @@ define([
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.templates.corpus_read_fullscreen,
+    templateFullscreen : Handlebars.templates.corpus_read_embedded,
     
     /**
      * The Handlebars template rendered as the CorpusWellView.
@@ -136,6 +136,9 @@ define([
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(this.model.toJSON()));
+          
+          $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
+
       } else if (this.format == "link") {
         Utils.debug("CORPUS LINK render: " + this.el);
 
@@ -153,9 +156,6 @@ define([
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
  
-        // Display the UpdatingCollectionView
-        //        this.dataListsView.render();
-     
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
@@ -182,6 +182,16 @@ define([
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
 
+      //Localize for all fullscreen view 
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      
+        
       } else if (this.format == "centreWell"){
         Utils.debug("CORPUS READ CENTER render: " + this.el);
 
@@ -212,9 +222,32 @@ define([
         this.permissionsView.el = this.$('.permissions-updating-collection');
         this.permissionsView.render();
 
+        //Localize for all embedded view
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
       }
       
-      //localization
+      //Localize corpus menu for all corpus views
+      $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
+      $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+      $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
+      $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+      $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+      $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
+      $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
+      $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+      
+      //Localize corpus read only view
+      $(this.el).find(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
+      
+      
+      //localization TODO to put away
       //$(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
       //$(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
       //$(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
@@ -243,7 +276,6 @@ define([
 //      //$(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
       //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
       //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      //$(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
       //$(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));  
       return this;
     },
