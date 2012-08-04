@@ -67,7 +67,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS DETAILS init: " + this.el);
+      Utils.debug("CORPUS DETAILS init: " );
       this.changeViewsOfInternalModels();
      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
@@ -148,12 +148,12 @@ define([
         Utils.debug("\tCorpus model was undefined.");
         return this;
       }
+      Utils.debug("CORPUS EDIT render: ");
       window.appView.currentCorpusEditView.destroy_view();
       window.appView.currentCorpusReadView.destroy_view();
 
-      Utils.debug("CORPUS READ render: " + this.el);
       if (this.format == "centreWell") {
-        Utils.debug("CORPUS Edit center render: " + this.el);
+        Utils.debug("CORPUS Edit center render: " );
           // Display the CorpusReadFullScreenView
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(this.model.toJSON()));
@@ -208,7 +208,7 @@ define([
           $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
       } else if (this.format == "fullscreen") {
-        Utils.debug("CORPUS EDIT FULLSCREEN render: " + this.el);
+        Utils.debug("CORPUS EDIT FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(this.model.toJSON()));
@@ -250,6 +250,7 @@ define([
         $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
         $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
         $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
         $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_Field_Tooltip"));
         $(this.el).find(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
         $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
@@ -263,6 +264,7 @@ define([
         $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
       } else if (this.format == "leftSide"){
+        Utils.debug("CORPUS EDIT LEFTSIDE render: " );
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
       
@@ -270,38 +272,38 @@ define([
         $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
       
       }else if (this.format == "modal"){
+        Utils.debug("CORPUS EDIT MODAL render: " );
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
         
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
-      //Localize corpus menu for all corpus views
-      $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
-      $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-      $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
-      $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-      $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-      $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
-      $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
-      $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
-      $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-      
-      //Localize the title and description lables
+      if (this.format != "modal"){
+        //Localize corpus menu for all corpus views, except new corpus modal
+        $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
+        $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+        $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
+        $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+        $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+        $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
+        $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
+        $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+        $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      }else{
+        //Localize the new corpus menu
+        $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+        $(this.el).find(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
+        $(this.el).find(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+        $(this.el).find(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
+        $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+        $(this.el).find(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
+        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+      }
+      //Localize the title and description labels
       $(this.el).find(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
-      $(this.el).find(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
+      $(this.el).find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
       
-      //localization unused TODO
-//      $("#corpus-fullscreen").find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-//      $("#corpus-fullscreen").find(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-//      $("#corpus-fullscreen").find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-//      $("#corpus-fullscreen").find(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
-//      $("#corpus-fullscreen").find(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
-//      $("#corpus-fullscreen").find(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
-//      $("#corpus-fullscreen").find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
-//      $("#corpus-fullscreen").find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-//      $("#corpus-fullscreen").find(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
-
       return this;
     },
     /**
@@ -309,6 +311,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING CORPUS EDIT VIEW");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -425,9 +428,9 @@ define([
     },
     
     newCorpus : function(e){
-      if(e){
-        e.stopPropagation();
-      }
+//      if(e){
+//        e.stopPropagation();
+//      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();
@@ -535,6 +538,7 @@ define([
       window.app.router.showDashboard();
     },
     resizeFullscreen : function(e){
+      Utils.debug("CORPUS EDIT starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
       }
