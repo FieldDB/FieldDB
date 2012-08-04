@@ -1,7 +1,13 @@
-<div>
-<!-- This div puts the buttons in the left corner -->
-  <div class="btn-group btn-toolbar corpusMenu">
-    <!-- This div is necessary so that the menu appears below the buttons -->
+<!-- Corpus icons - Different for all Corpus Handlebars -->
+<div class="pull-right">
+  <a href="#" class= "locale_Show_Readonly" rel="tooltip">
+    <i class="icons icon-book"></i></a>
+  <a href="#" class = "locale_Show_corpus_settings" rel="tooltip">
+    <i class="icons icon-cogs resize-full"></i></a>
+</div>
+<div class="btn-toolbar ">
+  <!-- Corpus Menu - Identical for all Corpus Handlebars -->
+  <div class="btn-toolbar">
     <div class="btn-group">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         <span class ="locale_New_menu"></span>  <span class="caret"></span>
@@ -13,7 +19,6 @@
         <li class="new-corpus"><a href="#" class = "locale_New_Corpus"></a></li>
       </ul>
     </div>
-    <!-- /btn-group -->
     <div class="btn-group">
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
         <span class ="locale_Data_menu"></span> <span class="caret"></span>
@@ -23,16 +28,10 @@
         <li><a href="#corpus/{{titleAsUrl}}/export" class = "locale_Export_Data"></a></li>
       </ul>
     </div>
-    <!-- /btn-group -->
-  </div>
-  
-  <div class="pull-right">
-    <a href="#" class= "locale_Show_Readonly" rel="tooltip">
-      <i class="icons icon-book"></i></a>
-    <a href="#" class = "locale_Show_corpus_settings" rel="tooltip">
-      <i class="icons icon-cogs resize-full"></i></a>
+    <!-- /Corpus Menu - Identical for all Corpus Handlebars -->
   </div>
 </div>
+
 <div class="corpus-description">
 	<label class="locale_Title"></label>
 	<textarea class="corpus-title-input save-corpus-blur">{{title}}</textarea>

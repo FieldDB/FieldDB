@@ -182,9 +182,31 @@ define([
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
           
-        //Localize embedded view
+        //Localize for all embedded view
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        
+          $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+          $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+          $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+          $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+          $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
+          //Localize for only Edit view.
+          $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+          $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+          $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+          $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_Field_Tooltip"));
+          $(this.el).find(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
+          $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+          $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+          $(this.el).find(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+          $(this.el).find(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
+          $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+          $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+          $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+          $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_State_Tooltip"));
+          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+
       } else if (this.format == "fullscreen") {
         Utils.debug("CORPUS EDIT FULLSCREEN render: " + this.el);
 
@@ -215,18 +237,20 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
-        //Localize fullscreen view
+      //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
         $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
         $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
         $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
         $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
+        //Localize for only Edit view.
+        $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
         $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
         $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
         $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_Field_Tooltip"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
         $(this.el).find(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
         $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
         $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
@@ -237,7 +261,7 @@ define([
         $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
         $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_State_Tooltip"));
         $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-      
+
       } else if (this.format == "leftSide"){
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(this.model.toJSON()));
@@ -263,6 +287,7 @@ define([
       $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
       $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
       
+      //Localize the title and description lables
       $(this.el).find(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
       $(this.el).find(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
       
