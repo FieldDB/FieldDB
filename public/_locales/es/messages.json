@@ -273,6 +273,9 @@
   "locale_Advanced_Search" : {
     "message" : "Búsqueda Advanzada"
   },
+  "locale_Advanced_Search_Tooltip" : {
+    "message" : "Búsqueda Advanzada allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."
+  },
   "locale_Email" : {
     "message" : "Correo Electronico:"
   },

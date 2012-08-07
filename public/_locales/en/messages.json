@@ -195,7 +195,7 @@
     "message" : "Previous Datum"
   },
   "locale_Search" : {
-    "message" : "Search"
+    "message" : "Type your search query, or push enter to see all data"
   },
   "locale_Close" : {
     "message" : "Close"
@@ -271,6 +271,9 @@
   },
   "locale_Advanced_Search" : {
     "message" : "Advanced Search"
+  },
+  "locale_Advanced_Search_Tooltip" : {
+    "message" : "Advanced Search allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."
   },
   "locale_User_Profile" : {
     "message" : "User Profile"

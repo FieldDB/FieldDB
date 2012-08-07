@@ -110,6 +110,10 @@ define([
         // Display the SearchView
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
+
+        //localization
+        $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
+        $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
       } 
       
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
@@ -122,10 +126,10 @@ define([
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization
+      $("#search-top").find(".locale_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Search"));
       $("#search-top").find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-      $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
-      
+      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Advanced_Search_Tooltip"));
+
       return this;
     },
     newTempDataList : function(callback){
