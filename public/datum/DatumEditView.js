@@ -142,7 +142,7 @@ define([
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "click .save-datum" : "saveScreen"
+      "click .save-datum" : "saveButton"
     },
 
     /**
@@ -277,6 +277,16 @@ define([
       this.needsSave = true;
     },
 
+    
+    saveButton : function(){
+      if (this.needsSave) {
+          saveScreen();
+      }else {
+        window.appView.toastUser("This datum "+this.model.id+"has no unsaved changes","alert-success","Saved!");
+
+      };
+    },
+    
     /**
      * If the model needs to be saved, saves it.
      */
@@ -292,7 +302,7 @@ define([
         },function(){
           window.appView.toastUser("Unable to save datum: "+self.model.id,"alert-danger","Not saved!");
         });
-      };
+      }
     },
     
     insertNewDatumTag : function(e) {
