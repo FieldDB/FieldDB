@@ -407,12 +407,12 @@ define([
       var importType = {
         csv: { confidence: 0, importFunction : this.importCSV }
         ,tabbed: { confidence: 0, importFunction : this.importTabbed }
-        ,handout: { confidence: 0, importFunction : this.importText }
         ,xml: { confidence: 0, importFunction : this.importXML }
         ,toolbox: { confidence: 0, importFunction : this.importToolbox }
         ,elanXML: { confidence: 0, importFunction : this.importXML }
         ,praatTextgrid: { confidence: 0, importFunction : this.importTextGrid }
         ,latex: { confidence: 0, importFunction : this.importLatex }
+        ,handout: { confidence: 0, importFunction : this.importText }
       };
       
       //if the user is just typing, try raw text
