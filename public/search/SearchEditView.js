@@ -106,15 +106,20 @@ define([
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
-      if (this.format == "centreWell") {
+      if (this.format == "fullscreen") {
+        // Display the SearchView
+        this.setElement($("#search-fullscreen"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        
+      } else if (this.format == "centreWell") {
         // Display the SearchView
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
-
-        //localization
-        $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-        $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
       } 
+      
+      //localization
+      $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
+      $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
       
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
