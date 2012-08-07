@@ -405,7 +405,7 @@ define([
           this.needsSave = true;
         }
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
-        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?]/g,"") != "") {
+        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
           // Ask the user if they want to use the guessed gloss
           if (confirm("Would you like to use this gloss:\n" + glossLine)) {
             // Replace the gloss line with the guessed gloss
