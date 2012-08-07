@@ -115,15 +115,15 @@ define([
       }
       
       //localization
-      //$(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-      //$(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-      //$(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
-      //$(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
-      //$(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
-      //$(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
-      //$(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
-      //$(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
-      //$(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
+      $("#authentication-embedded").find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+      $("#authentication-embedded").find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $("#authentication-embedded").find(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
+      $("#authentication-embedded").find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+      $("#authentication-embedded").find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $("#authentication-embedded").find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $("#authentication-embedded").find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $("#authentication-embedded").find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
+      $("#authentication-embedded").find(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
       
       
       return this;
