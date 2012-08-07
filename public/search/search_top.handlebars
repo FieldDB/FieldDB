@@ -1,5 +1,13 @@
-  <input id="search_box" type="text" value="{{searchKeywords}}" />
-  <i class="icons icon-search icon-white"></i>
-  <span>  
-    <button class="btn btn-inverse btn-advanced-search locale_Advanced_Search"></button>
-  </span>
+<input class="pull-left" id="search_box" type="text" value="{{searchKeywords}}" />
+<div class="btn-group pull-left">
+	<a href="#" class= "locale_Search_Tooltip" rel="tooltip">
+	  <i class="icons icon-search pull-left icon-white"></i>
+	</a>
+	<button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+		 <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu">
+		<a href="#" class="btn-advanced-search locale_Advanced_Search locale_Advanced_Search_Tooltip" rel="tooltip"></a>
+	</ul>
+</div>
+
