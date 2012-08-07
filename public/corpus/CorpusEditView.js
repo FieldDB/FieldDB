@@ -149,8 +149,10 @@ define([
         return this;
       }
       Utils.debug("CORPUS EDIT render: ");
-      window.appView.currentCorpusEditView.destroy_view();
-      window.appView.currentCorpusReadView.destroy_view();
+      if( this.format != "modal"){
+        window.appView.currentCorpusEditView.destroy_view();
+        window.appView.currentCorpusReadView.destroy_view();
+      }
 
       if (this.format == "centreWell") {
         Utils.debug("CORPUS Edit center render: " );
