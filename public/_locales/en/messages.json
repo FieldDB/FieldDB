@@ -197,6 +197,9 @@
   "locale_Search" : {
     "message" : "Type your search query, or push enter to see all data"
   },
+  "locale_View_Public_Profile_Tooltip" : {
+    "message" : "Click to view/edit your public profile"
+  },
   "locale_Close" : {
     "message" : "Close"
   },

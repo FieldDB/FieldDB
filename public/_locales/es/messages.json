@@ -51,6 +51,9 @@
   "locale_Activity_Feed" : {
     "message" : "Canal de Actividad"
   },
+  "locale_View_Public_Profile_Tooltip" : {
+    "message" : "TODO translate me Click to view/edit your public profile"
+  },
   "locale_Need_save" : {
     "message" : "Se ocupa guadar:"
   },
