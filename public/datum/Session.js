@@ -243,10 +243,11 @@ define([
             if (typeof successcallback == "function") {
               successcallback();
             }else{
-              window.appView.sessionReadLeftSideView.render();
-              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id,"alert-success","Connected!");
-//            window.appView.renderEditableSessionViews();
-//            window.appView.renderReadonlySessionViews();
+              window.appView.currentSessionReadView.format = "leftSide";
+              window.appView.currentSessionReadView.render();
+              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
+//            window.appView.renderEditableSessionViews("leftSide");
+//            window.appView.renderReadonlySessionViews("leftSide");
             }
           });
         }catch(e){

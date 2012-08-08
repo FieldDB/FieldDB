@@ -26,7 +26,7 @@ define([
     
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide", "fullscreen", 
-     * "embedded"  and link
+     * "centerWell"  and link
      * @extends Backbone.View
      * @constructs
      */
@@ -93,7 +93,11 @@ define([
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
-        if (this.format == "embedded") {
+        if(this.format != "modal"){
+          appView.currentSessionEditView.destroy_view();
+          appView.currentSessionReadView.destroy_view();
+        }
+        if (this.format == "centerWell") {
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
@@ -177,22 +181,24 @@ define([
       if(e){
         e.stopPropagation();
       }
-      window.app.router.showEmbeddedSession();
+      window.app.router.showDashboard();
     },
     
     resizeLarge : function(e) {
       if(e){
         e.stopPropagation();
       }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenSession();
     },
     
-    //bound to book
     showEditable :function(e) {
       if(e){
         e.stopPropagation();
       }
-      window.appView.renderEditableSessionViews();
+      window.appView.currentSessionEditView.format = this.format;
+      window.appView.currentSessionEditView.render();
     }, 
  
     insertNewComment : function(e) {
@@ -204,7 +210,21 @@ define([
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
   
   return SessionReadView;

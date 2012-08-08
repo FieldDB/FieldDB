@@ -158,8 +158,7 @@ define([
                 Utils.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                    window.appView.renderEditableSessionViews();
-                    window.appView.renderReadonlySessionViews();
+                    window.appView.renderReadonlySessionViews("centerWell");
                   });
                 });
               },
@@ -205,8 +204,7 @@ define([
                 Utils.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                    window.appView.renderEditableSessionViews();
-                    window.appView.renderReadonlySessionViews();
+                    window.appView.renderReadonlySessionViews("centerWell");
                   });
                 });
               },

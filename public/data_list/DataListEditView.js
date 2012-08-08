@@ -279,6 +279,7 @@ define( [
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
       
+//      locale_Export_Datalist
       //localization
       //$(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
       //$(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));

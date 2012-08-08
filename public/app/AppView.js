@@ -131,7 +131,7 @@ define([
       
       
       this.corpusNewModalView = new CorpusEditView({
-        model : this.model.get("corpus")
+        model : new Corpus()
       });
       this.corpusNewModalView.format = "modal";
    
@@ -155,7 +155,8 @@ define([
       this.searchEditView = new SearchEditView({
         model : this.model.get("search")
       });
-      
+      this.searchEditView.format = "centreWell";
+
       
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
@@ -180,35 +181,22 @@ define([
       /*
        * Set up four session views
        */ 
-      this.sessionEditLeftSideView = new SessionEditView({
+      this.currentSessionEditView = new SessionEditView({
         model : this.model.get("currentSession")
       });
-      this.sessionEditLeftSideView.format = "leftSide";
-      this.sessionReadLeftSideView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionReadLeftSideView.format = "leftSide";
-      this.sessionEditEmbeddedView = new SessionEditView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionEditEmbeddedView.format = "embedded";
-      this.sessionReadEmbeddedView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionReadEmbeddedView.format = "embedded";
-      this.sessionEditFullscreenView = new SessionEditView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionEditFullscreenView.format = "fullscreen";
-      this.sessionReadFullscreenView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionReadFullscreenView.format = "fullscreen";
-      this.sessionModalView = new SessionEditView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionModalView.format = "modal";
+      this.currentSessionEditView.format = "leftSide";
       
+      this.currentSessionReadView = new SessionReadView({
+        model : this.model.get("currentSession")
+      });
+      this.currentSessionReadView.format = "leftSide";
+      
+      
+      this.sessionNewModalView = new SessionEditView({
+        model : new Session()
+      });
+      this.sessionNewModalView.format = "modal";
+     
       if(typeof callback == "function"){
         callback();
       }
@@ -397,7 +385,7 @@ define([
         this.userPreferenceView.render();
         this.hotkeyEditView.render();//.showModal();
         this.renderReadonlyUserViews();
-        this.sessionModalView.render();
+//        this.sessionNewModalView.render();
 
         this.renderReadonlyDashboardViews();
         this.activityFeedView.render();
@@ -439,13 +427,13 @@ define([
 //        // Display the AuthView
 //        
 //        // Display the Session Views
-//        this.sessionEditLeftSideView.render();
-//        this.sessionReadLeftSideView.render();
-//        this.sessionEditEmbeddedView.render();
-//        this.sessionReadEmbeddedView.render();
-//        this.sessionEditFullscreenView.render();
-//        this.sessionReadFullscreenView.render();
-//        this.sessionModalView.render();
+//        this.currentSessionEditView.render();
+//        this.currentSessionReadView.render();
+//        this.currentSessionEditView.render();
+//        this.currentSessionReadView.render();
+//        this.currentSessionEditView.render();
+//        this.currentSessionReadView.render();
+//        this.sessionNewModalView.render();
 //        
 //        // Display the UserPreferenceEditView
 //        
@@ -491,7 +479,7 @@ define([
      */
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
-      this.sessionReadLeftSideView.render();
+      this.currentSessionReadView.render();
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
     },
@@ -507,16 +495,13 @@ define([
     },
       
     // Display Session Views
-    renderEditableSessionViews : function(sessionid) {
-      this.sessionEditLeftSideView.render();
-      this.sessionEditEmbeddedView.render();
-      this.sessionEditFullscreenView.render();
-      this.sessionModalView.render();
+    renderEditableSessionViews : function(format) {
+      this.currentSessionEditView.format = format;
+      this.currentSessionEditView.render();
     },
-    renderReadonlySessionViews : function(sessionid) {
-      this.sessionReadLeftSideView.render();
-      this.sessionReadEmbeddedView.render();
-      this.sessionReadFullscreenView.render();
+    renderReadonlySessionViews : function(format) {
+      this.currentSessionReadView.format = format;
+      this.currentSessionReadView.render();
     },
     
     // Display Datums View
