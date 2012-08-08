@@ -28,13 +28,13 @@ define([
      *
      ** @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide", "fullscreen", "modal", and 
-     * "embedded" 
+     * "centerWell" 
      * 
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      Utils.debug("SESSION init: " + this.el);
+      Utils.debug("SESSION init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -99,10 +99,6 @@ define([
 
     },
     
-    /**
-     * The Handlebars template rendered as the Embedded.
-     */
-    templateEmbedded: Handlebars.templates.session_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Summary.
@@ -110,9 +106,14 @@ define([
     templateSummary : Handlebars.templates.session_summary_edit_embedded,
     
     /**
+     * The Handlebars template rendered as the Embedded.
+     */
+    templateEmbedded: Handlebars.templates.session_edit_embedded,
+
+    /**
      * The Handlebars template rendered as the Fullscreen.
      */
-    templateFullscreen : Handlebars.templates.session_edit_fullscreen,
+    templateFullscreen : Handlebars.templates.session_edit_embedded,
     
     /**
      * The Handlebars template rendered as the Modal.
@@ -123,7 +124,7 @@ define([
      * Renders the SessionEditView.
      */
     render : function() {
-      Utils.debug("SESSION render: " + this.el);
+      Utils.debug("SESSION render: " );
       if (this.model == undefined) {
         Utils.debug("SESSION is undefined, come back later.");
         return this;
@@ -134,7 +135,11 @@ define([
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
-        if (this.format == "embedded") {
+        if(this.format != "modal"){
+          appView.currentSessionEditView.destroy_view();
+          appView.currentSessionReadView.destroy_view();
+        }
+        if (this.format == "centerWell") {
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
    
@@ -230,7 +235,7 @@ define([
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
-            window.appView.sessionReadLeftSideView.render();
+            window.appView.currentSessionReadView.render();
           });
         }
       });
@@ -240,13 +245,15 @@ define([
       if(e){
         e.stopPropagation();
       }
-      window.app.router.showEmbeddedSession();
+      window.app.router.showDashboard();
     },
     
     resizeLarge : function(e) {
       if(e){
         e.stopPropagation();
       }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenSession();
     },
     
@@ -256,7 +263,7 @@ define([
         e.stopPropagation();
       }
       this.changeViewsOfInternalModels();
-      window.appView.renderEditableSessionViews();
+      this.render();
     },
     
     //bound to book
@@ -264,7 +271,8 @@ define([
       if(e){
         e.stopPropagation();
       }
-      window.appView.renderReadonlySessionViews();
+      window.appView.currentSessionReadView.format = this.format;
+      window.appView.currentSessionReadView.render();
     },
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(e) {
@@ -279,7 +287,21 @@ define([
       window.appView.addUnsavedDoc(this.model.id);
       this.$el.find(".comment-new-text").val("");
 
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
   
   return SessionEditView;
