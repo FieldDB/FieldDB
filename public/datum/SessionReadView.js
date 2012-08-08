@@ -152,6 +152,8 @@ define([
       $(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
       $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
       $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+      $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+
  
       return this;
     },

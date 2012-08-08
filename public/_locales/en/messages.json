@@ -454,5 +454,8 @@
   },
   "locale_More" : {
     "message" : "More"
+  },
+   "locale_Elicitation_Session" : {
+    "message" : "Elicitation Session"
   }
 }
