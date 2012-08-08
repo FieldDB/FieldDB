@@ -19,7 +19,7 @@ To find out more about iField's features and to install it, visit its website at
 
 # Call for Beta Testers
 
-iField beta was officially launched in English and Spanish on August 2st 2012 in Patzun, Guatemala. So far we have had input from fieldlinguists working on Morpho-syntax, LF and Prosody. We are looking for more beta testers who would like to try out our app as a Beta Tester. In particular we need to know if the app is user-friendly, and if you have suggestions on how we can improve the app to save you time entering your data, and searching for your data when writing handouts/articles etc. 
+iField beta was officially launched in English and Spanish on August 2st 2012 in Patzun, Guatemala. So far we have had input from fieldlinguists working on Morpho-syntax, LF and Prosody. We are looking for more fieldlinguists who would like give us feedback and help us find bugs as a Beta Tester. In particular we need to know if the app is truely user-friendly, and if you have suggestions on how we can improve the app to save you time entering your data, and searching for your data when writing handouts/articles etc. 
 
 So put on your best fieldlinguist's cargo pants, and [join us for the bug hunt!](https://docs.google.com/spreadsheet/viewform?formkey=dFlXWENNd1FXRmxPOTl1NVVqemc2ZlE6MQ)
 
