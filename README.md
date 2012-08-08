@@ -20,7 +20,7 @@ To find out more about iField's features and to install it, visit its website at
 # Report Bugs and give us Feedback
 
 iField beta was officially launched in English and Spanish on August 2st 2012 in Patzun, Guatemala. So far we have had input from fieldlinguists working on Morpho-syntax, LF and Prosody. We are always looking for more feedback and your help finding bugs. In particular we need to know if the app is truely user-friendly, and if you have suggestions on how we can improve the app to save you time entering your data, and searching for your data when writing handouts/articles etc. 
-[Contact us](https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ)
+[Contact us/Report bugs](https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ)
 
 # Team
 * [Alan Bale](http://linguistics.concordia.ca/bale/) (McGill, Concordia)
