@@ -193,7 +193,7 @@ define([
       $(".locale_When").html(chrome.i18n.getMessage("locale_When"));
       $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
       $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-
+      $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
 
 
 

@@ -449,5 +449,8 @@
   },
   "locale_More" : {
     "message" : "Más"
+  },
+    "locale_Elicitation_Session" : {
+    "message" : "Sesión de Elicitación"
   }
 }
