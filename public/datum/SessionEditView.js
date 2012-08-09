@@ -240,11 +240,14 @@ define([
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         /* If it is in the modal, then it is a new session */
+        Utils.debug("Session format is "+self.format);
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
             window.appView.currentSessionReadView.render();
           });
+        }else{
+          window.appView.currentSessionReadView.render();
         }
       });
     },

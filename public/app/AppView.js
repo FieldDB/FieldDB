@@ -135,16 +135,17 @@ define([
       });
       this.currentCorpusReadView.format = "leftSide";
       
-      if(this.corpusNewModalView){
-        this.corpusNewModalView.destroy_view();
-      }
-      Utils.debug("Creating an empty new corpus for the new Corpus modal.");
-      this.corpusNewModalView = new CorpusEditView({
-        model : new Corpus()
-      });
-      this.corpusNewModalView.format = "modal";
-   
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
+
+      //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
+      if(! this.corpusNewModalView){
+        Utils.debug("Creating an empty new corpus for the new Corpus modal.");
+        this.corpusNewModalView = new CorpusEditView({
+          model : new Corpus()
+        });
+        this.corpusNewModalView.format = "modal";
+      }
+      
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
@@ -213,18 +214,17 @@ define([
       });
       this.currentSessionReadView.format = "leftSide";
       
-      if(this.sessionNewModalView){
-        this.sessionNewModalView.destroy_view();
+      //Only make a new session modal if it was not already created
+      if(! this.sessionNewModalView){
+        Utils.debug("Creating an empty new session for the new Session modal.");
+        this.sessionNewModalView = new SessionEditView({
+          model : new Session({
+            corpusname : window.app.get("corpus").get("corpusname"),
+            sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+          })
+        });
+        this.sessionNewModalView.format = "modal";
       }
-      Utils.debug("Creating an empty new session for the new Session modal.");
-      this.sessionNewModalView = new SessionEditView({
-        model : new Session({
-          corpusname : window.app.get("corpus").get("corpusname"),
-          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
-        })
-      });
-      this.sessionNewModalView.format = "modal";
-     
       if(typeof callback == "function"){
         callback();
       }
