@@ -280,7 +280,7 @@ define([
     
     saveButton : function(){
       if (this.needsSave) {
-          saveScreen();
+          this.saveScreen();
       }else {
         window.appView.toastUser("This datum "+this.model.id+"has no unsaved changes","alert-success","Saved!");
 
