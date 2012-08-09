@@ -31,6 +31,7 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("DATALIST init");
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());

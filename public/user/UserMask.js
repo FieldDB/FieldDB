@@ -17,6 +17,7 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("UserMask init", this.toJSON());
       try {
         if (this.get("corpusname") == undefined) {
           if(window.app)

@@ -22,7 +22,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM STATE EDIT init");
+      Utils.debug("DATUM STATE EDIT VIEW init");
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -50,7 +50,7 @@ define( [
      * Renders the DatumStateEditView.
      */
     render : function() {
-      Utils.debug("DATUM STATE EDIT render");
+      Utils.debug("DATUM STATE EDIT VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsEditView

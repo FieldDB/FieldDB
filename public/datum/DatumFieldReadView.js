@@ -21,7 +21,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM FIELD init");
+      Utils.debug("DATUM FIELD READ init");
     
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -52,7 +52,7 @@ define([
      * Renders the DatumFieldReadView.
      */
     render : function() {
-      Utils.debug("DATUM FIELD READ render");
+      Utils.debug("DATUM FIELD READ VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));

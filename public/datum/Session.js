@@ -94,7 +94,7 @@ define([
      * @constructs
      */
     initialize: function() {
-      
+      Utils.debug("SESSION init");
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -205,7 +205,8 @@ define([
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('Session save error' + e);
+              alert('Session save error' + JSON.stringfy(e));
+              Utils.debug('Session save error' + JSON.stringfy(e));
             }
           }
         });

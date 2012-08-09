@@ -19,6 +19,7 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("USER PREFERENCE VIEW init");
       this.model.bind("change:skin", this.renderSkin, this);
           
       this.model.bind("change", this.render, this);

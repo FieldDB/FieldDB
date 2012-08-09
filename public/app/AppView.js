@@ -102,7 +102,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("APP init: " + this.el);
+      Utils.debug("APPVIEW init: " + this.el);
 
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
@@ -118,18 +118,27 @@ define([
       window.setInterval(this.saveScreen, 10000);     
     },
     setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
-      // Create four corpus views
+      // Create three corpus views
+      if(this.currentCorpusEditView){
+        this.currentCorpusEditView.destroy_view();
+      }
       this.currentCorpusEditView = new CorpusEditView({
         model : this.model.get("corpus")
       });
       this.currentCorpusEditView.format = "leftSide";
-      
+     
+      if(this.currentCorpusReadView){
+        this.currentCorpusReadView.destroy_view();
+      }
       this.currentCorpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
       this.currentCorpusReadView.format = "leftSide";
       
-      
+      if(this.corpusNewModalView){
+        this.corpusNewModalView.destroy_view();
+      }
+      Utils.debug("Creating an empty new corpus for the new Corpus modal.");
       this.corpusNewModalView = new CorpusEditView({
         model : new Corpus()
       });
@@ -139,6 +148,10 @@ define([
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
+
+      if(this.importView){
+        this.importView.destroy_view();
+      }
       this.importView = new ImportEditView({
         model : new Import()
       });
@@ -152,6 +165,9 @@ define([
       /*
        *  Create search views
        */
+      if(this.searchEditView){
+        this.searchEditView.destroy_view();
+      }
       this.searchEditView = new SearchEditView({
         model : this.model.get("search")
       });
@@ -179,21 +195,33 @@ define([
     },
     setUpAndAssociateViewsAndModelsWithCurrentSession : function(callback){
       /*
-       * Set up four session views
+       * Set up three session views
        */ 
+      if(this.currentSessionEditView){
+        this.currentSessionEditView.destroy_view();
+      }
       this.currentSessionEditView = new SessionEditView({
         model : this.model.get("currentSession")
       });
       this.currentSessionEditView.format = "leftSide";
       
+      if(this.currentSessionReadView){
+        this.currentSessionReadView.destroy_view();
+      }
       this.currentSessionReadView = new SessionReadView({
         model : this.model.get("currentSession")
       });
       this.currentSessionReadView.format = "leftSide";
       
-      
+      if(this.sessionNewModalView){
+        this.sessionNewModalView.destroy_view();
+      }
+      Utils.debug("Creating an empty new session for the new Session modal.");
       this.sessionNewModalView = new SessionEditView({
-        model : new Session()
+        model : new Session({
+          corpusname : window.app.get("corpus").get("corpusname"),
+          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+        })
       });
       this.sessionNewModalView.format = "modal";
      
@@ -299,15 +327,24 @@ define([
        */
       this.currentPaginatedDataListDatumsView.fillWithIds(this.model.get("currentDataList").get("datumIds"), Datum);
       
+      
+      if(this.currentEditDataListView){
+        this.currentEditDataListView.destroy_view();
+      }
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
       this.currentEditDataListView.format = "leftSide";
       
+      
+      if(this.currentReadDataListView){
+        this.currentReadDataListView.destroy_view();
+      }
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
       this.currentReadDataListView.format = "leftSide";
+      
       
       if(typeof callback == "function"){
         callback();
@@ -374,7 +411,7 @@ define([
      * Renders the AppView and all of its child Views.
      */
     render : function() {
-      Utils.debug("APP render: " + this.el);
+      Utils.debug("APPVIEW render: " + this.el);
       if (this.model != undefined) {
         // Display the AppView
         this.setElement($("#app_view"));
@@ -385,7 +422,6 @@ define([
         this.userPreferenceView.render();
         this.hotkeyEditView.render();//.showModal();
         this.renderReadonlyUserViews();
-//        this.sessionNewModalView.render();
 
         this.renderReadonlyDashboardViews();
         this.activityFeedView.render();

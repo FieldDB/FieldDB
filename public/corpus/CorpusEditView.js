@@ -67,7 +67,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS DETAILS init: " );
+      Utils.debug("CORPUS EDIT init: " );
       this.changeViewsOfInternalModels();
      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
@@ -313,7 +313,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING CORPUS EDIT VIEW");
+      Utils.debug("DESTROYING CORPUS EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -422,7 +422,7 @@ define([
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
         window.appView.sessionNewModalView.model = new Session({
           corpusname : window.app.get("corpus").get("corpusname"),
-          sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON()) //This is okay, there will be no backbone ids since datumFields are not saved to pouch
+          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.set("comments", new Comments());
         window.appView.sessionNewModalView.render();

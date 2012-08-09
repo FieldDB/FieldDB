@@ -57,6 +57,7 @@ define([
     minimizedTemplate : Handlebars.templates.activity_feed_minimized,
 
     render : function() {
+      Utils.debug("ACTIVITY FEED VIEW render");
       if (this.format == "rightSide") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.template(this.model.toJSON()));

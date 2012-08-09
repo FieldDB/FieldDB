@@ -435,6 +435,8 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
+
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
