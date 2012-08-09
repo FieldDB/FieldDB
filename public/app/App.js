@@ -229,6 +229,7 @@ define([
     },
     
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function(couchConnection, appids, callback) {
+      Utils.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("corpus").get("couchConnection");
       }
@@ -281,8 +282,8 @@ define([
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
                               window.appView.renderReadonlyDashboardViews();
-                              window.appView.datumsEditView.format = "centerWell";
-                              window.appView.datumsEditView.render();
+//                              window.appView.datumsEditView.format = "centerWell";
+//                              window.appView.datumsEditView.render(); //this is already done in the dashboard render
                               
                               if (typeof callback == "function") {
                                 callback();

@@ -374,7 +374,22 @@ define([
 //      this.format = "fullscreeen";
 //      this.render(); //this is done in the router
       window.app.router.showFullscreenSearch();
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING SEARCH EDIT VIEW ");
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
 
   return SearchEditView;

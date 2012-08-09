@@ -77,7 +77,9 @@ define([
         }
         //if it is someone different, then change the model.
         if(userid != window.appView.publicReadUserView.model.id){
-          var userToShow = new UserMask();
+          var userToShow = new UserMask({
+            "corpusname": corpusname
+          });
           userToShow.id = userid;
           userToShow.changeCorpus(corpusname, function(){
             //fetch only after having setting the right pouch which is what changeCorpus does.

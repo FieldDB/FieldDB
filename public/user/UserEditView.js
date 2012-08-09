@@ -27,7 +27,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER init: " + this.el);
+      Utils.debug("USER EDIT VIEW init: " + this.el);
 
 //      this.model.bind("change", this.render, this); //this breaks the save. we should only render the corpus updating collection view.
 
@@ -85,16 +85,20 @@ define([
      * Renders the UserEditView depending on its format.
      */
     render : function() {
-      Utils.debug("USER render: " + this.el);
+//      Utils.debug("USER render: " + this.el);
 
       if (this.model == undefined) {
         Utils.debug("\User model was undefined");
         return this;
       }
       if (this.format == "fullscreen") {
+        Utils.debug("USER EDIT FULLSCREEN render: " + this.el);
+
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
       } else if(this.format == "modal") {
+        Utils.debug("USER EDIT MODAL render: " + this.el);
+
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
       }

@@ -22,7 +22,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM FIELD init");
+      Utils.debug("DATUM FIELD EDIT VIEW init");
     },
     
     /**
@@ -56,7 +56,7 @@ define([
      * Renders the DatumFieldEditView.
      */
     render : function() {
-      Utils.debug("DATUM FIELD EDIT render");
+      Utils.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));

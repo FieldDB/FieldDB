@@ -186,8 +186,10 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
     
     render : function() {
-      appView.currentReadDataListView.destroy_view();
-      appView.currentEditDataListView.destroy_view();
+      if(this.format != "link"){
+        appView.currentReadDataListView.destroy_view();
+        appView.currentEditDataListView.destroy_view();
+      }
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
@@ -336,6 +338,8 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING DATALIST READ VIEW "+ this.format);
+
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

@@ -93,7 +93,7 @@ define([
      * @constructs
      */
     initialize : function() {
-
+      Utils.debug("CORPUS INIT");
       if(!this.get("confidential")){
         this.set("confidential", new Confidential() )
       }
@@ -600,7 +600,7 @@ define([
     /**
      * Synchronize the server and local databases.
      */
-    replicateFromCorpus : function(couchConnection, fromcallback, tocallback) {
+    replicateFromCorpus : function(couchConnection, fromcallback) {
       var self = this;
       
       if(couchConnection == null || couchConnection == undefined){

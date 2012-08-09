@@ -680,6 +680,21 @@ define( [
       e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
       return false;
     },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING IMPORT EDIT VIEW ");
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
   
   return ImportEditView;

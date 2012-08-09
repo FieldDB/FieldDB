@@ -18,6 +18,8 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("ACTIVITY init: ");
+
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
       }

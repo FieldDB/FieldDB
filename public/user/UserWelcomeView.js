@@ -291,9 +291,10 @@ define([
                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateFromCorpus(couchConnection);
+                        c.replicateFromCorpus(couchConnection, function(){
 //                        appView.datumsEditView.newDatum();
-                        appView.datumsEditView.render();
+                          appView.datumsEditView.render();
+                        });
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
                           window.app.saveAndInterConnectInApp();
@@ -352,9 +353,11 @@ define([
                   window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
                     if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                       //do nothing because they have no recent ids
-                      alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+                      alert("Bug: User does not have most recent ids, not showing your most recent dashbaord.");
 //                      appView.datumsEditView.newDatum();
-                      appView.datumsEditView.render();
+//                      appView.datumsEditView.render();
+                      window.app.router.showDashboard();
+
                     }else{
                       /*
                        *  Load their last corpus, session, datalist etc

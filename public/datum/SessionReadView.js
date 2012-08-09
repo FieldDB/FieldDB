@@ -31,7 +31,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("SESSION init: " + this.el);
+      Utils.debug("SESSION READ VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -82,7 +82,7 @@ define([
      * Renders the SessionReadView.
      */
     render : function() {
-      Utils.debug("SESSION render: " + this.el);
+      Utils.debug("SESSION READ render: " );
       if (this.model == undefined) {
         Utils.debug("SESSION is undefined, come back later.");
         return this;
@@ -93,11 +93,13 @@ define([
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
-        if(this.format != "modal"){
+        if(this.format != "link"){
           appView.currentSessionEditView.destroy_view();
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "centerWell") {
+          Utils.debug("SESSION READ CENTERWELL render: " );
+
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
@@ -109,6 +111,8 @@ define([
           this.commentReadView.render();
          
         } else if (this.format == "leftSide") {
+          Utils.debug("SESSION READ LEFTSIDE render: " );
+
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
             consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
@@ -119,6 +123,8 @@ define([
           $(this.el).html(this.templateSummary(jsonToRender)); 
           
         } else if (this.format == "fullscreen") {
+          Utils.debug("SESSION READ FULLSCREEN render: " );
+
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(this.model.toJSON()));
           
@@ -129,6 +135,7 @@ define([
           this.commentReadView.render();
           
         } else if (this.format == "link") {
+          Utils.debug("SESSION READ LINK render: " );
 
           $(this.el).html(this.templateLink(this.model.toJSON()));
        
@@ -216,6 +223,8 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING SESSION READ VIEW "+ this.format);
+
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

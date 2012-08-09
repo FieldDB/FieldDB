@@ -32,6 +32,7 @@ define([
      * @constructs
      */
     initialize: function(attributes) {
+      Utils.debug("USER init");
       User.__super__.initialize.call(this, attributes);
       
       // If there is no prefs, create a new one

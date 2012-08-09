@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("PERMISSION init");
+      Utils.debug("PERMISSION EDIT VIEW init");
     },
     
     /**
@@ -41,7 +41,7 @@ define([
      * Renders the DatumFieldView.
      */
     render : function() {
-      Utils.debug("PERMISSION EDIT render");
+      Utils.debug("PERMISSION EDIT VIEW render");
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(jsonToRender));

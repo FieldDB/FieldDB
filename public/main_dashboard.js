@@ -170,6 +170,7 @@ require([
     Backbone.history.start();
     
     if(typeof callback == "function"){
+      Utils.debug("Calling back the startApps callback");
       callback();
     }
     
@@ -249,6 +250,7 @@ require([
             return;
           }else{
             a = new App();
+            window.app = a;
             var auth = a.get("authentication");
             var u = localStorage.getItem("encryptedUser");
             auth.loadEncryptedUser(u, function(success, errors){

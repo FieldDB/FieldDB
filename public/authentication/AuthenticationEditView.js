@@ -25,7 +25,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("AUTH init: " + this.el);
+      Utils.debug("AUTH EDIT init: " + this.el);
       
     //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
@@ -35,7 +35,7 @@ define([
       this.userView.setElement($("#user-quickview"));
       
       // Any time the Authentication model changes, re-render
-      this.model.bind('change', this.render, this);
+      this.model.bind('change:state', this.render, this);
       this.model.get("userPublic").bind('change', this.render, this);
       
     },
@@ -77,54 +77,55 @@ define([
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
-      Utils.debug("AUTH render: " + this.el);
+      Utils.debug("AUTH EDIT render: " + this.el);
+      if (this.model == undefined) {
+        Utils.debug("Auth model was undefined, come back later.");
+        return this;
+      }
+
       if(this.model.get("userPublic") != undefined){
         this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
+        this.model.set( "username", this.model.get("userPublic").get("username") );
       }
-      if (this.model != undefined) {
-        // Display the AuthenticationEditView
-        this.setElement($("#authentication-embedded"));
-        $(this.el).html(this.template(this.model.toJSON()));
-     
-        if (this.model.get("state") == "loggedIn") {
-          $("#logout").show();
-          $("#login").hide();
-          $("#login_form").hide();
-          if(this.model.get("userPublic") != undefined){
-            this.userView.setElement($("#user-quickview"));
-            this.userView.render();
-          }else{
-            $("#user-quickview").html('<i class="icons icon-user icon-white">');
-          }
-        } else {
-          $("#logout").hide();
-          $("#login").show();
-          $("#login_form").show();
-          if(this.model.get("userPublic") != undefined){
-            this.userView.setElement($("#user-quickview"));
-            this.userView.render();
-          }else{
-            $("#user-quickview").html('<i class="icons icon-user icon-white">');
-          }
-          this.$el.children(".user").html("");
+      // Display the AuthenticationEditView
+      this.setElement($("#authentication-embedded"));
+      $(this.el).html(this.template(this.model.toJSON()));
+
+      if (this.model.get("state") == "loggedIn") {
+        $("#logout").show();
+        $("#login").hide();
+        $("#login_form").hide();
+        if(this.model.get("userPublic") != undefined){
+          Utils.debug("\t rendering AuthenticationEditView's UserView");
+          this.userView.setElement($("#user-quickview"));
+          this.userView.render();
+        }else{
+          $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
-        
-        Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
-        Utils.debug("\tAuthentication model was undefined.");
+        $("#logout").hide();
+        $("#login").show();
+        $("#login_form").show();
+        if(this.model.get("userPublic") != undefined){
+          Utils.debug("\t rendering AuthenticationEditView's UserView");
+          this.userView.setElement($("#user-quickview"));
+          this.userView.render();
+        }else{
+          $("#user-quickview").html('<i class="icons icon-user icon-white">');
+        }
+        this.$el.children(".user").html("");
       }
-      
+
       //localization
-      $("#authentication-embedded").find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-      $("#authentication-embedded").find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-      $("#authentication-embedded").find(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
-      $("#authentication-embedded").find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
-      $("#authentication-embedded").find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
-      $("#authentication-embedded").find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
-      $("#authentication-embedded").find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
-      $("#authentication-embedded").find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
-      $("#authentication-embedded").find(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
-      
+      $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+      $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(this.el).find(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
+      $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+      $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(this.el).find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(this.el).find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
+      $(this.el).find(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
       
       return this;
     },

@@ -31,6 +31,7 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("AUTHENTICATION INIT");
       this.bind('error', function(model, error) {
         Utils.debug("Error in Authentication  : " + error);
       });
@@ -105,33 +106,38 @@ define([
      * 
      */
     saveServerResponseToUser : function(data, callback){
+      Utils.debug("saveServerResponseToUser");
+
       this.set("state", "loggedIn");
       this.staleAuthentication = false;
 
-      if (this.get("userPrivate") == undefined) {
-        this.set("userPrivate", new User());
-      }
-      if (this.get("userPublic") == undefined) {
-        this.set("userPublic", new UserMask());
-      }
-      var u = this.get("userPrivate");
-      u.id = data.user._id; //set the backbone id to be the same as the mongodb id
-      u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
       // Over write the public copy with any (new) username/gravatar
       // info
-      this.get("userPublic").id = this.get("userPrivate").id ;
       if (data.user.publicSelf == null) {
         // if the user hasnt already specified their public self, then
         // put in a username and gravatar,however they can add more
         // details like their affiliation, name, research interests
         // etc.
         data.user.publicSelf = {};
-        data.user.publicSelf.username = this.get("userPrivate").get(
-        "username");
-        data.user.publicSelf.gravatar = this.get("userPrivate").get(
-        "gravatar");
+        data.user.publicSelf.username = data.user.username;
+        data.user.publicSelf.gravatar = data.user.gravatar;
+        data.user.publicSelf.corpusname = data.user.corpuses[0].corpusname;
       }
-      this.get("userPublic").set(data.user.publicSelf);
+      
+      if (this.get("userPublic") == undefined) {
+        this.set("userPublic", new UserMask(data.user.publicSelf));
+      }else{
+        this.get("userPublic").set(data.user.publicSelf);
+      }
+      this.get("userPublic").id = data.user._id;
+      
+      if (this.get("userPrivate") == undefined) {
+        this.set("userPrivate", new User());
+      }
+      var u = this.get("userPrivate");
+      u.id = data.user._id; //set the backbone id to be the same as the mongodb id
+      //set the user AFTER setting his/her publicself if it wasnt there already
+      u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
 //    self.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
@@ -148,21 +154,23 @@ define([
         window.appView.addPouchDoc(this.get("userPublic").id);
       }
     },
-    loadEncryptedUser : function(encryptedUserString, callback){
+    loadEncryptedUser : function(encryptedUserString, callbackload){
+      Utils.debug("loadEncryptedUser");
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
       var data = {};
       data.user = u;
-      this.saveServerResponseToUser(data, callback);
+      this.saveServerResponseToUser(data, callbackload);
     },
-    saveAndEncryptUserToLocalStorage : function(callback){
+    saveAndEncryptUserToLocalStorage : function(callbacksaved){
+      Utils.debug("saveAndEncryptUserToLocalStorage");
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u);
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
         window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
       }
-      if(typeof callback == "function"){
-        callback();
+      if(typeof callbacksaved == "function"){
+        callbacksaved();
       }
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
