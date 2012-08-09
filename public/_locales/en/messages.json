@@ -173,8 +173,8 @@
   "locale_Default" : {
     "message" : "Default"
   },
-  "locale_Session" : {
-    "message" : "Session"
+  "locale_Elicitation_Session" : {
+    "message" : "Elicitation Session"
   },
   "locale_Export" : {
     "message" : "Export"

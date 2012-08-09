@@ -59,7 +59,7 @@ define([
       "click .btn-save-session" : "updatePouch",
       
       //Add button inserts new Comment
-      "click .add-comment-session-edit" : 'insertNewComment',
+      "click .add-comment-session" : 'insertNewComment',
       
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
@@ -139,7 +139,28 @@ define([
           appView.currentSessionEditView.destroy_view();
           appView.currentSessionReadView.destroy_view();
         }
-        if (this.format == "centerWell") {
+        if (this.format == "leftSide") {
+          Utils.debug("SESSION EDIT  LEFTSIDE render: " );
+
+          var jsonToRender = {
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
+          };
+          
+          this.setElement("#session-quickview");
+          $(this.el).html(this.templateSummary(jsonToRender));
+          
+          //Localization for leftSide
+          $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+          $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+          $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+          $(this.el).find(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+
+          
+        } else if (this.format == "centerWell") {
           Utils.debug("SESSION EDIT CENTERWELL render: " );
 
           this.setElement("#session-embedded");
@@ -152,18 +173,13 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
-        } else if (this.format == "leftSide") {
-          Utils.debug("SESSION EDIT  LEFTSIDE render: " );
+          //Localization for centerWell
+          $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
 
-          var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
-          };
-          
-          this.setElement("#session-quickview");
-          $(this.el).html(this.templateSummary(jsonToRender));
-          
         } else if (this.format == "fullscreen") {
           Utils.debug("SESSION EDIT FULLSCREEN render: " );
 
@@ -177,6 +193,14 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          //Localization for fullscreen
+          $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
+          
         } else if (this.format == "modal") {
           Utils.debug("SESSION EDIT MODAL render: " );
 
@@ -189,29 +213,17 @@ define([
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
+          
+          //Localization for modal
+          $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+          $(this.el).find(".locale_New_Session_Instructions").html(chrome.i18n.getMessage("locale_New_Session_Instructions"));
+          $(this.el).find(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
+          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+
         }
       } catch(e) {
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
-      
-      //localization
-      //$(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
-      //$(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      //$(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-      //$(".locale_New_Session_Instructions").html(chrome.i18n.getMessage("locale_New_Session_Instructions"));
-      //$(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
-      //$(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
-      //$(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
-      //$(".locale_When").html(chrome.i18n.getMessage("locale_When"));
-      //$(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-      //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-
-
-
-
-
-      
       
       return this;
     },    

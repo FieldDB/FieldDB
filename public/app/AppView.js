@@ -515,7 +515,7 @@ define([
      */
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
-      this.currentSessionReadView.render();
+      this.renderReadonlySessionViews("leftSide");
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
     },

@@ -177,8 +177,8 @@
   "locale_Default" : {
     "message" : "Gris"
   },
-  "locale_Session" : {
-    "message" : "Sesión"
+  "locale_Elicitation_Session" : {
+    "message" : "Sesión de Elicitación"
   },
   "locale_Export" : {
     "message" : "Exportar"
