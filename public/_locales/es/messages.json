@@ -390,7 +390,7 @@
   "locale_Edit_Datalist" : {
     "message" : "Editar lista de datos"
   },
-  "locale_Export_Datalist" : {
+  "locale_Export_Datalist_as_LaTeX" : {
     "message" : "Exportar lista de datos seleccionados en formato LaTeX"
   },
   "locale_Hide_Datalist" : {
@@ -441,7 +441,7 @@
   "locale_LaTeX" : {
     "message" : "Exportar dato en formato LaTeX"
   },
-  "locale_CSV" : {
+  "locale_CSV_Tooltip" : {
     "message" : "Exportar dato en formato CSV "
   },
   "locale_Decrypt" : {

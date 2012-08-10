@@ -204,7 +204,7 @@ define([
 //      //$(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
       //$(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
 
-      //$(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
+      //$(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
 
       return this;
     },

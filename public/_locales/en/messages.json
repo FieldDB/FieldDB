@@ -410,7 +410,7 @@
   "locale_Edit_Datalist" : {
     "message" : "Edit Data List"
   },
-  "locale_Export_Datalist" : {
+  "locale_Export_Datalist_as_LaTeX" : {
     "message" : "Export checked as LaTeX"
   },
   "locale_Hide_Datalist" : {
@@ -449,7 +449,7 @@
   "locale_LaTeX" : {
     "message" : "Export datum to LaTeX"
   },
-  "locale_CSV" : {
+  "locale_CSV_Tooltip" : {
     "message" : "Export datum to CSV"
   },
   "locale_of" : {

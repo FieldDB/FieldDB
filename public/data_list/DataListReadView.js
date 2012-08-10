@@ -28,7 +28,7 @@ define( [
      * @class A list of datum that are returned as a search result. It will have
      *        check-boxes on the side and a datum menu on the bottom.
      * 
-     * @property {String} format Valid formats are "link", "fullscreen", 
+     * @property {String} format Valid formats are "link", "fullscreen", "centerWell",
      * "leftSide", and "minimized".
      * 
      * @description Starts the DataListReadView with no children.
@@ -157,7 +157,7 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    templateFullscreen : Handlebars.templates.data_list_read_fullscreen,
+    templateFullscreen : Handlebars.templates.data_list_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
@@ -211,6 +211,11 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
         
+        //Localization of icons for quickview
+        $("#data-list-quickview-header").find(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
+        $("#data-list-quickview-header").find(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+        $("#data-list-quickview-header").find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+        
       } else if (this.format == "fullscreen") {
         Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
 
@@ -221,7 +226,11 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
         
-      } else if(this.format == "middle") {
+        //Localization of icons for fullscreen
+        $("#data-list-fullscreen-header").find(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+        $("#data-list-fullscreen-header").find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+       
+      } else if(this.format == "centerWell") {
         Utils.debug("DATALIST READ CENTER render: " + this.el);
 
         this.setElement($("#data-list-embedded-header"));
@@ -230,6 +239,10 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-embedded").find(".current-data-list-paginated-view") );
        
+        //Localization of icons for fullscreen
+        $("#data-list-fullscreen-header").find(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+        $("#data-list-fullscreen-header").find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+
       } else if (this.format == "minimized") {
         Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
 
@@ -242,26 +255,20 @@ define( [
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          //localization of data list menu
+          $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+          $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy"));
+          $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+          $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+          $(this.el).find(".locale_Export_Datalist_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_Datalist_as_LaTeX"));
+          $(this.el).find(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+          
         }
       }catch(e){
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
-      //localization
-      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      //$(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
-      //$(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      //$(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
-      //$(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      //$(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      //$(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      //$(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-      //$(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
-      //$(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
-
-
-
-
+     
       return this;
     },
     
@@ -285,7 +292,7 @@ define( [
           datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
         }
       }
-      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+//      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
 
       return datumIdsChecked;
     },
