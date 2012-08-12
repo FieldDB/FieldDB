@@ -13,18 +13,20 @@
 
 <!--DataList Menu  -->
 <div class="icons">
-    <a  href="#" class = "locale_Play_Audio_checked" rel="tooltip" >
-       <i class="icons icon-bullhorn"></i></a>
-    <a  href="#" class = "locale_Copy_checked" rel="tooltip" >
-       <i class="icons icon-paste"></i></a>
-    <a href="#" class= "locale_Encrypt_checked" rel="tooltip">
-      <i class="icons {{#if confidential}}icon-lock{{else}}icon-unlock{{/if}}"></i></a> 
-    <a href="#" class = "locale_Decrypt_checked" rel="tooltip">
-      <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
-    <a href="#" class = "locale_Export_Datalist_as_LaTeX" rel="tooltip">
-      <button class="btn btn-primary latex-export-datalist LaTeX">LaTeX</button></a>
-    <a href="#" class = "locale_CSV_Tooltip" rel="tooltip">
-      <button class="btn btn-primary CSV" >CSV</button></a>
+  <a  href="#" class = "locale_Play_Audio_checked" rel="tooltip" >
+     <i class="icons icon-bullhorn"></i></a>
+  <a  href="#" class = "locale_Copy_checked" rel="tooltip" >
+     <i class="icons icon-paste"></i></a>
+  <a href="#" class= "locale_Decrypt_checked" rel="tooltip">
+    <i class="icons icon-unlock"></i></a> 
+  <a href="#" class= "locale_Encrypt_checked" rel="tooltip">
+    <i class="icons icon-lock"></i></a>
+  <a href="#" class = "locale_Show_confidential_items_Tooltip" rel="tooltip">
+    <i class="icons {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
+  <a href="#" class = "locale_Export_checked_as_LaTeX" rel="tooltip">
+    <button class="btn btn-primary latex-export-datalist LaTeX">LaTeX</button></a>
+  <a href="#" class = "locale_Export_checked_as_CSV" rel="tooltip">
+    <button class="btn btn-primary CSV" >CSV</button></a>
 </div>
 
 <ul class="comments unstyled"></ul>
