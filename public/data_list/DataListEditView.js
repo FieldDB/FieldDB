@@ -159,6 +159,7 @@ define( [
         var self = this;
         confidential.turnOnDecryptedMode(function(){
           self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
+          $(self.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
         });
 
         return false;
@@ -170,7 +171,7 @@ define( [
         }
         confidential.turnOffDecryptedMode();
         this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
-
+        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
         return false;
       }
     },
@@ -220,7 +221,11 @@ define( [
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        if(jsonToRender.decryptedMode){
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+        }else{
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        }
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
         $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
@@ -244,7 +249,11 @@ define( [
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        if(jsonToRender.decryptedMode){
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+        }else{
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
         $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
@@ -268,7 +277,11 @@ define( [
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        if(jsonToRender.decryptedMode){
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+        }else{
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
         $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
@@ -294,7 +307,11 @@ define( [
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        if(jsonToRender.decryptedMode){
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+        }else{
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
         //No add comment button
@@ -323,7 +340,11 @@ define( [
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        if(jsonToRender.decryptedMode){
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+        }else{
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
         $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
