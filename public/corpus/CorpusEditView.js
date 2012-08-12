@@ -101,7 +101,7 @@ define([
     events : {
       "click .icon-book": "showReadonly",
       //Add button inserts new Comment
-      "click .add-comment-edit" : 'insertNewComment',
+      "click .add-comment-corpus" : 'insertNewComment',
     	
       //Add button inserts new Datum State
       "click .add-datum-state" : 'insertNewDatumState',
