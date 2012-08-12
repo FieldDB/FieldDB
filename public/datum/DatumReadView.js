@@ -146,26 +146,30 @@ define([
         var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
         var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
         
-        // makes the top two lines into an array of words.
-        var utteranceArray = utterance.split(' ');
-        var glossArray = gloss.split(' ');
-        
-        // Form an array of utterance and gloss segments for rendering
-        var couplet = [];
-        for (var i = 0; i < utteranceArray.length; i++) {
-          couplet.push({
-            utteranceSegment : utteranceArray[i],
-            glossSegment : glossArray[i]
-          });
-        }
-        
         var jsonToRender = {};
-        jsonToRender.translation = translation;
-        jsonToRender.couplet = couplet;
-        if (judgement !== "") {
-          jsonToRender.judgement = judgement;
+        try{
+          var utteranceArray = utterance.split(' ');
+          var glossArray = gloss.split(' ');
+          
+          // Form an array of utterance and gloss segments for rendering
+          var couplet = [];
+          for (var i = 0; i < utteranceArray.length; i++) {
+            couplet.push({
+              utteranceSegment : utteranceArray[i],
+              glossSegment : glossArray[i]
+            });
+          }
+          
+          jsonToRender.translation = translation;
+          jsonToRender.couplet = couplet;
+          if (judgement !== "") {
+            jsonToRender.judgement = judgement;
+          }
+        }catch(e){
+          alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
+          jsonToRender.translation = "bug";
         }
-        
+        // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
       }
       
