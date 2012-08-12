@@ -255,7 +255,7 @@ define( [
           this.commentReadView.render();
           
           //localization of data list menu
-          $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+          $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
           $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
           $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
           $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
