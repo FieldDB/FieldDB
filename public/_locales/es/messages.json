@@ -387,11 +387,29 @@
   "locale_Encrypt" : {
     "message" : "Encriptar/Decriptar"
   },
+  "locale_Encrypt_checked" : {
+    "message" : "TODO translate Make checked items confidential"
+  },
+  "locale_Decrypt_checked" : {
+    "message" : "TODO translate Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you want them to stay confidential and just want to edit them, click on the eye instead."
+  },
+  "locale_Decrypt" : {
+    "message" : "TODO translate Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you want it to stay confidential and just want to edit it, click on the eye instead."
+  },
+  "locale_Show_confidential_items_Tooltip" : {
+    "message" : "TODO translate Unmask confidential/encrypted items so that they can be edited and read for the next 10 minutes."
+  },
+  "locale_Hide_confidential_items_Tooltip" : {
+    "message" : "TODO translate Return to masked view of confidential/encrypted datum"
+  },
   "locale_Edit_Datalist" : {
     "message" : "Editar lista de datos"
   },
-  "locale_Export_Datalist_as_LaTeX" : {
+  "locale_Export_checked_as_LaTeX" : {
     "message" : "Exportar lista de datos seleccionados en formato LaTeX"
+  },
+  "locale_Export_checked_as_CSV" : {
+    "message" : "Exportar lista de datos seleccionados en formato CSV"
   },
   "locale_Hide_Datalist" : {
     "message" : "Esconder lista de datos"
@@ -429,12 +447,6 @@
   "locale_Play_Audio_checked" : {
     "message" : "Tocar audio de los seleccionados"
   },
-  "locale_Encrypt_checked" : {
-    "message" : "Encriptar los datos seleccionados"
-  },
-  "locale_Decrypt_checked" : {
-    "message" : "Mostrar datos confidenciales seleccionados"
-  },
   "locale_Insert_New_Datum" : {
     "message" : "Insertar un nuevo dato arriba"
   },
@@ -443,9 +455,6 @@
   },
   "locale_CSV_Tooltip" : {
     "message" : "Exportar dato en formato CSV "
-  },
-  "locale_Decrypt" : {
-    "message" : "Mostrar dato confidencial/encriptado"
   },
   "locale_of" : {
     "message" : "de"

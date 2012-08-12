@@ -202,7 +202,7 @@ define([
       //$(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
       //$(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
 //      //$(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
-      //$(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
+      //$(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
 
       //$(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
 

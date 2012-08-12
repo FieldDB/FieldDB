@@ -396,22 +396,31 @@
     "message" : "Duplicate datum to create a minimal pair"
   },
   "locale_Encrypt" : {
-    "message" : "Encrypt/Decrypt"
+    "message" : "Make this datum confidential"
   },
   "locale_Encrypt_checked" : {
-    "message" : "Make checked items confidential/encrypted"
+    "message" : "Make checked items confidential"
   },
   "locale_Decrypt_checked" : {
-    "message" : "Show confidential/encrypted items"
+    "message" : "Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you just want to unmask them so you can edit edit them, click on the eye instead."
   },
   "locale_Decrypt" : {
-    "message" : "Show confidential/encrypted datum"
+    "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."
+  },
+  "locale_Show_confidential_items_Tooltip" : {
+    "message" : "Unmask confidential/encrypted items so that they can be edited and read for the next 10 minutes."
+  },
+  "locale_Hide_confidential_items_Tooltip" : {
+    "message" : "Return to masked view of confidential/encrypted datum"
   },
   "locale_Edit_Datalist" : {
     "message" : "Edit Data List"
   },
-  "locale_Export_Datalist_as_LaTeX" : {
+  "locale_Export_checked_as_LaTeX" : {
     "message" : "Export checked as LaTeX"
+  },
+  "locale_Export_checked_as_CSV" : {
+    "message" : "Export checked as CSV"
   },
   "locale_Hide_Datalist" : {
     "message" : "Hide datalist"
