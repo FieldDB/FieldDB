@@ -431,7 +431,7 @@ define([
       // Store the current Session, the current corpus, and the current date
       // in the Datum
       this.set({
-        "session" : app.get("currentSession"),
+        "session" : app.get("currentSession"), //TODO this is dangerous no? it will overwrite its session with the current one if it is from a previous session
         "corpusname" : app.get("corpus").get("corpusname"),
         "dateModified" : JSON.stringify(new Date())
       });
