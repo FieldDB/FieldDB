@@ -217,7 +217,7 @@ define( [
         $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
         
         //localization of data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
@@ -245,7 +245,7 @@ define( [
         $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
         //localization of data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
@@ -273,7 +273,7 @@ define( [
         $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
         //localization of data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
@@ -303,7 +303,7 @@ define( [
         $(this.el).find(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
         
         //localization of search data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
         $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
         $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
         $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
@@ -381,7 +381,7 @@ define( [
       //$(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
       //$(".locale_Datalist_Description").attr("placeholder", chrome.i18n.getMessage("locale_Datalist_Description"));
       //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      //$(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      //$(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
       //$(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
       //$(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
       //$(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
