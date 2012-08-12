@@ -78,7 +78,7 @@ define([
       "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
-      "click .add-comment-read" : 'insertNewComment',
+      "click .add-comment-corpus" : 'insertNewComment',
       
       "click .icon-edit": "showEditable",
       

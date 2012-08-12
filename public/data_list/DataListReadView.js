@@ -60,7 +60,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist-read" : 'insertNewComment',
+      "click .add-comment-datalist" : 'insertNewComment',
       
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
@@ -247,6 +247,10 @@ define( [
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
+      
+        //localization of the minimized data list icons
+        $(this.el).find(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
+
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){

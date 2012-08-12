@@ -326,9 +326,13 @@ define( [
           $(".search-data-list-paginated-view").hide();
           $("#search-data-list-quickview-header").parent().find(".pagination-control").hide();
 
+          
         }catch(e){
           Utils.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
+
+        //localization of the minimized data list icons
+        $(this.el).find(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
 
       }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
@@ -355,6 +359,10 @@ define( [
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
+        
+        //localization of the minimized data list icons
+        $(this.el).find(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
+
       }else{
         Utils.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
