@@ -212,7 +212,7 @@ define([
     
     defaults : {
       skin : "",
-      numVisibleDatum : 3,
+      numVisibleDatum : 1,
       transparentDashboard: false,
       alwaysRandomizeSkin : true,
       numberOfItemsInPaginatedViews : 12
