@@ -391,7 +391,7 @@ define([
       //DONT render here, that way the user can come and go to the import dashboard
       this.hideEverything();
       $("#dashboard-view").show();
-      $('#export-modal').modal("show");
+      $('#export-batch-modal').modal("show");
     },
     
     // Functions that toggle between editable and readonly datums view

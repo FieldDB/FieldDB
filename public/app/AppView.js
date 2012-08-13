@@ -22,6 +22,7 @@ define([
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
+    "export/ExportBatchView",
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -66,6 +67,7 @@ define([
     DatumFields,
     Export,
     ExportReadView,
+    ExportBatchView,
     HotKey,
     HotKeyEditView,
     Import,
@@ -146,6 +148,10 @@ define([
       //TODO not sure if we should do this here
       // Create an ExportReadView
       this.exportView = new ExportReadView({
+        model : new Export()
+      });
+      
+      this.exportBatchView = new ExportBatchView({
         model : new Export()
       });
       
@@ -409,6 +415,7 @@ define([
         
         this.importView.render();
         this.exportView.render();
+        this.exportBatchView.render();
 //        // Display the Corpus Views
 //        this.corpusNewModalView.render();
 //        this.currentCorpusEditView.render();

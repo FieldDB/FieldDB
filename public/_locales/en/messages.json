@@ -321,7 +321,7 @@
     "message" : "Add...."
   },
   "locale_Datalist_Description" : {
-    "message" : "You can use datalists to create handouts or to prepare for sessions with consultants, or to share with collaborators."
+    "message" : "You can use datalists to create handouts or to prepare for elicitation sessions with consultants, or to share with collaborators."
   },
   "locale_Add_Tag" : {
     "message" : "New Tag..."
@@ -455,10 +455,11 @@
   "locale_More" : {
     "message" : "More"
   },
-   "locale_Elicitation_Session" : {
+  "locale_Elicitation_Session" : {
     "message" : "Elicitation Session"
   },
-     "locale_Searchable" : {
+  "locale_Searchable" : {
     "message" : "Searchable:"
   }
+ 
 }
