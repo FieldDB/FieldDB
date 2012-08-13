@@ -50,11 +50,11 @@ define([
         checked = "";
       }      
       Utils.debug("Updated shouldBeEncryptedExport to " + checked);
-      if(checked = ""){
+      if(checked !== "checked"){
         alert("Warning! You are about to export decrypted data.");
-        console.log("Warning! You are about to export decrypted data.");
+       // console.log("Warning! You are about to export decrypted data.");
       }
-      this.model.set("shouldBeEncrypted", checked);
+    //  this.model.set("shouldBeEncrypted", checked);
      
     },
   });
