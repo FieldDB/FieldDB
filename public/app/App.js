@@ -293,7 +293,7 @@ define([
                             });
                           },
                           error : function(e) {
-                            alert("There was an error fetching the session. Loading defaults..."+e);
+                            alert("There was an error fetching the session. Loading defaults..."+JSON.stringify(e));
                             s.set(
                                 "sessionFields", window.app.get("corpus").get("sessionFields").clone()
                             );
@@ -306,7 +306,7 @@ define([
                     });
                   },
                   error : function(e) {
-                    alert("There was an error fetching the data list. Loading defaults..."+e);
+                    alert("There was an error fetching the data list. Loading defaults..."+JSON.stringify(e));
                   }
                 }); //end fetch data list
               });//end data list change corpus
@@ -316,7 +316,7 @@ define([
             });//end setAsCurrentCorpus
           },
           error : function(e) {
-            alert("There was an error fetching corpus. Loading defaults..."+e);
+            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
           }
         }); //end corpus fetch
       }); //end corpus change corpus
