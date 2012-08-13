@@ -37,16 +37,12 @@ define([
       Utils.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
+      
       //localization
-      //$(".locale_LaTeX_Code").html(chrome.i18n.getMessage("locale_LaTeX_Code"));
-      //$(".locale_Unicode_Instructions").html(chrome.i18n.getMessage("locale_Unicode_Instructions"));
-      //$(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
-      //$(".locale_Remove_Unicode").html(chrome.i18n.getMessage("locale_Remove_Unicode"));
-      //$(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Paste_Type_Unicode_Symbol_Placeholder"));
-      //$(".locale_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("locale_TIPA_shortcut"));
-
-
-
+      $(this.el).find(".locale_LaTeX_Code").html(chrome.i18n.getMessage("locale_LaTeX_Code"));
+      $(this.el).find(".locale_Unicode_Instructions").html(chrome.i18n.getMessage("locale_Unicode_Instructions"));
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(this.el).find(".locale_Remove_Unicode").html(chrome.i18n.getMessage("locale_Remove_Unicode"));
       
       return this;
     },
