@@ -272,8 +272,8 @@ define([
                           dl.setAsCurrentDataList( function(){
                             window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
 //                              window.app.router.showDashboard();
-//                              window.appView.renderReadonlyDataListViews("fullscreen");
-                              window.appView.renderReadonlyDashboardViews();
+                              window.appView.renderReadonlyDataListViews("fullscreen");
+//                              window.appView.renderReadonlyDashboardViews();
                             });
                           });
                         });
@@ -303,7 +303,7 @@ define([
                   app.get("currentDataList").saveAndInterConnectInApp(function(){
                     dl.setAsCurrentDataList( function(){
                       window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                        window.appView.renderReadonlyDashboardViews();
+                        window.appView.renderReadonlyDataListViews("fullscreen");
                       });
                     });
                   });
@@ -316,7 +316,9 @@ define([
             
           }
         }
-        
+      }
+      if($("#datalist-fullscreen").html() == ""){
+        window.appView.renderReadonlyDataListViews("fullscreen");
       }
       this.hideEverything();
       $("#data-list-fullscreen").show();      
