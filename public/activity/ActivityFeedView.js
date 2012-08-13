@@ -64,15 +64,21 @@ define([
        
         this.activitiesView.el = this.$('.activities-updating-collection');
         this.activitiesView.render();
+        
+        //localization for non-minimized view
+        $(this.el).find(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
+
       } else if (this.format == "minimized") {
         this.setElement($("#activity-feed"));
         $(this.el).html(this.minimizedTemplate(this.model.toJSON()));
 
+        //localization for minimized view
+        $(this.el).find(".locale_Show_Activities").attr("title", chrome.i18n.getMessage("locale_Show_Activities"));
+
       }
-      //localization
-      //$(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed"));
-      //$(".locale_Show_Activities").attr("title", chrome.i18n.getMessage("locale_Show_Activities"));
-      //$(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
+      
+      //localization for all views
+      $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed"));
 
 
       return this;
