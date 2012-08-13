@@ -260,7 +260,7 @@ define( [
           
           //localization of data list menu
           $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
-          $(this.el).find(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy_checked"));
+          $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
           $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
           $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
           if(jsonToRender.decryptedMode){

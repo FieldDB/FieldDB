@@ -392,11 +392,11 @@
   "locale_Play_Audio_checked" : {
     "message" : "Play audio of checked items"
   },
-  "locale_Copy" : {
-    "message" : "Copy to clipboard"
+  "locale_Plain_Text_Export_Tooltip" : {
+    "message" : "Export as plain text/Copy to clipboard"
   },
-  "locale_Copy_checked" : {
-    "message" : "Copy checked items to clipboard"
+  "locale_Plain_Text_Export_Tooltip_checked" : {
+    "message" : "Export as plain text/Copy checked items to clipboard"
   },
   "locale_Duplicate" : {
     "message" : "Duplicate datum to create a minimal pair"
@@ -462,10 +462,10 @@
     "message" : "Insert a new datum on top of the dashboard center"
   },
   "locale_LaTeX" : {
-    "message" : "Export datum to LaTeX"
+    "message" : "Export datum as LaTeX"
   },
   "locale_CSV_Tooltip" : {
-    "message" : "Export datum to CSV"
+    "message" : "Export datum as CSV"
   },
   "locale_of" : {
     "message" : "of"
