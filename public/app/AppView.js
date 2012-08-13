@@ -431,8 +431,10 @@ define([
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
         
-        this.importView.render();
-        this.exportView.render();
+//        this.importView.render(); //render at last minute using router
+//        this.exportView.render();//render at last minute using router
+        
+        
 //        // Display the Corpus Views
 //        this.corpusNewModalView.render();
 //        this.currentCorpusEditView.render();

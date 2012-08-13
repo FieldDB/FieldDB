@@ -349,7 +349,7 @@ define([
       var files = this.get("files");
       Utils.debug(files);
       for ( var i = 0, f; f = files[i]; i++) {
-        filedetails.push( escape(f.name), f.type
+        filedetails.push( escape(f.name), ' ', f.type
             || ' n/a', ' - ', f.size, ' bytes, last modified: ',
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString()
                 : ' n/a');
@@ -441,6 +441,7 @@ define([
       }
       var mostLikelyImport = _.max(importType, function(obj) { return obj.confidence; });
       mostLikelyImport.importFunction(self.get("rawText"), self, null); //no callback, TODO strange loss of reference in importview
+      self.set("status","");
     },
     readBlob : function (file, callback, opt_startByte, opt_stopByte) {
       //console.log(this);

@@ -215,7 +215,7 @@ define([
       numVisibleDatum : 2, //Use two as default so users can see minimal pairs
       transparentDashboard: false,
       alwaysRandomizeSkin : true,
-      numberOfItemsInPaginatedViews : 12
+      numberOfItemsInPaginatedViews : 10
     },
     
     // Internal models: used by the parse function

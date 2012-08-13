@@ -27,8 +27,8 @@ define([
      * @class Session Edit View is where the user provides new session details.
      *
      ** @property {String} format Must be set when the view is
-     * initialized. Valid values are "leftSide", "fullscreen", "modal", and 
-     * "centerWell" 
+     * initialized. Valid values are "leftSide", "fullscreen", "modal",  
+     * "centerWell" , "import"
      * 
      * @extends Backbone.View
      * @constructs
@@ -75,8 +75,9 @@ define([
       })[0].set("mask", this.$el.find(".session-consultant-input")
           .val());
       
-      window.appView.addUnsavedDoc(this.model.id);
-
+      if(this.format != "import"){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
     
     updateElicitedDate : function(){
@@ -85,8 +86,9 @@ define([
       })[0].set("mask", this.$el.find(".session-elicitation-date-input")
           .val());
       
-      window.appView.addUnsavedDoc(this.model.id);
-
+      if(this.format != "import"){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
     
     updateGoal : function(){
@@ -95,31 +97,23 @@ define([
       })[0].set("mask", this.$el.find(".session-goal-input")
           .val());
       
-      window.appView.addUnsavedDoc(this.model.id);
-
+      if(this.format != "import"){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
     
     
-    /**
-     * The Handlebars template rendered as the Summary.
-     */
+    
     templateSummary : Handlebars.templates.session_summary_edit_embedded,
     
-    /**
-     * The Handlebars template rendered as the Embedded.
-     */
     templateEmbedded: Handlebars.templates.session_edit_embedded,
 
-    /**
-     * The Handlebars template rendered as the Fullscreen.
-     */
     templateFullscreen : Handlebars.templates.session_edit_embedded,
     
-    /**
-     * The Handlebars template rendered as the Modal.
-     */
     templateModal : Handlebars.templates.session_edit_modal,
     
+    templateImport : Handlebars.templates.session_edit_import,
+
     /**
      * Renders the SessionEditView.
      */
@@ -154,6 +148,25 @@ define([
           //Localization for leftSide
           $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+          $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+          $(this.el).find(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+
+          
+        }if (this.format == "import") {
+          Utils.debug("SESSION EDIT  IMPORT render: " );
+
+          var jsonToRender = {
+            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
+          };
+          
+          this.setElement("#import-session");
+          $(this.el).html(this.templateImport(jsonToRender));
+          
+          //Localization for leftSide
           $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
           $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
           $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));

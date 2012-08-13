@@ -12,6 +12,7 @@ define( [
     "datum/DatumReadView",
     "datum/DatumTag",
     "datum/Session",
+    "datum/SessionEditView",
     "app/PaginatedUpdatingCollectionView",
     "libs/Utils"
 
@@ -29,6 +30,7 @@ define( [
     DatumReadView,
     DatumTag,
     Session,
+    SessionEditView,
     PaginatedUpdatingCollectionView
 
 ) {
@@ -147,20 +149,31 @@ define( [
               $("#import-data-list").find(".import-data-list-paginated-view") );
         }
       }
+      
+      if(this.model.get("session") != undefined){
+        if(this.sessionView){
+          this.sessionView.destroy_view();
+        }
+        this.sessionView = new SessionEditView({
+          model : this.model.get("session")
+        });
+        this.sessionView.format = "import";
+        this.sessionView.render();
+      }
+      
       if(this.model.get("asCSV") != undefined){
         this.showCSVTable();
         this.renderDatumFieldsLabels();
       }
       
       //localization
-      //$(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
-      //$(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
-//      //$(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
-      //$(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
-      //$(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
-      //$(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
-      //$(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
-      
+      $(this.el).find(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
+      $(this.el).find(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
+      $(this.el).find(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
+      $(this.el).find(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
+      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
+      $(this.el).find(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
+      $(this.el).find(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
       
       return this;
     },
@@ -168,9 +181,9 @@ define( [
       if(this.model.get("datumFields") == undefined){
         return;
       }
-      var colors= ["label-info","label-inverse","label-success","label-warning","label-danger"];
+      var colors= ["label-info","label-inverse","label-success","label-warning","label-important"];
       var colorindex = 0;
-      $("#import-datum-field-labels").html("Drag the datum field to the top of the appropriate column: ");
+      $("#import-datum-field-labels").html("");//chrome.i18n.getMessage("locale_Drag_Fields_Instructions"));
       for(i in this.model.get("datumFields").models){
         var x = document.createElement("span");
         x.classList.add("label");
@@ -295,8 +308,8 @@ define( [
       var filename = " typing/copy paste into text area";
       var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
       try {
-        filename = this.model.files[0].name;
-        descript = "This is the data list which results from the import of these files." + this.model.get("fileDetails");
+        filename = this.model.get("files")[0].name;
+        descript = "This is the data list which results from the import of these files. " + this.model.get("fileDetails");
       }catch(e){
         //do nothing
       }
@@ -313,6 +326,17 @@ define( [
       this.importPaginatedDataListDatumsView.renderInElement(
         $("#import-data-list").find(".import-data-list-paginated-view") );
       
+      
+      if(this.model.get("session") != undefined){
+        if(this.sessionView){
+          this.sessionView.destroy_view();
+        }
+        this.sessionView = new SessionEditView({
+          model : this.model.get("session")
+        });
+        this.sessionView.format = "import";
+        this.sessionView.render();
+      }
       /* end views set up */
       
       this.model.set("datumArray", []);
@@ -405,13 +429,16 @@ define( [
         d.set("datumFields", fields);
         var states = window.app.get("corpus").get("datumStates").clone();
         d.set("datumStates", states);
-        
+        d.set("session", this.model.get("session"));
         //these are temp datums, dont save them until the user saves the data list
         this.importPaginatedDataListDatumsView.collection.add(d);
 //        this.dataListView.model.get("datumIds").push(d.id);
 
-        this.model.get("datumArray").unshift(d);
+        this.model.get("datumArray").push(d);
       }
+      
+      this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
+      
       $(".approve-save").removeAttr("disabled");
       $(".approve-save").removeClass("disabled");
     },
@@ -488,94 +515,94 @@ define( [
      */
     saveDataList : function(){
       var self = this;
-      this.createNewSession( function(){
-        window.hub.unsubscribe("savedDatumToPouch", null, self);
-        window.hub.unsubscribe("saveDatumFailedToPouch", null, self);
-        
-        // after we have a session
-        $(".approve-save").addClass("disabled");
-        // add the datums to the progress bar, so that we can augment for each
-        // that is saved.
-        $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
-
-        var dl = new DataList({
-          "corpusname" : window.app.get("corpus").get("corpusname"),
-          "title" : self.dataListView.model.get("title"),
-          "description": self.dataListView.model.get("description")
-        });
-        dl.saveAndInterConnectInApp(function(){
-          dl.setAsCurrentDataList(function(){
-            
-            // Update the progress bar, one more thing is done.
-            $(".import-progress").val($(".import-progress").val()+1);
-            
-         // Add the "imported" activity to the ActivityFeed
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                new Activity({
-                  verb : "attempted to import",
-                  directobject : self.model.get("datumArray").length + " data entries",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : "via Offline App",
-                  user: window.app.get("authentication").get("userPublic")
-                }));
-
-            window.hub.subscribe("savedDatumToPouch", function(arg){
-              this.savedindex[arg.d] = true;
-              this.savedcount++;
-//            window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
-              if( arg.d <= 0 ){
-                /*
-                 * If we are at the final index in the import's datum
-                 */
-                this.importCompleted();
-              }else{
-                /*
-                 * Save another datum when the previous succeeds
-                 */
-                var next = parseInt(arg.d) - 1;
-                this.saveADatumAndLoop(next);
-              }
-            }, self);
-
-            window.hub.subscribe("saveDatumFailedToPouch",function(arg){
-              this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
-              this.savefailedcount++;
-              window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
-
-              if( arg.d <= 0 ){
-                /*
-                 * If we are at the final index in the import's datum
-                 */
-                this.importCompleted();
-              }else{
-                /*
-                 * Save another datum when the previous fails
-                 */
-                var next = parseInt(arg.d) - 1;
-                this.saveADatumAndLoop(next);
-              }
-
-            }, self);
-            
-            /*
-             * Begin the datum saving loop with the last datum 
-             */
-            self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
-            
-            self.model.get("session").saveAndInterConnectInApp(function(){
-              //one more thing done.
-              $(".import-progress").val($(".import-progress").val()+1);
-            }, function(){
-              alert("Bug: Import session save failed. ");
-            });
-            
-            /* end successful save of datalist and session */
-            
-          },function(){
-            alert("Bug: couldnt set the import data list as the current data list.");
+      self.createNewSession( function(){
+        self.model.get("session").saveAndInterConnectInApp(function(){
+          $(".import-progress").val($(".import-progress").val()+1);
+          
+          window.hub.unsubscribe("savedDatumToPouch", null, self);
+          window.hub.unsubscribe("saveDatumFailedToPouch", null, self);
+          
+          // after we have a session
+          $(".approve-save").addClass("disabled");
+          // add the datums to the progress bar, so that we can augment for each
+          // that is saved.
+          $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
+          
+          var dl = new DataList({
+            "corpusname" : window.app.get("corpus").get("corpusname"),
+            "title" : self.dataListView.model.get("title"),
+            "description": self.dataListView.model.get("description")
           });
+          dl.saveAndInterConnectInApp(function(){
+            dl.setAsCurrentDataList(function(){
+              
+              // Update the progress bar, one more thing is done.
+              $(".import-progress").val($(".import-progress").val()+1);
+              
+              // Add the "imported" activity to the ActivityFeed
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                  new Activity({
+                    verb : "attempted to import",
+                    directobject : self.model.get("datumArray").length + " data entries",
+                    indirectobject : "in "+window.app.get("corpus").get("title"),
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
+              
+              window.hub.subscribe("savedDatumToPouch", function(arg){
+                this.savedindex[arg.d] = true;
+                this.savedcount++;
+//            window.appView.toastUser("Import succedded "+arg.d+" : "+arg.message,"alert-success","Saved!");
+                if( arg.d <= 0 ){
+                  /*
+                   * If we are at the final index in the import's datum
+                   */
+                  this.importCompleted();
+                }else{
+                  /*
+                   * Save another datum when the previous succeeds
+                   */
+                  var next = parseInt(arg.d) - 1;
+                  this.saveADatumAndLoop(next);
+                }
+              }, self);
+              
+              window.hub.subscribe("saveDatumFailedToPouch",function(arg){
+                this.savefailedindex[arg.d] = false; //this.model.get("datumArray")[arg.d];
+                this.savefailedcount++;
+                window.appView.toastUser("Import failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
+                
+                if( arg.d <= 0 ){
+                  /*
+                   * If we are at the final index in the import's datum
+                   */
+                  this.importCompleted();
+                }else{
+                  /*
+                   * Save another datum when the previous fails
+                   */
+                  var next = parseInt(arg.d) - 1;
+                  this.saveADatumAndLoop(next);
+                }
+                
+              }, self);
+              
+              /*
+               * Begin the datum saving loop with the last datum 
+               */
+              self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+                            
+            /* end successful save of datalist and session */
+            },function(){
+              alert("Bug: couldnt set the import data list as the current data list.");
+            });
+          /* Save datalist failure */
+          },function(){
+            alert("Bug: couldnt save the import datalist.");
+          });
+        /* Save session failure */
         },function(){
-          alert("Bug: couldnt save the import datalist.");
+          alert("Bug! save session failed in import");
         });
       });
     },
@@ -591,14 +618,21 @@ define( [
           "corpusname" : window.app.get("corpus").get("corpusname"),
         }));
         
+        var filemodified = JSON.stringify(new Date());
+        try {
+          filemodified = this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
+              : 'n/a';
+        }catch(e){
+          //do nothing
+        }
+        
         this.model.get("session").get("sessionFields").where({
           label : "goal"
         })[0].set("mask", "Goal from file import " + this.model.get("status"));
        
         this.model.get("session").get("sessionFields").where({
           label : "dateElicited"
-        })[0].set("mask", "Probably Prior to " + this.model.get("files")[0].lastModifiedDate ? this.model.get("files")[0].lastModifiedDate.toLocaleDateString()
-            : 'n/a');
+        })[0].set("mask", "Probably Prior to " + filemodified);
       }
       
       //DONT save now, save only when import is approved.

@@ -243,13 +243,16 @@
     "message" : "Import"
   },
   "locale_percent_completed" : {
-    "message" : "0% completed."
+    "message" : "% completed."
   },
   "locale_Import_Instructions" : {
-    "message" : " <ol> <li>Drag and drop a file (csv, txt, tabed, xml, text) to the area below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Drag/type the datum fields in the column headings which match. The columns will become fields in your database.</li> <li>Type in any other column headings that you want to keep in your imported data, the app will automatically create datum fields for these in your corpus.</li> <li>Click on the Attempt Import button.</li> <li>Review the data list to see if the import looks good.</li> <li>(Edit the table cells as needed, click Attempt Import and review data list as many times as you would like).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus, and a new data list will be created with this data.</li> </ol>"
+    "message" : " <ol> <li>Drag and drop a file (csv, txt, tabbed, xml, text, eaf, sf) to the area indicated below.</li> <li>(Edit/type in the text area to correct information as needed.)</li> <li>Associate your corpus's existing default data fields with the appropriate columns by either dragging the colored datum fields, or by typing in the column header input box .</li> <li>Type in any other column headings that you want to keep in your data, the app will automatically add these to the corpus' default datum fields. This means that you can search through them to locate your data. Each row in the table will be come a 'datum' in your corpus database.</li> <li>Click on the Attempt Import button at any time to see what your data will look like in a interlinear glossed data list.</li> <li>Review the interlinear glossed data list which appears on the left to see if the import looks good.</li> <li>(Continue to edit the table cells as needed, click Attempt Import and review data list as many times as you would like until the import looks correct).</li> <li>When satisfied with the data list, click Save and your data will be imported into your corpus. A new elicitation session will be created using the date modified of the file you imported (if you want, you can edit this session later to add a more accurate goal discussing why the file was originally created), a new data list will also be created which contains all these data since it is likely that you grouped this data together into a file for a reason in the first place. You can find the resulting new default datum fields, session, and data list in your Corpus Settings page.</li> </ol>"
+  },
+  "locale_Drag_Fields_Instructions" : {
+    "message" : "<p>Drag (or type) the colored datum fields to the column headings which match, type in any additional column headings which you would like to keep as datum fields. The columns will become default data fields in your corpus database, they will also become fields that you can search through to locate your data later on. Each row will be come a 'datum' in your corpus database.</p>"
   },
   "locale_Add_Extra_Columns" : {
-    "message" : " Add Extra Columns"
+    "message" : "Insert Extra Columns"
   },
   "locale_Attempt_Import" : {
     "message" : "Attempt Import"
@@ -324,7 +327,7 @@
     "message" : "Number of Datum to appear at a time:"
   },
   "locale_Help_Text_Placeholder" : {
-    "message" : "Put a help text here (optional) Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
+    "message" : "Put a help text or your team data entry conventions for this field here (optional)."
   },
   "locale_Add_Placeholder" : {
     "message" : "Add...."
@@ -339,7 +342,7 @@
     "message" : "Put some help text here (optional)"
   },
   "locale_Drag_and_Drop_Placeholder" : {
-    "message" : "Drag and drop files/text here!"
+    "message" : "Type or paste or drag and drop files/text here!"
   },
   "locale_Paste_Type_Unicode_Symbol_Placeholder" : {
     "message" : "Paste/type unicode symbol"

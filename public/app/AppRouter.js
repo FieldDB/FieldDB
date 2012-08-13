@@ -384,6 +384,9 @@ define([
     showImport : function() {
       Utils.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
+      if($("#import-fullscreen").html() == ""){
+        window.appView.importView.render();
+      }
       this.hideEverything();
       $('#import-fullscreen').show();
     },
@@ -391,6 +394,9 @@ define([
     showExport : function(corpusname) {
       Utils.debug("In showExport: " + corpusname);
       //DONT render here, that way the user can come and go to the import dashboard
+      if($("#export-modal").html() == ""){
+        window.appView.exportView.render();
+      }
       this.hideEverything();
       $("#dashboard-view").show();
       $('#export-modal').modal("show");
