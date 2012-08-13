@@ -225,8 +225,12 @@ define([
         view.saveScreen();
         this.model.pop();
       }
-      //bring the user to the top of the page where the prepended datum is.
-      window.scrollTo(0,0);
+      //bring the user to the top of the page where the prepended datum is, or show the dashboard if the datums arent showing.
+      if($("#datums-embedded").attr("style").indexOf("display: none;") > -1){
+        window.app.router.showDashboard();
+      }else{
+        window.scrollTo(0,0);
+      }
     }
   });
   

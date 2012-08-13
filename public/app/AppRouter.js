@@ -206,7 +206,7 @@ define([
                 Utils.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                    window.appView.renderReadonlySessionViews("centerWell");
+                    window.appView.renderReadonlySessionViews("fullscreen");
                   });
                 });
               },
@@ -217,7 +217,9 @@ define([
           });      
         }
       }
-      
+      if($("#session-fullscreen").html() == ""){
+        window.appView.renderReadonlySessionViews("fullscreen");
+      }
       this.hideEverything();
       $("#session-fullscreen").show();
     },

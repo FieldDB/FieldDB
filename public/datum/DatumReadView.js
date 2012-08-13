@@ -9,6 +9,7 @@ define([
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
     "datum/DatumTagReadView",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -22,6 +23,7 @@ define([
     DatumFieldReadView,
     DatumStateReadView,
     DatumTagReadView,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var DatumReadView = Backbone.View.extend(
@@ -68,6 +70,11 @@ define([
         childViewTagName     : "li",
         childViewFormat      : "datum"
       });
+      
+      this.sessionView = new SessionReadView({
+        model : this.model.get("session"),
+        });
+      this.sessionView.format = "link";
     },
 
     /**
@@ -162,6 +169,10 @@ define([
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
+        
+        // Display the SessionView
+        this.sessionView.el = this.$('.session-link'); 
+        this.sessionView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");

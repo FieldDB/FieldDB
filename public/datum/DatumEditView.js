@@ -12,6 +12,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "datum/DatumTagReadView",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
     "libs/Utils"
@@ -29,6 +30,7 @@ define([
     DatumTag,
     DatumTagEditView,
     DatumTagReadView,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var DatumEditView = Backbone.View.extend(
@@ -72,7 +74,13 @@ define([
         childViewFormat      : "datum"
       });
       
-      this.bind("change:audioVideo", this.playAudio, this);
+      this.sessionView = new SessionReadView({
+        model : this.model.get("session"),
+        });
+      this.sessionView.format = "link";
+      
+      this.model.bind("change:audioVideo", this.playAudio, this);
+      this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
     },
 
     /**
@@ -187,6 +195,10 @@ define([
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
+        
+        // Display the SessionView
+        this.sessionView.el = this.$('.session-link'); 
+        this.sessionView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
@@ -383,7 +395,16 @@ define([
     playAudio : function(){
       if(this.model.get("audioVideo")){
           this.$el.find(".datum-audio-player")[0].play();
+          this.needsSave = true;
       }
+    },
+    /*
+     * This function helps the user know that the app is saving his/her data often,
+     * it updates the time, without re-rendering the datum
+     */
+    updateLastModifiedUI : function(){
+      $(this.el).find(".last-modified").html(this.model.get("dateModified"));//("0 seconds ago");
+      $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
