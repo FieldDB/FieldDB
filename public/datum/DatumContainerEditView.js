@@ -225,6 +225,8 @@ define([
         view.saveScreen();
         this.model.pop();
       }
+      //bring the user to the top of the page where the prepended datum is.
+      window.scrollTo(0,0);
     }
   });
   

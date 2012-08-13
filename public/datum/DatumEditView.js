@@ -233,6 +233,7 @@ define([
     hideRareFields : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.rareFields = [];
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
@@ -250,6 +251,7 @@ define([
     showRareFields : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
