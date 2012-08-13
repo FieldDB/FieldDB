@@ -384,8 +384,11 @@
   "locale_Play_Audio" : {
     "message" : "Tocar audio"
   },
-  "locale_Copy" : {
-    "message" : "Copiar"
+  "locale_Plain_Text_Export_Tooltip" : {
+    "message" : "TODO translate Export as plain text/Copy to clipboard"
+  },
+  "locale_Plain_Text_Export_Tooltip_checked" : {
+    "message" : "TODO translate Export as plain text/Copy checked items to clipboard"
   },
   "locale_Duplicate" : {
     "message" : "Duplicar Dato por hacer un contraste minimál"
@@ -446,9 +449,6 @@
   },
   "locale_Public_or_Private" : {
     "message" : "Publico o Privado:"
-  },
-  "locale_Copy_checked" : {
-    "message" : "Copiar los seleccionados"
   },
   "locale_Play_Audio_checked" : {
     "message" : "Tocar audio de los seleccionados"

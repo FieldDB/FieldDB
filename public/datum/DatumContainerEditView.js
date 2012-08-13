@@ -89,7 +89,7 @@ define([
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
 
       }
-      //localization
+      //localization for all views
       $(this.el).find(".locale_Data_Entry_Area").html(chrome.i18n.getMessage("locale_Data_Entry_Area"));
       $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
     },
