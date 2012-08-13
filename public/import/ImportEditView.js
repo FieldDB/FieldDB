@@ -309,7 +309,7 @@ define( [
       var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
       try {
         filename = this.model.get("files")[0].name;
-        descript = "This is the data list which results from the import of these files. " + this.model.get("fileDetails");
+        descript = "This is the data list which results from the import of these file(s). " + this.model.get("fileDetails");
       }catch(e){
         //do nothing
       }
@@ -377,7 +377,7 @@ define( [
           $('td', $(this)).each(function(index, item) {
             datumObject[headers[index]] = $(item).html();
           });
-          array.push(datumObject);
+          array.unshift(datumObject);
         });
       }catch(e){
         //Import from the array instead of using jquery and html
@@ -388,7 +388,7 @@ define( [
           for( var c in headers){
             datumObject[headers[c]] = rows[r][c];
           }
-          array.push(datumObject);
+          array.unshift(datumObject);
         }
       }
       for (a in array) {
