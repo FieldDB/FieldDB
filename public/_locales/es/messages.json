@@ -450,7 +450,10 @@
   "locale_More" : {
     "message" : "Más"
   },
-    "locale_Elicitation_Session" : {
+  "locale_Elicitation_Session" : {
     "message" : "Sesión de Elicitación"
+  },
+  "locale_Searchable" : {
+    "message" : "Buscable:"
   }
 }

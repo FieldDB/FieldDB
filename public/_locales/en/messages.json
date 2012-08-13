@@ -457,5 +457,8 @@
   },
    "locale_Elicitation_Session" : {
     "message" : "Elicitation Session"
+  },
+     "locale_Searchable" : {
+    "message" : "Searchable:"
   }
 }
