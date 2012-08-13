@@ -78,7 +78,8 @@ define([
       },
       "click .icon-th-list" : "hideRareFields",
       "click .icon-list-alt" : "showRareFields",
-      
+      "click .add-comment-datum" : 'insertNewComment',
+
       
       /* Read Only Menu */
       "dblclick" : function(e) {
@@ -176,7 +177,7 @@ define([
       //localization
 //      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
 //      //$(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-//      //$(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+//      //$(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
 //      //$(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
 //      //$(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
 //      //$(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
@@ -216,7 +217,16 @@ define([
       $(this.el).find(".comments-section").show();
 
     },
-    
+    insertNewComment : function(e) {
+      if(e){
+        e.stopPropagation();
+      }
+      var m = new Comment({
+        "text" : this.$el.find(".comment-new-text").val(),
+      });
+      this.model.get("comments").add(m);
+      this.$el.find(".comment-new-text").val("");
+    },
     /**
      * Encrypts the datum if it is confidential
      * 

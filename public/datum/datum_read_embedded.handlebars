@@ -4,7 +4,7 @@
 <div class="datum_state">
   {{#each datumStates}}
   {{#if selected}}
-  <span class="badge badge-{{color}}">{{state}}</span>
+  <span class="label label-{{color}}"><i class = " icon-flag"></i>{{state}}</span>
   {{/if}}
   {{/each}}
 </div>
@@ -24,16 +24,12 @@
 </div>
 <div class="audio_video"></div>
 
-<!--Comments Section  -->
-<div class="comments-section">
-	<ul class="comments unstyled"></ul>
-	<div class="alert alert-info">
-		<i class="icons icon-comment"></i>
-		<textarea class="comment-new-text"></textarea>
-	</div>
-	<button class="btn btn-primary add-comment-edit" value="Add">
-		<span class="locale_Add"></span>
-	</button>
+<!-- Datum comments -->
+<ul class="comments unstyled"></ul>
+<div class="alert alert-info">
+  <textarea class="comment-new-text"></textarea>
+  <button class="btn btn-mini btn-primary add-comment-datum" value="Add">
+    <i class="icon-comment"></i>
+    <span class = "locale_Add"></span> 
+  </button>
 </div>
-
-
