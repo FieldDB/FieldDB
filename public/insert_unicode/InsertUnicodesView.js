@@ -77,25 +77,26 @@ define([
         $(this.el).find(".unicode-symbol").each(function(index, item) {
           this.addEventListener('dragstart', window.appView.insertUnicodesView.handleDragStart, false);
         });
+        
+        //localization for non-minimized view
+        $(this.el).find(".locale_Hide_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Hide_Unicode_Palette"));
+        $(this.el).find(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Paste_Type_Unicode_Symbol_Placeholder"));
+        $(this.el).find(".locale_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("locale_TIPA_shortcut"));
+        $(this.el).find(".locale_Add_new_symbol").attr("title", chrome.i18n.getMessage("locale_Add_new_symbol"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      
       } else if (this.format == "minimized") {
         // Display the minimized InsertUnicodesView
         this.setElement($("#insert-unicode"));
         $(this.el).html(this.minimizedTemplate({}));
+
+        //localization for minimized view
+        $(this.el).find(".locale_Show_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Show_Unicode_Palette"));
       }
-      //localization
-      //$(".locale_Unicode").html(chrome.i18n.getMessage("locale_Unicode"));
-      //$(".locale_Drag_and_Drop").html(chrome.i18n.getMessage("locale_Drag_and_Drop"));
-      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      //$(".locale_Show_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Show_Unicode_Palette"));
-      //$(".locale_Hide_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Hide_Unicode_Palette"));
-      //$(".locale_Add_new_symbol").attr("title", chrome.i18n.getMessage("locale_Add_new_symbol"));
-      //$(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Paste_Type_Unicode_Symbol_Placeholder"));
-      //$(".locale_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("locale_TIPA_shortcut"));
+      //localization for all views
+      $(this.el).find(".locale_Unicode").html(chrome.i18n.getMessage("locale_Unicode"));
+      $(this.el).find(".locale_Drag_and_Drop").html(chrome.i18n.getMessage("locale_Drag_and_Drop"));
 
-
-
-
-      
       return this;
     },
     
