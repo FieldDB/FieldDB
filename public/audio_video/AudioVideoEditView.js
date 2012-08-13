@@ -49,7 +49,7 @@ define([
         dropzone.setAttribute("preload","");
         dropzone.pause();
         dropzone.load();//suspends and restores all audio element
-        dropzone.play();
+//        dropzone.play(); //Dont play automatically
       }else{
         //TODO not working yet.
 //        audiofilespan = '<input type="file" id="files1" name="files1[]" multiple="">';

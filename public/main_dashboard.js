@@ -3,6 +3,7 @@ require.config({
   paths : {
     "text" : "libs/text",
     "jquery" : "libs/jquery",
+    "autosize" : "libs/jquery.autosize",
     "hotkeys" : "libs/jquery.hotkeys",
     "terminal" : "libs/terminal/terminal",
     "underscore" : "libs/underscore",
@@ -35,7 +36,13 @@ require.config({
     "jquery" : {
       exports : "$"
     },
-
+    
+    "autosize" :{
+      deps : [ "jquery" ],
+      exports : function($) {
+        return $;
+      }
+    },
     "bootstrap" :{
       deps : [ "jquery" ],
       exports : function($) {
@@ -116,6 +123,7 @@ require([
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
+    "autosize",
     "libs/Utils"
 ], function(
     App,
@@ -130,7 +138,8 @@ require([
     Handlebars,
     compiledTemplates,
     Backbone,
-    forcingpouchtoloadonbackboneearly
+    forcingpouchtoloadonbackboneearly,
+    forcingautosizetobeavailible
 ) {
   /*
    * Helper functions

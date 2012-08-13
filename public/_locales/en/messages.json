@@ -168,7 +168,7 @@
     "message" : "Teal"
   },
   "locale_Black" : {
-    "message" : "locale_Black"
+    "message" : "Black"
   },
   "locale_Default" : {
     "message" : "Default"
@@ -193,6 +193,9 @@
   },
   "locale_Previous_Datum" : {
     "message" : "Previous Datum"
+  },
+  "locale_Data_Entry_Area" : {
+    "message" : "Data Entry Area <small>(1-5 datum)</small>"
   },
   "locale_Search" : {
     "message" : "Type your search query, or push enter to see all data"
@@ -380,6 +383,9 @@
   "locale_Show_corpus_settings" : {
     "message" : "Show Corpus Settings"
   },
+  "locale_Drag_and_Drop_Audio_Tooltip" : {
+    "message" : "Drag and drop audio over the audio player to attach an audio file. You can also drag and drop a YouTube video URL to attach a YouTube video instead."
+  },
   "locale_Play_Audio" : {
     "message" : "Play audio"
   },
@@ -408,10 +414,10 @@
     "message" : "Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you just want to unmask it so you can edit edit it, click on the eye instead."
   },
   "locale_Show_confidential_items_Tooltip" : {
-    "message" : "Unmask confidential/encrypted items so that they can be edited and read for the next 10 minutes."
+    "message" : "Unmask confidential/encrypted data so that it can be edited and read for the next 10 minutes."
   },
   "locale_Hide_confidential_items_Tooltip" : {
-    "message" : "Return to masked view of confidential/encrypted datum"
+    "message" : "Return to masked view of confidential/encrypted data"
   },
   "locale_Edit_Datalist" : {
     "message" : "Edit Data List"
@@ -432,10 +438,10 @@
     "message" : "Edit Datum"
   },
   "locale_See_Fields" : {
-    "message" : "See more/less fields"
+    "message" : "Hide/Show infrequent fields"
   },
-  "locale_Add_Tags" : {
-    "message" : "Add Tags"
+  "locale_Add_Tags_Tooltip" : {
+    "message" : "Add a tag to this datum. Tags can be used to categorize datum, count how many datum of each tag you have and search datum."
   },
   "locale_Edit_Session" : {
     "message" : "Edit Session"

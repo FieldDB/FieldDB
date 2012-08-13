@@ -307,3 +307,28 @@ line.link {
 	font-size: 2em;
 	color: #fff;
 }
+
+.datum_tag{
+	padding: 1px 9px 2px !important;
+  -webkit-border-radius: 9px !important;
+	-moz-border-radius: 9px !important;
+	border-radius: 9px !important;
+	border-color: #3A87AD !important;
+	font-size: .85em !important;
+	font-weight: bold !important;
+	line-height: 1em !important;
+	color: white !important;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+	white-space: nowrap !important;
+	vertical-align: baseline !important;
+	background-color: #3A87AD !important;
+	text-align: center;
+}
+.border-left{
+	border-left: 1px solid #999;
+	padding-left: 5px !important;
+	margin-left: 10px !important;
+}
+.no-margin-left{
+	margin-left: 0px !important;
+}

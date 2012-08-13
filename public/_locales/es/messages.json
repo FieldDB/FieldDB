@@ -198,6 +198,9 @@
   "locale_Previous_Datum" : {
     "message" : "Último Dato"
   },
+  "locale_Data_Entry_Area" : {
+    "message" : "TODO translate Data Entry Area <small>(1-5 datum)</small>"
+  },
   "locale_Search" : {
     "message" : "Búzqueda"
   },
@@ -375,6 +378,9 @@
   "locale_Show_corpus_settings" : {
     "message" : "Mostrar Configuración de Corpus"
   },
+  "locale_Drag_and_Drop_Audio_Tooltip" : {
+    "message" : "TODO translate Drag and drop audio over the audio player to attach an audio file. You can also drag and drop a YouTube video URL to attach a YouTube video instead."
+  },
   "locale_Play_Audio" : {
     "message" : "Tocar audio"
   },
@@ -421,9 +427,9 @@
     "message" : "Editar Datos"
   },
   "locale_See_Fields" : {
-    "message" : "más o menos detailles"
+    "message" : "TODO translate Hide/Show infrequent fields"
   },
-  "locale_Add_Tags" : {
+  "locale_Add_Tags_Tooltip" : {
     "message" : "Añadir etiquetas"
   },
   "locale_Edit_Session" : {

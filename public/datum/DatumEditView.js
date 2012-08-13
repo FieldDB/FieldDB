@@ -11,6 +11,7 @@ define([
     "datum/DatumFieldEditView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
+    "datum/DatumTagReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
     "libs/Utils"
@@ -27,6 +28,7 @@ define([
     DatumFieldEditView,
     DatumTag,
     DatumTagEditView,
+    DatumTagReadView,
     UpdatingCollectionView
 ) {
   var DatumEditView = Backbone.View.extend(
@@ -57,7 +59,7 @@ define([
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
-        childViewConstructor : DatumTagEditView,
+        childViewConstructor : DatumTagReadView,
         childViewTagName     : "li",
       });
 
@@ -82,7 +84,12 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      
+      /* Prevent clicking on the help conventions from reloading the page to # */
+      "click .help-conventions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+      },
       /* Menu */
       "click .LaTeX" : function(){
         this.model.laTeXiT(true);
@@ -136,7 +143,7 @@ define([
         }
       },
       "change .datum_state_select" : "updateDatumStates",
-      "click .add-comment-datum-edit" : 'insertNewComment',
+      "click .add-comment-datum" : 'insertNewComment',
       
       "change" : "updatePouch",//TODO this shouldnt be happening?
       
@@ -158,6 +165,12 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+      try{
+        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
+      }catch(e){
+        Utils.debug("There was a problem fishing out which datum state was selected.");
+      }
       
       if (this.format == "well") {
         // Display the DatumEditView
@@ -188,24 +201,30 @@ define([
             });
           });
           self.hideRareFields();
-        }, 1000);
+        }, 500);
             
       }
       //localization
-      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-//      //$(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-      //$(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-//      //$(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      //$(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      //$(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-      //$(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      //$(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
-      //$(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-//      //$(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
-      //$(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
+      $(this.el).find(".locale_See_Fields").attr("title", chrome.i18n.getMessage("locale_See_Fields"));
+//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tags_Tooltip"));
+      $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
+      $(this.el).find(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      if(jsonToRender.confidential){
+        $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+      }else{
+        $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      }
+      if(jsonToRender.decryptedMode){
+        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+      }else{
+        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+      } 
+      $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
+      $(this.el).find(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
 
-      //$(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
-
+      $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", chrome.i18n.getMessage("locale_Drag_and_Drop_Audio_Tooltip"));
       return this;
     },
     
@@ -325,6 +344,12 @@ define([
       this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
       this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       
+      //update the view of the datum state to the new color and text without rendering the entire datum
+      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
+      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
+      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
+      $(this.el).find(".datum-state-value").html(selectedValue);
+
       this.needsSave = true;
     },
     
@@ -369,8 +394,13 @@ define([
         if (this.$el.find(".morphemes .datum_field_input").val() == "") {
           // If the morphemes line is empty, make it a copy of the utterance
           this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
-
           this.needsSave = true;
+          
+//          //autosize the morphemes field
+//          var datumself = this;
+//          window.setTimeout(function(){
+//            $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//          },500);
         }
         // If the guessed morphemes is different than the unparsed utterance 
         if (morphemesLine != utteranceLine && morphemesLine != "") {
@@ -380,10 +410,16 @@ define([
           if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
             // Replace the morphemes line with the guessed morphemes
             this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+            this.needsSave = true;
             //redo the gloss guessing
             this.guessGlosses(morphemesLine);
+            
+//            //autosize the morphemes field
+//            var datumself = this;
+//            window.setTimeout(function(){
+//              $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//            },500);
 
-            this.needsSave = true;
           }
         }
       }
@@ -410,8 +446,12 @@ define([
           if (confirm("Would you like to use this gloss:\n" + glossLine)) {
             // Replace the gloss line with the guessed gloss
             this.$el.find(".gloss .datum_field_input").val(glossLine);
-            
             this.needsSave = true;
+            //autosize the gloss field
+//            var datumself = this;
+//            window.setTimeout(function(){
+//              $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//            },500);
           }
         }
       }
