@@ -270,9 +270,9 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     /**
      * For paging, the number of items per page.
      */
-    perPage : 12,
+    perPage : 10,
     currentVisibleStart : 0,
-    currentVisibleEnd: 11,
+    currentVisibleEnd: 9,
     /**
      * Based on the number of items per page and the current page, calculate the current
      * pagination info.
