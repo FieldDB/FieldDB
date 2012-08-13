@@ -260,6 +260,7 @@ define([
           });
         }else{
           window.appView.currentSessionReadView.render();
+          window.app.router.showDashboard();
         }
       });
     },
