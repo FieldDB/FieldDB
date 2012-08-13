@@ -20,6 +20,10 @@ define([
     },
 
     model : Export,
+    
+    events : {
+      "click .shouldBeEncryptedExport" : "updateEncryptedExport"     
+    },
 
     classname : "export",
 
@@ -32,12 +36,27 @@ define([
       
       //localization
       $(".locale_Export").html(chrome.i18n.getMessage("locale_Export"));
-      $(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+      $(".locale_Close").html(chrome.i18n.getMessage("locale_Close")); 
+      $(".locale_Decrypt").html(chrome.i18n.getMessage("locale_Decrypt"));
 
-
-          
+      
       return this;
-    }
+    },
+    updateEncryptedExport : function() {
+      var checked = this.$el.children(".shouldBeEncryptedExport").is(':checked');
+      if (checked ) {
+        checked = "checked";
+      } else {
+        checked = "";
+      }      
+      Utils.debug("Updated shouldBeEncryptedExport to " + checked);
+      if(checked = ""){
+        alert("Warning! You are about to export decrypted data.");
+        console.log("Warning! You are about to export decrypted data.");
+      }
+      this.model.set("shouldBeEncrypted", checked);
+     
+    },
   });
   
   return ExportBatchView;
