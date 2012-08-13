@@ -275,6 +275,7 @@ define( [
     },
     convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
+      this.model.set("datumArray", []);
 
       /* clear out the data list views and datum views
        * 
@@ -377,7 +378,7 @@ define( [
           $('td', $(this)).each(function(index, item) {
             datumObject[headers[index]] = $(item).html();
           });
-          array.unshift(datumObject);
+          array.push(datumObject);
         });
       }catch(e){
         //Import from the array instead of using jquery and html
@@ -388,7 +389,7 @@ define( [
           for( var c in headers){
             datumObject[headers[c]] = rows[r][c];
           }
-          array.unshift(datumObject);
+          array.push(datumObject);
         }
       }
       for (a in array) {
@@ -432,7 +433,7 @@ define( [
         d.set("session", this.model.get("session"));
         //these are temp datums, dont save them until the user saves the data list
         this.importPaginatedDataListDatumsView.collection.add(d);
-//        this.dataListView.model.get("datumIds").push(d.id);
+//        this.dataListView.model.get("datumIds").push(d.id); the datum has no id, cannot put in datumIds
 
         this.model.get("datumArray").push(d);
       }
@@ -465,8 +466,9 @@ define( [
         // Add Datum to the new datalist and render it this should work
         // because the datum is saved in the pouch and can be fetched, 
         // this will also not be the default data list because has been replaced by the data list for this import
-        window.appView.currentPaginatedDataListDatumsView.collection.add(thatdatum);
-        window.app.get("currentDataList").get("datumIds").push(thatdatum.id);
+        //TODO This is still necessary, we cannot put the ids direclty into he datalist's model when it is created, they have no id.
+//        window.appView.currentPaginatedDataListDatumsView.collection.unshift(thatdatum);
+        window.appView.importView.dataListView.model.get("datumIds").unshift(thatdatum.id);
 
       },function(){
         //The e error should be from the error callback
@@ -496,9 +498,16 @@ define( [
       window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
       
-      // Render the first page of the new data list
-      window.appView.currentReadDataListView.format = "leftSide";
-      window.appView.currentReadDataListView.render();
+      // Set new data list as current one, and Render the first page of the new data list
+      window.appView.importView.dataListView.model.saveAndInterConnectInApp(function(){
+        window.appView.importView.dataListView.model.setAsCurrentDataList(function(){
+          window.appView.toastUser("Sucessfully connected all views up to imported data list. ","alert-success","Connected!");
+          window.appView.renderEditableDataListViews("leftSide");
+          window.appView.renderReadonlyDataListViews("leftSide");
+        });
+      },function(){
+        alert("bug: failure to save import's datalist");
+      });
 //      window.appView.cur?`rentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
 //      window.appView.renderReadonlyDataListViews();
 //    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
@@ -507,7 +516,7 @@ define( [
       $(".import-progress").val( $(".import-progress").attr("max") );
       $(".approve-save").html("Finished");
       
-      // Go back to the dashboard while saving datum in the background
+      // Go back to the dashboard 
       window.location.replace("#");
     },
     /**
@@ -528,13 +537,15 @@ define( [
           // that is saved.
           $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
           
-          var dl = new DataList({
-            "corpusname" : window.app.get("corpus").get("corpusname"),
-            "title" : self.dataListView.model.get("title"),
-            "description": self.dataListView.model.get("description")
-          });
-          dl.saveAndInterConnectInApp(function(){
-            dl.setAsCurrentDataList(function(){
+//          var dl = new DataList({
+//            "corpusname" : window.app.get("corpus").get("corpusname"),
+//            "title" : self.dataListView.model.get("title"),
+//            "description": self.dataListView.model.get("description")
+//          });
+//          window.resultDataList = dl;
+          //empty out datumids
+          window.appView.importView.dataListView.model.set("datumIds", []);
+          self.dataListView.model.saveAndInterConnectInApp(function(){
               
               // Update the progress bar, one more thing is done.
               $(".import-progress").val($(".import-progress").val()+1);
@@ -593,9 +604,7 @@ define( [
               self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
                             
             /* end successful save of datalist and session */
-            },function(){
-              alert("Bug: couldnt set the import data list as the current data list.");
-            });
+            
           /* Save datalist failure */
           },function(){
             alert("Bug: couldnt save the import datalist.");
