@@ -35,11 +35,12 @@ define([
     },
     
     defaults : {
-      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
-      verb : "added",
-      directobject : "an entry",
-      indirectobject : "with Consultant-SJ",
-      context : "via Android/ Offline Chrome App" ,
+//      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
+//      verb : "added",
+//      directobject : "an entry",
+//      indirectobject : "with Consultant-SJ",
+//      context : "via Android/ Offline Chrome App" ,
+//      link: "https:/ifield.fieldlinguist.com"
 //      timestamp: timestamp
     },
     
