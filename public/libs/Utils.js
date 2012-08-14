@@ -9,7 +9,7 @@
  */
 var Utils = Utils || {};
 
-Utils.debugMode = false;
+Utils.debugMode = true;
 
 
 //Utils.couchUrl = "https://ilanguage.iriscouch.com/default";
@@ -29,13 +29,15 @@ Utils.pouchUrl = "idb://db";
 Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
 /**
  * The address of the TouchDB-Android database on the Android.
+ * @Deprecated now using pouchUrl for all
  */
-Utils.activityFeedTouchUrl = "http://localhost:8888/activity_feed_db";
+//Utils.activityFeedTouchUrl = "http://localhost:8888/activity_feed_db";
 
 /**
  * The address of the PouchDB database on the browser.
+ * @Deprecated now using pouchUrl for all
  */
-Utils.activityFeedPouchUrl = "idb://activity_feed_db";
+//Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 
 /**
  * The url of the authentication server.

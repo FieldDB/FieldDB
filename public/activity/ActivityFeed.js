@@ -37,7 +37,7 @@ define([
       activities: Activities  
     },
     saveAndInterConnectInApp : function(callback){
-      
+      alert("Bug: saveAndInterConnectInApp is not a valid function on ActivityFeed. although could use it to transfer activiites...");
       if(typeof callback == "function"){
         callback();
       }
@@ -66,7 +66,8 @@ define([
       }
       //TODO test this
       if(couchConnection.pouchname.indexOf("activity_feed") == -1){
-        alert("this is not a well formed activity feed couch connection");
+        alert("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
+        Utils.debug("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
@@ -104,7 +105,7 @@ define([
       }
       //if the couchConnection is still not set, then try to set it using the corpus's connection and adding activity feed to it.
       if(!couchConnection){
-        couchConnection = window.app.get("corpus").get("couchConnection");
+        couchConnection = JSON.parse(JSON.stringify(window.app.get("corpus").get("couchConnection")));
         couchConnection.pouchname =  couchConnection.pouchname+"-activity_feed";
       }
       
