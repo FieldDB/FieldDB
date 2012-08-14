@@ -176,7 +176,7 @@ define([
         this.permissionsView.render();        
         
         try{
-          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("corpusname"));
+          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
         }catch(e){
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
@@ -380,7 +380,7 @@ define([
       window.app.get("currentSession").saveAndInterConnectInApp(function(){
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
         window.appView.sessionNewModalView.model = new Session({
-          corpusname : window.app.get("corpus").get("corpusname"),
+          pouchname : window.app.get("corpus").get("pouchname"),
           sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.set("comments", new Comments());
@@ -410,8 +410,8 @@ define([
       attributes.title = window.app.get("corpus").get("title")+ " copy";
       attributes.titleAsUrl = window.app.get("corpus").get("titleAsUrl")+"Copy";
       attributes.description = "Copy of: "+window.app.get("corpus").get("description");
-      attributes.corpusname = window.app.get("corpus").get("corpusname")+"copy";
-      attributes.couchConnection.corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      attributes.pouchname = window.app.get("corpus").get("pouchname")+"copy";
+      attributes.couchConnection.pouchname = window.app.get("corpus").get("pouchname")+"copy";
       attributes.dataLists = new DataLists();
       attributes.sessions = new Sessions();
       attributes.comments = new Comments();

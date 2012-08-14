@@ -152,15 +152,15 @@ define([
       }
       try{
         //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
-        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").get("corpusname").indexOf(this.model.get("corpus").get("couchConnection").get("corpusname") == -1)){
+        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").get("pouchname").indexOf(this.model.get("corpus").get("couchConnection").get("pouchname") == -1)){
           this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-          this.model.get("currentCorpusTeamActivityFeed").changeCorpus(this.model.get("corpus").get("couchConnection"));
+          this.model.get("currentCorpusTeamActivityFeed").changePouch(this.model.get("corpus").get("couchConnection"));
         }
       }catch(e){
         alert("there was a problem setting up the activity feed to this corpus' team's activities");
         Utils.debug("there was a problem setting up the activity feed to this corpus' team's activities",e);
         this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-        this.model.get("currentCorpusTeamActivityFeed").changeCorpus(this.model.get("corpus").get("couchConnection"));
+        this.model.get("currentCorpusTeamActivityFeed").changePouch(this.model.get("corpus").get("couchConnection"));
       }
       if(this.activityFeedCorpusTeamView){
 //        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
@@ -245,7 +245,7 @@ define([
         Utils.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
-            corpusname : window.app.get("corpus").get("corpusname"),
+            pouchname : window.app.get("corpus").get("pouchname"),
             sessionFields : window.app.get("currentSession").get("sessionFields").clone()
           })
         });
@@ -292,7 +292,7 @@ define([
         this.model.set("currentUserActivityFeed", new ActivityFeed({
           "activities" : window.app.get("authentication").get("userPrivate").get("activities"),
         }));
-        this.model.get("currentUserActivityFeed").changeCorpus(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
+        this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
       }
       if(this.activityFeedUserView){
 //        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
@@ -653,8 +653,8 @@ define([
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){
           var corpusConnection = self.model.get("corpus").get("couchConnection");
-          if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
-            && app.get("corpus").get("couchConnection").corpusname == "default"){
+          if(self.model.get("authentication").get("userPrivate").get("corpuses").pouchname != "default" 
+            && app.get("corpus").get("couchConnection").pouchname == "default"){
             corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
           }
           self.model.get("corpus").replicateCorpus(corpusConnection, callback);

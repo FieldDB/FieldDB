@@ -51,12 +51,12 @@ Utils.defaultCouchConnection = function() {
 //    protocol : "https://",
 //    domain : "ilanguage.iriscouch.com",
 //    port : "443",
-//    corpusname : "default"
+//    pouchname : "default"
 //  }; 
     protocol : "http://",
     domain : "localhost",
     port : "5984",
-    corpusname : "default"
+    pouchname : "default"
   }; 
 };
 /**

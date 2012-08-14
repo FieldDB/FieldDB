@@ -101,13 +101,13 @@ define([
       if(!this.get("publicSelf")){
         this.set("publicSelf", new CorpusMask({
           "couchConnection" : this.get("couchConnection"),
-          "corpusname" : this.get("corpusname")
+          "pouchname" : this.get("pouchname")
         }));
       }
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");
       }
-      this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
+      this.bind("change:publicCorpus",this.changePouchPublicPrivate,this);
       
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
@@ -228,7 +228,7 @@ define([
           this.set("team", window.app.get("authentication").get("userPublic"));
           this.get("team").id = window.app.get("authentication").get("userPublic").id;
         }else{
-//          this.set("team", new UserMask({corpusname: this.get("corpusname")}));
+//          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
         }
       }
       this.permissions = new Permissions();
@@ -239,18 +239,18 @@ define([
       this.permissions.add(new Permission({
         users: admins,
         role: "admin",
-        corpusname: this.get("corpusname")
+        pouchname: this.get("pouchname")
       }));
       
       this.permissions.add(new Permission({
         users: new Users(),
         role: "contributor",
-        corpusname: this.get("corpusname")
+        pouchname: this.get("pouchname")
       }));
       this.permissions.add(new Permission({
         users: new Users(), //"ifieldpublicuser"
         role: "collaborator",
-        corpusname: this.get("corpusname")
+        pouchname: this.get("pouchname")
       }));
       //TODO load the permissions in from the server.
     },
@@ -284,15 +284,15 @@ define([
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    changeCorpus : function(couchConnection, callback) {
+    changePouch : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
         .pouch(Utils.androidApp() ? Utils.touchUrl
-            + couchConnection.corpusname : Utils.pouchUrl
-            + couchConnection.corpusname);
+            + couchConnection.pouchname : Utils.pouchUrl
+            + couchConnection.pouchname);
       }
 
       if (typeof callback == "function") {
@@ -317,21 +317,21 @@ define([
       var newModel = false;
       if(!this.id){
         newModel = true;
-        //uses the conventions to set the corpusname off of the team's username 
+        //uses the conventions to set the pouchname off of the team's username 
         if(!this.get("titleAsUrl")){
           this.set("titleAsUrl", encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"")));
         }
-        if(!this.get("corpusname")){
-          this.set("corpusname", this.get("team").get("username")
+        if(!this.get("pouchname")){
+          this.set("pouchname", this.get("team").get("username")
               +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) );
         }
         if(!this.get("couchConnection")){
-          this.get("couchConnection").corpusname = this.get("team").get("username")
+          this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
         }
       }
       var oldrev = this.get("_rev");
-      this.changeCorpus(null,function(){
+      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             Utils.debug('Corpus save success');
@@ -344,7 +344,7 @@ define([
 //            }
             //save the corpus mask too
             var publicSelfMode = model.get("publicSelf");
-            publicSelfMode.changeCorpus( model.get("couchConnection"), function(){
+            publicSelfMode.changePouch( model.get("couchConnection"), function(){
               publicSelfMode.saveAndInterConnectInApp();
             });
             
@@ -376,7 +376,7 @@ define([
               var defaultDatalist = model.get("dataLists").models[model.get("dataLists").length - 1];
 
               if(defaultDatalist.needsSave){
-//                defaultDatalist.changeCorpus(null, function(){
+//                defaultDatalist.changePouch(null, function(){
 //                  Utils.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
 //                  defaultDatalist.save();
                 //TODO uncomment this
@@ -392,7 +392,7 @@ define([
                 if(model.get("sessions").models.length == 0 && model.get("dataLists").models.length == 0){
                   //create the first session for this corpus.
                   var s = new Session({
-                    corpusname : model.get("corpusname"),
+                    pouchname : model.get("pouchname"),
                     sessionFields : model.get("sessionFields").clone()
                   }); //MUST be a new model, other wise it wont save in a new pouch.
                   s.get("sessionFields").where({label: "user"})[0].set("mask", window.app.get("authentication").get("userPrivate").get("username") );
@@ -400,13 +400,13 @@ define([
                   s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
                   s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
-                  s.set("corpusname", model.get("corpusname"));
+                  s.set("pouchname", model.get("pouchname"));
                   s.saveAndInterConnectInApp(function(){
                     s.setAsCurrentSession(function(){
                       
                       //create the first datalist for this corpus.
                       var dl = new DataList({
-                        corpusname : model.get("corpusname")}); //MUST be a new model, other wise it wont save in a new pouch.
+                        pouchname : model.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
                       dl.set({
                         "title" : "Default Data List",
                         "dateCreated" : (new Date()).toDateString(),
@@ -414,7 +414,7 @@ define([
                         "Any new datum you create is added here. " +
                         "Data lists can be used to create handouts, prepare for sessions with consultants, " +
                         "export to LaTeX, or share with collaborators.",
-                        "corpusname" : model.get("corpusname")
+                        "pouchname" : model.get("pouchname")
                       });
                       dl.saveAndInterConnectInApp(function(){
                         dl.setAsCurrentDataList(function(){
@@ -463,7 +463,7 @@ define([
      */
     setAsCurrentCorpus : function(successcallback, failurecallback){
       //TODO think about how to switch corpuses... maybe take the most recent session and data list and set those at the same time, it should be okay.
-//      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
+//      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
 //        if (typeof failurecallback == "function") {
 //          failurecallback();
 //        }else{
@@ -521,13 +521,13 @@ define([
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = self.get("couchConnection");
       }
-      this.changeCorpus(couchConnection, function(){
+      this.changePouch(couchConnection, function(){
         self.pouch(function(err, db) {
           var couchurl = couchConnection.protocol+couchConnection.domain;
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.corpusname;
+          couchurl = couchurl +"/"+ couchConnection.pouchname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate to " + couchurl);
@@ -574,13 +574,13 @@ define([
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = self.get("couchConnection");
       }
-      this.changeCorpus(couchConnection, function(){
+      this.changePouch(couchConnection, function(){
         self.pouch(function(err, db) {
           var couchurl = couchConnection.protocol+couchConnection.domain;
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.corpusname;
+          couchurl = couchurl +"/"+ couchConnection.pouchname;
           
           
           //We can leave the to and from replication async, and make two callbacks. 
@@ -615,10 +615,10 @@ define([
                   }));
               
               // Get the corpus' current precedence rules
-              self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
+              self.buildMorphologicalAnalyzerFromTeamServer(self.get("pouchname"));
               
               // Build the lexicon
-              self.buildLexiconFromTeamServer(self.get("corpusname"));
+              self.buildLexiconFromTeamServer(self.get("pouchname"));
             }
           });
         });
@@ -709,40 +709,40 @@ define([
 //        return '';
     },
     /**
-     * This function takes in a corpusname, which could be different
+     * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
      * 
-     * @param corpusname
+     * @param pouchname
      * @param callback
      */
-    buildMorphologicalAnalyzerFromTeamServer : function(corpusname, callback){
-      if(!corpusname){
-        this.get("corpusname");
+    buildMorphologicalAnalyzerFromTeamServer : function(pouchname, callback){
+      if(!pouchname){
+        this.get("pouchname");
       }
       if(!callback){
         callback = null;
       }
-      Glosser.downloadPrecedenceRules(corpusname, callback);
+      Glosser.downloadPrecedenceRules(pouchname, callback);
     },
     /**
-     * This function takes in a corpusname, which could be different
+     * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
      * 
-     * @param corpusname
+     * @param pouchname
      * @param callback
      */
-    buildLexiconFromTeamServer : function(corpusname, callback){
-      if(!corpusname){
-        this.get("corpusname");
+    buildLexiconFromTeamServer : function(pouchname, callback){
+      if(!pouchname){
+        this.get("pouchname");
       }
       if(!callback){
         callback = null;
       }
-      this.lexicon.buildLexiconFromCouch(corpusname,callback);
+      this.lexicon.buildLexiconFromCouch(pouchname,callback);
     },
-    changeCorpusPublicPrivate : function(){
+    changePouchPublicPrivate : function(){
 //      alert("TODO contact server to change the public private of the corpus");
     }
   });

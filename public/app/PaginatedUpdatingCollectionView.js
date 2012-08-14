@@ -211,10 +211,10 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         alert("mixing a collection from id and models!");
       }
       for(var id in objectIds){
-        var obj = new Model({corpusname: app.get("corpus").get("corpusname")});
+        var obj = new Model({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = objectIds[id];
         var self = this;
-        obj.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               // Render at the bottom

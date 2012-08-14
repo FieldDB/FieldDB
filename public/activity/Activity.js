@@ -46,20 +46,19 @@ define([
     model : {
       user : UserMask
     },
-    changeCorpus : function(corpusname, callback) {
-      if(!corpusname){
-        if(window.app.get("currentUserActivityFeed")){
-          if(window.app.get("currentUserActivityFeed").get("couchConnection")){
-            corpusname = window.app.get("currentUserActivityFeed").get("couchConnection").get("corpusname");
-          }else{
-            alert("Cant save an activity so early, must wait until the users' activityfeed gets a pouch.");
-          }
+    changePouch : function(pouchname, callback) {
+      if(!pouchname){
+        if(this.get("user").get("username") ==  window.app.get("authentication").get("userPublic").get("username")){
+          pouchname = window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname;
+          this.set("pouchname", pouchname);
         }else{
-          alert("Can't save an activity so early, must wait until appviews have been done, they make sure the user's currentUserActivityFeed exists.");
+          alert("Bug in seting the pouch for this activity, i can only save activities from the current logged in user, not other users");
+          return;
         }
       }
+      
       if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
       }
       if(typeof callback == "function"){
         callback();
@@ -80,7 +79,7 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       Utils.debug("Saving the Activity");
       var self = this;
-      if(window.app.get("currentCorpusTeamActivityFeed").get("corpusname") != this.get("corpusname")){
+      if(window.app.get("currentCorpusTeamActivityFeed").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
           failurecallback();
         }else{
@@ -88,7 +87,7 @@ define([
         }
         return;
       }
-      this.changeCorpus(null, function(){
+      this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
             Utils.debug('Activity save success');

@@ -211,7 +211,7 @@ require([
 //    Pouch.destroy('idb://dbsapir-firstcorpus');
 //    localStorage.clear();
 //  localStorage.removeItem("appids");
-//  localStorage.removeItem("corpusname");
+//  localStorage.removeItem("pouchname");
 //  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
 //  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
 //  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
@@ -239,16 +239,16 @@ require([
       return;
     }else{
       Utils.debug("Loading app from localStorage");
-      var corpusname = null;
+      var pouchname = null;
       var couchConnection = null;
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
         alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
         loadFreshApp();
         return;
       }else{
-        corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
         couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-        if(!localStorage.getItem("db"+corpusname+"_id")){
+        if(!localStorage.getItem("db"+pouchname+"_id")){
           alert("We couldn't open your local database. Please login and it should fix the problem.");
           loadFreshApp(); 
           return;
@@ -268,7 +268,7 @@ require([
                 loadFreshApp();
                 return;
               }else{
-                a.createAppBackboneObjects(corpusname, function(){
+                a.createAppBackboneObjects(pouchname, function(){
                   window.startApp(a, function(){
                     window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
                   });

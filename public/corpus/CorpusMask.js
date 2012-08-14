@@ -206,7 +206,7 @@ define([
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    changeCorpus : function(couchConnection, callback) {
+    changePouch : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }else{
@@ -215,8 +215,8 @@ define([
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
         .pouch(Utils.androidApp() ? Utils.touchUrl
-            + couchConnection.corpusname : Utils.pouchUrl
-            + couchConnection.corpusname);
+            + couchConnection.pouchname : Utils.pouchUrl
+            + couchConnection.pouchname);
       }
 
       if (typeof callback == "function") {
@@ -233,7 +233,7 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       Utils.debug("Saving the CorpusMask");
       var self = this;
-      this.changeCorpus(null, function(){
+      this.changePouch(null, function(){
         self.pouch(function(err,db){
           self.set("id","corpus");
           var modelwithhardcodedid = self.toJSON();
@@ -271,7 +271,7 @@ define([
     updateToPouch : function(){
       alert("Bug: the corpusmask updatetopouch method is deprecated!");
       var self = this;
-      this.changeCorpus(null, function(){
+      this.changePouch(null, function(){
         self.pouch(function(err,db){
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
@@ -282,38 +282,38 @@ define([
       });
     },
     /**
-     * This function takes in a corpusname, which could be different
+     * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
      * 
-     * @param corpusname
+     * @param pouchname
      * @param callback
      */
-    buildMorphologicalAnalyzerFromTeamServer : function(corpusname, callback){
-      if(!corpusname){
-        this.get("corpusname");
+    buildMorphologicalAnalyzerFromTeamServer : function(pouchname, callback){
+      if(!pouchname){
+        this.get("pouchname");
       }
       if(!callback){
         callback = null;
       }
-      Glosser.downloadPrecedenceRules(corpusname, callback);
+      Glosser.downloadPrecedenceRules(pouchname, callback);
     },
     /**
-     * This function takes in a corpusname, which could be different
+     * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
      * 
-     * @param corpusname
+     * @param pouchname
      * @param callback
      */
-    buildLexiconFromTeamServer : function(corpusname, callback){
-      if(!corpusname){
-        this.get("corpusname");
+    buildLexiconFromTeamServer : function(pouchname, callback){
+      if(!pouchname){
+        this.get("pouchname");
       }
       if(!callback){
         callback = null;
       }
-      this.lexicon.buildLexiconFromCouch(corpusname,callback);
+      this.lexicon.buildLexiconFromCouch(pouchname,callback);
     }
   });
     

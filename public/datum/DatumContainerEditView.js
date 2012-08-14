@@ -121,7 +121,7 @@ define([
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).getAllDatumIdsByDate(function(rows) {
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getAllDatumIdsByDate(function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
@@ -133,7 +133,7 @@ define([
           self.prependDatum(new Datum({
             datumFields : app.get("corpus").get("datumFields").clone(),
             datumStates : app.get("corpus").get("datumStates").clone(),
-            corpusname : app.get("corpus").get("corpusname"),
+            pouchname : app.get("corpus").get("pouchname"),
             session : app.get("currentSession")
           }));
         } else {
@@ -165,7 +165,7 @@ define([
       this.prependDatum(new Datum({
         datumFields : app.get("corpus").get("datumFields").clone(),
         datumStates : app.get("corpus").get("datumStates").clone(),
-        corpusname : app.get("corpus").get("corpusname"),
+        pouchname : app.get("corpus").get("pouchname"),
         session : app.get("currentSession")
       }));
     },
