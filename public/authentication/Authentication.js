@@ -143,6 +143,13 @@ define([
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
 //      Utils.debug(data.user);
+      if(window.appView){
+        window.setTimeout(function(){
+          Utils.debug("trying to get activityfeed to be up-to-date");
+          window.appView.activityFeedUserView.model.set("activities", window.app.get("authentication").get("userPrivate").get("activities") );
+          window.appView.activityFeedUserView.render();
+        },1000);
+      }
       if (typeof callback == "function") {
         callback("true"); //tell caller that the user succeeded to authenticate
       }

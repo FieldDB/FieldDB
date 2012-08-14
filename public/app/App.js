@@ -282,11 +282,14 @@ define([
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                               Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
-
+//                              window.appView.setUpAndAssociateViewsAndModelsWithCurrentUser(); //this didnt help, or seem to be necesary.
+//                              window.appView.renderActivityFeedViews();
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
-                              window.appView.renderReadonlyDashboardViews();
+                              window.app.router.showDashboard();
+
+//                              window.appView.renderReadonlyDashboardViews();
 //                              window.appView.datumsEditView.format = "centerWell";
 //                              window.appView.datumsEditView.render(); //this is already done in the dashboard render
                               
