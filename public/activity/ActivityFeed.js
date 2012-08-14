@@ -21,7 +21,8 @@ define([
      */
     initialize : function() {
       if(!this.get("activities")) {
-        this.set("activities", window.app.get("authentication").get("userPrivate").get("activities"));
+//      this.set("activities", window.app.get("authentication").get("userPrivate").get("activities"));
+        this.set("activities", new Activities());
       }
       //TODO remove this, and us the change corpus instead. by keepint htis now, it puts all activity feeds into one.
 //      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
@@ -48,7 +49,7 @@ define([
      */
     saveUserActivities : function(){
       window.app.get("authentication").get("userPrivate").get("activities").each( function(a){
-        a.save();
+        a.saveAndInterConnectInApp();
       });
       
     },
@@ -65,8 +66,7 @@ define([
       }
       //TODO test this
       if(couchConnection.corpusname.indexOf("activity_feed") == -1){
-        this.get("couchConnection").corpusname = couchConnection.corpusname+"-activity_feed";
-        couchConnection.corpusname =  couchConnection.corpusname+"-activity_feed";
+        alert("this is not a well formed activity feed couch connection");
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync

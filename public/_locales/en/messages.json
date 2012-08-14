@@ -50,8 +50,11 @@
   "locale_New_User" : {
     "message" : "New User"
   },
-  "locale_Activity_Feed" : {
-    "message" : "Activity Feed"
+  "locale_Activity_Feed_Your" : {
+    "message" : "Your Activity Feed"
+  },
+  "locale_Activity_Feed_Team" : {
+    "message" : "Corpus Team Activity Feed"
   },
   "locale_Need_save" : {
     "message" : " Need save:"

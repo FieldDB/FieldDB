@@ -48,8 +48,11 @@
   "locale_New_User" : {
     "message" : "Usuario Nuevo"
   },
-  "locale_Activity_Feed" : {
-    "message" : "Canal de Actividad"
+   "locale_Activity_Feed_Your" : {
+    "message" : "TODO translate Your Canal de Actividad"
+  },
+  "locale_Activity_Feed_Team" : {
+    "message" : "TODO translate Corpus Team Canal de Actividad"
   },
   "locale_View_Public_Profile_Tooltip" : {
     "message" : "TODO translate me Click to view/edit your public profile"

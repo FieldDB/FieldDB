@@ -186,6 +186,9 @@ define([
       var corpusConnection = Utils.defaultCouchConnection();
       corpusConnection.corpusname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
+      var activityConnection = Utils.defaultCouchConnection();
+      activityConnection.corpusname = dataToPost.username+"-activity_feeed";
+      dataToPost.activityCouchConnection = activityConnection;
       dataToPost.gravatar = "./../user/user_gravatar.png";
      
       if (dataToPost.username != ""
@@ -253,7 +256,17 @@ define([
                     "couchConnection" : data.user.corpuses[0],
                     "corpusname" : data.user.corpuses[0].corpusname
                   });
+                  //get the right corpus into the activity feed early, now that the user auth exists, this will work
+                  window.app.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+                  var activityCouchConnection = data.user.corpuses[0];
+                  activityCouchConnection.corpusname =  data.user.corpuses[0].corpusname+"-activity_feed";
+                  window.app.get("currentCorpusTeamActivityFeed").changeCorpus(activityCouchConnection);
                   
+                  window.app.set("currentUserActivityFeed", new ActivityFeed({
+                    "activities" : auth.get("userPrivate").get("activities")
+                  }));
+                  window.app.get("currentUserActivityFeed").changeCorpus(data.user.activityCouchConnection);
+                
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
                   s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");

@@ -553,7 +553,7 @@ define([
                     user: window.app.get("authentication").get("userPublic")
                   }));
               //Replicate the team's activity feed, then call the sucess callback
-              window.appView.activityFeedView.model.replicateToActivityFeed(null, function(){
+              window.appView.activityFeedCorpusTeamView.model.replicateToActivityFeed(null, function(){
                 if(typeof successcallback == "function"){
                   successcallback();
                 }else{
