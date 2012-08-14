@@ -205,10 +205,17 @@ define([
               appView.datumsEditView.render();
             }else{
               /*
-               *  Load their last corpus, session, datalist etc
+               *  Load their last corpus, session, datalist etc, 
+               *  only if it is not the ones already most recently loaded.
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+              var visibleids = {};
+              visibleids.corpusid = app.get("corpus").id;
+              visibleids.sessionid = app.get("currentSession").id;
+              visibleids.datalistid = app.get("currentDataList").id;
+              if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
+                window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+              }
             }                    
           });
         });

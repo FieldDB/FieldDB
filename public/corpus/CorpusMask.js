@@ -77,17 +77,17 @@ define([
     initialize : function() {
 
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
-      this.id = "corpus";
+      this.set("id", "corpus");
       
       //TODO use these states to show what is public and what is not.
-      if(typeof(this.get("datumStates")) == "function"){
+      if(!this.get("datumStates")){
         this.set("datumStates", new DatumStates([ 
           new DatumState()
         ]));
       }//end if to set datumStates
       
       //Keeping all items since this seems okay for public viewing if the user wants to let the public see it. 
-      if(typeof(this.get("datumFields")) == "function"){
+      if(!this.get("datumFields")){
         this.set("datumFields", new DatumFields([ 
           new DatumField({
             label : "judgement",
@@ -124,7 +124,7 @@ define([
       }//end if to set datumFields
       
       //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
-      if(typeof(this.get("sessionFields")) == "function"){
+      if(!this.get("sessionFields")){
         this.set("sessionFields", new DatumFields([ 
           new DatumField({
             label : "dialect",
@@ -183,11 +183,11 @@ define([
       title : "Private Corpus",
       titleAsUrl :"PrivateCorpus",
       description : "The details of this corpus are not public.",
-      consultants : Consultants,
-      datumStates : DatumStates,
-      datumFields : DatumFields, 
-      sessionFields : DatumFields,
-      searchFields : DatumFields,
+//      consultants : Consultants,
+//      datumStates : DatumStates,
+//      datumFields : DatumFields, 
+//      sessionFields : DatumFields,
+//      searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
     },
     
@@ -223,17 +223,47 @@ define([
         callback();
       }
     }, 
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
-        callback();
-      }
+    /**
+     * this function makes it possible to save the CorpusMask with a
+     * hardcoded id, it uses pouch's API directly
+     * 
+     * @param successcallback
+     * @param failurecallback
+     */
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      Utils.debug("Saving the Corpus");
+      var self = this;
+      this.changeCorpus(null, function(){
+        self.pouch(function(err,db){
+          self.set("id","corpus");
+          var modelwithhardcodedid = self.toJSON();
+          modelwithhardcodedid._id = "corpus";
+          db.put(modelwithhardcodedid, function(err, response) {
+            console.log(response);
+            if(err){
+              if(typeof failurecallback == "function"){
+                failurecallback();
+              }else{
+                alert('CorpusMask save error' + JSON.stringify(err));
+                Utils.debug('CorpusMask save error' + JSON.stringify(err));
+              }
+            }else{
+              if(typeof successcallback == "function"){
+                successcallback();
+              }else{
+                Utils.debug("CorpusMask save success", response);
+              }
+            }
+          });
+        });
+      });      
     },
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
      */
     updateToPouch : function(){
+      alert("Bug: the corpusmask updatetopouch method is deprecated!");
       var self = this;
       this.changeCorpus(null, function(){
         self.pouch(function(err,db){

@@ -412,6 +412,21 @@ define([
     render : function() {
       Utils.debug("APPVIEW render: " + this.el);
       if (this.model != undefined) {
+        
+        Utils.debug("Destroying the appview, so we dont get double events. This is risky...");
+        this.currentCorpusEditView.destroy_view();
+        this.currentCorpusReadView.destroy_view();
+        this.currentSessionEditView.destroy_view();
+        this.currentSessionReadView.destroy_view();
+//        this.datumsEditView.destroy_view();
+//        this.datumsReadView.destroy_view();//TODO add all the other child views eventually once they know how to destroy_view
+        this.currentEditDataListView.destroy_view();
+        this.currentReadDataListView.destroy_view();
+        this.importView.destroy_view();
+        this.searchEditView.destroy_view();
+        this.destroy_view();
+        Utils.debug("Done Destroying the appview, so we dont get double events.");
+
         // Display the AppView
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
@@ -487,7 +502,7 @@ define([
          
         // Display the ImportEditView
       } else {
-        Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
+        alert("\tApp model is not defined, this is a very big bug. Refresh your browser, and let us know about this "+ Utils.contactUs);
       }
       
       this.setTotalPouchDocs();
@@ -761,8 +776,23 @@ define([
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
         +"</div>")
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING APP VIEW ");
+      
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//    this.remove();  
+//    Backbone.View.prototype.remove.call(this);
     }
-    
     
   });
 

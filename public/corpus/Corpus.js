@@ -105,7 +105,7 @@ define([
         }));
       }
       if(!this.get("publicCorpus")){
-        this.set("publicCorpus", "Public");
+        this.set("publicCorpus", "Private");
       }
       this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
       
@@ -226,6 +226,7 @@ define([
         //If app is completed loaded use the user, otherwise put a blank user
         if(window.appView){
           this.set("team", window.app.get("authentication").get("userPublic"));
+          this.get("team").id = window.app.get("authentication").get("userPublic").id;
         }else{
 //          this.set("team", new UserMask({corpusname: this.get("corpusname")}));
         }
@@ -341,9 +342,10 @@ define([
 //              title = "";
 //              differences = "";
 //            }
-            var publicSelf = new CorpusMask(model.get("publicSelf"));
-            publicSelf.changeCorpus(model.get("couchConnection"), function(){
-              publicSelf.save();
+            //save the corpus mask too
+            var publicSelfMode = model.get("publicSelf");
+            publicSelfMode.changeCorpus( model.get("couchConnection"), function(){
+              publicSelfMode.saveAndInterConnectInApp();
             });
             
             if(window.appView){
@@ -416,8 +418,7 @@ define([
                       });
                       dl.saveAndInterConnectInApp(function(){
                         dl.setAsCurrentDataList(function(){
-                          window.appView.render();
-                          window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
+                          window.app.router.showDashboard();                          window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
                           window.app.get("authentication").saveAndInterConnectInApp();
                           if(typeof successcallback == "function"){
                             successcallback();
