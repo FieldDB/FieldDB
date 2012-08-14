@@ -1,6 +1,7 @@
 define([
     "backbone", 
     "activity/Activity",
+    "activity/ActivityFeed",
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
@@ -15,6 +16,7 @@ define([
 ], function(
     Backbone, 
     Activity,
+    ActivityFeed,
     Authentication, 
     Corpus,
     DataList,
@@ -68,6 +70,7 @@ define([
         this.set("authentication", new Authentication());
       }
       
+      
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
 //      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
       
@@ -79,6 +82,7 @@ define([
       authentication : Authentication,
       currentSession : Session,
       currentDataList : DataList,
+      currentActivityFeed : ActivityFeed,
       search : Search
     },
     

@@ -261,11 +261,19 @@ define([
         model : this.authView.model.get("userPrivate").get("prefs")
       });
       
-      // Create an ActivityFeedView
-      this.activityFeedView = new ActivityFeedView({
-        model : new ActivityFeed()
-      }); 
-      this.activityFeedView.format = "rightSide";
+      
+      if(!this.model.get("currentActivityFeed")){
+        this.model.set("currentActivityFeed", new ActivityFeed())
+      }
+      if(this.activityFeedView){
+//        this.activityFeedView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+      }else{
+        // Create an ActivityFeedView
+        this.activityFeedView = new ActivityFeedView({
+          model : this.model.get("currentActivityFeed")
+        }); 
+        this.activityFeedView.format = "rightSide";
+      }
       
       // Create an InsertUnicodesView
       this.insertUnicodesView = new InsertUnicodesView({
