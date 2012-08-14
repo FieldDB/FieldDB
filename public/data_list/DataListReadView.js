@@ -37,7 +37,7 @@ define( [
      * @constructs
      */
     initialize : function(options) {
-      Utils.debug("DATALIST READ VIEW init: " + this.el);
+      Utils.debug("DATALIST READ VIEW init: ");
       
       this.changeViewsOfInternalModels();
       this.model.bind('change:title', function(){
@@ -196,13 +196,13 @@ define( [
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "link") {
-        Utils.debug("DATALIST READ LINK render: " + this.el);
+        Utils.debug("DATALIST READ LINK render: ");
 
         // Display the Data List
         $(this.el).html(this.templateLink(jsonToRender));
       
       } else if (this.format == "leftSide") {
-        Utils.debug("DATALIST READ LEFTSIDE render: " + this.el);
+        Utils.debug("DATALIST READ LEFTSIDE render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -216,7 +216,7 @@ define( [
         $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
         
       } else if (this.format == "fullscreen") {
-        Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
+        Utils.debug("DATALIST READ FULLSCREEN render: ");
 
         // Display the Data List
         this.setElement($("#data-list-fullscreen-header"));
@@ -230,7 +230,7 @@ define( [
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
        
       } else if(this.format == "centerWell") {
-        Utils.debug("DATALIST READ CENTER render: " + this.el);
+        Utils.debug("DATALIST READ CENTER render: ");
 
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
@@ -243,7 +243,7 @@ define( [
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
 
       } else if (this.format == "minimized") {
-        Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
+        Utils.debug("DATALIST READ MINIMIZED render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
