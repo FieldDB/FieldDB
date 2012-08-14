@@ -170,14 +170,12 @@ define([
         this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
       }
       if(this.activityFeedCorpusTeamView){
-//        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
-      }else{
-        // Create an ActivityFeedView
-        this.activityFeedCorpusTeamView = new ActivityFeedView({
-          model : this.model.get("currentCorpusTeamActivityFeed")
-        }); 
-        this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
+        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
       }
+      this.activityFeedCorpusTeamView = new ActivityFeedView({
+        model : this.model.get("currentCorpusTeamActivityFeed")
+      }); 
+      this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
       
       
       //TODO not sure if we should do this here
@@ -303,14 +301,12 @@ define([
         this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
       }
       if(this.activityFeedUserView){
-//        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
-      }else{
-        // Create an ActivityFeedView
-        this.activityFeedUserView = new ActivityFeedView({
-          model : this.model.get("currentUserActivityFeed")
-        }); 
-        this.activityFeedUserView.format = "rightSideUser";
+        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
       }
+      this.activityFeedUserView = new ActivityFeedView({
+        model : this.model.get("currentUserActivityFeed")
+      }); 
+      this.activityFeedUserView.format = "rightSideUser";
       
       
       // Create an InsertUnicodesView
@@ -634,7 +630,12 @@ define([
       this.publicReadUserView.render();
       this.modalReadUserView.render();
     },
+    renderActivityFeedViews : function() {
+      this.activityFeedUserView.render();
+      this.activityFeedCorpusTeamView.render();
+    },
     
+
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.

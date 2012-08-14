@@ -232,8 +232,7 @@ define([
                   verb : verb,
                   directobject : "<a href='#data/"+model.id+"'>dataList</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App.",
-                  user: window.app.get("authentication").get("userPublic")
+                  context : differences+" via Offline App."
                 }));
             
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;

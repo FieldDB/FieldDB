@@ -136,8 +136,7 @@ define([
                 verb : "synced",
                 directobject : "their activity feed",
                 indirectobject : "to their team server",
-                context : "via Offline App",
-                user : window.app.get("authentication").get("userPublic")
+                context : "via Offline App"
               }));
 
               if(typeof successcallback == "function"){

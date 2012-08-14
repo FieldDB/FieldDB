@@ -461,8 +461,7 @@ define([
                   verb : verb,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>datum</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App.",
-                  user: window.app.get("authentication").get("userPublic")
+                  context : differences+" via Offline App."
                 }));
 
             /*

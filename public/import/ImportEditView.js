@@ -491,8 +491,7 @@ define( [
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
-            context : "via Offline App",
-            user: window.app.get("authentication").get("userPublic")
+            context : "via Offline App"
           }));
 
       window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
@@ -556,8 +555,7 @@ define( [
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
+                    context : "via Offline App"
                   }));
               
               window.hub.subscribe("savedDatumToPouch", function(arg){

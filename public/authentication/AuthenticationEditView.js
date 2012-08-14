@@ -213,6 +213,7 @@ define([
               visibleids.sessionid = app.get("currentSession").id;
               visibleids.datalistid = app.get("currentDataList").id;
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
+                Utils.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
                 window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
               }
             }                    

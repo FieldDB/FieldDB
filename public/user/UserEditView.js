@@ -139,8 +139,7 @@ define([
             verb : "modified",
             directobject : "their profile",
             indirectobject : "",
-            context : "via Offline App",
-            user: window.app.get("authentication").get("userPublic")
+            context : "via Offline App"
           }));
       window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");
 

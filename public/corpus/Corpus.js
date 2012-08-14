@@ -361,8 +361,7 @@ define([
                   verb : verb,
                   directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
                   indirectobject : "owned by <a href='#user/"+model.get("team").id+"'>"+model.get("team").get("username")+"</a>",
-                  context : differences+" via Offline App.",
-                  user: window.app.get("authentication").get("userPublic")
+                  context : differences+" via Offline App."
                 }));
             
             //make sure the corpus is in the history of the user
@@ -515,7 +514,7 @@ define([
     /**
      * Synchronize to server and from database.
      */
-    replicateToCorpus : function(couchConnection, successcallback, failurecallback) {
+    replicateToCorpus : function(couchConnection, replicatetosuccesscallback, failurecallback) {
       var self = this;
       
       if(couchConnection == null || couchConnection == undefined){
@@ -549,13 +548,13 @@ define([
                     verb : "synced",
                     directobject : window.app.get("corpus").get("title"),
                     indirectobject : "to their team server",
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
+                    context : "via Offline App"
                   }));
               //Replicate the team's activity feed, then call the sucess callback
               window.appView.activityFeedUserView.model.replicateToActivityFeed(null, function(){
-                if(typeof successcallback == "function"){
-                  successcallback();
+                if(typeof replicatetosuccesscallback == "function"){
+//                  window.appView.renderActivityFeedViews();
+                  replicatetosuccesscallback();
                 }else{
                   Utils.debug("ActivityFeed replicate to success");
                 }
@@ -610,8 +609,7 @@ define([
                     verb : "synced",
                     directobject : window.app.get("corpus").get("title"),
                     indirectobject : "from their team server",
-                    context : "via Offline App",
-                    user: window.app.get("authentication").get("userPublic")
+                    context : "via Offline App"
                   }));
               
               // Get the corpus' current precedence rules

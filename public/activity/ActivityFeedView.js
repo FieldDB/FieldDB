@@ -28,17 +28,24 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.activitiesView = new PaginatedUpdatingCollectionView({
-        collection           : this.model.get("activities"),
-        childViewConstructor : ActivityView,
-        childViewTagName     : 'li'
-      });
+      this.changeViewsOfInternalModels();
       
       //TODO this is how i tested the activity feed database, see the ActivityTest where it is hanging out not being tested.
 //          var a = new Activity();
 //          a.save();
     },
-
+    changeViewsOfInternalModels : function() {
+      if(this.model.get("activities")){
+        // Create a CommentReadView     
+        this.activitiesView = new PaginatedUpdatingCollectionView({
+          collection           : this.model.get("activities"),
+          childViewConstructor : ActivityView,
+          childViewTagName     : 'li'
+        });
+      }else{
+        alert("bug: activity feed view has no model.");
+      }
+    },
     model : ActivityFeed,
     
     events : {
@@ -58,7 +65,11 @@ define([
 
     render : function() {
       Utils.debug("ACTIVITY FEED VIEW render");
+      this.destroy_view();
+      
       if (this.format == "rightSideUser") {
+        this.changeViewsOfInternalModels();
+        
         this.setElement($("#activity-feed-user"));
         $(this.el).html(this.template(this.model.toJSON()));
        
@@ -70,6 +81,8 @@ define([
         $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Your"));
 
       }else if (this.format == "rightSideCorpusTeam") {
+        this.changeViewsOfInternalModels();
+
         this.setElement($("#activity-feed-corpus-team"));
         $(this.el).html(this.template(this.model.toJSON()));
        
@@ -101,7 +114,25 @@ define([
 
 
       return this;
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING ACTIIVITYFEED VIEW "+ this.format);
+      if (this.format.indexOf("minimized") == -1){
+        this.activitiesView.destroy_view();
+      }
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
 
   });
 
