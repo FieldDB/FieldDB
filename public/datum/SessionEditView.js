@@ -261,6 +261,7 @@ define([
     updatePouch : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
@@ -281,6 +282,7 @@ define([
     resizeSmall : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.app.router.showDashboard();
     },
@@ -288,6 +290,7 @@ define([
     resizeLarge : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -298,6 +301,7 @@ define([
     showEditable :function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.changeViewsOfInternalModels();
       this.render();
@@ -307,6 +311,7 @@ define([
     showReadonly : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentSessionReadView.format = this.format;
       window.appView.currentSessionReadView.render();
@@ -315,6 +320,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       console.log("I'm a new comment!");
       var m = new Comment({

@@ -76,6 +76,7 @@ define( [
       "click .latex-export-datalist": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -85,6 +86,7 @@ define( [
       "click .icon-paste": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -94,6 +96,7 @@ define( [
       "click .CSV": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -103,6 +106,7 @@ define( [
       "click .icon-bullhorn": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
@@ -111,6 +115,7 @@ define( [
       "click .icon-lock": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
@@ -122,6 +127,7 @@ define( [
       "click .icon-unlock": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
@@ -131,6 +137,10 @@ define( [
         return false;
       },
       "click .icon-eye-open" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
           alert("This is a bug: cannot find decryption module for your corpus.")
@@ -143,6 +153,10 @@ define( [
         return false;
       },
       "click .icon-eye-close" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
           alert("This is a bug: cannot find decryption module for your corpus.")
@@ -312,6 +326,7 @@ define( [
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
 //      this.format = "leftSide";
 //      this.render();
@@ -321,6 +336,7 @@ define( [
     resizeFullscreen : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -331,6 +347,7 @@ define( [
     showEditable :function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentEditDataListView.format = this.format;
       window.appView.currentEditDataListView.render();
@@ -340,6 +357,7 @@ define( [
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       console.log("I'm a new comment!");
       var m = new Comment({

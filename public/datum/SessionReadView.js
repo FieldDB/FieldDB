@@ -201,6 +201,7 @@ define([
     resizeSmall : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.app.router.showDashboard();
     },
@@ -208,6 +209,7 @@ define([
     resizeLarge : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -217,6 +219,7 @@ define([
     showEditable :function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentSessionEditView.format = this.format;
       window.appView.currentSessionEditView.render();
@@ -225,6 +228,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),

@@ -37,6 +37,7 @@ define([
       "click .edit-user-profile-modal" : function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         window.appView.modalEditUserView.render();
       }
