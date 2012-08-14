@@ -361,6 +361,7 @@ define([
     resizeSmall : function(e){
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from running same command twice
+        e.preventDefault();
       }
 //      this.format = "centreWell";
 //      this.render(); this is done in the router
@@ -370,6 +371,7 @@ define([
     resizeFullscreen : function(e){
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from running same command twice.
+        e.preventDefault();
       }
 //      this.format = "fullscreeen";
 //      this.render(); //this is done in the router

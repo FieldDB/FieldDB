@@ -466,6 +466,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
@@ -483,6 +484,7 @@ define([
     insertNewDatumField : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       //don't add blank fields
       if(this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_") == ""){
@@ -512,6 +514,7 @@ define([
     insertNewDatumState : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new DatumField({
         "state" : this.$el.find(".add_input").val(),
@@ -525,6 +528,7 @@ define([
     insertNewPermission : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       //TODO perform a server call to do this, and display the the results/errors
       var p = this.model.permissions.where({role: this.$el.find(".choose-add-permission-role").val()})[0];
@@ -536,6 +540,7 @@ define([
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.app.router.showDashboard();
     },
@@ -543,6 +548,7 @@ define([
       Utils.debug("CORPUS EDIT starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -552,6 +558,7 @@ define([
     showReadonly : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentCorpusReadView.format = this.format;
       window.appView.currentCorpusReadView.render();
@@ -570,6 +577,8 @@ define([
     updatePouch : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
+
       }
       var self = this;
       this.model.saveAndInterConnectInApp(function(){

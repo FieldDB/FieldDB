@@ -282,6 +282,7 @@ define([
     encryptDatum : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.model.encrypt();
       this.render();
@@ -294,6 +295,7 @@ define([
     decryptDatum : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.model.decrypt();
       this.render();
@@ -327,6 +329,7 @@ define([
     insertNewDatumTag : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
@@ -345,6 +348,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),

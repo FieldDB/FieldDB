@@ -22,10 +22,13 @@ define([
       "click .edit-tipa-input" : function(e){
         //dont collapse the dropdown
         e.stopPropagation();
+        e.preventDefault();
         return false;
       },
       "click .remove-unicode" : "removeUnicode",
       "keyup .edit-tipa-input" : function(e){
+        e.stopPropagation();
+        e.preventDefault();
         this.model.set("tipa", $(e.target).val());
       }
     },
@@ -47,7 +50,9 @@ define([
       return this;
     },
     
-    removeUnicode : function(){
+    removeUnicode : function(e){
+      e.stopPropagation();
+      e.preventDefault();
       window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").remove(this.model);    
     }
   });

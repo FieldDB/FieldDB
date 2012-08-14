@@ -60,6 +60,7 @@ define([
       "click .icon-book" : function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         window.appView.modalReadUserView.render();
       }

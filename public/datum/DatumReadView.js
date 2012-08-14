@@ -113,6 +113,7 @@ define([
       "dblclick" : function(e) {
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         // Prepend Datum to the top of the DatumContainer stack
         var d = this.model.clone();
@@ -124,6 +125,7 @@ define([
       "click .datum-checkboxes": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
     //    alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
@@ -226,15 +228,6 @@ define([
         $(this.el).html(this.latexTemplate(jsonToRender));
       }
       
-      //localization
-//      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-//      //$(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-//      //$(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-//      //$(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-//      //$(".locale_Plain_Text_Export_Tooltip").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip"));
-//      //$(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-//      //$(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      
       return this;
     },
     
@@ -272,6 +265,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),

@@ -161,7 +161,7 @@ define([
           this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
         }
       }catch(e){
-        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
+//        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
         Utils.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
         this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
         
@@ -426,6 +426,7 @@ define([
       "click .icon-search" : function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         this.searchEditView.searchTop();
       },

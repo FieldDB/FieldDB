@@ -100,6 +100,7 @@ define( [
       "click .latex-export-datalist": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -109,6 +110,7 @@ define( [
       "click .icon-paste": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -118,6 +120,7 @@ define( [
       "click .CSV": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -127,6 +130,7 @@ define( [
       "click .icon-bullhorn": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
@@ -135,6 +139,7 @@ define( [
       "click .icon-lock": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
@@ -145,6 +150,7 @@ define( [
       "click .icon-unlock": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
@@ -153,6 +159,10 @@ define( [
         return false;
       },
       "click .icon-eye-open" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
           alert("This is a bug: cannot find decryption module for your corpus.");
@@ -166,6 +176,10 @@ define( [
         return false;
       },
       "click .icon-eye-close" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
           alert("This is a bug: cannot find decryption module for your corpus.");
@@ -382,23 +396,6 @@ define( [
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
       
-//      locale_Export_checked_as_LaTeX
-      //localization
-      //$(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      //$(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
-      //$(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
-      //$(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
-      //$(".locale_Datalist_Description").attr("placeholder", chrome.i18n.getMessage("locale_Datalist_Description"));
-      //$(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      //$(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
-      //$(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
-      //$(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
-      //$(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
-      //$(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
-      //$(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
-
-      
-      
       return this;
     },
     
@@ -435,6 +432,7 @@ define( [
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
 //      this.format = "leftSide";
 //      this.render();
@@ -444,6 +442,7 @@ define( [
     resizeFullscreen : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -468,6 +467,7 @@ define( [
     showReadonly :function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentReadDataListView.format = this.format;
       window.appView.currentReadDataListView.render();
@@ -476,6 +476,7 @@ define( [
     updatePouch : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.model.saveAndInterConnectInApp(function(){
         window.appView.currentReadDataListView.format = this.format;
@@ -486,6 +487,7 @@ define( [
     saveSearchDataList : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
 //      var self = this;
 //      this.model.saveAndInterConnectInApp(function(){
@@ -507,6 +509,7 @@ define( [
     saveImportDataList : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       alert("TODO");
     },
@@ -515,6 +518,7 @@ define( [
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       console.log("I'm a new comment!");
       var m = new Comment({

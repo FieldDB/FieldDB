@@ -341,9 +341,6 @@
   "locale_Add_Tag" : {
     "message" : "New Tag..."
   },
-  "locale_locale_Help_Text" : {
-    "message" : "Put some help text here (optional)"
-  },
   "locale_Drag_and_Drop_Placeholder" : {
     "message" : "Type or paste or drag and drop files/text here!"
   },

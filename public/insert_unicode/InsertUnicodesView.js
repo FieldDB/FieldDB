@@ -103,7 +103,11 @@ define([
     /**
      * Adds a new unicode to the user's unicode collection
      */
-    insertNewUnicodeSymbol : function() {
+    insertNewUnicodeSymbol : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       var m = new InsertUnicode({
         "symbol" : this.$el.find(".insert-unicode-input").val(),
         "tipa" :  this.$el.find(".insert-unicode-tipa-input").val()
