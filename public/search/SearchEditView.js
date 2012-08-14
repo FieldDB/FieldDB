@@ -183,14 +183,14 @@ define([
 //        attributes.comments = undefined;
 //        attributes.title = self.model.get("title")+ " copy";
 //        attributes.description = "Copy of: "+self.model.get("description");
-//        attributes.corpusname = app.get("corpus").get("corpusname");
+//        attributes.pouchname = app.get("corpus").get("pouchname");
 //        attributes.datumIds = [];
         
         
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
-            "corpusname" : window.app.get("corpus").get("corpusname"),
+            "pouchname" : window.app.get("corpus").get("pouchname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."
           }),
@@ -318,7 +318,7 @@ define([
     search : function(queryString) {
       // Search for Datum that match the search criteria      
       var searchself = this;
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).searchByQueryString(queryString
           , function(datumIds){
         
         //this will take in datumIds from its caller

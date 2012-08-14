@@ -174,7 +174,7 @@ define([
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
        * 
        * appView.authView.model.get("userPrivate").set("gravatar","./../user/tilohash_gravatar.png")
-       * {"username":"bob3","password":"","email":"","gravatar":"./../user/tilohash_gravatar.png","researchInterest":"","affiliation":"","description":"","subtitle":"","corpuses":[{"corpusname":"bob3-firstcorpus","port":"443","domain":"ilanguage.iriscouch.com","protocol":"https://"}],"dataLists":[],"prefs":{"skin":"images/skins/stone_figurines.jpg","numVisibleDatum":3},"mostRecentIds":{"corpusid":"2DD73120-F4E5-4A9C-97F7-8F064C5CD6A8","sessionid":"40490877-F8B3-4390-901D-E5838535B01C","datalistid":"AD0B8232-C362-4B0E-80B2-4C3FBBE97421"},"firstname":"","lastname":"","teams":[],"sessionHistory":[],"activityHistory":[],"permissions":{},"hotkeys":{"firstKey":"","secondKey":"","description":""},"id":"4ffb3c6470fbe6d209000005","hash":"$2a$10$9XybfL5OeR4BFJtrifu9H.3MPjJQQnl9uTbXeBdajrjCyABExQId.","salt":"$2a$10$9XybfL5OeR4BFJtrifu9H.","login":"bob3","google":{},"github":{"plan":{}},"twit":{},"fb":{"name":{}},"_id":"4ffb3c6470fbe6d209000005"}
+       * {"username":"bob3","password":"","email":"","gravatar":"./../user/tilohash_gravatar.png","researchInterest":"","affiliation":"","description":"","subtitle":"","corpuses":[{"pouchname":"bob3-firstcorpus","port":"443","domain":"ilanguage.iriscouch.com","protocol":"https://"}],"dataLists":[],"prefs":{"skin":"images/skins/stone_figurines.jpg","numVisibleDatum":3},"mostRecentIds":{"corpusid":"2DD73120-F4E5-4A9C-97F7-8F064C5CD6A8","sessionid":"40490877-F8B3-4390-901D-E5838535B01C","datalistid":"AD0B8232-C362-4B0E-80B2-4C3FBBE97421"},"firstname":"","lastname":"","teams":[],"sessionHistory":[],"activityHistory":[],"permissions":{},"hotkeys":{"firstKey":"","secondKey":"","description":""},"id":"4ffb3c6470fbe6d209000005","hash":"$2a$10$9XybfL5OeR4BFJtrifu9H.3MPjJQQnl9uTbXeBdajrjCyABExQId.","salt":"$2a$10$9XybfL5OeR4BFJtrifu9H.","login":"bob3","google":{},"github":{"plan":{}},"twit":{},"fb":{"name":{}},"_id":"4ffb3c6470fbe6d209000005"}
        */
       var dataToPost = {};
       $(".username").val( $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"") );
@@ -182,12 +182,12 @@ define([
       dataToPost.email = $(".email").val();
       dataToPost.username = $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".password").val();
-      //Send a corpusname to create
+      //Send a pouchname to create
       var corpusConnection = Utils.defaultCouchConnection();
-      corpusConnection.corpusname = "firstcorpus";
+      corpusConnection.pouchname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
       var activityConnection = Utils.defaultCouchConnection();
-      activityConnection.corpusname = dataToPost.username+"-activity_feeed";
+      activityConnection.pouchname = dataToPost.username+"-activity_feeed";
       dataToPost.activityCouchConnection = activityConnection;
       dataToPost.gravatar = "./../user/user_gravatar.png";
      
@@ -221,7 +221,7 @@ define([
                * dismiss modal
                */ 
               
-//                a.createAppBackboneObjects(data.user.couchConnection.corpusname, function(){
+//                a.createAppBackboneObjects(data.user.couchConnection.pouchname, function(){
                 // Faking a login behavior, copy pasted from authentication auth function
                 var auth  = a.get("authentication");
                 auth.saveServerResponseToUser(data, function(){
@@ -242,7 +242,7 @@ define([
 //                      data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
 //                    }
 //                    auth.get("userPublic").set(data.user.publicSelf);
-//                    auth.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
+//                    auth.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
 ////                  auth.get("userPublic").save();
                   
                   var c = a.get("corpus");
@@ -254,18 +254,18 @@ define([
                     "sessions" : new Sessions(),
                     "team" : auth.get("userPublic"),
                     "couchConnection" : data.user.corpuses[0],
-                    "corpusname" : data.user.corpuses[0].corpusname
+                    "pouchname" : data.user.corpuses[0].pouchname
                   });
                   //get the right corpus into the activity feed early, now that the user auth exists, this will work
                   window.app.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
                   var activityCouchConnection = data.user.corpuses[0];
-                  activityCouchConnection.corpusname =  data.user.corpuses[0].corpusname+"-activity_feed";
-                  window.app.get("currentCorpusTeamActivityFeed").changeCorpus(activityCouchConnection);
+                  activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
+                  window.app.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
                   
                   window.app.set("currentUserActivityFeed", new ActivityFeed({
                     "activities" : auth.get("userPrivate").get("activities")
                   }));
-                  window.app.get("currentUserActivityFeed").changeCorpus(data.user.activityCouchConnection);
+                  window.app.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
                 
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
@@ -273,8 +273,8 @@ define([
                   s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
                   s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
-                  s.set("corpusname", data.user.corpuses[0].corpusname);
-                  s.changeCorpus(data.user.corpuses[0].corpusname);
+                  s.set("pouchname", data.user.corpuses[0].pouchname);
+                  s.changePouch(data.user.corpuses[0].pouchname);
                   
                   c.get("sessions").add(s);
                   
@@ -286,12 +286,12 @@ define([
                       "Any new datum you create is added here. " +
                       "Data lists can be used to create handouts, prepare for sessions with consultants, " +
                       "export to LaTeX, or share with collaborators.",
-                    "corpusname" : data.user.corpuses[0].corpusname
+                    "pouchname" : data.user.corpuses[0].pouchname
                   });
-                  dl.changeCorpus(data.user.corpuses[0].corpusname);
+                  dl.changePouch(data.user.corpuses[0].pouchname);
                   c.get("dataLists").add(dl);
                   
-                  c.changeCorpus(data.user.corpuses[0]);
+                  c.changePouch(data.user.corpuses[0]);
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
                   window.startApp(a, function(){
 //                     auth.get("userPrivate").addCurrentCorpusToUser();
@@ -356,7 +356,7 @@ define([
           $(".alert-error").addClass("alert-success");
           $(".alert-error").removeClass("alert-error");
           $(".alert-error").show();
-          a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
+          a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
             $('#user-welcome-modal').modal("hide");
             window.startApp(a, function(){
               var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.

@@ -317,7 +317,7 @@ define( [
       
       this.dataListView = new DataListEditView({
         model : new DataList({
-          "corpusname" : window.app.get("corpus").get("corpusname"),
+          "pouchname" : window.app.get("corpus").get("pouchname"),
           "title" : "Data from "+filename,
           "description": descript
         }),
@@ -393,7 +393,7 @@ define( [
         }
       }
       for (a in array) {
-        var d = new Datum({corpusname : window.app.get("corpus").get("corpusname")});
+        var d = new Datum({pouchname : window.app.get("corpus").get("pouchname")});
         var fields = this.model.get("datumFields").clone();
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
@@ -452,7 +452,7 @@ define( [
       var thatdatum = this.model.get("datumArray")[d];
       thatdatum.set({
         "session" : this.model.get("session"),
-        "corpusname" : window.app.get("corpus").get("corpusname"),
+        "pouchname" : window.app.get("corpus").get("pouchname"),
         "dateEntered" : JSON.stringify(new Date()),
         "dateModified" : JSON.stringify(new Date())
       });
@@ -538,7 +538,7 @@ define( [
           $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
           
 //          var dl = new DataList({
-//            "corpusname" : window.app.get("corpus").get("corpusname"),
+//            "pouchname" : window.app.get("corpus").get("pouchname"),
 //            "title" : self.dataListView.model.get("title"),
 //            "description": self.dataListView.model.get("description")
 //          });
@@ -624,7 +624,7 @@ define( [
       if(this.model.get("session") == undefined){
         this.model.set("session", new Session({
           sessionFields : window.app.get("corpus").get("sessionFields").clone(),
-          "corpusname" : window.app.get("corpus").get("corpusname"),
+          "pouchname" : window.app.get("corpus").get("pouchname"),
         }));
         
         var filemodified = JSON.stringify(new Date());

@@ -96,13 +96,13 @@ define([
      * 
      * @param callback
      */
-    createAppBackboneObjects : function(optionalcorpusname, callback){
-      if (optionalcorpusname == null) {
-        optionalcorpusname == "";
+    createAppBackboneObjects : function(optionalpouchname, callback){
+      if (optionalpouchname == null) {
+        optionalpouchname == "";
       }
       if (this.get("authentication").get("userPublic") == undefined) {
         var u = new UserMask({
-          corpusname : optionalcorpusname
+          pouchname : optionalpouchname
         });
         this.get("authentication").set("userPublic", u);
       }
@@ -111,23 +111,23 @@ define([
         this.get("authentication").set("userPrivate", u2);
       }
       var c = new Corpus({
-        corpusname : optionalcorpusname
+        pouchname : optionalpouchname
       });
       this.set("corpus", c);
 
       var s = new Session({
-        corpusname : optionalcorpusname,
+        pouchname : optionalpouchname,
         sessionFields : c.get("sessionFields").clone()
       });
       this.set("currentSession", s);
 
       var dl = new DataList({
-        corpusname : optionalcorpusname
+        pouchname : optionalpouchname
       });
       this.set("currentDataList", dl);
 
       var search = new Search({
-        corpusname : optionalcorpusname
+        pouchname : optionalpouchname
       });
       this.set("search", search);
 
@@ -162,13 +162,13 @@ define([
       var self = this;
       var c = this.get("corpus");
       c.set({
-        "corpusname" : couchConnection.corpusname,
+        "pouchname" : couchConnection.pouchname,
         couchConnection : couchConnection
       });
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
       
-      c.changeCorpus(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changeCorpus does.
+      c.changePouch(couchConnection, function(){
+        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(model) {
             Utils.debug("Corpus fetched successfully", model);
@@ -177,9 +177,9 @@ define([
 
             var s = self.get("currentSession");
             s.set({
-              "corpusname" : couchConnection.corpusname});
+              "pouchname" : couchConnection.pouchname});
             s.id = appids.sessionid; 
-            s.changeCorpus(couchConnection.corpusname, function(){
+            s.changePouch(couchConnection.pouchname, function(){
               s.fetch({
                 success : function(model) {
                   Utils.debug("Session fetched successfully", model);
@@ -188,9 +188,9 @@ define([
                   
                   var dl = self.get("currentDataList");
                   dl.set({
-                    "corpusname" : couchConnection.corpusname});
+                    "pouchname" : couchConnection.pouchname});
                   dl.id = appids.datalistid; 
-                  dl.changeCorpus(couchConnection.corpusname, function(){
+                  dl.changePouch(couchConnection.pouchname, function(){
                     dl.fetch({
                       success : function(model) {
                         Utils.debug("Data list fetched successfully", model);
@@ -238,12 +238,12 @@ define([
         couchConnection = this.get("corpus").get("couchConnection");
       }
       var c = new Corpus({
-        "corpusname" : couchConnection.corpusname,
+        "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
       });
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
-      c.changeCorpus(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changeCorpus does.
+      c.changePouch(couchConnection, function(){
+        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -254,10 +254,10 @@ define([
             c.setAsCurrentCorpus(function(){
               
               var dl = new DataList({
-                "corpusname" : couchConnection.corpusname
+                "pouchname" : couchConnection.pouchname
               });
               dl.id = appids.datalistid; 
-              dl.changeCorpus(couchConnection.corpusname, function(){
+              dl.changePouch(couchConnection.pouchname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -267,10 +267,10 @@ define([
                     dl.setAsCurrentDataList(function(){
                       
                       var s = new Session({
-                        "corpusname" : couchConnection.corpusname
+                        "pouchname" : couchConnection.pouchname
                       });
                       s.id = appids.sessionid; 
-                      s.changeCorpus(couchConnection.corpusname, function(){
+                      s.changePouch(couchConnection.pouchname, function(){
                         s.fetch({
                           success : function(sessionModel) {
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");

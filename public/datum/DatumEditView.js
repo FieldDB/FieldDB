@@ -410,7 +410,7 @@ define([
       var utteranceLine = $(e.currentTarget).val();
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       if (utteranceLine) {
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
@@ -450,7 +450,7 @@ define([
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       this.guessGlosses($(e.currentTarget).val());
     },

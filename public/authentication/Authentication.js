@@ -122,7 +122,7 @@ define([
         data.user.publicSelf.username = data.user.username;
         data.user.publicSelf.gravatar = data.user.gravatar;
         data.user.publicSelf._id = data.user._id;
-        data.user.publicSelf.corpusname = data.user.corpuses[0].corpusname;
+        data.user.publicSelf.pouchname = data.user.corpuses[0].pouchname;
       }
       
       if (this.get("userPublic") == undefined) {
@@ -139,7 +139,7 @@ define([
       u.id = data.user._id; //set the backbone id to be the same as the mongodb id
       //set the user AFTER setting his/her publicself if it wasnt there already
       u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
-//    self.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
+//    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
 //      Utils.debug(data.user);

@@ -28,7 +28,7 @@ define([
      * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus. 
      *
      * @property {FileList} files These are the file(s) that were dragged in.
-     * @property {String} corpusname This is the corpusid where the data should be imported
+     * @property {String} pouchname This is the corpusid where the data should be imported
      * @property {DatumFields} fields The fields array contains titles of the data columns.
      * @property {DataList} dataList the datalist imported, to hold the data before it is saved.
      * @property {Event} event The drag/drop event.
@@ -39,7 +39,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.set("corpusname", window.app.get("corpus").get("corpusname"));
+      this.set("pouchname", window.app.get("corpus").get("pouchname"));
       if(this.get("datumFields") == undefined){
         this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
       }
@@ -49,7 +49,7 @@ define([
     defaults : {
       status : "",
       fileDetails : "",
-      corpusname : "",
+      pouchname : "",
       datumArray : [],
 //      rawText: "",
 //      asCSV : "", //leave undefined
@@ -371,7 +371,7 @@ define([
 //          title : "Data from "+files[0].name,
 //          description : "This is the data list which would result from the import of these files."
 //            + this.get("fileDetails"),
-//            corpusname: this.get("corpusname")
+//            pouchname: this.get("pouchname")
 //        })
 //      });
 //      window.appView.importView.dataListView.format = "import";

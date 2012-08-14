@@ -58,21 +58,21 @@ define([
      * @param couchConnection
      * @param callback
      */
-    changeCorpus : function(couchConnection, callback) {
+    changePouch : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }else{
         this.set("couchConnection", couchConnection);
       }
       //TODO test this
-      if(couchConnection.corpusname.indexOf("activity_feed") == -1){
+      if(couchConnection.pouchname.indexOf("activity_feed") == -1){
         alert("this is not a well formed activity feed couch connection");
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
         .pouch(Utils.androidApp() ? Utils.touchUrl
-            + couchConnection.corpusname : Utils.pouchUrl
-            + couchConnection.corpusname);
+            + couchConnection.pouchname : Utils.pouchUrl
+            + couchConnection.pouchname);
       }
 
       if (typeof callback == "function") {
@@ -105,16 +105,16 @@ define([
       //if the couchConnection is still not set, then try to set it using the corpus's connection and adding activity feed to it.
       if(!couchConnection){
         couchConnection = window.app.get("corpus").get("couchConnection");
-        couchConnection.corpusname =  couchConnection.corpusname+"-activity_feed";
+        couchConnection.pouchname =  couchConnection.pouchname+"-activity_feed";
       }
       
-      this.changeCorpus(couchConnection, function(){
+      this.changePouch(couchConnection, function(){
         self.pouch(function(err, db) {
           var couchurl = couchConnection.protocol+couchConnection.domain;
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.corpusname;
+          couchurl = couchurl +"/"+ couchConnection.pouchname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate to " + couchurl);

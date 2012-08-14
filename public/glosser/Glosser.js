@@ -1,17 +1,17 @@
 var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
-Glosser.downloadPrecedenceRules = function(corpusname, callback){
+Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = Utils.defaultCouchConnection();
   var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port+"/";
 
   $.ajax({
     type : 'GET',
-    url : couchurl + corpusname
+    url : couchurl + pouchname
         + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
       // Parse the rules from JSON into an object
       rules = JSON.parse(rules);
-      localStorage.setItem(corpusname+"precendenceRules", JSON.stringify(rules.rows));
+      localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
 
       // Reduce the rules such that rules which are found in multiple source
       // words are only used/included once.
@@ -20,8 +20,8 @@ Glosser.downloadPrecedenceRules = function(corpusname, callback){
       }).value();
       
       // Save the reduced precedence rules in localStorage
-      localStorage.setItem(corpusname+"reducedRules", JSON.stringify(reducedRules));
-      Glosser.currentCorpusName = corpusname;
+      localStorage.setItem(pouchname+"reducedRules", JSON.stringify(reducedRules));
+      Glosser.currentCorpusName = pouchname;
       if(typeof callback == "function"){
         callback();
       }
@@ -189,12 +189,12 @@ Glosser.glossFinder = function(morphemesLine){
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
  */
-Glosser.generateForceDirectedRulesJsonForD3 = function(rules, corpusname) {
-  if(!corpusname){
-    corpusname = Glosser.currentCorpusName;
+Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
+  if(!pouchname){
+    pouchname = Glosser.currentCorpusName;
   }
   if(!rules){
-    rules = localStorage.getItem(corpusname+"precendenceRules");
+    rules = localStorage.getItem(pouchname+"precendenceRules");
     if(rules){
       rules = JSON.parse(rules);
     }
@@ -259,10 +259,10 @@ Glosser.saveAndInterConnectInApp = function(callback){
  * 
  */
 //Glosser.rulesGraph = Glosser.rulesGraph || {};
-Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, corpusname){
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, pouchname){
 
-  if(corpusname){
-    Glosser.currentCorpusName = corpusname;
+  if(pouchname){
+    Glosser.currentCorpusName = pouchname;
   }else{
     throw("Must provide corpus name to be able to visualize morphemes");
   }
@@ -301,7 +301,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   
   var svg = d3.select("#corpus-precedence-rules-visualization-fullscreen").append("svg")
     .attr("width", width)
-    .attr('title', "Morphology Visualization for "+ corpusname)
+    .attr('title', "Morphology Visualization for "+ pouchname)
     .attr("height", height);
   
   var titletext = "Explore the precedence relations of morphemes in your corpus";
