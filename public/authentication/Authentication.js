@@ -121,6 +121,7 @@ define([
         data.user.publicSelf = {};
         data.user.publicSelf.username = data.user.username;
         data.user.publicSelf.gravatar = data.user.gravatar;
+        data.user.publicSelf._id = data.user._id;
         data.user.publicSelf.corpusname = data.user.corpuses[0].corpusname;
       }
       
@@ -130,7 +131,7 @@ define([
         this.get("userPublic").set(data.user.publicSelf);
       }
       this.get("userPublic").id = data.user._id;
-      
+
       if (this.get("userPrivate") == undefined) {
         this.set("userPrivate", new User());
       }

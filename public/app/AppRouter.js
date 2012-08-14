@@ -95,6 +95,9 @@ define([
           });
         }
       }
+      if($("#public-user-page").html() == ""){
+        window.appView.publicReadUserView.render();
+      }
       this.hideEverything();
       $("#public-user-page").show();
     },
