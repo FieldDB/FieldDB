@@ -496,72 +496,26 @@ define([
         }
     },
     /**
-     * Synchronize the server and local databases.
+     * Synchronize the server and local databases. First to, then from.
      */
-    replicateCorpus : function(couchConnection, fromcallback, tocallback) {
+    replicateCorpus : function(couchConnection, successcallback, failurecallback) {
       var self = this;
-      
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = self.get("couchConnection");
-      }
-      this.changeCorpus(couchConnection, function(){
-        self.pouch(function(err, db) {
-          var couchurl = couchConnection.protocol+couchConnection.domain;
-          if(couchConnection.port != null){
-            couchurl = couchurl+":"+couchConnection.port;
-          }
-          couchurl = couchurl +"/"+ couchConnection.corpusname;
-          
-          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
-            Utils.debug("Replicate to " + couchurl);
-            Utils.debug(resp);
-            Utils.debug(err);
-            if(typeof tocallback == "function"){
-              tocallback();
-            }
-          });
-          //We can leave the to and from replication async, and make two callbacks. 
-          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
-            Utils.debug("Replicate from " + couchurl);
-            Utils.debug(resp);
-            Utils.debug(err);
-            if(err == null || err == undefined){
-              //This was a valid connection, lets save it into localstorage.
-              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
-              
-              // Display the most recent datum in this corpus
-//              appView.datumsEditView.updateDatums(); //Im not sure i want to do this.. lets leave htem where they were.
-            }
-            if(typeof fromcallback == "function"){
-              fromcallback();
-            }
-            window.appView.allSyncedDoc();
-            
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                new Activity({
-                  verb : "synced",
-                  directobject : window.app.get("corpus").get("title"),
-                  indirectobject : "with their team server",
-                  context : "via Offline App",
-                  user: window.app.get("authentication").get("userPublic")
-                }));
-            //Replicate the team's activity feed
-            window.appView.activityFeedView.model.replicateActivityFeed();
-            
-            // Get the corpus' current precedence rules
-            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
-            
-            // Build the lexicon
-            self.buildLexiconFromTeamServer(self.get("corpusname"));
-          });
-        });
+      this.replicateToCorpus(couchConnection, function(){
         
+        //if to was successful, call the from.
+        self.replicateFromCorpus(couchConnection, successcallback, failurecallback );
+        
+      },function(){
+        alert("Replicate to corpus failure");
+        if(typeof fromcallback == "function"){
+          fromcallback();
+        }
       });
     },
     /**
-     * Synchronize the server and local databases.
+     * Synchronize to server and from database.
      */
-    replicateToCorpus : function(couchConnection, fromcallback, tocallback) {
+    replicateToCorpus : function(couchConnection, successcallback, failurecallback) {
       var self = this;
       
       if(couchConnection == null || couchConnection == undefined){
@@ -575,33 +529,46 @@ define([
           }
           couchurl = couchurl +"/"+ couchConnection.corpusname;
           
-          db.replicate.to(couchurl, { continuous: false }, function(err, resp) {
+          db.replicate.to(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate to " + couchurl);
-            Utils.debug(resp);
+            Utils.debug(response);
             Utils.debug(err);
-            if(typeof tocallback == "function"){
-              tocallback();
+            if(err){
+              if(typeof failurecallback == "function"){
+                failurecallback();
+              }else{
+                alert('Corpus replicate to error' + JSON.stringify(err));
+                Utils.debug('Corpus replicate to error' + JSON.stringify(err));
+              }
+            }else{
+              Utils.debug("Corpus replicate to success", response);
+              window.appView.allSyncedDoc();
+              
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                  new Activity({
+                    verb : "synced",
+                    directobject : window.app.get("corpus").get("title"),
+                    indirectobject : "to their team server",
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
+              //Replicate the team's activity feed, then call the sucess callback
+              window.appView.activityFeedView.model.replicateToActivityFeed(null, function(){
+                if(typeof successcallback == "function"){
+                  successcallback();
+                }else{
+                  Utils.debug("ActivityFeed replicate to success");
+                }
+              });
             }
-            window.appView.allSyncedDoc();
           });
-
-          window.app.get("authentication").get("userPrivate").get("activities").unshift(
-              new Activity({
-                verb : "synced",
-                directobject : window.app.get("corpus").get("title"),
-                indirectobject : "to their team server",
-                context : "via Offline App",
-                user: window.app.get("authentication").get("userPublic")
-              }));
-          //Replicate the team's activity feed
-          window.appView.activityFeedView.model.replicateActivityFeed();
         });
       });
     },
     /**
-     * Synchronize the server and local databases.
+     * Synchronize from server to local database.
      */
-    replicateFromCorpus : function(couchConnection, fromcallback) {
+    replicateFromCorpus : function(couchConnection, successcallback, failurecallback) {
       var self = this;
       
       if(couchConnection == null || couchConnection == undefined){
@@ -617,36 +584,42 @@ define([
           
           
           //We can leave the to and from replication async, and make two callbacks. 
-          db.replicate.from(couchurl, { continuous: false }, function(err, resp) {
+          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate from " + couchurl);
-            Utils.debug(resp);
+            Utils.debug(response);
             Utils.debug(err);
-            if(err == null || err == undefined){
+            if(err){
+              if(typeof failurecallback == "function"){
+                failurecallback();
+              }else{
+                alert('ActivityFeed replicate to error' + JSON.stringify(err));
+                Utils.debug('ActivityFeed replicate to error' + JSON.stringify(err));
+              }
+            }else{
+              Utils.debug("Corpus replicate from success", response);
+
               //This was a valid connection, lets save it into localstorage.
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
               
-              // Display the most recent datum in this corpus
-//              appView.datumsEditView.updateDatums();//TODO cesine: im not sure i want to do this, lets let the user stay where they were. we will update datums only when we load the dashboard by ids.
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+              
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                  new Activity({
+                    verb : "synced",
+                    directobject : window.app.get("corpus").get("title"),
+                    indirectobject : "from their team server",
+                    context : "via Offline App",
+                    user: window.app.get("authentication").get("userPublic")
+                  }));
+              
+              // Get the corpus' current precedence rules
+              self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
+              
+              // Build the lexicon
+              self.buildLexiconFromTeamServer(self.get("corpusname"));
             }
-            if(typeof fromcallback == "function"){
-              fromcallback();
-            }
-//            window.appView.allSyncedDoc();
-            
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                new Activity({
-                  verb : "synced",
-                  directobject : window.app.get("corpus").get("title"),
-                  indirectobject : "from their team server",
-                  context : "via Offline App",
-                  user: window.app.get("authentication").get("userPublic")
-                }));
-            
-            // Get the corpus' current precedence rules
-            self.buildMorphologicalAnalyzerFromTeamServer(self.get("corpusname"));
-            
-            // Build the lexicon
-            self.buildLexiconFromTeamServer(self.get("corpusname"));
           });
         });
         

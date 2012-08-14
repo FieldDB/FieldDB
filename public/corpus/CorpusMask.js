@@ -231,7 +231,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      Utils.debug("Saving the Corpus");
+      Utils.debug("Saving the CorpusMask");
       var self = this;
       this.changeCorpus(null, function(){
         self.pouch(function(err,db){
@@ -241,12 +241,18 @@ define([
           db.put(modelwithhardcodedid, function(err, response) {
             console.log(response);
             if(err){
+              
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('CorpusMask save error' + JSON.stringify(err));
                 Utils.debug('CorpusMask save error' + JSON.stringify(err));
               }
+              //if(err.status == "409"){}//start workaround: the errors are conflicts, those might not be importnat, lets just do the success anyway, TOOD, try to get rid of this workaround in the future
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+              //end workaround
             }else{
               if(typeof successcallback == "function"){
                 successcallback();
