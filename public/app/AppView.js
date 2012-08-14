@@ -146,6 +146,32 @@ define([
         this.corpusNewModalView.format = "modal";
       }
       
+      // Create the corpus team activity view
+      if(!this.model.get("currentCorpusTeamActivityFeed")){
+        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+      }
+      try{
+        //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
+        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").get("corpusname").indexOf(this.model.get("corpus").get("couchConnection").get("corpusname") == -1)){
+          this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+          this.model.get("currentCorpusTeamActivityFeed").changeCorpus(this.model.get("corpus").get("couchConnection"));
+        }
+      }catch(e){
+        alert("there was a problem setting up the activity feed to this corpus' team's activities");
+        Utils.debug("there was a problem setting up the activity feed to this corpus' team's activities",e);
+        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+        this.model.get("currentCorpusTeamActivityFeed").changeCorpus(this.model.get("corpus").get("couchConnection"));
+      }
+      if(this.activityFeedCorpusTeamView){
+//        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+      }else{
+        // Create an ActivityFeedView
+        this.activityFeedCorpusTeamView = new ActivityFeedView({
+          model : this.model.get("currentCorpusTeamActivityFeed")
+        }); 
+        this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
+      }
+      
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
@@ -261,19 +287,23 @@ define([
         model : this.authView.model.get("userPrivate").get("prefs")
       });
       
-      
-      if(!this.model.get("currentActivityFeed")){
-        this.model.set("currentActivityFeed", new ActivityFeed())
+      // Create a UserActivityView
+      if(!this.model.get("currentUserActivityFeed")){
+        this.model.set("currentUserActivityFeed", new ActivityFeed({
+          "activities" : window.app.get("authentication").get("userPrivate").get("activities"),
+        }));
+        this.model.get("currentUserActivityFeed").changeCorpus(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
       }
-      if(this.activityFeedView){
-//        this.activityFeedView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+      if(this.activityFeedUserView){
+//        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
       }else{
         // Create an ActivityFeedView
-        this.activityFeedView = new ActivityFeedView({
-          model : this.model.get("currentActivityFeed")
+        this.activityFeedUserView = new ActivityFeedView({
+          model : this.model.get("currentUserActivityFeed")
         }); 
-        this.activityFeedView.format = "rightSide";
+        this.activityFeedUserView.format = "rightSideUser";
       }
+      
       
       // Create an InsertUnicodesView
       this.insertUnicodesView = new InsertUnicodesView({
@@ -446,7 +476,7 @@ define([
         this.renderReadonlyUserViews();
 
         this.renderReadonlyDashboardViews();
-        this.activityFeedView.render();
+        this.activityFeedCorpusTeamView.render();
         this.insertUnicodesView.render();
         
         //This forces the top search to render.
@@ -498,7 +528,7 @@ define([
 //        // Display the UserPreferenceEditView
 //        
 //        //Display ActivityFeedView
-//        this.activityFeedView.render();
+//        this.activityFeedCorpusTeamView.render();
 //        
 //        this.insertUnicodesView.render();
 //        
@@ -629,26 +659,6 @@ define([
           }
           self.model.get("corpus").replicateCorpus(corpusConnection, callback);
         });
-      });
-    },
-    /**
-     * Synchronize the activity feed server and local databases.
-     * TODO change this line in case it is called on the wrong model
-     *  this.activityFeedView.model.pouch(
-     */
-    replicateActivityFeedDatabase : function() {
-      (new ActivityFeedView()).pouch(function(err, db) {
-        db.replicate.to(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-        //TODO when activity feed becomes useful, ie a team feed, then replicate from as well.
-//        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
-//          Utils.debug("Replicate from");
-//          Utils.debug(resp);
-//          Utils.debug(err);
-//        });
       });
     },
     

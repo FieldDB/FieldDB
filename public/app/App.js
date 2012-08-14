@@ -70,7 +70,6 @@ define([
         this.set("authentication", new Authentication());
       }
       
-      
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
 //      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
       
@@ -82,7 +81,8 @@ define([
       authentication : Authentication,
       currentSession : Session,
       currentDataList : DataList,
-      currentActivityFeed : ActivityFeed,
+      currentCorpusTeamActivityFeed : ActivityFeed,
+      currentUserActivityFeed : ActivityFeed,
       search : Search
     },
     
@@ -250,6 +250,7 @@ define([
             Utils.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
+           
             c.setAsCurrentCorpus(function(){
               
               var dl = new DataList({

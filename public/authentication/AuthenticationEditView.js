@@ -200,9 +200,8 @@ define([
           window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
-//              appView.datumsEditView.newDatum();
-              appView.datumsEditView.render();
+              alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
+              window.app.router.showDashboard();
             }else{
               /*
                *  Load their last corpus, session, datalist etc, 
@@ -226,9 +225,8 @@ define([
           if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
-//              appView.datumsEditView.newDatum();
-              appView.datumsEditView.render();
+              alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
+              window.app.router.showDashboard();
             }else{
               /*
                *  Load their last corpus, session, datalist etc
