@@ -44,16 +44,15 @@ define([
     },
     updateEncryptedExport : function() {
       var checked = this.$el.children(".shouldBeEncryptedExport").is(':checked');
-      if (checked ) {
+     
+      if (checked) {
         checked = "checked";
       } else {
         checked = "";
+        alert("Warning! You are about to export decrypted data.");
       }      
       Utils.debug("Updated shouldBeEncryptedExport to " + checked);
-      if(checked !== "checked"){
-        alert("Warning! You are about to export decrypted data.");
-       // console.log("Warning! You are about to export decrypted data.");
-      }
+     
     //  this.model.set("shouldBeEncrypted", checked);
      
     },
