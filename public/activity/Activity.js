@@ -22,13 +22,16 @@ define([
 
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
+        if(!this.get("pouchname")) {
+          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
+        }
       }
       if(!this.get("timestamp")){
         this.set("timestamp",JSON.stringify(new Date()) );
       }
       
       if(this.isNew()){
-        this.saveAndInterConnectInApp();
+//        this.saveAndInterConnectInApp();
       }
     },
     
@@ -52,7 +55,7 @@ define([
           pouchname = window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname;
           this.set("pouchname", pouchname);
         }else{
-          alert("Bug in seting the pouch for this activity, i can only save activities from the current logged in user, not other users");
+          alert("Bug in setting the pouch for this activity, i can only save activities from the current logged in user, not other users");
           return;
         }
       }
@@ -79,14 +82,6 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       Utils.debug("Saving the Activity");
       var self = this;
-      if(window.app.get("currentCorpusTeamActivityFeed").get("pouchname") != this.get("pouchname")){
-        if(typeof failurecallback == "function"){
-          failurecallback();
-        }else{
-          alert('Activity save error. I cant save this Activity in this ActivityFeed, it belongs to another ActivityFeed. ' );
-        }
-        return;
-      }
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {

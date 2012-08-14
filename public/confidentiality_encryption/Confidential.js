@@ -33,7 +33,7 @@ define( [
      * 
      */
     initialize : function() {
-      console.log("Initializing confidentiality module");
+      Utils.debug("Initializing confidentiality module");
 
 //      var encryptedMessage = this.encrypt("hi this is a longer message.");
 //      console.log("encrypted" + encryptedMessage);

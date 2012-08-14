@@ -2,6 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "activity/Activity",
+    "activity/ActivityFeed",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -17,6 +18,7 @@ define([
     Backbone, 
     Handlebars, 
     Activity,
+    ActivityFeed,
     App,
     Authentication,
     Corpus,
@@ -187,7 +189,7 @@ define([
       corpusConnection.pouchname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
       var activityConnection = Utils.defaultCouchConnection();
-      activityConnection.pouchname = dataToPost.username+"-activity_feeed";
+      activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
       dataToPost.gravatar = "./../user/user_gravatar.png";
      
@@ -257,15 +259,15 @@ define([
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   //get the right corpus into the activity feed early, now that the user auth exists, this will work
-                  window.app.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-                  var activityCouchConnection = data.user.corpuses[0];
+                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+                  var activityCouchConnection = JSON.parse(JSON.stringify(data.user.corpuses[0]));
                   activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
-                  window.app.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
+                  a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
                   
-                  window.app.set("currentUserActivityFeed", new ActivityFeed({
+                  a.set("currentUserActivityFeed", new ActivityFeed({
                     "activities" : auth.get("userPrivate").get("activities")
                   }));
-                  window.app.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
+                  a.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
                 
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
