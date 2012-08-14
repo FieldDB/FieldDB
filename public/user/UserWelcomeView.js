@@ -302,7 +302,7 @@ define([
                         
                       });
                     }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
-                    console.log("Loadded app for a new user.");
+                    Utils.debug("Loadded app for a new user.");
                   });
                 });
 //                });
