@@ -93,11 +93,6 @@ define([
       if (!this.get("datumTags")) {
         this.set("datumTags", new DatumTags());
       }
-     
-      //timestamp
-      var t = JSON.stringify(new Date());
-     this.set("timestamp", new Date(JSON.parse(t)));
-
     },
     
     // Internal models: used by the parse function
