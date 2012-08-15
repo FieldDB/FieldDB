@@ -6,8 +6,12 @@
     "message" : "Un aplicacion de colección de datos linguisticos."
   },
   "locale_Close_and_login_as_Ed_Sapir" : {
-    "message" : "Cerrar y Entrar como Ed Sapir",
+    "message" : "Entrar como Ed Sapir",
     "description" : "button"
+  },
+  "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
+    "message" : "TODO translate You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to iField this is a great place to start after watching the videos.",
+    "description" : "tooltip"
   },
   "locale_Username" : {
     "message" : "Usuario:"
@@ -22,12 +26,12 @@
     "message" : "¡Bienvenido a iCampo! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "<i> Un aplicacion de coleccion de datos linguisticos..</i>"
+    "message" : "Un aplicacion de coleccion de datos linguisticos..."
   },
   "locale_Welcome_Beta_Testers" : {
-    "message" : "<p> ¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo.</p>"
+    "message" : "¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo."
   },
-  "locale_Or_create_a_new_user" : {
+  "locale_Create_a_new_user" : {
     "message" : "Crear un nuevo usuario"
   },
   "locale_What_is_your_username_going_to_be" : {
@@ -48,8 +52,29 @@
   "locale_New_User" : {
     "message" : "Usuario Nuevo"
   },
-  "locale_Activity_Feed" : {
-    "message" : "Canal de Actividad"
+   "locale_Activity_Feed_Your" : {
+    "message" : "TODO translate Your Canal de Actividad"
+  },
+  "locale_Activity_Feed_Team" : {
+    "message" : "TODO translate Corpus Team Canal de Actividad"
+  },
+  "locale_View_Profile_Tooltip" : {
+    "message" : "TODO translate Click to view user's page"
+  },
+  "locale_View_Public_Profile_Tooltip" : {
+    "message" : "TODO translate View/edit your public user's page"
+  },
+  "locale_Edit_User_Profile_Tooltip" : {
+    "message" : "TODO translate Click to edit your user profile"
+  },
+  "locale_Public_Profile_Instructions" : {
+    "message" : " TODO translateThis is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
+  },
+  "locale_Private_Profile_Instructions" : {
+    "message" : "TODO translate This is your private profile, only you members on your team can see it."
+  },
+  "locale_Edit_Public_User_Profile" : {
+    "message" : "TODO translate Edit My Public Profile"
   },
   "locale_Need_save" : {
     "message" : "Se ocupa guadar:"
@@ -174,8 +199,8 @@
   "locale_Default" : {
     "message" : "Gris"
   },
-  "locale_Session" : {
-    "message" : "Sesión"
+  "locale_Elicitation_Session" : {
+    "message" : "Sesión de Elicitación"
   },
   "locale_Export" : {
     "message" : "Exportar"
@@ -186,14 +211,17 @@
   "locale_Navigation" : {
     "message" : "Navegación"
   },
-  "locale_Favorite" : {
-    "message" : "Favorito"
+  "locale_Datum_Status_Checked" : {
+    "message" : "TODO translate Mark Datum status as checked/verified with language consultant"
   },
   "locale_Next_Datum" : {
     "message" : "Próximo Dato"
   },
   "locale_Previous_Datum" : {
     "message" : "Último Dato"
+  },
+  "locale_Data_Entry_Area" : {
+    "message" : "TODO translate Data Entry Area <small>(1-5 datum)</small>"
   },
   "locale_Search" : {
     "message" : "Búzqueda"
@@ -238,10 +266,13 @@
     "message" : "Importar"
   },
   "locale_percent_completed" : {
-    "message" : "0% completo."
+    "message" : "% completo."
   },
   "locale_Import_Instructions" : {
     "message" : " <ol> <li> Jalar y Soltar un archivo (csv, txt, tabed, xml, text) a la zona abajo..</li> <li>(Modificar su información como necesario.)</li> <li> Jalar o escribe los detailles de datos arriba de los columnos que coinciden. Las columnas se convertirán en filas de su pagina de datos. .</li> <li>Precionar el botón Intenta Importar.</li> <li>Revisa la lista de datos y averigua que su importe se ve bien. </li> <li>Modifica la tabla como necesario, oprime Intentar Importar cuando la lista esta listo, puede hacer este paso las veces que quiere. </li> <li>Cuando esta sastifecho con la lista de datos, oprime Guadar y su lista de datos serían importados a su corpus y un nuevo lista de datos será creado. </li> </ol>"
+  },
+  "locale_Drag_Fields_Instructions" : {
+    "message" : "TODO translate Drag (or type) the colored datum fields to the column headings which match, type in any additional column headings which you would like to keep as datum fields. The columns will become searchable fields in your database."
   },
   "locale_Add_Extra_Columns" : {
     "message" : " Agrega Columnas Extras"
@@ -272,6 +303,9 @@
   },
   "locale_Advanced_Search" : {
     "message" : "Búsqueda Advanzada"
+  },
+  "locale_Advanced_Search_Tooltip" : {
+    "message" : "Búsqueda Advanzada allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."
   },
   "locale_Email" : {
     "message" : "Correo Electronico:"
@@ -322,7 +356,7 @@
     "message" : "Etiqueta Nueva..."
   },
   "locale_locale_Help_Text" : {
-    "message" : "Se puede incluir text de ayuda aqui (opcional)"
+    "message" : "TODO this should be merged with locale_Help_Text?  Se puede incluir text de ayuda aqui (opcional)"
   },
   "locale_Drag_and_Drop_Placeholder" : {
     "message" : "Jale y Suelta achivos o textos aqui!"
@@ -354,10 +388,10 @@
   "locale_Show_Fullscreen" : {
     "message" : "Mostrar en pantalla completa "
   },
-  "locale_Add_locale_New_Datum_Field" : {
+  "locale_Add_New_Datum_Field_Tooltip" : {
     "message" : "Añadir un nuevo detaille de dato"
   },
-  "locale_Add_locale_New_Datum_State" : {
+  "locale_Add_New_Datum_State_Tooltip" : {
     "message" : "Añadir un estado de dato"
   },
   "locale_Show_in_Dashboard" : {
@@ -369,11 +403,17 @@
   "locale_Show_corpus_settings" : {
     "message" : "Mostrar Configuración de Corpus"
   },
+  "locale_Drag_and_Drop_Audio_Tooltip" : {
+    "message" : "TODO translate Drag and drop audio over the audio player to attach an audio file. You can also drag and drop a YouTube video URL to attach a YouTube video instead."
+  },
   "locale_Play_Audio" : {
     "message" : "Tocar audio"
   },
-  "locale_Copy" : {
-    "message" : "Copiar"
+  "locale_Plain_Text_Export_Tooltip" : {
+    "message" : "TODO translate Export as plain text/Copy to clipboard"
+  },
+  "locale_Plain_Text_Export_Tooltip_checked" : {
+    "message" : "TODO translate Export as plain text/Copy checked items to clipboard"
   },
   "locale_Duplicate" : {
     "message" : "Duplicar Dato por hacer un contraste minimál"
@@ -381,11 +421,29 @@
   "locale_Encrypt" : {
     "message" : "Encriptar/Decriptar"
   },
+  "locale_Encrypt_checked" : {
+    "message" : "TODO translate Make checked items confidential"
+  },
+  "locale_Decrypt_checked" : {
+    "message" : "TODO translate Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you want them to stay confidential and just want to edit them, click on the eye instead."
+  },
+  "locale_Decrypt" : {
+    "message" : "TODO translate Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you want it to stay confidential and just want to edit it, click on the eye instead."
+  },
+  "locale_Show_confidential_items_Tooltip" : {
+    "message" : "TODO translate Unmask confidential/encrypted items so that they can be edited and read for the next 10 minutes."
+  },
+  "locale_Hide_confidential_items_Tooltip" : {
+    "message" : "TODO translate Return to masked view of confidential/encrypted datum"
+  },
   "locale_Edit_Datalist" : {
     "message" : "Editar lista de datos"
   },
-  "locale_Export_Datalist" : {
+  "locale_Export_checked_as_LaTeX" : {
     "message" : "Exportar lista de datos seleccionados en formato LaTeX"
+  },
+  "locale_Export_checked_as_CSV" : {
+    "message" : "Exportar lista de datos seleccionados en formato CSV"
   },
   "locale_Hide_Datalist" : {
     "message" : "Esconder lista de datos"
@@ -397,9 +455,9 @@
     "message" : "Editar Datos"
   },
   "locale_See_Fields" : {
-    "message" : "más o menos detailles"
+    "message" : "TODO translate Hide/Show infrequent fields"
   },
-  "locale_Add_Tags" : {
+  "locale_Add_Tags_Tooltip" : {
     "message" : "Añadir etiquetas"
   },
   "locale_Edit_Session" : {
@@ -417,17 +475,8 @@
   "locale_Public_or_Private" : {
     "message" : "Publico o Privado:"
   },
-  "locale_Copy_checked" : {
-    "message" : "Copiar los seleccionados"
-  },
   "locale_Play_Audio_checked" : {
     "message" : "Tocar audio de los seleccionados"
-  },
-  "locale_Encrypt_checked" : {
-    "message" : "Encriptar los datos seleccionados"
-  },
-  "locale_Decrypt_checked" : {
-    "message" : "Mostrar datos confidenciales seleccionados"
   },
   "locale_Insert_New_Datum" : {
     "message" : "Insertar un nuevo dato arriba"
@@ -435,11 +484,8 @@
   "locale_LaTeX" : {
     "message" : "Exportar dato en formato LaTeX"
   },
-  "locale_CSV" : {
+  "locale_CSV_Tooltip" : {
     "message" : "Exportar dato en formato CSV "
-  },
-  "locale_Decrypt" : {
-    "message" : "Mostrar dato confidencial/encriptado"
   },
   "locale_of" : {
     "message" : "de"

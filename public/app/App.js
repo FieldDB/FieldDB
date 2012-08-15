@@ -1,6 +1,7 @@
 define([
     "backbone", 
     "activity/Activity",
+    "activity/ActivityFeed",
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
@@ -15,6 +16,7 @@ define([
 ], function(
     Backbone, 
     Activity,
+    ActivityFeed,
     Authentication, 
     Corpus,
     DataList,
@@ -79,6 +81,8 @@ define([
       authentication : Authentication,
       currentSession : Session,
       currentDataList : DataList,
+      currentCorpusTeamActivityFeed : ActivityFeed,
+      currentUserActivityFeed : ActivityFeed,
       search : Search
     },
     
@@ -92,13 +96,13 @@ define([
      * 
      * @param callback
      */
-    createAppBackboneObjects : function(optionalcorpusname, callback){
-      if (optionalcorpusname == null) {
-        optionalcorpusname == "";
+    createAppBackboneObjects : function(optionalpouchname, callback){
+      if (optionalpouchname == null) {
+        optionalpouchname == "";
       }
       if (this.get("authentication").get("userPublic") == undefined) {
         var u = new UserMask({
-          corpusname : optionalcorpusname
+          pouchname : optionalpouchname
         });
         this.get("authentication").set("userPublic", u);
       }
@@ -107,23 +111,23 @@ define([
         this.get("authentication").set("userPrivate", u2);
       }
       var c = new Corpus({
-        corpusname : optionalcorpusname
+        pouchname : optionalpouchname
       });
       this.set("corpus", c);
 
       var s = new Session({
-        corpusname : optionalcorpusname,
+        pouchname : optionalpouchname,
         sessionFields : c.get("sessionFields").clone()
       });
       this.set("currentSession", s);
 
       var dl = new DataList({
-        corpusname : optionalcorpusname
+        pouchname : optionalpouchname
       });
       this.set("currentDataList", dl);
 
       var search = new Search({
-        corpusname : optionalcorpusname
+        pouchname : optionalpouchname
       });
       this.set("search", search);
 
@@ -158,13 +162,13 @@ define([
       var self = this;
       var c = this.get("corpus");
       c.set({
-        "corpusname" : couchConnection.corpusname,
+        "pouchname" : couchConnection.pouchname,
         couchConnection : couchConnection
       });
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
       
-      c.changeCorpus(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changeCorpus does.
+      c.changePouch(couchConnection, function(){
+        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(model) {
             Utils.debug("Corpus fetched successfully", model);
@@ -173,9 +177,9 @@ define([
 
             var s = self.get("currentSession");
             s.set({
-              "corpusname" : couchConnection.corpusname});
+              "pouchname" : couchConnection.pouchname});
             s.id = appids.sessionid; 
-            s.changeCorpus(couchConnection.corpusname, function(){
+            s.changePouch(couchConnection.pouchname, function(){
               s.fetch({
                 success : function(model) {
                   Utils.debug("Session fetched successfully", model);
@@ -184,9 +188,9 @@ define([
                   
                   var dl = self.get("currentDataList");
                   dl.set({
-                    "corpusname" : couchConnection.corpusname});
+                    "pouchname" : couchConnection.pouchname});
                   dl.id = appids.datalistid; 
-                  dl.changeCorpus(couchConnection.corpusname, function(){
+                  dl.changePouch(couchConnection.pouchname, function(){
                     dl.fetch({
                       success : function(model) {
                         Utils.debug("Data list fetched successfully", model);
@@ -229,29 +233,31 @@ define([
     },
     
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function(couchConnection, appids, callback) {
+      Utils.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("corpus").get("couchConnection");
       }
       var c = new Corpus({
-        "corpusname" : couchConnection.corpusname,
+        "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
       });
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
-      c.changeCorpus(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changeCorpus does.
+      c.changePouch(couchConnection, function(){
+        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             Utils.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
+           
             c.setAsCurrentCorpus(function(){
               
               var dl = new DataList({
-                "corpusname" : couchConnection.corpusname
+                "pouchname" : couchConnection.pouchname
               });
               dl.id = appids.datalistid; 
-              dl.changeCorpus(couchConnection.corpusname, function(){
+              dl.changePouch(couchConnection.pouchname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -261,10 +267,10 @@ define([
                     dl.setAsCurrentDataList(function(){
                       
                       var s = new Session({
-                        "corpusname" : couchConnection.corpusname
+                        "pouchname" : couchConnection.pouchname
                       });
                       s.id = appids.sessionid; 
-                      s.changeCorpus(couchConnection.corpusname, function(){
+                      s.changePouch(couchConnection.pouchname, function(){
                         s.fetch({
                           success : function(sessionModel) {
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -276,13 +282,16 @@ define([
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                               Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
-
+//                              window.appView.setUpAndAssociateViewsAndModelsWithCurrentUser(); //this didnt help, or seem to be necesary.
+//                              window.appView.renderActivityFeedViews();
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
-                              window.appView.renderReadonlyDashboardViews();
-                              window.appView.datumsEditView.format = "centerWell";
-                              window.appView.datumsEditView.render();
+                              window.app.router.showDashboard();
+
+//                              window.appView.renderReadonlyDashboardViews();
+//                              window.appView.datumsEditView.format = "centerWell";
+//                              window.appView.datumsEditView.render(); //this is already done in the dashboard render
                               
                               if (typeof callback == "function") {
                                 callback();
@@ -292,7 +301,7 @@ define([
                             });
                           },
                           error : function(e) {
-                            alert("There was an error fetching the session. Loading defaults..."+e);
+                            alert("There was an error fetching the session. Loading defaults..."+JSON.stringify(e));
                             s.set(
                                 "sessionFields", window.app.get("corpus").get("sessionFields").clone()
                             );
@@ -305,7 +314,7 @@ define([
                     });
                   },
                   error : function(e) {
-                    alert("There was an error fetching the data list. Loading defaults..."+e);
+                    alert("There was an error fetching the data list. Loading defaults..."+JSON.stringify(e));
                   }
                 }); //end fetch data list
               });//end data list change corpus
@@ -315,7 +324,7 @@ define([
             });//end setAsCurrentCorpus
           },
           error : function(e) {
-            alert("There was an error fetching corpus. Loading defaults..."+e);
+            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
           }
         }); //end corpus fetch
       }); //end corpus change corpus

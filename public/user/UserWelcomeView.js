@@ -2,6 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "activity/Activity",
+    "activity/ActivityFeed",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -17,6 +18,7 @@ define([
     Backbone, 
     Handlebars, 
     Activity,
+    ActivityFeed,
     App,
     Authentication,
     Corpus,
@@ -105,20 +107,20 @@ define([
       },
 
       "click .sync-my-data" : function() {
-        this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
+        this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val());
       },
-      "click #welcomeusername" : function(e) {
+      "click .welcomeusername" : function(e) {
         return false;
       },
-      "click #welcomepassword" : function(e) {
+      "click .welcomepassword" : function(e) {
         return false;
       },
-      "keyup #welcomepassword" : function(e) {
+      "keyup .welcomepassword" : function(e) {
         var code = e.keyCode || e.which;
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.syncUser($("#welcomeusername").val(),$("#welcomepassword").val());
+          this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val());
         }
       }
     },
@@ -141,21 +143,22 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
-        $(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
-        $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-        $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-        $(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-        $(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
-        $(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
-        $(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
-        $(".locale_Or_create_a_new_user").html(chrome.i18n.getMessage("locale_Or_create_a_new_user"));
-        $(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
-        $(".locale_Confirm_Password").html(chrome.i18n.getMessage("locale_Confirm_Password"));
-        $(".locale_Sign_in_with_password").html(chrome.i18n.getMessage("locale_Sign_in_with_password"));
-        $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-        $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
-        $(".locale_New_User").html(chrome.i18n.getMessage("locale_New_User"));
-        $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
+        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir_Tooltip").attr("title", chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir_Tooltip"));
+        $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+        $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+        $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
+        $(this.el).find(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
+        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
+        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+        $(this.el).find(".locale_Create_a_new_user").html(chrome.i18n.getMessage("locale_Create_a_new_user"));
+        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+        $(this.el).find(".locale_New_User").text(chrome.i18n.getMessage("locale_New_User"));
+        $(this.el).find(".locale_Confirm_Password").text(chrome.i18n.getMessage("locale_Confirm_Password"));
+        $(this.el).find(".locale_Sign_in_with_password").text(chrome.i18n.getMessage("locale_Sign_in_with_password"));
+        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
 
 
       } else {
@@ -174,7 +177,7 @@ define([
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
        * 
        * appView.authView.model.get("userPrivate").set("gravatar","./../user/tilohash_gravatar.png")
-       * {"username":"bob3","password":"","email":"","gravatar":"./../user/tilohash_gravatar.png","researchInterest":"","affiliation":"","description":"","subtitle":"","corpuses":[{"corpusname":"bob3-firstcorpus","port":"443","domain":"ilanguage.iriscouch.com","protocol":"https://"}],"dataLists":[],"prefs":{"skin":"images/skins/stone_figurines.jpg","numVisibleDatum":3},"mostRecentIds":{"corpusid":"2DD73120-F4E5-4A9C-97F7-8F064C5CD6A8","sessionid":"40490877-F8B3-4390-901D-E5838535B01C","datalistid":"AD0B8232-C362-4B0E-80B2-4C3FBBE97421"},"firstname":"","lastname":"","teams":[],"sessionHistory":[],"activityHistory":[],"permissions":{},"hotkeys":{"firstKey":"","secondKey":"","description":""},"id":"4ffb3c6470fbe6d209000005","hash":"$2a$10$9XybfL5OeR4BFJtrifu9H.3MPjJQQnl9uTbXeBdajrjCyABExQId.","salt":"$2a$10$9XybfL5OeR4BFJtrifu9H.","login":"bob3","google":{},"github":{"plan":{}},"twit":{},"fb":{"name":{}},"_id":"4ffb3c6470fbe6d209000005"}
+       * {"username":"bob3","password":"","email":"","gravatar":"./../user/tilohash_gravatar.png","researchInterest":"","affiliation":"","description":"","subtitle":"","corpuses":[{"pouchname":"bob3-firstcorpus","port":"443","domain":"ilanguage.iriscouch.com","protocol":"https://"}],"dataLists":[],"prefs":{"skin":"images/skins/stone_figurines.jpg","numVisibleDatum":3},"mostRecentIds":{"corpusid":"2DD73120-F4E5-4A9C-97F7-8F064C5CD6A8","sessionid":"40490877-F8B3-4390-901D-E5838535B01C","datalistid":"AD0B8232-C362-4B0E-80B2-4C3FBBE97421"},"firstname":"","lastname":"","teams":[],"sessionHistory":[],"activityHistory":[],"permissions":{},"hotkeys":{"firstKey":"","secondKey":"","description":""},"id":"4ffb3c6470fbe6d209000005","hash":"$2a$10$9XybfL5OeR4BFJtrifu9H.3MPjJQQnl9uTbXeBdajrjCyABExQId.","salt":"$2a$10$9XybfL5OeR4BFJtrifu9H.","login":"bob3","google":{},"github":{"plan":{}},"twit":{},"fb":{"name":{}},"_id":"4ffb3c6470fbe6d209000005"}
        */
       var dataToPost = {};
       $(".username").val( $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"") );
@@ -182,10 +185,13 @@ define([
       dataToPost.email = $(".email").val();
       dataToPost.username = $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".password").val();
-      //Send a corpusname to create
+      //Send a pouchname to create
       var corpusConnection = Utils.defaultCouchConnection();
-      corpusConnection.corpusname = "firstcorpus";
+      corpusConnection.pouchname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
+      var activityConnection = Utils.defaultCouchConnection();
+      activityConnection.pouchname = dataToPost.username+"-activity_feed";
+      dataToPost.activityCouchConnection = activityConnection;
       dataToPost.gravatar = "./../user/user_gravatar.png";
      
       if (dataToPost.username != ""
@@ -218,30 +224,10 @@ define([
                * dismiss modal
                */ 
               
-//                a.createAppBackboneObjects(data.user.couchConnection.corpusname, function(){
+//                a.createAppBackboneObjects(data.user.couchConnection.pouchname, function(){
                 // Faking a login behavior, copy pasted from authentication auth function
                 var auth  = a.get("authentication");
                 auth.saveServerResponseToUser(data, function(){
-                  //this code is now all in one place, in saveServerResponseToUser DO NOT DELETE YET
-//                    auth.set("state", "loggedIn");
-//                    auth.staleAuthentication = false;
-//                    
-//                    var u = auth.get("userPrivate");
-//                    u.id = data.user._id; //set the backbone id to be the same as the mongodb id
-//                    u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
-//                    
-//                    // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
-//                    auth.get("userPublic").id = auth.get("userPrivate").id;
-//                    if (data.user.publicSelf == null) {
-//                      // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
-//                      data.user.publicSelf = {};
-//                      data.user.publicSelf.username = auth.get("userPrivate").get("username");
-//                      data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
-//                    }
-//                    auth.get("userPublic").set(data.user.publicSelf);
-//                    auth.get("userPublic").changeCorpus(data.user.corpuses[0].corpusname);
-////                  auth.get("userPublic").save();
-                  
                   var c = a.get("corpus");
                   c.set({
                     "title" : data.user.username + "'s Corpus",
@@ -251,17 +237,27 @@ define([
                     "sessions" : new Sessions(),
                     "team" : auth.get("userPublic"),
                     "couchConnection" : data.user.corpuses[0],
-                    "corpusname" : data.user.corpuses[0].corpusname
+                    "pouchname" : data.user.corpuses[0].pouchname
                   });
+                  //get the right corpus into the activity feed early, now that the user auth exists, this will work
+                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+                  var activityCouchConnection = JSON.parse(JSON.stringify(data.user.corpuses[0]));
+                  activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
+                  a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
                   
+                  a.set("currentUserActivityFeed", new ActivityFeed({
+                    "activities" : auth.get("userPrivate").get("activities")
+                  }));
+                  a.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
+                
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
                   s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
                   s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
                   s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
-                  s.set("corpusname", data.user.corpuses[0].corpusname);
-                  s.changeCorpus(data.user.corpuses[0].corpusname);
+                  s.set("pouchname", data.user.corpuses[0].pouchname);
+                  s.changePouch(data.user.corpuses[0].pouchname);
                   
                   c.get("sessions").add(s);
                   
@@ -273,12 +269,12 @@ define([
                       "Any new datum you create is added here. " +
                       "Data lists can be used to create handouts, prepare for sessions with consultants, " +
                       "export to LaTeX, or share with collaborators.",
-                    "corpusname" : data.user.corpuses[0].corpusname
+                    "pouchname" : data.user.corpuses[0].pouchname
                   });
-                  dl.changeCorpus(data.user.corpuses[0].corpusname);
+                  dl.changePouch(data.user.corpuses[0].pouchname);
                   c.get("dataLists").add(dl);
                   
-                  c.changeCorpus(data.user.corpuses[0]);
+                  c.changePouch(data.user.corpuses[0]);
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
                   window.startApp(a, function(){
 //                     auth.get("userPrivate").addCurrentCorpusToUser();
@@ -291,17 +287,20 @@ define([
                       c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
                         Utils.debug("Successfully authenticated user with their corpus server.");
                         //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateFromCorpus(couchConnection);
+                        c.replicateFromCorpus(couchConnection, function(){
 //                        appView.datumsEditView.newDatum();
-                        appView.datumsEditView.render();
+//                          appView.datumsEditView.render();
+                        });
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
-                          window.app.saveAndInterConnectInApp();
+                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
+                            window.app.saveAndInterConnectInApp();
+                          });
                         },10000);
                         
                       });
                     }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
-                    console.log("Loadded app for a new user.");
+                    Utils.debug("Loadded app for a new user.");
                   });
                 });
 //                });
@@ -342,7 +341,7 @@ define([
           $(".alert-error").addClass("alert-success");
           $(".alert-error").removeClass("alert-error");
           $(".alert-error").show();
-          a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].corpusname, function(){
+          a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
             $('#user-welcome-modal').modal("hide");
             window.startApp(a, function(){
               var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
@@ -352,9 +351,11 @@ define([
                   window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
                     if(auth.get("userPrivate").get("mostRecentIds") == undefined){
                       //do nothing because they have no recent ids
-                      alert("Bug: User does not have most recent ids, not showing your dashbaord.");
+                      alert("Bug: User does not have most recent ids, not showing your most recent dashbaord.");
 //                      appView.datumsEditView.newDatum();
-                      appView.datumsEditView.render();
+//                      appView.datumsEditView.render();
+                      window.app.router.showDashboard();
+
                     }else{
                       /*
                        *  Load their last corpus, session, datalist etc

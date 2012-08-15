@@ -84,12 +84,13 @@ function Sound(opt_loop) {
   };
 }
 
+
 var Terminal = Terminal || function(containerId) {
   window.URL = window.URL || window.webkitURL;
   window.requestFileSystem = window.requestFileSystem ||
                              window.webkitRequestFileSystem;
 
-  const VERSION_ = '1.9.0';
+  var VERSION_ = '1.9.0';
   const CMDS_ = [
     '3d', 'cat', 'cd', 'cp', 'clear', 'date', 'help', 'install', 'ls', 'mkdir',
     'mv', 'open', 'pwd', 'rm', 'rmdir', 'theme', 'version', 'who', 'wget'
@@ -764,9 +765,20 @@ var Terminal = Terminal || function(containerId) {
   return {
     initFS: function(persistent, size) {
       output('<div>Welcome to ' + document.title +
-             '! (v' + VERSION_ + ')</div>');
+             ' Power User Backend! (v<span class="ifield-version">' + VERSION_ + '</span>)</div>');
       output((new Date()).toLocaleString());
-      output('<p>Documentation: type "help"</p>');
+      output("<p>You can use this terminal to modify and rename files in your iFields file system. To see the" +
+      		" command list which you can run here: type 'help'</p>"+
+      		"<p> If you like to do more than rename files (ie more power user things), you can use the Chrome Browser's built in " +
+      		"Console to run batch opperations on your data, use regular expressions and more (this is why we wrote the app in Javascript, to encourage general 'hackability' :). " +
+      		"We will write some tutorials eventually on what is possible using the commandline (and of course, what we have blocked due to security risk to encrypted confidential data). " +
+      		"To access the Chrome Browsers Console: " +
+      		"<ul><li>Mac: ⌥⌘J (Command - Option - J) to open Developer Tools and bring focus to the Console.</li>" +
+          "<li>Linux/Windows: Control - Shift - J to open Developer Tools and bring focus to the Console.</li>" +
+          "<li>Android: let us know if you figure it out</li>" +
+          "<li>iPad/iPhone: let us know if you figure it out</li>" +
+      		"</ul></p>");
+      
 
       if (!!!window.requestFileSystem) {
         output('<div>Sorry! The FileSystem APIs are not available in your browser.</div>');

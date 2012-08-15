@@ -23,7 +23,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM STATE EDIT init");
+      Utils.debug("DATUM STATE READ VIEW init");
       
       // Default format is "corpus" since it will be used in an UpdatingCollectionView.
       this.format = "corpus";
@@ -54,7 +54,7 @@ define( [
      * Renders the DatumStateReadView.
      */
     render : function() {
-      Utils.debug("DATUM STATE EDIT render");
+      Utils.debug("DATUM STATE READ VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsReadView
