@@ -369,7 +369,8 @@ define([
         collection           : new Datums(),
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
-        childViewFormat      : "latex"
+        childViewFormat      : "latex",
+        childViewClass       : "row span12"
       });  
       
       /*

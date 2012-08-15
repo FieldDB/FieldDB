@@ -111,14 +111,19 @@ define([
       
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
-//          new DatumState(),
+          new DatumState({
+            state : "Checked",
+            color : "success",
+            selected: "selected"
+          }),
           new DatumState({
             state : "To be checked",
             color : "warning"
           }),
           , new DatumState({
             state : "Deleted",
-            color : "important"
+            color : "important",
+            showInSearchResults:  false
           }),
         ]));
       }//end if to set datumStates
