@@ -107,7 +107,7 @@ define([
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");
       }
-      this.bind("change:publicCorpus",this.changePouchPublicPrivate,this);
+      this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
       
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
@@ -768,7 +768,7 @@ define([
       }
       this.lexicon.buildLexiconFromCouch(pouchname,callback);
     },
-    changePouchPublicPrivate : function(){
+    changeCorpusPublicPrivate : function(){
 //      alert("TODO contact server to change the public private of the corpus");
     }
   });
