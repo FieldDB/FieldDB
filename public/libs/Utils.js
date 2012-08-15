@@ -64,7 +64,7 @@ Utils.defaultCouchConnection = function() {
 /**
  * A message for users if they need help which brings them to our contact us form
  */
-Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ'>Contact Us</a>";
+Utils.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 /**
  * Console logs out, if not on Internet Explorer. Only logs out if
@@ -244,6 +244,15 @@ Utils.removeClass = function(ele, cls) {
 		var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
 		ele.className = ele.className.replace(reg, ' ');
 	}
+};
+Utils.getVersion = function(callback) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open('GET', 'manifest.json');
+  xmlhttp.onload = function (e) {
+      var manifest = JSON.parse(xmlhttp.responseText);
+      callback(manifest.version);
+  };
+  xmlhttp.send(null);
 };
 
 

@@ -152,7 +152,6 @@ define([
     nextSkin : function() {
       this.currentSkin = (this.currentSkin + 1) % this.skins.length;
       this.model.set("skin", this.skins[this.currentSkin]);
-      $(this.el).find(".user-pref-skin-filename").html(this.model.get("skin"));
       this.savePrefs();
     },
     
@@ -166,6 +165,8 @@ define([
       if(document.body.style.backgroundImage.indexOf(this.model.get("skin")) == -1){
         document.body.style.backgroundImage = "url(" + this.model.get("skin") + ")";
       }
+      $(this.el).find(".user-pref-skin-filename").html(this.model.get("skin"));
+
     },
     
     updateNumVisibleDatum : function(e) {
