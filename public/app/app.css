@@ -168,7 +168,7 @@ textarea{
 }
 
 .halfopacity{
-	opacity: 0.75;
+	opacity: 0.75 ;
 } 
 
 .dropdown-menu .not-a {
@@ -199,8 +199,11 @@ textarea{
 .unicode-symbol{
 	cursor: move;
   font-size: 1.25em;
-  color: white;
+  color: #FFF68F;
   font-weight:normal !important;
+}
+.infrequent-unicode-symbol{
+  color: #fff !important;
 }
 .show-unicode-details{
   width: 2em;	

@@ -136,7 +136,7 @@ define([
      */
     handleDragStart : function(e) {
       // Target (this) element is the source node.
-      this.classList.remove("halfopacity");
+      this.classList.remove("infrequent-unicode-symbol");
 //      var u = window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").where({symbol: this.innerHTML});
       //TODO useCount++ increase the user count on that item.
       
