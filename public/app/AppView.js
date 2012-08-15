@@ -329,6 +329,12 @@ define([
         model : model
       });
       this.publicReadUserView.format = "public";
+      
+      this.publicEditUserView = new UserEditView({
+        model : model
+      });
+      this.publicEditUserView.format = "fullscreen";
+      
     },
     /*
      * Set up the six data list views, kills all collection in the currentPaginatedDataListDatumsView
