@@ -40,7 +40,18 @@ define([
     template : Handlebars.templates.activity,
     
     render : function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.verb = jsonToRender.verb.replace(/&gt;/g,">").replace(/&lt;/g,"<");
+      jsonToRender.directobject = jsonToRender.directobject.replace(/&gt;/g,">").replace(/&lt;/g,"<");
+      jsonToRender.indirectobject = jsonToRender.indirectobject.replace(/&gt;/g,">").replace(/&lt;/g,"<");
+      jsonToRender.context = jsonToRender.context.replace(/&gt;/g,">").replace(/&lt;/g,"<");
+
+      $(this.el).html(this.template({}));
+      
+      $(this.el).find(".activity_verb").html(jsonToRender.verb);
+      $(this.el).find(".activity_direct_object").html(jsonToRender.directobject);
+      $(this.el).find(".activity_indirect_object").html(jsonToRender.indirectobject);
+      
       this.userView.setElement(this.$(".activity-feed-user-link"));
       this.userView.render();
       

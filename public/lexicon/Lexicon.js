@@ -33,22 +33,22 @@ define([
      * Overwrite/build the lexicon from the corpus server if it is there, saves
      * the results to local storage so they can be reused offline.
      * 
-     * @param corpusname
+     * @param pouchname
      * @param callback
      */
-    buildLexiconFromCouch : function(corpusname, callback){
+    buildLexiconFromCouch : function(pouchname, callback){
       var self = this;
       var couchConnection = Utils.defaultCouchConnection();
       var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port+"/";
 
       $.ajax({
         type : 'GET',
-        url : couchurl+corpusname+"/_design/lexicon/_view/create_triples?group=true",
+        url : couchurl+pouchname+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(corpusname+"lexiconResults", results);
+          localStorage.setItem(pouchname+"lexiconResults", results);
           var lexiconTriples = JSON.parse(results).rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
@@ -68,11 +68,11 @@ define([
     /**
      * Overwrite/build the lexicon from local storage if it is there.
      * 
-     * @param corpusname
+     * @param pouchname
      * @param callback
      */
-    buildLexiconFromLocalStorage  : function(corpusname, callback){
-      var results = localStorage.getItem(corpusname+"lexiconResults");
+    buildLexiconFromLocalStorage  : function(pouchname, callback){
+      var results = localStorage.getItem(pouchname+"lexiconResults");
       if(!results){
         return;
       }

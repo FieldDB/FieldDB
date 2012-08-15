@@ -38,7 +38,7 @@ define([
     defaults : {
 //      users: Users,
 //      role: "", //admin, contributor, collaborator
-//      corpusname: "",
+//      pouchname: "",
     },
     
     // Internal models: used by the parse function
