@@ -226,6 +226,10 @@ define([
         }
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
+        
+        if(this.model.get("datumStates").where({selected : "selected"})[0].get("state") == "Deleted"){
+          $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
+        }
       }
       
       return this;
@@ -236,32 +240,7 @@ define([
         this.stateView.render();
       }
     },
-    rareFields : [],
-    frequentFields: ["judgement","utterance","morphemes","gloss","translation"],
-    hideRareFields : function(){
-      this.rareFields = [];
-      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
-          $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
-          this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
-        }
-      }
-      $(this.el).find(".icon-th-list").addClass("icon-list-alt");
-      $(this.el).find(".icon-th-list").removeClass("icon-th-list");
-      $(this.el).find(".comments-section").hide();
-
-    },
     
-    showRareFields : function(){
-      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
-      }
-      rareFields = [];
-      $(this.el).find(".icon-list-alt").addClass("icon-th-list");
-      $(this.el).find(".icon-list-alt").removeClass("icon-list-alt");
-      $(this.el).find(".comments-section").show();
-
-    },
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
