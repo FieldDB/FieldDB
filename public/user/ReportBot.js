@@ -27,9 +27,9 @@ define(["backbone"], function(Backbone) {
     model : {
     },
     
-    changeCorpus : function(corpusname, callback) {
+    changePouch : function(pouchname, callback) {
       if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
       }
       if (typeof callback == "function") {
         callback();
@@ -70,7 +70,7 @@ define(["backbone"], function(Backbone) {
       
       // Store view on CouchDB
       var self = this;
-      this.changeCorpus(this.get("corpusname"), function() {
+      this.changePouch(this.get("pouchname"), function() {
         self.pouch(function(err, db) {
           db.post(view, function(error, response) {
             if (!error) {

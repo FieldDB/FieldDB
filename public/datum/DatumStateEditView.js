@@ -22,7 +22,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM STATE EDIT init");
+      Utils.debug("DATUM STATE EDIT VIEW init");
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -50,7 +50,7 @@ define( [
      * Renders the DatumStateEditView.
      */
     render : function() {
-      Utils.debug("DATUM STATE EDIT render");
+      Utils.debug("DATUM STATE EDIT VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsEditView
@@ -58,16 +58,16 @@ define( [
         
         // Select the correct value from the color dropdown
         this.$el.children(".color_chooser").val(this.model.get("color"));
+        
+        //localization
+        $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+        $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+        $(this.el).find(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+        $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+        $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+        $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
       }
       
-      //localization
-      $(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
-      $(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
-      $(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
-      $(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
-      $(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
-      $(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
-      $(".Default").html(chrome.i18n.getMessage("Default"));
       return this;
     },
     

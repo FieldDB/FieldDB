@@ -22,7 +22,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM FIELD init");
+      Utils.debug("DATUM FIELD EDIT VIEW init");
     },
     
     /**
@@ -56,14 +56,14 @@ define([
      * Renders the DatumFieldEditView.
      */
     render : function() {
-      Utils.debug("DATUM FIELD EDIT render");
+      Utils.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         //localization
-        $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
-        $(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
-        $(".locale_locale_Help_Text").attr("placeholder", chrome.i18n.getMessage("locale_locale_Help_Text"));
+        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+        $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
@@ -71,6 +71,11 @@ define([
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
+        var fieldself = this;
+        window.setTimeout(function(){
+          $(fieldself.el).find(".datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+        },500);
+        
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = false;

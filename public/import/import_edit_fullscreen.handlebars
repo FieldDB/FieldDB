@@ -2,38 +2,43 @@
 	<div class="row-fluid">
 		<div class="span4 well">
 			<!--Sidebar content-->
-			<button class="btn btn-success approve-save disabled"><span class = "locale_Save_And_Import"></span></button>
-			<div id="import-data-list" class="well">
+			<span class="badge badge-info">8</span>
+			<button class="btn btn-success approve-save disabled locale_Save_And_Import"></button>
+			<div id="import-data-list" class="">
         <div id="import-data-list-header" class="middle "></div>
         <div>
           <ul class="unstyled zebra import-data-list-paginated-view"></ul>
           <div class="pagination-control"></div>
         </div>
       </div>
+      <div id="import-session" ></div>
 		</div>
 		<div class="span8">
 			<!--Body content-->
 			<div class="well">
-				<i class="icons icon-resize-small pull-right"></i>
 				<h1><span class="locale_Import"></span>
-					 <small id="import-type-description">{{corpusname}}</small>
+					 <small>{{pouchname}}</small>
 				</h1>
 				<progress class="import-progress" max="5" value="0">
-              <strong><span class = "percent_completed"></span></strong>
-            </progress>
-            <span class = "locale_Import_Instructions"></span>
+          <strong class = "locale_percent_completed"></strong>
+        </progress>
+        <span class = "locale_Import_Instructions"></span>
 				<div>{{status}}</div>
 			</div>
-			<textarea class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
 			<div class="well">
-				<button class="btn btn-primary add-column pull-right hide">
-				<span class = "locale_Add_Extra_Columns"></span>
-			</button>
+				<span class="badge badge-info">1</span><span class="badge badge-info">2</span>
+				<textarea class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
+			</div>
+			<div class="well">
+				<button class="btn btn-primary add-column pull-right hide locale_Add_Extra_Columns"></button>
+				<span class="badge badge-info">3</span>
 				<div id="import-datum-field-labels"></div>
 			</div>
 		</div>
 	</div>
 </div>
-	<button class="btn btn-success approve-import hide"><span class = "locale_Attempt_Import"></span></button>
-	<table id="csv-table-area"
-		class=" table well table-striped table-bordered table-condensed"></table>
+<span class="badge badge-info">5</span>
+<button class="btn btn-success approve-import hide locale_Attempt_Import"></button>
+
+<span class="badge badge-info">4</span><span class="badge badge-info">7</span>
+<table id="csv-table-area" class="well table table-striped table-bordered table-condensed"></table>

@@ -89,14 +89,14 @@ define([
     embeddedTemplate : Handlebars.templates.search_advanced_edit_embedded,
     
     /**
-     * The Handlebars template rednered as the fullscreen AdvancedSearchView.
+     * The Handlebars template rendered as the fullscreen AdvancedSearchView.
      */
-    fullscreenTemplate : Handlebars.templates.search_advanced_edit_fullscreen,
+    fullscreenTemplate : Handlebars.templates.search_advanced_edit_embedded,
     
     /**
      * The Handlebars template rendered as the TopSearchView.
      */
-    topTemplate : Handlebars.templates.search_edit_embedded,
+    topTemplate : Handlebars.templates.search_top,
    
     /**
      * Renders the SearchEditView.
@@ -117,6 +117,10 @@ define([
         $(this.el).html(this.embeddedTemplate(this.model.toJSON()));
       } 
       
+      //localization
+      $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
+      $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
+      
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
       
@@ -127,10 +131,10 @@ define([
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization
-      $(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-      $(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
-      
+      $("#search-top").find(".locale_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Search"));
+      $("#search-top").find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
+      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Advanced_Search_Tooltip"));
+
       return this;
     },
     newTempDataList : function(callback){
@@ -179,14 +183,14 @@ define([
 //        attributes.comments = undefined;
 //        attributes.title = self.model.get("title")+ " copy";
 //        attributes.description = "Copy of: "+self.model.get("description");
-//        attributes.corpusname = app.get("corpus").get("corpusname");
+//        attributes.pouchname = app.get("corpus").get("pouchname");
 //        attributes.datumIds = [];
         
         
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
-            "corpusname" : window.app.get("corpus").get("corpusname"),
+            "pouchname" : window.app.get("corpus").get("pouchname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."
           }),
@@ -314,7 +318,7 @@ define([
     search : function(queryString) {
       // Search for Datum that match the search criteria      
       var searchself = this;
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).searchByQueryString(queryString
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).searchByQueryString(queryString
           , function(datumIds){
         
         //this will take in datumIds from its caller
@@ -357,6 +361,7 @@ define([
     resizeSmall : function(e){
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from running same command twice
+        e.preventDefault();
       }
 //      this.format = "centreWell";
 //      this.render(); this is done in the router
@@ -366,11 +371,27 @@ define([
     resizeFullscreen : function(e){
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from running same command twice.
+        e.preventDefault();
       }
 //      this.format = "fullscreeen";
 //      this.render(); //this is done in the router
       window.app.router.showFullscreenSearch();
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING SEARCH EDIT VIEW ");
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
 
   return SearchEditView;
