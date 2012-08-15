@@ -111,6 +111,8 @@ define([
 
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
+      
+
       this.term.initFS(false, 1024 * 1024);
       
       // Set up a timeout event every 10sec
@@ -495,6 +497,11 @@ define([
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
         
+        //put the version into the terminal, and into the user menu
+        Utils.getVersion(function (ver) { 
+          window.appView.term.VERSION_ = ver;
+          $(".ifield-version").html(ver);
+        });
 //        this.importView.render(); //render at last minute using router
 //        this.exportView.render();//render at last minute using router
         
