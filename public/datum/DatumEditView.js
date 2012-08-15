@@ -105,7 +105,7 @@ define([
       "click .icon-eye-open" : function(e){
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
-          alert("This is a bug: cannot find decryption module for your corpus.")
+          alert("This is a bug: cannot find decryption module for your corpus.");
         }
         var self = this;
         confidential.turnOnDecryptedMode(function(){
@@ -117,7 +117,7 @@ define([
       "click .icon-eye-close" : function(e){
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
-          alert("This is a bug: cannot find decryption module for your corpus.")
+          alert("This is a bug: cannot find decryption module for your corpus.");
         }
         confidential.turnOffDecryptedMode();
         this.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
@@ -141,7 +141,8 @@ define([
       "change" : "updatePouch",//TODO this shouldnt be happening?
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
-      "blur .morphemes .datum_field_input" : "morphemesBlur"
+      "blur .morphemes .datum_field_input" : "morphemesBlur",
+      "click .save-datum" : "saveButton"
     },
 
     /**
@@ -192,19 +193,22 @@ define([
             
       }
       //localization
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-//      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-      $(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-//      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-      $(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      $(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
-      $(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-//      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
-      $(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
+      $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+      $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
-      $(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
+//      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
+      $(this.el).find(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
+//      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
+      $(this.el).find(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
+      $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+      $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+      $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
+      $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
+//      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+      $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
+
+      $(this.el).find(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
+
 
       return this;
     },
@@ -273,6 +277,16 @@ define([
       this.needsSave = true;
     },
 
+    
+    saveButton : function(){
+      if (this.needsSave) {
+          saveScreen();
+      }else {
+        window.appView.toastUser("This datum "+this.model.id+"has no unsaved changes","alert-success","Saved!");
+
+      };
+    },
+    
     /**
      * If the model needs to be saved, saves it.
      */
