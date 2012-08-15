@@ -211,10 +211,10 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         alert("mixing a collection from id and models!");
       }
       for(var id in objectIds){
-        var obj = new Model({corpusname: app.get("corpus").get("corpusname")});
+        var obj = new Model({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = objectIds[id];
         var self = this;
-        obj.changeCorpus(window.app.get("corpus").get("corpusname"), function(){
+        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               // Render at the bottom
@@ -258,21 +258,21 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         paginatedSelf.changeCount(e, paginatedSelf);
       });
       
-      //localization
-      $(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
-      $(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
-      $(".locale_More").html(chrome.i18n.getMessage("locale_More"));
-      $(".locale_of").html(chrome.i18n.getMessage("locale_of"));
-      $(".locale_pages_shown").html(chrome.i18n.getMessage("locale_pages_shown"));
+      //localization of the paginatedupdating collection's footer.
+      this.el.parent().find(".pagination-control").find(".locale_More").html(chrome.i18n.getMessage("locale_More"));
+      this.el.parent().find(".pagination-control").find(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
+      this.el.parent().find(".pagination-control").find(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
+      this.el.parent().find(".pagination-control").find(".locale_of").html(chrome.i18n.getMessage("locale_of"));
+      this.el.parent().find(".pagination-control").find(".locale_pages_shown").html(chrome.i18n.getMessage("locale_pages_shown"));
 
     },
 
     /**
      * For paging, the number of items per page.
      */
-    perPage : 12,
+    perPage : 10,
     currentVisibleStart : 0,
-    currentVisibleEnd: 11,
+    currentVisibleEnd: 9,
     /**
      * Based on the number of items per page and the current page, calculate the current
      * pagination info.
@@ -348,7 +348,25 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         }
       }
       self.renderUpdatedPaginationControl();
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING PAGINATEDUPDATINGCOLLECTIONVIEW  VIEW "+ this.format);
+      
+      this.collection.each(this.removeChildView);
+
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
     
   });
   return PaginatedUpdatingCollectionView;

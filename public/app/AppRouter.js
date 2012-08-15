@@ -1,5 +1,6 @@
 define([ 
     "backbone",
+    "datum/Datum",
     "data_list/DataList",
     "datum/Session",
     "datum/SessionEditView",
@@ -7,6 +8,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone,
+    Datum,
     DataList,
     Session,
     SessionEditView,
@@ -32,23 +34,23 @@ define([
 
     routes : {
       "corpus/:corpusid"                : "showFullscreenCorpus", 
-      "corpus/:corpusname/datum/:id"    : "showEmbeddedDatum", //corpusname has to match the pouch of the datum
-      "corpus/:corpusname/search"       : "showEmbeddedSearch",//corpusname has to match the pouch of the corpus
+      "corpus/:pouchname/datum/:id"    : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
+      "corpus/:pouchname/search"       : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/"                         : "showFullscreenCorpus", 
       "data/:dataListid"                : "showFullscreenDataList",
       "session/:sessionid"              : "showFullscreenSession",
       "user/:userid"                    : "showFullscreenUser",
       "import"                          : "showImport",
-      "corpus/:corpusname/export"       : "showExport",
+      "corpus/:pouchname/export"       : "showExport",
       ""                                : "showDashboard"
     },
     
     /**
-     * Displays the dashboard view of the given corpusname, if one was given. Or
+     * Displays the dashboard view of the given pouchname, if one was given. Or
      * the blank dashboard view, otherwise.
      * 
      * @param {String}
-     *          corpusname (Optional) The name of the corpus to display.
+     *          pouchname (Optional) The name of the corpus to display.
      */
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
@@ -68,23 +70,27 @@ define([
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
-    showFullscreenUser : function(userid, corpusname) {
+    showFullscreenUser : function(userid, pouchname) {
       Utils.debug("In showFullscreenUser: " + userid);
 
       if(userid){
-        if(!corpusname){
-          corpusname = app.get("corpus").get("corpusname");
+        if(!pouchname){
+          pouchname = app.get("corpus").get("pouchname");
         }
         //if it is someone different, then change the model.
         if(userid != window.appView.publicReadUserView.model.id){
-          var userToShow = new UserMask();
+          var userToShow = new UserMask({
+            "pouchname": pouchname
+          });
           userToShow.id = userid;
-          userToShow.changeCorpus(corpusname, function(){
-            //fetch only after having setting the right pouch which is what changeCorpus does.
+          userToShow.changePouch(pouchname, function(){
+            //fetch only after having setting the right pouch which is what changePouch does.
             userToShow.fetch({
               success : function(model) {
                 Utils.debug("Corpus member fetched successfully" +model);
                 window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
+                window.appView.publicReadUserView.render();
+
               },
               error : function(e) {
                 alert("User not found in this corpus.");
@@ -92,6 +98,9 @@ define([
             });
           });
         }
+      }
+      if($("#public-user-page").html() == ""){
+        window.appView.publicReadUserView.render();
       }
       this.hideEverything();
       $("#public-user-page").show();
@@ -101,13 +110,15 @@ define([
      * Displays all of the corpus details and settings. 
      * 
      * @param {String}
-     *          corpusname The name of the corpus this datum is from.
+     *          pouchname The name of the corpus this datum is from.
      */
     showFullscreenCorpus : function() {
       Utils.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
-      
+      if($("#corpus-fullscreen").html() == ""){
+        window.appView.renderReadonlyCorpusViews("fullscreen");
+      }
       this.hideEverything();
       $("#corpus-fullscreen").show();
     },
@@ -127,39 +138,38 @@ define([
     
     /**
      * Displays the fullscreen view of the session specified by the given
-     * corpusname and the given datumid.
+     * pouchname and the given datumid.
      * 
      * @param {String}
-     *          corpusname The name of the corpus this datum is from, this needs to direclty match its pouch.
+     *          pouchname The name of the corpus this datum is from, this needs to direclty match its pouch.
      * @param {Number}
      *          sessionid The ID of the session within the corpus.
      */
-    showEmbeddedSession : function(sessionid, corpusname) {
-      Utils.debug("In showEmbeddedSession: " + corpusname + " *** "
+    showEmbeddedSession : function(sessionid, pouchname) {
+      Utils.debug("In showEmbeddedSession: " + pouchname + " *** "
           + sessionid);
       if(sessionid){
-        if(!corpusname){
-          corpusname = window.app.get("corpus").get("corpusname");
+        if(!pouchname){
+          pouchname = window.app.get("corpus").get("pouchname");
         }
         if( sessionid != window.app.get("currentSession").id ){
           var cs = new Session({
-            "corpusname" : corpusname});
+            "pouchname" : pouchname});
           cs.id = sessionid;
           
           //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-          if(window.app.get("corpus").get("corpusname") != corpusname ){
+          if(window.app.get("corpus").get("pouchname") != pouchname ){
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
           
-          cs.changeCorpus(corpusname, function(){
-            //fetch only after having setting the right pouch which is what changeCorpus does.
+          cs.changePouch(pouchname, function(){
+            //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
                 Utils.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                    window.appView.renderEditableSessionViews();
-                    window.appView.renderReadonlySessionViews();
+                    window.appView.renderReadonlySessionViews("centerWell");
                   });
                 });
               },
@@ -181,32 +191,31 @@ define([
     /**
      * Displays the fullscreen view of the session.
      */
-    showFullscreenSession : function(sessionid, corpusname) {
-      Utils.debug("In showFullscreenSession"  + corpusname + " *** "
+    showFullscreenSession : function(sessionid, pouchname) {
+      Utils.debug("In showFullscreenSession"  + pouchname + " *** "
           + sessionid);
       if(sessionid){
-        if(!corpusname){
-          corpusname = window.app.get("corpus").get("corpusname");
+        if(!pouchname){
+          pouchname = window.app.get("corpus").get("pouchname");
         }
         if( sessionid != window.app.get("currentSession").id ){
           var cs = new Session({
-            "corpusname" : corpusname});
+            "pouchname" : pouchname});
           cs.id = sessionid;
           
           //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-          if(window.app.get("corpus").get("corpusname") != corpusname ){
+          if(window.app.get("corpus").get("pouchname") != pouchname ){
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
           
-          cs.changeCorpus(corpusname, function(){
-            //fetch only after having setting the right pouch which is what changeCorpus does.
+          cs.changePouch(pouchname, function(){
+            //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
                 Utils.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
-                    window.appView.renderEditableSessionViews();
-                    window.appView.renderReadonlySessionViews();
+                    window.appView.renderReadonlySessionViews("fullscreen");
                   });
                 });
               },
@@ -217,34 +226,36 @@ define([
           });      
         }
       }
-      
+      if($("#session-fullscreen").html() == ""){
+        window.appView.renderReadonlySessionViews("fullscreen");
+      }
       this.hideEverything();
       $("#session-fullscreen").show();
     },
    
     /**
      * Displays the fullscreen view of the datalist specified by the given
-     * corpusname and the given dataListid
+     * pouchname and the given dataListid
      * 
      * @param {String}
-     *          corpusname The name of the corpus this datalist is from.
+     *          pouchname The name of the corpus this datalist is from.
      * @param {Number}
      *          dataListid The ID of the datalist within the corpus.
      */
-    showFullscreenDataList : function(dataListid, corpusname) {
-      Utils.debug("In showFullscreenDataList: " + corpusname + " *** "
+    showFullscreenDataList : function(dataListid, pouchname) {
+      Utils.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
       if(dataListid &&  dataListid != app.get("currentDataList").id ){
-        if(!corpusname){
-          corpusname = window.app.get("corpus").get("corpusname");
+        if(!pouchname){
+          pouchname = window.app.get("corpus").get("pouchname");
         }
         var dl = new DataList({
-          "corpusname" : corpusname});
+          "pouchname" : pouchname});
         dl.id = dataListid;
         //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if(window.app.get("corpus").get("corpusname") != corpusname ){
+        if(window.app.get("corpus").get("pouchname") != pouchname ){
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           return;
         }
@@ -256,13 +267,13 @@ define([
            * default data list so that it will be the one we fetch.
            */
           if(dataListid == app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].id){
-            app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].changeCorpus(null, function(){
+            app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].changePouch(null, function(){
               app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].save(null, {
                 success : function(model, response) {
                   
                   //wait until the corpus copy is saved before fetching.
-                  dl.changeCorpus(corpusname, function(){
-                    //fetch only after having setting the right pouch which is what changeCorpus does.
+                  dl.changePouch(pouchname, function(){
+                    //fetch only after having setting the right pouch which is what changePouch does.
                     dl.fetch({
                       success : function(e) {
                         Utils.debug("Datalist fetched successfully" +e);
@@ -270,8 +281,8 @@ define([
                           dl.setAsCurrentDataList( function(){
                             window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
 //                              window.app.router.showDashboard();
-//                              window.appView.renderReadonlyDataListViews("fullscreen");
-                              window.appView.renderReadonlyDashboardViews();
+                              window.appView.renderReadonlyDataListViews("fullscreen");
+//                              window.appView.renderReadonlyDashboardViews();
                             });
                           });
                         });
@@ -293,15 +304,15 @@ define([
             /*
              * If it isnt the default data list, just fetch it.
              */
-            dl.changeCorpus(corpusname, function(){
-              //fetch only after having setting the right pouch which is what changeCorpus does.
+            dl.changePouch(pouchname, function(){
+              //fetch only after having setting the right pouch which is what changePouch does.
               dl.fetch({
                 success : function(e) {
                   Utils.debug("Datalist fetched successfully" +e);
                   app.get("currentDataList").saveAndInterConnectInApp(function(){
                     dl.setAsCurrentDataList( function(){
                       window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                        window.appView.renderReadonlyDashboardViews();
+                        window.appView.renderReadonlyDataListViews("fullscreen");
                       });
                     });
                   });
@@ -314,30 +325,32 @@ define([
             
           }
         }
-        
+      }
+      if($("#datalist-fullscreen").html() == ""){
+        window.appView.renderReadonlyDataListViews("fullscreen");
       }
       this.hideEverything();
       $("#data-list-fullscreen").show();      
     },
     
-    showMiddleDataList : function(dataListid, corpusname) {
+    showMiddleDataList : function(dataListid, pouchname) {
       Utils.debug("In showMiddleDataList");
 
       if(dataListid){
-        if(!corpusname){
-          corpusname = window.app.get("corpus").get("corpusname");
+        if(!pouchname){
+          pouchname = window.app.get("corpus").get("pouchname");
         }
         var dl = new DataList({
-          "corpusname" : corpusname});
+          "pouchname" : pouchname});
         dl.id = dataListid;
 
         //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if(window.app.get("corpus").get("corpusname") != corpusname ){
+        if(window.app.get("corpus").get("pouchname") != pouchname ){
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         }
         
-        dl.changeCorpus(corpusname, function(){
-          //fetch only after having setting the right pouch which is what changeCorpus does.
+        dl.changePouch(pouchname, function(){
+          //fetch only after having setting the right pouch which is what changePouch does.
           dl.fetch({
             success : function(e) {
               Utils.debug("Datalist fetched successfully" +e);
@@ -361,7 +374,7 @@ define([
     /**
      * Displays the advanced search in fullscreen form.
      */
-    showFullscreenSearch : function(corpusname, corpusid) {
+    showFullscreenSearch : function(pouchname, corpusid) {
       this.hideEverything();
       window.appView.searchEditView.format = "fullscreen";
       window.appView.searchEditView.render();
@@ -371,24 +384,50 @@ define([
     /**
      * Displays the advanced search in embedded form.
      */
-    showEmbeddedSearch : function(corpusname, corpusid) {
+    showEmbeddedSearch : function(pouchname, corpusid) {
       this.hideEverything();
       $("#dashboard-view").show();
       window.appView.searchEditView.format = "centreWell";
       window.appView.searchEditView.render();
       $("#search-embedded").show();
     },
-    
+    showEmbeddedDatum : function(pouchname, datumid){
+      Utils.debug("In showEmbeddedDatum"  + pouchname + " *** "
+          + datumid);
+      if(datumid){
+        if(!pouchname){
+          pouchname = window.app.get("corpus").get("pouchname");
+        }
+        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        obj.id  = datumid;
+        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              window.appView.datumsEditView.prependDatum(model);
+              window.app.router.showDashboard();
+            }
+          });
+        });
+      }else{
+        window.app.router.showDashboard();
+      }
+    },
     showImport : function() {
       Utils.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
+      if($("#import-fullscreen").html() == ""){
+        window.appView.importView.render();
+      }
       this.hideEverything();
       $('#import-fullscreen').show();
     },
     
-    showExport : function(corpusname) {
-      Utils.debug("In showExport: " + corpusname);
+    showExport : function(pouchname) {
+      Utils.debug("In showExport: " + pouchname);
       //DONT render here, that way the user can come and go to the import dashboard
+      if($("#export-modal").html() == ""){
+        window.appView.exportView.render();
+      }
       this.hideEverything();
       $("#dashboard-view").show();
       $('#export-modal').modal("show");

@@ -1,39 +1,50 @@
 <!-- list for the fields -->
 <ul class="datum_fields_ul unstyled"></ul>
-<!-- label for the states -->
-<div class="datum_state">
-  {{#each datumStates}}
-  {{#if selected}}
-  <span class="badge badge-{{color}}">{{state}}</span>
-  {{/if}}
-  {{/each}}
+<div class="">
+  <i class="icons icon-save "></i><span class="last-modified">{{dateModified}}</span><br/>
+  <i class="icons icon-time"></i><span class="date-created">{{dateEntered}}</span><br/>
+  <span class="session-link"></span>
 </div>
-<!-- list for the tags -->
-<ul class="datum_tags_ul unstyled"></ul>
-
-<!-- Buttons for various actions -->
-<div>
-  <div class="icons btn-group">
-    <a href="#" class = "locale_LaTeX" rel="tooltip">
-      <button class="btn btn-primary LaTeX">LaTeX</button></a>
-    <a href="#" class = "locale_CSV" rel="tooltip">
-      <button class="btn btn-primary CSV">CSV/Excel</button></a>
-    <a  href="#" class = "locale_Copy" rel="tooltip" >
-      <i class="icons icon-paste"></i></a>
+<hr/>
+<!-- Datum Read only specialized fields and menu area -->
+<div class="row-fluid">
+  <div class="span5">
+    <!-- Buttons for various read only actions -->
+    <div class=" btn-group">
+      <a href="#" class = "locale_Show_confidential_items_Tooltip btn btn-mini btn-primary" rel="tooltip">
+        <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
+      </a>
+      <a  href="#" class = "locale_Plain_Text_Export_Tooltip btn btn-mini btn-primary" rel="tooltip" >
+        <i class=" icon-paste"></i></a>
+      <a href="#" class = "locale_LaTeX  LaTeX btn btn-mini btn-primary" rel="tooltip">
+        <i class="">LaTeX</i>
+      </a>
+      <a href="#" class = "locale_CSV_Tooltip CSV btn btn-mini btn-primary" rel="tooltip">
+        <i class="">CSV</i>
+      </a>
+    </div>
+    <br/>
+    <div class="audio_video "></div>
+  </div>
+  <div class="span4 border-left">
+    <!-- list for the tags -->
+    <ul class="datum_tags_ul unstyled"></ul>
+  </div>
+  <div class="datum_state span3 border-left">
+    {{#each datumStates}}
+	  {{#if selected}}
+	  <span class="label label-{{color}}"><i class = " icon-flag"></i>{{state}}</span>
+	  {{/if}}
+	  {{/each}}
   </div>
 </div>
-<div class="audio_video"></div>
 
-<!--Comments Section  -->
-<div class="comments-section">
-	<ul class="comments unstyled"></ul>
-	<div class="alert alert-info">
-		<i class="icons icon-comment"></i>
-		<textarea class="comment-new-text"></textarea>
-	</div>
-	<button class="btn btn-primary add-comment-edit" value="Add">
-		<span class="locale_Add"></span>
-	</button>
+<!-- Datum comments -->
+<ul class="comments unstyled"></ul>
+<div class="alert alert-info">
+  <textarea class="comment-new-text"></textarea>
+  <button class="btn btn-mini btn-primary add-comment-datum" value="Add">
+    <i class="icon-comment"></i>
+    <span class = "locale_Add"></span> 
+  </button>
 </div>
-
-
