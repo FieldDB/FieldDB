@@ -94,7 +94,7 @@ define([
      * @constructs
      */
     initialize: function() {
-      
+      Utils.debug("SESSION init");
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -108,12 +108,12 @@ define([
       comments : Comments
     },
     
-    changeCorpus : function(corpusname, callback) {
-      if(!corpusname){
-        corpusname = this.get("corpusname");
+    changePouch : function(pouchname, callback) {
+      if(!pouchname){
+        pouchname = this.get("pouchname");
       }
       if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
       }
       if(typeof callback == "function"){
         callback();
@@ -139,7 +139,7 @@ define([
         newModel = false;
       }
       //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("corpusname") != this.get("corpusname")){
+      if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
           failurecallback();
         }else{
@@ -148,7 +148,7 @@ define([
         return;
       }
       var oldrev = this.get("_rev");
-      this.changeCorpus(null,function(){
+      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             Utils.debug('Session save success');
@@ -176,7 +176,7 @@ define([
 //                  user: window.app.get("authentication").get("userPublic")
                 }));
             
-            //make sure the session is in this corpus, if it is the same corpusname
+            //make sure the session is in this corpus, if it is the same pouchname
             var previousversionincorpus = window.app.get("corpus").get("sessions").getByCid(model.cid);
             if( previousversionincorpus == undefined ){
               window.app.get("corpus").get("sessions").unshift(model);
@@ -205,7 +205,8 @@ define([
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('Session save error' + e);
+              alert('Session save error' + JSON.stringfy(e));
+              Utils.debug('Session save error' + JSON.stringfy(e));
             }
           }
         });
@@ -222,7 +223,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentSession : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
+      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
         if (typeof failurecallback == "function") {
           failurecallback();
         }else{
@@ -243,10 +244,11 @@ define([
             if (typeof successcallback == "function") {
               successcallback();
             }else{
-              window.appView.sessionReadLeftSideView.render();
-              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id,"alert-success","Connected!");
-//            window.appView.renderEditableSessionViews();
-//            window.appView.renderReadonlySessionViews();
+              window.appView.currentSessionReadView.format = "leftSide";
+              window.appView.currentSessionReadView.render();
+              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
+//            window.appView.renderEditableSessionViews("leftSide");
+//            window.appView.renderReadonlySessionViews("leftSide");
             }
           });
         }catch(e){

@@ -60,6 +60,10 @@ define([
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".datum-embedded-ul");
         this.datumsView.render();
+        
+        //localization of centerWell view
+        $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+        
       } else if (this.format == "fullscreen") {
         // Display the DatumContainerEditView
         this.setElement($("#datum-container-fullscreen"));
@@ -68,10 +72,14 @@ define([
         // Display the DatumFieldsView
         this.datumsView.el = this.$(".datum-embedded-ul");
         this.datumsView.render();
+        
+        //localization of fullscreen view
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+
       }
-      //localization
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Edit_Datum").attr("title", chrome.i18n.getMessage("locale_Edit_Datum"));      
+      //localization for all views
+      $(this.el).find(".locale_Data_Entry_Area").html(chrome.i18n.getMessage("locale_Data_Entry_Area"));
+      $(this.el).find(".locale_Edit_Datum").attr("title", chrome.i18n.getMessage("locale_Edit_Datum"));      
     },
     
     resizeSmall : function() {
@@ -92,7 +100,7 @@ define([
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"corpusname": app.get("corpus").get("corpusname")})).getAllDatumIdsByDate(function(rows) {
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getAllDatumIdsByDate(function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums

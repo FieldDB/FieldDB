@@ -11,6 +11,8 @@ define([
     "datum/DatumFieldEditView",
     "datum/DatumTag",
     "datum/DatumTagEditView",
+    "datum/DatumTagReadView",
+    "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
     "libs/Utils"
@@ -27,6 +29,8 @@ define([
     DatumFieldEditView,
     DatumTag,
     DatumTagEditView,
+    DatumTagReadView,
+    SessionReadView,
     UpdatingCollectionView
 ) {
   var DatumEditView = Backbone.View.extend(
@@ -57,7 +61,7 @@ define([
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
-        childViewConstructor : DatumTagEditView,
+        childViewConstructor : DatumTagReadView,
         childViewTagName     : "li",
       });
 
@@ -70,7 +74,13 @@ define([
         childViewFormat      : "datum"
       });
       
-      this.bind("change:audioVideo", this.playAudio, this);
+      this.sessionView = new SessionReadView({
+        model : this.model.get("session"),
+        });
+      this.sessionView.format = "link";
+      
+      this.model.bind("change:audioVideo", this.playAudio, this);
+      this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
     },
 
     /**
@@ -82,7 +92,12 @@ define([
      * Events that the DatumEditView is listening to and their handlers.
      */
     events : {
-      
+      /* Prevent clicking on the help conventions from reloading the page to # */
+      "click .help-conventions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+      },
       /* Menu */
       "click .LaTeX" : function(){
         this.model.laTeXiT(true);
@@ -136,7 +151,7 @@ define([
         }
       },
       "change .datum_state_select" : "updateDatumStates",
-      "click .add-comment-datum-edit" : 'insertNewComment',
+      "click .add-comment-datum" : 'insertNewComment',
       
       "change" : "updatePouch",//TODO this shouldnt be happening?
       
@@ -159,6 +174,12 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+      try{
+        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
+      }catch(e){
+        Utils.debug("There was a problem fishing out which datum state was selected.");
+      }
       
       if (this.format == "well") {
         // Display the DatumEditView
@@ -176,6 +197,10 @@ define([
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
         
+        // Display the SessionView
+        this.sessionView.el = this.$('.session-link'); 
+        this.sessionView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
@@ -189,26 +214,30 @@ define([
             });
           });
           self.hideRareFields();
-        }, 1000);
+        }, 500);
             
+        //localization for edit well view
+        $(this.el).find(".locale_See_Fields").attr("title", chrome.i18n.getMessage("locale_See_Fields"));
+//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tags_Tooltip"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip"));
+        $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+        if(jsonToRender.confidential){
+          $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+        }else{
+          $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+        }
+        if(jsonToRender.decryptedMode){
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+        }else{
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        } 
+        $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
+        $(this.el).find(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
+        
+        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", chrome.i18n.getMessage("locale_Drag_and_Drop_Audio_Tooltip"));
       }
-      //localization
-      $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-
-//      $(".locale_Add_Tag").attr("placeholder", chrome.i18n.getMessage("locale_Add_Tag"));
-      $(this.el).find(".locale_Add_Tags").attr("title", chrome.i18n.getMessage("locale_Add_Tag"));
-//      $(".locale_Play_Audio").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(this.el).find(".locale_Copy").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
-      $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
-      $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-//      $(".locale_Decrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
-      $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));//TODO we dont have a tool tip for the eye, or at least no appropriate  localization message
-
-      $(this.el).find(".locale_CSV").attr("title", chrome.i18n.getMessage("locale_CSV"));
-
 
       return this;
     },
@@ -218,6 +247,7 @@ define([
     hideRareFields : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.rareFields = [];
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
@@ -235,6 +265,7 @@ define([
     showRareFields : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
@@ -253,6 +284,7 @@ define([
     encryptDatum : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.model.encrypt();
       this.render();
@@ -265,6 +297,7 @@ define([
     decryptDatum : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.model.decrypt();
       this.render();
@@ -278,7 +311,11 @@ define([
     },
 
     
-    saveButton : function(){
+    saveButton : function(e){
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       if (this.needsSave) {
           this.saveScreen();
       }else {
@@ -308,6 +345,7 @@ define([
     insertNewDatumTag : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
@@ -326,6 +364,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
@@ -339,6 +378,12 @@ define([
       this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
       this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       
+      //update the view of the datum state to the new color and text without rendering the entire datum
+      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
+      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
+      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
+      $(this.el).find(".datum-state-value").html(selectedValue);
+
       this.needsSave = true;
     },
     
@@ -370,21 +415,35 @@ define([
     playAudio : function(){
       if(this.model.get("audioVideo")){
           this.$el.find(".datum-audio-player")[0].play();
+          this.needsSave = true;
       }
+    },
+    /*
+     * This function helps the user know that the app is saving his/her data often,
+     * it updates the time, without re-rendering the datum
+     */
+    updateLastModifiedUI : function(){
+      $(this.el).find(".last-modified").html(this.model.get("dateModified"));//("0 seconds ago");
+      $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       if (utteranceLine) {
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
         if (this.$el.find(".morphemes .datum_field_input").val() == "") {
           // If the morphemes line is empty, make it a copy of the utterance
           this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
-
           this.needsSave = true;
+          
+//          //autosize the morphemes field
+//          var datumself = this;
+//          window.setTimeout(function(){
+//            $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//          },500);
         }
         // If the guessed morphemes is different than the unparsed utterance 
         if (morphemesLine != utteranceLine && morphemesLine != "") {
@@ -394,10 +453,16 @@ define([
           if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
             // Replace the morphemes line with the guessed morphemes
             this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
+            this.needsSave = true;
             //redo the gloss guessing
             this.guessGlosses(morphemesLine);
+            
+//            //autosize the morphemes field
+//            var datumself = this;
+//            window.setTimeout(function(){
+//              $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//            },500);
 
-            this.needsSave = true;
           }
         }
       }
@@ -405,7 +470,7 @@ define([
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("corpusname"));
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       this.guessGlosses($(e.currentTarget).val());
     },
@@ -419,13 +484,17 @@ define([
           this.needsSave = true;
         }
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
-        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?]/g,"") != "") {
+        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
           // Ask the user if they want to use the guessed gloss
           if (confirm("Would you like to use this gloss:\n" + glossLine)) {
             // Replace the gloss line with the guessed gloss
             this.$el.find(".gloss .datum_field_input").val(glossLine);
-            
             this.needsSave = true;
+            //autosize the gloss field
+//            var datumself = this;
+//            window.setTimeout(function(){
+//              $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//            },500);
           }
         }
       }
