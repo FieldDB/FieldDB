@@ -21,6 +21,7 @@ define([
      * @constructs
      */
     initialize : function() {
+      Utils.debug("USER PREFERENCE init");
       if(this.get("unicodes") == undefined){
         this.set("unicodes", new InsertUnicodes());
       }//end if to set unicode
@@ -211,10 +212,10 @@ define([
     
     defaults : {
       skin : "",
-      numVisibleDatum : 3,
+      numVisibleDatum : 2, //Use two as default so users can see minimal pairs
       transparentDashboard: false,
       alwaysRandomizeSkin : true,
-      numberOfItemsInPaginatedViews : 12
+      numberOfItemsInPaginatedViews : 10
     },
     
     // Internal models: used by the parse function

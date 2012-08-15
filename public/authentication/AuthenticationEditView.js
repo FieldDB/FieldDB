@@ -25,7 +25,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("AUTH init: " + this.el);
+      Utils.debug("AUTH EDIT init: " + this.el);
       
     //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
@@ -35,7 +35,7 @@ define([
       this.userView.setElement($("#user-quickview"));
       
       // Any time the Authentication model changes, re-render
-      this.model.bind('change', this.render, this);
+      this.model.bind('change:state', this.render, this);
       this.model.get("userPublic").bind('change', this.render, this);
       
     },
@@ -77,54 +77,55 @@ define([
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
-      Utils.debug("AUTH render: " + this.el);
+      Utils.debug("AUTH EDIT render: " + this.el);
+      if (this.model == undefined) {
+        Utils.debug("Auth model was undefined, come back later.");
+        return this;
+      }
+
       if(this.model.get("userPublic") != undefined){
         this.model.set( "gravatar", this.model.get("userPublic").get("gravatar") );
+        this.model.set( "username", this.model.get("userPublic").get("username") );
       }
-      if (this.model != undefined) {
-        // Display the AuthenticationEditView
-        this.setElement($("#authentication-embedded"));
-        $(this.el).html(this.template(this.model.toJSON()));
-     
-        if (this.model.get("state") == "loggedIn") {
-          $("#logout").show();
-          $("#login").hide();
-          $("#login_form").hide();
-          if(this.model.get("userPublic") != undefined){
-            this.userView.setElement($("#user-quickview"));
-            this.userView.render();
-          }else{
-            $("#user-quickview").html('<i class="icons icon-user icon-white">');
-          }
-        } else {
-          $("#logout").hide();
-          $("#login").show();
-          $("#login_form").show();
-          if(this.model.get("userPublic") != undefined){
-            this.userView.setElement($("#user-quickview"));
-            this.userView.render();
-          }else{
-            $("#user-quickview").html('<i class="icons icon-user icon-white">');
-          }
-          this.$el.children(".user").html("");
+      // Display the AuthenticationEditView
+      this.setElement($("#authentication-embedded"));
+      $(this.el).html(this.template(this.model.toJSON()));
+
+      if (this.model.get("state") == "loggedIn") {
+        $("#logout").show();
+        $("#login").hide();
+        $("#login_form").hide();
+        if(this.model.get("userPublic") != undefined){
+          Utils.debug("\t rendering AuthenticationEditView's UserView");
+          this.userView.setElement($("#user-quickview"));
+          this.userView.render();
+        }else{
+          $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
-        
-        Utils.debug("\trendering login: " + this.model.get("username"));
       } else {
-        Utils.debug("\tAuthentication model was undefined.");
+        $("#logout").hide();
+        $("#login").show();
+        $("#login_form").show();
+        if(this.model.get("userPublic") != undefined){
+          Utils.debug("\t rendering AuthenticationEditView's UserView");
+          this.userView.setElement($("#user-quickview"));
+          this.userView.render();
+        }else{
+          $("#user-quickview").html('<i class="icons icon-user icon-white">');
+        }
+        this.$el.children(".user").html("");
       }
-      
+
       //localization
-      $(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-      $(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-      $(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
-      $(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
-      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
-      $(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
-      $(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
-      $(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
-      $(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
-      
+      $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
+      $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(this.el).find(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
+      $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
+      $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(this.el).find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
+      $(this.el).find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
+      $(this.el).find(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
       
       return this;
     },
@@ -199,15 +200,22 @@ define([
           window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
-//              appView.datumsEditView.newDatum();
-              appView.datumsEditView.render();
+              alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
+              window.app.router.showDashboard();
             }else{
               /*
-               *  Load their last corpus, session, datalist etc
+               *  Load their last corpus, session, datalist etc, 
+               *  only if it is not the ones already most recently loaded.
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+              var visibleids = {};
+              visibleids.corpusid = app.get("corpus").id;
+              visibleids.sessionid = app.get("currentSession").id;
+              visibleids.datalistid = app.get("currentDataList").id;
+              if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
+                Utils.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
+                window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+              }
             }                    
           });
         });
@@ -218,9 +226,8 @@ define([
           if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
-              alert("Bug: User does not have most recent ids, not showing your dashbaord.");
-//              appView.datumsEditView.newDatum();
-              appView.datumsEditView.render();
+              alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
+              window.app.router.showDashboard();
             }else{
               /*
                *  Load their last corpus, session, datalist etc

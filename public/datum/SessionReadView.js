@@ -26,12 +26,12 @@ define([
     
      * @property {String} format Must be set when the view is
      * initialized. Valid values are "leftSide", "fullscreen", 
-     * "embedded"  and link
+     * "centerWell"  and link
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
-      Utils.debug("SESSION init: " + this.el);
+      Utils.debug("SESSION READ VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -52,16 +52,11 @@ define([
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-session-read" : 'insertNewComment',
+      "click .add-comment-session" : 'insertNewComment',
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
     },
-    
-    /**
-     * The Handlebars template rendered as the Embedded.
-     */
-    templateEmbedded: Handlebars.templates.session_read_embedded,
     
     /**
      * The Handlebars template rendered as the Summary.
@@ -69,9 +64,14 @@ define([
     templateSummary : Handlebars.templates.session_summary_read_embedded,
     
     /**
+     * The Handlebars template rendered as the Embedded.
+     */
+    templateEmbedded: Handlebars.templates.session_read_embedded,
+    
+    /**
      * The Handlebars template rendered as the Fullscreen.
      */
-    templateFullscreen : Handlebars.templates.session_read_fullscreen,
+    templateFullscreen : Handlebars.templates.session_read_embedded,
     
     /**
      * The Handlebars template rendered as the link format.
@@ -82,7 +82,7 @@ define([
      * Renders the SessionReadView.
      */
     render : function() {
-      Utils.debug("SESSION render: " + this.el);
+      Utils.debug("SESSION READ render: " );
       if (this.model == undefined) {
         Utils.debug("SESSION is undefined, come back later.");
         return this;
@@ -93,7 +93,33 @@ define([
           Utils.debug("SESSION fields are undefined, come back later.");
           return this;
         }
-        if (this.format == "embedded") {
+        if(this.format != "link"){
+          appView.currentSessionEditView.destroy_view();
+          appView.currentSessionReadView.destroy_view();
+        }
+        if (this.format == "leftSide") {
+          Utils.debug("SESSION READ LEFTSIDE render: " );
+
+          var jsonToRender = {
+              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
+              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
+              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
+          };
+
+          this.setElement("#session-quickview");
+          $(this.el).html(this.templateSummary(jsonToRender)); 
+
+          //Localization for leftSide
+          $(this.el).find(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
+          $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+          $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+          $(this.el).find(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+
+        }else if (this.format == "centerWell") {
+          Utils.debug("SESSION READ CENTERWELL render: " );
+
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
           
@@ -103,18 +129,16 @@ define([
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
-         
-        } else if (this.format == "leftSide") {
-          var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
-          };
           
-          this.setElement("#session-quickview");
-          $(this.el).html(this.templateSummary(jsonToRender)); 
-          
+          //Localization for centerWell
+          $(this.el).find(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
         } else if (this.format == "fullscreen") {
+          Utils.debug("SESSION READ FULLSCREEN render: " );
+
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(this.model.toJSON()));
           
@@ -124,7 +148,14 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          //Localization for fullscreen
+          $(this.el).find(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
         } else if (this.format == "link") {
+          Utils.debug("SESSION READ LINK render: " );
 
           $(this.el).html(this.templateLink(this.model.toJSON()));
        
@@ -135,7 +166,11 @@ define([
               dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
             };
           $(this.el).html(this.templateLink(jsonToRender));
-
+          
+          //Localization of link
+          $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
+          $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
+          
         } else {
           throw("You have not specified a format that the SessionReadView can understand.");
         }
@@ -143,18 +178,6 @@ define([
         Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       
-      //localization
-      $(".locale_Session").html(chrome.i18n.getMessage("locale_Session"));
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
-      $(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
-      $(".locale_When").html(chrome.i18n.getMessage("locale_When"));
-      $(".locale_Edit_Session").attr("title", chrome.i18n.getMessage("locale_Edit_Session"));
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
-
- 
       return this;
     },
     
@@ -178,35 +201,57 @@ define([
     resizeSmall : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
-      window.app.router.showEmbeddedSession();
+      window.app.router.showDashboard();
     },
     
     resizeLarge : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
+      this.format = "fullscreen";
+      this.render();
       window.app.router.showFullscreenSession();
     },
     
-    //bound to book
     showEditable :function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
-      window.appView.renderEditableSessionViews();
+      window.appView.currentSessionEditView.format = this.format;
+      window.appView.currentSessionEditView.render();
     }, 
  
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
-    }
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING SESSION READ VIEW "+ this.format);
+
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//      this.remove();  
+//      Backbone.View.prototype.remove.call(this);
+      }
   });
   
   return SessionReadView;
