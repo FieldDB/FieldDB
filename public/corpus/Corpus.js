@@ -336,6 +336,22 @@ define([
         }
       }
       var oldrev = this.get("_rev");
+      
+      /*
+       * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
+       */
+      try{
+        var ds = this.get("datumStates");
+        for (var s in ds){
+          if(ds[s].get("state") == undefined  ){
+            ds.splice(s,1);
+          }
+        }
+      }catch(e){
+        Utils.debug("Removing empty states work around failed some thing was wrong.",e);
+      }
+      
+      
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
