@@ -2,15 +2,12 @@
 	<h1 class = "locale_User_Settings"></h1>
 </div>
 <div class="modal-body">
-	<h5><span class = "locale_Skin"></span> {{skin}}</h5>
+	<h5 class = "locale_Skin"> </h5>
+	<span class="user-pref-skin-filename">{{skin}}</span>
 	<div class="control-group">
-		<button class="preference btn change-skin"><span class = "locale_Change_Background"></span></button>
-		<button class="preference btn randomize-backgound">
-		<span class = "locale_Background_on_Random"></span>
-	</button>
-		<button class="preference btn transparent-dashboard">
-		<span class = "locale_Transparent_Dashboard"></span>
-		</button>
+		<button class="preference btn change-skin locale_Change_Background"></button>
+		<button class="preference btn randomize-backgound locale_Background_on_Random">	</button>
+		<button class="preference btn transparent-dashboard locale_Transparent_Dashboard">		</button>
 	</div>
 	<h5 class ="locale_Number_Datum"></h5>
 	<select class="num_datum_dropdown">
@@ -22,6 +19,6 @@
 	</select>
 </div>
 <div class="modal-footer">
-	<a href="#" class="btn" data-dismiss="modal"><span class = "locale_Close"></span></a>
+	<a href="#" class="btn locale_Close" data-dismiss="modal"></a>
 </div>
 

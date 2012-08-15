@@ -1,5 +1,6 @@
 define([ 
     "backbone",
+    "datum/Datum",
     "data_list/DataList",
     "datum/Session",
     "datum/SessionEditView",
@@ -7,6 +8,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone,
+    Datum,
     DataList,
     Session,
     SessionEditView,
@@ -114,7 +116,9 @@ define([
       Utils.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
-      
+      if($("#corpus-fullscreen").html() == ""){
+        window.appView.renderReadonlyCorpusViews("fullscreen");
+      }
       this.hideEverything();
       $("#corpus-fullscreen").show();
     },
@@ -387,7 +391,27 @@ define([
       window.appView.searchEditView.render();
       $("#search-embedded").show();
     },
-    
+    showEmbeddedDatum : function(pouchname, datumid){
+      Utils.debug("In showEmbeddedDatum"  + pouchname + " *** "
+          + datumid);
+      if(datumid){
+        if(!pouchname){
+          pouchname = window.app.get("corpus").get("pouchname");
+        }
+        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        obj.id  = datumid;
+        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              window.appView.datumsEditView.prependDatum(model);
+              window.app.router.showDashboard();
+            }
+          });
+        });
+      }else{
+        window.app.router.showDashboard();
+      }
+    },
     showImport : function() {
       Utils.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
