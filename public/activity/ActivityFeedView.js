@@ -50,11 +50,19 @@ define([
     model : ActivityFeed,
     
     events : {
-      "click .icon-minus-sign" : function() {
+      "click .icon-minus-sign" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         this.format = "minimized"+this.format;
         this.render();
       },
-      "click .icon-plus-sign" : function() {
+      "click .icon-plus-sign" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         this.format = this.format.replace("minimized","");
         this.render();
       }

@@ -144,6 +144,7 @@ define([
         $(this.el).html(this.template(this.model.toJSON()));
         $(".username").focus();
         $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
+        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir_Tooltip").attr("title", chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir_Tooltip"));
         $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
         $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
         $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));

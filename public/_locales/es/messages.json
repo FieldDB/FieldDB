@@ -6,8 +6,12 @@
     "message" : "Un aplicacion de colección de datos linguisticos."
   },
   "locale_Close_and_login_as_Ed_Sapir" : {
-    "message" : "Cerrar y Entrar como Ed Sapir",
+    "message" : "Entrar como Ed Sapir",
     "description" : "button"
+  },
+  "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
+    "message" : "TODO translate You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to iField this is a great place to start after watching the videos.",
+    "description" : "tooltip"
   },
   "locale_Username" : {
     "message" : "Usuario:"

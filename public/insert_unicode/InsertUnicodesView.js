@@ -50,11 +50,19 @@ define([
           this.insertNewUnicodeSymbol();
         }
       },
-      "click .icon-minus-sign" : function() {
+      "click .icon-minus-sign" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         this.format = "minimized";
         this.render();
       },
-      "click .icon-plus-sign" : function() {
+      "click .icon-plus-sign" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         this.format = "rightSide";
         this.render();
       }

@@ -8,8 +8,12 @@
     "description" : "The description of the application, displayed in the web store."
   },
   "locale_Close_and_login_as_Ed_Sapir" : {
-    "message" : "Close and login as Ed Sapir",
+    "message" : "Login as Ed Sapir",
     "description" : "button"
+  },
+  "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
+    "message" : "You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to iField this is a great place to start after watching the videos. ",
+    "description" : "tooltip"
   },
   "locale_Username" : {
     "message" : "Username:"
