@@ -121,7 +121,7 @@ define([
         data.user.publicSelf = {};
         data.user.publicSelf.username = data.user.username;
         data.user.publicSelf.gravatar = data.user.gravatar;
-        data.user.publicSelf._id = data.user._id;
+        data.user.publicSelf.id = data.user._id; //this will end up as an attribute
         data.user.publicSelf.pouchname = data.user.corpuses[0].pouchname;
       }
       
@@ -130,7 +130,7 @@ define([
       }else{
         this.get("userPublic").set(data.user.publicSelf);
       }
-      this.get("userPublic").id = data.user._id;
+      this.get("userPublic")._id = data.user._id;
 
       if (this.get("userPrivate") == undefined) {
         this.set("userPrivate", new User());
@@ -157,10 +157,14 @@ define([
       Utils.setCookie("token", data.user.hash, 365);
       this.get("confidential").set("secretkey", data.user.hash);
       this.saveAndEncryptUserToLocalStorage();
-      if(window.appView){
-        window.appView.addBackboneDoc(this.get("userPublic").id);
-        window.appView.addPouchDoc(this.get("userPublic").id);
-      }
+//      if(window.appView){
+//        if(! this.get("userPublic").id){
+//          this.get("userPublic").saveAndInterConnectInApp();
+//        }else{
+//          window.appView.addBackboneDoc(this.get("userPublic").id);
+//          window.appView.addPouchDoc(this.get("userPublic").id);
+//        }
+//      }
     },
     loadEncryptedUser : function(encryptedUserString, callbackload){
       Utils.debug("loadEncryptedUser");

@@ -226,7 +226,7 @@ define([
         //If app is completed loaded use the user, otherwise put a blank user
         if(window.appView){
           this.set("team", window.app.get("authentication").get("userPublic"));
-          this.get("team").id = window.app.get("authentication").get("userPublic").id;
+//          this.get("team").id = window.app.get("authentication").get("userPublic").id;
         }else{
 //          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
         }
@@ -356,13 +356,41 @@ define([
             if(newModel){
               verb = "added";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
-                new Activity({
-                  verb : verb,
-                  directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
-                  indirectobject : "owned by <a href='#user/"+model.get("team").id+"'>"+model.get("team").get("username")+"</a>",
-                  context : differences+" via Offline App."
-                }));
+            var teamid = model.get("team").id; //Works if UserMask was saved
+            if(!teamid){
+              //TODO test this, this is to protect from the case wher the id of the team is not set yet.
+//              window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
+//                window.app.get("corpus").set("team", window.app.get("authentication").get("userPublic"));
+//                window.app.get("authentication").get("userPrivate").get("activities").unshift(
+//                    new Activity({
+//                      verb : verb,
+//                      directobject : "<a href='#corpus/"+window.app.get("corpus").id+"'>corpus "+title+"</a> ",
+//                      indirectobject : "owned by <a href='#user/"+window.app.get("corpus").get("team").id+"'>"+window.app.get("corpus").get("team").get("username")+"</a>",
+//                      context : differences+" via Offline App."
+//                    }));
+//              });
+              teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
+              if(!teamid){
+                if(model.get("team").get("username") == window.app.get("authentication").get("userPrivate").get("username")){
+                  teamid = window.app.get("authentication").get("userPrivate").id; //Assumes the user private and team are the same user...this is dangerous
+                }
+              }
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                  new Activity({
+                    verb : verb,
+                    directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
+                    context : differences+" via Offline App."
+                  }));
+            }else{
+              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+                  new Activity({
+                    verb : verb,
+                    directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
+                    indirectobject : "owned by <a href='#user/"+model.get("team").id+"'>"+model.get("team").get("username")+"</a>",
+                    context : differences+" via Offline App."
+                  }));
+            }
             
             //make sure the corpus is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("corpuses").indexOf(model.get("couchConnection")) == -1){

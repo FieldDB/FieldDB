@@ -227,26 +227,6 @@ define([
                 // Faking a login behavior, copy pasted from authentication auth function
                 var auth  = a.get("authentication");
                 auth.saveServerResponseToUser(data, function(){
-                  //this code is now all in one place, in saveServerResponseToUser DO NOT DELETE YET
-//                    auth.set("state", "loggedIn");
-//                    auth.staleAuthentication = false;
-//                    
-//                    var u = auth.get("userPrivate");
-//                    u.id = data.user._id; //set the backbone id to be the same as the mongodb id
-//                    u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
-//                    
-//                    // Over write the public copy with any (new) username/gravatar info set the backbone id of the userPublic to be the same as the mongodb id of the userPrivate
-//                    auth.get("userPublic").id = auth.get("userPrivate").id;
-//                    if (data.user.publicSelf == null) {
-//                      // If the user hasnt already specified their public auth, then put in a username and gravatar,however they can add more details like their affiliation, name, research interests etc.
-//                      data.user.publicSelf = {};
-//                      data.user.publicSelf.username = auth.get("userPrivate").get("username");
-//                      data.user.publicSelf.gravatar = auth.get("userPrivate").get("gravatar");
-//                    }
-//                    auth.get("userPublic").set(data.user.publicSelf);
-//                    auth.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
-////                  auth.get("userPublic").save();
-                  
                   var c = a.get("corpus");
                   c.set({
                     "title" : data.user.username + "'s Corpus",
@@ -308,11 +288,13 @@ define([
                         //Bring down the views so the user can search locally without pushing to a server.
                         c.replicateFromCorpus(couchConnection, function(){
 //                        appView.datumsEditView.newDatum();
-                          appView.datumsEditView.render();
+//                          appView.datumsEditView.render();
                         });
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
-                          window.app.saveAndInterConnectInApp();
+                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
+                            window.app.saveAndInterConnectInApp();
+                          });
                         },10000);
                         
                       });

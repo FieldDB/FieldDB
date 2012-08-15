@@ -100,7 +100,7 @@ width: 100%;
 .icon-white {
   color: #bbb;
 }
-.navbar :hover {
+.navbar .icons :hover {
   color: #fff ;
 }
 

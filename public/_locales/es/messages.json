@@ -57,6 +57,15 @@
   "locale_View_Public_Profile_Tooltip" : {
     "message" : "TODO translate me Click to view/edit your public profile"
   },
+  "locale_Public_Profile_Instructions" : {
+    "message" : " TODO translateThis is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
+  },
+  "locale_locale_Private_Profile_Instructions" : {
+    "message" : "TODO translate This is your private profile, only you members on your team can see it."
+  },
+  "locale_Edit_Public_User_Profile" : {
+    "message" : "TODO translate Edit My Public Profile"
+  },
   "locale_Need_save" : {
     "message" : "Se ocupa guadar:"
   },
@@ -192,8 +201,8 @@
   "locale_Navigation" : {
     "message" : "Navegación"
   },
-  "locale_Favorite" : {
-    "message" : "Favorito"
+  "locale_Datum_Status_Checked" : {
+    "message" : "TODO translate Mark Datum status as checked/verified with language consultant"
   },
   "locale_Next_Datum" : {
     "message" : "Próximo Dato"

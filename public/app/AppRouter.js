@@ -87,6 +87,8 @@ define([
               success : function(model) {
                 Utils.debug("Corpus member fetched successfully" +model);
                 window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
+                window.appView.publicReadUserView.render();
+
               },
               error : function(e) {
                 alert("User not found in this corpus.");

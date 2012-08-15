@@ -188,8 +188,8 @@
   "locale_Navigation" : {
     "message" : "Navigation"
   },
-  "locale_Favorite" : {
-    "message" : "Favorite"
+  "locale_Datum_Status_Checked" : {
+    "message" : "Mark Datum status as checked/verified with language consultant"
   },
   "locale_Next_Datum" : {
     "message" : "Next Datum"
@@ -205,6 +205,15 @@
   },
   "locale_View_Public_Profile_Tooltip" : {
     "message" : "Click to view/edit your public profile"
+  },
+  "locale_Public_Profile_Instructions" : {
+    "message" : "This is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
+  },
+  "locale_locale_Private_Profile_Instructions" : {
+    "message" : "This is your private profile, only you and your team members can see it."
+  },
+  "locale_Edit_Public_User_Profile" : {
+    "message" : "Edit My Public Profile"
   },
   "locale_Close" : {
     "message" : "Close"
