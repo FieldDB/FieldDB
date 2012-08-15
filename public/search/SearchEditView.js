@@ -164,7 +164,8 @@ define([
           collection           : new Datums(),
           childViewConstructor : DatumReadView,
           childViewTagName     : "li",
-          childViewFormat      : "latex"
+          childViewFormat      : "latex",
+          childViewClass       : "row span12"
         }); 
         
         // Scrub this better pouch it was still saving it as a revision.

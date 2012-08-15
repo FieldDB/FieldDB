@@ -214,8 +214,9 @@ define([
               glossSegment : glossArray[i]
             });
           }
-          
-          jsonToRender.translation = translation;
+          if(translation != ""){
+            jsonToRender.translation = "'"+translation+"'";
+          }
           jsonToRender.couplet = couplet;
           if (judgement !== "") {
             jsonToRender.judgement = judgement;
@@ -224,8 +225,13 @@ define([
           alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
           jsonToRender.translation = "bug";
         }
+        
+        jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
+        if(jsonToRender.datumstatecolor){
+          $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
+        }
         
         if(this.model.get("datumStates").where({selected : "selected"})[0].get("state") == "Deleted"){
           $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
