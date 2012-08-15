@@ -363,7 +363,6 @@ line.link {
 	color: rgb(185, 74, 72) !important;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 	background-color: rgb(242, 222, 222) !important;
-	border-color: rgb(238, 211, 215) !important;
 	border: 1px solid rgb(238, 211, 215) !important;
 	margin: 0px 0px 2px 0px !important;
 	padding-top: 0.25em !important;
@@ -372,25 +371,36 @@ line.link {
 }
 
 .datum-state-color-info {
-	background-color: rgba(58, 135, 173, 0.3) !important;
-	/* -webkit-border-radius: 5px !important;
-  -moz-border-radius: 5px !important;
-  border-radius: 5px !important; */
-  margin: 0px !important;
+	color: rgb(58, 135, 173) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  background-color: rgb(230, 250, 250) !important;
+  border: 1px solid rgb(220, 240, 240) !important;
+  margin: 0px 0px 2px 0px !important;
   padding-top: 0.25em !important;
   padding-bottom: 0.25em !important;
   border-bottom: 1px solid #888;
 }
 
 .datum-state-color-inverse {
-	background-color: rgba(51, 51, 51, 0.3) !important;
-	/* -webkit-border-radius: 5px !important;
-  -moz-border-radius: 5px !important;
-  border-radius: 5px !important; */
-  margin: 0px !important;
+	color: rgb(51, 51, 51) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  background-color: rgb(221, 221, 221) !important;
+  border: 1px solid rgb(210, 210, 210) !important;
+  margin: 0px 0px 2px 0px !important;
   padding-top: 0.25em !important;
   padding-bottom: 0.25em !important;
   border-bottom: 1px solid #888;
+	
+}
+.datum-state-color- {
+  color: rgb(51, 51, 51) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid rgb(210, 210, 210) !important;
+  margin: 0px 0px 2px 0px !important;
+  padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+  border-bottom: 1px solid #888;
+  
 }
 .datum-latex-translation{
 	 font-style: italic;
