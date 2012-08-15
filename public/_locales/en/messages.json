@@ -203,17 +203,23 @@
   "locale_Search" : {
     "message" : "Type your search query, or push enter to see all data"
   },
+  "locale_View_Profile_Tooltip" : {
+    "message" : "Click to view user's page"
+  },
   "locale_View_Public_Profile_Tooltip" : {
-    "message" : "Click to view/edit your public profile"
+    "message" : "View/edit your public user's page"
+  },
+  "locale_Edit_User_Profile_Tooltip" : {
+    "message" : "Click to edit your user profile"
   },
   "locale_Public_Profile_Instructions" : {
-    "message" : "This is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
+    "message" : "This is your public user's page. You can edit it to change/remove information. This is what your team members can see when they click on your gravatar. All of this information (including your gravatar) can be different from the information in your private profile."
   },
-  "locale_locale_Private_Profile_Instructions" : {
-    "message" : "This is your private profile, only you and your team members can see it."
+  "locale_Private_Profile_Instructions" : {
+    "message" : "This is your private profile."
   },
   "locale_Edit_Public_User_Profile" : {
-    "message" : "Edit My Public Profile"
+    "message" : "Edit my public user's page"
   },
   "locale_Close" : {
     "message" : "Close"

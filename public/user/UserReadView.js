@@ -29,19 +29,31 @@ define([
      */
     initialize : function() {
       Utils.debug("USER READ VIEW init: " + this.el);
-      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
+//      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
 
     },
     
     events : {
-      "click .edit-user-profile-modal" : function(e){
+      "click .edit-user-profile" : function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        window.appView.modalEditUserView.render();
+        if(this.format == "modal"){
+          window.appView.modalEditUserView.render();
+        }else if(this.format == "public"){
+          window.appView.publicEditUserView.render();
+        }
+      },
+      "click .view-public-profile" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#user-modal").modal("hide");
+        window.app.router.showFullscreenUser(this.model.id);
       }
-    },
+     },
     /**
      * The underlying model of the UserReadView is a User.
      */
@@ -86,30 +98,45 @@ define([
 
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
+        
+        //localization for user edit modal
+        $(this.el).find(".locale_Edit_User_Profile_Tooltip").attr("title",chrome.i18n.getMessage("locale_Edit_User_Profile_Tooltip"));
+        $(this.el).find(".locale_View_Public_Profile_Tooltip").html(chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
+        $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
+        $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+
       } else if (this.format == "link") {
         Utils.debug("USER READ LINK render: " + this.el);
 
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
+        
+        //localization for link view
+        $(this.el).find(".locale_View_Profile_Tooltip").attr("title",chrome.i18n.getMessage("locale_View_Profile_Tooltip"));
+
       } else if (this.format == "public") {
         Utils.debug("USER READ PUBLIC render: " + this.el);
 
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        
+        //localize the public user page
+        $(this.el).find(".locale_Edit_Public_User_Profile").attr("title",chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
+
       }else{
         throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
-      //localization
-      //$(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
-      //$(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
-      //$(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
-      //$(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
-      //$(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-      //$(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
-      //$(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
-      //$(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
-      //$(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
-      //$(".locale_Lastname").html(chrome.i18n.getMessage("locale_Lastname"));
       
+      if(this.format != "link"){
+        //localization for all except link
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+        $(this.el).find(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
+        $(this.el).find(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
+        $(this.el).find(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
+        $(this.el).find(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
+        $(this.el).find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+        $(this.el).find(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
+      }
+
       return this;
     },
     

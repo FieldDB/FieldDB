@@ -109,7 +109,7 @@ define([
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
         //localization for public user edit fullscreen
-        $(this.el).find(".locale_locale_Public_Profile_Instructions").html(chrome.i18n.getMessage("locale_locale_Public_Profile_Instructions"));
+        $(this.el).find(".locale_Public_Profile_Instructions").html(chrome.i18n.getMessage("locale_Public_Profile_Instructions"));
 
       } else if(this.format == "modal") {
         Utils.debug("USER EDIT MODAL render: " + this.el);
@@ -118,11 +118,10 @@ define([
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
         
         //localization for user edit modal
-        $(this.el).find(".locale_locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_locale_Private_Profile_Instructions"));
         $(this.el).find(".locale_Edit_Public_User_Profile").html(chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
+        $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
         $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
 
-        //
       }
       //localization
       $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
@@ -165,7 +164,9 @@ define([
             }));
       }else{
         window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
-        this.model.saveAndInterConnectInApp();
+        this.model.saveAndInterConnectInApp(function(){
+          window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+        });
         
         window.app.get("authentication").get("userPrivate").get("activities").unshift(
             new Activity({
@@ -182,9 +183,9 @@ define([
       this.showReadVersion();
     },
     showReadVersion : function(){
-      if(this.format =="modal"){
+      if(this.format == "modal"){
         window.appView.modalReadUserView.render();
-        $("#user-modal").modal("hide");
+//        $("#user-modal").modal("hide");
       }else{
         window.appView.publicReadUserView.render();
       }

@@ -54,13 +54,19 @@
   "locale_Activity_Feed_Team" : {
     "message" : "TODO translate Corpus Team Canal de Actividad"
   },
+  "locale_View_Profile_Tooltip" : {
+    "message" : "TODO translate Click to view user's page"
+  },
   "locale_View_Public_Profile_Tooltip" : {
-    "message" : "TODO translate me Click to view/edit your public profile"
+    "message" : "TODO translate View/edit your public user's page"
+  },
+  "locale_Edit_User_Profile_Tooltip" : {
+    "message" : "TODO translate Click to edit your user profile"
   },
   "locale_Public_Profile_Instructions" : {
     "message" : " TODO translateThis is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
   },
-  "locale_locale_Private_Profile_Instructions" : {
+  "locale_Private_Profile_Instructions" : {
     "message" : "TODO translate This is your private profile, only you members on your team can see it."
   },
   "locale_Edit_Public_User_Profile" : {
@@ -346,7 +352,7 @@
     "message" : "Etiqueta Nueva..."
   },
   "locale_locale_Help_Text" : {
-    "message" : "Se puede incluir text de ayuda aqui (opcional)"
+    "message" : "TODO this should be merged with locale_Help_Text?  Se puede incluir text de ayuda aqui (opcional)"
   },
   "locale_Drag_and_Drop_Placeholder" : {
     "message" : "Jale y Suelta achivos o textos aqui!"

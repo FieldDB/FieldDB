@@ -40,7 +40,8 @@ define([
         this.activitiesView = new PaginatedUpdatingCollectionView({
           collection           : this.model.get("activities"),
           childViewConstructor : ActivityView,
-          childViewTagName     : 'li'
+          childViewTagName     : 'li',
+          childViewClass        : 'breadcrumb'
         });
       }else{
         alert("bug: activity feed view has no model.");

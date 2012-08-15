@@ -4,24 +4,23 @@
   background-attachment:fixed;  
   background-position:center;
 }
-
+a:hover{
+	text-decoration: none !important;
+}
 .search{
 	padding: 10px
-}
-.navbar input:hover{
-  color: #000;
 }
 .width100 {
  width: 100%;
 }
 .gravatar-small{
-	width: 2em;
+	height: 2em;
 }
 .gravatar-medium{
-  width: 4em;
+  height: 4em;
 }
 .gravatar-large{
-  width: 8em;
+  height: 8em;
 }
 .activity_direct_object{
 	color: #055;
@@ -100,8 +99,8 @@ width: 100%;
 .icon-white {
   color: #bbb;
 }
-.navbar .icons :hover {
-  color: #fff ;
+.icon-white:hover {
+  color: #fff !important ;
 }
 
 textarea{
