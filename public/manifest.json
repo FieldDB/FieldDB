@@ -1,6 +1,6 @@
 {
   "name": "__MSG_application_title__",
-  "version": "1.15.1",
+  "version": "1.16.1",
   "description": "__MSG_application_description__",
   "default_locale": "es",
   
@@ -15,7 +15,7 @@
     "https://ifield.fieldlinguist.com/*",
     "https://ilanguage.iriscouch.com/*"
   ],
-   "": { 
+   "icons": { 
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png" 
