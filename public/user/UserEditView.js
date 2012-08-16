@@ -27,7 +27,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER init: " + this.el);
+      Utils.debug("USER EDIT VIEW init: " + this.el);
 
 //      this.model.bind("change", this.render, this); //this breaks the save. we should only render the corpus updating collection view.
 
@@ -43,9 +43,9 @@ define([
     },
 
     /**
-     * The underlying model of the UserEditView is a User.
+     * The underlying model of the UserEditView is a User, or a UserMask.
      */
-    model : User,
+//    model : User,
     
     /**
      * Events that the UserEditView is listening to and their handlers.
@@ -60,8 +60,19 @@ define([
       "click .icon-book" : function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
-        window.appView.modalReadUserView.render();
+        this.showReadVersion();
+        
+      },
+      "click .edit-public-user-profile" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }        
+        $("#user-modal").modal("hide");
+        window.app.router.showFullscreenUser();
+        window.appView.publicEditUserView.render();
       }
 
     },
@@ -85,32 +96,46 @@ define([
      * Renders the UserEditView depending on its format.
      */
     render : function() {
-      Utils.debug("USER render: " + this.el);
+//      Utils.debug("USER render: " + this.el);
 
       if (this.model == undefined) {
         Utils.debug("\User model was undefined");
         return this;
       }
       if (this.format == "fullscreen") {
-        this.setElement($("#user-fullscreen"));
+        Utils.debug("USER EDIT FULLSCREEN render: " + this.el);
+
+        this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        
+        //localization for public user edit fullscreen
+        $(this.el).find(".locale_Public_Profile_Instructions").html(chrome.i18n.getMessage("locale_Public_Profile_Instructions"));
+
       } else if(this.format == "modal") {
+        Utils.debug("USER EDIT MODAL render: " + this.el);
+
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
+        
+        //localization for user edit modal
+        $(this.el).find(".locale_Edit_Public_User_Profile").html(chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
+        $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
+        $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+
       }
       //localization
-      $(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
-      $(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
-      $(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
-      $(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
-      $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-      $(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
-      $(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
-      $(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
-      $(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
-      $(".locale_Lastname").html(chrome.i18n.getMessage("locale_Lastname"));
-      $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-      $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(this.el).find(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
+      $(this.el).find(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
+      $(this.el).find(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
+      $(this.el).find(".locale_Lastname").html(chrome.i18n.getMessage("locale_Lastname"));
+      $(this.el).find(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
+      $(this.el).find(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
+      $(this.el).find(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
+      $(this.el).find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+      $(this.el).find(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
+      $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
         // Display the CorpusesView
 //        this.corpusesView.render();
@@ -126,22 +151,44 @@ define([
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
       this.model.set("gravatar", $(this.el).find(".gravatar").val());
-      window.app.get("authentication").get("userPublic").set("gravatar", $(this.el).find(".gravatar").val());
-      window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-      window.appView.renderEditableUserViews();
-      window.appView.renderReadonlyUserViews();
-      window.app.get("authentication").get("userPrivate").get("activities").unshift(
-          new Activity({
-            verb : "modified",
-            directobject : "their profile",
-            indirectobject : "",
-            context : "via Offline App",
-            user: window.app.get("authentication").get("userPublic")
-          }));
+      
+      if(this.format =="modal"){
+        window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+        window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            new Activity({
+              verb : "modified",
+              directobject : "their profile",
+              indirectobject : "",
+              teamOrPersonal : "personal",
+              context : "via Offline App"
+            }));
+      }else{
+        window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
+        this.model.saveAndInterConnectInApp(function(){
+          window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+        });
+        
+        window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            new Activity({
+              verb : "modified",
+              directobject : "their profile",
+              indirectobject : "",
+              teamOrPersonal : "team",
+              context : "via Offline App"
+            }));
+      }
+      
       window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");
 
-      window.appView.modalReadUserView.render();
-      $("#user-modal").modal("hide");
+      this.showReadVersion();
+    },
+    showReadVersion : function(){
+      if(this.format == "modal"){
+        window.appView.modalReadUserView.render();
+//        $("#user-modal").modal("hide");
+      }else{
+        window.appView.publicReadUserView.render();
+      }
     },
     updateGravatar : function(){
       this.model.set("gravatar", $(this.el).find(".gravatar").val());

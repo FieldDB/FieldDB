@@ -3,6 +3,7 @@ require.config({
   paths : {
     "text" : "libs/text",
     "jquery" : "libs/jquery",
+    "autosize" : "libs/jquery.autosize",
     "hotkeys" : "libs/jquery.hotkeys",
     "terminal" : "libs/terminal/terminal",
     "underscore" : "libs/underscore",
@@ -35,7 +36,13 @@ require.config({
     "jquery" : {
       exports : "$"
     },
-
+    
+    "autosize" :{
+      deps : [ "jquery" ],
+      exports : function($) {
+        return $;
+      }
+    },
     "bootstrap" :{
       deps : [ "jquery" ],
       exports : function($) {
@@ -116,6 +123,7 @@ require([
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
+    "autosize",
     "libs/Utils"
 ], function(
     App,
@@ -130,7 +138,8 @@ require([
     Handlebars,
     compiledTemplates,
     Backbone,
-    forcingpouchtoloadonbackboneearly
+    forcingpouchtoloadonbackboneearly,
+    forcingautosizetobeavailible
 ) {
   /*
    * Helper functions
@@ -170,6 +179,7 @@ require([
     Backbone.history.start();
     
     if(typeof callback == "function"){
+      Utils.debug("Calling back the startApps callback");
       callback();
     }
     
@@ -201,7 +211,7 @@ require([
 //    Pouch.destroy('idb://dbsapir-firstcorpus');
 //    localStorage.clear();
 //  localStorage.removeItem("appids");
-//  localStorage.removeItem("corpusname");
+//  localStorage.removeItem("pouchname");
 //  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
 //  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
 //  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
@@ -229,16 +239,16 @@ require([
       return;
     }else{
       Utils.debug("Loading app from localStorage");
-      var corpusname = null;
+      var pouchname = null;
       var couchConnection = null;
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
         alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
         loadFreshApp();
         return;
       }else{
-        corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
         couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-        if(!localStorage.getItem("db"+corpusname+"_id")){
+        if(!localStorage.getItem("db"+pouchname+"_id")){
           alert("We couldn't open your local database. Please login and it should fix the problem.");
           loadFreshApp(); 
           return;
@@ -249,6 +259,7 @@ require([
             return;
           }else{
             a = new App();
+            window.app = a;
             var auth = a.get("authentication");
             var u = localStorage.getItem("encryptedUser");
             auth.loadEncryptedUser(u, function(success, errors){
@@ -257,7 +268,7 @@ require([
                 loadFreshApp();
                 return;
               }else{
-                a.createAppBackboneObjects(corpusname, function(){
+                a.createAppBackboneObjects(pouchname, function(){
                   window.startApp(a, function(){
                     window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
                   });

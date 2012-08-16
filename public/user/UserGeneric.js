@@ -4,13 +4,15 @@ define([
     "hotkey/HotKey",
     "permission/Permission",
     "user/UserPreference",
+    "user/UserMask",
     "libs/Utils"
 ], function(
     Backbone,
     Activities,
     HotKey,
     Permission,
-    UserPreference
+    UserPreference,
+    UserMask
 ) {
   var UserGeneric = Backbone.Model.extend(
   /** @lends UserGeneric.prototype */
@@ -46,7 +48,8 @@ define([
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      
+      Utils.debug("USERGENERIC init");
+
     },
       
     // Internal models: used by the parse function
@@ -54,7 +57,8 @@ define([
       prefs : UserPreference,
       permissions : Permission, //TODO this needs to become plural
       hotkeys : HotKey, //TODO this needs to become plural
-      activities : Activities 
+      activities : Activities,
+      publicSelf : UserMask
     },
 
     addCurrentCorpusToUser : function(){

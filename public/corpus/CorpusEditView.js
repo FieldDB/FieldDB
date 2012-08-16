@@ -67,7 +67,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS DETAILS init: " + this.el);
+      Utils.debug("CORPUS EDIT init: " );
       this.changeViewsOfInternalModels();
      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
@@ -101,7 +101,7 @@ define([
     events : {
       "click .icon-book": "showReadonly",
       //Add button inserts new Comment
-      "click .add-comment-edit" : 'insertNewComment',
+      "click .add-comment-corpus" : 'insertNewComment',
     	
       //Add button inserts new Datum State
       "click .add-datum-state" : 'insertNewDatumState',
@@ -127,7 +127,7 @@ define([
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.templates.corpus_edit_fullscreen,
+    templateFullscreen : Handlebars.templates.corpus_edit_embedded,
     
     /**
      * The Handlebars template rendered as the CorpusWellView.
@@ -148,15 +148,23 @@ define([
         Utils.debug("\tCorpus model was undefined.");
         return this;
       }
-      window.appView.currentCorpusEditView.destroy_view();
-      window.appView.currentCorpusReadView.destroy_view();
+      Utils.debug("CORPUS EDIT render: ");
+      if( this.format != "modal"){
+        window.appView.currentCorpusEditView.destroy_view();
+        window.appView.currentCorpusReadView.destroy_view();
+      }
 
-      Utils.debug("CORPUS READ render: " + this.el);
+      var jsonToRender = this.model.toJSON();
+      try{
+        jsonToRender.username = this.model.get("team").get("username");
+      }catch(e){
+        Utils.debug("Problem getting the usrname of the corpus' team");
+      }
       if (this.format == "centreWell") {
-        Utils.debug("CORPUS Edit center render: " + this.el);
+        Utils.debug("CORPUS Edit center render: " );
           // Display the CorpusReadFullScreenView
           this.setElement($("#corpus-embedded"));
-          $(this.el).html(this.templateCentreWell(this.model.toJSON()));
+          $(this.el).html(this.templateCentreWell(jsonToRender));
 
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
@@ -181,11 +189,37 @@ define([
           // Display the DatumStatesView
           this.datumStatesView.el = this.$('.datum_state_settings');
           this.datumStatesView.render();
+          
+        //Localize for all embedded view
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+          $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+          $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+          $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+          $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
+          //Localize for only Edit view.
+          $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+          $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+          $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+          $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_Field_Tooltip"));
+          $(this.el).find(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
+          $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+          $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+          $(this.el).find(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+          $(this.el).find(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
+          $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+          $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+          $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+          $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_State_Tooltip"));
+          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+
       } else if (this.format == "fullscreen") {
-        Utils.debug("CORPUS EDIT FULLSCREEN render: " + this.el);
+        Utils.debug("CORPUS EDIT FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen"));
-        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
 
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
@@ -211,66 +245,72 @@ define([
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
 
+      //Localize for all fullscreen view 
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+
+        //Localize for only Edit view.
+        $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+        $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
+        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
+        $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_Field_Tooltip"));
+        $(this.el).find(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
+        $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
+        $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
+        $(this.el).find(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
+        $(this.el).find(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
+        $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
+        $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
+        $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+        $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_New_Datum_State_Tooltip"));
+        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+
       } else if (this.format == "leftSide"){
+        Utils.debug("CORPUS EDIT LEFTSIDE render: " );
         this.setElement($("#corpus-quickview"));
-        $(this.el).html(this.templateSummary(this.model.toJSON()));
+        $(this.el).html(this.templateSummary(jsonToRender));
+      
+        //Localize left side edit view
+        $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
       
       }else if (this.format == "modal"){
+        Utils.debug("CORPUS EDIT MODAL render: " );
         this.setElement($("#new-corpus-modal"));
-        $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
-      
+        $(this.el).html(this.templateNewCorpus(jsonToRender));
+        
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");
       }
-             
-      try{
-        //localization
-        $(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
-        $(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-        $(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
-        $(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-        $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-        $(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
-        $(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
-        $(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
-        $(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-        $(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
-        $(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-        $(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-        $(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-        $(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-        $(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-        $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
-        $(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
-//        $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-        $(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-        $(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
-        $(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
-        $(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
-        $(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
-        $(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
-        $(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
-        $(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
-        $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-        $(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-        $(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
-        $(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
-        $(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
-        $(".locale_Description_Summary_Edit").html(chrome.i18n.getMessage("locale_Description"));
-        $(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
-        $(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
-        $(".locale_Add_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Add_Placeholder"));
-        $(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-        $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-        $(".locale_Add_locale_New_Datum_Field").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_Field"));
-        $(".locale_Add_locale_New_Datum_State").attr("title", chrome.i18n.getMessage("locale_Add_locale_New_Datum_State"));
-        $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
-        $(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
-      }catch(e){
-        alert("Localization of mising item perhaps");
-        console.log(e);
+      if (this.format != "modal"){
+        //Localize corpus menu for all corpus views, except new corpus modal
+        $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
+        $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
+        $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
+        $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
+        $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+        $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
+        $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
+        $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+        $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
+      }else{
+        //Localize the new corpus menu
+        $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
+        $(this.el).find(".locale_New_Corpus_Instructions").html(chrome.i18n.getMessage("locale_New_Corpus_Instructions"));
+        $(this.el).find(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
+        $(this.el).find(".locale_New_Corpus_Warning").html(chrome.i18n.getMessage("locale_New_Corpus_Warning"));
+        $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
+        $(this.el).find(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
+        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
       }
+      //Localize the title and description labels
+      $(this.el).find(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
+      $(this.el).find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
       
       return this;
     },
@@ -279,6 +319,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING CORPUS EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -385,19 +426,19 @@ define([
       //Save the current session just in case
       window.app.get("currentSession").saveAndInterConnectInApp(function(){
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-        window.appView.sessionModalView.model = new Session({
-          corpusname : window.app.get("corpus").get("corpusname"),
-          sessionFields : new DatumFields(window.app.get("currentSession").get("sessionFields").toJSON()) //This is okay, there will be no backbone ids since datumFields are not saved to pouch
+        window.appView.sessionNewModalView.model = new Session({
+          pouchname : window.app.get("corpus").get("pouchname"),
+          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
-        window.appView.sessionModalView.model.set("comments", new Comments());
-        window.appView.sessionModalView.render();
+        window.appView.sessionNewModalView.model.set("comments", new Comments());
+        window.appView.sessionNewModalView.render();
       });
     },
     
     newCorpus : function(e){
-      if(e){
-        e.stopPropagation();
-      }
+//      if(e){
+//        e.stopPropagation();
+//      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();
@@ -416,8 +457,8 @@ define([
       attributes.title = window.app.get("corpus").get("title")+ " copy";
       attributes.titleAsUrl = window.app.get("corpus").get("titleAsUrl")+"Copy";
       attributes.description = "Copy of: "+window.app.get("corpus").get("description");
-      attributes.corpusname = window.app.get("corpus").get("corpusname")+"copy";
-      attributes.couchConnection.corpusname = window.app.get("corpus").get("corpusname")+"copy";
+      attributes.pouchname = window.app.get("corpus").get("pouchname")+"copy";
+      attributes.couchConnection.pouchname = window.app.get("corpus").get("pouchname")+"copy";
       attributes.dataLists = new DataLists();
       attributes.sessions = new Sessions();
       attributes.comments = new Comments();
@@ -431,6 +472,7 @@ define([
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
@@ -448,6 +490,7 @@ define([
     insertNewDatumField : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       //don't add blank fields
       if(this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g,"_") == ""){
@@ -477,6 +520,7 @@ define([
     insertNewDatumState : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       var m = new DatumField({
         "state" : this.$el.find(".add_input").val(),
@@ -490,6 +534,7 @@ define([
     insertNewPermission : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       //TODO perform a server call to do this, and display the the results/errors
       var p = this.model.permissions.where({role: this.$el.find(".choose-add-permission-role").val()})[0];
@@ -501,12 +546,15 @@ define([
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.app.router.showDashboard();
     },
     resizeFullscreen : function(e){
+      Utils.debug("CORPUS EDIT starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -516,6 +564,7 @@ define([
     showReadonly : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentCorpusReadView.format = this.format;
       window.appView.currentCorpusReadView.render();
@@ -531,25 +580,30 @@ define([
      * needs to be reloaded entirely (page refresh), or we can attempt to attach
      * the views to these new models.
      */
-    updatePouch : function() {
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+      }
+      var self = this;
       this.model.saveAndInterConnectInApp(function(){
         if(this.format == "modal"){
           $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
-//        
-//        window.appView.currentCorpusReadView.format = this.format;
-//        window.appView.currentCorpusReadView.render();
+        window.appView.currentCorpusReadView.format = self.format;
+        window.appView.currentCorpusReadView.render();
         
       },function(){
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal("hide");
+          $("#new-corpus-modal").modal( "hide");
           alert("There was a problem somewhere loading and saving the new corpus.");
           window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }
-//        window.appView.currentCorpusReadView.format = this.format;
-//        window.appView.currentCorpusReadView.render();
+        window.appView.currentCorpusReadView.format = self.format;
+        window.appView.currentCorpusReadView.render();
       });
     }
   });

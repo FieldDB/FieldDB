@@ -102,7 +102,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("APP init: " + this.el);
+      Utils.debug("APPVIEW init: " + this.el);
 
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
@@ -111,6 +111,8 @@ define([
 
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
+      
+
       this.term.initFS(false, 1024 * 1024);
       
       // Set up a timeout event every 10sec
@@ -118,27 +120,72 @@ define([
       window.setInterval(this.saveScreen, 10000);     
     },
     setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
-      // Create four corpus views
+      // Create three corpus views
+      if(this.currentCorpusEditView){
+        this.currentCorpusEditView.destroy_view();
+      }
       this.currentCorpusEditView = new CorpusEditView({
         model : this.model.get("corpus")
       });
       this.currentCorpusEditView.format = "leftSide";
-      
+     
+      if(this.currentCorpusReadView){
+        this.currentCorpusReadView.destroy_view();
+      }
       this.currentCorpusReadView = new CorpusReadView({
         model : this.model.get("corpus")
       });
       this.currentCorpusReadView.format = "leftSide";
       
-      
-      this.corpusNewModalView = new CorpusEditView({
-        model : this.model.get("corpus")
-      });
-      this.corpusNewModalView.format = "modal";
-   
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
+
+      //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
+      if(! this.corpusNewModalView){
+        Utils.debug("Creating an empty new corpus for the new Corpus modal.");
+        this.corpusNewModalView = new CorpusEditView({
+          model : new Corpus()
+        });
+        this.corpusNewModalView.format = "modal";
+      }
+      
+      // Create the corpus team activity view
+      Utils.debug("Setting up the team activity feed.");
+      if(!this.model.get("currentCorpusTeamActivityFeed")){
+        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+      }
+      try{
+        //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
+        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname.indexOf(this.model.get("corpus").get("couchConnection").pouchname == -1)){
+          this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+          
+          var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
+          activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
+          this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
+        }
+      }catch(e){
+//        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
+        Utils.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
+        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+        
+        var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
+        activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
+        this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
+      }
+      if(this.activityFeedCorpusTeamView){
+        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+      }
+      this.activityFeedCorpusTeamView = new ActivityFeedView({
+        model : this.model.get("currentCorpusTeamActivityFeed")
+      }); 
+      this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
+      
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
+
+      if(this.importView){
+        this.importView.destroy_view();
+      }
       this.importView = new ImportEditView({
         model : new Import()
       });
@@ -152,10 +199,14 @@ define([
       /*
        *  Create search views
        */
+      if(this.searchEditView){
+        this.searchEditView.destroy_view();
+      }
       this.searchEditView = new SearchEditView({
         model : this.model.get("search")
       });
-      
+      this.searchEditView.format = "centreWell";
+
       
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
@@ -178,37 +229,35 @@ define([
     },
     setUpAndAssociateViewsAndModelsWithCurrentSession : function(callback){
       /*
-       * Set up four session views
+       * Set up three session views
        */ 
-      this.sessionEditLeftSideView = new SessionEditView({
+      if(this.currentSessionEditView){
+        this.currentSessionEditView.destroy_view();
+      }
+      this.currentSessionEditView = new SessionEditView({
         model : this.model.get("currentSession")
       });
-      this.sessionEditLeftSideView.format = "leftSide";
-      this.sessionReadLeftSideView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionReadLeftSideView.format = "leftSide";
-      this.sessionEditEmbeddedView = new SessionEditView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionEditEmbeddedView.format = "embedded";
-      this.sessionReadEmbeddedView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionReadEmbeddedView.format = "embedded";
-      this.sessionEditFullscreenView = new SessionEditView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionEditFullscreenView.format = "fullscreen";
-      this.sessionReadFullscreenView = new SessionReadView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionReadFullscreenView.format = "fullscreen";
-      this.sessionModalView = new SessionEditView({
-        model : this.model.get("currentSession")
-      });
-      this.sessionModalView.format = "modal";
+      this.currentSessionEditView.format = "leftSide";
       
+      if(this.currentSessionReadView){
+        this.currentSessionReadView.destroy_view();
+      }
+      this.currentSessionReadView = new SessionReadView({
+        model : this.model.get("currentSession")
+      });
+      this.currentSessionReadView.format = "leftSide";
+      
+      //Only make a new session modal if it was not already created
+      if(! this.sessionNewModalView){
+        Utils.debug("Creating an empty new session for the new Session modal.");
+        this.sessionNewModalView = new SessionEditView({
+          model : new Session({
+            pouchname : window.app.get("corpus").get("pouchname"),
+            sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+          })
+        });
+        this.sessionNewModalView.format = "modal";
+      }
       if(typeof callback == "function"){
         callback();
       }
@@ -245,11 +294,22 @@ define([
         model : this.authView.model.get("userPrivate").get("prefs")
       });
       
-      // Create an ActivityFeedView
-      this.activityFeedView = new ActivityFeedView({
-        model : new ActivityFeed()
+      // Create a UserActivityView
+      Utils.debug("Setting up the user activity feed.");
+      if(!this.model.get("currentUserActivityFeed")){
+        this.model.set("currentUserActivityFeed", new ActivityFeed({
+          "activities" : window.app.get("authentication").get("userPrivate").get("activities"),
+        }));
+        this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
+      }
+      if(this.activityFeedUserView){
+        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+      }
+      this.activityFeedUserView = new ActivityFeedView({
+        model : this.model.get("currentUserActivityFeed")
       }); 
-      this.activityFeedView.format = "rightSide";
+      this.activityFeedUserView.format = "rightSideUser";
+      
       
       // Create an InsertUnicodesView
       this.insertUnicodesView = new InsertUnicodesView({
@@ -271,6 +331,12 @@ define([
         model : model
       });
       this.publicReadUserView.format = "public";
+      
+      this.publicEditUserView = new UserEditView({
+        model : model
+      });
+      this.publicEditUserView.format = "fullscreen";
+      
     },
     /*
      * Set up the six data list views, kills all collection in the currentPaginatedDataListDatumsView
@@ -303,7 +369,8 @@ define([
         collection           : new Datums(),
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
-        childViewFormat      : "latex"
+        childViewFormat      : "latex",
+        childViewClass       : "row span12"
       });  
       
       /*
@@ -311,15 +378,24 @@ define([
        */
       this.currentPaginatedDataListDatumsView.fillWithIds(this.model.get("currentDataList").get("datumIds"), Datum);
       
+      
+      if(this.currentEditDataListView){
+        this.currentEditDataListView.destroy_view();
+      }
       this.currentEditDataListView = new DataListEditView({
         model : this.model.get("currentDataList"),
       }); 
       this.currentEditDataListView.format = "leftSide";
       
+      
+      if(this.currentReadDataListView){
+        this.currentReadDataListView.destroy_view();
+      }
       this.currentReadDataListView = new DataListReadView({
         model :  this.model.get("currentDataList"),
       });  
       this.currentReadDataListView.format = "leftSide";
+      
       
       if(typeof callback == "function"){
         callback();
@@ -334,7 +410,6 @@ define([
      * Events that the AppView is listening to and their handlers.
      */
     events : {
-      "click .icon-sitemap" : "replicateDatabases",
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
       },
@@ -360,6 +435,7 @@ define([
       "click .icon-search" : function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         this.searchEditView.searchTop();
       },
@@ -386,8 +462,29 @@ define([
      * Renders the AppView and all of its child Views.
      */
     render : function() {
-      Utils.debug("APP render: " + this.el);
+      Utils.debug("APPVIEW render: " + this.el);
       if (this.model != undefined) {
+        
+        Utils.debug("Destroying the appview, so we dont get double events. This is risky...");
+        this.currentCorpusEditView.destroy_view();
+        this.currentCorpusReadView.destroy_view();
+        this.currentSessionEditView.destroy_view();
+        this.currentSessionReadView.destroy_view();
+//        this.datumsEditView.destroy_view();
+//        this.datumsReadView.destroy_view();//TODO add all the other child views eventually once they know how to destroy_view
+        this.currentEditDataListView.destroy_view();
+        this.currentReadDataListView.destroy_view();
+        this.currentPaginatedDataListDatumsView.destroy_view();
+        
+        this.importView.destroy_view();
+        this.searchEditView.destroy_view();
+        
+        this.activityFeedUserView.destroy_view();
+        this.activityFeedCorpusTeamView.destroy_view();
+        
+        this.destroy_view();
+        Utils.debug("Done Destroying the appview, so we dont get double events.");
+
         // Display the AppView
         this.setElement($("#app_view"));
         $(this.el).html(this.template(this.model.toJSON()));
@@ -397,18 +494,25 @@ define([
         this.userPreferenceView.render();
         this.hotkeyEditView.render();//.showModal();
         this.renderReadonlyUserViews();
-        this.sessionModalView.render();
 
         this.renderReadonlyDashboardViews();
-        this.activityFeedView.render();
+        this.activityFeedUserView.render();
+        this.activityFeedCorpusTeamView.render();
         this.insertUnicodesView.render();
         
         //This forces the top search to render.
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
         
-        this.importView.render();
-        this.exportView.render();
+        //put the version into the terminal, and into the user menu
+        Utils.getVersion(function (ver) { 
+          window.appView.term.VERSION_ = ver;
+          $(".ifield-version").html(ver);
+        });
+//        this.importView.render(); //render at last minute using router
+//        this.exportView.render();//render at last minute using router
+        
+        
 //        // Display the Corpus Views
 //        this.corpusNewModalView.render();
 //        this.currentCorpusEditView.render();
@@ -439,18 +543,18 @@ define([
 //        // Display the AuthView
 //        
 //        // Display the Session Views
-//        this.sessionEditLeftSideView.render();
-//        this.sessionReadLeftSideView.render();
-//        this.sessionEditEmbeddedView.render();
-//        this.sessionReadEmbeddedView.render();
-//        this.sessionEditFullscreenView.render();
-//        this.sessionReadFullscreenView.render();
-//        this.sessionModalView.render();
+//        this.currentSessionEditView.render();
+//        this.currentSessionReadView.render();
+//        this.currentSessionEditView.render();
+//        this.currentSessionReadView.render();
+//        this.currentSessionEditView.render();
+//        this.currentSessionReadView.render();
+//        this.sessionNewModalView.render();
 //        
 //        // Display the UserPreferenceEditView
 //        
 //        //Display ActivityFeedView
-//        this.activityFeedView.render();
+//        this.activityFeedCorpusTeamView.render();
 //        
 //        this.insertUnicodesView.render();
 //        
@@ -462,30 +566,27 @@ define([
          
         // Display the ImportEditView
       } else {
-        Alert("\tApp model is not defined, refresh your browser."+ Utils.contactUs);
+        alert("\tApp model is not defined, this is a very big bug. Refresh your browser, and let us know about this "+ Utils.contactUs);
       }
       
       this.setTotalPouchDocs();
       this.setTotalBackboneDocs();
       
       //localization
-      $(".locale_Need_save").html(chrome.i18n.getMessage("locale_Need_save"));
-      $(".locale_60_unsaved").prepend(chrome.i18n.getMessage("locale_60_unsaved"));
-      $(".locale_Recent_Changes").prepend(chrome.i18n.getMessage("locale_Recent_Changes"));
-      $(".locale_Need_sync").html(chrome.i18n.getMessage("locale_Need_sync"));
-      $(".locale_60_unsaved").prepend(chrome.i18n.getMessage("locale_60_unsaved"));
-      $(".locale_Differences_with_the_central_server").html(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
-      $(".locale_Warning").html(chrome.i18n.getMessage("locale_Warning"));
-      $(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
-      $(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
-      $(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
-      $(".Password").html(chrome.i18n.getMessage("Password"));
-      $(".locale_Yep_its_me").html(chrome.i18n.getMessage("locale_Yep_its_me"));
-      $(".locale_Show_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_Dashboard"));
-      $(".locale_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("locale_Save_on_this_Computer"));
-      $(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
-
-
+      $(this.el).find(".locale_Show_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_Dashboard"));
+      $(this.el).find(".locale_Need_save").text(chrome.i18n.getMessage("locale_Need_save"));
+      $(this.el).find(".locale_Recent_Changes").text(chrome.i18n.getMessage("locale_Recent_Changes"));
+      $(this.el).find(".locale_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("locale_Save_on_this_Computer"));
+      $(this.el).find(".locale_Need_sync").text(chrome.i18n.getMessage("locale_Need_sync"));
+      $(this.el).find(".locale_Differences_with_the_central_server").text(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
+      $(this.el).find(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
+      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
+      $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+      $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+      $(this.el).find(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
+      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
+      $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+      $(this.el).find(".locale_Yep_its_me").text(chrome.i18n.getMessage("locale_Yep_its_me"));
       
       return this;
     },
@@ -494,7 +595,7 @@ define([
      */
     renderReadonlyDashboardViews : function() {
       this.renderReadonlyCorpusViews("leftSide");
-      this.sessionReadLeftSideView.render();
+      this.renderReadonlySessionViews("leftSide");
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
     },
@@ -510,16 +611,13 @@ define([
     },
       
     // Display Session Views
-    renderEditableSessionViews : function(sessionid) {
-      this.sessionEditLeftSideView.render();
-      this.sessionEditEmbeddedView.render();
-      this.sessionEditFullscreenView.render();
-      this.sessionModalView.render();
+    renderEditableSessionViews : function(format) {
+      this.currentSessionEditView.format = format;
+      this.currentSessionEditView.render();
     },
-    renderReadonlySessionViews : function(sessionid) {
-      this.sessionReadLeftSideView.render();
-      this.sessionReadEmbeddedView.render();
-      this.sessionReadFullscreenView.render();
+    renderReadonlySessionViews : function(format) {
+      this.currentSessionReadView.format = format;
+      this.currentSessionReadView.render();
     },
     
     // Display Datums View
@@ -553,7 +651,12 @@ define([
       this.publicReadUserView.render();
       this.modalReadUserView.render();
     },
+    renderActivityFeedViews : function() {
+      this.activityFeedUserView.render();
+      this.activityFeedCorpusTeamView.render();
+    },
     
+
     /**
      * This function triggers a sample app to load so that new users can play
      * around and get a feel for the app by seeing the data in context.
@@ -581,32 +684,12 @@ define([
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){
           var corpusConnection = self.model.get("corpus").get("couchConnection");
-          if(self.model.get("authentication").get("userPrivate").get("corpuses").corpusname != "default" 
-            && app.get("corpus").get("couchConnection").corpusname == "default"){
+          if(self.model.get("authentication").get("userPrivate").get("corpuses").pouchname != "default" 
+            && app.get("corpus").get("couchConnection").pouchname == "default"){
             corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
           }
           self.model.get("corpus").replicateCorpus(corpusConnection, callback);
         });
-      });
-    },
-    /**
-     * Synchronize the activity feed server and local databases.
-     * TODO change this line in case it is called on the wrong model
-     *  this.activityFeedView.model.pouch(
-     */
-    replicateActivityFeedDatabase : function() {
-      (new ActivityFeedView()).pouch(function(err, db) {
-        db.replicate.to(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
-          Utils.debug("Replicate to");
-          Utils.debug(resp);
-          Utils.debug(err);
-        });
-        //TODO when activity feed becomes useful, ie a team feed, then replicate from as well.
-//        db.replicate.from(Utils.activityFeedCouchUrl, { continuous: false }, function(err, resp) {
-//          Utils.debug("Replicate from");
-//          Utils.debug(resp);
-//          Utils.debug(err);
-//        });
       });
     },
     
@@ -742,8 +825,23 @@ define([
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
         +"</div>")
+    },
+    /**
+     * 
+     * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
+     */
+    destroy_view: function() {
+      Utils.debug("DESTROYING APP VIEW ");
+      
+      //COMPLETELY UNBIND THE VIEW
+      this.undelegateEvents();
+
+      $(this.el).removeData().unbind(); 
+
+      //Remove view from DOM
+//    this.remove();  
+//    Backbone.View.prototype.remove.call(this);
     }
-    
     
   });
 

@@ -21,7 +21,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM FIELD init");
+      Utils.debug("DATUM FIELD READ init");
     
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -52,13 +52,17 @@ define([
      * Renders the DatumFieldReadView.
      */
     render : function() {
-      Utils.debug("DATUM FIELD READ render");
+      Utils.debug("DATUM FIELD READ VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));
+        
+        //localization
+        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+      
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
@@ -69,7 +73,6 @@ define([
         $(this.el).html(this.templateValue(jsonToRender));
       }
     
-      $(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
       return this;
     },
     

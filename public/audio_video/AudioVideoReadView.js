@@ -26,7 +26,13 @@ define([
     template : Handlebars.templates.audio_video_read_embedded,
 
     render : function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      if(this.model.get("URL")){
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.audioType = "audio/"+this.model.get("filename").split('.').pop() ;
+        $(this.el).html(this.template(jsonToRender));
+      }else{
+        $(this.el).html(""); //render no audio player
+      }
       
       return this;
     }
