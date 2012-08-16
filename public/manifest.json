@@ -1,6 +1,6 @@
 {
   "name": "__MSG_application_title__",
-  "version": "1.13.2",
+  "version": "1.15.1",
   "description": "__MSG_application_description__",
   "default_locale": "es",
   
@@ -13,9 +13,7 @@
   "permissions": [
     "unlimitedStorage",
     "https://ifield.fieldlinguist.com/*",
-    "https://ilanguage.iriscouch.com/*",
-    "https://localhost:3001/*",
-    "http://localhost:5984/*"
+    "https://ilanguage.iriscouch.com/*"
   ],
    "": { 
     "16": "icon16.png",
