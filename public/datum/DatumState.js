@@ -32,10 +32,10 @@ define([
     },
     
     defaults : {
-      state : "Checked",
-      color : "success",
-      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
-      showInSearchResults : true,
+//      state : "Checked",
+      color : "",
+//      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
+      showInSearchResults : "checked",
       selected : ""
     },
     

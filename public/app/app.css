@@ -132,15 +132,18 @@ textarea{
 }
 
 .zebra li:nth-child(odd){
-	background: #DDD;
+	background: #fff; 
+}
+.zebra li:nth-child(even){
+  background: #fff; 
 }
 
 .datum-checkboxes{  
-    position:absolute;
+  /* position:absolute;  */
 }
 
 .latex-judgement{
-	position: absolute;
+	/* position: absolute; */
 }
     
 .datum_field_label{
@@ -333,4 +336,72 @@ line.link {
 }
 .no-margin-left{
 	margin-left: 0px !important;
+}
+
+.datum-state-color-success {
+	color: rgb(70, 136, 71) !important;
+  text-shadow: 0 1px 0 rgba( 255, 255, 255, 0.5) !important;
+  background-color: rgb(223, 240, 216) !important;
+  border: 1px solid rgb(214, 233, 198) !important;
+	margin: 0px 0px 2px 0px !important;
+	padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+}
+
+.datum-state-color-warning {
+	color: rgb(192, 152, 83) !important;
+  text-shadow: 0 1px 0 rgba( 255, 255, 255, 0.5) !important;
+  background-color: rgb(252, 248, 227) !important;
+  border: 1px solid rgb(251, 238, 213) !important;
+  margin: 0px 0px 2px 0px !important;
+  padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+  border-bottom: 1px solid #888;
+}
+
+.datum-state-color-important  {
+	color: rgb(185, 74, 72) !important;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+	background-color: rgb(242, 222, 222) !important;
+	border: 1px solid rgb(238, 211, 215) !important;
+	margin: 0px 0px 2px 0px !important;
+	padding-top: 0.25em !important;
+	padding-bottom: 0.25em !important;
+	border-bottom: 1px solid #888;
+}
+
+.datum-state-color-info {
+	color: rgb(58, 135, 173) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  background-color: rgb(230, 250, 250) !important;
+  border: 1px solid rgb(220, 240, 240) !important;
+  margin: 0px 0px 2px 0px !important;
+  padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+  border-bottom: 1px solid #888;
+}
+
+.datum-state-color-inverse {
+	color: rgb(51, 51, 51) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  background-color: rgb(221, 221, 221) !important;
+  border: 1px solid rgb(210, 210, 210) !important;
+  margin: 0px 0px 2px 0px !important;
+  padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+  border-bottom: 1px solid #888;
+	
+}
+.datum-state-color- {
+  color: rgb(51, 51, 51) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid rgb(210, 210, 210) !important;
+  margin: 0px 0px 2px 0px !important;
+  padding-top: 0.25em !important;
+  padding-bottom: 0.25em !important;
+  border-bottom: 1px solid #888;
+  
+}
+.datum-latex-translation{
+	 font-style: italic;
 }
