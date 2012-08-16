@@ -220,6 +220,7 @@ define([
         $(this.el).find(".locale_See_Fields").attr("title", chrome.i18n.getMessage("locale_See_Fields"));
 //      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tags_Tooltip"));
         $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
         $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
         $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip"));
         $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));

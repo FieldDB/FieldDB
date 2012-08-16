@@ -81,9 +81,7 @@ define([
       
       //TODO use these states to show what is public and what is not.
       if(!this.get("datumStates")){
-        this.set("datumStates", new DatumStates([ 
-          new DatumState()
-        ]));
+        this.set("datumStates", new DatumStates());
       }//end if to set datumStates
       
       //Keeping all items since this seems okay for public viewing if the user wants to let the public see it. 
