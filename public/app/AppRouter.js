@@ -104,6 +104,8 @@ define([
       }
       this.hideEverything();
       $("#public-user-page").show();
+      window.scrollTo(0,0);
+
     },
 
     /**
@@ -121,6 +123,8 @@ define([
       }
       this.hideEverything();
       $("#corpus-fullscreen").show();
+      window.scrollTo(0,0);
+
     },
     /**
      * Displays all of the corpus details and settings. 
@@ -231,6 +235,8 @@ define([
       }
       this.hideEverything();
       $("#session-fullscreen").show();
+      window.scrollTo(0,0);
+
     },
    
     /**
@@ -326,11 +332,13 @@ define([
           }
         }
       }
-      if($("#datalist-fullscreen").html() == ""){
+      if($("#data-list-fullscreen-header").html() == ""){
         window.appView.renderReadonlyDataListViews("fullscreen");
       }
       this.hideEverything();
-      $("#data-list-fullscreen").show();      
+      $("#data-list-fullscreen").show();    
+      window.scrollTo(0,0);
+
     },
     
     showMiddleDataList : function(dataListid, pouchname) {

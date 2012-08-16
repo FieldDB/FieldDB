@@ -111,14 +111,19 @@ define([
       
       if(typeof(this.get("datumStates")) == "function"){
         this.set("datumStates", new DatumStates([ 
-//          new DatumState(),
+          new DatumState({
+            state : "Checked",
+            color : "success",
+            selected: "selected"
+          }),
           new DatumState({
             state : "To be checked",
             color : "warning"
           }),
           , new DatumState({
             state : "Deleted",
-            color : "important"
+            color : "important",
+            showInSearchResults:  ""
           }),
         ]));
       }//end if to set datumStates
@@ -317,20 +322,33 @@ define([
       var newModel = false;
       if(!this.id){
         newModel = true;
-        //uses the conventions to set the pouchname off of the team's username 
-        if(!this.get("titleAsUrl")){
-          this.set("titleAsUrl", encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"")));
-        }
+        
         if(!this.get("pouchname")){
           this.set("pouchname", this.get("team").get("username")
-              +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) );
+              +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ) ;
         }
         if(!this.get("couchConnection")){
           this.get("couchConnection").pouchname = this.get("team").get("username")
-          +"-"+encodeURIComponent(this.get("title").replace(/[^a-zA-Z0-9-._~]/g,"").replace(/ /g,"")) ;
+          +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
       }
       var oldrev = this.get("_rev");
+      
+      /*
+       * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
+       */
+      try{
+        var ds = this.get("datumStates");
+        for (var s in ds){
+          if(ds[s].get("state") == undefined  ){
+            ds.splice(s,1);
+          }
+        }
+      }catch(e){
+        Utils.debug("Removing empty states work around failed some thing was wrong.",e);
+      }
+      
+      
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
@@ -719,20 +737,32 @@ define([
       });
     },
     validate: function(attrs){
-//        console.log(attrs);
-        if(attrs.title != undefined){
-          attrs.titleAsUrl = encodeURIComponent(attrs.title); //TODO the validate on corpus is still not working.
-        }
-        
-        if(attrs.publicCorpus){
-          if(attrs.publicCorpus != "Public"){
-            if(attrs.publicCorpus != "Private"){
-              return "Corpus must be either Public or Private"; //TODO test this.
-            }
+      if(attrs.publicCorpus){
+        if(attrs.publicCorpus != "Public"){
+          if(attrs.publicCorpus != "Private"){
+            return "Corpus must be either Public or Private"; //TODO test this.
           }
         }
-        
-//        return '';
+      }
+    },
+    set: function(key, value, options) {
+      var attributes;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (_.isObject(key) || key == null) {
+        attributes = key;
+        options = value;
+      } else {
+        attributes = {};
+        attributes[key] = value;
+      }
+
+      options = options || {};
+      // do any other custom property changes here
+      if(attributes.title){
+        attributes.titleAsUrl = attributes.title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");//this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+      }
+      return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
     /**
      * This function takes in a pouchname, which could be different

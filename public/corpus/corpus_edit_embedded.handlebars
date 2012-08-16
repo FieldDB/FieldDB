@@ -25,7 +25,7 @@
       </button>
       <ul class="dropdown-menu">
         <li><a href="#import" class = "locale_Import_Data"></a></li>
-        <li><a href="#corpus/{{titleAsUrl}}/export" class = "locale_Export_Data"></a></li>
+        <li><a href="#corpus/{{pouchname}}/export" class = "locale_Export_Data"></a></li>
       </ul>
     </div>
 	  <!-- /Corpus Menu - Identical for all Corpus Handlebars -->
@@ -48,6 +48,8 @@
 <label class = "locale_Public_or_Private"></label>
 <input type="text" value="{{publicCorpus}}" class=" public-or-private" data-provide="typeahead" data-items="4" 
         data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
+<a href = "http://ifield.fieldlinguist.com/{{username}}/{{titleAsUrl}}" target="_blank"><i class=" icon-link"></i></a>
+<small>Shareable URL: http://ifield.fieldlinguist.com/{{username}}/{{titleAsUrl}}</small>
         
 <div class="accordion" id="accordion-edit-embedded">
   <div class="accordion-group">
