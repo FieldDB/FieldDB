@@ -376,8 +376,12 @@ define([
     
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
-      this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-      this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      try{
+        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      }catch(e){
+        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+      }
       
       //update the view of the datum state to the new color and text without rendering the entire datum
       var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
