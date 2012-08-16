@@ -25,7 +25,7 @@
       </button>
       <ul class="dropdown-menu">
         <li><a href="#import" class = "locale_Import_Data"></a></li>
-        <li><a href="#corpus/{{titleAsUrl}}/export" class = "locale_Export_Data"></a></li>
+        <li><a href="#corpus/{{pouchname}}/export" class = "locale_Export_Data"></a></li>
       </ul>
     </div>
     <!-- /Corpus Menu - Identical for all Corpus Handlebars -->
@@ -34,6 +34,7 @@
 
 <div class="corpus-description">
 	<label class="locale_Title"></label>
+	<!-- <a href = "http://ifield.fieldlinguist.com/{{username}}/{{titleAsUrl}}" target = "_blank"><small><i class=" icon-link"></i></small></a> -->
 	<textarea class="corpus-title-input save-corpus-blur">{{title}}</textarea>
 	<label class="locale_Description"></label>
 	<textarea class="corpus-description-input save-corpus-blur">{{description}}</textarea>

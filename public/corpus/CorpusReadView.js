@@ -129,12 +129,18 @@ define([
         Utils.debug("\tCorpus model was undefined.");
         return this;
       }
+      var jsonToRender = this.model.toJSON();
+      try{
+        jsonToRender.username = this.model.get("team").get("username");
+      }catch(e){
+        Utils.debug("Problem getting the usrname of the corpus' team");
+      }
       if (this.format == "leftSide") {
         Utils.debug("CORPUS READ LEFTSIDE render: " );
 
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
-          $(this.el).html(this.templateSummary(this.model.toJSON()));
+          $(this.el).html(this.templateSummary(jsonToRender));
           
           $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
 
@@ -142,13 +148,13 @@ define([
         Utils.debug("CORPUS READ LINK render: " );
 
         // Display the CorpusGlimpseView, dont set the element
-        $(this.el).html(this.templateLink(this.model.toJSON()));
+        $(this.el).html(this.templateLink(jsonToRender));
         
       } else if (this.format == "fullscreen"){
         Utils.debug("CORPUS READ FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen")); 
-        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
         
 
         // Display the CommentReadView
@@ -195,7 +201,7 @@ define([
         Utils.debug("CORPUS READ CENTER render: " );
 
         this.setElement($("#corpus-embedded"));
-        $(this.el).html(this.templateCentreWell(this.model.toJSON()));
+        $(this.el).html(this.templateCentreWell(jsonToRender));
 
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
