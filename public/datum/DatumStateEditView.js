@@ -67,17 +67,9 @@ define( [
         $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
         $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
         $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+        this.$el.find(".locale_Searchable").html(chrome.i18n.getMessage("locale_Searchable"));
       }
       
-      //localization
-      this.$el.find(".locale_Searchable").html(chrome.i18n.getMessage("locale_Searchable"));
-      $(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
-      $(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
-      $(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
-      $(".locale_Blue").html(chrome.i18n.getMessage("locale_Blue"));
-      $(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
-      $(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
-      $(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
       return this;
     },
     
