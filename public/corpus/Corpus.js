@@ -123,7 +123,7 @@ define([
           , new DatumState({
             state : "Deleted",
             color : "important",
-            showInSearchResults:  false
+            showInSearchResults:  ""
           }),
         ]));
       }//end if to set datumStates

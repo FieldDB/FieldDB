@@ -35,7 +35,7 @@ define([
 //      state : "Checked",
       color : "",
 //      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
-      showInSearchResults : true,
+      showInSearchResults : "checked",
       selected : ""
     },
     
