@@ -760,7 +760,7 @@ define([
       options = options || {};
       // do any other custom property changes here
       if(attributes.title){
-        attributes.titleAsUrl = attributes.title.replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");//this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+        attributes.titleAsUrl = attributes.title.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");//this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
       }
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
