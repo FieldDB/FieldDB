@@ -13,26 +13,21 @@
 </head>
 <body>
 	<div class="well">
-		<h1>iField: a Fieldlinguistics Database which adapts to its
-			user's I-Language</h1>
-		<h2>Welcome, Bienvenue, Bienvenidos - Beta Testing Target: July
-			12st 2012</h2>
-		<h2>Official Launch August 1st, @CAML in Patzún, Guatemala</h2>
-		<h3>Status: 16 days behind schedule</h3>
+		<h1>
+			iField <small>beta</small> Weekly News Channel
+		</h1>
+		<h3>A Fieldlinguistics Database which adapts to its user's
+			I-Language</h3>
+		<h2>Officially Launched August 1st, @CAML in Patzún, Guatemala</h2>
 		<p>
-			Click here to go to the local <a href="index.html">index.html</a>
-			v1.12 (updated weekly).
+			To install or find out more: <a href="http://fieldlinguist.com">http://fieldlinguist.com</a>
 		</p>
 		<p>
-			Click here to go to <a href="https://ifield.fieldlinguist.com">https://ifield.fieldlinguist.com</a>
-			(updated once in a while).
+			To open the app: (only if you already have it installed) <a
+				href="chrome-extension://niphooaoogiloklolkphlnhbbkdlfdlm/dashboard.html">chrome-extension://niphooaoogiloklolkphlnhbbkdlfdlm/dashboard.html</a>
 		</p>
-	</div>
 
-	<hr>
-	<div class="well">
 
-		<h1 class="center">Our Weekly News Channel</h1>
 
 		<p>
 			If you want more frequent updates you can find out what we are doing
@@ -40,12 +35,191 @@
 			tool for decentralized projects, kind of like Facebook for
 			programmers. We are busy every day, updating issues, "committing"
 			code and asking each other for code reviews. Anyone can add features,
-			ask questions or leave us comments notes on our GitHub issue tracker:
-			<a target="top"
+			ask questions or leave us comments or notes on our GitHub issue
+			tracker: <a target="top"
 				href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
 				on GitHub </a>
 		</p>
 
+	</div>
+	<hr />
+	<!-- <div class="well">
+		<h1>August 10 2012 - Week 16 - More bug fixes and reliable confidentiality encryption.</h1>
+	</div> -->
+	<div class="well">
+		<h1>
+			August 3 2012 - Week 15 - Demo at <a href="http://mayanfamli.org/">CAML</a>
+		</h1>
+
+
+		<h2>Spanish Screencasts</h2>
+		<p>This week we created new Spanish screencasts to prepare for a
+			workshop on how to use iField to enter/import data at CAML. We didn't
+			publish them to YouTube yet because we didn't have good enough
+			internet at our hotel. They will be coming online by the end of next
+			week.</p>
+
+		<h2>Demo and Feedback</h2>
+		<p>
+			The CAML room didn't have tables or a lot of space to walk around and
+			help participants so instead of giving a workshop and helping people
+			import their data we just demoed the project and answered some of the
+			audience's questions. Some of the most important questions we got
+			were about import and export file types and why we were making a new
+			software for field linguists. We incorporated the audiences questions
+			into a new <a
+				href="https://docs.google.com/presentation/pub?id=1KQaq4jbGM9roakDNPuj_jxWPL5v0NXJNBWaLJpqDzHc&start=false&loop=false&delayms=10000">slide
+				show</a> and put up a spiffy <a href="http://fieldlinguist.com">website</a>.
+			The demo was <a
+				href="http://www.youtube.com/user/MuniPatzun?blend=1&ob=0"> live
+				streamed</a> by the <a
+				href="http://patzun.gob.gt/index.php?option=com_content&view=article&id=391:idiomas&catid=99:cultura&Itemid=439">Patzun
+				municipality</a>.
+		<h2>Spanish screencasts for regular expressions</h2>
+		<p>
+			We also got together with other techie linguists for a "hacking"
+			session on Thursday night at the top of Patzun Plaza to share tools
+			and tips in extracting particular examples from fieldwork data using
+			Unix commandline tools like the recipes in <a
+				href="http://people.sslmit.unibo.it/~baroni/compling04/UnixforPoets.pdf">Unix
+				for Poets</a>. Below are some screen casts Emmy made in Spanish for some
+			of the Chuj speakers for how they can use regular expressions to
+			extract info from their transcribed child language acquisition data.
+		</p>
+		<iframe width="560" height="315"
+			src="http://www.youtube.com/embed/videoseries?list=PL7A21CF3CEC45B4C2&amp;hl=en_US"
+			frameborder="0" allowfullscreen></iframe>
+		<h2>The big merge</h2>
+		<p>This week we merged in the localization branch and the bug
+			fix/new features branch. It was a big merge and took us about a day
+			to do. We worked on fixing some of the resulting bugs where events
+			were getting lost due to a mixture of layers of help popovers and
+			jquery calls to modify non-existant dom elements. We got most of the
+			bugs fixed so that we could demo at least the ability to gloss and
+			find morphemes, visualize morphemes, add comments on all objects in
+			the system, import data from csv, add new datum fields to the corpus
+			either by importing or by hand, searching data etc.</p>
+
+	</div>
+	<div class="well">
+		<h1>July 27 2012 - Week 14 - Localization, Major refactor and bug
+			fixes</h1>
+
+		<h2>More help texts, toasts and localization</h2>
+
+		<p>This week we implemented some of the beta tester requests
+			including importing .sf Toolbox files, adding tooltips on all the
+			buttons and icons to tell the user what they are for, and minimizing
+			some of the dashboard widgets (datalists, activity feed, unicode).</p>
+
+		<p>We added a user interface to add other users to your corpus,
+			either as administrators, or as contributers who can edit info/data,
+			or collaborators who can only see data. We also added a user
+			interface for you to change your corpus from private to public or
+			public to private.</p>
+
+		<p>We worked on localizing the app so that we can translate it
+			seamlessly into Spanish, in preparation for our launch at the Corpus
+			Approaches to Mayan Linguistics workshop in Guatemala.</p>
+
+		<h2>Major refactor and bug fixes</h2>
+		<p>We also fixed a bug in advanced search that wasn't showing all
+			the corpus' extra fields. (It was cloning the copurs fields too
+			early, now when it renders, it looks up the datum fields and session
+			fields so it is always up-to-date).</p>
+
+
+		<p>We refactored the way we were saving models in backbone to
+			create a save method that makes sure the model is saved in the right
+			pouch, and made sure that the model was interconnected where it
+			needed to be in the app (ie, if it is a new session, save it into the
+			corpus, and put it as the most recent session for the user so we can
+			re-load their dashboard if they leave etc).</p>
+
+		<p>We refactored the confidentiality encryption for datum in the
+			new datum architecture (where each field is an object, not just a
+			value) by adding a custom save function in the datum fields (which
+			gets called each time backbone tries to set something on the
+			DatumField object).</p>
+
+
+		<p>This week we also refactored the data list module to use a
+			paginated updating collections view, cleaned the app router and app
+			view to reduce the number of views to just 1 per edit &amp; read
+			version of the models for DataList, Search, and Corpus, reduced the
+			number of duplicate events fireing by destroying views when we
+			rendered over divs, refactored search, created a new widget for
+			search just above the data list, made any datum matching the current
+			search query automatically pop up in the temporary search list for
+			Alan, and turned the activity feed into paginated updating collection
+			too.</p>
+	</div>
+	<div class="well">
+		<h1>July 20 2012 - Week 13 - Semi-automatic glossing, morpheme
+			segmentation, a "cute" visualization of morphemes, drag and drop
+			audio</h1>
+
+		<iframe width="420" height="315"
+			src="http://www.youtube.com/embed/vEPfnUnnbj0" frameborder="0"
+			allowfullscreen></iframe>
+
+
+		<h2>Semi-automatic glossing and morhpheme segmentation</h2>
+		<p>This week we built a morpheme segmenter using the user's
+			morpheme segmentation line to find morphemes. It takes in the
+			previous morpheme lines, creates linear precedence rules for the
+			morphemes and then stores these as rules. When it is fed a new word
+			(or sequence of words), it looks up in these precedence rules to find
+			potential matching rules. Using the matching rules it tries to build
+			a mini finite state machine to segment the word into morphemes. On
+			our sample of 76 Quechua utterances it usually misses 1-2 morpheme
+			boundaries per word. It is designed to keep "learning" each time the
+			user syncs up to the server the get the latest version of their
+			morpheme finder's precedence rules.</p>
+
+		<p>We also built an auto-glosser which takes in a word (or a line
+			of words) and looks up the potential glosses for each morpheme in the
+			lexicon (which, like the precedence rules is built from previous
+			existing datum). At the moment it takes the most popular gloss for
+			the morphemes. It also assumes you are using Leipzig conventions to
+			gloss your data. Like the morpheme finder, it gets smarter the more
+			data you gloss.</p>
+
+		<p>Both the morpheme finder and glosser are trained on your
+			corpus, but in reality any corpus can use any precedence rules or
+			lexicon. This is done so that if you have a large corpus of cleaned
+			data, you can share your precedence rules or lexicon with anyone
+			working on the same dialect so that they don't have to build up a
+			large corpus to take advantage of semi-automatic morpheme/gloss
+			prediction.</p>
+
+		<h2>Report "bots" and data visualization</h2>
+
+		<p>
+			Using the precedence rules extracted from the corpus we were able to
+			do a really quick visualization using a <a href="http://d3js.org/">Force
+				Directed graph in D3</a>. D3 is a pretty awesome javascript
+			visualization library that makes SVG (ie, images that you can edit as
+			vectors, and print at any size!). We looked around for visualizations
+			and settled on a really quick simple one which lets you see the
+			morphemes as nodes in a connected graph, where each edge (connection)
+			in the graph is a linear ordering. If you hover over a node you can
+			see what morpheme it is, and by the color you can see which morphemes
+			need to be cleaned (ie ones that are abnormally long are in orange).
+			Later on we will make some more visualizations (hopefully something
+			with more linguistic info), and make it so you can click on the nodes
+			and see the datum that the node came from (useful if you want to use
+			the visualization to help you clean your data).
+		</p>
+
+		<h2>HTML5 audio</h2>
+		<p>After some work the HTML5 audio player is finally working
+			properly, you can drag and drop an audio file from your computer to
+			the audio player in the datum you are working on. It will save the
+			audio file in your iField's local file storage. We still haven't set
+			up the audio file server so the audio files are not being synced when
+			you hit sync, but they are safely stored in your local iField without
+			a problem.</p>
 	</div>
 	<div class="well">
 		<h1>July 13 2012 - Week 12 - Import, export, comments, activity
@@ -54,11 +228,10 @@
 		<p>This week we demoed the working features of iField (and some of
 			its bugs too) on Thursday. We finally got all the saving logic
 			running though the app and were able to implement some of the fun
-			features like drag and drop import, collapsing datum fields (so that rare
-			fields don't clutter your interface). We also added a transparent theme
-			for those of us who like to immerse ourselves in landscapes rather
-			than computer screens.
-		</p>
+			features like drag and drop import, collapsing datum fields (so that
+			rare fields don't clutter your interface). We also added a
+			transparent theme for those of us who like to immerse ourselves in
+			landscapes rather than computer screens.</p>
 		<p>We also made a few screencasts for the beta testers to watch
 			before trying to use the app. We invite all beta testers to send us
 			sample data so we can make the app work for them. It took about 1
@@ -66,9 +239,11 @@
 			it works for all CSV data. We hope it will be that easy with your
 			data formats.</p>
 
-  <h2>Beta Tester Tutorials</h2>
+		<h2>Beta Tester Tutorials</h2>
 
-  <iframe width="720" height="515" src="https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA&amp;hl=en_US" frameborder="0" allowfullscreen></iframe>
+		<iframe width="720" height="515"
+			src="https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA&amp;hl=en_US"
+			frameborder="0" allowfullscreen></iframe>
 
 	</div>
 	<div class="well">
@@ -371,8 +546,7 @@
 			src="http://redmine.ilanguage.ca:8080/"></iframe>
 
 		<h2>Web Widgets Server is up</h2>
-		<iframe width="100%" height="300"
-			src="https://ifield.fieldlinguist.com"></iframe>
+		<a href="https://ifield.fieldlinguist.com">https://ifield.fieldlinguist.com</a>
 
 		<h2>Lexicon Server is up</h2>
 		<iframe width="100%" height="300"
@@ -381,7 +555,7 @@
 		<h2>Corpus Server is a CouchDB server running on IrisCouch (it
 			can run on a department server too).</h2>
 		<iframe width="100%" height="300"
-			src="https://trisapeace.iriscouch.com/_utils/"></iframe>
+			src="https://ilanguage.iriscouch.com/_utils/"></iframe>
 
 		<h2>Screen cast explaining the coarse grained architecture</h2>
 		<iframe width="420" height="315"

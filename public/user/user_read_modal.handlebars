@@ -1,40 +1,35 @@
 <div class="modal-header">
-  <a href="#" rel="tooltip" title="Edit user profile">
-      <i class="icons icon-edit edit-user-profile-modal pull-right"></i></a>
-      
-  <h1><span class = "locale_User_Profile"></span> <small>{{firstname}} {{lastname}}</small></h1>
+	<a href="#" class="locale_Edit_User_Profile_Tooltip pull-right" rel="tooltip" >
+	 <i class="icons icon-edit edit-user-profile "></i> </a>
+  <a href="#" class="btn btn-primary view-public-profile locale_View_Public_Profile_Tooltip pull-right" ></a>
+	<h1>
+    <span class="locale_User_Profile"> </span> <small>{{username}} ({{firstname}} {{lastname}}) </small>
+	</h1>
+	<p class = "locale_Private_Profile_Instructions"></p>
+	
 </div>
-
 <div class="modal-body">
-    <dl>
-      <dt><span class = "locale_Gravatar"></span></dt>
-      <dd>
-        <img class="gravatar-image gravatar-large" src="{{gravatar}}"/>
-      </dd> 
-      <dt><span class = "locale_Email"></span></dt>
-      <dd>
-        <span class="email">{{email}}</span>
-      </dd>
-      <dt><span class = "locale_Research_Interests"></span></dt>
-      <dd>
-        <span class="researchInterest">{{researchInterest}}</span>
-      </dd>
-       <dt><span class = "locale_Affiliation"></span></dt>
-      <dd>
-        <span class="affiliation">{{affiliation}}</span>
-      </dd>
-       <dt><span class = "locale_Description"></span></dt>
-      <dd>
-        <span class="description">{{description}}</span>
-      </dd>
-       <dt><span class = "locale_Corpora"></span></dt>
-      <dd>
-        <ul class="corpora"></ul>
 
-      </dd>
-    </dl>
-
+	<dl>
+		<dt class="locale_Gravatar"></dt>
+		<dd>
+			<img class="gravatar-image gravatar-large" src="{{gravatar}}" />
+		</dd>
+		<dt class="locale_Email"></dt>
+		<dd class="email">{{email}}</dd>
+		<dt class="locale_Research_Interests"></dt>
+		<dd class="researchInterest">{{researchInterest}}</dd>
+		<dt class="locale_Affiliation"></dt>
+		<dd class="affiliation">{{affiliation}}</dd>
+		<dt class="locale_Description"></dt>
+		<dd class="description">{{description}}</dd>
+		<dt class="locale_Corpora"></dt>
+		<dd>
+			<ul class="corpora">
+			</ul>
+		</dd>
+	</dl>
 </div>
- <div class="modal-footer">
-  <a href="#" class="btn" data-dismiss="modal"><span class = "Close"></span></a>
+<div class="modal-footer">
+	 <a href="#" class="btn locale_Close" data-dismiss="modal"> </a>
 </div>

@@ -28,7 +28,7 @@ define( [
      * @class A list of datum that are returned as a search result. It will have
      *        check-boxes on the side and a datum menu on the bottom.
      * 
-     * @property {String} format Valid formats are "link", "fullscreen", 
+     * @property {String} format Valid formats are "link", "fullscreen", "centerWell",
      * "leftSide", and "minimized".
      * 
      * @description Starts the DataListReadView with no children.
@@ -37,7 +37,7 @@ define( [
      * @constructs
      */
     initialize : function(options) {
-      Utils.debug("DATALIST READ VIEW init: " + this.el);
+      Utils.debug("DATALIST READ VIEW init: ");
       
       this.changeViewsOfInternalModels();
       this.model.bind('change:title', function(){
@@ -60,7 +60,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist-read" : 'insertNewComment',
+      "click .add-comment-datalist" : 'insertNewComment',
       
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
@@ -76,6 +76,7 @@ define( [
       "click .latex-export-datalist": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -85,6 +86,7 @@ define( [
       "click .icon-paste": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -94,6 +96,7 @@ define( [
       "click .CSV": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
@@ -103,34 +106,41 @@ define( [
       "click .icon-bullhorn": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
         }
         
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
         return false;
       },
-      "click .icon-unlock": function(e){
-        if(e){
-          e.stopPropagation();
-        }
-        
-        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
-        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
-        this.render();
-
-        return false;
-      },
       "click .icon-lock": function(e){
         if(e){
           e.stopPropagation();
+          e.preventDefault();
+        }
+        
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
+//        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
+//        this.render();
+
+        return false;
+      },
+      "click .icon-unlock": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
         }
         
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
-        this.$el.find(".icon-lock").toggleClass("icon-unlock icon-lock");
-        this.render();
+//        this.$el.find(".icon-lock").toggleClass("icon-unlock icon-lock");
+//        this.render();
 
         return false;
       },
       "click .icon-eye-open" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
           alert("This is a bug: cannot find decryption module for your corpus.")
@@ -143,6 +153,10 @@ define( [
         return false;
       },
       "click .icon-eye-close" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
         var confidential = app.get("corpus").get("confidential");
         if(!confidential){
           alert("This is a bug: cannot find decryption module for your corpus.")
@@ -157,7 +171,7 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    templateFullscreen : Handlebars.templates.data_list_read_fullscreen,
+    templateFullscreen : Handlebars.templates.data_list_read_embedded,
     
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
@@ -186,22 +200,23 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
     
     render : function() {
-      appView.currentReadDataListView.destroy_view();
-      appView.currentEditDataListView.destroy_view();
+      if(this.format != "link"){
+        appView.currentReadDataListView.destroy_view();
+        appView.currentEditDataListView.destroy_view();
+      }
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
-      jsonToRender.confidential = false; //TODO should we show both lock and unlock if the data are mixed?
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "link") {
-        Utils.debug("DATALIST READ LINK render: " + this.el);
+        Utils.debug("DATALIST READ LINK render: ");
 
         // Display the Data List
         $(this.el).html(this.templateLink(jsonToRender));
       
       } else if (this.format == "leftSide") {
-        Utils.debug("DATALIST READ LEFTSIDE render: " + this.el);
+        Utils.debug("DATALIST READ LEFTSIDE render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -209,8 +224,13 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
         
+        //Localization of icons for quickview
+        $(this.el).find(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
+        $(this.el).find(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+        $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+        
       } else if (this.format == "fullscreen") {
-        Utils.debug("DATALIST READ FULLSCREEN render: " + this.el);
+        Utils.debug("DATALIST READ FULLSCREEN render: ");
 
         // Display the Data List
         this.setElement($("#data-list-fullscreen-header"));
@@ -219,8 +239,12 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
         
-      } else if(this.format == "middle") {
-        Utils.debug("DATALIST READ CENTER render: " + this.el);
+        //Localization of icons for fullscreen
+        $(this.el).find(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+       
+      } else if(this.format == "centerWell") {
+        Utils.debug("DATALIST READ CENTER render: ");
 
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
@@ -228,11 +252,19 @@ define( [
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
             $("#data-list-embedded").find(".current-data-list-paginated-view") );
        
+        //Localization of icons for centerWell
+        $(this.el).find(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
+
       } else if (this.format == "minimized") {
-        Utils.debug("DATALIST READ MINIMIZED render: " + this.el);
+        Utils.debug("DATALIST READ MINIMIZED render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
+      
+        //localization of the minimized data list icons
+        $(this.el).find(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
+
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
@@ -240,26 +272,25 @@ define( [
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          //localization of data list menu
+          $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
+          $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
+          $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
+          $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+          if(jsonToRender.decryptedMode){
+            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          }else{
+            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          }          
+          $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
+          $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
+          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+          
         }
       }catch(e){
         alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
       }
-      //localization
-      $(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-      $(".locale_Next").html(chrome.i18n.getMessage("locale_Next"));
-      $(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-      $(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-      $(".locale_Edit_Datalist").attr("title", chrome.i18n.getMessage("locale_Edit_Datalist"));
-      $(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio"));
-      $(".locale_Copy_checked").attr("title", chrome.i18n.getMessage("locale_Copy"));
-      $(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
-      $(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
-      $(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
-      $(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
-
-
-
-
+     
       return this;
     },
     
@@ -283,7 +314,7 @@ define( [
           datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
         }
       }
-      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+//      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
 
       return datumIdsChecked;
     },
@@ -295,6 +326,7 @@ define( [
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
 //      this.format = "leftSide";
 //      this.render();
@@ -304,6 +336,7 @@ define( [
     resizeFullscreen : function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       this.format = "fullscreen";
       this.render();
@@ -314,6 +347,7 @@ define( [
     showEditable :function(e){
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       window.appView.currentEditDataListView.format = this.format;
       window.appView.currentEditDataListView.render();
@@ -323,6 +357,7 @@ define( [
     insertNewComment : function(e) {
       if(e){
         e.stopPropagation();
+        e.preventDefault();
       }
       console.log("I'm a new comment!");
       var m = new Comment({
@@ -336,6 +371,8 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
+      Utils.debug("DESTROYING DATALIST READ VIEW "+ this.format);
+
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

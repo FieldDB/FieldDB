@@ -136,23 +136,23 @@ require([
    * Helper functions
    */
   
-  /* if they are browsing online, and not using the App version, bring them to the app version */
-  if( window.location.href.indexOf("chrome-extension") == -1 ){
-    var x = window.confirm("iField works best in the Chrome Store where it has unlimited space to store your data, " +
-    		"and can go online and offline. " +
-    		"\n\nNote: This is an HTML5 webapp, not a webpage. It uses a database called 'IndexedDB'." +
-    		"\n\n Safari doesn't let you save a database in the browser. " +
-    		"\n\n Firefox almost works but not quite. It might work in a year or so." +
-    		"\n\n Internet Exporer 10 might work, but not IE 6-9."+
-    		"\n\nClick cancel to try it out here, but we can't guarentee your data will be saved in a database. " +
-    		"\n\nClick OK to go to the Chrome Store App." 
-    );
-    if (x){
-        window.location = "https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm";
-    }else{
-      //let them stay
-    }
-  }
+//  /* if they are browsing online, and not using the App version, bring them to the app version */
+//  if( window.location.href.indexOf("chrome-extension") == -1 ){
+//    var x = window.confirm("iField works best in the Chrome Store where it has unlimited space to store your data, " +
+//    		"and can go online and offline. " +
+//    		"\n\nNote: This is an HTML5 webapp, not a webpage. It uses a database called 'IndexedDB'." +
+//    		"\n\n Safari doesn't let you save a database in the browser. " +
+//    		"\n\n Firefox almost works but not quite. It might work in a year or so." +
+//    		"\n\n Internet Exporer 10 might work, but not IE 6-9."+
+//    		"\n\nClick cancel to try it out here, but we can't guarentee your data will be saved in a database. " +
+//    		"\n\nClick OK to go to the Chrome Store App." 
+//    );
+//    if (x){
+//        window.location = "https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm";
+//    }else{
+//      //let them stay
+//    }
+//  }
 
   /**
    * This function is the only place that starts the app, notably the app view and app router. 
@@ -201,7 +201,7 @@ require([
 //    Pouch.destroy('idb://dbsapir-firstcorpus');
 //    localStorage.clear();
 //  localStorage.removeItem("appids");
-//  localStorage.removeItem("corpusname");
+//  localStorage.removeItem("pouchname");
 //  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
 //  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
 //  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
@@ -229,16 +229,16 @@ require([
       return;
     }else{
       Utils.debug("Loading app from localStorage");
-      var corpusname = null;
+      var pouchname = null;
       var couchConnection = null;
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
         alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
         loadFreshApp();
         return;
       }else{
-        corpusname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).corpusname;
+        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
         couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-        if(!localStorage.getItem("db"+corpusname+"_id")){
+        if(!localStorage.getItem("db"+pouchname+"_id")){
           alert("We couldn't open your local database. Please login and it should fix the problem.");
           loadFreshApp(); 
           return;
@@ -257,7 +257,7 @@ require([
                 loadFreshApp();
                 return;
               }else{
-                a.createAppBackboneObjects(corpusname, function(){
+                a.createAppBackboneObjects(pouchname, function(){
                   window.startApp(a, function(){
                     window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
                   });

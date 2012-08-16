@@ -75,9 +75,9 @@ define([
      */
     initialize : function() {
       // Initially, the first datumState is selected
-      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-        this.get("datumStates").models[0].set("selected", "selected");
-      }
+//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
+//        this.get("datumStates").models[0].set("selected", "selected");
+//      }
       
       // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
@@ -105,15 +105,15 @@ define([
       datumTags : DatumTags
     },
 
-    changeCorpus : function(corpusname, callback) {
-      if(!corpusname){
-        corpusname = this.get("corpusname");
-        if(corpusname == undefined){
-          corpusname = window.app.get("corpus").get("corpusname");
+    changePouch : function(pouchname, callback) {
+      if(!pouchname){
+        pouchname = this.get("pouchname");
+        if(pouchname == undefined){
+          pouchname = window.app.get("corpus").get("pouchname");
         }
       }
       if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + corpusname : Utils.pouchUrl + corpusname);
+        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
       }
       if (typeof callback == "function") {
         callback();
@@ -133,7 +133,7 @@ define([
       var self = this;
       
       try{
-        this.changeCorpus(this.get("corpusname"),function(){
+        this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
             db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
               if ((!err) && (typeof callback == "function"))  {
@@ -156,7 +156,7 @@ define([
       var self = this;
       
       try{
-        this.changeCorpus(this.get("corpusname"), function() {
+        this.changePouch(this.get("pouchname"), function() {
           self.pouch(function(err, db) {
             db.query("get_datum_field/get_datum_fields", {reduce: false}, function(err, response) {
               var matchIds = [];
@@ -288,7 +288,7 @@ define([
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
         datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
-        corpusname : this.get("corpusname"),
+        pouchname : this.get("pouchname"),
         session: this.get("session")
       });
 
@@ -413,7 +413,7 @@ define([
         this.set("dateEntered", JSON.stringify(new Date()));
       }
       //protect against users moving datums from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("corpusname") != this.get("corpusname")){
+      if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
           failurecallback();
         }else{
@@ -431,13 +431,28 @@ define([
       // Store the current Session, the current corpus, and the current date
       // in the Datum
       this.set({
-        "session" : app.get("currentSession"),
-        "corpusname" : app.get("corpus").get("corpusname"),
+        "session" : app.get("currentSession"), //TODO this is dangerous no? it will overwrite its session with the current one if it is from a previous session
+        "pouchname" : app.get("corpus").get("pouchname"),
         "dateModified" : JSON.stringify(new Date())
       });
       
       var oldrev = this.get("_rev");
-      this.changeCorpus(null,function(){
+      /*
+       * For some reason the corpus is getting an extra state that no one defined in it. 
+       * this gets rid of it when we save. (if it gets in to a datum)
+       */
+      try{
+        var ds = this.get("datumStates");
+        for (var s in ds){
+          if(ds[s].get("state") == undefined  ){
+            ds.splice(s,1);
+          }
+        }
+      }catch(e){
+        Utils.debug("Removing empty states work around failed some thing was wrong.",e);
+      }
+      
+      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             Utils.debug('Datum save success');
@@ -459,10 +474,9 @@ define([
             window.app.get("authentication").get("userPrivate").get("activities").unshift(
                 new Activity({
                   verb : verb,
-                  directobject : "<a href='#corpus/"+model.get("corpusname")+"/datum/"+model.id+"'>datum</a> ",
+                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>datum</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App.",
-                  user: window.app.get("authentication").get("userPublic")
+                  context : differences+" via Offline App."
                 }));
 
             /*
@@ -566,7 +580,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentDatum : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("corpusname") != this.get("corpusname") ){
+      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
         if (typeof failurecallback == "function") {
           failurecallback();
         }else{
