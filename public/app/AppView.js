@@ -474,8 +474,14 @@ define([
 //        this.datumsReadView.destroy_view();//TODO add all the other child views eventually once they know how to destroy_view
         this.currentEditDataListView.destroy_view();
         this.currentReadDataListView.destroy_view();
+        this.currentPaginatedDataListDatumsView.destroy_view();
+        
         this.importView.destroy_view();
         this.searchEditView.destroy_view();
+        
+        this.activityFeedUserView.destroy_view();
+        this.activityFeedCorpusTeamView.destroy_view();
+        
         this.destroy_view();
         Utils.debug("Done Destroying the appview, so we dont get double events.");
 
