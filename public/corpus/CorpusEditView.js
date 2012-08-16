@@ -154,11 +154,17 @@ define([
         window.appView.currentCorpusReadView.destroy_view();
       }
 
+      var jsonToRender = this.model.toJSON();
+      try{
+        jsonToRender.username = this.model.get("team").get("username");
+      }catch(e){
+        Utils.debug("Problem getting the usrname of the corpus' team");
+      }
       if (this.format == "centreWell") {
         Utils.debug("CORPUS Edit center render: " );
           // Display the CorpusReadFullScreenView
           this.setElement($("#corpus-embedded"));
-          $(this.el).html(this.templateCentreWell(this.model.toJSON()));
+          $(this.el).html(this.templateCentreWell(jsonToRender));
 
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
@@ -213,7 +219,7 @@ define([
         Utils.debug("CORPUS EDIT FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen"));
-        $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+        $(this.el).html(this.templateFullscreen(jsonToRender));
 
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
@@ -268,7 +274,7 @@ define([
       } else if (this.format == "leftSide"){
         Utils.debug("CORPUS EDIT LEFTSIDE render: " );
         this.setElement($("#corpus-quickview"));
-        $(this.el).html(this.templateSummary(this.model.toJSON()));
+        $(this.el).html(this.templateSummary(jsonToRender));
       
         //Localize left side edit view
         $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
@@ -276,7 +282,7 @@ define([
       }else if (this.format == "modal"){
         Utils.debug("CORPUS EDIT MODAL render: " );
         this.setElement($("#new-corpus-modal"));
-        $(this.el).html(this.templateNewCorpus(this.model.toJSON()));
+        $(this.el).html(this.templateNewCorpus(jsonToRender));
         
       }else {
         throw("You have not specified a format that the CorpusEditView can understand.");

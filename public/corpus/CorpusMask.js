@@ -188,7 +188,33 @@ define([
 //      searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
     },
-    
+    /**
+     * this resets the titleAsUrl to match the title, this means if the usr changes the title, their corpu has high chances of not being unique.
+     * 
+     * @param key
+     * @param value
+     * @param options
+     * @returns
+     */
+    set: function(key, value, options) {
+      var attributes;
+
+      // Handle both `"key", value` and `{key: value}` -style arguments.
+      if (_.isObject(key) || key == null) {
+        attributes = key;
+        options = value;
+      } else {
+        attributes = {};
+        attributes[key] = value;
+      }
+
+      options = options || {};
+      // do any other custom property changes here
+      if(attributes.title){
+        attributes.titleAsUrl = attributes.title.replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");//this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
+      }
+      return Backbone.Model.prototype.set.call( this, attributes, options ); 
+    },
     // Internal models: used by the parse function
     model : {
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
