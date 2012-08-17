@@ -510,7 +510,7 @@ define([
           $(".ifield-version").html(ver);
         });
 //        this.importView.render(); //render at last minute using router
-//        this.exportView.render();//render at last minute using router
+        this.exportView.render();//render at last minute using router
         
         
 //        // Display the Corpus Views
