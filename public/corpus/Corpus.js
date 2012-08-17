@@ -338,10 +338,10 @@ define([
        * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
        */
       try{
-        var ds = this.get("datumStates");
+        var ds = this.get("datumStates").models;
         for (var s in ds){
-          if(ds[s].get("state") == undefined  ){
-            ds.splice(s,1);
+          if(ds[s].get("state") == undefined){
+            this.get("datumStates").remove(ds[s]);
           }
         }
       }catch(e){
