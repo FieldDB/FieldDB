@@ -1,8 +1,8 @@
 <div class="pull-right">
 	<button class="btn btn-success save-datum locale_Save pull-right" value="Save"></button><br/>
-	<i class="icons icon-save "></i><span class="last-modified">{{dateModified}}</span><br/>
-	<i class="icons icon-time"></i><span class="date-created">{{dateEntered}}</span><br/>
-  <span class="session-link"></span>
+	<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
+	<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
+  
 </div>
 <!-- list for the fields -->
 <ul class="datum_fields_ul unstyled"></ul>
@@ -10,7 +10,7 @@
   <i class="icons icon-list-alt pull-right"> </i></a>
 <!-- Datum Edit view specialized fields and menu area -->
 <div class="row-fluid">
-	<div class="span5">
+	<div class="span6">
 		<!-- Buttons for various actions -->
 	  <div class=" btn-group">
 	    <a href="#" class = "locale_Insert_New_Datum btn btn-mini btn-primary" rel="tooltip">
@@ -22,27 +22,28 @@
 	    <a href="#" class = "locale_Show_confidential_items_Tooltip btn btn-mini btn-primary" rel="tooltip">
 	      <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i>
 	    </a>
-	    <a  href="#" class = "locale_Plain_Text_Export_Tooltip btn btn-mini btn-primary" rel="tooltip" >
+	    <a  href="#" class = "locale_Plain_Text_Export_Tooltip btn btn-mini btn-info" rel="tooltip" >
 	      <i class=" icon-paste"></i></a>
-	    <a href="#" class = "locale_LaTeX  LaTeX btn btn-mini btn-primary" rel="tooltip">
+	    <a href="#" class = "locale_LaTeX  LaTeX btn btn-mini btn-info" rel="tooltip">
 	      <i class="">LaTeX</i>
 	    </a>
-	    <a href="#" class = "locale_CSV_Tooltip CSV btn btn-mini btn-primary" rel="tooltip">
+	    <a href="#" class = "locale_CSV_Tooltip CSV btn btn-mini btn-info" rel="tooltip">
 	      <i class="">CSV</i>
 	    </a>
 	  </div>
 	  <br/>
 		<a href="#" class="audio_video locale_Drag_and_Drop_Audio_Tooltip" rel="tooltip"></a>
+		<span class="session-link"></span>
 	</div>
-  <div class="span4 border-left">
+  <div class="span3 border-left">
 		<!-- list for the tags -->
 		<ul class="datum_tags_ul unstyled"></ul>
-		<div class="controls span12 no-margin-left">
+		<div class="controls  no-margin-left">
 			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->
-			<div class="input-append span12">
+			<div class="input-append ">
 			  <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4" 
 	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]" 
-	      /><button class=" btn btn-primary add_datum_tag" type="button">
+	      /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
 	        <i class=" icon-tag"></i>
 	        <span class="locale_Add">Add</span> 
 	      </button>

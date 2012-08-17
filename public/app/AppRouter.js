@@ -436,8 +436,6 @@ define([
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();
       }
-      this.hideEverything();
-      $("#dashboard-view").show();
       $('#export-modal').modal("show");
     },
     

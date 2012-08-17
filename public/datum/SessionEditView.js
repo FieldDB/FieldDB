@@ -273,8 +273,8 @@ define([
             window.appView.currentSessionReadView.render();
           });
         }else{
+          window.appView.currentSessionReadView.format = self.format;
           window.appView.currentSessionReadView.render();
-          window.app.router.showDashboard();
         }
       });
     },
