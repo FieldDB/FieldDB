@@ -55,7 +55,7 @@ define([
         }
       }
       if(attributes.title){
-        if(this.get("title") != "All Data" && attributes.title == "All Data"){
+        if( !(this.get("title") == "Untitled Data List" || this.get("title") == "All Data") && attributes.title == "All Data"){
           alert("You cannot use All Data for your data list, that is reseved title for the first data list containing all your data.");
           return "You cannot modify the title of this data list to be the 'All Data' list.";
         }
