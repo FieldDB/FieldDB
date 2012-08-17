@@ -478,6 +478,9 @@
   "locale_Play_Audio_checked" : {
     "message" : "Tocar audio de los seleccionados"
   },
+  "locale_Remove_checked_from_datalist_tooltip" : {
+    "message" : "TODO translate los seleccionados"
+  },
   "locale_Insert_New_Datum" : {
     "message" : "Insertar un nuevo dato arriba"
   },

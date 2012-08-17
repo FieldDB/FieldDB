@@ -442,10 +442,10 @@ define([
        * this gets rid of it when we save. (if it gets in to a datum)
        */
       try{
-        var ds = this.get("datumStates");
+        var ds = this.get("datumStates").models;
         for (var s in ds){
-          if(ds[s].get("state") == undefined  ){
-            ds.splice(s,1);
+          if(ds[s].get("state") == undefined){
+            this.get("datumStates").remove(ds[s]);
           }
         }
       }catch(e){
