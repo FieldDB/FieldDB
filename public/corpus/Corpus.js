@@ -453,9 +453,9 @@ define([
                       var dl = new DataList({
                         pouchname : model.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
                       dl.set({
-                        "title" : "Default Data List",
+                        "title" : "All Data",
                         "dateCreated" : (new Date()).toDateString(),
-                        "description" : "This is the default data list for this corpus. " +
+                        "description" : "This list contains all data in this corpus. " +
                         "Any new datum you create is added here. " +
                         "Data lists can be used to create handouts, prepare for sessions with consultants, " +
                         "export to LaTeX, or share with collaborators.",
