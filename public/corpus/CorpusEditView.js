@@ -402,7 +402,8 @@ define([
     //Functions assoicate with the corpus menu
     newDatum : function(e) {
       if(e){
-        e.stopPropagation();
+//        e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
       }
       appView.datumsEditView.newDatum();
       app.router.showDashboard();
@@ -411,7 +412,8 @@ define([
     
     newDataList : function(e) {
       if(e){
-        e.stopPropagation();
+//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
       }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
@@ -420,7 +422,8 @@ define([
     
     newSession : function(e) {
       if(e){
-        e.stopPropagation();
+//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
       }
       $("#new-session-modal").modal("show");
       //Save the current session just in case
@@ -436,9 +439,10 @@ define([
     },
     
     newCorpus : function(e){
-//      if(e){
-//        e.stopPropagation();
-//      }
+      if(e){
+//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
+      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();

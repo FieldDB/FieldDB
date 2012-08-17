@@ -338,10 +338,10 @@ define([
        * For some reason the corpus is getting an extra state that no one defined in it. this gets rid of it when we save.
        */
       try{
-        var ds = this.get("datumStates");
+        var ds = this.get("datumStates").models;
         for (var s in ds){
-          if(ds[s].get("state") == undefined  ){
-            ds.splice(s,1);
+          if(ds[s].get("state") == undefined){
+            this.get("datumStates").remove(ds[s]);
           }
         }
       }catch(e){
@@ -453,9 +453,9 @@ define([
                       var dl = new DataList({
                         pouchname : model.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
                       dl.set({
-                        "title" : "Default Data List",
+                        "title" : "All Data",
                         "dateCreated" : (new Date()).toDateString(),
-                        "description" : "This is the default data list for this corpus. " +
+                        "description" : "This list contains all data in this corpus. " +
                         "Any new datum you create is added here. " +
                         "Data lists can be used to create handouts, prepare for sessions with consultants, " +
                         "export to LaTeX, or share with collaborators.",

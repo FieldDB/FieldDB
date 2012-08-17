@@ -125,9 +125,9 @@ define([
       "click .datum-checkboxes": function(e){
         if(e){
           e.stopPropagation();
-          e.preventDefault();
+//          e.preventDefault();//This breaks the checkbox
         }
-    //    alert("Checked box " + this.model.id);
+//        alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
       }
     },
