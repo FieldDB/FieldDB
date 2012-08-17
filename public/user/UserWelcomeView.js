@@ -263,12 +263,12 @@ define([
                   
                   var dl = a.get("currentDataList");
                   dl.set({
-                    "title" : "Default Data List",
+                    "title" : "All Data",
                     "dateCreated" : (new Date()).toDateString(),
-                    "description" : "This is the default data list for this corpus. " +
-                      "Any new datum you create is added here. " +
-                      "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                      "export to LaTeX, or share with collaborators.",
+                    "description" : "This list contains all data in this corpus. " +
+                    "Any new datum you create is added here. " +
+                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+                    "export to LaTeX, or share with collaborators.",
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   dl.changePouch(data.user.corpuses[0].pouchname);
