@@ -60,6 +60,9 @@
   "locale_Activity_Feed_Team" : {
     "message" : "Corpus Team Activity Feed"
   },
+  "locale_Refresh_Activities" : {
+    "message" : "Refresh activity feed to bring it up-to-date."
+  },
   "locale_Need_save" : {
     "message" : " Need save:"
   },

@@ -22,14 +22,16 @@ define([
 
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
-        if(!this.get("pouchname")) {
-          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
-        }
+//        if(!this.get("pouchname")) {
+//          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
+//        }
       }
       if(!this.get("timestamp")){
-        this.set("timestamp",JSON.stringify(new Date()) );
+        this.set("timestamp", JSON.stringify(new Date()) );
       }
-      
+      if( !this.get("teamOrPersonal")){
+         this.set("teamOrPersonal","personal");
+      }
       if(this.isNew()){
 //        this.saveAndInterConnectInApp();
       }
@@ -51,12 +53,23 @@ define([
     },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
-        if(this.get("user").get("username") ==  window.app.get("authentication").get("userPublic").get("username")){
-          pouchname = window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname;
-          this.set("pouchname", pouchname);
+        if( this.get("teamOrPersonal") == "personal"){
+          if(this.get("user").get("username") ==  window.app.get("authentication").get("userPublic").get("username")){
+            pouchname = window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname;
+            this.set("pouchname", pouchname);
+          }else{
+            alert("Bug in setting the pouch for this activity, i can only save activities from the current logged in user, not other users");
+            return;
+          }
         }else{
-          alert("Bug in setting the pouch for this activity, i can only save activities from the current logged in user, not other users");
-          return;
+          try{
+            pouchname = window.app.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname;
+            this.set("pouchname", pouchname);
+          }catch(e){
+            alert("Bug in setting the pouch for this activity, i can only save activities for the current corpus team.");
+            return;
+          }
+
         }
       }
       
@@ -82,6 +95,8 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       Utils.debug("Saving the Activity");
       var self = this;
+     
+      //save via pouch
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
@@ -100,6 +115,7 @@ define([
           }
         });
       });
+      
     }
     
   });

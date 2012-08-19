@@ -86,6 +86,7 @@ define([
         this.activitiesView.render();
         
         //localization for user non-minimized view
+        $(this.el).find(".locale_Refresh_Activities").attr("title", chrome.i18n.getMessage("locale_Refresh_Activities"));
         $(this.el).find(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
         $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Your"));
 
@@ -99,6 +100,7 @@ define([
         this.activitiesView.render();
         
         //localization for team non-minimized view
+        $(this.el).find(".locale_Refresh_Activities").attr("title", chrome.i18n.getMessage("locale_Refresh_Activities"));
         $(this.el).find(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
         $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Team"));
 
