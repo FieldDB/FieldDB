@@ -58,6 +58,9 @@
   "locale_Activity_Feed_Team" : {
     "message" : "TODO translate Corpus Team Canal de Actividad"
   },
+  "locale_Refresh_Activities" : {
+    "message" : "TODO translate"
+  },
   "locale_View_Profile_Tooltip" : {
     "message" : "TODO translate Click to view user's page"
   },
