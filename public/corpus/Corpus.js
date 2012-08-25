@@ -411,7 +411,7 @@ define([
                * at least we can test the map reduce
                * function.
                */
-              window.app.get("currentCorpusUserActivityFeed").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -436,7 +436,7 @@ define([
                     teamOrPersonal : "team"
                   }));
             }else{
-              window.app.get("currentCorpusUserActivityFeed").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -660,7 +660,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "team"
                   }));
-              window.app.get("currentCorpusUserActivityFeed").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
                     verb : "sycned",
                     verbmask : "synced",
@@ -741,7 +741,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "team"
                   }));
-              window.app.get("currentCorpusUserActivityFeed").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
                     verb : "sycned",
                     verbmask : "synced",
