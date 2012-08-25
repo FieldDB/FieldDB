@@ -153,7 +153,7 @@ define([
           success : function(model, response) {
             Utils.debug('Session save success');
             var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+goal+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
 //            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){
 //              goal = "";
@@ -167,13 +167,22 @@ define([
             if(newModel){
               verb = "added";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
-                  verb : verb,
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   directobject : "<a href='#session/"+model.id+"'>session</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App."
-//                  user: window.app.get("authentication").get("userPublic")
+                  teamOrPersonal : "team",
+                  context : " via Offline App."
+                }));
+            
+            window.app.get("currentUserActivityFeed").get("activities").unshift(
+                new Activity({
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobject : "<a href='#session/"+model.id+"'>session</a> ",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  teamOrPersonal : "personal",
+                  context : " via Offline App."
                 }));
             
             //make sure the session is in this corpus, if it is the same pouchname

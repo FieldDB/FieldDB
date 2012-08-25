@@ -2,14 +2,12 @@ define([
     "backbone", 
     "activity/Activity",
     "datum/Datum",
-    "datum/Datums",
     "comment/Comment",
     "comment/Comments"
 ], function(
     Backbone, 
     Activity,
     Datum,
-    Datums,
     Comment,
     Comments
 ) {
@@ -226,7 +224,7 @@ define([
           success : function(model, response) {
             Utils.debug('DataList save success');
             var title = model.get("title");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+title+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
 //            if(window.app.get("corpus").get("keepDataListDetailsPrivate")){
 //              title = "";
@@ -240,12 +238,23 @@ define([
             if(newModel){
               verb = "added";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            
+            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
-                  verb : verb,
-                  directobject : "<a href='#data/"+model.id+"'>dataList</a> ",
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App."
+                  teamOrPersonal : "team",
+                  context : " via Offline App."
+                }));
+            
+            window.app.get("currentUserActivityFeed").get("activities").unshift(
+                new Activity({
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  teamOrPersonal : "personal",
+                  context : " via Offline App."
                 }));
             
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;

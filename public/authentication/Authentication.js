@@ -138,6 +138,14 @@ define([
       var u = this.get("userPrivate");
       u.id = data.user._id; //set the backbone id to be the same as the mongodb id
       //set the user AFTER setting his/her publicself if it wasnt there already
+      if(data.user.activities){
+        alert("We have made a lot of changes in the app since your user was created. " +
+        		"Your user was created before the new Team and User activity feeds were implemented. " +
+        		"If you want to keep this user acount and data, contact us at opensource@ilanguage.ca " +
+        		"and we will transition your account for you. If you were just using this account for testing and you dont mind creating a  new user, " +
+        		"you should probably sign out and make a new user so you can use the " +
+        		"new Team and Activity feeds.");
+      }
       u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
 //    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
       // self.get("userPublic").save(); //TODO save this when there is
@@ -145,9 +153,9 @@ define([
 //      Utils.debug(data.user);
       if(window.appView){
         window.setTimeout(function(){
-          Utils.debug("trying to get activityfeed to be up-to-date");
-          window.appView.activityFeedUserView.model.set("activities", window.app.get("authentication").get("userPrivate").get("activities") );
-          window.appView.activityFeedUserView.render();
+          Utils.debug("trying to get activityfeed to be up-to-date");//dont need this anymore, the activites arent coming from the user when we sync down from the server.
+//          window.appView.activityFeedUserView.model.set("activities", window.app.get("currentCorpusTeamActivityFeed").get("activities") );
+//          window.appView.activityFeedUserView.render();
         },1000);
       }
       if (typeof callback == "function") {
