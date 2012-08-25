@@ -86,7 +86,7 @@ define([
       		"<a target='blank'  href='https://github.com/iLanguage/iField/issues/124'>" +
       		"You can vote for it in our issue tracker</a>.  " +
       		"We use the " +
-      		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly, you can too (if your a power user type).","alert","Track Changes:");
+      		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).","alert","Track Changes:");
     },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
