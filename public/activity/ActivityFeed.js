@@ -21,7 +21,7 @@ define([
      */
     initialize : function() {
       if(!this.get("activities")) {
-//      this.set("activities", window.app.get("authentication").get("userPrivate").get("activities"));
+//      this.set("activities", window.app.get("currentCorpusTeamActivityFeed").get("activities"));
         this.set("activities", new Activities());
       }
       //TODO remove this, and us the change corpus instead. by keepint htis now, it puts all activity feeds into one.
@@ -47,11 +47,13 @@ define([
     /**
      * not tested
      */
-    saveUserActivities : function(){
-      window.app.get("authentication").get("userPrivate").get("activities").each( function(a){
+    saveAndInterConnectInApp : function(successcallback, failurecallback){
+      this.get("activities").each( function(a){
         a.saveAndInterConnectInApp();
       });
-      
+      if(typeof successcallback == "function"){
+        successcallback();
+      }
     },
     /**
      * This is not really being used as long as the pouch is set in the initialize. 
@@ -131,12 +133,20 @@ define([
             }else{
               Utils.debug("ActivityFeed replicate to success", response);
               
-              window.app.get("authentication").get("userPrivate").get(
-              "activities").unshift(new Activity({
+              window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
+                verb : "synced",
+                directobject : "your activity feed",
+                indirectobject : "to the your activity feed server",
+                context : "via Offline App",
+                teamOrPersonal : "personal"
+              }));
+              
+              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
                 verb : "synced",
                 directobject : "their activity feed",
-                indirectobject : "to their team server",
-                context : "via Offline App"
+                indirectobject : "to the team activity feed server",
+                context : "via Offline App",
+                teamOrPersonal : "team"
               }));
 
               if(typeof successcallback == "function"){

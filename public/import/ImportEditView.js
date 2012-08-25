@@ -486,11 +486,22 @@ define( [
           ,"alert-success","Import successful:");
 
       // Add the "imported" activity to the ActivityFeed
-      window.app.get("authentication").get("userPrivate").get("activities").unshift(
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
           new Activity({
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
+            teamOrPersonal : "team",
+            context : "via Offline App"
+          }));
+
+      // Add the "imported" activity to the ActivityFeed
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "imported",
+            directobject : this.savedcount + " data entries",
+            indirectobject : "in "+window.app.get("corpus").get("title"),
+            teamOrPersonal : "personal",
             context : "via Offline App"
           }));
 
@@ -550,11 +561,22 @@ define( [
               $(".import-progress").val($(".import-progress").val()+1);
               
               // Add the "imported" activity to the ActivityFeed
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
+                    teamOrPersonal : "team",
+                    context : "via Offline App"
+                  }));
+              
+              // Add the "imported" activity to the ActivityFeed
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
+                  new Activity({
+                    verb : "attempted to import",
+                    directobject : self.model.get("datumArray").length + " data entries",
+                    indirectobject : "in "+window.app.get("corpus").get("title"),
+                    teamOrPersonal : "personal",
                     context : "via Offline App"
                   }));
               

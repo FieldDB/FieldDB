@@ -57,7 +57,7 @@ define([
       prefs : UserPreference,
       permissions : Permission, //TODO this needs to become plural
       hotkeys : HotKey, //TODO this needs to become plural
-      activities : Activities,
+//      activities : Activities, //@deprecated, now in a separate couch db
       publicSelf : UserMask
     },
 

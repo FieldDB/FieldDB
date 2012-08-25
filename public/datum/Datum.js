@@ -457,7 +457,7 @@ define([
           success : function(model, response) {
             Utils.debug('Datum save success');
             var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+utterance+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for datum goals in corpus
 //            if(window.app.get("corpus").get("keepDatumDetailsPrivate")){
 //              utterance = "";
@@ -471,14 +471,23 @@ define([
             if(newModel){
               verb = "added";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
-                  verb : verb,
-                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>datum</a> ",
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App."
+                  teamOrPersonal : "team",
+                  context : " via Offline App."
                 }));
-
+            
+            window.app.get("currentUserActivityFeed").get("activities").unshift(
+                new Activity({
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
+                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  teamOrPersonal : "personal",
+                  context : " via Offline App."
+                }));
             /*
              * If the current data list is the default
              * list, render the datum there since is the "Active" copy
