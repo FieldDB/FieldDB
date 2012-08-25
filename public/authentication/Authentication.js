@@ -138,7 +138,7 @@ define([
       var u = this.get("userPrivate");
       u.id = data.user._id; //set the backbone id to be the same as the mongodb id
       //set the user AFTER setting his/her publicself if it wasnt there already
-      if(data.user.activities){
+      if(data.user.activities && data.user.activities[0]){
         alert("We have made a lot of changes in the app since your user was created. " +
         		"Your user was created before the new Team and User activity feeds were implemented. " +
         		"If you want to keep this user acount and data, contact us at opensource@ilanguage.ca " +
