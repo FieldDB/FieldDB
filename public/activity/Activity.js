@@ -96,7 +96,13 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       Utils.debug("Saving the Activity");
       var self = this;
-     
+      if(! this.isNew()){
+        Utils.debug('Activity doesnt need to be saved.');
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+        return;
+      }
       //save via pouch
       this.changePouch(null, function(){
         self.save(null, {
