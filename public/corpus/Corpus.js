@@ -371,8 +371,10 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
             var teamid = model.get("team").id; //Works if UserMask was saved
             if(!teamid){
@@ -415,8 +417,9 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
-                    directobject : "<a href='#corpus/"+model.id+"'>corpus: "+title+"</a>",
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
                     context : " via Offline App.",
@@ -427,8 +430,9 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
-                    directobject : "<a href='#corpus/"+model.id+"'>corpus: "+title+"</a>",
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
@@ -440,8 +444,9 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
-                    directobject : "<a href='#corpus/"+model.id+"'>corpus: "+title+"</a>",
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
                     context : " via Offline App.",
@@ -452,8 +457,9 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
-                    directobject : "<a href='#corpus/"+model.id+"'>corpus: "+title+"</a>",
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
@@ -655,6 +661,7 @@ define([
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "to the team server",
                     indirectobjectmask : "to its team server",
                     context : " via Offline App.",
@@ -667,6 +674,7 @@ define([
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "to the team server",
                     indirectobjectmask : "to its team server",
                     context : " via Offline App.",
@@ -736,6 +744,7 @@ define([
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "from the team server",
                     indirectobjectmask : "from its team server",
                     context : " via Offline App.",
@@ -748,6 +757,7 @@ define([
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "from the team server",
                     indirectobjectmask : "from its team server",
                     context : " via Offline App.",

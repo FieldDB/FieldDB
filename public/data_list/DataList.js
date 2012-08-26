@@ -235,15 +235,18 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
             
             window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobjecticon : "icon-pushpin",
                   directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
                 }));
@@ -251,8 +254,9 @@ define([
             window.app.get("currentUserActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  directobjecticon : "icon-pushpin",
                   directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
                 }));
