@@ -479,7 +479,7 @@ define([
                   verbicon: verbicon,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
                   directobjecticon : "icon-list",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
                 }));
@@ -490,7 +490,7 @@ define([
                   verbicon: verbicon,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
                   directobjecticon : "icon-list",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
                 }));
