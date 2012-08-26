@@ -118,7 +118,9 @@ define([
    
     saveAnActivityAndLoop : function(d){
       var thatactivity = this.get("activities").models[d];
-      console.log(JSON.stringify(thatactivity.toJSON()));
+      if(thatactivity){
+        console.log(JSON.stringify(thatactivity.toJSON()));
+      }
           
       thatactivity.saveAndInterConnectInApp(function(){
         hub.publish("savedActivityToPouch",{d: d, message: " activity "+thatactivity.id});
