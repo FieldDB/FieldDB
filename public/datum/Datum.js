@@ -468,8 +468,10 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
             window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({

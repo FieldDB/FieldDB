@@ -25,6 +25,7 @@ a:hover{
 
 .activity_direct_object, .activity_direct_object a{
 	color: #055;
+	/* font-size: .85em; */
 }
 
 .activity_verb, .activity_verb a{
@@ -34,10 +35,12 @@ a:hover{
 
 .activity_indirect_object, .activity_indirect_object a{
 	 color: #550;
+	 /* font-size: .85em; */
 }
 
 .timestamp, .timestamp a{
   opacity: 0.75 ;
+  font-size: .85em;
   font-style: italic;
 }
 
