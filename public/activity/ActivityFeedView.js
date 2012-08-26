@@ -30,6 +30,7 @@ define([
     initialize : function() {
       this.changeViewsOfInternalModels();
       
+       
       //TODO this is how i tested the activity feed database, see the ActivityTest where it is hanging out not being tested.
 //          var a = new Activity();
 //          a.save();
@@ -65,6 +66,25 @@ define([
         }
         this.format = this.format.replace("minimized","");
         this.render();
+      },
+      "click .icon-refresh" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        
+        var activityfeedself = this.model;
+        //Get ready to listen for ajax errors
+        window.hub.subscribe("ajaxError", function(e){
+          Utils.debug("Populating activity feed offline. ", e);
+          
+          //Show the contents of the activity feed from the local pouch
+          activityfeedself.getAllIdsByDate(activityfeedself.populate);
+          window.hub.unsubscribe("ajaxError", null, activityfeedself); 
+        }, activityfeedself);
+        
+        //send the command that might produce errors
+        activityfeedself.replicateActivityFeed();
       }
     },
     

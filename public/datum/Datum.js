@@ -124,18 +124,18 @@ define([
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
      * @param {Function} callback A function that expects a single parameter. That
-     * parameter is the result of calling "get_datum_ids/by_date". So it is an array
+     * parameter is the result of calling "get_ids/by_date". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
      */
-    getAllDatumIdsByDate : function(callback) {
+    getAllIdsByDate : function(callback) {
       var self = this;
       
       try{
         this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
-            db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
+            db.query("get_ids/by_date", {reduce: false}, function(err, response) {
               if ((!err) && (typeof callback == "function"))  {
                 console.log("Callback with: ", response.rows);
                 callback(response.rows);

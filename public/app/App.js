@@ -382,8 +382,8 @@ define([
               //save activity feeds too
               appSelf.get("currentCorpusTeamActivityFeed").saveAndInterConnectInApp(function(){
                 appSelf.get("currentUserActivityFeed").saveAndInterConnectInApp(function(){
+                  Utils.debug("The activity feeds saved successfully.");
                   if(typeof successcallback == "function"){
-                    //  alert("The dashboard saved successfully, now calling the successcallback.");
                     successcallback();
                   }
                 },failurecallback);
