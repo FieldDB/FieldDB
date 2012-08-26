@@ -77,13 +77,13 @@ define([
         
         var activityfeedself = this.model;
         //Get ready to listen for ajax errors
-        window.hub.subscribe("ajaxError", function(e){
-          Utils.debug("Populating activity feed offline. ", e);
-          
-          //Show the contents of the activity feed from the local pouch
-          activityfeedself.getAllIdsByDate(activityfeedself.populate);
-          window.hub.unsubscribe("ajaxError", null, activityfeedself); 
-        }, activityfeedself);
+//        window.hub.subscribe("ajaxError", function(e){
+//          Utils.debug("Populating activity feed offline. ", e);
+//          
+//          //Show the contents of the activity feed from the local pouch
+//          activityfeedself.getAllIdsByDate(activityfeedself.populate);
+//          window.hub.unsubscribe("ajaxError", null, activityfeedself); 
+//        }, activityfeedself);
         
         //send the command that might produce errors
         activityfeedself.replicateActivityFeed();

@@ -43,20 +43,24 @@ define([
     nextsaveactivity : 0,
     
     saveAndInterConnectInApp : function(successcallback, failurecallback){
+      Utils.debug("Calling saveAndInterConnectInApp for "+this.get("couchConnection").pouchname);
       if(!successcallback){
         successcallback = function(){
           window.appView.toastUser("Save all activities","alert-success","Saved!");
         };
       }
-      var self = this;
-      window.hub.unsubscribe("savedActivityToPouch", null, self);
-      window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
+      console.log("successcallback",successcallback);
+      console.log("failurecallback",failurecallback);
       
-      this.savedcount = 0;
-      this.savedindex = [];
-      this.savefailedcount = 0;
-      this.savefailedindex = [];
-      this.nextsaveactivity  = 0;
+      var self = this;
+      window.hub.unsubscribe("savedActivityToPouch", null, this);
+      window.hub.unsubscribe("saveActivityFailedToPouch", null, this);
+      
+      self.savedcount = 0;
+      self.savedindex = [];
+      self.savefailedcount = 0;
+      self.savefailedindex = [];
+      self.nextsaveactivity  = 0;
       
       
       window.hub.subscribe("savedActivityToPouch", function(arg){
@@ -67,15 +71,21 @@ define([
            * If we are at the final index in the activity feed
            */
           Utils.debug("Activity feed saved.");
+          
           if(typeof successcallback == "function"){
             successcallback();
           }
+          window.hub.unsubscribe("savedActivityToPouch", null, this);
+          window.hub.unsubscribe("saveActivityFailedToPouch", null, this);
+          
         }else{
           /*
            * Save another activity when the previous succeeds
            */
           var next = parseInt(arg.d) - 1;
           this.saveAnActivityAndLoop(next);
+          alert("Calling saveAnActivityAndLoop for "+this.get("couchConnection").pouchname);
+
         }
       }, self);
       
@@ -92,12 +102,17 @@ define([
           if(typeof successcallback == "function"){
             successcallback();
           }
+          window.hub.unsubscribe("savedActivityToPouch", null, this);
+          window.hub.unsubscribe("saveActivityFailedToPouch", null, this);
+          
         }else{
           /*
            * Save another activity when the previous fails
            */
           var next = parseInt(arg.d) - 1;
           this.saveAnActivityAndLoop(next);
+          alert("Calling saveAnActivityAndLoop for "+this.get("couchConnection").pouchname);
+
         }
         
       }, self);
@@ -115,11 +130,17 @@ define([
       }
       
     },
-   
+    alerted : 0,
     saveAnActivityAndLoop : function(d){
+      this.alerted++;
+      if(this.alerted<10)
+      alert(d);
+      
       var thatactivity = this.get("activities").models[d];
       if(thatactivity){
-        console.log(JSON.stringify(thatactivity.toJSON()));
+        console.log("thatactivity "+d,thatactivity);
+      }else{
+        alert("bug!");
       }
           
       thatactivity.saveAndInterConnectInApp(function(){
@@ -239,6 +260,8 @@ define([
     },
     replicateToActivityFeed : function(couchConnection, successcallback, failurecallback) {
       var self = this;
+      Utils.debug("Calling replicateToActivityFeed for "+this.get("couchConnection").pouchname);
+
       self.saveAndInterConnectInApp(function(){
         if(couchConnection == null || couchConnection == undefined){
           couchConnection = self.get("couchConnection");
