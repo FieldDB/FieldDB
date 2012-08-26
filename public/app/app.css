@@ -24,17 +24,17 @@ a:hover{
 }
 
 .activity_direct_object, .activity_direct_object a{
-	color: #055;
+	/* color: #055; */
 	/* font-size: .85em; */
 }
 
 .activity_verb, .activity_verb a{
-  color: #055;
+  /* color: #055; */
 	font-weight: bold !important;
 }
 
 .activity_indirect_object, .activity_indirect_object a{
-	 color: #550;
+	 /* color: #550; */
 	 /* font-size: .85em; */
 }
 

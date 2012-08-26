@@ -65,6 +65,37 @@ define([
       comments: Comments
     },
 
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function(commentstring) {
+      var m = new Comment({
+        "text" : commentstring,
+     });
+      
+      this.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.id);
+      
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-pushpin'></i><a href='#data/"+this.id+"'>"+this.get('title')+"</a>",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-pushpin'></i><a href='#data/"+this.id+"'>"+this.get('title')+"</a>",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -244,6 +275,7 @@ define([
             window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
                   directobjecticon : "icon-pushpin",
                   directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
@@ -254,6 +286,7 @@ define([
             window.app.get("currentUserActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
                   directobjecticon : "icon-pushpin",
                   directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",

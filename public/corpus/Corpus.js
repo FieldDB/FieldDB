@@ -287,6 +287,37 @@ define([
       comments: Comments,
       team: UserMask
     },
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function(commentstring) {
+      var m = new Comment({
+        "text" : commentstring,
+     });
+      
+      this.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.id);
+      
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-cloud'></i><a href='#corpus/"+this.id+"'>this corpus</a>",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-cloud'></i><a href='#corpus/"+this.id+"'>"+this.get('title')+"</a>",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+    },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     changePouch : function(couchConnection, callback) {
@@ -417,6 +448,7 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
+                    verbicon : verbicon,
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -430,6 +462,7 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
+                    verbicon : verbicon,
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -444,6 +477,7 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
+                    verbicon : verbicon,
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -457,6 +491,7 @@ define([
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
+                    verbicon : verbicon,
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -659,6 +694,7 @@ define([
                   new Activity({
                     verb : "synced",
                     verbmask : "synced",
+                    verbicon : "icon-sitemap",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -672,6 +708,7 @@ define([
                   new Activity({
                     verb : "synced",
                     verbmask : "synced",
+                    verbicon : "icon-sitemap",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -742,6 +779,7 @@ define([
                   new Activity({
                     verb : "synced",
                     verbmask : "synced",
+                    verbicon : "icon-sitemap",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
@@ -755,6 +793,7 @@ define([
                   new Activity({
                     verb : "synced",
                     verbmask : "synced",
+                    verbicon : "icon-sitemap",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",

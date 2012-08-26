@@ -108,6 +108,39 @@ define([
       comments : Comments
     },
     
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function(commentstring) {
+      var m = new Comment({
+        "text" : commentstring,
+     });
+      
+      this.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.id);
+      
+      var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
+      
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-comments-alt'></i><a href='#data/"+this.id+"'>"+goal+"</a>",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-comments-alt'></i><a href='#data/"+this.id+"'>"+goal+"</a>",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -172,6 +205,7 @@ define([
             window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
                   directobjecticon : "icon-comments-alt",
                   directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
@@ -182,6 +216,7 @@ define([
             window.app.get("currentUserActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
                   directobjecticon : "icon-comments-alt",
                   directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",

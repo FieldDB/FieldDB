@@ -476,7 +476,9 @@ define([
             window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon: verbicon,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
+                  directobjecticon : "icon-list",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
                   teamOrPersonal : "team",
                   context : " via Offline App."
@@ -485,7 +487,9 @@ define([
             window.app.get("currentUserActivityFeed").get("activities").unshift(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon: verbicon,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
+                  directobjecticon : "icon-list",
                   indirectobject : "in "+window.app.get("corpus").get("title"),
                   teamOrPersonal : "personal",
                   context : " via Offline App."
