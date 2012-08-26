@@ -101,8 +101,18 @@ define([
     events : {
       "click .icon-book": "showReadonly",
       //Add button inserts new Comment
-      "click .add-comment-corpus" : 'insertNewComment',
-    	
+      "click .add-comment-corpus" : function(e) {
+          if(e){
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          var commentstring = this.$el.find(".comment-new-text").val();
+          
+          this.model.insertNewComment(commentstring);
+          this.$el.find(".comment-new-text").val("");
+          
+      },
+
       //Add button inserts new Datum State
       "click .add-datum-state" : 'insertNewDatumState',
       
@@ -471,23 +481,6 @@ define([
       window.appView.corpusNewModalView.render();
     },
 
-
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-     });
-      
-      // Add new comment to the db ? 
-      this.model.get("comments").add(m);
-      this.$el.find(".comment-new-text").val("");
-      window.appView.addUnsavedDoc(this.model.id);
-
-    },
     
     // This the function called by the add button, it adds a new datum field both to the 
     // collection and the model

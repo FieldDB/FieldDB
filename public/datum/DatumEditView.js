@@ -367,11 +367,37 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
+      var commentstring = this.$el.find(".comment-new-text").val();
       var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
+        "text" : commentstring,
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
+      
+      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-list'><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-list'><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+      
     },
     
     updateDatumStates : function() {

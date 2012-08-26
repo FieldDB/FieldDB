@@ -191,6 +191,7 @@ define([
                 if(numberofdashes.length == 2){
                   window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
                     verb : "synced",
+                    verbicon : "icon-sitemap",
                     directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     indirectobject : "to your activity feed server",
                     context : "via Offline App",
@@ -200,6 +201,7 @@ define([
                 else{
                   window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
                     verb : "synced",
+                    verbicon : "icon-sitemap",
                     directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     indirectobject : "to the team activity feed server",
                     context : "via Offline App",
@@ -255,6 +257,7 @@ define([
               if(numberofdashes.length == 2){
                 window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
                   verb : "synced",
+                  verbicon : "icon-sitemap",
                   directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                   indirectobject : "from your activity feed server",
                   context : "via Offline App",
@@ -264,6 +267,7 @@ define([
               else{
                 window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
                   verb : "synced",
+                  verbicon : "icon-sitemap",
                   directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                   indirectobject : "from the team activity feed server",
                   context : "via Offline App",
