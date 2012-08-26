@@ -348,6 +348,9 @@ line.link {
 	padding-left: 5px !important;
 	margin-left: 10px !important;
 }
+.border-bottom{
+  border-bottom: 1px solid #ccc;
+}
 .no-margin-left{
 	margin-left: 0px !important;
 }
