@@ -139,7 +139,7 @@
     "message" : "Description:"
   },
   "locale_Sessions_associated" : {
-    "message" : "Sessions associated with this corpus"
+    "message" : "Elicitation Sessions associated with this corpus"
   },
   "locale_Datalists_associated" : {
     "message" : "Datalists associated with this corpus"

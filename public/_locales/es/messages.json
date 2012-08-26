@@ -158,7 +158,7 @@
     "message" : "Descripción:"
   },
   "locale_Sessions_associated" : {
-    "message" : "Sesiónes asociados con el corpus"
+    "message" : "Sesiónes de Elicitación asociados con el corpus"
   },
   "locale_Datalists_associated" : {
     "message" : "Listas de datos asociados con el corpus"
