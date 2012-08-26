@@ -36,17 +36,99 @@ define([
     model : {
       activities: Activities  
     },
-     
-    /**
-     * not tested
-     */
+    savedcount : 0,
+    savedindex : [],
+    savefailedcount : 0,
+    savefailedindex : [],
+    nextsaveactivity : 0,
+    
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      this.get("activities").each( function(a){
-        a.saveAndInterConnectInApp();
-      });
-      if(typeof successcallback == "function"){
-        successcallback();
+      if(!successcallback){
+        successcallback = function(){
+          window.appView.toastUser("Save all activities","alert-success","Saved!");
+        };
       }
+      var self = this;
+      window.hub.unsubscribe("savedActivityToPouch", null, self);
+      window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
+      
+      this.savedcount = 0;
+      this.savedindex = [];
+      this.savefailedcount = 0;
+      this.savefailedindex = [];
+      this.nextsaveactivity  = 0;
+      
+      
+      window.hub.subscribe("savedActivityToPouch", function(arg){
+        this.savedindex[arg.d] = true;
+        this.savedcount++;
+        if( arg.d <= 0 ){
+          /*
+           * If we are at the final index in the activity feed
+           */
+          Utils.debug("Activity feed saved.");
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+        }else{
+          /*
+           * Save another activity when the previous succeeds
+           */
+          var next = parseInt(arg.d) - 1;
+          this.saveAnActivityAndLoop(next);
+        }
+      }, self);
+      
+      window.hub.subscribe("saveActivityFailedToPouch",function(arg){
+        this.savefailedindex[arg.d] = false; 
+        this.savefailedcount++;
+        window.appView.toastUser("Save activity failed "+arg.d+" : "+arg.message,"alert-danger","Failure:");
+        
+        if( arg.d <= 0 ){
+          /*
+           * If we are at the final index in the activity feed
+           */            
+          Utils.debug("Activity feed saved.");
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+        }else{
+          /*
+           * Save another activity when the previous fails
+           */
+          var next = parseInt(arg.d) - 1;
+          this.saveAnActivityAndLoop(next);
+        }
+        
+      }, self);
+      
+      /*
+       * Begin the activity saving loop with the last activity 
+       */
+      if(self.get("activities").length > 0){
+        self.saveAnActivityAndLoop(self.get("activities").length - 1);
+      }else{
+        Utils.debug("Activity feed didnt need to be saved.");
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+      }
+      
+    },
+   
+    saveAnActivityAndLoop : function(d){
+      var thatactivity = this.get("activities").models[d];
+      console.log(JSON.stringify(thatactivity.toJSON()));
+          
+      thatactivity.saveAndInterConnectInApp(function(){
+        hub.publish("savedActivityToPouch",{d: d, message: " activity "+thatactivity.id});
+      },function(){
+        //The e error should be from the error callback
+        if(!e){
+          e = {};
+        }
+        hub.publish("saveActivityFailedToPouch",{d: d, message: " activity "+ JSON.stringify(e) });
+      });
     },
     /**
      * This is not really being used as long as the pouch is set in the initialize. 
@@ -89,12 +171,12 @@ define([
     populate : function(rows, self, maxNumberToPopulate){
       self.get("activities").reset();
       if(!maxNumberToPopulate){
-        maxNumberToPopulate = 30;
+        maxNumberToPopulate = 200;
       }
       var populatedCount = 0;
-      for(row in rows){
+      for(var row = rows.length - 1; row >=0; row--){
         var a = new Activity((new Activity()).parse(rows[row].value));
-        self.get("activities").unshift(a);
+        self.get("activities").add(a);
         Utils.debug("In the Activity feed populate: Adding activity to feed ", a);
         populatedCount++;
         if(populatedCount > maxNumberToPopulate){
@@ -108,8 +190,8 @@ define([
      * @param {Function} callback A function that expects a single parameter. That
      * parameter is the result of calling "get_ids/by_date". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
-     * attribute contains the Datum's dateModified and the 'value' attribute contains
-     * the Datum itself.
+     * attribute contains the activity's dateModified and the 'value' attribute contains
+     * the activity itself.
      */
     getAllIdsByDate : function(callback) {
       alert("in the activity feed getAllIdsByDate");
@@ -190,8 +272,8 @@ define([
                 var numberofdashes = couchConnection.pouchname.split("-");
                 if(numberofdashes.length == 2){
                   window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
-                    verb : "synced",
-                    verbicon : "icon-sitemap",
+                    verb : "uploaded",
+                    verbicon : "icon-arrow-up",
                     directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     indirectobject : "to your activity feed server",
                     context : "via Offline App",
@@ -200,8 +282,8 @@ define([
                 }
                 else{
                   window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
-                    verb : "synced",
-                    verbicon : "icon-sitemap",
+                    verb : "uploaded",
+                    verbicon : "icon-arrow-up",
                     directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     indirectobject : "to the team activity feed server",
                     context : "via Offline App",
@@ -256,8 +338,8 @@ define([
               var numberofdashes = couchConnection.pouchname.split("-");
               if(numberofdashes.length == 2){
                 window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
-                  verb : "synced",
-                  verbicon : "icon-sitemap",
+                  verb : "downloaded",
+                  verbicon : "icon-arrow-down",
                   directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                   indirectobject : "from your activity feed server",
                   context : "via Offline App",
@@ -266,8 +348,8 @@ define([
               }
               else{
                 window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
-                  verb : "synced",
-                  verbicon : "icon-sitemap",
+                  verb : "downloaded",
+                  verbicon : "icon-arrow-down",
                   directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                   indirectobject : "from the team activity feed server",
                   context : "via Offline App",

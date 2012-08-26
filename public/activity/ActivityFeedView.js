@@ -42,7 +42,7 @@ define([
           collection           : this.model.get("activities"),
           childViewConstructor : ActivityView,
           childViewTagName     : 'li',
-          childViewClass        : 'breadcrumb'
+          childViewClass        : 'border-bottom'
         });
       }else{
         alert("bug: activity feed view has no model.");
@@ -72,6 +72,8 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
+        
+//        this.activitiesView.clearChildViews();
         
         var activityfeedself = this.model;
         //Get ready to listen for ajax errors

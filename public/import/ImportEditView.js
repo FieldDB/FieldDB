@@ -540,6 +540,11 @@ define( [
           
           window.hub.unsubscribe("savedDatumToPouch", null, self);
           window.hub.unsubscribe("saveDatumFailedToPouch", null, self);
+          this.savedcount = 0;
+          this.savedindex = [];
+          this.savefailedcount = 0;
+          this.savefailedindex = [];
+          this.nextsavedatum  = 0;
           
           // after we have a session
           $(".approve-save").addClass("disabled");
