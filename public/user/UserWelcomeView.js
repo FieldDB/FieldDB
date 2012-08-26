@@ -292,7 +292,12 @@ define([
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
                           window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
-                            window.app.saveAndInterConnectInApp();
+                            window.app.saveAndInterConnectInApp(function(){
+                              //replicate from both activity feeds to be sure that they have the search views
+                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
+                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
+                              });
+                            });
                           });
                         },10000);
                         

@@ -576,6 +576,7 @@ define([
         
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
+            window.appView.activityFeedCorpusTeamView.render(); //this gets destroyed in the re-associating. 
             if (typeof successcallback == "function") {
               successcallback();
             }else{
@@ -676,12 +677,12 @@ define([
               
               
               //Replicate the team's activity feed, then call the sucess callback
-              window.appView.activityFeedUserView.model.replicateToActivityFeed(null, function(){
+              window.appView.activityFeedCorpusTeamView.model.replicateToActivityFeed(null, function(){
                 if(typeof replicatetosuccesscallback == "function"){
 //                  window.appView.renderActivityFeedViews();
                   replicatetosuccesscallback();
                 }else{
-                  Utils.debug("ActivityFeed replicate to success");
+                  Utils.debug("ActivityFeed Team replicate to success");
                 }
               });
             }
@@ -716,8 +717,8 @@ define([
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
-                alert('ActivityFeed replicate to error' + JSON.stringify(err));
-                Utils.debug('ActivityFeed replicate to error' + JSON.stringify(err));
+                alert('Corpus replicate to error' + JSON.stringify(err));
+                Utils.debug('Corpus replicate to error' + JSON.stringify(err));
               }
             }else{
               Utils.debug("Corpus replicate from success", response);

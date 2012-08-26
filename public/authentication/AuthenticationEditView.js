@@ -317,7 +317,7 @@ define([
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , callback );
           $("#quick-authenticate-modal").modal("hide");
           $("#quick-authenticate-password").val("");
-//          window.hub.unsubscribe("quickAuthenticationClose", null, this);
+//          window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
         }, this);
       }else{
         $("#quick-authenticate-modal").modal("show");
@@ -327,7 +327,7 @@ define([
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , callback );
           $("#quick-authenticate-modal").modal("hide");
           $("#quick-authenticate-password").val("");
-//          window.hub.unsubscribe("quickAuthenticationClose", null, this);
+//          window.hub.unsubscribe("quickAuthenticationClose", null, this);//TODO why was this off, this si probably why we were getting lots of authentications
         }, this);
       }
     }

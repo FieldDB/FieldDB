@@ -27,7 +27,8 @@ define([
 //        }
       }
       if(!this.get("timestamp")){
-        this.set("timestamp", JSON.stringify(new Date()) );
+        this.set("timestamp", Date.now() );
+        this.set("dateModified", JSON.stringify(new Date()) );
       }
       if( !this.get("teamOrPersonal")){
          this.set("teamOrPersonal","personal");

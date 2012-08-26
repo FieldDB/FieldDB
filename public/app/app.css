@@ -22,18 +22,29 @@ a:hover{
 .gravatar-large{
   height: 8em;
 }
-.activity_direct_object{
+
+.activity_direct_object, .activity_direct_object a{
 	color: #055;
 }
-.activity_verb{
 
+.activity_verb, .activity_verb a{
+  color: #055;
+	font-weight: bold !important;
 }
-.activity_indirect_object{
+
+.activity_indirect_object, .activity_indirect_object a{
+	 color: #550;
 }
+
+.timestamp, .timestamp a{
+  opacity: 0.75 ;
+  font-style: italic;
+}
+
 .login{
 	margin-left: 5px;
-
 }
+
 .logout{
 	margin-left: 5px;
 }

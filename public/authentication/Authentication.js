@@ -151,13 +151,7 @@ define([
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
 //      Utils.debug(data.user);
-      if(window.appView){
-        window.setTimeout(function(){
-          Utils.debug("trying to get activityfeed to be up-to-date");//dont need this anymore, the activites arent coming from the user when we sync down from the server.
-//          window.appView.activityFeedUserView.model.set("activities", window.app.get("currentCorpusTeamActivityFeed").get("activities") );
-//          window.appView.activityFeedUserView.render();
-        },1000);
-      }
+      
       if (typeof callback == "function") {
         callback("true"); //tell caller that the user succeeded to authenticate
       }
