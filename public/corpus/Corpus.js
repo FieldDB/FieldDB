@@ -692,10 +692,10 @@ define([
 //              }
               window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "synced",
-                    verbmask : "synced",
-                    verbicon : "icon-sitemap",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
+                    verb : "uploaded",
+                    verbmask : "uploaded",
+                    verbicon : "icon-arrow-up",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
                     indirectobject : "to the team server",
@@ -706,10 +706,10 @@ define([
                   }));
               window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "synced",
-                    verbmask : "synced",
-                    verbicon : "icon-sitemap",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
+                    verb : "uploaded",
+                    verbmask : "uploaded",
+                    verbicon : "icon-arrow-up",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
                     indirectobject : "to the team server",
@@ -777,10 +777,10 @@ define([
               
               window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "synced",
-                    verbmask : "synced",
-                    verbicon : "icon-sitemap",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
+                    verb : "downloaded",
+                    verbmask : "downloaded",
+                    verbicon : "icon-arrow-down",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>  (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
                     indirectobject : "from the team server",
@@ -791,10 +791,10 @@ define([
                   }));
               window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "synced",
-                    verbmask : "synced",
-                    verbicon : "icon-sitemap",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
+                    verb : "downloaded",
+                    verbmask : "downloaded",
+                    verbicon : "icon-arrow-down",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
                     indirectobject : "from the team server",
