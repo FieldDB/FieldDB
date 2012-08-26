@@ -180,6 +180,7 @@ define([
       }catch(e){
         Utils.debug("There was a problem fishing out which datum state was selected.");
       }
+      jsonToRender.dateModified = Utils.prettyDate(jsonToRender.dateModified);
       
       if (this.format == "well") {
         // Display the DatumEditView
@@ -454,7 +455,7 @@ define([
      * it updates the time, without re-rendering the datum
      */
     updateLastModifiedUI : function(){
-      $(this.el).find(".last-modified").html(this.model.get("dateModified"));//("0 seconds ago");
+      $(this.el).find(".last-modified").html(Utils.prettyDate(this.model.get("dateModified")));//("0 seconds ago");
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){

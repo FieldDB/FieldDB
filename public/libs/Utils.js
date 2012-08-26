@@ -255,14 +255,18 @@ Utils.getVersion = function(callback) {
 //we have been using JSON.stringify(new Date()) to create our timestamps instead of unix epoch seconds (not sure why we werent using unix epoch), so this function is modified from the original in that it expects dates that were created using 
 //JSON.stringify(new Date())
 Utils.prettyDate = function(time){
+  if(!time){
+    return undefined;
+  }
   time = time.replace(/"/g,"");
   var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," "));
-  var greenwichtimenow = new Date(JSON.stringify(new Date()).replace(/"/g,""));
-  var  diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
+  var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g,"");
+  var greenwichdate = new Date((greenwichtimenow || "").replace(/-/g,"/").replace(/[TZ]/g," "));
+  var  diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
   var  day_diff = Math.floor(diff / 86400);
       
   if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 ){
-    return;
+    return undefined;
   }
       
   return day_diff == 0 && (
