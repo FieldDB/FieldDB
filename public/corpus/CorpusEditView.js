@@ -351,7 +351,7 @@ define([
         collection : this.model.permissions,
         childViewConstructor : PermissionEditView,
         childViewTagName     : 'li',
-        childViewClass       : "breadcrumb"
+        childViewClass       : "breadcrumb row span12"
       });
       
       //Create a Sessions List 
