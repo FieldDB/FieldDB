@@ -651,7 +651,7 @@ define([
 //              }
               window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "sycned",
+                    verb : "synced",
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
@@ -663,7 +663,7 @@ define([
                   }));
               window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "sycned",
+                    verb : "synced",
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
@@ -732,7 +732,7 @@ define([
               
               window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "sycned",
+                    verb : "synced",
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
@@ -744,7 +744,7 @@ define([
                   }));
               window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "sycned",
+                    verb : "synced",
                     verbmask : "synced",
                     directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>",
                     directobjectmask : "a corpus",
