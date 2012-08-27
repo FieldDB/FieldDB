@@ -146,13 +146,15 @@ Utils.publisher = {
       if (action === 'publish') {
         subscribers[i].fn.call(subscribers[i].context, arg);
       } else {
-        if (subscribers[i].context === context) {
-          var removed = subscribers.splice(i, 1);
-          Utils.debug("Removed subscriber from "+type, removed);
-
-        } else {
-          Utils.debug(type+" keeping subscriber " + i);
-
+        try{
+          if (subscribers[i].context === context) {
+            var removed = subscribers.splice(i, 1);
+            Utils.debug("Removed subscriber from "+type, removed);
+          } else {
+            Utils.debug(type+" keeping subscriber " + i);
+          }
+        }catch(e){
+          Utils.debug("problem visiting Subscriber "+i)
         }
       }
     }

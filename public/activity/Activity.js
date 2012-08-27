@@ -93,13 +93,13 @@ define([
      * @param successcallback
      * @param failurecallback
      */
-    saveAndInterConnectInApp : function(successcallback, failurecallback){
+    saveAndInterConnectInApp : function(activsuccesscallback, activfailurecallback){
       Utils.debug("Saving the Activity");
       var self = this;
       if(! this.isNew()){
         Utils.debug('Activity doesnt need to be saved.');
-        if(typeof successcallback == "function"){
-          successcallback();
+        if(typeof activsuccesscallback == "function"){
+          activsuccesscallback();
         }
         return;
       }
@@ -109,13 +109,13 @@ define([
           success : function(model, response) {
             Utils.debug('Activity save success');
 
-            if(typeof successcallback == "function"){
-              successcallback();
+            if(typeof activsuccesscallback == "function"){
+              activsuccesscallback();
             }
           },
           error : function(e) {
-            if(typeof failurecallback == "function"){
-              failurecallback();
+            if(typeof activfailurecallback == "function"){
+              activfailurecallback();
             }else{
               alert('Activity save error' + e);
             }
