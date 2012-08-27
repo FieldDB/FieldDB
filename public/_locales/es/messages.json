@@ -26,7 +26,7 @@
     "message" : "¡Bienvenido a iCampo! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "Un aplicacion de coleccion de datos linguisticos..."
+    "message" : "Un aplicacion de coleccion de datos linguisticos...gratis y OpenSource"
   },
   "locale_Welcome_Beta_Testers" : {
     "message" : "¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo."
@@ -57,6 +57,9 @@
   },
   "locale_Activity_Feed_Team" : {
     "message" : "TODO translate Corpus Team Canal de Actividad"
+  },
+  "locale_Refresh_Activities" : {
+    "message" : "TODO translate"
   },
   "locale_View_Profile_Tooltip" : {
     "message" : "TODO translate Click to view user's page"
@@ -155,7 +158,7 @@
     "message" : "Descripción:"
   },
   "locale_Sessions_associated" : {
-    "message" : "Sesiónes asociados con el corpus"
+    "message" : "Sesiónes de Elicitación asociados con el corpus"
   },
   "locale_Datalists_associated" : {
     "message" : "Listas de datos asociados con el corpus"

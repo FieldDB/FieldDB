@@ -45,8 +45,9 @@ define([
       jsonToRender.directobject = jsonToRender.directobject.replace(/&gt;/g,">").replace(/&lt;/g,"<");
       jsonToRender.indirectobject = jsonToRender.indirectobject.replace(/&gt;/g,">").replace(/&lt;/g,"<");
       jsonToRender.context = jsonToRender.context.replace(/&gt;/g,">").replace(/&lt;/g,"<");
-
-      $(this.el).html(this.template({}));
+      jsonToRender.timestamp = Utils.prettyTimestamp(jsonToRender.timestamp);
+      
+      $(this.el).html(this.template(jsonToRender));
       
       $(this.el).find(".activity_verb").html(jsonToRender.verb);
       $(this.el).find(".activity_direct_object").html(jsonToRender.directobject);

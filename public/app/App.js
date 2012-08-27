@@ -375,12 +375,19 @@ define([
               appSelf.get("authentication").staleAuthentication = true;
               localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
               window.appView.toastUser("Your dashboard has been saved, you can exit the page at anytime and return to this state.","alert-success","Exit at anytime:");
-              appSelf.router.showDashboard();
               
-              if(typeof successcallback == "function"){
-              //  alert("The dashboard saved successfully, now calling the successcallback.");
-                successcallback();
-              }
+              
+              //appSelf.router.showDashboard();
+              
+              //save activity feeds too
+              appSelf.get("currentCorpusTeamActivityFeed").saveAndInterConnectInApp(function(){
+                appSelf.get("currentUserActivityFeed").saveAndInterConnectInApp(function(){
+                  Utils.debug("The activity feeds saved successfully.");
+                  if(typeof successcallback == "function"){
+                    successcallback();
+                  }
+                },failurecallback);
+              },failurecallback);
               
             },failurecallback);
           },failurecallback);
