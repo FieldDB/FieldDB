@@ -287,6 +287,37 @@ define([
       comments: Comments,
       team: UserMask
     },
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function(commentstring) {
+      var m = new Comment({
+        "text" : commentstring,
+     });
+      
+      this.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.id);
+      
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-cloud'></i><a href='#corpus/"+this.id+"'>this corpus</a>",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-cloud'></i><a href='#corpus/"+this.id+"'>"+this.get('title')+"</a>",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+    },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     changePouch : function(couchConnection, callback) {
@@ -354,7 +385,7 @@ define([
           success : function(model, response) {
             Utils.debug('Corpus save success');
             var title = model.get("title");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+title+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for corpus in corpus
 //            if(window.app.get("corpus").get("keepCorpusDetailsPrivate")){
 //              title = "";
@@ -371,15 +402,17 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
             var teamid = model.get("team").id; //Works if UserMask was saved
             if(!teamid){
               //TODO test this, this is to protect from the case wher the id of the team is not set yet.
 //              window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
 //                window.app.get("corpus").set("team", window.app.get("authentication").get("userPublic"));
-//                window.app.get("authentication").get("userPrivate").get("activities").unshift(
+//                window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
 //                    new Activity({
 //                      verb : verb,
 //                      directobject : "<a href='#corpus/"+window.app.get("corpus").id+"'>corpus "+title+"</a> ",
@@ -393,20 +426,80 @@ define([
                   teamid = window.app.get("authentication").get("userPrivate").id; //Assumes the user private and team are the same user...this is dangerous
                 }
               }
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+              /**
+               * The idea of the masks in the activity
+               * is that the teams/users can make a
+               * public activity feed, which they create
+               * a special widget user for, and if the
+               * widget user asks for activities, the
+               * map reduce function returns only the
+               * masks, whcih means that the original
+               * activities are protected. so if the
+               * activity is soemthing that you might
+               * want to appear in a really public feed,
+               * then add a mask to it, and it will
+               * automatically appear. this can probably
+               * be done for all activities later. Right
+               * now its only in the syncing aspect so
+               * at least we can test the map reduce
+               * function.
+               */
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : verb,
-                    directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
+                    verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                    verbmask : verb,
+                    verbicon : verbicon,
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
                     indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
-                    context : differences+" via Offline App."
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "personal"
+                  }));
+              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+                  new Activity({
+                    verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                    verbmask : verb,
+                    verbicon : verbicon,
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "team"
                   }));
             }else{
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : verb,
-                    directobject : "<a href='#corpus/"+model.id+"'>corpus "+title+"</a> ",
-                    indirectobject : "owned by <a href='#user/"+model.get("team").id+"'>"+model.get("team").get("username")+"</a>",
-                    context : differences+" via Offline App."
+                    verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                    verbmask : verb,
+                    verbicon : verbicon,
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "personal"
+                  }));
+              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+                  new Activity({
+                    verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                    verbmask : verb,
+                    verbicon : verbicon,
+                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "team"
                   }));
             }
             
@@ -524,6 +617,7 @@ define([
         
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
+            window.appView.activityFeedCorpusTeamView.render(); //this gets destroyed in the re-associating. 
             if (typeof successcallback == "function") {
               successcallback();
             }else{
@@ -588,21 +682,52 @@ define([
             }else{
               Utils.debug("Corpus replicate to success", response);
               window.appView.allSyncedDoc();
-              
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+//              var teamid = "";
+//              var teamname = "";
+//              try{
+//                teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
+//                teamname = model.get("team").get("username");
+//              }catch(e){
+//                Utils.debug("Problem getting team details for the activity", e);
+//              }
+              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "synced",
-                    directobject : window.app.get("corpus").get("title"),
-                    indirectobject : "to their team server",
-                    context : "via Offline App"
+                    verb : "uploaded",
+                    verbmask : "uploaded",
+                    verbicon : "icon-arrow-up",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "to the team server",
+                    indirectobjectmask : "to its team server",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "team"
                   }));
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
+                  new Activity({
+                    verb : "uploaded",
+                    verbmask : "uploaded",
+                    verbicon : "icon-arrow-up",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "to the team server",
+                    indirectobjectmask : "to its team server",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "personal"
+                  }));
+              
+              
+              
               //Replicate the team's activity feed, then call the sucess callback
-              window.appView.activityFeedUserView.model.replicateToActivityFeed(null, function(){
+              window.appView.activityFeedCorpusTeamView.model.replicateToActivityFeed(null, function(){
                 if(typeof replicatetosuccesscallback == "function"){
 //                  window.appView.renderActivityFeedViews();
                   replicatetosuccesscallback();
                 }else{
-                  Utils.debug("ActivityFeed replicate to success");
+                  Utils.debug("ActivityFeed Team replicate to success");
                 }
               });
             }
@@ -637,8 +762,8 @@ define([
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
-                alert('ActivityFeed replicate to error' + JSON.stringify(err));
-                Utils.debug('ActivityFeed replicate to error' + JSON.stringify(err));
+                alert('Corpus replicate to error' + JSON.stringify(err));
+                Utils.debug('Corpus replicate to error' + JSON.stringify(err));
               }
             }else{
               Utils.debug("Corpus replicate from success", response);
@@ -650,12 +775,33 @@ define([
                 successcallback();
               }
               
-              window.app.get("authentication").get("userPrivate").get("activities").unshift(
+              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                   new Activity({
-                    verb : "synced",
-                    directobject : window.app.get("corpus").get("title"),
-                    indirectobject : "from their team server",
-                    context : "via Offline App"
+                    verb : "downloaded",
+                    verbmask : "downloaded",
+                    verbicon : "icon-arrow-down",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>  (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "from the team server",
+                    indirectobjectmask : "from its team server",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "team"
+                  }));
+              window.app.get("currentUserActivityFeed").get("activities").unshift(
+                  new Activity({
+                    verb : "downloaded",
+                    verbmask : "downloaded",
+                    verbicon : "icon-arrow-down",
+                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
+                    directobjectmask : "a corpus",
+                    directobjecticon : "icon-cloud",
+                    indirectobject : "from the team server",
+                    indirectobjectmask : "from its team server",
+                    context : " via Offline App.",
+                    contextmask : "",
+                    teamOrPersonal : "personal"
                   }));
               
               // Get the corpus' current precedence rules
@@ -680,7 +826,7 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(couchConnection, username, password, callback) {
+    logUserIntoTheirCorpusServer : function(couchConnection, username, password, succescallback, failurecallback) {
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }
@@ -699,8 +845,8 @@ define([
         data : corpusloginparams,
         success : function(data) {
           window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-          if (typeof callback == "function") {
-            callback(data);
+          if (typeof succescallback == "function") {
+            succescallback(data);
           }
         },
         error : function(data){
@@ -712,22 +858,19 @@ define([
               data : corpusloginparams,
               success : function(data) {
                 window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-                if (typeof callback == "function") {
-                  callback(data);
+                if (typeof succescallback == "function") {
+                  succescallback(data);
                 }
               },
               error : function(data){
                 window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
                 		"This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
-                		"You also can't share your data with team members. Chances are if you are in offline mode, " +
-                		"it is because you are using our website version instead of the Chrome Store app " +
-                		"<a href='https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm'>" +
-                		"https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm </a>  " +
-                		"Our website version has a bug which we are waiting for IrisCouch (our database hosting company) to fix," +
-                		" they said they would fix it soon. If your computer is online and you are the Chrome Store app, then this is a bug... please report it to us :)","alert-danger","Offline Mode:");
-//                appView.datumsEditView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
-                appView.datumsEditView.render();
-
+                		"You also can't share your data with team members. If your computer is online and you are" +
+                		" using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +Utils.contactUs+
+                		" If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
+                if (typeof failurecallback == "function") {
+                  failurecallback();
+                }
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);
               }

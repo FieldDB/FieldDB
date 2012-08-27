@@ -190,7 +190,7 @@ require([
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
     $('#user-welcome-modal').modal("show");
-  }
+  };
   /*
    * End functions
    */
@@ -203,8 +203,27 @@ require([
   Utils.makePublisher(window.hub);
   
   /*
-   * Clear the app completely
-   * TODO this doesnt work any more because each corpus is in a different pouch.
+   * Catch ajax errors, and re-throw them using the Utils function
+   * http://api.jquery.com/ajaxError/ mostly to catch pouch errors
+   */
+  $(document).ajaxError(function(e, xhr, settings, exception) {
+    Utils.catchAndThrowAjaxError(e, xhr, settings, exception);
+  }); 
+  
+  $(document).error(function(e, xhr, settings, exception) {
+    Utils.catchAndThrowPouchError(e, xhr, settings, exception);
+  });
+  
+  window.hub.subscribe("ajaxError",function(e){
+    Utils.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
+  }, this);
+  
+  window.hub.subscribe("pouchError",function(e){
+    Utils.debug("Pouch Error: ", e);
+  }, this);
+  /*
+   * For developers: to clear the app completely to test app load
+   * TODO this doesnt completely work any more because each corpus is in a different pouch.
    */
 //  Pouch.destroy('idb://db');
 //  Pouch.destroy('idb://dbdefault');
@@ -212,11 +231,7 @@ require([
 //    localStorage.clear();
 //  localStorage.removeItem("appids");
 //  localStorage.removeItem("pouchname");
-//  ids.corpusid = "4C1A0D9F-D548-491D-AEE5-19028ED85F2B";
-//  ids.sessionid = "1423B167-D728-4315-80DE-A10D28D8C4AE";
-//  ids.datalistid = "1C1F1187-329F-4473-BBC9-3B15D01D6A11";
     
-
   /*
    * Check for user's cookie and the dashboard so we can load it
    */

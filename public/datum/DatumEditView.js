@@ -180,6 +180,7 @@ define([
       }catch(e){
         Utils.debug("There was a problem fishing out which datum state was selected.");
       }
+      jsonToRender.dateModified = Utils.prettyDate(jsonToRender.dateModified);
       
       if (this.format == "well") {
         // Display the DatumEditView
@@ -367,11 +368,37 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
+      var commentstring = this.$el.find(".comment-new-text").val();
       var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
+        "text" : commentstring,
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
+      
+      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+      
     },
     
     updateDatumStates : function() {
@@ -428,7 +455,7 @@ define([
      * it updates the time, without re-rendering the datum
      */
     updateLastModifiedUI : function(){
-      $(this.el).find(".last-modified").html(this.model.get("dateModified"));//("0 seconds ago");
+      $(this.el).find(".last-modified").html(Utils.prettyDate(this.model.get("dateModified")));//("0 seconds ago");
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){

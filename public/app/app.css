@@ -22,18 +22,32 @@ a:hover{
 .gravatar-large{
   height: 8em;
 }
-.activity_direct_object{
-	color: #055;
-}
-.activity_verb{
 
+.activity_direct_object, .activity_direct_object a{
+	/* color: #055; */
+	/* font-size: .85em; */
 }
-.activity_indirect_object{
+
+.activity_verb, .activity_verb a{
+  /* color: #055; */
+	font-weight: bold !important;
 }
+
+.activity_indirect_object, .activity_indirect_object a{
+	 /* color: #550; */
+	 /* font-size: .85em; */
+}
+
+.timestamp, .timestamp a{
+  opacity: 0.75 ;
+  font-size: .85em;
+  font-style: italic;
+}
+
 .login{
 	margin-left: 5px;
-
 }
+
 .logout{
 	margin-left: 5px;
 }
@@ -333,6 +347,9 @@ line.link {
 	border-left: 1px solid #999;
 	padding-left: 5px !important;
 	margin-left: 10px !important;
+}
+.border-bottom{
+  border-bottom: 1px solid #ccc;
 }
 .no-margin-left{
 	margin-left: 0px !important;

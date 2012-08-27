@@ -78,8 +78,17 @@ define([
       "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
-      "click .add-comment-corpus" : 'insertNewComment',
-      
+      "click .add-comment-corpus" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var commentstring = this.$el.find(".comment-new-text").val();
+        
+        this.model.insertNewComment(commentstring);
+        this.$el.find(".comment-new-text").val("");
+        
+      },      
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
@@ -399,23 +408,6 @@ define([
       window.appView.corpusNewModalView.model = new Corpus(attributes);
       window.appView.corpusNewModalView.render();
     },
-
-
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-        console.log("I'm a new comment!");
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-      });
-      this.model.get("comments").add(m);
-      this.$el.find(".comment-new-text").val("");
-      window.appView.addUnsavedDoc(this.model.id);
-
-     },
     
      resizeSmall : function(e){
        if(e){
