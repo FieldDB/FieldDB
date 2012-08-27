@@ -112,7 +112,7 @@ define([
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
       
-
+      // Initialize the file system of the terminal
       this.term.initFS(false, 1024 * 1024);
       
       // Set up a timeout event every 10sec
@@ -172,7 +172,7 @@ define([
         this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
       }
       if(this.activityFeedCorpusTeamView){
-        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+        this.activityFeedCorpusTeamView.destroy_view();
       }
       this.activityFeedCorpusTeamView = new ActivityFeedView({
         model : this.model.get("currentCorpusTeamActivityFeed")
@@ -297,13 +297,11 @@ define([
       // Create a UserActivityView
       Utils.debug("Setting up the user activity feed.");
       if(!this.model.get("currentUserActivityFeed")){
-        this.model.set("currentUserActivityFeed", new ActivityFeed({
-          "activities" : window.app.get("authentication").get("userPrivate").get("activities"),
-        }));
+        this.model.set("currentUserActivityFeed", new ActivityFeed());
         this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
       }
       if(this.activityFeedUserView){
-        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+        this.activityFeedUserView.destroy_view(); 
       }
       this.activityFeedUserView = new ActivityFeedView({
         model : this.model.get("currentUserActivityFeed")
@@ -804,12 +802,14 @@ define([
     toastSavingDatumsCount : 0,
     toastUser : function(message, alertType, heading){
       if(message.indexOf("Automatically saving visible datum entries every 10 seconds") != -1 ){
-        this.toastSavingDatumsCount++;
-        if(this.toastSavingDatumsCount == 5){
-          message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
-        }if(this.toastSavingDatumsCount > 5){
-          return;
-        }
+//        this.toastSavingDatumsCount++;
+//        if(this.toastSavingDatumsCount == 5){
+//          message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
+//        }if(this.toastSavingDatumsCount > 5){
+//          return;
+//        }
+        //dont show these messages anymore, the app is stable and we have timestamps
+        return;
       }
       if(message.indexOf("Sucessfully saved") != -1){
         return; //dont show the mesages like "Sucessfully saved ..."

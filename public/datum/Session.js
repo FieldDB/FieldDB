@@ -108,6 +108,39 @@ define([
       comments : Comments
     },
     
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function(commentstring) {
+      var m = new Comment({
+        "text" : commentstring,
+     });
+      
+      this.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.id);
+      
+      var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
+      
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-comments-alt'></i><a href='#data/"+this.id+"'>"+goal+"</a>",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-comments-alt'></i><a href='#data/"+this.id+"'>"+goal+"</a>",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -153,7 +186,7 @@ define([
           success : function(model, response) {
             Utils.debug('Session save success');
             var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+goal+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
 //            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){
 //              goal = "";
@@ -164,16 +197,31 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
-                  verb : verb,
-                  directobject : "<a href='#session/"+model.id+"'>session</a> ",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App."
-//                  user: window.app.get("authentication").get("userPublic")
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
+                  directobjecticon : "icon-comments-alt",
+                  directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
+                  teamOrPersonal : "team",
+                  context : " via Offline App."
+                }));
+            
+            window.app.get("currentUserActivityFeed").get("activities").unshift(
+                new Activity({
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
+                  directobjecticon : "icon-comments-alt",
+                  directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
+                  teamOrPersonal : "personal",
+                  context : " via Offline App."
                 }));
             
             //make sure the session is in this corpus, if it is the same pouchname
