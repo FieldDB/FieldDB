@@ -178,7 +178,7 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate : function(username, password, callback) {
+    authenticate : function(username, password, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       
       // Temporarily keep the given's credentials
       var tempuser = new User({
@@ -186,6 +186,29 @@ define([
         password : password
       });
 
+      var whattodoifcouchloginerrors = function(){
+      //If the user has an untitled corpus, there is a high chance that their dashboard didn't load because they cant sync with couch but they do have their first local ones, attempt to look it up in their user, and laod it.
+        if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
+          if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+            //do nothing because they have no recent ids
+            alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
+            window.app.router.showDashboard();
+          }else{
+            /*
+             *  Load their last corpus, session, datalist etc
+             */
+            var appids = self.model.get("userPrivate").get("mostRecentIds");
+            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+          }
+        }
+        if(typeof corpusloginfailcallback == "function"){
+          corpusloginfailcallback();
+        }else{
+          Utils.debug('no corpusloginfailcallback was defined');
+
+        }
+      };
+      
       var self = this;
       this.model.authenticate(tempuser, function(success) {
         if (success == null) {
@@ -196,6 +219,12 @@ define([
         
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+          if(typeof corpusloginsuccesscallback == "function"){
+            Utils.debug('Calling corpusloginsuccesscallback');
+            corpusloginsuccesscallback();
+          }else{
+            Utils.debug('no corpusloginsuccesscallback was defined');
+          }
           //Replicate user's corpus down to pouch
           window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
@@ -218,27 +247,8 @@ define([
               }
             }                    
           });
-        });
+        }, whattodoifcouchloginerrors);
         
-        //wait a bit and load user's dashboard even if they can't replicate, its possible they are running in the CORS lacking web app. TODO remove this if and when we get CORS on iriscouch
-        window.setTimeout( function(){
-          //If the user has an untitled corpus, there is a high chance that their dashboard didn't load because they cant sync with couch but they do have their first local ones, attempt to look it up in their user, and laod it.
-          if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
-            if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
-              //do nothing because they have no recent ids
-              alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-              window.app.router.showDashboard();
-            }else{
-              /*
-               *  Load their last corpus, session, datalist etc
-               */
-              var appids = self.model.get("userPrivate").get("mostRecentIds");
-              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
-            }
-          }
-        },5000);
-
-
         
         // Save the authenticated user in our Models
         self.model.set({
@@ -246,10 +256,10 @@ define([
           username : self.model.get("userPrivate").get("username"),
           state : "loggedIn"
         });
-        if(typeof callback == "function"){
-          callback();
+        if(typeof sucescallback == "function"){
+          sucescallback();
         }
-      });
+      }, failcallback);
     },
     
     /**
@@ -307,28 +317,29 @@ define([
      * like removing a corpus. It is also used if the user hasn't confirmed their
      * identity in a while.
      */
-    showQuickAuthenticateView : function(callback) {
+    showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
+      var self = this;
       if( this.model.get("userPrivate").get("username") == "sapir" ){
         $("#quick-authenticate-modal").modal("show");
         $("#quick-authenticate-password").val("phoneme")
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
 //          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
-          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , callback );
+          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback );
           $("#quick-authenticate-modal").modal("hide");
           $("#quick-authenticate-password").val("");
-//          window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
-        }, this);
+          window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
+        }, self);
       }else{
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
 //          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
-          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , callback );
+          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback );
           $("#quick-authenticate-modal").modal("hide");
           $("#quick-authenticate-password").val("");
-//          window.hub.unsubscribe("quickAuthenticationClose", null, this);//TODO why was this off, this si probably why we were getting lots of authentications
-        }, this);
+          window.hub.unsubscribe("quickAuthenticationClose", null, this);//TODO why was this off, this si probably why we were getting lots of authentications
+        }, self);
       }
     }
   });

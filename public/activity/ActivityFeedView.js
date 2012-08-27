@@ -73,9 +73,39 @@ define([
           e.preventDefault();
         }
         
-//        this.activitiesView.clearChildViews();
-        
+        var self = this;
         var activityfeedself = this.model;
+        //ask the user to confirm their identity before syncing their activity feeds
+        window.appView.authView.showQuickAuthenticateView(
+        function(){
+          Utils.debug("Called by ActivityFeedView : in the authentication sucess.");
+        }, 
+        //don't show local activity if they entered the wrong password, or have no connectivity
+        function(){
+          Utils.debug("Called by ActivityFeedView : in the authentication failure.");
+        }, 
+        function(){
+          Utils.debug("Called by ActivityFeedView : in the corpus login sucess.");
+
+          //send the command that might produce errors
+          activityfeedself.replicateActivityFeed(null, function(){
+            Utils.debug("Refreshing activity feed from the servers succeeded.");
+          },function(){
+            Utils.debug("Refreshing activity feed failed.");
+          });
+        }, 
+        function(){
+          Utils.debug("Called by ActivityFeedView : in the corpus login failure.");
+
+          //if authentication fails only refresh locally
+          Utils.debug("Logging into the corpus server failed, trying just local activites.");
+          window.appView.toastUser("Logging into the corpus server failed, I can only load activities which you already have saved locally on this device.","alert-info","Showing only local activities:");
+//          self.activitiesView.clearChildViews();
+          activityfeedself.saveAndInterConnectInApp(function(){
+            activityfeedself.getAllIdsByDate(activityfeedself.populate);
+          });
+        });
+
         //Get ready to listen for ajax errors
 //        window.hub.subscribe("ajaxError", function(e){
 //          Utils.debug("Populating activity feed offline. ", e);
@@ -85,8 +115,6 @@ define([
 //          window.hub.unsubscribe("ajaxError", null, activityfeedself); 
 //        }, activityfeedself);
         
-        //send the command that might produce errors
-        activityfeedself.replicateActivityFeed();
       }
     },
     

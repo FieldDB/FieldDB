@@ -66,7 +66,7 @@ define([
      * @param user A user object to verify against the authentication database
      * @param callback A callback to call upon sucess.
      */
-    authenticate : function(user, callback) {
+    authenticate : function(user, successcallback, failcallback) {
       var dataToPost = {};
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
@@ -89,15 +89,25 @@ define([
                 data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
             window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
-
-            if (typeof callback == "function") {
-              callback(null, data.errors); // tell caller that the user failed to
+            if (typeof failcallback == "function") {
+              failcallback();
+            }
+            if (typeof successcallback == "function") {
+              successcallback(null, data.errors); // tell caller that the user failed to
               // authenticate
             }
           } else if (data.user != null) {
-            self.saveServerResponseToUser(data, callback);
+            self.saveServerResponseToUser(data, successcallback);
           }
         },//end successful login
+        error: function(e){
+          Utils.debug("Ajax failed, user might be offline.", e);
+          window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
+
+          if (typeof failcallback == "function") {
+            failcallback();
+          }
+        },
         dataType : ""
       });     
     },

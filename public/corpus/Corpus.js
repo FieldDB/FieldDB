@@ -826,7 +826,7 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(couchConnection, username, password, callback) {
+    logUserIntoTheirCorpusServer : function(couchConnection, username, password, succescallback, failurecallback) {
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }
@@ -845,8 +845,8 @@ define([
         data : corpusloginparams,
         success : function(data) {
           window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-          if (typeof callback == "function") {
-            callback(data);
+          if (typeof succescallback == "function") {
+            succescallback(data);
           }
         },
         error : function(data){
@@ -858,18 +858,19 @@ define([
               data : corpusloginparams,
               success : function(data) {
                 window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-                if (typeof callback == "function") {
-                  callback(data);
+                if (typeof succescallback == "function") {
+                  succescallback(data);
                 }
               },
               error : function(data){
                 window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
                 		"This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
                 		"You also can't share your data with team members. If your computer is online and you are" +
-                		" using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "+Utils.contactUs,"alert-danger","Offline Mode:");
-//                appView.datumsEditView.newDatum(); //show them a new datum rather than a blank screen when they first use the app
-                appView.datumsEditView.render();
-
+                		" using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +Utils.contactUs+
+                		" If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
+                if (typeof failurecallback == "function") {
+                  failurecallback();
+                }
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
