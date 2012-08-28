@@ -529,6 +529,11 @@
   },
   "locale_Searchable" : {
     "message" : "Searchable:"
+  },
+   "locale_Session_Description_tooltip" : {
+    "message" : "An elicitation session is a collection data associated with one session of elicitation, i.e. one meeting with consultants. 
+    It can also be used to include data from an article."
+    }
   }
  
 }

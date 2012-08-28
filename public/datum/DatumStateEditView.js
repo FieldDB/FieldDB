@@ -67,7 +67,7 @@ define( [
         $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
         $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
         $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
-        this.$el.find(".locale_Searchable").html(chrome.i18n.getMessage("locale_Searchable"));
+        $(this.el).find(".locale_Searchable").html(chrome.i18n.getMessage("locale_Searchable"));
       }
       
       return this;

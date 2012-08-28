@@ -508,6 +508,10 @@
   },
   "locale_Searchable" : {
     "message" : "Buscable:"
+  },
+  "locale_Session_Description_tooltip" : {
+     "message" : "Un sesión de elicitación es un colección de datos asociados una junta con sus consultantes.
+     Tambien se puede usar para guardar datos de un artículo."
   }
   
 }

@@ -193,6 +193,7 @@ define([
         //Localize for all embedded view
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+          $(this.el).find("locale_Session_Description_tooltip").attr("title", chrome.i18n.getMessage("locale_Session_Description_tooltip"));
           $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
           $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
           $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
