@@ -262,6 +262,25 @@ define([
         callback();
       }
     },
+    /*
+     * This function assures that whatever views on the dashboard that are coming from the user, are reassociated. it is currently after the user is synced from the server. 
+     * (which happens when the user authenticates so that if they were logged into another computer the can get their updated preferences.
+     */
+    associateCurrentUsersInternalModelsWithTheirViews : function(callback){
+      this.userPreferenceView.model = this.authView.model.get("userPrivate").get("prefs");
+      this.userPreferenceView.model.bind("change:skin", this.userPreferenceView.renderSkin, this.userPreferenceView);
+      
+      this.insertUnicodesView.model = this.authView.model.get("userPrivate").get("prefs").get("unicodes");
+      this.insertUnicodesView.changeViewsOfInternalModels();
+      this.insertUnicodesView.render();
+      
+      this.hotkeyEditView.model = this.authView.model.get("userPrivate").get("hotkeys");
+      //TODO the hotkeys are probably not associate dbut because they are not finished, they cant be checked yet
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     setUpAndAssociateViewsAndModelsWithCurrentUser : function(callback){
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -824,7 +843,7 @@ define([
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
-        +"</div>")
+        +"</div>");
     },
     /**
      * 

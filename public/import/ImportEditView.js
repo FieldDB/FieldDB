@@ -342,7 +342,7 @@ define( [
       
       this.model.set("datumArray", []);
       var headers = [];
-      $('th').each(function(index, item) {
+      $("#csv-table-area").find('th').each(function(index, item) {
           headers[index] = $(item).find(".drop-label-zone").val();
       });
       /*
@@ -373,12 +373,20 @@ define( [
       var array = [];
       try{
         //Import from html table that the user might have edited.
-        $('tr').has('td').each(function() {
+        $("#csv-table-area").find('tr').has('td').each(function() {
           var datumObject = {};
+          var testForEmptyness = "";
           $('td', $(this)).each(function(index, item) {
             datumObject[headers[index]] = $(item).html();
+            testForEmptyness += $(item).html();
           });
-          array.push(datumObject);
+          //if the table row has more than 2 non-white space characters, enter it as data
+          if(testForEmptyness.replace(/\W/g,"").length >= 2){
+            array.push(datumObject);
+          }else{
+            //dont add blank datum
+            Utils.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+          }
         });
       }catch(e){
         //Import from the array instead of using jquery and html
@@ -386,12 +394,24 @@ define( [
         var rows = this.model.get("asCSV");
         for(var r in rows){
           var datumObject = {};
+          var testForEmptyness = "";
           for( var c in headers){
             datumObject[headers[c]] = rows[r][c];
+            testForEmptyness += rows[r][c];
           }
-          array.push(datumObject);
+        //if the table row has more than 2 non-white space characters, enter it as data
+          if(testForEmptyness.replace(/\W/g,"").length >= 2){
+            array.push(datumObject);
+          }else{
+            //dont add blank datum
+            Utils.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+          }
         }
       }
+      
+      /*
+       * after building an array of datumobjects, turn them into backbone objects
+       */
       for (a in array) {
         var d = new Datum({pouchname : window.app.get("corpus").get("pouchname")});
         var fields = this.model.get("datumFields").clone();
@@ -678,10 +698,10 @@ define( [
      * Adds double the columns
      */
     insertDoubleColumnsInTable : function(){
-      $('td').each(function(index) {
+      $("#csv-table-area").find('td').each(function(index) {
         $(this).after('<td contenteditable = "true"></td>');
       });
-      $('th').each(function(index) {
+      $("#csv-table-area").find('th').each(function(index) {
         var tableCell = document.createElement("th");
         $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
         tableCell.addEventListener('drop', this.dragLabelToColumn, false);
