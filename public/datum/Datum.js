@@ -435,6 +435,7 @@ define([
         "pouchname" : app.get("corpus").get("pouchname"),
         "dateModified" : JSON.stringify(new Date())
       });
+      window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
       /*
