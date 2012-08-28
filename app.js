@@ -9,11 +9,19 @@ var express     = require('express')
     ,fs         = require('fs');
 
 var apphttpsdomain = "https://localhost:3001";
-//var apphttpsdomain = "https://ifield.fieldlinguist.com";
-
 var httpsOptions ={
-    key: fs.readFileSync('ifield.key'),
-    cert: fs.readFileSync('ifield.crt')};
+    key: fs.readFileSync('ifield_debug.key'),
+    cert: fs.readFileSync('ifield_debug.crt')
+};
+
+var productionMode = false;
+if (productionMode) {
+    apphttpsdomain = "https://ifield.fieldlinguist.com";
+    httpsOptions = {
+        key : fs.readFileSync('ifield_production.key'),
+        cert : fs.readFileSync('ifiled_production.crt')
+    };
+}
 var app = express.createServer(httpsOptions);
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
