@@ -22,13 +22,15 @@ define([
      * @constructs
      */
     initialize : function() {
+      this.changeViewsOfInternalModels();
+    },
+    changeViewsOfInternalModels : function(){
       this.insertUnicodesView = new UpdatingCollectionView({
         collection : this.model,
         childViewConstructor : InsertUnicodeView,
         childViewTagName : "span",
       });
     },
-
     /**
      * Events that the InsertUnicode is listening to and their handlers.
      */
@@ -120,7 +122,7 @@ define([
         "symbol" : this.$el.find(".insert-unicode-input").val(),
         "tipa" :  this.$el.find(".insert-unicode-tipa-input").val()
       });
-      app.get("authentication").get("userPrivate").get("prefs").get("unicodes").add(m);
+      this.model.add(m);
       
       // Clear the textfields
       this.$el.find(".insert-unicode-input").val("");
