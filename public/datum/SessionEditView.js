@@ -59,8 +59,17 @@ define([
       "click .btn-save-session" : "updatePouch",
       
       //Add button inserts new Comment
-      "click .add-comment-session" : 'insertNewComment',
-      
+      "click .add-comment-session" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var commentstring = this.$el.find(".comment-new-text").val();
+        
+        this.model.insertNewComment(commentstring);
+        this.$el.find(".comment-new-text").val("");
+        
+      },      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
@@ -273,8 +282,8 @@ define([
             window.appView.currentSessionReadView.render();
           });
         }else{
+          window.appView.currentSessionReadView.format = self.format;
           window.appView.currentSessionReadView.render();
-          window.app.router.showDashboard();
         }
       });
     },
@@ -316,21 +325,7 @@ define([
       window.appView.currentSessionReadView.format = this.format;
       window.appView.currentSessionReadView.render();
     },
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      console.log("I'm a new comment!");
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-      });
-      this.model.get("comments").add(m);
-      window.appView.addUnsavedDoc(this.model.id);
-      this.$el.find(".comment-new-text").val("");
-
-    },
+   
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js

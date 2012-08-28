@@ -181,7 +181,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       // Display the pagination footer
       this.renderUpdatedPaginationControl();
-        
+
       return this;
     },
     /**

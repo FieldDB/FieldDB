@@ -28,7 +28,7 @@
     "message" : "¡Bienvenido a iCampo! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "Un aplicacion de coleccion de datos linguisticos..."
+    "message" : "Un aplicacion de coleccion de datos linguisticos...gratis y OpenSource"
   },
   "locale_Welcome_Beta_Testers" : {
     "message" : "¡Bienvenidos! Por favor
@@ -63,6 +63,9 @@
   },
   "locale_Activity_Feed_Team" : {
     "message" : "Canal de Actividad del Equipo de Corpus"
+  },
+  "locale_Refresh_Activities" : {
+    "message" : "TODO translate"
   },
   "locale_View_Profile_Tooltip" : {
     "message" : "Haga clic para ver la pagina del usuario."
@@ -162,7 +165,7 @@
     "message" : "Descripción:"
   },
   "locale_Sessions_associated" : {
-    "message" : "Sesiónes asociados con el corpus"
+    "message" : "Sesiónes de Elicitación asociados con el corpus"
   },
   "locale_Datalists_associated" : {
     "message" : "Listas de datos asociados con el corpus"
@@ -484,6 +487,9 @@
   },
   "locale_Play_Audio_checked" : {
     "message" : "Tocar audio de los seleccionados"
+  },
+  "locale_Remove_checked_from_datalist_tooltip" : {
+    "message" : "TODO translate los seleccionados"
   },
   "locale_Insert_New_Datum" : {
     "message" : "Insertar un nuevo dato arriba"

@@ -152,26 +152,44 @@ define([
       this.model.set("description", $(this.el).find(".description").val());
       this.model.set("gravatar", $(this.el).find(".gravatar").val());
       
+      //It is the private self
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-        window.app.get("authentication").get("userPrivate").get("activities").unshift(
+        window.app.get("currentUserActivityFeed").get("activities").unshift(
             new Activity({
               verb : "modified",
-              directobject : "their profile",
+              directobject : "your private profile",
               indirectobject : "",
               teamOrPersonal : "personal",
               context : "via Offline App"
             }));
+        window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+            new Activity({
+              verb : "modified",
+              directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
+              indirectobject : "",
+              teamOrPersonal : "team",
+              context : "via Offline App"
+            }));
       }else{
+        //It is the public self
         window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
         this.model.saveAndInterConnectInApp(function(){
           window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         });
         
-        window.app.get("authentication").get("userPrivate").get("activities").unshift(
+        window.app.get("currentUserActivityFeed").get("activities").unshift(
             new Activity({
               verb : "modified",
-              directobject : "their profile",
+              directobject : "<a href='#user/"+this.model._id+"'>your public profile</a>",
+              indirectobject : "",
+              teamOrPersonal : "personal",
+              context : "via Offline App"
+            }));
+        window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+            new Activity({
+              verb : "modified",
+              directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
               indirectobject : "",
               teamOrPersonal : "team",
               context : "via Offline App"

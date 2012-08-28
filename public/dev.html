@@ -8,44 +8,202 @@
 <link rel="stylesheet" type="text/css"
 	href="./bootstrap/css/bootstrap.css">
 <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<script type="text/javascript" src="./libs/jquery.js"></script>
 
 <script type="text/javascript" src="./libs/analytics.js"></script>
 </head>
 <body>
-	<div class="well">
-		<h1>
-			iField <small>beta</small> Weekly News Channel
-		</h1>
-		<h3>A Fieldlinguistics Database which adapts to its user's
-			I-Language</h3>
-		<h2>Officially Launched August 1st, @CAML in Patzún, Guatemala</h2>
-		<p>
-			To install or find out more: <a href="http://fieldlinguist.com">http://fieldlinguist.com</a>
-		</p>
-		<p>
-			To open the app: (only if you already have it installed) <a
-				href="chrome-extension://niphooaoogiloklolkphlnhbbkdlfdlm/dashboard.html">chrome-extension://niphooaoogiloklolkphlnhbbkdlfdlm/dashboard.html</a>
-		</p>
+	<div class="well container">
+		<div class="row span12">
+			<div class="span6">
+				<h1>iField Beta</h1>
+				<h2>
+					Bi-Weekly Developers News Channel<small> with videos :)</small>
+				</h2>
+				<h3>A Fieldlinguistics Database which adapts to its user's
+					I-Language</h3>
+				<p>Officially Launched August 1st, @CAML in Patzún, Guatemala</p>
+				<p>
+					To install or get non-technical info: <a
+						href="http://fieldlinguist.com">http://fieldlinguist.com</a>
+				</p>
 
+				<p>
+					If you want more frequent techie updates you can find out what we
+					are doing by "watching" our project on GitHub. GitHub is a project
+					management tool for decentralized projects, kind of like Facebook
+					for programmers. Anyone can add features, ask questions or leave us
+					comments or notes directly in our GitHub issue tracker: <a
+						target="_blank"
+						href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
+						on GitHub </a>
+				</p>
 
-
-		<p>
-			If you want more frequent updates you can find out what we are doing
-			by "watching" our project on GitHub. GitHub is a project management
-			tool for decentralized projects, kind of like Facebook for
-			programmers. We are busy every day, updating issues, "committing"
-			code and asking each other for code reviews. Anyone can add features,
-			ask questions or leave us comments or notes on our GitHub issue
-			tracker: <a target="top"
-				href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
-				on GitHub </a>
-		</p>
+			</div>
+			<div id="twitterBox" class="span6">
+				<script>
+					//http://code.google.com/p/chromium/issues/detail?id=81637
+					//https://twitter.com/about/resources/widgets/widget_profile?
+					//http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
+					
+			     $(document).ready(function(){
+			     $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
+			        // dynamically add the get social sidebar
+			        $('body').prepend('<div id="social"></div>'); 
+			
+			          new TWTR.Widget({
+			            version: 2,
+			            type: 'profile',
+			            id : 'twitterBox',
+			            
+			            rpp: 4,
+			            interval: 30000,
+			            width: 250,
+			            height: 300,
+			            theme: {
+			              shell: {
+			                background: '#55a1ba',
+			                color: '#ffffff'
+			              },
+			              tweets: {
+			                background: '#fcf9fc',
+			                color: '#0f010f',
+			                links: '#2d61a1'
+			              }
+			            },
+			            features: {
+			              scrollbar: true,
+			              loop: false,
+			              live: true,
+			              behavior: 'all'
+			            }
+			          }).render().setUser('FieldLinguist').start();
+			
+			      });
+			    });
+			    
+			    </script>
+			</div>
+		</div>
 
 	</div>
 	<hr />
-	<!-- <div class="well">
-		<h1>August 10 2012 - Week 16 - More bug fixes and reliable confidentiality encryption.</h1>
-	</div> -->
+	<div class="well">
+		<h1>August 31 2012 - Weeks 18 &amp; 19 - Two activity feeds and
+			preparing for Field methods beta testing</h1>
+
+		<p>
+			This week we started setting up iField on a McGill server, and <a
+				target="_blank"
+				href="https://github.com/iLanguage/iField/wiki/How-to-install-on-your-own-server">adding
+				more documentation for others who want to set up iField or set up a
+				developers environment for iField.</a>
+		</p>
+
+		<p>
+			Gretchen also made us a <a target="_blank"
+				href="http://www.facebook.com/iFieldApp">Facebook fan page</a> where
+			we can put some non-technical updates when we release new versions of
+			the app (we will probably keep the technical updates here so that
+			normal users don't get confused with this techno-babble), she also
+			made a sort of user group on facebook called<a target="_blank"
+				href="https://www.facebook.com/groups/486887294657548/"> iField
+				keeners</a> to let "iField keeners" share slides if someone in their
+			department asks them to give a presentation. Yuliya's department at
+			Stony Brook was curious too so she will probably be giving a
+			presentation in October. We also showed the app to Michael Diercks at
+			Pomona (California) who will probably join our advisory board and
+			help us test the app for use in a field methods class. We went
+			through the app looking for bugs and unfinished features that we need
+			to have ready and put them into the <a target="_blank"
+				href="https://github.com/iLanguage/iField/issues?milestone=21&state=open">Field
+				Methods Beta Testing Milestone</a>
+		</p>
+
+		<p>
+			With the new Facebook pages we also need a real logo! If you know
+			anyone with some design skills please send them to <a target="_blank"
+				href="http://www.facebook.com/iFieldApp">our fan page where we
+				are brainstorming the logo</a>, we'd like to have one by the end of
+			September.
+		</p>
+
+		<p>We also refactored the comments to move the code to the models
+			from the views to reduce code duplication</p>
+
+		<p>We made finished making the two activity feeds functional,
+			sycnable to their servers and saveable. While we were at it we and
+			added cute icons for all the objects in the system (sessions,
+			datalists, corpus, permissions). We also made the activity feed cuter
+			using icons for actions and direct objects, and most importantly, we
+			now have nicer timestamps (i.e. 2 seconds ago).</p>
+
+	</div>
+
+	<div class="well">
+		<h1>August 17 2012 - Week 17 - More bug fixes, more cute features
+			and started the new activity feeds</h1>
+
+		This week we released a ton of new bug fixes and features that had
+		been in the works over the past two weeks.
+
+		<ul>
+			<li>Finished verified the localization of all modules. The
+				details are in the comments on <a target="_blank"
+				href="https://github.com/iLanguage/iField/pull/464">Pull Request
+					#464</a>
+			</li>
+			<li>Made the page scroll to the top when the user starts a new
+				datum or wants to edit a datum</li>
+			<li>Fixed a bug in the sync button being called twice</li>
+			<li>Pre-parsed the activity strings so that the links were
+				active, and cleaned up the app router so that the links actually
+				worked</li>
+			<li>Started the work to divide activity feeds into pouches so
+				that each feed would go in its own database</li>
+			<li>Started the user interface for the two activity feeds, one
+				for user, one for team</li>
+			<li>Got the corpus mask to save as "corpus" in the database so
+				that the Node router doesn't need to know the id of the corpus to
+				show its public view, only the pouch info is needed.</li>
+			<li>Added a whole bunch of help info to the user menu, as well
+				as the version of iField so they can see which version they are
+				using</li>
+			<li>Made infrequent unicode white and frequent yellow</li>
+			<li>Added strike out on deleted datum</li>
+			<li>Added color coding using datum state (checked, to be
+				checked, deleted, and whatever the user chooses) to the data list</li>
+			<li>Tried to pin down the mysterious datum state that was
+				getting inserted, added a workaround instead...</li>
+			<li>Added more details on how to set up an iField server for
+				department server admins</li>
+			<li>Re-did the icons and buttons on datum and data list into a
+				button group</li>
+			<li>Added a remove button to the datalist to remove datum from
+				the data list, maybe later we will add a dropdown so they can also
+				delete datum (or change their state) from the datalist</li>
+		</ul>
+	</div>
+
+	<div class="well">
+		<h1>August 10 2012 - Week 16 - Bug fixes and refactor of the
+			session views.</h1>
+
+		<ul>
+			<li>This week we refactored the session views to be sure that
+				events weren't getting lost, or firing from ghost views.</li>
+			<li>Added timestamps to the Datum user interface so the users
+				can see their datum are saved every 10 seconds</li>
+			<li>Added a save button to the Datum so that it was consistent
+				through out the app</li>
+			<li>Made the nav bar fit better on a small screen by putting
+				just the search icon and a dropdown to find advanced search</li>
+			<li>Added more tooltips around the app to tell users what things
+				were for</li>
+			<li>Verified the localization of a few of the modules</li>
+		</ul>
+	</div>
+
 	<div class="well">
 		<h1>
 			August 3 2012 - Week 15 - Demo at <a href="http://mayanfamli.org/">CAML</a>
@@ -54,33 +212,36 @@
 
 		<h2>Spanish Screencasts</h2>
 		<p>This week we created new Spanish screencasts to prepare for a
-			workshop on how to use iField to enter/import data at CAML. We didn't
-			publish them to YouTube yet because we didn't have good enough
-			internet at our hotel. They will be coming online by the end of next
-			week.</p>
+			workshop on how to use iField to enter/import data at CAML. We
+			published them to YouTube after we came back because we didn't have
+			good enough internet at our hotel. Here they are:</p>
+
+		<iframe width="560" height="315"
+			src="http://www.youtube.com/embed/videoseries?list=PL7D2CC06C80AF754C&amp;hl=en_US"
+			frameborder="0" allowfullscreen></iframe>
 
 		<h2>Demo and Feedback</h2>
 		<p>
 			The CAML room didn't have tables or a lot of space to walk around and
-			help participants so instead of giving a workshop and helping people
-			import their data we just demoed the project and answered some of the
+			help participants so instead of giving a workshop and showing how to
+			import data we just demoed the project and answered some of the
 			audience's questions. Some of the most important questions we got
 			were about import and export file types and why we were making a new
-			software for field linguists. We incorporated the audiences questions
-			into a new <a
+			software for field linguists. Gretchen incorporated the audiences
+			questions into a new <a target="_blank"
 				href="https://docs.google.com/presentation/pub?id=1KQaq4jbGM9roakDNPuj_jxWPL5v0NXJNBWaLJpqDzHc&start=false&loop=false&delayms=10000">slide
-				show</a> and put up a spiffy <a href="http://fieldlinguist.com">website</a>.
-			The demo was <a
+				show</a> and we put up a spiffy <a href="http://fieldlinguist.com">website</a>.
+			The demo was <a target="_blank"
 				href="http://www.youtube.com/user/MuniPatzun?blend=1&ob=0"> live
-				streamed</a> by the <a
+				streamed</a> by the <a target="_blank"
 				href="http://patzun.gob.gt/index.php?option=com_content&view=article&id=391:idiomas&catid=99:cultura&Itemid=439">Patzun
 				municipality</a>.
-		<h2>Spanish screencasts for regular expressions</h2>
+			<h2>Spanish screencasts for regular expressions</h2>
 		<p>
 			We also got together with other techie linguists for a "hacking"
 			session on Thursday night at the top of Patzun Plaza to share tools
 			and tips in extracting particular examples from fieldwork data using
-			Unix commandline tools like the recipes in <a
+			Unix commandline tools like the recipes in <a target="_blank"
 				href="http://people.sslmit.unibo.it/~baroni/compling04/UnixforPoets.pdf">Unix
 				for Poets</a>. Below are some screen casts Emmy made in Spanish for some
 			of the Chuj speakers for how they can use regular expressions to
@@ -469,17 +630,21 @@
 			want to start fleshing out the views with handlebars and integrating
 			them into the app. This video will start you out with your handlebars
 			template and takes you through backbone to finally render the view.
+		
 		<p>
 
 			<iframe width="420" height="315"
 				src="https://www.youtube.com/embed/J7tCgQHvVqM" frameborder="0"
 				allowfullscreen></iframe>
+		
 		<p>This second video is a more complicated example involving
 			partials.
+		
 		<p>
 			<iframe width="420" height="315"
 				src="https://www.youtube.com/embed/4ddHkvOjWJE" frameborder="0"
 				allowfullscreen></iframe>
+	
 	</div>
 
 	<div class="well">
@@ -638,8 +803,9 @@
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="./libs/jquery.js"></script>
-	<script src="./bootstrap/js/bootstrap-transition.js"></script>
+	<script src="./libs/jquery.js">
+</script>
+			<script src="./bootstrap/js/bootstrap-transition.js"></script>
 	<script src="./bootstrap/js/bootstrap-alert.js"></script>
 	<script src="./bootstrap/js/bootstrap-modal.js"></script>
 	<script src="./bootstrap/js/bootstrap-dropdown.js"></script>
@@ -652,5 +818,8 @@
 	<script src="./bootstrap/js/bootstrap-carousel.js"></script>
 	<script src="./bootstrap/js/bootstrap-typeahead.js"></script>
 
-</body>
+
+
+
+		</body>
 </html>

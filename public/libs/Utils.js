@@ -9,11 +9,11 @@
  */
 var Utils = Utils || {};
 
-Utils.debugMode = false;
+Utils.debugMode = true;
 
 
-Utils.couchUrl = "https://ilanguage.iriscouch.com/default";
-//Utils.couchUrl = "http://localhost:5984/default";
+//Utils.couchUrl = "https://ilanguage.iriscouch.com/default";
+Utils.couchUrl = "http://localhost:5984/default";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -25,8 +25,8 @@ Utils.touchUrl = "http://localhost:8888/db";
 Utils.pouchUrl = "idb://db";
 
 
-Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
-//Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
+//Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
+Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
 /**
  * The address of the TouchDB-Android database on the Android.
  * @Deprecated now using pouchUrl for all
@@ -43,23 +43,23 @@ Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
  * The url of the authentication server.
  */
 
-Utils.authUrl = "https://ifield.fieldlinguist.com";
-//Utils.authUrl = "https://localhost:3001";
+//Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
+Utils.authUrl = "https://localhost:3001";
 /**
  * The parameters of the default couch server.
  */
 Utils.defaultCouchConnection = function() {
   return {
-    protocol : "https://",
-    domain : "ilanguage.iriscouch.com",
-    port : "443",
-    pouchname : "default"
-  }; 
-//    protocol : "http://",
-//    domain : "localhost",
-//    port : "5984",
+//    protocol : "https://",
+//    domain : "ilanguage.iriscouch.com",
+//    port : "443",
 //    pouchname : "default"
 //  }; 
+    protocol : "http://",
+    domain : "localhost",
+    port : "5984",
+    pouchname : "default"
+  }; 
 };
 /**
  * A message for users if they need help which brings them to our contact us form
@@ -146,13 +146,15 @@ Utils.publisher = {
       if (action === 'publish') {
         subscribers[i].fn.call(subscribers[i].context, arg);
       } else {
-        if (subscribers[i].context === context) {
-          subscribers.splice(i, 1);
-          Utils.debug("Removed subscribers");
-
-        } else {
-          Utils.debug("Not removing subscriber" + i);
-
+        try{
+          if (subscribers[i].context === context) {
+            var removed = subscribers.splice(i, 1);
+            Utils.debug("Removed subscriber from "+type, removed);
+          } else {
+            Utils.debug(type+" keeping subscriber " + i);
+          }
+        }catch(e){
+          Utils.debug("problem visiting Subscriber "+i)
         }
       }
     }
@@ -230,21 +232,7 @@ Utils.onlineOnly = function() {
 	return !this.androidApp() && !this.chromeApp();
 };
 
-Utils.hasClass = function(ele, cls) {
-	return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-};
 
-Utils.addClass = function(ele, cls) {
-	if(!this.hasClass(ele, cls))
-		ele.className += " " + cls;
-};
-
-Utils.removeClass = function(ele, cls) {
-	if(this.hasClass(ele, cls)) {
-		var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)', 'g');
-		ele.className = ele.className.replace(reg, ' ');
-	}
-};
 Utils.getVersion = function(callback) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open('GET', 'manifest.json');
@@ -256,3 +244,84 @@ Utils.getVersion = function(callback) {
 };
 
 
+/*
+ * JavaScript Pretty Date
+ * Copyright (c) 2011 John Resig (ejohn.org)
+ * Licensed under the MIT and GPL licenses.
+ */
+
+// Takes an ISO time and returns a string representing how
+// long ago the date represents.
+
+//modified by iField team to take in Greenwich time which is what we are using for our time stamps so that users in differnt time zones will get real times, not strangely futureistic times
+//we have been using JSON.stringify(new Date()) to create our timestamps instead of unix epoch seconds (not sure why we werent using unix epoch), so this function is modified from the original in that it expects dates that were created using 
+//JSON.stringify(new Date())
+Utils.prettyDate = function(time){
+  if(!time){
+    return undefined;
+  }
+  time = time.replace(/"/g,"");
+  var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," "));
+  var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g,"");
+  var greenwichdate = new Date((greenwichtimenow || "").replace(/-/g,"/").replace(/[TZ]/g," "));
+  var  diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
+  var  day_diff = Math.floor(diff / 86400);
+      
+  if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 ){
+    return undefined;
+  }
+      
+  return day_diff == 0 && (
+      diff < 60 && "just now" ||
+      diff < 120 && "1 minute ago" ||
+      diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+      diff < 7200 && "1 hour ago" ||
+      diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
+    day_diff == 1 && "Yesterday" ||
+    day_diff < 7 && day_diff + " days ago" ||
+    day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
+};
+Utils.prettyTimestamp = function(timestamp){
+  var date = new Date(timestamp);
+  var greenwichtimenow = new Date();
+  var  diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
+  var  day_diff = Math.floor(diff / 86400);
+      
+  if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 ){
+    return;
+  }
+      
+  return day_diff == 0 && (
+      diff < 60 && "just now" ||
+      diff < 120 && "1 minute ago" ||
+      diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+      diff < 7200 && "1 hour ago" ||
+      diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
+    day_diff == 1 && "Yesterday" ||
+    day_diff < 7 && day_diff + " days ago" ||
+    day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
+};
+//
+//// If jQuery is included in the page, adds a jQuery plugin to handle it as well
+//if ( typeof jQuery != "undefined" )
+//  jQuery.fn.prettyDate = function(){
+//    return this.each(function(){
+//      var date = prettyDate(this.title);
+//      if ( date )
+//        jQuery(this).text( date );
+//    });
+//  };
+
+Utils.catchAndThrowAjaxError = function(e, xhr, settings, exception){    
+  console.log('\tAjax error in: ' + settings.url + ' \n'+'error:\n' + xhr.responseText );
+  window.hub.publish("ajaxError",exception);
+//  throw exception; //this doesnt work, cant use normal try catches, instead using pub sub
+};
+
+Utils.catchAndThrowPouchError = function(e){    
+  console.log('\tCaught Error : ', e );
+  if(e){
+    window.hub.publish("pouchError", e);
+  }
+//  throw e; //this doesnt work, cant use normal try catches, instead using pub sub
+};

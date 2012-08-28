@@ -42,6 +42,7 @@ define([
       "user/:userid"                    : "showFullscreenUser",
       "import"                          : "showImport",
       "corpus/:pouchname/export"       : "showExport",
+      "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       ""                                : "showDashboard"
     },
     
@@ -66,6 +67,26 @@ define([
       $("#dashboard-view").show();
       $("#datums-embedded").show();
       window.location.href = "#"; //TODO this is to clear the parameters in the url
+    },
+    /**
+     * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
+     */
+    showDiffs : function(oldrevision, newrevision){
+      var couchConnection = window.app.get("corpus").get("couchConnection");
+      var couchDatabaseUrl = couchConnection.protocol+couchConnection.domain;
+      if(couchConnection.port != null){
+        couchDatabaseUrl = couchDatabaseUrl+":"+couchConnection.port;
+      }
+      couchDatabaseUrl = couchDatabaseUrl +"/_utils/database.html?"+ couchConnection.pouchname;
+     
+      
+      window.appView.toastUser("We haven't implemented the 'diff' tool yet" +
+      		" (ie, showing the changes, letting you undo changes etc)." +
+      		" We will do it eventually, when it becomes a priority. " +
+      		"<a target='blank'  href='https://github.com/iLanguage/iField/issues/124'>" +
+      		"You can vote for it in our issue tracker</a>.  " +
+      		"We use the " +
+      		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).","alert","Track Changes:");
     },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
@@ -436,9 +457,8 @@ define([
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();
       }
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $('#export-batch-modal').modal("show");
+
+      $('#export-modal').modal("show");
     },
     
     // Functions that toggle between editable and readonly datums view

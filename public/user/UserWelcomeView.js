@@ -245,9 +245,7 @@ define([
                   activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
                   a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
                   
-                  a.set("currentUserActivityFeed", new ActivityFeed({
-                    "activities" : auth.get("userPrivate").get("activities")
-                  }));
+                  a.set("currentUserActivityFeed", new ActivityFeed());
                   a.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
                 
                   var s = a.get("currentSession");
@@ -263,12 +261,12 @@ define([
                   
                   var dl = a.get("currentDataList");
                   dl.set({
-                    "title" : "Default Data List",
+                    "title" : "All Data",
                     "dateCreated" : (new Date()).toDateString(),
-                    "description" : "This is the default data list for this corpus. " +
-                      "Any new datum you create is added here. " +
-                      "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                      "export to LaTeX, or share with collaborators.",
+                    "description" : "This list contains all data in this corpus. " +
+                    "Any new datum you create is added here. " +
+                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+                    "export to LaTeX, or share with collaborators.",
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   dl.changePouch(data.user.corpuses[0].pouchname);
@@ -294,7 +292,12 @@ define([
                         //save the users' first dashboard so at least they will have it if they close the app.
                         window.setTimeout(function(){
                           window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
-                            window.app.saveAndInterConnectInApp();
+                            window.app.saveAndInterConnectInApp(function(){
+                              //replicate from both activity feeds to be sure that they have the search views
+                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
+                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
+                              });
+                            });
                           });
                         },10000);
                         

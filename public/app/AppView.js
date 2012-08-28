@@ -114,7 +114,7 @@ define([
       // Create and initialize a Terminal
       this.term = new Terminal('terminal');
       
-
+      // Initialize the file system of the terminal
       this.term.initFS(false, 1024 * 1024);
       
       // Set up a timeout event every 10sec
@@ -174,7 +174,7 @@ define([
         this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
       }
       if(this.activityFeedCorpusTeamView){
-        this.activityFeedCorpusTeamView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+        this.activityFeedCorpusTeamView.destroy_view();
       }
       this.activityFeedCorpusTeamView = new ActivityFeedView({
         model : this.model.get("currentCorpusTeamActivityFeed")
@@ -268,6 +268,25 @@ define([
         callback();
       }
     },
+    /*
+     * This function assures that whatever views on the dashboard that are coming from the user, are reassociated. it is currently after the user is synced from the server. 
+     * (which happens when the user authenticates so that if they were logged into another computer the can get their updated preferences.
+     */
+    associateCurrentUsersInternalModelsWithTheirViews : function(callback){
+      this.userPreferenceView.model = this.authView.model.get("userPrivate").get("prefs");
+      this.userPreferenceView.model.bind("change:skin", this.userPreferenceView.renderSkin, this.userPreferenceView);
+      
+      this.insertUnicodesView.model = this.authView.model.get("userPrivate").get("prefs").get("unicodes");
+      this.insertUnicodesView.changeViewsOfInternalModels();
+      this.insertUnicodesView.render();
+      
+      this.hotkeyEditView.model = this.authView.model.get("userPrivate").get("hotkeys");
+      //TODO the hotkeys are probably not associate dbut because they are not finished, they cant be checked yet
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     setUpAndAssociateViewsAndModelsWithCurrentUser : function(callback){
       // Create an AuthenticationEditView
       this.authView = new AuthenticationEditView({
@@ -303,13 +322,11 @@ define([
       // Create a UserActivityView
       Utils.debug("Setting up the user activity feed.");
       if(!this.model.get("currentUserActivityFeed")){
-        this.model.set("currentUserActivityFeed", new ActivityFeed({
-          "activities" : window.app.get("authentication").get("userPrivate").get("activities"),
-        }));
+        this.model.set("currentUserActivityFeed", new ActivityFeed());
         this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
       }
       if(this.activityFeedUserView){
-        this.activityFeedUserView.destroy_view(); //TODO when activityfeed knows how to destroy itself.
+        this.activityFeedUserView.destroy_view(); 
       }
       this.activityFeedUserView = new ActivityFeedView({
         model : this.model.get("currentUserActivityFeed")
@@ -522,7 +539,7 @@ define([
           $(".ifield-version").html(ver);
         });
 //        this.importView.render(); //render at last minute using router
-//        this.exportView.render();//render at last minute using router
+        this.exportView.render();//render at last minute using router
         
         
 //        // Display the Corpus Views
@@ -816,12 +833,14 @@ define([
     toastSavingDatumsCount : 0,
     toastUser : function(message, alertType, heading){
       if(message.indexOf("Automatically saving visible datum entries every 10 seconds") != -1 ){
-        this.toastSavingDatumsCount++;
-        if(this.toastSavingDatumsCount == 5){
-          message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
-        }if(this.toastSavingDatumsCount > 5){
-          return;
-        }
+//        this.toastSavingDatumsCount++;
+//        if(this.toastSavingDatumsCount == 5){
+//          message = message+"<p>&nbsp;</p><p>The app will continue to save your visible datum enties every 10 seconds, but it will no longer show these messages.</p>";
+//        }if(this.toastSavingDatumsCount > 5){
+//          return;
+//        }
+        //dont show these messages anymore, the app is stable and we have timestamps
+        return;
       }
       if(message.indexOf("Sucessfully saved") != -1){
         return; //dont show the mesages like "Sucessfully saved ..."
@@ -836,7 +855,7 @@ define([
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
-        +"</div>")
+        +"</div>");
     },
     /**
      * 
