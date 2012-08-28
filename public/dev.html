@@ -8,68 +8,82 @@
 <link rel="stylesheet" type="text/css"
 	href="./bootstrap/css/bootstrap.css">
 <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-      
-<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script type="text/javascript" src="./libs/jquery.js"></script>
 
 <script type="text/javascript" src="./libs/analytics.js"></script>
 </head>
 <body>
-	<div class="well row span12 container">
-		<div class="span6">
-			<h1>
-				iField Beta
-			</h1>
-			<h2>
-				Bi-Weekly Developers News Channel<small> with videos :)</small>
-			</h2>
-			<h3>A Fieldlinguistics Database which adapts to its user's
-				I-Language</h3>
-			<p>Officially Launched August 1st, @CAML in Patzún, Guatemala</p>
-			<p>
-				To install or get non-technical info: <a
-					href="http://fieldlinguist.com">http://fieldlinguist.com</a>
-			</p>
+	<div class="well container">
+		<div class="row span12">
+			<div class="span6">
+				<h1>iField Beta</h1>
+				<h2>
+					Bi-Weekly Developers News Channel<small> with videos :)</small>
+				</h2>
+				<h3>A Fieldlinguistics Database which adapts to its user's
+					I-Language</h3>
+				<p>Officially Launched August 1st, @CAML in Patzún, Guatemala</p>
+				<p>
+					To install or get non-technical info: <a
+						href="http://fieldlinguist.com">http://fieldlinguist.com</a>
+				</p>
 
-			<p>
-				If you want more frequent techie updates you can find out what we
-				are doing by "watching" our project on GitHub. GitHub is a project
-				management tool for decentralized projects, kind of like Facebook
-				for programmers. Anyone can add features, ask questions or leave us
-				comments or notes directly in our GitHub issue tracker: <a
-					target="_blank"
-					href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
-					on GitHub </a>
-			</p>
+				<p>
+					If you want more frequent techie updates you can find out what we
+					are doing by "watching" our project on GitHub. GitHub is a project
+					management tool for decentralized projects, kind of like Facebook
+					for programmers. Anyone can add features, ask questions or leave us
+					comments or notes directly in our GitHub issue tracker: <a
+						target="_blank"
+						href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
+						on GitHub </a>
+				</p>
 
-		</div>
-		<div class="span6">
-			<script>
-			new TWTR.Widget({
-			  version: 2,
-			  type: 'profile',
-			  rpp: 4,
-			  interval: 30000,
-			  width: 250,
-			  height: 300,
-			  theme: {
-			    shell: {
-			      background: '#359abf',
-			      color: '#ffffff'
-			    },
-			    tweets: {
-			      background: '#fcfcfc',
-			      color: '#0f000f',
-			      links: '#288bb8'
-			    }
-			  },
-			  features: {
-			    scrollbar: false,
-			    loop: false,
-			    live: false,
-			    behavior: 'all'
-			  }
-			}).render().setUser('fieldlinguist').start();
-			</script>
+			</div>
+			<div id="twitterBox" class="span6">
+				<script>
+					//http://code.google.com/p/chromium/issues/detail?id=81637
+					//https://twitter.com/about/resources/widgets/widget_profile?
+					//http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
+					
+			     $(document).ready(function(){
+			     $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
+			        // dynamically add the get social sidebar
+			        $('body').prepend('<div id="social"></div>'); 
+			
+			          new TWTR.Widget({
+			            version: 2,
+			            type: 'profile',
+			            id : 'twitterBox',
+			            
+			            rpp: 4,
+			            interval: 30000,
+			            width: 250,
+			            height: 300,
+			            theme: {
+			              shell: {
+			                background: '#55a1ba',
+			                color: '#ffffff'
+			              },
+			              tweets: {
+			                background: '#fcf9fc',
+			                color: '#0f010f',
+			                links: '#2d61a1'
+			              }
+			            },
+			            features: {
+			              scrollbar: true,
+			              loop: false,
+			              live: true,
+			              behavior: 'all'
+			            }
+			          }).render().setUser('FieldLinguist').start();
+			
+			      });
+			    });
+			    
+			    </script>
+			</div>
 		</div>
 
 	</div>
@@ -198,9 +212,9 @@
 
 		<h2>Spanish Screencasts</h2>
 		<p>This week we created new Spanish screencasts to prepare for a
-			workshop on how to use iField to enter/import data at CAML. We 
-			published them to YouTube after we came back because we didn't have good enough
-			internet at our hotel. Here they are:</p>
+			workshop on how to use iField to enter/import data at CAML. We
+			published them to YouTube after we came back because we didn't have
+			good enough internet at our hotel. Here they are:</p>
 
 		<iframe width="560" height="315"
 			src="http://www.youtube.com/embed/videoseries?list=PL7D2CC06C80AF754C&amp;hl=en_US"
@@ -222,7 +236,7 @@
 				streamed</a> by the <a target="_blank"
 				href="http://patzun.gob.gt/index.php?option=com_content&view=article&id=391:idiomas&catid=99:cultura&Itemid=439">Patzun
 				municipality</a>.
-		<h2>Spanish screencasts for regular expressions</h2>
+			<h2>Spanish screencasts for regular expressions</h2>
 		<p>
 			We also got together with other techie linguists for a "hacking"
 			session on Thursday night at the top of Patzun Plaza to share tools
@@ -616,17 +630,21 @@
 			want to start fleshing out the views with handlebars and integrating
 			them into the app. This video will start you out with your handlebars
 			template and takes you through backbone to finally render the view.
+		
 		<p>
 
 			<iframe width="420" height="315"
 				src="https://www.youtube.com/embed/J7tCgQHvVqM" frameborder="0"
 				allowfullscreen></iframe>
+		
 		<p>This second video is a more complicated example involving
 			partials.
+		
 		<p>
 			<iframe width="420" height="315"
 				src="https://www.youtube.com/embed/4ddHkvOjWJE" frameborder="0"
 				allowfullscreen></iframe>
+	
 	</div>
 
 	<div class="well">
@@ -785,8 +803,9 @@
 	<!-- Le javascript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="./libs/jquery.js"></script>
-	<script src="./bootstrap/js/bootstrap-transition.js"></script>
+	<script src="./libs/jquery.js">
+</script>
+			<script src="./bootstrap/js/bootstrap-transition.js"></script>
 	<script src="./bootstrap/js/bootstrap-alert.js"></script>
 	<script src="./bootstrap/js/bootstrap-modal.js"></script>
 	<script src="./bootstrap/js/bootstrap-dropdown.js"></script>
@@ -801,5 +820,6 @@
 
 
 
-</body>
+
+		</body>
 </html>
