@@ -78,8 +78,17 @@ define([
       "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
-      "click .add-comment-corpus" : 'insertNewComment',
-      
+      "click .add-comment-corpus" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var commentstring = this.$el.find(".comment-new-text").val();
+        
+        this.model.insertNewComment(commentstring);
+        this.$el.find(".comment-new-text").val("");
+        
+      },      
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
@@ -331,7 +340,8 @@ define([
   //Functions assoicate with the corpus menu
     newDatum : function(e) {
       if(e){
-        e.stopPropagation();
+//        e.stopPropagation(); //cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
       } 
       appView.datumsEditView.newDatum();
       app.router.showDashboard();
@@ -340,7 +350,8 @@ define([
     
     newDataList : function(e) {
       if(e){
-        e.stopPropagation();
+//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
       }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
@@ -349,7 +360,8 @@ define([
     
     newSession : function(e) {
       if(e){
-        e.stopPropagation();
+//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
       }
       $("#new-session-modal").modal("show");
       //Save the current session just in case
@@ -365,9 +377,10 @@ define([
     },
     
     newCorpus : function(e){
-//      if(e){
-//        e.stopPropagation();
-//      }
+      if(e){
+//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+        e.preventDefault(); //this stops the link from moving the page to the top
+      }
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       window.app.get("corpus").saveAndInterConnectInApp();
@@ -395,23 +408,6 @@ define([
       window.appView.corpusNewModalView.model = new Corpus(attributes);
       window.appView.corpusNewModalView.render();
     },
-
-
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-        console.log("I'm a new comment!");
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-      });
-      this.model.get("comments").add(m);
-      this.$el.find(".comment-new-text").val("");
-      window.appView.addUnsavedDoc(this.model.id);
-
-     },
     
      resizeSmall : function(e){
        if(e){

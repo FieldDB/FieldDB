@@ -66,7 +66,7 @@ define([
      * @param user A user object to verify against the authentication database
      * @param callback A callback to call upon sucess.
      */
-    authenticate : function(user, callback) {
+    authenticate : function(user, successcallback, failcallback) {
       var dataToPost = {};
       dataToPost.login = user.get("username");
       dataToPost.password = user.get("password");
@@ -89,15 +89,25 @@ define([
                 data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
             window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
-
-            if (typeof callback == "function") {
-              callback(null, data.errors); // tell caller that the user failed to
+            if (typeof failcallback == "function") {
+              failcallback();
+            }
+            if (typeof successcallback == "function") {
+              successcallback(null, data.errors); // tell caller that the user failed to
               // authenticate
             }
           } else if (data.user != null) {
-            self.saveServerResponseToUser(data, callback);
+            self.saveServerResponseToUser(data, successcallback);
           }
         },//end successful login
+        error: function(e){
+          Utils.debug("Ajax failed, user might be offline.", e);
+          window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
+
+          if (typeof failcallback == "function") {
+            failcallback();
+          }
+        },
         dataType : ""
       });     
     },
@@ -138,18 +148,23 @@ define([
       var u = this.get("userPrivate");
       u.id = data.user._id; //set the backbone id to be the same as the mongodb id
       //set the user AFTER setting his/her publicself if it wasnt there already
+      if(data.user.activities && data.user.activities[0]){
+        alert("We have made a lot of changes in the app since your user was created. " +
+        		"Your user was created before the new Team and User activity feeds were implemented. " +
+        		"If you want to keep this user acount and data, contact us at opensource@ilanguage.ca " +
+        		"and we will transition your account for you. If you were just using this account for testing and you dont mind creating a  new user, " +
+        		"you should probably sign out and make a new user so you can use the " +
+        		"new Team and Activity feeds.");
+      }
       u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
+      if(window.appView){
+        window.appView.associateCurrentUsersInternalModelsWithTheirViews();
+      }
 //    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
 //      Utils.debug(data.user);
-      if(window.appView){
-        window.setTimeout(function(){
-          Utils.debug("trying to get activityfeed to be up-to-date");
-          window.appView.activityFeedUserView.model.set("activities", window.app.get("authentication").get("userPrivate").get("activities") );
-          window.appView.activityFeedUserView.render();
-        },1000);
-      }
+      
       if (typeof callback == "function") {
         callback("true"); //tell caller that the user succeeded to authenticate
       }

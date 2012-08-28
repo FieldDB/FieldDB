@@ -2,14 +2,12 @@ define([
     "backbone", 
     "activity/Activity",
     "datum/Datum",
-    "datum/Datums",
     "comment/Comment",
     "comment/Comments"
 ], function(
     Backbone, 
     Activity,
     Datum,
-    Datums,
     Comment,
     Comments
 ) {
@@ -47,13 +45,57 @@ define([
       description : "",
       datumIds : []
     },
-    
+    validate: function(attributes) {
+      if(attributes.title){
+        if(this.get("title") == "All Data" && attributes.title != "All Data"){
+          alert("You cannot modify the title of the default data list of all data in the corpus. You can make a new data list containing all data by pushing the search button wiht no query, it will make a new data list with all datum which you can customize.");
+          return "You cannot modify the title of the default data list of all data in the corpus.";
+        }
+      }
+      if(attributes.title){
+        if( !(this.get("title") == "Untitled Data List" || this.get("title") == "All Data") && attributes.title == "All Data"){
+          alert("You cannot use All Data for your data list, that is reseved title for the first data list containing all your data.");
+          return "You cannot modify the title of this data list to be the 'All Data' list.";
+        }
+      }
+    },
     
     // Internal models: used by the parse function
     model : {
       comments: Comments
     },
 
+  //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment : function(commentstring) {
+      var m = new Comment({
+        "text" : commentstring,
+     });
+      
+      this.get("comments").add(m);
+      window.appView.addUnsavedDoc(this.id);
+      
+      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-pushpin'></i><a href='#data/"+this.id+"'>"+this.get('title')+"</a>",
+            teamOrPersonal : "team",
+            context : " via Offline App."
+          }));
+      
+      window.app.get("currentUserActivityFeed").get("activities").unshift(
+          new Activity({
+            verb : "commented",
+            verbicon: "icon-comment",
+            directobjecticon : "",
+            directobject : "'"+commentstring+"'",
+            indirectobject : "on <i class='icon-pushpin'></i><a href='#data/"+this.id+"'>"+this.get('title')+"</a>",
+            teamOrPersonal : "personal",
+            context : " via Offline App."
+          }));
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -213,7 +255,7 @@ define([
           success : function(model, response) {
             Utils.debug('DataList save success');
             var title = model.get("title");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+title+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
 //            if(window.app.get("corpus").get("keepDataListDetailsPrivate")){
 //              title = "";
@@ -224,15 +266,32 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            
+            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
-                  verb : verb,
-                  directobject : "<a href='#data/"+model.id+"'>dataList</a> ",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App."
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
+                  directobjecticon : "icon-pushpin",
+                  directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
+                  teamOrPersonal : "team",
+                  context : " via Offline App."
+                }));
+            
+            window.app.get("currentUserActivityFeed").get("activities").unshift(
+                new Activity({
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon : verbicon,
+                  directobjecticon : "icon-pushpin",
+                  directobject : "<a href='#data/"+model.id+"'>"+title+"</a> ",
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
+                  teamOrPersonal : "personal",
+                  context : " via Offline App."
                 }));
             
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;

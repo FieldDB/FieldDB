@@ -40,7 +40,7 @@ define( [
       Utils.debug("DATALIST READ VIEW init: ");
       
       this.changeViewsOfInternalModels();
-      this.model.bind('change:title', function(){
+      this.model.bind('change:dateCreated', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
@@ -60,8 +60,17 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : 'insertNewComment',
-      
+      "click .add-comment-datalist" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var commentstring = this.$el.find(".comment-new-text").val();
+        
+        this.model.insertNewComment(commentstring);
+        this.$el.find(".comment-new-text").val("");
+        
+      },      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable",
@@ -110,6 +119,19 @@ define( [
         }
         
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
+        return false;
+      },
+      "click .icon-remove-sign": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if(this.model.get("title") != "All Data"){
+          this.removeDatumFromThisList(this.getAllCheckedDatums());
+        }else{
+          $(e.target).attr("disabled","disabled")
+          $(e.target).addClass("disabled")
+        }
         return false;
       },
       "click .icon-lock": function(e){
@@ -274,6 +296,7 @@ define( [
           
           //localization of data list menu
           $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
+          $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", chrome.i18n.getMessage("locale_Remove_checked_from_datalist_tooltip"));
           $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
           $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
           $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
@@ -323,6 +346,17 @@ define( [
         alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       });
     },
+    removeDatumFromThisList : function(datumIds){
+      if(datumIds == this.model.get("datumIds")){
+        return; //return quietly, refuse to remove all datum in a data list. 
+      }
+      try{
+        this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
+        appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
+      }catch(e){
+        Utils.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+      }
+    },
     resizeSmall : function(e){
       if(e){
         e.stopPropagation();
@@ -353,19 +387,6 @@ define( [
       window.appView.currentEditDataListView.render();
     },
     
-    //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      console.log("I'm a new comment!");
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-      });
-      this.model.get("comments").add(m);
-      this.$el.find(".comment-new-text").val("");
-    },
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js

@@ -421,8 +421,8 @@ define([
         if(fileExtension == "csv"){
           importType.csv.confidence++;
         }else if(fileExtension == "txt"){
-          //If there are more than 100 tabs in the file, try tabbed.
-          if(self.get("rawText").split("\t").length > 100){
+          //If there are more than 20 tabs in the file, try tabbed.
+          if(self.get("rawText").split("\t").length > 20){
             importType.tabbed.confidence++;
           }else{
             importType.handout.confidence++;
