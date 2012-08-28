@@ -169,36 +169,34 @@ define([
         session : app.get("currentSession")
       }));
     },
-    
+    promptedForNewSession : false,
     /**
      * Prepends the given Datum to the top of the Datum stack.
      * Saves and bumps the bottom Datum off the stack, if necessary.
      * 
-     * @param {Datm} datum The Datum to preprend.
+     * @param {Datm} datum The Datum to prepend.
      */
     prependDatum : function(datum) {
       if (datum.isNew()) {
         // If the corpus' previous Datum is more than 24 hours old,
         // prompt the user if they want to create a new Session.
         var tooOld = false;
-        for (var i = 0; i < this.model.length; i++) {
-          var previousDateModified = this.model.models[i].get("dateModified");
+          var previousDateModified = window.app.get("corpus").get("dateOfLastDatumModifiedToCheckForOldSession");
           if (previousDateModified) {
             var currentDate = new Date();
             // 86400000 = 24h * 60m * 60s * 1000ms = 1 day 
             if (currentDate - new Date(JSON.parse(previousDateModified)) > 86400000) {
               tooOld = true;
-              break;
-            }
           }
         }
-        
-        if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
-          // Display the new Session modal
-          $("#new-session-modal").modal("show");
-          
-          return;
-        } 
+        if(!this.promptedForNewSession){
+          if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
+            // Display the new Session modal
+            $("#new-session-modal").modal("show");
+            this.promptedForNewSession = true;
+            return;
+          } 
+        }
       // If the datum is already being displayed by the datumContainer
       } else if (this.model.get(datum.id)) {
         // Loop through the currently displayed views
