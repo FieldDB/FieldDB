@@ -124,18 +124,18 @@ define([
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
      * @param {Function} callback A function that expects a single parameter. That
-     * parameter is the result of calling "get_datum_ids/by_date". So it is an array
+     * parameter is the result of calling "get_ids/by_date". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
      */
-    getAllDatumIdsByDate : function(callback) {
+    getAllIdsByDate : function(callback) {
       var self = this;
       
       try{
         this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
-            db.query("get_datum_ids/by_date", {reduce: false}, function(err, response) {
+            db.query("get_ids/by_date", {reduce: false}, function(err, response) {
               if ((!err) && (typeof callback == "function"))  {
                 console.log("Callback with: ", response.rows);
                 callback(response.rows);
@@ -442,10 +442,10 @@ define([
        * this gets rid of it when we save. (if it gets in to a datum)
        */
       try{
-        var ds = this.get("datumStates");
+        var ds = this.get("datumStates").models;
         for (var s in ds){
-          if(ds[s].get("state") == undefined  ){
-            ds.splice(s,1);
+          if(ds[s].get("state") == undefined){
+            this.get("datumStates").remove(ds[s]);
           }
         }
       }catch(e){
@@ -457,7 +457,7 @@ define([
           success : function(model, response) {
             Utils.debug('Datum save success');
             var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
-            var differences = "<a class='activity-diff' href='#diff/oldrev/"+oldrev+"/newrev/"+response._rev+"'>"+utterance+"</a>";
+            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for datum goals in corpus
 //            if(window.app.get("corpus").get("keepDatumDetailsPrivate")){
 //              utterance = "";
@@ -468,17 +468,32 @@ define([
               window.appView.addSavedDoc(model.id);
             }
             var verb = "updated";
+            verbicon = "icon-pencil";
             if(newModel){
               verb = "added";
+              verbicon = "icon-plus";
             }
-            window.app.get("authentication").get("userPrivate").get("activities").unshift(
+            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
                 new Activity({
-                  verb : verb,
-                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>datum</a> ",
-                  indirectobject : "in "+window.app.get("corpus").get("title"),
-                  context : differences+" via Offline App."
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon: verbicon,
+                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
+                  directobjecticon : "icon-list",
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
+                  teamOrPersonal : "team",
+                  context : " via Offline App."
                 }));
-
+            
+            window.app.get("currentUserActivityFeed").get("activities").unshift(
+                new Activity({
+                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
+                  verbicon: verbicon,
+                  directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
+                  directobjecticon : "icon-list",
+                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
+                  teamOrPersonal : "personal",
+                  context : " via Offline App."
+                }));
             /*
              * If the current data list is the default
              * list, render the datum there since is the "Active" copy

@@ -2306,8 +2306,8 @@ var IdbPouch = function(opts, callback) {
     // An object of couch view functions that we use
     // Note that spacing is very important. Do not reformat these values
     var validCouchViews = {
-      getAllDatumIdsByDate : function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}},
-      searchByQueryString : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
+        getAllIdsByDate : function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}},
+        searchByQueryString : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
     };
 
     // We may have passed in an anonymous function that used emit in
