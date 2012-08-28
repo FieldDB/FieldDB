@@ -8,33 +8,69 @@
 <link rel="stylesheet" type="text/css"
 	href="./bootstrap/css/bootstrap.css">
 <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+      
+<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
 
 <script type="text/javascript" src="./libs/analytics.js"></script>
 </head>
 <body>
-	<div class="well">
-		<h1>
-			iField <small>beta</small> Bi-Weekly Developers News Channel<small>
-				with videos :)</small>
-		</h1>
-		<h3>A Fieldlinguistics Database which adapts to its user's
-			I-Language</h3>
-		<h2>Officially Launched August 1st, @CAML in Patzún, Guatemala</h2>
-		<p>
-			To install or get non-technical info: <a
-				href="http://fieldlinguist.com">http://fieldlinguist.com</a>
-		</p>
+	<div class="well row span12 container">
+		<div class="span6">
+			<h1>
+				iField Beta
+			</h1>
+			<h2>
+				Bi-Weekly Developers News Channel<small> with videos :)</small>
+			</h2>
+			<h3>A Fieldlinguistics Database which adapts to its user's
+				I-Language</h3>
+			<p>Officially Launched August 1st, @CAML in Patzún, Guatemala</p>
+			<p>
+				To install or get non-technical info: <a
+					href="http://fieldlinguist.com">http://fieldlinguist.com</a>
+			</p>
 
-		<p>
-			If you want more frequent techie updates you can find out what we are
-			doing by "watching" our project on GitHub. GitHub is a project
-			management tool for decentralized projects, kind of like Facebook for
-			programmers. Anyone can add features, ask questions or leave us
-			comments or notes directly in our GitHub issue tracker: <a
-				target="_blank"
-				href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
-				on GitHub </a>
-		</p>
+			<p>
+				If you want more frequent techie updates you can find out what we
+				are doing by "watching" our project on GitHub. GitHub is a project
+				management tool for decentralized projects, kind of like Facebook
+				for programmers. Anyone can add features, ask questions or leave us
+				comments or notes directly in our GitHub issue tracker: <a
+					target="_blank"
+					href="https://github.com/iLanguage/iField/issues/milestones?direction=asc&sort=due_date">iField
+					on GitHub </a>
+			</p>
+
+		</div>
+		<div class="span6">
+			<script>
+			new TWTR.Widget({
+			  version: 2,
+			  type: 'profile',
+			  rpp: 4,
+			  interval: 30000,
+			  width: 250,
+			  height: 300,
+			  theme: {
+			    shell: {
+			      background: '#359abf',
+			      color: '#ffffff'
+			    },
+			    tweets: {
+			      background: '#fcfcfc',
+			      color: '#0f000f',
+			      links: '#288bb8'
+			    }
+			  },
+			  features: {
+			    scrollbar: false,
+			    loop: false,
+			    live: false,
+			    behavior: 'all'
+			  }
+			}).render().setUser('fieldlinguist').start();
+			</script>
+		</div>
 
 	</div>
 	<hr />
@@ -43,18 +79,20 @@
 			preparing for Field methods beta testing</h1>
 
 		<p>
-			This week we started setting up iField on a McGill server, and <a target="_blank"
+			This week we started setting up iField on a McGill server, and <a
+				target="_blank"
 				href="https://github.com/iLanguage/iField/wiki/How-to-install-on-your-own-server">adding
 				more documentation for others who want to set up iField or set up a
 				developers environment for iField.</a>
 		</p>
 
 		<p>
-			Gretchen also made us a <a  target="_blank" href="http://www.facebook.com/iFieldApp">Facebook
-				fan page</a> where we can put some non-technical updates when we release
-			new versions of the app (we will probably keep the technical updates
-			here so that normal users don't get confused with this
-			techno-babble), she also made a sort of user group on facebook called<a target="_blank" 
+			Gretchen also made us a <a target="_blank"
+				href="http://www.facebook.com/iFieldApp">Facebook fan page</a> where
+			we can put some non-technical updates when we release new versions of
+			the app (we will probably keep the technical updates here so that
+			normal users don't get confused with this techno-babble), she also
+			made a sort of user group on facebook called<a target="_blank"
 				href="https://www.facebook.com/groups/486887294657548/"> iField
 				keeners</a> to let "iField keeners" share slides if someone in their
 			department asks them to give a presentation. Yuliya's department at
@@ -160,8 +198,8 @@
 
 		<h2>Spanish Screencasts</h2>
 		<p>This week we created new Spanish screencasts to prepare for a
-			workshop on how to use iField to enter/import data at CAML. We didn't
-			publish them to YouTube yet because we didn't have good enough
+			workshop on how to use iField to enter/import data at CAML. We 
+			published them to YouTube after we came back because we didn't have good enough
 			internet at our hotel. Here they are:</p>
 
 		<iframe width="560" height="315"
