@@ -157,6 +157,9 @@ define([
         		"new Team and Activity feeds.");
       }
       u.set(u.parse(data.user)); //might take internal elements that are supposed to be a backbone model, and override them
+      if(window.appView){
+        window.appView.associateCurrentUsersInternalModelsWithTheirViews();
+      }
 //    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
