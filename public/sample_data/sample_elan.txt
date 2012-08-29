@@ -1,0 +1,7535 @@
+file:/Users/gina/git/iField/public/sample_data/sample_elan.eaf
+Wednesday, August 29, 2012 12:29 PM
+
+ref@RLP
+trs@RLPtsa'     a-kaj                 i-su'-b-eñ-ob                        tye     a   papa-ji   PERF A2-empezar  A3-decir-APL-SUF-B3-PL venir  M  papá
+trad@RLPque a papá le comentaron que viniera
+eng@RLPthat they commented to dad to come
+TC00:00:00.360 - 00:00:02.140
+SD(0.88)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta'        kaj              i-säkl-añ-ob           tye      i-lum           che' jiñi PERF empezar   A3-buscar-TDI-PL venir  A3-terreno así   ese
+trad@RLPde esa forma empezaron a buscar terreno
+eng@RLPthey started to look for terrain like that
+TC00:00:03.020 - 00:00:05.010
+SD(1.44)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLPsupo que aquí en San Miguel también estaban solicitando terreno
+eng@RLPhe knew that here in San Miguel they were soliciting terrain too
+TC00:00:06.450 - 00:00:09.440
+SD(0.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtsa'-bi              kaj             y-ubin             cha’añ wol       tyi         k'ajty-i               tye       je lum        ila    tyi        Sanmikel-i PERFV-REP empezar  A3-escuchar  SR        PROG PREP preguntar-SUF venir       terreno  aquí PREP San Miguel-
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta'       ame kaj               i-ña'ty-añ            je papaj ta'         tyäl-i PERF          empezar    A3-pensar-TDI      papá  PREP  venir-VTI
+trad@RLPde pensarlo papa vino
+eng@RLPdad came from thinking about it
+TC00:00:09.940 - 00:00:11.730
+SD(0.86)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLPallá en Chuchucruz lo odiaban bastante peleaban terreno peleaban donde
+eng@RLPthere in Chuchucruz, they hated him a lot, they fought terrain, they fought where
+TC00:00:12.590 - 00:00:18.230
+SD(0.72)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPa   yaj tyi         chuchukrus che' mu'-bi            i-weñ      ts'ajl-eñ-ob   che'-je i-kajety-añ-ob      i-lum,            i-kajety-añ-ob       a-ba'               mi M  allá PERF Chuchucruz así  IMPFV-REP  A3-bien odiar-TDI-PLasí-      A3- pelar-TDI-PL A3-terreno,  A3- pelar-TDI-PL  M-PRO.REL IMPFV
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmel-ob     i-chol       i-ba'                  mi          mel-ob    i-kajpel-el hacer-PL A3-milpa A3-PRO.LOC  IMPFV  hacer-PL A3-café--NF
+trad@RLPhacían milpa y donde hacían su cafetal
+eng@RLPthey made crops and where they made their coffee plantation
+TC00:00:18.950 - 00:00:21.170
+SD(1.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäx-bi           i-säk-ä                         ña'ty-a           a  papaj täx-me-ku             i-käy-ä PERF-REP A3-desesperar-VTT pensar-VTT  M papá   PERF-así-ASEV A3-dejar-VTT
+trad@RLPdespués de pensarlo papá dejó (el terreno)
+eng@RLPafter thinking about it dad left
+TC00:00:22.380 - 00:00:24.710
+SD(0.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäx-me-ku             tyäl-i PERF-así-ASEV  venir-VTI
+trad@RLPde ahí se vino
+eng@RLPhe came from there
+TC00:00:25.500 - 00:00:26.310
+SD(0.32)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpe    cha'            lajal-jach-ta' tyi       y-ikoty a   ta'-bä           i-tsaj-le-yi pero otra_vez   igual-sólo-    venir  A3-SR  M PERF-REL A3-odiar-PAS-
+trad@RLPpero se vino de nuevo con el que tenía problemas
+eng@RLPbut he came again with the one that had problems
+TC00:00:26.630 - 00:00:29.130
+SD(0.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwä-jach    ta'       cha'           tyi       y-ikoty aquí-sólo PERF otra_vez   venir A3-SR
+trad@RLPse vino con el aquí
+eng@RLPhe came with him here
+TC00:00:30.000 - 00:00:31.270
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'-ta'      mi         y-äl          a  papaj así-ASEV IMPFV  A3-decir  M papá
+trad@RLPasí decía papá
+eng@RLPthat's how dad used to say
+TC00:00:32.100 - 00:00:33.170
+SD(1.08)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLPen ese tiempo se empezó a construir este pueblo
+eng@RLPin that time he started to build this town
+TC00:00:34.250 - 00:00:37.080
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPix-ku   ba'              horaj che’ jiñ-i           tsa'     a  kaj             tyi        mejl-el       a-bi       ili      lum-i allá-    PRO.REL hora   así PRO3-CL PERF M empezar  PREP hacer-NF   M-REP este terreno-CL
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLPde ahí empezó a sentirse un poco tranquilo pero no se tranquilizo por completo porque empezaron a pelear el lugar para hacer la milpa
+eng@RLPfrom there he started to feel a little more calm, but he didn't calm down completely because they started to fight the place to make the crops
+TC00:00:38.040 - 00:00:44.270
+SD(0.94)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyä'-äch-me           aku   ta'         i-mero     ubiñ   i-tyijikña-y-el             peroj chakuj mak  tyi        kaj          i-cha'              weñ tyaj           i-tyijikñi-y-el               tsa'-bi              i-cha'               kajityañ-ob ba'               mi         mel-ob     i-chol-i  allí-ASEV-PRED           PERF  A3-mero sentir A3-alegre-EPN-NF  pero                NEG PERF PROSP A3-otra_vez  bien alcanzar  A3-alegre-EPN-NF  PERFV-REP  A3-otra_vez  pelear-PL   PRO.LOC   IMPFV hacer-PL  A3-milpa-CL
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLPde esa forma papá decía que estaba nuevamente pensativo
+eng@RLPin that way dad said he was again pensative
+TC00:00:45.210 - 00:00:48.270
+SD(0.91)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsäk-che'-jach-bi         ch'äjyem-tyik  jiñ           papaj tsa'     cha'           kaj             mi          y-äl           aja blanco-así-sólo-REP triste-               PRON3 papá  PERF otra_vez  empezar   IMPFV  A3-decir  EXCL
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPix-ku         che' jiñ-i ya-ASEV  así  PRO3-CL
+trad@RLPya de ahí
+eng@RLPfrom there
+TC00:00:49.180 - 00:00:50.090
+SD(1.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'uñ ba' tsa' kaj tyi ñäjchelij jiñ ache' tyäx päsletyak kajtyak tyi...
+trad@RLPdonde empezaron a tranquilizarse fue cuando se empezó a medir se empezó
+eng@RLPwhere they started to calm down was when they started to measure they started
+TC00:00:51.890 - 00:00:55.730
+SD(0.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpäsityak tyi jujuntyikil che’jiñi ta' amekuj  lajmi tyi chaj tsajlentyel a papaj
+trad@RLPa medir uno por uno de ahí a papá lo dejaron de odiar
+eng@RLPto measure one by one from there they stopped hating dad
+TC00:00:56.710 - 00:01:00.760
+SD(0.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ata' kajyob tyi jubetye bajche jiñ
+trad@RLPde esa forma empezaron a trasladarse
+eng@RLPin that way they started to move out
+TC00:01:01.740 - 00:01:03.520
+SD(1.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ata' ujtyityak tyi meleyob cheje, amajtyañ ejtyel chuktyak cheje tyäx abi käyäyob
+trad@RLPde esa forma lo hicieron lo que es el trabajo de mozo lo dejaron
+eng@RLPin that way they made him what is young boy's work they left him
+TC00:01:05.120 - 00:01:09.430
+SD(1.03)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha’añ mach chäñ yomobäx abi imel a jiñi tyoj majtyañ ejtyel
+trad@RLPpues ya no querían dedicarse como mozos
+eng@RLPwell they no longer wanted to dedicate themselves like young boys
+TC00:01:10.460 - 00:01:14.000
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyo librej ejtyejach abij
+trad@RLPera un trabajo no pagado
+eng@RLPit was unpaid work
+TC00:01:14.830 - 00:01:16.240
+SD(0.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach abij añix chuk mi tyajob mach abax kamelob ityojol
+trad@RLPno alcazaba nada no era mucho la paga
+eng@RLPwasn't enough for anything it didn't pay much
+TC00:01:16.650 - 00:01:19.780
+SD(1.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche' tsa' yälätyak apapaj
+trad@RLPhacia decía papá
+eng@RLPthat's what dad said
+TC00:01:20.890 - 00:01:22.020
+SD(1.23)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyäxmeku ayaj cheje jiñmek cha’añ tyäx kaj itsiklañobtye a ilali
+trad@RLPfue en ese momento que decidieron buscar este terreno
+eng@RLPthat was when they decided to find this terrain
+TC00:01:23.250 - 00:01:26.560
+SD(0.58)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäxmek atsa' kaj imero ubiñob ityijikñiyel  koj icha’añix a tyi kaj ibaja  melob a che'  tyi
+trad@RLPfue cuando se tranquilizaron un poco porque lo que hacían ya eran de ellos así
+eng@RLPit was when they settled down a bit because what they did was already theirs like that
+TC00:01:27.140 - 00:01:31.200
+SD(0.28)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbajñelilob abij
+trad@RLPde solitos decía
+eng@RLPof lonely people, he said
+TC00:01:31.480 - 00:01:32.620
+SD(1.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche' tyi yälä ili
+trad@RLPasí decía este
+eng@RLPthat's what this one said
+TC00:01:33.830 - 00:01:34.630
+SD(0.81)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkojata' ubibil kcha’añ baje jiñ
+trad@RLPde esa forma yo escuchaba eso
+eng@RLPin that way, I heard that
+TC00:01:35.440 - 00:01:36.770
+SD(1.04)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbajche ta' tyili je kpapaji
+trad@RLPel motivo por el que también vino mi papa
+eng@RLPthe reason why my dad also came
+TC00:01:37.810 - 00:01:39.470
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi kajich je ilum
+trad@RLPera por el terreno
+eng@RLPwas for the terrain
+TC00:01:40.430 - 00:01:41.510
+SD(0.67)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi lumobjach kaxlañob baj chumul
+trad@RLPvivían en el terreno de los ladinos
+eng@RLPthey lived on the terrain of the (spanish speaking indians?)
+TC00:01:42.180 - 00:01:44.360
+SD(0.75)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmachek  añk mi iweñ mel a ixim
+trad@RLPno sembraba mucho el maíz
+eng@RLPcorn wasn't planted a lot
+TC00:01:45.110 - 00:01:46.930
+SD(0.85)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmak ' mi weñ mel ichol chejachij bäkeñtyik  bajchetyak mi imelob abi icholi
+trad@RLPno hacía mucho milpa lo hacían pero con miedo
+eng@RLPthere wasn't a lot of crop; they made it, but with fear
+TC00:01:47.780 - 00:01:52.450
+SD(1.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma'añik koj tsa' kaj iyubiñ che'  wox  tyi säklañtye je yaj tyi amerikaji
+trad@RLPpues como supo que en América estaban buscando (terreno)
+eng@RLPI suppose like how in America they were looking (for terrain)
+TC00:01:53.540 - 00:01:56.820
+SD(0.93)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjixekuj  je k yujmel ambä tyi santamariaj tsi' kaj ipiyob abi tye ibäj
+trad@RLPya mi tío el que estaba en San María se empezaron a convencer entre ellos
+eng@RLPalready, my uncle that was in San Maria; they started to convince among them
+TC00:01:57.750 - 00:02:01.320
+SD(1.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPla'ix ja kerañ
+trad@RLPhermano ya vente
+eng@RLPbrother come already
+TC00:02:02.430 - 00:02:03.600
+SD(1.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsäklañix baj maj mel acholi che' abij
+trad@RLPbusca lugar para hacer tu milpa que así  le dijo
+eng@RLPlook for a place to make your crop, that he told him
+TC00:02:04.790 - 00:02:07.120
+SD(0.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPloñ ñaxamek tsa' käle a tyi amerika chaku mak ta' kälej
+trad@RLPfue el primero en quedarse en América pero no se quedó
+eng@RLPhe was the first to stay in America but he didn't stay
+TC00:02:07.920 - 00:02:11.090
+SD(0.97)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñixkuj yaj tsa' mek cha'
+trad@RLPya de ahí empezó
+eng@RLPfrom there he started
+TC00:02:12.060 - 00:02:13.370
+SD(1.13)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñumityak asensuji mach abij añik  ta' lokä tyi sensuj a kpapaji cha' majli
+trad@RLPa pasar el censo que no salió en el censo mi papá de ahí se volvió a ir
+eng@RLPafter passing the census that didn't come out on the census, my dad left there again
+TC00:02:14.500 - 00:02:18.470
+SD(0.57)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäle añtyo jocholbi ya'i yäx mi la maj ya'i
+trad@RLPen estos momentos hay todavía (terrenos) baldíos ahora se van allá
+eng@RLPin these times, there are still waste lands, now they go there
+TC00:02:19.040 - 00:02:21.460
+SD(0.7)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkaj la wotsabeñ ikabaji nuebo muntoj mu kaj laj wotsabeñ chejme'ak  iyilolob
+trad@RLPlo van a nombrar Nuevo Mundo así lo van a nombrar que así les dijeron
+eng@RLPthey're going to name it New World, thats what they're going to name it, so they told them
+TC00:02:22.160 - 00:02:25.670
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyajmek ta' chaj letsi maj je kpapaj
+trad@RLPentonces mi papá se volvió a ir allá
+eng@RLPthen my dad went there again
+TC00:02:26.630 - 00:02:28.420
+SD(0.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejaxmek tyi kuñ tyaja bajche jiñ
+trad@RLPde esa forma lo consiguió
+eng@RLPthat's how he got it
+TC00:02:29.320 - 00:02:31.010
+SD(0.88)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkuñ wäxek chumil pekoj wäle mataj chiñ wox ikäñe yubil je
+trad@RLPya radica aquí pero ahora ya no lo utiliza
+eng@RLPit's here already but now he doesn't use it
+TC00:02:31.890 - 00:02:35.180
+SD(1.23)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkojatsaj  bajche jiñi ta' kubiñtyak  abajche jiñ
+trad@RLPde esa forma lo escuché
+eng@RLPin that way I heard him
+TC00:02:36.410 - 00:02:38.290
+SD(1.32)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALIxku a jiñ ¿bak tyilem a papaj chej?
+trad@NALy así dónde provenía papá
+eng@NALand so where did dad come from?
+TC00:02:39.610 - 00:02:41.110
+SD(0.77)
+
+
+ref@RLP
+trs@RLPantaj tyilemta' tyi totukeroj ja'e yajatsa' taj kaj k'el je  yaj
+trad@RLPestaba en Tortuguero yo lo empecé a ver allá
+eng@RLPhe was in Tortuguero, I started to see him there
+TC00:02:41.880 - 00:02:44.820
+SD(1.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtortukerota ta' tyili ta' kaj tyi tyile a yaj
+trad@RLPvenía de Tortuguero de allí vino
+eng@RLPhe came from Tortugero, he came from there
+TC00:02:46.070 - 00:02:48.620
+SD(1.51)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyiyoñlo che'
+trad@RLPnos venimos
+eng@RLPwe came
+TC00:02:50.130 - 00:02:50.840
+SD(1.36)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkaxeñlon tyile che' loñ
+trad@RLPasí nos trasladamos
+eng@RLPthat's how we moved
+TC00:02:52.200 - 00:02:53.440
+SD(0.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñaxan ta' ñumiloyon tyi chumtyil tyi amerikaj
+trad@RLPprimero nos pasamos a vivir en América
+eng@RLPfirst we went to live in America
+TC00:02:53.650 - 00:02:55.790
+SD(0.35)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmejlemixta ili sanmikel
+trad@RLPSan Miguel ya estaba construido
+eng@RLPSan Miguel was already built
+TC00:02:56.140 - 00:02:57.680
+SD(0.27)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñumejaxmeku mi ñumelob
+trad@RLPnadamas lo cruzabamos
+eng@RLPwe just crossed it
+TC00:02:57.950 - 00:02:59.220
+SD(1.1)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchak wokol ta' yubiyob a ximbal
+trad@RLPera difícil caminar
+eng@RLPit was hard to walk
+TC00:03:00.320 - 00:03:01.980
+SD(0.33)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPok'lel bajche ili ja’lel
+trad@RLPcon lodo en temporada de lluvia
+eng@RLPwith mud in rain season
+TC00:03:02.310 - 00:03:03.560
+SD(1.44)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmaxtyota' añ  kartera che'
+trad@RLPtodavía no había carretera
+eng@RLPthere was no road yet
+TC00:03:05.000 - 00:03:06.230
+SD(0.35)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpuru tyi bijta' mi xiñob che'
+trad@RLPcaminaban en puro callejón
+eng@RLPthey walked in plain alleyway
+TC00:03:06.580 - 00:03:08.300
+SD(1.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach bajche jiñ
+trad@RLPasí era
+eng@RLPthat's how it was
+TC00:03:09.550 - 00:03:10.210
+SD(1.55)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyäxta tyi kuñ tyajobix iweñlel mataj ta' chäñ kajyob tyi ximbal koj
+trad@RLPde esa forma se sintieron un poco mejor pues ya no caminaban por caminar
+eng@RLPin that way, they felt a little better, after all, they didn't walk to walk
+TC00:03:11.760 - 00:03:15.230
+SD(1.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyo junjajtsaxta'  tyiliyob a yaj tyi tortukero
+trad@RLPvinieron en un solo jalón de Tortuguero
+eng@RLPthey came in just one pull  from Tortuguero
+TC00:03:16.530 - 00:03:19.610
+SD(0.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsilbido
+trad@RLP
+eng@RLP
+TC00:03:20.590 - 00:03:21.050
+SD(1.07)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejata' bajche
+trad@RLPasí fue
+eng@RLPthat's how it was
+TC00:03:22.120 - 00:03:22.830
+SD(0.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkubiñ abajche mi yilobi
+trad@RLPque escuché lo que decían
+eng@RLPthat I heard what they said
+TC00:03:23.330 - 00:03:24.680
+SD(2.23)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmajk ta' kaj itsajleñ apapaj mi yil a che'
+trad@NALquién fue el que odió a papá
+eng@NALwho was it that hated dad?
+TC00:03:26.910 - 00:03:28.640
+SD(0.62)
+
+
+ref@RLP
+trs@RLPaaaah
+trad@RLP
+eng@RLP
+TC00:03:29.260 - 00:03:29.610
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALwäjbä añob ila
+trad@NALlos que están aquí
+eng@NALthey that are here
+TC00:03:29.600 - 00:03:30.280
+SD(0.35)
+
+
+ref@RLP
+trs@RLPapapaj
+trad@RLPa papá
+eng@RLPdad
+TC00:03:30.630 - 00:03:31.200
+SD(0.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL[ianundible]
+trad@NAL
+eng@NAL
+TC00:03:31.450 - 00:03:32.080
+SD(0.96)
+
+
+ref@RLP
+trs@RLPchaku yerañobjach abi bajche ixi yerañ peruj kuzman che'
+trad@RLPfueron sus propios hermanos así como Pedro Guzmán
+eng@RLPit was his own brothers like Pedro Guzmán
+TC00:03:33.040 - 00:03:36.110
+SD(0.29)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñobjach ata' kaj itsajleñob ibä jiñ
+trad@RLPcon él fue que empezó a odiar
+eng@RLPwith him it was that he started to hate
+TC00:03:36.400 - 00:03:37.880
+SD(1.05)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach ata' kujchob che'
+trad@RLPeran insoportables
+eng@RLPthey were unbearable
+TC00:03:38.930 - 00:03:40.070
+SD(0.95)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpe' naxañ ata' ta' chämi je'
+trad@RLPy fue el primero en morir
+eng@RLPand he was the first to die
+TC00:03:41.020 - 00:03:42.360
+SD(0.82)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmartiñ kuzman che' mi kloñ ubiñ
+trad@RLPescuché que decían Martín Guzmán
+eng@RLPI heard what Martín Guzmán said
+TC00:03:43.180 - 00:03:44.500
+SD(0.47)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPnaxañ ta' chämi iloñ  tsajloñ iweñ
+trad@RLPfue el primero en morir y me odió y también
+eng@RLPhe was the first to die and he hated me too
+TC00:03:44.970 - 00:03:47.010
+SD(2.12)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyikoty bajche yerañob che'
+trad@RLPcomo sus otros hermanos
+eng@RLPlike his other brothers
+TC00:03:49.130 - 00:03:50.250
+SD(1.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta' ata' iweñ tsajle ixä markusij
+trad@RLPese Marcos también lo odió bastante
+eng@RLPthat Marcos hated him a lot too
+TC00:03:52.040 - 00:03:53.560
+SD(1.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' lajaljach ata' tyi yikoty
+trad@RLPy se vinieron juntos de nueva cuenta
+eng@RLPand they came together
+TC00:03:55.460 - 00:03:56.850
+SD(2.17)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyajta' mi baja kälelob ta' kälä ache' mata' wol kñajtyañ mi chaj lajalta' tyal kikoty chejta' mi yil che'
+trad@RLPpensé que allí se iban a quedar decía nunca pensé que iban a venir conmigo decía
+eng@RLPI thought they were going to stay there, he said, I never thought they were going to come with me, he said
+TC00:03:59.020 - 00:04:03.750
+SD(0.28)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi yiltyak
+trad@RLPasí decía
+eng@RLPthat's what he said
+TC00:04:04.030 - 00:04:04.520
+SD(1.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido
+trad@RLP
+eng@RLP
+TC00:04:05.770 - 00:04:06.040
+SD(2.76)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach baje jiñ
+trad@RLPasí fue
+eng@RLPthat's how it was
+TC00:04:08.800 - 00:04:09.780
+SD(0.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyajach
+trad@RLPhasta ahí
+eng@RLPup until there
+TC00:04:10.080 - 00:04:10.330
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALixku a jiñi
+trad@NALy esos
+eng@NALand those?
+TC00:04:10.260 - 00:04:11.300
+SD(1.12)
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmi tyi tyojoyob ilum ta' ñumi
+trad@NALlos que pasaron pagaban sus terrenos
+eng@NALthose that passed by paid for their terrains
+TC00:04:12.420 - 00:04:14.090
+SD(0.19)
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALche' ta' ochiyob
+trad@NALen el momento de entrar
+eng@NALthe moment they came in?
+TC00:04:14.280 - 00:04:14.970
+SD
+
+
+ref@RLP
+trs@RLPjänke
+trad@RLPasí es
+eng@RLPthat's how it was
+TC00:04:14.970 - 00:04:15.480
+SD(0.59)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañichku koperasion
+trad@RLPhabía cooperación
+eng@RLPthere was cooperation
+TC00:04:16.070 - 00:04:16.980
+SD(1.78)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpuru koperasion ta' che'
+trad@RLPhabía pura cooperación
+eng@RLPthere was pure cooperation
+TC00:04:18.760 - 00:04:20.310
+SD(1.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmaj yubiñob atyi saltuj
+trad@RLPiban hasta Salto
+eng@RLPthey went until Salto
+TC00:04:21.970 - 00:04:23.310
+SD(0.46)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi muchkä ityajob
+trad@RLPpara saber si se les concedían
+eng@RLPto know if anyone knew them
+TC00:04:23.770 - 00:04:24.650
+SD(2.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchetyakata' bajche jiñ
+trad@RLPde esa forma fue
+eng@RLPin that way it was
+TC00:04:26.740 - 00:04:27.520
+SD(0.44)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmajk iloñ yum a ili lum a cheñi
+trad@NALquién era el dueño de este terreno
+eng@NALwho was the owner of this terrain?
+TC00:04:27.960 - 00:04:29.650
+SD(0.65)
+
+
+ref@RLP
+trs@RLPjiñi machek kujilik majch iyum koj
+trad@RLPeste no sé quién era el dueño
+eng@RLPthis one, I don't know who owned it
+TC00:04:30.300 - 00:04:33.230
+SD(1.51)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjocholäch abi
+trad@RLPestaba baldío
+eng@RLPit was empty
+TC00:04:34.740 - 00:04:35.680
+SD(0.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjocholäch abi' a ili lumi
+trad@RLPestaba baldío este terreno
+eng@RLPit was empty, this terrain
+TC00:04:36.580 - 00:04:38.330
+SD(1.63)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpe' täx añch abi iyum tyi ñaxañi pe' täx abi ikäyä mi yälob aja'
+trad@RLPpero si tenía dueño al inicio decían que lo habían abandonado
+eng@RLPbut if it had an owner initially, they said it was abandoned
+TC00:04:39.960 - 00:04:43.590
+SD(1.59)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñtyakme'aku tyi ipäkä a ixä  ja'as añbä  tyi
+trad@RLPy fueron los que sembraron el plátano que había
+eng@RLPand it was those that planted the plantain that there was
+TC00:04:45.180 - 00:04:47.840
+SD(0.93)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPal kajpelel
+trad@RLPen el pequeño cafetal
+eng@RLPin the little coffee plantation
+TC00:04:48.770 - 00:04:49.500
+SD(1.63)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPej chuxkaj ik'abatyak  mata' muj weñ  kchäñbeñ isujm ja'e
+trad@RLPno sé es que como se llamaba no le entendía muy bien
+eng@RLPwhat I don't know is what it was called, I didn't understand very well
+TC00:04:51.130 - 00:04:54.510
+SD(1.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañch ik'aba akaxlañ
+trad@RLPtenía su nombre el ladino
+eng@RLPhe had his name, the (spanish speaking indian?)
+TC00:04:55.720 - 00:04:56.800
+SD(1.32)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta'bä ñumiyob abi tyi ñaxa chumtyäl
+trad@RLPlos primeros pobladores
+eng@RLPthe first to populate
+TC00:04:58.120 - 00:05:00.230
+SD(1.46)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpe' täxta' icha' käyäyob che' täxta' kaj tyi k'ajtyintyel je' che'
+trad@RLPpero lo dejaron porque ya se los empezaron a pedir
+eng@RLPbut they left it because they started asking it from them
+TC00:05:01.690 - 00:05:04.680
+SD(2.05)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmachek añäch tyi chäñ käyäyob aja'
+trad@RLPellos ya no lo dejaron
+eng@RLPthey no longer let him
+TC00:05:06.730 - 00:05:08.280
+SD(0.88)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchak' lamtyak akuj ta' cha' sujtyiyob maj a tyi chuchucrus
+trad@RLPy solo pocos se regresaron de nuevo en Chuchucruz
+eng@RLPand only a few returned again to Chuchucruz
+TC00:05:09.160 - 00:05:11.270
+SD(1.46)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' sujtyiyob abi majle a maxbä yoñk kälel
+trad@RLPse regresaron los que no se querían quedar
+eng@RLPthose that didn't want to stay returned
+TC00:05:12.730 - 00:05:14.750
+SD(1.92)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjinjax a joñon mak ta' kunya jak'ä cha'an mi cha' sujtye aja pe' wäch ta' käleyoñ aja
+trad@RLPyo solo ya no quise volver a regresar aquí me quedé
+eng@RLPme only, I didn't want to go back, here I stayed
+TC00:05:16.670 - 00:05:21.070
+SD(1.08)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj chejta' mi yäl apapaj
+trad@RLPasí decía papá
+eng@RLPthat's what dad said
+TC00:05:22.150 - 00:05:23.140
+SD(2.74)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyomächbä ikäyobi
+trad@RLPy los que lo querían dejar
+eng@RLPand those that wanted to leave
+TC00:05:25.880 - 00:05:27.070
+SD(0.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' majliyob aja
+trad@RLPse volvieron a ir
+eng@RLPleft again
+TC00:05:27.680 - 00:05:28.540
+SD(1.06)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmu'abi bäjñañob a chämel bajche koj mu ata' ibä chämelob a che' mi tsiji julelob che'
+trad@RLPtemían que se murieran decían que los recién establecidos se morían
+eng@RLPthey were scared of dying, they said that the recently established died
+TC00:05:29.600 - 00:05:33.920
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ta' kaxta' mi yälob
+trad@RLPasí es como comentaban
+eng@RLPthat's what they commented
+TC00:05:35.450 - 00:05:36.280
+SD(0.07)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALchuk iyes a che' mi chämelob
+trad@NALy porqué se morían
+eng@NALand why did the die?
+TC00:05:36.350 - 00:05:37.360
+SD(0.27)
+
+
+ref@RLP
+trs@RLPjäjä wa' kaj abi kajk'
+trad@RLPjäjä empezaban a tener calentura
+eng@RLPhaha, they started to have heat stroke
+TC00:05:37.630 - 00:05:39.180
+SD(0.42)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwa' kaj abi tya'
+trad@RLPempezaban a tener diarrea
+eng@RLPthey started to have diarreah
+TC00:05:39.600 - 00:05:40.580
+SD(1.37)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjasäjach ata' ibä ubiyob
+trad@RLPcon eso se morían
+eng@RLPwith that one died
+TC00:05:41.950 - 00:05:43.110
+SD(0.59)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñme'ak tyi bäjñayobi
+trad@RLPeso fue lo que temieron
+eng@RLPthat's what they were scared of
+TC00:05:43.700 - 00:05:44.800
+SD(1.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' sujtyikob abi koj machta' baj kä tyajob abi tsak che'
+trad@RLPse volvieron a regresar porque no conseguían medicina
+eng@RLPthey went back again because they couldn't find medicine
+TC00:05:46.760 - 00:05:49.680
+SD(0.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido de pavos
+trad@RLP
+eng@RLP
+TC00:05:50.370 - 00:05:51.460
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejata mi yältyak
+trad@RLPasí decía
+eng@RLPthat's what he said
+TC00:05:52.420 - 00:05:53.310
+SD(0.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyältyak kubi
+trad@RLPescuché que así decía
+eng@RLPI heard that's what he said
+TC00:05:54.000 - 00:05:54.730
+SD(2.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach bajche jiñ
+trad@RLPasí nada más
+eng@RLPso nothing else
+TC00:05:56.820 - 00:05:57.410
+SD(0.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALche' bak ta' ñaxan chumleyob a che' ta'  juliyob che'
+trad@NALy cuando recientemente se establecieron dónde fue que vivieron
+eng@NALand when they established themselves recently where did they live?
+TC00:05:57.940 - 00:06:00.280
+SD(0.77)
+
+
+ref@RLP
+trs@RLPyajta' tyi' ja'
+trad@RLPallá en la orilla del rio
+eng@RLPthere on the shore
+TC00:06:01.050 - 00:06:02.010
+SD(0.99)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpoj ix tyi entyil
+trad@RLPcerca de la loma
+eng@RLPclose to the hillside
+TC00:06:03.000 - 00:06:03.640
+SD(1.22)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñaxañixjekta' ta' kajyob tyi chumtyil ya' yäxta ta' kotyiyob che'
+trad@RLPfue donde empezaron a establecerse allí fue donde llegaron
+eng@RLPwhere they started to establish themselves, that's where they arrived
+TC00:06:04.860 - 00:06:07.430
+SD(2.0)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpejtyel aja
+trad@RLPtoda la
+eng@RLPall the
+TC00:06:09.430 - 00:06:10.270
+SD(0.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPeskuela ya' ta' luj käle a tyi entyäl
+trad@RLPescuela allí se quedaron en la lomita
+eng@RLPschool, they stayed there on the hill
+TC00:06:10.680 - 00:06:12.560
+SD(0.74)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkancha chubä yajta' ta' lu käle che'
+trad@RLPasí como la cancha allí quedó
+eng@RLPjust like the field stayed there
+TC00:06:13.300 - 00:06:15.410
+SD(1.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkaj icha' ñajtyañobix iletsetyel a ilali cha'an a kartera icha' mulañob che' koj añobta ikajpelel che'
+trad@RLPpoco después acordaron venirse aquí por la carretera les gustó por la cuestión del café
+eng@RLPa little after, they agreed to come here by the road, they liked the matter of the coffee
+TC00:06:17.050 - 00:06:22.630
+SD(1.55)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha'an junya wokolix mi lak kuch jubetye a la kajpe ki' cha' mas läkäläx aya'i
+trad@RLPera difícil volver a trasladar el café y aquí era más cercano
+eng@RLPit was hard to move the coffee again and here it was closer
+TC00:06:24.180 - 00:06:28.230
+SD(0.99)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyikoty che' mi lak choñi chetyakob che'
+trad@RLPy más cuando lo vendemos así decían
+eng@RLPand more once we sell it, they said
+TC00:06:29.220 - 00:06:30.930
+SD(1.14)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñaxan arusta' ta' kaj ikäñ tyi ejtyel je papaj
+trad@RLPpapá primero trabajó el arroz
+eng@RLPfirst dad worked the rice
+TC00:06:32.070 - 00:06:34.150
+SD(0.89)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP[inaudible]
+trad@RLP
+eng@RLP
+TC00:06:35.040 - 00:06:36.180
+SD(0.72)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejata' tyajatyaktye tyakiñ je bajche jiñ
+trad@RLPde esa forma fue como consiguió dinero
+eng@RLPthat's how he got money
+TC00:06:36.900 - 00:06:39.020
+SD(0.23)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP[inaudible]
+trad@RLP
+eng@RLP
+TC00:06:39.250 - 00:06:41.180
+SD(0.85)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejata' ta' kaj yilobtye bajche jiñi ta'ta'
+trad@RLPasí fue como empezaron a ponerse de acuerdo
+eng@RLPthat's how they started agreeing
+TC00:06:42.030 - 00:06:44.190
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkajyobich tyi letse tyilel
+trad@RLPde ahí se trasladaron aquí
+eng@RLPfrom there they moved here
+TC00:06:45.150 - 00:06:46.360
+SD(2.75)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyixek junya käle a tyi' ja'
+trad@RLPy la orilla del rio lo dejaron
+eng@RLPand they left it at the edge of the river
+TC00:06:49.110 - 00:06:50.670
+SD(0.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPabaskañ
+trad@RLPel Bascan
+eng@RLPthe Bascan
+TC00:06:51.270 - 00:06:52.100
+SD(0.29)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP[inaudible]
+trad@RLP
+eng@RLP
+TC00:06:52.390 - 00:06:53.890
+SD(2.67)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach baje jiñ
+trad@RLPasí es
+eng@RLPthat's how it is
+TC00:06:56.560 - 00:06:57.310
+SD(0.57)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjinjach ubibityak kcha'añ a jiñ
+trad@RLPeso es lo que recuerdo
+eng@RLPthat's what I remember
+TC00:06:57.880 - 00:06:59.350
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañtyakächku che' pe' koj mata' mi mejl
+trad@RLPhabían otras cosas pero no
+eng@RLPthere were other things, but I don't
+TC00:07:00.760 - 00:07:02.030
+SD(0.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPluj loty ja'el
+trad@RLPlos recuerdo
+eng@RLPremember them
+TC00:07:02.210 - 00:07:03.200
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido
+trad@RLP
+eng@RLP
+TC00:07:03.210 - 00:07:04.240
+SD(0.67)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido
+trad@RLP
+eng@RLP
+TC00:07:04.910 - 00:07:05.580
+SD(1.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP[inaudible]
+trad@RLP
+eng@RLP
+TC00:07:07.370 - 00:07:08.550
+SD(0.51)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPixkuta' je kmama che'... pechomjach abi chajleñ je ya'
+trad@RLPen el caso de mi mamá allí se dedicaba a hacer tortilla
+eng@RLPin my mom's case, she dedicated herself to making tortilla
+TC00:07:09.060 - 00:07:11.980
+SD(0.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi...
+trad@RLPen...
+eng@RLPin...
+TC00:07:12.160 - 00:07:12.660
+SD(0.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPba' lino
+trad@RLPdonde está Lino
+eng@RLPwhere Lino is
+TC00:07:13.530 - 00:07:14.110
+SD(0.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPlino che' mi yilob kubi
+trad@RLPescuché que le decían Lino
+eng@RLPI heard what Lino said
+TC00:07:14.290 - 00:07:15.400
+SD(0.95)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñoxi kaxlañ
+trad@RLPun ladino viejo
+eng@RLPan old ladino
+TC00:07:16.350 - 00:07:17.470
+SD(1.7)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma
+trad@RLPma
+eng@RLPma
+TC00:07:19.170 - 00:07:19.390
+SD(0.54)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsäkanjach mi majlelob che'
+trad@RLPse iban muy temprano
+eng@RLPthey left very early
+TC00:07:19.930 - 00:07:21.340
+SD(0.39)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPik'añ mi kotyelob
+trad@RLPy regresaban ya tarde
+eng@RLPand they came back very late
+TC00:07:21.730 - 00:07:22.950
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmuxmeku i...
+trad@RLPy así
+eng@RLP
+TC00:07:23.780 - 00:07:24.780
+SD(0.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPya' ipoj wech
+trad@RLPde esa forma
+eng@RLPin that way
+TC00:07:25.680 - 00:07:26.190
+SD(0.44)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyajob ityojoli
+trad@RLPconseguían paga
+eng@RLPthey found pay
+TC00:07:26.630 - 00:07:27.440
+SD(1.06)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' wa' mäñob ixapom chujbä
+trad@RLPy compraban lo que es su jabón
+eng@RLPand they bought what was their soap
+TC00:07:28.500 - 00:07:30.210
+SD(0.78)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPixäp mäñob abi imuty ibujk
+trad@RLPcompraban su pollo su vestimenta
+eng@RLPthey bought their chicken, their clothing
+TC00:07:30.990 - 00:07:32.560
+SD(2.01)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ata' iñusayob bajche jiñ
+trad@RLPfue así como vivieron
+eng@RLPthat's how they lived
+TC00:07:34.570 - 00:07:35.840
+SD(0.33)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP[inaudible]
+trad@RLP
+eng@RLP
+TC00:07:36.170 - 00:07:37.990
+SD(0.02)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyajatyakob ityojo ixapom bajche jiñ
+trad@RLPy consiguieron dinero para su jabón
+eng@RLPand they found money for their soap
+TC00:07:38.010 - 00:07:39.880
+SD(0.75)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPje junya wokol abi
+trad@RLPera muy difícil
+eng@RLPit was very hard
+TC00:07:40.630 - 00:07:41.900
+SD(1.91)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach añikta' lon chän k'ele ja'e chaku
+trad@RLPeso yo ya no lo vi
+eng@RLPthat I didn't see
+TC00:07:43.810 - 00:07:45.560
+SD(0.49)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsilbido
+trad@RLP
+eng@RLP
+TC00:07:46.050 - 00:07:46.580
+SD(0.47)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjinjachbä yubil
+trad@RLPeso era
+eng@RLPthat was
+TC00:07:47.050 - 00:07:47.730
+SD(4.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachakta'  tyi imeletyakob awajali
+trad@RLPanteriormente fue así como lo hicieron
+eng@RLPbefore that's how they did it
+TC00:07:52.230 - 00:07:53.960
+SD(2.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach tyijikñayich, wäleyi woko, mach chän woko ejtyelich bajche oraj la kom sujtyete aja' pe' tyijikñayich mi la kulel la kule lakux la kwaj chujbäx
+trad@RLPno era nada fácil ahora ya no es difícil el trabajo pues te regresas a la hora que quieres y es tranquilo cuando llegamos llegamos a comer lo que sea
+eng@RLPit wasn't easy at all, now work it's not hard, afterall, you come back when you want and it's calm, when we come back,  we come back to eat whatever
+TC00:07:56.760 - 00:08:05.980
+SD(0.65)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpe' awajali tyi yubiyob a xñoxobi mach tyijikñayik chejta' mi yäl
+trad@RLPpero antes los ancianos no fue tranquilo así decía
+eng@RLPbut before, the old ones, it wasn't calm, that's what he said
+TC00:08:06.630 - 00:08:09.970
+SD(2.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbajche' oraj la kom sujtyel mi la ksujtyetyel chañtyo kiñ bajche librejich añonla chejta' mi yäl
+trad@RLPnos retiramos a la hora que sea cuando todavía hay sol decía como ya somos libres
+eng@RLPwe quit when while there's still sun, he said, since now we're free
+TC00:08:12.080 - 00:08:16.730
+SD(2.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchichta' ja'el
+trad@RLPy así es
+eng@RLPthat's how it is
+TC00:08:18.840 - 00:08:19.560
+SD(1.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALchuktyak ejtyel tyi imeleyob a che'iñi
+trad@NALy qué tipo de trabajo realizaban
+eng@NALand what type of work did you do?
+TC00:08:20.670 - 00:08:21.940
+SD(0.27)
+
+
+ref@RLP
+trs@RLPawajali
+trad@RLPanteriormente
+eng@RLPbefore
+TC00:08:22.210 - 00:08:22.770
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL[inaudible]
+trad@NAL
+eng@NAL
+TC00:08:22.730 - 00:08:23.150
+SD(0.5)
+
+
+ref@RLP
+trs@RLPchak puru tyuk kajpeta' che'
+trad@RLPeran puro cortar café
+eng@RLPit was pure cutting coffee
+TC00:08:23.650 - 00:08:25.270
+SD(1.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpuru mel
+trad@RLPhacían
+eng@RLPthey did
+TC00:08:27.060 - 00:08:27.660
+SD(0.94)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcholoya kajpelel puru jujchiya  yejba kajpe ata' tyi ichajle je papaj ya' tyi chuchucruz
+trad@RLPla limpieza y raspado del cafetal era el trabajo que hizo papá en Chuchucruz
+eng@RLPthe cleaning and scraped the coffee plantation, it was the work dad did in Chachucruz
+TC00:08:28.600 - 00:08:32.970
+SD(2.01)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjujchibäl ata' iyejbal akajpe'i
+trad@RLPcada mata de café era bien cuidado
+eng@RLPeach coffee plant was well cared for
+TC00:08:34.980 - 00:08:36.910
+SD(1.93)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkaj icha' porajiñob ichajleñob abi
+trad@RLPdecía que los injertaban
+eng@RLPhe said they grafted them
+TC00:08:38.840 - 00:08:41.090
+SD(0.52)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha'an weñ mi ichachajleñ awuty che' ujtyi ityukbeñob iwuty
+trad@RLPpara que volvieran a dar un buen café en la próxima cosecha
+eng@RLPso they would give good coffee again next harvest
+TC00:08:41.610 - 00:08:44.570
+SD(1.52)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' weñ kajpeme'aku mi lokel
+trad@RLPy salía un buen café
+eng@RLP
+TC00:08:46.090 - 00:08:48.080
+SD(1.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido
+trad@RLP
+eng@RLP
+TC00:08:49.270 - 00:08:49.660
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcheta' mi yältyak bajche jiñ
+trad@RLPasí es como decía
+eng@RLPthat's how they said
+TC00:08:49.660 - 00:08:51.010
+SD(2.55)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' päjtyabeñob iwutyi chaku machäch añk mi poj lokelob ja'eli  chaku
+trad@RLPles volvían a esperar el fruto y cuando no salían (a trabajar)
+eng@RLPthey waited for the fruit again and when they didn't leave
+TC00:08:53.560 - 00:08:56.720
+SD(0.32)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäch abi tyejlob tyi kejle majl
+trad@RLPaquí mismo los venían a llevar
+eng@RLPthey brough them here
+TC00:08:57.040 - 00:08:58.420
+SD(1.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañob ata' ikaporal che'
+trad@RLPellos tenían caporal
+eng@RLPthey had a foreman
+TC00:08:59.670 - 00:09:01.000
+SD(1.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpoj k'ächälixmeku mi kotyelob tyi k'ejlel
+trad@RLPvenían montados a verlos
+eng@RLPhe came riding to see them
+TC00:09:02.660 - 00:09:04.560
+SD(1.46)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchukoch ma' ta' lokäyetyla a tyi ejtyel che' abi
+trad@RLPy porqué no salieron a trabajar que así decía
+eng@RLPand because they didn't go out to work, he said
+TC00:09:06.020 - 00:09:08.010
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäle ijkäl
+trad@RLPahora mañana
+eng@RLPnow tomorrow
+TC00:09:09.540 - 00:09:10.430
+SD(0.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchäkä k'elbime'aku mi ma' mi bujtyelob abi i...
+trad@RLPy eran bien vigilados y también cuando no llenaban su
+eng@RLPyou will be well watched and also when you didn't fill your
+TC00:09:10.730 - 00:09:13.810
+SD(0.26)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPilataj koj lata ata' mi pästyil akajpe'
+trad@RLPla lata pues era en lata como se medía el café
+eng@RLPcan, since it was in cans how they measured the coffee
+TC00:09:14.070 - 00:09:16.480
+SD(1.37)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmajkäch abi sebäch mi majlel abiyi
+trad@RLPy los que se iban temprano
+eng@RLPand those that left early
+TC00:09:17.850 - 00:09:20.440
+SD(1.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmuxtyo abi tyajob uxpe'j  lataj chape'j lataj a kajpe'
+trad@RLPellos conseguían de dos a tres latas de café
+eng@RLPthey got from two to three cans of coffee
+TC00:09:21.740 - 00:09:24.520
+SD(1.78)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpäsbi akuj tyi lataj
+trad@RLPque era medidos en lata
+eng@RLPwhich were measured in cans
+TC00:09:26.300 - 00:09:27.270
+SD(1.63)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALamachbä muk ibujtye ilatajob
+trad@NALy los que no llenaban la lata
+eng@NALand those that didn't fill the can?
+TC00:09:28.900 - 00:09:30.150
+SD(0.16)
+
+
+ref@RLP
+trs@RLPjä... matsa' bujtyi chak chejach abi mi käle
+trad@RLPjä…y los que no llenaban así quedaba
+eng@RLPja... and those that didn't fill it, that's how it stayed
+TC00:09:30.310 - 00:09:32.720
+SD(1.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach abi añik mi chäm ityojol
+trad@RLPno recibían su paga
+eng@RLPthey didn't receive their pay
+TC00:09:33.810 - 00:09:35.030
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchap'ej me'aku kiñ mi cha' butyob i...
+trad@RLPy los llenaban hasta en dos días su
+eng@RLPand they filled them even in two days
+TC00:09:36.440 - 00:09:38.470
+SD(0.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP[inaudible]
+trad@RLP
+eng@RLP
+TC00:09:39.110 - 00:09:39.930
+SD(0.1)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPilata bajche'
+trad@RLPsu lata
+eng@RLPtheir can
+TC00:09:40.030 - 00:09:40.970
+SD(0.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido
+trad@RLP
+eng@RLP
+TC00:09:41.580 - 00:09:42.700
+SD(0.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchetyakata'  tyi yälätyakob bajche jiñ
+trad@RLPasí es como comentaban
+eng@RLP
+TC00:09:43.680 - 00:09:45.000
+SD(1.48)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPiñusayob aja wolkol ta' yubiyob
+trad@RLPya ellos sufrieron fue difícil
+eng@RLPand they suffered, it was hard
+TC00:09:46.480 - 00:09:48.440
+SD(3.02)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALixku a xixikob che' chuk mi melob
+trad@NALy las mujeres qué hacían
+eng@NALand they women what did they do?
+TC00:09:51.460 - 00:09:52.760
+SD(0.67)
+
+
+ref@RLP
+trs@RLPtyuk kajpe' abi je yomobächbä
+trad@RLPlas que querían también cortaban café
+eng@RLPthey ones that wanted also cut coffee
+TC00:09:53.430 - 00:09:55.170
+SD(2.2)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyuk kajpe' abi mi chajleñob je' chaku mach ata' seje kajpe'le che'  ke' tsämä...jach ata' kajpe'lel
+trad@RLPtambién se dedicaban a cortar café es que había demasiado cafetal
+eng@RLPthey also dedicated themselves to cutting coffee, there was too much coffee plantation
+TC00:09:57.370 - 00:10:02.660
+SD(3.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñta' xchoñ kajpe'jobäta' che' xtyuk' kajpe'ob koj ipuru wiñikta' tyi ikäñäyob che' koj mata' añ acha'añ che'
+trad@RLPeran verdaderos vendedores de café y los que eran cortadores de café eran contratados pues ellos no tenían
+eng@RLPthey were true coffee salesmen, and those that were coffee cutters were contracted since they didn't have
+TC00:10:06.490 - 00:10:12.410
+SD(0.84)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñjata' icha'añob
+trad@RLPpues era de los terratenientes
+eng@RLPsince they were the landowners
+TC00:10:13.250 - 00:10:14.620
+SD(1.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ta' tyi iñusayob aja'
+trad@RLPfue así como lo pasaron
+eng@RLPthat's how they passed it
+TC00:10:16.230 - 00:10:17.550
+SD(1.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäxme'akuj ikuñ ñajtyañ je' papaj  che' tsa'abi kaj ikuñ moty ipäk' je' icha'añ ya' tyi chuchucrus
+trad@RLPpapá empezó a reflexionar y empezó a sembrar el de él en Chuchucruz
+eng@RLPdad started to reflect and he started to plant his in Chuchucruz
+TC00:10:19.190 - 00:10:23.300
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpe' jiñich abi täx kaj tyi ajlel cha'añ muxki ipästyil je' jiñ lumi
+trad@RLPpero fue cuando ya se empezó a comentar que se iban a medir el terreno
+eng@RLPbut it was when they started commenting that they were going to measure the terrain
+TC00:10:24.710 - 00:10:28.520
+SD(1.13)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäx ityaja iloñ tyajatyakob abi ilum che' chaku
+trad@RLPfue cuando consiguieron su terreno pero
+eng@RLPit was when they got their terrain, but
+TC00:10:29.650 - 00:10:32.690
+SD(1.23)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj tajtyota' kaj icha' kajityañob che' yikotyob je' yerañ che'
+trad@RLPcomo empezaron a pelear con sus hermanos
+eng@RLPsince they started fighting with their brothers
+TC00:10:33.920 - 00:10:37.170
+SD(1.63)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchilbe chilbeñob ibä tyi ikäyä ikajpelel je' ipapaj che' ta' chämi che'
+trad@RLPse quitaban entre ellos el cafetal de su papá cuando murió
+eng@RLPthey took their dad's coffee plantation from each other when he died
+TC00:10:38.800 - 00:10:42.490
+SD(1.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejta' tyi ñusayob bajche' jiñ
+trad@RLPfue así como lo pasaron
+eng@RLPthat's how they passed it
+TC00:10:44.100 - 00:10:45.520
+SD(0.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkänlaj chik'lajob abi uj...
+trad@RLPse odiaban entre ellos
+eng@RLPthey hated each other
+TC00:10:46.120 - 00:10:47.820
+SD(1.97)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido
+trad@RLP
+eng@RLP
+TC00:10:49.790 - 00:10:50.930
+SD(0.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchetyakata' mi yäl
+trad@RLPasí me comentaba
+eng@RLPthat's what they told me
+TC00:10:51.910 - 00:10:53.000
+SD(1.99)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'i che'eñ
+trad@RLPasí decía
+eng@RLPthat's what he said
+TC00:10:54.990 - 00:10:56.370
+SD(0.08)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALche'i ta' laj tyiyob yeran je' la'
+trad@NALy así se vinieron sus hermanos aquí
+eng@NALand so his brothers came here
+TC00:10:56.450 - 00:10:57.870
+SD
+
+
+ref@RLP
+trs@RLPjä ta'ta' chaj luj tyili käsa tsik käleyob je' yaj
+trad@RLPse vinieron todos nadie se quedó allá
+eng@RLPthey all came here, no one stayed there
+TC00:10:57.750 - 00:11:00.430
+SD(1.72)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta' chaj luj tyiyob je'
+trad@RLPse vinieron todos
+eng@RLPthey all came
+TC00:11:02.150 - 00:11:03.560
+SD(1.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALa xixikbä yerañ che' ma'añik
+trad@NALy sus hermanas no tenia
+eng@NALand his sisters, he didn't have
+TC00:11:04.860 - 00:11:06.440
+SD
+
+
+ref@RLP
+trs@RLPmata' mata' xixik wätsa ta' tyili alak chichi
+trad@RLPno no tenia hermana aquí se vino su hermana
+eng@RLPno he didn't have a sister, his sister came here
+TC00:11:06.360 - 00:11:09.380
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkojata' yikoty bajche' ixä imama pelipej
+trad@RLPera la única así como la mamá de Felipe
+eng@RLPshe was the only one like that like Felipe's mom
+TC00:11:10.340 - 00:11:13.430
+SD(1.1)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäjta' ta' chaj tyil aja'
+trad@RLPaquí se volvió a venir
+eng@RLPhere he came again
+TC00:11:14.530 - 00:11:15.820
+SD(1.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyikoty je' lak tyaty sebastian che' wäjta' ta' chaj tyili ja'e
+trad@RLPy también el señor Sebastián aquí se vino
+eng@RLPalso Mr Sebatian he came here
+TC00:11:17.420 - 00:11:20.630
+SD(1.97)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäjta' ta' luj much' tyiyob
+trad@RLPaquí se vinieron todos
+eng@RLPthey all came here
+TC00:11:22.600 - 00:11:24.370
+SD(0.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchaj jocholta' ta' kälej je' yaj
+trad@RLPy allá nadie se quedó
+eng@RLPno one stayed there
+TC00:11:24.900 - 00:11:26.520
+SD(1.15)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyañbäyixe'akuj majk tyi chämä akajpelel
+trad@RLPy fue otro quien se quedó con el cafetal
+eng@RLPand it was someone else who kept the coffee plantation
+TC00:11:27.670 - 00:11:30.150
+SD(0.94)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejta' mi yäl
+trad@RLPasí decía
+eng@RLPthat's what he said
+TC00:11:31.090 - 00:11:31.980
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyambäyix tyi ichämäyob kajpelel chejta' ja'el
+trad@RLPfueron otros quienes se quedó el cafetal decía
+eng@RLPit was to other that the coffee plantation was left, said
+TC00:11:33.510 - 00:11:36.280
+SD(0.78)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkña'i koj kña' chejta' mi isubeñ imamaj
+trad@RLPigual la señora la señora como se refería a su mamá
+eng@RLPanyway the woman, the woman like how he refered to his mom
+TC00:11:37.060 - 00:11:39.460
+SD(2.03)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta'tyo itsajleyon ja'el pe' tsa'ta' ichaj käyä je' ikajpelel ilumil yotyotyi che'ta'
+trad@RLPtambién me llegó a odiar y también ella dejó abandonado el cafetal y el terreno de su casa decía
+eng@RLPalso she came to hate me and also she left the coffee plantation abandoned and the terrain of her house, she said
+TC00:11:41.490 - 00:11:46.370
+SD(2.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche' abi tyi iñusayob bajche' jiñi
+trad@RLPque así lo pasaron
+eng@RLPand that's how they went
+TC00:11:48.580 - 00:11:50.730
+SD(4.44)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALlaj che' tyi ñusayob o baja jiñjach
+trad@NALasí lo pasaron todos o fue la única situación
+eng@NALand that's how it went for all of them or was it the only situation?
+TC00:11:55.170 - 00:11:56.880
+SD(0.47)
+
+
+ref@RLP
+trs@RLPmajmej che'ikäch tyi iluj iñusayob je' yañobä
+trad@RLPcreo que así lo pasaron las demás personas
+eng@RLPI think that's how it when for the other people
+TC00:11:57.350 - 00:11:59.850
+SD(2.26)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ta' tyi iñusayob a ixä ñoxtyakobixbä ta' kälaj
+trad@RLPvi que fue la misma situación que pasaron las personas ancianas
+eng@RLPI saw that it was the same situation that the old people went through
+TC00:12:02.110 - 00:12:04.440
+SD(1.1)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ich ata' tyi iluj ñusayob
+trad@RLPasí lo pasaron todos
+eng@RLPthat's how it went for all of them
+TC00:12:05.540 - 00:12:07.090
+SD(1.03)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj ya'jata' luj añob yaj che' pejtyel yañbä ejidotyak yañbä koloniatyak abi
+trad@RLPes que allí estaban las personas de otros ejidos y colonias
+eng@RLPit's that there were the people from other cooperatives and colonies
+TC00:12:08.120 - 00:12:12.670
+SD(1.47)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbajach ata' tyilemob je' xtyuk kajpej tyi chajleyob che'
+trad@RLPlos trabajadores de café provenían de lugares diferentes
+eng@RLPthe coffee workers came from different places
+TC00:12:14.140 - 00:12:17.650
+SD(2.92)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALpuru lak tyañ tyi käñätyakob a che'iñi
+trad@NALutilizaban nuestra lengua (ch’ol)
+eng@NALthey used our tongue
+TC00:12:20.570 - 00:12:22.330
+SD
+
+
+ref@RLP
+trs@RLPjänkej
+trad@RLPasí es
+eng@RLPthat's how it is
+TC00:12:21.850 - 00:12:22.630
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALo añ yañbä
+trad@NALo había otro
+eng@NALor was there another?
+TC00:12:22.620 - 00:12:24.040
+SD(0.56)
+
+
+ref@RLP
+trs@RLPpuruj puruj lak... jänkej
+trad@RLPera puru…así es
+eng@RLPit was puru... that's how it was
+TC00:12:24.600 - 00:12:26.850
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALxtseltalob tsotsil
+trad@NALtseltales tzotsiles
+eng@NALtseltales tzotsiles
+TC00:12:25.140 - 00:12:26.860
+SD(1.05)
+
+
+ref@RLP
+trs@RLPyañbäyobix ja'e jiñ tseltalobix mi käl partejob
+trad@RLPpienso que los tzeltales eran otros
+eng@RLPI think the tzeltales were others
+TC00:12:27.910 - 00:12:32.810
+SD(1.02)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmuch' jiñobjachkata' a lak pi'ilobkata' wäle chaku poj mata' laj käñätyakob che'
+trad@RLPlas personas los formaban un solo grupo pero como no se conocían
+eng@RLPthe people made them one whole group, but they didn't know each other
+TC00:12:33.830 - 00:12:38.510
+SD(0.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjontyolobta'
+trad@RLPeran malos
+eng@RLPthey were bad
+TC00:12:39.410 - 00:12:40.550
+SD(2.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejta' tyi iñusa' a papaj bajche' jiñ
+trad@RLPasí fue como vivió papá
+eng@RLPthat's how dad lived
+TC00:12:43.210 - 00:12:45.610
+SD(3.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALixku ache' ñaxan xjulelobtyo che' oñkuta' lum tyi mach oñik alum tyi tyajayob a xjulel
+trad@NALy los primeros pobladores recibieron bastante terreno o no fue mucho
+eng@NALand the first inhabitants received much land or was it not much?
+TC00:12:48.720 - 00:12:53.190
+SD(0.24)
+
+
+ref@RLP
+trs@RLPoñ tyoj oñtyakäxkata' alum tyi tyajayob a ilalij
+trad@RLPfue bastante el terreno que recibieron aquí
+eng@RLPit was plenty, the terrain they got here
+TC00:12:53.430 - 00:12:57.140
+SD(0.63)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñukleta lum che'
+trad@RLPera bastante terreno
+eng@RLPit was plenty terrain
+TC00:12:57.770 - 00:12:59.320
+SD(0.86)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkälä maj tyi cheberia
+trad@RLPllegaba hasta Echeverría
+eng@RLPit went until Echeverría
+TC00:13:00.180 - 00:13:01.290
+SD(1.81)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcheberia che' mutyota' imäktyañob ta' yälä cha'añ
+trad@RLPEcheverría dijeron que lo iban a reservar para
+eng@RLPEcheverría they said they were going to reserve for
+TC00:13:03.100 - 00:13:05.670
+SD(0.99)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi täx koliyob ichityoñob ta' loñ ajliyi
+trad@RLPque cuando crecieran sus hijos dijeron
+eng@RLPwhen their kids grew up, they said
+TC00:13:06.660 - 00:13:09.250
+SD(0.72)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi majlelob tyi loñ alä koj matsa' añ jiñta' a domkuj kusman che'
+trad@RLPse iban a ir para allá decían pero no ya que Domingo Guzmán
+eng@RLPthey were going to go there, they said, but no longer now that Domingo Guzmán
+TC00:13:09.970 - 00:13:14.020
+SD(1.06)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPipoj waj tyempañob amajl ibä kola aya' koxlaj kbajan mel lak cha'añ loñ che'obata' ja'el
+trad@RLPempezó a reunir personas para ir vamos allá vamos a hacer nuestro ejido decían
+eng@RLPstarted to gather people to go, lets go there lets go make our cooperative, they said
+TC00:13:15.080 - 00:13:20.440
+SD(1.71)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyikoty bajche' ixä ipapaj risa che' tsajtyakobta' che' iwox kuchob ichim
+trad@RLPjunto con el papá de Risa fueron a cargar sus morrales
+eng@RLPtogether with Risa's dad they went to load their packs
+TC00:13:22.150 - 00:13:26.770
+SD(1.71)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyäxek ya' tyi kaj iwetsbeñob ochel iyum yambä koloñatyakäxekuj  ya' ta' ajñi
+trad@RLPde ahí le empezó a meter personas de otras colonias y allí se quedaron
+eng@RLPfrom there, there started to be people from other colonies and there they stayed
+TC00:13:28.480 - 00:13:32.830
+SD(0.38)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPamata' ya' ta' chaj käle je' lomkuj kusman che'
+trad@RLPy no se quedó allí el Domingo Guzmán
+eng@RLPand he didn't stay there, the Domingo Guzmán
+TC00:13:33.210 - 00:13:35.560
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtajata' chaj tyiliyob
+trad@RLPse volvieron a venir
+eng@RLPthey came back again
+TC00:13:36.390 - 00:13:37.710
+SD(1.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñmekta' cha'añ chäch mi chän subeñob je' che' añ chuj yom iloñ chän mel koj isujmäta' ja'el
+trad@RLPy por eso así se lo dicen cuando quiere planear algo y están en lo correcto
+eng@RLPand because of that they tell him when they want to plan something and it's in the right
+TC00:13:39.400 - 00:13:43.880
+SD(2.02)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALchuk mi subeñtyakob
+trad@NALy qué le dicen
+eng@NALand what do they tell him?
+TC00:13:45.900 - 00:13:46.880
+SD(0.99)
+
+
+ref@RLP
+trs@RLPmi subeñ cha'añ tyi loñ majl imäktyañ aya' tyi kaj iyäk iyotsabeñ majl iyum
+trad@RLPle dicen que fue a vivir allá y permitió que entraran otras personas
+eng@RLPthey tell him that he went to work there and allowed other people to come in
+TC00:13:47.870 - 00:13:53.240
+SD(0.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj jiñtsa' tyi kaj ibajañ otsabeñob iyum che'
+trad@RLPporque fue el que le metió otros dueños
+eng@RLPbecause it was him that brought in other owners
+TC00:13:53.930 - 00:13:56.460
+SD(0.65)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmatsa' laj kux ba' choyoltyak iyum ta' kotyi a ya' tyi cheberia che'
+trad@RLPes que ya no sabemos de dónde venían los que llegaron a Echeverría
+eng@RLPit's that now we don't know where they came from the ones that got to Echeverría
+TC00:13:57.110 - 00:14:00.590
+SD(3.02)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejata' ta' ujtyi bajche' jiñi ta'
+trad@RLPfue así como terminó
+eng@RLPthat's how it ended
+TC00:14:03.610 - 00:14:05.500
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj loñ wäxtyokta' mi kälä ajñetyakob tyi samblea a ila che'
+trad@RLPanteriormente hasta aquí venían (los de Echeverría) a la asamblea
+eng@RLPbefore, they even came out here (the ones from Echeverría) to the assembly
+TC00:14:07.030 - 00:14:09.990
+SD(0.59)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmata' añ täxtaj ikäyäyob koj täxata' a baja
+trad@RLPahora ya no pues lo dejaron porque ya
+eng@RLPnot any more now, the left it because now
+TC00:14:10.580 - 00:14:13.210
+SD(0.71)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyoxoyob ibä che'
+trad@RLPse dividieron
+eng@RLPthey divided
+TC00:14:13.920 - 00:14:15.400
+SD(2.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'akta' baje jiñ
+trad@RLPque así fue
+eng@RLPthat's how
+TC00:14:17.590 - 00:14:18.530
+SD(1.24)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñuklelächkata' tyi tyajayob alumkata' jiñ chaku
+trad@RLPfue bastante el terreno que consiguieron pero
+eng@RLPit was a lot, the terrain they got, but
+TC00:14:19.770 - 00:14:22.710
+SD(1.15)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpartetaj ta' ochi iyum
+trad@RLPentraron otros a adueñarse
+eng@RLPothers came it to take it
+TC00:14:23.860 - 00:14:25.220
+SD(0.24)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPache' machäkach ta' loñ tyoj majlyob je' che' mata'
+trad@RLPsi no fuera por ellos que se fueron
+eng@RLPif it wasn't for those that left
+TC00:14:25.460 - 00:14:28.180
+SD(0.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiñobäch ata' yalobilob ya' ta' majli
+trad@RLPsus hijos se habrían ido allá
+eng@RLPtheir kids would have gone there
+TC00:14:28.840 - 00:14:30.810
+SD(3.05)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtächta' iloñ baja mäktya apapaj che'...yuke
+trad@RLPpapá lo había reservado para eso pero
+eng@RLPdad had reserved it for that, but
+TC00:14:33.860 - 00:14:37.220
+SD(0.81)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjäñichtsa' chaj tsajleñtyeli ajleñtyeli
+trad@RLPde nueva cuenta empezó el odio y el regaño
+eng@RLPagain started the hate and the scoldings
+TC00:14:38.030 - 00:14:41.170
+SD(0.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj mata' añ je' chityoñbä yalobil che'
+trad@RLPcomo no tenía hijo varón
+eng@RLPsince he didn't have a male
+TC00:14:41.780 - 00:14:44.120
+SD(1.13)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPloñ baja jiñjata' ajabel
+trad@RLPera únicamente Abel
+eng@RLPit was only Abel
+TC00:14:45.250 - 00:14:46.620
+SD(2.22)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido...
+trad@RLP
+eng@RLP
+TC00:14:48.840 - 00:14:49.780
+SD(0.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcheta' tyi yälätyak baje' jiñ
+trad@RLPasí comentaba
+eng@RLPso he said
+TC00:14:50.440 - 00:14:51.880
+SD(3.7)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ta' tyi iñusayob baje' jiñ chejax baje' jiñ
+trad@RLPfue así como lo pasaron solamente así
+eng@RLPthat's how they were, just like that
+TC00:14:55.580 - 00:14:57.720
+SD(1.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkojachi akajaltyakbä kcha'añ ja'el
+trad@RLPsolo me acuerdo de eso
+eng@RLPI just remember that
+TC00:14:59.380 - 00:15:02.080
+SD(1.31)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañtyakächkaj icha'añ papaj wäle chakuj mata' chän luj kajalix lak cha'añ aja'
+trad@RLPpapá tenía otras cosas seguramente pero ya no me acuerdo de todo
+eng@RLPdad had other things, surely, but I don't remember at all
+TC00:15:03.390 - 00:15:06.910
+SD(1.37)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbajche' tyi iñusayob k'iñ bajche' tyi iñusayob oraj
+trad@RLPcómo pasaron el día y cómo pasaron la hora
+eng@RLPhow they spend the day and the hour
+TC00:15:08.280 - 00:15:11.170
+SD(2.78)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALbaje' oratyak mi ichojyeltyakob a che' ejtyel
+trad@NALa qué hora se levantaban en la mañana
+eng@NALat what time did they get up in the morning?
+TC00:15:13.950 - 00:15:16.410
+SD(0.08)
+
+
+ref@RLP
+trs@RLPchakuj junya alas sinkojtyo abi' mi majlelob uj
+trad@RLPellos se iban (al trabajo) a las cinco
+eng@RLPthey left (for work) at five
+TC00:15:16.490 - 00:15:19.240
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPalas sinkotyo abi' yax abi' kotyelob a che' isäk'añ
+trad@RLPse iban a las cinco y cuando terminaba de amanecer ya estaban allí
+eng@RLPthey left at five and when dawn was over, they were already there
+TC00:15:20.070 - 00:15:24.090
+SD(0.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALiyok
+trad@NALen pata
+eng@NALon foot?
+TC00:15:24.280 - 00:15:25.010
+SD
+
+
+ref@RLP
+trs@RLPjänkej koj yokobta' che'
+trad@RLPsí en pata pues caminaban
+eng@RLPyes, on foot since they walked
+TC00:15:24.720 - 00:15:26.220
+SD(1.39)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchaj las sinkoj de la tartej mi kotyelobtyo abi'
+trad@RLPy a las cinco también regresaban
+eng@RLPand at five also they came back
+TC00:15:27.610 - 00:15:30.710
+SD(0.22)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido...
+trad@RLP
+eng@RLP
+TC00:15:30.930 - 00:15:34.170
+SD(1.16)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALache'iñ este
+trad@NALy así este
+eng@NALand like that
+TC00:15:35.330 - 00:15:36.640
+SD(2.83)
+
+
+ref@RLP
+trs@RLPchejach baje jiñ mi yältyak mi kloñ ubiñ
+trad@RLPescuchaba que comentaba
+eng@RLPI listened to what they said
+TC00:15:39.470 - 00:15:42.040
+SD(1.73)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach ik'ächich mi chojyelob bätyan je' xpechoñ xjuchbal
+trad@RLPlos que hacían tortilla y molían también se levantaban muy de mañana
+eng@RLPthe ones that made tortilla and grinded also woke up very in the morning
+TC00:15:43.770 - 00:15:47.860
+SD(0.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido...
+trad@RLP
+eng@RLP
+TC00:15:48.500 - 00:15:50.370
+SD(5.0)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPicha'añob che' machmek añik chejachme'akuj yi muchmuch k'exob tyi yixim
+trad@RLPde ellos pues no había nada solo entre poquitos cocían el maíz
+eng@RLPfrom them there was nothing, they only knew a little about corn
+TC00:15:55.370 - 00:15:58.940
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyi ityojolob che' mi much chämob abi sujtyel je' yixim
+trad@RLPsu recompensas era regresar a sus casas con un poquito de maíz
+eng@RLPtheir reward was coming home with a little corn
+TC00:16:00.470 - 00:16:03.440
+SD(0.71)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach abi baje jiñ
+trad@RLPasí fue
+eng@RLPthat's how it was
+TC00:16:04.150 - 00:16:05.360
+SD(1.38)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmata' añ baj kä mel ichol che'
+trad@RLPpues no tenían donde hacer milpa
+eng@RLPsince they didn't have where to do
+TC00:16:06.740 - 00:16:08.430
+SD(2.78)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ata' iñusayob
+trad@RLPque así sobrevivieron
+eng@RLPso they survived
+TC00:16:11.210 - 00:16:13.680
+SD(0.31)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALche'iñi much ijastyiyeltyak iyiximob
+trad@NALy así les rendía su maíz
+eng@NALand that's how the corn was enough??
+TC00:16:13.990 - 00:16:15.680
+SD
+
+
+ref@RLP
+trs@RLPchak chuk kä ityubeñ
+trad@RLPque le iban  hacer
+eng@RLPwhat were they to do?
+TC00:16:15.380 - 00:16:16.760
+SD(1.57)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchuk kä tyubeñ bätyañ ta'ta' kaj k'el je' che' mata' añobik ichol
+trad@RLPque le iban hacer cuando empecé a verlos no tenían milpa
+eng@RLPwhat were they going to do, I started to see them, they didn't have crop
+TC00:16:18.330 - 00:16:22.390
+SD(1.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta' kaj k'el je' kpapa che'iñi wokoläch mi yubiñ
+trad@RLPcuando vi a mi papá estaba sufriendo
+eng@RLPwhen I saw my dad he was already suffering
+TC00:16:23.600 - 00:16:27.610
+SD(1.88)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñaxan ata' mi kotyañob tyi ejtyel tyita' ikajtyibeyob ilum akaxlañ ba' mi melob ichol che'
+trad@RLPprimero ayudaban a los ladinos en sus trabajos y ya luego pedían el lugar para hacer sus milpas
+eng@RLPFirst they helped the ladinos in their jobs and then asked for space to make their crops
+TC00:16:29.490 - 00:16:34.130
+SD(0.45)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñaxañ ata' mi kotyañob tyi yejtyel muchmekuj yi joy akeñtyelob chaku bajchetyo k'amel
+trad@RLPprimero los ayudaban a trabajar y luego se les daba un pedazo de terreno para sus milpas
+eng@RLPfirst they helped them and then they were given a bit of land to make their crops
+TC00:16:34.580 - 00:16:39.950
+SD(2.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach tyi ñusatyakob ta' k'ele ja'el
+trad@RLPde esa manera fue como lo pasaron
+eng@RLPthat's how it went
+TC00:16:42.130 - 00:16:44.120
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPruido...
+trad@RLP
+eng@RLP
+TC00:16:45.080 - 00:16:47.490
+SD(0.38)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPje' yuk mach tyijikñayich tyi iñusayob uj
+trad@RLPno era nada fácil lo que vivieron
+eng@RLPit wasn't at all easy what they lived
+TC00:16:47.870 - 00:16:49.940
+SD(1.03)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALixkuj ajalobob che' mak muj tyi ejtyel je' baje jiñ
+trad@NALy en el caso de los niños no trabajaban de esa forma
+eng@NALand as far as kids, they didn't work?
+TC00:16:50.970 - 00:16:53.180
+SD
+
+
+ref@RLP
+trs@RLPmaxtyo
+trad@RLPtodavía no
+eng@RLPnot yet
+TC00:16:53.110 - 00:16:53.890
+SD(1.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach machtyo akuj  koj mach ata' añ ta' ochi tyi eskuela je' papaj che'
+trad@RLPque todavía no que papá no fue a la escuela
+eng@RLPnot yet that dad didn't go to school
+TC00:16:54.980 - 00:16:58.660
+SD(1.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'ebich ata' ityojol je' imanta bujk koj yaj manta mi läpop che' käsa che'ikäch pantalon je' baje ili
+trad@RLPpensaba que con lo que ganaba tenía para su camisa de manta era todo de manta no eran los mismos pantalones de ahora
+eng@RLPthey though that with what they made they had enough for their calico shirt , it was all calico, they weren't the same pants from now
+TC00:16:59.840 - 00:17:04.870
+SD(0.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmu'achata' itsitstyil a iwexob ibujkob
+trad@RLPsus camisas y pantalones se les costuraba
+eng@RLPtheir shirts and pants were sown
+TC00:17:05.660 - 00:17:08.800
+SD(1.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi täx abi ujtyiyob a tyi yejtyeli  mi wis chämob abi yaj
+trad@RLPcuando terminaban sus trabajos recibían algo
+eng@RLPwhen they finished their work they received something
+TC00:17:09.910 - 00:17:14.620
+SD(1.13)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma' yaj bente sentabo koj chej mi kloñ ubiñ aja'
+trad@RLPque eran veinte centavos los que escuchaba
+eng@RLPthat was twenty cents, the ones I heard
+TC00:17:15.750 - 00:17:19.630
+SD(1.26)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchakuj mata' poj jubäkäxtyo ityojoltyak je' manta wajali
+trad@RLPcreo que la manta era un poco barato anteriormente
+eng@RLPI think calico was a little cheaper before
+TC00:17:20.890 - 00:17:23.990
+SD(0.76)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmu'abi yi wäs chämob ityojol che' waj chämobäx abi imanta bujki muj abi  yäkob tyi tsitstyil
+trad@RLPcuando recibían sus pagos ellos adquirían sus mantas para la camisa y los mandaban a cocer
+eng@RLPwhen they got their pay, they got their calico for their shirt and they sent it to be sown
+TC00:17:24.750 - 00:17:29.730
+SD(2.89)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkäsa chetyakob pälob iwex yaj xborwextyakob abi
+trad@RLPsus pantalones no eran largos eran cortos
+eng@RLPtheir pants weren't long, they were short
+TC00:17:32.620 - 00:17:36.660
+SD(0.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPabi a wajaliyi
+trad@RLPanteriormente
+eng@RLPbefore
+TC00:17:37.530 - 00:17:38.720
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach añch ta' kloñ chäñ k'ele ja'el
+trad@RLPyo eso ya no los vi
+eng@RLPand that I didn't see
+TC00:17:40.250 - 00:17:42.480
+SD(1.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpantaloñtyakäxta' ta' kaj k'el
+trad@RLPvi los pantalones ya normales
+eng@RLPI saw the regular pants
+TC00:17:44.380 - 00:17:46.520
+SD(0.58)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'ta' tyi yesmayob abi a bajche' jiñ
+trad@RLPasí fue lo que enfrentaron
+eng@RLPthat's what they faced
+TC00:17:47.100 - 00:17:48.890
+SD(2.51)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmach chäkäch je' yijñabob
+trad@RLPasí pasaba con sus esposas
+eng@RLPthat's how it was with their wives
+TC00:17:51.400 - 00:17:52.850
+SD(1.39)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPiwaj chämbeñ manta ja'el
+trad@RLPse les adquiría la manta de igual forma
+eng@RLPthey got the calico for them
+TC00:17:54.240 - 00:17:55.670
+SD(1.17)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPibujkä
+trad@RLPsus vestidos
+eng@RLPtheir dresses
+TC00:17:56.840 - 00:17:57.760
+SD(1.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwaj ch'ämob je' imajtsä chakuj jubemäxtyo je' majtsäli
+trad@RLPse les adquirían sus faldas creo que era un poco barato
+eng@RLPthey got them their skirts, I think they were cheaper
+TC00:17:59.260 - 00:18:02.710
+SD(1.02)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsinkuenta sentabojächta' jump'ej korte je' majtsäl ta' kaj k'el
+trad@RLPempecé a ver que la falda costaba cincuenta centavos
+eng@RLPI started to see the skirt cost fifty cents
+TC00:18:03.730 - 00:18:06.950
+SD(1.54)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchap'ejixtyota' ixä yaj koj sien pesujixta' mi yälob a ixä käñtsiñanbä
+trad@RLPeran dos los de cien pesos que decían eran amarillentos
+eng@RLPit was two of the hundred pesos that they said were yellowish
+TC00:18:08.490 - 00:18:12.610
+SD(1.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsien pesu abi aja'
+trad@RLPque era de cien peso
+eng@RLPthat was one hundred weight
+TC00:18:14.270 - 00:18:15.360
+SD(1.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsinkuenta pesu abi yaj sinkuenta sentabo
+trad@RLPel de cincuenta centavo era cincuenta peso
+eng@RLPthe fifty cent one was fifty weight
+TC00:18:17.150 - 00:18:19.780
+SD(1.56)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäxtyo kxuty k'ele a jiñ pe' chejach ta' k'ele baje' jiñ
+trad@RLPeso los vi un poco solamente los vi
+eng@RLPthose I only saw a little, I only saw
+TC00:18:21.340 - 00:18:24.550
+SD(1.14)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchak bak maj tyaj
+trad@RLPpero donde los conseguías
+eng@RLPbut where you found them
+TC00:18:25.690 - 00:18:26.920
+SD(0.45)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchuk jop' achoñ
+trad@RLPqué podías vender
+eng@RLPthat you could sell
+TC00:18:27.370 - 00:18:28.860
+SD(1.72)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwokol uj...
+trad@RLPera difícil
+eng@RLPwas hard
+TC00:18:30.580 - 00:18:32.280
+SD(3.43)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejaxtyo bajche' jiñ
+trad@RLPasí era
+eng@RLPthat's how it was
+TC00:18:35.710 - 00:18:36.950
+SD(0.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmak' chuj tyi polotyakob a che' añob tyi yum mak iwa ichityam imuty bajche'
+trad@NALcuando estaban con sus patrones no producían nada de cerdos o pollos
+eng@NALwhen they were with their boses they didn't produce any pigs or chickens?
+TC00:18:37.140 - 00:18:43.220
+SD
+
+
+ref@RLP
+trs@RLPjä'ä ma'añik
+trad@RLPno nada
+eng@RLPno, none
+TC00:18:38.970 - 00:18:42.560
+SD(1.33)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'iñi bak' abi mi tyajbeñob yixim
+trad@RLPpues no les podían conseguir su maíz
+eng@RLPsince they couldn't get their corn
+TC00:18:43.890 - 00:18:45.430
+SD(1.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma'añik
+trad@RLPno
+eng@RLPno
+TC00:18:47.220 - 00:18:47.920
+SD(1.57)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyoj chejach
+trad@RLPasí solamente
+eng@RLPlike that only
+TC00:18:49.490 - 00:18:50.390
+SD(3.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi muty chujbä mata' añ tyoj chejach abi mi
+trad@RLPni sus pollos no tenían nada de esa forma fue
+eng@RLPor their chickens, they didn't have anything that way, it was
+TC00:18:53.500 - 00:18:57.510
+SD(2.63)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALbajche' ta' kaj tyi tyilelob a jiñ che' añobi yumil che'
+trad@NALcómo que fue que vinieron si tenían sus patrones
+eng@NALlike how was it that they came if they had their bosses?
+TC00:19:00.140 - 00:19:02.760
+SD(0.57)
+
+
+ref@RLP
+trs@RLPa añbä iyum
+trad@RLPahh, los que tenían sus patrones
+eng@RLPahh, those that had their bosses
+TC00:19:03.330 - 00:19:04.470
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALjäjä
+trad@NALsí sí
+eng@NALyes yes
+TC00:19:04.160 - 00:19:04.860
+SD
+
+
+ref@RLP
+trs@RLPkoj täxta' kaj ikäyob che'
+trad@RLPcomo los empezaron a abandonar
+eng@RLPsince they started to abandon them
+TC00:19:04.600 - 00:19:05.930
+SD(1.44)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäx ata' kaj ikäy je' mach ata' mach ta' kaj ichän melbe yejtyel
+trad@RLPlos abandonaron ya no hubo quien les hiciera el trabajo
+eng@RLPthey abandoned them, then there was no one to do their work
+TC00:19:07.370 - 00:19:10.360
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachme'akuj ta' käle ja'el
+trad@RLPde esa forma los abandonaron
+eng@RLPin that way they abandoned them
+TC00:19:11.190 - 00:19:12.640
+SD(1.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkoj puruj wiñikta' mi käñob aja' raul raul tyi ikababä kaxlañ
+trad@RLPcomo siempre utilizaban empleados el Raúl Raúl así se llamaba el ladino
+eng@RLPsince they always used employees, Raúl Raúl, that's what the ladino was called
+TC00:19:14.470 - 00:19:19.440
+SD(2.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha'p'ejachbä jäch
+trad@RLPdos de
+eng@RLPtwo of
+TC00:19:21.740 - 00:19:23.020
+SD(1.4)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchumtyälbä kaxlañ mi kloñ k'el ja'el täxtyo jk'ele pe' ipapajäch a ubi
+trad@RLPvi que era uno de los ladinos que habitaban era el papá de
+eng@RLPI saw that one of the ladinos that lived there was the dad of
+TC00:19:24.420 - 00:19:29.110
+SD(0.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPa ubi lino lino che' mi isubeñob mi kloñ ubiñ
+trad@RLPel Lino Lino así escuchaba que les decían
+eng@RLPthe Lino Lino, so I heard that they said
+TC00:19:29.750 - 00:19:32.580
+SD(4.77)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchuk aja' añobäxekuj iwakax aj
+trad@RLPya ellos tenían sus ganados
+eng@RLPthey already had their cattle
+TC00:19:37.350 - 00:19:39.250
+SD(4.77)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi majl tyi tyilelob abi i ilembali chaku kälä ata' tyi saltu
+trad@RLPsus aguardientes se los traían desde Salto
+eng@RLPtheir liquor they brought from Salto
+TC00:19:44.020 - 00:19:49.040
+SD(0.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchojke majl juntyikil abi a xkuch lembal
+trad@RLPse enviaba a uno para cargar el aguardiente
+eng@RLPthey sent one to carry the liquor
+TC00:19:49.730 - 00:19:52.120
+SD(0.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi lata abi mi tyel a lembal jiñme'akuj mi chäkchäk jebeñtyelob a che'
+trad@RLPel aguardiente los trasladaban en lata y se les servían cuando
+eng@RLPthe liquor they transported in cans and they served them when
+TC00:19:52.760 - 00:19:56.410
+SD(0.47)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyujtyelob abi a tyi tyuk kajpej
+trad@RLPterminaban de cortar el café
+eng@RLPwhen they finished cutting the coffee
+TC00:19:56.880 - 00:19:58.500
+SD(1.12)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpoj yäktyakobixe'akuj mi sujtyel che'tyaktya mi yälob
+trad@RLPse retiraban ya borrachos así decían
+eng@RLPthey left already drunk, they said
+TC00:19:59.620 - 00:20:03.470
+SD(1.47)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchäch mi käl ja'el tächta' k'ele k'eletyakob xlembal awajali
+trad@RLPyo digo que así fue pues veía a borrachos
+eng@RLPI say it it was like that since I saw drunks
+TC00:20:04.940 - 00:20:10.450
+SD(2.74)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkala wejlabob mi sujtyelob majl
+trad@RLPiban gritando en sus regresos
+eng@RLPthey went shouting on their return
+TC00:20:13.190 - 00:20:15.790
+SD(1.03)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyuk kajpe'äl a chak tsityatyoj a jiñ
+trad@RLPlos cortadores de café no eran pocos
+eng@RLPthey coffee cutters weren't few
+TC00:20:16.820 - 00:20:19.680
+SD(2.48)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjunya ochiyob tyi rikuj aja'
+trad@RLPse convirtieron en ricos (los ladinos)
+eng@RLPthey became rich (the ladinos)
+TC00:20:22.160 - 00:20:23.900
+SD(2.38)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäxekuj kaj isäklañobäx ilum je' wiñikob che'iñi tyajtyakobix ilumi tyi kaj baja melobäx abi icha'añ
+trad@RLPlos hombres empezaron a buscar sus terrenos y ya cuando consiguieron sus terrenos empezaron a hacer sus propios trabajos
+eng@RLPthe men started to look for their terrains and when they found their terrains they started to make their own work
+TC00:20:26.280 - 00:20:32.340
+SD(1.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäxme'akuj käleyob chaku chuki koj añobixta' iwakax aja'
+trad@RLPde esa forma se quedaron (los ladinos) pero ya ellos tenían sus ganados
+eng@RLPin that way they stayed (the ladinos), but they also had their cattle
+TC00:20:33.550 - 00:20:37.570
+SD(2.0)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'tyakta' aja'
+trad@RLPasí fue
+eng@RLPthat's how it was
+TC00:20:39.570 - 00:20:40.470
+SD(2.81)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'jach a tyi imeleyob bajche' jiñ
+trad@RLPasí fue como le hicieron
+eng@RLPthat's how they did it
+TC00:20:43.280 - 00:20:44.870
+SD(4.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ta' jkubi bajche' jiñ
+trad@RLPasi es nomas
+eng@RLPthat's how it was
+TC00:20:49.660 - 00:20:50.950
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NALbaki tyälem tyako' bajiñ kaxlañ ty'añ mu'bu mel
+trs@NALde donde proviene las palabras nuevas que se manejan
+trad@NALwhere did the new word that were used come from?
+eng@NAL
+TC00:20:50.400 - 00:20:52.880
+SD(0.36)
+
+
+ref@RLP
+trs@RLPtsu'kux
+trad@RLPasi es
+eng@RLPthat's how it is
+TC00:20:53.240 - 00:20:54.110
+SD(1.31)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtumbala tsajñiyety papa
+trad@RLPen tumbala fuiste papa
+eng@RLPin tumbala you were dad
+TC00:20:55.420 - 00:20:56.620
+SD(0.96)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'älä ta' tumbala che'eñ
+trad@RLPllegue asta tumbala, dice
+eng@RLPmake it to tumbala, he says
+TC00:20:57.580 - 00:20:59.370
+SD(1.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchäñ muk'obä ñumel tyi
+trad@RLP
+eng@RLP
+TC00:21:01.350 - 00:21:02.600
+SD(0.26)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi much'ki tyi yambä oraj
+trad@RLPlo ajunto aquella vez
+eng@RLPhe added it that time
+TC00:21:02.860 - 00:21:04.630
+SD(0.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmak che'ik mi lok'el
+trad@RLPno sale así
+eng@RLPshe doesn't go out like that
+TC00:21:05.320 - 00:21:06.570
+SD(1.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjujp'embä xiñolaj yilaj
+trad@RLPparece una mujer gorda
+eng@RLPshe looks like a fat woman
+TC00:21:08.210 - 00:21:10.390
+SD(1.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañach ta' tyi tumbala
+trad@RLPsi hay en tumbala
+eng@RLPyes there is in tumbala
+TC00:21:11.640 - 00:21:12.850
+SD(3.17)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtsañixbi tyi tumbala, añächbi ch'oyoltyobä tyi tumbala tsajñäxbä k'el
+trad@RLPllegan en ocasiones en tumbala, hay algunos provenientes de tumbala los que llegan aver
+eng@RLPthere arrive sometimes in tumbala, there are some foreign students to tumbala that show up
+TC00:21:16.020 - 00:21:18.830
+SD(2.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPikäñätyako'ba ts'ak a papa niko
+trad@RLPconoce algunas planta medicinales tu papa niko
+eng@RLPyour dad knows some medicinal plants, Nico
+TC00:21:21.430 - 00:21:23.680
+SD(1.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPches añäye
+trad@RLP
+eng@RLP
+TC00:21:25.280 - 00:21:26.050
+SD(4.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjinta' che' mi k'uxo li chityam   tyi maj ichoño'ba lewi
+trad@RLPcuando comen el cerdo en ese momento vender la grasa
+eng@RLPwhen they eat the pig, then in that moment selling the fat
+TC00:21:30.140 - 00:21:33.190
+SD(0.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkits'tyäbilo'ba'ta' yik'oty iñij'aña'
+trad@RLP
+eng@RLP
+TC00:21:33.980 - 00:21:35.870
+SD(0.97)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma'bi tsirbeñtyelo' baje' ilew
+trad@RLP
+eng@RLP
+TC00:21:36.840 - 00:21:39.770
+SD(3.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPya' chiñi mach ta' ba' tsa'ik
+trad@RLP
+eng@RLP
+TC00:21:43.300 - 00:21:44.790
+SD(0.49)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyäk'äyo'babi lewil mux meku tsäntsäntyelo'
+trad@RLP
+eng@RLP
+TC00:21:45.280 - 00:21:47.690
+SD(0.89)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyäxtyoku'añ ityajo'
+trad@RLPencuentran estando halla todavía
+eng@RLPthey find being there still
+TC00:21:48.580 - 00:21:49.920
+SD(1.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmajki mi chäñtyakala
+trad@NALquienes son los que encuentran
+eng@NALwho are the ones that find?
+TC00:21:51.010 - 00:21:52.210
+SD(0.18)
+
+
+ref@RLP
+trs@RLPlaj kpi'älo' xujch'o
+trad@RLPlas personas que roban
+eng@RLPthose that steal
+TC00:21:52.390 - 00:21:54.100
+SD(1.07)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPxujch'oba'
+trad@RLPrateros que
+eng@RLPthe thieves that
+TC00:21:55.170 - 00:21:56.060
+SD(1.38)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjiño' muo mäktyaño'la tyi bij
+trad@RLPaquellos que nos topan en el camino
+eng@RLPthose that run into us on the road
+TC00:21:57.440 - 00:21:59.290
+SD(5.68)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkuñan ujtye tsuk'sub
+trad@RLP
+eng@RLP
+TC00:22:04.970 - 00:22:07.170
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALiche'eñ este
+trad@NALentonces, este
+eng@NALthen this
+TC00:22:07.160 - 00:22:08.310
+SD(0.08)
+
+
+ref@RLP
+trs@RLPches
+trad@RLPque
+eng@RLPthat
+TC00:22:08.390 - 00:22:08.960
+SD(2.82)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALchukityak iwen a'beño ik'ux che'eñ jump'ej k'iñ cha'añ ya'añ mi tye k'el
+trad@NALque cosas le dan de comer todo el dia para que pueda encontrar
+eng@NALwhat things do they give them to eat all day so they can find?
+TC00:22:11.780 - 00:22:15.530
+SD(0.81)
+
+
+ref@RLP
+trs@RLPtsak sujtyimi k'ux a'bi
+trad@RLPse fue a comer ayer
+eng@RLPhe went to eat yesterday
+TC00:22:16.340 - 00:22:18.170
+SD(0.31)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmata'ba'añ isa' mi k'okuchomajlel
+trad@RLPno tenian pozol que llevar cargando
+eng@RLPhe didn't have pozol to carry
+TC00:22:18.480 - 00:22:21.430
+SD(1.99)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPty'äch kuchomajel ipuk'o kometa che'  buty'bi asa' baje wäle che
+trad@RLPcargan una bola de pozol para batir, parecidos así como se guardan el pozol actualmente en un recipiente
+eng@RLPthey carried a pozol ball to mix, like how pozol is kept now in a container
+TC00:22:23.420 - 00:22:27.510
+SD(0.83)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkajiyo' puk'o
+trad@RLPempezaron a batir
+eng@RLPthey started to mix
+TC00:22:28.340 - 00:22:29.220
+SD(2.62)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi tyi japo' bi sa' cha'kajlob ba
+trad@RLPcuando termina de tomar pozol comienzan donde
+eng@RLPwhen they start to drink pozol they start where
+TC00:22:31.840 - 00:22:34.410
+SD(1.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyuk' kajpej
+trad@RLPcortar café
+eng@RLPto cut coffee
+TC00:22:35.590 - 00:22:36.520
+SD(2.29)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchuxka ma' wäk'eñtye ak'ux wa'wa jä jän
+trad@RLPque será te doy de comer en este momento
+eng@RLPwhat should I give you to eat now
+TC00:22:38.810 - 00:22:42.280
+SD(1.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'ätyo cha' k'otye yi wen k'uxo' tyi yotyoty
+trad@RLPllegan hasta comer en su casa
+eng@RLPthey come to eat at home
+TC00:22:43.470 - 00:22:45.440
+SD(4.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyiketyotyak ta' k'eletyakta'
+trad@RLPte estoy observando todavía
+eng@RLPI'm watching yo still
+TC00:22:50.240 - 00:22:51.600
+SD(2.35)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLPkäjyi awokola, käyäla asi'il se'eyo'oj
+trs@RLPdejaron en peligro, dejen sus leñas así dijeron
+trad@RLP
+eng@RLP
+TC00:22:53.950 - 00:22:57.260
+SD(2.26)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLPyältyäl k'amatyakochin majlob tyi
+trs@RLP
+trad@RLP
+eng@RLP
+TC00:22:59.520 - 00:23:02.030
+SD(0.46)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta'ku baki, macha'añ
+trad@RLPasí es donde, será que hay
+eng@RLP
+TC00:23:02.490 - 00:23:03.700
+SD(0.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmach jiñ doktor
+trad@NALserá el doctor
+eng@NAL
+TC00:23:04.200 - 00:23:05.040
+SD(0.04)
+
+
+ref@RLP
+trs@RLPmatsa'ba k'ele loktor
+trad@RLPno he visto ningún doctor
+eng@RLP
+TC00:23:05.080 - 00:23:07.180
+SD(0.92)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche' majchikach mi' mäño' ya mijoral
+trad@RLPsolo el mejoral cualquier a de comprar
+eng@RLP
+TC00:23:08.100 - 00:23:10.740
+SD(0.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPespirinatyakta' mäño' kilatyak ta'a
+trad@RLPaspirina he visto que compran
+eng@RLP
+TC00:23:11.720 - 00:23:14.630
+SD(2.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbajche'ta tyi lajmi kmama saj luk'ux-äyok k'am-äjel
+trad@RLPasí como murio mi mama le comenzó a doler los pies por la enfermedad
+eng@RLP
+TC00:23:17.500 - 00:23:23.280
+SD(1.2)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NAL¿chuki tyi yu'bi?
+trad@NAL¿qué le sucedió?
+eng@NAL
+TC00:23:24.480 - 00:23:25.470
+SD(0.35)
+
+
+ref@RLP
+trs@RLPchokuko k'am-äjel tsa', mutya kuje'chiñ  kola tyi ja'tsijñ
+trad@RLPsi es de enfermedad pues, también padezco de puro estornudo
+eng@RLP
+TC00:23:25.820 - 00:23:30.730
+SD(1.53)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwäleku ma k'echbeñtye kpisil mu ti kucho' baje ixi uk'um
+trad@RLPhoy vas a ir a traer mi ropa, y cargar como si fuera la ánfora
+eng@RLP
+TC00:23:32.260 - 00:23:36.620
+SD(1.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmi kuchma yuk'um, kolem uk'um, yäk'eñtye wats kuchlok'el
+trad@RLPllevan cargando su ánfora, ánfora grande,  le dan que cargue todo
+eng@RLP
+TC00:23:38.490 - 00:23:42.320
+SD(2.12)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'otyiyanta' tyi ja' ta' ka tyi uk'e je'el
+trad@RLPllega otro en le río comienza a llorar
+eng@RLP
+TC00:23:44.440 - 00:23:46.500
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPka tyi uk'el
+trad@RLPcomenzó a llorar
+eng@RLP
+TC00:23:47.910 - 00:23:49.580
+SD(1.04)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'otyi
+trad@RLPllega
+eng@RLP
+TC00:23:50.620 - 00:23:51.330
+SD(1.08)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmu tyi chäk'echo li buxpok' chi
+trad@RLPy siguen sosteniendo su tartera de madera
+eng@RLP
+TC00:23:52.410 - 00:23:54.390
+SD(1.51)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkux tyi ñumel posu'beñtye aja  tyäkinche'ixta' yälol je'el
+trad@RLPpase usted así le dijeron, así le andaban diciendo
+eng@RLP
+TC00:23:55.900 - 00:24:00.300
+SD(1.0)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyäxbi ta' kälem tätäpero yatyo ta' kälem
+trad@RLPtodavía se quedo (el tätäpero) todavía quedo
+eng@RLP
+TC00:24:01.300 - 00:24:03.770
+SD(1.71)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPla maj su'bety chesbäya se'eñ, che' k'otyiyoñ, muxka se'ejak'bä ty'änle
+trad@RLPvoy a anunciarte así me dijo, llegue entonces, estaba apunto de contestarlo
+eng@RLP
+TC00:24:05.480 - 00:24:09.460
+SD(1.82)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmatyelaty tyi wa' tyi wa'tyäloñta' sujtyel
+trad@RLPno vengan a pararse, llendose parando
+eng@RLP
+TC00:24:11.280 - 00:24:13.550
+SD(0.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkux su'beñtyäle cha'añkili
+trad@RLPve a llamarlos para que
+eng@RLP
+TC00:24:14.350 - 00:24:16.400
+SD(0.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyajbeñoma kbuxpok'i cho'oñ
+trad@RLPayudame con mi tartera por favor
+eng@RLP
+TC00:24:17.010 - 00:24:19.000
+SD(1.52)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbixtyota'ta woko k'otyi jinta' tyijikñayoñ
+trad@RLP
+eng@RLP
+TC00:24:20.520 - 00:24:24.620
+SD(0.84)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchukbeñoñtyola ju'bel li jka'äli che'eñ ta'ixta kaj chukbeñtye ju'be iyuk'um
+trad@RLPpor favor agarren bajar mi agua, entonces en ese momento le agarre bajar su ánfora
+eng@RLP
+TC00:24:25.460 - 00:24:29.500
+SD(0.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtäxtyomeku kaji kñäk'
+trad@RLPluego comenzó mi estomago
+eng@RLP
+TC00:24:30.290 - 00:24:32.280
+SD(0.95)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmuluya xkola che'eñ
+trad@RLP
+eng@RLP
+TC00:24:33.230 - 00:24:34.640
+SD(1.07)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmuluyonkula tyi ja'i che'eñ xkä'äloñ tyi tsijkaño' che' yom, imulo'ma tyi ja', ya jump'ej ya' tyi poj tsäñä
+trad@RLPmójenme en agua así dijo, mandamos a que lo salpiquen por qué así quiere, y mo mojaban en agua, solo uno pudo enfriar
+eng@RLP
+TC00:24:35.710 - 00:24:41.890
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcheta' yu'ba kmama bajche' jiñ
+trad@RLPasí le sucede mi mama como ese
+eng@RLP
+TC00:24:43.300 - 00:24:44.990
+SD(4.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmachikbä kälijeb k'äkuxiliktyobä kaje cheb ch'ujtyaty k'am-äjel
+trad@RLPsi no se hubiera quedado seguiría viva aun todavía, por Dios enfermedad
+eng@RLP
+TC00:24:49.630 - 00:24:54.300
+SD(2.55)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'jach tyi ñunsaj baje' jiñ
+trad@RLPasí pasó nomas como ese
+eng@RLP
+TC00:24:56.850 - 00:24:58.380
+SD(1.74)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPeeeeej ma'bita' semanaj jkäl bäk'eb bak jop' ama
+trad@RLP
+eng@RLP
+TC00:25:00.120 - 00:25:04.740
+SD(1.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmata'añ loktor jinta'añ chu'bu
+trad@RLPno hay doctor y solo hay cosas
+eng@RLP
+TC00:25:06.240 - 00:25:09.370
+SD(1.01)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañ wäle ya'ix añ loktor anjulemityak, tyak'inta'yom je'e
+trad@RLPhoy en día ya está el doctor que llega siempre, pero dinero quiere
+eng@RLP
+TC00:25:10.380 - 00:25:13.620
+SD(1.11)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyajla tyi ñunsajbä
+trad@RLPalcanza pasando
+eng@RLP
+TC00:25:14.730 - 00:25:15.640
+SD(6.37)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkojach
+trad@RLPapenas
+eng@RLP
+TC00:25:22.010 - 00:25:22.610
+SD(0.35)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALñujkajelp eskuela tyak chiñ, añäch je'el wajali
+trad@NALse ve que va ver escuela, antes si había
+eng@NAL
+TC00:25:22.960 - 00:25:25.410
+SD
+
+
+ref@RLP
+trs@RLPannn mata' iskuela an wajali
+trad@RLPaaaa, antes no había escuela
+eng@RLP
+TC00:25:25.420 - 00:25:28.390
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañäch ak'äoty chächäk krusi te ya'tsa'i kpapata', ma'anta' ochen a'bi je'el tyi eskuela
+trad@RLPhay debes de tener una cruz roja para poner mi papa, no había entrado en la escuela
+eng@RLP
+TC00:25:29.800 - 00:25:34.800
+SD(0.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma'be tyi yotsä papa
+trad@RLPno metió sus papa
+eng@RLP
+TC00:25:35.600 - 00:25:37.060
+SD(1.55)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmux akaj tyi kanar che' awälo, bakima tyaj abujki che'akta yälo mi yä, lojkoñtye otsäñtye tyi esckuela añche'eñ
+trad@RLPvas a tener que trabajar así te dicen, nomas te dicen en donde vas a conseguir una camisa, me gustaría mucho que me metieran en la escuela así dijo
+eng@RLP
+TC00:25:38.610 - 00:25:47.020
+SD(1.17)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachta' tyi yäljats'i je'el
+trad@RLPuna tragada nomas dio
+eng@RLP
+TC00:25:48.190 - 00:25:49.410
+SD(1.35)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñunk'abi ñumelo' tyi k'ejle che ma'bi ku k'elo'ba tyi eskuela
+trad@RLPnunca pasaron a verlos y no pueden verse en la escuela
+eng@RLP
+TC00:25:50.760 - 00:25:55.760
+SD(0.81)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPcha' mach yomo'ma
+trad@RLPes por qué no quieren ir
+eng@RLP
+TC00:25:56.570 - 00:25:57.520
+SD(2.99)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkotyak ajoñoñi tyä'ämach tyok'ib tyi iskuela baka' käyo', che' chi
+trad@RLPmira como yo quizás no se siente bien en la escuela donde los dejan, así es
+eng@RLP
+TC00:26:00.510 - 00:26:05.140
+SD(2.16)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtsetseña julkaj tyi ku'bita' kaj tyi jule aj maistro sujtye a'li ta' kajiyo tyi poj ochetyako'ma, chejach añ bajche' jiñ
+trad@RLPescuche que estaban llegando y riendo el maestro, se fueron hayer entonces así empezaron a entrar, así nomas
+eng@RLP
+TC00:26:07.300 - 00:26:15.030
+SD(1.95)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi cha'leta' ochel tyi klase xkäskum ankutyi munkuchi karaskas ta' tsajñ tyi ochel
+trad@RLPmi hermano entro en la escuela, en donde asta fue a entras en caracas
+eng@RLP
+TC00:26:16.980 - 00:26:24.570
+SD(1.03)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPixaty ta'bä iskuela che' lonkuxuxtyo kmama, jiñachta' che chalenkäya je'el che xchämi aj mama
+trad@RLPhalla nomas en la escuela cuando mi mama aun estaba viva, solo que volvió dejar botado cuando mi mama murió
+eng@RLP
+TC00:26:25.600 - 00:26:31.530
+SD(3.75)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachbä
+trad@RLPasi es nomas
+eng@RLP
+TC00:26:35.280 - 00:26:35.980
+SD(2.12)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPk'äjtyek wäle ma'ix majch tyi weñ chale eskuela
+trad@RLPhasta ahora casi nadie siguió estudiando
+eng@RLP
+TC00:26:38.100 - 00:26:40.420
+SD(1.57)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyaj keraño'
+trad@RLPson mis hermanos
+eng@RLP
+TC00:26:41.990 - 00:26:42.850
+SD(4.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche'an chi
+trad@RLPasi esta
+eng@RLP
+TC00:26:47.720 - 00:26:48.620
+SD(3.58)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ta' tyak käletyak bajche' jiñ
+trad@RLPasí nomas volvieron a quedar
+eng@RLP
+TC00:26:52.200 - 00:26:53.630
+SD(3.22)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkon x-ubiñ kcha'añ
+trad@RLPvoy a preguntar el mío
+eng@RLP
+TC00:26:56.850 - 00:26:57.850
+SD(3.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLPche'tyota' kaje tyi muntoj chin chejachta'i ma'ix majta' yon ochiyo'ba kerañob bij
+trs@RLPcuando comenzaron juntos así nomas ya nadie de algunos de mis hermanos quisieron entrar
+trad@RLP
+eng@RLP
+TC00:27:01.100 - 00:27:06.330
+SD(2.97)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPta'tyo kajiyo pe wi'ix kolelo'ix
+trad@RLPsi comenzaron pero son los nuevos muchachos
+eng@RLP
+TC00:27:09.300 - 00:27:11.230
+SD(5.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachbi bajche' jiñ, iñunsayo'ba tyatyä ña'älo' wajali
+trad@RLPcuando pasan los padre y madre anteriormente, dicen, asta ahi nomas
+eng@RLP
+TC00:27:16.920 - 00:27:21.150
+SD(6.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALañtyakäch jiñ añtyakbä ye'tyel je'el wajali ches k'otye
+trad@NALsi habían quienes tenias cargos antes, que hace
+eng@NAL
+TC00:27:27.810 - 00:27:30.730
+SD
+
+
+ref@RLP
+trs@RLPchukiyes loty chin
+trad@RLPno se que guarda
+eng@RLP
+TC00:27:29.970 - 00:27:30.710
+SD(1.74)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjuntyejb
+trad@RLPuna mata
+eng@RLP
+TC00:27:32.450 - 00:27:33.200
+SD(1.38)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPañtyako'äch a'bij
+trad@RLPsi habían hayer
+eng@RLP
+TC00:27:34.580 - 00:27:35.810
+SD(1.86)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPlu' añächkata' ajñiko
+trad@RLPespero que esten todos
+eng@RLP
+TC00:27:37.670 - 00:27:39.070
+SD(1.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpoj chäxtyoka  ta' ka lomejletyak a iskuela jiñtyak, mata' ba'ix xä'ochiyo' ñojtyiko'ixbä, bi'tyalob ixbä
+trad@RLPsi empezaron a hacer la escuela, ya no pudieron entrar los que tenias edad, solo niños nomas
+eng@RLP
+TC00:27:40.870 - 00:27:48.790
+SD(2.87)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtsa' tyu' kajpe ku ta' tyi kajiyo chin
+trad@RLPcomenzaron a cortar café o través
+eng@RLP
+TC00:27:51.660 - 00:27:53.390
+SD(3.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ta' tyi meletyako' bajche' jiñ
+trad@RLPasí hicieron nomas arreglaron como ese
+eng@RLP
+TC00:27:57.180 - 00:27:58.740
+SD(3.04)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach ta' k'ele je'eli
+trad@RLPasí miro nomas también
+eng@RLP
+TC00:28:01.780 - 00:28:03.190
+SD(2.69)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALawäle' chin cho'oñ tyi lenkäyo kajpe tyi kajpe ty'ox
+trad@NALdigo, actualmente dejaron todos su cafés repartiendo
+eng@NAL
+TC00:28:05.880 - 00:28:08.890
+SD(0.38)
+
+
+ref@RLP
+trs@RLPtyak chuktyak anwäle jiñ le'ujtyita' anwäle chin, anka'ax jpotrero añ mik laj tyoj'añ
+trad@RLPya no hay nada horita, todo termino horita,  solo potrero en la que convirtieron
+eng@RLP
+TC00:28:09.270 - 00:28:16.430
+SD(1.32)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpejtyel ta' tyi käyäyo' ku che'aktyo ta' ju'bi tyojol, ta' ju'bi tyojol kajpe chin lenkäyäyo'bityak
+trad@RLPtodos los dejaron cuando el precio tendió a bajar, bajo el precio del café y lo dejaron
+eng@RLP
+TC00:28:17.750 - 00:28:25.140
+SD(1.23)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtya lon letsi ityojol käkäw chin lonpäs  ikäkäw,   koma'añ ityojol je'el käkäw lu' lenkäy
+trad@RLPtambién el cacao subió de precio y fueron a mostrar el cacao, como no tiene precio y mal pagado el cacao todos volvieron a dejar
+eng@RLP
+TC00:28:26.370 - 00:28:32.220
+SD(2.07)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach muktyaktyob bajche jiñ
+trad@RLPasi es cuando realizaban así
+eng@RLP
+TC00:28:34.290 - 00:28:35.960
+SD(2.43)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPts'insajach ta' mi chuk'tyako' mik lok'e mu'bu japo'
+trad@RLPpoquito nomas los que procesan y llevan para loman
+eng@RLP
+TC00:28:38.390 - 00:28:41.010
+SD(1.39)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmux ijapo'
+trad@RLPentonces lo toman
+eng@RLP
+TC00:28:42.400 - 00:28:43.290
+SD(4.01)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALwajali ke wen letsex tyi tyojbentyakta'
+trad@NALantes si tenian buen precio
+eng@NAL
+TC00:28:47.300 - 00:28:49.300
+SD
+
+
+ref@RLP
+trs@RLPche'eñ muxtyoti tyojtyätyak tyi kinse bajche' tyak añ kilo je'el
+trad@RLPsi todavía pagan en quince el precio del kilo del café
+eng@RLP
+TC00:28:49.290 - 00:28:53.160
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALjäää', jäää'
+trad@NALasí, asi
+eng@NAL
+TC00:28:51.610 - 00:28:53.160
+SD(1.31)
+
+
+ref@RLP
+trs@RLPchux je'e wäle
+trad@RLPquizás así es todavía
+eng@RLP
+TC00:28:54.470 - 00:28:55.480
+SD(3.36)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyoko letsächta' che'  ma cha'mäñ'eñ
+trad@RLPvende bien caro si le compras o través
+eng@RLP
+TC00:28:58.840 - 00:29:00.590
+SD(2.56)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbentisinko jata' mi yä je'el tyi palenke äjä', che' lok'eñ ijuñ, palenkejach ta' mi mäbeñtyelo', ma' mäntye presku   ikäkätye'tyak
+trad@RLPdice que veinte y cinco pagan igual en palenque así es, cuando tiene sacado el papel, sólo en palenque le compran, y va trayendo comprado su refresco y su cacaté
+eng@RLP
+TC00:29:03.150 - 00:29:13.200
+SD(2.34)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkchok'ach kotyo je'el chi kua'ak''iñtyeta' yom chi
+trad@RLP
+eng@RLP
+TC00:29:15.540 - 00:29:18.390
+SD(1.33)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtsa'äxtyo ma tyi cha'ak'ñiñ chuk ma melab, käybilachbä ty'añ che' kuxulikya a papa mach yu käy jule
+trad@RLPse fue hacer la limpieza todo lo que se hace, lo tiene dicho cuando estaba vivo que no le gusta llegar temprano del trabajo
+eng@RLP
+TC00:29:19.720 - 00:29:25.020
+SD(2.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPyä'äch ta' lon añ aj chijty yik'ñañ cha' len'al, ikoraje mi' cha'leñ ibajtyoka, chuk anwäle
+trad@RLPsi esta el que lo esta vigilando, lo vuelve a decir o través, es coraje que hace donde esta, pero que tiene horita
+eng@RLP
+TC00:29:27.210 - 00:29:33.900
+SD(4.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPlekäle, lenkäle
+trad@RLPquedo sólo, lo dejaron
+eng@RLP
+TC00:29:38.200 - 00:29:40.200
+SD(6.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPlon machka kbajñelik pejtyelächta' tyi käyäyo
+trad@RLPno solo a nosotros, todos lo dejaron
+eng@RLP
+TC00:29:46.450 - 00:29:49.420
+SD(1.32)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPilu' otsayo'ix tyi cholel chin, yañob bäj
+trad@RLPlo metieron todo en milpa, aquelos otros
+eng@RLP
+TC00:29:50.740 - 00:29:54.030
+SD(2.5)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALlu' mäñtyako' ma' wä je'el
+trad@NALusted cree que lo haya comprado todo
+eng@NAL
+TC00:29:56.530 - 00:29:57.770
+SD(0.17)
+
+
+ref@RLP
+trs@RLPmu'uch iyojli mäñob lamtyak
+trad@RLPsí, algunos lo compran pero pocos
+eng@RLP
+TC00:29:57.940 - 00:30:01.070
+SD(0.93)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPje'exu machä ba'añ li lum che tyäli ilombäk' lu' ochelo', bajche' äch ñukeleya sajty, chäch tyi lon lu' otsäyo' tyi cholel ta'bi cha'añ
+trad@RLPaquellos que no tienen terrenos
+eng@RLP
+TC00:30:02.000 - 00:30:10.780
+SD(1.18)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpär potreroj ta' chiñ
+trad@RLP
+eng@RLP
+TC00:30:11.960 - 00:30:13.250
+SD(3.04)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachta' tyi sak käle pore kajpeb
+trad@RLP
+eng@RLP
+TC00:30:16.290 - 00:30:18.110
+SD(4.3)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejach bajche' jiñ
+trad@RLP
+eng@RLP
+TC00:30:22.410 - 00:30:23.410
+SD(4.28)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALmuchkata' lom te lon jak' jiñtyak'o baya'i mach yomo' e'tyel ixbäje'
+trad@NAL
+eng@NAL
+TC00:30:27.690 - 00:30:31.170
+SD(0.22)
+
+
+ref@RLP
+trs@RLPmi ma'añikta' kma tyi a'leñtyek, a'lentyela tak ta'
+trad@RLP
+eng@RLP
+TC00:30:31.390 - 00:30:35.080
+SD(5.98)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpoj mächach ta' tsajñ  ka chäm a tyojol  mi mach'ata' mejliyety tyi e'tye mi chañix a k'iñ ta' k'otye, chejach tab
+trad@RLP
+eng@RLP
+TC00:30:41.060 - 00:30:47.010
+SD(2.08)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchu che'ex ya wa'akña ñume aj kaporal mi yä a papa
+trad@RLP
+eng@RLP
+TC00:30:49.090 - 00:30:52.970
+SD(1.42)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwa'akña ñumi ik'elonla iwa'ba'aj jäp'bi ch'okeli, ya'ba a'leñtye
+trad@RLP
+eng@RLP
+TC00:30:54.390 - 00:31:00.580
+SD(1.14)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPwa'ba jak jiño'ba'ba xujlem ya'ba a'leñtye, ma'ku ka ch'äm a tyojol, che'bita yälolo' chiñ
+trad@RLP
+eng@RLP
+TC00:31:01.720 - 00:31:08.600
+SD(1.95)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñoj
+trad@RLP
+eng@RLP
+TC00:31:10.550 - 00:31:11.210
+SD(3.79)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPche' tyakachta' bi'baku
+trad@RLP
+eng@RLP
+TC00:31:15.000 - 00:31:16.550
+SD(1.49)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjinche'  tyi bixe cha'le a'liya a papa che maj kakbe je'e icha'añ chi
+trad@RLP
+eng@RLP
+TC00:31:18.040 - 00:31:21.580
+SD(1.19)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC00:31:22.770 - 00:31:28.570
+SD(1.41)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyak'iñ ñächta' je'e chiñ
+trad@RLP
+eng@RLP
+TC00:31:29.980 - 00:31:31.580
+SD(1.55)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachta'  tyi tyajayo' je'e tyak'iñ bajche' baje' jiñ
+trad@RLP
+eng@RLP
+TC00:31:33.130 - 00:31:35.060
+SD(6.92)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALix ku je'e jiñ ta'bä julityako ñaxaño'bä ku k'älä kuxulo'äxtyo je'el
+trad@NAL
+eng@NAL
+TC00:31:41.980 - 00:31:46.680
+SD(0.05)
+
+
+ref@RLP
+trs@RLPbakityo  lu' chämiyo'ta'
+trad@RLP
+eng@RLP
+TC00:31:46.730 - 00:31:49.360
+SD(1.47)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPjej
+trad@RLP
+eng@RLP
+TC00:31:50.830 - 00:31:51.530
+SD(1.89)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñajtyota' tyi chämi la keks pransisko che'i
+trad@RLP
+eng@RLP
+TC00:31:53.420 - 00:31:56.310
+SD(2.72)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbak icha'a morenubä bajche' morenaji chämiyo'i
+trad@RLP
+eng@RLP
+TC00:31:59.030 - 00:32:03.120
+SD(3.21)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPlaj kem paskual kuxtyel chämiyo'ta'i misujx julelo'tye
+trad@RLP
+eng@RLP
+TC00:32:06.330 - 00:32:10.090
+SD(2.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPak wa'bä ki mel aj lumi, ñaxan ya'tyota' tyi chämi je'e chi, tyeko morenu che'ta' mi yä chi
+trad@RLP
+eng@RLP
+TC00:32:12.990 - 00:32:19.170
+SD(5.66)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPlu' chämiyo'
+trad@RLP
+eng@RLP
+TC00:32:24.830 - 00:32:26.060
+SD(6.92)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtsa' lu' yäk'äyo' waj
+trad@RLP
+eng@RLP
+TC00:32:32.980 - 00:32:33.920
+SD(1.65)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPkñunsaño' mu'ta chajach yäk'ä batyi la tyek che bajche ixi ta' chämi k'äbä ñajta' tyo ta' ma je'e
+trad@RLP
+eng@RLP
+TC00:32:35.570 - 00:32:41.010
+SD(0.64)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsajtyi la kñox ermañu, ñaxantyota' ma je'e, cha' wi'ilixta' a papa
+trad@RLP
+eng@RLP
+TC00:32:41.650 - 00:32:48.960
+SD(4.33)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma'ix ñoj kuxul yi'oty laj ktyaty tyi mayonla chin
+trad@RLP
+eng@RLP
+TC00:32:53.290 - 00:32:56.270
+SD(2.25)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPmutyo laj k'a tyi mujkel yäk'o bajche  papa jo'matyaki che'eñ
+trad@RLP
+eng@RLP
+TC00:32:58.520 - 00:33:01.710
+SD(1.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPxi'ix tyi tyäle waj mik'otye ba' xmteo arkuxi jol chumtyälo'
+trad@RLP
+eng@RLP
+TC00:33:02.800 - 00:33:06.960
+SD(1.45)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPñaxantyobita' ju'iyo
+trad@RLP
+eng@RLP
+TC00:33:08.410 - 00:33:09.840
+SD(1.9)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPtyi kaj cha' wan ñan u'beñ pi'i julelo'bä bi'ixbä cha' cha' ochel ik'exoltyak ajal iyum aläl
+trad@RLP
+eng@RLP
+TC00:33:11.740 - 00:33:17.260
+SD(1.05)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPma' ta'  ch'äjmityakob je'  yalobilob che'
+trad@RLP
+eng@RLP
+TC00:33:18.310 - 00:33:20.500
+SD(1.61)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLPjiñtyakta'  yambä koloñatyak che'
+trs@RLP
+trad@RLP
+eng@RLP
+TC00:33:22.110 - 00:33:26.070
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLP
+trad@RLP
+eng@RLP
+TC
+SD
+ref@NAL
+trs@NALbak ta' cha' tyäliyob a  xwi'i julelob
+trad@NAL
+eng@NAL
+TC00:33:22.160 - 00:33:24.130
+SD(4.65)
+
+
+ref@RLP
+trs@RLPche' bajche'ta'  je'el tyi yotsäbe ya' juntyiki cha'an je'e papa che' jinta' ixi  sebastañ sachis
+trad@RLP
+eng@RLP
+TC00:33:28.780 - 00:33:35.210
+SD(0.09)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPsanta mariatyo ta' tye je
+trad@RLP
+eng@RLP
+TC00:33:35.300 - 00:33:36.900
+SD(0.56)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPpurutyu xch'olo tyi santa maria mi kil aja
+trad@RLP
+eng@RLP
+TC00:33:37.460 - 00:33:39.620
+SD(2.8)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPbaxka tyelentyakob ayantyakobä
+trad@RLP
+eng@RLP
+TC00:33:42.420 - 00:33:44.810
+SD(4.6)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachta' mi yätyakob mi kubiñ
+trad@RLP
+eng@RLP
+TC00:33:49.410 - 00:33:50.960
+SD(7.52)
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
+ref@RLP
+trs@RLPchejachi bajche' jiñi
+trad@RLP
+eng@RLP
+TC00:33:58.480 - 00:34:00.500
+SD
+ref@NAL
+trs@NAL
+trad@NAL
+eng@NAL
+TC
+SD
+
+
