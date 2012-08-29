@@ -144,7 +144,10 @@ Utils.publisher = {
 
     for (i = 0; i < max; i += 1) {
       if (action === 'publish') {
-        subscribers[i].fn.call(subscribers[i].context, arg);
+        if(subscribers[i]){
+          //TODO there is a bug with the subscribers they are getting lost, and it is trying to call fn of undefiend. this is a workaround until we figure out why subscribers are getting lost.
+          subscribers[i].fn.call(subscribers[i].context, arg);
+        }
       } else {
         try{
           if (subscribers[i].context === context) {
