@@ -8,6 +8,7 @@ define([
     "datum/DatumFields",
     "datum/Session",
     "app/PaginatedUpdatingCollectionView",
+    "xml2json",
     "libs/Utils"
 ], function(
     Backbone,
@@ -18,7 +19,8 @@ define([
     Datums,
     DatumFields,
     Session,
-    PaginatedUpdatingCollectionView
+    PaginatedUpdatingCollectionView,
+    X2JS
 ) {
   var Import = Backbone.Model.extend(
 
@@ -193,9 +195,130 @@ define([
 
       return CSV;
     },
-    importXML : function(text, selftext, self, callback) {
+    importXML : function(text, self, callback) {
       alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+    },
+    importElanXML : function(text, self, callback) {
+      //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+      var xmlParser = new X2JS();
+      window.text = text;
+      var jsonObj = xmlParser.xml_str2json( text );
+      console.log(jsonObj);
+       
+      //add the header to the session
+//    HEADER can be put in the session and in the datalist
+      var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g,"\n").replace(/[\[\]{}]/g,"").replace(/:/g," : ").replace(/"/g,"").replace(/\\n/g,"").replace(/file : /g,"file:").replace(/ : \//g,":/").trim();
+      //TODO turn these into session fields
+      this.set("status", this.get("status")+"\n"+annotationDetails);
       
+      
+      var header = [];
+      var tierinfo = [];
+//    TIER has tiers of each, create datum  it says who the informant is and who the data entry person is. can turn the objects in the tier into a datum
+//for tier, add rows containing
+//    _ANNOTATOR
+      tierinfo.push("_ANNOTATOR");
+//    _DEFAULT_LOCALE
+      tierinfo.push("_DEFAULT_LOCALE");
+//    _LINGUISTIC_TYPE_REF
+      tierinfo.push("_LINGUISTIC_TYPE_REF");
+//    _PARTICIPANT
+      tierinfo.push("_PARTICIPANT");
+//    _TIER_ID
+      tierinfo.push("_TIER_ID");
+//    __cnt
+      tierinfo.push("__cnt");
+       
+      var annotationinfo = [];
+//    ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE.__cnt
+//      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE", "elanALIGNABLE_ANNOTATION": "ANNOTATION_VALUE"});
+//    ANNOTATION.ALIGNABLE_ANNOTATION._ANNOTATION_ID
+      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._ANNOTATION_ID", "elanALIGNABLE_ANNOTATION": "_ANNOTATION_ID"});
+//    ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF1
+      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF1", "elanALIGNABLE_ANNOTATION": "_TIME_SLOT_REF1"});
+//    ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF2
+      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF2", "elanALIGNABLE_ANNOTATION": "_TIME_SLOT_REF2"});
+//    
+      var refannotationinfo = [];
+//    ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE
+      refannotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE", "elanREF_ANNOTATION": "ANNOTATION_VALUE"});
+//    ANNOTATION.REF_ANNOTATION._ANNOTATION_ID
+      refannotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.REF_ANNOTATION._ANNOTATION_ID", "elanREF_ANNOTATION": "_ANNOTATION_ID"});
+//    ANNOTATION.REF_ANNOTATION._ANNOTATION_REF
+      refannotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.REF_ANNOTATION._ANNOTATION_REF", "elanREF_ANNOTATION": "_ANNOTATION_REF"});
+      
+      
+      header.push("_ANNOTATOR");
+      header.push("_DEFAULT_LOCALE");
+      header.push("_LINGUISTIC_TYPE_REF");
+      header.push("_PARTICIPANT");
+      header.push("_TIER_ID");
+      header.push("__cnt");
+      
+      header.push("ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE");
+
+      header.push("ANNOTATION.ALIGNABLE_ANNOTATION._ANNOTATION_ID");
+      header.push("ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF1");
+      header.push("ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF2");
+
+      header.push("ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE");
+      header.push("ANNOTATION.REF_ANNOTATION._ANNOTATION_ID");
+      header.push("ANNOTATION.REF_ANNOTATION._ANNOTATION_REF");
+      
+
+      //similar to toolbox
+      var matrix = [];
+      var TIER = jsonObj.ANNOTATION_DOCUMENT.TIER;
+      
+      //there are normally 8ish tiers, with different participants
+      for(l in TIER){
+        //in those tiers are various amounts of annotations per participant
+        for(annotation in TIER[l].ANNOTATION){
+          matrix[annotation] = [];
+          
+          for(cell in tierinfo){
+            matrix[annotation][tierinfo[cell]] = jsonObj.ANNOTATION_DOCUMENT.TIER[l][tierinfo[cell]];
+          }
+
+          try{
+            matrix[annotation]["ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE.__cnt"] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION.ANNOTATION_VALUE.__cnt;
+            for(cell in annotationinfo){
+              matrix[annotation][annotationinfo[cell].iFieldDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];         
+            }
+          }catch(e){
+            Utils.debug("TIER "+l+" doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
+          }
+          
+          try{
+            for(cell in refannotationinfo){
+              matrix[annotation][refannotationinfo[cell].iFieldDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];         
+            }
+          }catch(e){
+            Utils.debug("TIER "+l+" doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
+          }
+          
+        }
+      }
+      var rows = [];
+      for(var d in matrix){
+        var cells = [];
+        //loop through all the column headings, find the data for that header and put it into a row of cells
+        for(var h in header){
+          var cell = matrix[d][header[h]];
+          if(cell){
+            cells.push(cell);
+          }else{
+            //fill the cell with a blank if that datum didn't have a header
+            cells.push("");
+          }
+        }
+        rows.push(cells);
+      }
+      if(rows == []){
+        rows.push("");
+      }
+      self.set("extractedHeader",header);
+      self.set("asCSV", rows);
       if(typeof callback == "function"){
         callback();
       }
@@ -409,7 +532,7 @@ define([
         ,tabbed: { confidence: 0, importFunction : this.importTabbed }
         ,xml: { confidence: 0, importFunction : this.importXML }
         ,toolbox: { confidence: 0, importFunction : this.importToolbox }
-        ,elanXML: { confidence: 0, importFunction : this.importXML }
+        ,elanXML: { confidence: 0, importFunction : this.importElanXML }
         ,praatTextgrid: { confidence: 0, importFunction : this.importTextGrid }
         ,latex: { confidence: 0, importFunction : this.importLatex }
         ,handout: { confidence: 0, importFunction : this.importText }
