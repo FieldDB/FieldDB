@@ -209,6 +209,8 @@ define([
 //    HEADER can be put in the session and in the datalist
       var annotationDetails = JSON.stringify(jsonObj.ANNOTATION_DOCUMENT.HEADER).replace(/,/g,"\n").replace(/[\[\]{}]/g,"").replace(/:/g," : ").replace(/"/g,"").replace(/\\n/g,"").replace(/file : /g,"file:").replace(/ : \//g,":/").trim();
       //TODO turn these into session fields
+      this.set("status", this.get("status")+"\n"+annotationDetails);
+      
       
       var header = [];
       var tierinfo = [];
