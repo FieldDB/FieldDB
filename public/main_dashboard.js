@@ -1,19 +1,7 @@
 // Set the RequireJS configuration
 require.config({
   paths : {
-    "text" : "libs/text",
-    "jquery" : "libs/jquery",
-    "autosize" : "libs/jquery.autosize",
-    "hotkeys" : "libs/jquery.hotkeys",
-    "terminal" : "libs/terminal/terminal",
-    "underscore" : "libs/underscore",
-    "backbone" : "libs/backbone",
-    "handlebars" : "libs/handlebars.runtime",
-    "compiledTemplates" : "libs/compiled_handlebars",
-    "crypto" : "libs/Crypto_AES",
-    "pouch" : "libs/pouch.alpha",
-    "backbone_pouchdb" : "libs/backbone-pouchdb",
-    "backbone_couchdb" : "libs/backbone-couchdb",
+    /* Bootstrap user interface javascript files */
     "bootstrap" : "bootstrap/js/bootstrap",
     "bootstrap-transition" : "bootstrap/js/bootstrap-transition",
     "bootstrap-alert" : "bootstrap/js/bootstrap-alert",
@@ -26,7 +14,31 @@ require.config({
     "bootstrap-button" : "bootstrap/js/bootstrap-button",
     "bootstrap-collapse" : "bootstrap/js/bootstrap-collapse",
     "bootstrap-carousel" : "bootstrap/js/bootstrap-carousel",
-    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead"
+    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead",
+    
+    "crypto" : "libs/Crypto_AES",
+
+    /* jQuery and jQuery plugins */
+    "jquery" : "libs/jquery",
+    "autosize" : "libs/jquery.autosize",
+    "hotkeys" : "libs/jquery.hotkeys",
+    
+    /* Handlebars html templating libraries and compiled templates */
+    "compiledTemplates" : "libs/compiled_handlebars",
+    "handlebars" : "libs/handlebars.runtime",
+    
+    /* Backbone Model View Controller framework and its plugins and dependencies */
+    "backbone" : "libs/backbone",
+    "backbone_pouchdb" : "libs/backbone-pouchdb",
+    "backbone_couchdb" : "libs/backbone-couchdb",
+    "pouch" : "libs/pouch.alpha",
+    "underscore" : "libs/underscore",
+    
+    "terminal" : "libs/terminal/terminal",
+    
+    "text" : "libs/text",
+    
+    "xml2json" : "libs/xml2json"
   },
   shim : {
     "underscore" : {
@@ -37,11 +49,19 @@ require.config({
       exports : "$"
     },
     
+    "xml2json" : {
+      exports : "X2JS"
+    },
+    
     "autosize" :{
       deps : [ "jquery" ],
       exports : function($) {
         return $;
       }
+    },
+    "xml2json" :{
+      deps : [ "jquery" ],
+      exports : "X2JS"
     },
     "bootstrap" :{
       deps : [ "jquery" ],
@@ -124,6 +144,7 @@ require([
     "backbone",
     "backbone_pouchdb",
     "autosize",
+    "xml2json",
     "libs/Utils"
 ], function(
     App,
@@ -139,7 +160,8 @@ require([
     compiledTemplates,
     Backbone,
     forcingpouchtoloadonbackboneearly,
-    forcingautosizetobeavailible
+    forcingautosizetobeavailible,
+    forcingxml2jsontobeavilible
 ) {
   /*
    * Helper functions
