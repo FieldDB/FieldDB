@@ -4,13 +4,7 @@ compiled_handlebars.js
 *.handlebars.js
 
 #ignore private config files
-ifield.key
-ifield.orig.key
-ifield.csr
-ifield.crt
-
-couchkeys.js
-everyauthconfig.js
+*_production*
 
 # Ignore natural lib 
 public/libs/natural/
