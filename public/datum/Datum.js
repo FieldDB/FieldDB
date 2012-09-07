@@ -154,7 +154,12 @@ define([
     
     searchByQueryString : function(queryString, callback) {
       var self = this;
-      
+      try{
+        //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
+        window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
+      }catch(e){
+        Utils.debug("Search Analytics not working.");
+      }
       try{
         this.changePouch(this.get("pouchname"), function() {
           self.pouch(function(err, db) {
