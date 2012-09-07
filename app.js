@@ -78,4 +78,4 @@ mongooseAuth.helpExpress(app);
 
 port = "3001";
 app.listen(port);
-console.log("Listening on " + port)
+console.log("Listening on " + port+ "\n"+new Date());

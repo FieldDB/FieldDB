@@ -33,9 +33,9 @@ define([
       if( !this.get("teamOrPersonal")){
          this.set("teamOrPersonal","personal");
       }
-      if(this.isNew()){
+//      if(this.isNew()){
 //        this.saveAndInterConnectInApp();
-      }
+//      }
     },
     
     defaults : {

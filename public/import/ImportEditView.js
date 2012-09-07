@@ -307,7 +307,7 @@ define( [
       }
       
       var filename = " typing/copy paste into text area";
-      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
+      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
       try {
         filename = this.model.get("files")[0].name;
         descript = "This is the data list which results from the import of these file(s). " + this.model.get("fileDetails");
