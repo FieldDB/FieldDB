@@ -1,5 +1,5 @@
 /**
-   * Moved anaytics out of inline code to respect new Content Security Policy of extension manifest  version 2
+   * Moved analytics out of in-line code to respect new Content Security Policy of extension manifest  version 2
    */
   var _AnalyticsCode = 'UA-32705284-1';
 
@@ -45,3 +45,26 @@
 //      buttons[i].addEventListener('click', trackButtonClick);
 //    }
 //  });
+  
+  /**
+   * Use search analytics example
+   */
+//  var pageTracker = _gat._getTracker(_AnalyticsCode);
+//  pageTracker._initData(); 
+//  pageTracker._trackPageview('/search_results.php?q=searchterm'); 
+  
+  
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  var hndl = window.setTimeout("StartTracking()", 100);
+  function StartTracking(){
+    if (typeof(_gat) == 'object')
+    {
+      window.clearTimeout(hndl);
+      window.pageTracker =_gat._getTracker(_AnalyticsCode);
+      window.pageTracker._initData();
+      window.pageTracker._trackPageview();
+    } else {
+      hndl = window.setTimeout("StartTracking()", 1000);
+    }
+  }
