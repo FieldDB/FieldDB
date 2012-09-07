@@ -4,16 +4,95 @@
  * 
  * @property {Boolean} debugMode This boolean can be changed from true to
  *           false for production mode to speed up the app.
- *
+ * @property {Boolean} productionMode This boolean can be changed from false to
+ *           true to point the app to production servers rather than development servers.
  * @constructs
  */
+
 var Utils = Utils || {};
 
-Utils.debugMode = true;
+/*
+ * Turn this off to make the app run faster.
+ */
+Utils.debugMode = true; 
+
+/*
+ * This makes the app use the production servers. To do this, don't edit these values, run
+ * the "switch_to_production.sh" script
+ */
+Utils.productionMode = true;
+
+/*
+ * Turn this on so you don't have to set up a server or an couch database, this
+ * means you will have to develop online. You can develop offline, if you know
+ * how to set up a server and couchdb. To do this, don't edit these values, run
+ * the "switch_to_develop_offline.sh" script
+ * 
+ * By default this should be set so that you dont have to have a local server running. To do this, don't edit these values, run
+ * the "switch_to_develop_with_minimal_setup.sh" script
+ */
+Utils.easyDevelopmentMode = true; 
 
 
-//Utils.couchUrl = "https://ilanguage.iriscouch.com/default";
 Utils.couchUrl = "http://localhost:5984/default";
+
+
+Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
+
+
+/**
+ * The url of the authentication server.
+ */
+
+Utils.authUrl = "https://localhost:3001";
+
+/**
+ * The parameters of the default couch server.
+ */
+Utils.defaultCouchConnection = function() {
+  return {
+    protocol : "http://",
+    domain : "localhost",
+    port : "5984",
+    pouchname : "default"
+  }; 
+};
+
+/**
+ * The urls and parameters in the production servers
+ */
+if(Utils.productionMode){
+  Utils.authUrl = "https://ifield.fieldlinguist.com"; 
+  Utils.couchUrl = "https://ifield.iriscouch.com/default";
+  Utils.activityFeedCouchUrl = "https://ifield.iriscouch.com/activity_feed";
+
+  Utils.defaultCouchConnection = function() {
+    return {
+      protocol : "https://",
+      domain : "ifield.iriscouch.com",
+      port : "443",
+      pouchname : "default"
+    }; 
+  };
+}
+
+/**
+ * The urls and parameters for the easy developerment mode (uses deployed iField server and ifieldevs couch database
+ */
+if(Utils.easyDevelopmentMode){
+  Utils.authUrl = "http://ifielddevs.fieldlinguist.com"; 
+  Utils.couchUrl = "http://ifielddevs.iriscouch.com/default";
+  Utils.activityFeedCouchUrl = "http://ifielddevs.iriscouch.com/activity_feed";
+
+  Utils.defaultCouchConnection = function() {
+    return {
+      protocol : "http://",
+      domain : "ifielddevs.iriscouch.com",
+      port : "",
+      pouchname : "default"
+    }; 
+  };
+}
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -24,9 +103,6 @@ Utils.touchUrl = "http://localhost:8888/db";
  */
 Utils.pouchUrl = "idb://db";
 
-
-//Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
-Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
 /**
  * The address of the TouchDB-Android database on the Android.
  * @Deprecated now using pouchUrl for all
@@ -39,28 +115,6 @@ Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
  */
 //Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 
-/**
- * The url of the authentication server.
- */
-
-//Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
-Utils.authUrl = "https://localhost:3001";
-/**
- * The parameters of the default couch server.
- */
-Utils.defaultCouchConnection = function() {
-  return {
-//    protocol : "https://",
-//    domain : "ilanguage.iriscouch.com",
-//    port : "443",
-//    pouchname : "default"
-//  }; 
-    protocol : "http://",
-    domain : "localhost",
-    port : "5984",
-    pouchname : "default"
-  }; 
-};
 /**
  * A message for users if they need help which brings them to our contact us form
  */
