@@ -33,9 +33,9 @@ source ~/.profile
 echo -en '\E[47;32m'"\033[1mS"   # Green
 echo "Downloading the iField Authentication server from GitHub"
 cd $HOME/ifieldworkspace
-wget http://ilanguagelab.googlecode.com/files/OpenSourceFieldlinguistics-iField-v1.16.2.tar.gz
-tar -zxvf OpenSourceFieldlinguistics-iField-v1.16.2.tar.gz
-mv OpenSourceFieldlinguistics-iField-f335d25/ iField
+wget http://ilanguagelab.googlecode.com/files/OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216.tar.gz
+tar -zxvf OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216.tar.gz
+mv OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216/ iField
 cd iField
 echo "Installing the iField dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
