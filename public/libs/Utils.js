@@ -20,7 +20,7 @@ Utils.debugMode = true;
  * This makes the app use the production servers. To do this, don't edit these values, run
  * the "switch_to_production.sh" script
  */
-Utils.productionMode = false;
+Utils.productionMode = true;
 
 /*
  * Turn this on so you don't have to set up a server or an couch database, this
