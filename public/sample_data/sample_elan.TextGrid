@@ -1,0 +1,4241 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0.0
+xmax = 390.581
+tiers? <exists>
+size = 8
+item []:
+    item[1]:
+        class = "IntervalTier"
+        name = "ref@RLP"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 244
+        intervals [1]
+            xmin = 0.0
+            xmax = 0.36
+            text = ""
+        intervals [2]
+            xmin = 0.36
+            xmax = 2.14
+            text = ""
+        intervals [3]
+            xmin = 2.14
+            xmax = 3.02
+            text = ""
+        intervals [4]
+            xmin = 3.02
+            xmax = 5.01
+            text = ""
+        intervals [5]
+            xmin = 5.01
+            xmax = 6.45
+            text = ""
+        intervals [6]
+            xmin = 6.45
+            xmax = 9.44
+            text = ""
+        intervals [7]
+            xmin = 9.44
+            xmax = 9.94
+            text = ""
+        intervals [8]
+            xmin = 9.94
+            xmax = 11.73
+            text = ""
+        intervals [9]
+            xmin = 11.73
+            xmax = 12.59
+            text = ""
+        intervals [10]
+            xmin = 12.59
+            xmax = 18.23
+            text = ""
+        intervals [11]
+            xmin = 18.23
+            xmax = 18.95
+            text = ""
+        intervals [12]
+            xmin = 18.95
+            xmax = 21.17
+            text = ""
+        intervals [13]
+            xmin = 21.17
+            xmax = 22.38
+            text = ""
+        intervals [14]
+            xmin = 22.38
+            xmax = 24.71
+            text = ""
+        intervals [15]
+            xmin = 24.71
+            xmax = 25.5
+            text = ""
+        intervals [16]
+            xmin = 25.5
+            xmax = 26.31
+            text = ""
+        intervals [17]
+            xmin = 26.31
+            xmax = 26.63
+            text = ""
+        intervals [18]
+            xmin = 26.63
+            xmax = 29.13
+            text = ""
+        intervals [19]
+            xmin = 29.13
+            xmax = 30.0
+            text = ""
+        intervals [20]
+            xmin = 30.0
+            xmax = 31.27
+            text = ""
+        intervals [21]
+            xmin = 31.27
+            xmax = 32.1
+            text = ""
+        intervals [22]
+            xmin = 32.1
+            xmax = 33.17
+            text = ""
+        intervals [23]
+            xmin = 33.17
+            xmax = 34.25
+            text = ""
+        intervals [24]
+            xmin = 34.25
+            xmax = 37.08
+            text = ""
+        intervals [25]
+            xmin = 37.08
+            xmax = 38.04
+            text = ""
+        intervals [26]
+            xmin = 38.04
+            xmax = 44.27
+            text = ""
+        intervals [27]
+            xmin = 44.27
+            xmax = 45.21
+            text = ""
+        intervals [28]
+            xmin = 45.21
+            xmax = 48.27
+            text = ""
+        intervals [29]
+            xmin = 48.27
+            xmax = 49.18
+            text = ""
+        intervals [30]
+            xmin = 49.18
+            xmax = 50.09
+            text = ""
+        intervals [31]
+            xmin = 50.09
+            xmax = 51.89
+            text = ""
+        intervals [32]
+            xmin = 51.89
+            xmax = 55.73
+            text = ""
+        intervals [33]
+            xmin = 55.73
+            xmax = 56.71
+            text = ""
+        intervals [34]
+            xmin = 56.71
+            xmax = 60.76
+            text = ""
+        intervals [35]
+            xmin = 60.76
+            xmax = 61.74
+            text = ""
+        intervals [36]
+            xmin = 61.74
+            xmax = 63.52
+            text = " "
+        intervals [37]
+            xmin = 63.52
+            xmax = 65.12
+            text = ""
+        intervals [38]
+            xmin = 65.12
+            xmax = 69.43
+            text = ""
+        intervals [39]
+            xmin = 69.43
+            xmax = 70.46
+            text = ""
+        intervals [40]
+            xmin = 70.46
+            xmax = 74.0
+            text = ""
+        intervals [41]
+            xmin = 74.0
+            xmax = 74.83
+            text = ""
+        intervals [42]
+            xmin = 74.83
+            xmax = 76.24
+            text = ""
+        intervals [43]
+            xmin = 76.24
+            xmax = 76.65
+            text = ""
+        intervals [44]
+            xmin = 76.65
+            xmax = 79.78
+            text = ""
+        intervals [45]
+            xmin = 79.78
+            xmax = 80.89
+            text = ""
+        intervals [46]
+            xmin = 80.89
+            xmax = 82.02
+            text = ""
+        intervals [47]
+            xmin = 82.02
+            xmax = 83.25
+            text = ""
+        intervals [48]
+            xmin = 83.25
+            xmax = 86.56
+            text = ""
+        intervals [49]
+            xmin = 86.56
+            xmax = 87.14
+            text = ""
+        intervals [50]
+            xmin = 87.14
+            xmax = 91.2
+            text = ""
+        intervals [51]
+            xmin = 91.2
+            xmax = 91.48
+            text = ""
+        intervals [52]
+            xmin = 91.48
+            xmax = 92.62
+            text = ""
+        intervals [53]
+            xmin = 92.62
+            xmax = 93.83
+            text = ""
+        intervals [54]
+            xmin = 93.83
+            xmax = 94.63
+            text = ""
+        intervals [55]
+            xmin = 94.63
+            xmax = 95.44
+            text = ""
+        intervals [56]
+            xmin = 95.44
+            xmax = 96.77
+            text = ""
+        intervals [57]
+            xmin = 96.77
+            xmax = 97.81
+            text = ""
+        intervals [58]
+            xmin = 97.81
+            xmax = 99.47
+            text = ""
+        intervals [59]
+            xmin = 99.47
+            xmax = 100.43
+            text = ""
+        intervals [60]
+            xmin = 100.43
+            xmax = 101.51
+            text = ""
+        intervals [61]
+            xmin = 101.51
+            xmax = 102.18
+            text = ""
+        intervals [62]
+            xmin = 102.18
+            xmax = 104.36
+            text = ""
+        intervals [63]
+            xmin = 104.36
+            xmax = 105.11
+            text = ""
+        intervals [64]
+            xmin = 105.11
+            xmax = 106.93
+            text = ""
+        intervals [65]
+            xmin = 106.93
+            xmax = 107.78
+            text = ""
+        intervals [66]
+            xmin = 107.78
+            xmax = 112.45
+            text = ""
+        intervals [67]
+            xmin = 112.45
+            xmax = 113.54
+            text = ""
+        intervals [68]
+            xmin = 113.54
+            xmax = 116.82
+            text = ""
+        intervals [69]
+            xmin = 116.82
+            xmax = 117.75
+            text = ""
+        intervals [70]
+            xmin = 117.75
+            xmax = 121.32
+            text = ""
+        intervals [71]
+            xmin = 121.32
+            xmax = 122.43
+            text = ""
+        intervals [72]
+            xmin = 122.43
+            xmax = 123.6
+            text = ""
+        intervals [73]
+            xmin = 123.6
+            xmax = 124.79
+            text = ""
+        intervals [74]
+            xmin = 124.79
+            xmax = 127.12
+            text = ""
+        intervals [75]
+            xmin = 127.12
+            xmax = 127.92
+            text = ""
+        intervals [76]
+            xmin = 127.92
+            xmax = 131.09
+            text = ""
+        intervals [77]
+            xmin = 131.09
+            xmax = 132.06
+            text = ""
+        intervals [78]
+            xmin = 132.06
+            xmax = 133.37
+            text = ""
+        intervals [79]
+            xmin = 133.37
+            xmax = 134.5
+            text = ""
+        intervals [80]
+            xmin = 134.5
+            xmax = 138.47
+            text = ""
+        intervals [81]
+            xmin = 138.47
+            xmax = 139.04
+            text = ""
+        intervals [82]
+            xmin = 139.04
+            xmax = 141.46
+            text = ""
+        intervals [83]
+            xmin = 141.46
+            xmax = 142.16
+            text = ""
+        intervals [84]
+            xmin = 142.16
+            xmax = 145.67
+            text = ""
+        intervals [85]
+            xmin = 145.67
+            xmax = 146.63
+            text = ""
+        intervals [86]
+            xmin = 146.63
+            xmax = 148.42
+            text = ""
+        intervals [87]
+            xmin = 148.42
+            xmax = 149.32
+            text = ""
+        intervals [88]
+            xmin = 149.32
+            xmax = 151.01
+            text = ""
+        intervals [89]
+            xmin = 151.01
+            xmax = 151.89
+            text = ""
+        intervals [90]
+            xmin = 151.89
+            xmax = 155.18
+            text = ""
+        intervals [91]
+            xmin = 155.18
+            xmax = 156.41
+            text = ""
+        intervals [92]
+            xmin = 156.41
+            xmax = 158.29
+            text = ""
+        intervals [93]
+            xmin = 158.29
+            xmax = 161.88
+            text = ""
+        intervals [94]
+            xmin = 161.88
+            xmax = 164.82
+            text = ""
+        intervals [95]
+            xmin = 164.82
+            xmax = 166.07
+            text = ""
+        intervals [96]
+            xmin = 166.07
+            xmax = 168.62
+            text = ""
+        intervals [97]
+            xmin = 168.62
+            xmax = 170.13
+            text = ""
+        intervals [98]
+            xmin = 170.13
+            xmax = 170.84
+            text = ""
+        intervals [99]
+            xmin = 170.84
+            xmax = 172.2
+            text = ""
+        intervals [100]
+            xmin = 172.2
+            xmax = 173.44
+            text = ""
+        intervals [101]
+            xmin = 173.44
+            xmax = 173.65
+            text = ""
+        intervals [102]
+            xmin = 173.65
+            xmax = 175.79
+            text = ""
+        intervals [103]
+            xmin = 175.79
+            xmax = 176.14
+            text = ""
+        intervals [104]
+            xmin = 176.14
+            xmax = 177.68
+            text = ""
+        intervals [105]
+            xmin = 177.68
+            xmax = 177.95
+            text = ""
+        intervals [106]
+            xmin = 177.95
+            xmax = 179.22
+            text = ""
+        intervals [107]
+            xmin = 179.22
+            xmax = 180.32
+            text = ""
+        intervals [108]
+            xmin = 180.32
+            xmax = 181.98
+            text = ""
+        intervals [109]
+            xmin = 181.98
+            xmax = 182.31
+            text = ""
+        intervals [110]
+            xmin = 182.31
+            xmax = 183.56
+            text = ""
+        intervals [111]
+            xmin = 183.56
+            xmax = 185.0
+            text = ""
+        intervals [112]
+            xmin = 185.0
+            xmax = 186.23
+            text = ""
+        intervals [113]
+            xmin = 186.23
+            xmax = 186.58
+            text = ""
+        intervals [114]
+            xmin = 186.58
+            xmax = 188.3
+            text = ""
+        intervals [115]
+            xmin = 188.3
+            xmax = 189.55
+            text = ""
+        intervals [116]
+            xmin = 189.55
+            xmax = 190.21
+            text = ""
+        intervals [117]
+            xmin = 190.21
+            xmax = 191.76
+            text = ""
+        intervals [118]
+            xmin = 191.76
+            xmax = 195.23
+            text = ""
+        intervals [119]
+            xmin = 195.23
+            xmax = 196.53
+            text = ""
+        intervals [120]
+            xmin = 196.53
+            xmax = 199.61
+            text = ""
+        intervals [121]
+            xmin = 199.61
+            xmax = 200.59
+            text = ""
+        intervals [122]
+            xmin = 200.59
+            xmax = 201.05
+            text = ""
+        intervals [123]
+            xmin = 201.05
+            xmax = 202.12
+            text = ""
+        intervals [124]
+            xmin = 202.12
+            xmax = 202.83
+            text = ""
+        intervals [125]
+            xmin = 202.83
+            xmax = 203.33
+            text = ""
+        intervals [126]
+            xmin = 203.33
+            xmax = 204.68
+            text = ""
+        intervals [127]
+            xmin = 204.68
+            xmax = 209.26
+            text = ""
+        intervals [128]
+            xmin = 209.26
+            xmax = 209.61
+            text = "
+"
+        intervals [129]
+            xmin = 209.61
+            xmax = 210.63
+            text = ""
+        intervals [130]
+            xmin = 210.63
+            xmax = 211.2
+            text = ""
+        intervals [131]
+            xmin = 211.2
+            xmax = 213.04
+            text = ""
+        intervals [132]
+            xmin = 213.04
+            xmax = 216.11
+            text = "
+"
+        intervals [133]
+            xmin = 216.11
+            xmax = 216.4
+            text = ""
+        intervals [134]
+            xmin = 216.4
+            xmax = 217.88
+            text = "
+"
+        intervals [135]
+            xmin = 217.88
+            xmax = 218.93
+            text = ""
+        intervals [136]
+            xmin = 218.93
+            xmax = 220.07
+            text = ""
+        intervals [137]
+            xmin = 220.07
+            xmax = 221.02
+            text = ""
+        intervals [138]
+            xmin = 221.02
+            xmax = 222.36
+            text = ""
+        intervals [139]
+            xmin = 222.36
+            xmax = 223.18
+            text = ""
+        intervals [140]
+            xmin = 223.18
+            xmax = 224.5
+            text = "
+"
+        intervals [141]
+            xmin = 224.5
+            xmax = 224.97
+            text = ""
+        intervals [142]
+            xmin = 224.97
+            xmax = 227.01
+            text = ""
+        intervals [143]
+            xmin = 227.01
+            xmax = 229.13
+            text = ""
+        intervals [144]
+            xmin = 229.13
+            xmax = 230.25
+            text = ""
+        intervals [145]
+            xmin = 230.25
+            xmax = 232.04
+            text = ""
+        intervals [146]
+            xmin = 232.04
+            xmax = 233.56
+            text = "
+"
+        intervals [147]
+            xmin = 233.56
+            xmax = 235.46
+            text = ""
+        intervals [148]
+            xmin = 235.46
+            xmax = 236.85
+            text = ""
+        intervals [149]
+            xmin = 236.85
+            xmax = 239.02
+            text = ""
+        intervals [150]
+            xmin = 239.02
+            xmax = 243.75
+            text = ""
+        intervals [151]
+            xmin = 243.75
+            xmax = 244.03
+            text = ""
+        intervals [152]
+            xmin = 244.03
+            xmax = 244.52
+            text = ""
+        intervals [153]
+            xmin = 244.52
+            xmax = 245.77
+            text = ""
+        intervals [154]
+            xmin = 245.77
+            xmax = 246.04
+            text = ""
+        intervals [155]
+            xmin = 246.04
+            xmax = 248.8
+            text = ""
+        intervals [156]
+            xmin = 248.8
+            xmax = 249.78
+            text = ""
+        intervals [157]
+            xmin = 249.78
+            xmax = 250.08
+            text = ""
+        intervals [158]
+            xmin = 250.08
+            xmax = 250.33
+            text = ""
+        intervals [159]
+            xmin = 250.33
+            xmax = 254.97
+            text = ""
+        intervals [160]
+            xmin = 254.97
+            xmax = 255.48
+            text = ""
+        intervals [161]
+            xmin = 255.48
+            xmax = 256.07
+            text = ""
+        intervals [162]
+            xmin = 256.07
+            xmax = 256.98
+            text = ""
+        intervals [163]
+            xmin = 256.98
+            xmax = 258.76
+            text = ""
+        intervals [164]
+            xmin = 258.76
+            xmax = 260.31
+            text = ""
+        intervals [165]
+            xmin = 260.31
+            xmax = 261.97
+            text = ""
+        intervals [166]
+            xmin = 261.97
+            xmax = 263.31
+            text = ""
+        intervals [167]
+            xmin = 263.31
+            xmax = 263.77
+            text = ""
+        intervals [168]
+            xmin = 263.77
+            xmax = 264.65
+            text = ""
+        intervals [169]
+            xmin = 264.65
+            xmax = 266.74
+            text = ""
+        intervals [170]
+            xmin = 266.74
+            xmax = 267.52
+            text = ""
+        intervals [171]
+            xmin = 267.52
+            xmax = 270.3
+            text = ""
+        intervals [172]
+            xmin = 270.3
+            xmax = 273.23
+            text = ""
+        intervals [173]
+            xmin = 273.23
+            xmax = 274.74
+            text = ""
+        intervals [174]
+            xmin = 274.74
+            xmax = 275.68
+            text = ""
+        intervals [175]
+            xmin = 275.68
+            xmax = 276.58
+            text = ""
+        intervals [176]
+            xmin = 276.58
+            xmax = 278.33
+            text = ""
+        intervals [177]
+            xmin = 278.33
+            xmax = 279.96
+            text = ""
+        intervals [178]
+            xmin = 279.96
+            xmax = 283.59
+            text = ""
+        intervals [179]
+            xmin = 283.59
+            xmax = 285.18
+            text = ""
+        intervals [180]
+            xmin = 285.18
+            xmax = 287.84
+            text = ""
+        intervals [181]
+            xmin = 287.84
+            xmax = 288.77
+            text = ""
+        intervals [182]
+            xmin = 288.77
+            xmax = 289.5
+            text = ""
+        intervals [183]
+            xmin = 289.5
+            xmax = 291.13
+            text = ""
+        intervals [184]
+            xmin = 291.13
+            xmax = 294.51
+            text = ""
+        intervals [185]
+            xmin = 294.51
+            xmax = 295.72
+            text = ""
+        intervals [186]
+            xmin = 295.72
+            xmax = 296.8
+            text = ""
+        intervals [187]
+            xmin = 296.8
+            xmax = 298.12
+            text = ""
+        intervals [188]
+            xmin = 298.12
+            xmax = 300.23
+            text = ""
+        intervals [189]
+            xmin = 300.23
+            xmax = 301.69
+            text = ""
+        intervals [190]
+            xmin = 301.69
+            xmax = 304.68
+            text = ""
+        intervals [191]
+            xmin = 304.68
+            xmax = 306.73
+            text = ""
+        intervals [192]
+            xmin = 306.73
+            xmax = 308.28
+            text = ""
+        intervals [193]
+            xmin = 308.28
+            xmax = 309.16
+            text = ""
+        intervals [194]
+            xmin = 309.16
+            xmax = 311.27
+            text = ""
+        intervals [195]
+            xmin = 311.27
+            xmax = 312.73
+            text = ""
+        intervals [196]
+            xmin = 312.73
+            xmax = 314.75
+            text = ""
+        intervals [197]
+            xmin = 314.75
+            xmax = 316.67
+            text = ""
+        intervals [198]
+            xmin = 316.67
+            xmax = 321.07
+            text = ""
+        intervals [199]
+            xmin = 321.07
+            xmax = 322.15
+            text = ""
+        intervals [200]
+            xmin = 322.15
+            xmax = 323.14
+            text = ""
+        intervals [201]
+            xmin = 323.14
+            xmax = 325.88
+            text = ""
+        intervals [202]
+            xmin = 325.88
+            xmax = 327.07
+            text = ""
+        intervals [203]
+            xmin = 327.07
+            xmax = 327.68
+            text = ""
+        intervals [204]
+            xmin = 327.68
+            xmax = 328.54
+            text = "
+"
+        intervals [205]
+            xmin = 328.54
+            xmax = 329.6
+            text = ""
+        intervals [206]
+            xmin = 329.6
+            xmax = 333.92
+            text = ""
+        intervals [207]
+            xmin = 333.92
+            xmax = 335.45
+            text = ""
+        intervals [208]
+            xmin = 335.45
+            xmax = 336.28
+            text = "
+"
+        intervals [209]
+            xmin = 336.28
+            xmax = 337.63
+            text = ""
+        intervals [210]
+            xmin = 337.63
+            xmax = 339.18
+            text = ""
+        intervals [211]
+            xmin = 339.18
+            xmax = 339.6
+            text = ""
+        intervals [212]
+            xmin = 339.6
+            xmax = 340.58
+            text = ""
+        intervals [213]
+            xmin = 340.58
+            xmax = 341.95
+            text = ""
+        intervals [214]
+            xmin = 341.95
+            xmax = 343.11
+            text = ""
+        intervals [215]
+            xmin = 343.11
+            xmax = 343.7
+            text = ""
+        intervals [216]
+            xmin = 343.7
+            xmax = 344.8
+            text = ""
+        intervals [217]
+            xmin = 344.8
+            xmax = 346.76
+            text = ""
+        intervals [218]
+            xmin = 346.76
+            xmax = 349.68
+            text = ""
+        intervals [219]
+            xmin = 349.68
+            xmax = 350.37
+            text = ""
+        intervals [220]
+            xmin = 350.37
+            xmax = 351.46
+            text = ""
+        intervals [221]
+            xmin = 351.46
+            xmax = 352.42
+            text = ""
+        intervals [222]
+            xmin = 352.42
+            xmax = 353.31
+            text = ""
+        intervals [223]
+            xmin = 353.31
+            xmax = 354.0
+            text = ""
+        intervals [224]
+            xmin = 354.0
+            xmax = 354.73
+            text = "
+"
+        intervals [225]
+            xmin = 354.73
+            xmax = 356.82
+            text = ""
+        intervals [226]
+            xmin = 356.82
+            xmax = 357.41
+            text = "
+"
+        intervals [227]
+            xmin = 357.41
+            xmax = 361.05
+            text = ""
+        intervals [228]
+            xmin = 361.05
+            xmax = 362.01
+            text = ""
+        intervals [229]
+            xmin = 362.01
+            xmax = 363.0
+            text = ""
+        intervals [230]
+            xmin = 363.0
+            xmax = 363.64
+            text = ""
+        intervals [231]
+            xmin = 363.64
+            xmax = 364.86
+            text = ""
+        intervals [232]
+            xmin = 364.86
+            xmax = 367.43
+            text = ""
+        intervals [233]
+            xmin = 367.43
+            xmax = 369.43
+            text = ""
+        intervals [234]
+            xmin = 369.43
+            xmax = 370.27
+            text = ""
+        intervals [235]
+            xmin = 370.27
+            xmax = 370.68
+            text = ""
+        intervals [236]
+            xmin = 370.68
+            xmax = 372.56
+            text = ""
+        intervals [237]
+            xmin = 372.56
+            xmax = 373.3
+            text = ""
+        intervals [238]
+            xmin = 373.3
+            xmax = 375.41
+            text = ""
+        intervals [239]
+            xmin = 375.41
+            xmax = 377.05
+            text = ""
+        intervals [240]
+            xmin = 377.05
+            xmax = 382.63
+            text = ""
+        intervals [241]
+            xmin = 382.63
+            xmax = 384.18
+            text = ""
+        intervals [242]
+            xmin = 384.18
+            xmax = 388.23
+            text = ""
+        intervals [243]
+            xmin = 388.23
+            xmax = 389.22
+            text = ""
+        intervals [244]
+            xmin = 389.22
+            xmax = 390.581
+            text = ""
+    item[2]:
+        class = "IntervalTier"
+        name = "trs@RLP"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 244
+        intervals [1]
+            xmin = 0.0
+            xmax = 0.36
+            text = ""
+        intervals [2]
+            xmin = 0.36
+            xmax = 2.14
+            text = "tsa'     a-kaj                 i-su'-b-eñ-ob                        tye     a   papa-ji  
+PERF A2-empezar  A3-decir-APL-SUF-B3-PL venir  M  papá                 "
+        intervals [3]
+            xmin = 2.14
+            xmax = 3.02
+            text = ""
+        intervals [4]
+            xmin = 3.02
+            xmax = 5.01
+            text = "ta'        kaj              i-säkl-añ-ob           tye      i-lum           che' jiñi
+PERF empezar   A3-buscar-TDI-PL venir  A3-terreno así   ese                                    "
+        intervals [5]
+            xmin = 5.01
+            xmax = 6.45
+            text = ""
+        intervals [6]
+            xmin = 6.45
+            xmax = 9.44
+            text = "tsa'-bi              kaj             y-ubin             cha’añ wol       tyi         k'ajty-i               tye       je lum        ila    tyi        Sanmikel-i
+PERFV-REP empezar  A3-escuchar  SR        PROG PREP preguntar-SUF venir       terreno  aquí PREP San Miguel-                                                           "
+        intervals [7]
+            xmin = 9.44
+            xmax = 9.94
+            text = ""
+        intervals [8]
+            xmin = 9.94
+            xmax = 11.73
+            text = "ta'       ame kaj               i-ña'ty-añ            je papaj ta'         tyäl-i
+PERF          empezar    A3-pensar-TDI      papá  PREP  venir-VTI                          "
+        intervals [9]
+            xmin = 11.73
+            xmax = 12.59
+            text = ""
+        intervals [10]
+            xmin = 12.59
+            xmax = 18.23
+            text = "a   yaj tyi         chuchukrus che' mu'-bi            i-weñ      ts'ajl-eñ-ob   che'-je i-kajety-añ-ob      i-lum,            i-kajety-añ-ob       a-ba'               mi
+M  allá PERF Chuchucruz así  IMPFV-REP  A3-bien odiar-TDI-PLasí-      A3- pelar-TDI-PL A3-terreno,  A3- pelar-TDI-PL  M-PRO.REL IMPFV                                                                                           
+"
+        intervals [11]
+            xmin = 18.23
+            xmax = 18.95
+            text = ""
+        intervals [12]
+            xmin = 18.95
+            xmax = 21.17
+            text = "mel-ob     i-chol       i-ba'                  mi          mel-ob    i-kajpel-el
+hacer-PL A3-milpa A3-PRO.LOC  IMPFV  hacer-PL A3-café--NF                                                         "
+        intervals [13]
+            xmin = 21.17
+            xmax = 22.38
+            text = ""
+        intervals [14]
+            xmin = 22.38
+            xmax = 24.71
+            text = "täx-bi           i-säk-ä                         ña'ty-a           a  papaj täx-me-ku             i-käy-ä
+PERF-REP A3-desesperar-VTT pensar-VTT  M papá   PERF-así-ASEV A3-dejar-VTT                                                "
+        intervals [15]
+            xmin = 24.71
+            xmax = 25.5
+            text = ""
+        intervals [16]
+            xmin = 25.5
+            xmax = 26.31
+            text = "täx-me-ku             tyäl-i
+PERF-así-ASEV  venir-VTI                       "
+        intervals [17]
+            xmin = 26.31
+            xmax = 26.63
+            text = ""
+        intervals [18]
+            xmin = 26.63
+            xmax = 29.13
+            text = "pe    cha'            lajal-jach-ta' tyi       y-ikoty a   ta'-bä           i-tsaj-le-yi
+pero otra_vez   igual-sólo-    venir  A3-SR  M PERF-REL A3-odiar-PAS-                                                "
+        intervals [19]
+            xmin = 29.13
+            xmax = 30.0
+            text = ""
+        intervals [20]
+            xmin = 30.0
+            xmax = 31.27
+            text = "wä-jach    ta'       cha'           tyi       y-ikoty
+aquí-sólo PERF otra_vez   venir A3-SR                "
+        intervals [21]
+            xmin = 31.27
+            xmax = 32.1
+            text = ""
+        intervals [22]
+            xmin = 32.1
+            xmax = 33.17
+            text = "che'-ta'      mi         y-äl          a  papaj
+así-ASEV IMPFV  A3-decir  M papá                                  "
+        intervals [23]
+            xmin = 33.17
+            xmax = 34.25
+            text = ""
+        intervals [24]
+            xmin = 34.25
+            xmax = 37.08
+            text = "ix-ku   ba'              horaj che’ jiñ-i           tsa'     a  kaj             tyi        mejl-el       a-bi       ili      lum-i
+allá-    PRO.REL hora   así PRO3-CL PERF M empezar  PREP hacer-NF   M-REP este terreno-CL                                                                    "
+        intervals [25]
+            xmin = 37.08
+            xmax = 38.04
+            text = ""
+        intervals [26]
+            xmin = 38.04
+            xmax = 44.27
+            text = "yä'-äch-me           aku   ta'         i-mero     ubiñ   i-tyijikña-y-el             peroj chakuj mak  tyi        kaj          i-cha'              weñ tyaj           i-tyijikñi-y-el               tsa'-bi              i-cha'               kajityañ-ob ba'               mi         mel-ob     i-chol-i 
+allí-ASEV-PRED           PERF  A3-mero sentir A3-alegre-EPN-NF  pero                NEG PERF PROSP A3-otra_vez  bien alcanzar  A3-alegre-EPN-NF  PERFV-REP  A3-otra_vez  pelear-PL   PRO.LOC   IMPFV hacer-PL  A3-milpa-CL                                                                           "
+        intervals [27]
+            xmin = 44.27
+            xmax = 45.21
+            text = ""
+        intervals [28]
+            xmin = 45.21
+            xmax = 48.27
+            text = "säk-che'-jach-bi         ch'äjyem-tyik  jiñ           papaj tsa'     cha'           kaj             mi          y-äl           aja
+blanco-así-sólo-REP triste-               PRON3 papá  PERF otra_vez  empezar   IMPFV  A3-decir  EXCL"
+        intervals [29]
+            xmin = 48.27
+            xmax = 49.18
+            text = ""
+        intervals [30]
+            xmin = 49.18
+            xmax = 50.09
+            text = "ix-ku         che' jiñ-i
+ya-ASEV  así  PRO3-CL    "
+        intervals [31]
+            xmin = 50.09
+            xmax = 51.89
+            text = ""
+        intervals [32]
+            xmin = 51.89
+            xmax = 55.73
+            text = "k'uñ ba' tsa' kaj tyi ñäjchelij jiñ ache' tyäx päsletyak kajtyak tyi..."
+        intervals [33]
+            xmin = 55.73
+            xmax = 56.71
+            text = ""
+        intervals [34]
+            xmin = 56.71
+            xmax = 60.76
+            text = "päsityak tyi jujuntyikil che’jiñi ta' amekuj  lajmi tyi chaj tsajlentyel a papaj "
+        intervals [35]
+            xmin = 60.76
+            xmax = 61.74
+            text = ""
+        intervals [36]
+            xmin = 61.74
+            xmax = 63.52
+            text = "chejach ata' kajyob tyi jubetye bajche jiñ"
+        intervals [37]
+            xmin = 63.52
+            xmax = 65.12
+            text = ""
+        intervals [38]
+            xmin = 65.12
+            xmax = 69.43
+            text = "che'ata' ujtyityak tyi meleyob cheje, amajtyañ ejtyel chuktyak cheje tyäx abi käyäyob"
+        intervals [39]
+            xmin = 69.43
+            xmax = 70.46
+            text = ""
+        intervals [40]
+            xmin = 70.46
+            xmax = 74.0
+            text = "cha’añ mach chäñ yomobäx abi imel a jiñi tyoj majtyañ ejtyel"
+        intervals [41]
+            xmin = 74.0
+            xmax = 74.83
+            text = ""
+        intervals [42]
+            xmin = 74.83
+            xmax = 76.24
+            text = "tyo librej ejtyejach abij"
+        intervals [43]
+            xmin = 76.24
+            xmax = 76.65
+            text = ""
+        intervals [44]
+            xmin = 76.65
+            xmax = 79.78
+            text = "mach abij añix chuk mi tyajob mach abax kamelob ityojol"
+        intervals [45]
+            xmin = 79.78
+            xmax = 80.89
+            text = ""
+        intervals [46]
+            xmin = 80.89
+            xmax = 82.02
+            text = "che' tsa' yälätyak apapaj"
+        intervals [47]
+            xmin = 82.02
+            xmax = 83.25
+            text = ""
+        intervals [48]
+            xmin = 83.25
+            xmax = 86.56
+            text = "yäxmeku ayaj cheje jiñmek cha’añ tyäx kaj itsiklañobtye a ilali"
+        intervals [49]
+            xmin = 86.56
+            xmax = 87.14
+            text = ""
+        intervals [50]
+            xmin = 87.14
+            xmax = 91.2
+            text = "wäxmek atsa' kaj imero ubiñob ityijikñiyel  koj icha’añix a tyi kaj ibaja  melob a che'  tyi"
+        intervals [51]
+            xmin = 91.2
+            xmax = 91.48
+            text = ""
+        intervals [52]
+            xmin = 91.48
+            xmax = 92.62
+            text = "bajñelilob abij    "
+        intervals [53]
+            xmin = 92.62
+            xmax = 93.83
+            text = ""
+        intervals [54]
+            xmin = 93.83
+            xmax = 94.63
+            text = "che' tyi yälä ili"
+        intervals [55]
+            xmin = 94.63
+            xmax = 95.44
+            text = ""
+        intervals [56]
+            xmin = 95.44
+            xmax = 96.77
+            text = "kojata' ubibil kcha’añ baje jiñ"
+        intervals [57]
+            xmin = 96.77
+            xmax = 97.81
+            text = ""
+        intervals [58]
+            xmin = 97.81
+            xmax = 99.47
+            text = "bajche ta' tyili je kpapaji"
+        intervals [59]
+            xmin = 99.47
+            xmax = 100.43
+            text = ""
+        intervals [60]
+            xmin = 100.43
+            xmax = 101.51
+            text = "tyi kajich je ilum"
+        intervals [61]
+            xmin = 101.51
+            xmax = 102.18
+            text = ""
+        intervals [62]
+            xmin = 102.18
+            xmax = 104.36
+            text = "tyi lumobjach kaxlañob baj chumul"
+        intervals [63]
+            xmin = 104.36
+            xmax = 105.11
+            text = ""
+        intervals [64]
+            xmin = 105.11
+            xmax = 106.93
+            text = "machek  añk mi iweñ mel a ixim"
+        intervals [65]
+            xmin = 106.93
+            xmax = 107.78
+            text = ""
+        intervals [66]
+            xmin = 107.78
+            xmax = 112.45
+            text = "mak ' mi weñ mel ichol chejachij bäkeñtyik  bajchetyak mi imelob abi icholi"
+        intervals [67]
+            xmin = 112.45
+            xmax = 113.54
+            text = ""
+        intervals [68]
+            xmin = 113.54
+            xmax = 116.82
+            text = "ma'añik koj tsa' kaj iyubiñ che'  wox  tyi säklañtye je yaj tyi amerikaji"
+        intervals [69]
+            xmin = 116.82
+            xmax = 117.75
+            text = ""
+        intervals [70]
+            xmin = 117.75
+            xmax = 121.32
+            text = "jixekuj  je k yujmel ambä tyi santamariaj tsi' kaj ipiyob abi tye ibäj"
+        intervals [71]
+            xmin = 121.32
+            xmax = 122.43
+            text = ""
+        intervals [72]
+            xmin = 122.43
+            xmax = 123.6
+            text = "la'ix ja kerañ"
+        intervals [73]
+            xmin = 123.6
+            xmax = 124.79
+            text = ""
+        intervals [74]
+            xmin = 124.79
+            xmax = 127.12
+            text = "säklañix baj maj mel acholi che' abij"
+        intervals [75]
+            xmin = 127.12
+            xmax = 127.92
+            text = ""
+        intervals [76]
+            xmin = 127.92
+            xmax = 131.09
+            text = "loñ ñaxamek tsa' käle a tyi amerika chaku mak ta' kälej"
+        intervals [77]
+            xmin = 131.09
+            xmax = 132.06
+            text = ""
+        intervals [78]
+            xmin = 132.06
+            xmax = 133.37
+            text = "jiñixkuj yaj tsa' mek cha'"
+        intervals [79]
+            xmin = 133.37
+            xmax = 134.5
+            text = ""
+        intervals [80]
+            xmin = 134.5
+            xmax = 138.47
+            text = "ñumityak asensuji mach abij añik  ta' lokä tyi sensuj a kpapaji cha' majli"
+        intervals [81]
+            xmin = 138.47
+            xmax = 139.04
+            text = ""
+        intervals [82]
+            xmin = 139.04
+            xmax = 141.46
+            text = "wäle añtyo jocholbi ya'i yäx mi la maj ya'i  "
+        intervals [83]
+            xmin = 141.46
+            xmax = 142.16
+            text = ""
+        intervals [84]
+            xmin = 142.16
+            xmax = 145.67
+            text = "kaj la wotsabeñ ikabaji nuebo muntoj mu kaj laj wotsabeñ chejme'ak  iyilolob"
+        intervals [85]
+            xmin = 145.67
+            xmax = 146.63
+            text = ""
+        intervals [86]
+            xmin = 146.63
+            xmax = 148.42
+            text = "yajmek ta' chaj letsi maj je kpapaj"
+        intervals [87]
+            xmin = 148.42
+            xmax = 149.32
+            text = ""
+        intervals [88]
+            xmin = 149.32
+            xmax = 151.01
+            text = "chejaxmek tyi kuñ tyaja bajche jiñ"
+        intervals [89]
+            xmin = 151.01
+            xmax = 151.89
+            text = ""
+        intervals [90]
+            xmin = 151.89
+            xmax = 155.18
+            text = "kuñ wäxek chumil pekoj wäle mataj chiñ wox ikäñe yubil je  "
+        intervals [91]
+            xmin = 155.18
+            xmax = 156.41
+            text = ""
+        intervals [92]
+            xmin = 156.41
+            xmax = 158.29
+            text = "kojatsaj  bajche jiñi ta' kubiñtyak  abajche jiñ"
+        intervals [93]
+            xmin = 158.29
+            xmax = 161.88
+            text = ""
+        intervals [94]
+            xmin = 161.88
+            xmax = 164.82
+            text = "antaj tyilemta' tyi totukeroj ja'e yajatsa' taj kaj k'el je  yaj"
+        intervals [95]
+            xmin = 164.82
+            xmax = 166.07
+            text = ""
+        intervals [96]
+            xmin = 166.07
+            xmax = 168.62
+            text = "tortukerota ta' tyili ta' kaj tyi tyile a yaj"
+        intervals [97]
+            xmin = 168.62
+            xmax = 170.13
+            text = ""
+        intervals [98]
+            xmin = 170.13
+            xmax = 170.84
+            text = "tyiyoñlo che'"
+        intervals [99]
+            xmin = 170.84
+            xmax = 172.2
+            text = ""
+        intervals [100]
+            xmin = 172.2
+            xmax = 173.44
+            text = "kaxeñlon tyile che' loñ "
+        intervals [101]
+            xmin = 173.44
+            xmax = 173.65
+            text = ""
+        intervals [102]
+            xmin = 173.65
+            xmax = 175.79
+            text = "ñaxan ta' ñumiloyon tyi chumtyil tyi amerikaj"
+        intervals [103]
+            xmin = 175.79
+            xmax = 176.14
+            text = ""
+        intervals [104]
+            xmin = 176.14
+            xmax = 177.68
+            text = "mejlemixta ili sanmikel"
+        intervals [105]
+            xmin = 177.68
+            xmax = 177.95
+            text = ""
+        intervals [106]
+            xmin = 177.95
+            xmax = 179.22
+            text = "ñumejaxmeku mi ñumelob"
+        intervals [107]
+            xmin = 179.22
+            xmax = 180.32
+            text = ""
+        intervals [108]
+            xmin = 180.32
+            xmax = 181.98
+            text = "chak wokol ta' yubiyob a ximbal"
+        intervals [109]
+            xmin = 181.98
+            xmax = 182.31
+            text = ""
+        intervals [110]
+            xmin = 182.31
+            xmax = 183.56
+            text = "ok'lel bajche ili ja’lel"
+        intervals [111]
+            xmin = 183.56
+            xmax = 185.0
+            text = ""
+        intervals [112]
+            xmin = 185.0
+            xmax = 186.23
+            text = "maxtyota' añ  kartera che'"
+        intervals [113]
+            xmin = 186.23
+            xmax = 186.58
+            text = ""
+        intervals [114]
+            xmin = 186.58
+            xmax = 188.3
+            text = "puru tyi bijta' mi xiñob che'"
+        intervals [115]
+            xmin = 188.3
+            xmax = 189.55
+            text = ""
+        intervals [116]
+            xmin = 189.55
+            xmax = 190.21
+            text = "chejach bajche jiñ"
+        intervals [117]
+            xmin = 190.21
+            xmax = 191.76
+            text = ""
+        intervals [118]
+            xmin = 191.76
+            xmax = 195.23
+            text = "yäxta tyi kuñ tyajobix iweñlel mataj ta' chäñ kajyob tyi ximbal koj"
+        intervals [119]
+            xmin = 195.23
+            xmax = 196.53
+            text = ""
+        intervals [120]
+            xmin = 196.53
+            xmax = 199.61
+            text = "tyo junjajtsaxta'  tyiliyob a yaj tyi tortukero"
+        intervals [121]
+            xmin = 199.61
+            xmax = 200.59
+            text = ""
+        intervals [122]
+            xmin = 200.59
+            xmax = 201.05
+            text = "silbido"
+        intervals [123]
+            xmin = 201.05
+            xmax = 202.12
+            text = ""
+        intervals [124]
+            xmin = 202.12
+            xmax = 202.83
+            text = "chejata' bajche"
+        intervals [125]
+            xmin = 202.83
+            xmax = 203.33
+            text = ""
+        intervals [126]
+            xmin = 203.33
+            xmax = 204.68
+            text = "kubiñ abajche mi yilobi"
+        intervals [127]
+            xmin = 204.68
+            xmax = 209.26
+            text = ""
+        intervals [128]
+            xmin = 209.26
+            xmax = 209.61
+            text = "aaaah"
+        intervals [129]
+            xmin = 209.61
+            xmax = 210.63
+            text = ""
+        intervals [130]
+            xmin = 210.63
+            xmax = 211.2
+            text = "apapaj"
+        intervals [131]
+            xmin = 211.2
+            xmax = 213.04
+            text = ""
+        intervals [132]
+            xmin = 213.04
+            xmax = 216.11
+            text = "chaku yerañobjach abi bajche ixi yerañ peruj kuzman che'"
+        intervals [133]
+            xmin = 216.11
+            xmax = 216.4
+            text = ""
+        intervals [134]
+            xmin = 216.4
+            xmax = 217.88
+            text = "jiñobjach ata' kaj itsajleñob ibä jiñ"
+        intervals [135]
+            xmin = 217.88
+            xmax = 218.93
+            text = ""
+        intervals [136]
+            xmin = 218.93
+            xmax = 220.07
+            text = "mach ata' kujchob che'"
+        intervals [137]
+            xmin = 220.07
+            xmax = 221.02
+            text = ""
+        intervals [138]
+            xmin = 221.02
+            xmax = 222.36
+            text = "pe' naxañ ata' ta' chämi je'"
+        intervals [139]
+            xmin = 222.36
+            xmax = 223.18
+            text = ""
+        intervals [140]
+            xmin = 223.18
+            xmax = 224.5
+            text = "martiñ kuzman che' mi kloñ ubiñ"
+        intervals [141]
+            xmin = 224.5
+            xmax = 224.97
+            text = ""
+        intervals [142]
+            xmin = 224.97
+            xmax = 227.01
+            text = "naxañ ta' chämi iloñ  tsajloñ iweñ"
+        intervals [143]
+            xmin = 227.01
+            xmax = 229.13
+            text = ""
+        intervals [144]
+            xmin = 229.13
+            xmax = 230.25
+            text = "yikoty bajche yerañob che'"
+        intervals [145]
+            xmin = 230.25
+            xmax = 232.04
+            text = ""
+        intervals [146]
+            xmin = 232.04
+            xmax = 233.56
+            text = "ta' ata' iweñ tsajle ixä markusij"
+        intervals [147]
+            xmin = 233.56
+            xmax = 235.46
+            text = ""
+        intervals [148]
+            xmin = 235.46
+            xmax = 236.85
+            text = "cha' lajaljach ata' tyi yikoty"
+        intervals [149]
+            xmin = 236.85
+            xmax = 239.02
+            text = ""
+        intervals [150]
+            xmin = 239.02
+            xmax = 243.75
+            text = "yajta' mi baja kälelob ta' kälä ache' mata' wol kñajtyañ mi chaj lajalta' tyal kikoty chejta' mi yil che'"
+        intervals [151]
+            xmin = 243.75
+            xmax = 244.03
+            text = ""
+        intervals [152]
+            xmin = 244.03
+            xmax = 244.52
+            text = "mi yiltyak"
+        intervals [153]
+            xmin = 244.52
+            xmax = 245.77
+            text = ""
+        intervals [154]
+            xmin = 245.77
+            xmax = 246.04
+            text = "ruido"
+        intervals [155]
+            xmin = 246.04
+            xmax = 248.8
+            text = ""
+        intervals [156]
+            xmin = 248.8
+            xmax = 249.78
+            text = "chejach baje jiñ"
+        intervals [157]
+            xmin = 249.78
+            xmax = 250.08
+            text = ""
+        intervals [158]
+            xmin = 250.08
+            xmax = 250.33
+            text = "yajach"
+        intervals [159]
+            xmin = 250.33
+            xmax = 254.97
+            text = ""
+        intervals [160]
+            xmin = 254.97
+            xmax = 255.48
+            text = "jänke"
+        intervals [161]
+            xmin = 255.48
+            xmax = 256.07
+            text = ""
+        intervals [162]
+            xmin = 256.07
+            xmax = 256.98
+            text = "añichku koperasion"
+        intervals [163]
+            xmin = 256.98
+            xmax = 258.76
+            text = ""
+        intervals [164]
+            xmin = 258.76
+            xmax = 260.31
+            text = "puru koperasion ta' che'"
+        intervals [165]
+            xmin = 260.31
+            xmax = 261.97
+            text = ""
+        intervals [166]
+            xmin = 261.97
+            xmax = 263.31
+            text = "maj yubiñob atyi saltuj"
+        intervals [167]
+            xmin = 263.31
+            xmax = 263.77
+            text = ""
+        intervals [168]
+            xmin = 263.77
+            xmax = 264.65
+            text = "mi muchkä ityajob"
+        intervals [169]
+            xmin = 264.65
+            xmax = 266.74
+            text = ""
+        intervals [170]
+            xmin = 266.74
+            xmax = 267.52
+            text = "chetyakata' bajche jiñ"
+        intervals [171]
+            xmin = 267.52
+            xmax = 270.3
+            text = ""
+        intervals [172]
+            xmin = 270.3
+            xmax = 273.23
+            text = "jiñi machek kujilik majch iyum koj"
+        intervals [173]
+            xmin = 273.23
+            xmax = 274.74
+            text = ""
+        intervals [174]
+            xmin = 274.74
+            xmax = 275.68
+            text = "jocholäch abi"
+        intervals [175]
+            xmin = 275.68
+            xmax = 276.58
+            text = ""
+        intervals [176]
+            xmin = 276.58
+            xmax = 278.33
+            text = "jocholäch abi' a ili lumi"
+        intervals [177]
+            xmin = 278.33
+            xmax = 279.96
+            text = ""
+        intervals [178]
+            xmin = 279.96
+            xmax = 283.59
+            text = "pe' täx añch abi iyum tyi ñaxañi pe' täx abi ikäyä mi yälob aja'"
+        intervals [179]
+            xmin = 283.59
+            xmax = 285.18
+            text = ""
+        intervals [180]
+            xmin = 285.18
+            xmax = 287.84
+            text = "jiñtyakme'aku tyi ipäkä a ixä  ja'as añbä  tyi"
+        intervals [181]
+            xmin = 287.84
+            xmax = 288.77
+            text = ""
+        intervals [182]
+            xmin = 288.77
+            xmax = 289.5
+            text = "al kajpelel"
+        intervals [183]
+            xmin = 289.5
+            xmax = 291.13
+            text = ""
+        intervals [184]
+            xmin = 291.13
+            xmax = 294.51
+            text = "ej chuxkaj ik'abatyak  mata' muj weñ  kchäñbeñ isujm ja'e"
+        intervals [185]
+            xmin = 294.51
+            xmax = 295.72
+            text = ""
+        intervals [186]
+            xmin = 295.72
+            xmax = 296.8
+            text = "añch ik'aba akaxlañ"
+        intervals [187]
+            xmin = 296.8
+            xmax = 298.12
+            text = ""
+        intervals [188]
+            xmin = 298.12
+            xmax = 300.23
+            text = "ta'bä ñumiyob abi tyi ñaxa chumtyäl"
+        intervals [189]
+            xmin = 300.23
+            xmax = 301.69
+            text = ""
+        intervals [190]
+            xmin = 301.69
+            xmax = 304.68
+            text = "pe' täxta' icha' käyäyob che' täxta' kaj tyi k'ajtyintyel je' che'"
+        intervals [191]
+            xmin = 304.68
+            xmax = 306.73
+            text = ""
+        intervals [192]
+            xmin = 306.73
+            xmax = 308.28
+            text = "machek añäch tyi chäñ käyäyob aja'"
+        intervals [193]
+            xmin = 308.28
+            xmax = 309.16
+            text = ""
+        intervals [194]
+            xmin = 309.16
+            xmax = 311.27
+            text = "chak' lamtyak akuj ta' cha' sujtyiyob maj a tyi chuchucrus"
+        intervals [195]
+            xmin = 311.27
+            xmax = 312.73
+            text = ""
+        intervals [196]
+            xmin = 312.73
+            xmax = 314.75
+            text = "cha' sujtyiyob abi majle a maxbä yoñk kälel"
+        intervals [197]
+            xmin = 314.75
+            xmax = 316.67
+            text = ""
+        intervals [198]
+            xmin = 316.67
+            xmax = 321.07
+            text = "jinjax a joñon mak ta' kunya jak'ä cha'an mi cha' sujtye aja pe' wäch ta' käleyoñ aja"
+        intervals [199]
+            xmin = 321.07
+            xmax = 322.15
+            text = ""
+        intervals [200]
+            xmin = 322.15
+            xmax = 323.14
+            text = "koj chejta' mi yäl apapaj"
+        intervals [201]
+            xmin = 323.14
+            xmax = 325.88
+            text = ""
+        intervals [202]
+            xmin = 325.88
+            xmax = 327.07
+            text = "yomächbä ikäyobi"
+        intervals [203]
+            xmin = 327.07
+            xmax = 327.68
+            text = ""
+        intervals [204]
+            xmin = 327.68
+            xmax = 328.54
+            text = "cha' majliyob aja"
+        intervals [205]
+            xmin = 328.54
+            xmax = 329.6
+            text = ""
+        intervals [206]
+            xmin = 329.6
+            xmax = 333.92
+            text = "mu'abi bäjñañob a chämel bajche koj mu ata' ibä chämelob a che' mi tsiji julelob che'"
+        intervals [207]
+            xmin = 333.92
+            xmax = 335.45
+            text = ""
+        intervals [208]
+            xmin = 335.45
+            xmax = 336.28
+            text = "che'ta' kaxta' mi yälob"
+        intervals [209]
+            xmin = 336.28
+            xmax = 337.63
+            text = ""
+        intervals [210]
+            xmin = 337.63
+            xmax = 339.18
+            text = "jäjä wa' kaj abi kajk'"
+        intervals [211]
+            xmin = 339.18
+            xmax = 339.6
+            text = ""
+        intervals [212]
+            xmin = 339.6
+            xmax = 340.58
+            text = "wa' kaj abi tya'"
+        intervals [213]
+            xmin = 340.58
+            xmax = 341.95
+            text = ""
+        intervals [214]
+            xmin = 341.95
+            xmax = 343.11
+            text = "jasäjach ata' ibä ubiyob"
+        intervals [215]
+            xmin = 343.11
+            xmax = 343.7
+            text = ""
+        intervals [216]
+            xmin = 343.7
+            xmax = 344.8
+            text = "jiñme'ak tyi bäjñayobi"
+        intervals [217]
+            xmin = 344.8
+            xmax = 346.76
+            text = ""
+        intervals [218]
+            xmin = 346.76
+            xmax = 349.68
+            text = "cha' sujtyikob abi koj machta' baj kä tyajob abi tsak che'"
+        intervals [219]
+            xmin = 349.68
+            xmax = 350.37
+            text = ""
+        intervals [220]
+            xmin = 350.37
+            xmax = 351.46
+            text = "ruido de pavos"
+        intervals [221]
+            xmin = 351.46
+            xmax = 352.42
+            text = ""
+        intervals [222]
+            xmin = 352.42
+            xmax = 353.31
+            text = "chejata mi yältyak"
+        intervals [223]
+            xmin = 353.31
+            xmax = 354.0
+            text = ""
+        intervals [224]
+            xmin = 354.0
+            xmax = 354.73
+            text = "yältyak kubi"
+        intervals [225]
+            xmin = 354.73
+            xmax = 356.82
+            text = ""
+        intervals [226]
+            xmin = 356.82
+            xmax = 357.41
+            text = "chejach bajche jiñ"
+        intervals [227]
+            xmin = 357.41
+            xmax = 361.05
+            text = ""
+        intervals [228]
+            xmin = 361.05
+            xmax = 362.01
+            text = "yajta' tyi' ja'"
+        intervals [229]
+            xmin = 362.01
+            xmax = 363.0
+            text = ""
+        intervals [230]
+            xmin = 363.0
+            xmax = 363.64
+            text = "poj ix tyi entyil"
+        intervals [231]
+            xmin = 363.64
+            xmax = 364.86
+            text = ""
+        intervals [232]
+            xmin = 364.86
+            xmax = 367.43
+            text = "ñaxañixjekta' ta' kajyob tyi chumtyil ya' yäxta ta' kotyiyob che'"
+        intervals [233]
+            xmin = 367.43
+            xmax = 369.43
+            text = ""
+        intervals [234]
+            xmin = 369.43
+            xmax = 370.27
+            text = "pejtyel aja"
+        intervals [235]
+            xmin = 370.27
+            xmax = 370.68
+            text = ""
+        intervals [236]
+            xmin = 370.68
+            xmax = 372.56
+            text = "eskuela ya' ta' luj käle a tyi entyäl"
+        intervals [237]
+            xmin = 372.56
+            xmax = 373.3
+            text = ""
+        intervals [238]
+            xmin = 373.3
+            xmax = 375.41
+            text = "kancha chubä yajta' ta' lu käle che'"
+        intervals [239]
+            xmin = 375.41
+            xmax = 377.05
+            text = ""
+        intervals [240]
+            xmin = 377.05
+            xmax = 382.63
+            text = "kaj icha' ñajtyañobix iletsetyel a ilali cha'an a kartera icha' mulañob che' koj añobta ikajpelel che'"
+        intervals [241]
+            xmin = 382.63
+            xmax = 384.18
+            text = ""
+        intervals [242]
+            xmin = 384.18
+            xmax = 388.23
+            text = "cha'an junya wokolix mi lak kuch jubetye a la kajpe ki' cha' mas läkäläx aya'i"
+        intervals [243]
+            xmin = 388.23
+            xmax = 389.22
+            text = ""
+        intervals [244]
+            xmin = 389.22
+            xmax = 390.581
+            text = "yikoty che' mi lak choñi chetyakob che'"
+    item[3]:
+        class = "IntervalTier"
+        name = "trad@RLP"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 236
+        intervals [1]
+            xmin = 0.0
+            xmax = 0.36
+            text = ""
+        intervals [2]
+            xmin = 0.36
+            xmax = 2.14
+            text = "que a papá le comentaron que viniera"
+        intervals [3]
+            xmin = 2.14
+            xmax = 3.02
+            text = ""
+        intervals [4]
+            xmin = 3.02
+            xmax = 5.01
+            text = "de esa forma empezaron a buscar terreno"
+        intervals [5]
+            xmin = 5.01
+            xmax = 6.45
+            text = ""
+        intervals [6]
+            xmin = 6.45
+            xmax = 9.44
+            text = "supo que aquí en San Miguel también estaban solicitando terreno"
+        intervals [7]
+            xmin = 9.44
+            xmax = 9.94
+            text = ""
+        intervals [8]
+            xmin = 9.94
+            xmax = 11.73
+            text = "de pensarlo papa vino"
+        intervals [9]
+            xmin = 11.73
+            xmax = 12.59
+            text = ""
+        intervals [10]
+            xmin = 12.59
+            xmax = 18.23
+            text = "allá en Chuchucruz lo odiaban bastante peleaban terreno peleaban donde"
+        intervals [11]
+            xmin = 18.23
+            xmax = 18.95
+            text = ""
+        intervals [12]
+            xmin = 18.95
+            xmax = 21.17
+            text = "hacían milpa y donde hacían su cafetal"
+        intervals [13]
+            xmin = 21.17
+            xmax = 22.38
+            text = ""
+        intervals [14]
+            xmin = 22.38
+            xmax = 24.71
+            text = "después de pensarlo papá dejó (el terreno)"
+        intervals [15]
+            xmin = 24.71
+            xmax = 25.5
+            text = ""
+        intervals [16]
+            xmin = 25.5
+            xmax = 26.31
+            text = "de ahí se vino"
+        intervals [17]
+            xmin = 26.31
+            xmax = 26.63
+            text = ""
+        intervals [18]
+            xmin = 26.63
+            xmax = 29.13
+            text = "pero se vino de nuevo con el que tenía problemas"
+        intervals [19]
+            xmin = 29.13
+            xmax = 30.0
+            text = ""
+        intervals [20]
+            xmin = 30.0
+            xmax = 31.27
+            text = "se vino con el aquí"
+        intervals [21]
+            xmin = 31.27
+            xmax = 32.1
+            text = ""
+        intervals [22]
+            xmin = 32.1
+            xmax = 33.17
+            text = "así decía papá"
+        intervals [23]
+            xmin = 33.17
+            xmax = 34.25
+            text = ""
+        intervals [24]
+            xmin = 34.25
+            xmax = 37.08
+            text = "en ese tiempo se empezó a construir este pueblo"
+        intervals [25]
+            xmin = 37.08
+            xmax = 38.04
+            text = ""
+        intervals [26]
+            xmin = 38.04
+            xmax = 44.27
+            text = "de ahí empezó a sentirse un poco tranquilo pero no se tranquilizo por completo porque empezaron a pelear el lugar para hacer la milpa"
+        intervals [27]
+            xmin = 44.27
+            xmax = 45.21
+            text = ""
+        intervals [28]
+            xmin = 45.21
+            xmax = 48.27
+            text = "de esa forma papá decía que estaba nuevamente pensativo "
+        intervals [29]
+            xmin = 48.27
+            xmax = 49.18
+            text = ""
+        intervals [30]
+            xmin = 49.18
+            xmax = 50.09
+            text = "ya de ahí"
+        intervals [31]
+            xmin = 50.09
+            xmax = 51.89
+            text = ""
+        intervals [32]
+            xmin = 51.89
+            xmax = 55.73
+            text = "donde empezaron a tranquilizarse fue cuando se empezó a medir se empezó"
+        intervals [33]
+            xmin = 55.73
+            xmax = 56.71
+            text = ""
+        intervals [34]
+            xmin = 56.71
+            xmax = 60.76
+            text = "a medir uno por uno de ahí a papá lo dejaron de odiar"
+        intervals [35]
+            xmin = 60.76
+            xmax = 61.74
+            text = ""
+        intervals [36]
+            xmin = 61.74
+            xmax = 63.52
+            text = "de esa forma empezaron a trasladarse"
+        intervals [37]
+            xmin = 63.52
+            xmax = 65.12
+            text = ""
+        intervals [38]
+            xmin = 65.12
+            xmax = 69.43
+            text = "de esa forma lo hicieron lo que es el trabajo de mozo lo dejaron"
+        intervals [39]
+            xmin = 69.43
+            xmax = 70.46
+            text = ""
+        intervals [40]
+            xmin = 70.46
+            xmax = 74.0
+            text = "pues ya no querían dedicarse como mozos"
+        intervals [41]
+            xmin = 74.0
+            xmax = 74.83
+            text = ""
+        intervals [42]
+            xmin = 74.83
+            xmax = 76.24
+            text = "era un trabajo no pagado "
+        intervals [43]
+            xmin = 76.24
+            xmax = 76.65
+            text = ""
+        intervals [44]
+            xmin = 76.65
+            xmax = 79.78
+            text = "no alcazaba nada no era mucho la paga"
+        intervals [45]
+            xmin = 79.78
+            xmax = 80.89
+            text = ""
+        intervals [46]
+            xmin = 80.89
+            xmax = 82.02
+            text = "hacia decía papá"
+        intervals [47]
+            xmin = 82.02
+            xmax = 83.25
+            text = ""
+        intervals [48]
+            xmin = 83.25
+            xmax = 86.56
+            text = "fue en ese momento que decidieron buscar este terreno"
+        intervals [49]
+            xmin = 86.56
+            xmax = 87.14
+            text = ""
+        intervals [50]
+            xmin = 87.14
+            xmax = 91.2
+            text = "fue cuando se tranquilizaron un poco porque lo que hacían ya eran de ellos así "
+        intervals [51]
+            xmin = 91.2
+            xmax = 91.48
+            text = ""
+        intervals [52]
+            xmin = 91.48
+            xmax = 92.62
+            text = "de solitos decía"
+        intervals [53]
+            xmin = 92.62
+            xmax = 93.83
+            text = ""
+        intervals [54]
+            xmin = 93.83
+            xmax = 94.63
+            text = "así decía este"
+        intervals [55]
+            xmin = 94.63
+            xmax = 95.44
+            text = ""
+        intervals [56]
+            xmin = 95.44
+            xmax = 96.77
+            text = "de esa forma yo escuchaba eso"
+        intervals [57]
+            xmin = 96.77
+            xmax = 97.81
+            text = ""
+        intervals [58]
+            xmin = 97.81
+            xmax = 99.47
+            text = "el motivo por el que también vino mi papa"
+        intervals [59]
+            xmin = 99.47
+            xmax = 100.43
+            text = ""
+        intervals [60]
+            xmin = 100.43
+            xmax = 101.51
+            text = "era por el terreno"
+        intervals [61]
+            xmin = 101.51
+            xmax = 102.18
+            text = ""
+        intervals [62]
+            xmin = 102.18
+            xmax = 104.36
+            text = "vivían en el terreno de los ladinos"
+        intervals [63]
+            xmin = 104.36
+            xmax = 105.11
+            text = ""
+        intervals [64]
+            xmin = 105.11
+            xmax = 106.93
+            text = "no sembraba mucho el maíz"
+        intervals [65]
+            xmin = 106.93
+            xmax = 107.78
+            text = ""
+        intervals [66]
+            xmin = 107.78
+            xmax = 112.45
+            text = "no hacía mucho milpa lo hacían pero con miedo"
+        intervals [67]
+            xmin = 112.45
+            xmax = 113.54
+            text = ""
+        intervals [68]
+            xmin = 113.54
+            xmax = 116.82
+            text = "pues como supo que en América estaban buscando (terreno)"
+        intervals [69]
+            xmin = 116.82
+            xmax = 117.75
+            text = ""
+        intervals [70]
+            xmin = 117.75
+            xmax = 121.32
+            text = "ya mi tío el que estaba en San María se empezaron a convencer entre ellos "
+        intervals [71]
+            xmin = 121.32
+            xmax = 122.43
+            text = ""
+        intervals [72]
+            xmin = 122.43
+            xmax = 123.6
+            text = "hermano ya vente"
+        intervals [73]
+            xmin = 123.6
+            xmax = 124.79
+            text = ""
+        intervals [74]
+            xmin = 124.79
+            xmax = 127.12
+            text = "busca lugar para hacer tu milpa que así  le dijo"
+        intervals [75]
+            xmin = 127.12
+            xmax = 127.92
+            text = ""
+        intervals [76]
+            xmin = 127.92
+            xmax = 131.09
+            text = "fue el primero en quedarse en América pero no se quedó"
+        intervals [77]
+            xmin = 131.09
+            xmax = 132.06
+            text = ""
+        intervals [78]
+            xmin = 132.06
+            xmax = 133.37
+            text = "ya de ahí empezó"
+        intervals [79]
+            xmin = 133.37
+            xmax = 134.5
+            text = ""
+        intervals [80]
+            xmin = 134.5
+            xmax = 138.47
+            text = "a pasar el censo que no salió en el censo mi papá de ahí se volvió a ir"
+        intervals [81]
+            xmin = 138.47
+            xmax = 139.04
+            text = ""
+        intervals [82]
+            xmin = 139.04
+            xmax = 141.46
+            text = "en estos momentos hay todavía (terrenos) baldíos ahora se van allá "
+        intervals [83]
+            xmin = 141.46
+            xmax = 142.16
+            text = ""
+        intervals [84]
+            xmin = 142.16
+            xmax = 145.67
+            text = "lo van a nombrar Nuevo Mundo así lo van a nombrar que así les dijeron"
+        intervals [85]
+            xmin = 145.67
+            xmax = 146.63
+            text = ""
+        intervals [86]
+            xmin = 146.63
+            xmax = 148.42
+            text = "entonces mi papá se volvió a ir allá"
+        intervals [87]
+            xmin = 148.42
+            xmax = 149.32
+            text = ""
+        intervals [88]
+            xmin = 149.32
+            xmax = 151.01
+            text = "de esa forma lo consiguió"
+        intervals [89]
+            xmin = 151.01
+            xmax = 151.89
+            text = ""
+        intervals [90]
+            xmin = 151.89
+            xmax = 155.18
+            text = "ya radica aquí pero ahora ya no lo utiliza"
+        intervals [91]
+            xmin = 155.18
+            xmax = 156.41
+            text = ""
+        intervals [92]
+            xmin = 156.41
+            xmax = 158.29
+            text = "de esa forma lo escuché "
+        intervals [93]
+            xmin = 158.29
+            xmax = 161.88
+            text = ""
+        intervals [94]
+            xmin = 161.88
+            xmax = 164.82
+            text = "estaba en Tortuguero yo lo empecé a ver allá"
+        intervals [95]
+            xmin = 164.82
+            xmax = 166.07
+            text = ""
+        intervals [96]
+            xmin = 166.07
+            xmax = 168.62
+            text = "venía de Tortuguero de allí vino"
+        intervals [97]
+            xmin = 168.62
+            xmax = 170.13
+            text = ""
+        intervals [98]
+            xmin = 170.13
+            xmax = 170.84
+            text = "nos venimos"
+        intervals [99]
+            xmin = 170.84
+            xmax = 172.2
+            text = ""
+        intervals [100]
+            xmin = 172.2
+            xmax = 173.44
+            text = "así nos trasladamos"
+        intervals [101]
+            xmin = 173.44
+            xmax = 173.65
+            text = ""
+        intervals [102]
+            xmin = 173.65
+            xmax = 175.79
+            text = "primero nos pasamos a vivir en América"
+        intervals [103]
+            xmin = 175.79
+            xmax = 176.14
+            text = ""
+        intervals [104]
+            xmin = 176.14
+            xmax = 177.68
+            text = "San Miguel ya estaba construido"
+        intervals [105]
+            xmin = 177.68
+            xmax = 177.95
+            text = ""
+        intervals [106]
+            xmin = 177.95
+            xmax = 179.22
+            text = "nadamas lo cruzabamos"
+        intervals [107]
+            xmin = 179.22
+            xmax = 180.32
+            text = ""
+        intervals [108]
+            xmin = 180.32
+            xmax = 181.98
+            text = "era difícil caminar"
+        intervals [109]
+            xmin = 181.98
+            xmax = 182.31
+            text = ""
+        intervals [110]
+            xmin = 182.31
+            xmax = 183.56
+            text = "con lodo en temporada de lluvia"
+        intervals [111]
+            xmin = 183.56
+            xmax = 185.0
+            text = ""
+        intervals [112]
+            xmin = 185.0
+            xmax = 186.23
+            text = "todavía no había carretera"
+        intervals [113]
+            xmin = 186.23
+            xmax = 186.58
+            text = ""
+        intervals [114]
+            xmin = 186.58
+            xmax = 188.3
+            text = "caminaban en puro callejón"
+        intervals [115]
+            xmin = 188.3
+            xmax = 189.55
+            text = ""
+        intervals [116]
+            xmin = 189.55
+            xmax = 190.21
+            text = "así era"
+        intervals [117]
+            xmin = 190.21
+            xmax = 191.76
+            text = ""
+        intervals [118]
+            xmin = 191.76
+            xmax = 195.23
+            text = "de esa forma se sintieron un poco mejor pues ya no caminaban por caminar"
+        intervals [119]
+            xmin = 195.23
+            xmax = 196.53
+            text = ""
+        intervals [120]
+            xmin = 196.53
+            xmax = 199.61
+            text = "vinieron en un solo jalón de Tortuguero"
+        intervals [121]
+            xmin = 199.61
+            xmax = 202.12
+            text = ""
+        intervals [122]
+            xmin = 202.12
+            xmax = 202.83
+            text = "así fue"
+        intervals [123]
+            xmin = 202.83
+            xmax = 203.33
+            text = ""
+        intervals [124]
+            xmin = 203.33
+            xmax = 204.68
+            text = "que escuché lo que decían"
+        intervals [125]
+            xmin = 204.68
+            xmax = 210.63
+            text = ""
+        intervals [126]
+            xmin = 210.63
+            xmax = 211.2
+            text = "a papá"
+        intervals [127]
+            xmin = 211.2
+            xmax = 213.04
+            text = ""
+        intervals [128]
+            xmin = 213.04
+            xmax = 216.11
+            text = "fueron sus propios hermanos así como Pedro Guzmán"
+        intervals [129]
+            xmin = 216.11
+            xmax = 216.4
+            text = ""
+        intervals [130]
+            xmin = 216.4
+            xmax = 217.88
+            text = "con él fue que empezó a odiar"
+        intervals [131]
+            xmin = 217.88
+            xmax = 218.93
+            text = ""
+        intervals [132]
+            xmin = 218.93
+            xmax = 220.07
+            text = "eran insoportables"
+        intervals [133]
+            xmin = 220.07
+            xmax = 221.02
+            text = ""
+        intervals [134]
+            xmin = 221.02
+            xmax = 222.36
+            text = "y fue el primero en morir"
+        intervals [135]
+            xmin = 222.36
+            xmax = 223.18
+            text = ""
+        intervals [136]
+            xmin = 223.18
+            xmax = 224.5
+            text = "escuché que decían Martín Guzmán"
+        intervals [137]
+            xmin = 224.5
+            xmax = 224.97
+            text = ""
+        intervals [138]
+            xmin = 224.97
+            xmax = 227.01
+            text = "fue el primero en morir y me odió y también"
+        intervals [139]
+            xmin = 227.01
+            xmax = 229.13
+            text = ""
+        intervals [140]
+            xmin = 229.13
+            xmax = 230.25
+            text = "como sus otros hermanos"
+        intervals [141]
+            xmin = 230.25
+            xmax = 232.04
+            text = ""
+        intervals [142]
+            xmin = 232.04
+            xmax = 233.56
+            text = "ese Marcos también lo odió bastante"
+        intervals [143]
+            xmin = 233.56
+            xmax = 235.46
+            text = ""
+        intervals [144]
+            xmin = 235.46
+            xmax = 236.85
+            text = "y se vinieron juntos de nueva cuenta"
+        intervals [145]
+            xmin = 236.85
+            xmax = 239.02
+            text = ""
+        intervals [146]
+            xmin = 239.02
+            xmax = 243.75
+            text = "pensé que allí se iban a quedar decía nunca pensé que iban a venir conmigo decía"
+        intervals [147]
+            xmin = 243.75
+            xmax = 244.03
+            text = ""
+        intervals [148]
+            xmin = 244.03
+            xmax = 244.52
+            text = "así decía"
+        intervals [149]
+            xmin = 244.52
+            xmax = 248.8
+            text = ""
+        intervals [150]
+            xmin = 248.8
+            xmax = 249.78
+            text = "así fue"
+        intervals [151]
+            xmin = 249.78
+            xmax = 250.08
+            text = ""
+        intervals [152]
+            xmin = 250.08
+            xmax = 250.33
+            text = "hasta ahí"
+        intervals [153]
+            xmin = 250.33
+            xmax = 254.97
+            text = ""
+        intervals [154]
+            xmin = 254.97
+            xmax = 255.48
+            text = "así es"
+        intervals [155]
+            xmin = 255.48
+            xmax = 256.07
+            text = ""
+        intervals [156]
+            xmin = 256.07
+            xmax = 256.98
+            text = "había cooperación"
+        intervals [157]
+            xmin = 256.98
+            xmax = 258.76
+            text = ""
+        intervals [158]
+            xmin = 258.76
+            xmax = 260.31
+            text = "había pura cooperación"
+        intervals [159]
+            xmin = 260.31
+            xmax = 261.97
+            text = ""
+        intervals [160]
+            xmin = 261.97
+            xmax = 263.31
+            text = "iban hasta Salto"
+        intervals [161]
+            xmin = 263.31
+            xmax = 263.77
+            text = ""
+        intervals [162]
+            xmin = 263.77
+            xmax = 264.65
+            text = "para saber si se les concedían"
+        intervals [163]
+            xmin = 264.65
+            xmax = 266.74
+            text = ""
+        intervals [164]
+            xmin = 266.74
+            xmax = 267.52
+            text = "de esa forma fue"
+        intervals [165]
+            xmin = 267.52
+            xmax = 270.3
+            text = ""
+        intervals [166]
+            xmin = 270.3
+            xmax = 273.23
+            text = "este no sé quién era el dueño"
+        intervals [167]
+            xmin = 273.23
+            xmax = 274.74
+            text = ""
+        intervals [168]
+            xmin = 274.74
+            xmax = 275.68
+            text = "estaba baldío"
+        intervals [169]
+            xmin = 275.68
+            xmax = 276.58
+            text = ""
+        intervals [170]
+            xmin = 276.58
+            xmax = 278.33
+            text = "estaba baldío este terreno"
+        intervals [171]
+            xmin = 278.33
+            xmax = 279.96
+            text = ""
+        intervals [172]
+            xmin = 279.96
+            xmax = 283.59
+            text = "pero si tenía dueño al inicio decían que lo habían abandonado "
+        intervals [173]
+            xmin = 283.59
+            xmax = 285.18
+            text = ""
+        intervals [174]
+            xmin = 285.18
+            xmax = 287.84
+            text = "y fueron los que sembraron el plátano que había"
+        intervals [175]
+            xmin = 287.84
+            xmax = 288.77
+            text = ""
+        intervals [176]
+            xmin = 288.77
+            xmax = 289.5
+            text = "en el pequeño cafetal"
+        intervals [177]
+            xmin = 289.5
+            xmax = 291.13
+            text = ""
+        intervals [178]
+            xmin = 291.13
+            xmax = 294.51
+            text = "no sé es que como se llamaba no le entendía muy bien "
+        intervals [179]
+            xmin = 294.51
+            xmax = 295.72
+            text = ""
+        intervals [180]
+            xmin = 295.72
+            xmax = 296.8
+            text = "tenía su nombre el ladino"
+        intervals [181]
+            xmin = 296.8
+            xmax = 298.12
+            text = ""
+        intervals [182]
+            xmin = 298.12
+            xmax = 300.23
+            text = "los primeros pobladores"
+        intervals [183]
+            xmin = 300.23
+            xmax = 301.69
+            text = ""
+        intervals [184]
+            xmin = 301.69
+            xmax = 304.68
+            text = "pero lo dejaron porque ya se los empezaron a pedir"
+        intervals [185]
+            xmin = 304.68
+            xmax = 306.73
+            text = ""
+        intervals [186]
+            xmin = 306.73
+            xmax = 308.28
+            text = "ellos ya no lo dejaron"
+        intervals [187]
+            xmin = 308.28
+            xmax = 309.16
+            text = ""
+        intervals [188]
+            xmin = 309.16
+            xmax = 311.27
+            text = "y solo pocos se regresaron de nuevo en Chuchucruz"
+        intervals [189]
+            xmin = 311.27
+            xmax = 312.73
+            text = ""
+        intervals [190]
+            xmin = 312.73
+            xmax = 314.75
+            text = "se regresaron los que no se querían quedar"
+        intervals [191]
+            xmin = 314.75
+            xmax = 316.67
+            text = ""
+        intervals [192]
+            xmin = 316.67
+            xmax = 321.07
+            text = "yo solo ya no quise volver a regresar aquí me quedé"
+        intervals [193]
+            xmin = 321.07
+            xmax = 322.15
+            text = ""
+        intervals [194]
+            xmin = 322.15
+            xmax = 323.14
+            text = "así decía papá"
+        intervals [195]
+            xmin = 323.14
+            xmax = 325.88
+            text = ""
+        intervals [196]
+            xmin = 325.88
+            xmax = 327.07
+            text = "y los que lo querían dejar"
+        intervals [197]
+            xmin = 327.07
+            xmax = 327.68
+            text = ""
+        intervals [198]
+            xmin = 327.68
+            xmax = 328.54
+            text = "se volvieron a ir"
+        intervals [199]
+            xmin = 328.54
+            xmax = 329.6
+            text = ""
+        intervals [200]
+            xmin = 329.6
+            xmax = 333.92
+            text = "temían que se murieran decían que los recién establecidos se morían"
+        intervals [201]
+            xmin = 333.92
+            xmax = 335.45
+            text = ""
+        intervals [202]
+            xmin = 335.45
+            xmax = 336.28
+            text = "así es como comentaban"
+        intervals [203]
+            xmin = 336.28
+            xmax = 337.63
+            text = ""
+        intervals [204]
+            xmin = 337.63
+            xmax = 339.18
+            text = "jäjä empezaban a tener calentura"
+        intervals [205]
+            xmin = 339.18
+            xmax = 339.6
+            text = ""
+        intervals [206]
+            xmin = 339.6
+            xmax = 340.58
+            text = "empezaban a tener diarrea "
+        intervals [207]
+            xmin = 340.58
+            xmax = 341.95
+            text = ""
+        intervals [208]
+            xmin = 341.95
+            xmax = 343.11
+            text = "con eso se morían"
+        intervals [209]
+            xmin = 343.11
+            xmax = 343.7
+            text = ""
+        intervals [210]
+            xmin = 343.7
+            xmax = 344.8
+            text = "eso fue lo que temieron"
+        intervals [211]
+            xmin = 344.8
+            xmax = 346.76
+            text = ""
+        intervals [212]
+            xmin = 346.76
+            xmax = 349.68
+            text = "se volvieron a regresar porque no conseguían medicina"
+        intervals [213]
+            xmin = 349.68
+            xmax = 352.42
+            text = ""
+        intervals [214]
+            xmin = 352.42
+            xmax = 353.31
+            text = "así decía"
+        intervals [215]
+            xmin = 353.31
+            xmax = 354.0
+            text = ""
+        intervals [216]
+            xmin = 354.0
+            xmax = 354.73
+            text = "escuché que así decía "
+        intervals [217]
+            xmin = 354.73
+            xmax = 356.82
+            text = ""
+        intervals [218]
+            xmin = 356.82
+            xmax = 357.41
+            text = "así nada más"
+        intervals [219]
+            xmin = 357.41
+            xmax = 361.05
+            text = ""
+        intervals [220]
+            xmin = 361.05
+            xmax = 362.01
+            text = "allá en la orilla del rio "
+        intervals [221]
+            xmin = 362.01
+            xmax = 363.0
+            text = ""
+        intervals [222]
+            xmin = 363.0
+            xmax = 363.64
+            text = "cerca de la loma"
+        intervals [223]
+            xmin = 363.64
+            xmax = 364.86
+            text = ""
+        intervals [224]
+            xmin = 364.86
+            xmax = 367.43
+            text = "fue donde empezaron a establecerse allí fue donde llegaron"
+        intervals [225]
+            xmin = 367.43
+            xmax = 369.43
+            text = ""
+        intervals [226]
+            xmin = 369.43
+            xmax = 370.27
+            text = "toda la"
+        intervals [227]
+            xmin = 370.27
+            xmax = 370.68
+            text = ""
+        intervals [228]
+            xmin = 370.68
+            xmax = 372.56
+            text = "escuela allí se quedaron en la lomita"
+        intervals [229]
+            xmin = 372.56
+            xmax = 373.3
+            text = ""
+        intervals [230]
+            xmin = 373.3
+            xmax = 375.41
+            text = "así como la cancha allí quedó"
+        intervals [231]
+            xmin = 375.41
+            xmax = 377.05
+            text = ""
+        intervals [232]
+            xmin = 377.05
+            xmax = 382.63
+            text = "poco después acordaron venirse aquí por la carretera les gustó por la cuestión del café"
+        intervals [233]
+            xmin = 382.63
+            xmax = 384.18
+            text = ""
+        intervals [234]
+            xmin = 384.18
+            xmax = 388.23
+            text = "era difícil volver a trasladar el café y aquí era más cercano"
+        intervals [235]
+            xmin = 388.23
+            xmax = 389.22
+            text = ""
+        intervals [236]
+            xmin = 389.22
+            xmax = 390.581
+            text = "y más cuando lo vendemos así decían"
+    item[4]:
+        class = "IntervalTier"
+        name = "eng@RLP"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 236
+        intervals [1]
+            xmin = 0.0
+            xmax = 0.36
+            text = ""
+        intervals [2]
+            xmin = 0.36
+            xmax = 2.14
+            text = "that they commented to dad to come"
+        intervals [3]
+            xmin = 2.14
+            xmax = 3.02
+            text = ""
+        intervals [4]
+            xmin = 3.02
+            xmax = 5.01
+            text = "they started to look for terrain like that"
+        intervals [5]
+            xmin = 5.01
+            xmax = 6.45
+            text = ""
+        intervals [6]
+            xmin = 6.45
+            xmax = 9.44
+            text = "he knew that here in San Miguel they were soliciting terrain too"
+        intervals [7]
+            xmin = 9.44
+            xmax = 9.94
+            text = ""
+        intervals [8]
+            xmin = 9.94
+            xmax = 11.73
+            text = "dad came from thinking about it"
+        intervals [9]
+            xmin = 11.73
+            xmax = 12.59
+            text = ""
+        intervals [10]
+            xmin = 12.59
+            xmax = 18.23
+            text = "there in Chuchucruz, they hated him a lot, they fought terrain, they fought where"
+        intervals [11]
+            xmin = 18.23
+            xmax = 18.95
+            text = ""
+        intervals [12]
+            xmin = 18.95
+            xmax = 21.17
+            text = "they made crops and where they made their coffee plantation"
+        intervals [13]
+            xmin = 21.17
+            xmax = 22.38
+            text = ""
+        intervals [14]
+            xmin = 22.38
+            xmax = 24.71
+            text = "after thinking about it dad left"
+        intervals [15]
+            xmin = 24.71
+            xmax = 25.5
+            text = ""
+        intervals [16]
+            xmin = 25.5
+            xmax = 26.31
+            text = "he came from there"
+        intervals [17]
+            xmin = 26.31
+            xmax = 26.63
+            text = ""
+        intervals [18]
+            xmin = 26.63
+            xmax = 29.13
+            text = "but he came again with the one that had problems"
+        intervals [19]
+            xmin = 29.13
+            xmax = 30.0
+            text = ""
+        intervals [20]
+            xmin = 30.0
+            xmax = 31.27
+            text = "he came with him here"
+        intervals [21]
+            xmin = 31.27
+            xmax = 32.1
+            text = ""
+        intervals [22]
+            xmin = 32.1
+            xmax = 33.17
+            text = "that's how dad used to say"
+        intervals [23]
+            xmin = 33.17
+            xmax = 34.25
+            text = ""
+        intervals [24]
+            xmin = 34.25
+            xmax = 37.08
+            text = "in that time he started to build this town"
+        intervals [25]
+            xmin = 37.08
+            xmax = 38.04
+            text = ""
+        intervals [26]
+            xmin = 38.04
+            xmax = 44.27
+            text = "from there he started to feel a little more calm, but he didn't calm down completely because they started to fight the place to make the crops"
+        intervals [27]
+            xmin = 44.27
+            xmax = 45.21
+            text = ""
+        intervals [28]
+            xmin = 45.21
+            xmax = 48.27
+            text = "in that way dad said he was again pensative"
+        intervals [29]
+            xmin = 48.27
+            xmax = 49.18
+            text = ""
+        intervals [30]
+            xmin = 49.18
+            xmax = 50.09
+            text = "from there"
+        intervals [31]
+            xmin = 50.09
+            xmax = 51.89
+            text = ""
+        intervals [32]
+            xmin = 51.89
+            xmax = 55.73
+            text = "where they started to calm down was when they started to measure they started"
+        intervals [33]
+            xmin = 55.73
+            xmax = 56.71
+            text = ""
+        intervals [34]
+            xmin = 56.71
+            xmax = 60.76
+            text = "to measure one by one from there they stopped hating dad"
+        intervals [35]
+            xmin = 60.76
+            xmax = 61.74
+            text = ""
+        intervals [36]
+            xmin = 61.74
+            xmax = 63.52
+            text = "in that way they started to move out"
+        intervals [37]
+            xmin = 63.52
+            xmax = 65.12
+            text = ""
+        intervals [38]
+            xmin = 65.12
+            xmax = 69.43
+            text = "in that way they made him what is young boy's work they left him"
+        intervals [39]
+            xmin = 69.43
+            xmax = 70.46
+            text = ""
+        intervals [40]
+            xmin = 70.46
+            xmax = 74.0
+            text = "well they no longer wanted to dedicate themselves like young boys"
+        intervals [41]
+            xmin = 74.0
+            xmax = 74.83
+            text = ""
+        intervals [42]
+            xmin = 74.83
+            xmax = 76.24
+            text = "it was unpaid work"
+        intervals [43]
+            xmin = 76.24
+            xmax = 76.65
+            text = ""
+        intervals [44]
+            xmin = 76.65
+            xmax = 79.78
+            text = "wasn't enough for anything it didn't pay much"
+        intervals [45]
+            xmin = 79.78
+            xmax = 80.89
+            text = ""
+        intervals [46]
+            xmin = 80.89
+            xmax = 82.02
+            text = "that's what dad said"
+        intervals [47]
+            xmin = 82.02
+            xmax = 83.25
+            text = ""
+        intervals [48]
+            xmin = 83.25
+            xmax = 86.56
+            text = "that was when they decided to find this terrain"
+        intervals [49]
+            xmin = 86.56
+            xmax = 87.14
+            text = ""
+        intervals [50]
+            xmin = 87.14
+            xmax = 91.2
+            text = "it was when they settled down a bit because what they did was already theirs like that"
+        intervals [51]
+            xmin = 91.2
+            xmax = 91.48
+            text = ""
+        intervals [52]
+            xmin = 91.48
+            xmax = 92.62
+            text = "of lonely people, he said"
+        intervals [53]
+            xmin = 92.62
+            xmax = 93.83
+            text = ""
+        intervals [54]
+            xmin = 93.83
+            xmax = 94.63
+            text = "that's what this one said"
+        intervals [55]
+            xmin = 94.63
+            xmax = 95.44
+            text = ""
+        intervals [56]
+            xmin = 95.44
+            xmax = 96.77
+            text = "in that way, I heard that"
+        intervals [57]
+            xmin = 96.77
+            xmax = 97.81
+            text = ""
+        intervals [58]
+            xmin = 97.81
+            xmax = 99.47
+            text = "the reason why my dad also came"
+        intervals [59]
+            xmin = 99.47
+            xmax = 100.43
+            text = ""
+        intervals [60]
+            xmin = 100.43
+            xmax = 101.51
+            text = "was for the terrain"
+        intervals [61]
+            xmin = 101.51
+            xmax = 102.18
+            text = ""
+        intervals [62]
+            xmin = 102.18
+            xmax = 104.36
+            text = "they lived on the terrain of the (spanish speaking indians?)"
+        intervals [63]
+            xmin = 104.36
+            xmax = 105.11
+            text = ""
+        intervals [64]
+            xmin = 105.11
+            xmax = 106.93
+            text = "corn wasn't planted a lot"
+        intervals [65]
+            xmin = 106.93
+            xmax = 107.78
+            text = ""
+        intervals [66]
+            xmin = 107.78
+            xmax = 112.45
+            text = "there wasn't a lot of crop; they made it, but with fear"
+        intervals [67]
+            xmin = 112.45
+            xmax = 113.54
+            text = ""
+        intervals [68]
+            xmin = 113.54
+            xmax = 116.82
+            text = "I suppose like how in America they were looking (for terrain)"
+        intervals [69]
+            xmin = 116.82
+            xmax = 117.75
+            text = ""
+        intervals [70]
+            xmin = 117.75
+            xmax = 121.32
+            text = "already, my uncle that was in San Maria; they started to convince among them"
+        intervals [71]
+            xmin = 121.32
+            xmax = 122.43
+            text = ""
+        intervals [72]
+            xmin = 122.43
+            xmax = 123.6
+            text = "brother come already"
+        intervals [73]
+            xmin = 123.6
+            xmax = 124.79
+            text = ""
+        intervals [74]
+            xmin = 124.79
+            xmax = 127.12
+            text = "look for a place to make your crop, that he told him"
+        intervals [75]
+            xmin = 127.12
+            xmax = 127.92
+            text = ""
+        intervals [76]
+            xmin = 127.92
+            xmax = 131.09
+            text = "he was the first to stay in America but he didn't stay"
+        intervals [77]
+            xmin = 131.09
+            xmax = 132.06
+            text = ""
+        intervals [78]
+            xmin = 132.06
+            xmax = 133.37
+            text = "from there he started"
+        intervals [79]
+            xmin = 133.37
+            xmax = 134.5
+            text = ""
+        intervals [80]
+            xmin = 134.5
+            xmax = 138.47
+            text = "after passing the census that didn't come out on the census, my dad left there again"
+        intervals [81]
+            xmin = 138.47
+            xmax = 139.04
+            text = ""
+        intervals [82]
+            xmin = 139.04
+            xmax = 141.46
+            text = "in these times, there are still waste lands, now they go there"
+        intervals [83]
+            xmin = 141.46
+            xmax = 142.16
+            text = ""
+        intervals [84]
+            xmin = 142.16
+            xmax = 145.67
+            text = "they're going to name it New World, thats what they're going to name it, so they told them"
+        intervals [85]
+            xmin = 145.67
+            xmax = 146.63
+            text = ""
+        intervals [86]
+            xmin = 146.63
+            xmax = 148.42
+            text = "then my dad went there again"
+        intervals [87]
+            xmin = 148.42
+            xmax = 149.32
+            text = ""
+        intervals [88]
+            xmin = 149.32
+            xmax = 151.01
+            text = "that's how he got it"
+        intervals [89]
+            xmin = 151.01
+            xmax = 151.89
+            text = ""
+        intervals [90]
+            xmin = 151.89
+            xmax = 155.18
+            text = "it's here already but now he doesn't use it"
+        intervals [91]
+            xmin = 155.18
+            xmax = 156.41
+            text = ""
+        intervals [92]
+            xmin = 156.41
+            xmax = 158.29
+            text = "in that way I heard him"
+        intervals [93]
+            xmin = 158.29
+            xmax = 161.88
+            text = ""
+        intervals [94]
+            xmin = 161.88
+            xmax = 164.82
+            text = "he was in Tortuguero, I started to see him there"
+        intervals [95]
+            xmin = 164.82
+            xmax = 166.07
+            text = ""
+        intervals [96]
+            xmin = 166.07
+            xmax = 168.62
+            text = "he came from Tortugero, he came from there"
+        intervals [97]
+            xmin = 168.62
+            xmax = 170.13
+            text = ""
+        intervals [98]
+            xmin = 170.13
+            xmax = 170.84
+            text = "we came"
+        intervals [99]
+            xmin = 170.84
+            xmax = 172.2
+            text = ""
+        intervals [100]
+            xmin = 172.2
+            xmax = 173.44
+            text = "that's how we moved"
+        intervals [101]
+            xmin = 173.44
+            xmax = 173.65
+            text = ""
+        intervals [102]
+            xmin = 173.65
+            xmax = 175.79
+            text = "first we went to live in America"
+        intervals [103]
+            xmin = 175.79
+            xmax = 176.14
+            text = ""
+        intervals [104]
+            xmin = 176.14
+            xmax = 177.68
+            text = "San Miguel was already built"
+        intervals [105]
+            xmin = 177.68
+            xmax = 177.95
+            text = ""
+        intervals [106]
+            xmin = 177.95
+            xmax = 179.22
+            text = "we just crossed it"
+        intervals [107]
+            xmin = 179.22
+            xmax = 180.32
+            text = ""
+        intervals [108]
+            xmin = 180.32
+            xmax = 181.98
+            text = "it was hard to walk"
+        intervals [109]
+            xmin = 181.98
+            xmax = 182.31
+            text = ""
+        intervals [110]
+            xmin = 182.31
+            xmax = 183.56
+            text = "with mud in rain season"
+        intervals [111]
+            xmin = 183.56
+            xmax = 185.0
+            text = ""
+        intervals [112]
+            xmin = 185.0
+            xmax = 186.23
+            text = "there was no road yet"
+        intervals [113]
+            xmin = 186.23
+            xmax = 186.58
+            text = ""
+        intervals [114]
+            xmin = 186.58
+            xmax = 188.3
+            text = "they walked in plain alleyway"
+        intervals [115]
+            xmin = 188.3
+            xmax = 189.55
+            text = ""
+        intervals [116]
+            xmin = 189.55
+            xmax = 190.21
+            text = "that's how it was"
+        intervals [117]
+            xmin = 190.21
+            xmax = 191.76
+            text = ""
+        intervals [118]
+            xmin = 191.76
+            xmax = 195.23
+            text = "in that way, they felt a little better, after all, they didn't walk to walk"
+        intervals [119]
+            xmin = 195.23
+            xmax = 196.53
+            text = ""
+        intervals [120]
+            xmin = 196.53
+            xmax = 199.61
+            text = "they came in just one pull  from Tortuguero"
+        intervals [121]
+            xmin = 199.61
+            xmax = 202.12
+            text = ""
+        intervals [122]
+            xmin = 202.12
+            xmax = 202.83
+            text = "that's how it was"
+        intervals [123]
+            xmin = 202.83
+            xmax = 203.33
+            text = ""
+        intervals [124]
+            xmin = 203.33
+            xmax = 204.68
+            text = "that I heard what they said"
+        intervals [125]
+            xmin = 204.68
+            xmax = 210.63
+            text = ""
+        intervals [126]
+            xmin = 210.63
+            xmax = 211.2
+            text = "dad"
+        intervals [127]
+            xmin = 211.2
+            xmax = 213.04
+            text = ""
+        intervals [128]
+            xmin = 213.04
+            xmax = 216.11
+            text = "it was his own brothers like Pedro Guzmán"
+        intervals [129]
+            xmin = 216.11
+            xmax = 216.4
+            text = ""
+        intervals [130]
+            xmin = 216.4
+            xmax = 217.88
+            text = "with him it was that he started to hate"
+        intervals [131]
+            xmin = 217.88
+            xmax = 218.93
+            text = ""
+        intervals [132]
+            xmin = 218.93
+            xmax = 220.07
+            text = "they were unbearable"
+        intervals [133]
+            xmin = 220.07
+            xmax = 221.02
+            text = ""
+        intervals [134]
+            xmin = 221.02
+            xmax = 222.36
+            text = "and he was the first to die"
+        intervals [135]
+            xmin = 222.36
+            xmax = 223.18
+            text = ""
+        intervals [136]
+            xmin = 223.18
+            xmax = 224.5
+            text = "I heard what Martín Guzmán said"
+        intervals [137]
+            xmin = 224.5
+            xmax = 224.97
+            text = ""
+        intervals [138]
+            xmin = 224.97
+            xmax = 227.01
+            text = "he was the first to die and he hated me too"
+        intervals [139]
+            xmin = 227.01
+            xmax = 229.13
+            text = ""
+        intervals [140]
+            xmin = 229.13
+            xmax = 230.25
+            text = "like his other brothers"
+        intervals [141]
+            xmin = 230.25
+            xmax = 232.04
+            text = ""
+        intervals [142]
+            xmin = 232.04
+            xmax = 233.56
+            text = "that Marcos hated him a lot too"
+        intervals [143]
+            xmin = 233.56
+            xmax = 235.46
+            text = ""
+        intervals [144]
+            xmin = 235.46
+            xmax = 236.85
+            text = "and they came together"
+        intervals [145]
+            xmin = 236.85
+            xmax = 239.02
+            text = ""
+        intervals [146]
+            xmin = 239.02
+            xmax = 243.75
+            text = "I thought they were going to stay there, he said, I never thought they were going to come with me, he said"
+        intervals [147]
+            xmin = 243.75
+            xmax = 244.03
+            text = ""
+        intervals [148]
+            xmin = 244.03
+            xmax = 244.52
+            text = "that's what he said"
+        intervals [149]
+            xmin = 244.52
+            xmax = 248.8
+            text = ""
+        intervals [150]
+            xmin = 248.8
+            xmax = 249.78
+            text = "that's how it was"
+        intervals [151]
+            xmin = 249.78
+            xmax = 250.08
+            text = ""
+        intervals [152]
+            xmin = 250.08
+            xmax = 250.33
+            text = "up until there"
+        intervals [153]
+            xmin = 250.33
+            xmax = 254.97
+            text = ""
+        intervals [154]
+            xmin = 254.97
+            xmax = 255.48
+            text = "that's how it was"
+        intervals [155]
+            xmin = 255.48
+            xmax = 256.07
+            text = ""
+        intervals [156]
+            xmin = 256.07
+            xmax = 256.98
+            text = "there was cooperation"
+        intervals [157]
+            xmin = 256.98
+            xmax = 258.76
+            text = ""
+        intervals [158]
+            xmin = 258.76
+            xmax = 260.31
+            text = "there was pure cooperation"
+        intervals [159]
+            xmin = 260.31
+            xmax = 261.97
+            text = ""
+        intervals [160]
+            xmin = 261.97
+            xmax = 263.31
+            text = "they went until Salto"
+        intervals [161]
+            xmin = 263.31
+            xmax = 263.77
+            text = ""
+        intervals [162]
+            xmin = 263.77
+            xmax = 264.65
+            text = "to know if anyone knew them"
+        intervals [163]
+            xmin = 264.65
+            xmax = 266.74
+            text = ""
+        intervals [164]
+            xmin = 266.74
+            xmax = 267.52
+            text = "in that way it was"
+        intervals [165]
+            xmin = 267.52
+            xmax = 270.3
+            text = ""
+        intervals [166]
+            xmin = 270.3
+            xmax = 273.23
+            text = "this one, I don't know who owned it"
+        intervals [167]
+            xmin = 273.23
+            xmax = 274.74
+            text = ""
+        intervals [168]
+            xmin = 274.74
+            xmax = 275.68
+            text = "it was empty"
+        intervals [169]
+            xmin = 275.68
+            xmax = 276.58
+            text = ""
+        intervals [170]
+            xmin = 276.58
+            xmax = 278.33
+            text = "it was empty, this terrain"
+        intervals [171]
+            xmin = 278.33
+            xmax = 279.96
+            text = ""
+        intervals [172]
+            xmin = 279.96
+            xmax = 283.59
+            text = "but if it had an owner initially, they said it was abandoned"
+        intervals [173]
+            xmin = 283.59
+            xmax = 285.18
+            text = ""
+        intervals [174]
+            xmin = 285.18
+            xmax = 287.84
+            text = "and it was those that planted the plantain that there was"
+        intervals [175]
+            xmin = 287.84
+            xmax = 288.77
+            text = ""
+        intervals [176]
+            xmin = 288.77
+            xmax = 289.5
+            text = "in the little coffee plantation"
+        intervals [177]
+            xmin = 289.5
+            xmax = 291.13
+            text = ""
+        intervals [178]
+            xmin = 291.13
+            xmax = 294.51
+            text = "what I don't know is what it was called, I didn't understand very well"
+        intervals [179]
+            xmin = 294.51
+            xmax = 295.72
+            text = ""
+        intervals [180]
+            xmin = 295.72
+            xmax = 296.8
+            text = "he had his name, the (spanish speaking indian?)"
+        intervals [181]
+            xmin = 296.8
+            xmax = 298.12
+            text = ""
+        intervals [182]
+            xmin = 298.12
+            xmax = 300.23
+            text = "the first to populate"
+        intervals [183]
+            xmin = 300.23
+            xmax = 301.69
+            text = ""
+        intervals [184]
+            xmin = 301.69
+            xmax = 304.68
+            text = "but they left it because they started asking it from them"
+        intervals [185]
+            xmin = 304.68
+            xmax = 306.73
+            text = ""
+        intervals [186]
+            xmin = 306.73
+            xmax = 308.28
+            text = "they no longer let him"
+        intervals [187]
+            xmin = 308.28
+            xmax = 309.16
+            text = ""
+        intervals [188]
+            xmin = 309.16
+            xmax = 311.27
+            text = "and only a few returned again to Chuchucruz"
+        intervals [189]
+            xmin = 311.27
+            xmax = 312.73
+            text = ""
+        intervals [190]
+            xmin = 312.73
+            xmax = 314.75
+            text = "those that didn't want to stay returned"
+        intervals [191]
+            xmin = 314.75
+            xmax = 316.67
+            text = ""
+        intervals [192]
+            xmin = 316.67
+            xmax = 321.07
+            text = "me only, I didn't want to go back, here I stayed"
+        intervals [193]
+            xmin = 321.07
+            xmax = 322.15
+            text = ""
+        intervals [194]
+            xmin = 322.15
+            xmax = 323.14
+            text = "that's what dad said"
+        intervals [195]
+            xmin = 323.14
+            xmax = 325.88
+            text = ""
+        intervals [196]
+            xmin = 325.88
+            xmax = 327.07
+            text = "and those that wanted to leave"
+        intervals [197]
+            xmin = 327.07
+            xmax = 327.68
+            text = ""
+        intervals [198]
+            xmin = 327.68
+            xmax = 328.54
+            text = "left again"
+        intervals [199]
+            xmin = 328.54
+            xmax = 329.6
+            text = ""
+        intervals [200]
+            xmin = 329.6
+            xmax = 333.92
+            text = "they were scared of dying, they said that the recently established died"
+        intervals [201]
+            xmin = 333.92
+            xmax = 335.45
+            text = ""
+        intervals [202]
+            xmin = 335.45
+            xmax = 336.28
+            text = "that's what they commented"
+        intervals [203]
+            xmin = 336.28
+            xmax = 337.63
+            text = ""
+        intervals [204]
+            xmin = 337.63
+            xmax = 339.18
+            text = "haha, they started to have heat stroke"
+        intervals [205]
+            xmin = 339.18
+            xmax = 339.6
+            text = ""
+        intervals [206]
+            xmin = 339.6
+            xmax = 340.58
+            text = "they started to have diarreah"
+        intervals [207]
+            xmin = 340.58
+            xmax = 341.95
+            text = ""
+        intervals [208]
+            xmin = 341.95
+            xmax = 343.11
+            text = "with that one died"
+        intervals [209]
+            xmin = 343.11
+            xmax = 343.7
+            text = ""
+        intervals [210]
+            xmin = 343.7
+            xmax = 344.8
+            text = "that's what they were scared of"
+        intervals [211]
+            xmin = 344.8
+            xmax = 346.76
+            text = ""
+        intervals [212]
+            xmin = 346.76
+            xmax = 349.68
+            text = "they went back again because they couldn't find medicine"
+        intervals [213]
+            xmin = 349.68
+            xmax = 352.42
+            text = ""
+        intervals [214]
+            xmin = 352.42
+            xmax = 353.31
+            text = "that's what he said"
+        intervals [215]
+            xmin = 353.31
+            xmax = 354.0
+            text = ""
+        intervals [216]
+            xmin = 354.0
+            xmax = 354.73
+            text = "I heard that's what he said"
+        intervals [217]
+            xmin = 354.73
+            xmax = 356.82
+            text = ""
+        intervals [218]
+            xmin = 356.82
+            xmax = 357.41
+            text = "so nothing else"
+        intervals [219]
+            xmin = 357.41
+            xmax = 361.05
+            text = ""
+        intervals [220]
+            xmin = 361.05
+            xmax = 362.01
+            text = "there on the shore"
+        intervals [221]
+            xmin = 362.01
+            xmax = 363.0
+            text = ""
+        intervals [222]
+            xmin = 363.0
+            xmax = 363.64
+            text = "close to the hillside"
+        intervals [223]
+            xmin = 363.64
+            xmax = 364.86
+            text = ""
+        intervals [224]
+            xmin = 364.86
+            xmax = 367.43
+            text = "where they started to establish themselves, that's where they arrived"
+        intervals [225]
+            xmin = 367.43
+            xmax = 369.43
+            text = ""
+        intervals [226]
+            xmin = 369.43
+            xmax = 370.27
+            text = "all the"
+        intervals [227]
+            xmin = 370.27
+            xmax = 370.68
+            text = ""
+        intervals [228]
+            xmin = 370.68
+            xmax = 372.56
+            text = "school, they stayed there on the hill"
+        intervals [229]
+            xmin = 372.56
+            xmax = 373.3
+            text = ""
+        intervals [230]
+            xmin = 373.3
+            xmax = 375.41
+            text = "just like the field stayed there"
+        intervals [231]
+            xmin = 375.41
+            xmax = 377.05
+            text = ""
+        intervals [232]
+            xmin = 377.05
+            xmax = 382.63
+            text = "a little after, they agreed to come here by the road, they liked the matter of the coffee"
+        intervals [233]
+            xmin = 382.63
+            xmax = 384.18
+            text = ""
+        intervals [234]
+            xmin = 384.18
+            xmax = 388.23
+            text = "it was hard to move the coffee again and here it was closer"
+        intervals [235]
+            xmin = 388.23
+            xmax = 389.22
+            text = ""
+        intervals [236]
+            xmin = 389.22
+            xmax = 390.581
+            text = "and more once we sell it, they said"
+    item[5]:
+        class = "IntervalTier"
+        name = "ref@NAL"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 21
+        intervals [1]
+            xmin = 0.0
+            xmax = 159.61
+            text = ""
+        intervals [2]
+            xmin = 159.61
+            xmax = 161.11
+            text = ""
+        intervals [3]
+            xmin = 161.11
+            xmax = 206.91
+            text = ""
+        intervals [4]
+            xmin = 206.91
+            xmax = 208.64
+            text = ""
+        intervals [5]
+            xmin = 208.64
+            xmax = 209.6
+            text = ""
+        intervals [6]
+            xmin = 209.6
+            xmax = 210.28
+            text = ""
+        intervals [7]
+            xmin = 210.28
+            xmax = 211.45
+            text = ""
+        intervals [8]
+            xmin = 211.45
+            xmax = 212.08
+            text = ""
+        intervals [9]
+            xmin = 212.08
+            xmax = 250.26
+            text = ""
+        intervals [10]
+            xmin = 250.26
+            xmax = 251.3
+            text = ""
+        intervals [11]
+            xmin = 251.3
+            xmax = 252.42
+            text = ""
+        intervals [12]
+            xmin = 252.42
+            xmax = 254.09
+            text = ""
+        intervals [13]
+            xmin = 254.09
+            xmax = 254.28
+            text = ""
+        intervals [14]
+            xmin = 254.28
+            xmax = 254.97
+            text = ""
+        intervals [15]
+            xmin = 254.97
+            xmax = 267.96
+            text = ""
+        intervals [16]
+            xmin = 267.96
+            xmax = 269.65
+            text = ""
+        intervals [17]
+            xmin = 269.65
+            xmax = 336.35
+            text = ""
+        intervals [18]
+            xmin = 336.35
+            xmax = 337.36
+            text = ""
+        intervals [19]
+            xmin = 337.36
+            xmax = 357.94
+            text = ""
+        intervals [20]
+            xmin = 357.94
+            xmax = 360.28
+            text = ""
+        intervals [21]
+            xmin = 360.28
+            xmax = 390.581
+            text = ""
+    item[6]:
+        class = "IntervalTier"
+        name = "trs@NAL"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 21
+        intervals [1]
+            xmin = 0.0
+            xmax = 159.61
+            text = ""
+        intervals [2]
+            xmin = 159.61
+            xmax = 161.11
+            text = "Ixku a jiñ ¿bak tyilem a papaj chej?"
+        intervals [3]
+            xmin = 161.11
+            xmax = 206.91
+            text = ""
+        intervals [4]
+            xmin = 206.91
+            xmax = 208.64
+            text = "majk ta' kaj itsajleñ apapaj mi yil a che'"
+        intervals [5]
+            xmin = 208.64
+            xmax = 209.6
+            text = ""
+        intervals [6]
+            xmin = 209.6
+            xmax = 210.28
+            text = "wäjbä añob ila"
+        intervals [7]
+            xmin = 210.28
+            xmax = 211.45
+            text = ""
+        intervals [8]
+            xmin = 211.45
+            xmax = 212.08
+            text = "[ianundible]"
+        intervals [9]
+            xmin = 212.08
+            xmax = 250.26
+            text = ""
+        intervals [10]
+            xmin = 250.26
+            xmax = 251.3
+            text = "ixku a jiñi"
+        intervals [11]
+            xmin = 251.3
+            xmax = 252.42
+            text = ""
+        intervals [12]
+            xmin = 252.42
+            xmax = 254.09
+            text = "mi tyi tyojoyob ilum ta' ñumi"
+        intervals [13]
+            xmin = 254.09
+            xmax = 254.28
+            text = ""
+        intervals [14]
+            xmin = 254.28
+            xmax = 254.97
+            text = "che' ta' ochiyob"
+        intervals [15]
+            xmin = 254.97
+            xmax = 267.96
+            text = ""
+        intervals [16]
+            xmin = 267.96
+            xmax = 269.65
+            text = "majk iloñ yum a ili lum a cheñi"
+        intervals [17]
+            xmin = 269.65
+            xmax = 336.35
+            text = ""
+        intervals [18]
+            xmin = 336.35
+            xmax = 337.36
+            text = "chuk iyes a che' mi chämelob"
+        intervals [19]
+            xmin = 337.36
+            xmax = 357.94
+            text = ""
+        intervals [20]
+            xmin = 357.94
+            xmax = 360.28
+            text = "che' bak ta' ñaxan chumleyob a che' ta'  juliyob che'"
+        intervals [21]
+            xmin = 360.28
+            xmax = 390.581
+            text = ""
+    item[7]:
+        class = "IntervalTier"
+        name = "trad@NAL"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 19
+        intervals [1]
+            xmin = 0.0
+            xmax = 159.61
+            text = ""
+        intervals [2]
+            xmin = 159.61
+            xmax = 161.11
+            text = "y así dónde provenía papá"
+        intervals [3]
+            xmin = 161.11
+            xmax = 206.91
+            text = ""
+        intervals [4]
+            xmin = 206.91
+            xmax = 208.64
+            text = "quién fue el que odió a papá"
+        intervals [5]
+            xmin = 208.64
+            xmax = 209.6
+            text = ""
+        intervals [6]
+            xmin = 209.6
+            xmax = 210.28
+            text = "los que están aquí"
+        intervals [7]
+            xmin = 210.28
+            xmax = 250.26
+            text = ""
+        intervals [8]
+            xmin = 250.26
+            xmax = 251.3
+            text = "y esos"
+        intervals [9]
+            xmin = 251.3
+            xmax = 252.42
+            text = ""
+        intervals [10]
+            xmin = 252.42
+            xmax = 254.09
+            text = "los que pasaron pagaban sus terrenos"
+        intervals [11]
+            xmin = 254.09
+            xmax = 254.28
+            text = ""
+        intervals [12]
+            xmin = 254.28
+            xmax = 254.97
+            text = "en el momento de entrar"
+        intervals [13]
+            xmin = 254.97
+            xmax = 267.96
+            text = ""
+        intervals [14]
+            xmin = 267.96
+            xmax = 269.65
+            text = "quién era el dueño de este terreno"
+        intervals [15]
+            xmin = 269.65
+            xmax = 336.35
+            text = ""
+        intervals [16]
+            xmin = 336.35
+            xmax = 337.36
+            text = "y porqué se morían"
+        intervals [17]
+            xmin = 337.36
+            xmax = 357.94
+            text = ""
+        intervals [18]
+            xmin = 357.94
+            xmax = 360.28
+            text = "y cuando recientemente se establecieron dónde fue que vivieron"
+        intervals [19]
+            xmin = 360.28
+            xmax = 390.581
+            text = ""
+    item[8]:
+        class = "IntervalTier"
+        name = "eng@NAL"
+        xmin = 0.0
+        xmax = 390.581
+        intervals: size = 19
+        intervals [1]
+            xmin = 0.0
+            xmax = 159.61
+            text = ""
+        intervals [2]
+            xmin = 159.61
+            xmax = 161.11
+            text = "and so where did dad come from?"
+        intervals [3]
+            xmin = 161.11
+            xmax = 206.91
+            text = ""
+        intervals [4]
+            xmin = 206.91
+            xmax = 208.64
+            text = "who was it that hated dad?"
+        intervals [5]
+            xmin = 208.64
+            xmax = 209.6
+            text = ""
+        intervals [6]
+            xmin = 209.6
+            xmax = 210.28
+            text = "they that are here"
+        intervals [7]
+            xmin = 210.28
+            xmax = 250.26
+            text = ""
+        intervals [8]
+            xmin = 250.26
+            xmax = 251.3
+            text = "and those?"
+        intervals [9]
+            xmin = 251.3
+            xmax = 252.42
+            text = ""
+        intervals [10]
+            xmin = 252.42
+            xmax = 254.09
+            text = "those that passed by paid for their terrains"
+        intervals [11]
+            xmin = 254.09
+            xmax = 254.28
+            text = ""
+        intervals [12]
+            xmin = 254.28
+            xmax = 254.97
+            text = "the moment they came in?"
+        intervals [13]
+            xmin = 254.97
+            xmax = 267.96
+            text = ""
+        intervals [14]
+            xmin = 267.96
+            xmax = 269.65
+            text = "who was the owner of this terrain?"
+        intervals [15]
+            xmin = 269.65
+            xmax = 336.35
+            text = ""
+        intervals [16]
+            xmin = 336.35
+            xmax = 337.36
+            text = "and why did the die?"
+        intervals [17]
+            xmin = 337.36
+            xmax = 357.94
+            text = ""
+        intervals [18]
+            xmin = 357.94
+            xmax = 360.28
+            text = "and when they established themselves recently where did they live?"
+        intervals [19]
+            xmin = 360.28
+            xmax = 390.581
+            text = ""
