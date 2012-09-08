@@ -13,7 +13,7 @@ echo "Creating folders to hold a Mongo database"
 mkdir $HOME/ifieldworkspace/data
 mkdir $HOME/ifieldworkspace/data/db
 echo "Attempting to turn on mongodb on port 8136"
-./mongod --dbpath $HOME/ifieldworkspace/data/db --port 8136 &
+./mongod --dbpath $HOME/ifieldworkspace/data/db  --fork --logpath $HOME/ifieldworkspace/log/mongodb.log --logappend
 
 
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
