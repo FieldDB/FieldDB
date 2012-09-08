@@ -35,7 +35,7 @@ echo "Downloading the iField Authentication server from GitHub"
 cd $HOME/ifieldworkspace
 wget http://ilanguagelab.googlecode.com/files/OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216.tar.gz
 tar -zxvf OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216.tar.gz
-mv OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216/ iField
+mv OpenSourceFieldlinguistics-iField-v1.19.1-0-2207b0b/ iField
 cd iField
 echo "Installing the iField dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
