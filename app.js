@@ -8,7 +8,7 @@ var express     = require('express')
     ,crypto     = require('crypto')
     ,fs         = require('fs');
 
-var apphttpsdomain = "https://localhost:3001";
+var apphttpsdomain = "https://localhost:3183";
 var httpsOptions ={
     key: fs.readFileSync('ifield_debug.key'),
     cert: fs.readFileSync('ifield_debug.crt')
@@ -65,7 +65,7 @@ app.get('/:usergeneric/:corpusordatalist', function(req, res){
   var datalistid = "";
   //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus, if it is a datalist, do that instead
 //  res.redirect(apphttpsdomain+'#corpus/'+corpusid);
-//  res.redirect("https://localhost:3001\#data/"+req.params.datalistid);
+//  res.redirect("https://localhost:3183\#data/"+req.params.datalistid);
   res.redirect("https://ifield.fieldlinguist.com\#corpus/"+req.params.corpusid);
 });
 
@@ -76,6 +76,6 @@ app.get('/:usergeneric', function(req, res){
 
 mongooseAuth.helpExpress(app);
 
-port = "3001";
+port = "3183";
 app.listen(port);
 console.log("Listening on " + port+ "\n"+new Date());
