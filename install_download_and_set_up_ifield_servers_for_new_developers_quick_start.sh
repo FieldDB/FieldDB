@@ -51,7 +51,7 @@ cd iField
 echo "Installing the iField dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
 npm install
-echo "Testing if iField will run, it should say 'Listening on 3001' you can kill it by typing CTL+C \n\nYou can start it properly using bash start_ifield.sh"
+echo "Testing if iField will run, it should say 'Listening on 3183' you can kill it by typing CTL+C \n\nYou can start it properly using bash start_ifield.sh"
 node  app.js 
 
 
