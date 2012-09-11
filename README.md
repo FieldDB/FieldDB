@@ -1,7 +1,7 @@
-Fieldlinguistics database has moved into its own GitHub organization!
+Fieldlinguistics database has graduated into its own GitHub organization!
 ======
 
 
-Please see the [OpenSourceFieldlinguitics][build] repository.
+Come join us at the [OpenSourceFieldlinguitics][build] repository.
 
 [build]: https://github.com/OpenSourceFieldlinguistics/iField
