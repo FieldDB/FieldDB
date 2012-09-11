@@ -44,7 +44,7 @@ Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
  * The url of the authentication server.
  */
 
-Utils.authUrl = "https://localhost:3001";
+Utils.authUrl = "https://localhost:3183";
 
 /**
  * The parameters of the default couch server.
