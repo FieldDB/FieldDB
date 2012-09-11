@@ -11,10 +11,19 @@ wget  http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.0.7.tgz
 tar -zxvf mongodb-linux-x86_64-2.0.7.tgz
 cd mongodb-linux-x86_64-2.0.7/bin
 echo "Creating folders to hold a Mongo database"
-mkdir $HOME/ifieldworkspace/data
-mkdir $HOME/ifieldworkspace/data/db
+mkdir $HOME/ifieldworkspace/usersdatabase
+mkdir $HOME/ifieldworkspace/usersdatabase/db
 echo "Attempting to turn on mongodb on its normal port"
-./mongod --dbpath $HOME/ifieldworkspace/data/db  --fork --logpath $HOME/ifieldworkspace/logs/mongodb.log --logappend
+./mongod --dbpath $HOME/ifieldworkspace/usersdatabase/db  --fork --logpath $HOME/ifieldworkspace/logs/mongodb.log --logappend
+
+#echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
+#cd $HOME/ifieldworkspace
+#wget http://apache.skazkaforyou.com/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz 
+#tar -zxvf apache-couchdb-1.2.0.tar.gz
+#cd apache-couchdb-1.2.0
+#./configure --prefix=$HOME/ifieldworkspace/couchdb
+#make
+#make install
 
 
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
@@ -42,7 +51,7 @@ cd iField
 echo "Installing the iField dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
 npm install
-echo "Testing if iField will run, it should say 'Listening on 3001' you can kill it by typing CTL+C \n\nYou can start it properly using bash start_ifield.sh"
+echo "Testing if iField will run, it should say 'Listening on 3183' you can kill it by typing CTL+C \n\nYou can start it properly using bash start_ifield.sh"
 node  app.js 
 
 
