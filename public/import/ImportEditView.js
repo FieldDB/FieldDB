@@ -506,7 +506,7 @@ define( [
           ,"alert-success","Import successful:");
 
       // Add the "imported" activity to the ActivityFeed
-      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+      window.app.get("currentCorpusTeamActivityFeed").addActivity(
           new Activity({
             verb : "imported",
             directobject : this.savedcount + " data entries",
@@ -516,7 +516,7 @@ define( [
           }));
 
       // Add the "imported" activity to the ActivityFeed
-      window.app.get("currentUserActivityFeed").get("activities").unshift(
+      window.app.get("currentUserActivityFeed").addActivity(
           new Activity({
             verb : "imported",
             directobject : this.savedcount + " data entries",
@@ -586,7 +586,7 @@ define( [
               $(".import-progress").val($(".import-progress").val()+1);
               
               // Add the "imported" activity to the ActivityFeed
-              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+              window.app.get("currentCorpusTeamActivityFeed").addActivity(
                   new Activity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
@@ -596,7 +596,7 @@ define( [
                   }));
               
               // Add the "imported" activity to the ActivityFeed
-              window.app.get("currentUserActivityFeed").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").addActivity(
                   new Activity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",

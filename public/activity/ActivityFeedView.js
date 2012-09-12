@@ -44,7 +44,6 @@ define([
           childViewTagName     : 'li',
           childViewClass        : 'border-bottom'
         });
-        this.model.get("activities").bind('add', this.model.limitCollectionSize, this.model);
 
       }else{
         alert("bug: activity feed view has no model.");
