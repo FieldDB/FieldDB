@@ -739,7 +739,7 @@ define( [
       }
       
    // Don't do anything if dropping the same column we're dragging.
-      if (window.appView.importView.dragSrcEl != this) {
+      if (window.appView.importView.dragSrcEl != this && window.appView.importView.dragSrcEl != null) {
         // Set the source column's HTML to the HTML of the columnwe dropped on.
 //        window.appView.importView.dragSrcEl.innerHTML = e.target.value;
         e.target.value = window.appView.importView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
@@ -754,7 +754,7 @@ define( [
         e.stopPropagation(); // Stops some browsers from redirecting.
       }
       // Don't do anything if dropping the same column we're dragging.
-      if (window.appView.importView.dragSrcEl != this) {
+      if (window.appView.importView.dragSrcEl != this && window.appView.importView.dragSrcEl != null) {
         // Set the source column's HTML to the HTML of the columnwe dropped on.
         window.appView.importView.dragSrcEl.innerHTML = this.innerHTML;
         this.innerHTML = e.dataTransfer.getData('text/html');
