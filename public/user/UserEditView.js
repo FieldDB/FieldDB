@@ -155,7 +155,7 @@ define([
       //It is the private self
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-        window.app.get("currentUserActivityFeed").get("activities").unshift(
+        window.app.get("currentUserActivityFeed").addActivity(
             new Activity({
               verb : "modified",
               directobject : "your private profile",
@@ -163,7 +163,7 @@ define([
               teamOrPersonal : "personal",
               context : "via Offline App"
             }));
-        window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+        window.app.get("currentCorpusTeamActivityFeed").addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
@@ -178,7 +178,7 @@ define([
           window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         });
         
-        window.app.get("currentUserActivityFeed").get("activities").unshift(
+        window.app.get("currentUserActivityFeed").addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>your public profile</a>",
@@ -186,7 +186,7 @@ define([
               teamOrPersonal : "personal",
               context : "via Offline App"
             }));
-        window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+        window.app.get("currentCorpusTeamActivityFeed").addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
