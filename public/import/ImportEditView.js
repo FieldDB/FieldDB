@@ -48,6 +48,22 @@ define( [
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
       },
+      /* event listeners for the drag and drop import of files */
+      "dragover .drop-zone" : function(e){
+        this._dragOverEvent(e);
+      },
+      "dragenter .drop-zone" : function(e){
+        this._dragEnterEvent(e);
+      },
+      "dragleave .drop-zone" : function(e){
+        this._dragLeaveEvent(e);
+      },
+      "drop .drop-zone" : function(e){
+        this._dropEvent(e);
+      },
+      "drop .drop-label-zone" : function(e){
+        this._dropLabelEvent(e);
+      },
       "click .add-column" : "insertDoubleColumnsInTable",
       "blur .export-large-textarea" : "updateRawText"
     },
@@ -729,7 +745,7 @@ define( [
      * @param e
      */
     dragLabelToColumn : function(e) {
-      Utils.debug("Recieved a drop event ");
+      Utils.debug("Recieved a drop import label event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
