@@ -1,5 +1,5 @@
-<div class="container-fluid">
-	<div class="row-fluid">
+<div class="container-fluid well">
+	<div class="row-fluid ">
 		<div class="span4 well">
 			<!--Sidebar content-->
 			<span class="badge badge-info">8</span>
@@ -29,16 +29,20 @@
 				<span class="badge badge-info">1</span><span class="badge badge-info">2</span>
 				<textarea class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
 			</div>
-			<div class="well">
-				<button class="btn btn-primary add-column pull-right hide locale_Add_Extra_Columns"></button>
+			<button
+				class="btn btn-primary add-column  hide locale_Add_Extra_Columns"></button>
+			<div class="well container span11">
 				<span class="badge badge-info">3</span>
-				<div id="import-datum-field-labels"></div>
+				<div id="import-datum-field-labels" class="row-fluid"></div>
 			</div>
 		</div>
 	</div>
-</div>
-<span class="badge badge-info">5</span>
-<button class="btn btn-success approve-import hide locale_Attempt_Import"></button>
+	 <div class="row-fluid ">
+		<span class="badge badge-info">5</span>
+		<button
+			class="btn btn-success approve-import hide locale_Attempt_Import"></button>
 
-<span class="badge badge-info">4</span><span class="badge badge-info">7</span>
+		<span class="badge badge-info">4</span><span class="badge badge-info">7</span>
+	</div>
+</div>
 <table id="csv-table-area" class="well table table-striped table-bordered table-condensed"></table>
