@@ -44,7 +44,7 @@ Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
  * The url of the authentication server.
  */
 
-Utils.authUrl = "https://localhost:3001";
+Utils.authUrl = "https://localhost:3183";
 
 /**
  * The parameters of the default couch server.
@@ -80,7 +80,7 @@ if(Utils.productionMode){
  * The urls and parameters for the easy developerment mode (uses deployed iField server and ifieldevs couch database
  */
 if(Utils.easyDevelopmentMode){
-  Utils.authUrl = "http://ifielddevs.fieldlinguist.com"; 
+  Utils.authUrl = "https://ifielddevs.fieldlinguist.com:3001"; 
   Utils.couchUrl = "http://ifielddevs.iriscouch.com/default";
   Utils.activityFeedCouchUrl = "http://ifielddevs.iriscouch.com/activity_feed";
 

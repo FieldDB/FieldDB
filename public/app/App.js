@@ -374,7 +374,7 @@ define([
               
               appSelf.get("authentication").staleAuthentication = true;
               localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
-              window.appView.toastUser("Your dashboard has been saved, you can exit the page at anytime and return to this state.","alert-success","Exit at anytime:");
+              window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.","alert-success","Exit at anytime:");
               
               
               //appSelf.router.showDashboard();

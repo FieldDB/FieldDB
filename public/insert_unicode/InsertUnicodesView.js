@@ -85,7 +85,7 @@ define([
         this.insertUnicodesView.render();
   
         $(this.el).find(".unicode-symbol").each(function(index, item) {
-          this.addEventListener('dragstart', window.appView.insertUnicodesView.handleDragStart, false);
+          this.addEventListener('dragstart', window.appView.insertUnicodesView.handleDragStart);
         });
         
         //localization for non-minimized view
@@ -139,15 +139,18 @@ define([
     handleDragStart : function(e) {
       // Target (this) element is the source node.
       this.classList.remove("infrequent-unicode-symbol");
+      e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
+
 //      var u = window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").where({symbol: this.innerHTML});
       //TODO useCount++ increase the user count on that item.
       
       //if not already dragging, do a drag start
       if(window.appView.insertUnicodesView.dragSrcEl == null){
         window.appView.insertUnicodesView.dragSrcEl = this;
-        e.dataTransfer.effectAllowed = 'move';
+//        e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.innerHTML);
       }
+      return false;
     }
   });
   return InsertUnicodesView;
