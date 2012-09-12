@@ -214,8 +214,11 @@ define([
           $('.datum-field').each(function(index, item) {
             item.classList.add( $(item).find("label").html() );
             $(".datum_field_input").each(function(index){
-              this.addEventListener('drop', window.appView.dragUnicodeToField, false);
-              this.addEventListener('dragover', window.appView.handleDragOver, false);
+              this.addEventListener('drop', window.appView.dragUnicodeToField);
+              this.addEventListener('dragover', window.appView.handleDragOver);
+              this.addEventListener('dragleave', function(){
+                $(this).removeClass("over");
+              } );
             });
           });
           self.hideRareFields();
