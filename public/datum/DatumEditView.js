@@ -169,8 +169,12 @@ define([
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
-      Utils.debug("DATUM render: " + this.el);
+      Utils.debug("DATUM render: " );
       
+      if(this.collection){
+        Utils.debug("This datum has a link to a collection. Removing the link.");
+//        delete this.collection;
+      }
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
@@ -377,7 +381,7 @@ define([
       
       var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
 
-      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+      window.app.get("currentCorpusTeamActivityFeed").addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -388,7 +392,7 @@ define([
             context : " via Offline App."
           }));
       
-      window.app.get("currentUserActivityFeed").get("activities").unshift(
+      window.app.get("currentUserActivityFeed").addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
