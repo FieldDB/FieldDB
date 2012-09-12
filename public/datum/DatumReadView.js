@@ -148,6 +148,11 @@ define([
     render : function() {
       Utils.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
       
+      if(this.collection){
+        Utils.debug("This datum has a link to a collection. Removing the link.");
+//        delete this.collection;
+      }
+      
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
         Utils.debug("DATUM fields is undefined, come back later.");
         return this;

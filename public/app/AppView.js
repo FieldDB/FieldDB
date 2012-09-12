@@ -720,7 +720,7 @@ define([
      * @param e event
      */
     dragUnicodeToField : function(e) {
-      Utils.debug("Recieved a drop event ");
+      Utils.debug("Recieved a drop unicode event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -739,6 +739,7 @@ define([
           e.target.value = e.target.value + window.appView.insertUnicodesView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
           //say that the unicode drag event has been handled
           window.appView.insertUnicodesView.dragSrcEl = null;
+          $(this).removeClass("over");
         }
         return false;
       }
@@ -750,7 +751,9 @@ define([
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+      this.className = 'over';
+      e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
+      
       return false;
     },
     

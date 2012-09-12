@@ -119,7 +119,7 @@ define([
       
       var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
       
-      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+      window.app.get("currentCorpusTeamActivityFeed").addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -130,7 +130,7 @@ define([
             context : " via Offline App."
           }));
       
-      window.app.get("currentUserActivityFeed").get("activities").unshift(
+      window.app.get("currentUserActivityFeed").addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -202,7 +202,7 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+            window.app.get("currentCorpusTeamActivityFeed").addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
@@ -213,7 +213,7 @@ define([
                   context : " via Offline App."
                 }));
             
-            window.app.get("currentUserActivityFeed").get("activities").unshift(
+            window.app.get("currentUserActivityFeed").addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
