@@ -199,6 +199,7 @@ textarea{
 }
 *:-khtml-drag {
   background-color: rgba(238,238,238, 0.5);
+  /* padding: 1em; */
   border: dashed #333 2px;
   color: #000;
 }
