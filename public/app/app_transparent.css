@@ -10,3 +10,12 @@
 a {
   color: #3bf;
 }
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+  background-color:rgba(0,0,0,0.3);
+}
+
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+  background-color:rgba(0,0,0,0.3);
+}
