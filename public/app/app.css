@@ -185,9 +185,23 @@ textarea{
 }
 
 .halfopacity{
-	opacity: 0.75 ;
+	opacity: 0.5 ;
 } 
-
+.over {
+  border-color: #000;
+  background: #999 !important;
+}
+/*http://html5demos.com/drag*/
+*[draggable=true] {
+  -moz-user-select:none;
+  -khtml-user-drag: element;
+  cursor: move;
+}
+*:-khtml-drag {
+  background-color: rgba(238,238,238, 0.5);
+  border: dashed #333 2px;
+  color: #000;
+}
 .dropdown-menu .not-a {
   display: block;
   padding: 3px 15px;
