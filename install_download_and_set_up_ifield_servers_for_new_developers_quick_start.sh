@@ -41,7 +41,7 @@ echo "export PATH=$HOME/ifieldworkspace/node/bin:$PATH" >> ~/.profile
 source ~/.profile
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
-echo "Downloading the iField Authentication server from GitHub"
+echo "Downloading the iField Authentication server from Github"
 cd $HOME/ifieldworkspace
 #wget http://ilanguagelab.googlecode.com/files/OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216.tar.gz
 #tar -zxvf OpenSourceFieldlinguistics-iField-v1.19.1-0-gee36216.tar.gz
