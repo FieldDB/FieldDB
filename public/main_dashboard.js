@@ -145,6 +145,7 @@ require([
     "backbone_pouchdb",
     "autosize",
     "xml2json",
+    "libs/webservicesconfig_devserver",
     "libs/Utils"
 ], function(
     App,
