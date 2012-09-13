@@ -1,6 +1,7 @@
 var express     = require('express')
     ,util       = require('util')
-    
+    ,node_config = require("./lib/nodeconfig_devserver")
+
     ,mongooseAuth  = require('mongoose-auth')
     ,Users = require('./lib/restfullmongooseusers.js')
     
@@ -8,21 +9,8 @@ var express     = require('express')
     ,crypto     = require('crypto')
     ,fs         = require('fs');
 
-var apphttpsdomain = "https://localhost:3183";
-var httpsOptions ={
-    key: fs.readFileSync('ifield_debug.key'),
-    cert: fs.readFileSync('ifield_debug.crt')
-};
 
-var productionMode = false;
-if (productionMode) {
-    apphttpsdomain = "https://ifield.fieldlinguist.com";
-    httpsOptions = {
-        key : fs.readFileSync('ifield_production.key'),
-        cert : fs.readFileSync('ifiled_production.crt')
-    };
-}
-var app = express.createServer(httpsOptions);
+var app = express.createServer(node_config.httpsOptions);
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
 //app.use(function(req, res, next) {
@@ -64,7 +52,7 @@ app.get('/:usergeneric/:corpusordatalist', function(req, res){
   var corpusid = "";
   var datalistid = "";
   //TOOD look up the usergeneric, then look up the corpus id so that the backbone router will show/fetch that corpus, if it is a datalist, do that instead
-//  res.redirect(apphttpsdomain+'#corpus/'+corpusid);
+//  res.redirect(node_config.apphttpsdomain+'#corpus/'+corpusid);
 //  res.redirect("https://localhost:3183\#data/"+req.params.datalistid);
   res.redirect("https://ifield.fieldlinguist.com\#corpus/"+req.params.corpusid);
 });
@@ -76,6 +64,5 @@ app.get('/:usergeneric', function(req, res){
 
 mongooseAuth.helpExpress(app);
 
-port = "3183";
-app.listen(port);
-console.log("Listening on " + port+ "\n"+new Date());
+app.listen(node_config.port);
+console.log("Listening on " + node_config.apphttpsdomain+ "\n"+new Date());
