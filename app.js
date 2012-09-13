@@ -9,7 +9,9 @@ var express     = require('express')
     ,crypto     = require('crypto')
     ,fs         = require('fs');
 
-
+//read in the specified filenames as the security key and certificate
+node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
+node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
 var app = express.createServer(node_config.httpsOptions);
 
 //http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
