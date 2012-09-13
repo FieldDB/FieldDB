@@ -1,8 +1,10 @@
 #!/bin/bash
 
+#alias wget="curl -O --retry 999 --retry-max-time 0 -C -"
+
 echo "Making ifield workspace"
-mkdir ifieldworkspace
-cd ifieldworkspace
+mkdir $HOME/ifieldworkspace
+cd $HOME/ifieldworkspace
 mkdir logs
 
 echo -en '\E[47;34m'"\033[1mE"
