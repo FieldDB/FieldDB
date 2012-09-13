@@ -48,6 +48,10 @@ cd $HOME/ifieldworkspace
 #mv OpenSourceFieldlinguistics-iField-v1.19.1-0-2207b0b/ iField
 git clone git://github.com/OpenSourceFieldlinguistics/iField.git
 cd iField
+
+echo "Setting the upstream of the repository so that updates are easy to do"
+git remote add upstream git@github.com:OpenSourceFieldlinguistics/iField.git
+
 echo "Installing the iField dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
 npm install
