@@ -20,7 +20,7 @@ echo "Creating folders to hold a Mongo database"
 mkdir $HOME/ifieldworkspace/usersdatabase
 mkdir $HOME/ifieldworkspace/usersdatabase/db
 echo "Attempting to turn on mongodb on its normal port"
-bash mongod --dbpath $HOME/ifieldworkspace/usersdatabase/db  --fork --logpath $HOME/ifieldworkspace/logs/mongodb.log --logappend
+./mongod --dbpath $HOME/ifieldworkspace/usersdatabase/db  --fork --logpath $HOME/ifieldworkspace/logs/mongodb.log --logappend
 
 #echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
 #cd $HOME/ifieldworkspace
