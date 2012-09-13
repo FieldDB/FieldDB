@@ -14,7 +14,8 @@ echo -en '\E[47;34m'"\033[1mE"
 echo  "Downloading the Mongo Database files, this is where users are stored."
 curl -O --retry 999 --retry-max-time 0 -C -  http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.0.7.tgz 
 tar -zxvf mongodb-linux-x86_64-2.0.7.tgz
-cd mongodb-linux-x86_64-2.0.7/bin
+mv mongodb-linux-x86_64-2.0.7 mongodb
+cd mongodb/bin
 echo "Creating folders to hold a Mongo database"
 mkdir $HOME/ifieldworkspace/usersdatabase
 mkdir $HOME/ifieldworkspace/usersdatabase/db
