@@ -7,7 +7,7 @@ sed 's/Utils.debugMode *= *false/Utils.debugMode = true/' public/libs/Utils.js  
 mv output public/libs/Utils.js
 
 echo "Tell the Chrome app to contact the dev webservices."
-sed 's/webservicesconfig_[^"]*)/webservicesconfig_devserver)/' public/main_dashboard.js  > output
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' public/main_dashboard.js  > output
 mv output public/main_dashboard.js
 
 echo ""
