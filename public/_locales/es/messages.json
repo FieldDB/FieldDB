@@ -65,7 +65,7 @@
     "message" : "Canal de Actividad del Equipo de Corpus"
   },
   "locale_Refresh_Activities" : {
-    "message" : "TODO translate"
+    "message" : "Actualiza Actividades"
   },
   "locale_View_Profile_Tooltip" : {
     "message" : "Haga clic para ver la pagina del usuario."
@@ -489,7 +489,7 @@
     "message" : "Tocar audio de los seleccionados"
   },
   "locale_Remove_checked_from_datalist_tooltip" : {
-    "message" : "TODO translate los seleccionados"
+    "message" : "Borre los seleccionados de la lista de datos"
   },
   "locale_Insert_New_Datum" : {
     "message" : "Insertar un nuevo dato arriba"
@@ -516,8 +516,7 @@
     "message" : "Buscable:"
   },
   "locale_Session_Description_tooltip" : {
-     "message" : "Un sesión de elicitación es un colección de datos asociados una junta con sus consultantes.
-     Tambien se puede usar para guardar datos de un artículo."
+    "message" : "Un sesión de elicitación es un colección de datos asociados de una junta con sus consultantes. Tambien se puede usar para guardar datos de un artículo."
   }
   
 }
