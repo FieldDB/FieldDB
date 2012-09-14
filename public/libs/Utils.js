@@ -4,16 +4,22 @@
  * 
  * @property {Boolean} debugMode This boolean can be changed from true to
  *           false for production mode to speed up the app.
- *
+ * @property {Boolean} productionMode This boolean can be changed from false to
+ *           true to point the app to production servers rather than development servers.
  * @constructs
  */
+
 var Utils = Utils || {};
 
-Utils.debugMode = true;
+/*
+ * Turn this off to make the app run faster. If it is on, you can see a lot of
+ * debugging output whcih can be useful as a developer to find out what the app
+ * is doing, how control flows through the app and also to debug new features or
+ * bugs.
+ */
+Utils.debugMode = true; 
 
 
-//Utils.couchUrl = "https://ilanguage.iriscouch.com/default";
-Utils.couchUrl = "http://localhost:5984/default";
 /**
  * The address of the TouchDB-Android database on the Android.
  */
@@ -24,9 +30,6 @@ Utils.touchUrl = "http://localhost:8888/db";
  */
 Utils.pouchUrl = "idb://db";
 
-
-//Utils.activityFeedCouchUrl = "https://ilanguage.iriscouch.com/activity_feed";
-Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
 /**
  * The address of the TouchDB-Android database on the Android.
  * @Deprecated now using pouchUrl for all
@@ -39,28 +42,6 @@ Utils.activityFeedCouchUrl = "http://localhost:5984/activity_feed";
  */
 //Utils.activityFeedPouchUrl = "idb://activity_feed_db";
 
-/**
- * The url of the authentication server.
- */
-
-//Utils.authUrl = "https://ifield.fieldlinguist.com";//"https://localhost:3001";
-Utils.authUrl = "https://localhost:3001";
-/**
- * The parameters of the default couch server.
- */
-Utils.defaultCouchConnection = function() {
-  return {
-//    protocol : "https://",
-//    domain : "ilanguage.iriscouch.com",
-//    port : "443",
-//    pouchname : "default"
-//  }; 
-    protocol : "http://",
-    domain : "localhost",
-    port : "5984",
-    pouchname : "default"
-  }; 
-};
 /**
  * A message for users if they need help which brings them to our contact us form
  */
@@ -144,7 +125,10 @@ Utils.publisher = {
 
     for (i = 0; i < max; i += 1) {
       if (action === 'publish') {
-        subscribers[i].fn.call(subscribers[i].context, arg);
+        if(subscribers[i]){
+          //TODO there is a bug with the subscribers they are getting lost, and it is trying to call fn of undefiend. this is a workaround until we figure out why subscribers are getting lost.
+          subscribers[i].fn.call(subscribers[i].context, arg);
+        }
       } else {
         try{
           if (subscribers[i].context === context) {

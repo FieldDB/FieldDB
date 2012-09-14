@@ -154,7 +154,12 @@ define([
     
     searchByQueryString : function(queryString, callback) {
       var self = this;
-      
+      try{
+        //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
+        window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
+      }catch(e){
+        Utils.debug("Search Analytics not working.");
+      }
       try{
         this.changePouch(this.get("pouchname"), function() {
           self.pouch(function(err, db) {
@@ -435,6 +440,7 @@ define([
         "pouchname" : app.get("corpus").get("pouchname"),
         "dateModified" : JSON.stringify(new Date())
       });
+      window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
       /*
@@ -473,7 +479,7 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+            window.app.get("currentCorpusTeamActivityFeed").addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon: verbicon,
@@ -484,7 +490,7 @@ define([
                   context : " via Offline App."
                 }));
             
-            window.app.get("currentUserActivityFeed").get("activities").unshift(
+            window.app.get("currentUserActivityFeed").addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon: verbicon,

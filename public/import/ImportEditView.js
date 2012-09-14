@@ -48,6 +48,7 @@ define( [
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
       },
+      /* event listeners for the drag and drop import of files */
       "dragover .drop-zone" : function(e){
         this._dragOverEvent(e);
       },
@@ -186,11 +187,12 @@ define( [
       $("#import-datum-field-labels").html("");//chrome.i18n.getMessage("locale_Drag_Fields_Instructions"));
       for(i in this.model.get("datumFields").models){
         var x = document.createElement("span");
+        x.classList.add("pull-left");
         x.classList.add("label");
         x.classList.add(colors[colorindex%colors.length]);
         x.draggable="true";
         x.innerHTML = this.model.get("datumFields").models[i].get("label");
-        x.addEventListener('dragover', this.handleDragStart, false);
+        x.addEventListener('dragstart', this.handleDragStart);
         colorindex++;
         $("#import-datum-field-labels").append(x);
         $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
@@ -198,33 +200,36 @@ define( [
       
       //add tags
       var x = document.createElement("span");
+      x.classList.add("pull-left");
       x.classList.add("label");
       x.classList.add(colors[colorindex%colors.length]);
       x.draggable="true";
       x.innerHTML = "datumTags";
-      x.addEventListener('dragover', this.handleDragStart, false);
+      x.addEventListener('dragstart', this.handleDragStart);
       colorindex++;
       $("#import-datum-field-labels").append(x);
       $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
 
       //add date
       var x = document.createElement("span");
+      x.classList.add("pull-left");
       x.classList.add("label");
       x.classList.add(colors[colorindex%colors.length]);
       x.draggable="true";
       x.innerHTML = "dateElicited";
-      x.addEventListener('dragover', this.handleDragStart, false);
+      x.addEventListener('dragstart', this.handleDragStart);
       colorindex++;
       $("#import-datum-field-labels").append(x);
       $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
       
     //add checkedWithConsultant
       var x = document.createElement("span");
+      x.classList.add("pull-left");
       x.classList.add("label");
       x.classList.add(colors[colorindex%colors.length]);
       x.draggable="true";
       x.innerHTML = "checkedWithConsultant";
-      x.addEventListener('dragover', this.handleDragStart, false);
+      x.addEventListener('dragstart', this.handleDragStart);
       colorindex++;
       $("#import-datum-field-labels").append(x);
       $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
@@ -251,8 +256,11 @@ define( [
           headercelltext = extractedHeader[i];
         }
         $(tableCell).html('<input type="text" class="drop-label-zone header'+i+'" value="'+headercelltext+'"/>');
-        tableCell.addEventListener('drop', this.dragLabelToColumn, false);
-        tableCell.addEventListener('dragover', this.handleDragOver, false);
+        $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
+        $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
+        $(tableCell).find("input")[0].addEventListener('dragleave', function(){
+          $(this).removeClass("over");
+        } );
         headerRow.appendChild(tableCell);
       }
       tablehead.appendChild(headerRow);
@@ -307,7 +315,7 @@ define( [
       }
       
       var filename = " typing/copy paste into text area";
-      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area."
+      var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
       try {
         filename = this.model.get("files")[0].name;
         descript = "This is the data list which results from the import of these file(s). " + this.model.get("fileDetails");
@@ -506,7 +514,7 @@ define( [
           ,"alert-success","Import successful:");
 
       // Add the "imported" activity to the ActivityFeed
-      window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+      window.app.get("currentCorpusTeamActivityFeed").addActivity(
           new Activity({
             verb : "imported",
             directobject : this.savedcount + " data entries",
@@ -516,7 +524,7 @@ define( [
           }));
 
       // Add the "imported" activity to the ActivityFeed
-      window.app.get("currentUserActivityFeed").get("activities").unshift(
+      window.app.get("currentUserActivityFeed").addActivity(
           new Activity({
             verb : "imported",
             directobject : this.savedcount + " data entries",
@@ -586,7 +594,7 @@ define( [
               $(".import-progress").val($(".import-progress").val()+1);
               
               // Add the "imported" activity to the ActivityFeed
-              window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(
+              window.app.get("currentCorpusTeamActivityFeed").addActivity(
                   new Activity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
@@ -596,7 +604,7 @@ define( [
                   }));
               
               // Add the "imported" activity to the ActivityFeed
-              window.app.get("currentUserActivityFeed").get("activities").unshift(
+              window.app.get("currentUserActivityFeed").addActivity(
                   new Activity({
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
@@ -704,8 +712,11 @@ define( [
       $("#csv-table-area").find('th').each(function(index) {
         var tableCell = document.createElement("th");
         $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
-        tableCell.addEventListener('drop', this.dragLabelToColumn, false);
-        tableCell.addEventListener('dragover', this.handleDragOver, false);
+        $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
+        $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
+        $(tableCell).find("input")[0].addEventListener('dragleave', function(){
+          $(this).removeClass("over");
+        } );
         $(this).after(tableCell);
       });
     },
@@ -718,13 +729,15 @@ define( [
     handleDragStart : function(e) {
       // Target (this) element is the source node.
       this.classList.add("halfopacity");
+      e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
 
       //if not already dragging, do a drag start
       if(window.appView.importView.dragSrcEl == null){
         window.appView.importView.dragSrcEl = this;
-        e.dataTransfer.effectAllowed = 'move';
+//        e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.innerHTML);
       }
+      return false;
     },
     /**
      * http://www.html5rocks.com/en/tutorials/dnd/basics/
@@ -732,32 +745,20 @@ define( [
      * @param e
      */
     dragLabelToColumn : function(e) {
-      Utils.debug("Recieved a drop event ");
+      Utils.debug("Recieved a drop import label event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
       }
       
    // Don't do anything if dropping the same column we're dragging.
-      if (window.appView.importView.dragSrcEl != this) {
+      if (window.appView.importView.dragSrcEl != this && window.appView.importView.dragSrcEl != null) {
         // Set the source column's HTML to the HTML of the columnwe dropped on.
 //        window.appView.importView.dragSrcEl.innerHTML = e.target.value;
         e.target.value = window.appView.importView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
         window.appView.importView.dragSrcEl = null;
+        $(this).removeClass("over");
         $(".import-progress").val($(".import-progress").val()+1);
-      }
-      return false;
-    },
-    handleDrop : function(e) {
-      // this/e.target is current target element.
-      if (e.stopPropagation) {
-        e.stopPropagation(); // Stops some browsers from redirecting.
-      }
-      // Don't do anything if dropping the same column we're dragging.
-      if (window.appView.importView.dragSrcEl != this) {
-        // Set the source column's HTML to the HTML of the columnwe dropped on.
-        window.appView.importView.dragSrcEl.innerHTML = this.innerHTML;
-        this.innerHTML = e.dataTransfer.getData('text/html');
       }
       return false;
     },
@@ -765,7 +766,8 @@ define( [
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+      this.className = 'over';
+      e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       return false;
     },
     /**

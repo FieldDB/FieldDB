@@ -44,6 +44,7 @@ define([
           childViewTagName     : 'li',
           childViewClass        : 'border-bottom'
         });
+
       }else{
         alert("bug: activity feed view has no model.");
       }

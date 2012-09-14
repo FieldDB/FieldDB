@@ -27,7 +27,8 @@ define([
       //TODO remove this, and us the change corpus instead. by keepint htis now, it puts all activity feeds into one.
 //      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
 //          : Utils.activityFeedPouchUrl);
-      
+      this.set("maxInMemoryCollectionSize", 20);
+
     },
 //    defaults: {
 //      activities: Activities
@@ -64,10 +65,16 @@ define([
       self.savefailedindex = [];
       self.nextsaveactivity  = 0;
       
+      //workaround to remove the pointer to all the superfluous and recursive collection in each activity. 
+      for(var j = 0; j< self.get("activities").models.length; j++){
+        if(self.get("activities").models[j].collection){
+          delete self.get("activities").models[j].collection;
+        }
+      }
       
       window.hub.subscribe("savedActivityToPouch", function(arg){
-        this.savedindex[arg.d] = true;
-        this.savedcount++;
+        self.savedindex[arg.d] = true;
+        self.savedcount++;
         if( arg.d <= 0 ){
           /*
            * If we are at the final index in the activity feed
@@ -78,36 +85,36 @@ define([
             successcallback();
           }
           var alertcolor = "alert-success";
-          if(this.savefailedcount > 0){
+          if(self.savefailedcount > 0){
             var alertcolor = "alert-warning";
           }
-          window.appView.toastUser("Save activity feed completed, "+this.savefailedcount+" failures, "+this.truelysaved+" new." ,alertcolor,"Activities saved:");
+          window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,alertcolor,"Activities saved:");
 
-          window.hub.unsubscribe("savedActivityToPouch", null, this);
-          window.hub.unsubscribe("saveActivityFailedToPouch", null, this);
+          window.hub.unsubscribe("savedActivityToPouch", null, self);
+          window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
           
         }else{
           /*
            * Save another activity when the previous succeeds
            */
           var next = parseInt(arg.d) - 1;
-          this.saveAnActivityAndLoop(next);
-          Utils.debug("Save succeeded: "+arg.d+" Calling saveAnActivityAndLoop for "+this.get("couchConnection").pouchname);
+          self.saveAnActivityAndLoop(next);
+          Utils.debug("Save succeeded: "+arg.d+" Calling saveAnActivityAndLoop for "+self.get("couchConnection").pouchname);
 
         }
       }, self);
       
       window.hub.subscribe("saveActivityFailedToPouch",function(arg){
-        this.savefailedindex[arg.d] = false; 
-        this.savefailedcount++;
+        self.savefailedindex[arg.d] = false; 
+        self.savefailedcount++;
 //        window.appView.toastUser("Save activity failed "+arg.d+" : "+arg.message,"alert-warning","Failures:");
         
-        this.alerted++;
-        if(this.alerted<100){
+        self.alerted++;
+        if(self.alerted<100){
           //alert(d);
-          alert("Bug! the app seems to be looping. Attempting ot stop it.");
-          window.hub.unsubscribe("savedActivityToPouch", null, this);
-          window.hub.unsubscribe("saveActivityFailedToPouch", null, this);
+          alert("Bug! the "+self.get("couchConnection").pouchname+" activity feed seems to be recursing. Attempting ot stop it.");
+          window.hub.unsubscribe("savedActivityToPouch", null, self);
+          window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
          //TODO there is a problem, workaround is to call the success callback anyway.
           if(typeof successcallback == "function"){
             successcallback();
@@ -121,18 +128,18 @@ define([
           if(typeof successcallback == "function"){
             successcallback();
           }
-          window.appView.toastUser("Save activity feed completed, "+this.savefailedcount+" failures, "+this.truelysaved+" new." ,null,"Activities saved:");
+          window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,null,"Activities saved:");
 
-          window.hub.unsubscribe("savedActivityToPouch", null, this);
-          window.hub.unsubscribe("saveActivityFailedToPouch", null, this);
+          window.hub.unsubscribe("savedActivityToPouch", null, self);
+          window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
           
         }else{
           /*
            * Save another activity when the previous fails
            */
           var next = parseInt(arg.d) - 1;
-          this.saveAnActivityAndLoop(next);
-          Utils.debug("Save failed: "+arg.d+"  Calling saveAnActivityAndLoop for "+this.get("couchConnection").pouchname);
+          self.saveAnActivityAndLoop(next);
+          Utils.debug("Save failed: "+arg.d+"  Calling saveAnActivityAndLoop for "+self.get("couchConnection").pouchname);
 
         }
         
@@ -174,6 +181,10 @@ define([
       if(thatactivity.isNew()){
         this.truelysaved++;
       }
+      if(thatactivity.collection){
+        Utils.debug("This activity has a collection. removing it.");
+        delete thatactivity.collection;
+      }
       thatactivity.saveAndInterConnectInApp(function(){
         hub.publish("savedActivityToPouch",{d: d, message: " activity "+thatactivity.id});
       },function(){
@@ -214,6 +225,28 @@ define([
         callback();
       }
     },  
+    addActivity : function(model){
+      var name = "undefined couchconnection";
+      try{
+        name = this.get("couchConnection").pouchname;
+      }catch(e){
+        console.warn("couchConnection was undefined on the activity feed. this is a problem");
+      }
+      var currentlength =  this.get("activities").length;
+      console.log(name+ " checking activity feed size = "+ currentlength);
+      //console.log(name+ " this is the activity that was added = ", model);
+
+      if(currentlength> this.get("maxInMemoryCollectionSize")){  
+        console.log("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
+        var modelToRemove = this.get("activities").pop(); //because activities are added by unshift
+        modelToRemove.saveAndInterConnectInApp();
+      }
+      if(model.collection){
+        Utils.debug("This activity has a collection. removing it.");
+//        delete model.collection;
+      }
+      this.get("activities").unshift(model);
+    },
     /**
      * This function looks through pouch, and populates the activity feed. It accepts a maxNumberToPopulate so that we don't have too many objects in memory unncessarily. The structure of the rows objects is defined by the map reduce function in the couchdb.
      * right now, it contains the objects of the activities so it can be quite heavy as well. 
@@ -333,7 +366,7 @@ define([
                 
                 var numberofdashes = couchConnection.pouchname.split("-");
                 if(numberofdashes.length == 2){
-                  window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
+                  window.app.get("currentUserActivityFeed").addActivity(new Activity({
                     verb : "uploaded",
                     verbicon : "icon-arrow-up",
                     directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
@@ -343,7 +376,7 @@ define([
                   }));
                 }
                 else{
-                  window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
+                  window.app.get("currentCorpusTeamActivityFeed").addActivity(new Activity({
                     verb : "uploaded",
                     verbicon : "icon-arrow-up",
                     directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
@@ -400,7 +433,7 @@ define([
 
               var numberofdashes = couchConnection.pouchname.split("-");
               if(numberofdashes.length == 2){
-                window.app.get("currentUserActivityFeed").get("activities").unshift(new Activity({
+                window.app.get("currentUserActivityFeed").addActivity(new Activity({
                   verb : "downloaded",
                   verbicon : "icon-arrow-down",
                   directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
@@ -410,7 +443,7 @@ define([
                 }));
               }
               else{
-                window.app.get("currentCorpusTeamActivityFeed").get("activities").unshift(new Activity({
+                window.app.get("currentCorpusTeamActivityFeed").addActivity(new Activity({
                   verb : "downloaded",
                   verbicon : "icon-arrow-down",
                   directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
