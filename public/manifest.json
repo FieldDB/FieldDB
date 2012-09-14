@@ -17,7 +17,7 @@
     "https://ifielddevs.fieldlinguist.com:3001/*",
     "https://ifielddevs.iriscouch.com/*",
     "https://localhost:3183/*",
-    "https://localhost:6984/*"
+    "http://localhost:5984/*"
   ],
    "icons": { 
     "16": "icon16.png",
