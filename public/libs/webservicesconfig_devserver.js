@@ -2,7 +2,7 @@
 var Utils = Utils || {};
 
 
-Utils.authUrl = "https://ifielddevs.fieldlinguist.com:3001";
+Utils.authUrl = "https://ifielddevs.fieldlinguist.com:3183";
 Utils.defaultCouchConnection = function() {
   return {
     protocol : "https://",
