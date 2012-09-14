@@ -52,3 +52,12 @@ This project is released under the [Apache 2.0](http://www.apache.org/licenses/L
 * Click on the "Pull Request" button, and leave us a note about what you changed. 
 * Feel the glow :)
  
+=======
+Fieldlinguistics database has graduated into its own GitHub organization!
+======
+
+
+Come join us at the [OpenSourceFieldlinguitics][build] repository.
+
+[build]: https://github.com/OpenSourceFieldlinguistics/iField
+

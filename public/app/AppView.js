@@ -22,6 +22,7 @@ define([
     "datum/DatumFields", 
     "export/Export",
     "export/ExportReadView",
+    "export/ExportBatchView",
     "hotkey/HotKey",
     "hotkey/HotKeyEditView",
     "import/Import",
@@ -66,6 +67,7 @@ define([
     DatumFields,
     Export,
     ExportReadView,
+    ExportBatchView,
     HotKey,
     HotKeyEditView,
     Import,
@@ -193,6 +195,10 @@ define([
       //TODO not sure if we should do this here
       // Create an ExportReadView
       this.exportView = new ExportReadView({
+        model : new Export()
+      });
+      
+      this.exportBatchView = new ExportBatchView({
         model : new Export()
       });
       
@@ -521,6 +527,12 @@ define([
         this.searchEditView.format = "centreWell";
         this.searchEditView.render();
         
+//        this.importView.render();
+//        this.exportView.render();
+        
+        
+        //This is the export view that will be viewed from the corpus data menu.
+//        this.exportBatchView.render();
         //put the version into the terminal, and into the user menu
         Utils.getVersion(function (ver) { 
           window.appView.term.VERSION_ = ver;

@@ -38,7 +38,8 @@ define( [
      */
     events : {
       "blur .datum_state_input" : "updateState",
-      "change .color_chooser" : "updateColor"
+      "change .color_chooser" : "updateColor",
+      "click .shouldBeSearchable" : "updateSearchable" 
     },
 
     /**
@@ -66,6 +67,7 @@ define( [
         $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
         $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
         $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+        $(this.el).find(".locale_Searchable").html(chrome.i18n.getMessage("locale_Searchable"));
       }
       
       return this;
@@ -85,6 +87,20 @@ define( [
     updateColor : function() {
       Utils.debug("Updated color to " + this.$el.children(".color_chooser").val());
       this.model.set("color", this.$el.children(".color_chooser").val());
+    },
+    
+    updateSearchable : function() {
+      var checked = this.$el.children(".shouldBeSearchable").is(':checked');
+      if (checked ) {
+        checked = "checked";
+      } else {
+        checked = "";
+      }
+      Utils.debug("Updated showInSearchResults to " + checked);
+      this.model.set("showInSearchResults", checked);
+    //TODO I modeled this after shouldBeEncrypted, but this function doesn't 
+   //actualy affect the actual search results, just the property 'showInSearchResults' in the model.  
+
     }
   });
 

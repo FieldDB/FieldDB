@@ -457,6 +457,7 @@ define([
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();
       }
+
       $('#export-modal').modal("show");
     },
     

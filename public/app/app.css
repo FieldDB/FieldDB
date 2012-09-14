@@ -341,6 +341,9 @@ line.link {
 	font-size: 2em;
 	color: #fff;
 }
+.datim-state-settings-checkbox{
+padding-right:50px;
+ }
 
 .datum_tag{
 	padding: 1px 9px 2px !important;
@@ -369,6 +372,7 @@ line.link {
 .no-margin-left{
 	margin-left: 0px !important;
 }
+
 
 .datum-state-color-success {
 	color: rgb(70, 136, 71) !important;

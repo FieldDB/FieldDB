@@ -10,7 +10,9 @@
     "description" : "button"
   },
   "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
-    "message" : "TODO translate You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to iField this is a great place to start after watching the videos.",
+    "message" : "Si usted es nuevo a iField, 
+    puedes registrar como Ed Sapir para explorar la aplicación con sus datos. 
+     También hay comentarios que explica varios funciones de la aplicacion y como se usa.",
     "description" : "tooltip"
   },
   "locale_Username" : {
@@ -29,7 +31,10 @@
     "message" : "Un aplicacion de coleccion de datos linguisticos...gratis y OpenSource"
   },
   "locale_Welcome_Beta_Testers" : {
-    "message" : "¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo."
+    "message" : "¡Bienvenidos! Por favor
+     <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>
+     vea estos tutoriales antes de empezar de probar iCampo</a>.
+      Dejanos notas, comentarios, sugerencias en la forma abajo."
   },
   "locale_Create_a_new_user" : {
     "message" : "Crear un nuevo usuario"
@@ -47,37 +52,38 @@
     "message" : "¡Aviso!"
   },
   "locale_This_is_a_beta_version" : {
-    "message" : "Esta es una versión beta de iCampo, podría sonreír y hacer burbujas pero también eructa, vomita y duerme en momentos inoportunos ..."
+    "message" : "Esta es una versión beta de iCampo, podría sonreír y hacer burbujas pero también eructa, 
+    vomita y duerme en momentos inoportunos ..."
   },
   "locale_New_User" : {
     "message" : "Usuario Nuevo"
   },
    "locale_Activity_Feed_Your" : {
-    "message" : "TODO translate Your Canal de Actividad"
+    "message" : "Su Canal de Actividad"
   },
   "locale_Activity_Feed_Team" : {
-    "message" : "TODO translate Corpus Team Canal de Actividad"
+    "message" : "Canal de Actividad del Equipo de Corpus"
   },
   "locale_Refresh_Activities" : {
-    "message" : "TODO translate"
+    "message" : "Actualiza Actividades"
   },
   "locale_View_Profile_Tooltip" : {
-    "message" : "TODO translate Click to view user's page"
+    "message" : "Haga clic para ver la pagina del usuario."
   },
   "locale_View_Public_Profile_Tooltip" : {
-    "message" : "TODO translate View/edit your public user's page"
+    "message" : "Vea o edita su página de usuario pública"
   },
   "locale_Edit_User_Profile_Tooltip" : {
-    "message" : "TODO translate Click to edit your user profile"
+    "message" : "Haga clic para editar su pérfil de usuario."
   },
   "locale_Public_Profile_Instructions" : {
-    "message" : " TODO translateThis is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
+    "message" : "Este pérfil es publico, ustéd lo puede cambiar o quitar información. Esto es lo que ve la gente cuando omprimen su foto."
   },
   "locale_Private_Profile_Instructions" : {
-    "message" : "TODO translate This is your private profile, only you members on your team can see it."
+    "message" : "Esto es su pérfil privada, solamente los miembres de su equipo lo pueden ver."
   },
   "locale_Edit_Public_User_Profile" : {
-    "message" : "TODO translate Edit My Public Profile"
+    "message" : "Edita mi pérfil publico"
   },
   "locale_Need_save" : {
     "message" : "Se ocupa guadar:"
@@ -95,7 +101,8 @@
     "message" : "Diferencias con el servidor central:"
   },
   "locale_to_beta_testers" : {
-    "message" : "Estos mensajes son para comunicar con los provadores que hace la aplicación. Los mensajes se desapareserán cuando la aplicación esta mas estable. <p>Puedes cerrar los mensajes con el x.</p>"
+    "message" : "Estos mensajes son para comunicar con los provadores que hace la aplicación.
+     Los mensajes se desapareserán cuando la aplicación esta mas estable. <p>Puedes cerrar los mensajes con el x.</p>"
   },
   "locale_We_need_to_make_sure_its_you" : {
     "message" : "Ocupamos asegurar que es ustéd..."
@@ -215,7 +222,7 @@
     "message" : "Navegación"
   },
   "locale_Datum_Status_Checked" : {
-    "message" : "TODO translate Mark Datum status as checked/verified with language consultant"
+    "message" : "Marca estado de dato como verificado con consultante."
   },
   "locale_Next_Datum" : {
     "message" : "Próximo Dato"
@@ -224,10 +231,10 @@
     "message" : "Último Dato"
   },
   "locale_Data_Entry_Area" : {
-    "message" : "TODO translate Data Entry Area <small>(1-5 datum)</small>"
+    "message" : "Area de Entrada de Datos <small>(1-5 datos)</small>"
   },
   "locale_Search" : {
-    "message" : "Búzqueda"
+    "message" : "Búsqueda"
   },
   "locale_Close" : {
     "message" : "Cerrar"
@@ -275,7 +282,7 @@
     "message" : " <ol> <li> Jalar y Soltar un archivo (csv, txt, tabed, xml, text) a la zona abajo..</li> <li>(Modificar su información como necesario.)</li> <li> Jalar o escribe los detailles de datos arriba de los columnos que coinciden. Las columnas se convertirán en filas de su pagina de datos. .</li> <li>Precionar el botón Intenta Importar.</li> <li>Revisa la lista de datos y averigua que su importe se ve bien. </li> <li>Modifica la tabla como necesario, oprime Intentar Importar cuando la lista esta listo, puede hacer este paso las veces que quiere. </li> <li>Cuando esta sastifecho con la lista de datos, oprime Guadar y su lista de datos serían importados a su corpus y un nuevo lista de datos será creado. </li> </ol>"
   },
   "locale_Drag_Fields_Instructions" : {
-    "message" : "TODO translate Drag (or type) the colored datum fields to the column headings which match, type in any additional column headings which you would like to keep as datum fields. The columns will become searchable fields in your database."
+    "message" : "Jala los titulos de fila de color al columno que corresponde.  Tecla titulos a los columnos adicionales.  Estos titulos de columnos serán las filas o detalles en sus datos en que se puede hacer búsquedas en su base de datos."
   },
   "locale_Add_Extra_Columns" : {
     "message" : " Agrega Columnas Extras"
@@ -358,8 +365,8 @@
   "locale_Add_Tag" : {
     "message" : "Etiqueta Nueva..."
   },
-  "locale_locale_Help_Text" : {
-    "message" : "TODO this should be merged with locale_Help_Text?  Se puede incluir text de ayuda aqui (opcional)"
+  "locale_Help_Text" : {
+    "message" : "Se puede incluir text de ayuda aqui (opcional)"
   },
   "locale_Drag_and_Drop_Placeholder" : {
     "message" : "Jale y Suelta achivos o textos aqui!"
@@ -407,16 +414,16 @@
     "message" : "Mostrar Configuración de Corpus"
   },
   "locale_Drag_and_Drop_Audio_Tooltip" : {
-    "message" : "TODO translate Drag and drop audio over the audio player to attach an audio file. You can also drag and drop a YouTube video URL to attach a YouTube video instead."
+    "message" : "Jala y Suelta su audio sobre el tocador de audio para adjuntar su archivo de audio. Tamién se puede adjuntar un URL de YouTube."
   },
   "locale_Play_Audio" : {
     "message" : "Tocar audio"
   },
   "locale_Plain_Text_Export_Tooltip" : {
-    "message" : "TODO translate Export as plain text/Copy to clipboard"
+    "message" : "Exportar como texto"
   },
   "locale_Plain_Text_Export_Tooltip_checked" : {
-    "message" : "TODO translate Export as plain text/Copy checked items to clipboard"
+    "message" : "Exportar selecionados como texto"
   },
   "locale_Duplicate" : {
     "message" : "Duplicar Dato por hacer un contraste minimál"
@@ -425,19 +432,19 @@
     "message" : "Encriptar/Decriptar"
   },
   "locale_Encrypt_checked" : {
-    "message" : "TODO translate Make checked items confidential"
+    "message" : "Encriptar selecionados"
   },
   "locale_Decrypt_checked" : {
-    "message" : "TODO translate Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you want them to stay confidential and just want to edit them, click on the eye instead."
+    "message" : "Descifrar selecionados. Aviso: Esto los guardara como descifrado.  Si los quieres editar, omprime el ojo."
   },
   "locale_Decrypt" : {
-    "message" : "TODO translate Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you want it to stay confidential and just want to edit it, click on the eye instead."
+    "message" : "Descifrar dato. Aviso: Esto los guardara como descifrado.  Si los quieres editar, omprime el ojo."
   },
   "locale_Show_confidential_items_Tooltip" : {
-    "message" : "TODO translate Unmask confidential/encrypted items so that they can be edited and read for the next 10 minutes."
+    "message" : "Vea datos confidenciales para editarlos por los próximos diez mintuos."
   },
   "locale_Hide_confidential_items_Tooltip" : {
-    "message" : "TODO translate Return to masked view of confidential/encrypted datum"
+    "message" : "Volver a encriptar dato."
   },
   "locale_Edit_Datalist" : {
     "message" : "Editar lista de datos"
@@ -458,7 +465,7 @@
     "message" : "Editar Datos"
   },
   "locale_See_Fields" : {
-    "message" : "TODO translate Hide/Show infrequent fields"
+    "message" : "Vea/Esconda filas infrecuentes."
   },
   "locale_Add_Tags_Tooltip" : {
     "message" : "Añadir etiquetas"
@@ -482,7 +489,7 @@
     "message" : "Tocar audio de los seleccionados"
   },
   "locale_Remove_checked_from_datalist_tooltip" : {
-    "message" : "TODO translate los seleccionados"
+    "message" : "Borre los seleccionados de la lista de datos"
   },
   "locale_Insert_New_Datum" : {
     "message" : "Insertar un nuevo dato arriba"
@@ -501,5 +508,15 @@
   },
   "locale_More" : {
     "message" : "Más"
+  },
+  "locale_Elicitation_Session" : {
+    "message" : "Sesión de Elicitación"
+  },
+  "locale_Searchable" : {
+    "message" : "Buscable:"
+  },
+  "locale_Session_Description_tooltip" : {
+    "message" : "Un sesión de elicitación es un colección de datos asociados de una junta con sus consultantes. Tambien se puede usar para guardar datos de un artículo."
   }
+  
 }
