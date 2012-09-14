@@ -182,7 +182,7 @@ define([
       var dataToPost = {};
       $(".registerusername").val( $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
       dataToPost.login = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
-      dataToPost.email = $(".registeruseremail").val().trim();
+      dataToPost.emailaddress = $(".registeruseremail").val().trim();
       dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = Utils.authUrl;
@@ -197,7 +197,7 @@ define([
      
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
-        && dataToPost.email != "") {
+        && dataToPost.emailaddress != "") {
         Utils.debug("User has entered an email and the passwords match. ");
         var a = new App();
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
