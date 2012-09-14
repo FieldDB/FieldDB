@@ -4,9 +4,9 @@ var Utils = Utils || {};
 Utils.authUrl = "https://localhost:3183";
 Utils.defaultCouchConnection = function() {
   return {
-    protocol : "https://",
+    protocol : "http://",
     domain : "localhost",
-    port : "6984",
+    port : "5984",
     pouchname : "default"
   }; 
 };
