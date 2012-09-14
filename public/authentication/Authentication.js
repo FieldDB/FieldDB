@@ -89,7 +89,11 @@ define([
             $(".alert-error").html(
                 data.errors.join("<br/>") + " " + Utils.contactUs);
             $(".alert-error").show();
-            window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
+            try{
+              window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
+            }catch(e){
+              Utils.debug(e);
+            }
             if (typeof failcallback == "function") {
               failcallback();
             }
