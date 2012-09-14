@@ -57,24 +57,24 @@ define([
      * Events that the UserWelcomeView is listening to and their handlers.
      */
     events : {
-      "click .username" : function(e){
+      "click .registerusername" : function(e){
         e.target.select();
       },
       
-      "keyup .username" : function(e) {
+      "keyup .registerusername" : function(e) {
         var code = e.keyCode || e.which;
         
         // code == 13 is the enter key
-        if ((code == 13) && (this.$el.find(".username").val().trim() != "YourNewUserNameGoesHere")) {
-          this.model.set("username", $(".username").val().trim());
+        if ((code == 13) && (this.$el.find(".registerusername").val().trim() != "YourNewUserNameGoesHere")) {
+          this.model.set("username", $(".registerusername").val().trim());
           $(".confirm-password").show();
-          $(".password").focus();
+          $(".registerpassword").focus();
         }
       },
       "click .new-user-button" : function() {
-        this.model.set("username", $(".username").val().trim());
+        this.model.set("username", $(".registerusername").val().trim());
         $(".confirm-password").show();
-        $(".password").focus();
+        $(".registerpassword").focus();
       },
       "click .register-new-user" : "registerNewUser",
       "keyup .to-confirm-password" : function(e) {
@@ -142,7 +142,7 @@ define([
         // Display the UserWelcomeView
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
-        $(".username").focus();
+        $(".registerusername").focus();
         $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
         $(this.el).find(".locale_Close_and_login_as_Ed_Sapir_Tooltip").attr("title", chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir_Tooltip"));
         $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
@@ -180,11 +180,11 @@ define([
        * {"username":"bob3","password":"","email":"","gravatar":"./../user/tilohash_gravatar.png","researchInterest":"","affiliation":"","description":"","subtitle":"","corpuses":[{"pouchname":"bob3-firstcorpus","port":"443","domain":"ilanguage.iriscouch.com","protocol":"https://"}],"dataLists":[],"prefs":{"skin":"images/skins/stone_figurines.jpg","numVisibleDatum":3},"mostRecentIds":{"corpusid":"2DD73120-F4E5-4A9C-97F7-8F064C5CD6A8","sessionid":"40490877-F8B3-4390-901D-E5838535B01C","datalistid":"AD0B8232-C362-4B0E-80B2-4C3FBBE97421"},"firstname":"","lastname":"","teams":[],"sessionHistory":[],"activityHistory":[],"permissions":{},"hotkeys":{"firstKey":"","secondKey":"","description":""},"id":"4ffb3c6470fbe6d209000005","hash":"$2a$10$9XybfL5OeR4BFJtrifu9H.3MPjJQQnl9uTbXeBdajrjCyABExQId.","salt":"$2a$10$9XybfL5OeR4BFJtrifu9H.","login":"bob3","google":{},"github":{"plan":{}},"twit":{},"fb":{"name":{}},"_id":"4ffb3c6470fbe6d209000005"}
        */
       var dataToPost = {};
-      $(".username").val( $(".username").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
-      dataToPost.login = $(".username").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
-      dataToPost.email = $(".email").val().trim();
-      dataToPost.username = $(".username").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
-      dataToPost.password = $(".password").val().trim();
+      $(".registerusername").val( $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
+      dataToPost.login = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
+      dataToPost.email = $(".registeruseremail").val().trim();
+      dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
+      dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = Utils.authUrl;
       //Send a pouchname to create
       var corpusConnection = Utils.defaultCouchConnection();
@@ -200,7 +200,7 @@ define([
         && dataToPost.email != "") {
         Utils.debug("User has entered an email and the passwords match. ");
         var a = new App();
-        a.createAppBackboneObjects($(".username").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
+        a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
         /*
          * Contact the server and register the new user
