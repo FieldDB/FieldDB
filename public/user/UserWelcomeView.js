@@ -185,6 +185,7 @@ define([
       dataToPost.email = $(".email").val();
       dataToPost.username = $(".username").val().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".password").val();
+      dataToPost.authUrl = Utils.authUrl;
       //Send a pouchname to create
       var corpusConnection = Utils.defaultCouchConnection();
       corpusConnection.pouchname = "firstcorpus";
