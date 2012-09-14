@@ -94,7 +94,7 @@ define([
 
       "click .sync-sapir-data" : function() {
         console.log("hiding user welcome, syncing sapir");
-        this.syncUser("sapir","phoneme");
+        this.syncUser("sapir","phoneme", Utils.authUrl);
 
 //        //This is the old logic which can still be used to load sapir without contacting a server. DO NOT DELETE
 //        a = new App();
@@ -107,7 +107,7 @@ define([
       },
 
       "click .sync-my-data" : function() {
-        this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val());
+        this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val(), $(".welcomeauthurl").val());
       },
       "click .welcomeusername" : function(e) {
         return false;
@@ -120,7 +120,7 @@ define([
         
         // code == 13 is the enter key
         if (code == 13) {
-          this.syncUser($(".welcomeusername").val(),$(".welcomepassword").val());
+          this.syncUser($(".welcomeusername").val(), $(".welcomepassword").val(), $(".welcomeauthurl").val());
         }
       }
     },
@@ -328,9 +328,9 @@ define([
      * @param username
      * @param password
      */
-    syncUser : function(username,password){
+    syncUser : function(username,password, authUrl){
       console.log("hiding user welcome, syncing users data");
-      var u = new User({username:username, password: password });
+      var u = new User({username:username, password: password, authUrl: authUrl });
       a = new App();
       var auth = a.get("authentication");
       auth.authenticate(u, function(success, errors){
