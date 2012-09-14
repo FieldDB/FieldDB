@@ -136,6 +136,9 @@ define([
       $(this.el).find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
       $(this.el).find(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
       
+      document.getElementById("authUrl").value = Utils.authUrl;
+
+      
       return this;
     },
     
@@ -161,7 +164,9 @@ define([
     login : function() {
       Utils.debug("LOGIN");
       this.authenticate(document.getElementById("username").value, 
-          document.getElementById("password").value);
+          document.getElementById("password").value,
+          document.getElementById("authUrl").value
+      );
     },
     
     /**
@@ -187,12 +192,13 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate : function(username, password, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
+    authenticate : function(username, password, authUrl, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       
       // Temporarily keep the given's credentials
       var tempuser = new User({
         username : username,
-        password : password
+        password : password,
+        authUrl : authUrl
       });
 
       var whattodoifcouchloginerrors = function(){
@@ -334,7 +340,13 @@ define([
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
 //          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
-          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback );
+          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
+              , $("#quick-authenticate-password").val()
+              , window.app.get("authentication").get("userPrivate").get("authUrl") 
+              , authsuccesscallback
+              , authfailurecallback
+              , corpusloginsuccesscallback
+              , corpusloginfailcallback );
           $("#quick-authenticate-modal").modal("hide");
           $("#quick-authenticate-password").val("");
           window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
@@ -344,7 +356,13 @@ define([
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
 //          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
-          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username"), $("#quick-authenticate-password").val() , authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback );
+          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
+              , $("#quick-authenticate-password").val() 
+              , window.app.get("authentication").get("userPrivate").get("authUrl")
+              , authsuccesscallback
+              , authfailurecallback
+              , corpusloginsuccesscallback
+              , corpusloginfailcallback );
           $("#quick-authenticate-modal").modal("hide");
           $("#quick-authenticate-password").val("");
           window.hub.unsubscribe("quickAuthenticationClose", null, this);//TODO why was this off, this si probably why we were getting lots of authentications
