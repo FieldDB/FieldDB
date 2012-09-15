@@ -38,7 +38,18 @@ This project is released under the [Apache 2.0](http://www.apache.org/licenses/L
  
 # Related repositories
 
-These are the webservices which the FieldDB client uses, and which make up the complete FieldDB suite. If you fork the project, you might also be intersted in forking these repositories and adapting them to your needs.
+These are the webservices which the FieldDB client uses, and which make up the complete FieldDB suite. If you fork the project, you might also be intersted in forking these repositories and adapting them to your needs. We created two scripts to simplify the process of downloading and building the FieldDB dependancies into what we call an fielddbworkspace.
+
+* [Mac developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh)
+<code>
+$ curl -O --retry 999 --retry-max-time 0 -C -="curl -O --retry 999 --retry-max-time 0 -C - https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh
+</code>
+* [Linux developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_linux_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh) 
+<code>
+$ wget https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_linux_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh
+</code>
+* [Windows developers](https://github.com/OpenSourceFieldlinguistics/FieldDB/wiki/How-to-install-on-your-own-server) 
+
 
 ## Core webservices:
 * [Authentication webservice](https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService) (for creation of new users and their accounts on the various webservices)
