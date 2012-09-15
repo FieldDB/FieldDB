@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# For wget using:   curl -O --retry 999 --retry-max-time 0 -C -="curl -O --retry 999 --retry-max-time 0 -C -"
+# For wget using:   "curl -O --retry 999 --retry-max-time 0 -C -"
 
 git --version || { echo 'You dont have Git installed, please install it: sudo apt-get install git or http://git-scm.com/downloads' ; exit 1; }
 gcc --version || { echo 'You dont have a C++ compiler installed, please install it and other developer tools: sudo apt-get install sudo apt-get build-dep nodejs  or http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12' ; exit 1; }
