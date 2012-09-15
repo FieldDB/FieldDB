@@ -7,6 +7,10 @@ Utils.lexiconUrl = "https://localhost:3185";
 Utils.corpusUrl = "https://localhost:3186";
 Utils.activityUrl = "https://localhost:3187";
 Utils.widgetUrl = "https://localhost:3188";
+Utils.chromeClientUrl = function(){
+  return window.location.origin;
+};
+
 
 /*
  * not using secure couch because it would require extra set up for developers
