@@ -12,11 +12,33 @@
   "offline_enabled": true,
   "permissions": [
     "unlimitedStorage",
-    "https://ifield.fieldlinguist.com/*",
+    "https://www.fieldlinguist.com/*",
+    
+    "https://auth.fieldlinguist.com/*",
+    "https://audio.fieldlinguist.com/*",
+    "https://lexicon.fieldlinguist.com/*",
+    "https://corpus.fieldlinguist.com/*",
+    "https://activity.fieldlinguist.com/*",
+    "https://widget.fieldlinguist.com/*",
+    
     "https://ifield.iriscouch.com/*",
-    "https://ifielddevs.fieldlinguist.com:3183/*",
+    
+    "https://authdev.fieldlinguist.com:3183/*",
+    "https://audiodev.fieldlinguist.com:3184/*",
+    "https://lexicondev.fieldlinguist.com:3185/*",
+    "https://corpusdev.fieldlinguist.com:3186/*",
+    "https://activitydev.fieldlinguist.com:3187/*",
+    "https://widgetdev.fieldlinguist.com:3188/*",
+    
     "https://ifielddevs.iriscouch.com/*",
+    
     "https://localhost:3183/*",
+    "https://localhost:3184/*",
+    "https://localhost:3185/*",
+    "https://localhost:3186/*",
+    "https://localhost:3187/*",
+    "https://localhost:3188/*",
+    
     "http://localhost:5984/*"
   ],
    "icons": { 
