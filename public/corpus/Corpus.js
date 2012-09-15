@@ -253,7 +253,7 @@ define([
         pouchname: this.get("pouchname")
       }));
       this.permissions.add(new Permission({
-        users: new Users(), //"ifieldpublicuser"
+        users: new Users(), //"fielddbpublicuser"
         role: "collaborator",
         pouchname: this.get("pouchname")
       }));
