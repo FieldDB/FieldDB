@@ -9,6 +9,8 @@ mv output public/libs/Utils.js
 echo "Tell the Chrome app to contact the local webservices."
 sed 's/webservicesconfig_[^,]*/webservicesconfig_local"/' public/main_dashboard.js  > output
 mv output public/main_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_local"/' public/main.js  > output
+mv output public/main.js
 
 echo ""
 echo ""
@@ -22,3 +24,13 @@ sed 's/everyauthconfig_[^)]*)/everyauthconfig_local")/' lib/restfullmongooseuser
 mv output lib/restfullmongooseusers.js
 sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/restfullmongooseusers.js  > output
 mv output lib/restfullmongooseusers.js
+
+echo ""
+echo ""
+echo "Putting the Chrome app's manifest into the local manifest for testing local webservices running on the same computer as the chrome extension"
+cp public/manifest_local.json public/manifest.json
+
+echo ""
+echo ""
+echo "Now running in local/offline developer mode using the localhost webservices"
+
