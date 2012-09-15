@@ -42,7 +42,7 @@ These are the webservices which the FieldDB client uses, and which make up the c
 
 * [Mac developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh)
 <code>
-$ curl -O --retry 999 --retry-max-time 0 -C -="curl -O --retry 999 --retry-max-time 0 -C - https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh
+$ curl -O --retry 999 --retry-max-time 0 -C - https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh
 </code>
 * [Linux developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_linux_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh) 
 <code>
