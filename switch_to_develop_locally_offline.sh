@@ -9,6 +9,8 @@ mv output public/libs/Utils.js
 echo "Tell the Chrome app to contact the local webservices."
 sed 's/webservicesconfig_[^,]*/webservicesconfig_local"/' public/main_dashboard.js  > output
 mv output public/main_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_local"/' public/main.js  > output
+mv output public/main.js
 
 echo ""
 echo ""
