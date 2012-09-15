@@ -38,7 +38,7 @@ define([
      */
     buildLexiconFromCouch : function(pouchname, callback){
       var self = this;
-      var couchConnection = Utils.defaultCouchConnection();
+      var couchConnection = app.get("corpus").get("couchConnection");
       var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port+"/";
 
       $.ajax({

@@ -44,7 +44,7 @@ define([
 //      directobject : "an entry",
 //      indirectobject : "with Consultant-SJ",
 //      context : "via Android/ Offline Chrome App" ,
-//      link: "https:/ifield.fieldlinguist.com"
+//      link: "https:/www.fieldlinguist.com"
 //      timestamp: timestamp
     },
     
