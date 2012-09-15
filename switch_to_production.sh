@@ -28,4 +28,10 @@ mv output lib/restfullmongooseusers.js
 echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the production manifest for release into the Chrome store as the stable (branded) version of the app."
-mv public/manifest_production.json public/manifest.json
+cp public/manifest_production.json public/manifest.json
+
+echo ""
+echo ""
+echo "Now running in production mode using the production webservices. You can now create your Chrome extension for production deployment."
+
+

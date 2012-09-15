@@ -30,4 +30,9 @@ mv output lib/restfullmongooseusers.js
 echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the dev manifest for release into the Chrome store as the unstable bleeding egde chromeapp  for users who like to be on the bleeding edge"
-mv public/manifest_dev.json public/manifest.json
+cp public/manifest_dev.json public/manifest.json
+
+echo ""
+echo ""
+echo "Now running in developer mode using the dev webservices. You can now create your Chrome extension to deploy the unstable/bleeding edge app for users who want to be on the unstable branch."
+
