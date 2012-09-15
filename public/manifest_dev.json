@@ -1,8 +1,8 @@
 {
-  "name": "__MSG_application_title__",
+  "name": "FieldDB unstable",
   "version": "1.21",
   "description": "__MSG_application_description__",
-  "default_locale": "es",
+  "default_locale": "en",
   
   "app": {
     "launch": {
