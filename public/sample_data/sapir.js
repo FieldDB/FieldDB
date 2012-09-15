@@ -4,7 +4,7 @@ var backbone ={
    "name": "sapir",
    "roles": [
        "\"sapir-firstcorpus_admin\"",
-       "ifielduser"
+       "fielddbuser"
    ],
    "type": "user",
    "password_sha": "5451eb07c29031729c07d70c331ae4512692a539",
