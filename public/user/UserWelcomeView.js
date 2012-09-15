@@ -149,7 +149,7 @@ define([
         $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
         $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
         $(this.el).find(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-        $(this.el).find(".locale_Welcome_to_iField").html(chrome.i18n.getMessage("locale_Welcome_to_iField"));
+        $(this.el).find(".locale_Welcome_to_FieldDB").html(chrome.i18n.getMessage("locale_Welcome_to_FieldDB"));
         $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
         $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
         $(this.el).find(".locale_Create_a_new_user").html(chrome.i18n.getMessage("locale_Create_a_new_user"));

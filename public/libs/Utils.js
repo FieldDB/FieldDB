@@ -237,7 +237,7 @@ Utils.getVersion = function(callback) {
 // Takes an ISO time and returns a string representing how
 // long ago the date represents.
 
-//modified by iField team to take in Greenwich time which is what we are using for our time stamps so that users in differnt time zones will get real times, not strangely futureistic times
+//modified by FieldDB team to take in Greenwich time which is what we are using for our time stamps so that users in differnt time zones will get real times, not strangely futureistic times
 //we have been using JSON.stringify(new Date()) to create our timestamps instead of unix epoch seconds (not sure why we werent using unix epoch), so this function is modified from the original in that it expects dates that were created using 
 //JSON.stringify(new Date())
 Utils.prettyDate = function(time){
