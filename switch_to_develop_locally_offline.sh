@@ -24,3 +24,8 @@ sed 's/everyauthconfig_[^)]*)/everyauthconfig_local")/' lib/restfullmongooseuser
 mv output lib/restfullmongooseusers.js
 sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/restfullmongooseusers.js  > output
 mv output lib/restfullmongooseusers.js
+
+echo ""
+echo ""
+echo "Putting the Chrome app's manifest into the local manifest for testing local webservices running on the same computer as the chrome extension"
+mv public/manifest_local.json public/manifest.json

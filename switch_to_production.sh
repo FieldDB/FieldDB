@@ -24,3 +24,8 @@ sed 's/everyauthconfig_[^)]*)/everyauthconfig_production")/' lib/restfullmongoos
 mv output lib/restfullmongooseusers.js
 sed 's/couchkeys_[^)]*)/couchkeys_production")/' lib/restfullmongooseusers.js  > output
 mv output lib/restfullmongooseusers.js
+
+echo ""
+echo ""
+echo "Putting the Chrome app's manifest into the production manifest for release into the Chrome store as the stable (branded) version of the app."
+mv public/manifest_production.json public/manifest.json
