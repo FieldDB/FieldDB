@@ -160,7 +160,14 @@ define([
         $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
         $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
 
-
+        //save the version of the app into this view so we can use it when we create a user.
+        var self = this;
+        Utils.getVersion(function (ver) { 
+          self.appVersion = ver;
+          $(this.el).find(".welcome_version_number").html(ver);
+        });
+        
+        
       } else {
         Utils.debug("\User model was undefined");
       }
@@ -186,6 +193,7 @@ define([
       dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = Utils.authUrl;
+      dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a pouchname to create
       var corpusConnection = Utils.defaultCouchConnection();
       corpusConnection.pouchname = "firstcorpus";
