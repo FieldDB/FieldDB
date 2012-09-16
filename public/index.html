@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+
+  function getUrlVar(key){
+      var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+      return result && unescape(result[1]) || ""; 
+  }
+
+  if(getUrlVar("mobilepage") != 0 || !getUrlVar("mobilepage")) {
+    if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+      if(getCookie("mobilepage") != "mobile") {
+        //handle iPhone
+      }
+    }
+  }
+
+  function getCookie(c_name){
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++) {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name) {
+        return unescape(y);
+      }
+    }
+  }
+  window.animateOff = false;
+  </script> 
+    <meta http-equiv="content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=.5"/>
+    <!-- Change images -->
+    
+    <title>Collect, share and search your data offline and online - FieldDB</title>
+
+    <link rel="stylesheet" type="text/css" href="/webimages/compiled.css" />
+        <script type="text/javascript" src="/webimages/all.js"></script>
+
+    <script type="text/javascript" charset="utf-8"> 
+    var userLang = (navigator.language) ? navigator.language : navigator.userLanguage; 
+    //alert ("The language is: " + userLang);
+    </script>
+    
+    
+  <style>#shine-top {display: none;}#page-container {display: none;}</style>
+  
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32705284-1']);
+  _gaq.push(['_setDomainName', 'example.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+  </script>
+  
+  </head>
+
+  <body>
+  <div id="loading" class="wrapper" ></div>
+       <div id="shine-top">
+       </div>
+    <div class="phonewrapper">
+		<div id="page-container">
+
+
+			<a href="#" id="button1" onclick="return false" class="arrow left"></a>
+			<a href="#" id="button2" onclick="return false" class="arrow right"></a>
+
+			<div id="gallery">
+				<div class="image1 galleryimg">
+					<img
+						src="/webimages/image1-9035eb0cc2b7b287e73048f7b0225a70df83923e-gz.png" />
+				</div>
+				<div class="image3 galleryimg">
+					<img
+						src="/webimages/image2-e2416fa7ccda16ff3768a8d1bd3616735927ee1e-gz.png" />
+				</div>
+				<div class="image2 galleryimg">
+					<img
+						src="/webimages/image3-b75d8f8ed2a655ff4cf38a8e6c847923b2be158b-gz.png" />
+				</div>
+				<div class="image4 galleryimg">
+					<img
+						src="/webimages/image4-bd447c30f10ad5f21e6c98413da4d39a2df3ce69-gz.png" />
+				</div>
+				<div class="image5 galleryimg">
+					<div id="player">
+						<iframe class="youtubevideo" width="510" height="315"
+							src="https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA&amp;hl=en_US"
+							frameborder="0" allowfullscreen></iframe>
+					</div>
+				</div>
+				<div class="gallerynav">
+					<a href="#" class="nav1 bullet targetimagenav">image1</a> <a
+						href="#" class="nav2 bullet">image2</a> <a href="#"
+						class="nav3 bullet">image3</a> <a href="#" class="nav4 bullet">image4</a>
+					<a href="#" class="nav5 bullet video">image5</a>
+				</div>
+			</div>
+
+			<div class="header"></div>
+
+			<div class="divider-from-top belowstage"></div>
+
+			<div style="float: left; width: 60%; margin: 1em;">
+
+
+				<h3>What is FieldDB?</h3>
+				<p>FieldDB is a free, open source project developed collectively
+					by field linguists and software developers to make a modular,
+					user-friendly app which can be used to collect, search and share
+					your data.</p>
+
+				<h3>Who can I use FieldDB with?</h3>
+				<ul>
+					<li>FieldDB is a Chrome app, which means it works on Windows,
+						Mac, Linux, Android, iPad, and also offline.</li>
+					<li>Multiple collaborators can add to the same corpus, and you
+						can encrypt any piece of data, keep it private within your corpus,
+						or make it public to share with the community and other
+						researchers.</li>
+				</ul>
+				<h3>How can FieldDB save me time?</h3>
+				<p>
+					FieldDB uses machine learning and computational linguistics to adapt
+					to your existing organization of the data which you import and
+					predict how to gloss it. FieldDB already supports import and export
+					of many common formats, including ELAN, Praat, Toolbox, FLEx,
+					Filemaker Pro, LaTeX, xml, csv and more, but if you have another
+					format you'd like to import or export, <a
+						href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ'>Contact
+						Us</a>.
+				</p>
+				<h3>What are the principles behind FieldDB?</h3>
+				<p>
+					We designed FieldDB from the ground up to be user-friendly, but also
+					to conform to <a href="http://emeld.org/school/what.html">EMELD</a>
+					and <a
+						href="http://www.dataone.org/sites/all/documents/DataONE_BP_Primer_020212.pdf">DataOne</a>
+					best practices on formatting, archiving, open access, and security.
+					For more information, see the data management sections of <a
+						href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">our
+						white paper</a>. We vow never to use your private data, you can find
+					out more in our <a
+						href="privacy.html">privacy
+						policy</a>.
+				</p>
+			</div>
+			<div style="float: right;">
+				<div id="twitterBox" style="margin:1em;">
+				 <script>
+	          //http://code.google.com/p/chromium/issues/detail?id=81637
+	          //https://twitter.com/about/resources/widgets/widget_profile?
+	          //http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
+	          
+	          /**
+	          * Fieldlingiust's tweets
+	          */
+	          
+	           $(document).ready(function(){
+	           $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
+	              // dynamically add the get social sidebar
+	              $('body').prepend('<div id="social"></div>'); 
+	      
+	                new TWTR.Widget({
+	                  version: 2,
+	                  type: 'profile',
+	                  id : 'twitterBox',
+	                  
+	                  rpp: 4,
+	                  interval: 30000,
+	                  width: 250,
+	                  height: 250,
+	                  theme: {
+	                    shell: {
+	                      background: '#55a1ba',
+	                      color: '#ffffff'
+	                    },
+	                    tweets: {
+	                      background: '#fcf9fc',
+	                      color: '#0f010f',
+	                      links: '#2d61a1'
+	                    }
+	                  },
+	                  features: {
+	                    scrollbar: true,
+	                    loop: false,
+	                    live: true,
+	                    behavior: 'all'
+	                  }
+	                }).render().setUser('FieldLinguist').start();
+	      
+	            });
+	          });
+	          
+	          
+	         </script>
+				</div>
+				<div id="twitterBoxSearch" style="margin:1em;">
+				 <script>
+	          /**
+	            * search for  #fielddbapp tweets
+	            */
+	            
+	           
+	           $(document).ready(function(){
+	           $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
+	              // dynamically add the get social sidebar
+	              $('body').prepend('<div id="socialsearch"></div>'); 
+	      
+	                new TWTR.Widget({
+									  version: 2,
+									  type: 'search',
+									  id : 'twitterBoxSearch',
+									  search: '#fielddbapp @fieldlinguist fieldlinguistics',
+									  interval: 30000,
+									  title: '#fielddbapp @fieldlinguist',
+									  subject: 'Twitter news from the FieldDB community',
+									  width: 250,
+									  height: 250,
+									  theme: {
+									    shell: {
+									      background: '#8ec1da',
+									      color: '#ffffff'
+									    },
+									    tweets: {
+									      background: '#ffffff',
+									      color: '#444444',
+									      links: '#1985b5'
+									    }
+									  },
+									  features: {
+									    scrollbar: false,
+									    loop: true,
+									    live: true,
+									    behavior: 'default'
+									  }
+									}).render().start();
+	      
+	            });
+	          });
+	          
+	          
+	         </script>
+	        
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+
+  <img src = "webimages/mulitple_devices.png" style="position: absolute; top: 0px;right: 0px;z-index: 100;" width=100/>
+		<div id="footer"  class="clearfloat">
+        <ul class="">
+          <li><a target="_blank" href="https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm">Install</a></li>
+          <li><a target="_blank" href="privacy.html">Privacy Policy</a></li>
+          <li><a target="_blank"  href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones">OpenSource</a></li>
+          <li><a target="_blank"  href="http://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA&amp;hl=en_US">Video Tutorials</a></li>
+          <li><a target="_blank"  href="https://docs.google.com/presentation/pub?id=1KQaq4jbGM9roakDNPuj_jxWPL5v0NXJNBWaLJpqDzHc&start=false&loop=false&delayms=10000">Features</a></li>
+          <li><a target="_blank"  href="https://www.fieldlinguist.com/dev.html">Developer's News Channel</a></li>
+          <li><a target="_blank"  href="http://www.facebook.com/FieldDBApp">FieldDB Facebook Community</a></li>
+          <li><a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">Conforms to EMELD &amp; DataOne Data Management Best Practices</a></li>
+        </ul>
+
+          
+          <ul class="">
+          <li>Team
+            <ul>
+              <li>
+              <a href="http://linguistics.concordia.ca/bale/">Alan Bale (McGill, Concordia)</a> </li>
+              <li>
+              <a href="http://udel.edu/%7Emdotedot/">M.E. Cathcart (U Delaware, iLanguage Lab LTD)</a> </li>
+              <li>
+              <a href="http://gina.ilanguage.ca/">Gina Cook (iLanguage Lab LTD)</a> </li>
+              <li>
+              <a href="http://people.linguistics.mcgill.ca/%7Ejessica/Welcome.html">Jessica Coon (McGill)</a> </li>
+              <li>
+              <a href="http://trisapeace.angelfire.com/">Theresa Deering (iLanguage Lab LTD)</a> </li>
+              <!-- <li>
+              <a href="http://rhenderson.org/">Robert Henderson (UC Santa Cruz, McGill)</a> </li> -->
+              <li>
+              <a href="http://egg.auf.net/people/manyakinayuliya/">Yuliya Manyakina (Concordia, Stony Brook)</a> </li>
+              <!-- <li>
+              <a href="http://www.crblm.ca/gretchen_mcculloch">Gretchen McCulloch (McGill)</a> </li> -->
+              <li>
+              <a href="http://linguistics.concordia.ca/gazette.html">Hisako Noguchi (Concordia)</a> </li>
+              <li>
+              <a href="http://prosodylab.org/">Michael Wagner (McGill)</a> </li>
+              </ul>
+          </li>
+          <li>Funding
+            <ul class="">
+              <li>We have some small funding TBA</li>
+            </ul>
+          </li>
+        </ul>
+              
+      </div>
+    </div>
+  </div>
+  
+  </body>
+    <script type="text/javascript" src="/webimages/event.js"></script>    <script type="text/javascript">document.write(unescape("%3Cscript src='" + (("https:" == document.location.protocol) ? "https://ssl-" : "http://") + "include.reinvigorate.net/re_.js' type='text/javascript'%3E%3C/script%3E"));</script>
+    <script type="text/javascript">try { reinvigorate.track("502o6-jd1y52i68g"); } catch(err) {}</script>
+  <script>
+      cookie('visited','home');
+  
+  if(getCookie('visited') != 'home') {
+    var cl = new CanvasLoader('loading');
+    cl.setColor('#ffffff'); // default is '#000000'
+    cl.setShape('spiral'); // default is 'oval'
+    cl.setDiameter(44); // default is 40
+    cl.setDensity(14); // default is 40
+    cl.setRange(1.4); // default is 1.3
+    cl.setSpeed(1); // default is 2
+    cl.setFPS(19); // default is 24
+    //cl.show();
+
+    setTimeout("showPage()",500);
+    } else {
+    //alert(  getCookie('visited'));
+      $('#shine-top').css('display','block');
+      $('#page-container').css('display','block');
+      $('.logo2').css('opacity','1');
+      $('.intro').css('display','none');
+    }
+      //alert('home');
+
+     function cookie(visited,page) {
+          date=new Date();
+          expires=new Date(date.getTime()+date*86400000);
+          document.cookie=visited+"="+page+";expires="+expires.toGMTString();
+    }
+
+        $('input, div').click(function() {
+        if($('#newsletter').is(":focus")) {
+          $('.input-wrap').css('background-position','-565px -50px');
+        } else {
+          $('.input-wrap').css('background-position','-565px 0px');
+        }
+      });
+    cookie('visited','home');
+
+  function getCookie(c_name) {
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++) {
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name){
+        return unescape(y);
+        }
+    }
+  }
+
+  if(getCookie('mobilepage')!= 'mobile') {
+    cookie('mobilepage','mobile');
+  }
+  
+  function showPage() {
+    $(".logo1").delay(1200).animate({opacity:1},500).delay(900).animate({opacity:0},800,function() {
+    $(".logo2").animate({opacity:1},500,function(){     $("#loading").fadeOut(500, function () {
+          setTimeout(function () {$("#shine-top").fadeIn(500); }, 500)
+          setTimeout(function () {$("#page-container").fadeIn(500);}, 500)
+          setTimeout(function () { $(".intro").css('display','none'); }, 900);
+  
+      }); }); 
+     })
+  }
+  $(".nav5").click(function(){
+    window.animateOff = true;
+  });
+  $(".youtubevideo").click(function(){
+    window.animateOff = true;
+  });
+  /*$(".nav1").click(function(){
+    window.animateOff = false;
+  });
+  $(".nav2").click(function(){
+    window.animateOff = false;
+  });
+  $(".nav3").click(function(){
+    window.animateOff = false;
+  });
+  $(".nav4").click(function(){
+    window.animateOff = false;
+  });*/
+</script>
+</html>

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#Compile handlebars templates: required to use chrome extension, and avoid insecure script injection vunerabilites
+./compile_handlebars.sh
+
+./node_modules/forever/bin/forever \
+start \
+-al ../logs/httpredirectapp.log \
+-ao out.log \
+-ae err.log \
+httpredirectapp.js
+
+./node_modules/forever/bin/forever \
+start \
+-al ../logs/fieldbwww.log \
+-ao out.log \
+-ae err.log \
+server.js
