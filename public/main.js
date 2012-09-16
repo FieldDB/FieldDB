@@ -145,6 +145,7 @@ require([
     "backbone_pouchdb",
     "autosize",
     "xml2json",
+    "libs/webservicesconfig_devserver",
     "libs/Utils"
 ], function(
     App,
@@ -169,7 +170,7 @@ require([
   
 //  /* if they are browsing online, and not using the App version, bring them to the app version */
 //  if( window.location.href.indexOf("chrome-extension") == -1 ){
-//    var x = window.confirm("iField works best in the Chrome Store where it has unlimited space to store your data, " +
+//    var x = window.confirm("FieldDB works best in the Chrome Store where it has unlimited space to store your data, " +
 //    		"and can go online and offline. " +
 //    		"\n\nNote: This is an HTML5 webapp, not a webpage. It uses a database called 'IndexedDB'." +
 //    		"\n\n Safari doesn't let you save a database in the browser. " +

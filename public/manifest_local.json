@@ -1,5 +1,5 @@
 {
-  "name": "__MSG_application_title__",
+  "name": "FieldDB Localhost",
   "version": "1.21",
   "description": "__MSG_application_description__",
   "default_locale": "es",
@@ -42,8 +42,8 @@
     "http://localhost:5984/*"
   ],
    "icons": { 
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png" 
+    "16": "icon16_local.png",
+    "48": "icon48_local.png",
+    "128": "icon128_local.png" 
   }
 }

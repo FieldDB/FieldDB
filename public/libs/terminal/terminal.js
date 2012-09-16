@@ -765,9 +765,9 @@ var Terminal = Terminal || function(containerId) {
   return {
     initFS: function(persistent, size) {
       output('<div>Welcome to ' + document.title +
-             ' Power User Backend! (v<span class="ifield-version">' + VERSION_ + '</span>)</div>');
+             ' Power User Backend! (v<span class="fielddb-version">' + VERSION_ + '</span>)</div>');
       output((new Date()).toLocaleString());
-      output("<p>You can use this terminal to modify and rename files in your iFields file system. To see the" +
+      output("<p>You can use this terminal to modify and rename files in your FieldDBs file system. To see the" +
       		" command list which you can run here: type 'help'</p>"+
       		"<p> If you like to do more than rename files (ie more power user things), you can use the Chrome Browser's built in " +
       		"Console to run batch opperations on your data, use regular expressions and more (this is why we wrote the app in Javascript, to encourage general 'hackability' :). " +
