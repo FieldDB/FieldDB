@@ -117,28 +117,31 @@
 
 		<p>As soon as we detected the leak we changed the administration
 			credentials and suspended the intern from all privileges to modify
-			the source code, label issues or edit the wiki, in addition the
-			intern will not be trusted with other sensitive information. At
-			19:26pm Eastern Standard Time this evening (Saturday September 15th)
-			we rolled out a fix to the vulnerability on the authentication
-			server, and the CouchDB server. We also turned off the registration
-			of all new users in the Chrome store app and started an investigation
-			into the impact of the leak.</p>
+			the source code, in addition the intern will not be trusted with
+			other sensitive information. At 19:26pm Eastern Standard Time this
+			evening (Saturday September 15th) we rolled out a fix to the
+			vulnerability on the authentication server, and the CouchDB server.
+			We also turned off the registration of all new users in the Chrome
+			store app and started an investigation into the impact of the leak.</p>
 
-		<p>Database and log analysis have shown that the no corpus
-			databases were modified during this 17 hour time period. All affected
-			users have been or will be contacted once we are certain of the
-			findings. To make it easier to contact users once we leave beta we
-			will be asking users to provide an email address when they register, as
-			is standard with most websites.The root cause of the vulnerability
-			was an early credential sharing with an inexperienced developer, and
-			a subsequent "check-in" of those sensitive credentials into our
-			GitHub repository, a problem which is common in early stages of open
-			source projects where all development is decentralized and there is
-			not one developer who controls information flow in the project, or
-			who reviews the code of other developers. We have been using a code
+		<p>
+			Database and log analysis have shown that the no corpus databases
+			were accessed or modified during this 17 hour time period. All
+			affected users have been or will be contacted once we are certain of
+			the findings. To make it easier to contact users once we leave beta
+			we will be asking users to provide an email address when they
+			register, as is standard with most websites.The root cause of the
+			vulnerability was an <a
+				href="https://www.google.com/search?hl=en&q=admin+credentials+leaked&oq=admin+credentials+leaked">trusting
+				an inexperienced developer with sensitive credentials, and a
+				subsequent "check-in" of those sensitive credentials into our GitHub
+				repository</a>, a problem which is common in early stages of open source
+			projects where all development is decentralized and there is not one
+			developer who controls information flow in the project, or who
+			reviews the code of other developers. We have been using a code
 			review procedure via "pull requests" since May 5th, with reminders on
-			August 15.</p>
+			August 15.
+		</p>
 
 		<p>Prior to the leak we had initiated a full audit of the codebase
 			to ensure that no instances of this vulnerability were present. This
@@ -149,10 +152,15 @@
 			personally ensure that we our strategy going forward to prevent this
 			type of vulnerability is enforced. I sincerely apologize for allowing
 			this to happen. While no damage was done, we believe it is important
-			to keep you informed about the security of your linguistic data.
-			Security is our priority and I will be arranging additional external
-			security audits above and beyond our normal schedule to further test
-			our security measures and give you peace of mind.</p>
+			to keep you informed about the security of your linguistic data. We
+			will continue to encourage unexperienced developers to contribute to
+			the project, as that is one of the main reasons we made it: to
+			empower linguists to build and modify their tools, however we will no
+			longer trust in-experienced developers with sensitive deployment
+			config files. Security is our priority and I will be arranging
+			additional external security audits above and beyond our normal
+			schedule to further test our security measures and give you peace of
+			mind.</p>
 
 		<h2>Language Learning Module - Android Prototype begins</h2>
 		<p>This Thursday we started working on an outline for a new module
