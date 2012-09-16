@@ -40,7 +40,7 @@ This project is released under the [Apache 2.0](http://www.apache.org/licenses/L
 
 These are the webservices which the FieldDB client uses, and which make up the complete FieldDB suite. If you fork the project, you might also be intersted in forking these repositories and adapting them to your needs. We created two scripts to simplify the process of downloading and building the FieldDB dependancies into what we call an fielddbworkspace.
 
-* [Mac developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_ifield_servers_for_new_developers_quick_start.sh)
+* [Mac developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh)
 <pre>
 $ curl -O --retry 999 --retry-max-time 0 -C - https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
 $ bash install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
