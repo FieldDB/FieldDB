@@ -16,19 +16,6 @@ mv output public/main.js
 
 echo ""
 echo ""
-echo "Put the Node server to act as the development server"
-sed 's/nodeconfig_[^)]*)/nodeconfig_devserver")/' app.js  > output
-mv output app.js
-
-sed 's/nodeconfig_[^)]*)/nodeconfig_devserver")/' lib/restfullmongooseusers.js  > output
-mv output lib/restfullmongooseusers.js
-sed 's/everyauthconfig_[^)]*)/everyauthconfig_devserver")/' lib/restfullmongooseusers.js  > output
-mv output lib/restfullmongooseusers.js
-sed 's/couchkeys_[^)]*)/couchkeys_devserver")/' lib/restfullmongooseusers.js  > output
-mv output lib/restfullmongooseusers.js
-
-echo ""
-echo ""
 echo "Putting the Chrome app's manifest into the dev manifest for release into the Chrome store as the unstable bleeding egde chromeapp  for users who like to be on the bleeding edge"
 cp public/manifest_dev.json public/manifest.json
 
