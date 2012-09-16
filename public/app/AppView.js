@@ -524,7 +524,7 @@ define([
         //put the version into the terminal, and into the user menu
         Utils.getVersion(function (ver) { 
           window.appView.term.VERSION_ = ver;
-          $(".ifield-version").html(ver);
+          $(".fielddb-version").html(ver);
         });
 //        this.importView.render(); //render at last minute using router
         this.exportView.render();//render at last minute using router
