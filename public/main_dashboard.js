@@ -212,6 +212,24 @@ require([
     // Create a UserWelcomeView modal
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
+    $('#user-welcome-modal').modal({
+      backdrop : true,
+      keyboard : true
+    }).css({
+      'width' : function() {
+        return ($(document).width() * .8 ) + 'px';
+      },
+      'height' : function() {
+        return ($(document).height() * .8 ) + 'px';
+      },
+      'margin-left' : function() {
+        return -($(this).width() * .5 );
+      }
+      ,
+      'margin-top' : function() {
+        return -($(this).height() * .5 );
+      }
+    });
     $('#user-welcome-modal').modal("show");
   };
   /*

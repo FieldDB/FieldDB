@@ -18,6 +18,7 @@ echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the local manifest for testing local webservices running on the same computer as the chrome extension"
 cp public/manifest_local.json public/manifest.json
+cp public/icon128_local.png public/icon.png
 
 echo ""
 echo ""

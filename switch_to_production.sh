@@ -18,6 +18,7 @@ echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the production manifest for release into the Chrome store as the stable (branded) version of the app."
 cp public/manifest_production.json public/manifest.json
+cp public/icon128_production.png public/icon.png
 
 echo ""
 echo ""
