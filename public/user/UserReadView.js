@@ -169,7 +169,7 @@ define([
 //      this.model.fetch();
       this.model.set ({
           "id": "E144FA24-BAF4-48F9-9800-62E7A7E93CF4",
-          "username" : "ifieldpublicuser",
+          "username" : "fielddbpublicuser",
           "password" : "",
           "email" : "",
           "firstname" : "Anonymous",

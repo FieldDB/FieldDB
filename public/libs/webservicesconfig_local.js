@@ -1,6 +1,7 @@
 /* Extends the Utils class */
 var Utils = Utils || {};
 
+Utils.websiteUrl = "https://localhost:3182";
 Utils.authUrl = "https://localhost:3183";
 Utils.audioUrl = "https://localhost:3184";
 Utils.lexiconUrl = "https://localhost:3185";
