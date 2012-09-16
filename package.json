@@ -1,0 +1,15 @@
+{
+  "name": "FieldDBAuthenticationService",
+  "version": "0.1.21",
+  "dependencies": {
+    "express": "2.5.10"
+    ,"forever":"0.9.2"
+    ,"cradle": "latest"
+    ,"mongoose": "latest"
+    ,"mongoose-auth": "latest"
+    ,"paperboy": "latest"
+    ,"zlib": "latest"                     
+    ,"crypto":"latest"
+    ,"everyauth": "latest"
+  }
+}

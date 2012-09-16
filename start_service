@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#cd mongodb/bin
+#./mongod --dbpath $HOME/fielddbworkspace/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace/logs/mongodb.log --logappend
+
+./node_modules/forever/bin/forever \
+start \
+-al ../logs/fielddbauth.log \
+-ao out.log \
+-ae err.log \
+service.js
