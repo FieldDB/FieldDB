@@ -1,54 +1,62 @@
-Fieldlinguist's iField: An offline/online fieldlinguistics database which adapts to its user's I-Language.
+FieldDB is a free, modular, open source project developed collectively by field linguists and software developers to make an expandable user-friendly app which can be used to collect, search and share your data, both online and offline. It is fundamentally an app written in 100% Javascript which runs entirely client side, backed by a NoSQL database (we are currently using CouchDB and its offline browser wrapper PouchDB alpha). It has a number of webservices which it connects to in order to allow users to perform tasks which require the internet/cloud (ie, syncing data between devices and users, sharing data publicly, running CPU intensive processes to analyze/extract/search audio/video/text).
 
-# What is Fieldlinguist's iField?
-iField is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share your data.
+FieldDB beta was officially launched in English and Spanish on August 1st 2012 in Patzun, Guatemala as an [app for fieldlinguists](https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm). 
 
-# Who can I use Fieldlinguist's iField with?
-* Fieldlinguist's iField is a Chrome app, which means it works on Windows, Mac, Linux, Android, iPad, and also offline.
-* Multiple collaborators can add to the same corpus, and you can encrypt any piece of data, keep it private within your corpus, or make it public to share with the community and other researchers.
-
-# How can Fieldlinguist's iField save me time?
-Fieldlinguist's iField uses machine learning and computational linguistics to adapt to your existing organization of the data which you import and predict how to gloss it. iField already supports import and export of many common formats, including ELAN, Praat, Toolbox, FLEx, Filemaker Pro, LaTeX, xml, csv and more, but if you have another format you'd like to import or export, Contact Us.
-
-# What are the principles behind Fieldlinguist's iField?
-We designed Fieldlinguist's iField from the ground up to be user-friendly, but also to conform to EMELD and DataOne best practices on formatting, archiving, open access, and security. For more information, see the data management sections of our white paper. We vow never to use your private data, you can find out more in our privacy policy.
-
-# Install
-
-To find out more about the features and to install it, visit its website at [http://fieldlinguist.com](http://fieldlinguist.com)
-
-# Report Bugs and give us Feedback
-
-Fieldlinguist's iField beta was officially launched in English and Spanish on August 2st 2012 in Patzun, Guatemala. So far we have had input from fieldlinguists working on Morpho-syntax, LF and Prosody. We are always looking for more feedback and your help finding bugs. In particular we need to know if the app is truely user-friendly, and if you have suggestions on how we can improve the app to save you time entering your data, and searching for your data when writing handouts/articles etc. 
-[Form to Contact us/Report bugs](https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ)
+[more info...](http://fieldlinguist.com)
 
 # Team
-* [Alan Bale](http://linguistics.concordia.ca/bale/) (McGill, Concordia)
+
+* [Alan Bale](http://linguistics.concordia.ca/bale/) (Concordia)
 * [M.E. Cathcart](http://udel.edu/~mdotedot/) (U Delaware)
-* [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab LTD)
+* [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab Ltd)
 * [Jessica Coon](http://people.linguistics.mcgill.ca/~jessica/Welcome.html) (McGill)
-* [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab LTD)
-* [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Concordia, Stony Brook)
+* [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab Ltd)
+* [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Stony Brook)
+* [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
 * [Michael Wagner](http://prosodylab.org/) (McGill)
 
 
-# References 
-See [Wiki](https://github.com/OpenSourceFieldlinguistics/iField/wiki) for References, Similar Software that we investigated, Software Design Docs and Software Requirements Specification 
-
 # Funding
+
 We have some small funding TBA
 
 # License 
 
-This project is released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license, which is an very non-restrictive open source license which basically says you can adapt the software to any use you see fit. You can also download it and install it on your Departments servers.
+This project is released under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license, which is an very non-restrictive open source license which basically says you can adapt the code to any use you see fit. 
 
 # How to Contribute Code
 
 * [Signup for a GitHub account](https://github.com/signup/free) (GitHub is free for OpenSource)
 * Click on the "Fork" button to create your own copy.
-* [Follow the 4 GitHub Help Tutorials](http://help.github.com/) for how to install and use Git on your computer.
-* Edit the code on your computer, and push to your origin (git push origin master).
-* Click on the "Pull Request" button, and leave us a note about what you changed. 
-* Feel the glow :)
+* Leave us a note in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues) to tell us a bit about the bug/feature you want to work on.
+* You can [follow the 4 GitHub Help Tutorials](http://help.github.com/) to install and use Git on your computer.
+* You can watch the videos in the [Developer's Blog](http://www.fieldlinguist.com/dev.html) to find out how the codebase works, and to find where is the code that you want to edit. Feel free to ask us questions in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues), we're friendly and welcome Open Source newbies.
+* Edit the code on your computer, commit it referencing the issue #xx you created ($ git commit -m "fixes #xx i changed blah blah...") and push to your origin ($ git push origin master).
+* Click on the "Pull Request" button, and leave us a note about what you changed. We will look at your changes and help you bring them into the project!
+* Feel the glow of contributing to OpenSource :)
  
+# Related repositories
+
+These are the webservices which the FieldDB client uses, and which make up the complete FieldDB suite. If you fork the project, you might also be intersted in forking these repositories and adapting them to your needs. We created two scripts to simplify the process of downloading and building the FieldDB dependancies into what we call an fielddbworkspace.
+
+* [Mac developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh)
+<pre>
+$ curl -O --retry 999 --retry-max-time 0 -C - https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
+$ bash install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
+</pre>
+* [Linux developer script](https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh) 
+<pre>
+$ wget https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
+$ bash install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
+</pre>
+  
+
+## Core webservices:
+* [Authentication webservice](https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService) (for creation of new users and their accounts on the various webservices)
+* [FieldDB Webserver](https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer) (for public URLs)
+* [Database webservice](http://couchdb.apache.org/) (we are using pure CouchDB for this webservice)
+
+## Optional webservices
+* [Audio webservice](https://github.com/OpenSourceFieldlinguistics/AudioWebService) (for hosting audio files and running processes such as the ProsodyLab's Aligner)
+* [Lexicon webservice](https://github.com/OpenSourceFieldlinguistics/LexiconWebService) (for search functionality, and glosser functionality if you are a linguist)

@@ -89,7 +89,7 @@ define([
      * 
      * CSV is a common export format for Filemaker, Microsoft Excel and
      * OpenOffice Spreadsheets, and could be a good format to export
-     * from these sources and import into iField.
+     * from these sources and import into FieldDB.
      * 
      * @param text
      */
@@ -231,21 +231,21 @@ define([
        
       var annotationinfo = [];
 //    ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE.__cnt
-//      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE", "elanALIGNABLE_ANNOTATION": "ANNOTATION_VALUE"});
+//      annotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE", "elanALIGNABLE_ANNOTATION": "ANNOTATION_VALUE"});
 //    ANNOTATION.ALIGNABLE_ANNOTATION._ANNOTATION_ID
-      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._ANNOTATION_ID", "elanALIGNABLE_ANNOTATION": "_ANNOTATION_ID"});
+      annotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._ANNOTATION_ID", "elanALIGNABLE_ANNOTATION": "_ANNOTATION_ID"});
 //    ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF1
-      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF1", "elanALIGNABLE_ANNOTATION": "_TIME_SLOT_REF1"});
+      annotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF1", "elanALIGNABLE_ANNOTATION": "_TIME_SLOT_REF1"});
 //    ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF2
-      annotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF2", "elanALIGNABLE_ANNOTATION": "_TIME_SLOT_REF2"});
+      annotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.ALIGNABLE_ANNOTATION._TIME_SLOT_REF2", "elanALIGNABLE_ANNOTATION": "_TIME_SLOT_REF2"});
 //    
       var refannotationinfo = [];
 //    ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE
-      refannotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE", "elanREF_ANNOTATION": "ANNOTATION_VALUE"});
+      refannotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE", "elanREF_ANNOTATION": "ANNOTATION_VALUE"});
 //    ANNOTATION.REF_ANNOTATION._ANNOTATION_ID
-      refannotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.REF_ANNOTATION._ANNOTATION_ID", "elanREF_ANNOTATION": "_ANNOTATION_ID"});
+      refannotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.REF_ANNOTATION._ANNOTATION_ID", "elanREF_ANNOTATION": "_ANNOTATION_ID"});
 //    ANNOTATION.REF_ANNOTATION._ANNOTATION_REF
-      refannotationinfo.push({"iFieldDatumFieldName" : "ANNOTATION.REF_ANNOTATION._ANNOTATION_REF", "elanREF_ANNOTATION": "_ANNOTATION_REF"});
+      refannotationinfo.push({"FieldDBDatumFieldName" : "ANNOTATION.REF_ANNOTATION._ANNOTATION_REF", "elanREF_ANNOTATION": "_ANNOTATION_REF"});
       
       
       header.push("_ANNOTATOR");
@@ -283,7 +283,7 @@ define([
           try{
             matrix[annotation]["ANNOTATION.ALIGNABLE_ANNOTATION.ANNOTATION_VALUE.__cnt"] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION.ANNOTATION_VALUE.__cnt;
             for(cell in annotationinfo){
-              matrix[annotation][annotationinfo[cell].iFieldDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];         
+              matrix[annotation][annotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];         
             }
           }catch(e){
             Utils.debug("TIER "+l+" doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
@@ -291,7 +291,7 @@ define([
           
           try{
             for(cell in refannotationinfo){
-              matrix[annotation][refannotationinfo[cell].iFieldDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];         
+              matrix[annotation][refannotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];         
             }
           }catch(e){
             Utils.debug("TIER "+l+" doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
@@ -327,8 +327,8 @@ define([
      * This function accepts text which uses \t tabs between columns. If
      * you have your data in ELAN or in Microsoft Excel or OpenOffice
      * spreadsheets, this will most likely be a good format to export
-     * your data, and import into iField. This function is triggered if
-     * your file has more than 100 tabs in it, iField guesses that it
+     * your data, and import into FieldDB. This function is triggered if
+     * your file has more than 100 tabs in it, FieldDB guesses that it
      * should try this function.
      * 
      * @param tabbed
