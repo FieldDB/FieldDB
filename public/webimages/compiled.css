@@ -327,7 +327,7 @@ div#timeline-container {
 	margin: 0 0 -185px 0;
 	margin-top: -180px;
 	background:
-		url(/webimages/timeline-container--gz.jpg);
+		url(/webimages/timeline-container.jpg);
 }
 
 div#timeline-container-overlay {
@@ -1207,14 +1207,14 @@ input:-moz-placeholder {
 	min-width: 1024px;
 	height: 700px;
 	background:
-		url(/webimages/shine-teaser-59bdc616de7968ccccd1e12d6abb02f11f64749d-gz.jpg);
+		url(/webimages/shine-teaser.jpg);
 	background-position: center top;
 	background-repeat: no-repeat;
 }
 
 #shine-top.feature {
 	background:
-		url(/webimages/shine-features-teaser--gz.jpg);
+		url(/webimages/shine-features-teaser.jpg);
 	background-position: center top;
 	background-repeat: no-repeat;
 	margin-left: 6px;
@@ -1222,7 +1222,7 @@ input:-moz-placeholder {
 
 #shine-top.apps {
 	background:
-		url(/webimages/shine-apps-teaser-2ff892851cf309a5d362f4959f663b0d7b3f8136-gz.jpg);
+		url(/webimages/shine-apps-teaser.jpg);
 	background-position: center top;
 	left: -10px;
 	background-repeat: no-repeat;
@@ -1230,7 +1230,7 @@ input:-moz-placeholder {
 
 #shine-top.clear {
 	background:
-		url(/webimages/shine-d79a8f546c722db95dfdde00ed396c07bef94d2f-gz.jpg);
+		url(/webimages/shine.jpg);
 	background-position: center top;
 	background-repeat: no-repeat;
 	left: 0px;
@@ -1238,7 +1238,7 @@ input:-moz-placeholder {
 
 #shine-top.premium {
 	background:
-		url(/webimages/shine-d79a8f546c722db95dfdde00ed396c07bef94d2f-gz.jpg);
+		url(/webimages/shine.jpg);
 	background-position: center top;
 	background-repeat: no-repeat;
 	left: 0px;
@@ -1246,7 +1246,7 @@ input:-moz-placeholder {
 
 #shine-top.iphone {
 	background:
-		url(/webimages/shine-iphone-teaser-e142393f412b4fd5a99294575edb9dcd65f17e6e-gz.jpg);
+		url(/webimages/shine-iphone-teaser.jpg);
 	background-position: center top;
 	height: 900px;
 	background-repeat: no-repeat;
@@ -2448,7 +2448,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	height: 292px;
 	float: left;
 	background-image:
-		url(/webimages/apps-examples-048d0c130a589dd0618696af74aa8da1261d0606-gz.jpg);
+		url(/webimages/apps-examples.jpg);
 }
 
 .featurearea.appspage .exampleimg.dash.first {
@@ -2604,14 +2604,14 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 .featurearea .appsicon.tasks {
 	background-image:
-		url(/webimages/featurespage/tasksicon--gz.jpg);
+		url(/webimages/featurespage/tasksicon.jpg);
 	top: 1220px;
 	left: 200px;
 }
 
 .featurearea .appsicon.notes {
 	background-image:
-		url(/webimages/featurespage/notesicon--gz.jpg);
+		url(/webimages/featurespage/notesicon.jpg);
 	top: 2445px;
 	left: 187px;
 }
@@ -2657,7 +2657,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	width: 312px;
 	height: 387px;
 	background-image:
-		url(/webimages/featurespage/features-sprite--gz.jpg);
+		url(/webimages/featurespage/features-sprite.jpg);
 	background-repeat: no-repeat;
 }
 
@@ -3612,7 +3612,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	}
 	#shine-top.feature {
 		background:
-			url(/webimages/shine-features-teaser--gz.jpg);
+			url(/webimages/shine-features-teaser.jpg);
 		background-position: center top;
 		left: -20px;
 		background-repeat: no-repeat;
@@ -3627,7 +3627,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 		width: 640px;
 		background-position: center top;
 		background:
-			url(/webimages/retina-bg-f552737ce4c0c68af82b56489663a83871415104-gz.jpg);
+			url(/webimages/retina-bg.jpg);
 		background-position: center top;
 		background-repeat: no-repeat;
 		-webkit-background-size: 100% 100%;
@@ -3653,7 +3653,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	}
 	#shine-top.feature {
 		background:
-			url(/webimages/shine-features-teaser--gz.jpg);
+			url(/webimages/shine-features-teaser.jpg);
 		background-position: center top;
 		left: -16px;
 		background-repeat: no-repeat;
@@ -3668,7 +3668,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 		width: 640px;
 		background-position: center top;
 		background:
-			url(/webimages/retina-bg-f552737ce4c0c68af82b56489663a83871415104-gz.jpg);
+			url(/webimages/retina-bg.jpg);
 		background-position: center top;
 		background-repeat: no-repeat;
 		-webkit-background-size: cover;
@@ -3704,7 +3704,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	}
 	#shine-top.feature {
 		background:
-			url(/webimages/shine-features-teaser--gz.jpg);
+			url(/webimages/shine-features-teaser.jpg);
 		background-position: center top;
 		left: -10px;
 		background-repeat: no-repeat;
