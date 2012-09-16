@@ -217,6 +217,11 @@ textarea{
 	width: 2em !important;
 }
 
+.welcome_video_iframe{
+	margin: auto;
+	text-align: center;
+}
+
 .comment-bubble{
 	margin: 3px;
 	padding: 3px;

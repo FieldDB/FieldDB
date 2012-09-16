@@ -149,16 +149,16 @@ define([
         $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
         $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
         $(this.el).find(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-        $(this.el).find(".locale_Welcome_to_FieldDB").html(chrome.i18n.getMessage("locale_Welcome_to_FieldDB"));
+//        $(this.el).find(".locale_Welcome_to_FieldDB").html(chrome.i18n.getMessage("locale_Welcome_to_FieldDB"));
         $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
-        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+//        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
         $(this.el).find(".locale_Create_a_new_user").html(chrome.i18n.getMessage("locale_Create_a_new_user"));
-        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
         $(this.el).find(".locale_New_User").text(chrome.i18n.getMessage("locale_New_User"));
         $(this.el).find(".locale_Confirm_Password").text(chrome.i18n.getMessage("locale_Confirm_Password"));
         $(this.el).find(".locale_Sign_in_with_password").text(chrome.i18n.getMessage("locale_Sign_in_with_password"));
-        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
-        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+//        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+//        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
 
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;
