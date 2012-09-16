@@ -178,7 +178,7 @@
 	height: 37px;
 	right: -4px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: -528px -280px;
 	z-index: 200;
 }
@@ -1132,7 +1132,7 @@ h2 {
 
 h2.special {
 	background:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: 55px -160px;
 	background-repeat: no-repeat;
 	margin: -140px 0 50px;
@@ -1141,7 +1141,7 @@ h2.special {
 
 h2.lifeprojects {
 	background:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	margin: -30px 0 0;
 	background-repeat: no-repeat;
 	background-position: 55px 10px;
@@ -1292,13 +1292,13 @@ input:-moz-placeholder {
 #page-container .arrow.left {
 	left: -3px;
 	background-image:
-		url(/webimages/arrowleft--gz.png);
+		url(/webimages/arrowleft.png);
 }
 
 #page-container .arrow.right {
 	right: -9px;
 	background-image:
-		url(/webimages/arrowright--gz.png);
+		url(/webimages/arrowright.png);
 }
 
 .headlineimg {
@@ -1312,20 +1312,20 @@ input:-moz-placeholder {
 
 .headlineimg.features {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	margin-left: 5px;
 	background-position: center -350px;
 }
 
 .headlineimg.apps {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: center -1563px;
 }
 
 .headlineimg.iphone {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: 55px -2219px;
 }
 
@@ -1425,7 +1425,7 @@ input:-moz-placeholder {
 	width: 1019px;
 	margin-top: 0px;
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-repeat: no-repeat;
 	background-position: 55px -2455px;
 	z-index: 999;
@@ -1509,7 +1509,7 @@ input:-moz-placeholder {
 	width: 175px;
 	height: 65px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	vertical-align: top;
 	background-position: -175px -199px;
 }
@@ -1531,7 +1531,7 @@ input:-moz-placeholder {
 	width: 175px;
 	height: 64px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	vertical-align: top;
 	background-position: 0px -199px;
 }
@@ -1549,7 +1549,7 @@ input:-moz-placeholder {
 	width: 175px;
 	height: 65px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	vertical-align: top;
 	background-position: -350px -199px;
 }
@@ -1567,7 +1567,7 @@ input:-moz-placeholder {
 	width: 175px;
 	height: 66px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	vertical-align: top;
 	background-position: -2208px -199px;
 }
@@ -1963,7 +1963,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	width: 460px;
 	height: 67px;
 	background-image:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 }
 
 .trybtn.trybtn:hover {
@@ -2199,7 +2199,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	border: none;
 	height: 43px;
 	background-image:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: -792px -264px;
 }
 
@@ -2231,7 +2231,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	display: block;
 	float: left;
 	background-image:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: -465px -65px;
 }
 
@@ -2310,7 +2310,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 .share-container .facebook {
 	margin-left: 15px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: 1195px -702px;
 }
 
@@ -2326,7 +2326,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	width: 92px;
 	padding-left: 5px;
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: 2612px -699px;
 }
 
@@ -2340,7 +2340,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 .share-container .twitter {
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: 1276px -510px;
 }
 
@@ -2525,14 +2525,14 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 .featurearea .featureheadline.work {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	margin-left: 10px;
 	background-position: 45px -575px;
 }
 
 .featurearea .featureheadline.built-in {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	height: 125px;
 	background-position: 42px -750px;
 	margin-left: 12px;
@@ -2540,21 +2540,21 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 .featurearea .featureheadline.in-mind {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: 55px -960px;
 	height: 80px;
 }
 
 .featurearea .featureheadline.cloud-sync {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	height: 150px;
 	background-position: 56px -1128px;
 }
 
 .featurearea .featureheadline.tech {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: 56px -1341px;
 	height: 160px;
 	z-index: 9999;
@@ -2569,7 +2569,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 .featurearea .featureheadline.tasks {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: 55px -1770px;
 	height: 160px;
 	margin-top: -100px;
@@ -2577,7 +2577,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 .featurearea .featureheadline.notes {
 	background-image:
-		url(/webimages/headlines--gz.png);
+		url(/webimages/headlines.png);
 	background-position: 55px -1990px;
 	margin-top: -100px;
 	height: 160px;
@@ -2734,7 +2734,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	text-indent: 11px;
 	line-height: 170px;
 	background-image:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 }
 
 .featurearea ul li a.collab {
@@ -3035,7 +3035,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	bottom: 0;
 	margin-left: 73px;
 	background-image:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	background-position: -525px -156px;
 	text-indent: -9999px;
 	background-repeat: no-repeat;
@@ -3432,7 +3432,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	width: 185px;
 	height: 35px;
 	background-image:
-		url('/webimages/btns--gz.png');
+		url('/webimages/btns.png');
 	background-position: 490px -295px;
 }
 
@@ -3457,7 +3457,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 #footer .twitter {
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	width: 169px;
 	height: 28px;
 	background-position: 1445px 874px;
@@ -3475,7 +3475,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 
 #footer .facebook {
 	background:
-		url(/webimages/btns--gz.png);
+		url(/webimages/btns.png);
 	width: 169px;
 	height: 28px;
 	float: right;
@@ -3570,7 +3570,7 @@ text-shadow: 1px  2px  1px #000 .wkdelete textarea:focus {
 	display: block;
 	margin-top: 70px;
 	background-image:
-		url(/webimages/mobilebtns--gz.png);
+		url(/webimages/mobilebtns.png);
 	background-repeat: no-repeat;
 	text-indent: -9999px;
 	position: absolute;
