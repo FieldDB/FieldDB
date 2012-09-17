@@ -285,7 +285,8 @@ define([
                   c.changePouch(data.user.corpuses[0]);
                   a.saveAndInterConnectInApp(function(){
                     alert("save app succeeded");
-                      document.location.href='corpus.html';
+                    localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
+                    document.location.href='corpus.html';
                   },function(){
                     alert("save app failed.");
                   });
