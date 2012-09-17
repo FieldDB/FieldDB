@@ -55,6 +55,7 @@ mkdir $HOME/fielddbworkspace/usersdatabase/db
 echo "Attempting to turn on mongodb on its normal port"
 ./mongod --dbpath $HOME/fielddbworkspace/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace/logs/mongodb.log --logappend
 
+#./mongod --dbpath $HOME/fielddbworkspace_local/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace_local/logs/mongodb.log --logappend
 
 
 ## FieldDB Web services ###################################################
