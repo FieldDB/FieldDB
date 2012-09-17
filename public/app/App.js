@@ -226,7 +226,9 @@ define([
             });
           },
           error : function(e) {
-            alert("There was an error fetching corpus. Loading defaults..."+e);
+//            alert("There was an error fetching corpus. Loading defaults..."+e);
+            document.location.href='user.html';
+
           }
         });
       });
@@ -325,6 +327,8 @@ define([
           },
           error : function(e) {
             alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
+            document.location.href='user.html';
+
           }
         }); //end corpus fetch
       }); //end corpus change corpus
@@ -374,7 +378,9 @@ define([
               
               appSelf.get("authentication").staleAuthentication = true;
               localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
-              window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.","alert-success","Exit at anytime:");
+              if(window.appView){
+                window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.","alert-success","Exit at anytime:");
+              }
               
               
               //appSelf.router.showDashboard();

@@ -9,6 +9,7 @@ echo "Making fielddb workspace, this will contain the logs, client code and web 
 mkdir $HOME/fielddbworkspace
 cd $HOME/fielddbworkspace
 mkdir logs
+mkdir usersaudiofiles
 
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
@@ -54,6 +55,7 @@ mkdir $HOME/fielddbworkspace/usersdatabase/db
 echo "Attempting to turn on mongodb on its normal port"
 ./mongod --dbpath $HOME/fielddbworkspace/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace/logs/mongodb.log --logappend
 
+#./mongod --dbpath $HOME/fielddbworkspace_local/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace_local/logs/mongodb.log --logappend
 
 
 ## FieldDB Web services ###################################################

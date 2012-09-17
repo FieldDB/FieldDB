@@ -1,4 +1,4 @@
-.llama{
+body{
   background-image: url('../images/skins/bamboo_garden.jpg'); 
   background-repeat:no-repeat;
   background-attachment:fixed;  
@@ -215,6 +215,11 @@ textarea{
 
 .small-field{
 	width: 2em !important;
+}
+
+.welcome_video_iframe{
+	margin: auto;
+	text-align: center;
 }
 
 .comment-bubble{

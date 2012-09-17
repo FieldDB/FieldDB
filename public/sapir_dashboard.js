@@ -145,7 +145,7 @@ require([
     "backbone_pouchdb",
     "autosize",
     "xml2json",
-    "libs/webservicesconfig_devserver",
+    "libs/webservicesconfig_local",
     "libs/Utils"
 ], function(
     App,
@@ -205,14 +205,6 @@ require([
       Utils.debug("Calling back the startApps callback");
       callback();
     }
-    
-  };
-  loadFreshApp = function(){
-    Utils.debug("Loading fresh app");
-    // Create a UserWelcomeView modal
-    var welcomeUserView = new UserWelcomeView();
-    welcomeUserView.render();
-    $('#user-welcome-modal').modal("show");
   };
   /*
    * End functions
@@ -224,103 +216,26 @@ require([
    */
   window.hub = {};
   Utils.makePublisher(window.hub);
-  
+ 
   /*
-   * Catch ajax errors, and re-throw them using the Utils function
-   * http://api.jquery.com/ajaxError/ mostly to catch pouch errors
+   * Loading sapir
    */
-  $(document).ajaxError(function(e, xhr, settings, exception) {
-    Utils.catchAndThrowAjaxError(e, xhr, settings, exception);
-  }); 
-  
-  $(document).error(function(e, xhr, settings, exception) {
-    Utils.catchAndThrowPouchError(e, xhr, settings, exception);
+  alert("Loading sapir's dashboard TODO, set him up and get his data.");
+  var appjson = localStorage.getItem("mostRecentDashboard");
+  appjson = JSON.parse(appjson);
+  var pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
+  var couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+  var a = new App();
+  window.app = a;
+  var auth = a.get("authentication");
+  var u = localStorage.getItem("encryptedUser");
+  auth.loadEncryptedUser(u, function(success, errors){
+    a.createAppBackboneObjects(pouchname, function(){
+      window.startApp(a, function(){
+        window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
+      });
+    });
   });
-  
-  window.hub.subscribe("ajaxError",function(e){
-    Utils.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
-  }, this);
-  
-  window.hub.subscribe("pouchError",function(e){
-    Utils.debug("Pouch Error: ", e);
-  }, this);
-  /*
-   * For developers: to clear the app completely to test app load
-   * TODO this doesnt completely work any more because each corpus is in a different pouch.
-   */
-//  Pouch.destroy('idb://db');
-//  Pouch.destroy('idb://dbdefault');
-//    Pouch.destroy('idb://dbsapir-firstcorpus');
-//    localStorage.clear();
-//  localStorage.removeItem("appids");
-//  localStorage.removeItem("pouchname");
-    
-  /*
-   * Check for user's cookie and the dashboard so we can load it
-   */
-  var username = Utils.getCookie("username");
-  //if(username == "sapir"){
-  //  loadFreshApp();
-  //  return;
-  //}
-  if (username != null && username != "") {
-//    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
-    var appjson = localStorage.getItem("mostRecentDashboard");
-    appjson = JSON.parse(appjson);
-    if (appjson == null){
-      alert("We don't know what dashbaord to load for you. Please login and it should fix this problem.");
-      loadFreshApp();
-      return;
-    }else if (appjson.length < 3) {
-      alert("There was something inconsistent with your prevous dashboard. Please login and it should fix the problem.");
-      loadFreshApp();
-      return;
-    }else{
-      Utils.debug("Loading app from localStorage");
-      var pouchname = null;
-      var couchConnection = null;
-      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
-        alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
-        loadFreshApp();
-        return;
-      }else{
-        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
-        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-        if(!localStorage.getItem("db"+pouchname+"_id")){
-          alert("We couldn't open your local database. Please login and it should fix the problem.");
-          loadFreshApp(); 
-          return;
-        }else{
-          if(!localStorage.getItem("encryptedUser")){
-            alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
-            loadFreshApp();
-            return;
-          }else{
-            a = new App();
-            window.app = a;
-            var auth = a.get("authentication");
-            var u = localStorage.getItem("encryptedUser");
-            auth.loadEncryptedUser(u, function(success, errors){
-              if(success == null){
-                alert("We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
-                loadFreshApp();
-                return;
-              }else{
-                a.createAppBackboneObjects(pouchname, function(){
-                  window.startApp(a, function(){
-                    window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
-                  });
-                });
-              }
-            });
-          }
-        }
-      }
-    }
-  } else {
-    //new user, let them register or login as themselves or sapir
-    loadFreshApp();
- }
-  
-  
+
+
 });

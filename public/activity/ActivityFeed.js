@@ -45,10 +45,17 @@ define([
     nextsaveactivity : 0,
     
     saveAndInterConnectInApp : function(successcallback, failurecallback){
+      //work around for the activity feeds recursively saving themselves.
+      if(this.lastSavedTimeStamp && Date.now() - this.lastSavedTimeStamp < 30000){
+        return;
+      }
+      this.lastSavedTimeStamp = Date.now();
       Utils.debug("Calling saveAndInterConnectInApp for "+this.get("couchConnection").pouchname);
       if(!successcallback){
         successcallback = function(){
-          window.appView.toastUser("Save all activities","alert-success","Saved!");
+          if(window.appView){
+            window.appView.toastUser("Save all activities","alert-success","Saved!");
+          }
         };
       }
       console.log("successcallback",successcallback);
@@ -88,7 +95,9 @@ define([
           if(self.savefailedcount > 0){
             var alertcolor = "alert-warning";
           }
-          window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,alertcolor,"Activities saved:");
+          if(window.appView){
+            window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,alertcolor,"Activities saved:");
+          }
 
           window.hub.unsubscribe("savedActivityToPouch", null, self);
           window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
@@ -107,7 +116,9 @@ define([
       window.hub.subscribe("saveActivityFailedToPouch",function(arg){
         self.savefailedindex[arg.d] = false; 
         self.savefailedcount++;
-//        window.appView.toastUser("Save activity failed "+arg.d+" : "+arg.message,"alert-warning","Failures:");
+        if(window.appView){
+//          window.appView.toastUser("Save activity failed "+arg.d+" : "+arg.message,"alert-warning","Failures:");
+        }
         
         self.alerted++;
         if(self.alerted<100){
@@ -128,7 +139,9 @@ define([
           if(typeof successcallback == "function"){
             successcallback();
           }
-          window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,null,"Activities saved:");
+          if(window.appView){
+            window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,null,"Activities saved:");
+          }
 
           window.hub.unsubscribe("savedActivityToPouch", null, self);
           window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
