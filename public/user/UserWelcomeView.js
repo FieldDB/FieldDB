@@ -164,7 +164,7 @@ define([
         var self = this;
         Utils.getVersion(function (ver) { 
           self.appVersion = ver;
-          $(this.el).find(".welcome_version_number").html(ver);
+          $(self.el).find(".welcome_version_number").html(ver);
         });
         
         

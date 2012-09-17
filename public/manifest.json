@@ -1,8 +1,8 @@
 {
-  "name": "FieldDB unstable",
+  "name": "FieldDB Localhost",
   "version": "1.21",
   "description": "__MSG_application_description__",
-  "default_locale": "en",
+  "default_locale": "es",
   
   "app": {
     "launch": {
@@ -42,8 +42,8 @@
     "http://localhost:5984/*"
   ],
    "icons": { 
-    "16": "icon16_dev.png",
-    "48": "icon48_dev.png",
-    "128": "icon128_dev.png" 
+    "16": "icon16_local.png",
+    "48": "icon48_local.png",
+    "128": "icon128_local.png" 
   }
 }

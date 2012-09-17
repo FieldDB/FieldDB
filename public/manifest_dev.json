@@ -6,7 +6,7 @@
   
   "app": {
     "launch": {
-      "local_path": "dashboard.html"
+      "local_path": "user.html"
     }
   },
   "offline_enabled": true,
@@ -39,7 +39,9 @@
     "https://localhost:3187/*",
     "https://localhost:3188/*",
     
-    "http://localhost:5984/*"
+    "http://localhost:5984/*",
+    
+    "https://www.youtube.com/*"
   ],
    "icons": { 
     "16": "icon16_dev.png",

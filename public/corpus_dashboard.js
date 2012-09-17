@@ -145,7 +145,7 @@ require([
     "backbone_pouchdb",
     "autosize",
     "xml2json",
-    "libs/webservicesconfig_devserver",
+    "libs/webservicesconfig_local",
     "libs/Utils"
 ], function(
     App,
@@ -209,28 +209,7 @@ require([
   };
   loadFreshApp = function(){
     Utils.debug("Loading fresh app");
-    // Create a UserWelcomeView modal
-    var welcomeUserView = new UserWelcomeView();
-    welcomeUserView.render();
-    $('#user-welcome-modal').modal({
-      backdrop : true,
-      keyboard : true
-    }).css({
-      'width' : function() {
-        return ($(document).width() * .8 ) + 'px';
-      },
-      'height' : function() {
-        return ($(document).height() * .8 ) + 'px';
-      },
-      'margin-left' : function() {
-        return -($(this).width() * .5 );
-      }
-      ,
-      'margin-top' : function() {
-        return -($(this).height() * .5 );
-      }
-    });
-    $('#user-welcome-modal').modal("show");
+    document.location.href='user.html';
   };
   /*
    * End functions
@@ -247,21 +226,21 @@ require([
    * Catch ajax errors, and re-throw them using the Utils function
    * http://api.jquery.com/ajaxError/ mostly to catch pouch errors
    */
-  $(document).ajaxError(function(e, xhr, settings, exception) {
-    Utils.catchAndThrowAjaxError(e, xhr, settings, exception);
-  }); 
+//  $(document).ajaxError(function(e, xhr, settings, exception) {
+//    Utils.catchAndThrowAjaxError(e, xhr, settings, exception);
+//  }); 
+//  
+//  $(document).error(function(e, xhr, settings, exception) {
+//    Utils.catchAndThrowPouchError(e, xhr, settings, exception);
+//  });
   
-  $(document).error(function(e, xhr, settings, exception) {
-    Utils.catchAndThrowPouchError(e, xhr, settings, exception);
-  });
-  
-  window.hub.subscribe("ajaxError",function(e){
-    Utils.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
-  }, this);
-  
-  window.hub.subscribe("pouchError",function(e){
-    Utils.debug("Pouch Error: ", e);
-  }, this);
+//  window.hub.subscribe("ajaxError",function(e){
+//    Utils.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
+//  }, this);
+//  
+//  window.hub.subscribe("pouchError",function(e){
+//    Utils.debug("Pouch Error: ", e);
+//  }, this);
   /*
    * For developers: to clear the app completely to test app load
    * TODO this doesnt completely work any more because each corpus is in a different pouch.
