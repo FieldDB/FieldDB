@@ -49,20 +49,6 @@ require.config({
       exports : "$"
     },
     
-    "xml2json" : {
-      exports : "X2JS"
-    },
-    
-    "autosize" :{
-      deps : [ "jquery" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    "xml2json" :{
-      deps : [ "jquery" ],
-      exports : "X2JS"
-    },
     "bootstrap" :{
       deps : [ "jquery" ],
       exports : function($) {
@@ -119,10 +105,6 @@ require.config({
       exports : function(Handlebars) {
         return Handlebars;
       }
-    },
-    "terminal" : {
-      deps : ["bootstrap","jquery"],
-      exports : "Terminal"
     }
     
   }
@@ -130,93 +112,110 @@ require.config({
 
 // Initialization
 require([
-    "app/App",
-    "app/AppView",
-    "app/AppRouter",
-    "corpus/Corpus",
-    "data_list/DataList",
-    "datum/Datum",
-    "datum/Session",
     "user/User",
     "user/UserWelcomeView",
-    "handlebars",
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
-    "autosize",
-    "xml2json",
-    "libs/webservicesconfig_devserver",
+    "libs/webservicesconfig_local",
     "libs/Utils"
 ], function(
-    App,
-    AppView,
-    AppRouter,
-    Corpus,
-    DataList,
-    Datum,
-    Session,
     User,
     UserWelcomeView,
-    Handlebars,
     compiledTemplates,
     Backbone,
-    forcingpouchtoloadonbackboneearly,
-    forcingautosizetobeavailible,
-    forcingxml2jsontobeavilible
+    forcingpouchtoloadonbackboneearly
 ) {
   /*
    * Helper functions
    */
-  
-//  /* if they are browsing online, and not using the App version, bring them to the app version */
-//  if( window.location.href.indexOf("chrome-extension") == -1 ){
-//    var x = window.confirm("FieldDB works best in the Chrome Store where it has unlimited space to store your data, " +
-//    		"and can go online and offline. " +
-//    		"\n\nNote: This is an HTML5 webapp, not a webpage. It uses a database called 'IndexedDB'." +
-//    		"\n\n Safari doesn't let you save a database in the browser. " +
-//    		"\n\n Firefox almost works but not quite. It might work in a year or so." +
-//    		"\n\n Internet Exporer 10 might work, but not IE 6-9."+
-//    		"\n\nClick cancel to try it out here, but we can't guarentee your data will be saved in a database. " +
-//    		"\n\nClick OK to go to the Chrome Store App." 
-//    );
-//    if (x){
-//        window.location = "https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm";
-//    }else{
-//      //let them stay
-//    }
-//  }
-
-  /**
-   * This function is the only place that starts the app, notably the app view and app router. 
-   * It is called either by the main.js or by the UserWelcomeView.js
-   */
-  window.startApp = function(a, callback){
-    window.app = a;
-
-    // Create and display the AppView and its dependents
-    window.appView = new AppView({model: a}); 
-    window.appView.render();
-    
-    // Start the Router
-    app.router = new AppRouter();
-    Backbone.history.start();
-    
-    if(typeof callback == "function"){
-      callback();
-    }
-    
-  };
   loadFreshApp = function(){
     Utils.debug("Loading fresh app");
     // Create a UserWelcomeView modal
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
+    $('#user-welcome-modal').modal({
+      backdrop : true,
+      keyboard : true
+    }).css({
+      'width' : function() {
+        return ($(document).width() * .8 ) + 'px';
+      },
+      'height' : function() {
+        return ($(document).height() * .8 ) + 'px';
+      },
+      'margin-left' : function() {
+        return -($(this).width() * .5 );
+      },
+      'margin-top' : function() {
+        return -($(this).height() * .5 );
+      }
+    });
     $('#user-welcome-modal').modal("show");
   };
   /*
    * End functions
    */
   
-  $("#user-welcome-modal").modal("show");
+    
+  /*
+   * Check for user's cookie and the dashboard so we can load it
+   */
+  var username = Utils.getCookie("username");
+  if (username != null && username != "") {
+//    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
+    var appjson = localStorage.getItem("mostRecentDashboard");
+    appjson = JSON.parse(appjson);
+    if (appjson == null){
+      alert("We don't know what dashbaord to load for you. Please login and it should fix this problem.");
+      loadFreshApp();
+      return;
+    }else if (appjson.length < 3) {
+      alert("There was something inconsistent with your prevous dashboard. Please login and it should fix the problem.");
+      loadFreshApp();
+      return;
+    }else{
+      Utils.debug("Loading app from localStorage");
+      var pouchname = null;
+      var couchConnection = null;
+      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
+        alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
+        loadFreshApp();
+        return;
+      }else{
+        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
+        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+        if(!localStorage.getItem("db"+pouchname+"_id")){
+          alert("We couldn't open your local database. Please login and it should fix the problem.");
+          loadFreshApp(); 
+          return;
+        }else{
+          if(!localStorage.getItem("encryptedUser")){
+            alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
+            loadFreshApp();
+            return;
+          }else{
+            a = new App();
+            window.app = a;
+            var auth = a.get("authentication");
+            var u = localStorage.getItem("encryptedUser");
+            auth.loadEncryptedUser(u, function(success, errors){
+              if(success == null){
+                alert("We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
+                loadFreshApp();
+                return;
+              }else{
+                $(".user-fullscreen").html("list of corpora goes here");
+              }
+            });
+          }
+        }
+      }
+    }
+  } else {
+    //new user, let them register or login as themselves or sapir
+    loadFreshApp();
+ }
+  
   
 });
