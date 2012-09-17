@@ -766,7 +766,7 @@ define( [
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      this.className = 'over';
+      this.classList.add("over");
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       return false;
     },
