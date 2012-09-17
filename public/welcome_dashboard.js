@@ -193,32 +193,24 @@ require([
         document.location.href='user.html';
         return;
       }else{
-        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
-        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-        if(!localStorage.getItem("db"+pouchname+"_id")){
-          alert("We couldn't open your local database. Please login and it should fix the problem.");
+        if(!localStorage.getItem("encryptedUser")){
+          alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
           document.location.href='user.html';
           return;
         }else{
-          if(!localStorage.getItem("encryptedUser")){
-            alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
-            document.location.href='user.html';
-            return;
-          }else{
-            a = new App();
-            window.app = a;
-            var auth = a.get("authentication");
-            var u = localStorage.getItem("encryptedUser");
-            auth.loadEncryptedUser(u, function(success, errors){
-              if(success == null){
-                alert("We couldn't load your user."+errors.join("<br/>") + " " + Utils.contactUs);  
-                loadFreshApp();
-                return;
-              }else{
-                document.location.href='corpus.html';
-              }
-            });
-          }
+          a = new App();
+          window.app = a;
+          var auth = a.get("authentication");
+          var u = localStorage.getItem("encryptedUser");
+          auth.loadEncryptedUser(u, function(success, errors){
+            if(success == null){
+              alert("We couldn't load your user."+errors.join("<br/>") + " " + Utils.contactUs);  
+              loadFreshApp();
+              return;
+            }else{
+              document.location.href='corpus.html';
+            }
+          });
         }
       }
     }

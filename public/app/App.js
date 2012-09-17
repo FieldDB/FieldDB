@@ -326,7 +326,7 @@ define([
             });//end setAsCurrentCorpus
           },
           error : function(e) {
-//            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
+            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
             document.location.href='user.html';
 
           }
