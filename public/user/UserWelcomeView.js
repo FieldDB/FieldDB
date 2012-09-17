@@ -208,6 +208,7 @@ define([
         && dataToPost.emailaddress != "") {
         Utils.debug("User has entered an email and the passwords match. ");
         var a = new App();
+        window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
         /*
@@ -249,7 +250,7 @@ define([
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   //get the right corpus into the activity feed early, now that the user auth exists, this will work
-                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());
                   var activityCouchConnection = JSON.parse(JSON.stringify(data.user.corpuses[0]));
                   activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
                   a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
@@ -259,10 +260,10 @@ define([
                 
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
+                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
                   s.set("pouchname", data.user.corpuses[0].pouchname);
                   s.changePouch(data.user.corpuses[0].pouchname);
                   
@@ -275,7 +276,7 @@ define([
                     "description" : "This list contains all data in this corpus. " +
                     "Any new datum you create is added here. " +
                     "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                    "export to LaTeX, or share with collaborators.",
+                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   dl.changePouch(data.user.corpuses[0].pouchname);
@@ -284,7 +285,7 @@ define([
                   c.changePouch(data.user.corpuses[0]);
                   a.saveAndInterConnectInApp(function(){
                     alert("save app succeeded");
-                    document.location.href='corpus.html';
+                      document.location.href='corpus.html';
                   },function(){
                     alert("save app failed.");
                   });
