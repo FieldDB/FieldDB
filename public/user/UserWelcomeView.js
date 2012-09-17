@@ -41,7 +41,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER welcome init: " + this.el);
+      Utils.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
       this.model.bind("change", this.render, this);
@@ -135,7 +135,7 @@ define([
      * Renders the UserWelcomeView and its partial.
      */
     render : function() {
-      Utils.debug("USER render: " + this.el);
+      Utils.debug("USER render: " );
 
       if (this.model != undefined) {
         this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
@@ -164,7 +164,7 @@ define([
         var self = this;
         Utils.getVersion(function (ver) { 
           self.appVersion = ver;
-          $(self.el).find(".welcome_version_number").html(ver);
+          $(self.el).find(".welcome_version_number").html("v"+ver);
         });
         
         
@@ -178,7 +178,7 @@ define([
     registerNewUser : function() {
       $(".register-new-user").addClass("disabled");
 
-      Utils.debug("Attempting to register a new user: " + this.el);
+      Utils.debug("Attempting to register a new user: " );
       /*
        * Set defaults for new user registration here,
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
@@ -282,38 +282,44 @@ define([
                   c.get("dataLists").add(dl);
                   
                   c.changePouch(data.user.corpuses[0]);
-                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-                  window.startApp(a, function(){
-//                     auth.get("userPrivate").addCurrentCorpusToUser();
-                    window.setTimeout(function(){
-                      /*
-                       * Use the corpus just created to log the user into that corpus's couch server
-                       */
-                      var couchConnection = data.user.corpuses[0];
-                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
-                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
-                        Utils.debug("Successfully authenticated user with their corpus server.");
-                        //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateFromCorpus(couchConnection, function(){
-//                        appView.datumsEditView.newDatum();
-//                          appView.datumsEditView.render();
-                        });
-                        //save the users' first dashboard so at least they will have it if they close the app.
-                        window.setTimeout(function(){
-                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
-                            window.app.saveAndInterConnectInApp(function(){
-                              //replicate from both activity feeds to be sure that they have the search views
-                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
-                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
-                              });
-                            });
-                          });
-                        },10000);
-                        
-                      });
-                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
-                    Utils.debug("Loadded app for a new user.");
+                  a.saveAndInterConnectInApp(function(){
+                    alert("save app succeeded");
+                    document.location.href='corpus.html';
+                  },function(){
+                    alert("save app failed.");
                   });
+                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
+//                  window.startApp(a, function(){
+////                     auth.get("userPrivate").addCurrentCorpusToUser();
+//                    window.setTimeout(function(){
+//                      /*
+//                       * Use the corpus just created to log the user into that corpus's couch server
+//                       */
+//                      var couchConnection = data.user.corpuses[0];
+//                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
+//                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
+//                        Utils.debug("Successfully authenticated user with their corpus server.");
+//                        //Bring down the views so the user can search locally without pushing to a server.
+//                        c.replicateFromCorpus(couchConnection, function(){
+////                        appView.datumsEditView.newDatum();
+////                          appView.datumsEditView.render();
+//                        });
+//                        //save the users' first dashboard so at least they will have it if they close the app.
+//                        window.setTimeout(function(){
+//                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
+//                            window.app.saveAndInterConnectInApp(function(){
+//                              //replicate from both activity feeds to be sure that they have the search views
+//                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
+//                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
+//                              });
+//                            });
+//                          });
+//                        },10000);
+//                        
+//                      });
+//                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
+//                    Utils.debug("Loadded app for a new user.");
+//                  });
                 });
 //                });
             }
