@@ -1,6 +1,6 @@
 var express     = require('express')
     ,util       = require('util')
-    ,node_config = require("./lib/nodeconfig_local")
+    ,node_config = require("./lib/nodeconfig_devserver")
 
     ,mongooseAuth  = require('mongoose-auth')
     ,Users = require('./lib/restfullmongooseusers.js')
