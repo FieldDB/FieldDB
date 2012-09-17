@@ -136,6 +136,7 @@ define([
         data.user.publicSelf = {};
         data.user.publicSelf.username = data.user.username;
         data.user.publicSelf.gravatar = data.user.gravatar;
+        data.user.publicSelf.authUrl = data.user.authUrl;
         data.user.publicSelf.id = data.user._id; //this will end up as an attribute
         data.user.publicSelf.pouchname = data.user.corpuses[0].pouchname;
       }

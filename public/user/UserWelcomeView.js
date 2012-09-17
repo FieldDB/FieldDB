@@ -41,7 +41,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER welcome init: " + this.el);
+      Utils.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
       this.model.bind("change", this.render, this);
@@ -135,7 +135,7 @@ define([
      * Renders the UserWelcomeView and its partial.
      */
     render : function() {
-      Utils.debug("USER render: " + this.el);
+      Utils.debug("USER render: " );
 
       if (this.model != undefined) {
         this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
@@ -149,22 +149,22 @@ define([
         $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
         $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
         $(this.el).find(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-        $(this.el).find(".locale_Welcome_to_FieldDB").html(chrome.i18n.getMessage("locale_Welcome_to_FieldDB"));
+//        $(this.el).find(".locale_Welcome_to_FieldDB").html(chrome.i18n.getMessage("locale_Welcome_to_FieldDB"));
         $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
-        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
+//        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
         $(this.el).find(".locale_Create_a_new_user").html(chrome.i18n.getMessage("locale_Create_a_new_user"));
-        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
+//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
         $(this.el).find(".locale_New_User").text(chrome.i18n.getMessage("locale_New_User"));
         $(this.el).find(".locale_Confirm_Password").text(chrome.i18n.getMessage("locale_Confirm_Password"));
         $(this.el).find(".locale_Sign_in_with_password").text(chrome.i18n.getMessage("locale_Sign_in_with_password"));
-        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
-        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+//        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+//        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
 
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;
         Utils.getVersion(function (ver) { 
           self.appVersion = ver;
-          $(this.el).find(".welcome_version_number").html(ver);
+          $(self.el).find(".welcome_version_number").html("v"+ver);
         });
         
         
@@ -178,7 +178,7 @@ define([
     registerNewUser : function() {
       $(".register-new-user").addClass("disabled");
 
-      Utils.debug("Attempting to register a new user: " + this.el);
+      Utils.debug("Attempting to register a new user: " );
       /*
        * Set defaults for new user registration here,
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
@@ -208,6 +208,7 @@ define([
         && dataToPost.emailaddress != "") {
         Utils.debug("User has entered an email and the passwords match. ");
         var a = new App();
+        window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
         /*
@@ -249,7 +250,7 @@ define([
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   //get the right corpus into the activity feed early, now that the user auth exists, this will work
-                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activites, means that the user's activities will all get saved into this corpus, this is problematic if they have multiple corpuses, maybe can add a filter somehow. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());
                   var activityCouchConnection = JSON.parse(JSON.stringify(data.user.corpuses[0]));
                   activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
                   a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
@@ -259,10 +260,10 @@ define([
                 
                   var s = a.get("currentSession");
                   s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
+                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
+                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
                   s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
+                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
                   s.set("pouchname", data.user.corpuses[0].pouchname);
                   s.changePouch(data.user.corpuses[0].pouchname);
                   
@@ -275,45 +276,52 @@ define([
                     "description" : "This list contains all data in this corpus. " +
                     "Any new datum you create is added here. " +
                     "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                    "export to LaTeX, or share with collaborators.",
+                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
                     "pouchname" : data.user.corpuses[0].pouchname
                   });
                   dl.changePouch(data.user.corpuses[0].pouchname);
                   c.get("dataLists").add(dl);
                   
                   c.changePouch(data.user.corpuses[0]);
-                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-                  window.startApp(a, function(){
-//                     auth.get("userPrivate").addCurrentCorpusToUser();
-                    window.setTimeout(function(){
-                      /*
-                       * Use the corpus just created to log the user into that corpus's couch server
-                       */
-                      var couchConnection = data.user.corpuses[0];
-                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
-                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
-                        Utils.debug("Successfully authenticated user with their corpus server.");
-                        //Bring down the views so the user can search locally without pushing to a server.
-                        c.replicateFromCorpus(couchConnection, function(){
-//                        appView.datumsEditView.newDatum();
-//                          appView.datumsEditView.render();
-                        });
-                        //save the users' first dashboard so at least they will have it if they close the app.
-                        window.setTimeout(function(){
-                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
-                            window.app.saveAndInterConnectInApp(function(){
-                              //replicate from both activity feeds to be sure that they have the search views
-                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
-                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
-                              });
-                            });
-                          });
-                        },10000);
-                        
-                      });
-                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
-                    Utils.debug("Loadded app for a new user.");
+                  a.saveAndInterConnectInApp(function(){
+                    alert("save app succeeded");
+                    localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
+                    document.location.href='corpus.html';
+                  },function(){
+                    alert("save app failed.");
                   });
+                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
+//                  window.startApp(a, function(){
+////                     auth.get("userPrivate").addCurrentCorpusToUser();
+//                    window.setTimeout(function(){
+//                      /*
+//                       * Use the corpus just created to log the user into that corpus's couch server
+//                       */
+//                      var couchConnection = data.user.corpuses[0];
+//                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
+//                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
+//                        Utils.debug("Successfully authenticated user with their corpus server.");
+//                        //Bring down the views so the user can search locally without pushing to a server.
+//                        c.replicateFromCorpus(couchConnection, function(){
+////                        appView.datumsEditView.newDatum();
+////                          appView.datumsEditView.render();
+//                        });
+//                        //save the users' first dashboard so at least they will have it if they close the app.
+//                        window.setTimeout(function(){
+//                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
+//                            window.app.saveAndInterConnectInApp(function(){
+//                              //replicate from both activity feeds to be sure that they have the search views
+//                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
+//                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
+//                              });
+//                            });
+//                          });
+//                        },10000);
+//                        
+//                      });
+//                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
+//                    Utils.debug("Loadded app for a new user.");
+//                  });
                 });
 //                });
             }

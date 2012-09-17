@@ -615,6 +615,13 @@ define([
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
         
+        //If there is no view, we are done.
+        if(! window.appView){
+          successcallback();
+          return;
+        }
+        
+        //If there is a view, we should set up the corpus dashboard and render the team activity feed. TODO is this why the team activyfeed isnt working ona fresh app?
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
             window.appView.activityFeedCorpusTeamView.render(); //this gets destroyed in the re-associating. 
@@ -844,7 +851,9 @@ define([
         url : couchurl ,
         data : corpusloginparams,
         success : function(data) {
-          window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
+          if(window.appView){
+            window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
+          }
           if (typeof succescallback == "function") {
             succescallback(data);
           }
@@ -857,17 +866,21 @@ define([
               url : couchurl ,
               data : corpusloginparams,
               success : function(data) {
-                window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
+                if(window.appView){
+                  window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
+                }
                 if (typeof succescallback == "function") {
                   succescallback(data);
                 }
               },
               error : function(data){
-                window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
-                		"This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
-                		"You also can't share your data with team members. If your computer is online and you are" +
-                		" using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +Utils.contactUs+
-                		" If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
+                if(window.appView){
+                  window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
+                      "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
+                      "You also can't share your data with team members. If your computer is online and you are" +
+                      " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +Utils.contactUs+
+                      " If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
+                }
                 if (typeof failurecallback == "function") {
                   failurecallback();
                 }
