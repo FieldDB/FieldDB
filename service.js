@@ -49,8 +49,13 @@ app.post('/usernamelogin/:username', function(req,res){
 });
 
 
-
-mongooseAuth.helpExpress(app);
+/*
+ * Loading the User Authentication and Corpus Builder Module
+ * everyauth.helpExpress is being deprecated. helpExpress is now automatically
+ * invoked when it detects express. So remove everyauth.helpExpress from your
+ * code
+ */
+//mongooseAuth.helpExpress(app);
 
 app.listen(node_config.port);
 console.log("Listening on " + node_config.apphttpsdomain+ "\n"+new Date());

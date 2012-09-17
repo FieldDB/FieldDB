@@ -3,8 +3,8 @@
 echo ""
 echo ""
 echo "Put the Node server to act as the development server"
-sed 's/nodeconfig_[^)]*)/nodeconfig_devserver")/' app.js  > output
-mv output app.js
+sed 's/nodeconfig_[^)]*)/nodeconfig_devserver")/' service.js  > output
+mv output service.js
 
 sed 's/nodeconfig_[^)]*)/nodeconfig_devserver")/' lib/restfullmongooseusers.js  > output
 mv output lib/restfullmongooseusers.js
