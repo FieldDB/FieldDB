@@ -112,18 +112,54 @@ require.config({
 
 // Initialization
 require([
+    "app/App",
     "user/User",
+    "user/UserWelcomeView",
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
     "libs/webservicesconfig_local",
     "libs/Utils"
 ], function(
+    App,
     User,
+    UserWelcomeView,
     compiledTemplates,
     Backbone,
     forcingpouchtoloadonbackboneearly
 ) {
+  /*
+   * Helper functions
+   */
+  loadFreshApp = function(){
+//    document.location.href='sapir_corpus.html';
+
+    Utils.debug("Loading fresh app");
+    // Create a UserWelcomeView modal
+    var welcomeUserView = new UserWelcomeView();
+    welcomeUserView.render();
+    $('#user-welcome-modal').modal({
+      backdrop : true,
+      keyboard : true
+    }).css({
+      'width' : function() {
+        return ($(document).width() * .8 ) + 'px';
+      },
+      'height' : function() {
+        return ($(document).height() * .8 ) + 'px';
+      },
+      'margin-left' : function() {
+        return -($(this).width() * .5 );
+      },
+      'margin-top' : function() {
+        return -($(this).height() * .5 );
+      }
+    });
+    $('#user-welcome-modal').modal("show");
+  };
+  /*
+   * End functions
+   */
   
   /*
    * Start the pub sub hub
@@ -131,18 +167,66 @@ require([
   window.hub = {};
   Utils.makePublisher(window.hub);
  
+    
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
   var username = Utils.getCookie("username");
   if (username != null && username != "") {
-     alert("Welcome again " + username); //Dont need to tell them this
-    // anymore, it seems perfectly stable.
-
-    $("#user-fullscreen").html("list of corpora goes here");
+//    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
+    var appjson = localStorage.getItem("mostRecentDashboard");
+    appjson = JSON.parse(appjson);
+    if (appjson == null){
+      alert("We don't know what dashbaord to load for you. Please login and it should fix this problem.");
+      document.location.href='user.html';
+      return;
+    }else if (appjson.length < 3) {
+      alert("There was something inconsistent with your prevous dashboard. Please login and it should fix the problem.");
+      document.location.href='user.html';
+      return;
+    }else{
+      Utils.debug("Loading app from localStorage");
+      var pouchname = null;
+      var couchConnection = null;
+      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
+        alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
+        document.location.href='user.html';
+        return;
+      }else{
+        pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
+        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+        if(!localStorage.getItem("db"+pouchname+"_id")){
+          alert("We couldn't open your local database. Please login and it should fix the problem.");
+          document.location.href='user.html';
+          return;
+        }else{
+          if(!localStorage.getItem("encryptedUser")){
+            alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
+            document.location.href='user.html';
+            return;
+          }else{
+            a = new App();
+            window.app = a;
+            var auth = a.get("authentication");
+            var u = localStorage.getItem("encryptedUser");
+            auth.loadEncryptedUser(u, function(success, errors){
+              if(success == null){
+                alert("We couldn't load your user."+errors.join("<br/>") + " " + Utils.contactUs);  
+                loadFreshApp();
+                return;
+              }else{
+                document.location.href='corpus.html';
+              }
+            });
+          }
+        }
+      }
+    }
   } else {
-    // new user, let them register or login as themselves or sapir
-    document.location.href='index.html';
-  }
+    //new user, let them register or login as themselves or sapir
+    loadFreshApp();
+
+ }
+  
   
 });

@@ -226,7 +226,9 @@ define([
             });
           },
           error : function(e) {
-            alert("There was an error fetching corpus. Loading defaults..."+e);
+//            alert("There was an error fetching corpus. Loading defaults..."+e);
+            document.location.href='user.html';
+
           }
         });
       });
@@ -324,7 +326,9 @@ define([
             });//end setAsCurrentCorpus
           },
           error : function(e) {
-            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
+//            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
+            document.location.href='user.html';
+
           }
         }); //end corpus fetch
       }); //end corpus change corpus

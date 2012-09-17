@@ -6,7 +6,7 @@
   
   "app": {
     "launch": {
-      "local_path": "user.html"
+      "local_path": "index.html"
     }
   },
   "offline_enabled": true,
