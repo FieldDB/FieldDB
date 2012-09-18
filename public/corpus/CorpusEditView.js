@@ -203,12 +203,19 @@ define([
         //Localize for all embedded view
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+          $(this.el).find(".locale_elicitation_sessions_explaination").html(chrome.i18n.getMessage("locale_elicitation_sessions_explaination"));
           $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+          $(this.el).find(".locale_datalists_explaination").html(chrome.i18n.getMessage("locale_datalists_explaination"));
           $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+          $(this.el).find(".locale_permissions_explaination").html(chrome.i18n.getMessage("locale_permissions_explaination"));
           $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+          $(this.el).find(".locale_datum_fields_explaination").html(chrome.i18n.getMessage("locale_datum_fields_explaination"));
           $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+          $(this.el).find(".locale_datum_states_explaination").html(chrome.i18n.getMessage("locale_datum_states_explaination"));
           $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
 
+          
+          
           //Localize for only Edit view.
           $(this.el).find(".locale_Public_or_Private").html(chrome.i18n.getMessage("locale_Public_or_Private"));
           $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
@@ -258,10 +265,15 @@ define([
       //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
         $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
+        $(this.el).find(".locale_elicitation_sessions_explaination").html(chrome.i18n.getMessage("locale_elicitation_sessions_explaination"));
         $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
+        $(this.el).find(".locale_datalists_explaination").html(chrome.i18n.getMessage("locale_datalists_explaination"));
         $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
+        $(this.el).find(".locale_permissions_explaination").html(chrome.i18n.getMessage("locale_permissions_explaination"));
         $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
+        $(this.el).find(".locale_datum_fields_explaination").html(chrome.i18n.getMessage("locale_datum_fields_explaination"));
         $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
+        $(this.el).find(".locale_datum_states_explaination").html(chrome.i18n.getMessage("locale_datum_states_explaination"));
         $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
 
         //Localize for only Edit view.
