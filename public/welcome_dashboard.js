@@ -118,7 +118,7 @@ require([
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
-    "libs/webservicesconfig_local",
+    "libs/webservicesconfig_devserver",
     "libs/Utils"
 ], function(
     App,
