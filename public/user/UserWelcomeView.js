@@ -242,7 +242,6 @@ define([
                   c.set({
                     "title" : data.user.username + "'s Corpus",
                     "titleAsUrl" : data.user.username + "Corpus",
-                    "description" : "This is an untitled corpus, created by default.",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
                     "team" : auth.get("userPublic"),
