@@ -263,7 +263,7 @@ define([
     defaults : {
       title : "Untitled Corpus",
       titleAsUrl :"UntitledCorpus",
-      description : "This is an untitled corpus, created by default.",
+      description : "This is an untitled corpus, created by default. You should change its title and description to better describe whatever database/corpus you want to build.",
 //      confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
