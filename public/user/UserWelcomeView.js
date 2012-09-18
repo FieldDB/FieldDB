@@ -283,12 +283,14 @@ define([
                   
                   c.changePouch(data.user.corpuses[0]);
                   a.saveAndInterConnectInApp(function(){
-                    alert("save app succeeded");
+//                    alert("save app succeeded");
                     localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
                     document.location.href='corpus.html';
-                  },function(){
-                    alert("save app failed.");
-                  });
+                  }
+//                  ,function(){
+//                    alert("Bug! save app failed.");
+//                  }
+                  );
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
 //                  window.startApp(a, function(){
 ////                     auth.get("userPrivate").addCurrentCorpusToUser();
