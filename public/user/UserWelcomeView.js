@@ -158,7 +158,7 @@ define([
         $(this.el).find(".locale_Confirm_Password").text(chrome.i18n.getMessage("locale_Confirm_Password"));
         $(this.el).find(".locale_Sign_in_with_password").text(chrome.i18n.getMessage("locale_Sign_in_with_password"));
 //        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
-//        $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+//        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(chrome.i18n.getMessage("locale_Instructions_to_show_on_dashboard"));
 
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;

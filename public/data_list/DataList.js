@@ -80,7 +80,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-pushpin'></i><a href='#data/"+this.id+"'>"+this.get('title')+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
           }));
@@ -91,7 +91,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-pushpin'></i><a href='#data/"+this.id+"'>"+this.get('title')+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
           }));

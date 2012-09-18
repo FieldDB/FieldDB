@@ -598,8 +598,8 @@ define([
       $(this.el).find(".locale_Differences_with_the_central_server").text(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
       $(this.el).find(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
       $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
-      $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
-      $(this.el).find(".locale_This_is_a_beta_version").html(chrome.i18n.getMessage("locale_This_is_a_beta_version"));
+//      $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
+      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(chrome.i18n.getMessage("locale_Instructions_to_show_on_dashboard"));
       $(this.el).find(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
       $(this.el).find(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
       $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
