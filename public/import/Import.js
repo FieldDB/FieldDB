@@ -114,7 +114,8 @@ define([
 //          });
 //          rows[l] = withoutQuotes;
         }else{
-          rows[l] = self.parseLineCSV(rows[l]);
+          var rowWithoutQuotes = rows[l].replace(/"/g,"");
+          rows[l] = self.parseLineCSV(rowWithoutQuotes);
         }
       }
       

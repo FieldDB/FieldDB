@@ -39,16 +39,12 @@
 
 	
 
-<label class = "locale_Title"></label>
-<input class="corpus-title-input" value="{{title}}" type="text"/>
+<label class = "locale_Title"></label> <i class="icon-cloud"></i> 
+<input class="corpus-title-input" value="{{title}}" type="text"/><small>{{publicCorpus}}</small>
 
 <label class = locale_Description></label>
 <textarea class="corpus-description-input">{{description}}</textarea>
 
-<label class = "locale_Public_or_Private"></label>
-<input type="text" value="{{publicCorpus}}" class=" public-or-private" data-provide="typeahead" data-items="4" 
-        data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
-<a href = "http://www.fieldlinguist.com/{{username}}/{{titleAsUrl}}" target="_blank"><i class=" icon-link"></i></a>
 <small>Shareable URL: http://www.fieldlinguist.com/{{username}}/{{titleAsUrl}}</small>
         
 <div class="accordion" id="accordion-edit-embedded">
@@ -61,6 +57,7 @@
     </div>
     <div class="accordion-body collapse" id="collapseSessionsEE">
       <div class="accordion-inner">
+        <span class="locale_elicitation_sessions_explaination"></span>
         <ul class = "sessions-updating-collection unstyled">
                 <!-- Updating Sessions Collection -->
         </ul>
@@ -77,6 +74,7 @@
     </div>
     <div class="accordion-body collapse" id="collapseDatalistsEE" >
       <div class="accordion-inner">
+				<span class="locale_datalists_explaination"></span>
          <ul class = "datalists-updating-collection unstyled">
                 <!-- Updating DataLists Collection -->
         </ul>
@@ -93,6 +91,13 @@
 		</div>
     <div class="accordion-body collapse" id="collapsePermissionsEE">
       <div class="accordion-inner container span12">
+				<span class="locale_permissions_explaination"></span>
+				<label class = "locale_Public_or_Private"></label>
+				<input type="text" value="{{publicCorpus}}" class=" public-or-private" data-provide="typeahead" data-items="4" 
+				        data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
+				<a href = "http://www.fieldlinguist.com/{{username}}/{{titleAsUrl}}" target="_blank"><i class=" icon-link"></i></a>
+				<small>Shareable URL: http://www.fieldlinguist.com/{{username}}/{{titleAsUrl}}</small>
+				 
         <ul class = "permissions-updating-collection unstyled">
                       <!-- Updating Permissions Collection -->
         </ul>
@@ -108,6 +113,7 @@
     </div>
     <div class="accordion-body collapse" id="collapseDatumFieldSettingsEE">
       <div class="accordion-inner">
+				<span class="locale_datum_fields_explaination"></span>
         <ul class="datum_field_settings unstyled"></ul>
         <div class="breadcrumb">
           <span class="pull-right"> 
@@ -131,6 +137,7 @@
       </a>
     </div>
     <div class="accordion-body collapse" id="collapseDatumStateSettingsEE">
+			<span class="locale_datum_states_explaination"></span>
         <ul class="datum_state_settings unstyled"></ul>
         <input class="add_input locale_Add_Placeholder" value="" type="text"></input>
         <select class="add_color_chooser">
