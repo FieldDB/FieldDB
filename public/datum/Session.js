@@ -125,7 +125,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-comments-alt'></i><a href='#data/"+this.id+"'>"+goal+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-comments-alt'></i> "+goal+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
           }));
@@ -136,7 +136,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-comments-alt'></i><a href='#data/"+this.id+"'>"+goal+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-comments-alt'></i> "+goal+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
           }));

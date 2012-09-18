@@ -695,6 +695,10 @@ define( [
         this.model.get("session").get("sessionFields").where({
           label : "dateElicited"
         })[0].set("mask", "Probably Prior to " + filemodified);
+        
+        this.model.get("session").get("sessionFields").where({
+          label : "consultants"
+        })[0].set("mask", "Unknown");
       }
       
       //DONT save now, save only when import is approved.
@@ -766,7 +770,7 @@ define( [
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      this.className = 'over';
+      this.classList.add("over");
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       return false;
     },
