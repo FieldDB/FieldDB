@@ -2,7 +2,7 @@ var express = require('express')
   , authenticationfunctions = require('./lib/userauthentication.js')
   , passport = require('passport')
   , flash = require('connect-flash')
-  , util = require('util')
+  , util = require('util');
   
 
 var app = express();
@@ -34,12 +34,12 @@ Use this route middleware on any resource that needs to be protected.  If
 the request is authenticated (typically via a persistent login session),
 the request will proceed.  Otherwise, the user will be redirected to the
 login page.*/
-function ensureAuthenticated(req, res, next) {
- if (req.isAuthenticated()) {
-   return next();
- }
- res.redirect('/login');
-}
+//function ensureAuthenticated(req, res, next) {
+// if (req.isAuthenticated()) {
+//   return next();
+// }
+// res.redirect('/login');
+//}
 
 
 /*
@@ -51,11 +51,11 @@ app.get('/', function(req, res) {
   });
 });
 
-app.get('/account', ensureAuthenticated, function(req, res) {
-  res.render('account', {
-    user : req.user
-  });
-});
+//app.get('/account', ensureAuthenticated, function(req, res) {
+//  res.render('account', {
+//    user : req.user
+//  });
+//});
 
 app.get('/login', function(req, res) {
   res.render('login', {
@@ -96,6 +96,37 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 */
+
+/*
+ * Based off the login post alternative above. 
+ */
+
+//app.post('/register',
+//    authenticationfunctions.registerNewUser('local', req, {
+//  failureRedirect : '/login',
+//  failureFlash : true
+//}), function(req, res) {
+//  res.redirect('/');
+//});
+
+app.post('/register', function(req, res, fn ) {
+  
+  authenticationfunctions.registerNewUser('local', req, function(err, user, info) {
+    if (err) {
+      console.log("There was an error in the authenticationfunctions.registerNewUser"+ err);
+//      res.send(util.inspect(err));
+      res.send("bug")
+    }
+    if (!user) {
+      req.flash('error', info.message);
+      res.send(util.inspect(info));
+    }
+    console.log("Returning the user: "+util.inspect(user));
+    res.send(util.inspect(user));
+
+  });
+});
+
 
 app.get('/logout', function(req, res){
   req.logout();
