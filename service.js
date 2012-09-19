@@ -50,7 +50,7 @@ app.configure(function() {
 //   This is an alternative implementation that uses a custom callback to
 //   acheive the same functionality.
 app.post('/login', function(req, res) {
-  authenticationfunctions.authenticateUser(req.body.username, req.body.password,  function(err, user, info) {
+  authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
@@ -60,6 +60,7 @@ app.post('/login', function(req, res) {
       returndata.errors = info;
     }else{
       returndata.user = user;
+      delete returndata.user.serverlogs;
       returndata.info = info;
       console.log(new Date() + " Returning the existing user as json:\n"+util.inspect(user));
     }

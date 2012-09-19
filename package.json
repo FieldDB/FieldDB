@@ -10,7 +10,8 @@
     ,"passport": ">= 0.0.0"
     ,"passport-local": ">= 0.0.0"
     ,"forever":"0.9.2"
-, "nano": "latest"
+    , "nano": "latest"
+    , "nodemailer" : "latest"
     ,"cradle": "latest"
   }
 }
