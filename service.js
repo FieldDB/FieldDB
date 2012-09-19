@@ -1,61 +1,108 @@
-var express     = require('express')
-    ,util       = require('util')
-    ,node_config = require("./lib/nodeconfig_devserver")
-
-    ,mongooseAuth  = require('mongoose-auth')
-    ,Users = require('./lib/restfullmongooseusers.js')
-    
-    ,https      = require('https')
-    ,crypto     = require('crypto')
-    ,fs         = require('fs');
-
-//read in the specified filenames as the security key and certificate
-node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
-node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
-var app = express.createServer(node_config.httpsOptions);
-
-//http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
-//app.use(function(req, res, next) {
-//  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
-//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//  next();
-//});
-
-app.configure(function() {
-  app.use(express.logger());
-  app.use(express.bodyParser());
-  app.use(express.cookieParser());
-  app.use(express.session({secret: "90ndsj9dfdsfwewfead3"}));
-  app.use(express.static(__dirname + '/public'));
-//  app.use(app.router); //do not turn this on, see notes on https://github.com/bnoguchi/mongoose-auth/
-  app.use(mongooseAuth.middleware());
-  app.use(express.errorHandler());
-});
-
-//http://stackoverflow.com/questions/11181546/node-js-express-cross-domain-scripting%20
-//app.all('/', function(req, res, next) {
-//  res.header("Access-Control-Allow-Origin", "https://ilanguage.iriscouch.com");
-//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//  next();
-// });
-
-app.post('/usernamelogin/:username', function(req,res){
-  console.log("User wants to log in "+req.params.username);
-  // TODO Look up username in mongodb, find their login service, and redirect them to
-  // that service. if username and password, reply to backbone with a message to
-  // show login and password
+var express = require('express')
+  , authenticationfunctions = require('./lib/userauthentication.js')
+  , passport = require('passport')
+  , flash = require('connect-flash')
+  , util = require('util')
   
-  res.redirect('/login');
+
+var app = express();
+
+// configure Express
+app.configure(function() {
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'ejs');
+  app.engine('ejs', require('ejs-locals'));
+  app.use(express.logger());
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.session({
+    secret : 'CtlFYUMLl1VdIr35'
+  }));
+  app.use(flash());
+  // Initialize Passport! Also use passport.session() middleware, to support
+  // persistent login sessions (recommended).
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.static(__dirname + '/../../public'));
 });
+
+
+/*Simple route middleware to ensure user is authenticated.
+Use this route middleware on any resource that needs to be protected.  If
+the request is authenticated (typically via a persistent login session),
+the request will proceed.  Otherwise, the user will be redirected to the
+login page.*/
+function ensureAuthenticated(req, res, next) {
+ if (req.isAuthenticated()) {
+   return next();
+ }
+ res.redirect('/login');
+}
 
 
 /*
- * Loading the User Authentication and Corpus Builder Module
- * everyauth.helpExpress is being deprecated. helpExpress is now automatically
- * invoked when it detects express. So remove everyauth.helpExpress from your
- * code
+ * Routes
  */
-//mongooseAuth.helpExpress(app);
+app.get('/', function(req, res) {
+  res.render('index', {
+    user : req.user
+  });
+});
 
-app.listen(node_config.port);
-console.log("Listening on " + node_config.apphttpsdomain+ "\n"+new Date());
+app.get('/account', ensureAuthenticated, function(req, res) {
+  res.render('account', {
+    user : req.user
+  });
+});
+
+app.get('/login', function(req, res) {
+  res.render('login', {
+    user : req.user,
+    message : req.flash('error')
+  });
+});
+
+// POST /login
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+//
+//   curl -v -d "username=bob&password=secret" http://127.0.0.1:3000/login
+app.post('/login', passport.authenticate('local', {
+  failureRedirect : '/login',
+  failureFlash : true
+}), function(req, res) {
+  res.redirect('/');
+});
+  
+// POST /login
+//   This is an alternative implementation that uses a custom callback to
+//   acheive the same functionality.
+/*
+app.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err) }
+    if (!user) {
+      req.flash('error', info.message);
+      return res.redirect('/login')
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/users/' + user.username);
+    });
+  })(req, res, next);
+});
+*/
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+app.listen(3000);
+
+
+
