@@ -112,17 +112,19 @@ app.post('/login', function(req, res, next) {
 app.post('/register', function(req, res, fn ) {
   
   authenticationfunctions.registerNewUser('local', req, function(err, user, info) {
+    var returndata = {};
     if (err) {
-      console.log("There was an error in the authenticationfunctions.registerNewUser"+ err);
-//      res.send(util.inspect(err));
-      res.send("bug")
+      console.log(new Date() + " There was an error in the authenticationfunctions.registerNewUser"+ util.inspect(err));
+      returndata.errors = info;
     }
     if (!user) {
-      req.flash('error', info.message);
-      res.send(util.inspect(info));
+      returndata.errors = info;
+    }else{
+      returndata.user = user;
+      returndata.info = info;
+      console.log(new Date() + " Returning the newly built user: "+util.inspect(user));
     }
-    console.log("Returning the user: "+util.inspect(user));
-    res.send(util.inspect(user));
+    res.send(util.inspect(returndata));
 
   });
 });
