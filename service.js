@@ -29,41 +29,9 @@ app.configure(function() {
 });
 
 
-/*Simple route middleware to ensure user is authenticated.
-Use this route middleware on any resource that needs to be protected.  If
-the request is authenticated (typically via a persistent login session),
-the request will proceed.  Otherwise, the user will be redirected to the
-login page.*/
-//function ensureAuthenticated(req, res, next) {
-// if (req.isAuthenticated()) {
-//   return next();
-// }
-// res.redirect('/login');
-//}
-
-
 /*
  * Routes
  */
-app.get('/', function(req, res) {
-  res.render('index', {
-    user : req.user
-  });
-});
-
-//app.get('/account', ensureAuthenticated, function(req, res) {
-//  res.render('account', {
-//    user : req.user
-//  });
-//});
-
-app.get('/login', function(req, res) {
-  res.render('login', {
-    user : req.user,
-    message : req.flash('error')
-  });
-});
-
 // POST /login
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
@@ -71,31 +39,35 @@ app.get('/login', function(req, res) {
 //   which, in this example, will redirect the user to the home page.
 //
 //   curl -v -d "username=bob&password=secret" http://127.0.0.1:3000/login
-app.post('/login', passport.authenticate('local', {
-  failureRedirect : '/login',
-  failureFlash : true
-}), function(req, res) {
-  res.redirect('/');
-});
+//app.post('/login', passport.authenticate('local', {
+//  failureRedirect : '/login',
+//  failureFlash : true
+//}), function(req, res) {
+//  res.redirect('/');
+//});
   
 // POST /login
 //   This is an alternative implementation that uses a custom callback to
 //   acheive the same functionality.
-/*
-app.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err) }
-    if (!user) {
-      req.flash('error', info.message);
-      return res.redirect('/login')
+app.post('/login', function(req, res) {
+  authenticationfunctions.authenticateUser(req.body.username, req.body.password,  function(err, user, info) {
+    var returndata = {};
+    if (err) {
+      console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
+      returndata.errors = info;
     }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.redirect('/users/' + user.username);
-    });
-  })(req, res, next);
+    if (!user) {
+      returndata.errors = info;
+    }else{
+      returndata.user = user;
+      returndata.info = info;
+      console.log(new Date() + " Returning the existing user as json:\n"+util.inspect(user));
+    }
+    res.send(util.inspect(returndata));
+  });
+
 });
-*/
+
 
 /*
  * Based off the login post alternative above. 
@@ -109,7 +81,25 @@ app.post('/login', function(req, res, next) {
 //  res.redirect('/');
 //});
 
-app.post('/register', function(req, res, fn ) {
+/**
+ * Takes in the http request and response. Calls the registerNewUser function in
+ * the authenticationfunctions library. The registerNewUser function takes in a
+ * method (local/twitter/facebook/etc) the http request, and a function to call
+ * after registerNewUer has completed. In this case the function is expected to
+ * be called with an err (null if no error), user (null if no user), and an info
+ * object containing a message which can be show to the calling application
+ * which sent the post request.
+ * 
+ * If there is an error, the info is added to the 'errors' attribute of the
+ * returned json.
+ * 
+ * If there is a user, the user is added to the 'user' attribute of the returned
+ * json. If there is no user, the info is again added to the 'errors' attribute
+ * of the returned json.
+ * 
+ * Finally the returndata json is sent to the calling application via the response.
+ */
+app.post('/register', function(req, res ) {
   
   authenticationfunctions.registerNewUser('local', req, function(err, user, info) {
     var returndata = {};
@@ -129,7 +119,51 @@ app.post('/register', function(req, res, fn ) {
   });
 });
 
+/**
+ * @deprecated not needed for an authentication webservice
+ */
+app.get('/', function(req, res) {
+  res.render('index', {
+    user : req.user
+  });
+});
 
+/*
+ * Simple route middleware to ensure user is authenticated. Use this route
+ * middleware on any resource that needs to be protected. If the request is
+ * authenticated (typically via a persistent login session), the request will
+ * proceed. Otherwise, the user will be redirected to the login page.
+ *  
+ * @deprecated  not needed for an authentication webservice
+ */
+//function ensureAuthenticated(req, res, next) {
+// if (req.isAuthenticated()) {
+//   return next();
+// }
+// res.redirect('/login');
+//}
+
+/**
+ * @deprecated  not needed for an authentication webservice
+ */
+//app.get('/account', ensureAuthenticated, function(req, res) {
+//  res.render('account', {
+//    user : req.user
+//  });
+//});
+
+/**
+ * @deprecated  not needed for an authentication webservice
+ */
+app.get('/login', function(req, res) {
+  res.render('login', {
+    user : req.user,
+    message : req.flash('error')
+  });
+});
+/**
+ * @deprecated  not needed for an authentication webservice
+ */
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
