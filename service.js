@@ -1,11 +1,18 @@
-var express = require('express')
+var https = require('https')
+  , express = require('express')
   , authenticationfunctions = require('./lib/userauthentication.js')
+  , node_config = require("./lib/nodeconfig_local")
   , passport = require('passport')
   , flash = require('connect-flash')
+  , fs = require('fs')
   , util = require('util');
-  
 
-var app = express();
+//read in the specified filenames as the security key and certificate
+node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
+node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
+
+
+var app = express(node_config.httpsOptions);
 
 // configure Express
 app.configure(function() {
@@ -32,23 +39,11 @@ app.configure(function() {
 /*
  * Routes
  */
-// POST /login
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
-//
-//   curl -v -d "username=bob&password=secret" http://127.0.0.1:3000/login
-//app.post('/login', passport.authenticate('local', {
-//  failureRedirect : '/login',
-//  failureFlash : true
-//}), function(req, res) {
-//  res.redirect('/');
-//});
-  
-// POST /login
-//   This is an alternative implementation that uses a custom callback to
-//   acheive the same functionality.
+
+/**
+ * Responds to requests for login, if sucessful replies with the user's details
+ * as json
+ */
 app.post('/login', function(req, res) {
   authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
     var returndata = {};
@@ -69,18 +64,6 @@ app.post('/login', function(req, res) {
 
 });
 
-
-/*
- * Based off the login post alternative above. 
- */
-
-//app.post('/register',
-//    authenticationfunctions.registerNewUser('local', req, {
-//  failureRedirect : '/login',
-//  failureFlash : true
-//}), function(req, res) {
-//  res.redirect('/');
-//});
 
 /**
  * Takes in the http request and response. Calls the registerNewUser function in
@@ -170,7 +153,7 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.listen(3000);
-
+app.listen(node_config.port);
+console.log("Express server listening on port %d", node_config.port);
 
 
