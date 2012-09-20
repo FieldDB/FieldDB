@@ -6,12 +6,15 @@ echo "Put the Node server to act as the localhost server"
 sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' service.js  > output
 mv output service.js
 
-sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' lib/restfullmongooseusers.js  > output
-mv output lib/restfullmongooseusers.js
-sed 's/everyauthconfig_[^)]*)/everyauthconfig_local")/' lib/restfullmongooseusers.js  > output
-mv output lib/restfullmongooseusers.js
-sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/restfullmongooseusers.js  > output
-mv output lib/restfullmongooseusers.js
+sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' lib/userauthentication.js  > output
+mv output lib/userauthentication.js
+sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/userauthentication.js  > output
+mv output lib/userauthentication.js
+
+sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' lib/corpusmanagement.js  > output
+mv output lib/corpusmanagement.js
+sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/corpusmanagement.js  > output
+mv output lib/corpusmanagement.js
 
 echo ""
 echo ""

@@ -2,14 +2,16 @@
   "name": "FieldDBAuthenticationService",
   "version": "0.1.21",
   "dependencies": {
-    "express": "2.5.10"
+    "express": "latest"
+    ,"connect-flash": "0.1.x"
+    ,"ejs": ">= 0.0.0"
+    ,"ejs-locals": ">= 0.0.0"
+    ,"bcrypt": "latest"
+    ,"passport": ">= 0.0.0"
+    ,"passport-local": ">= 0.0.0"
     ,"forever":"0.9.2"
+    , "nano": "latest"
+    , "nodemailer" : "latest"
     ,"cradle": "latest"
-    ,"mongoose": "latest"
-    ,"mongoose-auth": "latest"
-    ,"paperboy": "latest"
-    ,"zlib": "latest"                     
-    ,"crypto":"latest"
-    ,"everyauth": "latest"
   }
 }
