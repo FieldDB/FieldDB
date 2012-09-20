@@ -225,8 +225,12 @@ define([
               });
             });
           },
-          error : function(e) {
-//            alert("There was an error fetching corpus. Loading defaults..."+e);
+          error : function(e, x, y ) {
+            console.log(e);
+            console.log(x);
+            console.log(y);
+            
+            alert("There was an error fetching corpus. Loading defaults..."+e);
             document.location.href='user.html';
 
           }
@@ -325,8 +329,11 @@ define([
               alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             });//end setAsCurrentCorpus
           },
-          error : function(e) {
-            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(e));
+          error : function(model, error, other) {
+            console.log(model);
+            console.log(error);
+            console.log(other);
+            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(error));
             document.location.href='user.html';
 
           }
