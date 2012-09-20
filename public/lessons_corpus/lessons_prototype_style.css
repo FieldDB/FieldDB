@@ -1,0 +1,17 @@
+.tile {
+	margin: 1em;
+	padding: 2em;
+	font-size:2em;
+	float: left;
+	width: 3em;
+	text-align: center;
+}
+
+.tile_container {
+	width: 90%;
+    margin: 0px auto;
+}
+
+.end_tiles {
+	clear: both;
+}
