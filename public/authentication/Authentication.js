@@ -68,7 +68,7 @@ define([
      */
     authenticate : function(user, successcallback, failcallback) {
       var dataToPost = {};
-      dataToPost.login = user.get("username");
+      dataToPost.username = user.get("username");
       dataToPost.password = user.get("password");
       if(this.get("userPrivate") != undefined){
         //if the same user is re-authenticating, include their details to sync to the server.
@@ -107,7 +107,9 @@ define([
         },//end successful login
         error: function(e){
           Utils.debug("Ajax failed, user might be offline.", e);
-          window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
+          if(window.appView){
+            window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
+          }
 
           if (typeof failcallback == "function") {
             failcallback();
