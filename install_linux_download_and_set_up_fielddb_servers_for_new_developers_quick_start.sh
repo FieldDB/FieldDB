@@ -21,8 +21,6 @@ cd FieldDB
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote add upstream git@github.com:OpenSourceFieldlinguistics/FieldDB.git
 git remote rm origin
-echo "Compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
-bash compile_handlebars.sh
 
 ## Webservice dependencies ###################################################
 
@@ -41,22 +39,10 @@ echo "export PATH=$HOME/fielddbworkspace/node/bin:$PATH" >> ~/.profile
 source ~/.profile
 
 
-## Authentication server dependencies ###################################################
-
-echo -en '\E[47;34m'"\033[1mE"
-echo  "Downloading the Mongo Database files, this is where users are stored."
-curl -O --retry 999 --retry-max-time 0 -C -  http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.0.7.tgz 
-tar -zxvf mongodb-linux-x86_64-2.0.7.tgz
-mv mongodb-linux-x86_64-2.0.7 mongodb
-cd mongodb/bin
-echo "Creating folders to hold a Mongo database"
-mkdir $HOME/fielddbworkspace/usersdatabase
-mkdir $HOME/fielddbworkspace/usersdatabase/db
-echo "Attempting to turn on mongodb on its normal port"
-./mongod --dbpath $HOME/fielddbworkspace/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace/logs/mongodb.log --logappend
-
-#./mongod --dbpath $HOME/fielddbworkspace_local/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace_local/logs/mongodb.log --logappend
-
+cd $HOME/fielddbworkspace/FieldDB
+echo "Compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
+npm install handlebars
+bash compile_handlebars.sh
 
 ## FieldDB Web services ###################################################
 
@@ -117,14 +103,16 @@ git remote rm origin
 
 ## DB service dependencies ###################################################
 
-echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
-cd $HOME/fielddbworkspace
-curl -O --retry 999 --retry-max-time 0 -C - http://apache.skazkaforyou.com/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz 
-tar -zxvf apache-couchdb-1.2.0.tar.gz
-cd apache-couchdb-1.2.0
-./configure --prefix=$HOME/fielddbworkspace/couchdb
-make
-make install
+## This is optional, do this if you do not want to use iriscouch.com or another couch db hosting service.
+
+#echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
+#cd $HOME/fielddbworkspace
+#curl -O --retry 999 --retry-max-time 0 -C - http://apache.skazkaforyou.com/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz 
+#tar -zxvf apache-couchdb-1.2.0.tar.gz
+#cd apache-couchdb-1.2.0
+#./configure --prefix=$HOME/fielddbworkspace/couchdb
+#make
+#make install
 
 ## Running tests to see if everything downloaded and works ###################################################
 
