@@ -10,9 +10,9 @@ sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' lib/userauthentication.js  > outpu
 mv output lib/userauthentication.js
 sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/userauthentication.js  > output
 mv output lib/userauthentication.js
+sed 's/mailconfig_[^)]*)/mailconfig_local")/' lib/userauthentication.js  > output
+mv output lib/userauthentication.js
 
-sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' lib/corpusmanagement.js  > output
-mv output lib/corpusmanagement.js
 sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/corpusmanagement.js  > output
 mv output lib/corpusmanagement.js
 
