@@ -12,7 +12,7 @@ node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
 node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
 
 
-var app = express(node_config.httpsOptions);
+var app = express();
 
 // configure Express
 app.configure(function() {
@@ -49,17 +49,17 @@ app.post('/login', function(req, res) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
-      returndata.errors = info;
+      returndata.errors = [info.message];
     }
     if (!user) {
-      returndata.errors = info;
+      returndata.errors = [info.message];
     }else{
       returndata.user = user;
       delete returndata.user.serverlogs;
-      returndata.info = info;
+      returndata.info = [info.message];
       console.log(new Date() + " Returning the existing user as json:\n"+util.inspect(user));
     }
-    res.send(util.inspect(returndata));
+    res.send(returndata);
   });
 
 });
@@ -89,16 +89,16 @@ app.post('/register', function(req, res ) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.registerNewUser"+ util.inspect(err));
-      returndata.errors = info;
+      returndata.errors = [info.message];
     }
     if (!user) {
-      returndata.errors = info;
+      returndata.errors = [info.message];
     }else{
       returndata.user = user;
-      returndata.info = info;
+      returndata.info = [info.message];
       console.log(new Date() + " Returning the newly built user: "+util.inspect(user));
     }
-    res.send(util.inspect(returndata));
+    res.send(returndata);
 
   });
 });
@@ -153,7 +153,9 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.listen(node_config.port);
+https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
+
+//app.listen(node_config.port);
 console.log("Express server listening on port %d", node_config.port);
 
 
