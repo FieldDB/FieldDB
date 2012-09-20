@@ -54,9 +54,13 @@
 //  pageTracker._trackPageview('/search_results.php?q=searchterm'); 
   
   
-  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-  var hndl = window.setTimeout("StartTracking()", 100);
+//  var gaJsHost =  "https://ssl." ;
+//  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+//  console.log("Attempting to load "+ gaJsHost + "google-analytics.com/ga.js");
+  //Chrome manifest 2 doesnt work so put a static ga.js into the project.
+  var hndl = window.setTimeout(function() {
+    StartTracking();
+  }, 100);
   function StartTracking(){
     if (typeof(_gat) == 'object')
     {
@@ -65,6 +69,8 @@
       window.pageTracker._initData();
       window.pageTracker._trackPageview();
     } else {
-      hndl = window.setTimeout("StartTracking()", 1000);
+      hndl = window.setTimeout(function() {
+        StartTracking();
+      }, 1000);
     }
   }
