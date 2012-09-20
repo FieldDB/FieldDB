@@ -389,7 +389,8 @@ The project has three core modules which must be developed prior to additional m
 \subsubsection{Collaboration Module}
 The collaboration module shown in Table~\ref{table-collaboration}  deals with users, teams, permissions, user authentication,  as well as allowing users to see changes, modifications, and data verification in the form of an ``Activity Feed.'' An activity feed is a common design pattern which allows users to learn form other users how to use the software, what are popular functions other users are completing in addition to being a central location to update oneself on the activity in the corpus. The system will have special users called ``bot'' which are scripts or programs which power users can write in Javascript which will crawl their corpus and clean/automate batch actions.
 
-We estimate the total cost of the collaboration module to be around \$5,700 before taxes. The implementation of the collaboration module was begun on April 20th 2012. We will have its final costs on August 3rd 2012.
+We estimate the total cost of the collaboration module to be around \$5,700 before taxes. The implementation of the collaboration module was begun on April 20th 2012, and finished on August 1st 2012, with the exception of Team Feed and Team Preference Widgets. 
+%User/Consultant/Team tests are not done either. 
 \begin{table}[h]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -408,7 +409,7 @@ User list item Widget&	16&	HTML5	\\
 Team Preferences Widget&	8&	HTML5	\\ 
 User Profile Widget&	8&	HTML5	\\ 
 User Tests&	30&	Javascript \\ 
-consultant Tests&	30&	Javascript	\\ 
+Consultant Tests&	30&	Javascript	\\ 
 Team Tests&	30&	Javascript	\\ 
 Android Deployment&	15&	Java	\\ 
 Chrome Extension Deployment&	20&	Javascript \\ 
@@ -426,7 +427,7 @@ Heroku Deployment&	5&	Integration	\\
 \subsubsection{Corpus Module}
 The corpus module shown in Table~\ref{table-corpus} deals with storing confidential data in the AES US Federal encryption standard, replicating the corpus locally on the  users' computers, as well as on a central server hosted either in the cloud, or on a linguistic department's server. The corpus module contains all of the core logic, including data fields, session fields, as well as data lists which are used to curate lists of data for handouts or publication either in linguistic articles or as web widgets embedded in external websites such as linguistic department blogs, or project pages. The corpus module is also where search of datum is implemented. 
 
-We estimate the total cost of the corpus module to be around \$9,200 before taxes. The implementation of the corpus module was begun on April 20th 2012. We will know its final costs on August 3rd 2012.
+We estimate the total cost of the corpus module to be around \$9,200 before taxes. The implementation of the corpus module was begun on April 20th 2012, and finished on August 1st 2012, with the exception of Corpus diff Widget.
 \begin{table}[htbp]
 \begin{center}
   \begin{tabular}{ | lcl | }
@@ -525,7 +526,70 @@ Heroku Deployment&	5&  Integration \\
 
 \subsection{``Dream'' Modules}
 
-The "dream" modules allow for more features that will save reachers time in their data entry and data anysis, but which are not necessary for simply entering and transcribing data. These modules are on hold until budget becomes available. 
+The "dream" modules allow for more features that will save researchers time in their data entry and data analysis, but which are not necessary for simply entering and transcribing data. These modules are on hold until budget becomes available.
+
+
+\subsubsection{Language Learning Module}
+The language learning module shown in Table ~\ref{tab:langlearn} enables researchers and language teachers to create language learning aids using the data in existing corpora. The learning aids aim to help language learners improve their listening and speaking skills. The orthographic lines (i.e. utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create a lesson. 
+
+
+The prototype of the language learning module was begun on September 13th 2012.
+
+\begin{table}[htbp]
+\begin{center}
+  \begin{tabular}{ | lcl | }
+\hline
+Iteration &	 Hours &	Technology	\\
+\hline
+-- Prototype && \\ 
+Software Architecture Design & 55 & Software Engineering \\
+Lesson Datum Model & 15  & Javascript \\
+Lesson Datum Listen and Repeat View & 20  & Javascript \\
+XML import logic  & 6 & Javascript \\ 
+Datum to Lesson logic  & 6  & Map Reduce \\ 
+DataList to Unit logic  & 6  & Map Reduce \\ 
+Corpus to Language Learning logic  &  10  & Map Reduce \\ 
+Main Manu Dashboard  & 6  & HTML \\ 
+Student LIsten and Repeat Dashboard  & 10  & HTML \\ 
+Student Instructions View  & 6  & Javascript \\ 
+Audio Visualization View  & 30  & Javascript \\ 
+Audio Play/Record View  & 10  & Javascript \\ 
+Audio Text Time Alignment logic  & 20  & Javascript \\ 
+Audio Record Android logic  &  6  & Java \\ 
+Android Packaging  & 15  & Java \\ 
+% # of weeks with 1 full-time personnel supervising 2 interns 4.775 
+\hline 
+Software Architecture Design & 40 & Software Engineering  \\ 
+Teacher User Model  &  10 &  Javascript \\ 
+Teacher User View  &  40  & Javascript \\ 
+Language Learning Corpus  &  10 &  Javascript \\ 
+Language Learning Corpus View  &  40  & Javascript \\ 
+Language Learning Corpus Dashboard  &  10  & HTML \\ 
+Student User Model  &  30  & Javascript \\ 
+Student User View  &  60  & Javascript \\ 
+Datum Shadowing Lesson Model  & 10 & Javascript \\ 
+Datum Shadowing Lesson View  &  10  &  Javascript \\ 
+Student Shadowing Lesson Dashboard &  40 & HTML \\ 
+Datum Quiz Multiple Choice Model  & 20  & Javascript \\ 
+Datum Quiz Multiple Choice View  &  20  & Javascript \\ 
+Student Quiz Dashboard  & 120  & HTML \\ 
+Datum Prompted Production Model  & 20  & Javascript \\ 
+Datum Prompted Production View  & 20  & Javascript \\ 
+Student Prompted Productions Dashboard  &  40  & HTML \\ 
+Feedback Comment Model  & 10  & Javascript \\ 
+Feedback Comment View  & 40  & Javascript \\ 
+Comment Teacher Feedback logic & 6  & Map Reduce \\ 
+Audio import to Multiple Utterances logic   & 60  & Praat \& Javascript \\ 
+Audio File Server  & 140  & Node \\ 
+% # of weeks with 1 full-time personnel 19.4 
+\hline
+  \end{tabular}
+ \caption{The Language Learning Module enables to use data in the database to create lessons for language learners.  }
+  \label{tab:langlearn}
+  \end{center}
+\end{table}
+
+
 
 \subsubsection{Phonological Search Module}
 The phonological search module shown in Table~\ref{tab:phono} is used to search for phonological features in context. It consists of a phonology ontology (a general purpose feature geometry/articulatory feature ontology, or a customized ontology created by the users for their language of interest) which lets the user search for potential minimal pairs or phonological features in context to verify with consultants or to prepare psycholinguistic experiments. The phonological search module is used by the {\it  phonetic aligner} module to generate a ``dictionary.txt'' file containing orthography and phones which is used by the phonetic aligner module.
