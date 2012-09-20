@@ -1,17 +1,56 @@
 .tile {
 	margin: 1em;
-	padding: 2em;
-	font-size:2em;
+	font-size: 1.5em;
 	float: left;
-	width: 3em;
+	width: 6em;
+	line-height: 6em;
+	vertical-align: middle;
 	text-align: center;
+	vertical-align: middle;
+}
+
+.centered_page {
+	width: 95%;
+	margin: auto;
 }
 
 .tile_container {
-	width: 90%;
-    margin: 0px auto;
+	width: 95%;
+	margin: 0px auto;
 }
 
 .end_tiles {
 	clear: both;
+}
+
+.total_progress {
+  line-height: 0em;
+  height: 0em;
+}
+
+progress {
+	width: 100%;
+	margin: 0em;
+	padding: 0em;
+	height: 0.5em;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	/* gets rid of default border in Firefox and Opera. */
+	border: solid #333 1px;
+	border-radius: 3px;
+	background-color: red !important;
+}
+
+/* Chrome */
+progress::-webkit-progress-bar {
+	background-color: white; 
+}
+
+.total_complete progress::-webkit-progress-value {
+  background-color: rgba(255, 255, 50, 0.5);
+}
+
+.correct_complete progress::-webkit-progress-value {
+  background-color: rgba(100, 200, 100, 0.5);
 }
