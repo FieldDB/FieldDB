@@ -77,7 +77,7 @@ define([
         $(".registerpassword").focus();
       },
       "click .register-new-user" : "registerNewUser",
-      "keyup .to-confirm-password" : function(e) {
+      "keyup .registeruseremail" : function(e) {
         var code = e.keyCode || e.which;
         
         // code == 13 is the enter key
@@ -166,7 +166,7 @@ define([
           self.appVersion = ver;
           $(self.el).find(".welcome_version_number").html("v"+ver);
         });
-        
+        $(this.el).find(".welcomeauthurl").val(Utils.authUrl);
         
       } else {
         Utils.debug("\User model was undefined");
@@ -188,8 +188,8 @@ define([
        */
       var dataToPost = {};
       $(".registerusername").val( $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
-      dataToPost.login = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
-      dataToPost.emailaddress = $(".registeruseremail").val().trim();
+//      dataToPost.login = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
+      dataToPost.email = $(".registeruseremail").val().trim();
       dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = Utils.authUrl;
@@ -205,7 +205,7 @@ define([
      
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
-        && dataToPost.emailaddress != "") {
+        && dataToPost.email != "") {
         Utils.debug("User has entered an email and the passwords match. ");
         var a = new App();
         window.app = a;
@@ -283,12 +283,14 @@ define([
                   
                   c.changePouch(data.user.corpuses[0]);
                   a.saveAndInterConnectInApp(function(){
-                    alert("save app succeeded");
+//                    alert("save app succeeded");
                     localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
                     document.location.href='corpus.html';
-                  },function(){
-                    alert("save app failed.");
-                  });
+                  }
+//                  ,function(){
+//                    alert("Bug! save app failed.");
+//                  }
+                  );
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
 //                  window.startApp(a, function(){
 ////                     auth.get("userPrivate").addCurrentCorpusToUser();
@@ -347,12 +349,14 @@ define([
       console.log("hiding user welcome, syncing users data");
       var u = new User({username:username, password: password, authUrl: authUrl });
       a = new App();
+      window.app = a;
+
       var auth = a.get("authentication");
       auth.authenticate(u, function(success, errors){
         if(success == null){
           $(".alert-error").html(
               errors.join("<br/>") + " " + Utils.contactUs);
-//          alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
+//        alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
           $(".alert-error").show();
           $('#user-welcome-modal').modal("show");
         }else{
@@ -360,34 +364,17 @@ define([
           $(".alert-error").addClass("alert-success");
           $(".alert-error").removeClass("alert-error");
           $(".alert-error").show();
+          //TODO let them choose their corpus
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
-            $('#user-welcome-modal').modal("hide");
-            window.startApp(a, function(){
-              var couchConnection = auth.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
-              window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
-                //Replicate user's corpus down to pouch
-                window.setTimeout(function(){
-                  window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
-                    if(auth.get("userPrivate").get("mostRecentIds") == undefined){
-                      //do nothing because they have no recent ids
-                      alert("Bug: User does not have most recent ids, not showing your most recent dashbaord.");
-//                      appView.datumsEditView.newDatum();
-//                      appView.datumsEditView.render();
-                      window.app.router.showDashboard();
-
-                    }else{
-                      /*
-                       *  Load their last corpus, session, datalist etc
-                       */
-                      var appids = auth.get("userPrivate").get("mostRecentIds");
-                      window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
-                    }                    
-                  });
-                },3000);
+            var couchConnection = auth.get("userPrivate").get("corpuses")[0];
+            window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+              //Replicate user's corpus down to pouch
+              window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
+                //Must replicate before redirecting to dashboard, otherwise the pouch and corpus will be empty
+                document.location.href='corpus.html';
               });
             });
           });
-          
         }
       });
     }
