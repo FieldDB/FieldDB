@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $HOME/fielddbworkspace/AuthenticationWebService
+bash switch_to_producti.sh 
 
 $HOME/fielddbworkspace/AuthenticationWebService/node_modules/forever/bin/forever \
 start \
