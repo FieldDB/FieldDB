@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#cd mongodb/bin
-#./mongod --dbpath $HOME/fielddbworkspace/usersdatabase/db  --fork --logpath $HOME/fielddbworkspace/logs/mongodb.log --logappend
+cd $HOME/fielddbworkspace/AuthenticationWebService
+bash switch_to_producti.sh 
 
-./node_modules/forever/bin/forever \
+$HOME/fielddbworkspace/AuthenticationWebService/node_modules/forever/bin/forever \
 start \
--al ../logs/fielddbauth.log \
--ao out.log \
--ae err.log \
+-al $HOME/fielddbworkspace/logs/fielddbauth.log \
+-ao $HOME/fielddbworkspace/logs/fielddbauthout.log \
+-ae $HOME/fielddbworkspace/logs/fielddbautherr.log \
 service.js

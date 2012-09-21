@@ -2,8 +2,6 @@ var https = require('https')
   , express = require('express')
   , authenticationfunctions = require('./lib/userauthentication.js')
   , node_config = require("./lib/nodeconfig_devserver")
-  , passport = require('passport')
-  , flash = require('connect-flash')
   , fs = require('fs')
   , util = require('util');
 
@@ -16,9 +14,6 @@ var app = express();
 
 // configure Express
 app.configure(function() {
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.engine('ejs', require('ejs-locals'));
   app.use(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
@@ -26,11 +21,6 @@ app.configure(function() {
   app.use(express.session({
     secret : 'CtlFYUMLl1VdIr35'
   }));
-  app.use(flash());
-  // Initialize Passport! Also use passport.session() middleware, to support
-  // persistent login sessions (recommended).
-  app.use(passport.initialize());
-  app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/../../public'));
 });
@@ -103,59 +93,9 @@ app.post('/register', function(req, res ) {
   });
 });
 
-/**
- * @deprecated not needed for an authentication webservice
- */
-app.get('/', function(req, res) {
-  res.render('index', {
-    user : req.user
-  });
-});
-
-/*
- * Simple route middleware to ensure user is authenticated. Use this route
- * middleware on any resource that needs to be protected. If the request is
- * authenticated (typically via a persistent login session), the request will
- * proceed. Otherwise, the user will be redirected to the login page.
- *  
- * @deprecated  not needed for an authentication webservice
- */
-//function ensureAuthenticated(req, res, next) {
-// if (req.isAuthenticated()) {
-//   return next();
-// }
-// res.redirect('/login');
-//}
-
-/**
- * @deprecated  not needed for an authentication webservice
- */
-//app.get('/account', ensureAuthenticated, function(req, res) {
-//  res.render('account', {
-//    user : req.user
-//  });
-//});
-
-/**
- * @deprecated  not needed for an authentication webservice
- */
-app.get('/login', function(req, res) {
-  res.render('login', {
-    user : req.user,
-    message : req.flash('error')
-  });
-});
-/**
- * @deprecated  not needed for an authentication webservice
- */
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
 
 //app.listen(node_config.port);
 console.log("Express server listening on port %d", node_config.port);
-
 
