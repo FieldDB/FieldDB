@@ -1,18 +1,19 @@
 #!/bin/bash
 
-#Compile handlebars templates: required to use chrome extension, and avoid insecure script injection vunerabilites
-./compile_handlebars.sh
+cd $HOME/fielddbworkspace/FieldDBWebServer
+bash switch_to_producti.sh
 
-./node_modules/forever/bin/forever \
+$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever \
 start \
--al ../logs/httpredirectapp.log \
--ao out.log \
--ae err.log \
+-al $HOME/fielddbworkspace/logs/httpredirectapp.log \
+-ao $HOME/fielddbworkspace/logs/httpredirectout.log \
+-ae $HOME/fielddbworkspace/logs/httpredirecterr.log \
 httpredirectapp.js
 
-./node_modules/forever/bin/forever \
+cd $HOME/fielddbworkspace/FieldDBWebServer
+$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever \
 start \
--al ../logs/fieldbwww.log \
--ao out.log \
--ae err.log \
+-al $HOME/fielddbworkspace/logs/fielddbwww.log \
+-ao $HOME/fielddbworkspace/logs/fielddbwwwout.log \
+-ae $HOME/fielddbworkspace/logs/fielddbwwwerr.log \
 server.js

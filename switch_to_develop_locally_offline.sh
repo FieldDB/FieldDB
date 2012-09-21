@@ -1,12 +1,9 @@
 #!/bin/bash
 
 echo ""
-echo ""
 echo "Put the Node server to act as the localhost server"
 sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' server.js  > output
 mv output server.js
 
-echo ""
-echo ""
 echo "Now running in local/offline developer mode using the localhost."
 

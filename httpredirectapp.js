@@ -1,9 +1,12 @@
-var express = require('express');
+var http = require('http')
+    , express = require('express')
+    , node_config = require("./lib/nodeconfig_production");
 
 //Everyauth and express keep routing to http rather than https
 //http://stackoverflow.com/questions/7450940/automatic-https-connection-redirect-with-node-js-express
-var http = express.createServer();
-http.get('*',function(req,res){  
-    res.redirect('https://www.fieldlinguist.com'+req.url);
+var app = express();
+app.get('*',function(req,res){  
+    res.redirect(node_config.apphttpsdomain+req.url);
 });
-http.listen(8080);
+http.createServer(app).listen("3182"); 
+
