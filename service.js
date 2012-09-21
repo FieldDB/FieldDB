@@ -2,7 +2,6 @@ var https = require('https')
   , express = require('express')
   , authenticationfunctions = require('./lib/userauthentication.js')
   , node_config = require("./lib/nodeconfig_devserver")
-  , passport = require('passport')
   , fs = require('fs')
   , util = require('util');
 
@@ -22,10 +21,6 @@ app.configure(function() {
   app.use(express.session({
     secret : 'CtlFYUMLl1VdIr35'
   }));
-  // Initialize Passport! Also use passport.session() middleware, to support
-  // persistent login sessions (recommended).
-  app.use(passport.initialize());
-  app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/../../public'));
 });
@@ -98,30 +93,6 @@ app.post('/register', function(req, res ) {
   });
 });
 
-
-/*
- * Simple route middleware to ensure user is authenticated. Use this route
- * middleware on any resource that needs to be protected. If the request is
- * authenticated (typically via a persistent login session), the request will
- * proceed. Otherwise, the user will be redirected to the login page.
- *  
- * @deprecated  not needed for an authentication webservice
- */
-//function ensureAuthenticated(req, res, next) {
-// if (req.isAuthenticated()) {
-//   return next();
-// }
-// res.redirect('/login');
-//}
-
-/**
- * @deprecated  not needed for an authentication webservice
- */
-//app.get('/account', ensureAuthenticated, function(req, res) {
-//  res.render('account', {
-//    user : req.user
-//  });
-//});
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
 
