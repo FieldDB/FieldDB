@@ -41,6 +41,7 @@ define([
           success : function(data) {
             console.log("Got data back from the server about this corpus: ", data);
             var corpus = new CorpusMask(JSON.parse(data));
+            corpus.corpusid = couchConnection.corpusid;
             self.unshift(corpus);
           },
           error : function(data){

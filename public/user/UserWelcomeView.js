@@ -286,8 +286,12 @@ define([
                   c.changePouch(data.user.corpuses[0]);
                   a.saveAndInterConnectInApp(function(){
 //                    alert("save app succeeded");
-                    localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
-                    document.location.href='corpus.html';
+                    //Put this corpus's id into the couchconnection in the user so that we can fetch the private view of the corpus directly
+                    auth.get("userPrivate").get("corpuses")[0].corpusid = c.id;
+                    auth.saveAndInterConnectInApp(function(){
+                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
+                      document.location.href='user.html#corpus/'+data.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
+                    });
                   }
 //                  ,function(){
 //                    alert("Bug! save app failed.");

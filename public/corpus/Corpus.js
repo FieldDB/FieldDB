@@ -362,6 +362,8 @@ define([
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
+      }else{
+        this.get("couchConnection").corpusid = this.id;
       }
       var oldrev = this.get("_rev");
       
@@ -769,8 +771,8 @@ define([
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
-                alert('Corpus replicate to error' + JSON.stringify(err));
-                Utils.debug('Corpus replicate to error' + JSON.stringify(err));
+                alert('Corpus replicate from error' + JSON.stringify(err));
+                Utils.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             }else{
               Utils.debug("Corpus replicate from success", response);
@@ -781,8 +783,8 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }
-              
-              window.app.get("currentCorpusTeamActivityFeed").addActivity(
+              if(window.app.get("currentCorpusTeamActivityFeed")){
+                window.app.get("currentCorpusTeamActivityFeed").addActivity(
                   new Activity({
                     verb : "downloaded",
                     verbmask : "downloaded",
@@ -796,7 +798,9 @@ define([
                     contextmask : "",
                     teamOrPersonal : "team"
                   }));
-              window.app.get("currentUserActivityFeed").addActivity(
+              }
+              if(window.app.get("currentUserActivityFeed")){
+                window.app.get("currentUserActivityFeed").addActivity(
                   new Activity({
                     verb : "downloaded",
                     verbmask : "downloaded",
@@ -810,6 +814,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "personal"
                   }));
+              }
               
               // Get the corpus' current precedence rules
               self.buildMorphologicalAnalyzerFromTeamServer(self.get("pouchname"));
