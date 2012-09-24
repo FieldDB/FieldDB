@@ -211,10 +211,10 @@ define([
         window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
-        $(".alert-error").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you, this'll just take a minute...</p> <progress max='100'> <strong>Progress: working...</strong>" );
-        $(".alert-error").addClass("alert-success");
-        $(".alert-error").show();
-        $(".alert-error").removeClass("alert-error");
+        $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+        $(".welcome-screen-alerts").addClass("alert-success");
+        $(".welcome-screen-alerts").show();
+        $(".welcome-screen-alerts").removeClass("alert-error");
         $(".register-new-user").addClass("disabled");
         $(".register-new-user").attr("disabed","disabled");
         /*
@@ -226,8 +226,8 @@ define([
           data : dataToPost,
           success : function(data) {
             if (data.errors != null) {
-              $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
-              $(".alert-error").show();
+              $(".welcome-screen-alerts").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+              $(".welcome-screen-alerts").show();
             } else if (data.user) {
               
 
@@ -333,8 +333,8 @@ define([
         });
       } else{
         Utils.debug("User has not entered good info. ");
-          $(".alert-error").html("Your passwords don't seem to match. " + Utils.contactUs );
-          $(".alert-error").show();
+          $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + Utils.contactUs );
+          $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
 
       }
@@ -353,19 +353,25 @@ define([
       a = new App();
       window.app = a;
 
+      $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+      $(".welcome-screen-alerts").addClass("alert-success");
+      $(".welcome-screen-alerts").show();
+      $(".welcome-screen-alerts").removeClass("alert-error");
+      
       var auth = a.get("authentication");
       auth.authenticate(u, function(success, errors){
         if(success == null){
-          $(".alert-error").html(
+          $(".welcome-screen-alerts").html(
               errors.join("<br/>") + " " + Utils.contactUs);
 //        alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
-          $(".alert-error").show();
-          $('#user-welcome-modal').modal("show");
+          $(".welcome-screen-alerts").show();
+          $(".welcome-screen-alerts").addClass("alert-error");
+//          $('#user-welcome-modal').modal("show");
         }else{
-          $(".alert-error").html("Syncing your data to this tablet/laptop." );
-          $(".alert-error").addClass("alert-success");
-          $(".alert-error").removeClass("alert-error");
-          $(".alert-error").show();
+          $(".welcome-screen-alerts").html("Syncing your data to this tablet/laptop." );
+          $(".welcome-screen-alerts").addClass("alert-success");
+          $(".welcome-screen-alerts").removeClass("alert-error");
+          $(".welcome-screen-alerts").show();
           //TODO let them choose their corpus
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
             var couchConnection = auth.get("userPrivate").get("corpuses")[0];
@@ -378,6 +384,13 @@ define([
             });
           });
         }
+      }, function(message){
+        $(".welcome-screen-alerts").html(
+            message+" Something went wrong, either we were unable to contact the server or something is wrong with your login info. Please try again " + Utils.contactUs);
+//      alert("Something went wrong, either we were unable to contact the server, or something is wrong with your login info.");
+        $(".welcome-screen-alerts").show();
+        $(".welcome-screen-alerts").addClass("alert-error");
+//        $('#user-welcome-modal').modal("show");
       });
     }
   });
