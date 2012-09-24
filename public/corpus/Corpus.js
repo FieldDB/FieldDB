@@ -882,7 +882,7 @@ define([
                       " If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
                 }
                 if (typeof failurecallback == "function") {
-                  failurecallback();
+                  failurecallback("I couldn't log you into your corpus.");
                 }
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);

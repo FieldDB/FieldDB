@@ -368,7 +368,7 @@ define([
           $(".welcome-screen-alerts").addClass("alert-error");
 //          $('#user-welcome-modal').modal("show");
         }else{
-          $(".welcome-screen-alerts").html("Syncing your data to this tablet/laptop." );
+          $(".welcome-screen-alerts").html("Attempting to sync your data to this tablet/laptop...</p> <progress max='100'> <strong>Progress: working...</strong>" );
           $(".welcome-screen-alerts").addClass("alert-success");
           $(".welcome-screen-alerts").removeClass("alert-error");
           $(".welcome-screen-alerts").show();
@@ -381,12 +381,17 @@ define([
                 //Must replicate before redirecting to dashboard, otherwise the pouch and corpus will be empty
                 document.location.href='corpus.html';
               });
+            }, function(errormessage){
+              $(".welcome-screen-alerts").html(
+                  errormessage+" " + Utils.contactUs);
+              $(".welcome-screen-alerts").show();
+              $(".welcome-screen-alerts").addClass("alert-error");
             });
           });
         }
       }, function(message){
         $(".welcome-screen-alerts").html(
-            message+" Something went wrong, either we were unable to contact the server or something is wrong with your login info. Please try again " + Utils.contactUs);
+            message+" Something went wrong, thats all we know. Please try again or report this to us if it does it again:  " + Utils.contactUs);
 //      alert("Something went wrong, either we were unable to contact the server, or something is wrong with your login info.");
         $(".welcome-screen-alerts").show();
         $(".welcome-screen-alerts").addClass("alert-error");
