@@ -130,7 +130,7 @@ define([
       $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
       $(this.el).find(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
       $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
-      $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+      $(this.el).find(".locale_Private_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
       $(this.el).find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
       $(this.el).find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
       $(this.el).find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
