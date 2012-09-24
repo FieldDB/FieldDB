@@ -110,6 +110,7 @@ define([
         
         //localization for public user edit fullscreen
         $(this.el).find(".locale_Public_Profile_Instructions").html(chrome.i18n.getMessage("locale_Public_Profile_Instructions"));
+        $(this.el).find(".locale_Public_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
 
       } else if(this.format == "modal") {
         Utils.debug("USER EDIT MODAL render: " + this.el);
@@ -121,11 +122,13 @@ define([
         $(this.el).find(".locale_Edit_Public_User_Profile").html(chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
         $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
         $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+        $(this.el).find(".locale_Private_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
 
       }
       //localization
       $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-      $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+    
+
       $(this.el).find(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
       $(this.el).find(".locale_Gravatar_URL").html(chrome.i18n.getMessage("locale_Gravatar_URL"));
       $(this.el).find(".locale_Firstname").html(chrome.i18n.getMessage("locale_Firstname"));
@@ -155,7 +158,8 @@ define([
       //It is the private self
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-        window.app.get("currentUserActivityFeed").addActivity(
+        if(window.app.get("currentUserActivityFeed")){
+          window.app.get("currentUserActivityFeed").addActivity(
             new Activity({
               verb : "modified",
               directobject : "your private profile",
@@ -163,7 +167,9 @@ define([
               teamOrPersonal : "personal",
               context : "via Offline App"
             }));
-        window.app.get("currentCorpusTeamActivityFeed").addActivity(
+        }
+        if(window.app.get("currentCorpusTeamActivityFeed")){
+          window.app.get("currentCorpusTeamActivityFeed").addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
@@ -171,6 +177,7 @@ define([
               teamOrPersonal : "team",
               context : "via Offline App"
             }));
+        }
       }else{
         //It is the public self
         window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
