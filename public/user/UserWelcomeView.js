@@ -211,6 +211,12 @@ define([
         window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
+        $(".alert-error").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you, this'll just take a minute...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+        $(".alert-error").addClass("alert-success");
+        $(".alert-error").show();
+        $(".alert-error").removeClass("alert-error");
+        $(".register-new-user").addClass("disabled");
+        $(".register-new-user").attr("disabed","disabled");
         /*
          * Contact the server and register the new user
          */
@@ -223,11 +229,7 @@ define([
               $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
               $(".alert-error").show();
             } else if (data.user) {
-              $(".alert-error").html("<p><strong>Please wait:</strong> Preparing your first corpus/database for you, this'll just take a minute...</p> <progress max='100'> <strong>Progress: working...</strong>" );
-              $(".alert-error").addClass("alert-success");
-              $(".alert-error").show();
-              $(".alert-error").removeClass("alert-error");
-              $(".register-new-user").addClass("disabled");
+              
 
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then

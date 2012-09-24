@@ -138,15 +138,25 @@ require([
     // Create a UserWelcomeView modal
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
+    
+    var modal_width = ($(document).width() * .8 );
+    if(modal_width > 600){
+      modal_width = 600;
+    }
+    var modal_height = ($(document).height() * .8 );
+//    if(modal_height > 400){
+//      modal_height = 400;
+//    }
+    
     $('#user-welcome-modal').modal({
       backdrop : true,
       keyboard : true
     }).css({
       'width' : function() {
-        return ($(document).width() * .8 ) + 'px';
+        return modal_width + 'px';
       },
       'height' : function() {
-        return ($(document).height() * .8 ) + 'px';
+        return modal_height + 'px';
       },
       'margin-left' : function() {
         return -($(this).width() * .5 );
