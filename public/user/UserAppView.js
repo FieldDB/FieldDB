@@ -184,7 +184,6 @@ define(
                 });
                 $(".corpus-settings").addClass("hidden");
                 $(".power-users-link").addClass("hidden");
-                $("#user-modal").modal("show");
               }
               return this;
             },

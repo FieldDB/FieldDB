@@ -50,6 +50,7 @@ define([
         return this;
       }
       var jsonToRender = this.model.toJSON();
+      jsonToRender.corpusid = this.model.corpusid;
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
