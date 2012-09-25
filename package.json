@@ -1,6 +1,6 @@
 {
   "name": "FieldDBAuthenticationService",
-  "version": "1.21.2",
+  "version": "1.22",
   "dependencies": {
     "express": "latest"
     ,"bcrypt": "latest"

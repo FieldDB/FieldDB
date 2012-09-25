@@ -49,6 +49,7 @@ app.post('/login', function(req, res) {
       returndata.info = [info.message];
       console.log(new Date() + " Returning the existing user as json:\n"+util.inspect(user));
     }
+    console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
     res.send(returndata);
   });
 
