@@ -99,8 +99,13 @@ define([
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
-        $(this.el).find(".locale_Public_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
 
+        // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       } else if (this.format == "modal") {
         Utils.debug("USER READ MODAL render: ");
 
@@ -112,7 +117,7 @@ define([
         $(this.el).find(".locale_View_Public_Profile_Tooltip").html(chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
         $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
         $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
-        $(this.el).find(".locale_Private_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
 
 
         // Display the CorpusesReadView
@@ -136,7 +141,13 @@ define([
         
         //localize the public user page
         $(this.el).find(".locale_Edit_Public_User_Profile").attr("title",chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
 
+     // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       }else{
         throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
