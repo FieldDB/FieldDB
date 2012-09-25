@@ -51,11 +51,11 @@ define([
       }
       var jsonToRender = this.model.toJSON();
       jsonToRender.corpusid = this.model.corpusid;
-      try{
-        jsonToRender.username = this.model.get("team").get("username");
-      }catch(e){
-        Utils.debug("Problem getting the username of the corpus' team");
-      }
+//      try{
+//        jsonToRender.username = this.model.get("team").get("username");
+//      }catch(e){
+//        Utils.debug("Problem getting the username of the corpus' team");
+//      }
 
       $(this.el).html(this.templateLink(jsonToRender));
 

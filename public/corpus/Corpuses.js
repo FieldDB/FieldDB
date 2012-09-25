@@ -35,21 +35,39 @@ define([
         }
         couchurl = couchurl +"/"+ couchConnection.pouchname+"/corpus";
         
-        $.ajax({
-          type : 'GET',
-          url : couchurl ,
-          success : function(data) {
-            console.log("Got data back from the server about this corpus: ", data);
-            var corpus = new CorpusMask(JSON.parse(data));
-            corpus.corpusid = couchConnection.corpusid;
-            self.unshift(corpus);
-          },
-          error : function(data){
-            console.log("Got error back from the server about this corpus: ", data);
-            var corpus = new CorpusMask({title: "Unable to fetch title from server, please click the sync button to get the latest details."});
-            self.unshift(corpus);
-          }
+        var corpuse = new CorpusMask({
+          title : "",
+          pouchname : couchConnection.pouchname
         });
+        corpuse.corpusid = couchConnection.corpusid;
+        self.unshift(corpuse);
+        
+
+        /*
+         * if we want to fetch the corpus's title from the server: (if
+         * the corpus is private, it will just say private corpus which
+         * we expect to be the normal case, therefore not usefull to
+         * show it.
+         */
+//        $.ajax({
+//          type : 'GET',
+//          url : couchurl ,
+//          success : function(data) {
+//            console.log("Got data back from the server about this corpus: ", data);
+//            var corpus = new CorpusMask(JSON.parse(data));
+//            corpus.corpusid = arrayOfCorpora[thisc].corpusid;
+//            self.unshift(corpus);
+//          },
+//          error : function(data){
+//            console.log("Got error back from the server about this corpus: ", data);
+//            var corpuse = new CorpusMask({
+//                  title : "We need to make sure you're you before showing you the latest details (click the sync button).",
+//                  pouchname : arrayOfCorpora[thisc].pouchname
+//                });
+//            corpuse.corpusid = arrayOfCorpora[thisc].corpusid;
+//            self.unshift(corpuse);
+//          }
+//        });
       }
     },
     constructCollectionFromArrayLocally : function(arrayOfCorpora){

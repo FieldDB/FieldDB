@@ -243,7 +243,6 @@ define([
                   var c = a.get("corpus");
                   c.set({
                     "title" : data.user.username + "'s Corpus",
-                    "titleAsUrl" : data.user.username + "Corpus",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
                     "team" : auth.get("userPublic"),
@@ -259,44 +258,48 @@ define([
                   a.set("currentUserActivityFeed", new ActivityFeed());
                   a.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
                 
-                  var s = a.get("currentSession");
-                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
-                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
-                  s.set("pouchname", data.user.corpuses[0].pouchname);
-                  s.changePouch(data.user.corpuses[0].pouchname);
+                  //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
+                  c.saveAndInterConnectInApp();
                   
-                  c.get("sessions").add(s);
                   
-                  var dl = a.get("currentDataList");
-                  dl.set({
-                    "title" : "All Data",
-                    "dateCreated" : (new Date()).toDateString(),
-                    "description" : "This list contains all data in this corpus. " +
-                    "Any new datum you create is added here. " +
-                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
-                    "pouchname" : data.user.corpuses[0].pouchname
-                  });
-                  dl.changePouch(data.user.corpuses[0].pouchname);
-                  c.get("dataLists").add(dl);
-                  
-                  c.changePouch(data.user.corpuses[0]);
-                  a.saveAndInterConnectInApp(function(){
-//                    alert("save app succeeded");
-                    //Put this corpus's id into the couchconnection in the user so that we can fetch the private view of the corpus directly
-                    auth.get("userPrivate").get("corpuses")[0].corpusid = c.id;
-                    auth.saveAndInterConnectInApp(function(){
-                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
-                      document.location.href='user.html#corpus/'+data.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
-                    });
-                  }
+//                  var s = a.get("currentSession");
+//                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
+//                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
+//                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
+//                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+//                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
+//                  s.set("pouchname", data.user.corpuses[0].pouchname);
+//                  s.changePouch(data.user.corpuses[0].pouchname);
+//                  
+//                  c.get("sessions").add(s);
+//                  
+//                  var dl = a.get("currentDataList");
+//                  dl.set({
+//                    "title" : "All Data",
+//                    "dateCreated" : (new Date()).toDateString(),
+//                    "description" : "This list contains all data in this corpus. " +
+//                    "Any new datum you create is added here. " +
+//                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+//                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
+//                    "pouchname" : data.user.corpuses[0].pouchname
+//                  });
+//                  dl.changePouch(data.user.corpuses[0].pouchname);
+//                  c.get("dataLists").add(dl);
+//                  
+//                  c.changePouch(data.user.corpuses[0]);
+//                  a.saveAndInterConnectInApp(function(){
+////                    alert("save app succeeded");
+//                    //Put this corpus's id into the couchconnection in the user so that we can fetch the private view of the corpus directly
+//                    auth.get("userPrivate").get("corpuses")[0].corpusid = c.id;
+//                    auth.saveAndInterConnectInApp(function(){
+//                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
+//                      document.location.href='user.html#corpus/'+data.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
+//                    });
+//                  }
 //                  ,function(){
 //                    alert("Bug! save app failed.");
 //                  }
-                  );
+//                  );
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
 //                  window.startApp(a, function(){
 ////                     auth.get("userPrivate").addCurrentCorpusToUser();
