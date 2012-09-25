@@ -13,7 +13,7 @@
 </section>
 
 <section>
-	<h3>Road Map</h3>
+	<h2>Road Map</h2>
 	<ul class="incremental">
 		<li>100% offline with PouchDB</li>
 		<li>Require.js</li>
@@ -22,7 +22,7 @@
 </section>
 
 <section>
-	<h3>What is FieldDB?</h3>
+	<h2>What is FieldDB?</h2>
 	<ul class="incremental">
 		<li>Offline</li>
 		<li>Semi-structured</li>
@@ -43,7 +43,7 @@
 
 
 <section>
-  <h3>Three kinds of Offline</h3>
+  <h2>Three kinds of Offline</h2>
   <ul class="incremental">
     <li>Online
     <li>Online and Offline/cached
@@ -72,7 +72,7 @@
 </section>
 
 <section>
-	<h3>Why CouchDB?</h3>
+	<h2>Why CouchDB?</h2>
 	<ul class="incremental">
 		<li>NoSQL</li>
 		<li>Versioned data</li>
@@ -83,7 +83,7 @@
 </section>
 
 <section>
-	<h3>PouchDB Modes</h3>
+	<h2>PouchDB Modes</h2>
 	<ul class="incremental">
 		<li>IDB</li>
 		<li>HTTP</li>
@@ -93,35 +93,34 @@
 </section>
 
 <section>
-	<h3>Vanilla Backbone Models</h3>
-	<p>In a normal Backbone Model, the storage is given using the uri
-	property</p>
+	<h2>Vanilla Backbone Models</h2>
+	<h3>In a normal Backbone Model, the storage is given using the uri
+	property</h3>
 	<!-- insert example code here -->
 </section>
 
 <section>
-	<h3>Storing the model in a PouchDB</h3>
-	<p>To store a Backbone Model in a PouchDB, you can give it a pouch
-	property instead</p>
+	<h2>Storing the model in PouchDB</h2>
+	<h3>To store a Backbone Model in a PouchDB, you can give it a pouch
+	property instead</h3>
 	<!-- insert example code here -->
 </section>
 
 <section>
-	<h3>Storing the model in different PouchDBs</h3>
-	<p>However, we need the ability to change the PouchDB associated with
-	any given model</p>
+	<h2>Changing a Model's PouchDB</h2>
+	<h3>However, we need the ability to change the PouchDB associated with
+	any given model</h3>
 	<!-- insert example code here -->
 </section>
 
 <section>
-	<h3>The eval problem</h3>
-	<p>CouchDB queries are performed using Map and Reduce functions
-	written in JavaScript.</p>
-	<p>Example:<!-- insert example code here --></p>
+	<h2>The eval problem</h2>
+	<h3>CouchDB queries are performed using Map and Reduce functions
+	written in JavaScript and results are output using an emit function.</h3>
 </section>
 
 <section>
-	<p>In PouchDB, they implement emit in the pouch.alpha.js file like this
+	<h2>emit in PouchDB</h2>
 	<!-- insert this code here:
 	var emit = function(key, val) {
 	    var viewRow = {
@@ -135,13 +134,10 @@
 	    results.push(viewRow);
 	};
 	-->
-	But in order to call this emit function, it uses eval. eval is not
-	considered safe by the Chrome Manifest v2, so we needed a workaround.
-	</p>
 </section>
 
 <section>
-	<p>In pouch.alphs.js:</p>
+	<h2>Our hack</h2>
 	<ol>
 		<li>Hardcode the Map and Reduce functions where emit is in scope</li>
 		<li>Compare the desired function against the hardcoded versions</li>
@@ -150,7 +146,7 @@
 </section>
 
 <section>
-	<p>Why Require.js?</p>
+	<h2>Why Require.js?</h2>
 	<ul class="incremental">
 		<li>Easier development through localization</li>
 		<li>Smarter minification</li>
