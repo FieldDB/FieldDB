@@ -275,7 +275,15 @@ define([
       this.insertUnicodesView.render();
       
       this.hotkeyEditView.model = this.authView.model.get("userPrivate").get("hotkeys");
-      //TODO the hotkeys are probably not associate dbut because they are not finished, they cant be checked yet
+      //TODO the hotkeys are probably not associated but because they are not finished, they can't be checked yet
+      
+      this.modalEditUserView.changeViewsOfInternalModels();
+      this.modalReadUserView.changeViewsOfInternalModels();
+      this.modalReadUserView.render();
+      
+      this.publicEditUserView.changeViewsOfInternalModels();
+      this.publicReadUserView.changeViewsOfInternalModels();
+      this.publicReadUserView.render();
       
       if(typeof callback == "function"){
         callback();
@@ -288,24 +296,21 @@ define([
       });
       
       /* 
-       * Set up the five user views
+       * Set up the four user views
        */
-      this.fullScreenEditUserView = new UserEditView({
-        model : this.model.get("authentication").get("userPrivate")
-      });
-      this.fullScreenEditUserView.format = "fullscreen";
-      
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(this.model.get("authentication").get("userPublic") );
       
       this.modalEditUserView = new UserEditView({
         model : this.model.get("authentication").get("userPrivate")
       });
       this.modalEditUserView.format = "modal";
+      this.modalEditUserView.changeViewsOfInternalModels();
       
       this.modalReadUserView = new UserReadView({
         model : this.model.get("authentication").get("userPrivate")
       });
       this.modalReadUserView.format = "modal";
+      this.modalReadUserView.changeViewsOfInternalModels();
       
 
       // Create a UserPreferenceEditView
@@ -313,7 +318,7 @@ define([
         model : this.authView.model.get("userPrivate").get("prefs")
       });
       
-      // Create a UserActivityView
+      // Create a UserActivityView 
       Utils.debug("Setting up the user activity feed.");
       if(!this.model.get("currentUserActivityFeed")){
         this.model.set("currentUserActivityFeed", new ActivityFeed());
@@ -348,12 +353,12 @@ define([
         model : model
       });
       this.publicReadUserView.format = "public";
-      
+
       this.publicEditUserView = new UserEditView({
         model : model
       });
-      this.publicEditUserView.format = "fullscreen";
-      
+      this.publicEditUserView.format = "public";
+
     },
     /*
      * Set up the six data list views, kills all collection in the currentPaginatedDataListDatumsView
@@ -661,7 +666,7 @@ define([
     
     // Display User Views
     renderEditableUserViews : function(userid) {
-      this.fullScreenEditUserView.render();
+      this.publicEditUserView.render();
       this.modalEditUserView.render();
     },
     renderReadonlyUserViews : function(userid) {
