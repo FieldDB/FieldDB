@@ -249,12 +249,12 @@ define([
       
       this.permissions.add(new Permission({
         users: new Users(),
-        role: "contributor",
+        role: "reader",
         pouchname: this.get("pouchname")
       }));
       this.permissions.add(new Permission({
         users: new Users(), //"fielddbpublicuser"
-        role: "collaborator",
+        role: "writer",
         pouchname: this.get("pouchname")
       }));
       //TODO load the permissions in from the server.
@@ -318,6 +318,43 @@ define([
             context : " via Offline App."
           }));
     },
+
+    newCorpus : function(){
+     
+      $("#new-corpus-modal").modal("show");
+      //Save the current session just in case
+      this.saveAndInterConnectInApp();
+      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+      var attributes = JSON.parse(JSON.stringify(this.attributes));
+      // Clear the current data list's backbone info and info which we shouldnt clone
+      attributes._id = undefined;
+      attributes._rev = undefined;
+      /*
+       * WARNING this might not be a good idea, if you find strange side
+       * effects in corpora in the future, it might be due to this way
+       * of creating (duplicating) a corpus. However with a corpus it is
+       * a good idea to duplicate the permissions and settings so that
+       * the user won't have to redo them.
+       */
+      attributes.title = this.get("title")+ " copy";
+      attributes.titleAsUrl = this.get("titleAsUrl")+"Copy";
+      attributes.description = "Copy of: "+this.get("description");
+//      attributes.sessionFields = new DatumFields(attributes.sessionFields);
+      attributes.pouchname = this.get("pouchname")+"copy";
+      attributes.couchConnection.pouchname = this.get("pouchname")+"copy";
+      attributes.dataLists = [];
+      attributes.sessions = [];
+      attributes.comments = [];
+      attributes.publicSelfMode = {};
+      attributes.team = window.app.get("authentication").get("userPublic").toJSON();
+
+      window.appView.corpusNewModalView.model = new Corpus();
+      //be sure internal models are parsed and built.
+      window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
+      window.appView.corpusNewModalView.render();
+    },
+
+    
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     changePouch : function(couchConnection, callback) {
@@ -362,6 +399,8 @@ define([
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
+      }else{
+        this.get("couchConnection").corpusid = this.id;
       }
       var oldrev = this.get("_rev");
       
@@ -393,9 +432,11 @@ define([
 //            }
             //save the corpus mask too
             var publicSelfMode = model.get("publicSelf");
-            publicSelfMode.changePouch( model.get("couchConnection"), function(){
-              publicSelfMode.saveAndInterConnectInApp();
-            });
+            if(publicSelfMode.changePouch){
+              publicSelfMode.changePouch( model.get("couchConnection"), function(){
+                publicSelfMode.saveAndInterConnectInApp();
+              });
+            }
             
             if(window.appView){
               window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");
@@ -452,8 +493,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -481,8 +522,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+model.get("team").get("username")+"</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -502,9 +543,10 @@ define([
                     teamOrPersonal : "team"
                   }));
             }
-            
+            model.get("couchConnection").corpusid = model.id;
             //make sure the corpus is in the history of the user
-            if(window.app.get("authentication").get("userPrivate").get("corpuses").indexOf(model.get("couchConnection")) == -1){
+            var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
+            if(pouches.indexOf(model.get("couchConnection").pouchname) == -1){
               window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
             }
             /*
@@ -522,55 +564,32 @@ define([
               }
             }
             if(newModel){
-              //TODO something similar to saving the current dashboard so the user can go back.
-//              window.app.saveAndInterConnectInApp(function(){
-               
-              self.setAsCurrentCorpus(function(){
-
-                if(model.get("sessions").models.length == 0 && model.get("dataLists").models.length == 0){
-                  //create the first session for this corpus.
-                  var s = new Session({
-                    pouchname : model.get("pouchname"),
-                    sessionFields : model.get("sessionFields").clone()
-                  }); //MUST be a new model, other wise it wont save in a new pouch.
-                  s.get("sessionFields").where({label: "user"})[0].set("mask", window.app.get("authentication").get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "AA");
-                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "To explore the app and try entering/importing data");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "A few months ago, probably on a Monday night.");
-                  s.set("pouchname", model.get("pouchname"));
-                  s.saveAndInterConnectInApp(function(){
-                    s.setAsCurrentSession(function(){
-                      
-                      //create the first datalist for this corpus.
-                      var dl = new DataList({
-                        pouchname : model.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
-                      dl.set({
-                        "title" : "All Data",
-                        "dateCreated" : (new Date()).toDateString(),
-                        "description" : "This list contains all data in this corpus. " +
-                        "Any new datum you create is added here. " +
-                        "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                        "export to LaTeX, or share with collaborators.",
-                        "pouchname" : model.get("pouchname")
+              
+              self.makeSureCorpusHasADataList(function(){
+                self.makeSureCorpusHasASession(function(){
+                  
+                  //save the internal models go to the user dashboard to to load the corpus into the dashboard
+                  self.save(null, {
+                    success : function(model, response) {
+                      window.app.get("authentication").saveAndInterConnectInApp(function(){
+                        window.location.replace("user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
                       });
-                      dl.saveAndInterConnectInApp(function(){
-                        dl.setAsCurrentDataList(function(){
-                          window.app.router.showDashboard();                          window.appView.toastUser("Created a new session and datalist, and loaded them into the dashboard. This might not have worked perfectly.<a href='goback'>Go Back</a>");
-                          window.app.get("authentication").saveAndInterConnectInApp();
-                          if(typeof successcallback == "function"){
-                            successcallback();
-                          }
-                        });
-                      });
-                    });
+                    },error : function(e) {
+                      alert('New Corpus save error' + e);
+                    }
                   });
-                }else{
-                  if(typeof successcallback == "function"){
-                    successcallback();
-                  }
-                }
-              });
+                  
+
+                  //end success to create new data list
+                },function(e){
+                  alert("Failed to create a session. "+e);
+                });//end failure to create new data list
+                //end success to create new data list
+              },function(){
+                alert("Failed to create a datalist. "+e);
+              });//end failure to create new data list
+              
+             
             }else{
               //if an existing corpus
               window.app.get("authentication").saveAndInterConnectInApp();
@@ -587,6 +606,91 @@ define([
             }
           }
         });
+      });
+    },
+    makeSureCorpusHasADataList : function(sucess, failure){
+      if(this.get("dataLists").models.length > 0){
+        if (typeof sucess == "function"){
+          sucess();
+          return;
+        }
+      }
+      var self = this;
+    //create the first datalist for this corpus.
+      var dl = new DataList({
+        pouchname : this.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
+      dl.set({
+        "title" : "All Data",
+        "dateCreated" : (new Date()).toDateString(),
+        "description" : "This list contains all data in this corpus. " +
+        "Any new datum you create is added here. " +
+        "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+        "export to LaTeX, or share with collaborators.",
+        "pouchname" : this.get("pouchname")
+      });
+      dl.set("dateCreated",JSON.stringify(new Date()));
+      dl.set("dateModified", JSON.stringify(new Date()));
+      dl.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + this.get("pouchname") : Utils.pouchUrl + this.get("pouchname"));
+      dl.save(null, {
+        success : function(model, response) {
+          window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+          self.get("dataLists").unshift(model);
+          
+          if(typeof sucess == "function"){
+            sucess();
+          }else{
+            Utils.debug('DataList save success' + model.id);
+          }
+        },
+        error : function(e) {
+          if(typeof failure == "function"){
+            failure();
+          }else{
+            Utils.debug('DataList save error' + e);
+          }
+        }
+      });
+    },
+    makeSureCorpusHasASession : function(suces, fail){
+      if(this.get("sessions").models.length > 0){
+        if (typeof suces == "function"){
+          suces();
+          return;
+        }
+      }
+      var self = this;
+      var s = new Session({
+        pouchname : this.get("pouchname"),
+        sessionFields : this.get("sessionFields").clone()
+      }); //MUST be a new model, other wise it wont save in a new pouch.
+      s.get("sessionFields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
+      s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
+      s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
+      s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+      s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period for example: A few months ago, probably on a Monday night.");
+      
+      s.set("pouchname", this.get("pouchname"));
+      s.set("dateCreated",JSON.stringify(new Date()));
+      s.set("dateModified", JSON.stringify(new Date()));
+      s.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + this.get("pouchname") : Utils.pouchUrl + this.get("pouchname"));
+      s.save(null, {
+        success : function(model, response) {
+          window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+          self.get("sessions").unshift(model);
+
+          if(typeof suces == "function"){
+            suces();
+          }else{
+            Utils.debug('Session save success' + model.id);
+          }
+        },
+        error : function(e) {
+          if(typeof fail == "function"){
+            fail();
+          }else{
+            Utils.debug('Session save error' + e);
+          }
+        }
       });
     },
     /**
@@ -769,8 +873,8 @@ define([
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
-                alert('Corpus replicate to error' + JSON.stringify(err));
-                Utils.debug('Corpus replicate to error' + JSON.stringify(err));
+                alert('Corpus replicate from error' + JSON.stringify(err));
+                Utils.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             }else{
               Utils.debug("Corpus replicate from success", response);
@@ -781,8 +885,8 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }
-              
-              window.app.get("currentCorpusTeamActivityFeed").addActivity(
+              if(window.app.get("currentCorpusTeamActivityFeed")){
+                window.app.get("currentCorpusTeamActivityFeed").addActivity(
                   new Activity({
                     verb : "downloaded",
                     verbmask : "downloaded",
@@ -796,7 +900,9 @@ define([
                     contextmask : "",
                     teamOrPersonal : "team"
                   }));
-              window.app.get("currentUserActivityFeed").addActivity(
+              }
+              if(window.app.get("currentUserActivityFeed")){
+                window.app.get("currentUserActivityFeed").addActivity(
                   new Activity({
                     verb : "downloaded",
                     verbmask : "downloaded",
@@ -810,6 +916,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "personal"
                   }));
+              }
               
               // Get the corpus' current precedence rules
               self.buildMorphologicalAnalyzerFromTeamServer(self.get("pouchname"));
@@ -882,7 +989,7 @@ define([
                       " If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
                 }
                 if (typeof failurecallback == "function") {
-                  failurecallback();
+                  failurecallback("I couldn't log you into your corpus.");
                 }
                 Utils.debug(data);
                 window.app.get("authentication").set("staleAuthentication", true);

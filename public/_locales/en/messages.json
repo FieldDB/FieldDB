@@ -333,6 +333,12 @@
   "locale_User_Profile" : {
     "message" : "User Profile"
   },
+  "locale_Private_Profile" : {
+    "message" : "Private Profile"
+  },
+  "locale_Public_Profile" : {
+    "message" : "Public Profile"
+  },
   "locale_Email" : {
     "message" : "Email:"
   },
