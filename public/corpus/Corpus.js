@@ -318,7 +318,20 @@ define([
             context : " via Offline App."
           }));
     },
-
+    newSession : function() {
+      $("#new-session-modal").modal("show");
+      //Save the current session just in case
+      var self = this;
+      window.app.get("currentSession").saveAndInterConnectInApp(function(){
+        //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+        window.appView.sessionNewModalView.model = new Session({
+          pouchname : self.get("pouchname"),
+          sessionFields : self.get("sessionFields").clone()
+        });
+        window.appView.sessionNewModalView.model.set("comments", new Comments());
+        window.appView.sessionNewModalView.render();
+      });
+    },
     newCorpus : function(){
      
       $("#new-corpus-modal").modal("show");
@@ -620,10 +633,9 @@ define([
       var dl = new DataList({
         pouchname : this.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
       dl.set({
-        "title" : "All Data",
+        "title" : "Datalist instructions",
         "dateCreated" : (new Date()).toDateString(),
-        "description" : "This list contains all data in this corpus. " +
-        "Any new datum you create is added here. " +
+        "description" : "This list explains what datalists are and how to make them. " +
         "Data lists can be used to create handouts, prepare for sessions with consultants, " +
         "export to LaTeX, or share with collaborators.",
         "pouchname" : this.get("pouchname")
