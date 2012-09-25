@@ -170,6 +170,8 @@ define([
       var newModel = true;
       if(this.id){
         newModel = false;
+      }else{
+        this.set("dateCreated",JSON.stringify(new Date()));
       }
       //protect against users moving sessions from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
@@ -181,6 +183,7 @@ define([
         return;
       }
       var oldrev = this.get("_rev");
+      this.set("dateModified", JSON.stringify(new Date()));
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {

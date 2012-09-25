@@ -65,15 +65,25 @@ define([
           c.fetch({
             success : function(model) {
               Utils.debug("Corpus fetched successfully", model);
-              var mostRecentIds = {
-                corpusid : c.id,
-                datalistid : c.get("dataLists").models[0].id,
-                sessionid : c.get("sessions").models[0].id
-              };
-              console.log("mostRecentIds",mostRecentIds);
-              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(model.get("couchConnection")));
-              localStorage.setItem("mostRecentDashboard", JSON.stringify(mostRecentIds));
-              window.location.replace("corpus.html");
+              
+              if(c.get("dataLists").length > 0 && c.get("sessions").length > 0 ){
+                self.loadCorpusDashboard(model);
+              }else{
+                alert("Bug: Something might be wrong with this corpus. "+e);
+
+                c.makeSureCorpusHasADataList(function(){
+                  c.makeSureCorpusHasASession(function(){
+                    self.loadCorpusDashboard(model);
+                    //end success to create new data list
+                  },function(e){
+                    alert("Failed to create a session. "+e);
+                  });//end failure to create new data list
+                  //end success to create new data list
+                },function(){
+                  alert("Failed to create a datalist. "+e);
+                });//end failure to create new data list
+              }
+              
             },
             error : function(e, x, y ) {
               console.log(e);
@@ -99,6 +109,17 @@ define([
         alert("Cannot fetch the corpus without its id..."+e);
       }
       
+    },
+    loadCorpusDashboard: function(c){
+      var mostRecentIds = {
+          corpusid : c.id,
+          datalistid : c.get("dataLists").models[0].id,
+          sessionid : c.get("sessions").models[0].id
+        };
+        console.log("mostRecentIds",mostRecentIds);
+        localStorage.setItem("mostRecentCouchConnection",JSON.stringify(c.get("couchConnection")));
+        localStorage.setItem("mostRecentDashboard", JSON.stringify(mostRecentIds));
+        window.location.replace("corpus.html");
     },
     bringCorpusToThisDevice : function(corpus, callback) {
       window.app.get("authentication").syncUserWithServer(function(){
