@@ -249,12 +249,12 @@ define([
       
       this.permissions.add(new Permission({
         users: new Users(),
-        role: "contributor",
+        role: "reader",
         pouchname: this.get("pouchname")
       }));
       this.permissions.add(new Permission({
         users: new Users(), //"fielddbpublicuser"
-        role: "collaborator",
+        role: "writer",
         pouchname: this.get("pouchname")
       }));
       //TODO load the permissions in from the server.
