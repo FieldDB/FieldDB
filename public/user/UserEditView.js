@@ -2,13 +2,21 @@ define([
     "backbone", 
     "handlebars", 
     "activity/Activity",
+    "corpus/Corpus",
+    "corpus/Corpuses",
+    "corpus/CorpusLinkView",
     "user/User",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     Activity,
-    User
+    Corpus,
+    Corpuses,
+    CorpusLinkView,
+    User,
+    UpdatingCollectionView
 ) {
   var UserEditView = Backbone.View.extend(
   /** @lends UserEditView.prototype */
@@ -29,17 +37,8 @@ define([
     initialize : function() {
       Utils.debug("USER EDIT VIEW init: " + this.el);
 
-//      this.model.bind("change", this.render, this); //this breaks the save. we should only render the corpus updating collection view.
+      this.changeViewsOfInternalModels();
 
-      //TODO replace this code with a Updating Collections View
-      
-      // Create a CorpusesView
-//      if(this.model.get("corpuses") == undefined){
-//        this.model.set("corpuses", []);
-//      }
-//      this.corpusesView = new CorpusesView({
-//        array : this.model.get("corpuses")
-//      });
     },
 
     /**
@@ -105,13 +104,18 @@ define([
       if (this.format == "fullscreen") {
         Utils.debug("USER EDIT FULLSCREEN render: " + this.el);
 
-        this.setElement($("#public-user-page"));
+        this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
         //localization for public user edit fullscreen
         $(this.el).find(".locale_Public_Profile_Instructions").html(chrome.i18n.getMessage("locale_Public_Profile_Instructions"));
-        $(this.el).find(".locale_Public_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
 
+        // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       } else if(this.format == "modal") {
         Utils.debug("USER EDIT MODAL render: " + this.el);
 
@@ -122,8 +126,28 @@ define([
         $(this.el).find(".locale_Edit_Public_User_Profile").html(chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
         $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
         $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
-        $(this.el).find(".locale_Private_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
 
+        // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
+      }else if (this.format == "public") {
+        Utils.debug("USER EDIT PUBLIC render: " + this.el);
+
+        this.setElement($("#public-user-page"));
+        $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        
+        //localization for public user edit fullscreen
+        $(this.el).find(".locale_Public_Profile_Instructions").html(chrome.i18n.getMessage("locale_Public_Profile_Instructions"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
+
+        // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       }
       //localization
       $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
@@ -140,9 +164,8 @@ define([
       $(this.el).find(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
       $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
 
-        // Display the CorpusesView
-//        this.corpusesView.render();
 
+      return this;
     },
     saveProfile : function(){
       Utils.debug("Saving user");
@@ -218,6 +241,22 @@ define([
     updateGravatar : function(){
       this.model.set("gravatar", $(this.el).find(".gravatar").val());
       $(this.el).find(".gravatar").attr("src",$(this.el).find(".gravatar").val());
+    },
+    changeViewsOfInternalModels : function(){
+      //Create a CommentReadView      TODO add comments to users
+//      this.commentReadView = new UpdatingCollectionView({
+//        collection           : this.model.get("comments"),
+//        childViewConstructor : CommentReadView,
+//        childViewTagName     : 'li'
+//      });
+    //Create a CommentReadView     
+      this.corpusesReadView = new UpdatingCollectionView({
+        collection : new Corpuses(),
+        childViewConstructor : CorpusLinkView,
+        childViewTagName : 'li'
+      });
+      this.corpusesReadView.collection.constructCollectionFromArray(this.model
+          .get("corpuses"))
     }
   });
 
