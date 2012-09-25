@@ -86,16 +86,13 @@ define([
         data : dataToPost,
         success : function(data) {
           if (data.errors != null) {
-            $(".alert-error").html(
-                data.errors.join("<br/>") + " " + Utils.contactUs);
-            $(".alert-error").show();
             try{
               window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
             }catch(e){
               Utils.debug(e);
             }
             if (typeof failcallback == "function") {
-              failcallback();
+              failcallback(data.errors.join("<br/>"));
             }
             if (typeof successcallback == "function") {
               successcallback(null, data.errors); // tell caller that the user failed to
@@ -112,7 +109,7 @@ define([
           }
 
           if (typeof failcallback == "function") {
-            failcallback();
+            failcallback("There was an error in contacting the authentication server to confirm your identity. Maybe you're offline?");
           }
         },
         dataType : ""
