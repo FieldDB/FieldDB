@@ -45,20 +45,6 @@ define([
       description : "",
       datumIds : []
     },
-    validate: function(attributes) {
-      if(attributes.title){
-        if(this.get("title") == "All Data" && attributes.title != "All Data"){
-          alert("You cannot modify the title of the default data list of all data in the corpus. You can make a new data list containing all data by pushing the search button wiht no query, it will make a new data list with all datum which you can customize.");
-          return "You cannot modify the title of the default data list of all data in the corpus.";
-        }
-      }
-      if(attributes.title){
-        if( !(this.get("title") == "Untitled Data List" || this.get("title") == "All Data") && attributes.title == "All Data"){
-          alert("You cannot use All Data for your data list, that is reseved title for the first data list containing all your data.");
-          return "You cannot modify the title of this data list to be the 'All Data' list.";
-        }
-      }
-    },
     
     // Internal models: used by the parse function
     model : {
@@ -296,37 +282,37 @@ define([
             
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
 
-            /*
-             * If the corpus has no data lists in it, just save this one.
-             */
-            if(window.app.get("corpus").get("dataLists").length == 0){
-              window.app.get("corpus").get("dataLists").unshift(model);//TODO need to test
-//            }else if(window.app.get("corpus").get("dataLists").length > 1){
-//              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
-//              //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
-//              if(previousversionincorpus !== model){//if they are the same there is no reason to overwrite them.
-//                window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
-            }else{
-              if(window.app.get("corpus").id) window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
-              /*
-               * If there is more than one datalist in the corpus, we need to find this one and replace it.
-               */
+//            /*
+//             * If the corpus has no data lists in it, just save this one.
+//             */
+//            if(window.app.get("corpus").get("dataLists").length == 0){
+//              window.app.get("corpus").get("dataLists").unshift(model);//TODO need to test
+////            }else if(window.app.get("corpus").get("dataLists").length > 1){
+////              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
+////              //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
+////              if(previousversionincorpus !== model){//if they are the same there is no reason to overwrite them.
+////                window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
+//            }else{
+//              if(window.app.get("corpus").id) window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
+//              /*
+//               * If there is more than one datalist in the corpus, we need to find this one and replace it.
+//               */
               var previousversionincorpus = window.app.get("corpus").get("dataLists").get(model.id);
               if(previousversionincorpus == undefined ){
                 window.app.get("corpus").get("dataLists").unshift(model);
               }else{
-                var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
-                if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
-                  //this is the default, put it last
-                  window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
-                  window.app.get("corpus").get("dataLists").add(model);
-                }else{
-                  //this is a normal data list, put it first
+//                var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
+//                if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
+//                  //this is the default, put it last
+//                  window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
+//                  window.app.get("corpus").get("dataLists").add(model);
+//                }else{
+//                  //this is a normal data list, put it first
                   window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
                   window.app.get("corpus").get("dataLists").unshift(model);
-                }
+//                }
               }
-            }
+//            }
             
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){

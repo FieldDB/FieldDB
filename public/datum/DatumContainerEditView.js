@@ -192,7 +192,7 @@ define([
         if(!this.promptedForNewSession){
           if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
             // Display the new Session modal
-            $("#new-session-modal").modal("show");
+            window.app.get("corpus").newSession();
             this.promptedForNewSession = true;
             return;
           } 

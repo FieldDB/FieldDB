@@ -471,17 +471,7 @@ define([
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
       }
-      $("#new-session-modal").modal("show");
-      //Save the current session just in case
-      window.app.get("currentSession").saveAndInterConnectInApp(function(){
-        //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-        window.appView.sessionNewModalView.model = new Session({
-          pouchname : window.app.get("corpus").get("pouchname"),
-          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
-        });
-        window.appView.sessionNewModalView.model.set("comments", new Comments());
-        window.appView.sessionNewModalView.render();
-      });
+      this.model.newSession();
     },
     
     newCorpus : function(e){
