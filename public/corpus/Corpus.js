@@ -318,7 +318,20 @@ define([
             context : " via Offline App."
           }));
     },
-
+    newSession : function() {
+      $("#new-session-modal").modal("show");
+      //Save the current session just in case
+      var self = this;
+      window.app.get("currentSession").saveAndInterConnectInApp(function(){
+        //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
+        window.appView.sessionNewModalView.model = new Session({
+          pouchname : self.get("pouchname"),
+          sessionFields : self.get("sessionFields").clone()
+        });
+        window.appView.sessionNewModalView.model.set("comments", new Comments());
+        window.appView.sessionNewModalView.render();
+      });
+    },
     newCorpus : function(){
      
       $("#new-corpus-modal").modal("show");
