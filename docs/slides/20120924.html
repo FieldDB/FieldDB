@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 
 <meta charset="utf-8">
-<title>The Title Of Your Presentation</title>
+<title>Building Modular Data Intensive Offline WebApps</title>
 
 <!-- Your Slides -->
 <!-- One section is one slide -->
 
 <section>
 	<!-- This is the first slide -->
-	<h1>Building offline data intensive apps in HTML5</h1>
-	<footer>Theresa Deering &amp; Gina Cook</footer>
+	<h3>Building Modular Offline Apps in Javascript</h3>
+
+	<footer>Gina Cook &amp; Theresa Deering</footer>
 </section>
 
 <section>
 	<h3>Road Map</h3>
 	<ul class="incremental">
-		<li>100% offline with PouchDB</li>
-		<li>Require.js</li>
+		<li>Persisiting data offline client side</li>
+		<li>Building for <span class="ipa">χ </span>
+		</li>
 	</ul>
 	<div role="note"></div>
 </section>
 
 <section>
-	<h3>What is FieldDB?</h3>
+	<h3>
+		Case study: <a target="_new"
+			href="https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm">FieldDB</a>
+	</h3>
 	<ul class="incremental">
 		<li>Offline</li>
-		<li>Semi-structured</li>
-		<li>Web widgets</li>
+		<li>Semi-structured Data</li>
+		<li>Web Widgets</li>
 		<li>Encrypted</li>
 		<li>Data intensive</li>
 		<li>Webservices</li>
@@ -40,8 +45,10 @@
 				all of it</li>
 			<li>Encrypted: Fieldlinguist's are bound to laws on the
 				protection and exploitation of 'human subjects'</li>
-				<li>Data intensive: Fieldlinguists would import the web, if they could</li>
-    <li>CPU intensive: Fieldlinguists have lots of repetitive tasks and Opensource projects which automate them.</li>
+			<li>Data intensive: Fieldlinguists would import the web, if they
+				could</li>
+			<li>CPU intensive: Fieldlinguists have lots of repetitive tasks
+				and Opensource projects which automate them.</li>
 		</ul>
 	</div>
 </section>
@@ -50,9 +57,9 @@
 <section>
 	<h3>Three kinds of Offline</h3>
 	<ul class="incremental">
-		<li>Online
-		<li>Online and Offline/cached
-		<li>Only Offline
+		<li>Online</li>
+		<li>Online and Offline/cached</li>
+		<li>Only Offline</li>
 	</ul>
 	<div role="note">Some notes. They are only visible using onstage
 		shell.</div>
@@ -79,46 +86,70 @@
 	</ul>
 	<div role="note">TODO double check touchdb's status</div>
 </section>
-
 <section>
-	<p>Require.js</p>
+	<blockquote>
+		PouchDB <span class="ipa">alpha</span>
+	</blockquote>
 	<div role="note"></div>
 </section>
 
 
 <section>
-	<h2>Underscore/Backbone vs AMD</h2>
+	<blockquote>Require.js</blockquote>
+	<div role="note"></div>
+</section>
 
-	<div role="note">http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+
+<section>
+	<h2>The CommonJS Debate</h2>
+
+	<div role="note">Underscore/Backbone vs. AMD
+		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
 </section>
 
 <section>
-	<h3>Enter: shims</h3>
+	<p>
+		Getting libraries<br /> to play nice<br /> with Require.js
+	</p>
+
+	<div role="note">Underscore/Backbone vs. AMD
+		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+</section>
+
+<section>
+	<h3>Enter: shims (May 28, 2012)</h3>
 	<script src="https://gist.github.com/3779339.js?file=shims"></script>
-	<div role="note"></div>
+	<div role="note">https://github.com/jrburke/requirejs/wiki/Upgrading-to-RequireJS-2.0</div>
 </section>
 
 <section>
-	<h3>Build for Chrome for Hacker Fieldlinguists</h3>
-	<script src="https://gist.github.com/3779357.js?file=buildforhackability.json"></script>
-	<div role="note"></div>
+	<h3>Build for Hackability</h3>
+	<script
+		src="https://gist.github.com/3779357.js?file=buildforhackability.json"></script>
+	<div role="note">No, seriously. Deploying with a built in
+		Javascript console is a feature for our power users, they can automate
+		data cleaning, itterate through their data, use breakpoints and
+		more...</div>
 </section>
 
 <section>
-	<h3>Build for Chrome for non-Hacker Fieldlinguists</h3>
-	<script src="https://gist.github.com/3779359.js?file=buildforspeed.json"></script>
+	<h3>Build for Speed</h3>
+	<script
+		src="https://gist.github.com/3779359.js?file=buildforspeed.json"></script>
 	<div role="note"></div>
 </section>
 
 <section>
 	<h3>Build for Android</h3>
-	<script src="https://gist.github.com/3779361.js?file=buildforandroid.json"></script>
+	<script
+		src="https://gist.github.com/3779361.js?file=buildforandroid.json"></script>
 	<div role="note">super small for download from market over 3g</div>
 </section>
 
 <section>
-	<h3>Build Read only Models</h3>
-	<script src="https://gist.github.com/3779364.js?file=buildreadonly.json"></script>
+	<h3>Build Read Only Models</h3>
+	<script
+		src="https://gist.github.com/3779364.js?file=buildreadonly.json"></script>
 	<div role="note">super small for download from market over 3g</div>
 </section>
 
@@ -130,89 +161,33 @@
 
 <section>
 	<figure>
-    <!-- Figures are used to display images and videos fullpage -->
-    <img
-      src="https://wwwdev.fieldlinguist.com:3181/images/team_at_work.jpg">
-    <figcaption>Acknowledgements
-    
-    <ul class="incremental">
-    <li>PouchDB guys</li>
-    <li>Stackoverflow</li>
-    <li>Our clients </li>
-    <li>Our interns</li>
-  </ul></figcaption>
-  </figure>
-  
-  
-  
-	<div role="note">who let us keep it OpenSource</div>
-</section>
-
-
-<section>
-	<h3>An incremental list</h3>
-	<ul class="incremental">
-		<li>Item 1
-		<li>Item 2
-		<li>Item 3
-	</ul>
-	<div role="note">Some notes. They are only visible using onstage
-		shell.</div>
-</section>
-
-<section>
-	<blockquote>Who's brave enough to fly into something we
-		all keep calling a death sphere?</blockquote>
-	<details>
-		<p>In the onstage shell, notes scroll rather than overflow:</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-			ac dui eu est feugiat lacinia sit amet nec leo. Mauris eu ipsum leo.
-			Nulla mi odio, cursus sed sollicitudin non, fringilla id magna.
-			Suspendisse sit amet posuere elit. Maecenas iaculis, turpis a
-			placerat imperdiet, libero lorem feugiat nisi, nec tincidunt diam
-			nibh sit amet massa. Vestibulum quis adipiscing tellus. Maecenas
-			sollicitudin sodales pulvinar. Donec dui ipsum, bibendum facilisis
-			consequat interdum, tempus ut mauris. Aliquam ut dolor nec odio
-			scelerisque bibendum quis in neque. Aliquam dui dui, pulvinar quis
-			fermentum quis, gravida eu augue. Nunc tristique dolor a urna
-			pulvinar bibendum. Curabitur mollis cursus neque, in scelerisque
-			metus porta non. Donec tempor enim in nibh vestibulum et convallis
-			nisi malesuada. Duis ut lectus sed metus venenatis porttitor id
-			pharetra quam. Suspendisse sapien turpis, ornare in molestie et,
-			gravida eget turpis.</p>
-	</details>
-</section>
-
-<section>
-	<h2>Part two</h2>
-</section>
-
-<section>
-	<figure>
 		<!-- Figures are used to display images and videos fullpage -->
-		<img src="http://placekitten.com/g/800/600">
-		<figcaption>An image</figcaption>
+		<img
+			src="https://wwwdev.fieldlinguist.com:3181/images/team_at_work.jpg">
+		<figcaption>
+			Acknowledgements
+			<ul class="incremental">
+				<li>PouchDB guys</li>
+				<li>Stackoverflow</li>
+				<li>Our clients</li>
+				<li>Our interns</li>
+			</ul>
+		</figcaption>
 	</figure>
-	<div role="note">Kittens are so cute!</div>
+	<div role="note">Thank our clients who let us keep it OpenSource</div>
 </section>
 
-<section>
-	<figure>
-		<!-- Videos are automatically played -->
-		<video
-			src="http://videos-cdn.mozilla.net/brand/Mozilla_Firefox_Manifesto_v0.2_640.webm"
-			poster="http://www.mozilla.org/images/about/poster.jpg"></video>
-		<figcaption>A video</figcaption>
-	</figure>
-</section>
 
-<section>
-	<h2>End!</h2>
-</section>
+
 
 <!-- Your Style -->
 <!-- Define the style of your presentation -->
-
+<style>
+.ipa {
+	font-family: italic Courier serif;
+	font-size: larger;
+}
+</style>
 <!-- Maybe a font from http://www.google.com/webfonts ? -->
 <link href='http://fonts.googleapis.com/css?family=Oswald'
 	rel='stylesheet'>
@@ -347,7 +322,7 @@ section[aria-selected] {
 	left: 0;
 }
 /* After */
-section[aria-selected]   ~ section {
+section[aria-selected]          ~ section {
 	left: +150%;
 }
 
@@ -364,7 +339,7 @@ section[aria-selected]   ~ section {
 }
 
 /* The items to-be-selected */
-.incremental>*[aria-selected]   ~ * {
+.incremental>*[aria-selected]          ~ * {
 	opacity: 0;
 }
 
@@ -375,7 +350,6 @@ section[aria-selected]   ~ section {
 	background: #AAA;
 }
 </style>
-
 <!-- {{{{ dzslides core
 #
 #
@@ -391,7 +365,6 @@ section[aria-selected]   ~ section {
 -->
 
 <div id="progress-bar"></div>
-
 <!-- Default Style -->
 <style>
 * {
@@ -501,7 +474,6 @@ body.loaded {
 	display: none;
 }
 </style>
-
 <script>
   var Dz = {
     remoteWindows: [],
@@ -857,8 +829,6 @@ body.loaded {
 
   window.onload = init;
 </script>
-
-
 <script> // Helpers
   if (!Function.prototype.bind) {
     Function.prototype.bind = function (oThis) {
