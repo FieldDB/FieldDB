@@ -7,195 +7,304 @@
 <!-- One section is one slide -->
 
 <section>
-    <!-- This is the first slide -->
-    <h1>My Presentation</h1>
-    <footer>by John Doe</footer>
+	<!-- This is the first slide -->
+	<h1>Building offline data intensive apps in HTML5</h1>
+	<footer>Theresa Deering &amp; Gina Cook</footer>
 </section>
 
 <section>
-    <p>Some random text: But I've never been to the moon! You can see how I lived before I met you. Also Zoidberg.
-    I could if you hadn't turned on the light and shut off my stereo.</p>
+	<h3>Road Map</h3>
+	<ul class="incremental">
+		<li>100% offline with PouchDB</li>
+		<li>Require.js</li>
+	</ul>
+	<div role="note"></div>
 </section>
 
 <section>
-    <h3>An incremental list</h3>
-    <ul class="incremental">
-      <li>Item 1
-      <li>Item 2
-      <li>Item 3
-    </ul>
-    <div role="note">Some notes. They are only visible using onstage shell.</div>
+	<h3>What is FieldDB?</h3>
+	<ul class="incremental">
+		<li>Offline</li>
+		<li>Semi-structured</li>
+		<li>Web widgets</li>
+		<li>Encrypted</li>
+	</ul>
+	<div role="note">
+	<ul class="">
+    <li>Offline: Fieldlinguists rarely have internet</li>
+    <li>Semi-structured: Fieldlinguist are super structured, but
+      never the same structure</li>
+    <li>Web widgets: Fieldlinguist want to share their data, but not
+      all of it</li>
+    <li>Encrypted: Fieldlinguist's are bound to laws on the
+      protection and exploitation of 'human subjects'</li>
+  </ul></div>
+</section>
+
+
+<section>
+  <h3>Three kinds of Offline</h3>
+  <ul class="incremental">
+    <li>Online
+    <li>Online and Offline/cached
+    <li>Only Offline
+  </ul>
+  <div role="note">Some notes. They are only visible using onstage
+    shell.</div>
+</section>
+
+
+<section>
+  <figure>
+    <!-- Figures are used to display images and videos fullpage -->
+    <img src="https://wwwdev.fieldlinguist.com:3181/images/entityRelationDiagram.jpg">
+    <figcaption>Our Stack</figcaption>
+  </figure>
+  <div role="note"></div>
 </section>
 
 <section>
-  <blockquote>
-    Who's brave enough to fly into something we all keep calling a death sphere?
-  </blockquote>
-  <details>
-    <p>In the onstage shell, notes scroll rather than overflow:</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac dui eu est feugiat lacinia sit amet nec leo. Mauris eu ipsum leo. Nulla mi odio, cursus sed sollicitudin non, fringilla id magna. Suspendisse sit amet posuere elit. Maecenas iaculis, turpis a placerat imperdiet, libero lorem feugiat nisi, nec tincidunt diam nibh sit amet massa. Vestibulum quis adipiscing tellus. Maecenas sollicitudin sodales pulvinar. Donec dui ipsum, bibendum facilisis consequat interdum, tempus ut mauris. Aliquam ut dolor nec odio scelerisque bibendum quis in neque. Aliquam dui dui, pulvinar quis fermentum quis, gravida eu augue. Nunc tristique dolor a urna pulvinar bibendum. Curabitur mollis cursus neque, in scelerisque metus porta non. Donec tempor enim in nibh vestibulum et convallis nisi malesuada. Duis ut lectus sed metus venenatis porttitor id pharetra quam. Suspendisse sapien turpis, ornare in molestie et, gravida eget turpis.
-    </p>
-  </details>
+	<h3>Why CouchDB?</h3>
+	<ul class="incremental">
+		<li>NoSQL</li>
+		<li>Versioned data</li>
+		<li>Offline 'support' via PouchDB alpha</li>
+		<li>Mobile ''support'' via TouchDB pre-alpha?</li>
+	</ul>
+	<div role="note">TODO double check touchdb's status</div>
 </section>
 
 <section>
-    <h2>Part two</h2>
+  <p>Require.js</p>
+  <div role="note"></div>
+</section>
+
+
+<section>
+  <h3>An incremental list</h3>
+  <ul class="incremental">
+    <li>Item 1
+    <li>Item 2
+    <li>Item 3
+  </ul>
+  <div role="note">Some notes. They are only visible using onstage
+    shell.</div>
 </section>
 
 <section>
-    <figure> <!-- Figures are used to display images and videos fullpage -->
-      <img src="http://placekitten.com/g/800/600">
-      <figcaption>An image</figcaption>
-    </figure>
-    <div role="note">Kittens are so cute!</div>
+	<blockquote>Who's brave enough to fly into something we
+		all keep calling a death sphere?</blockquote>
+	<details>
+		<p>In the onstage shell, notes scroll rather than overflow:</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+			ac dui eu est feugiat lacinia sit amet nec leo. Mauris eu ipsum leo.
+			Nulla mi odio, cursus sed sollicitudin non, fringilla id magna.
+			Suspendisse sit amet posuere elit. Maecenas iaculis, turpis a
+			placerat imperdiet, libero lorem feugiat nisi, nec tincidunt diam
+			nibh sit amet massa. Vestibulum quis adipiscing tellus. Maecenas
+			sollicitudin sodales pulvinar. Donec dui ipsum, bibendum facilisis
+			consequat interdum, tempus ut mauris. Aliquam ut dolor nec odio
+			scelerisque bibendum quis in neque. Aliquam dui dui, pulvinar quis
+			fermentum quis, gravida eu augue. Nunc tristique dolor a urna
+			pulvinar bibendum. Curabitur mollis cursus neque, in scelerisque
+			metus porta non. Donec tempor enim in nibh vestibulum et convallis
+			nisi malesuada. Duis ut lectus sed metus venenatis porttitor id
+			pharetra quam. Suspendisse sapien turpis, ornare in molestie et,
+			gravida eget turpis.</p>
+	</details>
 </section>
 
 <section>
-    <figure> <!-- Videos are automatically played -->
-      <video src="http://videos-cdn.mozilla.net/brand/Mozilla_Firefox_Manifesto_v0.2_640.webm" poster="http://www.mozilla.org/images/about/poster.jpg"></video>
-      <figcaption>A video</figcaption>
-    </figure>
+	<h2>Part two</h2>
 </section>
 
 <section>
-    <h2>End!</h2>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="http://placekitten.com/g/800/600">
+		<figcaption>An image</figcaption>
+	</figure>
+	<div role="note">Kittens are so cute!</div>
+</section>
+
+<section>
+	<figure>
+		<!-- Videos are automatically played -->
+		<video
+			src="http://videos-cdn.mozilla.net/brand/Mozilla_Firefox_Manifesto_v0.2_640.webm"
+			poster="http://www.mozilla.org/images/about/poster.jpg"></video>
+		<figcaption>A video</figcaption>
+	</figure>
+</section>
+
+<section>
+	<h2>End!</h2>
 </section>
 
 <!-- Your Style -->
 <!-- Define the style of your presentation -->
 
 <!-- Maybe a font from http://www.google.com/webfonts ? -->
-<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+<link href='http://fonts.googleapis.com/css?family=Oswald'
+	rel='stylesheet'>
 
 <style>
-  html, .view body { background-color: black; counter-reset: slideidx; }
-  body, .view section { background-color: white; border-radius: 12px }
-  /* A section is a slide. It's size is 800x600, and this will never change */
-  section, .view head > title {
-      /* The font from Google */
-      font-family: 'Oswald', arial, serif;
-      font-size: 30px;
-  }
+html,.view body {
+	background-color: black;
+	counter-reset: slideidx;
+}
 
-  .view section:after {
-    counter-increment: slideidx;
-    content: counter(slideidx, decimal-leading-zero);
-    position: absolute; bottom: -80px; right: 100px;
-    color: white;
-  }
+body,.view section {
+	background-color: white;
+	border-radius: 12px
+}
+/* A section is a slide. It's size is 800x600, and this will never change */
+section,.view head>title { /* The font from Google */
+	font-family: 'Oswald', arial, serif;
+	font-size: 30px;
+}
 
-  .view head > title {
-    color: white;
-    text-align: center;
-    margin: 1em 0 1em 0;
-  }
+.view section:after {
+	counter-increment: slideidx;
+	content: counter(slideidx, decimal-leading-zero);
+	position: absolute;
+	bottom: -80px;
+	right: 100px;
+	color: white;
+}
 
-  h1, h2 {
-    margin-top: 200px;
-    text-align: center;
-    font-size: 80px;
-  }
-  h3 {
-    margin: 100px 0 50px 100px;
-  }
+.view head>title {
+	color: white;
+	text-align: center;
+	margin: 1em 0 1em 0;
+}
 
-  ul {
-      margin: 50px 200px;
-  }
+h1,h2 {
+	margin-top: 200px;
+	text-align: center;
+	font-size: 80px;
+}
 
-  p {
-    margin: 75px;
-    font-size: 50px;
-  }
+h3 {
+	margin: 100px 0 50px 100px;
+}
 
-  blockquote {
-    height: 100%;
-    background-color: black;
-    color: white;
-    font-size: 60px;
-    padding: 50px;
-  }
-  blockquote:before {
-    content: open-quote;
-  }
-  blockquote:after {
-    content: close-quote;
-  }
+ul {
+	margin: 50px 200px;
+}
 
-  /* Figures are displayed full-page, with the caption
+p {
+	margin: 75px;
+	font-size: 50px;
+}
+
+blockquote {
+	height: 100%;
+	background-color: black;
+	color: white;
+	font-size: 60px;
+	padding: 50px;
+}
+
+blockquote:before {
+	content: open-quote;
+}
+
+blockquote:after {
+	content: close-quote;
+}
+
+/* Figures are displayed full-page, with the caption
      on top of the image/video */
-  figure {
-    background-color: black;
-    width: 100%;
-    height: 100%;
-  }
-  figure > * {
-    position: absolute;
-  }
-  figure > img, figure > video {
-    width: 100%; height: 100%;
-  }
-  figcaption {
-    margin: 70px;
-    font-size: 50px;
-  }
+figure {
+	background-color: black;
+	width: 100%;
+	height: 100%;
+}
 
-  footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 40px;
-    text-align: right;
-    background-color: #F3F4F8;
-    border-top: 1px solid #CCC;
-  }
+figure>* {
+	position: absolute;
+}
 
-  /* Transition effect */
-  /* Feel free to change the transition effect for original
+figure>img,figure>video {
+	width: 100%;
+	height: 100%;
+}
+
+figcaption {
+	margin: 70px;
+	font-size: 50px;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	padding: 40px;
+	text-align: right;
+	background-color: #F3F4F8;
+	border-top: 1px solid #CCC;
+}
+
+/* Transition effect */
+/* Feel free to change the transition effect for original
      animations. See here:
      https://developer.mozilla.org/en/CSS/CSS_transitions
      How to use CSS3 Transitions: */
-  section {
-    -moz-transition: left 400ms linear 0s;
-    -webkit-transition: left 400ms linear 0s;
-    -ms-transition: left 400ms linear 0s;
-    transition: left 400ms linear 0s;
-  }
-  .view section {
-    -moz-transition: none;
-    -webkit-transition: none;
-    -ms-transition: none;
-    transition: none;
-  }
+section {
+	-moz-transition: left 400ms linear 0s;
+	-webkit-transition: left 400ms linear 0s;
+	-ms-transition: left 400ms linear 0s;
+	transition: left 400ms linear 0s;
+}
 
-  .view section[aria-selected] {
-    border: 5px red solid;
-  }
+.view section {
+	-moz-transition: none;
+	-webkit-transition: none;
+	-ms-transition: none;
+	transition: none;
+}
 
-  /* Before */
-  section { left: -150%; }
-  /* Now */
-  section[aria-selected] { left: 0; }
-  /* After */
-  section[aria-selected] ~ section { left: +150%; }
+.view section[aria-selected] {
+	border: 5px red solid;
+}
 
-  /* Incremental elements */
+/* Before */
+section {
+	left: -150%;
+}
+/* Now */
+section[aria-selected] {
+	left: 0;
+}
+/* After */
+section[aria-selected]  ~ section {
+	left: +150%;
+}
 
-  /* By default, visible */
-  .incremental > * { opacity: 1; }
+/* Incremental elements */
 
-  /* The current item */
-  .incremental > *[aria-selected] { opacity: 1; }
+/* By default, visible */
+.incremental>* {
+	opacity: 1;
+}
 
-  /* The items to-be-selected */
-  .incremental > *[aria-selected] ~ * { opacity: 0; }
+/* The current item */
+.incremental>*[aria-selected] {
+	opacity: 1;
+}
 
-  /* The progressbar, at the bottom of the slides, show the global
+/* The items to-be-selected */
+.incremental>*[aria-selected]  ~ * {
+	opacity: 0;
+}
+
+/* The progressbar, at the bottom of the slides, show the global
      progress of the presentation. */
-  #progress-bar {
-    height: 2px;
-    background: #AAA;
-  }
+#progress-bar {
+	height: 2px;
+	background: #AAA;
+}
 </style>
 
 <!-- {{{{ dzslides core
@@ -216,65 +325,112 @@
 
 <!-- Default Style -->
 <style>
-  * { margin: 0; padding: 0; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
-  [role="note"] { display: none; }
-  body {
-    width: 800px; height: 600px;
-    margin-left: -400px; margin-top: -300px;
-    position: absolute; top: 50%; left: 50%;
-    overflow: hidden;
-    display: none;
-  }
-  .view body {
-    position: static;
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    display: inline-block;
-    overflow: visible; overflow-x: hidden;
-    /* undo Dz.onresize */
-    transform: none !important;
-    -moz-transform: none !important;
-    -webkit-transform: none !important;
-    -o-transform: none !important;
-    -ms-transform: none !important;
-  }
-  .view head, .view head > title { display: block }
-  section {
-    position: absolute;
-    pointer-events: none;
-    width: 100%; height: 100%;
-  }
-  .view section {
-    pointer-events: auto;
-    position: static;
-    width: 800px; height: 600px;
-    margin: -150px -200px;
-    float: left;
+* {
+	margin: 0;
+	padding: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
 
-    transform: scale(.4);
-    -moz-transform: scale(.4);
-    -webkit-transform: scale(.4);
-    -o-transform: scale(.4);
-    -ms-transform: scale(.4);
-  }
-  .view section > * { pointer-events: none; }
-  section[aria-selected] { pointer-events: auto; }
-  html { overflow: hidden; }
-  html.view { overflow: visible; }
-  body.loaded { display: block; }
-  .incremental {visibility: hidden; }
-  .incremental[active] {visibility: visible; }
-  #progress-bar{
-    bottom: 0;
-    position: absolute;
-    -moz-transition: width 400ms linear 0s;
-    -webkit-transition: width 400ms linear 0s;
-    -ms-transition: width 400ms linear 0s;
-    transition: width 400ms linear 0s;
-  }
-  .view #progress-bar {
-    display: none;
-  }
+[role="note"] {
+	display: none;
+}
+
+body {
+	width: 800px;
+	height: 600px;
+	margin-left: -400px;
+	margin-top: -300px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	overflow: hidden;
+	display: none;
+}
+
+.view body {
+	position: static;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	overflow: visible;
+	overflow-x: hidden;
+	/* undo Dz.onresize */
+	transform: none !important;
+	-moz-transform: none !important;
+	-webkit-transform: none !important;
+	-o-transform: none !important;
+	-ms-transform: none !important;
+}
+
+.view head,.view head>title {
+	display: block
+}
+
+section {
+	position: absolute;
+	pointer-events: none;
+	width: 100%;
+	height: 100%;
+}
+
+.view section {
+	pointer-events: auto;
+	position: static;
+	width: 800px;
+	height: 600px;
+	margin: -150px -200px;
+	float: left;
+	transform: scale(.4);
+	-moz-transform: scale(.4);
+	-webkit-transform: scale(.4);
+	-o-transform: scale(.4);
+	-ms-transform: scale(.4);
+}
+
+.view section>* {
+	pointer-events: none;
+}
+
+section[aria-selected] {
+	pointer-events: auto;
+}
+
+html {
+	overflow: hidden;
+}
+
+html.view {
+	overflow: visible;
+}
+
+body.loaded {
+	display: block;
+}
+
+.incremental {
+	visibility: hidden;
+}
+
+.incremental[active] {
+	visibility: visible;
+}
+
+#progress-bar {
+	bottom: 0;
+	position: absolute;
+	-moz-transition: width 400ms linear 0s;
+	-webkit-transition: width 400ms linear 0s;
+	-ms-transition: width 400ms linear 0s;
+	transition: width 400ms linear 0s;
+}
+
+.view #progress-bar {
+	display: none;
+}
 </style>
 
 <script>
