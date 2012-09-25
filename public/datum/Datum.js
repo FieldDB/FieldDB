@@ -279,7 +279,7 @@ define([
     
     /**
      * Clone the current Datum and return the clone. The clone is put in the current
-     * Session, regardless of the origin Datum's Session.
+     * Session, regardless of the origin Datum's Session. //TODO it doesn tlook liek this is the case below:
      * 
      * @return The clone of the current Datum.
      */
@@ -436,10 +436,15 @@ define([
       // Store the current Session, the current corpus, and the current date
       // in the Datum
       this.set({
-        "session" : app.get("currentSession"), //TODO this is dangerous no? it will overwrite its session with the current one if it is from a previous session
-        "pouchname" : app.get("corpus").get("pouchname"),
+        "pouchname" : window.app.get("corpus").get("pouchname"),
         "dateModified" : JSON.stringify(new Date())
       });
+      if(!this.get("session")){
+        this.set("session" , window.app.get("currentSession")); 
+        Util.debug("Setting the session on this datum to the current one.");
+      }else{
+        Utils.debug("Not setting the session on this datum.");
+      }
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
