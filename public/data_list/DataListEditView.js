@@ -151,12 +151,7 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        if(this.model.get("title") != "All Data"){
-          this.removeDatumFromThisList(this.getAllCheckedDatums());
-        }else{
-          $(e.target).attr("disabled","disabled")
-          $(e.target).addClass("disabled")
-        }
+        this.removeDatumFromThisList(this.getAllCheckedDatums());
         return false;
       },
       "click .icon-lock": function(e){

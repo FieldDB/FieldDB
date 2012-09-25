@@ -620,10 +620,9 @@ define([
       var dl = new DataList({
         pouchname : this.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
       dl.set({
-        "title" : "All Data",
+        "title" : "Datalist instructions",
         "dateCreated" : (new Date()).toDateString(),
-        "description" : "This list contains all data in this corpus. " +
-        "Any new datum you create is added here. " +
+        "description" : "This list explains what datalists are and how to make them. " +
         "Data lists can be used to create handouts, prepare for sessions with consultants, " +
         "export to LaTeX, or share with collaborators.",
         "pouchname" : this.get("pouchname")
