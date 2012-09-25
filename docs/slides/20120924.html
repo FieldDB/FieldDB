@@ -114,6 +114,42 @@
 </section>
 
 <section>
+	<h3>The eval problem</h3>
+	<p>CouchDB queries are performed using Map and Reduce functions
+	written in JavaScript.</p>
+	<p>Example:<!-- insert example code here --></p>
+</section>
+
+<section>
+	<p>In PouchDB, they implement emit in the pouch.alpha.js file like this
+	<!-- insert this code here:
+	var emit = function(key, val) {
+	    var viewRow = {
+	        id: current._id,
+	        key: key,
+	        value: val
+	    }
+	    if (options.include_docs) {
+	        viewRow.doc = current.doc;
+	    }
+	    results.push(viewRow);
+	};
+	-->
+	But in order to call this emit function, it uses eval. eval is not
+	considered safe by the Chrome Manifest v2, so we needed a workaround.
+	</p>
+</section>
+
+<section>
+	<p>In pouch.alphs.js:</p>
+	<ol>
+		<li>Hardcode the Map and Reduce functions where emit is in scope</li>
+		<li>Compare the desired function against the hardcoded versions</li>
+		<li>Run the hardcoded versions</li>
+	</ol>
+</section>
+
+<section>
   <p>Require.js</p>
   <div role="note"></div>
 </section>
@@ -234,7 +270,7 @@ h3 {
 	margin: 100px 0 50px 100px;
 }
 
-ul {
+ul, ol {
 	margin: 50px 200px;
 }
 
