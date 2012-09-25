@@ -406,7 +406,7 @@ define([
     
     updateTitle: function(){
       var newTitle = this.$el.find(".corpus-title-input").val();
-      if(newTitle = ""){
+      if(newTitle == ""){
         alert("Please enter a title for your corpus."); //TODO make this more user friendly later
         return;
       }
