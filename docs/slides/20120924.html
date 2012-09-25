@@ -1,43 +1,52 @@
 ﻿<!DOCTYPE html>
 
 <meta charset="utf-8">
-<title>Building offline data intensive apps in HTML5</title>
+<title>Building Modular Data Intensive Offline WebApps</title>
 
 <!-- Your Slides -->
 <!-- One section is one slide -->
 
 <section>
 	<!-- This is the first slide -->
-	<h2>Building offline data-intensive apps in HTML5</h2>
-	<footer>Theresa Deering &amp; Gina Cook</footer>
+	<h2>Building Modular Offline Apps in Javascript</h2>
+	<footer>Gina Cook &amp; Theresa Deering</footer>
 </section>
 
 <section>
 	<h2>Road Map</h2>
 	<ul class="incremental">
-		<li>100% offline with PouchDB</li>
-		<li>Require.js</li>
+		<li>Persisiting data offline client side</li>
+		<li>Building for <span class="ipa">χ </span></li>
 	</ul>
 	<div role="note"></div>
 </section>
 
 <section>
-	<h2>What is FieldDB?</h2>
+	<h3>
+		Case study: <a target="_new"
+			href="https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm">FieldDB</a>
+	</h3>
 	<ul class="incremental">
 		<li>Offline</li>
-		<li>Semi-structured</li>
-		<li>Web widgets</li>
+		<li>Semi-structured Data</li>
+		<li>Web Widgets</li>
 		<li>Encrypted</li>
+		<li>Data intensive</li>
+		<li>Webservices</li>
 	</ul>
 	<div role="note">
 		<ul class="">
 			<li>Offline: Fieldlinguists rarely have internet</li>
 			<li>Semi-structured: Fieldlinguist are super structured, but
-			never the same structure</li>
+				never the same structure</li>
 			<li>Web widgets: Fieldlinguist want to share their data, but not
-			all of it</li>
+				all of it</li>
 			<li>Encrypted: Fieldlinguist's are bound to laws on the
-		protection and exploitation of 'human subjects'</li>
+				protection and exploitation of 'human subjects'</li>
+			<li>Data intensive: Fieldlinguists would import the web, if they
+				could</li>
+			<li>CPU intensive: Fieldlinguists have lots of repetitive tasks
+				and Opensource projects which automate them.</li>
 		</ul>
 	</div>
 </section>
@@ -46,22 +55,12 @@
 <section>
 	<h2>Three kinds of Offline</h2>
 	<ul class="incremental">
-		<li>Online
-		<li>Online and Offline/cached
-		<li>Only Offline
+		<li>Online</li>
+		<li>Online and Offline/cached</li>
+		<li>Only Offline</li>
 	</ul>
 	<div role="note">Some notes. They are only visible using onstage
-	shell.</div>
-</section>
-
-
-<section>
-	<figure>
-		<!-- Figures are used to display images and videos fullpage -->
-		<img src="https://wwwdev.fieldlinguist.com:3181/images/entityRelationDiagram.jpg">
-		<figcaption>Our Stack</figcaption>
-	</figure>
-	<div role="note"></div>
+		shell.</div>
 </section>
 
 <section>
@@ -139,11 +138,16 @@
 
 <section>
 	<h2>Our hack</h2>
-	<ol>
+	<ol class="incremental">
 		<li>Hardcode the Map and Reduce functions where emit is in scope</li>
 		<li>Compare the desired function against the hardcoded versions</li>
 		<li>Run the hardcoded versions</li>
 	</ol>
+</section>
+
+<section>
+	<blockquote>Require.js</blockquote>
+	<div role="note"></div>
 </section>
 
 <section>
@@ -153,6 +157,65 @@
 		<li>Smarter minification</li>
 		<li>Better for building "widgets"</li>
 	</ul>
+</section>
+
+<section>
+	<h2>The CommonJS Debate</h2>
+
+	<div role="note">Underscore/Backbone vs. AMD
+		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+</section>
+
+<section>
+	<p>
+		Getting libraries<br /> to play nice<br /> with Require.js
+	</p>
+
+	<div role="note">Underscore/Backbone vs. AMD
+		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+</section>
+
+<section>
+	<h3>Enter: shims (May 28, 2012)</h3>
+	<script src="https://gist.github.com/3779339.js?file=shims"></script>
+	<div role="note">https://github.com/jrburke/requirejs/wiki/Upgrading-to-RequireJS-2.0</div>
+</section>
+
+<section>
+	<h3>Build for Hackability</h3>
+	<script
+		src="https://gist.github.com/3779357.js?file=buildforhackability.json"></script>
+	<div role="note">No, seriously. Deploying with a built in
+		Javascript console is a feature for our power users, they can automate
+		data cleaning, itterate through their data, use breakpoints and
+		more...</div>
+</section>
+
+<section>
+	<h3>Build for Speed</h3>
+	<script
+		src="https://gist.github.com/3779359.js?file=buildforspeed.json"></script>
+	<div role="note"></div>
+</section>
+
+<section>
+	<h3>Build for Android</h3>
+	<script
+		src="https://gist.github.com/3779361.js?file=buildforandroid.json"></script>
+	<div role="note">super small for download from market over 3g</div>
+</section>
+
+<section>
+	<h3>Build Read Only Models</h3>
+	<script
+		src="https://gist.github.com/3779364.js?file=buildreadonly.json"></script>
+	<div role="note">super small for download from market over 3g</div>
+</section>
+
+<section>
+	<h3>Build Embeddable Widgets</h3>
+	<script src="https://gist.github.com/3779367.js?file=buildwidgets.json"></script>
+	<div role="note">auth, 3user, corpus->datalist, datum</div>
 </section>
 
 <section>
@@ -166,12 +229,37 @@
 </section>
 
 <section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img
+			src="https://wwwdev.fieldlinguist.com:3181/images/team_at_work.jpg">
+		<figcaption>
+			Acknowledgements
+			<ul class="incremental">
+				<li>PouchDB guys</li>
+				<li>Stackoverflow</li>
+				<li>Our clients</li>
+				<li>Our interns</li>
+			</ul>
+		</figcaption>
+	</figure>
+	<div role="note">Thank our clients who let us keep it OpenSource</div>
+</section>
+
+<section>
 	<h2>Questions?</h2>
 </section>
 
+
+
 <!-- Your Style -->
 <!-- Define the style of your presentation -->
-
+<style>
+.ipa {
+	font-family: italic Courier serif;
+	font-size: larger;
+}
+</style>
 <!-- Maybe a font from http://www.google.com/webfonts ? -->
 <link href='http://fonts.googleapis.com/css?family=Oswald'
 	rel='stylesheet'>
@@ -312,7 +400,7 @@ section[aria-selected] {
 	left: 0;
 }
 /* After */
-section[aria-selected]  ~ section {
+section[aria-selected]          ~ section {
 	left: +150%;
 }
 
@@ -329,7 +417,7 @@ section[aria-selected]  ~ section {
 }
 
 /* The items to-be-selected */
-.incremental>*[aria-selected]  ~ * {
+.incremental>*[aria-selected]          ~ * {
 	opacity: 0;
 }
 
@@ -340,7 +428,6 @@ section[aria-selected]  ~ section {
 	background: #AAA;
 }
 </style>
-
 <!-- {{{{ dzslides core
 #
 #
@@ -356,7 +443,6 @@ section[aria-selected]  ~ section {
 -->
 
 <div id="progress-bar"></div>
-
 <!-- Default Style -->
 <style>
 * {
@@ -466,7 +552,6 @@ body.loaded {
 	display: none;
 }
 </style>
-
 <script>
   var Dz = {
     remoteWindows: [],
@@ -822,8 +907,6 @@ body.loaded {
 
   window.onload = init;
 </script>
-
-
 <script> // Helpers
   if (!Function.prototype.bind) {
     Function.prototype.bind = function (oThis) {
