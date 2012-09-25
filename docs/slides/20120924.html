@@ -28,39 +28,45 @@
 		<li>Semi-structured</li>
 		<li>Web widgets</li>
 		<li>Encrypted</li>
+		<li>Data intensive</li>
+		<li>Webservices</li>
 	</ul>
 	<div role="note">
-	<ul class="">
-    <li>Offline: Fieldlinguists rarely have internet</li>
-    <li>Semi-structured: Fieldlinguist are super structured, but
-      never the same structure</li>
-    <li>Web widgets: Fieldlinguist want to share their data, but not
-      all of it</li>
-    <li>Encrypted: Fieldlinguist's are bound to laws on the
-      protection and exploitation of 'human subjects'</li>
-  </ul></div>
+		<ul class="">
+			<li>Offline: Fieldlinguists rarely have internet</li>
+			<li>Semi-structured: Fieldlinguist are super structured, but
+				never the same structure</li>
+			<li>Web widgets: Fieldlinguist want to share their data, but not
+				all of it</li>
+			<li>Encrypted: Fieldlinguist's are bound to laws on the
+				protection and exploitation of 'human subjects'</li>
+				<li>Data intensive: Fieldlinguists would import the web, if they could</li>
+    <li>CPU intensive: Fieldlinguists have lots of repetitive tasks and Opensource projects which automate them.</li>
+		</ul>
+	</div>
 </section>
 
 
 <section>
-  <h3>Three kinds of Offline</h3>
-  <ul class="incremental">
-    <li>Online
-    <li>Online and Offline/cached
-    <li>Only Offline
-  </ul>
-  <div role="note">Some notes. They are only visible using onstage
-    shell.</div>
+	<h3>Three kinds of Offline</h3>
+	<ul class="incremental">
+		<li>Online
+		<li>Online and Offline/cached
+		<li>Only Offline
+	</ul>
+	<div role="note">Some notes. They are only visible using onstage
+		shell.</div>
 </section>
 
 
 <section>
-  <figure>
-    <!-- Figures are used to display images and videos fullpage -->
-    <img src="https://wwwdev.fieldlinguist.com:3181/images/entityRelationDiagram.jpg">
-    <figcaption>Our Stack</figcaption>
-  </figure>
-  <div role="note"></div>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img
+			src="https://wwwdev.fieldlinguist.com:3181/images/entityRelationDiagram.jpg">
+		<figcaption>Our Stack</figcaption>
+	</figure>
+	<div role="note"></div>
 </section>
 
 <section>
@@ -75,20 +81,83 @@
 </section>
 
 <section>
-  <p>Require.js</p>
-  <div role="note"></div>
+	<p>Require.js</p>
+	<div role="note"></div>
 </section>
 
 
 <section>
-  <h3>An incremental list</h3>
-  <ul class="incremental">
-    <li>Item 1
-    <li>Item 2
-    <li>Item 3
-  </ul>
-  <div role="note">Some notes. They are only visible using onstage
-    shell.</div>
+	<h2>Underscore/Backbone vs AMD</h2>
+
+	<div role="note">http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+</section>
+
+<section>
+	<h3>Enter: shims</h3>
+	<script src="https://gist.github.com/3779339.js?file=shims"></script>
+	<div role="note"></div>
+</section>
+
+<section>
+	<h3>Build for Chrome for Hacker Fieldlinguists</h3>
+	<script src="https://gist.github.com/3779357.js?file=buildforhackability.json"></script>
+	<div role="note"></div>
+</section>
+
+<section>
+	<h3>Build for Chrome for non-Hacker Fieldlinguists</h3>
+	<script src="https://gist.github.com/3779359.js?file=buildforspeed.json"></script>
+	<div role="note"></div>
+</section>
+
+<section>
+	<h3>Build for Android</h3>
+	<script src="https://gist.github.com/3779361.js?file=buildforandroid.json"></script>
+	<div role="note">super small for download from market over 3g</div>
+</section>
+
+<section>
+	<h3>Build Read only Models</h3>
+	<script src="https://gist.github.com/3779364.js?file=buildreadonly.json"></script>
+	<div role="note">super small for download from market over 3g</div>
+</section>
+
+<section>
+	<h3>Build Embeddable Widgets</h3>
+	<script src="https://gist.github.com/3779367.js?file=buildwidgets.json"></script>
+	<div role="note">auth, 3user, corpus->datalist, datum</div>
+</section>
+
+<section>
+	<figure>
+    <!-- Figures are used to display images and videos fullpage -->
+    <img
+      src="https://wwwdev.fieldlinguist.com:3181/images/team_at_work.jpg">
+    <figcaption>Acknowledgements
+    
+    <ul class="incremental">
+    <li>PouchDB guys</li>
+    <li>Stackoverflow</li>
+    <li>Our clients </li>
+    <li>Our interns</li>
+  </ul></figcaption>
+  </figure>
+  
+  
+  
+	<div role="note">who let us keep it OpenSource</div>
+</section>
+
+
+<section>
+	<h3>An incremental list</h3>
+	<ul class="incremental">
+		<li>Item 1
+		<li>Item 2
+		<li>Item 3
+	</ul>
+	<div role="note">Some notes. They are only visible using onstage
+		shell.</div>
 </section>
 
 <section>
@@ -278,7 +347,7 @@ section[aria-selected] {
 	left: 0;
 }
 /* After */
-section[aria-selected]  ~ section {
+section[aria-selected]   ~ section {
 	left: +150%;
 }
 
@@ -295,7 +364,7 @@ section[aria-selected]  ~ section {
 }
 
 /* The items to-be-selected */
-.incremental>*[aria-selected]  ~ * {
+.incremental>*[aria-selected]   ~ * {
 	opacity: 0;
 }
 
