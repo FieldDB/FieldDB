@@ -445,7 +445,7 @@
     "message" : "Play audio of checked items"
   },
   "locale_Remove_checked_from_datalist_tooltip" : {
-    "message" : "Remove checked datum from this data list (they will still be in the corpus). This will only work on datalists that you build, not in the 'All Data' list which contains all corpus data."
+    "message" : "Remove checked datum from this data list (they will still be in the corpus). "
   },
   "locale_Plain_Text_Export_Tooltip" : {
     "message" : "Export as plain text/Copy to clipboard"
