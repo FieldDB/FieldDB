@@ -131,29 +131,24 @@
 </section>
 
 <section>
-	<h2>The eval problem</h2>
-	<h3>eval('fun.map = ' + fun.map.toString() + ';');</h3>
+	<h3>The eval problem</h3>
+	<script class="incremental" src="https://gist.github.com/3785402.js?file=eval-problem.js"></script>
 </section>
 
-<!-- <section>
-	<h3>emit in PouchDB</h3>
-	<script src="https://gist.github.com/3779669.js?file=shims"></script>
-</section> -->
-
 <section>
-	<h2>Our hack</h2>
+	<h3>Our hack</h3>
 	<ol class="incremental">
 		<li>Hardcode the Map and Reduce functions where emit is in scope</li>
 		<li>Compare the desired function against the hardcoded versions</li>
-		<li>Run the hardcoded versions</li>
+		<li>Assign the hardcoded version to fun.map</li>
 	</ol>
 </section>
 
 
 
 <section>
-  <h3>eval Workaround</h3>
-  <script src="https://gist.github.com/3785402.js?file=eval.js"></script>
+  <h3>Our hack</h3>
+  <script src="https://gist.github.com/3785402.js?file=eval-hack.js"></script>
   <div role="note">Hidden slide in case get asked to see the code
     for our eval hack</div>
 </section>
