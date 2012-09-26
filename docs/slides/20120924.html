@@ -29,11 +29,11 @@
 	</h2>
 	<ul class="incremental">
 		<li>Offline</li>
-		<li>Semi-structured Data</li>
-		<li>Web Widgets</li>
+		<li>Semi-structured data</li>
+		<li>Web widgets</li>
 		<li>Encrypted</li>
 		<li>Data intensive</li>
-		<li>Webservices</li>
+		<li>Web services</li>
 	</ul>
 	<div role="note">
 		<ul class="">
@@ -94,24 +94,18 @@
 </section>
 
 <section>
-	<h2>Vanilla Backbone Models</h2>
-	<h3>In a normal Backbone Model, the storage is given using the uri
-	property</h3>
-	<!-- insert example code here -->
+	<h3>Vanilla Backbone Models (url or urlRoot property)</h3>
+	<script src="https://gist.github.com/3785310.js?file=vanilla-backbone.js"></script>
 </section>
 
 <section>
-	<h2>Storing the model in PouchDB</h2>
-	<h3>To store a Backbone Model in a PouchDB, you can give it a pouch
-	property instead</h3>
-	<!-- insert example code here -->
+	<h3>Using <a href="https://github.com/jo/backbone-pouchdb">backbone-pouchdb</a> (pouch property)</h3>
+	<script src="https://gist.github.com/3785310.js?file=vanilla-pouchdb-backbone.js"></script>
 </section>
 
 <section>
-	<h2>Changing a Model's PouchDB</h2>
-	<h3>However, we need the ability to change the PouchDB associated with
-	any given model</h3>
-	<!-- insert example code here -->
+	<h3>Changing a Model's PouchDB with backbone-pouchdb (functions)</h3>
+	<script src="https://gist.github.com/3785310.js?file=extended-pouchdb-backbone.js"></script>
 </section>
 
 <section>
@@ -142,7 +136,8 @@
 <section>
 	<h2>Why Require.js?</h2>
 	<ul class="incremental">
-		<li>Easier development through localization</li>
+		<li>Shorter HTML file(s)</li>
+		<li>Easier development using local dependencies</li>
 		<li>Smarter minification</li>
 		<li>Better for building "widgets"</li>
 	</ul>
@@ -238,6 +233,13 @@
 
 <section>
 	<h2>Questions?</h2>
+</section>
+
+<section>
+	<h3>eval Workaround</h3>
+	<script src="https://gist.github.com/3785402.js?file=eval.js"></script>
+	<div role="note">Hidden slide in case get asked to see the code for
+	our eval hack</div>
 </section>
 
 
