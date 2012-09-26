@@ -8,16 +8,23 @@
 
 <section>
 	<!-- This is the first slide -->
-	<h2>Building Modular Offline Apps in Javascript*</h2>
-	<ul><li>* a funny subtitle here...</li></ul>
-	<footer>Gina Cook &amp; Theresa Deering</footer>
+	<h2>Building A Modular Offline App in Javascript*</h2>
+	<ul>
+		<li>* FieldDB: a case study</li>
+	</ul>
+	<footer>
+		<a href="https://github.com/cesine">Cook</a> &amp; <a
+			href="https://github.com/trisapeace/">Deering</a>
+	</footer>
 </section>
 
 <section>
 	<h2>Road Map</h2>
 	<ul class="incremental">
-		<li>Persisiting data offline client side</li>
-		<li>Building for <span class="ipa">χ </span></li>
+		<li>Architecture</li>
+		<li>Persisiting data client side with PouchDB</li>
+		<li>Building for <span class="ipa">χ </span> with Require.js
+		</li>
 	</ul>
 	<div role="note"></div>
 </section>
@@ -29,11 +36,11 @@
 	</h2>
 	<ul class="incremental">
 		<li>Offline</li>
-		<li>Semi-structured data</li>
-		<li>Web widgets</li>
-		<li>Encrypted</li>
 		<li>Data intensive</li>
+		<li>Highly structured data, but never the same structure</li>
+		<li>Encrypted</li>
 		<li>Web services</li>
+		<li>Web widgets</li>
 	</ul>
 	<div role="note">
 		<ul class="">
@@ -41,7 +48,7 @@
 			<li>Semi-structured: Fieldlinguist are super structured, but
 				never the same structure</li>
 			<li>Web widgets: Fieldlinguist want to share their data, but not
-				all of it</li>
+				all of it mash ups and mashability</li>
 			<li>Encrypted: Fieldlinguist's are bound to laws on the
 				protection and exploitation of 'human subjects'</li>
 			<li>Data intensive: Fieldlinguists would import the web, if they
@@ -53,8 +60,10 @@
 </section>
 
 
+
+
 <section>
-	<h2>Three kinds of Offline</h2>
+	<h2>What do we mean by Offline?</h2>
 	<ul class="incremental">
 		<li>Online</li>
 		<li>Online and Offline/cached</li>
@@ -64,11 +73,16 @@
 		shell.</div>
 </section>
 
+
 <section>
-	<blockquote>
-		Apache CouchDB is a database that uses JSON for documents,
-		JavaScript for MapReduce queries and regular HTTP for an API.
-	</blockquote>
+	<h2>Architecture</h2>
+	<div role="note"></div>
+</section>
+
+<section>
+	<blockquote>Apache CouchDB is a database that uses JSON
+		for documents, JavaScript for MapReduce queries and regular HTTP for
+		an API.</blockquote>
 	<!-- http://couchdb.apache.org/ -->
 </section>
 
@@ -76,6 +90,7 @@
 	<h2>Why CouchDB?</h2>
 	<ul class="incremental">
 		<li>NoSQL</li>
+		<li>MapReduce</li>
 		<li>Versioned data</li>
 		<li>Offline 'support' via PouchDB</li>
 		<li>Mobile ''support'' via TouchDB</li>
@@ -89,35 +104,41 @@
 		<li>IDB</li>
 		<li>HTTP</li>
 		<li>HTTPS (new)</li>
-		<li>WebSQL <a href="https://github.com/daleharvey/pouchdb/issues/63">(tbd)</a></li>
+		<li>WebSQL <a
+			href="https://github.com/daleharvey/pouchdb/issues/63">(tbd)</a></li>
 	</ul>
 </section>
 
 <section>
 	<h3>Vanilla Backbone Models (url or urlRoot property)</h3>
-	<script src="https://gist.github.com/3785310.js?file=vanilla-backbone.js"></script>
+	<script
+		src="https://gist.github.com/3790182.js?file=vanilla-backbone.js"></script>
 </section>
 
 <section>
-	<h3>Using <a href="https://github.com/jo/backbone-pouchdb">backbone-pouchdb</a> (pouch property)</h3>
-	<script src="https://gist.github.com/3785310.js?file=vanilla-pouchdb-backbone.js"></script>
+	<h3>
+		Using <a href="https://github.com/jo/backbone-pouchdb">backbone-pouchdb</a>
+		(pouch property)
+	</h3>
+	<script
+		src="https://gist.github.com/3790182.js?file=vanilla-pouchdb-backbone.js"></script>
 </section>
 
 <section>
 	<h3>Changing a Model's PouchDB with backbone-pouchdb (functions)</h3>
-	<script src="https://gist.github.com/3785310.js?file=extended-pouchdb-backbone.js"></script>
+	<script
+		src="https://gist.github.com/3790182.js?file=extended-pouchdb-backbone.js"></script>
 </section>
 
 <section>
 	<h2>The eval problem</h2>
-	<h3>CouchDB queries are performed using Map and Reduce functions
-	written in JavaScript and results are output using an emit function.</h3>
+	<h3>eval('fun.map = ' + fun.map.toString() + ';');</h3>
 </section>
 
-<section>
+<!-- <section>
 	<h3>emit in PouchDB</h3>
 	<script src="https://gist.github.com/3779669.js?file=shims"></script>
-</section>
+</section> -->
 
 <section>
 	<h2>Our hack</h2>
@@ -128,9 +149,22 @@
 	</ol>
 </section>
 
+
+
 <section>
-	<blockquote>RequireJS is a JavaScript file and module loader. It is optimized for in-browser use, but it can be used in other JavaScript environments, like Rhino and Node. </blockquote>
-	<div role="note">Using a modular script loader like RequireJS will improve the speed and quality of your code.</div>
+  <h3>eval Workaround</h3>
+  <script src="https://gist.github.com/3785402.js?file=eval.js"></script>
+  <div role="note">Hidden slide in case get asked to see the code
+    for our eval hack</div>
+</section>
+
+
+<section>
+	<blockquote>RequireJS is a JavaScript file and module
+		loader. It is optimized for in-browser use, but it can be used in
+		other JavaScript environments, like Rhino and Node.</blockquote>
+	<div role="note">Using a modular script loader like RequireJS
+		will improve the speed and quality of your code.</div>
 </section>
 
 <section>
@@ -141,7 +175,8 @@
 		<li>Smarter minification</li>
 		<li>Better for building "widgets"</li>
 	</ul>
-	<div role="note">we used chrome extension for localization but i bet using require js would be nice, then it would work on the web.</div>
+	<div role="note">we used chrome extension for localization but i
+		bet using require js would be nice, then it would work on the web.</div>
 </section>
 
 <!-- <section>
@@ -153,7 +188,8 @@
 
 <section>
 	<p>
-		Getting libraries (Backbone, Underscore, JQuery)<br /> to play nice<br /> with Require.js
+		Getting libraries (Backbone, Underscore, JQuery)<br /> to play nice<br />
+		with Require.js
 	</p>
 
 	<div role="note">Underscore/Backbone vs. AMD
@@ -178,9 +214,15 @@
 
 <section>
 	<h4>Build for Speed</h4>
-	<script
-		src="https://gist.github.com/3779359.js?file=buildforspeed.js"></script>
+	<script src="https://gist.github.com/3779359.js?file=buildforspeed.js"></script>
 	<div role="note"></div>
+</section>
+
+
+<section>
+  <p>Demo</p >
+  
+  <div role="note">probably show deploy in chrome for hackabilty, deploy in android for package size. </div>
 </section>
 
 <section>
@@ -192,8 +234,7 @@
 
 <section>
 	<h4>Build Read Only Models</h4>
-	<script
-		src="https://gist.github.com/3779364.js?file=buildreadonly.js"></script>
+	<script src="https://gist.github.com/3779364.js?file=buildreadonly.js"></script>
 	<div role="note">super small for download from market over 3g</div>
 </section>
 
@@ -208,8 +249,8 @@
 	<ul class="incremental">
 		<li>Start with Offline in mind</li>
 		<li>Debug as a Chrome Extension</li>
-		<li>If a library is in active development, make sure you know
-		how things work</li>
+		<li>If a library is in active development, make sure you know how
+			things work</li>
 	</ul>
 </section>
 
@@ -222,7 +263,6 @@
 			Acknowledgements
 			<ul class="incremental">
 				<li>PouchDB guys</li>
-				<li>Stackoverflow</li>
 				<li>Our clients</li>
 				<li>Our interns</li>
 			</ul>
@@ -233,13 +273,6 @@
 
 <section>
 	<h2>Questions?</h2>
-</section>
-
-<section>
-	<h3>eval Workaround</h3>
-	<script src="https://gist.github.com/3785402.js?file=eval.js"></script>
-	<div role="note">Hidden slide in case get asked to see the code for
-	our eval hack</div>
 </section>
 
 
@@ -270,6 +303,7 @@ body,.view section {
 section,.view head>title { /* The font from Google */
 	font-family: 'Oswald', arial, serif;
 	font-size: 20px;
+	letter-spacing: 1px;
 }
 
 .view section:after {
@@ -304,10 +338,10 @@ h3 {
 }
 
 h4 {
-  margin: 30px 0 30px 50px;
+	margin: 30px 0 30px 50px;
 }
 
-ul, ol {
+ul,ol {
 	margin: 50px 200px;
 }
 
@@ -396,7 +430,7 @@ section[aria-selected] {
 	left: 0;
 }
 /* After */
-section[aria-selected]          ~ section {
+section[aria-selected]            ~ section {
 	left: +150%;
 }
 
@@ -413,7 +447,7 @@ section[aria-selected]          ~ section {
 }
 
 /* The items to-be-selected */
-.incremental>*[aria-selected]          ~ * {
+.incremental>*[aria-selected]            ~ * {
 	opacity: 0;
 }
 
