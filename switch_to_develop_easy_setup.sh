@@ -3,7 +3,7 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into debug mode to see the debugging output."
-sed 's/Utils.debugMode *= *false/Utils.debugMode = true/' public/libs/Utils.js  > output
+sed 's/Utils.debugMode *= *false/Utils.debugMode = false/' public/libs/Utils.js  > output
 mv output public/libs/Utils.js
 
 echo ""
