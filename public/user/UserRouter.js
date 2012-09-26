@@ -92,7 +92,7 @@ define([
               if(self.islooping){
                 return;
               }
-              var couchConnection = window.app.get("userPrivate").get("corpuses")[0];
+              var couchConnection = window.app.get("authentication").get("userPrivate").get("corpuses")[0];
               self.bringCorpusToThisDevice(couchConnection, function(){
                 alert("Downloaded this corpus to this device. "+e);
                 self.showCorpusDashboard(pouchname, corpusid);
