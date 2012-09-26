@@ -17,7 +17,7 @@ var Utils = Utils || {};
  * is doing, how control flows through the app and also to debug new features or
  * bugs.
  */
-Utils.debugMode = true; 
+Utils.debugMode = false; 
 
 
 /**
