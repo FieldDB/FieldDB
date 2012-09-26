@@ -66,10 +66,6 @@ define(
               this.userPreferenceView.model.bind("change:skin",
                   this.userPreferenceView.renderSkin, this.userPreferenceView);
 
-              this.insertUnicodesView.model = this.authView.model.get(
-                  "userPrivate").get("prefs").get("unicodes");
-              this.insertUnicodesView.changeViewsOfInternalModels();
-              this.insertUnicodesView.render();
 
               this.hotkeyEditView.model = this.authView.model
                   .get("userPrivate").get("hotkeys");
@@ -184,6 +180,11 @@ define(
                 });
                 $(".corpus-settings").addClass("hidden");
                 $(".power-users-link").addClass("hidden");
+                
+                $(this.el).find(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
+                $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
+                $(this.el).find(".locale_Yep_its_me").text(chrome.i18n.getMessage("locale_Yep_its_me"));
+                
               }
               return this;
             },
