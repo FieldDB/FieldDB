@@ -91,14 +91,80 @@
 
 
 	<div class="well">
-                <h1>September 22 2012 - Week 22 - Refactored Authentication web service</h1>
+		<h1>September 29 2012 - Week 22 &amp; 23 - Upgraded our version
+			of Node.js from 0.6.19 to 0.8.10 Multiple corpora and Refactored
+			Authentication web service</h1>
 
+		<h2 id="onthebleedingedge">A new authentication server</h2>
+		<p>This week we worked on refactoring (thats techie talk for
+			re-writing and re-designing) the authentication webservice so we
+			could use up-to-date libaries. We were stuck on an older version of
+			node because the authentication library we were using was using an
+			older version of express etc etc. Now we switched authenticaiton
+			libraries, and switched database backends so now users are stored in
+			a couchdb also. We also added a mailer library to send out emails to
+			users if they forget their password and to welcome when they first
+			sign up so that they have their username written down somewhere.</p>
+		<p>
+			Its been 5 weeks since we deployed an updated version of the app,
+			mostly because of big changes that needed to be done (like the
+			authentication server) before we could let users really use the app,
+			not just as beta testers. This week <a
+				href="https://chrome.google.com/webstore/detail/jclfbgmjfgkmjdiknoccaobgbkifmlcp">we
+				deployed a new chrome extension which is on the bleeding edge of
+				development</a>, once its stable enough the developers are using it,
+			version of the app which we are calling "unstable." So if you like to
+			be on the edge, or just see what new features are coming up, you can
+			install that version at the same times as the normal (stable)
+			version. Ideally we would like a couple of people using the unstable
+			version for about a month or so before it will go into the stable
+			version. It depends on the speed at which we are developing.
+		</p>
 
-                <h2 id="onthebleedingedge">A new authentication server</h2>
-	<p>This week we worked on refactoring (thats techie talk for re-writing and re-designing) the authentication webservice so we could use up-to-date libariries. We were stuck on an older version of node because the authentication library we were using was using an older version of express etc etc. Now we switched authenticaiton libraries, and switched database backends so now users are stored in a couchdb also. We also addd a mailer library to send out emails to users if they forget their password and to welcome when they first sign up so that they have their username written down somewhere.</p>
-<p> Its been 5 weeks since we deployed an updated version of the app, mostly because of big changes that needed to be done (like the authentication server) before we could let users really use the app, not just as beta testers. This week
- <a href="https://chrome.google.com/webstore/detail/jclfbgmjfgkmjdiknoccaobgbkifmlcp">we deployed a new chrome extension which is on the bleeding edge of development</a>, once its stable enough the develpers are using it, version of the app which we are calling "unstable." So if you like to be on the edge, or just see what new features are coming up, you can install that version at the same times as the  normal (stable) version. Ideally we would like a couple of people using the unstable version for about a month or so before it will go into the stable version. It depends on the speed at which we are developing. </p>	
+		<h2 id=>Multiple Corpora and a new flow</h2>
+		<p>Having a clean auth service helped us roll out the new corpora
+			feature faster. We also changed the way the dashboard loads. Before
+			it would start at the index, see if it knew who you were, and then
+			see if it knew which dashboard you last used, and then redirect you
+			to the dashboard page if it knew which corpus, session and datalist
+			to load. That was fine for development and for testing the dashboard
+			but we really needed a way that you could change between corpora
+			safely. Because the Pouch database (which is unique per corpus) must
+			be set on all objects are saved we had invented a rather complicated
+			work around to be sure that objects where saved into the right pouch
+			the first time. Now we have added an intermediary page (a users
+			dashboard) which will load your user info and let you choose a corpus
+			if it is unable to figure out what to load for you. This greatly
+			simplifies the loading of a corpus and in fact, if a user is on the
+			corpus.html page we can now guarentee that the pouch they want to
+			work in is known so we might be able to refactor out the workaround
+			that we put in place back in June. In theory, this should make the
+			app much more stable as we are finally getting closer to how it was
+			designed to be, not how it had to be so we could debug, it has
+			certainly reduced the number of ifs.... We won't know for sure if the
+			new flow is stable until we get a few more testers using it.</p>
 
+		<p>
+			We are also excited to announce that the Default/All Data datalist is
+			gone. We have had it in the app for a longtime, before we had search,
+			largely because we wanted to be able to show you a list of your
+			datum, and we didn't have search to be able to retrieve it. We've had
+			offline search in the pouch for a long time now, so its about time
+			that we use search to show you all your data. This greatly simplifies
+			the app. Before if you saved a datum, we had to see if the All data
+			list was active, and insert the new datum at the top so you could see
+			it visually as you entered data. In addition, if the All data list
+			wasn't visible we had to go into the corpus and insert the datum into
+			it, and then be sure that the All data list that was in the corpus,
+			got saved into the pouch before you wanted to load it. Essentially an
+			nightmare of <a
+				href="http://en.wikipedia.org/wiki/Database_normalization">de-normalizaiton</a>
+			. So it is with great pleasure that we tell you that you can find all
+			your data, by clicking on the search icon. Of course, if you have a
+			lot of data it will take some time to load the data list. We will
+			modify the Infinite Paginated Updating Collection view to be smarter
+			about how much data it loads. That will have to wait...
+		</p>
 	</div>
 	<div class="well">
 		<h1>September 15 2012 - Week 20 &amp; 21 - Language-learning aid
@@ -109,8 +175,8 @@
 			leaked</h2>
 		<p>At 10:57am Eastern Standard Time yesterday morning (Friday
 			September 14th 2012-09-14T12:12:57-07:00) a former intern
-			inadvertently leaked admin password to the CouchDB account used to create corpora for
-			the Beta testers.</p>
+			inadvertently leaked admin password to the CouchDB account used to
+			create corpora for the Beta testers.</p>
 
 		<p>
 			What this means is that unauthorized persons could discover the
@@ -119,17 +185,16 @@
 				a commit on our repository</a> and access/delete/administrate the data
 			in beta tester's corpus databases hosted at <a
 				href="https://ilanguage.iriscouch.com/_utils">https://ilanguage.iriscouch.com/_utils</a>
- This leak did not create
-			any vulnerabilities in your private user data (i.e. email, first name
-			last name etc) as that data is stored in a different database.
+			This leak did not create any vulnerabilities in your private user
+			data (i.e. email, first name last name etc) as that data is stored in
+			a different database.
 		</p>
 
-		<p> 
-At 19:26pm Eastern Standard Time this
-			evening (Saturday September 15th) we rolled out a fix to the
-			vulnerability on the authentication server, and the Corpus database server.
-			We also turned off the registration of all new users in the Chrome
-			store app and started an investigation into the impact of the leak.</p>
+		<p>At 19:26pm Eastern Standard Time this evening (Saturday
+			September 15th) we rolled out a fix to the vulnerability on the
+			authentication server, and the Corpus database server. We also turned
+			off the registration of all new users in the Chrome store app and
+			started an investigation into the impact of the leak.</p>
 
 		<p>
 			Database and log analysis have shown that the no corpus databases
@@ -138,33 +203,37 @@ At 19:26pm Eastern Standard Time this
 			the findings. To make it easier to contact users once we leave beta
 			we will be asking users to provide an email address when they
 			register, as is standard with most websites.The root cause of the
-			vulnerability was an trusting
-                                an inexperienced developer with <a
-				href="https://www.google.com/search?hl=en&q=admin+credentials+leaked&oq=admin+credentials+leaked"> sensitive credentials</a>, and a
-				subsequent "check-in" of those sensitive credentials into our GitHub
-				repository, a problem which is common among inexperienced developers. 
+			vulnerability was an trusting an inexperienced developer with <a
+				href="https://www.google.com/search?hl=en&q=admin+credentials+leaked&oq=admin+credentials+leaked">
+				sensitive credentials</a>, and a subsequent "check-in" of those
+			sensitive credentials into our GitHub repository, a problem which is
+			common among inexperienced developers.
 		</p>
 
 		<p>Prior to the leak we had initiated a full audit of the codebase
 			to ensure that no instances of this vulnerability were present. This
 			audit is was complete on Wednesday, Aug 29, 2012 at 2:05 PM, however
-			the developer in question did not read the emailed instructions and inadvertantly commited the sensitive files and pushed them to their GitHub account, making the files public.
+			the developer in question did not read the emailed instructions and
+			inadvertantly commited the sensitive files and pushed them to their
+			GitHub account, making the files public. I am going to personally
+			ensure that we our strategy going forward to prevent this type of
+			vulnerability is enforced. I sincerely apologize for allowing this to
+			happen.</p>
+		<p>
+			While no damage was done, we believe it is important to keep you
+			informed about the security of your linguistic data. We will continue
+			to encourage inexperienced developers to contribute to the project,
+			as that is one of the main reasons we made it: to empower linguists
+			to build and modify their tools, however we will no longer trust
+			inexperienced developers with sensitive deployment config files.
+			Security is our priority and I will be arranging <a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/582">external
+				security audits</a> to further test our security measures and give you
+			peace of mind.
+		</p>
 
-I am going to
-			personally ensure that we our strategy going forward to prevent this
-			type of vulnerability is enforced. I sincerely apologize for allowing
-			this to happen.</p>
-<p> While no damage was done, we believe it is important
-			to keep you informed about the security of your linguistic data. We
-			will continue to encourage inexperienced developers to contribute to
-			the project, as that is one of the main reasons we made it: to
-			empower linguists to build and modify their tools, however we will no
-			longer trust inexperienced developers with sensitive deployment
-			config files. Security is our priority and I will be arranging
-			<a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/582">external security audits</a> to further test our security measures and give you peace of
-			mind.</p>
-
-		<h2 id="languagelearningmodelbegins">Language Learning Module - Android Prototype begins</h2>
+		<h2 id="languagelearningmodelbegins">Language Learning Module -
+			Android Prototype begins</h2>
 		<p>This Thursday we started working on an outline for a new module
 			(with our new intern, Elise). This module will be an aid for
 			language- learners, giving audio/visual and textual language lessons.
