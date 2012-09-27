@@ -1,6 +1,6 @@
 {
   "name": "FieldDB unstable",
-  "version": "1.21.2",
+  "version": "1.22.2",
   "description": "__MSG_application_description__",
   "default_locale": "en",
   
@@ -23,6 +23,7 @@
     
     "https://ifield.iriscouch.com/*",
     
+    "https://wwwdev.fieldlinguist.com:3181/*",
     "https://authdev.fieldlinguist.com:3183/*",
     "https://audiodev.fieldlinguist.com:3184/*",
     "https://lexicondev.fieldlinguist.com:3185/*",
@@ -40,6 +41,6 @@
     "128": "icon128_dev.png" 
   },
   "manifest_version": 2,
-  "content_security_policy": "default-src 'self' https://authdev.fieldlinguist.com:3183/  https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/ ; script-src 'self' https://authdev.fieldlinguist.com:3183/ https://ssl.google-analytics.com/ ; connect-src  https://www.youtube.com/  https://authdev.fieldlinguist.com:3183/ https://ifielddevs.iriscouch.com/ https://ifielddevs.iriscouch.com:443/ 'self'; object-src 'self';"
+  "content_security_policy": "default-src 'self' https://authdev.fieldlinguist.com:3183/ https://wwwdev.fieldlinguist.com:3181/  https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/ ; script-src 'self' https://wwwdev.fieldlinguist.com:3181/ https://authdev.fieldlinguist.com:3183/ https://ssl.google-analytics.com/ ; connect-src https://wwwdev.fieldlinguist.com:3181/  https://www.youtube.com/  https://authdev.fieldlinguist.com:3183/ https://ifielddevs.iriscouch.com/ https://ifielddevs.iriscouch.com:443/ 'self'; object-src 'self' https://wwwdev.fieldlinguist.com:3181/;"
  
 }

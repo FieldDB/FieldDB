@@ -279,7 +279,7 @@ define([
     
     /**
      * Clone the current Datum and return the clone. The clone is put in the current
-     * Session, regardless of the origin Datum's Session.
+     * Session, regardless of the origin Datum's Session. //TODO it doesn tlook liek this is the case below:
      * 
      * @return The clone of the current Datum.
      */
@@ -436,10 +436,15 @@ define([
       // Store the current Session, the current corpus, and the current date
       // in the Datum
       this.set({
-        "session" : app.get("currentSession"), //TODO this is dangerous no? it will overwrite its session with the current one if it is from a previous session
-        "pouchname" : app.get("corpus").get("pouchname"),
+        "pouchname" : window.app.get("corpus").get("pouchname"),
         "dateModified" : JSON.stringify(new Date())
       });
+      if(!this.get("session")){
+        this.set("session" , window.app.get("currentSession")); 
+        Util.debug("Setting the session on this datum to the current one.");
+      }else{
+        Utils.debug("Not setting the session on this datum.");
+      }
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
@@ -500,38 +505,38 @@ define([
                   teamOrPersonal : "personal",
                   context : " via Offline App."
                 }));
-            /*
-             * If the current data list is the default
-             * list, render the datum there since is the "Active" copy
-             * that will eventually overwrite the default in the
-             * corpus if the user saves the current data list
-             */
-            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
-            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
-              //Put it into the current data list views
-              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
-              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
-              //Put it into the ids of the current data list
-              var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
-              if(positionInCurrentDataList != -1){
-                window.app.get("currentDataList").get("datumIds").splice(positionInCurrentDataList, 1);
-              }
-              window.app.get("currentDataList").get("datumIds").unshift(model.id);
-              window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
-            }else{
-              /*
-               * Make sure the datum is at the top of the default data list which is in the corpus,
-               * this is in case the default data list is not being displayed
-               */
-              var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
-              if(positionInDefaultDataList != -1 ){
-                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
-                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
-              }
-              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-              window.app.get("corpus").get("dataLists").models[defaultIndex].needsSave  = true;
-              window.appView.addUnsavedDoc(window.app.get("corpus").id);
-            }
+//            /*
+//             * If the current data list is the default
+//             * list, render the datum there since is the "Active" copy
+//             * that will eventually overwrite the default in the
+//             * corpus if the user saves the current data list
+//             */
+//            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
+//            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
+//              //Put it into the current data list views
+//              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
+//              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
+//              //Put it into the ids of the current data list
+//              var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
+//              if(positionInCurrentDataList != -1){
+//                window.app.get("currentDataList").get("datumIds").splice(positionInCurrentDataList, 1);
+//              }
+//              window.app.get("currentDataList").get("datumIds").unshift(model.id);
+//              window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
+//            }else{
+//              /*
+//               * Make sure the datum is at the top of the default data list which is in the corpus,
+//               * this is in case the default data list is not being displayed
+//               */
+//              var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
+//              if(positionInDefaultDataList != -1 ){
+//                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
+//                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+//              }
+//              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
+//              window.app.get("corpus").get("dataLists").models[defaultIndex].needsSave  = true;
+//              window.appView.addUnsavedDoc(window.app.get("corpus").id);
+//            }
             /*
              * Also, see if this datum matches the search datalist, and add it to the top of the search list
              */

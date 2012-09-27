@@ -40,11 +40,11 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        if(this.model.get("alwaysRandomizeSkin")){
-          this.model.set("alwaysRandomizeSkin",false);
+        if(this.model.get("alwaysRandomizeSkin") == "true"){
+          this.model.set("alwaysRandomizeSkin","false");
           $(this.el).find(".randomize-backgound").removeClass("btn-success");
         }else{
-          this.model.set("alwaysRandomizeSkin",true);
+          this.model.set("alwaysRandomizeSkin","true");
           $(this.el).find(".randomize-backgound").addClass("btn-success");
           this.randomSkin();
         }
@@ -55,12 +55,12 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        if(this.model.get("transparentDashboard")){
-          this.model.set("transparentDashboard", false);
+        if(this.model.get("transparentDashboard") == "true"){
+          this.model.set("transparentDashboard", "false");
           $(this.el).find(".transparent-dashboard").removeClass("btn-success");
           this.makeDashboardOpaque();
         }else{
-          this.model.set("transparentDashboard", true);
+          this.model.set("transparentDashboard", "true");
           $(this.el).find(".transparent-dashboard").addClass("btn-success");
           this.makeDashboardTransparent();
         }
@@ -82,14 +82,14 @@ define([
         this.$el.find(".num_datum_dropdown").val(this.model.get("numVisibleDatum"));
         
         
-        if(this.model.get("alwaysRandomizeSkin")){
+        if(this.model.get("alwaysRandomizeSkin") == "true"){
           $(this.el).find(".randomize-backgound").addClass("btn-success");
           this.randomSkin();
         }else{
           $(this.el).find(".randomize-backgound").removeClass("btn-success");
         }
         
-        if(this.model.get("transparentDashboard")){
+        if(this.model.get("transparentDashboard") == "true"){
           $(this.el).find(".transparent-dashboard").addClass("btn-success");
           this.makeDashboardTransparent();
         }else{

@@ -74,7 +74,7 @@ define([
         //if the same user is re-authenticating, include their details to sync to the server.
         if(user.get("username") == this.get("userPrivate").get("username")){
           dataToPost.syncDetails = "true";
-          dataToPost.syncUserDetails = JSON.stringify(this.get("userPrivate").toJSON());
+          dataToPost.syncUserDetails = JSON.parse(JSON.stringify(this.get("userPrivate").toJSON()));
         }
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server, the server will overwrite their details. should we automatically check here, or should we make htem a button when they are authetnticated to test if they ahve lost their prefs etc?
       }
@@ -86,16 +86,13 @@ define([
         data : dataToPost,
         success : function(data) {
           if (data.errors != null) {
-            $(".alert-error").html(
-                data.errors.join("<br/>") + " " + Utils.contactUs);
-            $(".alert-error").show();
             try{
               window.appView.toastUser(data.errors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
             }catch(e){
               Utils.debug(e);
             }
             if (typeof failcallback == "function") {
-              failcallback();
+              failcallback(data.errors.join("<br/>"));
             }
             if (typeof successcallback == "function") {
               successcallback(null, data.errors); // tell caller that the user failed to
@@ -112,7 +109,7 @@ define([
           }
 
           if (typeof failcallback == "function") {
-            failcallback();
+            failcallback("There was an error in contacting the authentication server to confirm your identity. Maybe you're offline?");
           }
         },
         dataType : ""

@@ -130,6 +130,12 @@
   "locale_User_Profile" : {
     "message" : "Perfil de Usuario"
   },
+  "locale_Private_Profile" : {
+    "message" : "TODO translate Perfil Privada"
+  },
+  "locale_Public_Profile" : {
+    "message" : "TODO translate Perfil Publico"
+  },
   "locale_User_Settings" : {
     "message" : "Configuración de Usuario"
   },
