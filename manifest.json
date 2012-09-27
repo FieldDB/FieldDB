@@ -1,10 +1,10 @@
 {
-  "name": "Drag and Drop FieldLinguistics Tests",
+  "name": "Drag and Drop FieldLinguistics Tests or Slides",
   "version": "1.0",
   "description": "A way for the developers to test the Drag and Drop FieldLinguistics App",
   "app": {
     "launch": {
-      "local_path": "./tests/jasmine.html"
+      "local_path": "./docs/slides/20120924.html"
     }
   },
   "offline_enabled": true,

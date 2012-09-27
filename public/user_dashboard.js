@@ -112,14 +112,18 @@ require.config({
 
 // Initialization
 require([
-    "user/User",
+    "user/UserApp",
+    "user/UserAppView",
+    "user/UserRouter",
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
     "libs/webservicesconfig_devserver",
     "libs/Utils"
 ], function(
-    User,
+    UserApp,
+    UserAppView,
+    UserRouter,
     compiledTemplates,
     Backbone,
     forcingpouchtoloadonbackboneearly
@@ -136,10 +140,24 @@ require([
    */
   var username = Utils.getCookie("username");
   if (username != null && username != "") {
-     alert("Welcome again " + username); //Dont need to tell them this
-    // anymore, it seems perfectly stable.
 
-    $("#user-fullscreen").html("list of corpora goes here");
+    window.app = new UserApp();
+    var auth = window.app.get("authentication");
+    var u = localStorage.getItem("encryptedUser");
+    auth.loadEncryptedUser(u, function(success, errors){
+      if(success == null){
+        alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
+        document.location.href='index.html';
+        return;
+      }else{
+//        alert("We logged you in." + Utils.contactUs);  
+        window.appView = new UserAppView({model: window.app}); 
+        window.appView.render();
+        app.router = new UserRouter();
+        Backbone.history.start();
+      }
+    });
+    
   } else {
     // new user, let them register or login as themselves or sapir
     document.location.href='index.html';

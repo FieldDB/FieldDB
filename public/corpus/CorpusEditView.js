@@ -405,20 +405,44 @@ define([
     },
     
     updateTitle: function(){
-      this.model.set("title",this.$el.find(".corpus-title-input").val());
-      window.appView.addUnsavedDoc(this.model.id);
+      var newTitle = this.$el.find(".corpus-title-input").val();
+      if(newTitle == ""){
+        alert("Please enter a title for your corpus."); //TODO make this more user friendly later
+        return;
+      }
+      this.model.set("title", newTitle);
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }else{
+        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
+
+        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
+        if(pouches.indexOf(newPouchName) != -1){
+          alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
+          this.$el.find(".corpus-title-input").val("");
+          return;
+        }
+        
+        this.model.get("couchConnection").pouchname = newPouchName;
+        this.model.set("pouchname", newPouchName);
+        this.model.get("publicSelf").set("pouchname", newPouchName);
+        this.model.get("team").set("pouchname", newPouchName);
+        this.$el.find(".new-corpus-pouchname").html(newPouchName);
+      }
 
     },
     
     updateDescription: function(){
       this.model.set("description",this.$el.find(".corpus-description-input").val());
-      window.appView.addUnsavedDoc(this.model.id);
-
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
     updatePublicOrPrivate : function(){
       this.model.set("publicCorpus",this.$el.find(".public-or-private").val());
-      window.appView.addUnsavedDoc(this.model.id);
-
+      if(this.model.id){
+        window.appView.addUnsavedDoc(this.model.id);
+      }
     },
    
     //Functions assoicate with the corpus menu
@@ -447,17 +471,7 @@ define([
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
       }
-      $("#new-session-modal").modal("show");
-      //Save the current session just in case
-      window.app.get("currentSession").saveAndInterConnectInApp(function(){
-        //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-        window.appView.sessionNewModalView.model = new Session({
-          pouchname : window.app.get("corpus").get("pouchname"),
-          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
-        });
-        window.appView.sessionNewModalView.model.set("comments", new Comments());
-        window.appView.sessionNewModalView.render();
-      });
+      this.model.newSession();
     },
     
     newCorpus : function(e){
@@ -465,32 +479,7 @@ define([
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
       }
-      $("#new-corpus-modal").modal("show");
-      //Save the current session just in case
-      window.app.get("corpus").saveAndInterConnectInApp();
-      //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
-      var attributes = JSON.parse(JSON.stringify(window.app.get("corpus").attributes));
-      // Clear the current data list's backbone info and info which we shouldnt clone
-      attributes._id = undefined;
-      attributes._rev = undefined;
-      /*
-       * WARNING this might not be a good idea, if you find strange side
-       * effects in corpora in the future, it might be due to this way
-       * of creating (duplicating) a corpus. However with a corpus it is
-       * a good idea to duplicate the permissions and settings so that
-       * the user won't have to redo them.
-       */
-      attributes.title = window.app.get("corpus").get("title")+ " copy";
-      attributes.titleAsUrl = window.app.get("corpus").get("titleAsUrl")+"Copy";
-      attributes.description = "Copy of: "+window.app.get("corpus").get("description");
-      attributes.pouchname = window.app.get("corpus").get("pouchname")+"copy";
-      attributes.couchConnection.pouchname = window.app.get("corpus").get("pouchname")+"copy";
-      attributes.dataLists = new DataLists();
-      attributes.sessions = new Sessions();
-      attributes.comments = new Comments();
-
-      window.appView.corpusNewModalView.model = new Corpus(attributes);
-      window.appView.corpusNewModalView.render();
+      this.model.newCorpus();
     },
 
     
