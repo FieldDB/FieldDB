@@ -4,7 +4,7 @@
   "description": "A way for the developers to test the Drag and Drop FieldLinguistics App",
   "app": {
     "launch": {
-      "local_path": "./docs/slides/20120924.html"
+      "local_path": "./docs/slides/shells/onstage.html"
     }
   },
   "offline_enabled": true,
