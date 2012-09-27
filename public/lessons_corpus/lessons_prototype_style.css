@@ -24,8 +24,8 @@
 }
 
 .total_progress {
-  line-height: 0em;
-  height: 0em;
+	line-height: 0em;
+	height: 0em;
 }
 
 progress {
@@ -44,13 +44,19 @@ progress {
 
 /* Chrome */
 progress::-webkit-progress-bar {
-	background-color: white; 
+	background-color: white;
 }
 
 .total_complete progress::-webkit-progress-value {
-  background-color: rgba(255, 255, 50, 0.5);
+	background-color: rgba(255, 255, 50, 0.5);
 }
 
 .correct_complete progress::-webkit-progress-value {
-  background-color: rgba(100, 200, 100, 0.5);
+	background-color: rgba(100, 200, 100, 0.5);
 }
+
+.dialog_screen {
+	width: 50%;
+	margin: auto;
+}
+
