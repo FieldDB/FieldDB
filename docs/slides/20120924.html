@@ -8,15 +8,19 @@
 
 <section class="bamboo">
 	<h2>Taking Javascript into the field:</h2>
-	<h3>
-		<a href="https://github.com/OpenSourceFieldlinguistics">a case
+	<h4 >
+		<a  href="https://github.com/OpenSourceFieldlinguistics">a case
 			study</a>
-	</h3>
+	</h4>
 	<footer>
-		<a href="https://github.com/cesine"><i class="icon-github"></i>
-			cesine</a> <span class="github">G. Cook</span> &amp; <a
-			href="https://github.com/trisapeace/"><i class="icon-github"></i>
-			trisapeace</a> <span class="github">T. Deering</span>
+		<div>Cook &amp; Deering</div>
+		<div>
+			<a href="https://github.com/cesine" class="github"><i
+				class="icon-github "></i> cesine</a> &nbsp; &nbsp; &nbsp; &nbsp; <a
+				href="https://github.com/trisapeace/" class="github"><i
+				class="icon-github "></i> trisapeace</a>
+		</div>
+
 	</footer>
 	<div role="note">FieldDB is a 100% Javascript stack for
 		collaboratively collecting data. It was designed to run offline on
@@ -50,7 +54,7 @@
 	<ul class="incremental">
 		<li>Offline</li>
 		<li>Data intensive</li>
-		<li>Highly structured data, but never the same structure</li>
+		<li>Highly structured data, but always changing</li>
 		<li>Encrypted</li>
 		<li>Web services</li>
 		<li>Web widgets</li>
@@ -499,10 +503,18 @@ for(var d in datums){
 		to Handlebars and Backbone.js without a drop of fear...</div>
 </section>
 
-<section>
-	<h2>Questions?</h2>
-</section>
 
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="dashboard.png">
+		<figcaption>Questions?</figcaption>
+	</figure>
+	<div role="note">Thanks, the client codebase and webservices are
+		all on github, we also have a dev blog where our interns created
+		screencasts and board casts of what they learned while developing the
+		app.</div>
+</section>
 
 
 <!-- Your Style -->
@@ -522,15 +534,12 @@ a {
 	text-decoration: none;
 }
 
-.bamboo a {
+.bamboo {
 	font-size: 2em;
 }
 
 .github {
-	font-size: 1em;
-	vertical-align: bottom;
-	line-height: 3em;
-	color: #000;
+	font-size: 20px;
 	text-shadow: 0px 0px #000;
 	color: #000;
 }
@@ -634,7 +643,7 @@ figure {
 	width: 100%;
 	height: 100%;
 	color: #fff;
-	text-shadow: 2px 2px #000;
+	text-shadow: 3px 3px #000;
 }
 
 figure>* {
@@ -647,8 +656,17 @@ figure>img,figure>video {
 }
 
 figcaption {
-	margin: 70px;
+	margin: 200px;
 	font-size: 50px;
+}
+
+figcaption ul {
+	font-size: 30px;
+	margin-left: 0px;
+}
+
+figcaption li {
+	margin-left: 60px;
 }
 
 footer {
@@ -695,7 +713,7 @@ section[aria-selected] {
 /* After */
 section[aria-selected]                                                 
 	                                                                      
-	    ~ section {
+	       ~ section {
 	left: +150%;
 }
 
@@ -714,7 +732,7 @@ section[aria-selected]
 /* The items to-be-selected */
 .incremental>*[aria-selected]                                          
 	                                                                      
-	           ~ * {
+	              ~ * {
 	opacity: 0;
 }
 
