@@ -3,14 +3,18 @@ define([
     "handlebars", 
     "corpus/Corpus",
     "corpus/Corpuses",
+    "corpus/CorpusLinkView",
     "user/User",
+    "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
     Backbone, 
     Handlebars, 
     Corpus,
     Corpuses,
-    User
+    CorpusLinkView,
+    User,
+    UpdatingCollectionView
 ) {
   var UserReadView = Backbone.View.extend(
   /** @lends UserReadView.prototype */
@@ -30,6 +34,7 @@ define([
     initialize : function() {
       Utils.debug("USER READ VIEW init: ");
 //      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
+      this.changeViewsOfInternalModels();
 
     },
     
@@ -93,6 +98,14 @@ define([
 
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
+        
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
+
+        // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       } else if (this.format == "modal") {
         Utils.debug("USER READ MODAL render: ");
 
@@ -104,7 +117,14 @@ define([
         $(this.el).find(".locale_View_Public_Profile_Tooltip").html(chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
         $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
         $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
 
+
+        // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       } else if (this.format == "link") {
         Utils.debug("USER READ LINK render: ");
 
@@ -121,14 +141,20 @@ define([
         
         //localize the public user page
         $(this.el).find(".locale_Edit_Public_User_Profile").attr("title",chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
+        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
 
+     // Display the CorpusesReadView
+        this.corpusesReadView.el = $(this.el).find('.corpuses');
+        this.corpusesReadView.render();
+        
+        
       }else{
         throw("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
       
       if(this.format != "link"){
         //localization for all except link
-        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_User_Profile"));
+
         $(this.el).find(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
         $(this.el).find(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
         $(this.el).find(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
@@ -140,59 +166,21 @@ define([
       return this;
     },
     
-    
-    
-    /**
-     * Initializes the public User.
-     */
-    
-    loadPublic : function(){
-      var oldprefs = this.model.get("prefs");
-//      this.model = new User({
-//        "username" : "public",
-//        "password" : "",
-//        "email" : "",
-//        "firstname" : "Anonymous",
-//        "lastname" : "User",
-//        "gravatar" : "./../user/public_gravatar.png",
-//        "researchInterest" : "",
-//        "affiliation" : "",
-//        "description" : "",
-//        "subtitle" : "",
-//        "corpuses" : ["5028B933-72BB-4EA4-ADF8-67C2A5ABC968"],
-//        "dataLists" : [],
-//        "prefs" : oldprefs,
-//        "teams" : []
+    changeViewsOfInternalModels : function(){
+      //Create a CommentReadView      TODO add comments to users
+//      this.commentReadView = new UpdatingCollectionView({
+//        collection           : this.model.get("comments"),
+//        childViewConstructor : CommentReadView,
+//        childViewTagName     : 'li'
 //      });
-
-//      this.model.id = "E144FA24-BAF4-48F9-9800-62E7A7E93CF4";
-//      this.model.fetch();
-      this.model.set ({
-          "id": "E144FA24-BAF4-48F9-9800-62E7A7E93CF4",
-          "username" : "fielddbpublicuser",
-          "password" : "",
-          "email" : "",
-          "firstname" : "Anonymous",
-          "lastname" : "User",
-          "gravatar" : "./../user/public_gravatar.png",
-          "prefs" : oldprefs,
-        });
-//      var n = new Corpus({title: "test corpus filled in userView", titleAsUrl: "test"});
-//      this.model.get("corpuses").push(n.id);
-//      var d = new DataList({});
-//      this.model.get("dataLists").push(d.id); 
-//      var self = this;
-//      this.model.save(
-//          null,
-//          {
-//            success : function() {
-//              self.model.get("corpuses").push(n.id);
-//            },
-//            error : function() {
-//              alert("Unable to create new corpus.");
-//            }
-//          }
-//      );
+    //Create a CommentReadView     
+      this.corpusesReadView = new UpdatingCollectionView({
+        collection : new Corpuses(),
+        childViewConstructor : CorpusLinkView,
+        childViewTagName : 'li'
+      });
+      this.corpusesReadView.collection.constructCollectionFromArray(this.model
+          .get("corpuses"))
     }
   });
 

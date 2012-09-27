@@ -33,15 +33,15 @@ define([
     },
 
     routes : {
-      "corpus/:corpusid"                : "showFullscreenCorpus", 
-      "corpus/:pouchname/datum/:id"    : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
-      "corpus/:pouchname/search"       : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
-      "corpus/"                         : "showFullscreenCorpus", 
+      "corpus/:pouchname"               : "showFullscreenCorpus", 
+      "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
+      "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
+      "corpus"                          : "showFullscreenCorpus", 
       "data/:dataListid"                : "showFullscreenDataList",
       "session/:sessionid"              : "showFullscreenSession",
       "user/:userid"                    : "showFullscreenUser",
       "import"                          : "showImport",
-      "corpus/:pouchname/export"       : "showExport",
+      "corpus/:pouchname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       ""                                : "showDashboard"
     },

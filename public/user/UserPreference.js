@@ -213,8 +213,8 @@ define([
     defaults : {
       skin : "",
       numVisibleDatum : 2, //Use two as default so users can see minimal pairs
-      transparentDashboard: false,
-      alwaysRandomizeSkin : true,
+      transparentDashboard: "false",
+      alwaysRandomizeSkin : "true",
       numberOfItemsInPaginatedViews : 10
     },
     
