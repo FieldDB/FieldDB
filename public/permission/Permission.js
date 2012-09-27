@@ -37,7 +37,7 @@ define([
   
     defaults : {
 //      users: Users,
-//      role: "", //admin, contributor, collaborator
+//      role: "", //admin, writer, reader
 //      pouchname: "",
     },
     

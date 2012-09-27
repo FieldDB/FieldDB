@@ -211,6 +211,12 @@ define([
         window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
+        $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+        $(".welcome-screen-alerts").addClass("alert-success");
+        $(".welcome-screen-alerts").show();
+        $(".welcome-screen-alerts").removeClass("alert-error");
+        $(".register-new-user").addClass("disabled");
+        $(".register-new-user").attr("disabed","disabled");
         /*
          * Contact the server and register the new user
          */
@@ -220,14 +226,10 @@ define([
           data : dataToPost,
           success : function(data) {
             if (data.errors != null) {
-              $(".alert-error").html(data.errors.join("<br/>")+" "+Utils.contactUs );
-              $(".alert-error").show();
+              $(".welcome-screen-alerts").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+              $(".welcome-screen-alerts").show();
             } else if (data.user) {
-              $(".alert-error").html("<p><strong>Please wait:</strong> Preparing your first corpus/database for you, this'll just take a minute...</p> <progress max='100'> <strong>Progress: working...</strong>" );
-              $(".alert-error").addClass("alert-success");
-              $(".alert-error").show();
-              $(".alert-error").removeClass("alert-error");
-              $(".register-new-user").addClass("disabled");
+              
 
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
@@ -241,7 +243,6 @@ define([
                   var c = a.get("corpus");
                   c.set({
                     "title" : data.user.username + "'s Corpus",
-                    "titleAsUrl" : data.user.username + "Corpus",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
                     "team" : auth.get("userPublic"),
@@ -257,40 +258,48 @@ define([
                   a.set("currentUserActivityFeed", new ActivityFeed());
                   a.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
                 
-                  var s = a.get("currentSession");
-                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
-                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
-                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
-                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
-                  s.set("pouchname", data.user.corpuses[0].pouchname);
-                  s.changePouch(data.user.corpuses[0].pouchname);
+                  //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
+                  c.saveAndInterConnectInApp();
                   
-                  c.get("sessions").add(s);
                   
-                  var dl = a.get("currentDataList");
-                  dl.set({
-                    "title" : "All Data",
-                    "dateCreated" : (new Date()).toDateString(),
-                    "description" : "This list contains all data in this corpus. " +
-                    "Any new datum you create is added here. " +
-                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
-                    "pouchname" : data.user.corpuses[0].pouchname
-                  });
-                  dl.changePouch(data.user.corpuses[0].pouchname);
-                  c.get("dataLists").add(dl);
-                  
-                  c.changePouch(data.user.corpuses[0]);
-                  a.saveAndInterConnectInApp(function(){
-//                    alert("save app succeeded");
-                    localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
-                    document.location.href='corpus.html';
-                  }
+//                  var s = a.get("currentSession");
+//                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
+//                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
+//                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
+//                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+//                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
+//                  s.set("pouchname", data.user.corpuses[0].pouchname);
+//                  s.changePouch(data.user.corpuses[0].pouchname);
+//                  
+//                  c.get("sessions").add(s);
+//                  
+//                  var dl = a.get("currentDataList");
+//                  dl.set({
+//                    "title" : "All Data",
+//                    "dateCreated" : (new Date()).toDateString(),
+//                    "description" : "This list contains all data in this corpus. " +
+//                    "Any new datum you create is added here. " +
+//                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
+//                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
+//                    "pouchname" : data.user.corpuses[0].pouchname
+//                  });
+//                  dl.changePouch(data.user.corpuses[0].pouchname);
+//                  c.get("dataLists").add(dl);
+//                  
+//                  c.changePouch(data.user.corpuses[0]);
+//                  a.saveAndInterConnectInApp(function(){
+////                    alert("save app succeeded");
+//                    //Put this corpus's id into the couchconnection in the user so that we can fetch the private view of the corpus directly
+//                    auth.get("userPrivate").get("corpuses")[0].corpusid = c.id;
+//                    auth.saveAndInterConnectInApp(function(){
+//                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
+//                      document.location.href='user.html#corpus/'+data.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
+//                    });
+//                  }
 //                  ,function(){
 //                    alert("Bug! save app failed.");
 //                  }
-                  );
+//                  );
                   // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
 //                  window.startApp(a, function(){
 ////                     auth.get("userPrivate").addCurrentCorpusToUser();
@@ -331,8 +340,8 @@ define([
         });
       } else{
         Utils.debug("User has not entered good info. ");
-          $(".alert-error").html("Your passwords don't seem to match. " + Utils.contactUs );
-          $(".alert-error").show();
+          $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + Utils.contactUs );
+          $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
 
       }
@@ -351,19 +360,25 @@ define([
       a = new App();
       window.app = a;
 
+      $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+      $(".welcome-screen-alerts").addClass("alert-success");
+      $(".welcome-screen-alerts").show();
+      $(".welcome-screen-alerts").removeClass("alert-error");
+      
       var auth = a.get("authentication");
       auth.authenticate(u, function(success, errors){
         if(success == null){
-          $(".alert-error").html(
+          $(".welcome-screen-alerts").html(
               errors.join("<br/>") + " " + Utils.contactUs);
 //        alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
-          $(".alert-error").show();
-          $('#user-welcome-modal').modal("show");
+          $(".welcome-screen-alerts").show();
+          $(".welcome-screen-alerts").addClass("alert-error");
+//          $('#user-welcome-modal').modal("show");
         }else{
-          $(".alert-error").html("Syncing your data to this tablet/laptop." );
-          $(".alert-error").addClass("alert-success");
-          $(".alert-error").removeClass("alert-error");
-          $(".alert-error").show();
+          $(".welcome-screen-alerts").html("Attempting to sync your data to this tablet/laptop...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+          $(".welcome-screen-alerts").addClass("alert-success");
+          $(".welcome-screen-alerts").removeClass("alert-error");
+          $(".welcome-screen-alerts").show();
           //TODO let them choose their corpus
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
             var couchConnection = auth.get("userPrivate").get("corpuses")[0];
@@ -373,9 +388,21 @@ define([
                 //Must replicate before redirecting to dashboard, otherwise the pouch and corpus will be empty
                 document.location.href='corpus.html';
               });
+            }, function(errormessage){
+              $(".welcome-screen-alerts").html(
+                  errormessage+" " + Utils.contactUs);
+              $(".welcome-screen-alerts").show();
+              $(".welcome-screen-alerts").addClass("alert-error");
             });
           });
         }
+      }, function(message){
+        $(".welcome-screen-alerts").html(
+            message+" Something went wrong, thats all we know. Please try again or report this to us if it does it again:  " + Utils.contactUs);
+//      alert("Something went wrong, either we were unable to contact the server, or something is wrong with your login info.");
+        $(".welcome-screen-alerts").show();
+        $(".welcome-screen-alerts").addClass("alert-error");
+//        $('#user-welcome-modal').modal("show");
       });
     }
   });

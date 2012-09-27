@@ -9,7 +9,7 @@ echo "Making fielddb workspace, this will contain the logs, client code and web 
 mkdir $HOME/fielddbworkspace
 cd $HOME/fielddbworkspace
 mkdir logs
-mkdir usersaudiofiles
+mkdir audiofiles
 
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
@@ -27,9 +27,9 @@ git remote rm origin
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
 echo "Downloading Node, a javascript server which is what FieldDB uses to run"
 cd $HOME/fielddbworkspace
-curl -O --retry 999 --retry-max-time 0 -C - http://nodejs.org/dist/v0.6.19/node-v0.6.19.tar.gz
-tar -zxvf node-v0.6.19.tar.gz
-cd node-v0.6.19
+curl -O --retry 999 --retry-max-time 0 -C - http://nodejs.org/dist/v0.8.10/node-v0.8.10.tar.gz
+tar -zxvf node-v0.8.10.tar.gz
+cd node-v0.8.10
 echo "Next three lines give command to compile Node"
 ./configure --prefix=$HOME/fielddbworkspace/node
 make
@@ -105,14 +105,14 @@ git remote rm origin
 
 ## This is optional, do this if you do not want to use iriscouch.com or another couch db hosting service.
 
-#echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
-#cd $HOME/fielddbworkspace
-#curl -O --retry 999 --retry-max-time 0 -C - http://apache.skazkaforyou.com/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz 
-#tar -zxvf apache-couchdb-1.2.0.tar.gz
-#cd apache-couchdb-1.2.0
-#./configure --prefix=$HOME/fielddbworkspace/couchdb
-#make
-#make install
+echo "Downloading Couch Database files, this is where the activity feeds and corpus databases are stored."
+cd $HOME/fielddbworkspace
+curl -O --retry 999 --retry-max-time 0 -C - http://apache.skazkaforyou.com/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz 
+tar -zxvf apache-couchdb-1.2.0.tar.gz
+cd apache-couchdb-1.2.0
+./configure --prefix=$HOME/fielddbworkspace/couchdb
+make
+make install
 
 ## Running tests to see if everything downloaded and works ###################################################
 

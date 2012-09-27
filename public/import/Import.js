@@ -114,8 +114,10 @@ define([
 //          });
 //          rows[l] = withoutQuotes;
         }else{
-          var rowWithoutQuotes = rows[l].replace(/"/g,"");
-          rows[l] = self.parseLineCSV(rowWithoutQuotes);
+          rows[l] = self.parseLineCSV(rows[l]);
+          /* This was a fix for alan's data but it breaks other data. */
+//          var rowWithoutQuotes = rows[l].replace(/"/g,"");
+//          rows[l] = self.parseLineCSV(rowWithoutQuotes);
         }
       }
       
