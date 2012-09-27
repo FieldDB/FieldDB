@@ -8,8 +8,8 @@
 
 <section class="bamboo">
 	<h2>Taking Javascript into the field:</h2>
-	<h4 >
-		<a  href="https://github.com/OpenSourceFieldlinguistics">a case
+	<h4>
+		<a href="https://github.com/OpenSourceFieldlinguistics">a case
 			study</a>
 	</h4>
 	<footer>
@@ -26,8 +26,7 @@
 		collaboratively collecting data. It was designed to run offline on
 		multiple platforms (Chrome Extension and Android). In this talk we
 		will discuss the hurdles along the way to building a data heavy
-		offline app. The Javascript App, and its Node.js web services are
-		OpenSourced on GitHub:</div>
+		offline app.</div>
 </section>
 
 <section>
@@ -66,20 +65,20 @@
 				could</li>
 			<li>Highly-structured: Fieldlinguists are super structured, but
 				never the same structure and the structure of the data usually
-				evolves over time as their analysis evolves and the data the collect
-				evolves.</li>
+				evolves over time as their analysis evolves and the data they
+				collect grows.</li>
 			<li>Encrypted: Fieldlinguist's are bound to laws on the
-				protection and exploitation of 'human subjects' which means some
-				data needs to be confidential, until the subject's death. This means
-				encryption in the database and decrypting only after authentication.
-				An interesting problem for an offline app where no code or tokens
-				can be hidden from the user...</li>
+				protection of 'human subjects' which means some data needs to be
+				confidential, until the subject's death. This means encryption in
+				the database and decrypting only after authentication. An
+				interesting problem for an offline app where no code or tokens can
+				be hidden from the user...</li>
 			<li>CPU intensive: Fieldlinguists have lots of repetitive tasks
-				and OpenSource projects which automate them, use use Node.js to
-				bring these in as web services.</li>
-			<li>Web widgets: Fieldlinguist want to share their data, but not
-				all of it. mash ups and mashability are essential for a truely wide
-				adoption..</li>
+				and OpenSource projects which automate them, we use Node.js to bring
+				these in as web services.</li>
+			<li>Web widgets: Fieldlinguists want to share their data, but
+				not all of it. Mash ups and mashability are what's missing from
+				existing fieldlinguistics database software..</li>
 		</ul>
 	</div>
 </section>
@@ -97,7 +96,10 @@
 	<div role="note">Most Javascript apps are not offline, they're
 		online in constant contact with a web server. Others are online and
 		can go offline for a period of time by living out of a cache. In our
-		case we are talking about completely offline, with a few buttons which
+		case we are talking about completely offline. Files are delivered in
+		the first download of the app, and they persist (along with their
+		storage) even after the user has uninstalled the app (in the case of a
+		Chrome extension, or Android). Sure, the app has a few buttons which
 		make REST calls to a web service, but only when the user wants to
 		connect.</div>
 </section>
@@ -115,12 +117,12 @@
 		<p>Our App is designed to run on a couple of clients, namely a
 			Chrome extension, an Android tablet and in a limited capacity, on a
 			website. There are 4 web services: Authentication,
-			AudioSplicing&Transcription, Search/MachineLearning, Database and a
+			AudioSplicing/Transcription, Search/MachineLearning, Database and a
 			webserver, 4 are Node.js and one is CouchDB itself.</p>
 		<p>We are using Backbone, Handlebars, Require.js to manage
-			dependencies and PouchDB which wraps IndexedDB. In this we are going
-			to talk about two key libraries and their pitfalls which we think
-			might help you guys out if you have similar stack.</p>
+			dependencies and PouchDB which wraps IndexedDB. In this talk we are
+			going to look at two key libraries and their pitfalls which we think
+			might help you guys out, if you have similar stack.</p>
 	</div>
 </section>
 
@@ -282,14 +284,14 @@
 	<script class="incremental"
 		src="https://gist.github.com/3785402.js?file=eval-problem.js"></script>
 	<div role="note">By far the most exciting hurdle getting an alpha
-		library to run on a new HTML5 API was the eval problem. Eval is evil,
-		but sometimes a necesary evil. This is a line in Pouch which takes in
-		your Map function (so you can search in your database), which is
-		stored as a doc (i.e. string) in your database, and evaluates it into
-		code so it can be called. The best part is that Chrome extensions can
-		no longer call eval. So what good is a database if you cant search it?
-		And because the eval has to be called in the scope where the emit
-		function is called, avoiding the eval requires a redesign of PouchDB.
+		library to run in a chrome extension was the eval problem. Eval is
+		evil, but sometimes a necesary evil. This is a line in Pouch which
+		takes in your Map function (so you can search in your database), which
+		is stored as a doc (i.e. string) in your database, and evaluates it
+		into code so it can be called. The best part is that Chrome extensions
+		can no longer call eval. So what good is a database if you cant search
+		it? And because the eval has to be called in the scope where the emit
+		function is defined, avoiding the eval requires a redesign of PouchDB.
 		So here is our hack...</div>
 </section>
 
@@ -311,8 +313,8 @@
 <section>
 	<h3>Our hack</h3>
 	<script src="https://gist.github.com/3785402.js?file=eval-hack.js"></script>
-	<div role="note">Here is the 10 lines of code we had to bury deep
-		on line 2308 of pouch.alpha.js</div>
+	<div role="note">Here are the 10 lines of code we had to bury
+		deep on line 2308 of pouch.alpha.js</div>
 </section>
 
 
@@ -321,28 +323,26 @@
 		loader. It is optimized for in-browser use, but it can be used in
 		other JavaScript environments, like Rhino and Node.</blockquote>
 	<div role="note">Turning now to modularity and code-reuse. Using
-		a modular script loader like RequireJS drastically reduced the
-		complexity of developing and deploying our codebase for multiple
-		clients.</div>
+		a script loader like RequireJS drastically reduced the complexity of
+		developing and deploying our codebase for multiple clients.</div>
 </section>
 
 <section>
 	<h2>Why Require.js?</h2>
 	<ul class="incremental">
-		<li>Shorter HTML file(s)</li>
-		<li>Easier development using local dependencies</li>
+		<li>Easier development using only local dependencies</li>
 		<li>Smarter minification</li>
 		<li>Better for building "widgets"</li>
 	</ul>
 	<div role="note">Require.js makes for cleaner classes, if you're
 		used to developing in Java, having Require makes you feel right at
-		home..Require.js calculates the files your class depends on and
-		includes them for you. Require can also 'build' your classes into one
+		home. Require.js calculates the files your class depends on and
+		includes them for you. Require can also 'build' your classes into a
 		minified js file for shipping down the wire, whether it be on page
 		load for a website, or when the user downloads your app from the
 		Android market. Similarly require helps for building a subset of the
-		codebase ie for building an activity feed widget which your users can
-		embed in their WordPress, website etc.</div>
+		codebase i.e. for building an activity feed widget which your users
+		can embed in their WordPress, website etc.</div>
 </section>
 
 <!-- <section>
@@ -361,14 +361,15 @@
 
 	<div role="note">As far as we can see there's a clear political
 		divide between two camps of Javascript developers. Here's what we can
-		pull away from it. Some that think you should always build and
-		therefore you don't need to use a module loader in production, and
-		those that can. Libraries from one camp dont play nice with libraries
-		of others... Specifically getting Underscore/Backbone and JQuery to
-		play nice with require.js has been a stopping point for a lot of devs.
-		There was a release or two where underscore and backbone were AMD
-		compliant but then it was removed for some reason "As of version 1.3.0
-		Underscore removed AMD (RequireJS) support."
+		pull away from it. One camp thinks you do/should always build and
+		therefore you don't need to use a module loader in development, and
+		one camp doesn't. Libraries from one camp dont (didn't) play nice with
+		libraries of others... Specifically getting Underscore/Backbone and
+		JQuery to play nice with Require.js has been a give-up point for a lot
+		of devs. We don't know much about the politics but there was a release
+		or two where underscore and backbone were AMD compliant but then it
+		was removed for some reason "As of version 1.3.0 Underscore removed
+		AMD (RequireJS) support."
 		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
 </section>
 
@@ -378,8 +379,8 @@
 	<div role="note">The solution infact is simple, well, if you were
 		Googling after May 28th, when James burke the maintainer of Require
 		added in shims. After that we've had no trouble building new fancy
-		build configurations... We are now over 14 libraries and no loading
-		problems...
+		build and testing configurations... We are now over 14 libraries and
+		70 classes and no loading problems...
 		https://github.com/jrburke/requirejs/wiki/Upgrading-to-RequireJS-2.0</div>
 </section>
 
@@ -400,7 +401,7 @@
 	<script
 		src="https://gist.github.com/3779357.js?file=buildforhackability.js"></script>
 	<div role="note">No, seriously. Deploying with a built in
-		Javascript console is a feature for our power users, they can automate
+		Javascript console is a feature for our power users. They can automate
 		data cleaning, itterate through their data, use breakpoints and
 		more...</div>
 </section>
@@ -415,8 +416,9 @@
 			Hackability</figcaption>
 	</figure>
 	<div role="note">
-		We are power user friendly, and because permissions are double checked
-		on the server side, we let the users have full access to their data...
+		We are power user friendly, and because write-permissions are double
+		checked on the server side, we let the users have full access to their
+		data...
 		<pre>
 var datums = appView.currentPaginatedDataListDatumsView.collection.models
 		
@@ -438,8 +440,9 @@ for(var d in datums){
 <section>
 	<h2>Demo</h2>
 	<div role="note">
-		probably show what the code looks like in chrome for hackabilty, and
-		what the code looks like in android for package size, and using JSI?
+		Will probably show what the code looks like in chrome for hackabilty,
+		and what the code looks like in android for package size, and using
+		JSI?
 		<pre>
 		
 		</pre>
@@ -470,11 +473,10 @@ for(var d in datums){
 	<ul class="incremental">
 		<li>Start with Offline in mind</li>
 		<li>Debug as a Chrome Extension</li>
-		<li>If a library is in active development, make sure you know how
-			things work</li>
+		<li>If a library is in active development...</li>
 	</ul>
 	<div role="note">Here's our take home. We are glad we built with
-		offline in mind from the beginnning we developed in a chrome
+		offline in mind from the beginnning we developed in a Chrome
 		extension, with no server to hit. Debugging in chrome extensions is
 		almost everything we need, break points to run code in a context and
 		more. Finally, if a library is in active development take the time to
@@ -496,11 +498,11 @@ for(var d in datums){
 			</ul>
 		</figcaption>
 	</figure>
-	<div role="note">We'd like to thank Dale and Jo the PouchDB guys,
+	<div role="note">We'd like to thank Dale and Joe the PouchDB guys,
 		with out which we would have had to do the whole db logic client side
 		ourselves. We'd also like to thank our clients for letting us keep our
-		codebase open source and finally our interns who went from Set theory
-		to Handlebars and Backbone.js without a drop of fear...</div>
+		codebase open source and finally our interns who went from logic class to
+		BDD without a drop of fear...</div>
 </section>
 
 
@@ -513,7 +515,7 @@ for(var d in datums){
 	<div role="note">Thanks, the client codebase and webservices are
 		all on github, we also have a dev blog where our interns created
 		screencasts and board casts of what they learned while developing the
-		app.</div>
+		app.</div>  
 </section>
 
 
@@ -713,7 +715,7 @@ section[aria-selected] {
 /* After */
 section[aria-selected]                                                 
 	                                                                      
-	       ~ section {
+	            ~ section {
 	left: +150%;
 }
 
@@ -732,7 +734,7 @@ section[aria-selected]
 /* The items to-be-selected */
 .incremental>*[aria-selected]                                          
 	                                                                      
-	              ~ * {
+	                   ~ * {
 	opacity: 0;
 }
 
