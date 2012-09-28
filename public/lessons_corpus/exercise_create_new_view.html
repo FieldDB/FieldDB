@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FieldDB</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css"
+	href="./../bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+	href="./../bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="./../app/app.css">
+<link rel="stylesheet" type="text/css"
+	href="lessons_prototype_style.css">
+<link rel="stylesheet" type="text/css"
+	href="./../font_awesome/css/font-awesome.css">
+
+
+<!-- END Stylesheets -->
+
+</head>
+<body class="body_background centered_page">
+	<div class="well">
+		<a href="#" class="btn btn-primary pull-right">Save</a> <a
+			href="dialog_vocab_exercises_view.html"
+			class="btn btn-primary pull-left ">Back</a>
+		<h1>New Vocab Exercise</h1>
+	</div>
+	<div class="well">
+
+		<div class="well">
+			Picture: <a href="#" onclick="capturePhoto();" class="btn but-primary">Take a picture</a>
+
+		</div>
+		<div class="well">
+			Record and Repeat: <a href="#" onclick="captureAudio();" class="btn but-primary">Record
+				audio</a>
+
+		</div>
+
+
+		<div class="accordion" id="accordion2">
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse"
+						data-parent="#accordion2" href="#collapseOne"> Transcription </a>
+				</div>
+				<div id="collapseOne" class="accordion-body collapse ">
+					<div class="accordion-inner">
+						<textarea></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse"
+						data-parent="#accordion2" href="#collapseTwo">Translation </a>
+				</div>
+				<div id="collapseTwo" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<textarea></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+	<script src="./../libs/jquery.js"></script>
+	<script src="./../bootstrap/js/bootstrap.min.js"></script>
+	<script src="./../bootstrap/js/bootstrap-collapse.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="exercise_create_new.js"></script>
+
+</body>
+</html>
