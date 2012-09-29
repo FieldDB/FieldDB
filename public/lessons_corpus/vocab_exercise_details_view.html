@@ -21,17 +21,31 @@
 </head>
 <body class="body_background centered_page">
 	<div class="well">
-		<a href="vocab_exercise_details_view.html"
-			class="btn btn-success pull-right">NEXT</a> <a
-			href="dialog_vocab_exercises_view.html"
-			class="btn btn-primary pull-left ">Back</a>
-		<h1>Vocab Exercise</h1>
+	<div class="btn-group">
+			<div class="btn-group pull-right">
+			 <a href="vocab_exercise_details_view.html" rel="tooltip" title="Previous vocab item">
+	      <i class="icons icon-arrow-left"></i></a>	 
+			 <a href="vocab_exercise_details_view.html" rel="tooltip" title="Next vocab item">
+				<i class="icons icon-arrow-right"></i></a> 
+			</div>
+			<div class="btn-group pull-left">	
+				<a href="vocab_datalist_thumbnail_view.html"
+				class="btn btn-primary pull-left ">Go to Vocab List</a>
+	    </div>
+    </div>
+    
+	<h1>Vocab Exercise</h1>
 	</div>
+	
 	<div class="well">
-		<iframe width="560" height="315"
-			src="https://www.youtube.com/embed/duafaPoWiG4" frameborder="0"
-			allowfullscreen></iframe>
-		Record and Repeat: <a href="#" class="audio_video "><audio
+		<img width="360" height="265" src="private_clam_sp.png" />		
+		<h3>Play Audio:</h3> <a href="#" class="audio_video ">
+		<audio controls="" id="playerdatums" class="datum-audio-player">
+        <source src="private_eeseesig.wav" type="audio/wav"></source>
+        </audio></a>
+			
+			
+		<h3>Record and Repeat:</h3> <a href="#" class="audio_video "><audio
 				controls="" id="playerdatums" class="datum-audio-player"></audio></a>
 
 		<div class="accordion" id="accordion2">
@@ -41,7 +55,7 @@
 						data-parent="#accordion2" href="#collapseOne"> Transcription </a>
 				</div>
 				<div id="collapseOne" class="accordion-body collapse ">
-					<div class="accordion-inner">Anim pariatur cliche...</div>
+					<div class="accordion-inner">e's, e'sig</div>
 				</div>
 			</div>
 			<div class="accordion-group">
@@ -50,7 +64,7 @@
 						data-parent="#accordion2" href="#collapseTwo">Translation </a>
 				</div>
 				<div id="collapseTwo" class="accordion-body collapse">
-					<div class="accordion-inner">Anim pariatur cliche...</div>
+					<div class="accordion-inner">clam, clams</div>
 				</div>
 			</div>
 		</div>
