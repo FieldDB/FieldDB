@@ -6,6 +6,8 @@ if (!OPrime.isAndroidApp()) {
       "controls");
   document.getElementById("audio_response_file").setAttribute("controls",
       "controls");
+  document.getElementById("audio_sample_response_file").setAttribute("controls",
+  "controls");
 }
 /*
  * Handle the play/pause stimuli button
@@ -36,12 +38,42 @@ document.getElementById("stop_stimulus_button").onclick = function(e) {
 };
 
 /*
+ * Handle the play/pause sample response button
+ */
+document.getElementById("play_sample_response_button").onclick = function(e) {
+  if ($(e.target)[0].classList.toString().indexOf("icon-pause") == -1) {
+    OPrime.playAudioFile('audio_sample_response_file', function() {
+      // oncomplete change the text of the button to play
+      $($(e.target)[0]).toggleClass("icon-pause icon-play");
+    });
+    $($(e.target)[0]).toggleClass("icon-play icon-pause");
+  } else {
+    OPrime.pauseAudioFile('audio_sample_response_file');
+    $($(e.target)[0]).toggleClass("icon-pause icon-play");
+  }
+};
+
+/*
+ * Handle the stop sample response button
+ */
+document.getElementById("stop_sample_response_button").onclick = function(e) {
+  OPrime.stopAudioFile('audio_sample_response_file');
+  if (document.getElementById("play_sample_response_button").classList.toString()
+      .indexOf("icon-play") == -1) {
+    $(document.getElementById("play_sample_response_button")).toggleClass(
+        "icon-play icon-pause");
+  }
+};
+
+/*
  * Handle the record/stop response button
  */
 document.getElementById("record_vocab_response_button").onclick = function(e) {
   e.stopPropagation();
   var responsefilename = document.getElementById("audio_stimuli_file").src
-      .replace(".wav", "").replace(/\/.*\//,"").replace("ogg", "").replace(".mp3", "") + "_response_"+Date.now()+".mp3";
+      .replace(".wav", "").replace(/\/.*\//, "").replace("ogg", "").replace(
+          ".mp3", "")
+      + "_response_" + Date.now() + ".mp3";
   if (document.getElementById("record_vocab_response_button").classList
       .toString().indexOf("icon-stop") == -1) {
     OPrime.captureAudio(responsefilename, /* started */function(audioUrl) {
@@ -67,8 +99,7 @@ document.getElementById("record_vocab_response_button").onclick = function(e) {
   } else {
     document.getElementById("record_vocab_response_button").setAttribute(
         "disabled", "disabled");
-    OPrime.stopAndSaveAudio(responsefilename, /* stopped */function(
-        audioUrl) {
+    OPrime.stopAndSaveAudio(responsefilename, /* stopped */function(audioUrl) {
       if (document.getElementById("record_vocab_response_button").classList
           .toString().indexOf("icon-stop") > -1) {
         $(document.getElementById("record_vocab_response_button")).toggleClass(
@@ -116,16 +147,11 @@ if (userHistory) {
   userHistory = {};
   userHistory.id = Date.now();
 }
-OPrime.hub
-    .subscribe(
-        "playbackCompleted",
-        function(filename) {
-          window.userHistory[filename] = window.userHistory[filename]
-              || [];
-          window.userHistory[filename].push(JSON
-              .stringify(new Date()));
-          window.saveUser();
-        }, userHistory);
+OPrime.hub.subscribe("playbackCompleted", function(filename) {
+  window.userHistory[filename] = window.userHistory[filename] || [];
+  window.userHistory[filename].push(JSON.stringify(new Date()));
+  window.saveUser();
+}, userHistory);
 
 window.saveUser = function() {
   localStorage.setItem("userHistory", JSON.stringify(window.userHistory));

@@ -2,7 +2,7 @@
  * Hide HTML5 audio controls on Android
  */
 if (!OPrime.isAndroidApp()) {
-  document.getElementById("vocab_audio_stimuli").setAttribute("controls",
+  document.getElementById("audio_stimuli_file").setAttribute("controls",
       "controls");
 }
 /*
@@ -10,13 +10,13 @@ if (!OPrime.isAndroidApp()) {
  */
 document.getElementById("play_stimulus_button").onclick = function(e) {
   if ($(e.target)[0].classList.toString().indexOf("icon-pause") == -1) {
-    OPrime.playAudioFile('vocab_audio_stimuli', function() {
+    OPrime.playAudioFile('audio_stimuli_file', function() {
       // oncomplete change the text of the button to play
       $($(e.target)[0]).toggleClass("icon-pause icon-play");
     });
     $($(e.target)[0]).toggleClass("icon-play icon-pause");
   } else {
-    OPrime.pauseAudioFile('vocab_audio_stimuli');
+    OPrime.pauseAudioFile('audio_stimuli_file');
     $($(e.target)[0]).toggleClass("icon-pause icon-play");
   }
 };
@@ -25,7 +25,7 @@ document.getElementById("play_stimulus_button").onclick = function(e) {
  * Handle the stop stimuli button
  */
 document.getElementById("stop_stimulus_button").onclick = function(e) {
-  OPrime.stopAudioFile('vocab_audio_stimuli');
+  OPrime.stopAudioFile('audio_stimuli_file');
   if (document.getElementById("play_stimulus_button").classList.toString()
       .indexOf("icon-play") == -1) {
     $(document.getElementById("play_stimulus_button")).toggleClass(
