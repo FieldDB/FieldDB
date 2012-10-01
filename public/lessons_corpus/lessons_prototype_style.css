@@ -1,7 +1,3 @@
-body {
-	background: -webkit-linear-gradient(top, #FFFFdd, #FFFF99) ;
-}
-
 .tile {
 	margin: 0.5em;
 	float: left;
@@ -9,12 +5,11 @@ body {
 	height: 6em;
 	text-align: center;
 }
-
-.tile h1 {
+.tile h1{
 	line-height: 4em;
 	vertical-align: middle;
 	font-size: 1.5em;
-	text-align: center;
+	text-align:center;
 	text-shadow: 1px 1px #000;
 }
 
@@ -43,9 +38,8 @@ body {
 	line-height: 0em;
 	height: 0em;
 	width: 9em;
-	margin-left: -1.5em;
+	margin-left:-1.5em;
 }
-
 .progressBar {
 	width: 100%;
 	margin: 0em;
