@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,20 +21,32 @@
 </head>
 <body class="body_background centered_page">
 	<div class="well">
-		<a href="vocab_exercise_details_view.html"
-			class="btn btn-success pull-right">NEXT</a> <a
-			href="dialog_vocab_exercises_view.html"
-			class="btn btn-primary pull-left ">Back</a>
-		<h1>Vocab Exercise</h1>
+	<div class="btn-group">
+			<div class="btn-group pull-right">
+			 <a href="vocab_exercise_details_view.html" rel="tooltip" title="Previous vocab item">
+	      <i class="icons icon-arrow-left"></i></a>	 
+			 <a href="vocab_exercise_details_view.html" rel="tooltip" title="Next vocab item">
+				<i class="icons icon-arrow-right"></i></a> 
+			</div>
+			<div class="btn-group pull-left">	
+				<a href="vocab_datalist_thumbnail_view.html"
+				class="btn btn-primary pull-left ">Go to Vocab List</a>
+	    </div>
+    </div>
+    
+	<h1>Vocab Exercise</h1>
 	</div>
+	
 	<div class="well">
-		<iframe width="560" height="315"
-			src="http://www.youtube.com/embed/duafaPoWiG4" frameborder="0"
-			allowfullscreen></iframe>
-		Record and Repeat: <a href="#" class="audio_video "><audio
-				controls="controls" autoplay="autoplay" >
-				<source src="private_eeseesig.wav" type="audio/wav"></source>
-			</audio></a>
+		<img width="360" height="265" src="private_clam_sp.png" />		
+		<h3>Play Audio:</h3> <a href="#" class="audio_video ">
+		<audio controls="" id="playerdatums" class="datum-audio-player">
+        <source src="private_eeseesig.wav" type="audio/wav"></source>
+        </audio></a>
+			
+			
+		<h3>Record and Repeat:</h3> <a href="#" class="audio_video "><audio
+				controls="" id="playerdatums" class="datum-audio-player"></audio></a>
 
 		<div class="accordion" id="accordion2">
 			<div class="accordion-group">
@@ -42,7 +55,7 @@
 						data-parent="#accordion2" href="#collapseOne"> Transcription </a>
 				</div>
 				<div id="collapseOne" class="accordion-body collapse ">
-					<div class="accordion-inner">Anim pariatur cliche...</div>
+					<div class="accordion-inner">e's, e'sig</div>
 				</div>
 			</div>
 			<div class="accordion-group">
@@ -51,7 +64,7 @@
 						data-parent="#accordion2" href="#collapseTwo">Translation </a>
 				</div>
 				<div id="collapseTwo" class="accordion-body collapse">
-					<div class="accordion-inner">Anim pariatur cliche...</div>
+					<div class="accordion-inner">clam, clams</div>
 				</div>
 			</div>
 		</div>
@@ -61,6 +74,47 @@
 	<script src="./../libs/jquery.js"></script>
 	<script src="./../bootstrap/js/bootstrap.min.js"></script>
 	<script src="./../bootstrap/js/bootstrap-collapse.js"></script>
+
+
+  <!-- Needs...
+  
+  video (or static image)
+  
+  audio player: number of listens of whole recording, date of last listen, who listened
+  	visualization (waveform)
+  	play/pause button ("play" can function as "repeat")
+  	slow button
+  
+  audio recorder: number of pieces recorded, accuracy of each recording, recordings themselves, 
+  date of recordings, who recorded, privacy on recordings
+  	visualization (waveform)
+  	record button (records and stops recording, resumes)
+  	play/pause button ("play" can function as "repeat")
+  	redo button
+  		(built into "next", "back", "redo", "menu" buttons?) sends it to the array
+  	
+  optional transcription text
+    button to show it or hide it
+    (time-synching for longer phrases?)
+ 
+  optional translation text
+  	
+  	button to show it or hide it
+  		SHOW:
+  		<div class="pull-right">
+			<a href="#" class="locale_Show_Translation" rel="tooltip" title="Show Translation">
+   		    <i class="icons icon-plus-sign"></i></a>  
+		</div>
+		HIDE:
+		<div class="pull-right">
+			<a href="#" class="locale_Hide_Translation" rel="tooltip" title="Hide Translation">
+	   		<i class="icons icon-minus-sign"></i></a>
+	   	</div>
+	   		
+  "next" button
+  "back" button
+  ("back to menu" button?)
+  -->
 
 </body>
 </html>
