@@ -1,5 +1,5 @@
 body {
-	background: -webkit-linear-gradient(top, #FFFFdd, #FFFF99) ;
+	background: -webkit-linear-gradient(top, #FFFFdd, #FFFF99);
 }
 
 .tile {
@@ -26,10 +26,10 @@ body {
 .well a {
 	color: #fff;
 }
-/* .centered_page {
-	width: 95%;
-	margin: auto;
-} */
+
+.centered_page {
+	text-align: center;
+}
 
 /* .tile_container {
 	width: 95%;
