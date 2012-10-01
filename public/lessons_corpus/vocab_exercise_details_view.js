@@ -1,4 +1,13 @@
 /*
+ * Hide HTML5 audio controls on Android
+ */
+if (!OPrime.isAndroidApp()) {
+  document.getElementById("vocab_audio_stimuli").setAttribute("controls",
+      "controls");
+  document.getElementById("vocab_audio_response").setAttribute("controls",
+      "controls");
+}
+/*
  * Handle the play/pause stimuli button
  */
 document.getElementById("play_vocab_stimuli_button").onclick = function(e) {
@@ -31,9 +40,11 @@ document.getElementById("stop_vocab_stimuli_button").onclick = function(e) {
  */
 document.getElementById("record_vocab_response_button").onclick = function(e) {
   e.stopPropagation();
+  var responsefilename = document.getElementById("vocab_audio_stimuli").src
+      .replace(".wav", "").replace(/\/.*\//,"").replace("ogg", "").replace(".mp3", "") + "_response_"+Date.now()+".mp3";
   if (document.getElementById("record_vocab_response_button").classList
       .toString().indexOf("icon-stop") == -1) {
-    OPrime.captureAudio("vocab_response.mp3", /* started */function(audioUrl) {
+    OPrime.captureAudio(responsefilename, /* started */function(audioUrl) {
       OPrime.debug("\nRecording successfully started " + audioUrl);
 
       // Only change the icons once.
@@ -56,7 +67,7 @@ document.getElementById("record_vocab_response_button").onclick = function(e) {
   } else {
     document.getElementById("record_vocab_response_button").setAttribute(
         "disabled", "disabled");
-    OPrime.stopAndSaveAudio("vocab_response.mp3", /* stopped */function(
+    OPrime.stopAndSaveAudio(responsefilename, /* stopped */function(
         audioUrl) {
       if (document.getElementById("record_vocab_response_button").classList
           .toString().indexOf("icon-stop") > -1) {
@@ -108,10 +119,10 @@ if (userHistory) {
 OPrime.hub
     .subscribe(
         "playbackCompleted",
-        function() {
-          window.userHistory.completedEntireAudioFile = window.userHistory.completedEntireAudioFile
+        function(filename) {
+          window.userHistory[filename] = window.userHistory[filename]
               || [];
-          window.userHistory.completedEntireAudioFile.push(JSON
+          window.userHistory[filename].push(JSON
               .stringify(new Date()));
           window.saveUser();
         }, userHistory);
