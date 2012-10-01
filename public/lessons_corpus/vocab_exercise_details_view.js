@@ -10,7 +10,7 @@ if (!OPrime.isAndroidApp()) {
 /*
  * Handle the play/pause stimuli button
  */
-document.getElementById("play_vocab_stimuli_button").onclick = function(e) {
+document.getElementById("play_stimulus_button").onclick = function(e) {
   if ($(e.target)[0].classList.toString().indexOf("icon-pause") == -1) {
     OPrime.playAudioFile('vocab_audio_stimuli', function() {
       // oncomplete change the text of the button to play
@@ -26,11 +26,11 @@ document.getElementById("play_vocab_stimuli_button").onclick = function(e) {
 /*
  * Handle the stop stimuli button
  */
-document.getElementById("stop_vocab_stimuli_button").onclick = function(e) {
+document.getElementById("stop_stimulus_button").onclick = function(e) {
   OPrime.stopAudioFile('vocab_audio_stimuli');
-  if (document.getElementById("play_vocab_stimuli_button").classList.toString()
+  if (document.getElementById("play_stimulus_button").classList.toString()
       .indexOf("icon-play") == -1) {
-    $(document.getElementById("play_vocab_stimuli_button")).toggleClass(
+    $(document.getElementById("play_stimulus_button")).toggleClass(
         "icon-play icon-pause");
   }
 };
