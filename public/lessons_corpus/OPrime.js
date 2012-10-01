@@ -154,8 +154,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
 OPrime.audioEndListener = function() {
   var audiourl = this.getAttribute("src")
   OPrime.debug("End audio ", audiourl);
-  OPrime.hub.publish('playbackCompleted', 'Audio playback has completed:'
-      + Date.now());
+  OPrime.hub.publish('playbackCompleted', audiourl);
 };
 OPrime.pauseAudioFile = function(divid, callingcontext) {
   if (!callingcontext) {
