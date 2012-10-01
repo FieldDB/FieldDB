@@ -23,29 +23,37 @@
 </head>
 <body class="body_background centered_page">
 	<div class="well">
-	   <div class="btn-group pull-right">
-    <a href="comprehension_exercise_details_view.html"
-      class="btn btn-success pull-right">Go to Exercises</a>
-    </div>    
-	  <div class="btn-group pull-left">
-	   <a href="dialog_vocab_exercises_view.html" 
-	    class="btn btn-primary pull-left ">Go to Lesson Menu</a>
-	  </div>
+		<div class="btn-group pull-right">
+			<a href="comprehension_exercise_details_view.html"
+				class="btn btn-success pull-right">Go to Exercises</a>
+		</div>
+		<div class="btn-group pull-left">
+			<a href="dialog_vocab_exercises_view.html"
+				class="btn btn-primary pull-left ">Go to Lesson Menu</a>
+		</div>
 		<h1>Dialog</h1>
 	</div>
-<!--	<iframe width="560" height="315"
-		src="https://www.youtube.com/embed/duafaPoWiG4" frameborder="0"
-		allowfullscreen></iframe>
--->
-  <img width="360" height="265" src="private_clam_sp.png" />  
-		
-		<h3>Play Audio:</h3> <a href="#" class="audio_video "><audio
-        controls="" id="playerdatums" class="datum-audio-player">
-        <source src="private_sample_dialog_clam.wav" type="audio/wav"></source>
-        </audio></a>
 
+	<img src="private_clam_sp.png" />
 
-  <!-- Needs...
+	<h3>Play Audio:</h3>
+
+	<div class="android_audio_controls ">
+		<button id="play_stimulus_button"
+			class="btn btn-inverse icon-play"></button>
+		<button id="stop_stimulus_button"
+			class="btn btn-inverse icon-stop"></button>
+	</div>
+	<audio id="vocab_audio_stimuli"
+		src="/lessons_corpus/private_sample_dialog_clam.wav"
+		class="datum-audio-player">
+	</audio>
+
+  <script src="./../libs/jquery.js"></script>
+	<script src="OPrime.js"></script>
+	<script src="dialog_presentation_view.js"></script>
+
+	<!-- Needs...
   video (or static image)
   audio 
   	play/pause button ("play" can function as "repeat")
@@ -59,6 +67,6 @@
   	button to show it or hide it
   "go to questions" button
   -->
- 
+
 </body>
 </html>
