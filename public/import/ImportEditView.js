@@ -306,7 +306,8 @@ define( [
         collection           : new Datums(),
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
-        childViewFormat      : "latex"
+        childViewFormat      : "latex",
+        childViewClassName   : "row span12"
       }); 
 
       if(this.dataListView){
