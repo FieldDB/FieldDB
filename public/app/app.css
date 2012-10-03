@@ -442,3 +442,8 @@ line.link {
 .datum-latex-translation{
 	 font-style: italic;
 }
+.scrollable {
+  overflow: auto !important;
+  height: 25em !important;
+  width: 100% !important;
+}
