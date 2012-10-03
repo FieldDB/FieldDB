@@ -1,9 +1,8 @@
-function capturePhoto() {
-  alert("Capture photo");
-}
+
 
 document.getElementById("save_new_exercise").onclick = function(e) {
-  window.userHistory.userCreatedExercises = window.userHistory.userCreatedExercises || [];
+  window.userHistory.userCreatedExercises = window.userHistory.userCreatedExercises
+      || [];
   var newexercise = {};
   newexercise.userid = window.userHistory.id;
   newexercise.dateCreated = JSON.stringify(new Date());
@@ -15,7 +14,22 @@ document.getElementById("save_new_exercise").onclick = function(e) {
       .getElementById("audio_stimuli_translation").value;
   OPrime.debug(JSON.stringify(newexercise));
   window.userHistory.userCreatedExercises.push(newexercise);
+  alert("I saved your lesson to localstorage as JSON (normally I would put it in a database, but this is just a clickable prototype): "
+      + JSON.stringify(newexercise));
 };
+
+document.getElementById("capture_image_stimuli_button").onclick = function(e) {
+  e.stopPropagation();
+  var responsefilename = document.getElementById("audio_stimuli_transcription").value
+      .replace(/\W/g, "_")
+      + "_stimuli_" + Date.now() + ".png";
+  OPrime.capturePhoto(responsefilename, /* started */null, /* completed */
+      function(imageUrl) {
+        OPrime.debug("\nPicture capture successfully completed " + imageUrl);
+        document.getElementById("image_stimuli_file").src = imageUrl;
+      });
+};
+
 
 /*
  * Hide HTML5 audio controls on Android
