@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>FieldDB</title>
+<title>Learn Mi'gmaq</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css"
@@ -21,18 +21,49 @@
 </head>
 <body class="body_background centered_page">
 	<div class="well">
-		<a href="vocab_exercise_details_view.html"
-			class="btn btn-success pull-right">NEXT</a> <a
-			href="dialog_vocab_exercises_view.html"
-			class="btn btn-primary pull-left ">Back</a>
+		<div class="btn-group">
+			<div class="btn-group pull-right">
+				<a href="vocab_exercise_details_view.html" rel="tooltip"
+					title="Previous vocab item"> <i class="icons icon-arrow-left"></i></a>
+				<a href="vocab_exercise_details_view.html" rel="tooltip"
+					title="Next vocab item"> <i class="icons icon-arrow-right"></i></a>
+			</div>
+			<div class="btn-group pull-left">
+				<a href="vocab_datalist_thumbnail_view.html"
+					class="btn btn-mini btn-primary pull-left ">Go to Vocab List</a>
+			</div>
+		</div>
+
 		<h1>Vocab Exercise</h1>
 	</div>
+
 	<div class="well">
-		<iframe width="560" height="315"
-			src="https://www.youtube.com/embed/duafaPoWiG4" frameborder="0"
-			allowfullscreen></iframe>
-		Record and Repeat: <a href="#" class="audio_video "><audio
-				controls="" id="playerdatums" class="datum-audio-player"></audio></a>
+		<img  src="sample_clam_sp.png" />
+
+		<h3>Play Audio:</h3>
+
+		<div class="android_audio_controls ">
+			<button id="play_stimulus_button"
+				class="btn btn-inverse icon-play"></button>
+			<button id="stop_stimulus_button"
+				class="btn btn-inverse icon-stop"></button>
+		</div>
+		<audio id="audio_stimuli_file"
+			src="/lessons_corpus/sample_vocab_clam.mp3" class="datum-audio-player">
+		</audio>
+
+		<h3>Record and Repeat:</h3>
+
+		<div class="android_audio_controls ">
+			<button id="record_vocab_response_button"
+				class="btn btn-inverse icon-record">
+				<img src="mic_white.png" />
+			</button>
+			<button id="play_response_button"
+				class="btn btn-inverse icon-play"></button>
+		</div>
+		<audio id="audio_response_file" src="" class="datum-audio-player">
+		</audio>
 
 		<div class="accordion" id="accordion2">
 			<div class="accordion-group">
@@ -41,7 +72,13 @@
 						data-parent="#accordion2" href="#collapseOne"> Transcription </a>
 				</div>
 				<div id="collapseOne" class="accordion-body collapse ">
-					<div class="accordion-inner">Anim pariatur cliche...</div>
+					<div class="accordion-inner">e's, e'sig</div>
+					<span class="text_grid"> <input class="playable_syllable"
+						min=0.00 max=0.26 value="no"></input> <input
+						class="playable_syllable" min=0.26 max=0.70 value="qata"></input>
+						<input class="playable_syllable" min=0.69 max=1.04 value="tusu"></input>
+						<input class="playable_syllable" min=1.64 max=1.99 value="wan"></input>
+					</span>
 				</div>
 			</div>
 			<div class="accordion-group">
@@ -50,19 +87,19 @@
 						data-parent="#accordion2" href="#collapseTwo">Translation </a>
 				</div>
 				<div id="collapseTwo" class="accordion-body collapse">
-					<div class="accordion-inner">Anim pariatur cliche...</div>
+					<div class="accordion-inner">clam, clams</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 
 	<script src="./../libs/jquery.js"></script>
 	<script src="./../bootstrap/js/bootstrap.min.js"></script>
 	<script src="./../bootstrap/js/bootstrap-collapse.js"></script>
+	<script src="OPrime.js"></script>
+	<script src="vocab_exercise_details_view.js"></script>
 
-
-  <!-- Needs...
+	<!-- Needs...
   
   video (or static image)
   

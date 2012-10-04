@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>FieldDB</title>
+<title>Learn Mi'gmaq</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css"
@@ -21,23 +21,100 @@
 <body class="body_background centered_page">
 	<div class="well ">
 		<h1>Comprehension Exercise</h1>
-		<div>
-			<div class="well">What did the woman decide to do?</div>
-			<div class="well">
-				Record your answer: <a href="#" class="audio_video "><audio
-						controls="" id="playerdatums" class="datum-audio-player"></audio></a>
+
+		<div class="well">
+			Listen to the question:
+
+
+			<div class="android_audio_controls ">
+				<button id="play_stimulus_button" class="btn btn-inverse icon-play"></button>
+				<button id="stop_stimulus_button" class="btn btn-inverse icon-stop"></button>
 			</div>
-			<div class="well">
-				Listen to the answer: <a href="#" class="audio_video "><audio
-						controls="" id="playerdatums" class="datum-audio-player"></audio></a>
+			<audio id="audio_stimuli_file"
+				src="/lessons_corpus/sample_question_clam.mp3"
+				class="datum-audio-player">
+			</audio>
+
+
+
+			<div class="accordion" id="accordion2">
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse"
+							data-parent="#accordion2" href="#collapseOne"> Transcription
+						</a>
+					</div>
+					<div id="collapseOne" class="accordion-body collapse ">
+						<div class="accordion-inner">TODO put Mi'gmaq here</div>
+						<span class="text_grid"> <input class="playable_syllable"
+							min=0.00 max=0.26 value="no"></input> <input
+							class="playable_syllable" min=0.26 max=0.70 value="qata"></input>
+							<input class="playable_syllable" min=0.69 max=1.04 value="tusu"></input>
+							<input class="playable_syllable" min=1.64 max=1.99 value="wan"></input>
+						</span>
+					</div>
+				</div>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse"
+							data-parent="#accordion2" href="#collapseTwo">Translation </a>
+					</div>
+					<div id="collapseTwo" class="accordion-body collapse">
+						<div class="accordion-inner">Does the woman like clams?</div>
+					</div>
+				</div>
 			</div>
+
+
 		</div>
+
+
+		<div class="well">
+			Record your answer:
+
+			<div class="android_audio_controls ">
+				<button id="record_vocab_response_button"
+					class="btn btn-inverse icon-record">
+					<img src="mic_white.png" />
+				</button>
+				<button id="play_response_button"
+					class="btn btn-inverse icon-play"></button>
+			</div>
+			<audio id="audio_response_file" src="" class="datum-audio-player">
+			</audio>
+
+
+		</div>
+		<div class="well">
+			Listen to the sample answer:
+
+			<div class="android_audio_controls ">
+				<button id="play_sample_response_button"
+					class="btn btn-inverse icon-play"></button>
+				<button id="stop_sample_response_button"
+					class="btn btn-inverse icon-stop"></button>
+			</div>
+			<audio id="audio_sample_response_file"
+				src="/lessons_corpus/sample_question_clam_res.mp3"
+				class="datum-audio-player">
+			</audio>
+
+		</div>
+
 
 		<div class="well">
 			<a href="comprehension_exercise_details_view.html"
 				class="btn btn-success pull-right">NEXT</a> <a
-				href="dialog_vocab_exercises_view.html" class="btn btn-primary ">Back</a>
+				href="dialog_presentation_view.html" class="btn btn-primary ">Back
+				to Dialog</a>
 		</div>
 	</div>
+
+	<script src="./../libs/jquery.js"></script>
+	<script src="./../bootstrap/js/bootstrap.min.js"></script>
+  <script src="./../bootstrap/js/bootstrap-collapse.js"></script>
+	<script src="OPrime.js"></script>
+	<script src="comprehension_exercise_details_view.js"></script>
+
 </body>
 </html>
