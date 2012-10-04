@@ -1,2 +1,8 @@
-./node_modules/forever/bin/forever stop httpredirectapp.js
-./node_modules/forever/bin/forever stop server.js
+#!/bin/bash
+
+$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever stop httpredirectapp.js
+$HOME/fielddbworkspace/FieldDBWebServer/node_modules/forever/bin/forever stop server.js
+
+cd $HOME/fielddbworkspace/FieldDBWebServer
+bash switch_to_develop_easy_setup.sh
+

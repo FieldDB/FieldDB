@@ -1,15 +1,9 @@
 {
   "name": "FieldDBWebServer",
-  "version": "0.1.21",
+  "version": "1.21.2",
   "dependencies": {
     "express": "latest"
-    ,"forever":"0.9.2"
-    ,"handlebars": "latest"
-    ,"underscore": "latest"
-    ,"cradle": "latest"
+    ,"forever":"latest"
     ,"paperboy": "latest"
-    ,"backbone": "latest"
-    ,"zlib": "latest"                     
-    ,"crypto":"latest"
   }
 }
