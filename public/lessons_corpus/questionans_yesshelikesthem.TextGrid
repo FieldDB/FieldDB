@@ -1,0 +1,72 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.7890833333333334 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "migmaq" 
+        xmin = 0 
+        xmax = 1.7890833333333334 
+        intervals: size = 3 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.20177918594983374 
+            text = "" 
+        intervals [2]:
+            xmin = 0.20177918594983374 
+            xmax = 1.5430263856332893 
+            text = " ehe negm wigpaji" 
+        intervals [3]:
+            xmin = 1.5430263856332893 
+            xmax = 1.7890833333333334 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "syllable" 
+        xmin = 0 
+        xmax = 1.7890833333333334 
+        intervals: size = 10 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.20177918594983374 
+            text = "" 
+        intervals [2]:
+            xmin = 0.20177918594983374 
+            xmax = 0.38350265107864984 
+            text = "e" 
+        intervals [3]:
+            xmin = 0.38350265107864984 
+            xmax = 0.6038908811524709 
+            text = "he" 
+        intervals [4]:
+            xmin = 0.6038908811524709 
+            xmax = 0.6803207239798835 
+            text = "" 
+        intervals [5]:
+            xmin = 0.6803207239798835 
+            xmax = 0.7776970361200155 
+            text = "ne" 
+        intervals [6]:
+            xmin = 0.7776970361200155 
+            xmax = 0.9028437469948312 
+            text = "gm" 
+        intervals [7]:
+            xmin = 0.9028437469948312 
+            xmax = 1.203563545548343 
+            text = "wig" 
+        intervals [8]:
+            xmin = 1.203563545548343 
+            xmax = 1.2965424042744567 
+            text = "pa" 
+        intervals [9]:
+            xmin = 1.2965424042744567 
+            xmax = 1.5430263856332893 
+            text = "ji" 
+        intervals [10]:
+            xmin = 1.5430263856332893 
+            xmax = 1.7890833333333334 
+            text = "" 
