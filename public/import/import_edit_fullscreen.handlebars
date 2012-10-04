@@ -1,48 +1,102 @@
 <div class="container-fluid well">
 	<div class="row-fluid ">
-		<div class="span4 well">
-			<!--Sidebar content-->
-			<span class="badge badge-info">8</span>
-			<button class="btn btn-success approve-save disabled locale_Save_And_Import"></button>
-			<div id="import-data-list" class="">
-        <div id="import-data-list-header" class="middle "></div>
-        <div>
-          <ul class="unstyled zebra import-data-list-paginated-view"></ul>
-          <div class="pagination-control"></div>
-        </div>
-      </div>
-      <div id="import-session" ></div>
-		</div>
-		<div class="span8">
+
+		<div class="">
 			<!--Body content-->
 			<div class="well">
-				<h1><span class="locale_Import"></span>
-					 <small>{{pouchname}}</small>
+				<h1>
+					<span class="locale_Import"></span> <small>{{pouchname}}</small>
 				</h1>
 				<progress class="import-progress" max="5" value="0">
-          <strong class = "locale_percent_completed"></strong>
-        </progress>
-        <span class = "locale_Import_Instructions"></span>
+					<strong class="locale_percent_completed"></strong>
+				</progress>
+				Videos: http://www.youtube.com/watch?v=2FbfjJmqWt4&list=PL7D2CC06C80AF754C&index=2&feature=plpp_video
+				<span class="locale_Import_Instructions"></span>
 				<div>{{status}}</div>
 			</div>
-			<div class="well">
-				<span class="badge badge-info">1</span><span class="badge badge-info">2</span>
-				<textarea class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder" >{{rawText}}</textarea>
+
+		</div>
+	</div>
+	<div class="row-fluid "></div>
+</div>
+
+<div class="accordion well" id="accordion2">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseOne">Step 1: Raw View
+				of the Data</a>
+		</div>
+		<div id="collapseOne" class="accordion-body in collapse ">
+			<div class="accordion-inner">
+
+				<div class="well">
+					<span class="badge badge-info">1</span><span
+						class="badge badge-info">2</span>
+					<textarea
+						class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder">{{rawText}}</textarea>
+
+					Click on Step 2 below.
+				</div>
+
 			</div>
-			<button
-				class="btn btn-primary add-column  hide locale_Add_Extra_Columns"></button>
-			<div class="well container span11">
-				<span class="badge badge-info">3</span>
-				<div id="import-datum-field-labels" class="row-fluid"></div>
+
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#collapseTwo">Step 2: Editable
+				Tabular View of the Data </a>
+		</div>
+		<div id="collapseTwo" class="accordion-body collapse">
+			<div class="accordion-inner ">
+
+				<button
+					class="btn btn-primary add-column  hide locale_Add_Extra_Columns"></button>
+				<div class="well container span11">
+					<span class="badge badge-info">3</span>
+					<div id="import-datum-field-labels" class="row-fluid"></div>
+				</div>
+
+				<div class="scrollable">
+					<table id="csv-table-area"
+						class="well table table-striped table-bordered table-condensed "></table>
+				</div>
+				Click on Step 3 below
 			</div>
 		</div>
 	</div>
-	 <div class="row-fluid ">
-		<span class="badge badge-info">5</span>
-		<button
-			class="btn btn-success approve-import hide locale_Attempt_Import"></button>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion3" href="#collapseThree">Step 3:
+				Intralineaer Gloss/Quick View of the Data View of the Data </a>
+		</div>
+		<div id="collapseThree" class="accordion-body collapse">
+			<div class="accordion-inner">
 
-		<span class="badge badge-info">4</span><span class="badge badge-info">7</span>
+				<span class="badge badge-info">5</span>
+				<button
+					class="btn btn-success approve-import hide locale_Attempt_Import"></button>
+				<span class="badge badge-info">4</span><span
+					class="badge badge-info">7</span> <span class="badge badge-info">8</span>
+				<button
+					class="btn btn-success approve-save disabled locale_Save_And_Import"></button>
+
+
+				<div id="import-data-list" class="well row">
+					<div id="import-data-list-header" class=" "></div>
+					<div class=" container span12 ">
+						<ul class="unstyled zebra import-data-list-paginated-view"></ul>
+						<div class="pagination-control"></div>
+					</div>
+				</div>
+
+				<div id="import-session" class="well"></div>
+
+			</div>
+		</div>
 	</div>
 </div>
-<table id="csv-table-area" class="well table table-striped table-bordered table-condensed"></table>
+

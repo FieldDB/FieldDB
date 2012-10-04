@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Learn Mi'gmaq</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- Stylesheets -->
+
+<script type="text/javascript" charset="utf-8" src="cordova-2.1.0.js"></script>
+<script type="text/javascript" charset="utf-8"
+  src="exercise_create_new_cordova.js"></script>
+
+
+<!-- END Stylesheets -->
+
+</head>
+<body>
+
+
+
+  <button onclick="captureAudio();">Capture Audio</button>
+  <br>
+
+  <button onclick="capturePhoto();">Capture Photo</button>
+  <br>
+  <button onclick="capturePhotoEdit();">Capture Editable Photo</button>
+  <br>
+  <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From
+    Photo Library</button>
+  <br>
+  <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From
+    Photo Album</button>
+  <br>
+  <img style="display: none; width: 60px; height: 60px;" id="smallImage"
+    src="" />
+  <img style="display: none;" id="largeImage" src="" />
+
+
+
+</body>
+</html>
