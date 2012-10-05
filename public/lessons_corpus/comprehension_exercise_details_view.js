@@ -155,7 +155,7 @@ OPrime.hub.subscribe("playbackCompleted", function(filename) {
 
 window.saveUser = function() {
   localStorage.setItem("userHistory", JSON.stringify(window.userHistory));
-  OPrime.debug(JSON.stringify(window.userHistory));
+  //OPrime.debug(JSON.stringify(window.userHistory));
 };
 
 // Android WebView is not calling the onbeforeunload to save the userHistory.
