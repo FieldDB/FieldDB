@@ -206,7 +206,7 @@ define([
       var xmlParser = new X2JS();
       window.text = text;
       var jsonObj = xmlParser.xml_str2json( text );
-      console.log(jsonObj);
+      Utils.debug(jsonObj);
        
       //add the header to the session
 //    HEADER can be put in the session and in the datalist
