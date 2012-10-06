@@ -307,7 +307,7 @@ define([
       var text = $(".datum_field_input").val() || [];
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
-      console.log(text);
+      Utils.debug(text);
  
       return "";
 //    }, 
