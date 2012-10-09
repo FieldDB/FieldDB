@@ -227,7 +227,9 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
-      appView.currentEditDataListView.destroy_view();
+      if(window.appView.currentEditDataListView){
+        appView.currentEditDataListView.destroy_view();
+      }
       appView.currentReadDataListView.destroy_view();
       
       var jsonToRender = this.model.toJSON();
