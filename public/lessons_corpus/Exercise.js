@@ -1,11 +1,15 @@
 define( [ 
     "backbone", 
-    "../datum/Datum",
-    "../user/User"
+    "../datum/Datum", 
+    "recording/Recording",
+    "recordings/Recordings"
+//    "../user/User"
 ], function(
     Backbone,
-    Datum,
-    User
+    Datum, 
+    Recording, 
+    Recordings
+//    User
     ) {
   var Exercise = Datum.extend(
    {
@@ -34,7 +38,7 @@ define( [
      * 
      */
     initialize : function() {
-      Exercise.__super__.initialize.call(this);
+      Exercise.__super__.initialize.call(this,);
 
 //      this.set("user", "");
       this.set("lastListened", new Date(JSON.parse(t)));
