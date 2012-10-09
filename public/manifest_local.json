@@ -39,7 +39,7 @@
     "https://localhost:3187/*",
     "https://localhost:3188/*",
     
-    "http://localhost:5984/*",
+    "https://localhost:6984/*",
     
     "https://www.youtube.com/*"
     
@@ -48,5 +48,8 @@
     "16": "icon16_local.png",
     "48": "icon48_local.png",
     "128": "icon128_local.png" 
-  }
+  },
+  "manifest_version": 2,
+  "content_security_policy": "default-src 'self' https://localhost:3183 https://localhost:6984  https://authdev.fieldlinguist.com:3183 https://wwwdev.fieldlinguist.com:3181  https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com ; script-src 'self' https://wwwdev.fieldlinguist.com:3181 https://localhost:3183 https://localhost:6984  https://authdev.fieldlinguist.com:3183 https://ssl.google-analytics.com ; connect-src https://wwwdev.fieldlinguist.com:3181  https://www.youtube.com  https://localhost:3183 https://localhost:6984  https://authdev.fieldlinguist.com:3183 https://ifielddevs.iriscouch.com https://ifielddevs.iriscouch.com:443 'self'; object-src 'self' https://localhost:3183 https://localhost:6984  https://authdev.fieldlinguist.com:3183 https://wwwdev.fieldlinguist.com:3181;"
+  
 }

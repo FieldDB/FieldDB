@@ -19,9 +19,9 @@ Utils.chromeClientUrl = function(){
  */
 Utils.defaultCouchConnection = function() {
   return {
-    protocol : "http://",
+    protocol : "https://",
     domain : "localhost",
-    port : "5984",
+    port : "6984",
     pouchname : "default"
   }; 
 };
