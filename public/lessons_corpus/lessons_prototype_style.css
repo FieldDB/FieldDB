@@ -98,3 +98,6 @@ progress::-webkit-progress-bar {
 	width: 50%;
 	margin: auto;
 }
+.text_grid input{
+	width:5em;
+}

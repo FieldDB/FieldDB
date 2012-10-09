@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.7026875 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "migmaq" 
+        xmin = 0 
+        xmax = 2.7026875 
+        intervals: size = 3 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.9814993727650395 
+            text = "" 
+        intervals [2]:
+            xmin = 0.9814993727650395 
+            xmax = 1.6549593096030377 
+            text = "e'sig" 
+        intervals [3]:
+            xmin = 1.6549593096030377 
+            xmax = 2.7026875 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "syllable" 
+        xmin = 0 
+        xmax = 2.7026875 
+        intervals: size = 4 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.9816229734738106 
+            text = "" 
+        intervals [2]:
+            xmin = 0.9816229734738106 
+            xmax = 1.2369752654302277 
+            text = " e'" 
+        intervals [3]:
+            xmin = 1.2369752654302277 
+            xmax = 1.6548357088942662 
+            text = "sig" 
+        intervals [4]:
+            xmin = 1.6548357088942662 
+            xmax = 2.7026875 
+            text = "" 

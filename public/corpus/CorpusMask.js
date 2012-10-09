@@ -263,7 +263,7 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            console.log(response);
+            Utils.debug(response);
             if(err){
               Utils.debug("CorpusMask put error", err);
               if(err.status == "409"){
@@ -330,7 +330,7 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            console.log(response);
+            Utils.debug(response);
           });
         });
       });
