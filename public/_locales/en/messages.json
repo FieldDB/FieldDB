@@ -391,7 +391,7 @@
     "message" : "New Tag..."
   },
   "locale_Drag_and_Drop_Placeholder" : {
-    "message" : "Type or paste or drag and drop files/text here!"
+    "message" : "Drag and drop, copy-paste or type your data here."
   },
   "locale_Paste_Type_Unicode_Symbol_Placeholder" : {
     "message" : "Paste/type unicode symbol"
