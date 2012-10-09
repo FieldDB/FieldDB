@@ -218,8 +218,10 @@ define( [
     
     render : function() {
       if(this.format != "link"){
-        appView.currentReadDataListView.destroy_view();
-        appView.currentEditDataListView.destroy_view();
+        window.appView.currentReadDataListView.destroy_view();
+        if(window.appView.currentEditDataListView){
+          window.appView.currentEditDataListView.destroy_view();
+        }
       }
       
       var jsonToRender = this.model.toJSON();
@@ -378,8 +380,10 @@ define( [
         e.stopPropagation();
         e.preventDefault();
       }
-      window.appView.currentEditDataListView.format = this.format;
-      window.appView.currentEditDataListView.render();
+      if(window.appView.currentEditDataListView){
+        window.appView.currentEditDataListView.format = this.format;
+        window.appView.currentEditDataListView.render();
+      }
     },
     
     /**
