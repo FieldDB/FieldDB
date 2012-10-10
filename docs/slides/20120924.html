@@ -22,6 +22,11 @@
 		</div>
 
 	</footer>
+	<div role="note">FieldDB is a 100% Javascript stack for
+		collaboratively collecting data. It was designed to run offline on
+		multiple platforms (Chrome Extension and Android). In this talk we
+		will discuss the hurdles along the way to building a data heavy
+		offline app.</div>
 </section>
 
 <section>
@@ -32,11 +37,12 @@
 		<li>Building for <span class="ipa">χ </span> with Require.js
 		</li>
 	</ul>
-	<div role="note">
-		Look at FieldDB and its architecture
-		<br />
-		Two key libraries + how they fit
-	</div>
+	<div role="note">We will breifly go over our Architecture, which
+		is all OpenSourced on GitHub. Then we go more deeply into two key
+		libraries and how they fit into our stack: PouchDB alpha, a Javascript
+		implementation of the NoSQL database CouchDB, for storing large
+		amounts of data offline, and Require.js for simplifying development
+		and deploying to different targets.</div>
 </section>
 
 <section>
@@ -53,13 +59,27 @@
 		<li>Web widgets</li>
 	</ul>
 	<div role="note">
-		Offline
-		<br />
-		Data Intensive --> Highly-structured + encrypted
-		<br />
-		External web services that we can use
-		<br />
-		Sharing some data
+		<ul class="">
+			<li>Offline: Fieldlinguists rarely have internet</li>
+			<li>Data intensive: Fieldlinguists would import the web, if they
+				could</li>
+			<li>Highly-structured: Fieldlinguists are super structured, but
+				never the same structure and the structure of the data usually
+				evolves over time as their analysis evolves and the data they
+				collect grows.</li>
+			<li>Encrypted: Fieldlinguist's are bound to laws on the
+				protection of 'human subjects' which means some data needs to be
+				confidential, until the subject's death. This means encryption in
+				the database and decrypting only after authentication. An
+				interesting problem for an offline app where no code or tokens can
+				be hidden from the user...</li>
+			<li>CPU intensive: Fieldlinguists have lots of repetitive tasks
+				and OpenSource projects which automate them, we use Node.js to bring
+				these in as web services.</li>
+			<li>Web widgets: Fieldlinguists want to share their data, but
+				not all of it. Mash ups and mashability are what's missing from
+				existing fieldlinguistics database software..</li>
+		</ul>
 	</div>
 </section>
 
@@ -73,11 +93,15 @@
 		<li>Online and Offline/cached</li>
 		<li>Only Offline</li>
 	</ul>
-	<div role="note">
-		Emphasis on the "WE"
-		<br />
-		Most JS is online
-	</div>
+	<div role="note">Most Javascript apps are not offline, they're
+		online in constant contact with a web server. Others are online and
+		can go offline for a period of time by living out of a cache. In our
+		case we are talking about completely offline. Files are delivered in
+		the first download of the app, and they persist (along with their
+		storage) even after the user has uninstalled the app (in the case of a
+		Chrome extension, or Android). Sure, the app has a few buttons which
+		make REST calls to a web service, but only when the user wants to
+		connect.</div>
 </section>
 
 <section>
@@ -90,15 +114,15 @@
 		</figcaption>
 	</figure>
 	<div role="note">
-		Backbone -- Underscore, JQuery, Handlebars
-		<br />
-		Require -- Text
-		<br />
-		PouchDB
-		<br />
-		Server-side
-		<br />
-		Key libraries and what we learned
+		<p>Our App is designed to run on a couple of clients, namely a
+			Chrome extension, an Android tablet and in a limited capacity, on a
+			website. There are 4 web services: Authentication,
+			AudioSplicing/Transcription, Search/MachineLearning, Database and a
+			webserver, 4 are Node.js and one is CouchDB itself.</p>
+		<p>We are using Backbone, Handlebars, Require.js to manage
+			dependencies and PouchDB which wraps IndexedDB. In this talk we are
+			going to look at two key libraries and their pitfalls which we think
+			might help you guys out, if you have similar stack.</p>
 	</div>
 </section>
 
@@ -115,7 +139,7 @@
 	<ul class="incremental">
 		<li>NoSQL</li>
 	</ul>
-	<div role="note">Uses JSON for documents</div>
+	<div role="note"></div>
 </section>
 
 <section>
@@ -124,11 +148,9 @@
 		<img src="futon_json.png">
 		<figcaption>NoSQL</figcaption>
 	</figure>
-	<div role="note">
-		We love JSON
-		<br />
-		Flexibility
-	</div>
+	<div role="note">Not all NoSQL is created equal, we love the
+		flexibility of Couch, we were using MongoDB for our users and found
+		changing the User Schema frustrating...</div>
 </section>
 
 
@@ -138,11 +160,7 @@
 		<li>NoSQL</li>
 		<li>MapReduce</li>
 	</ul>
-	<div role="note">
-		In Javascript
-		<br />
-		Great for semi-structured
-	</div>
+	<div role="note"></div>
 </section>
 
 <section>
@@ -153,11 +171,10 @@
 			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 			MapReduce</figcaption>
 	</figure>
-	<div role="note">
-		Just the map function
-		<br />
-		emits key value pairs below
-	</div>
+	<div role="note">Search functions are written in Javascript using
+		the MapReduce programming paradigm, handy for semi-structured data,
+		handy for extracting training sets or running machine learning
+		algorithms in the data :)</div>
 </section>
 
 <section>
@@ -167,11 +184,7 @@
 		<li>MapReduce</li>
 		<li>Versioned data</li>
 	</ul>
-	<div role="note">
-		Collaborative data
-		<br />
-		Updating old data
-	</div>
+	<div role="note"></div>
 </section>
 
 
@@ -181,11 +194,8 @@
 		<img src="couchdb_versioned.png">
 		<figcaption>Versioned</figcaption>
 	</figure>
-	<div role="note">
-		Revision number
-		<br />
-		Previous/Next version
-	</div>
+	<div role="note">Couchdb is versioned which is super handy when
+		you have collaborative editing, as you can all imagine...</div>
 </section>
 
 <section>
@@ -197,9 +207,10 @@
 		<li>Offline 'support' via PouchDB</li>
 		<li>Mobile ''support'' via TouchDB</li>
 	</ul>
-	<div role="note">
-		Alpha!
-	</div>
+	<div role="note">After about a month and a half we realized how
+		pre-alpha Pouch was. We spent a week on something, and came back on
+		Monday to it suddenly working because the Pouch guys had seen us
+		starting figure out their code.</div>
 </section>
 
 <section>
@@ -207,11 +218,9 @@
 	<ul class="incremental">
 		<li>IDB</li>
 	</ul>
-	<div role="note">
-		IndexedDB
-		<br />
-		CouchDB API
-	</div>
+	<div role="note">IndexedDB came out last December in Chrome,
+		that's fresh. There was a point in June when we knew our app wouldn't
+		work in September because the APIs were changing.</div>
 </section>
 
 <section>
@@ -220,7 +229,8 @@
 		<img src="indexedDB_pouchDB.png">
 		<figcaption>IndexedDB</figcaption>
 	</figure>
-	<div role="note"></div>
+	<div role="note">A tip: You can see your docs in
+		IndexedDB/PouchDB by looking in the Resources tab of Chrome dev tools.</div>
 </section>
 
 <section>
@@ -229,11 +239,11 @@
 		<li>IDB</li>
 		<li>HTTP</li>
 	</ul>
-	<div role="note">
-		Communicate with online CouchDBs
-	</div>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
 </section>
-
 <section>
 	<h2>PouchDB Modes</h2>
 	<ul>
@@ -241,11 +251,11 @@
 		<li>HTTP</li>
 		<li>HTTPS (new!)</li>
 	</ul>
-	<div role="note">
-		Chrome Manifest 2
-	</div>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
 </section>
-
 <section>
 	<h2>PouchDB Modes</h2>
 	<ul>
@@ -255,22 +265,20 @@
 		<li>WebSQL <a
 			href="https://github.com/daleharvey/pouchdb/issues/63">(#63)</a></li>
 	</ul>
-	<div role="note">
-		Issue on GitHub
-		<br />
-		... transition to Backbone (as in Architecture diagram)
-	</div>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
 </section>
 
 <section>
 	<h3>Vanilla Backbone Models (url or urlRoot property)</h3>
 	<script
 		src="https://gist.github.com/3790182.js?file=vanilla-backbone.js"></script>
-	<div role="note">
-		Already done Backbone
-		<br />
-		Persist Models and Collections
-	</div>
+	<div role="note">We expect most of you have done or seen some
+		Backbone or similar framework so we wont bore you with the details,
+		suffice it to say that you add a property and it says which table/API
+		your data is headed to..</div>
 </section>
 
 <section>
@@ -280,11 +288,8 @@
 	</h3>
 	<script
 		src="https://gist.github.com/3790182.js?file=vanilla-pouchdb-backbone.js"></script>
-	<div role="note">
-		Exact same calling structure
-		<br />
-		... transition to eval (that was standard, this next thing is not)
-	</div>
+	<div role="note">To bring in pouch you simply call a function,
+		which returns a function that uses the IndexedDB you want.</div>
 </section>
 
 <!-- <section>
@@ -301,11 +306,16 @@
 	<h3>The eval problem</h3>
 	<script class="incremental"
 		src="https://gist.github.com/3785402.js?file=eval-problem.js"></script>
-	<div role="note">
-		Tell what PouchDB does by default
-		<br />
-		Chrome Manifest 2
-	</div>
+	<div role="note">By far the most exciting hurdle getting an alpha
+		library to run in a chrome extension was the eval problem. Eval is
+		evil, but sometimes a necesary evil. This is a line in Pouch which
+		takes in your Map function (so you can search in your database), which
+		is stored as a doc (i.e. string) in your database, and evaluates it
+		into code so it can be called. The best part is that Chrome extensions
+		can no longer call eval. So what good is a database if you cant search
+		it? And because the eval has to be called in the scope where the emit
+		function is defined, avoiding the eval requires a redesign of PouchDB.
+		So here is our hack...</div>
 </section>
 
 <section>
@@ -315,17 +325,19 @@
 		<li>Compare the desired function against the hardcoded versions</li>
 		<li>Assign the hardcoded version to fun.map</li>
 	</ol>
-	<div role="note"></div>
+	<div role="note">We put together an object containing the
+		functions needed in our database for client side (we have some that
+		are just for webservices, training etc...). We do string match on
+		these functions compared to the function in the doc and call the
+		function that string matches. No eval problem, but still a hack and
+		requires putting code into the PouchDB library.</div>
 </section>
 
 <section>
 	<h3>Our hack</h3>
 	<script src="https://gist.github.com/3785402.js?file=eval-hack.js"></script>
-	<div role="note">
-		Line 2308 of pouch.alpha.js
-		<br />
-		... transition to Gina (on to Require.js)
-	</div>
+	<div role="note">Here are the 10 lines of code we had to bury
+		deep on line 2308 of pouch.alpha.js</div>
 </section>
 
 
