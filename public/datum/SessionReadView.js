@@ -104,7 +104,9 @@ define([
           return this;
         }
         if(this.format != "link"){
-          appView.currentSessionEditView.destroy_view();
+          if(window.appView.currentSessionEditView){
+            appView.currentSessionEditView.destroy_view();
+          }
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
@@ -231,8 +233,10 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      window.appView.currentSessionEditView.format = this.format;
-      window.appView.currentSessionEditView.render();
+      if(window.appView.currentSessionEditView){
+        window.appView.currentSessionEditView.format = this.format;
+        window.appView.currentSessionEditView.render();
+      }
     }, 
  
     /**
