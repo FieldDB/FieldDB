@@ -187,11 +187,11 @@ require([
     var appjson = localStorage.getItem("mostRecentDashboard");
     appjson = JSON.parse(appjson);
     if (appjson == null){
-      alert("We don't know what dashbaord to load for you. Please login and it should fix this problem.");
+//      alert("We don't know what corpus dashbaord to load for you. Please login and it should fix this problem.");
       document.location.href='user.html';
       return;
     }else if (appjson.length < 3) {
-      alert("There was something inconsistent with your prevous dashboard. Please login and it should fix the problem.");
+//      alert("There was something inconsistent with your prevous corpus dashboard. ");
       document.location.href='user.html';
       return;
     }else{
@@ -199,13 +199,14 @@ require([
       var pouchname = null;
       var couchConnection = null;
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
-        alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
+//        alert("We can't accurately guess which corpus to load.");
         document.location.href='user.html';
         return;
       }else{
         if(!localStorage.getItem("encryptedUser")){
           alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
-          document.location.href='user.html';
+          Utils.setCookie("username","");
+          document.location.href='index.html';
           return;
         }else{
           a = new App();
