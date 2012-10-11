@@ -1,6 +1,6 @@
 {
   "application_title" : {
-    "message" : "LingSync beta",
+    "message" : "LingSync",
     "description" : "The title of the application, displayed in the web store."
   },
   "application_description" : {

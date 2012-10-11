@@ -32,7 +32,7 @@
 <section>
 	<h2>Road Map</h2>
 	<ul class="incremental">
-		<li>Architecture</li>
+		<li>FieldDB</li>
 		<li>Persisting data client side with PouchDB</li>
 		<li>Building for <span class="ipa">χ </span> with Require.js
 		</li>
@@ -235,7 +235,30 @@
 
 <section>
 	<h2>PouchDB Modes</h2>
-	<ul class="incremental">
+	<ul>
+		<li>IDB</li>
+		<li>HTTP</li>
+	</ul>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
+</section>
+<section>
+	<h2>PouchDB Modes</h2>
+	<ul>
+		<li>IDB</li>
+		<li>HTTP</li>
+		<li>HTTPS (new!)</li>
+	</ul>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
+</section>
+<section>
+	<h2>PouchDB Modes</h2>
+	<ul>
 		<li>IDB</li>
 		<li>HTTP</li>
 		<li>HTTPS (new!)</li>
@@ -437,7 +460,7 @@ for(var d in datums){
 </section>
 
 
-<section>
+<!--  <section>
 	<h2>Demo</h2>
 	<div role="note">
 		Will probably show what the code looks like in chrome for hackabilty,
@@ -447,7 +470,7 @@ for(var d in datums){
 		
 		</pre>
 	</div>
-</section>
+</section>-->
 
 <section>
 	<h4>Build for Android</h4>
