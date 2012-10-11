@@ -45,6 +45,10 @@ define( [
     events : {
       "click .approve-save" : "saveDataList",
       "click .approve-import" : "convertTableIntoDataList",
+// Commented out the removeClass function right below, it seems this function doesn't let the datalist to show in import view.      
+//      "click .approve-import" : function(e){
+//        $("#import-third-step").removeClass("hidden");
+//      },
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
       },
@@ -172,6 +176,9 @@ define( [
       $(this.el).find(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
       $(this.el).find(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
       $(this.el).find(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
+      $(this.el).find(".locale_Import_First_Step").html(chrome.i18n.getMessage("locale_Import_First_Step"));
+      $(this.el).find(".locale_Import_Second_Step").html(chrome.i18n.getMessage("locale_Import_Second_Step"));
+      $(this.el).find(".locale_Import_Third_Step").html(chrome.i18n.getMessage("locale_Import_Third_Step"));
       $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
       $(this.el).find(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
       $(this.el).find(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
@@ -775,6 +782,16 @@ define( [
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       return false;
     },
+    
+// Choose an option from Dropdown "Import from" then the second step will show up    
+    showSecondStep : function(e){
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      $("#import-second-step").removeClass("hidden");
+    },
+
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
