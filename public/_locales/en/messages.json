@@ -301,7 +301,7 @@
     "message" : "Insert Extra Columns"
   },
   "locale_Attempt_Import" : {
-    "message" : "Attempt Import"
+    "message" : "Preview Import"
   },
   "locale_LaTeX_Code" : {
     "message" : "LaTeX Code:"
