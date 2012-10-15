@@ -255,12 +255,29 @@ define([
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
               var visibleids = {};
-              visibleids.corpusid = app.get("corpus").id;
-              visibleids.sessionid = app.get("currentSession").id;
-              visibleids.datalistid = app.get("currentDataList").id;
+              if(app.get("corpus")){
+                visibleids.corpusid = app.get("corpus").id;
+              }else{
+                visibleids.corpusid = "";
+              }
+              if(app.get("currentSession"))  {
+                visibleids.sessionid = app.get("currentSession").id;
+              }else{
+                visibleids.sessionid = "";
+              }
+              if(app.get("currentDataList")){
+                visibleids.datalistid = app.get("currentDataList").id;
+              }else{
+                visibleids.datalistid = "";
+              }
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
                 Utils.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
-                window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+                if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
+                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+                }else{
+                  console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
+                  window.app.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
+                }
               }
             }                    
           });
