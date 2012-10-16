@@ -89,12 +89,12 @@
 	<hr />
 
 	<div class="well">
-		<h1>October 4 2012 - Week 24 &amp; 25 - Learn Mi'gmaq Prototype is deployed, and so are the new production servers on LingSync.org!</h1>
+		<h1>October  13 2012 - Week 24 &amp; 25 - Learn Mi'gmaq Prototype
+			is deployed, and so are the new production servers!</h1>
 
 		<h2>Prototype demo</h2>
 		<p>Our prototype is out there and looking good! Watch the video
 			for a tour.</p>
-		<h4>Sorry it's flipped sideways! We'll try to fix that this week.</h4>
 
 		<iframe width="560" height="315"
 			src="http://www.youtube.com/embed/MOG22jpAPPM" frameborder="0"
@@ -112,16 +112,53 @@
 		<h2>New read-only corpus dashboards</h2>
 
 		<p>We are slowly making progress towards getting public urls for
-			those who want to let others see their corpus publicaly. We are
-			realizing this is a top priority for grant comittees, but for
-			research team it is super complicated, requireing them to get
-			approval from their language consultant to open their data.
-			Essentailly, we don't know anyone who actually needs the public url
-			right now so we haven't been making it a priority. @trisapeace and
-			@cesine presented the technical sides of the app at Javascript
-			Montreal, so the read only dashboard was mroe of an exercise of
-			showing what require can do to build different versions of the app.</p>
+			those who want to let others see their corpus publicly. We are
+			realizing this is a top priority for grant committees, but for
+			research team it is super complicated, requiring them to get approval
+			from their language consultant to open their data. Essentially, we
+			don't know anyone who actually needs the public url right now so we
+			haven't been making it a priority.</p>
 
+
+		<h2>Presented  FieldDB at
+			Javascript Montreal</h2>
+		<p>
+			@trisapeace and @cesine <a href="slides/offline_databases.html">presented
+				the technical sides of the app at Javascript Montreal</a>. In the
+			process we added the read only dashboard which was more of an
+			exercise of showing what require can do to build different versions
+			of the app.
+		</p>
+
+		<h2>Intern dipps her toes into Android
+			development</h2>
+		<p>Since she finished the Learn Mi'gmaq prototype this week Elise
+			also looking back into getting the app to run offline on Android and
+			iPad using TouchDB. When we found out that chrome worked on Android
+			and iPad we planned to use the Chrome store to run the app on
+			tablets. But, it turns out that the chrome store isnt availible yet
+			on the mobile version of Chrome. We had some old code from June which
+			started setting up TouchDB on the android. Elise explored the
+			codebases, and another code base for keeping a Grocery list offline
+			using TouchDB.</p>
+
+		<h2>Chrome 23.0.1271.26 changes the IndexedDB spec</h2>
+
+		<p>
+			At one point this week we woke up to a dashboard taht woudlnt load
+			(it just said Untitled corpus). The culprit was a new version of
+			chrome (we are using the beta version, which is about 1 month before
+			users). It turns out that the IndexedDBs created with previous
+			versions of chrome need to be updated. We have two options, try to
+			fix PouchDB's update function and contribute it upstream to the
+			PouchDB guys, or write a script to log users out, move their
+			databases and the log them back in so that they have fresh new
+			pouches filled with their data. We created an issue for this here...
+			<a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/635">Handle
+				when users upgrade to Chrome 23.0.1271.17</a> we have 2 weeks to get it
+			sorted out
+		</p>
 	</div>
 	<div class="well">
 		<h1>September 29 2012 - Week 22 &amp; 23 - Upgraded our version
