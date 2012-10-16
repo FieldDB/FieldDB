@@ -1,0 +1,1289 @@
+﻿<!DOCTYPE html>
+
+<meta charset="utf-8">
+<title>a case study</title>
+
+<!-- Your Slides -->
+<!-- One section is one slide -->
+
+<section class="bamboo">
+	<h2>Taking Javascript into the field:</h2>
+	<h4>
+		<a href="https://github.com/OpenSourceFieldlinguistics">a case
+			study</a>
+	</h4>
+	<footer>
+		<div>Cook &amp; Deering</div>
+		<div>
+			<a href="https://github.com/cesine" class="github"><i
+				class="icon-github "></i> cesine</a> &nbsp; &nbsp; &nbsp; &nbsp; <a
+				href="https://github.com/trisapeace/" class="github"><i
+				class="icon-github "></i> trisapeace</a>
+		</div>
+
+	</footer>
+	<div role="note">FieldDB is a 100% Javascript stack for
+		collaboratively collecting data. It was designed to run offline on
+		multiple platforms (Chrome Extension and Android). In this talk we
+		will discuss the hurdles along the way to building a data heavy
+		offline app.</div>
+</section>
+
+<section>
+	<h2>Road Map</h2>
+	<ul class="incremental">
+		<li>FieldDB</li>
+		<li>Persisting data client side with PouchDB</li>
+		<li>Building for <span class="ipa">χ </span> with Require.js
+		</li>
+	</ul>
+	<div role="note">We will breifly go over our Architecture, which
+		is all OpenSourced on GitHub. Then we go more deeply into two key
+		libraries and how they fit into our stack: PouchDB alpha, a Javascript
+		implementation of the NoSQL database CouchDB, for storing large
+		amounts of data offline, and Require.js for simplifying development
+		and deploying to different targets.</div>
+</section>
+
+<section>
+	<h2>
+		Case study: <a target="_new"
+			href="https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm">FieldDB</a>
+	</h2>
+	<ul class="incremental">
+		<li>Offline</li>
+		<li>Data intensive</li>
+		<li>Highly structured data, but always changing</li>
+		<li>Encrypted</li>
+		<li>Web services</li>
+		<li>Web widgets</li>
+	</ul>
+	<div role="note">
+		<ul class="">
+			<li>Offline: Fieldlinguists rarely have internet</li>
+			<li>Data intensive: Fieldlinguists would import the web, if they
+				could</li>
+			<li>Highly-structured: Fieldlinguists are super structured, but
+				never the same structure and the structure of the data usually
+				evolves over time as their analysis evolves and the data they
+				collect grows.</li>
+			<li>Encrypted: Fieldlinguist's are bound to laws on the
+				protection of 'human subjects' which means some data needs to be
+				confidential, until the subject's death. This means encryption in
+				the database and decrypting only after authentication. An
+				interesting problem for an offline app where no code or tokens can
+				be hidden from the user...</li>
+			<li>CPU intensive: Fieldlinguists have lots of repetitive tasks
+				and OpenSource projects which automate them, we use Node.js to bring
+				these in as web services.</li>
+			<li>Web widgets: Fieldlinguists want to share their data, but
+				not all of it. Mash ups and mashability are what's missing from
+				existing fieldlinguistics database software..</li>
+		</ul>
+	</div>
+</section>
+
+
+
+
+<section>
+	<h2>What do we mean by Offline?</h2>
+	<ul class="incremental">
+		<li>Online</li>
+		<li>Online and Offline/cached</li>
+		<li>Only Offline</li>
+	</ul>
+	<div role="note">Most Javascript apps are not offline, they're
+		online in constant contact with a web server. Others are online and
+		can go offline for a period of time by living out of a cache. In our
+		case we are talking about completely offline. Files are delivered in
+		the first download of the app, and they persist (along with their
+		storage) even after the user has uninstalled the app (in the case of a
+		Chrome extension, or Android). Sure, the app has a few buttons which
+		make REST calls to a web service, but only when the user wants to
+		connect.</div>
+</section>
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="FieldDB_Architecture.png">
+		<figcaption>
+			<!-- Architecture -->
+
+		</figcaption>
+	</figure>
+	<div role="note">
+		<p>Our App is designed to run on a couple of clients, namely a
+			Chrome extension, an Android tablet and in a limited capacity, on a
+			website. There are 4 web services: Authentication,
+			AudioSplicing/Transcription, Search/MachineLearning, Database and a
+			webserver, 4 are Node.js and one is CouchDB itself.</p>
+		<p>We are using Backbone, Handlebars, Require.js to manage
+			dependencies and PouchDB which wraps IndexedDB. In this talk we are
+			going to look at two key libraries and their pitfalls which we think
+			might help you guys out, if you have similar stack.</p>
+	</div>
+</section>
+
+<section>
+	<blockquote>Apache CouchDB is a database that uses JSON
+		for documents, JavaScript for MapReduce queries and regular HTTP for
+		an API.</blockquote>
+	<!-- http://couchdb.apache.org/ -->
+</section>
+
+
+<section>
+	<h2>Why CouchDB?</h2>
+	<ul class="incremental">
+		<li>NoSQL</li>
+	</ul>
+	<div role="note"></div>
+</section>
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="futon_json.png">
+		<figcaption>NoSQL</figcaption>
+	</figure>
+	<div role="note">Not all NoSQL is created equal, we love the
+		flexibility of Couch, we were using MongoDB for our users and found
+		changing the User Schema frustrating...</div>
+</section>
+
+
+<section>
+	<h2>Why CouchDB?</h2>
+	<ul class="">
+		<li>NoSQL</li>
+		<li>MapReduce</li>
+	</ul>
+	<div role="note"></div>
+</section>
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="couchdb_mapreduce.png">
+		<figcaption>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+			MapReduce</figcaption>
+	</figure>
+	<div role="note">Search functions are written in Javascript using
+		the MapReduce programming paradigm, handy for semi-structured data,
+		handy for extracting training sets or running machine learning
+		algorithms in the data :)</div>
+</section>
+
+<section>
+	<h2>Why CouchDB?</h2>
+	<ul class="">
+		<li>NoSQL</li>
+		<li>MapReduce</li>
+		<li>Versioned data</li>
+	</ul>
+	<div role="note"></div>
+</section>
+
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="couchdb_versioned.png">
+		<figcaption>Versioned</figcaption>
+	</figure>
+	<div role="note">Couchdb is versioned which is super handy when
+		you have collaborative editing, as you can all imagine...</div>
+</section>
+
+<section>
+	<h2>Why CouchDB?</h2>
+	<ul class="">
+		<li>NoSQL</li>
+		<li>MapReduce</li>
+		<li>Versioned data</li>
+		<li>Offline 'support' via PouchDB</li>
+		<li>Mobile ''support'' via TouchDB</li>
+	</ul>
+	<div role="note">After about a month and a half we realized how
+		pre-alpha Pouch was. We spent a week on something, and came back on
+		Monday to it suddenly working because the Pouch guys had seen us
+		starting figure out their code.</div>
+</section>
+
+<section>
+	<h2>PouchDB Modes</h2>
+	<ul class="incremental">
+		<li>IDB</li>
+	</ul>
+	<div role="note">IndexedDB came out last December in Chrome,
+		that's fresh. There was a point in June when we knew our app wouldn't
+		work in September because the APIs were changing.</div>
+</section>
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="indexedDB_pouchDB.png">
+		<figcaption>IndexedDB</figcaption>
+	</figure>
+	<div role="note">A tip: You can see your docs in
+		IndexedDB/PouchDB by looking in the Resources tab of Chrome dev tools.</div>
+</section>
+
+<section>
+	<h2>PouchDB Modes</h2>
+	<ul>
+		<li>IDB</li>
+		<li>HTTP</li>
+	</ul>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
+</section>
+<section>
+	<h2>PouchDB Modes</h2>
+	<ul>
+		<li>IDB</li>
+		<li>HTTP</li>
+		<li>HTTPS (new!)</li>
+	</ul>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
+</section>
+<section>
+	<h2>PouchDB Modes</h2>
+	<ul>
+		<li>IDB</li>
+		<li>HTTP</li>
+		<li>HTTPS (new!)</li>
+		<li>WebSQL <a
+			href="https://github.com/daleharvey/pouchdb/issues/63">(#63)</a></li>
+	</ul>
+	<div role="note">We needed HTTPS because Chrome manifest v2
+		requires contacting only HTTPS services (in their fight to get rid of
+		malicious Chrome extensions etc). So we added it and then Dale brought
+		it over to Pouch.</div>
+</section>
+
+<section>
+	<h3>Vanilla Backbone Models (url or urlRoot property)</h3>
+	<script
+		src="https://gist.github.com/3790182.js?file=vanilla-backbone.js"></script>
+	<div role="note">We expect most of you have done or seen some
+		Backbone or similar framework so we wont bore you with the details,
+		suffice it to say that you add a property and it says which table/API
+		your data is headed to..</div>
+</section>
+
+<section>
+	<h3>
+		Using <a href="https://github.com/jo/backbone-pouchdb">backbone-pouchdb</a>
+		(pouch property)
+	</h3>
+	<script
+		src="https://gist.github.com/3790182.js?file=vanilla-pouchdb-backbone.js"></script>
+	<div role="note">To bring in pouch you simply call a function,
+		which returns a function that uses the IndexedDB you want.</div>
+</section>
+
+<!-- <section>
+	<h3>Changing a Model's PouchDB with backbone-pouchdb (functions)</h3>
+	<script
+		src="https://gist.github.com/3790182.js?file=extended-pouchdb-backbone.js"></script>
+	<div role="note">In our case, this wasn't enough... Because we
+		had models whose pouch was unknown when they were loaded we added a
+		new function "changePouch" which woudl let us save and fetch a model
+		from one IndexedDB to another.</div>
+</section> -->
+
+<section>
+	<h3>The eval problem</h3>
+	<script class="incremental"
+		src="https://gist.github.com/3785402.js?file=eval-problem.js"></script>
+	<div role="note">By far the most exciting hurdle getting an alpha
+		library to run in a chrome extension was the eval problem. Eval is
+		evil, but sometimes a necesary evil. This is a line in Pouch which
+		takes in your Map function (so you can search in your database), which
+		is stored as a doc (i.e. string) in your database, and evaluates it
+		into code so it can be called. The best part is that Chrome extensions
+		can no longer call eval. So what good is a database if you cant search
+		it? And because the eval has to be called in the scope where the emit
+		function is defined, avoiding the eval requires a redesign of PouchDB.
+		So here is our hack...</div>
+</section>
+
+<section>
+	<h3>Our hack</h3>
+	<ol class="incremental">
+		<li>Hardcode the Map and Reduce functions where emit is in scope</li>
+		<li>Compare the desired function against the hardcoded versions</li>
+		<li>Assign the hardcoded version to fun.map</li>
+	</ol>
+	<div role="note">We put together an object containing the
+		functions needed in our database for client side (we have some that
+		are just for webservices, training etc...). We do string match on
+		these functions compared to the function in the doc and call the
+		function that string matches. No eval problem, but still a hack and
+		requires putting code into the PouchDB library.</div>
+</section>
+
+<section>
+	<h3>Our hack</h3>
+	<script src="https://gist.github.com/3785402.js?file=eval-hack.js"></script>
+	<div role="note">Here are the 10 lines of code we had to bury
+		deep on line 2308 of pouch.alpha.js</div>
+</section>
+
+
+<section>
+	<blockquote>RequireJS is a JavaScript file and module
+		loader. It is optimized for in-browser use, but it can be used in
+		other JavaScript environments, like Rhino and Node.</blockquote>
+	<div role="note">Turning now to modularity and code-reuse. Using
+		a script loader like RequireJS drastically reduced the complexity of
+		developing and deploying our codebase for multiple clients.</div>
+</section>
+
+<section>
+	<h2>Why Require.js?</h2>
+	<ul class="incremental">
+		<li>Easier development using only local dependencies</li>
+		<li>Smarter minification</li>
+		<li>Better for building "widgets"</li>
+	</ul>
+	<div role="note">Require.js makes for cleaner classes, if you're
+		used to developing in Java, having Require makes you feel right at
+		home. Require.js calculates the files your class depends on and
+		includes them for you. Require can also 'build' your classes into a
+		minified js file for shipping down the wire, whether it be on page
+		load for a website, or when the user downloads your app from the
+		Android market. Similarly require helps for building a subset of the
+		codebase i.e. for building an activity feed widget which your users
+		can embed in their WordPress, website etc.</div>
+</section>
+
+<!-- <section>
+	<h2>The CommonJS Debate</h2>
+
+	<div role="note">Underscore/Backbone vs. AMD
+		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+</section> -->
+
+<section>
+	<p>
+		Getting libraries (Backbone, Underscore, JQuery)<br /> to <a
+			href="http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs">play
+			nice</a><br /> with Require.js ...
+	</p>
+
+	<div role="note">As far as we can see there's a clear political
+		divide between two camps of Javascript developers. Here's what we can
+		pull away from it. One camp thinks you do/should always build and
+		therefore you don't need to use a module loader in development, and
+		one camp doesn't. Libraries from one camp dont (didn't) play nice with
+		libraries of others... Specifically getting Underscore/Backbone and
+		JQuery to play nice with Require.js has been a give-up point for a lot
+		of devs. We don't know much about the politics but there was a release
+		or two where underscore and backbone were AMD compliant but then it
+		was removed for some reason "As of version 1.3.0 Underscore removed
+		AMD (RequireJS) support."
+		http://stackoverflow.com/questions/8131265/loading-backbone-and-underscore-using-requirejs</div>
+</section>
+
+<section>
+	<h4>Enter: shims (May 28, 2012)</h4>
+	<script src="https://gist.github.com/3779339.js?file=shims.js"></script>
+	<div role="note">The solution infact is simple, well, if you were
+		Googling after May 28th, when James burke the maintainer of Require
+		added in shims. After that we've had no trouble building new fancy
+		build and testing configurations... We are now over 14 libraries and
+		70 classes and no loading problems...
+		https://github.com/jrburke/requirejs/wiki/Upgrading-to-RequireJS-2.0</div>
+</section>
+
+
+<section>
+	<h4>What it really looks like...</h4>
+	<div class="scrollable">
+		<script
+			src="https://gist.github.com/3791746.js?file=corpus_dashboard.js"></script>
+	</div>
+	<div role="note">Don't like toy examples? Me neither... here is
+		what our require really looks like...</div>
+</section>
+
+
+<section>
+	<h4>Build for Hackability</h4>
+	<script
+		src="https://gist.github.com/3779357.js?file=buildforhackability.js"></script>
+	<div role="note">No, seriously. Deploying with a built in
+		Javascript console is a feature for our power users. They can automate
+		data cleaning, itterate through their data, use breakpoints and
+		more...</div>
+</section>
+
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="power_user_friendly.png">
+		<figcaption>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+			Hackability</figcaption>
+	</figure>
+	<div role="note">
+		We are power user friendly, and because write-permissions are double
+		checked on the server side, we let the users have full access to their
+		data...
+		<pre>
+var datums = appView.currentPaginatedDataListDatumsView.collection.models
+		
+for(var d in datums){
+  console.log(datums[d].get("datumFields").where({label:"utterance"})[0].get("mask"));
+}
+    </pre>
+	</div>
+</section>
+
+
+<section>
+	<h4>Build for Speed</h4>
+	<script src="https://gist.github.com/3779359.js?file=buildforspeed.js"></script>
+	<div role="note"></div>
+</section>
+
+
+<!--  <section>
+	<h2>Demo</h2>
+	<div role="note">
+		Will probably show what the code looks like in chrome for hackabilty,
+		and what the code looks like in android for package size, and using
+		JSI?
+		<pre>
+		
+		</pre>
+	</div>
+</section>-->
+
+<section>
+	<h4>Build for Android</h4>
+	<script
+		src="https://gist.github.com/3779361.js?file=buildforandroid.js"></script>
+	<div role="note">super small for download from market over 3g</div>
+</section>
+
+<section>
+	<h4>Build Read Only Models</h4>
+	<script src="https://gist.github.com/3779364.js?file=buildreadonly.js"></script>
+	<div role="note">Reduce the hackability of your models...</div>
+</section>
+
+<section>
+	<h4>Build Embeddable Widgets</h4>
+	<script src="https://gist.github.com/3779367.js?file=buildwidgets.js"></script>
+	<div role="note">auth, 3user, corpus->datalist, datum</div>
+</section>
+
+<section>
+	<h2>Offline is tricky, but possible</h2>
+	<ul class="incremental">
+		<li>Start with Offline in mind</li>
+		<li>Debug as a Chrome Extension</li>
+		<li>If a library is in active development...</li>
+	</ul>
+	<div role="note">Here's our take home. We are glad we built with
+		offline in mind from the beginnning we developed in a Chrome
+		extension, with no server to hit. Debugging in chrome extensions is
+		almost everything we need, break points to run code in a context and
+		more. Finally, if a library is in active development take the time to
+		read the code, you'll be glad you did and you can contribute back to
+		the library.</div>
+</section>
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img
+			src="https://wwwdev.fieldlinguist.com:3181/images/team_at_work.jpg">
+		<figcaption>
+			Acknowledgements
+			<ul class="incremental">
+				<li>PouchDB</li>
+				<li>Our clients</li>
+				<li>Our interns</li>
+			</ul>
+		</figcaption>
+	</figure>
+	<div role="note">We'd like to thank Dale and Joe the PouchDB guys,
+		with out which we would have had to do the whole db logic client side
+		ourselves. We'd also like to thank our clients for letting us keep our
+		codebase open source and finally our interns who went from logic class to
+		BDD without a drop of fear...</div>
+</section>
+
+
+<section>
+	<figure>
+		<!-- Figures are used to display images and videos fullpage -->
+		<img src="dashboard.png">
+		<figcaption>Questions?</figcaption>
+	</figure>
+	<div role="note">Thanks, the client codebase and webservices are
+		all on github, we also have a dev blog where our interns created
+		screencasts and board casts of what they learned while developing the
+		app.</div>  
+</section>
+
+
+<!-- Your Style -->
+<!-- Define the style of your presentation -->
+<link rel="stylesheet" type="text/css"
+	href="/public/font_awesome/css/font-awesome.css">
+
+<style>
+.bamboo {
+	background-image: url(/public/images/skins/bamboo_garden.jpg);
+	color: #ffffff;
+	text-shadow: 2px 2px #000;
+}
+
+a {
+	color: #A4C639;
+	text-decoration: none;
+}
+
+.bamboo {
+	font-size: 2em;
+}
+
+.github {
+	font-size: 20px;
+	text-shadow: 0px 0px #000;
+	color: #000;
+}
+
+.ipa {
+	font-family: italic Courier serif;
+	font-size: larger;
+}
+/* make some gists scrollable */
+.scrollable {
+	overflow: auto !important;
+	height: 500px !important;
+	width: 100% !important;
+}
+</style>
+<!-- Maybe a font from http://www.google.com/webfonts ? -->
+<link href='http://fonts.googleapis.com/css?family=Oswald'
+	rel='stylesheet'>
+
+<style>
+html,.view body {
+	background-color: black;
+	counter-reset: slideidx;
+}
+
+body,.view section {
+	background-color: white;
+	border-radius: 12px
+}
+/* A section is a slide. It's size is 800x600, and this will never change */
+section,.view head>title { /* The font from Google */
+	font-family: 'Oswald', arial, serif;
+	font-size: 20px;
+	letter-spacing: 1px;
+}
+
+.view section:after {
+	counter-increment: slideidx;
+	content: counter(slideidx, decimal-leading-zero);
+	position: absolute;
+	bottom: -80px;
+	right: 100px;
+	color: white;
+}
+
+.view head>title {
+	color: white;
+	text-align: center;
+	margin: 1em 0 1em 0;
+}
+
+h1 {
+	margin-top: 200px;
+	text-align: center;
+	font-size: 80px;
+}
+
+h2 {
+	margin-top: 200px;
+	text-align: center;
+	font-size: 60px;
+}
+
+h3 {
+	margin: 100px 0 50px 100px;
+}
+
+h4 {
+	margin: 30px 0 30px 50px;
+}
+
+ul,ol {
+	margin: 50px 200px;
+}
+
+p {
+	margin: 75px;
+	font-size: 50px;
+}
+
+blockquote {
+	height: 100%;
+	background-color: black;
+	color: white;
+	font-size: 60px;
+	padding: 50px;
+}
+
+blockquote:before {
+	content: open-quote;
+}
+
+blockquote:after {
+	content: close-quote;
+}
+
+/* Figures are displayed full-page, with the caption
+     on top of the image/video */
+figure {
+	background-color: black;
+	width: 100%;
+	height: 100%;
+	color: #fff;
+	text-shadow: 3px 3px #000;
+}
+
+figure>* {
+	position: absolute;
+}
+
+figure>img,figure>video {
+	width: 100%;
+	height: 100%;
+}
+
+figcaption {
+	margin: 200px;
+	font-size: 50px;
+}
+
+figcaption ul {
+	font-size: 30px;
+	margin-left: 0px;
+}
+
+figcaption li {
+	margin-left: 60px;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	padding: 40px;
+	text-align: right;
+	background-color: #F3F4F8;
+	border-top: 1px solid #CCC;
+}
+
+/* Transition effect */
+/* Feel free to change the transition effect for original
+     animations. See here:
+     https://developer.mozilla.org/en/CSS/CSS_transitions
+     How to use CSS3 Transitions: */
+section {
+	-moz-transition: left 400ms linear 0s;
+	-webkit-transition: left 400ms linear 0s;
+	-ms-transition: left 400ms linear 0s;
+	transition: left 400ms linear 0s;
+}
+
+.view section {
+	-moz-transition: none;
+	-webkit-transition: none;
+	-ms-transition: none;
+	transition: none;
+}
+
+.view section[aria-selected] {
+	border: 5px red solid;
+}
+
+/* Before */
+section {
+	left: -150%;
+}
+/* Now */
+section[aria-selected] {
+	left: 0;
+}
+/* After */
+section[aria-selected]                                                 
+	                                                                      
+	            ~ section {
+	left: +150%;
+}
+
+/* Incremental elements */
+
+/* By default, visible */
+.incremental>* {
+	opacity: 1;
+}
+
+/* The current item */
+.incremental>*[aria-selected] {
+	opacity: 1;
+}
+
+/* The items to-be-selected */
+.incremental>*[aria-selected]                                          
+	                                                                      
+	                   ~ * {
+	opacity: 0;
+}
+
+/* The progressbar, at the bottom of the slides, show the global
+     progress of the presentation. */
+#progress-bar {
+	height: 2px;
+	background: #AAA;
+}
+</style>
+<!-- {{{{ dzslides core
+#
+#
+#     __  __  __       .  __   ___  __
+#    |  \  / /__` |    | |  \ |__  /__`
+#    |__/ /_ .__/ |___ | |__/ |___ .__/ core :€
+#
+#
+# The following block of code is not supposed to be edited.
+# But if you want to change the behavior of these slides,
+# feel free to hack it!
+#
+-->
+
+<div id="progress-bar"></div>
+<!-- Default Style -->
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+[role="note"] {
+	display: none;
+}
+
+body {
+	width: 800px;
+	height: 600px;
+	margin-left: -400px;
+	margin-top: -300px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	overflow: hidden;
+	display: none;
+}
+
+.view body {
+	position: static;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	overflow: visible;
+	overflow-x: hidden;
+	/* undo Dz.onresize */
+	transform: none !important;
+	-moz-transform: none !important;
+	-webkit-transform: none !important;
+	-o-transform: none !important;
+	-ms-transform: none !important;
+}
+
+.view head,.view head>title {
+	display: block
+}
+
+section {
+	position: absolute;
+	pointer-events: none;
+	width: 100%;
+	height: 100%;
+}
+
+.view section {
+	pointer-events: auto;
+	position: static;
+	width: 800px;
+	height: 600px;
+	margin: -150px -200px;
+	float: left;
+	transform: scale(.4);
+	-moz-transform: scale(.4);
+	-webkit-transform: scale(.4);
+	-o-transform: scale(.4);
+	-ms-transform: scale(.4);
+}
+
+.view section>* {
+	pointer-events: none;
+}
+
+section[aria-selected] {
+	pointer-events: auto;
+}
+
+html {
+	overflow: hidden;
+}
+
+html.view {
+	overflow: visible;
+}
+
+body.loaded {
+	display: block;
+}
+
+.incremental {
+	visibility: hidden;
+}
+
+.incremental[active] {
+	visibility: visible;
+}
+
+#progress-bar {
+	bottom: 0;
+	position: absolute;
+	-moz-transition: width 400ms linear 0s;
+	-webkit-transition: width 400ms linear 0s;
+	-ms-transition: width 400ms linear 0s;
+	transition: width 400ms linear 0s;
+}
+
+.view #progress-bar {
+	display: none;
+}
+</style>
+<script>
+  var Dz = {
+    remoteWindows: [],
+    idx: -1,
+    step: 0,
+    html: null,
+    slides: null,
+    progressBar : null,
+    params: {
+      autoplay: "1"
+    }
+  };
+
+  Dz.init = function() {
+    document.body.className = "loaded";
+    this.slides = Array.prototype.slice.call($$("body > section"));
+    this.progressBar = $("#progress-bar");
+    this.html = document.body.parentNode;
+    this.setupParams();
+    this.onhashchange();
+    this.setupTouchEvents();
+    this.onresize();
+    this.setupView();
+  }
+
+  Dz.setupParams = function() {
+    var p = window.location.search.substr(1).split('&');
+    p.forEach(function(e, i, a) {
+      var keyVal = e.split('=');
+      Dz.params[keyVal[0]] = decodeURIComponent(keyVal[1]);
+    });
+  // Specific params handling
+    if (!+this.params.autoplay)
+      $$.forEach($$("video"), function(v){ v.controls = true });
+  }
+
+  Dz.onkeydown = function(aEvent) {
+    // Don't intercept keyboard shortcuts
+    if (aEvent.altKey
+      || aEvent.ctrlKey
+      || aEvent.metaKey
+      || aEvent.shiftKey) {
+      return;
+    }
+    if ( aEvent.keyCode == 37 // left arrow
+      || aEvent.keyCode == 38 // up arrow
+      || aEvent.keyCode == 33 // page up
+    ) {
+      aEvent.preventDefault();
+      this.back();
+    }
+    if ( aEvent.keyCode == 39 // right arrow
+      || aEvent.keyCode == 40 // down arrow
+      || aEvent.keyCode == 34 // page down
+    ) {
+      aEvent.preventDefault();
+      this.forward();
+    }
+    if (aEvent.keyCode == 35) { // end
+      aEvent.preventDefault();
+      this.goEnd();
+    }
+    if (aEvent.keyCode == 36) { // home
+      aEvent.preventDefault();
+      this.goStart();
+    }
+    if (aEvent.keyCode == 32) { // space
+      aEvent.preventDefault();
+      this.toggleContent();
+    }
+    if (aEvent.keyCode == 70) { // f
+      aEvent.preventDefault();
+      this.goFullscreen();
+    }
+    if (aEvent.keyCode == 79) { // o
+      aEvent.preventDefault();
+      this.toggleView();
+    }
+  }
+
+  /* Touch Events */
+
+  Dz.setupTouchEvents = function() {
+    var orgX, newX;
+    var tracking = false;
+
+    var db = document.body;
+    db.addEventListener("touchstart", start.bind(this), false);
+    db.addEventListener("touchmove", move.bind(this), false);
+
+    function start(aEvent) {
+      aEvent.preventDefault();
+      tracking = true;
+      orgX = aEvent.changedTouches[0].pageX;
+    }
+
+    function move(aEvent) {
+      if (!tracking) return;
+      newX = aEvent.changedTouches[0].pageX;
+      if (orgX - newX > 100) {
+        tracking = false;
+        this.forward();
+      } else {
+        if (orgX - newX < -100) {
+          tracking = false;
+          this.back();
+        }
+      }
+    }
+  }
+
+  Dz.setupView = function() {
+    document.body.addEventListener("click", function ( e ) {
+      if (!Dz.html.classList.contains("view")) return;
+      if (!e.target || e.target.nodeName != "SECTION") return;
+
+      Dz.html.classList.remove("view");
+      Dz.setCursor(Dz.slides.indexOf(e.target) + 1);
+    }, false);
+  }
+
+  /* Adapt the size of the slides to the window */
+
+  Dz.onresize = function() {
+    var db = document.body;
+    var sx = db.clientWidth / window.innerWidth;
+    var sy = db.clientHeight / window.innerHeight;
+    var transform = "scale(" + (1/Math.max(sx, sy)) + ")";
+
+    db.style.MozTransform = transform;
+    db.style.WebkitTransform = transform;
+    db.style.OTransform = transform;
+    db.style.msTransform = transform;
+    db.style.transform = transform;
+  }
+
+
+  Dz.getNotes = function(aIdx) {
+    var s = $("section:nth-of-type(" + aIdx + ")");
+    var d = s.$("[role='note']");
+    return d ? d.innerHTML : "";
+  }
+
+  Dz.onmessage = function(aEvent) {
+    var argv = aEvent.data.split(" "), argc = argv.length;
+    argv.forEach(function(e, i, a) { a[i] = decodeURIComponent(e) });
+    var win = aEvent.source;
+    if (argv[0] === "REGISTER" && argc === 1) {
+      this.remoteWindows.push(win);
+      this.postMsg(win, "REGISTERED", document.title, this.slides.length);
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+      return;
+    }
+    if (argv[0] === "BACK" && argc === 1)
+      this.back();
+    if (argv[0] === "FORWARD" && argc === 1)
+      this.forward();
+    if (argv[0] === "START" && argc === 1)
+      this.goStart();
+    if (argv[0] === "END" && argc === 1)
+      this.goEnd();
+    if (argv[0] === "TOGGLE_CONTENT" && argc === 1)
+      this.toggleContent();
+    if (argv[0] === "SET_CURSOR" && argc === 2)
+      window.location.hash = "#" + argv[1];
+    if (argv[0] === "GET_CURSOR" && argc === 1)
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+    if (argv[0] === "GET_NOTES" && argc === 1)
+      this.postMsg(win, "NOTES", this.getNotes(this.idx));
+  }
+
+  Dz.toggleContent = function() {
+    // If a Video is present in this new slide, play it.
+    // If a Video is present in the previous slide, stop it.
+    var s = $("section[aria-selected]");
+    if (s) {
+      var video = s.$("video");
+      if (video) {
+        if (video.ended || video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      }
+    }
+  }
+
+  Dz.setCursor = function(aIdx, aStep) {
+    // If the user change the slide number in the URL bar, jump
+    // to this slide.
+    aStep = (aStep != 0 && typeof aStep !== "undefined") ? "." + aStep : ".0";
+    window.location.hash = "#" + aIdx + aStep;
+  }
+
+  Dz.onhashchange = function() {
+    var cursor = window.location.hash.split("#"),
+        newidx = 1,
+        newstep = 0;
+    if (cursor.length == 2) {
+      newidx = ~~cursor[1].split(".")[0];
+      newstep = ~~cursor[1].split(".")[1];
+      if (newstep > Dz.slides[newidx - 1].$$('.incremental > *').length) {
+        newstep = 0;
+        newidx++;
+      }
+    }
+    this.setProgress(newidx, newstep);
+    if (newidx != this.idx) {
+      this.setSlide(newidx);
+    }
+    if (newstep != this.step) {
+      this.setIncremental(newstep);
+    }
+    for (var i = 0; i < this.remoteWindows.length; i++) {
+      this.postMsg(this.remoteWindows[i], "CURSOR", this.idx + "." + this.step);
+    }
+  }
+
+  Dz.back = function() {
+    if (this.idx == 1 && this.step == 0) {
+      return;
+    }
+    if (this.step == 0) {
+      this.setCursor(this.idx - 1,
+                     this.slides[this.idx - 2].$$('.incremental > *').length);
+    } else {
+      this.setCursor(this.idx, this.step - 1);
+    }
+  }
+
+  Dz.forward = function() {
+    if (this.idx >= this.slides.length &&
+        this.step >= this.slides[this.idx - 1].$$('.incremental > *').length) {
+        return;
+    }
+    if (this.step >= this.slides[this.idx - 1].$$('.incremental > *').length) {
+      this.setCursor(this.idx + 1, 0);
+    } else {
+      this.setCursor(this.idx, this.step + 1);
+    }
+  }
+
+  Dz.goStart = function() {
+    this.setCursor(1, 0);
+  }
+
+  Dz.goEnd = function() {
+    var lastIdx = this.slides.length;
+    var lastStep = this.slides[lastIdx - 1].$$('.incremental > *').length;
+    this.setCursor(lastIdx, lastStep);
+  }
+
+  Dz.toggleView = function() {
+    this.html.classList.toggle("view");
+
+    if (this.html.classList.contains("view")) {
+      $("section[aria-selected]").scrollIntoView(true);
+    }
+  }
+
+  Dz.setSlide = function(aIdx) {
+    this.idx = aIdx;
+    var old = $("section[aria-selected]");
+    var next = $("section:nth-of-type("+ this.idx +")");
+    if (old) {
+      old.removeAttribute("aria-selected");
+      var video = old.$("video");
+      if (video) {
+        video.pause();
+      }
+    }
+    if (next) {
+      next.setAttribute("aria-selected", "true");
+      if (this.html.classList.contains("view")) {
+        next.scrollIntoView();
+      }
+      var video = next.$("video");
+      if (video && !!+this.params.autoplay) {
+        video.play();
+      }
+    } else {
+      // That should not happen
+      this.idx = -1;
+      // console.warn("Slide doesn't exist.");
+    }
+  }
+
+  Dz.setIncremental = function(aStep) {
+    this.step = aStep;
+    var old = this.slides[this.idx - 1].$('.incremental > *[aria-selected]');
+    if (old) {
+      old.removeAttribute('aria-selected');
+    }
+    var incrementals = $$('.incremental');
+    if (this.step <= 0) {
+      $$.forEach(incrementals, function(aNode) {
+        aNode.removeAttribute('active');
+      });
+      return;
+    }
+    var next = this.slides[this.idx - 1].$$('.incremental > *')[this.step - 1];
+    if (next) {
+      next.setAttribute('aria-selected', true);
+      next.parentNode.setAttribute('active', true);
+      var found = false;
+      $$.forEach(incrementals, function(aNode) {
+        if (aNode != next.parentNode)
+          if (found)
+            aNode.removeAttribute('active');
+          else
+            aNode.setAttribute('active', true);
+        else
+          found = true;
+      });
+    } else {
+      setCursor(this.idx, 0);
+    }
+    return next;
+  }
+
+  Dz.goFullscreen = function() {
+    var html = $('html'),
+        requestFullscreen = html.requestFullscreen || html.requestFullScreen || html.mozRequestFullScreen || html.webkitRequestFullScreen;
+    if (requestFullscreen) {
+      requestFullscreen.apply(html);
+    }
+  }
+  
+  Dz.setProgress = function(aIdx, aStep) {
+    var slide = $("section:nth-of-type("+ aIdx +")");
+    if (!slide)
+      return;
+    var steps = slide.$$('.incremental > *').length + 1,
+        slideSize = 100 / (this.slides.length - 1),
+        stepSize = slideSize / steps;
+    this.progressBar.style.width = ((aIdx - 1) * slideSize + aStep * stepSize) + '%';
+  }
+  
+  Dz.postMsg = function(aWin, aMsg) { // [arg0, [arg1...]]
+    aMsg = [aMsg];
+    for (var i = 2; i < arguments.length; i++)
+      aMsg.push(encodeURIComponent(arguments[i]));
+    aWin.postMessage(aMsg.join(" "), "*");
+  }
+  
+  function init() {
+    Dz.init();
+    window.onkeydown = Dz.onkeydown.bind(Dz);
+    window.onresize = Dz.onresize.bind(Dz);
+    window.onhashchange = Dz.onhashchange.bind(Dz);
+    window.onmessage = Dz.onmessage.bind(Dz);
+  }
+
+  window.onload = init;
+</script>
+<script> // Helpers
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+
+      // closest thing possible to the ECMAScript 5 internal IsCallable
+      // function 
+      if (typeof this !== "function")
+      throw new TypeError(
+        "Function.prototype.bind - what is trying to be fBound is not callable"
+      );
+
+      var aArgs = Array.prototype.slice.call(arguments, 1),
+          fToBind = this,
+          fNOP = function () {},
+          fBound = function () {
+            return fToBind.apply( this instanceof fNOP ? this : oThis || window,
+                   aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+      fNOP.prototype = this.prototype;
+      fBound.prototype = new fNOP();
+
+      return fBound;
+    };
+  }
+
+  var $ = (HTMLElement.prototype.$ = function(aQuery) {
+    return this.querySelector(aQuery);
+  }).bind(document);
+
+  var $$ = (HTMLElement.prototype.$$ = function(aQuery) {
+    return this.querySelectorAll(aQuery);
+  }).bind(document);
+
+  $$.forEach = function(nodeList, fun) {
+    Array.prototype.forEach.call(nodeList, fun);
+  }
+
+</script>
+<!-- vim: set fdm=marker: }}} -->

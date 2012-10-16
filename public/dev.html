@@ -42,47 +42,46 @@
 			</div>
 			<div id="twitterBox" class="span4">
 				<script>
-					//http://code.google.com/p/chromium/issues/detail?id=81637
-					//https://twitter.com/about/resources/widgets/widget_profile?
-					//http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
-					
-			     $(document).ready(function(){
-			     $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
-			        // dynamically add the get social sidebar
-			        $('body').prepend('<div id="social"></div>'); 
-			
-			          new TWTR.Widget({
-			            version: 2,
-			            type: 'profile',
-			            id : 'twitterBox',
-			            
-			            rpp: 4,
-			            interval: 30000,
-			            width: 250,
-			            height: 300,
-			            theme: {
-			              shell: {
-			                background: '#55a1ba',
-			                color: '#ffffff'
-			              },
-			              tweets: {
-			                background: '#fcf9fc',
-			                color: '#0f010f',
-			                links: '#2d61a1'
-			              }
-			            },
-			            features: {
-			              scrollbar: true,
-			              loop: false,
-			              live: true,
-			              behavior: 'all'
-			            }
-			          }).render().setUser('LingSync').start();
-			
-			      });
-			    });
-			    
-			    </script>
+          //http://code.google.com/p/chromium/issues/detail?id=81637
+          //https://twitter.com/about/resources/widgets/widget_profile?
+          //http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
+
+          $(document).ready(function() {
+            $.getScript("https://widgets.twimg.com/j/2/widget.js", function() {
+              // dynamically add the get social sidebar
+              $('body').prepend('<div id="social"></div>');
+
+              new TWTR.Widget({
+                version : 2,
+                type : 'profile',
+                id : 'twitterBox',
+
+                rpp : 4,
+                interval : 30000,
+                width : 250,
+                height : 300,
+                theme : {
+                  shell : {
+                    background : '#55a1ba',
+                    color : '#ffffff'
+                  },
+                  tweets : {
+                    background : '#fcf9fc',
+                    color : '#0f010f',
+                    links : '#2d61a1'
+                  }
+                },
+                features : {
+                  scrollbar : true,
+                  loop : false,
+                  live : true,
+                  behavior : 'all'
+                }
+              }).render().setUser('LingSync').start();
+
+            });
+          });
+        </script>
 			</div>
 		</div>
 
@@ -90,16 +89,39 @@
 	<hr />
 
 	<div class="well">
-                <h1>October 4 2012 - Week 24 - Android App Features</h1>
+		<h1>October 4 2012 - Week 24 &amp; 25 - Learn Mi'gmaq Prototype is deployed, and so are the new production servers on LingSync.org!</h1>
 
-                <h2>Prototype demo</h2>
-	<p>Our prototype is out there and looking good! Watch the video for a tour.</p>
-	<h4>Sorry it's flipped sideways! We'll try to fix that this week.</h4>
+		<h2>Prototype demo</h2>
+		<p>Our prototype is out there and looking good! Watch the video
+			for a tour.</p>
+		<h4>Sorry it's flipped sideways! We'll try to fix that this week.</h4>
 
 		<iframe width="560" height="315"
-			src="http://www.youtube.com/embed/MOG22jpAPPM"
-			frameborder="0" allowfullscreen></iframe> 
-	
+			src="http://www.youtube.com/embed/MOG22jpAPPM" frameborder="0"
+			allowfullscreen></iframe>
+
+		<h2>Production servers are live</h2>
+		<p>Our new production services/servers are now live in the
+			lingsync.org namespace. It took some time for the dns to resolve for
+			all the components to come together. We are using Nginx to delegate
+			the https connection to different node js web services on different
+			ports. We released version 1.24 stable which is using the new
+			permanent production servers. We're so excited that the app finally
+			has a home and database that won't be moving any time soon!</p>
+
+		<h2>New read-only corpus dashboards</h2>
+
+		<p>We are slowly making progress towards getting public urls for
+			those who want to let others see their corpus publicaly. We are
+			realizing this is a top priority for grant comittees, but for
+			research team it is super complicated, requireing them to get
+			approval from their language consultant to open their data.
+			Essentailly, we don't know anyone who actually needs the public url
+			right now so we haven't been making it a priority. @trisapeace and
+			@cesine presented the technical sides of the app at Javascript
+			Montreal, so the read only dashboard was mroe of an exercise of
+			showing what require can do to build different versions of the app.</p>
+
 	</div>
 	<div class="well">
 		<h1>September 29 2012 - Week 22 &amp; 23 - Upgraded our version
@@ -1004,7 +1026,8 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="./libs/jquery.js">
-</script>
+    
+  </script>
 	<script src="./bootstrap/js/bootstrap-transition.js"></script>
 	<script src="./bootstrap/js/bootstrap-alert.js"></script>
 	<script src="./bootstrap/js/bootstrap-modal.js"></script>
