@@ -99,7 +99,7 @@ define([
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
-        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
+        $(this.el).find(".locale_User_Profile").html(Locale["locale_Private_Profile"].message);
 
         // Display the CorpusesReadView
         this.corpusesReadView.el = $(this.el).find('.corpuses');
@@ -113,11 +113,11 @@ define([
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
         
         //localization for user edit modal
-        $(this.el).find(".locale_Edit_User_Profile_Tooltip").attr("title",chrome.i18n.getMessage("locale_Edit_User_Profile_Tooltip"));
-        $(this.el).find(".locale_View_Public_Profile_Tooltip").html(chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
-        $(this.el).find(".locale_Private_Profile_Instructions").html(chrome.i18n.getMessage("locale_Private_Profile_Instructions"));
-        $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
-        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
+        $(this.el).find(".locale_Edit_User_Profile_Tooltip").attr("title",Locale["locale_Edit_User_Profile_Tooltip"].message);
+        $(this.el).find(".locale_View_Public_Profile_Tooltip").html(Locale["locale_View_Public_Profile_Tooltip"].message);
+        $(this.el).find(".locale_Private_Profile_Instructions").html(Locale["locale_Private_Profile_Instructions"].message);
+        $(this.el).find(".locale_Close").html(Locale["locale_Close"].message);
+        $(this.el).find(".locale_User_Profile").html(Locale["locale_Private_Profile"].message);
 
 
         // Display the CorpusesReadView
@@ -131,7 +131,7 @@ define([
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
         
         //localization for link view
-        $(this.el).find(".locale_View_Profile_Tooltip").attr("title",chrome.i18n.getMessage("locale_View_Profile_Tooltip"));
+        $(this.el).find(".locale_View_Profile_Tooltip").attr("title",Locale["locale_View_Profile_Tooltip"].message);
 
       } else if (this.format == "public") {
         Utils.debug("USER READ PUBLIC render: ");
@@ -140,8 +140,8 @@ define([
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
         
         //localize the public user page
-        $(this.el).find(".locale_Edit_Public_User_Profile").attr("title",chrome.i18n.getMessage("locale_Edit_Public_User_Profile"));
-        $(this.el).find(".locale_User_Profile").html(chrome.i18n.getMessage("locale_Public_Profile"));
+        $(this.el).find(".locale_Edit_Public_User_Profile").attr("title",Locale["locale_Edit_Public_User_Profile"].message);
+        $(this.el).find(".locale_User_Profile").html(Locale["locale_Public_Profile"].message);
 
      // Display the CorpusesReadView
         this.corpusesReadView.el = $(this.el).find('.corpuses');
@@ -155,12 +155,12 @@ define([
       if(this.format != "link"){
         //localization for all except link
 
-        $(this.el).find(".locale_Gravatar").html(chrome.i18n.getMessage("locale_Gravatar"));
-        $(this.el).find(".locale_Email").html(chrome.i18n.getMessage("locale_Email"));
-        $(this.el).find(".locale_Research_Interests").html(chrome.i18n.getMessage("locale_Research_Interests"));
-        $(this.el).find(".locale_Affiliation").html(chrome.i18n.getMessage("locale_Affiliation"));
-        $(this.el).find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
-        $(this.el).find(".locale_Corpora").html(chrome.i18n.getMessage("locale_Corpora"));
+        $(this.el).find(".locale_Gravatar").html(Locale["locale_Gravatar"].message);
+        $(this.el).find(".locale_Email").html(Locale["locale_Email"].message);
+        $(this.el).find(".locale_Research_Interests").html(Locale["locale_Research_Interests"].message);
+        $(this.el).find(".locale_Affiliation").html(Locale["locale_Affiliation"].message);
+        $(this.el).find(".locale_Description").html(Locale["locale_Description"].message);
+        $(this.el).find(".locale_Corpora").html(Locale["locale_Corpora"].message);
       }
 
       return this;
