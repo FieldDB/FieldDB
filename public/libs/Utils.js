@@ -344,6 +344,3 @@ Utils.testPouchChromeVersions = function(pouchname) {
     }
   }
 };
-
-window.Locale=require("text!_locales/en/messages.json")
-
