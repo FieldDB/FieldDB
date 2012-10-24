@@ -105,13 +105,13 @@ define([
         
       }
       //localization
-      $(this.el).find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
-      $(this.el).find(".locale_Skin").html(chrome.i18n.getMessage("locale_Skin"));
-      $(this.el).find(".locale_Change_Background").html(chrome.i18n.getMessage("locale_Change_Background"));
-      $(this.el).find(".locale_Background_on_Random").html(chrome.i18n.getMessage("locale_Background_on_Random"));
-      $(this.el).find(".locale_Transparent_Dashboard").html(chrome.i18n.getMessage("locale_Transparent_Dashboard"));
-      $(this.el).find(".locale_Number_Datum").html(chrome.i18n.getMessage("locale_Number_Datum"));
-      $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));  
+      $(this.el).find(".locale_User_Settings").html(Locale["locale_User_Settings"].message);
+      $(this.el).find(".locale_Skin").html(Locale["locale_Skin"].message);
+      $(this.el).find(".locale_Change_Background").html(Locale["locale_Change_Background"].message);
+      $(this.el).find(".locale_Background_on_Random").html(Locale["locale_Background_on_Random"].message);
+      $(this.el).find(".locale_Transparent_Dashboard").html(Locale["locale_Transparent_Dashboard"].message);
+      $(this.el).find(".locale_Number_Datum").html(Locale["locale_Number_Datum"].message);
+      $(this.el).find(".locale_Close").html(Locale["locale_Close"].message);  
       return this;
     },
     
