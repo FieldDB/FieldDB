@@ -96,7 +96,6 @@ app.post('/register', function(req, res ) {
 
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
-
 //app.listen(node_config.port);
 console.log("Express server listening on port %d", node_config.port);
 
