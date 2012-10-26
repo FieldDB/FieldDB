@@ -48,7 +48,34 @@ define( [
 // Commented out the removeClass function right below, it seems this function doesn't let the datalist to show in import view.      
 //      "click .approve-import" : function(e){
 //        $("#import-third-step").removeClass("hidden");
+//      },      
+//      "click #format-csv" : function(){
+//        this.model.importCSV();
 //      },
+//      "click #format-tabbed" : function(){
+//        this.model.importTabbed();
+//      },
+//      "click #format-xml" : function(){
+//        this.model.importXML();
+//      },
+//      "click #format-elanxml" : function(){
+//        this.model.importElanXML();
+//      },
+//      "click #format-toolbox" : function(){
+//        this.model.importToolbox();
+//      },
+//      "click #format-praat" : function(){
+//        this.model.importTextGrid();
+//      },
+//      "click #format-latex" : function(){
+//        this.model.importLatex();
+//      },
+//      "click #format-handout" : function(){
+//        this.model.importText();
+//      },
+
+      "click .import-format" : "showSecondStep",
+      
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
       },
@@ -69,7 +96,7 @@ define( [
         this._dropLabelEvent(e);
       },
       "click .add-column" : "insertDoubleColumnsInTable",
-      "blur .export-large-textarea" : "updateRawText"
+      "blur .export-large-textarea" : "updateRawText",
     },
     _dragOverEvent: function (e) {
       if (e.originalEvent) e = e.originalEvent;
@@ -141,7 +168,7 @@ define( [
     template: Handlebars.templates.import_edit_fullscreen,
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
-      this.model.guessFormatAndImport();
+//      this.model.guessFormatAndImport();
     },
     render : function() {
       this.setElement("#import-fullscreen");
@@ -783,7 +810,7 @@ define( [
       return false;
     },
     
-// Choose an option from Dropdown "Import from" then the second step will show up    
+//// Choose an option from Dropdown "Import from" then the second step will show up    
     showSecondStep : function(e){
       if(e){
         e.stopPropagation();
@@ -791,7 +818,7 @@ define( [
       }
       $("#import-second-step").removeClass("hidden");
     },
-
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
