@@ -120,7 +120,9 @@ define([
         d.id = this.model.id;
         d.set("_id", this.model.get("_id"));
         d.set("_rev", this.model.get("_rev"));
-        appView.datumsEditView.prependDatum(d);
+        if(window.appView.datumsEditView){
+          appView.datumsEditView.prependDatum(d);
+        }
       },
       "click .datum-checkboxes": function(e){
         if(e){
@@ -307,7 +309,7 @@ define([
       var text = $(".datum_field_input").val() || [];
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
-      console.log(text);
+      Utils.debug(text);
  
       return "";
 //    }, 

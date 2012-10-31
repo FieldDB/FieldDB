@@ -137,7 +137,7 @@ define([
           self.pouch(function(err, db) {
             db.query("get_ids/by_date", {reduce: false}, function(err, response) {
               if ((!err) && (typeof callback == "function"))  {
-                console.log("Callback with: ", response.rows);
+                Utils.debug("Callback with: ", response.rows);
                 callback(response.rows);
               }
             });

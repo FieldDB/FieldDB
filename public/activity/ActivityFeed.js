@@ -58,8 +58,8 @@ define([
           }
         };
       }
-      console.log("successcallback",successcallback);
-      console.log("failurecallback",failurecallback);
+      Utils.debug("successcallback",successcallback);
+      Utils.debug("failurecallback",failurecallback);
       
       var self = this;
       window.hub.unsubscribe("savedActivityToPouch", null, self);
@@ -177,11 +177,11 @@ define([
       
       var thatactivity = this.get("activities").models[d];
       if(thatactivity){
-        console.log("thatactivity "+d,thatactivity);
+        Utils.debug("thatactivity "+d,thatactivity);
       }else{
 //        alert("Bug in activity save, please report this! Activity number: "+d);
-//        console.log("these are the activity models", this.get("activities").models);
-        console.log("this is the model taht is missing: ", this.get("activities").models[d]);
+//        Utils.debug("these are the activity models", this.get("activities").models);
+        Utils.debug("this is the model taht is missing: ", this.get("activities").models[d]);
         thatactivity = this.get("activities").models[d];
         if(thatactivity){
           //can keep going
@@ -246,11 +246,11 @@ define([
         console.warn("couchConnection was undefined on the activity feed. this is a problem");
       }
       var currentlength =  this.get("activities").length;
-      console.log(name+ " checking activity feed size = "+ currentlength);
-      //console.log(name+ " this is the activity that was added = ", model);
+      Utils.debug(name+ " checking activity feed size = "+ currentlength);
+      //Utils.debug(name+ " this is the activity that was added = ", model);
 
       if(currentlength> this.get("maxInMemoryCollectionSize")){  
-        console.log("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
+        Utils.debug("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
         var modelToRemove = this.get("activities").pop(); //because activities are added by unshift
         modelToRemove.saveAndInterConnectInApp();
       }

@@ -381,6 +381,7 @@ define([
             + couchConnection.pouchname);
       }
 
+      Utils.testPouchChromeVersions(couchConnection.pouchname);
       if (typeof callback == "function") {
         callback();
       }
