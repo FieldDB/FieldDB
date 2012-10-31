@@ -30,6 +30,7 @@ Utils.defaultCouchConnection = function() {
     protocol : "https://",
     domain : "ifielddevs.iriscouch.com",
     port : "443",
-    pouchname : "default"
+    pouchname : "default",
+    path : ""
   }; 
 };
