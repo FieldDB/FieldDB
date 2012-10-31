@@ -49,6 +49,7 @@ define( [
         $(" #import-third-step").removeClass("hidden");
         this.convertTableIntoDataList();
       },
+       /*event listeners for the import from dropdown menu  */
       "click #format-csv" : function(e){
         e.preventDefault();
 //          this.updateRawText();
@@ -56,27 +57,48 @@ define( [
           this.model.importCSV(text, this.model);
           this.showSecondStep();
       },
-//      "click #format-tabbed" : function(){
-//        this.model.importTabbed();
-//      },
-//      "click #format-xml" : function(){
-//        this.model.importXML();
-//      },
-//      "click #format-elanxml" : function(){
-//        this.model.importElanXML();
-//      },
-//      "click #format-toolbox" : function(){
-//        this.model.importToolbox();
-//      },
-//      "click #format-praat" : function(){
-//        this.model.importTextGrid();
-//      },
-//      "click #format-latex" : function(){
-//        this.model.importLatex();
-//      },
-//      "click #format-handout" : function(){
-//        this.model.importText();
-//      },
+      "click #format-tabbed" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importTabbed(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-xml" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importXML(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-elanxml" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importElanXML(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-toolbox" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importToolbox(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-praat" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importTextGrid(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-latex" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importLatex(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-handout" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importText(text, this.model);
+          this.showSecondStep();
+      },
       
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
