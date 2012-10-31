@@ -147,6 +147,7 @@ require([
     auth.loadEncryptedUser(u, function(success, errors){
       if(success == null){
         alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
+        Utils.setCookie("username","");
         document.location.href='index.html';
         return;
       }else{

@@ -1,30 +1,29 @@
 {
-  "name": "LingSync - McGill",
-  "version": "1.22",
-  "description": "LingSync Fieldlinguistics Database Application for the McGill Linguistics Department.",
-    "default_locale": "en",
-  
-  "app": {
-    "launch": {
-      "local_path": "index.html"
-    }
-  },
-  "offline_enabled": true,
-  "permissions": [
-    "unlimitedStorage",
-    
-    "https://prosody.linguistics.mcgill.ca:3001/*",
-    "https://prosody.linguistics.mcgill.ca:8136/*",
-    "https://prosody.linguistics.mcgill.ca:6984/*",
-    
-    "https://www.youtube.com/*"
-  ],
-   "icons": { 
-    "16": "icon16_production.png",
-    "48": "icon48_production.png",
-    "128": "icon128_production.png" 
-  },
-  "manifest_version": 2,
-  "content_security_policy": "default-src 'self'  https://prosody.linguistics.mcgill.ca:3001/   https://prosody.linguistics.mcgill.ca:8136/  https://prosody.linguistics.mcgill.ca:6984/  https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/ ; script-src 'self'  https://prosody.linguistics.mcgill.ca:3001/   https://prosody.linguistics.mcgill.ca:8136/  https://prosody.linguistics.mcgill.ca:6984/  https://ssl.google-analytics.com/ ; connect-src  https://prosody.linguistics.mcgill.ca:3001/   https://prosody.linguistics.mcgill.ca:8136/  https://prosody.linguistics.mcgill.ca:6984/ https://www.youtube.com/   'self'; object-src 'self'  https://prosody.linguistics.mcgill.ca:3001/   https://prosody.linguistics.mcgill.ca:8136/  https://prosody.linguistics.mcgill.ca:6984/;"
+ "name": "LingSync - McGill",
+ "version" : "1.24.3",
+ "description": "LingSync Fieldlinguistics Database Application for the McGill Linguistics Department.",
+ "default_locale": "en",
+ 
+ "app": {
+ "launch": {
+ "local_path": "index.html"
+ }
+ },
+ "offline_enabled": true,
+ "permissions": [
+ "unlimitedStorage",
+ "https://prosody.linguistics.mcgill.ca/*",
+ "https://www.youtube.com/*"
+ ],
+ "icons": { 
+ "16": "icon16_production.png",
+ "48": "icon48_production.png",
+ "128": "icon128_production.png" 
+ },
+ "manifest_version": 2,
+
+
+"content_security_policy":
+"default-src 'self' https://prosody.linguistics.mcgill.ca https://si0.twimg.com https://ssl.google-analytics.com/ https://www.youtube.com/ ; script-src 'self' https://prosody.linguistics.mcgill.ca https://ssl.google-analytics.com/ ; connect-src https://prosody.linguistics.mcgill.ca https://www.youtube.com/ 'self'; object-src 'self' https://prosody.linguistics.mcgill.ca;" 
  
 }

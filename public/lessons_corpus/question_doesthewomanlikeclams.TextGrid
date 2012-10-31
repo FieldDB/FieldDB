@@ -1,0 +1,76 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.4813125 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "migmaq" 
+        xmin = 0 
+        xmax = 2.4813125 
+        intervals: size = 3 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.25426390505061564 
+            text = "" 
+        intervals [2]:
+            xmin = 0.25426390505061564 
+            xmax = 2.1195817246825253 
+            text = "ula e'pit wigpaji e'sig?" 
+        intervals [3]:
+            xmin = 2.1195817246825253 
+            xmax = 2.4813125 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "syllable" 
+        xmin = 0 
+        xmax = 2.4813125 
+        intervals: size = 11 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.25426390505061564 
+            text = "" 
+        intervals [2]:
+            xmin = 0.25426390505061564 
+            xmax = 0.3543445387353937 
+            text = "u" 
+        intervals [3]:
+            xmin = 0.3543445387353937 
+            xmax = 0.5112870767538436 
+            text = "la" 
+        intervals [4]:
+            xmin = 0.5112870767538436 
+            xmax = 0.7254154135691699 
+            text = "e'" 
+        intervals [5]:
+            xmin = 0.7254154135691699 
+            xmax = 0.9224408480829526 
+            text = "pit" 
+        intervals [6]:
+            xmin = 0.9224408480829526 
+            xmax = 1.1498211572744406 
+            text = "wig" 
+        intervals [7]:
+            xmin = 1.1498211572744406 
+            xmax = 1.2871947451132986 
+            text = "pa" 
+        intervals [8]:
+            xmin = 1.2871947451132986 
+            xmax = 1.5191992154463136 
+            text = "ji" 
+        intervals [9]:
+            xmin = 1.5191992154463136 
+            xmax = 1.7182155686181069 
+            text = "e'" 
+        intervals [10]:
+            xmin = 1.7182155686181069 
+            xmax = 2.1195817246825253 
+            text = "sig" 
+        intervals [11]:
+            xmin = 2.1195817246825253 
+            xmax = 2.4813125 
+            text = "" 

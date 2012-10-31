@@ -92,9 +92,9 @@ define([
               if(self.islooping){
                 return;
               }
-              var couchConnection = window.app.get("userPrivate").get("corpuses")[0];
-              self.bringCorpusToThisDevice(couchConnection, function(){
-                alert("Downloaded this corpus to this device. "+e);
+              var couchConnection = window.app.get("authentication").get("userPrivate").get("corpuses")[0];
+              self.bringCorpusToThisDevice(c, function(){
+                alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
                 self.showCorpusDashboard(pouchname, corpusid);
                 self.islooping = true;
                 
@@ -122,9 +122,17 @@ define([
         window.location.replace("corpus.html");
     },
     bringCorpusToThisDevice : function(corpus, callback) {
-      window.app.get("authentication").syncUserWithServer(function(){
-        corpus.replicateFromCorpus(null, callback);
-      });
+      for (var x in window.app.get("authentication").get("userPrivate").get("corpuses")){
+        if(window.app.get("authentication").get("userPrivate").get("corpuses")[x].pouchname == corpus.get("pouchname")){
+          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpuses")[x]);
+          window.app.set("corpus",corpus);
+          window.app.get("authentication").staleAuthentication = true;
+          window.app.get("authentication").syncUserWithServer(function(){
+            corpus.replicateFromCorpus(null, callback);
+          });
+          break;
+        }
+      }
     }
     
   });

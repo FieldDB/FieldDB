@@ -131,7 +131,9 @@ define([
      */
     render : function() {
       Utils.debug("CORPUS READ render: ");
-      window.appView.currentCorpusEditView.destroy_view();
+      if(window.appView.currentCorpusEditView){
+        window.appView.currentCorpusEditView.destroy_view();
+      }
       window.appView.currentCorpusReadView.destroy_view();
       
       if (this.model == undefined) {
@@ -329,7 +331,8 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "link"
       });
-      
+
+      this.model.loadPermissions();
       //Create a Permissions View
       this.permissionsView = new UpdatingCollectionView({
         collection : this.model.permissions,
@@ -409,8 +412,10 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      window.appView.currentCorpusEditView.format = this.format;
-      window.appView.currentCorpusEditView.render();
+      if(window.appView.currentCorpusEditView){
+        window.appView.currentCorpusEditView.format = this.format;
+        window.appView.currentCorpusEditView.render();
+      }
     }
   });
 
