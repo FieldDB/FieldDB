@@ -6,6 +6,13 @@ echo "Put the Chrome app source into non debug mode to not see the debugging out
 sed 's/Utils.debugMode *= *true/Utils.debugMode = false/' public/libs/Utils.js  > output
 mv output public/libs/Utils.js
 
+
+echo ""
+echo ""
+echo "Put the production analytics code."
+sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-35422317-1";/' public/libs/analytics.js  > output
+mv output public/libs/analytics.js
+
 echo ""
 echo ""
 echo "Tell the Chrome app to contact the production webservices."

@@ -4,17 +4,14 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 
 [more info...](http://fieldlinguist.com)
 
-# Team
+# Interns and Development Team
 
-* [Alan Bale](http://linguistics.concordia.ca/bale/) (Concordia)
 * [M.E. Cathcart](http://udel.edu/~mdotedot/) (U Delaware)
 * [Gina Cook](http://gina.ilanguage.ca/) (iLanguage Lab Ltd)
-* [Jessica Coon](http://people.linguistics.mcgill.ca/~jessica/Welcome.html) (McGill)
 * [Theresa Deering](http://trisapeace.angelfire.com/) (iLanguage Lab Ltd)
 * [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Stony Brook)
 * [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
-* [Michael Wagner](http://prosodylab.org/) (McGill)
 
 
 # Funding

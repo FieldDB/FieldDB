@@ -3,8 +3,15 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into debug mode to see the debugging output."
-sed 's/Utils.debugMode *= *false/Utils.debugMode = true/' public/libs/Utils.js  > output
+sed 's/Utils.debugMode *= *true/Utils.debugMode = false/' public/libs/Utils.js  > output
 mv output public/libs/Utils.js
+
+
+echo ""
+echo ""
+echo "Put the dev analytics code."
+sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' public/libs/analytics.js  > output
+mv output public/libs/analytics.js
 
 echo ""
 echo ""

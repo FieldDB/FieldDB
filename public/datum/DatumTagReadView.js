@@ -22,26 +22,14 @@ define([
       Utils.debug("DATUM TAG EDIT VIEW init");
     },
 
-    /**
-     * The underlying model of the DatumTagEditView is a DatumTag.
-     */
     model : DatumTag,
     
-    /**
-     * Events that the DatumTagEditView is listening to and their handlers.
-     */
     events : {
       "blur .datum_tag" : "updateTag"
     },
 
-    /**
-     * The Handlebars template rendered as the DatumTagEditView.
-     */
     template: Handlebars.templates.datum_tag_read_embedded,
     	
-    /**
-     * Renders the DatumTagEditView.
-     */
     render : function() {
       Utils.debug("DATUM TAG EDIT VIEW render");
       
@@ -52,6 +40,7 @@ define([
     
     /**
      * Change the model's state.
+    @Deprecated
      */
     updateTag : function() {
       this.model.set("tag", this.$el.children(".datum_tag").val());
