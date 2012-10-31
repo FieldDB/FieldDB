@@ -2,13 +2,13 @@
 var Utils = Utils || {};
 
 
-Utils.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
-Utils.authUrl = "https://authdev.fieldlinguist.com:3183";
-Utils.audioUrl = "https://audiodev.fieldlinguist.com:3184";
-Utils.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
-Utils.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
-Utils.activityUrl = "https://activitydev.fieldlinguist.com:3187";
-Utils.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
+Utils.websiteUrl = "https://prosody.linguistics.mcgill.ca/www";
+Utils.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+Utils.audioUrl = "https://prosody.linguistics.mcgill.ca/audio";
+Utils.lexiconUrl = "https://prosody.linguistics.mcgill.ca/lexicon";
+Utils.corpusUrl = "https://prosody.linguistics.mcgill.ca/corpus";
+Utils.activityUrl = "https://prosody.linguistics.mcgill.ca/activity";
+Utils.widgetUrl = "https://prosody.linguistics.mcgill.ca/widget";
 
 /*
  * Use the current app's chrome url, assuming if its a dev, they will have their
@@ -28,8 +28,9 @@ Utils.chromeClientUrl = function(){
 Utils.defaultCouchConnection = function() {
   return {
     protocol : "https://",
-    domain : "ifielddevs.iriscouch.com",
-    port : "443",
-    pouchname : "default"
+    domain : "prosody.linguistics.mcgill.ca",
+    port : "6984",
+    pouchname : "default",
+    path : "/corpus"
   }; 
 };
