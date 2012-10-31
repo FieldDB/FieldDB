@@ -44,14 +44,18 @@ define( [
     },
     events : {
       "click .approve-save" : "saveDataList",
-      "click .approve-import" : "convertTableIntoDataList",
-// Commented out the removeClass function right below, it seems this function doesn't let the datalist to show in import view.      
-//      "click .approve-import" : function(e){
-//        $("#import-third-step").removeClass("hidden");
-//      },      
-//      "click #format-csv" : function(){
-//        this.model.importCSV();
-//      },
+      "click .approve-import" : function(e){
+        e.preventDefault();
+        $(" #import-third-step").removeClass("hidden");
+        this.convertTableIntoDataList();
+      },
+      "click #format-csv" : function(e){
+        e.preventDefault();
+//          this.updateRawText();
+        var text = $(".export-large-textarea").val();
+          this.model.importCSV(text, this.model);
+          this.showSecondStep();
+      },
 //      "click #format-tabbed" : function(){
 //        this.model.importTabbed();
 //      },
@@ -73,8 +77,6 @@ define( [
 //      "click #format-handout" : function(){
 //        this.model.importText();
 //      },
-
-      "click .import-format" : "showSecondStep",
       
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
@@ -168,7 +170,7 @@ define( [
     template: Handlebars.templates.import_edit_fullscreen,
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
-//      this.model.guessFormatAndImport();
+      this.model.guessFormatAndImport();
     },
     render : function() {
       this.setElement("#import-fullscreen");
