@@ -188,6 +188,9 @@ define([
 //      searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
     },
+    loadPermissions: function(){
+      //TODO decide if we need this method in a corpus mask
+    },
     /**
      * this resets the titleAsUrl to match the title, this means if the usr changes the title, their corpu has high chances of not being unique.
      * 
@@ -263,7 +266,7 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            console.log(response);
+            Utils.debug(response);
             if(err){
               Utils.debug("CorpusMask put error", err);
               if(err.status == "409"){
@@ -330,7 +333,7 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            console.log(response);
+            Utils.debug(response);
           });
         });
       });

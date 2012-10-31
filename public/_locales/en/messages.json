@@ -1,6 +1,6 @@
 {
   "application_title" : {
-    "message" : "Fieldlinguist's FieldDB beta",
+    "message" : "LingSync",
     "description" : "The title of the application, displayed in the web store."
   },
   "application_description" : {
@@ -12,7 +12,7 @@
     "description" : "button"
   },
   "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
-    "message" : "You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to Fieldlinguist's FieldDB this is a great place to start after watching the videos. ",
+    "message" : "You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to LingSync this is a great place to start after watching the videos. ",
     "description" : "tooltip"
   },
   "locale_Username" : {
@@ -25,13 +25,13 @@
     "message" : "Sync my data to this computer"
   },
   "locale_Welcome_to_FieldDB" : {
-    "message" : "Welcome to Fieldlinguist's FieldDB! <small>beta</small>"
+    "message" : "Welcome to LingSync! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "iField is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data."
+    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data."
   },
   "locale_Welcome_Beta_Testers" : {
-    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing Fieldlinguist's FieldDB</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"
+    "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"
   },
   "locale_Welcome_Screen" : {
     "message" : "<p>Curious what this is? <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"
@@ -70,7 +70,7 @@
     "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, 'Checked' with a consultant, 'To be checked', 'Deleted' etc. Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team's data validation workflow (e.g. 'To be checked with Sophie,' 'Checked with Gradys').  You can assign colours to your Datum States, these colours will appear in your data list. You can flag a Datum as Deleted and it won't show up in search results. A Datum in a corpus is never really deleted, it remains in the database complete with its change history so that you can review it at a later date.  (In future we might add a button to allow users to 'empty the trash' and mass-delete old Datum from the system.) </p> "
   },
    "locale_advanced_search_explaination" : {
-    "message" : "<p>There are two ways to access Search, you can type in your query in the search box which is always present on the top left of the screen, or you can click on the button next to it to get to the Advanced Search. Search is very important to field linguists, this is why we made the Search very powerful, and we are planning on making it more powerful in the future. You can type any string of characters in the Datum or Session Fields below. The search will look through the datum of your corpus, and find datum which contain that substring, this means you can type 'nay' and you will get morphemes 'onay' 'naya' etc. While this is not ideal for finding allomorphs, it works pretty well. Right now the search is happening on your computer, offline. In the future we will be adding a 'lexicon webservice' which will work on indexing your morphemes glosses etc to make search faster, but also smarter by build a more linguistically informed indexes of your data so that you can use linguistic constructs to search for your data as you do naturally when you search with your eyes, rather than with a database. We also have planned a 'Dream' module for phonological search that essentially uses a feature geometry ontology to let you search for minimal pairs. A search automatically creates a temporary Datalist, which appears below the Session quick view on the left side of the screen. You can choose to rename and save this Datalist if created a collection of data that you wanted. You can also leave this search data list open, if you enter new datum which matched your search query that appears in the top left corner, they will automatically appear in the search data list too. This can be handy for you to see datum around a certain phenomena while you are entering new data. If your search query is hard to formulate to get all the examples you need, you can search for nothing (leave all fields blank) and it will return all your data as a new Datalist. In general we have decided to implement search such that it errs on the side of high recall, i.e. that it finds all relevant examples, but also returns some garbage, rather than high precision, i.e. that it finds only exact examples, but misses some relevant ones. Currently the search results are not sorted by relevancy to the query. Once we have a proper 'lexicon webservice' we will have more measures of relevancy and will be able to return results and their relevancy scores. </p>"
+    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type 'nay' and search will find the morphemes 'onay', 'naya' etc. </p> <p>Search for nothing (leave everything blank) to see all your data. </p> <p>Search automatically creates a temporary Datalist. You can save it as \"open\", so new matching data will be added automatically, or \"closed\", so it will stay exactly the way it was when you created it. </p> <p>For now, search is offline on your computer, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"
    },
   "locale_New_User" : {
     "message" : "New User"
