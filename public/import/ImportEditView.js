@@ -44,7 +44,62 @@ define( [
     },
     events : {
       "click .approve-save" : "saveDataList",
-      "click .approve-import" : "convertTableIntoDataList",
+      "click .approve-import" : function(e){
+        e.preventDefault();
+        $(" #import-third-step").removeClass("hidden");
+        this.convertTableIntoDataList();
+      },
+       /*event listeners for the import from dropdown menu  */
+      "click #format-csv" : function(e){
+        e.preventDefault();
+//          this.updateRawText();
+        var text = $(".export-large-textarea").val();
+          this.model.importCSV(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-tabbed" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importTabbed(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-xml" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importXML(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-elanxml" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importElanXML(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-toolbox" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importToolbox(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-praat" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importTextGrid(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-latex" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importLatex(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-handout" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importText(text, this.model);
+          this.showSecondStep();
+      },
+      
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
       },
@@ -65,7 +120,7 @@ define( [
         this._dropLabelEvent(e);
       },
       "click .add-column" : "insertDoubleColumnsInTable",
-      "blur .export-large-textarea" : "updateRawText"
+      "blur .export-large-textarea" : "updateRawText",
     },
     _dragOverEvent: function (e) {
       if (e.originalEvent) e = e.originalEvent;
@@ -172,6 +227,9 @@ define( [
       $(this.el).find(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
       $(this.el).find(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
       $(this.el).find(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
+      $(this.el).find(".locale_Import_First_Step").html(chrome.i18n.getMessage("locale_Import_First_Step"));
+      $(this.el).find(".locale_Import_Second_Step").html(chrome.i18n.getMessage("locale_Import_Second_Step"));
+      $(this.el).find(".locale_Import_Third_Step").html(chrome.i18n.getMessage("locale_Import_Third_Step"));
       $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
       $(this.el).find(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
       $(this.el).find(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
@@ -775,6 +833,16 @@ define( [
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       return false;
     },
+    
+//// Choose an option from Dropdown "Import from" then the second step will show up    
+    showSecondStep : function(e){
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      $("#import-second-step").removeClass("hidden");
+    },
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
