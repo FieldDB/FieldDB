@@ -137,9 +137,9 @@ define([
         this.activitiesView.render();
         
         //localization for user non-minimized view
-        $(this.el).find(".locale_Refresh_Activities").attr("title", chrome.i18n.getMessage("locale_Refresh_Activities"));
-        $(this.el).find(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
-        $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Your"));
+        $(this.el).find(".locale_Refresh_Activities").attr("title", Locale["locale_Refresh_Activities"].message);
+        $(this.el).find(".locale_Hide_Activities").attr("title", Locale["locale_Hide_Activities"].message);
+        $(this.el).find(".locale_Activity_Feed").html(Locale["locale_Activity_Feed_Your"].message);
 
       }else if (this.format == "rightSideCorpusTeam") {
         this.changeViewsOfInternalModels();
@@ -151,25 +151,25 @@ define([
         this.activitiesView.render();
         
         //localization for team non-minimized view
-        $(this.el).find(".locale_Refresh_Activities").attr("title", chrome.i18n.getMessage("locale_Refresh_Activities"));
-        $(this.el).find(".locale_Hide_Activities").attr("title", chrome.i18n.getMessage("locale_Hide_Activities"));
-        $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Team"));
+        $(this.el).find(".locale_Refresh_Activities").attr("title", Locale["locale_Refresh_Activities"].message);
+        $(this.el).find(".locale_Hide_Activities").attr("title", Locale["locale_Hide_Activities"].message);
+        $(this.el).find(".locale_Activity_Feed").html(Locale["locale_Activity_Feed_Team"].message);
 
       } else if (this.format == "minimizedrightSideUser") {
         this.setElement($("#activity-feed-user"));
         $(this.el).html(this.minimizedTemplate(this.model.toJSON()));
 
         //localization for user minimized view
-        $(this.el).find(".locale_Show_Activities").attr("title", chrome.i18n.getMessage("locale_Show_Activities"));
-        $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Your"));
+        $(this.el).find(".locale_Show_Activities").attr("title", Locale["locale_Show_Activities"].message);
+        $(this.el).find(".locale_Activity_Feed").html(Locale["locale_Activity_Feed_Your"].message);
 
       }else if (this.format == "minimizedrightSideCorpusTeam") {
         this.setElement($("#activity-feed-corpus-team"));
         $(this.el).html(this.minimizedTemplate(this.model.toJSON()));
 
         //localization for team minimized view
-        $(this.el).find(".locale_Show_Activities").attr("title", chrome.i18n.getMessage("locale_Show_Activities"));
-        $(this.el).find(".locale_Activity_Feed").html(chrome.i18n.getMessage("locale_Activity_Feed_Team"));
+        $(this.el).find(".locale_Show_Activities").attr("title", Locale["locale_Show_Activities"].message);
+        $(this.el).find(".locale_Activity_Feed").html(Locale["locale_Activity_Feed_Team"].message);
 
       }
       
