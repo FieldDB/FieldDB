@@ -29,17 +29,17 @@ define([
             $(this.el).html(this.template(this.model.toJSON()));
            
             //localization
-            $(this.el).find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
-            $(this.el).find(".locale_Actions").html(chrome.i18n.getMessage("locale_Actions"));
-            $(this.el).find(".locale_Navigation").html(chrome.i18n.getMessage("locale_Navigation"));
-            $(this.el).find(".locale_Datum_Status_Checked").html(chrome.i18n.getMessage("locale_Datum_Status_Checked"));
-            $(this.el).find(".locale_Next_Datum").html(chrome.i18n.getMessage("locale_Next_Datum"));
-            $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-            $(this.el).find(".locale_Previous_Datum").html(chrome.i18n.getMessage("locale_Previous_Datum"));
-            $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-            $(this.el).find(".locale_Search").html(chrome.i18n.getMessage("locale_Search"));
-            $(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
-            $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+            $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale["locale_Keyboard_Shortcuts"].message);
+            $(this.el).find(".locale_Actions").html(Locale["locale_Actions"].message);
+            $(this.el).find(".locale_Navigation").html(Locale["locale_Navigation"].message);
+            $(this.el).find(".locale_Datum_Status_Checked").html(Locale["locale_Datum_Status_Checked"].message);
+            $(this.el).find(".locale_Next_Datum").html(Locale["locale_Next_Datum"].message);
+            $(this.el).find(".locale_New_Datum").html(Locale["locale_New_Datum"].message);
+            $(this.el).find(".locale_Previous_Datum").html(Locale["locale_Previous_Datum"].message);
+            $(this.el).find(".locale_New_Session").html(Locale["locale_New_Session"].message);
+            $(this.el).find(".locale_Search").html(Locale["locale_Search"].message);
+            $(this.el).find(".locale_Close").html(Locale["locale_Close"].message);
+            $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
 //
 //            $(document).bind('keydown', 'ctrl+j', function() {
 //                alert('You found the hotkey!');
