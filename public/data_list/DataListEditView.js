@@ -188,7 +188,7 @@ define( [
         var self = this;
         confidential.turnOnDecryptedMode(function(){
           self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
-          $(self.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(self.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         });
 
         return false;
@@ -204,7 +204,7 @@ define( [
         }
         confidential.turnOffDecryptedMode();
         this.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
-        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+        $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         return false;
       }
     },
@@ -246,25 +246,25 @@ define( [
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
 
         //Localization of icons and buttons for edit quickview
-        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-        $(this.el).find(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
-        $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-        $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
+        $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
+        $(this.el).find(".locale_Hide_Datalist").attr("title", Locale["locale_Hide_Datalist"].message);
+        $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
         
         //localization of data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
-        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", chrome.i18n.getMessage("locale_Remove_checked_from_datalist_tooltip"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
-        $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
-        $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale["locale_Play_Audio_checked"].message);
+        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale["locale_Remove_checked_from_datalist_tooltip"].message);
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale["locale_Plain_Text_Export_Tooltip_checked"].message);
+        $(this.el).find(".locale_Encrypt_checked").attr("title", Locale["locale_Encrypt_checked"].message);
+        $(this.el).find(".locale_Decrypt_checked").attr("title", Locale["locale_Decrypt_checked"].message);
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         }
-        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
-        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale["locale_Export_checked_as_LaTeX"].message);
+        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale["locale_Export_checked_as_CSV"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       } else  if (this.format == "fullscreen") {
         Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
@@ -276,24 +276,24 @@ define( [
             $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
         
         //Localization of icons for fullscreen
-        $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+        $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
 
         //localization of data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
-        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", chrome.i18n.getMessage("locale_Remove_checked_from_datalist_tooltip"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
-        $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
-        $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale["locale_Play_Audio_checked"].message);
+        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale["locale_Remove_checked_from_datalist_tooltip"].message);
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale["locale_Plain_Text_Export_Tooltip_checked"].message);
+        $(this.el).find(".locale_Encrypt_checked").attr("title", Locale["locale_Encrypt_checked"].message);
+        $(this.el).find(".locale_Decrypt_checked").attr("title", Locale["locale_Decrypt_checked"].message);
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         }        
-        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
-        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale["locale_Export_checked_as_LaTeX"].message);
+        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale["locale_Export_checked_as_CSV"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       } else if (this.format == "centreWell") {
         Utils.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -305,24 +305,24 @@ define( [
             $("#data-list-embedded").find(".current-data-list-paginated-view") );
         
         //Localization of icons for centerWell
-        $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+        $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
 
         //localization of data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
-        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", chrome.i18n.getMessage("locale_Remove_checked_from_datalist_tooltip"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
-        $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
-        $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale["locale_Play_Audio_checked"].message);
+        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale["locale_Remove_checked_from_datalist_tooltip"].message);
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale["locale_Plain_Text_Export_Tooltip_checked"].message);
+        $(this.el).find(".locale_Encrypt_checked").attr("title", Locale["locale_Encrypt_checked"].message);
+        $(this.el).find(".locale_Decrypt_checked").attr("title", Locale["locale_Decrypt_checked"].message);
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         }        
-        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
-        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale["locale_Export_checked_as_LaTeX"].message);
+        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale["locale_Export_checked_as_CSV"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       }else if (this.format == "search") {
         Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -337,22 +337,22 @@ define( [
         $("#search-data-list-quickview-header").parent().find(".pagination-control").show();
         
         //Localization of icons and buttons for search quickview
-        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-        $(this.el).find(".locale_Hide_Datalist").attr("title", chrome.i18n.getMessage("locale_Hide_Datalist"));
+        $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
+        $(this.el).find(".locale_Hide_Datalist").attr("title", Locale["locale_Hide_Datalist"].message);
         
         //localization of search data list menu
-        $(this.el).find(".locale_Play_Audio_checked").attr("title", chrome.i18n.getMessage("locale_Play_Audio_checked"));
-        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", chrome.i18n.getMessage("locale_Remove_checked_from_datalist_tooltip"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
-        $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
-        $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+        $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale["locale_Play_Audio_checked"].message);
+        $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale["locale_Remove_checked_from_datalist_tooltip"].message);
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale["locale_Plain_Text_Export_Tooltip_checked"].message);
+        $(this.el).find(".locale_Encrypt_checked").attr("title", Locale["locale_Encrypt_checked"].message);
+        $(this.el).find(".locale_Decrypt_checked").attr("title", Locale["locale_Decrypt_checked"].message);
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         }        
-        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
-        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
+        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale["locale_Export_checked_as_LaTeX"].message);
+        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale["locale_Export_checked_as_CSV"].message);
         //No add comment button
         
       }else if (this.format == "search-minimized") {
@@ -371,7 +371,7 @@ define( [
         }
 
         //localization of the minimized data list icons
-        $(this.el).find(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
+        $(this.el).find(".locale_Show_Datalist").attr("title", Locale["locale_Show_Datalist"].message);
 
       }else if (this.format == "import"){
         Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
@@ -380,17 +380,17 @@ define( [
         $(this.el).html(this.importTemplate(jsonToRender));
         
         //localization of import data list menu
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip_checked"));
-        $(this.el).find(".locale_Encrypt_checked").attr("title", chrome.i18n.getMessage("locale_Encrypt_checked"));
-        $(this.el).find(".locale_Decrypt_checked").attr("title", chrome.i18n.getMessage("locale_Decrypt_checked"));
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale["locale_Plain_Text_Export_Tooltip_checked"].message);
+        $(this.el).find(".locale_Encrypt_checked").attr("title", Locale["locale_Encrypt_checked"].message);
+        $(this.el).find(".locale_Decrypt_checked").attr("title", Locale["locale_Decrypt_checked"].message);
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         }        
-        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_LaTeX"));
-        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", chrome.i18n.getMessage("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale["locale_Export_checked_as_LaTeX"].message);
+        $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale["locale_Export_checked_as_CSV"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         
       } else if (this.format == "minimized") {
@@ -400,7 +400,7 @@ define( [
         $(this.el).html(this.templateMinimized(jsonToRender));
         
         //localization of the minimized data list icons
-        $(this.el).find(".locale_Show_Datalist").attr("title", chrome.i18n.getMessage("locale_Show_Datalist"));
+        $(this.el).find(".locale_Show_Datalist").attr("title", Locale["locale_Show_Datalist"].message);
 
       }else{
         Utils.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
@@ -412,8 +412,8 @@ define( [
           this.commentReadView.render();
           
           //localization of edit data list 
-          $(this.el).find(".locale_Title").html(chrome.i18n.getMessage("locale_Title"));
-          $(this.el).find(".locale_Description").html(chrome.i18n.getMessage("locale_Description"));
+          $(this.el).find(".locale_Title").html(Locale["locale_Title"].message);
+          $(this.el).find(".locale_Description").html(Locale["locale_Description"].message);
 
         }
       }catch(e){

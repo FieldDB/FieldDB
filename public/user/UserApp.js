@@ -6,6 +6,7 @@ define([
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
+    "text!_locales/en/messages.json",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -14,7 +15,9 @@ define([
     UserRouter,
     Confidential,
     User,
-    UserMask
+    UserMask,
+    LocaleData
+
 ) {
   var UserApp = Backbone.Model.extend(
   /** @lends UserApp.prototype */
@@ -38,6 +41,12 @@ define([
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
         this.set("authentication", new Authentication());
+      }
+      
+      if(LocaleData){
+        window.Locale = JSON.parse(LocaleData);
+      }else{
+        window.Locale = {};
       }
     },
     render: function(){

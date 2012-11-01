@@ -1,8 +1,8 @@
-FieldDB is a free, modular, open source project developed collectively by field linguists and software developers to make an expandable user-friendly app which can be used to collect, search and share your data, both online and offline. It is fundamentally an app written in 100% Javascript which runs entirely client side, backed by a NoSQL database (we are currently using CouchDB and its offline browser wrapper PouchDB alpha). It has a number of webservices which it connects to in order to allow users to perform tasks which require the internet/cloud (ie, syncing data between devices and users, sharing data publicly, running CPU intensive processes to analyze/extract/search audio/video/text).
+FieldDB is a free, modular, open source project developed collectively by field linguists and software developers to make an expandable user-friendly app which can be used to collect, search and share your data, both online and offline. It is fundamentally an app written in 100% Javascript which runs entirely client side, backed by a NoSQL database (we are currently using CouchDB and its offline browser wrapper PouchDB alpha). It has a number of webservices which it connects to in order to allow users to perform tasks which require the internet/cloud (ie, syncing data between devices and users, sharing data publicly, running CPU intensive processes to analyze/extract/search audio/video/text). While the app was fundamentally designed for field linguists it can be used by anyone collecting text data or collecting highly structured data where the fields on each data point require encryption or customization from user to user.
 
-FieldDB beta was officially launched in English and Spanish on August 1st 2012 in Patzun, Guatemala as an [app for fieldlinguists](https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm). 
+FieldDB beta was officially launched in English and Spanish on August 1st 2012 in Patzun, Guatemala as an [app for fieldlinguists](https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj). 
 
-[more info...](http://fieldlinguist.com)
+[more info...](http://lingsync.org)
 
 # Interns and Development Team
 
@@ -28,7 +28,7 @@ This project is released under the [Apache 2.0](http://www.apache.org/licenses/L
 * Click on the "Fork" button to create your own copy.
 * Leave us a note in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues) to tell us a bit about the bug/feature you want to work on.
 * You can [follow the 4 GitHub Help Tutorials](http://help.github.com/) to install and use Git on your computer.
-* You can watch the videos in the [Developer's Blog](http://www.fieldlinguist.com/dev.html) to find out how the codebase works, and to find where is the code that you want to edit. Feel free to ask us questions in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues), we're friendly and welcome Open Source newbies.
+* You can watch the videos in the [Developer's Blog](https://www.lingsync.org/dev.html) to find out how the codebase works, and to find where is the code that you want to edit. Feel free to ask us questions in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues), we're friendly and welcome Open Source newbies.
 * Edit the code on your computer, commit it referencing the issue #xx you created ($ git commit -m "fixes #xx i changed blah blah...") and push to your origin ($ git push origin master).
 * Click on the "Pull Request" button, and leave us a note about what you changed. We will look at your changes and help you bring them into the project!
 * Feel the glow of contributing to OpenSource :)

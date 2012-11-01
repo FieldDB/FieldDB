@@ -305,6 +305,12 @@ Utils.catchAndThrowPouchError = function(e) {
 };
 
 Utils.testPouchChromeVersions = function(pouchname) {
+  return;
+  
+  
+  /*
+   * Dead code follows
+   */
   var chromeVersionWhenThisPouchWasCreated = localStorage.getItem(pouchname
       + "chromeCreationVersion");
   var currentChromeVersion = window.navigator.appVersion
@@ -339,8 +345,13 @@ Utils.testPouchChromeVersions = function(pouchname) {
           "if it was created with a previous version of Chrome. " +
           "Here is the solution: before you update to Chrome 23.0.1271.17, you should sync your corpus" +
           ". We have programmed the app to log you out, and do the databse upgrade for you," +
-          " but you will lose some of your data if you have synced it to the team server. \n\n" +
+          " but you will lose some of your data if you have not backed it up to the team server. \n\n" +
       "We have created this pop-up to remind you to sync/backup your data to the server before you upgrade your Chrome browser.");
     }
   }
 };
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 137a88bc1c6b660f744a4fd19c7a549c3e2c5b65
