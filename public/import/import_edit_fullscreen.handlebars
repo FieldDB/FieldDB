@@ -7,10 +7,13 @@
 				<h1>
 					<span class="locale_Import"></span> <small>{{pouchname}}</small>
 				</h1>
-           <div>{{status}}</div>
-                     				
-            <h5><span class="locale_Import_Instructions"></span>
-				      <a href="http://www.facebook.com/LingSyncApp" target="_blank"><i class="icons icon-globe"></i></a></h5> 
+				<div>{{status}}</div>
+
+				<h5>
+					<span class="locale_Import_Instructions"></span> <a
+						href="http://www.facebook.com/LingSyncApp" target="_blank"><i
+						class="icons icon-globe"></i></a>
+				</h5>
 			</div>
 
 		</div>
@@ -19,72 +22,81 @@
 </div>
 
 <div class="well" id="import-first-step">
- <span class="locale_Import_First_Step"></span>
-		<div class="well">
-			<textarea
-						class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder">{{rawText}}</textarea>
-      <span>Which format are you importing from?</span>
+	<span class="locale_Import_First_Step"></span>
+	<div class="well">
+		<textarea
+			class="export-large-textarea  drop-zone locale_Drag_and_Drop_Placeholder">{{rawText}}</textarea>
+		<span>Which format are you importing from?</span>
 
-		   <div class="btn-group">			
-	       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-  	     <span>Import from</span> <span class="caret"></span>
-	       </button>		
-			 <ul class="dropdown-menu" >
-       <li><a class="import-format" id="format-csv" tabindex="-1" href="#">CSV</a></li>
-       <li><a class="import-format" id="format-tabbed" tabindex="-1" href="#">Tabbed</a></li>
-       <li><a class="import-format" id="format-xml" tabindex="-1" href="#">XML</a></li>
-       <li><a class="import-format" id="format-elanxml" tabindex="-1" href="#">ElanXML</a></li>
-       <li><a class="import-format" id="format-toolbox" tabindex="-1" href="#">Toolbox</a></li>
-       <li><a class="import-format" id="format-praat" tabindex="-1" href="#">Praat Text Grid</a></li>
-       <li><a class="import-format" id="format-latex" tabindex="-1" href="#">LaTex</a></li>
-       <li><a class="import-format" id="format-handout" tabindex="-1" href="#">Handout</a></li>
-       </ul>
-      </div>	
+		<div class="btn-group">
+			<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+				<span>Import from</span> <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<li><a class="import-format" id="format-csv" tabindex="-1"
+					href="#">CSV</a></li>
+				<li><a class="import-format" id="format-tabbed" tabindex="-1"
+					href="#">Tabbed</a></li>
+				<li><a class="import-format" id="format-xml" tabindex="-1"
+					href="#">XML</a></li>
+				<li><a class="import-format" id="format-elanxml" tabindex="-1"
+					href="#">ElanXML</a></li>
+				<li><a class="import-format" id="format-toolbox" tabindex="-1"
+					href="#">Toolbox</a></li>
+				<li><a class="import-format" id="format-praat" tabindex="-1"
+					href="#">Praat Text Grid</a></li>
+				<li><a class="import-format" id="format-latex" tabindex="-1"
+					href="#">LaTex</a></li>
+				<li><a class="import-format" id="format-handout" tabindex="-1"
+					href="#">Handout</a></li>
+			</ul>
 		</div>
+	</div>
 </div>
 
 <div class="well hidden " id="import-second-step">
-  <span class="locale_Import_Second_Step"></span>
-				
-<button class="btn btn-primary add-column  hide locale_Add_Extra_Columns"></button>
+	<span class="locale_Import_Second_Step"></span>
 
-        <div class="well container span11">
+	<button
+		class="btn btn-primary add-column  hide locale_Add_Extra_Columns"></button>
 
-					<div id="import-datum-field-labels" class="row-fluid"></div>
-	 </div>
+	<div class="well container span11">
 
-		<div class="scrollable">
-					<table id="csv-table-area"
-						class="well table table-striped table-bordered table-condensed "></table>
-		</div>
-				
-		<button
-      class="btn btn-success approve-import hide locale_Attempt_Import"></button>
-				
+		<div id="import-datum-field-labels" class="row-fluid"></div>
+	</div>
+
+	<div class="scrollable">
+		<table id="csv-table-area"
+			class="well table table-striped table-bordered table-condensed "></table>
+	</div>
+
+	<button
+		class="btn btn-success approve-import hide locale_Attempt_Import"></button>
+
 </div>
 
 <div class="well hidden " id="import-third-step">
-  <span class="locale_Import_Third_Step"></span>
-	
-	  <div id="import-data-list" class="well row">
+	<span class="locale_Import_Third_Step"></span>
 
-		  	 <div id="import-data-list-header" class=" "></div>
-					<div class=" container span12 ">
-						<ul class="unstyled zebra import-data-list-paginated-view"></ul>
-						<div class="pagination-control"></div>
-				 </div>
-			 
-	 </div>
+	<div id="import-data-list" class="well row">
+
+		<div id="import-data-list-header" class=" "></div>
+		<div class=" container span12 ">
+			<ul class="unstyled zebra import-data-list-paginated-view"></ul>
+			<div class="pagination-control"></div>
+		</div>
+
+	</div>
 
 
-				<div id="import-session" class="well"></div>
+	<div id="import-session" class="well"></div>
 
-        <button
-          class="btn btn-success approve-save disabled locale_Save_And_Import"></button>
+	<button
+		class="btn btn-success approve-save disabled locale_Save_And_Import"></button>
 
-        <progress class="import-progress" max="5" value="0">
-          <strong class="locale_percent_completed"></strong>
-        </progress>
+	<progress class="import-progress" max="5" value="0">
+		<strong class="locale_percent_completed"></strong>
+	</progress>
 
 
 </div>
