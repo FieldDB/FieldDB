@@ -777,12 +777,6 @@ define( [
       var count = $("#csv-table-area").find('th').length;
       $("#csv-table-area").find('th').each(function(index) {
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
-        $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
-        $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
-        $(tableCell).find("input")[0].addEventListener('dragleave', function(){
-          $(this).removeClass("over");
-        } );
         count++;
         $(tableCell).html('<input type="text" class="drop-label-zone header'+count+'" value=""/>');
         $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
