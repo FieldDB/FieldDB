@@ -246,7 +246,11 @@ define( [
         //Localization of icons for quickview
         $(this.el).find(".locale_Hide_Datalist").attr("title", Locale["locale_Hide_Datalist"].message);
         $(this.el).find(".locale_Edit_Datalist").attr("title", Locale["locale_Edit_Datalist"].message);
+<<<<<<< HEAD
         $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
+=======
+        $(this.el).find(".locale_Show_fullscreen").attr("title", Locale["locale_Show_fullscreen"].message);
+>>>>>>> parent of 9243846... Revert "changed the localization implementation so it works outside chrome extension and fixes #650"
         
       } else if (this.format == "fullscreen") {
         Utils.debug("DATALIST READ FULLSCREEN render: ");

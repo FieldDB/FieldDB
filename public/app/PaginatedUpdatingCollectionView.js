@@ -259,11 +259,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       });
       
       //localization of the paginatedupdating collection's footer.
-      this.el.parent().find(".pagination-control").find(".locale_More").html(chrome.i18n.getMessage("locale_More"));
-      this.el.parent().find(".pagination-control").find(".locale_Show").html(chrome.i18n.getMessage("locale_Show"));
-      this.el.parent().find(".pagination-control").find(".locale_per_page").html(chrome.i18n.getMessage("locale_per_page"));
-      this.el.parent().find(".pagination-control").find(".locale_of").html(chrome.i18n.getMessage("locale_of"));
-      this.el.parent().find(".pagination-control").find(".locale_pages_shown").html(chrome.i18n.getMessage("locale_pages_shown"));
+      this.el.parent().find(".pagination-control").find(".locale_More").html(Locale["locale_More"].message);
+      this.el.parent().find(".pagination-control").find(".locale_Show").html(Locale["locale_Show"].message);
+      this.el.parent().find(".pagination-control").find(".locale_per_page").html(Locale["locale_per_page"].message);
+      this.el.parent().find(".pagination-control").find(".locale_of").html(Locale["locale_of"].message);
+      this.el.parent().find(".pagination-control").find(".locale_pages_shown").html(Locale["locale_pages_shown"].message);
 
     },
 

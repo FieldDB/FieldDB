@@ -62,7 +62,11 @@ define([
         this.datumsView.render();
         
         //localization of centerWell view
+<<<<<<< HEAD
         $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
+=======
+        $(this.el).find(".locale_Show_fullscreen").attr("title", Locale["locale_Show_fullscreen"].message);
+>>>>>>> parent of 9243846... Revert "changed the localization implementation so it works outside chrome extension and fixes #650"
         
       } else if (this.format == "fullscreen") {
         // Display the DatumContainerEditView
