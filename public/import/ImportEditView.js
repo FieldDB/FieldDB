@@ -224,17 +224,16 @@ define( [
         this.showSecondStep();
       }
       
-      //localization
-      $(this.el).find(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
-      $(this.el).find(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
-      $(this.el).find(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
-      $(this.el).find(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
-      $(this.el).find(".locale_Import_First_Step").html(chrome.i18n.getMessage("locale_Import_First_Step"));
-      $(this.el).find(".locale_Import_Second_Step").html(chrome.i18n.getMessage("locale_Import_Second_Step"));
-      $(this.el).find(".locale_Import_Third_Step").html(chrome.i18n.getMessage("locale_Import_Third_Step"));
-      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
-      $(this.el).find(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
-      $(this.el).find(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
+      $(this.el).find(".locale_Save_And_Import").html(Locale["locale_Save_And_Import"].message);
+      $(this.el).find(".locale_Import").html(Locale["locale_Import"].message);
+      $(this.el).find(".locale_percent_completed").html(Locale["locale_percent_completed"].message);
+      $(this.el).find(".locale_Import_Instructions").html(Locale["locale_Import_Instructions"].message);
+      $(this.el).find(".locale_Import_First_Step").html(Locale["locale_Import_First_Step"].message);
+      $(this.el).find(".locale_Import_Second_Step").html(Locale["locale_Import_Second_Step"].message);
+      $(this.el).find(".locale_Import_Third_Step").html(Locale["locale_Import_Third_Step"].message);
+      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", Locale["locale_Drag_and_Drop_Placeholder"].message);
+      $(this.el).find(".locale_Add_Extra_Columns").html(Locale["locale_Add_Extra_Columns"].message);
+      $(this.el).find(".locale_Attempt_Import").html(Locale["locale_Attempt_Import"].message);
       
       return this;
     },
@@ -244,7 +243,7 @@ define( [
       }
       var colors= ["label-info","label-inverse","label-success","label-warning","label-important"];
       var colorindex = 0;
-      $("#import-datum-field-labels").html("");//chrome.i18n.getMessage("locale_Drag_Fields_Instructions"));
+      $("#import-datum-field-labels").html("");//Locale["locale_Drag_Fields_Instructions"].message);
       for(i in this.model.get("datumFields").models){
         var x = document.createElement("span");
         x.classList.add("pull-left");

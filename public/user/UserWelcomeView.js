@@ -143,22 +143,22 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".registerusername").focus();
-        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir"));
-        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir_Tooltip").attr("title", chrome.i18n.getMessage("locale_Close_and_login_as_Ed_Sapir_Tooltip"));
-        $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
-        $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-        $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(chrome.i18n.getMessage("locale_Sync_my_data_to_this_computer"));
-//        $(this.el).find(".locale_Welcome_to_FieldDB").html(chrome.i18n.getMessage("locale_Welcome_to_FieldDB"));
-        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(chrome.i18n.getMessage("locale_An_offline_online_fieldlinguistics_database"));
-//        $(this.el).find(".locale_Welcome_Beta_Testers").html(chrome.i18n.getMessage("locale_Welcome_Beta_Testers"));
-        $(this.el).find(".locale_Create_a_new_user").html(chrome.i18n.getMessage("locale_Create_a_new_user"));
-//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(chrome.i18n.getMessage("locale_What_is_your_username_going_to_be"));
-        $(this.el).find(".locale_New_User").text(chrome.i18n.getMessage("locale_New_User"));
-        $(this.el).find(".locale_Confirm_Password").text(chrome.i18n.getMessage("locale_Confirm_Password"));
-        $(this.el).find(".locale_Sign_in_with_password").text(chrome.i18n.getMessage("locale_Sign_in_with_password"));
-//        $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
-//        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(chrome.i18n.getMessage("locale_Instructions_to_show_on_dashboard"));
+        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(Locale["locale_Close_and_login_as_Ed_Sapir"].message);
+        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir_Tooltip").attr("title", Locale["locale_Close_and_login_as_Ed_Sapir_Tooltip"].message);
+        $(this.el).find(".locale_Log_In").html(Locale["locale_Log_In"].message);
+        $(this.el).find(".locale_Username").html(Locale["locale_Username"].message);
+        $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
+        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale["locale_Sync_my_data_to_this_computer"].message);
+//        $(this.el).find(".locale_Welcome_to_FieldDB").html(Locale["locale_Welcome_to_FieldDB"].message);
+        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale["locale_An_offline_online_fieldlinguistics_database"].message);
+//        $(this.el).find(".locale_Welcome_Beta_Testers").html(Locale["locale_Welcome_Beta_Testers"].message);
+        $(this.el).find(".locale_Create_a_new_user").html(Locale["locale_Create_a_new_user"].message);
+//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(Locale["locale_What_is_your_username_going_to_be"].message);
+        $(this.el).find(".locale_New_User").text(Locale["locale_New_User"].message);
+        $(this.el).find(".locale_Confirm_Password").text(Locale["locale_Confirm_Password"].message);
+        $(this.el).find(".locale_Sign_in_with_password").text(Locale["locale_Sign_in_with_password"].message);
+//        $(this.el).find(".locale_Warning").text(Locale["locale_Warning"].message);
+//        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale["locale_Instructions_to_show_on_dashboard"].message);
 
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;
