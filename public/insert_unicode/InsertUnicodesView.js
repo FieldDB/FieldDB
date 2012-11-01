@@ -89,11 +89,11 @@ define([
         });
         
         //localization for non-minimized view
-        $(this.el).find(".locale_Hide_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Hide_Unicode_Palette"));
-        $(this.el).find(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Paste_Type_Unicode_Symbol_Placeholder"));
-        $(this.el).find(".locale_TIPA_shortcut").attr("placeholder", chrome.i18n.getMessage("locale_TIPA_shortcut"));
-        $(this.el).find(".locale_Add_new_symbol").attr("title", chrome.i18n.getMessage("locale_Add_new_symbol"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Hide_Unicode_Palette").attr("title", Locale["locale_Hide_Unicode_Palette"].message);
+        $(this.el).find(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", Locale["locale_Paste_Type_Unicode_Symbol_Placeholder"].message);
+        $(this.el).find(".locale_TIPA_shortcut").attr("placeholder", Locale["locale_TIPA_shortcut"].message);
+        $(this.el).find(".locale_Add_new_symbol").attr("title", Locale["locale_Add_new_symbol"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
       
       } else if (this.format == "minimized") {
         // Display the minimized InsertUnicodesView
@@ -101,11 +101,11 @@ define([
         $(this.el).html(this.minimizedTemplate({}));
 
         //localization for minimized view
-        $(this.el).find(".locale_Show_Unicode_Palette").attr("title", chrome.i18n.getMessage("locale_Show_Unicode_Palette"));
+        $(this.el).find(".locale_Show_Unicode_Palette").attr("title", Locale["locale_Show_Unicode_Palette"].message);
       }
       //localization for all views
-      $(this.el).find(".locale_Unicode").html(chrome.i18n.getMessage("locale_Unicode"));
-      $(this.el).find(".locale_Drag_and_Drop").html(chrome.i18n.getMessage("locale_Drag_and_Drop"));
+      $(this.el).find(".locale_Unicode").html(Locale["locale_Unicode"].message);
+      $(this.el).find(".locale_Drag_and_Drop").html(Locale["locale_Drag_and_Drop"].message);
 
       return this;
     },

@@ -118,10 +118,10 @@ define([
       } 
       
       //localization
-      $(this.el).find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $(this.el).find(".locale_advanced_search_explaination").html(chrome.i18n.getMessage("locale_advanced_search_explaination"));
-      $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-      $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
+      $(this.el).find(".locale_Advanced_Search").html(Locale["locale_Advanced_Search"].message);
+      $(this.el).find(".locale_advanced_search_explaination").html(Locale["locale_advanced_search_explaination"].message);
+      $(this.el).find(".locale_AND").html(Locale["locale_AND"].message);
+      $(this.el).find(".locale_OR").html(Locale["locale_OR"].message);
       
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
@@ -133,9 +133,9 @@ define([
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization
-      $("#search-top").find(".locale_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Search"));
-      $("#search-top").find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Advanced_Search_Tooltip"));
+      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale["locale_Search"].message);
+      $("#search-top").find(".locale_Advanced_Search").html(Locale["locale_Advanced_Search"].message);
+      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale["locale_Advanced_Search_Tooltip"].message);
 
       return this;
     },
