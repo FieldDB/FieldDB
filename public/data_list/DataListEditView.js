@@ -91,7 +91,8 @@ define( [
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
       
-      "click .icon-minus-sign" : function() {
+      "click .icon-minus-sign" : function(e) {
+        e.preventDefault();
         if(this.format == "search"){
           this.format = "search-minimized";
         }else{
@@ -99,7 +100,8 @@ define( [
         }
         this.render();
       },
-      "click .icon-plus-sign" : function() {
+      "click .icon-plus-sign" : function(e) {
+        e.preventDefault();
         if(this.format == "search-minimized"){
           this.format = "search";
         }else{
