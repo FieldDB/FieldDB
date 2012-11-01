@@ -128,8 +128,14 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        this.removeDatumFromThisList(this.getAllCheckedDatums());
-        return false;
+        var r=window.confirm("Are you sure you want to remove these items from the datalist?");
+        if (r==true) {
+        	this.removeDatumFromThisList(this.getAllCheckedDatums());
+        	return false;
+        }
+        else {
+        	return false;
+        }
       },
       "click .icon-lock": function(e){
         if(e){
@@ -350,8 +356,11 @@ define( [
         return; //return quietly, refuse to remove all datum in a data list. 
       }
       try{
-        this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
-        appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
+        this.model.set("datumIds", _.difference(this.model.get("datumIds"), datumIds) );
+        for (var i = 0; i < datumIds.length; i++) {
+        	appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[i]));
+      	}
+        this.model.saveAndInterConnectInApp();
       }catch(e){
         Utils.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }

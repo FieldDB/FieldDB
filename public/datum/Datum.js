@@ -169,14 +169,23 @@ define([
               if (!err) {
                 // Process the given query string into tokens
                 var queryTokens = self.processQueryString(queryString);
-                
+                var doGrossKeywordMatch = false;
+                if(queryString.indexOf(":") == -1){
+                  doGrossKeywordMatch = true;
+                  queryString = queryString.toLowerCase().replace(/\s/g,"");
+                }
                 // Go through all the rows of results
                 for (i in response.rows) {
                   var thisDatumIsIn = false;
                   // If the query string is null, include all datumIds
                   if(queryString.trim() == ""){
                     thisDatumIsIn = true;
+                  }else if(doGrossKeywordMatch){
+                      if(JSON.stringify(response.rows[i].key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
+                        thisDatumIsIn = true;
+                      }
                   }else{
+                    
                     // Determine if this datum matches the first search criteria
                     thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
                     
