@@ -64,16 +64,8 @@ define([
         window.appView.currentCorpusReadView.format = "fullscreen";
         window.appView.currentCorpusReadView.render();
         app.router.showFullscreenCorpus();
-      },
-      //
-      "keyup #quick-authenticate-password" : function(e) {
-        var code = e.keyCode || e.which;
-        Utils.debug("This should fire when the user pushes enter but it doesnt. TODO might have to just use jquery in the render, insted of backbone which might limit it to the element...");
-        // code == 13 is the enter key
-        if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
-          $("#quick-authentication-okay-btn").click();
-        }
       }
+      //
     },
     
     /**
