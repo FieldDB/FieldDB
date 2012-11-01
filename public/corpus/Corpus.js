@@ -257,7 +257,9 @@ define([
         role: "writer",
         pouchname: this.get("pouchname")
       }));
-      //TODO load the permissions in from the server.
+      //TODO load the permissions in from the server. contact authentication server, 
+      //auth server contacts couch, asks it who readers etc are, tells us, 
+      //we load them in, add them to the roles of readers and writers.
     },
     
     defaults : {

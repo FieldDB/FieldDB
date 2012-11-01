@@ -150,6 +150,9 @@
   "locale_Export_Data" : {
     "message" : "Export Data"
   },
+  "locale_All_Data" : {
+  	"message" : "All Data"
+  },
   "locale_Save" : {
     "message" : "Save"
   },

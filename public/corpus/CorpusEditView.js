@@ -15,6 +15,7 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
+    "datum/Datum",
     "permission/Permission",
     "permission/Permissions",
     "permission/PermissionEditView",
@@ -40,6 +41,7 @@ define([
     DatumState,
     DatumStates,
     DatumStateEditView,
+    Datum,
     Permission,
     Permissions,
     PermissionEditView,
@@ -93,7 +95,10 @@ define([
     /**
      * The underlying model of the CorpusReadFullScreenView is a Corpus.
      */    
-    model : Corpus,
+    model : {
+    	datum : Datum,
+    	corpus : Corpus
+    },
    
     /**
      * Events that the CorpusReadFullScreenView is listening to and their handlers.
@@ -126,6 +131,13 @@ define([
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
+      
+      //corpus menu buttons under Data
+      "click #show-all-data-e" : function(e){
+         e.preventDefault();
+         var queryString = "";
+         this.datum.searchByQueryString(queryString);
+      },
       
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
@@ -319,6 +331,7 @@ define([
         $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
         $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
         $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
+        $(this.el).find(".locale_All_Data").html(Locale["locale_All_Data"].message);
         $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
       }else{
         //Localize the new corpus menu
