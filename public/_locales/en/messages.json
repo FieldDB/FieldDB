@@ -446,7 +446,7 @@
     "message" : "Show Corpus Settings"
   },
   "locale_Drag_and_Drop_Audio_Tooltip" : {
-    "message" : "Drag and drop audio over the audio player to attach an audio file. You can also drag and drop a YouTube video URL to attach a YouTube video instead."
+    "message" : "Drag and drop audio over the audio player to attach an audio file. Drag and drop option for YouTube videos coming soon."
   },
   "locale_Play_Audio" : {
     "message" : "Play audio"
