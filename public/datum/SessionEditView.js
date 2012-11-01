@@ -156,7 +156,7 @@ define([
           
           //Localization for leftSide
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
-          $(this.el).find(".locale_Show_fullscreen").attr("title", Locale["locale_Show_fullscreen"].message);
+          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
           $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
           $(this.el).find(".locale_Goal").html(Locale["locale_Goal"].message);
           $(this.el).find(".locale_Consultants").html(Locale["locale_Consultants"].message);

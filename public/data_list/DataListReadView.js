@@ -246,7 +246,7 @@ define( [
         //Localization of icons for quickview
         $(this.el).find(".locale_Hide_Datalist").attr("title", Locale["locale_Hide_Datalist"].message);
         $(this.el).find(".locale_Edit_Datalist").attr("title", Locale["locale_Edit_Datalist"].message);
-        $(this.el).find(".locale_Show_fullscreen").attr("title", Locale["locale_Show_fullscreen"].message);
+        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
         
       } else if (this.format == "fullscreen") {
         Utils.debug("DATALIST READ FULLSCREEN render: ");
