@@ -193,6 +193,7 @@ define( [
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
       this.model.guessFormatAndImport();
+      this.showSecondStep();
     },
     render : function() {
       this.setElement("#import-fullscreen");
@@ -220,6 +221,7 @@ define( [
       if(this.model.get("asCSV") != undefined){
         this.showCSVTable();
         this.renderDatumFieldsLabels();
+        this.showSecondStep();
       }
       
       //localization
@@ -365,7 +367,7 @@ define( [
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
         childViewFormat      : "latex",
-        childViewClassName   : "row span12"
+        childViewClass       : "row span11"
       }); 
 
       if(this.dataListView){
@@ -772,9 +774,17 @@ define( [
       $("#csv-table-area").find('td').each(function(index) {
         $(this).after('<td contenteditable = "true"></td>');
       });
+      var count = $("#csv-table-area").find('th').length;
       $("#csv-table-area").find('th').each(function(index) {
         var tableCell = document.createElement("th");
         $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
+        $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
+        $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
+        $(tableCell).find("input")[0].addEventListener('dragleave', function(){
+          $(this).removeClass("over");
+        } );
+        count++;
+        $(tableCell).html('<input type="text" class="drop-label-zone header'+count+'" value=""/>');
         $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
         $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
         $(tableCell).find("input")[0].addEventListener('dragleave', function(){
