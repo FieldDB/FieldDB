@@ -60,12 +60,12 @@ define( [
         this.$el.children(".color_chooser").val(this.model.get("color"));
         
         //localization
-        $(this.el).find(".locale_Green").html(chrome.i18n.getMessage("locale_Green"));
-        $(this.el).find(".locale_Orange").html(chrome.i18n.getMessage("locale_Orange"));
-        $(this.el).find(".locale_Red").html(chrome.i18n.getMessage("locale_Red"));
-        $(this.el).find(".locale_Teal").html(chrome.i18n.getMessage("locale_Teal"));
-        $(this.el).find(".locale_Black").html(chrome.i18n.getMessage("locale_Black"));
-        $(this.el).find(".locale_Default").html(chrome.i18n.getMessage("locale_Default"));
+        $(this.el).find(".locale_Green").html(Locale["locale_Green"].message);
+        $(this.el).find(".locale_Orange").html(Locale["locale_Orange"].message);
+        $(this.el).find(".locale_Red").html(Locale["locale_Red"].message);
+        $(this.el).find(".locale_Teal").html(Locale["locale_Teal"].message);
+        $(this.el).find(".locale_Black").html(Locale["locale_Black"].message);
+        $(this.el).find(".locale_Default").html(Locale["locale_Default"].message);
       }
       
       return this;
