@@ -31,8 +31,8 @@ define([
     	$(this.el).html(this.template(this.model.toJSON()));
     	
     	//localization
-    	$(this.el).find(".locale_Export").html(chrome.i18n.getMessage("locale_Export"));
-    	$(this.el).find(".locale_Close").html(chrome.i18n.getMessage("locale_Close"));
+    	$(this.el).find(".locale_Export").html(Locale["locale_Export"].message);
+    	$(this.el).find(".locale_Close").html(Locale["locale_Close"].message);
 
 
   	      
