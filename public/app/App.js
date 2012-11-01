@@ -12,6 +12,7 @@ define([
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
+    "text!_locales/en/messages.json",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -26,7 +27,8 @@ define([
     AppRouter,
     Confidential,
     User,
-    UserMask
+    UserMask,
+    LocaleData
 ) {
   var App = Backbone.Model.extend(
   /** @lends App.prototype */
@@ -73,6 +75,12 @@ define([
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
 //      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
       
+      if(LocaleData){
+        window.Locale = JSON.parse(LocaleData);
+      }else{
+        window.Locale = {};
+      }
+
     },
     
     // Internal models: used by the parse function
