@@ -2,7 +2,6 @@
   "name" : "LingSync testing",
   "version" : "1.24.3",
   "description" : "A bleeding edge version, with new features faster",
-  "default_locale" : "en",
   "app" : {
     "launch" : {
       "local_path" : "index.html"
