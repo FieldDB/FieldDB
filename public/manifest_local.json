@@ -2,7 +2,6 @@
   "name" : "FieldDB Localhost",
   "version" : "1.24.3",
   "description" : "__MSG_application_description__",
-  "default_locale" : "en",
   "app" : {
     "launch" : {
       "local_path" : "index.html"
