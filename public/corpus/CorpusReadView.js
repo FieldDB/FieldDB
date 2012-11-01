@@ -153,7 +153,7 @@ define([
           this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(jsonToRender));
           
-          $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
+          $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale["locale_Show_corpus_settings"].message);
 
       } else if (this.format == "link") {
         Utils.debug("CORPUS READ LINK render: " );
@@ -199,18 +199,18 @@ define([
         }
 
         //Localize for all fullscreen view 
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(chrome.i18n.getMessage("locale_elicitation_sessions_explaination"));
-        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explaination").html(chrome.i18n.getMessage("locale_datalists_explaination"));
-        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explaination").html(chrome.i18n.getMessage("locale_permissions_explaination"));
-        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explaination").html(chrome.i18n.getMessage("locale_datum_fields_explaination"));
-        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explaination").html(chrome.i18n.getMessage("locale_datum_states_explaination"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
+        $(this.el).find(".locale_elicitation_sessions_explaination").html(Locale["locale_elicitation_sessions_explaination"].message);
+        $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
+        $(this.el).find(".locale_datalists_explaination").html(Locale["locale_datalists_explaination"].message);
+        $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
+        $(this.el).find(".locale_permissions_explaination").html(Locale["locale_permissions_explaination"].message);
+        $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
+        $(this.el).find(".locale_datum_fields_explaination").html(Locale["locale_datum_fields_explaination"].message);
+        $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
+        $(this.el).find(".locale_datum_states_explaination").html(Locale["locale_datum_states_explaination"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         
       } else if (this.format == "centreWell"){
@@ -244,33 +244,33 @@ define([
         this.permissionsView.render();
 
         //Localize for all embedded view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(chrome.i18n.getMessage("locale_elicitation_sessions_explaination"));
-        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explaination").html(chrome.i18n.getMessage("locale_datalists_explaination"));
-        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explaination").html(chrome.i18n.getMessage("locale_permissions_explaination"));
-        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explaination").html(chrome.i18n.getMessage("locale_datum_fields_explaination"));
-        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explaination").html(chrome.i18n.getMessage("locale_datum_states_explaination"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
+        $(this.el).find(".locale_elicitation_sessions_explaination").html(Locale["locale_elicitation_sessions_explaination"].message);
+        $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
+        $(this.el).find(".locale_datalists_explaination").html(Locale["locale_datalists_explaination"].message);
+        $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
+        $(this.el).find(".locale_permissions_explaination").html(Locale["locale_permissions_explaination"].message);
+        $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
+        $(this.el).find(".locale_datum_fields_explaination").html(Locale["locale_datum_fields_explaination"].message);
+        $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
+        $(this.el).find(".locale_datum_states_explaination").html(Locale["locale_datum_states_explaination"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       }
       
       //Localize corpus menu for all corpus views
-      $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
-      $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-      $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
-      $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-      $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-      $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
-      $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
-      $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+      $(this.el).find(".locale_New_menu").html(Locale["locale_New_menu"].message);
+      $(this.el).find(".locale_New_Datum").html(Locale["locale_New_Datum"].message);
+      $(this.el).find(".locale_New_Data_List").html(Locale["locale_New_Data_List"].message);
+      $(this.el).find(".locale_New_Session").html(Locale["locale_New_Session"].message);
+      $(this.el).find(".locale_New_Corpus").html(Locale["locale_New_Corpus"].message);
+      $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
+      $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
+      $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
       
       //Localize corpus read only view
-      $(this.el).find(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
+      $(this.el).find(".locale_Edit_corpus").attr("title", Locale["locale_Edit_corpus"].message);
       
       
       return this;
