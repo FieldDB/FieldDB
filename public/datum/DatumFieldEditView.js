@@ -61,9 +61,9 @@ define([
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         //localization
-        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
-        $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
-        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
+        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale["locale_Encrypt_if_confidential"].message);
+        $(this.el).find(".locale_Help_Text").html(Locale["locale_Help_Text"].message);
+        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale["locale_Help_Text_Placeholder"].message);
         
         // Select the correct values from the model
         this.$el.children(".choose-field").val(this.model.get("label"));

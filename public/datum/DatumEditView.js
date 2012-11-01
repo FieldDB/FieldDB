@@ -225,27 +225,27 @@ define([
         }, 500);
             
         //localization for edit well view
-        $(this.el).find(".locale_See_Fields").attr("title", chrome.i18n.getMessage("locale_See_Fields"));
-//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-        $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip"));
-        $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+        $(this.el).find(".locale_See_Fields").attr("title", Locale["locale_See_Fields"].message);
+//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale["locale_Add_Tags_Tooltip"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+        $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
+        $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale["locale_Insert_New_Datum"].message);
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale["locale_Plain_Text_Export_Tooltip"].message);
+        $(this.el).find(".locale_Duplicate").attr("title", Locale["locale_Duplicate"].message);
         if(jsonToRender.confidential){
-          $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+          $(this.el).find(".locale_Encrypt").attr("title", Locale["locale_Decrypt"].message);
         }else{
-          $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+          $(this.el).find(".locale_Encrypt").attr("title", Locale["locale_Encrypt"].message);
         }
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         } 
-        $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-        $(this.el).find(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
+        $(this.el).find(".locale_LaTeX").attr("title", Locale["locale_LaTeX"].message);
+        $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale["locale_CSV_Tooltip"].message);
         
-        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", chrome.i18n.getMessage("locale_Drag_and_Drop_Audio_Tooltip"));
+        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale["locale_Drag_and_Drop_Audio_Tooltip"].message);
       }
 
       return this;
