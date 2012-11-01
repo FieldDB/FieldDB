@@ -44,7 +44,62 @@ define( [
     },
     events : {
       "click .approve-save" : "saveDataList",
-      "click .approve-import" : "convertTableIntoDataList",
+      "click .approve-import" : function(e){
+        e.preventDefault();
+        $(" #import-third-step").removeClass("hidden");
+        this.convertTableIntoDataList();
+      },
+       /*event listeners for the import from dropdown menu  */
+      "click #format-csv" : function(e){
+        e.preventDefault();
+//          this.updateRawText();
+        var text = $(".export-large-textarea").val();
+          this.model.importCSV(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-tabbed" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importTabbed(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-xml" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importXML(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-elanxml" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importElanXML(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-toolbox" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importToolbox(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-praat" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importTextGrid(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-latex" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importLatex(text, this.model);
+          this.showSecondStep();
+      },
+      "click #format-handout" : function(e){
+        e.preventDefault();
+        var text = $(".export-large-textarea").val();
+          this.model.importText(text, this.model);
+          this.showSecondStep();
+      },
+      
       "click .icon-resize-small" : function(){
         window.app.router.showDashboard();
       },
@@ -65,7 +120,7 @@ define( [
         this._dropLabelEvent(e);
       },
       "click .add-column" : "insertDoubleColumnsInTable",
-      "blur .export-large-textarea" : "updateRawText"
+      "blur .export-large-textarea" : "updateRawText",
     },
     _dragOverEvent: function (e) {
       if (e.originalEvent) e = e.originalEvent;
@@ -138,6 +193,7 @@ define( [
     updateRawText : function(){
       this.model.set("rawText", $(".export-large-textarea").val());
       this.model.guessFormatAndImport();
+      this.showSecondStep();
     },
     render : function() {
       this.setElement("#import-fullscreen");
@@ -165,16 +221,19 @@ define( [
       if(this.model.get("asCSV") != undefined){
         this.showCSVTable();
         this.renderDatumFieldsLabels();
+        this.showSecondStep();
       }
       
-      //localization
-      $(this.el).find(".locale_Save_And_Import").html(chrome.i18n.getMessage("locale_Save_And_Import"));
-      $(this.el).find(".locale_Import").html(chrome.i18n.getMessage("locale_Import"));
-      $(this.el).find(".locale_percent_completed").html(chrome.i18n.getMessage("locale_percent_completed"));
-      $(this.el).find(".locale_Import_Instructions").html(chrome.i18n.getMessage("locale_Import_Instructions"));
-      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Drag_and_Drop_Placeholder"));
-      $(this.el).find(".locale_Add_Extra_Columns").html(chrome.i18n.getMessage("locale_Add_Extra_Columns"));
-      $(this.el).find(".locale_Attempt_Import").html(chrome.i18n.getMessage("locale_Attempt_Import"));
+      $(this.el).find(".locale_Save_And_Import").html(Locale["locale_Save_And_Import"].message);
+      $(this.el).find(".locale_Import").html(Locale["locale_Import"].message);
+      $(this.el).find(".locale_percent_completed").html(Locale["locale_percent_completed"].message);
+      $(this.el).find(".locale_Import_Instructions").html(Locale["locale_Import_Instructions"].message);
+      $(this.el).find(".locale_Import_First_Step").html(Locale["locale_Import_First_Step"].message);
+      $(this.el).find(".locale_Import_Second_Step").html(Locale["locale_Import_Second_Step"].message);
+      $(this.el).find(".locale_Import_Third_Step").html(Locale["locale_Import_Third_Step"].message);
+      $(this.el).find(".locale_Drag_and_Drop_Placeholder").attr("placeholder", Locale["locale_Drag_and_Drop_Placeholder"].message);
+      $(this.el).find(".locale_Add_Extra_Columns").html(Locale["locale_Add_Extra_Columns"].message);
+      $(this.el).find(".locale_Attempt_Import").html(Locale["locale_Attempt_Import"].message);
       
       return this;
     },
@@ -184,7 +243,7 @@ define( [
       }
       var colors= ["label-info","label-inverse","label-success","label-warning","label-important"];
       var colorindex = 0;
-      $("#import-datum-field-labels").html("");//chrome.i18n.getMessage("locale_Drag_Fields_Instructions"));
+      $("#import-datum-field-labels").html("");//Locale["locale_Drag_Fields_Instructions"].message);
       for(i in this.model.get("datumFields").models){
         var x = document.createElement("span");
         x.classList.add("pull-left");
@@ -307,7 +366,7 @@ define( [
         childViewConstructor : DatumReadView,
         childViewTagName     : "li",
         childViewFormat      : "latex",
-        childViewClassName   : "row span12"
+        childViewClass       : "row span11"
       }); 
 
       if(this.dataListView){
@@ -714,9 +773,11 @@ define( [
       $("#csv-table-area").find('td').each(function(index) {
         $(this).after('<td contenteditable = "true"></td>');
       });
+      var count = $("#csv-table-area").find('th').length;
       $("#csv-table-area").find('th').each(function(index) {
         var tableCell = document.createElement("th");
-        $(tableCell).html('<input type="text" class="drop-label-zone header"/>');
+        count++;
+        $(tableCell).html('<input type="text" class="drop-label-zone header'+count+'" value=""/>');
         $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
         $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
         $(tableCell).find("input")[0].addEventListener('dragleave', function(){
@@ -775,6 +836,16 @@ define( [
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       return false;
     },
+    
+//// Choose an option from Dropdown "Import from" then the second step will show up    
+    showSecondStep : function(e){
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      $("#import-second-step").removeClass("hidden");
+    },
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
