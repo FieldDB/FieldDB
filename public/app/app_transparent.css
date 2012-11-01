@@ -1,10 +1,10 @@
 .well{
 	color: #fff;
-	background-color:rgba(0,0,0,0.3);
+	background-color:rgba(0,0,0,0.5);
 }
 .breadcrumb{
   color: #fff;
-  background-color:rgba(0,0,0,0.3);
+  background-color:rgba(0,0,0,0.5);
   background-image: none;
 }
 a {
@@ -12,10 +12,10 @@ a {
 }
 .table-striped tbody tr:nth-child(odd) td,
 .table-striped tbody tr:nth-child(odd) th {
-  background-color:rgba(0,0,0,0.3);
+  background-color:rgba(0,0,0,0.5);
 }
 
 .table tbody tr:hover td,
 .table tbody tr:hover th {
-  background-color:rgba(0,0,0,0.3);
+  background-color:rgba(0,0,0,0.5);
 }
