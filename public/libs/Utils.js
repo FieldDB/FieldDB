@@ -350,14 +350,3 @@ Utils.testPouchChromeVersions = function(pouchname) {
     }
   }
 };
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 137a88bc1c6b660f744a4fd19c7a549c3e2c5b65
-=======
-
-window.Locale=require("text!_locales/en/messages.json")
-
->>>>>>> parent of 9243846... Revert "changed the localization implementation so it works outside chrome extension and fixes #650"
