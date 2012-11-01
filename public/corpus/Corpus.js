@@ -135,7 +135,7 @@ define([
             size : "3",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
+            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc). Leaving it blank can mean grammatical/acceptable, or you can add a new symbol to mean grammatical/acceptable."
           }),
           new DatumField({
             label : "utterance",
