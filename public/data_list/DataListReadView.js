@@ -74,11 +74,13 @@ define( [
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable",
-      "click .icon-minus-sign" : function() {
+      "click .icon-minus-sign" : function(e) {
+        e.preventDefault();
         this.format = "minimized";
         this.render();
       },
-      "click .icon-plus-sign" : function() {
+      "click .icon-plus-sign" : function(e) {
+        e.preventDefault();
         this.format = "leftSide";
         this.render();
       },
