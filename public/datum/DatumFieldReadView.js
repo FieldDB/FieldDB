@@ -61,7 +61,7 @@ define([
         this.$el.children(".choose-field").val(this.model.get("label"));
         
         //localization
-        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
+        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale["locale_Encrypt_if_confidential"].message);
       
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
