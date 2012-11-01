@@ -249,7 +249,7 @@ define( [
         $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
         $(this.el).find(".locale_Hide_Datalist").attr("title", Locale["locale_Hide_Datalist"].message);
         $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
-        $(this.el).find(".locale_Show_fullscreen").attr("title", Locale["locale_Show_fullscreen"].message);
+        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
         
         //localization of data list menu
         $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale["locale_Play_Audio_checked"].message);

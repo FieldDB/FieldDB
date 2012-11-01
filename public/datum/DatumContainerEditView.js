@@ -74,7 +74,7 @@ define([
         this.datumsView.render();
         
         //localization of centerWell view
-        $(this.el).find(".locale_Show_fullscreen").attr("title", Locale["locale_Show_fullscreen"].message);
+        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
         
       } else if (this.format == "fullscreen") {
         // Display the DatumContainerEditView
