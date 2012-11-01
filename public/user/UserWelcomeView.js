@@ -13,6 +13,7 @@ define([
     "datum/Session",
     "datum/Sessions",
     "user/User",
+    "text!_locales/en/messages.json",
     "libs/Utils"
 ], function(
     Backbone, 
@@ -28,7 +29,8 @@ define([
     DatumFields,
     Session,
     Sessions,
-    User
+    User,
+    LocaleData
 ) {
   var UserWelcomeView = Backbone.View.extend(
   /** @lends UserWelcomeView.prototype */
@@ -44,6 +46,11 @@ define([
       Utils.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
+      if(LocaleData){
+          window.Locale = JSON.parse(LocaleData);
+        }else{
+          window.Locale = {};
+        }
       this.model.bind("change", this.render, this);
     },
 
