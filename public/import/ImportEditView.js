@@ -224,6 +224,7 @@ define( [
         this.showSecondStep();
       }
       
+      //localization
       $(this.el).find(".locale_Save_And_Import").html(Locale["locale_Save_And_Import"].message);
       $(this.el).find(".locale_Import").html(Locale["locale_Import"].message);
       $(this.el).find(".locale_percent_completed").html(Locale["locale_percent_completed"].message);
