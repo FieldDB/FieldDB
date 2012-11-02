@@ -120,16 +120,16 @@ define([
       /*
        * Copy the mask, value and shouldBeEncrypted and encrypted from the object if it is not being set.
        */
-      if(!attributes.mask && this.get("mask")){
+      if(attributes.mask == undefined && this.get("mask")){
         attributes.mask = this.get("mask");
       }
-      if(!attributes.value && this.get("value")){
+      if(attributes.value == undefined && this.get("value")){
         attributes.value = this.get("value");
       }
-      if(!attributes.shouldBeEncrypted && this.get("shouldBeEncrypted")){
+      if(attributes.shouldBeEncrypted == undefined && this.get("shouldBeEncrypted")){
         attributes.shouldBeEncrypted = this.get("shouldBeEncrypted");
       }
-      if(!attributes.encrypted && this.get("encrypted")){
+      if(attributes.encrypted == undefined && this.get("encrypted")){
         attributes.encrypted = this.get("encrypted");
       }
       
