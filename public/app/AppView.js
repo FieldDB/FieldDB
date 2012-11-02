@@ -622,6 +622,7 @@ define([
       this.renderReadonlySessionViews("leftSide");
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
+      this.datumsEditView.showMostRecentDatum();
     },
     
     // Display the Corpus Views
