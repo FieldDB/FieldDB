@@ -213,6 +213,24 @@ define([
                     matchIds.push(response.rows[i].value);
                   }
                 }
+              }else{
+                if(window.toldSearchtomakeviews){
+                  Utils.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
+                  return;
+                }
+                /*
+                 * Its possible that the corpus has no search views, create them and then try searching again.
+                 */
+                window.appView.toastUser("Initializing your search functions for the first time." +
+                		" Search in LingSync is pretty powerful, " +
+                		" in fact if you're the power user type you can write your " +
+                		"own data extracting/filtering/visualization queries using " +
+                		"MapReduce <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>find out more...</a>","alert-success","Search:");
+                window.toldSearchtomakeviews = true;
+                var previousquery = queryString;
+                window.app.get("corpus").makeSurePouchHasSearchViews(function(){
+                  window.appView.searchEditView.search(previousquery);
+                });
               }
               if(typeof callback == "function"){
                 //callback with the unique members of the array
