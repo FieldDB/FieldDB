@@ -153,8 +153,6 @@ define([
       "change .datum_state_select" : "updateDatumStates",
       "click .add-comment-datum" : 'insertNewComment',
       
-      "change" : "updatePouch",//TODO this shouldnt be happening?
-      
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "click .save-datum" : "saveButton"
@@ -306,22 +304,12 @@ define([
 
     needsSave : false,
     
-    updatePouch : function() {
-      this.needsSave = true;
-    },
-
-    
     saveButton : function(e){
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
-      if (this.needsSave) {
-          this.saveScreen();
-      }else {
-        window.appView.toastUser("This datum "+this.model.id+"has no unsaved changes","alert-success","Saved!");
-
-      };
+      this.model.saveAndInterConnectInApp();
     },
     
     /**
@@ -503,6 +491,8 @@ define([
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       this.guessGlosses($(e.currentTarget).val());
+      this.needsSave = true;
+
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
