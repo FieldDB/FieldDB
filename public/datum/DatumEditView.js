@@ -209,18 +209,9 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
+        
         var self = this;
         window.setTimeout(function(){
-          $('.datum-field').each(function(index, item) {
-            item.classList.add( $(item).find("label").html() );
-            $(".datum_field_input").each(function(index){
-              this.addEventListener('drop', window.appView.dragUnicodeToField);
-              this.addEventListener('dragover', window.appView.handleDragOver);
-              this.addEventListener('dragleave', function(){
-                $(this).removeClass("over");
-              } );
-            });
-          });
           self.hideRareFields();
         }, 500);
             
