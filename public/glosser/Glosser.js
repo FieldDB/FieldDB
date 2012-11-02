@@ -159,7 +159,7 @@ Glosser.glossFinder = function(morphemesLine){
     }else{
       Glosser.toastedUserToImport ++;
       if(Glosser.toastedUserToImport % 10 == 1 && corpusSize < 30){
-        window.appView.toastUser("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.","alert-info","");
+        window.appView.toastUser("You have roughly "+corpusSize+" datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.","alert-info","AutoGlosser:");
       }
     }
     return "";

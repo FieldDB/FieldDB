@@ -83,6 +83,8 @@ define([
 //      });
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
+//        Utils.debug("Corpus edit view sessions changed. changeViewsOfInternalModels and rendering...");
+//        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
 //      this.model.bind('change:dataLists', function(){
