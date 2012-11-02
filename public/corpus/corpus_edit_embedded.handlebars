@@ -12,6 +12,7 @@
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         <span class ="locale_New_menu"></span>  <span class="caret"></span>
       </button>
+      //create new stuff in same dashboard
       <ul class="dropdown-menu">
         <li class="new-datum"><a href="#" class = "locale_New_Datum"></a></li>
         <li class="new-data-list"><a href="#" class = "locale_New_Data_List"></a></li>
@@ -23,10 +24,11 @@
       <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
         <span class ="locale_Data_menu"></span> <span class="caret"></span>
       </button>
+      //modify URL
       <ul class="dropdown-menu">
         <li><a href="#import" class = "locale_Import_Data"></a></li>
         <li><a href="#corpus/{{pouchname}}/export" class = "locale_Export_Data"></a></li>
-        <li><a href="#" class = "locale_All_Data" id = "show-all-data-e"></a></li>
+        <li><a href="#corpus/{{pouchname}}/alldata" class = "locale_All_Data"></a></li>
       </ul>
     </div>
 	  <!-- /Corpus Menu - Identical for all Corpus Handlebars -->
