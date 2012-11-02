@@ -116,7 +116,7 @@ define([
       window.app.router.showReadonlyDatums(this.format);
     },
     
-    updateDatums : function() {
+    showMostRecentDatum : function() {
       var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
@@ -130,21 +130,26 @@ define([
           }
             
           // Add a single, blank Datum
-          self.prependDatum(new Datum({
-            datumFields : app.get("corpus").get("datumFields").clone(),
-            datumStates : app.get("corpus").get("datumStates").clone(),
-            pouchname : app.get("corpus").get("pouchname"),
-            session : app.get("currentSession")
-          }));
+          self.newDatum();
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
-            for (var i = self.model.length; i < nextNumberOfDatum; i++) {
+            for (var i = 0; i < rows.length; i++) {
+              //If you've filled it up, stop filling.
+              if(self.model.length > nextNumberOfDatum){
+                return;
+              }
+              
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
               if (rows[rows.length - i - 1]) {
-                var d = new Datum();
-                d.set(d.parse(rows[rows.length - i - 1].value));
-                self.model.add(d);
+                var m = rows[rows.length - i - 1];
+                //Only add datum objects to the container
+                if(m.value.jsonType == "Datum"){
+                  var d = new Datum();
+                  d.set(d.parse(m.value));
+                  self.model.add(d);
+                  
+                }
               }
             }
           // If the user has decreased the number of Datum to display in the container

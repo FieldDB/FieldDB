@@ -581,7 +581,6 @@ define([
               
               self.makeSureCorpusHasADataList(function(){
                 self.makeSureCorpusHasASession(function(){
-                  
                   //save the internal models go to the user dashboard to to load the corpus into the dashboard
                   self.save(null, {
                     success : function(model, response) {
@@ -592,12 +591,11 @@ define([
                       alert('New Corpus save error' + e);
                     }
                   });
-                  
 
-                  //end success to create new data list
+                  //end success to create new session
                 },function(e){
                   alert("Failed to create a session. "+e);
-                });//end failure to create new data list
+                });//end failure to create new session
                 //end success to create new data list
               },function(){
                 alert("Failed to create a datalist. "+e);
@@ -705,6 +703,65 @@ define([
           }
         }
       });
+    },
+    /**
+     * If more views are added to corpora (or activity feeds) , add them here
+     * @returns {} an object containing valid map reduce functions
+     */
+    validCouchViews : function(){
+      return {
+        "get_ids/by_date" : {
+          map: function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}
+        },
+        "get_datum_field/get_datum_fields" : {
+          map : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
+        }
+      };
+    },
+    createPouchView: function(view, callback){
+      if(!window.validCouchViews){
+        window.validCouchViews = this.validCouchViews();
+      }
+      var viewparts = view.split("/");
+      if(viewparts.length != 2){
+        console.log("Warning "+view+ " is not a valid view name.");
+        return;
+      }
+      var corpusself = this;
+      this.changePouch(this.get("pouchname"), function() {
+        corpusself.pouch(function(err, db) {
+          var modelwithhardcodedid = {
+              "_id": "_design/"+viewparts[0],
+              "language": "javascript",
+              "views": {
+//                "by_id" : {
+//                      "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                  }
+              }
+           };
+          modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].map.toString()};
+          if(window.validCouchViews[view].reduce){
+            modelwithhardcodedid.views[viewparts[1]].reduce =  window.validCouchViews[view].reduce.toString();
+          }
+
+          console.log("This is what the doc will look like: ", modelwithhardcodedid);
+          db.put(modelwithhardcodedid, function(err, response) {
+            Utils.debug(response);
+            if(err){
+              Utils.debug("The "+view+" view couldn't be created.");
+            }else{
+              
+              Utils.debug("The "+view+" view was created.");
+              if(typeof callback == "function"){
+                callback();
+              }
+              
+              
+            }
+          });
+        });
+      });
+      
     },
     /**
      * Accepts two functions success will be called if successful,
