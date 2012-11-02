@@ -135,7 +135,7 @@ define([
             size : "3",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
+            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc). Leaving it blank can mean grammatical/acceptable, or you can add a new symbol to mean grammatical/acceptable."
           }),
           new DatumField({
             label : "utterance",
@@ -632,11 +632,11 @@ define([
       var dl = new DataList({
         pouchname : this.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
       dl.set({
-        "title" : "Datalist instructions",
+        "title" : "Default Datalist - Empty",
         "dateCreated" : (new Date()).toDateString(),
-        "description" : "This list explains what datalists are and how to make them. " +
-        "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-        "export to LaTeX, or share with collaborators.",
+        "description" : "The app comes with a default datalist which is empty. " +
+        "Once you have data in your corpus, you can create a datalist using Search. Imported data will also show up as a datalist. " +
+        "Datalists can be used to create handouts, export to LaTeX, or share with collaborators.",
         "pouchname" : this.get("pouchname")
       });
       dl.set("dateCreated",JSON.stringify(new Date()));
