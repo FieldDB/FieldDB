@@ -2253,6 +2253,12 @@ var IdbPouch = function(opts, callback) {
       api.get('_design/' + parts[0], function(err, doc) {
         if (err) {
           call(callback, err);
+          return;
+        }
+        //added by gina Nov 2 2012
+        if (!doc){
+          call(callback, err);
+          return;
         }
         new viewQuery({
           map: doc.views[parts[1]].map,

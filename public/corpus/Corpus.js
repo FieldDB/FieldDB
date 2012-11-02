@@ -581,23 +581,26 @@ define([
               
               self.makeSureCorpusHasADataList(function(){
                 self.makeSureCorpusHasASession(function(){
-                  
-                  //save the internal models go to the user dashboard to to load the corpus into the dashboard
-                  self.save(null, {
-                    success : function(model, response) {
-                      window.app.get("authentication").saveAndInterConnectInApp(function(){
-                        window.location.replace("user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
-                      });
-                    },error : function(e) {
-                      alert('New Corpus save error' + e);
-                    }
-                  });
-                  
+                  self.makeSurePouchHasSearchViews(function(){
+                    //save the internal models go to the user dashboard to to load the corpus into the dashboard
+                    self.save(null, {
+                      success : function(model, response) {
+                        window.app.get("authentication").saveAndInterConnectInApp(function(){
+                          window.location.replace("user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
+                        });
+                      },error : function(e) {
+                        alert('New Corpus save error' + e);
+                      }
+                    });
 
-                  //end success to create new data list
+                    //end success to create views
+                  },function(e){
+                    alert("Failed to create a views for map reduce queries on the corpus/pouch. "+e);
+                  });//end failure to create views
+                  //end success to create new session
                 },function(e){
                   alert("Failed to create a session. "+e);
-                });//end failure to create new data list
+                });//end failure to create new session
                 //end success to create new data list
               },function(){
                 alert("Failed to create a datalist. "+e);
@@ -705,6 +708,138 @@ define([
           }
         }
       });
+    },
+    validCouchViews : function(){
+      return {
+        "get_ids/by_date" : function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}},
+        "get_datum_field/get_datum_fields" : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}},
+        "length": 2
+      };
+    },
+    makeSurePouchHasSearchViews : function(suces, fail){
+      if(!suces){
+        suces = function(){
+          Utils.debug("Done checking if the pouch has search views.");
+        }
+      }
+      
+      if(!window.validCouchViews){
+        window.validCouchViews = this.validCouchViews();
+      }
+      
+      var self = this;
+
+      this.changePouch(this.get("pouchname"), function() {
+        self.pouch(function(err, db) {
+          var viewself = "get_ids/by_date";
+          db.query(viewself, {reduce: false}, function(err, response) {
+            if (!err) {
+              Utils.debug("The "+viewself+" view exists.");
+            }else{
+              Utils.debug("The "+viewself+" view doesn't exist.");
+
+              console.log("The first view was missing. Creating all of them");
+
+              /*
+               * add "get_ids/by_date"
+               */
+              var view = "get_ids/by_date";
+              var viewparts = view.split("/");
+              var modelwithhardcodedid = {
+                  "_id": "_design/"+viewparts[0],
+                  "language": "javascript",
+                  "views": {
+//                  "by_id" : {
+//                  "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                  }
+                  }
+              };
+              modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].toString()};
+              console.log("This is what the doc will look like: ", modelwithhardcodedid);
+              db.put(modelwithhardcodedid, function(err, response) {
+                Utils.debug(response);
+                if(err){
+                  Utils.debug("The "+view+" view couldn't be created.");
+                }else{
+                  Utils.debug("The "+view+" view was created.");
+
+                  /*
+                   * then add "get_datum_field/get_datum_fields"
+                   */
+                  view = "get_datum_field/get_datum_fields";
+                  viewparts = view.split("/");
+                  modelwithhardcodedid = {
+                      "_id": "_design/"+viewparts[0],
+                      "language": "javascript",
+                      "views": {
+//                      "by_id" : {
+//                      "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                      }
+                      }
+                  };
+                  modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].toString()};
+                  console.log("This is what the doc will look like: ", modelwithhardcodedid);
+                  db.put(modelwithhardcodedid, function(err, response) {
+                    Utils.debug(response);
+                    if(err){
+                      Utils.debug("The "+view+" view couldn't be created.");
+                    }else{
+
+                      Utils.debug("The "+view+" view was created.");
+                      suces();
+
+
+                    }
+                  });//end "get_datum_field/get_datum_fields"
+                }
+              });// end  "get_ids/by_date"
+            }
+          }); //end checking for the first view
+
+        });
+      });
+
+    },
+    createPouchView: function(view, callback){
+      if(!window.validCouchViews){
+        window.validCouchViews = this.validCouchViews();
+      }
+      var viewparts = view.split("/");
+      if(viewparts.length != 2){
+        console.log("Warning "+view+ " is not a valid view name.");
+        return;
+      }
+      var corpusself = this;
+      this.changePouch(this.get("pouchname"), function() {
+        corpusself.pouch(function(err, db) {
+          var modelwithhardcodedid = {
+              "_id": "_design/"+viewparts[0],
+              "language": "javascript",
+              "views": {
+//                "by_id" : {
+//                      "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                  }
+              }
+           };
+          modelwithhardcodedid.views[viewparts[1]] = JSON.stringify(window.validCouchViews[view]);
+          
+          db.put(modelwithhardcodedid, function(err, response) {
+            Utils.debug(response);
+            if(err){
+              Utils.debug("The "+view+" view couldn't be created.");
+            }else{
+              
+              Utils.debug("The "+view+" view was created.");
+              if(typeof callback == "function"){
+                callback();
+              }
+              
+              
+            }
+          });
+        });
+      });
+      
     },
     /**
      * Accepts two functions success will be called if successful,
