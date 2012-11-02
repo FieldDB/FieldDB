@@ -821,8 +821,8 @@ define([
 //                  }
               }
            };
-          modelwithhardcodedid.views[viewparts[1]] = JSON.stringify(window.validCouchViews[view]);
-          
+          modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].toString()};
+          console.log("This is what the doc will look like: ", modelwithhardcodedid);
           db.put(modelwithhardcodedid, function(err, response) {
             Utils.debug(response);
             if(err){
