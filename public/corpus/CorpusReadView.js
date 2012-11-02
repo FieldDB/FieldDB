@@ -61,8 +61,8 @@ define([
       Utils.debug("CORPUS READ init: " );
       this.changeViewsOfInternalModels();
       
-   // If the model's title changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:title', function(){
+   // If the model's pouchname changes, chances are its a new corpus, re-render its internal models.
+      this.model.bind('change:pouchname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);

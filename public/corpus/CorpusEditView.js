@@ -73,7 +73,7 @@ define([
       this.changeViewsOfInternalModels();
      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:title', function(){
+      this.model.bind('change:pouchname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
