@@ -131,14 +131,7 @@ define([
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
-      
-      //corpus menu buttons under Data
-      "click #show-all-data-e" : function(e){
-         e.preventDefault();
-         var queryString = "";
-         this.datum.searchByQueryString(queryString);
-      },
-      
+
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",

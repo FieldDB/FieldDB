@@ -98,10 +98,7 @@ define([
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
-      "click #show-all-data-r" : function(e){
-    	  e.preventDefault();
-    	 Datum.searchByQueryString();
-      }
+
     },
     
     /**
