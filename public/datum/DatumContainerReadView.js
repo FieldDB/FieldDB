@@ -82,16 +82,28 @@ define([
       $(this.el).find(".locale_Edit_Datum").attr("title", Locale["locale_Edit_Datum"].message);      
     },
     
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
 //      window.app.router.showReadonlyDatums("centreWell");
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
-    resizeFullscreen : function() {
+    resizeFullscreen : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showReadonlyDatums("fullscreen");
     },
     
-    showEditable : function() {
+    showEditable : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showEditableDatums(this.format);
     },
     

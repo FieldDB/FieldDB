@@ -473,7 +473,7 @@ define( [
       }
 //      this.format = "leftSide";
 //      this.render();
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
     resizeFullscreen : function(e){
@@ -540,7 +540,7 @@ define( [
         searchself.format = "search-minimized";
         searchself.render();
         searchself.model.setAsCurrentDataList();
-        window.app.router.showDashboard();
+        window.location.href = "#render/true";
 
       });
     },

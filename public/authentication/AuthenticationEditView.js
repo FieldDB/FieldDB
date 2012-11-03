@@ -201,7 +201,7 @@ define([
           if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
             //do nothing because they have no recent ids
             alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-            window.app.router.showDashboard();
+            window.location.href = "#render/true";
           }else{
             /*
              *  Load their last corpus, session, datalist etc
@@ -239,7 +239,7 @@ define([
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
               alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-              window.app.router.showDashboard();
+              window.location.href = "#render/true";
             }else{
               /*
                *  Load their last corpus, session, datalist etc, 

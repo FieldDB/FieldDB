@@ -133,10 +133,12 @@ define(
               "click #quick-authentication-okay-btn" : function(e) {
                 window.hub.publish("quickAuthenticationClose", "no message");
               },
-              "click .icon-home" : function() {
-                // this.model.router.showDashboard();
-                window.location.href = "#";
-                app.router.showDashboard(); // the above line wasnt working
+              "click .icon-home" : function(e) {
+                if(e){
+                  e.stopPropagation();
+                  e.preventDefault();
+                }   
+                window.location.href = "#render/true";
               },
               "click .save-dashboard" : function() {
                 window.app.saveAndInterConnectInApp();
