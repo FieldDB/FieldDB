@@ -115,7 +115,7 @@ define([
           if (nextNumberOfDatum > self.model.length) {
             for (var i = 0; i < rows.length; i++) {
               //If you've filled it up, stop filling.
-              if(self.model.length > nextNumberOfDatum){
+              if(self.model.length >= nextNumberOfDatum){
                 return;
               }
               
