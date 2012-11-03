@@ -410,7 +410,11 @@ define([
      * placed at the top of the datumsView, pushing off the bottom Datum, if
      * necessary.
      */
-    newDatum : function() {
+    newDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       // Add a new Datum to the top of the Datum stack
       appView.datumsEditView.newDatum();
     },
@@ -419,7 +423,11 @@ define([
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function() {      
+    duplicateDatum : function(e) { 
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       // Add it as a new Datum to the top of the Datum stack
       var d = this.model.clone();
       delete d.attributes.dateEntered;

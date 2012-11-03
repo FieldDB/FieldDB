@@ -301,7 +301,7 @@ define([
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
-                              window.app.router.showDashboard();
+                              window.app.router.renderDashboardOrNot(true);
 
 //                              window.appView.renderReadonlyDashboardViews();
 //                              window.appView.datumsEditView.format = "centerWell";

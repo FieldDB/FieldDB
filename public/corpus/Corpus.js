@@ -225,6 +225,19 @@ define([
       }
       //this.loadPermissions();
       
+//      var couchConnection = this.get("couchConnection");
+//      if(!couchConnection){
+//        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+//        if(!localStorage.getItem("mostRecentCouchConnection")){
+//          alert("Bug, need to take you back to the users page.");
+//        }
+//        this.set("couchConnection", couchConnection);
+//      }
+//      this.pouch = Backbone.sync
+//      .pouch(Utils.androidApp() ? Utils.touchUrl
+//        + couchConnection.pouchname : Utils.pouchUrl
+//        + couchConnection.pouchname);
+      
     },
     loadPermissions: function(){
       if (!this.get("team")){
@@ -326,7 +339,7 @@ define([
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
         window.appView.sessionNewModalView.model = new Session({
           pouchname : self.get("pouchname"),
-          sessionFields : self.get("sessionFields").clone()
+          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.set("comments", new Comments());
         window.appView.sessionNewModalView.render();
@@ -360,7 +373,16 @@ define([
       attributes.comments = [];
       attributes.publicSelfMode = {};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
-
+      //clear out search terms from the new corpus's datum fields
+      for(var x in attributes.datumFields){
+        attributes.datumFields[x].mask = "";
+        attributes.datumFields[x].value = "";
+      }
+      //clear out search terms from the new corpus's session fields
+      for(var x in attributes.sessionFields){
+        attributes.sessionFields[x].mask = "";
+        attributes.sessionFields[x].value = "";
+      }
       window.appView.corpusNewModalView.model = new Corpus();
       //be sure internal models are parsed and built.
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
@@ -373,6 +395,10 @@ define([
     changePouch : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
+      }
+      if(!couchConnection){
+        Utils.debug("Cant change corpus's couch connection");
+        return;
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
@@ -718,7 +744,7 @@ define([
         }
       };
     },
-    createPouchView: function(view, callback){
+    createPouchView: function(view, callbackpouchview){
       if(!window.validCouchViews){
         window.validCouchViews = this.validCouchViews();
       }
@@ -728,7 +754,10 @@ define([
         return;
       }
       var corpusself = this;
-      this.changePouch(this.get("pouchname"), function() {
+      if(!this.get("couchConnection")){
+        return;
+      }
+      this.changePouch(null, function() {
         corpusself.pouch(function(err, db) {
           var modelwithhardcodedid = {
               "_id": "_design/"+viewparts[0],
@@ -752,8 +781,8 @@ define([
             }else{
               
               Utils.debug("The "+view+" view was created.");
-              if(typeof callback == "function"){
-                callback();
+              if(typeof callbackpouchview == "function"){
+                callbackpouchview();
               }
               
               

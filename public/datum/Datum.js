@@ -427,7 +427,7 @@ define([
         dIndex.set("encrypted", "checked");
       });
       //TODO scrub version history to get rid of all unencrypted versions.
-      this.saveAndInterConnectInApp(window.app.router.showDashboard, window.app.router.showDashboard);
+      this.saveAndInterConnectInApp(window.app.router.renderDashboardOrNot, window.app.router.renderDashboardOrNot);
     },
     
     /**
