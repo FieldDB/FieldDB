@@ -37,7 +37,7 @@ define([
   {
     /**
      * @class The UserWelcomeView invites the user to login using their existing
-     *        name to sync their data, or to login as the sample user, sapir
+     *        name to sync their data, or to login as the sample user, lingllama
      * 
      * @extends Backbone.View
      * @constructs
@@ -99,13 +99,13 @@ define([
         window.location.href = Utils.authUrl+"/auth/facebook";
       },
 
-      "click .sync-sapir-data" : function() {
-        console.log("hiding user welcome, syncing sapir");
-        this.syncUser("sapir","phoneme", Utils.authUrl);
+      "click .sync-lingllama-data" : function() {
+        console.log("hiding user welcome, syncing lingllama");
+        this.syncUser("lingllama","phoneme", Utils.authUrl);
 
-//        //This is the old logic which can still be used to load sapir without contacting a server. DO NOT DELETE
+//        //This is the old logic which can still be used to load lingllama without contacting a server. DO NOT DELETE
 //        a = new App();
-//        a.createAppBackboneObjects("sapir-firstcorpus",function() {
+//        a.createAppBackboneObjects("lingllama-firstcorpus",function() {
 //          $('#user-welcome-modal').modal("hide");
 //          window.startApp(a, function() {
 //            window.appView.loadSample();
@@ -150,8 +150,8 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".registerusername").focus();
-        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir").html(Locale["locale_Close_and_login_as_Ed_Sapir"].message);
-        $(this.el).find(".locale_Close_and_login_as_Ed_Sapir_Tooltip").attr("title", Locale["locale_Close_and_login_as_Ed_Sapir_Tooltip"].message);
+        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale["locale_Close_and_login_as_LingLlama"].message);
+        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale["locale_Close_and_login_as_LingLlama_Tooltip"].message);
         $(this.el).find(".locale_Log_In").html(Locale["locale_Log_In"].message);
         $(this.el).find(".locale_Username").html(Locale["locale_Username"].message);
         $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
