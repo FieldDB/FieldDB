@@ -225,6 +225,19 @@ define([
       }
       //this.loadPermissions();
       
+//      var couchConnection = this.get("couchConnection");
+//      if(!couchConnection){
+//        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+//        if(!localStorage.getItem("mostRecentCouchConnection")){
+//          alert("Bug, need to take you back to the users page.");
+//        }
+//        this.set("couchConnection", couchConnection);
+//      }
+//      this.pouch = Backbone.sync
+//      .pouch(Utils.androidApp() ? Utils.touchUrl
+//        + couchConnection.pouchname : Utils.pouchUrl
+//        + couchConnection.pouchname);
+      
     },
     loadPermissions: function(){
       if (!this.get("team")){
@@ -373,6 +386,10 @@ define([
     changePouch : function(couchConnection, callback) {
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
+      }
+      if(!couchConnection){
+        Utils.debug("Cant change corpus's couch connection");
+        return;
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
@@ -718,7 +735,7 @@ define([
         }
       };
     },
-    createPouchView: function(view, callback){
+    createPouchView: function(view, callbackpouchview){
       if(!window.validCouchViews){
         window.validCouchViews = this.validCouchViews();
       }
@@ -728,7 +745,10 @@ define([
         return;
       }
       var corpusself = this;
-      this.changePouch(this.get("pouchname"), function() {
+      if(!this.get("couchConnection")){
+        return;
+      }
+      this.changePouch(null, function() {
         corpusself.pouch(function(err, db) {
           var modelwithhardcodedid = {
               "_id": "_design/"+viewparts[0],
@@ -752,8 +772,8 @@ define([
             }else{
               
               Utils.debug("The "+view+" view was created.");
-              if(typeof callback == "function"){
-                callback();
+              if(typeof callbackpouchview == "function"){
+                callbackpouchview();
               }
               
               

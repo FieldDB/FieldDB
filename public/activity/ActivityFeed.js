@@ -219,6 +219,10 @@ define([
       }else{
         this.set("couchConnection", couchConnection);
       }
+      if(!couchConnection){
+        Utils.debug("Can't change activity feed's couch connection");
+        return;
+      }
       //TODO test this
       if(couchConnection.pouchname.indexOf("activity_feed") == -1){
         alert("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
@@ -302,9 +306,18 @@ define([
     getAllIdsByDate : function(callback) {
       Utils.debug("In the activity feed getAllIdsByDate "+this.get("couchConnection").pouchname);
       var self = this;
+      var couchConnection = null;
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = self.get("couchConnection");
+      }
+      //if the couchConnection is still not set, then try to set it using the corpus's connection and adding activity feed to it.
+      if(!couchConnection){
+        couchConnection = JSON.parse(JSON.stringify(window.app.get("corpus").get("couchConnection")));
+        couchConnection.pouchname =  couchConnection.pouchname+"-activity_feed";
+      }
       
       try{
-        this.changePouch(null, function(){
+        this.changePouch(couchConnection, function(){
           Utils.debug("Changing pouch in activity feed was sucessfull.");
           self.pouch(function(err, db) {
             db.query("get_ids/by_date", {reduce: false}, function(err, response) {
