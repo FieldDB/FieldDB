@@ -109,7 +109,7 @@ define([
           }
             
           // Add a single, blank Datum
-          self.newDatum();
+//          self.newDatum();
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
