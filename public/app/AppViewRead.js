@@ -332,7 +332,11 @@ define([
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
       },
-      "click .icon-home" : function() {
+      "click .icon-home" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
 //        this.model.router.showDashboard();
         window.location.href = "#render/true";
       },
