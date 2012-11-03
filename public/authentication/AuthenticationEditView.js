@@ -268,7 +268,7 @@ define([
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
                 }else{
                   console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-                  window.app.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
+                  window.app.router.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
                 }
               }
             }                    
