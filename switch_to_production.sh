@@ -18,8 +18,8 @@ echo ""
 echo "Tell the Chrome app to contact the production webservices."
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' public/corpus_dashboard.js  > output
 mv output public/corpus_dashboard.js
-sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' public/sapir_dashboard.js  > output
-mv output public/sapir_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' public/lingllama_dashboard.js  > output
+mv output public/lingllama_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' public/user_dashboard.js  > output
 mv output public/user_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' public/welcome_dashboard.js  > output

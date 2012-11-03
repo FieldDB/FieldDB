@@ -1,7 +1,7 @@
 /**
    * Moved analytics out of in-line code to respect new Content Security Policy of extension manifest  version 2
    */
-  var _AnalyticsCode = "UA-32705284-1";
+  var _AnalyticsCode = "UA-35422317-1";
 
   /**
    * Below is a modified version of the Google Analytics asynchronous tracking
