@@ -132,7 +132,7 @@ require([
    * Helper functions
    */
   loadFreshApp = function(){
-//    document.location.href='sapir_corpus.html';
+//    document.location.href='lingllama_corpus.html';
 
     Utils.debug("Loading fresh app");
     // Create a UserWelcomeView modal
@@ -226,7 +226,7 @@ require([
       }
     }
   } else {
-    //new user, let them register or login as themselves or sapir
+    //new user, let them register or login as themselves or lingllama
     loadFreshApp();
 
  }

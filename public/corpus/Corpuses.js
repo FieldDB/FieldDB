@@ -33,7 +33,7 @@ define([
         if (couchConnection.port != null) {
           couchurl = couchurl + ":" + couchConnection.port;
         }
-        couchurl = couchurl +"/"+ couchConnection.pouchname+"/corpus";
+        couchurl = couchurl +couchConnection.path +"/"+ couchConnection.pouchname+"/corpus";
         
         var corpuse = new CorpusMask({
           title : "",

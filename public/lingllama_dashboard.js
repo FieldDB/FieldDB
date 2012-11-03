@@ -218,9 +218,9 @@ require([
   Utils.makePublisher(window.hub);
  
   /*
-   * Loading sapir
+   * Loading lingllama
    */
-  alert("Loading sapir's dashboard TODO, set him up and get his data.");
+  alert("Loading lingllama's dashboard TODO, set him up and get his data.");
   var appjson = localStorage.getItem("mostRecentDashboard");
   appjson = JSON.parse(appjson);
   var pouchname = JSON.parse(localStorage.getItem("mostRecentCouchConnection")).pouchname;
