@@ -152,6 +152,9 @@ define([
                 }
               }
             }
+            if(self.model.length == 0){
+              self.newDatum();
+            }
           // If the user has decreased the number of Datum to display in the container
           } else if (nextNumberOfDatum < self.model.length) {
             // Pop the excess Datum from the bottom of the stack
