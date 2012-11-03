@@ -453,8 +453,8 @@ define([
 //        e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
       }
+//      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      app.router.showDashboard();
       Utils.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },
     
@@ -548,7 +548,7 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     resizeFullscreen : function(e){
       Utils.debug("CORPUS EDIT starts to render fullscreen. " );

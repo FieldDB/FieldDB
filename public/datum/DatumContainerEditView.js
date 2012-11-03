@@ -3,6 +3,7 @@ define([
     "handlebars",
     "datum/Datum",
     "datum/Datums",
+    "datum/DatumFields",
     "datum/DatumEditView",
     "app/UpdatingCollectionView"
 ], function(
@@ -10,6 +11,7 @@ define([
     Handlebars,
     Datum,
     Datums,
+    DatumFields,
     DatumEditView,
     UpdatingCollectionView
 ) {
@@ -103,16 +105,28 @@ define([
       }
     },
     
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
 //      window.app.router.showEditableDatums("centreWell");
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
-    resizeFullscreen : function() {
+    resizeFullscreen : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showEditableDatums("fullscreen");
     },
  
-    showReadonly : function() {
+    showReadonly : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showReadonlyDatums(this.format);
     },
     
@@ -170,8 +184,14 @@ define([
      * Adds a new Datum to the current Corpus in the current Session.
      */
     newDatum : function() {
+      //copy the corpus's datum fields and empty them.
+      var datumfields = app.get("corpus").get("datumFields").toJSON();
+      for(var x in datumfields){
+        datumfields[x].mask = "";
+        datumfields[x].value = "";
+      }
       this.prependDatum(new Datum({
-        datumFields : app.get("corpus").get("datumFields").clone(),
+        datumFields : new DatumFields(datumfields),
         datumStates : app.get("corpus").get("datumStates").clone(),
         pouchname : app.get("corpus").get("pouchname"),
         session : app.get("currentSession")
@@ -223,7 +243,7 @@ define([
       }
         
       // Add the new, blank, Datum
-      this.model.add(datum, {at:0});
+      this.model.unshift(datum);
        
       // If there are too many datum on the screen, remove the bottom one and save it, if necessary
       if (this.model.length > app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum")) {
@@ -232,10 +252,11 @@ define([
         this.model.pop();
       }
       //bring the user to the top of the page where the prepended datum is, or show the dashboard if the datums arent showing.
-      if($("#datums-embedded").attr("style").indexOf("display: none;") > -1){
-        window.app.router.showDashboard();
+      if($("#datums-embedded").attr("style").indexOf("display: none;") > -1 && $("#datum-container-fullscreen").attr("style").indexOf("display: none;") > -1){
+        window.location.href = "#render/true"; 
       }else{
         window.scrollTo(0,0);
+        $($($(this.el).find(".utterance")[0]).find(".datum_field_input")[0]).focus()
       }
     }
   });

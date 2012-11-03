@@ -24,6 +24,7 @@ define([
 
     routes : {
       "corpus/:pouchname/:id"           : "showCorpusDashboard", 
+      "render/:render"                  : "showDashboard",
       ""                                : "showDashboard"
     },
     
