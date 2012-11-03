@@ -43,9 +43,27 @@ define([
       "import"                          : "showImport",
       "corpus/:pouchname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
+      "render/:render"                  : "renderDashboardOrNot",
       ""                                : "showDashboard"
     },
-    
+
+    /**
+     * Does nothing or renders
+     * 
+     * @param {String}
+     *          pouchname (Optional) The name of the corpus to display.
+     */
+    renderDashboardOrNot : function(render) {
+      Utils.debug("In renderDashboardOrNot: " );
+      if(render == undefined || render == true || render == "true"){
+        window.appView.renderReadonlyDashboardViews();
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $("#datums-embedded").show();
+        window.location.href = "#"; 
+      }
+    },
+
     /**
      * Displays the dashboard view of the given pouchname, if one was given. Or
      * the blank dashboard view, otherwise.
@@ -55,18 +73,6 @@ define([
      */
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
-      //Re-render the dashboard, if either the corpus or the datalist read views arent already renderd on the side.
-//      if(window.appView.currentCorpusReadView.format != "leftSide" || window.appView.currentReadDataListView.format != "leftSide" ){
-        window.appView.renderReadonlyDashboardViews();
-//      }
-        //Just render the datums container
-//      window.appView.datumsEditView.format = "centerWell";
-//      window.appView.datumsEditView.render();
-//      window.app.router.hideEverything(); //TODO there is a loss of this somewhere in the app, using the hardcoded varible is a workaround.
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#datums-embedded").show();
-      window.location.href = "#"; //TODO this is to clear the parameters in the url
     },
     /**
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
@@ -427,18 +433,24 @@ define([
         if(!pouchname){
           pouchname = window.app.get("corpus").get("pouchname");
         }
+        if(datumid == "new"){
+          appView.datumsEditView.newDatum();
+          window.location.href = "#render/false"; //TODO this is to clear the parameters in the url
+          $($($(".utterance")[0]).find(".datum_field_input")[0]).focus()
+          return;
+        }
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumid;
         obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               window.appView.datumsEditView.prependDatum(model);
-              window.app.router.showDashboard();
+              window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
             }
           });
         });
       }else{
-        window.app.router.showDashboard();
+        window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
       }
     },
     showImport : function() {

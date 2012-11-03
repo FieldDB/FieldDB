@@ -82,16 +82,28 @@ define([
       $(this.el).find(".locale_Edit_Datum").attr("title", Locale["locale_Edit_Datum"].message);      
     },
     
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
 //      window.app.router.showReadonlyDatums("centreWell");
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
-    resizeFullscreen : function() {
+    resizeFullscreen : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showReadonlyDatums("fullscreen");
     },
     
-    showEditable : function() {
+    showEditable : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showEditableDatums(this.format);
     },
     
@@ -109,13 +121,13 @@ define([
           }
             
           // Add a single, blank Datum
-          self.newDatum();
+//          self.newDatum();
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
             for (var i = 0; i < rows.length; i++) {
               //If you've filled it up, stop filling.
-              if(self.model.length > nextNumberOfDatum){
+              if(self.model.length >= nextNumberOfDatum){
                 return;
               }
               
