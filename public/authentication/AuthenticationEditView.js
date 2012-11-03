@@ -164,7 +164,7 @@ define([
     },
     
     /**
-     * Notes: Sapir's user comes from his time after his PhD and before his
+     * Notes: LingLlama's user comes from his time after his PhD and before his
      * foray into the industry. This is when he started getting some results for
      * "phoneme" around 1910. For a similar use of historical users see Morgan
      * Blamey and Tucker the Technician at blamestella.com
@@ -345,12 +345,12 @@ define([
      */
     showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       var self = this;
-      if( this.model.get("userPrivate").get("username") == "sapir" ){
+      if( this.model.get("userPrivate").get("username") == "lingllama" ){
         $("#quick-authenticate-modal").modal("show");
         $("#quick-authenticate-password").val("phoneme")
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
-//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+//          alert("Authenticating quickly, with just password, (if the user is not lingllama, if its lingllama, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val()
               , window.app.get("authentication").get("userPrivate").get("authUrl") 
@@ -366,7 +366,7 @@ define([
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
-//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+//          alert("Authenticating quickly, with just password, (if the user is not lingllama, if its lingllama, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val() 
               , window.app.get("authentication").get("userPrivate").get("authUrl")
