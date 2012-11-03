@@ -2,7 +2,7 @@ var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
 Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
-  var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port+"/";
+  var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port +couchConnection.path+"/";
 
   $.ajax({
     type : 'GET',

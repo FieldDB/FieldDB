@@ -876,7 +876,7 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
+          couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate to " + couchurl);
@@ -960,7 +960,7 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
+          couchurl = couchurl  +couchConnection.path+"/"+ couchConnection.pouchname;
           
           
           //We can leave the to and from replication async, and make two callbacks. 
@@ -1048,7 +1048,7 @@ define([
       if (couchConnection.port != null) {
         couchurl = couchurl + ":" + couchConnection.port;
       }
-      couchurl = couchurl + "/_session";
+      couchurl = couchurl  + couchConnection.path + "/_session";
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
