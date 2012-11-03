@@ -83,7 +83,7 @@ define([
       if(couchConnection.port != null){
         couchDatabaseUrl = couchDatabaseUrl+":"+couchConnection.port;
       }
-      couchDatabaseUrl = couchDatabaseUrl +"/_utils/database.html?"+ couchConnection.pouchname;
+      couchDatabaseUrl = couchDatabaseUrl + couchConnection.path +"/_utils/database.html?"+ couchConnection.pouchname;
      
       
       window.appView.toastUser("We haven't implemented the 'diff' tool yet" +

@@ -7,12 +7,12 @@
     "message" : "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
     "description" : "The description of the application, displayed in the web store."
   },
-  "locale_Close_and_login_as_Ed_Sapir" : {
-    "message" : "Login as Ed Sapir",
+  "locale_Close_and_login_as_LingLlama" : {
+    "message" : "Login as LingLlama",
     "description" : "button"
   },
-  "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
-    "message" : "You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to LingSync this is a great place to start after watching the videos. ",
+  "locale_Close_and_login_as_LingLlama_Tooltip" : {
+    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to LingSync this is a great place to start after watching the videos. ",
     "description" : "tooltip"
   },
   "locale_Username" : {

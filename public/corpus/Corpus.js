@@ -64,11 +64,11 @@ define([
      * 
      * @property {String} title This is used to refer to the corpus, and
      *           what appears in the url on the main website eg
-     *           http://fieldlinguist.com/Sapir/SampleFieldLinguisticsCorpus
+     *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
      * @property {String} description This is a short description that
      *           appears on the corpus details page
      * @property {String} remote The git url of the remote eg:
-     *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
+     *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *           
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
@@ -876,7 +876,7 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
+          couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate to " + couchurl);
@@ -960,7 +960,7 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
+          couchurl = couchurl  +couchConnection.path+"/"+ couchConnection.pouchname;
           
           
           //We can leave the to and from replication async, and make two callbacks. 
@@ -1048,7 +1048,11 @@ define([
       if (couchConnection.port != null) {
         couchurl = couchurl + ":" + couchConnection.port;
       }
-      couchurl = couchurl + "/_session";
+      if(!couchConnection.path){
+        couchConnection.path = "";
+        this.get("couchConnection").path = "";
+      }
+      couchurl = couchurl  + couchConnection.path + "/_session";
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
