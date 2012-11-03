@@ -339,7 +339,7 @@ define([
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
         window.appView.sessionNewModalView.model = new Session({
           pouchname : self.get("pouchname"),
-          sessionFields : self.get("sessionFields").clone()
+          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.set("comments", new Comments());
         window.appView.sessionNewModalView.render();
@@ -373,7 +373,16 @@ define([
       attributes.comments = [];
       attributes.publicSelfMode = {};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
-
+      //clear out search terms from the new corpus's datum fields
+      for(var x in attributes.datumFields){
+        attributes.datumFields[x].mask = "";
+        attributes.datumFields[x].value = "";
+      }
+      //clear out search terms from the new corpus's session fields
+      for(var x in attributes.sessionFields){
+        attributes.sessionFields[x].mask = "";
+        attributes.sessionFields[x].value = "";
+      }
       window.appView.corpusNewModalView.model = new Corpus();
       //be sure internal models are parsed and built.
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
