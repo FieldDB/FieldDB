@@ -447,3 +447,6 @@ line.link {
   height: 25em !important;
   width: 100% !important;
 }
+#dashboard_loading_spinner{
+	text-align: center;
+}
