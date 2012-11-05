@@ -246,7 +246,16 @@ define([
       });
     },
     showSpinner : function(){
-        $('#dashboard_loading_spinner').html("<img src='images/loader.gif'/>");
+        $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
+        $('.spinner-image').css({
+          'width' : function() {
+            return ($(document).width() * .2 ) + 'px';
+          },
+          'height' : function() {
+            return ($(document).width() * .2 ) + 'px';
+          },
+          'padding-top': '10em'
+        });
     },
     stopSpinner : function(){
       $('#dashboard_loading_spinner').html("");
@@ -258,7 +267,7 @@ define([
        * Hide everything until it has all been loaded
        */
       window.app.router.hideEverything();
-      $("#dashboard-view").show();
+//      $("#dashboard-view").show();
       window.app.showSpinner();
 
       
@@ -279,7 +288,10 @@ define([
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
            
+            $(".spinner-status").html("Opened Corpus...");
+            
             c.setAsCurrentCorpus(function(){
+              $(".spinner-status").html("Loading Corpus...");
               
               var dl = new DataList({
                 "pouchname" : couchConnection.pouchname
@@ -288,12 +300,15 @@ define([
               dl.changePouch(couchConnection.pouchname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
+                    $(".spinner-status").html("Opened DataList...");
+
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                     Utils.debug("Data list fetched successfully", dataListModel);
                     window.appView.addBackboneDoc(dataListModel.id);
                     window.appView.addPouchDoc(dataListModel.id);
                     dl.setAsCurrentDataList(function(){
-                      
+                      $(".spinner-status").html("Loading your most recent DataList, "+dataListModel.get("datumIds").length+" entries...");
+
                       var s = new Session({
                         "pouchname" : couchConnection.pouchname
                       });
@@ -301,12 +316,16 @@ define([
                       s.changePouch(couchConnection.pouchname, function(){
                         s.fetch({
                           success : function(sessionModel) {
+                            $(".spinner-status").html("Opened Elicitation Session...");
+
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                             Utils.debug("Session fetched successfully", sessionModel);
                             window.appView.addBackboneDoc(sessionModel.id);
                             window.appView.addPouchDoc(sessionModel.id);
                             s.setAsCurrentSession(function(){
                               
+                              $(".spinner-status").html("Loading Elicitation Session...");
+
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                               Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
@@ -315,7 +334,9 @@ define([
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
+                              $(".spinner-status").html("Rendering Dashboard...");
                               window.app.router.renderDashboardOrNot(true);
+
                               window.app.stopSpinner();
 
 //                              window.appView.renderReadonlyDashboardViews();
