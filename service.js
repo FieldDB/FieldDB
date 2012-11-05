@@ -39,10 +39,10 @@ app.post('/login', function(req, res) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }
     if (!user) {
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }else{
       returndata.user = user;
       delete returndata.user.serverlogs;
@@ -80,10 +80,10 @@ app.post('/register', function(req, res ) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.registerNewUser"+ util.inspect(err));
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }
     if (!user) {
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }else{
       returndata.user = user;
       returndata.info = [info.message];
@@ -92,6 +92,74 @@ app.post('/register', function(req, res ) {
     res.send(returndata);
 
   });
+});
+
+
+/**
+ * Responds to requests for login, if successful replies with a list of usernames 
+ * as json
+ */
+app.post('/corpusteam', function(req, res) {
+  
+  var returndata = {};
+  authenticationfunctions.fetchCorpusPermissions( req, function(err, users, info) {
+    if (err) {
+      console.log(new Date() + " There was an error in the authenticationfunctions.fetchCorpusPermissions:\n"+ util.inspect(err));
+      returndata.userFriendlyErrors = [info.message];
+    }
+    if (!users) {
+      returndata.userFriendlyErrors = [info.message];
+    }else{
+      returndata.users = users;
+      returndata.info = [info.message];
+//      returndata.userFriendlyErrors = ["Faking an error to test"];
+    }
+    console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
+    console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
+    res.send(returndata);
+  });
+  
+});
+
+/**
+ * Responds to requests for login, if successful replies with the user's details
+ * as json
+ */
+app.post('/addroletouser', function(req, res) {
+  authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
+    var returndata = {};
+    if (err) {
+      console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
+      returndata.userFriendlyErrors = [info.message];
+    }
+    if (!user) {
+      returndata.userFriendlyErrors = [info.message];
+    }else{
+      returndata.roleadded = true;
+      returndata.info = [info.message];
+
+      //Add a role to the user
+      authenticationfunctions.addRoleToUser( req, function(err, roles, info) {
+        if (err) {
+          console.log(new Date() + " There was an error in the authenticationfunctions.addRoleToUser:\n"+ util.inspect(err));
+          returndata.userFriendlyErrors = [info.message];
+        }
+        if (!roles) {
+          returndata.userFriendlyErrors = [info.message];
+        }else{
+          returndata.roleadded = true;
+          returndata.info = [info.message];
+//          returndata.userFriendlyErrors = ["Faking an error"];
+          
+          console.log(new Date() + " Returning roleadded okay:\n");
+        }
+        console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
+        res.send(returndata);
+      });
+      
+    }
+  });
+
 });
 
 
