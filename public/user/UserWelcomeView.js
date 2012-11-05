@@ -231,11 +231,11 @@ define([
           type : 'POST',
           url : Utils.authUrl + "/register",
           data : dataToPost,
-          success : function(data) {
-            if (data.errors != null) {
-              $(".welcome-screen-alerts").html(data.errors.join("<br/>")+" "+Utils.contactUs );
+          success : function(serverResults) {
+            if (serverResults.userFriendlyErrors != null) {
+              $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>")+" "+Utils.contactUs );
               $(".welcome-screen-alerts").show();
-            } else if (data.user) {
+            } else if (serverResults.user) {
               
 
               /*
@@ -246,24 +246,24 @@ define([
 //                a.createAppBackboneObjects(data.user.couchConnection.pouchname, function(){
                 // Faking a login behavior, copy pasted from authentication auth function
                 var auth  = a.get("authentication");
-                auth.saveServerResponseToUser(data, function(){
+                auth.saveServerResponseToUser(serverResults, function(){
                   var c = a.get("corpus");
                   c.set({
-                    "title" : data.user.username + "'s Corpus",
+                    "title" : serverResults.user.username + "'s Corpus",
                     "dataLists" : new DataLists(),
                     "sessions" : new Sessions(),
                     "team" : auth.get("userPublic"),
-                    "couchConnection" : data.user.corpuses[0],
-                    "pouchname" : data.user.corpuses[0].pouchname
+                    "couchConnection" : serverResults.user.corpuses[0],
+                    "pouchname" : serverResults.user.corpuses[0].pouchname
                   });
                   //get the right corpus into the activity feed early, now that the user auth exists, this will work
                   a.set("currentCorpusTeamActivityFeed", new ActivityFeed());
-                  var activityCouchConnection = JSON.parse(JSON.stringify(data.user.corpuses[0]));
-                  activityCouchConnection.pouchname =  data.user.corpuses[0].pouchname+"-activity_feed";
+                  var activityCouchConnection = JSON.parse(JSON.stringify(serverResults.user.corpuses[0]));
+                  activityCouchConnection.pouchname =  serverResults.user.corpuses[0].pouchname+"-activity_feed";
                   a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
                   
                   a.set("currentUserActivityFeed", new ActivityFeed());
-                  a.get("currentUserActivityFeed").changePouch(data.user.activityCouchConnection);
+                  a.get("currentUserActivityFeed").changePouch(serverResults.user.activityCouchConnection);
                 
                   //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
                   c.saveAndInterConnectInApp();
@@ -275,8 +275,8 @@ define([
 //                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
 //                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
 //                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
-//                  s.set("pouchname", data.user.corpuses[0].pouchname);
-//                  s.changePouch(data.user.corpuses[0].pouchname);
+//                  s.set("pouchname", serverResults.user.corpuses[0].pouchname);
+//                  s.changePouch(serverResults.user.corpuses[0].pouchname);
 //                  
 //                  c.get("sessions").add(s);
 //                  
@@ -288,19 +288,19 @@ define([
 //                    "Any new datum you create is added here. " +
 //                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
 //                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
-//                    "pouchname" : data.user.corpuses[0].pouchname
+//                    "pouchname" : serverResults.user.corpuses[0].pouchname
 //                  });
-//                  dl.changePouch(data.user.corpuses[0].pouchname);
+//                  dl.changePouch(serverResults.user.corpuses[0].pouchname);
 //                  c.get("dataLists").add(dl);
 //                  
-//                  c.changePouch(data.user.corpuses[0]);
+//                  c.changePouch(serverResults.user.corpuses[0]);
 //                  a.saveAndInterConnectInApp(function(){
 ////                    alert("save app succeeded");
 //                    //Put this corpus's id into the couchconnection in the user so that we can fetch the private view of the corpus directly
 //                    auth.get("userPrivate").get("corpuses")[0].corpusid = c.id;
 //                    auth.saveAndInterConnectInApp(function(){
-//                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(data.user.corpuses[0]));
-//                      document.location.href='user.html#corpus/'+data.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
+//                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(serverResults.user.corpuses[0]));
+//                      document.location.href='user.html#corpus/'+serverResults.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
 //                    });
 //                  }
 //                  ,function(){
@@ -314,7 +314,7 @@ define([
 //                      /*
 //                       * Use the corpus just created to log the user into that corpus's couch server
 //                       */
-//                      var couchConnection = data.user.corpuses[0];
+//                      var couchConnection = serverResults.user.corpuses[0];
 //                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
 //                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
 //                        Utils.debug("Successfully authenticated user with their corpus server.");
