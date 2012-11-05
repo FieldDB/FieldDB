@@ -39,10 +39,10 @@ app.post('/login', function(req, res) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }
     if (!user) {
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }else{
       returndata.user = user;
       delete returndata.user.serverlogs;
@@ -80,10 +80,10 @@ app.post('/register', function(req, res ) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.registerNewUser"+ util.inspect(err));
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }
     if (!user) {
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }else{
       returndata.user = user;
       returndata.info = [info.message];
@@ -105,14 +105,14 @@ app.post('/corpusteam', function(req, res) {
   authenticationfunctions.fetchCorpusPermissions( req, function(err, users, info) {
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.fetchCorpusPermissions:\n"+ util.inspect(err));
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }
     if (!users) {
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }else{
       returndata.users = users;
       returndata.info = [info.message];
-//      returndata.errors = ["Faking an error to test"];
+//      returndata.userFriendlyErrors = ["Faking an error to test"];
     }
     console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
     console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
@@ -130,10 +130,10 @@ app.post('/addroletouser', function(req, res) {
     var returndata = {};
     if (err) {
       console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }
     if (!user) {
-      returndata.errors = [info.message];
+      returndata.userFriendlyErrors = [info.message];
     }else{
       returndata.roleadded = true;
       returndata.info = [info.message];
@@ -142,14 +142,14 @@ app.post('/addroletouser', function(req, res) {
       authenticationfunctions.addRoleToUser( req, function(err, roles, info) {
         if (err) {
           console.log(new Date() + " There was an error in the authenticationfunctions.addRoleToUser:\n"+ util.inspect(err));
-          returndata.errors = [info.message];
+          returndata.userFriendlyErrors = [info.message];
         }
         if (!roles) {
-          returndata.errors = [info.message];
+          returndata.userFriendlyErrors = [info.message];
         }else{
           returndata.roleadded = true;
           returndata.info = [info.message];
-//          returndata.errors = ["Faking an error"];
+//          returndata.userFriendlyErrors = ["Faking an error"];
           
           console.log(new Date() + " Returning roleadded okay:\n");
         }
