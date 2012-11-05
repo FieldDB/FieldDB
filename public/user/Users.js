@@ -19,12 +19,6 @@ define(
        * 
        */
     model: UserMask,
-    add : function(model, options) {
-     
-      }
-
-   
-
   
   }); 
   
