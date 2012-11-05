@@ -302,9 +302,9 @@ define([
           //Send username to limit the requests so only valid users can get a user list
           dataToPost.username = this.get("userPrivate").get("username");
           dataToPost.password = $("#quick-authenticate-password").val();
-          dataToPost.pouchname = window.app.get("corpus").get("pouchname");
+          dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
           
-          dataToPost.role = role;
+          dataToPost.roles = [role];
           dataToPost.userToAddToRole = userToAddToCorpus.username;
           
           authUrl = this.get("userPrivate").get("authUrl");
