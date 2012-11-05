@@ -96,39 +96,29 @@ app.post('/register', function(req, res ) {
 
 
 /**
- * Responds to requests for login, if sucessful replies with a list of usernames 
+ * Responds to requests for login, if successful replies with a list of usernames 
  * as json
  */
 app.post('/corpusteam', function(req, res) {
   
-  //TODO get and extract user names https://127.0.0.1:6984/_users/_design/users/_view/user_roles
   var returndata = {};
-  returndata.users = {
-    "readers" : [ {
-      "username" : "lingllama"
-    }, {
-      "username" : "bob"
-    }, {
-      "username" : "fred"
-    } ],
-    "writers" : [ {
-      "username" : "lingllama"
-    }, {
-      "username" : "bob"
-    } ],
-    "admins" : [ {
-      "username" : "bob"
-    } ],
-    "notonteam" : [ {
-      "username" : "phil"
-    }, {
-      "username" : "testingnoalldata"
-    }, {
-      "username" : "tom"
-    } ]
-  };
-  console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
-  res.send(returndata);
+  authenticationfunctions.fetchCorpusPermissions( req, function(err, users, info) {
+    if (err) {
+      console.log(new Date() + " There was an error in the authenticationfunctions.fetchCorpusPermissions:\n"+ util.inspect(err));
+      returndata.errors = [info.message];
+    }
+    if (!users) {
+      returndata.errors = [info.message];
+    }else{
+      returndata.users = users;
+      returndata.info = [info.message];
+//      returndata.errors = ["Faking an error to test"];
+    }
+    console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
+    console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
+    res.send(returndata);
+  });
+  
 });
 
 /**

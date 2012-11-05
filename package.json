@@ -8,5 +8,6 @@
     ,"nano": "latest"
     ,"nodemailer" : "latest"
     ,"cradle": "latest"
+    ,"underscore":"latest"
   }
 }
