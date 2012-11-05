@@ -1118,30 +1118,30 @@ define([
         type : 'POST',
         url : couchurl ,
         data : corpusloginparams,
-        success : function(data) {
+        success : function(serverResults) {
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
           }
           if (typeof succescallback == "function") {
-            succescallback(data);
+            succescallback(serverResults);
           }
         },
-        error : function(data){
+        error : function(serverResults){
           window.setTimeout(function(){
             //try one more time 5 seconds later 
             $.ajax({
               type : 'POST',
               url : couchurl ,
               data : corpusloginparams,
-              success : function(data) {
+              success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
                 }
                 if (typeof succescallback == "function") {
-                  succescallback(data);
+                  succescallback(serverResults);
                 }
               },
-              error : function(data){
+              error : function(serverResults){
                 if(window.appView){
                   window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
                       "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
@@ -1152,7 +1152,7 @@ define([
                 if (typeof failurecallback == "function") {
                   failurecallback("I couldn't log you into your corpus.");
                 }
-                Utils.debug(data);
+                Utils.debug(serverResults);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
             });
