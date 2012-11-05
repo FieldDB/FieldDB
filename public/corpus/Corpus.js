@@ -255,12 +255,10 @@ define([
       window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users){
         var typeaheadusers = _.pluck(users.notonteam,"username") || [];
         typeaheadusers = JSON.stringify(typeaheadusers);
-        var potentialusers = users.notonteam || [];
+        var potentialusers = users.allusers || [];
         corpusself.permissions = new Permissions();
+        
         var admins = new Users();
-        if(corpusself.get("team")){
-          admins.models.push(corpusself.get("team"));
-        }
         corpusself.permissions.add(new Permission({
           users : admins,
           role : "admin",
@@ -269,22 +267,7 @@ define([
           pouchname: corpusself.get("pouchname")
         }));
         
-        var readers = new Users();
-        if(corpusself.get("team")){
-          readers.models.push(corpusself.get("team"));
-        }
-        corpusself.permissions.add(new Permission({
-          users: readers,
-          role: "reader",
-          typeaheadusers : typeaheadusers,
-          potentialusers : potentialusers,
-          pouchname: corpusself.get("pouchname")
-        }));
-        
         var writers = new Users();
-        if(corpusself.get("team")){
-          writers.models.push(corpusself.get("team"));
-        }
         corpusself.permissions.add(new Permission({
           users: writers, 
           role: "writer",
@@ -293,6 +276,14 @@ define([
           pouchname: corpusself.get("pouchname")
         }));
         
+        var readers = new Users();
+        corpusself.permissions.add(new Permission({
+          users: readers,
+          role: "reader",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
         
         if(users.admins && users.admins.length > 0){
           for ( var u in users.admins) {

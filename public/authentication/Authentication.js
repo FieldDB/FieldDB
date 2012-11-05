@@ -104,7 +104,7 @@ define([
           }
         },//end successful login
         error: function(e){
-          Utils.debug("Ajax failed, user might be offline.", e);
+          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
           if(window.appView){
             window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
           }
@@ -245,7 +245,7 @@ define([
       if(this.get("userPrivate") != undefined){
         //Send username to limit the requests so only valid users can get a user list
         dataToPost.username = this.get("userPrivate").get("username");
-        dataToPost.pouchname = window.app.get("corpus").get("pouchname");
+        dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
         authUrl = this.get("userPrivate").get("authUrl");
       }else{
         return;
@@ -275,10 +275,7 @@ define([
           }
         },//end successful fetch
         error: function(e){
-          Utils.debug("Ajax failed, user might be offline.", e);
-          if(window.appView){
-            window.appView.toastUser("There was an error in contacting the authentication server to get the list of users on your corpus team." + Utils.contactUs, "alert-danger","Connection errors:");
-          }
+          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
 
           if (typeof failcallback == "function") {
             failcallback("There was an error in contacting the authentication server to get the list of users on your corpus team. Maybe you're offline?");
@@ -329,10 +326,7 @@ define([
             }
           },//end successful fetch
           error: function(e){
-            Utils.debug("Ajax failed, user might be offline.", e);
-            if(window.appView){
-              window.appView.toastUser("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team." + Utils.contactUs, "alert-danger","Connection errors:");
-            }
+            Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
 
             if (typeof failcallback == "function") {
               failcallback("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team. Maybe you're offline?");
