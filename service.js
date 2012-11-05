@@ -1,7 +1,7 @@
 var https = require('https')
   , express = require('express')
   , authenticationfunctions = require('./lib/userauthentication.js')
-  , node_config = require("./lib/nodeconfig_devserver")
+  , node_config = require("./lib/nodeconfig_local")
   , fs = require('fs')
   , util = require('util');
 
@@ -92,6 +92,84 @@ app.post('/register', function(req, res ) {
     res.send(returndata);
 
   });
+});
+
+
+/**
+ * Responds to requests for login, if sucessful replies with a list of usernames 
+ * as json
+ */
+app.post('/corpusteam', function(req, res) {
+  
+  //TODO get and extract user names https://127.0.0.1:6984/_users/_design/users/_view/user_roles
+  var returndata = {};
+  returndata.users = {
+    "readers" : [ {
+      "username" : "lingllama"
+    }, {
+      "username" : "bob"
+    }, {
+      "username" : "fred"
+    } ],
+    "writers" : [ {
+      "username" : "lingllama"
+    }, {
+      "username" : "bob"
+    } ],
+    "admins" : [ {
+      "username" : "bob"
+    } ],
+    "notonteam" : [ {
+      "username" : "phil"
+    }, {
+      "username" : "testingnoalldata"
+    }, {
+      "username" : "tom"
+    } ]
+  };
+  console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
+  res.send(returndata);
+});
+
+/**
+ * Responds to requests for login, if successful replies with the user's details
+ * as json
+ */
+app.post('/addroletouser', function(req, res) {
+  authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
+    var returndata = {};
+    if (err) {
+      console.log(new Date() + " There was an error in the authenticationfunctions.authenticateUser:\n"+ util.inspect(err));
+      returndata.errors = [info.message];
+    }
+    if (!user) {
+      returndata.errors = [info.message];
+    }else{
+      returndata.roleadded = true;
+      returndata.info = [info.message];
+
+      //Add a role to the user
+      authenticationfunctions.addRoleToUser( req, function(err, roles, info) {
+        if (err) {
+          console.log(new Date() + " There was an error in the authenticationfunctions.addRoleToUser:\n"+ util.inspect(err));
+          returndata.errors = [info.message];
+        }
+        if (!roles) {
+          returndata.errors = [info.message];
+        }else{
+          returndata.roleadded = true;
+          returndata.info = [info.message];
+//          returndata.errors = ["Faking an error"];
+          
+          console.log(new Date() + " Returning roleadded okay:\n");
+        }
+        console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
+        res.send(returndata);
+      });
+      
+    }
+  });
+
 });
 
 
