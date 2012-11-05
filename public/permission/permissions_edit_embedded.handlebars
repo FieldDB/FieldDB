@@ -5,17 +5,18 @@
 	</h4>
 	<ul>
 		{{#each users}}
-		<li>{{username}}</li> {{/each}}
+		<li class="breadcrumb  {{status}}">  <img class="gravatar-small" src="{{gravatar}}"/>
+		{{username}} </li> {{/each}}
 	</ul>
 </div>
 
 <div class="span6">
 	<label class="locale_Modify_Username_TODO ">Modify Username:</label> <input type="text"
 		class="  choose-add-permission-username" data-provide="typeahead"
-		data-items="4" data-source="{{friends}}">
+		data-items="4" data-source='{{typeaheadusers}}'>
 	<button class="btn btn-primary  add-user-to-permission-role"
 		value="Add">Add</button>
-	<button class="btn btn-primary  delete-user-permission-role"
-		value="Add">Delete</button>
+	<!-- <button class="btn btn-primary  delete-user-permission-role"
+		value="Add">Delete</button> -->
 </div>
 

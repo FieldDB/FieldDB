@@ -114,7 +114,26 @@ define([
           this.$el.find(".comment-new-text").val("");
           
       },
+      "click .reload-corpus-team-permissions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+        var corpusviewself = this;
+        this.model.loadPermissions(function(){
+          corpusviewself.permissionsView = new UpdatingCollectionView({
+            collection : corpusviewself.model.permissions,
+            childViewConstructor : PermissionEditView,
+            childViewTagName     : 'li',
+            childViewClass       : "breadcrumb row span12"
+          });
+          
+          corpusviewself.permissionsView.el = corpusviewself.$('.permissions-updating-collection');
+          corpusviewself.permissionsView.render();
+        });
+        
 
+      },
+      
       //Add button inserts new Datum State
       "click .add-datum-state" : 'insertNewDatumState',
       
@@ -134,6 +153,7 @@ define([
       "blur .corpus-description-input" : "updateDescription",
       "blur .public-or-private" : "updatePublicOrPrivate",
       "click .save-corpus" : "updatePouch",
+      
     },
 
     /**
@@ -191,8 +211,8 @@ define([
          this.sessionsView.render();
          
          // Display the PermissionsView
-         this.permissionsView.el = this.$('.permissions-updating-collection');
-         this.permissionsView.render();
+//         this.permissionsView.el = this.$('.permissions-updating-collection');
+//         this.permissionsView.render();
          
           // Display the DatumFieldsView
           this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -253,8 +273,8 @@ define([
         this.sessionsView.render();
         
         // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -369,14 +389,15 @@ define([
         childViewFormat      : "link"
       });
       
-      this.model.loadPermissions();
+//    this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
-      this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.permissions,
-        childViewConstructor : PermissionEditView,
-        childViewTagName     : 'li',
-        childViewClass       : "breadcrumb row span12"
-      });
+//      this.permissionsView = new UpdatingCollectionView({
+//        collection : this.model.permissions,
+//        childViewConstructor : PermissionEditView,
+//        childViewTagName     : 'li',
+//        childViewClass       : "breadcrumb row span12"
+//      });
+      
       
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
