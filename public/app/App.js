@@ -245,9 +245,23 @@ define([
         });
       });
     },
-    
+    showSpinner : function(){
+        $('#dashboard_loading_spinner').html("<img src='images/loader.gif'/>");
+    },
+    stopSpinner : function(){
+      $('#dashboard_loading_spinner').html("");
+    },
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function(couchConnection, appids, callback) {
       Utils.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+      
+      /*
+       * Hide everything until it has all been loaded
+       */
+      window.app.router.hideEverything();
+      $("#dashboard-view").show();
+      window.app.showSpinner();
+
+      
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("corpus").get("couchConnection");
       }
@@ -302,6 +316,7 @@ define([
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
                               window.app.router.renderDashboardOrNot(true);
+                              window.app.stopSpinner();
 
 //                              window.appView.renderReadonlyDashboardViews();
 //                              window.appView.datumsEditView.format = "centerWell";

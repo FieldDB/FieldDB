@@ -91,14 +91,34 @@ define([
         this.model.insertNewComment(commentstring);
         this.$el.find(".comment-new-text").val("");
         
-      },      
+      },   
+      "click .reload-corpus-team-permissions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+        var corpusviewself = this;
+        this.model.loadPermissions(function(){
+          corpusviewself.permissionsView = new UpdatingCollectionView({
+            collection : corpusviewself.model.permissions,
+            childViewConstructor : PermissionReadView,
+            childViewTagName     : 'li',
+            childViewClass       : "breadcrumb row span12"
+          });
+          
+          corpusviewself.permissionsView.el = corpusviewself.$('.permissions-updating-collection');
+          corpusviewself.permissionsView.render();
+        });
+        
+      },
+      
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
       "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
-      "click .new-corpus" : "newCorpus",
+      "click .new-corpus" : "newCorpus"
+     
     },
     
     /**
@@ -191,9 +211,9 @@ define([
         this.sessionsView.el = this.$('.sessions-updating-collection'); //TODO do not use such ambiguous class names, compare this with datum_field_settings below.  there is a highlyily hood that the sesson module will be using the same class name and will overwrite your renders.
         this.sessionsView.render();
         
-        // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();        
+//        // Display the PermissionsView
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();        
         
         try{
           Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
@@ -243,8 +263,8 @@ define([
         this.sessionsView.render();
         
         // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();
 
         //Localize for all embedded view
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
@@ -335,14 +355,14 @@ define([
         childViewFormat      : "link"
       });
 
-      this.model.loadPermissions();
+//      this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
-      this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.permissions,
-        childViewConstructor : PermissionReadView,
-        childViewTagName     : 'li',
-        childViewClass       : "breadcrumb"
-      });
+//      this.permissionsView = new UpdatingCollectionView({
+//        collection : this.model.permissions,
+//        childViewConstructor : PermissionReadView,
+//        childViewTagName     : 'li',
+//        childViewClass       : "breadcrumb"
+//      });
       
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({

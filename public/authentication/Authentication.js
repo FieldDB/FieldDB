@@ -104,7 +104,7 @@ define([
           }
         },//end successful login
         error: function(e){
-          Utils.debug("Ajax failed, user might be offline.", e);
+          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
           if(window.appView){
             window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
           }
@@ -238,6 +238,109 @@ define([
           callback();
         }
       }
+    },
+    fetchListOfUsersGroupedByPermissions : function(successcallback){
+      var dataToPost = {};
+      var authUrl = "";
+      if(this.get("userPrivate") != undefined){
+        //Send username to limit the requests so only valid users can get a user list
+        dataToPost.username = this.get("userPrivate").get("username");
+        dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
+        authUrl = this.get("userPrivate").get("authUrl");
+      }else{
+        return;
+      }
+      var self= this;
+      $.ajax({
+        type : 'POST',
+        url : authUrl + "/corpusteam",
+        data : dataToPost,
+        success : function(data) {
+          if (data.errors != null) {
+            try{
+              window.appView.toastUser(data.errors.join("<br/>") 
+                  , "alert-warning","Error connecting to populate corpus permissions:");
+            }catch(e){
+              Utils.debug(e);
+            }
+            if (typeof failcallback == "function") {
+              failcallback(data.errors.join("<br/>"));
+            }
+          } else if (data.users != null) {
+            if (typeof successcallback == "function") {
+              data.users.timestamp = Date.now();
+              localStorage.setItem(dataToPost.pouchname+"Permissions", JSON.stringify(data.users));
+              successcallback(data.users); 
+            }
+          }
+        },//end successful fetch
+        error: function(e){
+          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
+
+          if (typeof failcallback == "function") {
+            failcallback("There was an error in contacting the authentication server to get the list of users on your corpus team. Maybe you're offline?");
+          }
+        },
+        dataType : ""
+      }); 
+    },
+    addCorpusRoleToUser : function(role, userToAddToCorpus, successcallback, failcallback){
+      var self = this;
+      $("#quick-authenticate-modal").modal("show");
+      if( this.get("userPrivate").get("username") == "lingllama" ){
+        $("#quick-authenticate-password").val("phoneme");
+      }
+      window.hub.subscribe("quickAuthenticationClose",function(){
+       
+        //prepare data and send it
+        var dataToPost = {};
+        var authUrl = "";
+        if(this.get("userPrivate") != undefined){
+          //Send username to limit the requests so only valid users can get a user list
+          dataToPost.username = this.get("userPrivate").get("username");
+          dataToPost.password = $("#quick-authenticate-password").val();
+          dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
+          
+          dataToPost.roles = [role];
+          dataToPost.userToAddToRole = userToAddToCorpus.username;
+          
+          authUrl = this.get("userPrivate").get("authUrl");
+        }else{
+          return;
+        }
+        $.ajax({
+          type : 'POST',
+          url : authUrl + "/addroletouser",
+          data : dataToPost,
+          success : function(data) {
+            if (data.errors != null) {
+              Utils.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
+              if (typeof failcallback == "function") {
+                failcallback(data.errors.join("<br/>"));
+              }
+            } else if (data.roleadded != null) {
+              Utils.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
+              if (typeof successcallback == "function") {
+                successcallback(userToAddToCorpus); 
+              }
+            }
+          },//end successful fetch
+          error: function(e){
+            Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+
+            if (typeof failcallback == "function") {
+              failcallback("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team. Maybe you're offline?");
+            }
+          },
+          dataType : ""
+        }); 
+        //end send call
+        
+        //Close the modal
+        $("#quick-authenticate-modal").modal("hide");
+        $("#quick-authenticate-password").val("");
+        window.hub.unsubscribe("quickAuthenticationClose", null, this); 
+      }, self);
     }
     
   });
