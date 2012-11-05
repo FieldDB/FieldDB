@@ -223,7 +223,7 @@ define([
       if (!this.get("sessions")) {
         this.set("sessions", new Sessions());
       }
-      //this.loadPermissions();
+//      this.loadPermissions();
       
 //      var couchConnection = this.get("couchConnection");
 //      if(!couchConnection){
@@ -239,7 +239,7 @@ define([
 //        + couchConnection.pouchname);
       
     },
-    loadPermissions: function(){
+    loadPermissions: function(doneLoadingPermissions){
       if (!this.get("team")){
         //If app is completed loaded use the user, otherwise put a blank user
         if(window.appView){
@@ -249,28 +249,85 @@ define([
 //          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
         }
       }
-      this.permissions = new Permissions();
-      var admins = new Users();
-      if(this.get("team")){
-        admins.models.push(this.get("team"));
-      }
-      this.permissions.add(new Permission({
-        users: admins,
-        role: "admin",
-        pouchname: this.get("pouchname")
-      }));
       
-      this.permissions.add(new Permission({
-        users: new Users(),
-        role: "reader",
-        pouchname: this.get("pouchname")
-      }));
-      this.permissions.add(new Permission({
-        users: new Users(), //"fielddbpublicuser"
-        role: "writer",
-        pouchname: this.get("pouchname")
-      }));
-      //TODO load the permissions in from the server.
+      var corpusself = this;
+      // load the permissions in from the server.
+      window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users){
+        var typeaheadusers = _.pluck(users.notonteam,"username") || [];
+        typeaheadusers = JSON.stringify(typeaheadusers);
+        var potentialusers = users.allusers || [];
+        corpusself.permissions = new Permissions();
+        
+        var admins = new Users();
+        corpusself.permissions.add(new Permission({
+          users : admins,
+          role : "admin",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
+        
+        var writers = new Users();
+        corpusself.permissions.add(new Permission({
+          users: writers, 
+          role: "writer",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
+        
+        var readers = new Users();
+        corpusself.permissions.add(new Permission({
+          users: readers,
+          role: "reader",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
+        
+        if(users.admins && users.admins.length > 0){
+          for ( var u in users.admins) {
+            if(!users.admins[u].username){
+              continue;
+            }
+            var user = {"username" : users.admins[u].username};
+            if(users.admins[u].gravatar){
+              user.gravatar = users.admins[u].gravatar;
+            }
+            admins.models.push(new UserMask(user));
+          }
+        }
+        if(users.writers && users.writers.length > 0){
+          for ( var u in users.writers) {
+            if(!users.writers[u].username){
+              continue;
+            }
+            var user = {"username" : users.writers[u].username};
+            if(users.writers[u].gravatar){
+              user.gravatar = users.writers[u].gravatar;
+            }
+            writers.models.push(new UserMask(user));
+          }
+        }
+        if(users.readers && users.readers.length > 0){
+          for ( var u in users.readers) {
+            if(!users.readers[u].username){
+              continue;
+            }
+            var user = {"username" : users.readers[u].username};
+            if(users.readers[u].gravatar){
+              user.gravatar = users.readers[u].gravatar;
+            }
+            readers.models.push(new UserMask(user));
+          }
+        }
+        //Set up the typeahead for the permissions edit
+        
+        if(typeof doneLoadingPermissions == "function"){
+          doneLoadingPermissions();
+        }
+      });
+      
     },
     
     defaults : {
@@ -1028,6 +1085,7 @@ define([
         
       });
     },
+    
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
@@ -1060,30 +1118,30 @@ define([
         type : 'POST',
         url : couchurl ,
         data : corpusloginparams,
-        success : function(data) {
+        success : function(serverResults) {
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
           }
           if (typeof succescallback == "function") {
-            succescallback(data);
+            succescallback(serverResults);
           }
         },
-        error : function(data){
+        error : function(serverResults){
           window.setTimeout(function(){
             //try one more time 5 seconds later 
             $.ajax({
               type : 'POST',
               url : couchurl ,
               data : corpusloginparams,
-              success : function(data) {
+              success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
                 }
                 if (typeof succescallback == "function") {
-                  succescallback(data);
+                  succescallback(serverResults);
                 }
               },
-              error : function(data){
+              error : function(serverResults){
                 if(window.appView){
                   window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
                       "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
@@ -1094,7 +1152,7 @@ define([
                 if (typeof failurecallback == "function") {
                   failurecallback("I couldn't log you into your corpus.");
                 }
-                Utils.debug(data);
+                Utils.debug(serverResults);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
             });
