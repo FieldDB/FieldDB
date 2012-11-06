@@ -249,10 +249,10 @@ define([
         $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
         $('.spinner-image').css({
           'width' : function() {
-            return ($(document).width() * .2 ) + 'px';
+            return ($(document).width() * .1 ) + 'px';
           },
           'height' : function() {
-            return ($(document).width() * .2 ) + 'px';
+            return ($(document).width() * .1 ) + 'px';
           },
           'padding-top': '10em'
         });
