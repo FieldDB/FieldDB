@@ -297,7 +297,7 @@ define([
         var authUrl = "";
         if(this.get("userPrivate") != undefined){
           //Send username to limit the requests so only valid users can get a user list
-          dataToPost.username = "testingnoalldata";//this.get("userPrivate").get("username");
+          dataToPost.username = this.get("userPrivate").get("username");
           dataToPost.password = $("#quick-authenticate-password").val();
           dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
           
