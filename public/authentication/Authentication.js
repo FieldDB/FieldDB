@@ -246,6 +246,10 @@ define([
         //Send username to limit the requests so only valid users can get a user list
         dataToPost.username = this.get("userPrivate").get("username");
         dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
+        if(!dataToPost.couchConnection.path){
+          dataToPost.couchConnection.path ="";
+          window.app.get("corpus").get("couchConnection").path = "";
+        }
         authUrl = this.get("userPrivate").get("authUrl");
       }else{
         return;
@@ -300,7 +304,10 @@ define([
           dataToPost.username = this.get("userPrivate").get("username");
           dataToPost.password = $("#quick-authenticate-password").val();
           dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
-          
+          if(!dataToPost.couchConnection.path){
+            dataToPost.couchConnection.path ="";
+            window.app.get("corpus").get("couchConnection").path = "";
+          }
           dataToPost.roles = [role];
           dataToPost.userToAddToRole = userToAddToCorpus.username;
           
