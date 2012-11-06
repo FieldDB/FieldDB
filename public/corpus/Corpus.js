@@ -529,6 +529,7 @@ define([
 //            }
             //save the corpus mask too
             var publicSelfMode = model.get("publicSelf");
+            publicSelfMode.set("corpusId", model.id);
             if(publicSelfMode.changePouch){
               publicSelfMode.changePouch( model.get("couchConnection"), function(){
                 publicSelfMode.saveAndInterConnectInApp();
