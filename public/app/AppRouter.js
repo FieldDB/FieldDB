@@ -2,7 +2,6 @@ define([
     "backbone",
     "datum/Datum",
     "data_list/DataList",
-    "data_list/DataListEditView",
     "datum/Session",
     "datum/SessionEditView",
     "user/UserMask",
@@ -11,7 +10,6 @@ define([
     Backbone,
     Datum,
     DataList,
-    DataListEditView,
     Session,
     SessionEditView,
     UserMask
