@@ -117,8 +117,8 @@ define([
       "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
-      "click .new-corpus" : "newCorpus"
-     
+      "click .new-corpus" : "newCorpus",
+
     },
     
     /**
@@ -291,6 +291,7 @@ define([
       $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
       $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
       $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
+      $(this.el).find(".locale_All_Data").html(Locale["locale_All_Data"].message);
       
       //Localize corpus read only view
       $(this.el).find(".locale_Edit_corpus").attr("title", Locale["locale_Edit_corpus"].message);

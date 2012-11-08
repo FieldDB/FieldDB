@@ -147,7 +147,7 @@ define([
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
-      
+
       //text areas in the edit view
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
@@ -341,6 +341,7 @@ define([
         $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
         $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
         $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
+        $(this.el).find(".locale_All_Data").html(Locale["locale_All_Data"].message);
         $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
       }else{
         //Localize the new corpus menu
