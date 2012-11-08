@@ -16,6 +16,7 @@ define([
     "datum/Session",
     "datum/Sessions",
     "datum/SessionReadView",
+    "datum/Datum",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -36,6 +37,7 @@ define([
     Session,
     Sessions,
     SessionReadView,
+    Datum,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -117,14 +119,18 @@ define([
       "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
-      "click .new-corpus" : "newCorpus"
-     
+      "click .new-corpus" : "newCorpus",
+
     },
     
     /**
      * The underlying model of the CorpusReadView is a Corpus.
      */    
-    model : Corpus,
+    model :{
+    	datum : Datum,
+    	corpus : Corpus
+       },
+
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
@@ -291,6 +297,7 @@ define([
       $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
       $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
       $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
+      $(this.el).find(".locale_All_Data").html(Locale["locale_All_Data"].message);
       
       //Localize corpus read only view
       $(this.el).find(".locale_Edit_corpus").attr("title", Locale["locale_Edit_corpus"].message);
