@@ -283,7 +283,15 @@ define([
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
-      if(dataListid &&  dataListid != app.get("currentDataList").id ){
+      if(dataListid == app.get("currentDataList").id || ! dataListid ){
+    	  if($("#data-list-fullscreen-header").html() == ""){
+    	        window.appView.renderReadonlyDataListViews("fullscreen");
+    	      }
+    	      this.hideEverything();
+    	      $("#data-list-fullscreen").show();    
+    	      window.scrollTo(0,0);
+    	      return;
+      }else{
         if(!pouchname){
           pouchname = window.app.get("corpus").get("pouchname");
         }
@@ -362,12 +370,7 @@ define([
           }
         }
       }
-      if($("#data-list-fullscreen-header").html() == ""){
-        window.appView.renderReadonlyDataListViews("fullscreen");
-      }
-      this.hideEverything();
-      $("#data-list-fullscreen").show();    
-      window.scrollTo(0,0);
+     //TODO test other cases where datalist id needs to be changed
 
     },
     
@@ -437,15 +440,23 @@ define([
      * TODO: try saving it, setting it as current datalist and rendering that fullscreen
      */
     showAllData : function(pouchname) {
-        this.hideEverything();
-        $("#dashboard-view").show();
-        window.appView.searchEditView.search("");
-        window.appView.searchEditView.searchDataListView.model.set("title", "All Data");
-        window.appView.searchEditView.searchDataListView.render();
-        window.appView.currentEditDataListView.saveSearchDataList();
-        //Still remaining: set it as current DataList and call showFullScreenDatalist()
-        //(this.DataList).setAsCurrentDataList();
-        //this.showFullScreenDatalist(DataList,pouchname);
+//        this.hideEverything();
+//        $("#dashboard-view").show();
+    	window.app.showSpinner();
+        $(".spinner-status").html("Searching all data...");
+        window.appView.searchEditView.search("", function(){
+            window.appView.searchEditView.searchDataListView.model.set("title", "All Data as of " + new Date());
+//            window.appView.searchEditView.searchDataListView.render();
+            $(".spinner-status").html("Opening all data...");
+            window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
+                $(".spinner-status").html("Loading all data...");
+            	window.appView.currentReadDataListView.format = "fullscreen";
+            	window.appView.currentReadDataListView.render();
+            	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
+            	window.app.stopSpinner();
+            });
+        });
+        
       },
 
     showEmbeddedDatum : function(pouchname, datumid){

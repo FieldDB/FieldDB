@@ -16,7 +16,6 @@ define([
     "datum/Session",
     "datum/Sessions",
     "datum/SessionReadView",
-    "datum/Datum",
     "app/UpdatingCollectionView",
     "libs/Utils"
 ], function(
@@ -37,7 +36,6 @@ define([
     Session,
     Sessions,
     SessionReadView,
-    Datum,
     UpdatingCollectionView
 ) {
   var CorpusReadView = Backbone.View.extend(
@@ -126,11 +124,7 @@ define([
     /**
      * The underlying model of the CorpusReadView is a Corpus.
      */    
-    model :{
-    	datum : Datum,
-    	corpus : Corpus
-       },
-
+    model : Corpus,
 
     // TODO Should LexiconView really be here?
     lexicon : LexiconView,
