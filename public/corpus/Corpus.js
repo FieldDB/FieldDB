@@ -498,6 +498,9 @@ define([
         }
       }else{
         this.get("couchConnection").corpusid = this.id;
+        if(!this.get("couchConnection").path){
+          this.get("couchConnection").path = "";
+        }
       }
       var oldrev = this.get("_rev");
       
