@@ -2253,6 +2253,13 @@ var IdbPouch = function(opts, callback) {
       api.get('_design/' + parts[0], function(err, doc) {
         if (err) {
           call(callback, err);
+          return;  //added by cesine Nov 2 2012
+
+        }
+        //added by cesine Nov 2 2012
+        if (!doc){
+          call(callback, err);
+          return;
         }
         new viewQuery({
           map: doc.views[parts[1]].map,
@@ -2303,44 +2310,39 @@ var IdbPouch = function(opts, callback) {
       results.push(viewRow);
     };
     
-    // An object of couch view functions that we use
-    // Note that spacing is very important. Do not reformat these values
-    var validCouchViews = {
-        getAllIdsByDate : function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}},
-        searchByQueryString : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
-    };
-
-    // We may have passed in an anonymous function that used emit in
+    
+    /*
+     * Comments by cesine: to get around eval being blocked in chome
+     * extensions manifest v2 we are checking the function in the pouch doc to see if
+     * it string-matches the known function in the code base. If it
+     * matches, we are calling the known function.
+     * 
+    // Original Comments: We may have passed in an anonymous function that used emit in
     // the global scope, this is an ugly way to rescope it
     // eval('fun.map = ' + fun.map.toString() + ';');
-    for (var view in validCouchViews) {
-      if (fun.map.toString() == validCouchViews[view].toString()) {
-        fun.map = validCouchViews[view];
+     * 
+     */
+    window.validCouchViews = {
+        "get_ids/by_date" : {
+          map: function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}
+        },
+        "get_datum_field/get_datum_fields" : {
+          map : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
+        }
+    };
+    for (var view in window.validCouchViews) {
+      if (fun.map.toString().toLowerCase().replace(/\s/g,"") == window.validCouchViews[view].map.toString().toLowerCase().replace(/\s/g,"")) {
+        fun.map = window.validCouchViews[view].map;
         break;
       }
     }
-    if (typeof fun.map != "function") {
-      for (var view in window.validCouchViews) {
-        if (fun.map.toString() == window.validCouchViews[view].toString()) {
-          fun.map = window.validCouchViews[view];
-          break;
-        }
-      }
-    }
     if (fun.reduce) {
+      // Original code:
       // eval('fun.reduce = ' + fun.reduce.toString() + ';');
-      for (var view in validCouchViews) {
-        if (fun.reduce.toString() == validCouchViews[view].toString()) {
-          fun.reduce = validCouchViews[view];
+      for (var view in window.validCouchViews) {
+        if (fun.reduce.toString().toLowerCase().replace(/\s/g,"") == window.validCouchViews[view].reduce.toString().toLowerCase().replace(/\s/g,"")) {
+          fun.reduce = window.validCouchViews[view].reduce;
           break;
-        }
-      }
-      if (typeof fun.reduce != "function") {
-        for (var view in window.validCouchViews) {
-          if (fun.reduce.toString() == window.validCouchViews[view].toString()) {
-            fun.reduce = window.validCouchViews[view];
-            break;
-          }
         }
       }
     }

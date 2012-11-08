@@ -24,6 +24,8 @@ define([
 
     routes : {
       "corpus/:pouchname/:id"           : "showCorpusDashboard", 
+      "corpus/:pouchname/"              : "guessCorpusIdAndShowDashboard", 
+      "render/:render"                  : "showDashboard",
       ""                                : "showDashboard"
     },
     
@@ -31,9 +33,9 @@ define([
      * Displays the dashboard view of the user loaded in authentication
      * 
      */
-    showDashboard : function() {
+    showDashboard : function(renderOrNot) {
       Utils.debug("In showDashboard: " );
-      $("#user-modal").modal("show");
+//      $("#user-modal").modal("show");
 
     },
     /**
@@ -42,6 +44,25 @@ define([
      */
     showFullscreenUser : function() {
       Utils.debug("In showFullscreenUser: " );
+    },
+    guessCorpusIdAndShowDashboard : function(pouchname){
+      var c = new Corpus();
+      c.set({
+        "pouchname" : pouchname
+      });
+      c.id = "corpus";
+      c.changePouch({pouchname: pouchname},function(){
+        
+        c.fetch({
+          success : function(model) {
+            Utils.debug("Corpus fetched successfully", model);
+            window.app.router.showCorpusDashboard(pouchname, c.get("corpusId"));
+          },
+          error : function(e, x, y ) {
+            alert("There was a problem opening your dashboard.");
+          }
+        });
+      });
     },
     
     /**

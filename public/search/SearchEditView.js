@@ -228,6 +228,7 @@ define([
      */
     searchUnion : function() {
       Utils.debug("In searchUnion");
+      window.scrollTo(0,0);
       
       // Create a query string from the search criteria
       var queryString = this.getQueryString("union");
@@ -244,7 +245,8 @@ define([
      */
     searchIntersection : function() {
       Utils.debug("In searchIntersection");
-      
+      window.scrollTo(0,0);
+
       // Create a query string from the search criteria
       var queryString = this.getQueryString("intersection");
       

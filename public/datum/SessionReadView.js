@@ -215,7 +215,7 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
     resizeLarge : function(e) {
