@@ -2,6 +2,7 @@ define([
     "backbone",
     "datum/Datum",
     "data_list/DataList",
+    "data_list/DataListEditView",
     "datum/Session",
     "datum/SessionEditView",
     "user/UserMask",
@@ -10,6 +11,7 @@ define([
     Backbone,
     Datum,
     DataList,
+    DataListEditView,
     Session,
     SessionEditView,
     UserMask
@@ -33,14 +35,15 @@ define([
     },
 
     routes : {
-      "corpus/:pouchname"               : "showFullscreenCorpus", 
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
+      "corpus/:pouchname/alldata"       : "showAllData",//pouchname has to match the pouch of the corpus
+      "corpus/:pouchname"               : "showFullscreenCorpus", 
       "corpus"                          : "showFullscreenCorpus", 
-      "data/:dataListid"                : "showFullscreenDataList",
-      "session/:sessionid"              : "showFullscreenSession",
+      "data/:dataListid"                : "showFullscreenDataList",//TODO: consider putting corpus and pouchname here
+      "session/:sessionid"              : "showFullscreenSession",//TODO: consider putting corpus and pouchname here
       "user/:userid"                    : "showFullscreenUser",
-      "import"                          : "showImport",
+      "import"                          : "showImport",//TODO: consider putting corpus and pouchname here
       "corpus/:pouchname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       "render/:render"                  : "renderDashboardOrNot",
@@ -419,13 +422,32 @@ define([
     /**
      * Displays the advanced search in embedded form.
      */
-    showEmbeddedSearch : function(pouchname, corpusid) {
+    showEmbeddedSearch : function(pouchname) {
       this.hideEverything();
       $("#dashboard-view").show();
       window.appView.searchEditView.format = "centreWell";
       window.appView.searchEditView.render();
       $("#search-embedded").show();
     },
+    
+    /**
+     * The showAllData function gives the user a Datalist of all the  Datums in their corpus (embedded Datalist view)
+     * it does this by calling the search method of searchEditView within appView
+     * @param pouchname   identifies the database to look in 
+     * TODO: try saving it, setting it as current datalist and rendering that fullscreen
+     */
+    showAllData : function(pouchname) {
+        this.hideEverything();
+        $("#dashboard-view").show();
+        window.appView.searchEditView.search("");
+        window.appView.searchEditView.searchDataListView.model.set("title", "All Data");
+        window.appView.searchEditView.searchDataListView.render();
+        window.appView.currentEditDataListView.saveSearchDataList();
+        //Still remaining: set it as current DataList and call showFullScreenDatalist()
+        //(this.DataList).setAsCurrentDataList();
+        //this.showFullScreenDatalist(DataList,pouchname);
+      },
+
     showEmbeddedDatum : function(pouchname, datumid){
       Utils.debug("In showEmbeddedDatum"  + pouchname + " *** "
           + datumid);
