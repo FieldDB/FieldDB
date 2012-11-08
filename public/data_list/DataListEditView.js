@@ -522,7 +522,7 @@ define( [
       });
     },
     
-    saveSearchDataList : function(e){
+    saveSearchDataList : function(e, callback){
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -539,10 +539,10 @@ define( [
       searchself.model.saveAndInterConnectInApp(function(){
         searchself.format = "search-minimized";
         searchself.render();
-        searchself.model.setAsCurrentDataList();
-        window.location.href = "#render/true";
-
+        searchself.model.setAsCurrentDataList(callback);
+//        window.location.href = "#render/true";
       });
+
     },
     saveImportDataList : function(e){
       if(e){
