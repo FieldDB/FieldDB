@@ -38,6 +38,9 @@
 <small>Shareable URL: http://www.lingsync.org/{{username}}/{{titleAsUrl}}</small>
 <div class="description">{{description}}</div>
 
+<!-- Force directed graph of morphemes in the corpus -->
+<div class="corpus-precedence-rules-visualization" id="corpus-precedence-rules-visualization-fullscreen"></div>
+
 <div class="accordion" id="accordion-read-embedded">
   <div class="accordion-group">
     <div class="accordion-heading">
@@ -81,6 +84,9 @@
     <div id="collapsePermissionsRE" class="accordion-body collapse">
       <div class="accordion-inner ">
 				<span class="locale_permissions_explaination"></span>
+        <p>
+        <button class="btn btn-inverse reload-corpus-team-permissions"><i class="icon-refresh"></i> See current team members</button>
+        </p>
         <ul class = "permissions-updating-collection unstyled">
                       <!-- Updating Permissions Collection -->
         </ul>

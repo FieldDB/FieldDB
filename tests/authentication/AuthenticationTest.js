@@ -14,7 +14,7 @@ require([
         it("should not authenticate if login good username bad password",
             function() {
           
-//          var authenticated = u.login("sapir", "hypothesis");
+//          var authenticated = u.login("lingllama", "hypothesis");
 //          expect(!authenticated).toBeTruthy();
         });
         it("should not authenticate if login bad username any password",
@@ -26,7 +26,7 @@ require([
         it("should  authenticate if login good username good password",
             function() {
           
-//          var authenticated = u.login("sapir", "phoneme");
+//          var authenticated = u.login("lingllama", "phoneme");
 //          expect(authenticated).toBeTruthy();
         });
     });

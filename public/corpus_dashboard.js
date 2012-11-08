@@ -247,7 +247,7 @@ require([
    */
 //  Pouch.destroy('idb://db');
 //  Pouch.destroy('idb://dbdefault');
-//    Pouch.destroy('idb://dbsapir-firstcorpus');
+//    Pouch.destroy('idb://dblingllama-firstcorpus');
 //    localStorage.clear();
 //  localStorage.removeItem("appids");
 //  localStorage.removeItem("pouchname");
@@ -256,7 +256,7 @@ require([
    * Check for user's cookie and the dashboard so we can load it
    */
   var username = Utils.getCookie("username");
-  //if(username == "sapir"){
+  //if(username == "lingllama"){
   //  loadFreshApp();
   //  return;
   //}
@@ -308,7 +308,7 @@ require([
       }
     }
   } else {
-    //new user, let them register or login as themselves or sapir
+    //new user, let them register or login as themselves or lingllama
     loadFreshApp();
  }
   

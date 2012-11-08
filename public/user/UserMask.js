@@ -20,7 +20,9 @@ define([
       Utils.debug("UserMask init", this.toJSON());
       
     },
-    
+    defaults : {
+      gravatar :  "./../user/user_gravatar.png"
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");

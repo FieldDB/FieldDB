@@ -100,8 +100,12 @@ define( [
           this.showSecondStep();
       },
       
-      "click .icon-resize-small" : function(){
-        window.app.router.showDashboard();
+      "click .icon-resize-small" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        window.location.href = "#render/true";
       },
       /* event listeners for the drag and drop import of files */
       "dragover .drop-zone" : function(e){
@@ -616,7 +620,7 @@ define( [
       $(".approve-save").html("Finished");
       
       // Go back to the dashboard 
-      window.location.replace("#");
+      window.location.href = "#render/true";
     },
     /**
      * permanently saves the datalist to the corpus, and all of its datums too.

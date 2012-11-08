@@ -219,6 +219,10 @@ define([
       }else{
         this.set("couchConnection", couchConnection);
       }
+      if(!couchConnection){
+        Utils.debug("Can't change activity feed's couch connection");
+        return;
+      }
       //TODO test this
       if(couchConnection.pouchname.indexOf("activity_feed") == -1){
         alert("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
@@ -302,9 +306,18 @@ define([
     getAllIdsByDate : function(callback) {
       Utils.debug("In the activity feed getAllIdsByDate "+this.get("couchConnection").pouchname);
       var self = this;
+      var couchConnection = null;
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = self.get("couchConnection");
+      }
+      //if the couchConnection is still not set, then try to set it using the corpus's connection and adding activity feed to it.
+      if(!couchConnection){
+        couchConnection = JSON.parse(JSON.stringify(window.app.get("corpus").get("couchConnection")));
+        couchConnection.pouchname =  couchConnection.pouchname+"-activity_feed";
+      }
       
       try{
-        this.changePouch(null, function(){
+        this.changePouch(couchConnection, function(){
           Utils.debug("Changing pouch in activity feed was sucessfull.");
           self.pouch(function(err, db) {
             db.query("get_ids/by_date", {reduce: false}, function(err, response) {
@@ -315,6 +328,56 @@ define([
               }else{
                 Utils.debug("There was an error querying the database.",err);
                 Utils.debug("There was an error querying the database, this is the response.",response);
+                
+                
+                /*
+                 * Its possible that the pouch has no by date view, create it and then try loading the activity feed again.
+                 */
+                window.appView.toastUser("Initializing the sort by date search functions for the first time in this activity feed.","alert-success","Activity Feed:");
+                
+                if(!window.validCouchViews){
+                  window.validCouchViews = window.app.get("corpus").validCouchViews();
+                }
+                var view = "get_ids/by_date";
+                var viewparts = view.split("/");
+                if(viewparts.length != 2){
+                  console.log("Warning "+view+ " is not a valid view name.");
+                  return;
+                }
+                var activityfeedself = self;
+                activityfeedself.changePouch(null, function() {
+                  activityfeedself.pouch(function(err, db) {
+                    var modelwithhardcodedid = {
+                        "_id": "_design/"+viewparts[0],
+                        "language": "javascript",
+                        "views": {
+//                          "by_id" : {
+//                                "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                            }
+                        }
+                     };
+                    modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].map.toString()};
+                    if(window.validCouchViews[view].reduce){
+                      modelwithhardcodedid.views[viewparts[1]].reduce =  window.validCouchViews[view].reduce.toString();
+                    }
+
+                    console.log("This is what the doc will look like: ", modelwithhardcodedid);
+                    db.put(modelwithhardcodedid, function(err, response) {
+                      Utils.debug(response);
+                      if(err){
+                        Utils.debug("The "+view+" view couldn't be created.");
+                      }else{
+                        
+                        Utils.debug("The "+view+" view was created.");
+                        activityfeedself.getAllIdsByDate(callback);
+                        
+                        
+                      }
+                    });
+                  });
+                });
+                
+                
               }
             });
           });

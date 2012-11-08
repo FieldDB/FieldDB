@@ -69,10 +69,13 @@ define([
       
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
+//        Utils.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
+//        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
 //      this.model.bind('change:dataLists', function(){
-//        this.render();
+//            this.changeViewsOfInternalModels();
+//      this.render();
 //      }, this);
     },
     events : {
@@ -90,7 +93,26 @@ define([
         this.model.insertNewComment(commentstring);
         this.$el.find(".comment-new-text").val("");
         
-      },      
+      },   
+      "click .reload-corpus-team-permissions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+        var corpusviewself = this;
+        this.model.loadPermissions(function(){
+          corpusviewself.permissionsView = new UpdatingCollectionView({
+            collection : corpusviewself.model.permissions,
+            childViewConstructor : PermissionReadView,
+            childViewTagName     : 'li',
+            childViewClass       : "breadcrumb row span12"
+          });
+          
+          corpusviewself.permissionsView.el = corpusviewself.$('.permissions-updating-collection');
+          corpusviewself.permissionsView.render();
+        });
+        
+      },
+      
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
@@ -195,9 +217,9 @@ define([
         this.sessionsView.el = this.$('.sessions-updating-collection'); //TODO do not use such ambiguous class names, compare this with datum_field_settings below.  there is a highlyily hood that the sesson module will be using the same class name and will overwrite your renders.
         this.sessionsView.render();
         
-        // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();        
+//        // Display the PermissionsView
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();        
         
         try{
           Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
@@ -247,8 +269,8 @@ define([
         this.sessionsView.render();
         
         // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();
 
         //Localize for all embedded view
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
@@ -340,14 +362,14 @@ define([
         childViewFormat      : "link"
       });
 
-      this.model.loadPermissions();
+//      this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
-      this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.permissions,
-        childViewConstructor : PermissionReadView,
-        childViewTagName     : 'li',
-        childViewClass       : "breadcrumb"
-      });
+//      this.permissionsView = new UpdatingCollectionView({
+//        collection : this.model.permissions,
+//        childViewConstructor : PermissionReadView,
+//        childViewTagName     : 'li',
+//        childViewClass       : "breadcrumb"
+//      });
       
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
@@ -364,8 +386,8 @@ define([
 //        e.stopPropagation(); //cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
       } 
+//      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      app.router.showDashboard();
       Utils.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
     
@@ -400,7 +422,7 @@ define([
          e.stopPropagation();
          e.preventDefault();
        }
-       window.app.router.showDashboard();
+       window.location.href = "#render/true";
     },
     
     resizeFullscreen : function(e){

@@ -372,7 +372,7 @@ define( [
       }
 //      this.format = "leftSide";
 //      this.render();
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
     resizeFullscreen : function(e){
