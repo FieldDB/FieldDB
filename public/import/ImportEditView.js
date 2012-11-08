@@ -775,6 +775,7 @@ define( [
      * Adds double the columns
      */
     insertDoubleColumnsInTable : function(){
+      var self = this;
       $("#csv-table-area").find('td').each(function(index) {
         $(this).after('<td contenteditable = "true"></td>');
       });
@@ -783,8 +784,8 @@ define( [
         var tableCell = document.createElement("th");
         count++;
         $(tableCell).html('<input type="text" class="drop-label-zone header'+count+'" value=""/>');
-        $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
-        $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
+        $(tableCell).find("input")[0].addEventListener('drop', self.dragLabelToColumn);
+        $(tableCell).find("input")[0].addEventListener('dragover', self.handleDragOver);
         $(tableCell).find("input")[0].addEventListener('dragleave', function(){
           $(this).removeClass("over");
         } );
