@@ -15,7 +15,6 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "datum/DatumStateEditView",
-    "datum/Datum",
     "permission/Permission",
     "permission/Permissions",
     "permission/PermissionEditView",
@@ -41,7 +40,6 @@ define([
     DatumState,
     DatumStates,
     DatumStateEditView,
-    Datum,
     Permission,
     Permissions,
     PermissionEditView,
@@ -97,10 +95,7 @@ define([
     /**
      * The underlying model of the CorpusReadFullScreenView is a Corpus.
      */    
-    model : {
-    	datum : Datum,
-    	corpus : Corpus
-    },
+    model : Corpus,
    
     /**
      * Events that the CorpusReadFullScreenView is listening to and their handlers.
