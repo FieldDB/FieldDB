@@ -90,6 +90,8 @@ define( [
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
+
+      "change .datum_state_select" : "updateDatumStates",
       
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
@@ -237,6 +239,28 @@ define( [
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+      
+      /*
+       * This is to get the datum states dropdown information and render "To be checked" as a default. 
+       * If user changes the label to 
+       * something else, the first item in the dropdown menu will be shown.
+       * TODO test what happens if user changes datum state settings when a datalist is open 
+       */      
+      jsonToRender.datumStates = window.app.get("corpus").get("datumStates").toJSON();
+      var indexOfToBeChecked = _.pluck(jsonToRender.datumStates, "state").indexOf("To be checked");
+      if(indexOfToBeChecked == -1){
+        indexOfToBeChecked = 0;
+      }
+      for(var x in jsonToRender.datumStates){
+        if(x == indexOfToBeChecked){
+          jsonToRender.datumStates[x].selected = "selected";
+        }else{
+          jsonToRender.datumStates[x].selected = "";
+        }
+      }
+      jsonToRender.statecolor = jsonToRender.datumStates[indexOfToBeChecked].color;
+      jsonToRender.datumstate = jsonToRender.datumStates[indexOfToBeChecked].state;
+
 
       if (this.format == "leftSide") {
         Utils.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
@@ -552,6 +576,26 @@ define( [
       alert("TODO");
     },
    
+    updateDatumStates : function() {
+      var selectedValue = this.$el.find(".datum_state_select").val();
+      try{
+        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      }catch(e){
+        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+      }
+      
+      //update the view of the datum state to the new color and text without rendering the entire datum
+      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
+      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
+      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
+      $(this.el).find(".datum-state-value").html(selectedValue);
+
+      this.needsSave = true;
+    },
+
+    
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
