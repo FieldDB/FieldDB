@@ -158,10 +158,25 @@ define([
         alert("We have made a lot of changes in the app since your user was created. " +
         		"Your user was created before the new Team and User activity feeds were implemented. " +
         		"If you want to keep this user acount and data, contact us at opensource@ilanguage.ca " +
-        		"and we will transition your account for you. If you were just using this account for testing and you dont mind creating a  new user, " +
+        		"and we will transition your account for you. If you were just using this account for testing and you dont mind creating a new user, " +
         		"you should probably sign out and make a new user so you can use the " +
         		"new Team and Activity feeds.");
       }
+      /*
+       * Handle if the user got access to new corpora
+       */
+      if(serverResults.user.newCorpusConnections){
+        if(window.appView){
+          window.appView.toastUser("You have have been added to a new corpus team by someone! Click here to see the corpora to which you have access.","alert-success","Saved!");
+        }
+        for(var x in serverResults.user.newCorpusConnections){
+          if(_.pluck(serverResults.user.corpuses,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
+            serverResults.user.corpuses.push(serverResults.user.newCorpusConnections[x]);
+          }
+        }
+        delete serverResults.user.newCorpusConnections;
+      }
+      
       u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
