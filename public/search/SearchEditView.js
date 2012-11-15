@@ -119,7 +119,7 @@ define([
       
       //localization
       $(this.el).find(".locale_Advanced_Search").html(Locale["locale_Advanced_Search"].message);
-      $(this.el).find(".locale_advanced_search_explaination").html(Locale["locale_advanced_search_explaination"].message);
+      $(this.el).find(".locale_advanced_search_explanation").html(Locale["locale_advanced_search_explanation"].message);
       $(this.el).find(".locale_AND").html(Locale["locale_AND"].message);
       $(this.el).find(".locale_OR").html(Locale["locale_OR"].message);
       

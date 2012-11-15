@@ -1,5 +1,5 @@
 {
-	"dialog" : {
+	"conversation" : {
 		"speakers" : [ "A", "B" ],
 		"text" : [ {
 			"speaker" : "A",

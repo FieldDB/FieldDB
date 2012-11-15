@@ -142,6 +142,9 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .resize-full" : "resizeFullscreen",
       
+      //Add button inserts new Conversation Field
+      "click .add-conversation-field" : 'insertNewConversationDatumField',
+      
       //corpus menu buttons
       "click .new-datum" : "newDatum",
       "click .new-data-list" : "newDataList",
@@ -217,6 +220,10 @@ define([
           // Display the DatumFieldsView
           this.datumFieldsView.el = this.$('.datum_field_settings');
           this.datumFieldsView.render();
+
+          // Display the ConversationFieldsView
+          this.conversationFieldsView.el = this.$('.conversation_field_settings');
+          this.conversationFieldsView.render();
           
           // Display the DatumStatesView
           this.datumStatesView.el = this.$('.datum_state_settings');
@@ -225,15 +232,17 @@ define([
         //Localize for all embedded view
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
           $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
-          $(this.el).find(".locale_elicitation_sessions_explaination").html(Locale["locale_elicitation_sessions_explaination"].message);
+          $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
           $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
-          $(this.el).find(".locale_datalists_explaination").html(Locale["locale_datalists_explaination"].message);
+          $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
           $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
-          $(this.el).find(".locale_permissions_explaination").html(Locale["locale_permissions_explaination"].message);
+          $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
           $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
-          $(this.el).find(".locale_datum_fields_explaination").html(Locale["locale_datum_fields_explaination"].message);
+          $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
+          $(this.el).find(".locale_Conversation_field_settings").html(Locale["locale_Conversation_field_settings"].message);
+          $(this.el).find(".locale_conversation_fields_explanation").html(Locale["locale_conversation_fields_explanation"].message);
           $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
-          $(this.el).find(".locale_datum_states_explaination").html(Locale["locale_datum_states_explaination"].message);
+          $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
           $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
           
@@ -243,6 +252,7 @@ define([
           $(this.el).find(".locale_Encrypt_if_confidential").html(Locale["locale_Encrypt_if_confidential"].message);
           $(this.el).find(".locale_Help_Text").html(Locale["locale_Help_Text"].message);
           $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale["locale_Add_New_Datum_Field_Tooltip"].message);
+          $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale["locale_Add_New_Conversation_Field_Tooltip"].message);
           $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale["locale_Add_Placeholder"].message);
           $(this.el).find(".locale_Green").html(Locale["locale_Green"].message);
           $(this.el).find(".locale_Orange").html(Locale["locale_Orange"].message);
@@ -280,6 +290,10 @@ define([
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
 
+        // Display the ConversationFieldsView
+        this.conversationFieldsView.el = this.$('.conversation_field_settings');
+        this.conversationFieldsView.render();
+        
         // Display the DatumStatesView
         this.datumStatesView.el = this.$('.datum_state_settings');
         this.datumStatesView.render();
@@ -287,15 +301,17 @@ define([
       //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
         $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(Locale["locale_elicitation_sessions_explaination"].message);
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
         $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
-        $(this.el).find(".locale_datalists_explaination").html(Locale["locale_datalists_explaination"].message);
+        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
         $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
-        $(this.el).find(".locale_permissions_explaination").html(Locale["locale_permissions_explaination"].message);
+        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
         $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
-        $(this.el).find(".locale_datum_fields_explaination").html(Locale["locale_datum_fields_explaination"].message);
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
+        $(this.el).find(".locale_Conversation_field_settings").html(Locale["locale_Conversation_field_settings"].message);
+        $(this.el).find(".locale_conversation_fields_explanation").html(Locale["locale_conversation_fields_explanation"].message);
         $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
-        $(this.el).find(".locale_datum_states_explaination").html(Locale["locale_datum_states_explaination"].message);
+        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
         $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         //Localize for only Edit view.
@@ -304,6 +320,7 @@ define([
         $(this.el).find(".locale_Help_Text").html(Locale["locale_Help_Text"].message);
         $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale["locale_Help_Text_Placeholder"].message);
         $(this.el).find(".locale_Add_New_Datum_Field_Tooltip").attr("title", Locale["locale_Add_New_Datum_Field_Tooltip"].message);
+        $(this.el).find(".locale_Add_New_Conversation_Field_Tooltip").attr("title", Locale["locale_Add_New_Conversation_Field_Tooltip"].message);
         $(this.el).find(".locale_Add_Placeholder").attr("placeholder", Locale["locale_Add_Placeholder"].message);
         $(this.el).find(".locale_Green").html(Locale["locale_Green"].message);
         $(this.el).find(".locale_Orange").html(Locale["locale_Orange"].message);
@@ -417,7 +434,16 @@ define([
         childViewFormat      : "corpus",
         childViewClass       : "breadcrumb"
       });
-          
+
+      //Create a ConversationFieldsView     
+      this.conversationFieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("conversationFields"),
+        childViewConstructor : DatumFieldEditView,
+        childViewTagName     : 'li',
+        childViewFormat      : "corpus",
+        childViewClass       : "breadcrumb"
+      });
+
       // Create a DatumStatesView    
       this.datumStatesView = new UpdatingCollectionView({
         collection           : this.model.get("datumStates"),
@@ -538,6 +564,35 @@ define([
 
     },
  
+    insertNewConversationDatumField : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        //don't add blank fields
+        if(this.$el.find(".choose_add_conversation_field").val().toLowerCase().replace(/ /g,"_") == ""){
+          return;
+        }
+        // Remember if the encryption check box was checked
+        var checked = this.$el.find(".add_conversationShouldBeEncrypted").is(':checked') ? "checked" : "";
+        
+        // Create the new DatumField based on what the user entered
+        var m = new DatumField({
+          "label" : this.$el.find(".choose_add_conversation_field").val().toLowerCase().replace(/ /g,"_"),
+          "shouldBeEncrypted" : checked,
+          "help" : this.$el.find(".add_conversation_help").val()
+        });
+
+        // Add the new DatumField to the Corpus' list for datumFields
+        this.model.get("conversationFields").add(m);
+        
+        // Reset the line with the add button
+        this.$el.find(".choose_add_conversation_field").val("");//.children("option:eq(0)").attr("selected", true);
+        this.$el.find(".add_conversation_help").val("");
+        window.appView.addUnsavedDoc(this.model.id);
+
+      },
+    
     //This the function called by the add button, it adds a new datum state both to the collection and the model
     insertNewDatumState : function(e) {
       if(e){
@@ -612,7 +667,7 @@ define([
       this.model.saveAndInterConnectInApp(function(){
         if(this.format == "modal"){
           $("#new-corpus-modal").modal("hide");
-          window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+          window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
         window.appView.currentCorpusReadView.format = self.format;
@@ -622,7 +677,7 @@ define([
         if(this.format == "modal"){
           $("#new-corpus-modal").modal( "hide");
           alert("There was a problem somewhere loading and saving the new corpus.");
-          window.appView.toastUser("The permissions and datum fields and session fields were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
+          window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }
         window.appView.currentCorpusReadView.format = self.format;
         window.appView.currentCorpusReadView.render();
