@@ -73,6 +73,7 @@ define([
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+     * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
      * @property {DataLists} datalists Collection of data lists created under the corpus
      * @property {Permissions} permissions Collection of permissions groups associated to the corpus 
@@ -163,6 +164,17 @@ define([
           })
         ]));
       }//end if to set datumFields
+      
+      if(typeof(this.get("conversationFields")) == "function"){
+          this.set("conversationFields", new DatumFields([ 
+            new DatumField({
+              label : "speakers",
+              shouldBeEncrypted: "checked",
+              userchooseable: "disabled",
+              help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+            })
+          ]));
+        }//end if to set conversationFields
       
       if(typeof(this.get("sessionFields")) == "function"){
         this.set("sessionFields", new DatumFields([ 
@@ -337,7 +349,8 @@ define([
 //      confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
-      datumFields : DatumFields, 
+      datumFields : DatumFields,
+      conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
@@ -349,6 +362,7 @@ define([
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 
+      conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
       sessions : Sessions, 
@@ -434,6 +448,11 @@ define([
       for(var x in attributes.datumFields){
         attributes.datumFields[x].mask = "";
         attributes.datumFields[x].value = "";
+      }
+      //clear out search terms from the new corpus's conversation fields
+      for(var x in attributes.conversationFields){
+        attributes.conversationFields[x].mask = "";
+        attributes.conversationFields[x].value = "";
       }
       //clear out search terms from the new corpus's session fields
       for(var x in attributes.sessionFields){
@@ -794,6 +813,7 @@ define([
     /**
      * If more views are added to corpora (or activity feeds) , add them here
      * @returns {} an object containing valid map reduce functions
+     * TODO: add conversation search to the get_datum_fields function
      */
     validCouchViews : function(){
       return {
