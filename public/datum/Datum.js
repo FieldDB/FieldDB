@@ -343,7 +343,20 @@ define([
 
       return datum;
     },
-    
+    updateDatumState : function(selectedValue){
+      console.log("Asking to change the datum state to "+selectedValue); 
+      
+      try{
+        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      }catch(e){
+        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+      }
+      console.log("done"); 
+
+      this.save();
+      //TODO save it
+    },
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
      * (\exg. \"a) and then copies it on the expor modal so that when the user

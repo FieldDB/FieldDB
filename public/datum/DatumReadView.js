@@ -75,6 +75,8 @@ define([
         model : this.model.get("session"),
         });
       this.sessionView.format = "link";
+
+      this.model.bind("change", this.render, this);
     },
 
     /**
@@ -241,6 +243,12 @@ define([
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
         if(jsonToRender.datumstatecolor){
+          $(this.el).removeClass("datum-state-color-warning");
+          $(this.el).removeClass("datum-state-color-important");
+          $(this.el).removeClass("datum-state-color-info");
+          $(this.el).removeClass("datum-state-color-success");
+          $(this.el).removeClass("datum-state-color-inverse");
+
           $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
         }
         try{
