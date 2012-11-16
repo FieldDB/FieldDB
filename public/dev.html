@@ -20,12 +20,11 @@
 				<h2>
 					Bi-Weekly Developers News Channel<small> with videos :)</small>
 				</h2>
-				<h3>A Fieldlinguistics Database which adapts to its user's
-					I-Language</h3>
+				<h3>A Field Database which adapts to its user's terminology
+					and/or I-Language</h3>
 				<p>Officially Launched August 1st, @CAML in Patzún, Guatemala</p>
 				<p>
-					To install or get non-technical info: <a
-						href="http://fieldlinguist.com">http://fieldlinguist.com</a>
+					To install or get non-technical info: <a href="http://lingsync.org">http://lingsync.org</a>
 				</p>
 
 				<p>
@@ -88,13 +87,304 @@
 	</div>
 	<hr />
 
+
 	<div class="well">
-		<h1>October  13 2012 - Week 24 &amp; 25 - Learn Mi'gmaq Prototype
+		<h1>Nov 24 2012 - Week 30 &amp; 31 - Multiple users on a corpus</h1>
+
+		<p>This week we added the server side and client side code to
+			finally let users add each other to their corpora as readers, writers
+			or admins. Now, if someone shares their corpus with you and gives you
+			certain privileges the server will email you to let you know, and
+			tell you that you have to sync in order to bring this new corpus down
+			to your local computer. This is a very exciting change and really
+			makes the team activity feed have a purpose. We did a bit of testing
+			so far:</p>
+
+		<ul>
+			<li>Does the team activity feed show multiple users activities?
+			</li>
+			<li>If we click sync after receiving an email, do we
+				automatically see the corpus that was newly added?</li>
+			<li>If two users insert datum, can they see eachother's datum?</li>
+			<li>If two users edit the same datum at the same time, what
+				happens?</li>
+		</ul>
+		<p>Our conclusions is that yes, the plans we made for the teams
+			and permissions are working, the datum from each user end up in the
+			same corpus and on the other user's computer if both click sync to
+			sync their local data with the team server. But, we get very odd
+			behavior involving what is "most recent" for the datum. It might have
+			to do with timestamps...</p>
+		<p>We also have a pretty bad result with when users are editing a
+			datum at the same time: it looks like right now, out of the box (we
+			haven't even had time to look and see if there is a doc conflict
+			error) each user sees only their version of that datum. Our hope is
+			that Pouch is complaining and getting a document conflict error so we
+			will be able to catch it, alert the user that there were two users
+			who tried to edit the datum at the same time and then send them to
+			the database admin panel on Futon to go and resolve the conflicts
+			manually.</p>
+	</div>
+
+
+	<div class="well">
+		<h1 id="bugfixfiesta">Nov 10 2012 - Week 28 &amp; 29 - Bug fixing fiesta!</h1>
+		<p>On the thrusdays of these two weeks we had a bug fixing fiesta
+			to put out a new release in preparation for beta testing with a field
+			methods class in January. We closed roughly 29 bugs, and opened over
+			41!</p>
+
+		<h2>Pressing enter is now enough</h2>
+		<p>
+			Some of the more exciting bugs we fixed were the ability to finally
+			push enter when the app asks you to confirm that your identity <a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/559">#559</a>.
+			This is something we had been looking forward to fixing for a long
+			time but was rather tricky since the modal that pops up is not
+			C-commanded by the authentication code. We had to move the code that
+			captures key events on the password field up to the App level where
+			it could c-command the modal.
+		</p>
+
+		<h2>Instructions iteration 2</h2>
+
+		<p>We also started drafting a second iteration of much of the text
+			instructions in the app, notably the search text and the quick start
+			instructions.</p>
+
+		<h2>Key word search joins field search</h2>
+		<p>We finally added a bit of code to make it possible to do a
+			datum wide key word search. If you now type something in the quick
+			search box, it will search all the datum fields. Of course as before
+			you can also specify that you want it to only search in the
+			utterance, morphemes, gloss or semantic denotation fields etc.</p>
+
+		<h2>An odd side effect</h2>
+		<p>We found a pretty funny bug, if you enter something in a
+			corpus, then create a new corpus you would automatically get the text
+			you searched for as part of any new datum in that corpus. The reason
+			for this is that the search page is composed of all the datum fields
+			currently in your corpus, and if you have a search active when you
+			leave the app, your search can be there when you come back. The odd
+			text popping up in Datum was a side effect of this feature. We put in
+			some code which copies a clean version of your datum and session
+			fields when you make a new corpus. We will eventually need to add a
+			way to remove a default datum field from corpora. At the moment if
+			you have a corpus specialized for phonology, and then make one that
+			you want to be specialized with datum fields for semantics, you will
+			have all the fields that you had in the phonology corpus. Of course,
+			we expect this to happen rarely since users will most likly have a
+			set of fields they use for all their corpora.</p>
+
+
+		<h2>LingLlama replaces Sapir as sample user</h2>
+
+		<p>We had some complaints about Sapir as a person, so we contacted
+			the LingLlama to see what he would think about letting us use the
+			LingLlama as a sample user, he said sure. We are super excited to
+			have a new sample user, one that is fictional!</p>
+
+		<h2>Show me all my data!</h2>
+
+		<p>We started working on an All Data button that would automate
+			the process of searching your datum, creating a data list for you,
+			titleing it with the date, saving it and making it full screen. This
+			is one of the biggest mysteries when you open a field linguistics
+			program, and one of the reasons people stop using it before they even
+			start. If you can't see your data so you are wondering if the app is
+			working. We have always planned that you should be able to see your
+			data in one huge data list, and that when you open the app you have
+			the last data you edited shown to you in the middle of the screen but
+			this had some technical challenges behind it.</p>
+
+		<p>The biggest instability in the app since we switched to having
+			three main dashboards (a register page, a user page, a corpus page)
+			was that you had to sync down from the server before you could use
+			search. Why was this, you might ask? It has to do with views. Views
+			are a "view" on your data in CouchDB/PouchDB terms. Essentially there
+			are a couple of key views in the app that make it possible to find
+			your most recent data, all your data, and all your activities. Since
+			when we first built the app we didnt know how to create views on the
+			PouchDB (local, offline database) we were making them on the server
+			when we created a new user, this meant that before your user's
+			dashboard was complete, you HAD to sync. Since very few users believe
+			the sync button is necessary (they are working alone, and/or don't
+			want to back up the data that is largely just them playing around
+			with the app) these views weren't being created and so when the app
+			tried to use them it was producing silent growns that the user had no
+			idea about, unless they opened the console and looked.</p>
+
+		<p>Over the weekend we sat down and took some careful time to
+			figure out how to create the views using PouchDB locally, offline,
+			when the views are needed. So, we now have a couple of new messages
+			in the app that tell you when we are initializing search for the
+			first time, or initializing the query/view that finds your most
+			recent datum and puts it into the data entry widget for you.</p>
+
+
+		<p>It is so exciting to have the app back to what it was doing for
+			about 1-2 weeks in July, showing you all your data, and showing you
+			your most recent data when you open the app.</p>
+
+		<h2>Getting data entry to flow</h2>
+
+		<p>Data entry so far in the app was mostly focused on import. We
+			figured those that have data, are most curious about how hard it
+			would be to switch to a new data management tool. Now that we are
+			preparing for field methods, where we expect the users will actually
+			be using some of the auto-completion of the app to enter data, we did
+			an audit of how the data entry flow works.</p>
+
+		<p>Some important questions were:</p>
+		<ol>
+			<li>Can I tab through the data fields and get to the new datum
+				button, and push enter?</li>
+			<li>Can I immediately start typing if I create a new datum?</li>
+			<li>Can I enter data without a mouse in a full screen view?</li>
+		</ol>
+
+		<p>
+			We went through all these use cases and made sure they worked. Oddly
+			enough, the tabbing to the + New Datum button had some important
+			consequences. The app is using something called a router. The router
+			is a lot like a web url which you would see on a normal online app,
+			except that it has a # which divides the part the server handles, and
+			the part the client side app handles. The good thing about a router
+			is that it allows users to book mark what appears to be a 'page' to
+			them, ie import, or a datum, or a data list etc. By turning the new
+			datum into a route, we can now link to it from many areas of the app,
+			and we can cause the link functionality of the bootstrap
+			<button class="btn btn-mini btn-primary">+</button>
+			button to trigger the display of a new datum, complete with putting
+			the cursor in the first field of the datum (an invaluable asset for a
+			data entry app).
+		</p>
+
+		<h2>Auditing the Datum Save button</h2>
+		<p>Originally we wanted to the app save datum every 10 seconds, so
+			that the user wouldn't loose their work. Almost all our users found
+			this didn't make sense, they would rather save the data by clicking
+			on a button. If they don't click save, don't save.</p>
+
+		<p>So, we added a save button in addition to saving every 10
+			seconds. The save button was acting kind of oddly, sometimes saving,
+			sometimes not. We took a look and saw that the button was only saving
+			if the datum thought there had been changes to it, rather than saving
+			directly to the database. We made the save but save 100% of the time,
+			and commented out the code that saved the datum every 10 seconds. The
+			app still saves the datum if it has been changed and falls of the
+			datum entry area. We really need to think about this and re-design
+			the save in a way that users like, rather than trying to reduce the
+			number of versions in the database.</p>
+
+
+		<h2>Breaking changes in corpus connections</h2>
+		<p>The McGill server will have have a very special CouchDB
+			configuration. To our knowledge this will be one of the rare times on
+			the internet that a CouchDB will be running out of a directory
+			(actually a virtual directory). The reason for this is that the
+			University would prefer to route all traffic to the server through
+			Apache, so that the traffic can be analyzed using their existing log
+			monitoring systems. This is especially important for DOS (Denial of
+			Service) attacks where malicious servers repeatedly contact a server
+			for all its content in attempt to over load it and thereby "deny"
+			service to anyone legitimately trying to use the server. What this
+			means for CouchDB and Node.js, two technologies designed to have
+			support for high concurrancy, and support lots of live connections is
+			that they will be throtteled down to the speed and capacity of an
+			Apache server. If this were the main LingSync server we would
+			probably point this out to the University and tell them that they are
+			being silly, but because we only expect about 5-10 people to use the
+			server, and they wont connect very often we figure its not worth
+			explaining to them the difference between Apache threaded connections
+			and Erlang or Javascript event driven connections.</p>
+
+		<p>To prepare for this change we added a path to all new corpus
+			connections, and added code to make existing corpus connections
+			compatible with the new server code (which is the same for the McGill
+			server and the production and testing servers). We hope this wont
+			introduce bugs, and whatever bugs there are we will catch them soon.
+			We are going to wait about 2 weeks before we put the McGill server
+			into production to see if there are bugs that we didn't catch in our
+			internal testing.</p>
+
+
+		<h2>The corpus-precendence-rules-visualization comes back</h2>
+		<p>While we were in Guatemala between talks we were refactoring
+			and cleaning up the handlebars to reduce the number of handlebars
+			that had to be copy pasted to update menus when small changes or new
+			buttons were added. The Corpus handlebars had roughly 6 minutely
+			different versions which created a nightmare for localization. While
+			we were reducing the 6 down to 2 we lost the div that held the corpus
+			visualization! We didn't even notice it was gone until November. We
+			traced back the commits, found it (it was just one line) and put it
+			back in. Now its all working in is crazy flying glory. Its fun to
+			have a data visualization, but hopefully someday soon someone will
+			have time to change the visualization into something that actually
+			has meaning for linguists, at the moment its just the linear locality
+			of morphemes... not even arrows to indicate precedence.</p>
+
+		<h2>Loading spinner for long data lists</h2>
+		<p>Long data lists take about 10-50sec to load into memory,
+			sometimes much more. We added a spinner that shows you the progress
+			of loading your dashboard. Although not ideal at least this way the
+			users know something is going on while the dashboard is loading.
+			Before it used to say "untitled corpus" and that was the only
+			indication that the dashboard hadn't finished loading.</p>
+
+
+		<h2>Inserted columns in Import are droppable</h2>
+
+		<p>
+			Finally we found the bug that was making inserted columns in the
+			import not be droppble, which was pretty odd behaviour and pretty
+			annoying. It all came to a lack of "self," yeah no joke. In
+			javascript, an object has a "this" which refers to itself, and lets
+			it access its own member variables or functions. The code that was
+			attempting to add the drop listeners to these inserted cells was
+			using "this" but in a scope/closure where the this didn't mean the
+			ImportView (the object that knew how to handle the drop event), but
+			rather to the actual html element itself. The problem was easily <a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/commit/171565f64e9150575496441de2a7b299b13cfd1f">fixed</a>
+			by binding this to a new variable, outside the closure, and then
+			referencing it inside the jQuery scope that was creating the html
+			elements.
+		</p>
+	</div>
+
+
+	<div class="well">
+		<h1>October 27 2012 - Week 26 &amp; 27 - Localization for Android
+			&amp; Web</h1>
+
+		<h2>Localization made more general</h2>
+		<p>When we first set up the localization we used the built in
+			Chrome localization API, what this meant was that the app as of July
+			30, no longer worked on the web or on Android. This week Elise braved
+			regular expressions to a system wide find and replace so we could use
+			a more general localization strategy, now the app can run on the web
+			again!</p>
+
+		<h2>Simplifying the import page</h2>
+
+		<p>This week we also kept working on trying to make the import
+			page simpler. The import hadn't been re-designed since the night it
+			was hacked together in July for a pre-alpha demo, it needed some love
+			:)</p>
+
+	</div>
+
+	<div class="well">
+		<h1>October 13 2012 - Week 24 &amp; 25 - Learn Mi'gmaq Prototype
 			is deployed, and so are the new production servers!</h1>
 
 		<h2>Prototype demo</h2>
-		<p>Our prototype is out there and looking good! Watch the video
-			for a tour.</p>
+		<p>
+			Our clickable prototype is out there and looking good! Watch the
+			video for a tour. If you want to try clicking around in the
+			prototype, you can install it on your Android by clicking here: <a
+				href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons">https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons</a>
+		</p>
 
 		<iframe width="560" height="315"
 			src="http://www.youtube.com/embed/MOG22jpAPPM" frameborder="0"
@@ -120,23 +410,22 @@
 			haven't been making it a priority.</p>
 
 
-		<h2>Presented  FieldDB at
-			Javascript Montreal</h2>
+		<h2>Presented FieldDB at Javascript Montreal</h2>
 		<p>
-			@trisapeace and @cesine <a href="slides/offline_databases.html">presented
+			@trisapeace and @cesine <a
+				href="slides/shells/onstage.html#../offline_databases.html">presented
 				the technical sides of the app at Javascript Montreal</a>. In the
 			process we added the read only dashboard which was more of an
 			exercise of showing what require can do to build different versions
 			of the app.
 		</p>
 
-		<h2>Intern dipps her toes into Android
-			development</h2>
+		<h2>Intern dipps her toes into Android development</h2>
 		<p>Since she finished the Learn Mi'gmaq prototype this week Elise
 			also looking back into getting the app to run offline on Android and
-			iPad using TouchDB. When we found out that chrome worked on Android
+			iPad using TouchDB. When we found out that Chrome worked on Android
 			and iPad we planned to use the Chrome store to run the app on
-			tablets. But, it turns out that the chrome store isnt availible yet
+			tablets. But, it turns out that the Chrome store isn't available yet
 			on the mobile version of Chrome. We had some old code from June which
 			started setting up TouchDB on the android. Elise explored the
 			codebases, and another code base for keeping a Grocery list offline
@@ -145,11 +434,11 @@
 		<h2>Chrome 23.0.1271.26 changes the IndexedDB spec</h2>
 
 		<p>
-			At one point this week we woke up to a dashboard taht woudlnt load
+			At one point this week we woke up to a dashboard that wouldn't load
 			(it just said Untitled corpus). The culprit was a new version of
-			chrome (we are using the beta version, which is about 1 month before
+			Chrome (we are using the beta version, which is about 1 month before
 			users). It turns out that the IndexedDBs created with previous
-			versions of chrome need to be updated. We have two options, try to
+			versions of Chrome need to be updated. We have two options, try to
 			fix PouchDB's update function and contribute it upstream to the
 			PouchDB guys, or write a script to log users out, move their
 			databases and the log them back in so that they have fresh new
@@ -168,10 +457,10 @@
 		<h2 id="onthebleedingedge">A new authentication server</h2>
 		<p>This week we worked on refactoring (thats techie talk for
 			re-writing and re-designing) the authentication webservice so we
-			could use up-to-date libaries. We were stuck on an older version of
+			could use up-to-date libraries. We were stuck on an older version of
 			node because the authentication library we were using was using an
-			older version of express etc etc. Now we switched authenticaiton
-			libraries, and switched database backends so now users are stored in
+			older version of express etc etc. Now we switched authentication
+			libraries, and switched database back-ends so now users are stored in
 			a couchdb also. We also added a mailer library to send out emails to
 			users if they forget their password and to welcome when they first
 			sign up so that they have their username written down somewhere.</p>
@@ -761,8 +1050,8 @@
 			width="50%" />
 
 		<p>In this video we look at what happens when a new user comes to
-			the app, and how we let them play with Sapir's sample data until they
-			feel like making their own corpus.</p>
+			the app, and how we let them play with LingLlama's sample data until
+			they feel like making their own corpus.</p>
 		<iframe width="420" height="315"
 			src="https://www.youtube.com/embed/BhCaO8ZvmXY" frameborder="0"
 			allowfullscreen></iframe>
