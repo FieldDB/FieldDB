@@ -100,7 +100,35 @@ OPrime.debug = function(message, message2) {
 
 OPrime.bug = function(message) {
   alert(message);
-}
+};
+
+
+/**
+ * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
+ * the cookie, and the number of days until the cookie expires.
+ * 
+ * @param c_name
+ * @param value
+ * @param exdays
+ */
+OPrime.setCookie = function(c_name, value, exdays) {
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value = escape(value)
+      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  document.cookie = c_name + "=" + c_value;
+};
+OPrime.getCookie = function(c_name) {
+  var i, x, y, ARRcookies = document.cookie.split(";");
+  for (i = 0; i < ARRcookies.length; i++) {
+    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+    x = x.replace(/^\s+|\s+$/g, "");
+    if (x == c_name) {
+      return unescape(y);
+    }
+  }
+};
 
 OPrime.isAndroidApp = function() {
   // Development tablet navigator.userAgent:
@@ -108,15 +136,21 @@ OPrime.isAndroidApp = function() {
   // AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13
   // this.debug("The user agent is " + navigator.userAgent);
   return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
-}
+};
+
+if(OPrime.isAndroidApp()){
+  var debugOrNot = Android.isD();
+  console.log("Setting debug mode to the Android's mode: "+ debugOrNot);
+  OPrime.debugMode = debugOrNot;
+};
 
 OPrime.isAndroid4 = function() {
   return navigator.userAgent.indexOf("Android 4") > -1;
-}
+};
 
 OPrime.isChromeApp = function() {
   return window.location.href.indexOf("chrome-extension") > -1;
-}
+};
 
 /*
  * Audio functions
