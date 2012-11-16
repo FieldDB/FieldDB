@@ -1136,7 +1136,6 @@ define([
             $.ajax({
               type : 'POST',
               url : couchurl ,
-              data : corpusloginparams,
               success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
