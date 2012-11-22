@@ -320,7 +320,7 @@ define([
      * 
      * @param queryString {String} The string representing the query.
      */
-    search : function(queryString) {
+    search : function(queryString, callback) {
       // Search for Datum that match the search criteria      
       var searchself = this;
       (new Datum({"pouchname": app.get("corpus").get("pouchname")})).searchByQueryString(queryString
@@ -335,7 +335,7 @@ define([
         searchself.newTempDataList(function(){
           searchself.searchDataListView.model.set("title"
               , $("#search_box").val()
-              + " search result");
+              + " ");
           searchself.searchDataListView.model.set("description"
               ,  "This is the result of searching for : " 
               + $("#search_box").val()
@@ -350,6 +350,9 @@ define([
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
           Utils.debug("Successfully got data back from search and put it into the temp search data list");
+          if(typeof callback == "function"){
+        	  callback();
+          }
         });
       });
     },
