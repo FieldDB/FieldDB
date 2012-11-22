@@ -498,6 +498,9 @@ define([
         }
       }else{
         this.get("couchConnection").corpusid = this.id;
+        if(!this.get("couchConnection").path){
+          this.get("couchConnection").path = "";
+        }
       }
       var oldrev = this.get("_rev");
       
@@ -1133,7 +1136,6 @@ define([
             $.ajax({
               type : 'POST',
               url : couchurl ,
-              data : corpusloginparams,
               success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");

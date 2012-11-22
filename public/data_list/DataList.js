@@ -373,9 +373,9 @@ define([
               successcallback();
             }else{
               //TODO remove this when done debugging and it is working all the time.
-              window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
-              window.appView.renderEditableDataListViews("leftSide");
-              window.appView.renderReadonlyDataListViews("leftSide");
+//              window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
+//              window.appView.renderEditableDataListViews("leftSide"); //TODO does this need to be run?
+//              window.appView.renderReadonlyDataListViews("leftSide");
             }
           });
         }catch(e){
