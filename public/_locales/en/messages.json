@@ -236,7 +236,7 @@
     "message" : "Data Entry Area <small>(1-5 datum)</small>"
   },
   "locale_Search" : {
-    "message" : "Type your search query, or push enter to see all data"
+    "message" : "Type your search query, or hit enter to see all data"
   },
   "locale_View_Profile_Tooltip" : {
     "message" : "Click to view user's page"
