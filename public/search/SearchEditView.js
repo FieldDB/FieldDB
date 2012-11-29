@@ -335,7 +335,7 @@ define([
         searchself.newTempDataList(function(){
           searchself.searchDataListView.model.set("title"
               , $("#search_box").val()
-              + " search result");
+              + " ");
           searchself.searchDataListView.model.set("description"
               ,  "This is the result of searching for : " 
               + $("#search_box").val()

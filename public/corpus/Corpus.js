@@ -136,31 +136,31 @@ define([
             size : "3",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc). Leaving it blank can mean grammatical/acceptable, or you can add a new symbol to mean grammatical/acceptable."
+            help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
           }),
           new DatumField({
             label : "utterance",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
+            help: "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
           }),
           new DatumField({
             label : "morphemes",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
+            help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
           }),
           new DatumField({
             label : "gloss",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
+            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
           }),
           new DatumField({
             label : "translation",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
+            help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
           })
         ]));
       }//end if to set datumFields
@@ -182,7 +182,7 @@ define([
              label : "goal",
              shouldBeEncrypted: "",
              userchooseable: "disabled",
-             help: "This describes the goals of the session."
+             help: "The goals of the session."
            }),  
           new DatumField({
             label : "consultants",
@@ -193,19 +193,19 @@ define([
             label : "dialect",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "You can use this field to be as precise as you would like about the dialect of this session."
+            help: "The dialect of this session (as precise as you'd like)."
           }),
           new DatumField({
             label : "language",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "This is the langauge (or language family) if you would like to use it."
+            help: "The language (or language family), if desired."
           }),
           new DatumField({
             label : "dateElicited",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "This is the date in which the session took place."
+            help: "The date when the session took place."
           }),
           new DatumField({
             label : "user",
@@ -216,7 +216,7 @@ define([
             label : "dateSEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "This is the date in which the session was entered."
+            help: "The date when the session data was entered."
           }),
         ]));
         
@@ -345,7 +345,7 @@ define([
     defaults : {
       title : "Untitled Corpus",
       titleAsUrl :"UntitledCorpus",
-      description : "This is an untitled corpus, created by default. You should change its title and description to better describe whatever database/corpus you want to build.",
+      description : "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
 //      confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
@@ -1156,7 +1156,6 @@ define([
             $.ajax({
               type : 'POST',
               url : couchurl ,
-              data : corpusloginparams,
               success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
