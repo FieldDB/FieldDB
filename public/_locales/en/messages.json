@@ -137,6 +137,9 @@
   "locale_New_menu" : {
     "message" : "New"
   },
+  "locale_New_Conversation" : {
+  	"message" : "New Conversation"
+  },
   "locale_New_Data_List" : {
     "message" : "New Data List"
   },

@@ -172,9 +172,15 @@ define([
               shouldBeEncrypted: "checked",
               userchooseable: "disabled",
               help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+            }),
+            new DatumField({
+                label : "modality",
+                shouldBeEncrypted: "",
+                userchooseable: "disabled",
+                help: "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
             })
           ]));
-        }//end if to set conversationFields
+        }
       
       if(typeof(this.get("sessionFields")) == "function"){
         this.set("sessionFields", new DatumFields([ 

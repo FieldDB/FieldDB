@@ -352,6 +352,7 @@ define([
         //Localize corpus menu for all corpus views, except new corpus modal
         $(this.el).find(".locale_New_menu").html(Locale["locale_New_menu"].message);
         $(this.el).find(".locale_New_Datum").html(Locale["locale_New_Datum"].message);
+        $(this.el).find(".locale_New_Conversation").html(Locale["locale_New_Conversation"].message);
         $(this.el).find(".locale_New_Data_List").html(Locale["locale_New_Data_List"].message);
         $(this.el).find(".locale_New_Session").html(Locale["locale_New_Session"].message);
         $(this.el).find(".locale_New_Corpus").html(Locale["locale_New_Corpus"].message);
@@ -505,7 +506,16 @@ define([
       appView.datumsEditView.newDatum();
       Utils.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },
-    
+    newConversation : function(e) {
+        if(e){
+//          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+          e.preventDefault(); //this stops the link from moving the page to the top
+        }
+//        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
+//        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
+        Utils.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+      },
+
     newDataList : function(e) {
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
