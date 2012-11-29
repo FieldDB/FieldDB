@@ -224,15 +224,15 @@ define([
         //Localize for all fullscreen view 
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
         $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(Locale["locale_elicitation_sessions_explaination"].message);
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
         $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
-        $(this.el).find(".locale_datalists_explaination").html(Locale["locale_datalists_explaination"].message);
+        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
         $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
-        $(this.el).find(".locale_permissions_explaination").html(Locale["locale_permissions_explaination"].message);
+        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
         $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
-        $(this.el).find(".locale_datum_fields_explaination").html(Locale["locale_datum_fields_explaination"].message);
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
         $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
-        $(this.el).find(".locale_datum_states_explaination").html(Locale["locale_datum_states_explaination"].message);
+        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
         $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         
@@ -269,15 +269,15 @@ define([
         //Localize for all embedded view
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
         $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(Locale["locale_elicitation_sessions_explaination"].message);
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
         $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
-        $(this.el).find(".locale_datalists_explaination").html(Locale["locale_datalists_explaination"].message);
+        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
         $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
-        $(this.el).find(".locale_permissions_explaination").html(Locale["locale_permissions_explaination"].message);
+        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
         $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
-        $(this.el).find(".locale_datum_fields_explaination").html(Locale["locale_datum_fields_explaination"].message);
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
         $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
-        $(this.el).find(".locale_datum_states_explaination").html(Locale["locale_datum_states_explaination"].message);
+        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
         $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       }
@@ -285,6 +285,7 @@ define([
       //Localize corpus menu for all corpus views
       $(this.el).find(".locale_New_menu").html(Locale["locale_New_menu"].message);
       $(this.el).find(".locale_New_Datum").html(Locale["locale_New_Datum"].message);
+      $(this.el).find(".locale_New_Conversation").html(Locale["locale_New_Conversation"].message);
       $(this.el).find(".locale_New_Data_List").html(Locale["locale_New_Data_List"].message);
       $(this.el).find(".locale_New_Session").html(Locale["locale_New_Session"].message);
       $(this.el).find(".locale_New_Corpus").html(Locale["locale_New_Corpus"].message);
@@ -384,7 +385,16 @@ define([
       appView.datumsEditView.newDatum();
       Utils.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
-    
+    newConversation : function(e) {
+        if(e){
+//          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+          e.preventDefault(); //this stops the link from moving the page to the top
+        }
+//        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
+//        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
+        Utils.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+      },
+
     newDataList : function(e) {
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
