@@ -242,7 +242,7 @@ define([
                 		" Search in LingSync is pretty powerful, " +
                 		" in fact if you're the power user type you can write your " +
                 		"own data extracting/filtering/visualization queries using " +
-                		"MapReduce <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>find out more...</a>","alert-success","Search:");
+                		" <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>","alert-success","Search:");
                 window.toldSearchtomakeviews = true;
                 var previousquery = queryString;
                 window.app.get("corpus").createPouchView("get_datum_field/get_datum_fields", function(){
