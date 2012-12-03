@@ -125,7 +125,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-comments-alt'></i> "+goal+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
           }));
@@ -136,7 +136,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-comments-alt'></i> "+goal+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
           }));
@@ -209,7 +209,7 @@ define([
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
-                  directobjecticon : "icon-comments-alt",
+                  directobjecticon : "icon-calendar",
                   directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
@@ -220,7 +220,7 @@ define([
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
-                  directobjecticon : "icon-comments-alt",
+                  directobjecticon : "icon-calendar",
                   directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
