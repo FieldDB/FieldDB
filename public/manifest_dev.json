@@ -1,7 +1,8 @@
 {
   "name" : "LingSync testing",
-  "version" : "1.24.3",
+  "version" : "1.32.1",
   "description" : "A bleeding edge version, with new features faster",
+  "default_locale" : "es",
   "app" : {
     "launch" : {
       "local_path" : "index.html"
@@ -19,5 +20,5 @@
     "128" : "icon128_dev.png"
   },
   "manifest_version" : 2,
-  "content_security_policy" : "default-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com ; script-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com ; connect-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com ; object-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com "
+  "content_security_policy" : "img-src 'self' https://secure.gravatar.com  https://ssl.google-analytics.com ; default-src 'self' https://secure.gravatar.com https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com  https://ssl.google-analytics.com https://www.youtube.com ; script-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com  https://ssl.google-analytics.com https://www.youtube.com ; connect-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com  https://ssl.google-analytics.com https://www.youtube.com ; object-src 'self' https://auth.lingsync.org https://corpus.lingsync.org https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186 https://ifield.iriscouch.com https://ifielddevs.iriscouch.com  https://ssl.google-analytics.com https://www.youtube.com "
 }

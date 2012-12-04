@@ -33,19 +33,39 @@ define([
     },
 
     routes : {
-      "corpus/:pouchname"               : "showFullscreenCorpus", 
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
+      "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
+      "corpus/:pouchname/alldata"       : "showAllData",//pouchname has to match the pouch of the corpus
+      "corpus/:pouchname"               : "showFullscreenCorpus", 
       "corpus"                          : "showFullscreenCorpus", 
-      "data/:dataListid"                : "showFullscreenDataList",
-      "session/:sessionid"              : "showFullscreenSession",
+      "data/:dataListid"                : "showFullscreenDataList",//TODO: consider putting corpus and pouchname here
+      "session/:sessionid"              : "showFullscreenSession",//TODO: consider putting corpus and pouchname here
       "user/:userid"                    : "showFullscreenUser",
-      "import"                          : "showImport",
+      "import"                          : "showImport",//TODO: consider putting corpus and pouchname here
       "corpus/:pouchname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
+      "render/:render"                  : "renderDashboardOrNot",
       ""                                : "showDashboard"
     },
-    
+
+    /**
+     * Does nothing or renders
+     * 
+     * @param {String}
+     *          pouchname (Optional) The name of the corpus to display.
+     */
+    renderDashboardOrNot : function(render) {
+      Utils.debug("In renderDashboardOrNot: " );
+      if(render == undefined || render == true || render == "true"){
+        window.appView.renderReadonlyDashboardViews();
+        this.hideEverything();
+        $("#dashboard-view").show();
+        $("#datums-embedded").show();
+        window.location.href = "#"; 
+      }
+    },
+
     /**
      * Displays the dashboard view of the given pouchname, if one was given. Or
      * the blank dashboard view, otherwise.
@@ -55,18 +75,6 @@ define([
      */
     showDashboard : function() {
       Utils.debug("In showDashboard: " );
-      //Re-render the dashboard, if either the corpus or the datalist read views arent already renderd on the side.
-//      if(window.appView.currentCorpusReadView.format != "leftSide" || window.appView.currentReadDataListView.format != "leftSide" ){
-        window.appView.renderReadonlyDashboardViews();
-//      }
-        //Just render the datums container
-//      window.appView.datumsEditView.format = "centerWell";
-//      window.appView.datumsEditView.render();
-//      window.app.router.hideEverything(); //TODO there is a loss of this somewhere in the app, using the hardcoded varible is a workaround.
-      this.hideEverything();
-      $("#dashboard-view").show();
-      $("#datums-embedded").show();
-      window.location.href = "#"; //TODO this is to clear the parameters in the url
     },
     /**
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
@@ -77,7 +85,7 @@ define([
       if(couchConnection.port != null){
         couchDatabaseUrl = couchDatabaseUrl+":"+couchConnection.port;
       }
-      couchDatabaseUrl = couchDatabaseUrl +"/_utils/database.html?"+ couchConnection.pouchname;
+      couchDatabaseUrl = couchDatabaseUrl + couchConnection.path +"/_utils/database.html?"+ couchConnection.pouchname;
      
       
       window.appView.toastUser("We haven't implemented the 'diff' tool yet" +
@@ -274,7 +282,15 @@ define([
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
-      if(dataListid &&  dataListid != app.get("currentDataList").id ){
+      if(dataListid == app.get("currentDataList").id || ! dataListid ){
+    	  if($("#data-list-fullscreen-header").html() == ""){
+    	        window.appView.renderReadonlyDataListViews("fullscreen");
+    	      }
+    	      this.hideEverything();
+    	      $("#data-list-fullscreen").show();    
+    	      window.scrollTo(0,0);
+    	      return;
+      }else{
         if(!pouchname){
           pouchname = window.app.get("corpus").get("pouchname");
         }
@@ -353,12 +369,7 @@ define([
           }
         }
       }
-      if($("#data-list-fullscreen-header").html() == ""){
-        window.appView.renderReadonlyDataListViews("fullscreen");
-      }
-      this.hideEverything();
-      $("#data-list-fullscreen").show();    
-      window.scrollTo(0,0);
+     //TODO test other cases where datalist id needs to be changed
 
     },
     
@@ -413,13 +424,40 @@ define([
     /**
      * Displays the advanced search in embedded form.
      */
-    showEmbeddedSearch : function(pouchname, corpusid) {
+    showEmbeddedSearch : function(pouchname) {
       this.hideEverything();
       $("#dashboard-view").show();
       window.appView.searchEditView.format = "centreWell";
       window.appView.searchEditView.render();
       $("#search-embedded").show();
     },
+    
+    /**
+     * The showAllData function gives the user a Datalist of all the  Datums in their corpus (embedded Datalist view)
+     * it does this by calling the search method of searchEditView within appView
+     * @param pouchname   identifies the database to look in 
+     * TODO: try saving it, setting it as current datalist and rendering that fullscreen
+     */
+    showAllData : function(pouchname) {
+//        this.hideEverything();
+//        $("#dashboard-view").show();
+    	window.app.showSpinner();
+        $(".spinner-status").html("Searching all data...");
+        window.appView.searchEditView.search("", function(){
+            window.appView.searchEditView.searchDataListView.model.set("title", "All Data as of " + new Date());
+//            window.appView.searchEditView.searchDataListView.render();
+            $(".spinner-status").html("Opening all data...");
+            window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
+                $(".spinner-status").html("Loading all data...");
+            	window.appView.currentReadDataListView.format = "fullscreen";
+            	window.appView.currentReadDataListView.render();
+            	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
+            	window.app.stopSpinner();
+            });
+        });
+        
+      },
+
     showEmbeddedDatum : function(pouchname, datumid){
       Utils.debug("In showEmbeddedDatum"  + pouchname + " *** "
           + datumid);
@@ -427,20 +465,57 @@ define([
         if(!pouchname){
           pouchname = window.app.get("corpus").get("pouchname");
         }
+        if(datumid == "new"){
+          appView.datumsEditView.newDatum();
+          window.location.href = "#render/false"; //TODO this is to clear the parameters in the url
+          $($($(".utterance")[0]).find(".datum_field_input")[0]).focus()
+          return;
+        }
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumid;
         obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               window.appView.datumsEditView.prependDatum(model);
-              window.app.router.showDashboard();
+              window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
             }
           });
         });
       }else{
-        window.app.router.showDashboard();
+        window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
       }
     },
+    
+    showEmbeddedConversation : function(pouchname, conversationid){
+        $("#datums-embedded").hide();
+    	$("#conversation-embedded").show();
+    	Utils.debug("In showEmbeddedConversation"  + pouchname + " *** "
+            + conversationid);
+        if(conversationid){
+          if(!pouchname){
+            pouchname = window.app.get("corpus").get("pouchname");
+          }
+          if(conversationid == "new"){
+//            appView.datumsEditView.newDatum(); //change this so it's relevant for Conversation
+            window.location.href = "#render/false"; //TODO this is to clear the parameters in the url
+//            $($($(".utterance")[0]).find(".datum_field_input")[0]).focus() //change so relevant to Conversation
+            return;
+          }
+          var obj = new Conversation({pouchname: app.get("corpus").get("pouchname")});
+          obj.id  = conversationid;
+          obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
+            obj.fetch({
+              success : function(model, response) {
+ //               window.appView.datumsEditView.prependDatum(model); //change so relevant to Conversation
+                window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
+              }
+            });
+          });
+        }else{
+          window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
+        }
+      },
+      
     showImport : function() {
       Utils.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
@@ -489,8 +564,10 @@ define([
     hideEverything: function() {
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();
+      $("#conversation-embedded").hide();
       $("#data-list-fullscreen").hide();
       $("#datum-container-fullscreen").hide();
+      $("#conversation-container-fullscreen").hide();
       $("#corpus-embedded").hide();
       $("#corpus-fullscreen").hide();
       $("#search-fullscreen").hide();

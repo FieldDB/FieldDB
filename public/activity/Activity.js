@@ -10,7 +10,7 @@ define([
   {
     /**
      * @class The Activity is a record of the user's activity during one
-     *        session, i.e. it might say "Edward Sapir added 30 datums in Na
+     *        session, i.e. it might say "Edward LingLlama added 30 datums in Na
      *        Dene Corpus" This is so that users can see their history and teams
      *        can view teammate's contributions.
      * 

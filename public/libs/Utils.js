@@ -350,5 +350,3 @@ Utils.testPouchChromeVersions = function(pouchname) {
     }
   }
 };
-
-

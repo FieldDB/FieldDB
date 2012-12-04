@@ -118,8 +118,8 @@ define([
       this.term.initFS(false, 1024 * 1024);
       
       // Set up a timeout event every 10sec
-      _.bindAll(this, "saveScreen");
-      window.setInterval(this.saveScreen, 10000);     
+//      _.bindAll(this, "saveScreen");
+//      window.setInterval(this.saveScreen, 10000);     
     },
     setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
       // Create three corpus views
@@ -437,10 +437,12 @@ define([
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
       },
-      "click .icon-home" : function() {
-//        this.model.router.showDashboard();
-        window.location.href = "#";
-        app.router.showDashboard(); //the above line wasnt working
+      "click .icon-home" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        window.location.href = "#render/true";
       },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
@@ -462,6 +464,13 @@ define([
           e.preventDefault();
         }
         this.searchEditView.searchTop();
+      },
+      "keyup #quick-authenticate-password" : function(e) {
+          var code = e.keyCode || e.which;
+          // code == 13 is the enter key
+          if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
+            $("#quick-authentication-okay-btn").click();
+          }
       },
       "keyup #search_box" : function(e) {
 //        if(e){
@@ -622,6 +631,7 @@ define([
       this.renderReadonlySessionViews("leftSide");
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
+      this.datumsEditView.showMostRecentDatum();
     },
     
     // Display the Corpus Views

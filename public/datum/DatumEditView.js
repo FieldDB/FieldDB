@@ -153,8 +153,6 @@ define([
       "change .datum_state_select" : "updateDatumStates",
       "click .add-comment-datum" : 'insertNewComment',
       
-      "change" : "updatePouch",//TODO this shouldnt be happening?
-      
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "click .save-datum" : "saveButton"
@@ -209,18 +207,9 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
+        
         var self = this;
         window.setTimeout(function(){
-          $('.datum-field').each(function(index, item) {
-            item.classList.add( $(item).find("label").html() );
-            $(".datum_field_input").each(function(index){
-              this.addEventListener('drop', window.appView.dragUnicodeToField);
-              this.addEventListener('dragover', window.appView.handleDragOver);
-              this.addEventListener('dragleave', function(){
-                $(this).removeClass("over");
-              } );
-            });
-          });
           self.hideRareFields();
         }, 500);
             
@@ -315,22 +304,12 @@ define([
 
     needsSave : false,
     
-    updatePouch : function() {
-      this.needsSave = true;
-    },
-
-    
     saveButton : function(e){
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
-      if (this.needsSave) {
-          this.saveScreen();
-      }else {
-        window.appView.toastUser("This datum "+this.model.id+"has no unsaved changes","alert-success","Saved!");
-
-      };
+      this.model.saveAndInterConnectInApp();
     },
     
     /**
@@ -431,7 +410,11 @@ define([
      * placed at the top of the datumsView, pushing off the bottom Datum, if
      * necessary.
      */
-    newDatum : function() {
+    newDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       // Add a new Datum to the top of the Datum stack
       appView.datumsEditView.newDatum();
     },
@@ -440,7 +423,11 @@ define([
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function() {      
+    duplicateDatum : function(e) { 
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       // Add it as a new Datum to the top of the Datum stack
       var d = this.model.clone();
       delete d.attributes.dateEntered;
@@ -512,6 +499,8 @@ define([
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       this.guessGlosses($(e.currentTarget).val());
+      this.needsSave = true;
+
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {

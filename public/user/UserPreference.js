@@ -38,7 +38,7 @@ define([
 //        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ɖ"}));
 //        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ɗ"}));
 //        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ɘ"}));
-//        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ə"}));
+        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ə"}));
 //        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ɚ"}));
         this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ɛ"}));
 //        this.get("unicodes").add(new InsertUnicode({tipa: "", symbol:  "ɜ"}));
