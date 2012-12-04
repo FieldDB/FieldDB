@@ -7,12 +7,12 @@
     "message" : "An on/offline fieldlinguistics database app which adapts to its user's I-Language.",
     "description" : "The description of the application, displayed in the web store."
   },
-  "locale_Close_and_login_as_Ed_Sapir" : {
-    "message" : "Login as Ed Sapir",
+  "locale_Close_and_login_as_LingLlama" : {
+    "message" : "Login as LingLlama",
     "description" : "button"
   },
-  "locale_Close_and_login_as_Ed_Sapir_Tooltip" : {
-    "message" : "You can log in as Ed Sapir to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to LingSync this is a great place to start after watching the videos. ",
+  "locale_Close_and_login_as_LingLlama_Tooltip" : {
+    "message" : "You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to LingSync this is a great place to start after watching the videos. ",
     "description" : "tooltip"
   },
   "locale_Username" : {
@@ -28,7 +28,7 @@
     "message" : "Welcome to LingSync! <small>beta</small>"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "LingSync - McGill is a field linguistics database app for McGill researcher and their collaborators. To use this version of the app you need to be added to the list of authorized users by the McGill linguistics team."
+    "message" : "LingSync - McGill is a field linguistics database app for McGill researcher and their collaborators. To use this version of the app you need to be added to the list of authorized users by the McGill linguistics team. You can <a href='https://docs.google.com/spreadsheet/viewform?formkey=dGUyMS1acW5hTzlCR1NsQ0gxQ0Z3V0E6MQ#gid=0' target='_new'>request a username by completing this form.</a>"
   },
   "locale_Welcome_Beta_Testers" : {
     "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"
