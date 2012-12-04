@@ -3638,13 +3638,13 @@ module.exports = {
    * @param url           The URL to load
    * @param props         Properties that can be passed in to the activity:
    *      wait: int                           => wait msec before loading URL
-   *      loadingDialog: "Title,Message"      => display a native loading dialog
+   *      loadingConversation: "Title,Message"      => display a native loading dialog
    *      loadUrlTimeoutValue: int            => time in msec to wait before triggering a timeout error
    *      clearHistory: boolean              => clear webview history (default=false)
    *      openExternal: boolean              => open in a new browser (default=false)
    *
    * Example:
-   *      navigator.app.loadUrl("http://server/myapp/index.html", {wait:2000, loadingDialog:"Wait,Loading App", loadUrlTimeoutValue: 60000});
+   *      navigator.app.loadUrl("http://server/myapp/index.html", {wait:2000, loadingConversation:"Wait,Loading App", loadUrlTimeoutValue: 60000});
    */
   loadUrl:function(url, props) {
     exec(null, null, "App", "loadUrl", [url, props]);

@@ -1,6 +1,6 @@
 {
   "name" : "LingSync testing",
-  "version" : "1.28.6.1",
+  "version" : "1.32.1",
   "description" : "A bleeding edge version, with new features faster",
   "default_locale" : "es",
   "app" : {
