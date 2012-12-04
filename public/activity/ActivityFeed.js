@@ -424,7 +424,11 @@ define([
             if(couchConnection.port != null){
               couchurl = couchurl+":"+couchConnection.port;
             }
-            couchurl = couchurl +"/"+ couchConnection.pouchname;
+            if(!couchConnection.path){
+              couchConnection.path = "";
+            }
+            couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
+            
             Utils.debug("This is the url using to replicate to: "+couchurl);
             db.replicate.to(couchurl, { continuous: false }, function(err, response) {
               Utils.debug("Replicate to " + couchurl);
@@ -489,8 +493,11 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
-          
+          if(!couchConnection.path){
+            couchConnection.path = "";
+          }
+          couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
+                    
           
           //We can leave the to and from replication async, and make two callbacks. 
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {
