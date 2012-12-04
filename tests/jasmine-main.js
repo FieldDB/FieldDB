@@ -28,7 +28,9 @@ require.config({
     "bootstrap-button" : "bootstrap/js/bootstrap-button",
     "bootstrap-collapse" : "bootstrap/js/bootstrap-collapse",
     "bootstrap-carousel" : "bootstrap/js/bootstrap-carousel",
-    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead"
+    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead",
+
+      "xml2json" : "libs/xml2json"
 
      // "jquery.couch" : "libs/jquery.couch"
   },

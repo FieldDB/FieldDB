@@ -82,20 +82,32 @@ define([
       $(this.el).find(".locale_Edit_Datum").attr("title", Locale["locale_Edit_Datum"].message);      
     },
     
-    resizeSmall : function() {
+    resizeSmall : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
 //      window.app.router.showReadonlyDatums("centreWell");
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
-    resizeFullscreen : function() {
+    resizeFullscreen : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showReadonlyDatums("fullscreen");
     },
     
-    showEditable : function() {
+    showEditable : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       window.app.router.showEditableDatums(this.format);
     },
     
-    updateDatums : function() {
+    showMostRecentDatum : function() {
       var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
         
       // Get the current Corpus' Datum based on their date entered
@@ -107,18 +119,31 @@ define([
           for (var i = 0; i < self.model.length; i++) {
             self.model.pop();
           }
+            
+          // Add a single, blank Datum
+//          self.newDatum();
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
-            for (var i = self.model.length; i < nextNumberOfDatum; i++) {
+            for (var i = 0; i < rows.length; i++) {
+              //If you've filled it up, stop filling.
+              if(self.model.length >= nextNumberOfDatum){
+                return;
+              }
+              
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-if (rows[rows.length - i - 1]) {
-                var d = new Datum();
-                d.set(d.parse(rows[rows.length - i - 1].value));
-                self.model.add(d);
+              if (rows[rows.length - i - 1]) {
+                var m = rows[rows.length - i - 1];
+                //Only add datum objects to the container
+                if(m.value.jsonType == "Datum"){
+                  var d = new Datum();
+                  d.set(d.parse(m.value));
+                  self.model.add(d);
+                  
+                }
               }
             }
-          // If the user has decrease the number of Datum to display in the container
+          // If the user has decreased the number of Datum to display in the container
           } else if (nextNumberOfDatum < self.model.length) {
             // Pop the excess Datum from the bottom of the stack
             for (var i = nextNumberOfDatum; i < self.model.length; i++) {
@@ -126,7 +151,7 @@ if (rows[rows.length - i - 1]) {
             }
           }
         }
-      })
+      });
     }
   });
   

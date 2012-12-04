@@ -1,0 +1,34 @@
+<!--  Search Data lists icons -->
+<div class="pull-right">
+  <button class="btn btn-success save-search-datalist locale_Save" value="Save"></button>
+  <a href="#" class= "locale_Hide_Datalist" rel="tooltip">
+      <i class="icons icon-minus-sign"></i>
+  </a>  
+</div>
+
+<label class="locale_Title"></label> <i class="icon-pushpin"></i> 
+<small> {{datumCount}}</small>
+<textarea class="data-list-title">{{title}}</textarea>
+<label class="locale_Description"></label>
+<textarea class="data-list-description locale_Datalist_Description">
+{{description}}</textarea>
+
+<!--Search DataList Menu  -->
+<div class="btn-group">
+  <a  href="#" class = "locale_Play_Audio_checked btn btn-mini btn-primary" rel="tooltip" >
+    <i class=" icon-bullhorn"></i></a>
+  <!--This cannot be included in search or import <a  href="#" class = "locale_Remove_checked_from_datalist_tooltip btn btn-mini btn-primary" rel="tooltip" >
+    <i class=" icon-remove-sign"></i></a> -->
+  <a href="#" class= "locale_Decrypt_checked btn btn-mini btn-primary" rel="tooltip">
+    <i class=" icon-unlock"></i></a> 
+  <a href="#" class= "locale_Encrypt_checked btn btn-mini btn-primary" rel="tooltip">
+    <i class=" icon-lock"></i></a>
+  <a href="#" class = "locale_Show_confidential_items_Tooltip btn btn-mini btn-primary" rel="tooltip">
+    <i class=" {{#if decryptedMode}}icon-eye-close{{else}}icon-eye-open{{/if}}"></i></a>
+  <a  href="#" class = "locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info" rel="tooltip" >
+    <i class=" icon-paste"></i></a>
+  <a href="#" class = "locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX" rel="tooltip">
+    <i class="">LaTeX</i></a>
+  <a href="#" class = "locale_Export_checked_as_CSV btn btn-mini btn-info CSV" rel="tooltip">
+    <i class="">CSV</i></a>
+</div>

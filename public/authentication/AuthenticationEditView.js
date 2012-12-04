@@ -64,16 +64,8 @@ define([
         window.appView.currentCorpusReadView.format = "fullscreen";
         window.appView.currentCorpusReadView.render();
         app.router.showFullscreenCorpus();
-      },
-      //
-      "keyup #quick-authenticate-password" : function(e) {
-        var code = e.keyCode || e.which;
-        Utils.debug("This should fire when the user pushes enter but it doesnt. TODO might have to just use jquery in the render, insted of backbone which might limit it to the element...");
-        // code == 13 is the enter key
-        if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
-          $("#quick-authentication-okay-btn").click();
-        }
       }
+      //
     },
     
     /**
@@ -172,7 +164,7 @@ define([
     },
     
     /**
-     * Notes: Sapir's user comes from his time after his PhD and before his
+     * Notes: LingLlama's user comes from his time after his PhD and before his
      * foray into the industry. This is when he started getting some results for
      * "phoneme" around 1910. For a similar use of historical users see Morgan
      * Blamey and Tucker the Technician at blamestella.com
@@ -209,7 +201,7 @@ define([
           if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
             //do nothing because they have no recent ids
             alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-            window.app.router.showDashboard();
+            window.location.href = "#render/true";
           }else{
             /*
              *  Load their last corpus, session, datalist etc
@@ -247,7 +239,7 @@ define([
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
               alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-              window.app.router.showDashboard();
+              window.location.href = "#render/true";
             }else{
               /*
                *  Load their last corpus, session, datalist etc, 
@@ -276,7 +268,7 @@ define([
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
                 }else{
                   console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-                  window.app.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
+                  window.app.router.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
                 }
               }
             }                    
@@ -353,12 +345,12 @@ define([
      */
     showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       var self = this;
-      if( this.model.get("userPrivate").get("username") == "sapir" ){
+      if( this.model.get("userPrivate").get("username") == "lingllama" ){
         $("#quick-authenticate-modal").modal("show");
         $("#quick-authenticate-password").val("phoneme")
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
-//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+//          alert("Authenticating quickly, with just password, (if the user is not lingllama, if its lingllama, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val()
               , window.app.get("authentication").get("userPrivate").get("authUrl") 
@@ -374,7 +366,7 @@ define([
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
-//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+//          alert("Authenticating quickly, with just password, (if the user is not lingllama, if its lingllama, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val() 
               , window.app.get("authentication").get("userPrivate").get("authUrl")

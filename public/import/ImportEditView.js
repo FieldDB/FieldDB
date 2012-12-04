@@ -100,8 +100,12 @@ define( [
           this.showSecondStep();
       },
       
-      "click .icon-resize-small" : function(){
-        window.app.router.showDashboard();
+      "click .icon-resize-small" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        window.location.href = "#render/true";
       },
       /* event listeners for the drag and drop import of files */
       "dragover .drop-zone" : function(e){
@@ -224,6 +228,7 @@ define( [
         this.showSecondStep();
       }
       
+      //localization
       $(this.el).find(".locale_Save_And_Import").html(Locale["locale_Save_And_Import"].message);
       $(this.el).find(".locale_Import").html(Locale["locale_Import"].message);
       $(this.el).find(".locale_percent_completed").html(Locale["locale_percent_completed"].message);
@@ -615,7 +620,7 @@ define( [
       $(".approve-save").html("Finished");
       
       // Go back to the dashboard 
-      window.location.replace("#");
+      window.location.href = "#render/true";
     },
     /**
      * permanently saves the datalist to the corpus, and all of its datums too.
@@ -770,6 +775,7 @@ define( [
      * Adds double the columns
      */
     insertDoubleColumnsInTable : function(){
+      var self = this;
       $("#csv-table-area").find('td').each(function(index) {
         $(this).after('<td contenteditable = "true"></td>');
       });
@@ -778,8 +784,8 @@ define( [
         var tableCell = document.createElement("th");
         count++;
         $(tableCell).html('<input type="text" class="drop-label-zone header'+count+'" value=""/>');
-        $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
-        $(tableCell).find("input")[0].addEventListener('dragover', this.handleDragOver);
+        $(tableCell).find("input")[0].addEventListener('drop', self.dragLabelToColumn);
+        $(tableCell).find("input")[0].addEventListener('dragover', self.handleDragOver);
         $(tableCell).find("input")[0].addEventListener('dragleave', function(){
           $(this).removeClass("over");
         } );
