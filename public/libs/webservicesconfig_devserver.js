@@ -2,13 +2,13 @@
 var Utils = Utils || {};
 
 
-Utils.websiteUrl = "https://prosody.linguistics.mcgill.ca/www";
-Utils.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
-Utils.audioUrl = "https://prosody.linguistics.mcgill.ca/audio";
-Utils.lexiconUrl = "https://prosody.linguistics.mcgill.ca/lexicon";
-Utils.corpusUrl = "https://prosody.linguistics.mcgill.ca/corpus";
-Utils.activityUrl = "https://prosody.linguistics.mcgill.ca/activity";
-Utils.widgetUrl = "https://prosody.linguistics.mcgill.ca/widget";
+Utils.websiteUrl = "https://prosody.linguistics.mcgill.ca/www/";
+Utils.authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
+Utils.audioUrl = "https://prosody.linguistics.mcgill.ca/audio/";
+Utils.lexiconUrl = "https://prosody.linguistics.mcgill.ca/lexicon/";
+Utils.corpusUrl = "https://prosody.linguistics.mcgill.ca/corpus/";
+Utils.activityUrl = "https://prosody.linguistics.mcgill.ca/activity/";
+Utils.widgetUrl = "https://prosody.linguistics.mcgill.ca/widget/";
 
 /*
  * Use the current app's chrome url, assuming if its a dev, they will have their
@@ -29,8 +29,8 @@ Utils.defaultCouchConnection = function() {
   return {
     protocol : "https://",
     domain : "prosody.linguistics.mcgill.ca",
-    port : "6984",
+    port : "443",
     pouchname : "default",
-    path : "/corpus"
+    path : "/corpus/"
   }; 
 };

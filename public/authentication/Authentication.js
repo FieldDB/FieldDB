@@ -103,7 +103,7 @@ define([
           }
         },//end successful login
         error: function(e){
-          Utils.debug("Ajax failed, user might be offline.", e);
+          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
           if(window.appView){
             window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
           }
