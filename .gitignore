@@ -6,6 +6,7 @@ compiled_handlebars.js
 #ignore private config files
 *_production*
 *private*
+*mcgill*
 
 # Ignore natural lib 
 public/libs/natural/
