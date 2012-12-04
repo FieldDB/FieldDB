@@ -18,8 +18,8 @@ require([
 		it("should have a subtitle constisting of firstname lastname ", function() {
 			var u = new User();
 			u.set("firstname", "Ed");
-			u.set("lastname", "Sapir");
-			expect("Ed Sapir" == u.subtitle()).toBeTruthy();
+			u.set("lastname", "LingLlama");
+			expect("LingLlama" == u.subtitle()).toBeTruthy();
 		});
 		
 	});

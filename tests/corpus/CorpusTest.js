@@ -1,5 +1,5 @@
 require(
-    [ "corpus/Corpus","corpus/CorpusView"
+    [ "corpus/Corpus","corpus/CorpusEditView"
         ],
 function(Corpus,CorpusView) {
 

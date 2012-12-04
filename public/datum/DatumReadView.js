@@ -189,14 +189,14 @@ define([
         
         //localization for read only well view
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         } 
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip"));
-        $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-        $(this.el).find(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale["locale_Plain_Text_Export_Tooltip"].message);
+        $(this.el).find(".locale_LaTeX").attr("title", Locale["locale_LaTeX"].message);
+        $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale["locale_CSV_Tooltip"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       } else if (this.format == "latex") {
         //This gets the fields necessary from the model

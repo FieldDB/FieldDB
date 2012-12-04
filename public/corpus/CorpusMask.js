@@ -46,11 +46,11 @@ define([
      * 
      * @property {String} title This is used to refer to the corpus, and
      *           what appears in the url on the main website eg
-     *           http://fieldlinguist.com/Sapir/SampleFieldLinguisticsCorpus
+     *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
      * @property {String} description This is a short description that
      *           appears on the corpus details page
      * @property {String} remote The git url of the remote eg:
-     *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
+     *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *           
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
