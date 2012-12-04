@@ -94,7 +94,7 @@ progress::-webkit-progress-bar {
 	display: none;
 }
 
-.dialog_screen {
+.conversation_screen {
 	width: 50%;
 	margin: auto;
 }

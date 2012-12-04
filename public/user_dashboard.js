@@ -160,7 +160,7 @@ require([
     });
     
   } else {
-    // new user, let them register or login as themselves or sapir
+    // new user, let them register or login as themselves or lingllama
     document.location.href='index.html';
   }
   

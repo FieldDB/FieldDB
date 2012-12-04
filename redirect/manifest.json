@@ -1,0 +1,19 @@
+{
+  "name" : "iField Beta",
+  "version" : "1.16.3.5",
+  "description" : "Moved to LingSync.org!",
+  "app" : {
+    "launch" : {
+      "local_path" : "index.html"
+    }
+  },
+  "offline_enabled" : true,
+  "permissions" : [ "unlimitedStorage" ],
+  "icons" : {
+    "16" : "icon16.png",
+    "48" : "icon48.png",
+    "128" : "icon128.png"
+  },
+  "manifest_version" : 2,
+  "content_security_policy" : "default-src 'self' "
+}

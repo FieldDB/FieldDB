@@ -61,21 +61,36 @@ define([
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         //localization
-        $(this.el).find(".locale_Encrypt_if_confidential").html(chrome.i18n.getMessage("locale_Encrypt_if_confidential"));
-        $(this.el).find(".locale_Help_Text").html(chrome.i18n.getMessage("locale_Help_Text"));
-        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", chrome.i18n.getMessage("locale_Help_Text_Placeholder"));
+        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale["locale_Encrypt_if_confidential"].message);
+        $(this.el).find(".locale_Help_Text").html(Locale["locale_Help_Text"].message);
+        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale["locale_Help_Text_Placeholder"].message);
         
-        // Select the correct values from the model
-        this.$el.children(".choose-field").val(this.model.get("label"));
+        // Select the correct values from the model TODO is this dead code?
+        $(this.el).children(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
-        var fieldself = this;
-        window.setTimeout(function(){
-          $(fieldself.el).find(".datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-        },500);
         
+        //Add the label class to this element so that it can be found for other purposes like hiding rare fields
+        $(this.el).addClass(this.model.get("label"));
+        
+        //Add listener for drag and drop unicode
+        $(this.el).find(".datum_field_input").each(function(){
+          this.addEventListener('drop', window.appView.dragUnicodeToField);
+          this.addEventListener('dragover', window.appView.handleDragOver);
+          this.addEventListener('dragleave', function(){
+            $(this).removeClass("over");
+            return;
+          });
+//          $(this).autosize();
+        });
+        
+        var fieldself = this;
+//        This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+        window.setTimeout(function(){
+          $(fieldself.el).find(".datum_field_input").autosize();
+        },500);
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = false;

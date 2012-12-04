@@ -305,6 +305,12 @@ Utils.catchAndThrowPouchError = function(e) {
 };
 
 Utils.testPouchChromeVersions = function(pouchname) {
+  return;
+  
+  
+  /*
+   * Dead code follows
+   */
   var chromeVersionWhenThisPouchWasCreated = localStorage.getItem(pouchname
       + "chromeCreationVersion");
   var currentChromeVersion = window.navigator.appVersion
