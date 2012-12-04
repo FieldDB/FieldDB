@@ -15,9 +15,9 @@ require([
 		
 		it("should set user's team name", function(){
 			var u = new User();
-			u.set("username", "elingllama");
+			u.set("username", "esapir");
 			u.set("teams", ["YaleNavajo"]);
-			expect("elingllama" == u.teams(["YaleNavajo"])).tobeTruthy();
+			expect("esapir" == u.teams(["YaleNavajo"])).tobeTruthy();
 		});
 		
 		

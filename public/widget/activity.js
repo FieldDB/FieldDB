@@ -5,7 +5,7 @@
     new Fieldlinguist.Widget({
       version: 2,
       type: 'search',
-      search: '#lingllama',
+      search: '#sapir',
       interval: 30000,
       title: 'Team Activity Feed',
       subject: '',

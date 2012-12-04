@@ -118,7 +118,7 @@ require([
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
-    "libs/webservicesconfig_mcgill",
+    "libs/webservicesconfig_devserver",
     "libs/Utils"
 ], function(
     UserApp,
@@ -160,7 +160,7 @@ require([
     });
     
   } else {
-    // new user, let them register or login as themselves or lingllama
+    // new user, let them register or login as themselves or sapir
     document.location.href='index.html';
   }
   
