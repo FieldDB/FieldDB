@@ -471,3 +471,34 @@ line.link {
 	text-align: center;
 	text-shadow: 1px 1px #000;
 }
+
+.conversation-text-audio-wrapper{
+	overflow: hidden;
+	top: 18px;
+	left: 0px;
+	background: transparent;
+	width: 960px;
+	height: 435px;	
+}
+
+.conversation-text-audio-played{
+	background-color:rgba(0,0,0,0.5);
+	width: 750;
+}
+
+.jp-load-bar {
+	background-color: #aaa;
+	width: 960px;
+	height: 435px;
+	cursor: pointer;
+}
+.jp-play-bar {
+	background: rgba(255,255,255,0.5);
+	content: 'comming in January-February';
+	margin:1em;
+  font-size: 2em;
+  line-height:2em;
+  text-align:center;
+	width: 330px;
+	height: 435px;
+}
