@@ -46,7 +46,7 @@ define( [
       "click .approve-save" : "saveDataList",
       "click .approve-import" : function(e){
         e.preventDefault();
-        $(" #import-third-step").removeClass("hidden");
+        $("#import-third-step").removeClass("hidden");
         this.convertTableIntoDataList();
       },
        /*event listeners for the import from dropdown menu  */
@@ -108,23 +108,13 @@ define( [
         window.location.href = "#render/true";
       },
       /* event listeners for the drag and drop import of files */
-      "dragover .drop-zone" : function(e){
-        this._dragOverEvent(e);
-      },
-      "dragenter .drop-zone" : function(e){
-        this._dragEnterEvent(e);
-      },
-      "dragleave .drop-zone" : function(e){
-        this._dragLeaveEvent(e);
-      },
-      "drop .drop-zone" : function(e){
-        this._dropEvent(e);
-      },
-      "drop .drop-label-zone" : function(e){
-        this._dropLabelEvent(e);
-      },
+      "dragover .drop-zone" : "_dragOverEvent",
+      "dragenter .drop-zone" : "_dragEnterEvent",
+      "dragleave .drop-zone" : "_dragLeaveEvent",
+      "drop .drop-zone" : "_dropEvent",
+      "drop .drop-label-zone" : "_dropLabelEvent",
       "click .add-column" : "insertDoubleColumnsInTable",
-      "blur .export-large-textarea" : "updateRawText",
+      "blur .export-large-textarea" : "updateRawText"
     },
     _dragOverEvent: function (e) {
       if (e.originalEvent) e = e.originalEvent;
@@ -154,7 +144,9 @@ define( [
       if (e.preventDefault) e.preventDefault();
       if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting
 
-      if (this._draghoverClassAdded) $(this.el).removeClass("draghover");
+      if (this._draghoverClassAdded){
+        $(e.target).removeClass("draghover");
+      }
 
       this.drop(data, e.dataTransfer, e);
     },
@@ -165,28 +157,37 @@ define( [
       if (e.preventDefault) e.preventDefault();
       if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting
 
-      if (this._draghoverClassAdded) $(this.el).removeClass("draghover");
+      if (this._draghoverClassAdded) {
+        $(e.target).removeClass("draghover");
+      }
 
 //      this.drop(data, e.dataTransfer, e);
     },
     _getCurrentDragData: function (e) {
       var data = null;
-      if (window._backboneDragDropObject) data = window._backboneDragDropObject;
+      if (window._backboneDragDropObject) {
+        data = window._backboneDragDropObject;
+      }
       return data;
     },
 
     dragOver: function (data, dataTransfer, e) { // optionally override me and set dataTransfer.dropEffect, return false if the data is not droppable
-      $(this.el).addClass("draghover");
+      $(e.target).addClass("draghover");
       this._draghoverClassAdded = true;
     },
 
     dragLeave: function (data, dataTransfer, e) { // optionally override me
-      if (this._draghoverClassAdded) $(this.el).removeClass("draghover");
+      if (this._draghoverClassAdded) {
+        $(e.target).removeClass("draghover");
+      }
     },
     
     drop: function (data, dataTransfer, e) {
-      this.model.set("files", dataTransfer.files);
-      this.model.readFiles();
+      (function(){
+        var self = window.appView.importView.model;
+        self.set("files", dataTransfer.files);
+        self.readFiles();
+      })();
       $(".import-progress").val(1);
       $(".import-progress").attr("max", 4);
 
