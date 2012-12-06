@@ -346,7 +346,7 @@ define([
     
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
-     * (\exg. \"a) and then copies it on the expor modal so that when the user
+     * (\exg. \"a) and then copies it on the export modal so that when the user
      * switches over to their LaTeX file they only need to paste it in.
      * 
      * We did a poll on Facebook among EGGers, and other linguists we know and
@@ -355,12 +355,14 @@ define([
      */
     laTeXiT : function(showInExportModal) {
       utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex [*] \\gll " + utterance + " \\\\"
+            + "\n \\ex utterance
+            + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
-            + "\n\t\\glt `" + translation + "'"
+            + "\n\t\\trans `" + translation + "'"
             + "\n\\end{exe}\n\n";
       if (showInExportModal != null) {
         $("#export-type-description").html(" as LaTeX (GB4E)");
