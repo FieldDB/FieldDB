@@ -136,8 +136,25 @@ define([
         this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
             db.query("get_ids/by_date", {reduce: false}, function(err, response) {
+              
+              if(err){
+                if(window.toldSearchtomakebydateviews){
+                  Utils.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
+                  return;
+                }
+                /*
+                 * Its possible that the pouch has no by date views, create them and then try searching again.
+                 */
+                window.toldSearchtomakebydateviews = true;
+                window.app.get("corpus").createPouchView("get_ids/by_date", function(){
+                  window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
+                  self.getAllIdsByDate(callback);
+                });
+                return;
+              }
+              
               if ((!err) && (typeof callback == "function"))  {
-                console.log("Callback with: ", response.rows);
+                Utils.debug("Callback with: ", response.rows);
                 callback(response.rows);
               }
             });
@@ -169,14 +186,23 @@ define([
               if (!err) {
                 // Process the given query string into tokens
                 var queryTokens = self.processQueryString(queryString);
-                
+                var doGrossKeywordMatch = false;
+                if(queryString.indexOf(":") == -1){
+                  doGrossKeywordMatch = true;
+                  queryString = queryString.toLowerCase().replace(/\s/g,"");
+                }
                 // Go through all the rows of results
                 for (i in response.rows) {
                   var thisDatumIsIn = false;
                   // If the query string is null, include all datumIds
                   if(queryString.trim() == ""){
                     thisDatumIsIn = true;
+                  }else if(doGrossKeywordMatch){
+                      if(JSON.stringify(response.rows[i].key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
+                        thisDatumIsIn = true;
+                      }
                   }else{
+                    
                     // Determine if this datum matches the first search criteria
                     thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
                     
@@ -204,6 +230,24 @@ define([
                     matchIds.push(response.rows[i].value);
                   }
                 }
+              }else{
+                if(window.toldSearchtomakeviews){
+                  Utils.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
+                  return;
+                }
+                /*
+                 * Its possible that the corpus has no search views, create them and then try searching again.
+                 */
+                window.appView.toastUser("Initializing your search functions for the first time." +
+                		" Search in LingSync is pretty powerful, " +
+                		" in fact if you're the power user type you can write your " +
+                		"own data extracting/filtering/visualization queries using " +
+                		" <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>","alert-success","Search:");
+                window.toldSearchtomakeviews = true;
+                var previousquery = queryString;
+                window.app.get("corpus").createPouchView("get_datum_field/get_datum_fields", function(){
+                  window.appView.searchEditView.search(previousquery);
+                });
               }
               if(typeof callback == "function"){
                 //callback with the unique members of the array
@@ -302,7 +346,7 @@ define([
     
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
-     * (\exg. \"a) and then copies it on the expor modal so that when the user
+     * (\exg. \"a) and then copies it on the export modal so that when the user
      * switches over to their LaTeX file they only need to paste it in.
      * 
      * We did a poll on Facebook among EGGers, and other linguists we know and
@@ -311,12 +355,14 @@ define([
      */
     laTeXiT : function(showInExportModal) {
       utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex [*] \\gll " + utterance + " \\\\"
+            + "\n \\ex utterance "
+            + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
-            + "\n\t\\glt `" + translation + "'"
+            + "\n\t\\trans `" + translation + "'"
             + "\n\\end{exe}\n\n";
       if (showInExportModal != null) {
         $("#export-type-description").html(" as LaTeX (GB4E)");
@@ -383,7 +429,7 @@ define([
         dIndex.set("encrypted", "checked");
       });
       //TODO scrub version history to get rid of all unencrypted versions.
-      this.saveAndInterConnectInApp(window.app.router.showDashboard, window.app.router.showDashboard);
+      this.saveAndInterConnectInApp(window.app.router.renderDashboardOrNot, window.app.router.renderDashboardOrNot);
     },
     
     /**
@@ -437,7 +483,8 @@ define([
       // in the Datum
       this.set({
         "pouchname" : window.app.get("corpus").get("pouchname"),
-        "dateModified" : JSON.stringify(new Date())
+        "dateModified" : JSON.stringify(new Date()),
+        "jsonType" : "Datum"
       });
       if(!this.get("session")){
         this.set("session" , window.app.get("currentSession")); 

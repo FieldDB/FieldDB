@@ -46,11 +46,11 @@ define([
      * 
      * @property {String} title This is used to refer to the corpus, and
      *           what appears in the url on the main website eg
-     *           http://fieldlinguist.com/Sapir/SampleFieldLinguisticsCorpus
+     *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
      * @property {String} description This is a short description that
      *           appears on the corpus details page
      * @property {String} remote The git url of the remote eg:
-     *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
+     *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *           
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
@@ -188,6 +188,9 @@ define([
 //      searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
     },
+    loadPermissions: function(){
+      //TODO decide if we need this method in a corpus mask
+    },
     /**
      * this resets the titleAsUrl to match the title, this means if the usr changes the title, their corpu has high chances of not being unique.
      * 
@@ -263,7 +266,7 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            console.log(response);
+            Utils.debug(response);
             if(err){
               Utils.debug("CorpusMask put error", err);
               if(err.status == "409"){
@@ -330,7 +333,7 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            console.log(response);
+            Utils.debug(response);
           });
         });
       });

@@ -64,16 +64,8 @@ define([
         window.appView.currentCorpusReadView.format = "fullscreen";
         window.appView.currentCorpusReadView.render();
         app.router.showFullscreenCorpus();
-      },
-      //
-      "keyup #quick-authenticate-password" : function(e) {
-        var code = e.keyCode || e.which;
-        Utils.debug("This should fire when the user pushes enter but it doesnt. TODO might have to just use jquery in the render, insted of backbone which might limit it to the element...");
-        // code == 13 is the enter key
-        if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
-          $("#quick-authentication-okay-btn").click();
-        }
       }
+      //
     },
     
     /**
@@ -126,15 +118,15 @@ define([
       }
 
       //localization
-      $(this.el).find(".locale_Username").html(chrome.i18n.getMessage("locale_Username"));
-      $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-      $(this.el).find(".locale_Log_Out").html(chrome.i18n.getMessage("locale_Log_Out"));
-      $(this.el).find(".locale_Log_In").html(chrome.i18n.getMessage("locale_Log_In"));
-      $(this.el).find(".locale_Private_Profile").html(chrome.i18n.getMessage("locale_Private_Profile"));
-      $(this.el).find(".locale_User_Settings").html(chrome.i18n.getMessage("locale_User_Settings"));
-      $(this.el).find(".locale_Keyboard_Shortcuts").html(chrome.i18n.getMessage("locale_Keyboard_Shortcuts"));
-      $(this.el).find(".locale_Corpus_Settings").html(chrome.i18n.getMessage("locale_Corpus_Settings"));
-      $(this.el).find(".locale_Terminal_Power_Users").html(chrome.i18n.getMessage("locale_Terminal_Power_Users"));
+      $(this.el).find(".locale_Username").html(Locale["locale_Username"].message);
+      $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
+      $(this.el).find(".locale_Log_Out").html(Locale["locale_Log_Out"].message);
+      $(this.el).find(".locale_Log_In").html(Locale["locale_Log_In"].message);
+      $(this.el).find(".locale_Private_Profile").html(Locale["locale_Private_Profile"].message);
+      $(this.el).find(".locale_User_Settings").html(Locale["locale_User_Settings"].message);
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale["locale_Keyboard_Shortcuts"].message);
+      $(this.el).find(".locale_Corpus_Settings").html(Locale["locale_Corpus_Settings"].message);
+      $(this.el).find(".locale_Terminal_Power_Users").html(Locale["locale_Terminal_Power_Users"].message);
       
       document.getElementById("authUrl").value = Utils.authUrl;
 
@@ -172,7 +164,7 @@ define([
     },
     
     /**
-     * Notes: Sapir's user comes from his time after his PhD and before his
+     * Notes: LingLlama's user comes from his time after his PhD and before his
      * foray into the industry. This is when he started getting some results for
      * "phoneme" around 1910. For a similar use of historical users see Morgan
      * Blamey and Tucker the Technician at blamestella.com
@@ -209,7 +201,7 @@ define([
           if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
             //do nothing because they have no recent ids
             alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-            window.app.router.showDashboard();
+            window.location.href = "#render/true";
           }else{
             /*
              *  Load their last corpus, session, datalist etc
@@ -247,7 +239,7 @@ define([
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
               alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-              window.app.router.showDashboard();
+              window.location.href = "#render/true";
             }else{
               /*
                *  Load their last corpus, session, datalist etc, 
@@ -255,12 +247,29 @@ define([
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds");
               var visibleids = {};
-              visibleids.corpusid = app.get("corpus").id;
-              visibleids.sessionid = app.get("currentSession").id;
-              visibleids.datalistid = app.get("currentDataList").id;
+              if(app.get("corpus")){
+                visibleids.corpusid = app.get("corpus").id;
+              }else{
+                visibleids.corpusid = "";
+              }
+              if(app.get("currentSession"))  {
+                visibleids.sessionid = app.get("currentSession").id;
+              }else{
+                visibleids.sessionid = "";
+              }
+              if(app.get("currentDataList")){
+                visibleids.datalistid = app.get("currentDataList").id;
+              }else{
+                visibleids.datalistid = "";
+              }
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
                 Utils.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
-                window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+                if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
+                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+                }else{
+                  console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
+                  window.app.router.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
+                }
               }
             }                    
           });
@@ -336,12 +345,12 @@ define([
      */
     showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       var self = this;
-      if( this.model.get("userPrivate").get("username") == "sapir" ){
+      if( this.model.get("userPrivate").get("username") == "lingllama" ){
         $("#quick-authenticate-modal").modal("show");
         $("#quick-authenticate-password").val("phoneme")
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
-//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+//          alert("Authenticating quickly, with just password, (if the user is not lingllama, if its lingllama, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val()
               , window.app.get("authentication").get("userPrivate").get("authUrl") 
@@ -357,7 +366,7 @@ define([
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){
           //TODO show a modal instead of alert
-//          alert("Authenticating quickly, with just password, (if the user is not sapir, if its sapir, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
+//          alert("Authenticating quickly, with just password, (if the user is not lingllama, if its lingllama, just authenticating him with his password)... At the moment I will use the pasword 'test' ");
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val() 
               , window.app.get("authentication").get("userPrivate").get("authUrl")

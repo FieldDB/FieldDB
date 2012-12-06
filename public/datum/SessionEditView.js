@@ -155,12 +155,12 @@ define([
           $(this.el).html(this.templateSummary(jsonToRender));
           
           //Localization for leftSide
-          $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-          $(this.el).find(".locale_Show_fullscreen").attr("title", chrome.i18n.getMessage("locale_Show_fullscreen"));
-          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
-          $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
-          $(this.el).find(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+          $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
+          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
+          $(this.el).find(".locale_Goal").html(Locale["locale_Goal"].message);
+          $(this.el).find(".locale_Consultants").html(Locale["locale_Consultants"].message);
+          $(this.el).find(".locale_When").html(Locale["locale_When"].message);
 
           
         }if (this.format == "import") {
@@ -176,10 +176,10 @@ define([
           $(this.el).html(this.templateImport(jsonToRender));
           
           //Localization for leftSide
-          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Goal").html(chrome.i18n.getMessage("locale_Goal"));
-          $(this.el).find(".locale_Consultants").html(chrome.i18n.getMessage("locale_Consultants"));
-          $(this.el).find(".locale_When").html(chrome.i18n.getMessage("locale_When"));
+          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
+          $(this.el).find(".locale_Goal").html(Locale["locale_Goal"].message);
+          $(this.el).find(".locale_Consultants").html(Locale["locale_Consultants"].message);
+          $(this.el).find(".locale_When").html(Locale["locale_When"].message);
 
           
         } else if (this.format == "centerWell") {
@@ -196,11 +196,11 @@ define([
           this.commentReadView.render();
           
           //Localization for centerWell
-          $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+          $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+          $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
+          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
+          $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         } else if (this.format == "fullscreen") {
           Utils.debug("SESSION EDIT FULLSCREEN render: " );
@@ -216,11 +216,11 @@ define([
           this.commentReadView.render();
           
           //Localization for fullscreen
-          $(this.el).find(".locale_Show_Readonly").attr("title", chrome.i18n.getMessage("locale_Show_Readonly"));
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-          $(this.el).find(".locale_Elicitation_Session").html(chrome.i18n.getMessage("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+          $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+          $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
+          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
+          $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
           
         } else if (this.format == "modal") {
@@ -237,10 +237,10 @@ define([
           this.commentReadView.render();
           
           //Localization for modal
-          $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-          $(this.el).find(".locale_New_Session_Instructions").html(chrome.i18n.getMessage("locale_New_Session_Instructions"));
-          $(this.el).find(".locale_Cancel").html(chrome.i18n.getMessage("locale_Cancel"));
-          $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
+          $(this.el).find(".locale_New_Session").html(Locale["locale_New_Session"].message);
+          $(this.el).find(".locale_New_Session_Instructions").html(Locale["locale_New_Session_Instructions"].message);
+          $(this.el).find(".locale_Cancel").html(Locale["locale_Cancel"].message);
+          $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
 
         }
       } catch(e) {
@@ -293,7 +293,7 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      window.app.router.showDashboard();
+      window.location.href = "#render/true";
     },
     
     resizeLarge : function(e) {

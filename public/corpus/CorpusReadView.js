@@ -59,18 +59,21 @@ define([
       Utils.debug("CORPUS READ init: " );
       this.changeViewsOfInternalModels();
       
-   // If the model's title changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:title', function(){
+   // If the model's pouchname changes, chances are its a new corpus, re-render its internal models.
+      this.model.bind('change:pouchname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
       
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
+//        Utils.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
+//        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
 //      this.model.bind('change:dataLists', function(){
-//        this.render();
+//            this.changeViewsOfInternalModels();
+//      this.render();
 //      }, this);
     },
     events : {
@@ -88,7 +91,26 @@ define([
         this.model.insertNewComment(commentstring);
         this.$el.find(".comment-new-text").val("");
         
-      },      
+      },   
+      "click .reload-corpus-team-permissions" :function(e){
+        if(e){
+          e.preventDefault();
+        }
+        var corpusviewself = this;
+        this.model.loadPermissions(function(){
+          corpusviewself.permissionsView = new UpdatingCollectionView({
+            collection : corpusviewself.model.permissions,
+            childViewConstructor : PermissionReadView,
+            childViewTagName     : 'li',
+            childViewClass       : "breadcrumb row span12"
+          });
+          
+          corpusviewself.permissionsView.el = corpusviewself.$('.permissions-updating-collection');
+          corpusviewself.permissionsView.render();
+        });
+        
+      },
+      
       "click .icon-edit": "showEditable",
       
       //corpus menu buttons
@@ -96,6 +118,7 @@ define([
       "click .new-data-list" : "newDataList",
       "click .new-session" : "newSession",
       "click .new-corpus" : "newCorpus",
+
     },
     
     /**
@@ -131,7 +154,9 @@ define([
      */
     render : function() {
       Utils.debug("CORPUS READ render: ");
-      window.appView.currentCorpusEditView.destroy_view();
+      if(window.appView.currentCorpusEditView){
+        window.appView.currentCorpusEditView.destroy_view();
+      }
       window.appView.currentCorpusReadView.destroy_view();
       
       if (this.model == undefined) {
@@ -151,7 +176,7 @@ define([
           this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(jsonToRender));
           
-          $(this.el).find(".locale_Show_corpus_settings").attr("title", chrome.i18n.getMessage("locale_Show_corpus_settings"));
+          $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale["locale_Show_corpus_settings"].message);
 
       } else if (this.format == "link") {
         Utils.debug("CORPUS READ LINK render: " );
@@ -186,9 +211,9 @@ define([
         this.sessionsView.el = this.$('.sessions-updating-collection'); //TODO do not use such ambiguous class names, compare this with datum_field_settings below.  there is a highlyily hood that the sesson module will be using the same class name and will overwrite your renders.
         this.sessionsView.render();
         
-        // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();        
+//        // Display the PermissionsView
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();        
         
         try{
           Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
@@ -197,18 +222,18 @@ define([
         }
 
         //Localize for all fullscreen view 
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(chrome.i18n.getMessage("locale_elicitation_sessions_explaination"));
-        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explaination").html(chrome.i18n.getMessage("locale_datalists_explaination"));
-        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explaination").html(chrome.i18n.getMessage("locale_permissions_explaination"));
-        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explaination").html(chrome.i18n.getMessage("locale_datum_fields_explaination"));
-        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explaination").html(chrome.i18n.getMessage("locale_datum_states_explaination"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
+        $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
+        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
+        $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
+        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
+        $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
+        $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
+        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         
       } else if (this.format == "centreWell"){
@@ -238,37 +263,39 @@ define([
         this.sessionsView.render();
         
         // Display the PermissionsView
-        this.permissionsView.el = this.$('.permissions-updating-collection');
-        this.permissionsView.render();
+//        this.permissionsView.el = this.$('.permissions-updating-collection');
+//        this.permissionsView.render();
 
         //Localize for all embedded view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_in_Dashboard"));
-        $(this.el).find(".locale_Sessions_associated").html(chrome.i18n.getMessage("locale_Sessions_associated"));
-        $(this.el).find(".locale_elicitation_sessions_explaination").html(chrome.i18n.getMessage("locale_elicitation_sessions_explaination"));
-        $(this.el).find(".locale_Datalists_associated").html(chrome.i18n.getMessage("locale_Datalists_associated"));
-        $(this.el).find(".locale_datalists_explaination").html(chrome.i18n.getMessage("locale_datalists_explaination"));
-        $(this.el).find(".locale_Permissions_associated").html(chrome.i18n.getMessage("locale_Permissions_associated"));
-        $(this.el).find(".locale_permissions_explaination").html(chrome.i18n.getMessage("locale_permissions_explaination"));
-        $(this.el).find(".locale_Datum_field_settings").html(chrome.i18n.getMessage("locale_Datum_field_settings"));
-        $(this.el).find(".locale_datum_fields_explaination").html(chrome.i18n.getMessage("locale_datum_fields_explaination"));
-        $(this.el).find(".locale_Datum_state_settings").html(chrome.i18n.getMessage("locale_Datum_state_settings"));
-        $(this.el).find(".locale_datum_states_explaination").html(chrome.i18n.getMessage("locale_datum_states_explaination"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
+        $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
+        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
+        $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
+        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
+        $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
+        $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
+        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       }
       
       //Localize corpus menu for all corpus views
-      $(this.el).find(".locale_New_menu").html(chrome.i18n.getMessage("locale_New_menu"));
-      $(this.el).find(".locale_New_Datum").html(chrome.i18n.getMessage("locale_New_Datum"));
-      $(this.el).find(".locale_New_Data_List").html(chrome.i18n.getMessage("locale_New_Data_List"));
-      $(this.el).find(".locale_New_Session").html(chrome.i18n.getMessage("locale_New_Session"));
-      $(this.el).find(".locale_New_Corpus").html(chrome.i18n.getMessage("locale_New_Corpus"));
-      $(this.el).find(".locale_Data_menu").html(chrome.i18n.getMessage("locale_Data_menu"));
-      $(this.el).find(".locale_Import_Data").html(chrome.i18n.getMessage("locale_Import_Data"));
-      $(this.el).find(".locale_Export_Data").html(chrome.i18n.getMessage("locale_Export_Data"));
+      $(this.el).find(".locale_New_menu").html(Locale["locale_New_menu"].message);
+      $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale["locale_New_Datum"].message);
+      $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale["locale_New_Conversation"].message);
+      $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale["locale_New_Data_List"].message);
+      $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale["locale_New_Session"].message);
+      $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale["locale_New_Corpus"].message );
+      $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
+      $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
+      $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
+      $(this.el).find(".locale_All_Data").html(Locale["locale_All_Data"].message);
       
       //Localize corpus read only view
-      $(this.el).find(".locale_Edit_corpus").attr("title", chrome.i18n.getMessage("locale_Edit_corpus"));
+      $(this.el).find(".locale_Edit_corpus").attr("title", Locale["locale_Edit_corpus"].message);
       
       
       return this;
@@ -329,14 +356,15 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "link"
       });
-      
+
+//      this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
-      this.permissionsView = new UpdatingCollectionView({
-        collection : this.model.permissions,
-        childViewConstructor : PermissionReadView,
-        childViewTagName     : 'li',
-        childViewClass       : "breadcrumb"
-      });
+//      this.permissionsView = new UpdatingCollectionView({
+//        collection : this.model.permissions,
+//        childViewConstructor : PermissionReadView,
+//        childViewTagName     : 'li',
+//        childViewClass       : "breadcrumb"
+//      });
       
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
@@ -353,11 +381,20 @@ define([
 //        e.stopPropagation(); //cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
       } 
+//      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      app.router.showDashboard();
       Utils.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
-    
+    newConversation : function(e) {
+        if(e){
+//          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+          e.preventDefault(); //this stops the link from moving the page to the top
+        }
+//        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
+//        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
+        Utils.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+      },
+
     newDataList : function(e) {
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
@@ -389,7 +426,7 @@ define([
          e.stopPropagation();
          e.preventDefault();
        }
-       window.app.router.showDashboard();
+       window.location.href = "#render/true";
     },
     
     resizeFullscreen : function(e){
@@ -409,8 +446,10 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      window.appView.currentCorpusEditView.format = this.format;
-      window.appView.currentCorpusEditView.render();
+      if(window.appView.currentCorpusEditView){
+        window.appView.currentCorpusEditView.format = this.format;
+        window.appView.currentCorpusEditView.render();
+      }
     }
   });
 

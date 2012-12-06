@@ -1,5 +1,6 @@
 define([ 
     "backbone", 
+    "text!_locales/en/messages.json",
     "handlebars",
     "app/App", 
     "app/AppRouter",
@@ -44,6 +45,7 @@ define([
     "libs/Utils"
 ], function(
     Backbone, 
+    i18n,
     Handlebars,
     App, 
     AppRouter, 
@@ -116,8 +118,8 @@ define([
       this.term.initFS(false, 1024 * 1024);
       
       // Set up a timeout event every 10sec
-      _.bindAll(this, "saveScreen");
-      window.setInterval(this.saveScreen, 10000);     
+//      _.bindAll(this, "saveScreen");
+//      window.setInterval(this.saveScreen, 10000);     
     },
     setUpAndAssociateViewsAndModelsWithCurrentCorpus : function(callback){
       // Create three corpus views
@@ -435,10 +437,12 @@ define([
       "click #quick-authentication-okay-btn" : function(e){
         window.hub.publish("quickAuthenticationClose","no message");
       },
-      "click .icon-home" : function() {
-//        this.model.router.showDashboard();
-        window.location.href = "#";
-        app.router.showDashboard(); //the above line wasnt working
+      "click .icon-home" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        window.location.href = "#render/true";
       },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
@@ -460,6 +464,13 @@ define([
           e.preventDefault();
         }
         this.searchEditView.searchTop();
+      },
+      "keyup #quick-authenticate-password" : function(e) {
+          var code = e.keyCode || e.which;
+          // code == 13 is the enter key
+          if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
+            $("#quick-authentication-okay-btn").click();
+          }
       },
       "keyup #search_box" : function(e) {
 //        if(e){
@@ -595,20 +606,20 @@ define([
       this.setTotalBackboneDocs();
       
       //localization
-      $(this.el).find(".locale_Show_Dashboard").attr("title", chrome.i18n.getMessage("locale_Show_Dashboard"));
-      $(this.el).find(".locale_Need_save").text(chrome.i18n.getMessage("locale_Need_save"));
-      $(this.el).find(".locale_Recent_Changes").text(chrome.i18n.getMessage("locale_Recent_Changes"));
-      $(this.el).find(".locale_Save_on_this_Computer").attr("title", chrome.i18n.getMessage("locale_Save_on_this_Computer"));
-      $(this.el).find(".locale_Need_sync").text(chrome.i18n.getMessage("locale_Need_sync"));
-      $(this.el).find(".locale_Differences_with_the_central_server").text(chrome.i18n.getMessage("locale_Differences_with_the_central_server"));
-      $(this.el).find(".locale_Sync_and_Share").attr("title", chrome.i18n.getMessage("locale_Sync_and_Share"));
-      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", chrome.i18n.getMessage("locale_View_Public_Profile_Tooltip"));
-//      $(this.el).find(".locale_Warning").text(chrome.i18n.getMessage("locale_Warning"));
-      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(chrome.i18n.getMessage("locale_Instructions_to_show_on_dashboard"));
-      $(this.el).find(".locale_to_beta_testers").html(chrome.i18n.getMessage("locale_to_beta_testers"));
-      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
-      $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-      $(this.el).find(".locale_Yep_its_me").text(chrome.i18n.getMessage("locale_Yep_its_me"));
+      $(this.el).find(".locale_Show_Dashboard").attr("title", Locale["locale_Show_Dashboard"].message);
+      $(this.el).find(".locale_Need_save").text(Locale["locale_Need_save"].message);
+      $(this.el).find(".locale_Recent_Changes").text(Locale["locale_Recent_Changes"].message);
+      $(this.el).find(".locale_Save_on_this_Computer").attr("title", Locale["locale_Save_on_this_Computer"].message);
+      $(this.el).find(".locale_Need_sync").text(Locale["locale_Need_sync"].message);
+      $(this.el).find(".locale_Differences_with_the_central_server").text(Locale["locale_Differences_with_the_central_server"].message);
+      $(this.el).find(".locale_Sync_and_Share").attr("title", Locale["locale_Sync_and_Share"].message);
+      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", Locale["locale_View_Public_Profile_Tooltip"].message);
+//      $(this.el).find(".locale_Warning").text(Locale["locale_Warning"].message);
+      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale["locale_Instructions_to_show_on_dashboard"].message);
+      $(this.el).find(".locale_to_beta_testers").html(Locale["locale_to_beta_testers"].message);
+      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale["locale_We_need_to_make_sure_its_you"].message);
+      $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
+      $(this.el).find(".locale_Yep_its_me").text(Locale["locale_Yep_its_me"].message);
       
       return this;
     },
@@ -620,6 +631,7 @@ define([
       this.renderReadonlySessionViews("leftSide");
       this.renderReadonlyDataListViews("leftSide");
       this.renderEditableDatumsViews("centreWell");
+      this.datumsEditView.showMostRecentDatum();
     },
     
     // Display the Corpus Views
@@ -845,7 +857,7 @@ define([
         alertType = "";
       }
       if(!heading){
-        heading = chrome.i18n.getMessage("locale_Warning");
+        heading = Locale["locale_Warning"].message;
       }
       $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"

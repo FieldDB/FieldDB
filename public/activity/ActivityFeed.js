@@ -58,8 +58,8 @@ define([
           }
         };
       }
-      console.log("successcallback",successcallback);
-      console.log("failurecallback",failurecallback);
+      Utils.debug("successcallback",successcallback);
+      Utils.debug("failurecallback",failurecallback);
       
       var self = this;
       window.hub.unsubscribe("savedActivityToPouch", null, self);
@@ -177,11 +177,11 @@ define([
       
       var thatactivity = this.get("activities").models[d];
       if(thatactivity){
-        console.log("thatactivity "+d,thatactivity);
+        Utils.debug("thatactivity "+d,thatactivity);
       }else{
 //        alert("Bug in activity save, please report this! Activity number: "+d);
-//        console.log("these are the activity models", this.get("activities").models);
-        console.log("this is the model taht is missing: ", this.get("activities").models[d]);
+//        Utils.debug("these are the activity models", this.get("activities").models);
+        Utils.debug("this is the model taht is missing: ", this.get("activities").models[d]);
         thatactivity = this.get("activities").models[d];
         if(thatactivity){
           //can keep going
@@ -219,6 +219,10 @@ define([
       }else{
         this.set("couchConnection", couchConnection);
       }
+      if(!couchConnection){
+        Utils.debug("Can't change activity feed's couch connection");
+        return;
+      }
       //TODO test this
       if(couchConnection.pouchname.indexOf("activity_feed") == -1){
         alert("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
@@ -246,11 +250,11 @@ define([
         console.warn("couchConnection was undefined on the activity feed. this is a problem");
       }
       var currentlength =  this.get("activities").length;
-      console.log(name+ " checking activity feed size = "+ currentlength);
-      //console.log(name+ " this is the activity that was added = ", model);
+      Utils.debug(name+ " checking activity feed size = "+ currentlength);
+      //Utils.debug(name+ " this is the activity that was added = ", model);
 
       if(currentlength> this.get("maxInMemoryCollectionSize")){  
-        console.log("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
+        Utils.debug("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
         var modelToRemove = this.get("activities").pop(); //because activities are added by unshift
         modelToRemove.saveAndInterConnectInApp();
       }
@@ -302,9 +306,18 @@ define([
     getAllIdsByDate : function(callback) {
       Utils.debug("In the activity feed getAllIdsByDate "+this.get("couchConnection").pouchname);
       var self = this;
+      var couchConnection = null;
+      if(couchConnection == null || couchConnection == undefined){
+        couchConnection = self.get("couchConnection");
+      }
+      //if the couchConnection is still not set, then try to set it using the corpus's connection and adding activity feed to it.
+      if(!couchConnection){
+        couchConnection = JSON.parse(JSON.stringify(window.app.get("corpus").get("couchConnection")));
+        couchConnection.pouchname =  couchConnection.pouchname+"-activity_feed";
+      }
       
       try{
-        this.changePouch(null, function(){
+        this.changePouch(couchConnection, function(){
           Utils.debug("Changing pouch in activity feed was sucessfull.");
           self.pouch(function(err, db) {
             db.query("get_ids/by_date", {reduce: false}, function(err, response) {
@@ -315,6 +328,56 @@ define([
               }else{
                 Utils.debug("There was an error querying the database.",err);
                 Utils.debug("There was an error querying the database, this is the response.",response);
+                
+                
+                /*
+                 * Its possible that the pouch has no by date view, create it and then try loading the activity feed again.
+                 */
+                window.appView.toastUser("Initializing the sort by date search functions for the first time in this activity feed.","alert-success","Activity Feed:");
+                
+                if(!window.validCouchViews){
+                  window.validCouchViews = window.app.get("corpus").validCouchViews();
+                }
+                var view = "get_ids/by_date";
+                var viewparts = view.split("/");
+                if(viewparts.length != 2){
+                  console.log("Warning "+view+ " is not a valid view name.");
+                  return;
+                }
+                var activityfeedself = self;
+                activityfeedself.changePouch(null, function() {
+                  activityfeedself.pouch(function(err, db) {
+                    var modelwithhardcodedid = {
+                        "_id": "_design/"+viewparts[0],
+                        "language": "javascript",
+                        "views": {
+//                          "by_id" : {
+//                                "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                            }
+                        }
+                     };
+                    modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].map.toString()};
+                    if(window.validCouchViews[view].reduce){
+                      modelwithhardcodedid.views[viewparts[1]].reduce =  window.validCouchViews[view].reduce.toString();
+                    }
+
+                    console.log("This is what the doc will look like: ", modelwithhardcodedid);
+                    db.put(modelwithhardcodedid, function(err, response) {
+                      Utils.debug(response);
+                      if(err){
+                        Utils.debug("The "+view+" view couldn't be created.");
+                      }else{
+                        
+                        Utils.debug("The "+view+" view was created.");
+                        activityfeedself.getAllIdsByDate(callback);
+                        
+                        
+                      }
+                    });
+                  });
+                });
+                
+                
               }
             });
           });
@@ -361,7 +424,11 @@ define([
             if(couchConnection.port != null){
               couchurl = couchurl+":"+couchConnection.port;
             }
-            couchurl = couchurl +"/"+ couchConnection.pouchname;
+            if(!couchConnection.path){
+              couchConnection.path = "";
+            }
+            couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
+            
             Utils.debug("This is the url using to replicate to: "+couchurl);
             db.replicate.to(couchurl, { continuous: false }, function(err, response) {
               Utils.debug("Replicate to " + couchurl);
@@ -426,8 +493,11 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
-          
+          if(!couchConnection.path){
+            couchConnection.path = "";
+          }
+          couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
+                    
           
           //We can leave the to and from replication async, and make two callbacks. 
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {

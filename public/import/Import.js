@@ -206,7 +206,7 @@ define([
       var xmlParser = new X2JS();
       window.text = text;
       var jsonObj = xmlParser.xml_str2json( text );
-      console.log(jsonObj);
+      Utils.debug(jsonObj);
        
       //add the header to the session
 //    HEADER can be put in the session and in the datalist
@@ -518,7 +518,7 @@ define([
     readFileIntoRawText : function(index, callback){
       var self = this;
       this.readBlob(this.get("files")[index], function(){
-        self.guessFormatAndImport(0, callback); 
+        self.guessFormatAndImport(null, callback); 
       });
     },
     /**

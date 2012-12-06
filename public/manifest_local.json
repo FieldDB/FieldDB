@@ -1,52 +1,25 @@
 {
-  "name": "FieldDB Localhost",
-  "version": "1.23",
-  "description": "__MSG_application_description__",
-  "default_locale": "es",
-  
-  "app": {
-    "launch": {
-      "local_path": "index.html"
+  "name" : "FieldDB Localhost",
+  "version" : "1.32.1",
+  "description" : "Local development version",
+  "default_locale" : "es",
+  "app" : {
+    "launch" : {
+      "local_path" : "index.html"
     }
   },
-  "offline_enabled": true,
-  "permissions": [
-    "unlimitedStorage",
-    "https://www.fieldlinguist.com/*",
-    
-    "https://auth.fieldlinguist.com/*",
-    "https://audio.fieldlinguist.com/*",
-    "https://lexicon.fieldlinguist.com/*",
-    "https://corpus.fieldlinguist.com/*",
-    "https://activity.fieldlinguist.com/*",
-    "https://widget.fieldlinguist.com/*",
-    
-    "https://ifield.iriscouch.com/*",
-    
-    "https://authdev.fieldlinguist.com:3183/*",
-    "https://audiodev.fieldlinguist.com:3184/*",
-    "https://lexicondev.fieldlinguist.com:3185/*",
-    "https://corpusdev.fieldlinguist.com:3186/*",
-    "https://activitydev.fieldlinguist.com:3187/*",
-    "https://widgetdev.fieldlinguist.com:3188/*",
-    
-    "https://ifielddevs.iriscouch.com/*",
-    
-    "https://localhost:3183/*",
-    "https://localhost:3184/*",
-    "https://localhost:3185/*",
-    "https://localhost:3186/*",
-    "https://localhost:3187/*",
-    "https://localhost:3188/*",
-    
-    "http://localhost:5984/*",
-    
-    "https://www.youtube.com/*"
-    
-  ],
-   "icons": { 
-    "16": "icon16_local.png",
-    "48": "icon48_local.png",
-    "128": "icon128_local.png" 
-  }
+  "offline_enabled" : true,
+  "permissions" : [ "unlimitedStorage", "https://auth.fieldlinguist.com/*",
+      "https://corpus.fieldlinguist.com/*", "https://ifield.iriscouch.com/*",
+      "https://authdev.fieldlinguist.com:3183/*",
+      "https://corpusdev.fieldlinguist.com:6984/*",
+      "https://ifielddevs.iriscouch.com/*", "https://www.youtube.com/*",
+      "https://localhost:3183/*", "https://localhost:6984/*" ],
+  "icons" : {
+    "16" : "icon16_local.png",
+    "48" : "icon48_local.png",
+    "128" : "icon128_local.png"
+  },
+  "manifest_version" : 2,
+  "content_security_policy" : "img-src 'self' https://secure.gravatar.com https://ssl.google-analytics.com  ; default-src 'self' https://secure.gravatar.com   https://auth.lingsync.org https://corpus.lingsync.org  https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186  https://localhost:3183 https://localhost:6984    https://ifield.iriscouch.com https://ifielddevs.iriscouch.com  https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com ; script-src 'self' https://auth.lingsync.org   https://corpus.lingsync.org    https://authdev.fieldlinguist.com:3183   https://corpusdev.fieldlinguist.com:3186    https://localhost:3183   https://localhost:6984        https://ifield.iriscouch.com   https://ifielddevs.iriscouch.com    https://si0.twimg.com   https://ssl.google-analytics.com   https://www.youtube.com ; connect-src 'self' https://auth.lingsync.org   https://corpus.lingsync.org    https://authdev.fieldlinguist.com:3183   https://corpusdev.fieldlinguist.com:3186    https://localhost:3183   https://localhost:6984        https://ifield.iriscouch.com   https://ifielddevs.iriscouch.com    https://si0.twimg.com   https://ssl.google-analytics.com   https://www.youtube.com ; object-src 'self' https://auth.lingsync.org   https://corpus.lingsync.org    https://authdev.fieldlinguist.com:3183   https://corpusdev.fieldlinguist.com:3186    https://localhost:3183   https://localhost:6984        https://ifield.iriscouch.com   https://ifielddevs.iriscouch.com    https://si0.twimg.com   https://ssl.google-analytics.com   https://www.youtube.com  "
 }
