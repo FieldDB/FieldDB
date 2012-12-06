@@ -359,7 +359,7 @@ define([
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex utterance
+            + "\n \\ex utterance "
             + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
             + "\n\t\\trans `" + translation + "'"
