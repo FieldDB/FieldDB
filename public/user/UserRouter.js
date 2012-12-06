@@ -96,18 +96,18 @@ define([
             if(c.get("dataLists").length > 0 && c.get("sessions").length > 0 ){
               self.loadCorpusDashboard(model);
             }else{
-              alert("Bug: Something might be wrong with this corpus. "+e);
+              alert("Bug: Something might be wrong with this corpus. ");
 
               c.makeSureCorpusHasADataList(function(){
                 c.makeSureCorpusHasASession(function(){
                   self.loadCorpusDashboard(model);
                   //end success to create new data list
-                },function(e){
-                  alert("Failed to create a session. "+e);
+                },function(){
+                  alert("Failed to create a session. ");
                 });//end failure to create new data list
                 //end success to create new data list
               },function(){
-                alert("Failed to create a datalist. "+e);
+                alert("Failed to create a datalist. ");
               });//end failure to create new data list
             }
 

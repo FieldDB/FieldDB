@@ -237,7 +237,7 @@ define([
               $(".welcome-screen-alerts").show();
             } else if (serverResults.user) {
               
-
+              
               /*
                * Create a new user, and put them into the authView, create a corpus, session and datalist for them then
                * dismiss modal
