@@ -64,15 +64,16 @@ define([
      * 
      * @property {String} title This is used to refer to the corpus, and
      *           what appears in the url on the main website eg
-     *           http://fieldlinguist.com/Sapir/SampleFieldLinguisticsCorpus
+     *           http://fieldlinguist.com/LingLlama/SampleFieldLinguisticsCorpus
      * @property {String} description This is a short description that
      *           appears on the corpus details page
      * @property {String} remote The git url of the remote eg:
-     *           git@fieldlinguist.com:Sapir/SampleFieldLinguisticsCorpus.git
+     *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *           
      * @property {Consultants} consultants Collection of consultants who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus 
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
+     * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
      * @property {DataLists} datalists Collection of data lists created under the corpus
      * @property {Permissions} permissions Collection of permissions groups associated to the corpus 
@@ -135,34 +136,51 @@ define([
             size : "3",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
+            help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
           }),
           new DatumField({
             label : "utterance",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
+            help: "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
           }),
           new DatumField({
             label : "morphemes",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
+            help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
           }),
           new DatumField({
             label : "gloss",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
+            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
           }),
           new DatumField({
             label : "translation",
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
-            help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
+            help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
           })
         ]));
       }//end if to set datumFields
+      
+      if(typeof(this.get("conversationFields")) == "function"){
+          this.set("conversationFields", new DatumFields([ 
+            new DatumField({
+              label : "speakers",
+              shouldBeEncrypted: "checked",
+              userchooseable: "disabled",
+              help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+            }),
+            new DatumField({
+                label : "modality",
+                shouldBeEncrypted: "",
+                userchooseable: "disabled",
+                help: "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
+            })
+          ]));
+        }
       
       if(typeof(this.get("sessionFields")) == "function"){
         this.set("sessionFields", new DatumFields([ 
@@ -170,7 +188,7 @@ define([
              label : "goal",
              shouldBeEncrypted: "",
              userchooseable: "disabled",
-             help: "This describes the goals of the session."
+             help: "The goals of the session."
            }),  
           new DatumField({
             label : "consultants",
@@ -181,19 +199,19 @@ define([
             label : "dialect",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "You can use this field to be as precise as you would like about the dialect of this session."
+            help: "The dialect of this session (as precise as you'd like)."
           }),
           new DatumField({
             label : "language",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "This is the langauge (or language family) if you would like to use it."
+            help: "The language (or language family), if desired."
           }),
           new DatumField({
             label : "dateElicited",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "This is the date in which the session took place."
+            help: "The date when the session took place."
           }),
           new DatumField({
             label : "user",
@@ -204,7 +222,7 @@ define([
             label : "dateSEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
-            help: "This is the date in which the session was entered."
+            help: "The date when the session data was entered."
           }),
         ]));
         
@@ -223,10 +241,23 @@ define([
       if (!this.get("sessions")) {
         this.set("sessions", new Sessions());
       }
-      //this.loadPermissions();
+//      this.loadPermissions();
+      
+//      var couchConnection = this.get("couchConnection");
+//      if(!couchConnection){
+//        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+//        if(!localStorage.getItem("mostRecentCouchConnection")){
+//          alert("Bug, need to take you back to the users page.");
+//        }
+//        this.set("couchConnection", couchConnection);
+//      }
+//      this.pouch = Backbone.sync
+//      .pouch(Utils.androidApp() ? Utils.touchUrl
+//        + couchConnection.pouchname : Utils.pouchUrl
+//        + couchConnection.pouchname);
       
     },
-    loadPermissions: function(){
+    loadPermissions: function(doneLoadingPermissions){
       if (!this.get("team")){
         //If app is completed loaded use the user, otherwise put a blank user
         if(window.appView){
@@ -236,38 +267,96 @@ define([
 //          this.set("team", new UserMask({pouchname: this.get("pouchname")}));
         }
       }
-      this.permissions = new Permissions();
-      var admins = new Users();
-      if(this.get("team")){
-        admins.models.push(this.get("team"));
-      }
-      this.permissions.add(new Permission({
-        users: admins,
-        role: "admin",
-        pouchname: this.get("pouchname")
-      }));
       
-      this.permissions.add(new Permission({
-        users: new Users(),
-        role: "reader",
-        pouchname: this.get("pouchname")
-      }));
-      this.permissions.add(new Permission({
-        users: new Users(), //"fielddbpublicuser"
-        role: "writer",
-        pouchname: this.get("pouchname")
-      }));
-      //TODO load the permissions in from the server.
+      var corpusself = this;
+      // load the permissions in from the server.
+      window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users){
+        var typeaheadusers = _.pluck(users.notonteam,"username") || [];
+        typeaheadusers = JSON.stringify(typeaheadusers);
+        var potentialusers = users.allusers || [];
+        corpusself.permissions = new Permissions();
+        
+        var admins = new Users();
+        corpusself.permissions.add(new Permission({
+          users : admins,
+          role : "admin",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
+        
+        var writers = new Users();
+        corpusself.permissions.add(new Permission({
+          users: writers, 
+          role: "writer",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
+        
+        var readers = new Users();
+        corpusself.permissions.add(new Permission({
+          users: readers,
+          role: "reader",
+          typeaheadusers : typeaheadusers,
+          potentialusers : potentialusers,
+          pouchname: corpusself.get("pouchname")
+        }));
+        
+        if(users.admins && users.admins.length > 0){
+          for ( var u in users.admins) {
+            if(!users.admins[u].username){
+              continue;
+            }
+            var user = {"username" : users.admins[u].username};
+            if(users.admins[u].gravatar){
+              user.gravatar = users.admins[u].gravatar;
+            }
+            admins.models.push(new UserMask(user));
+          }
+        }
+        if(users.writers && users.writers.length > 0){
+          for ( var u in users.writers) {
+            if(!users.writers[u].username){
+              continue;
+            }
+            var user = {"username" : users.writers[u].username};
+            if(users.writers[u].gravatar){
+              user.gravatar = users.writers[u].gravatar;
+            }
+            writers.models.push(new UserMask(user));
+          }
+        }
+        if(users.readers && users.readers.length > 0){
+          for ( var u in users.readers) {
+            if(!users.readers[u].username){
+              continue;
+            }
+            var user = {"username" : users.readers[u].username};
+            if(users.readers[u].gravatar){
+              user.gravatar = users.readers[u].gravatar;
+            }
+            readers.models.push(new UserMask(user));
+          }
+        }
+        //Set up the typeahead for the permissions edit
+        
+        if(typeof doneLoadingPermissions == "function"){
+          doneLoadingPermissions();
+        }
+      });
+      
     },
     
     defaults : {
       title : "Untitled Corpus",
       titleAsUrl :"UntitledCorpus",
-      description : "This is an untitled corpus, created by default. You should change its title and description to better describe whatever database/corpus you want to build.",
+      description : "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
 //      confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
-      datumFields : DatumFields, 
+      datumFields : DatumFields,
+      conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
       couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
@@ -279,6 +368,7 @@ define([
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 
+      conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
       sessions : Sessions, 
@@ -326,7 +416,7 @@ define([
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
         window.appView.sessionNewModalView.model = new Session({
           pouchname : self.get("pouchname"),
-          sessionFields : self.get("sessionFields").clone()
+          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.set("comments", new Comments());
         window.appView.sessionNewModalView.render();
@@ -360,7 +450,21 @@ define([
       attributes.comments = [];
       attributes.publicSelfMode = {};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
-
+      //clear out search terms from the new corpus's datum fields
+      for(var x in attributes.datumFields){
+        attributes.datumFields[x].mask = "";
+        attributes.datumFields[x].value = "";
+      }
+      //clear out search terms from the new corpus's conversation fields
+      for(var x in attributes.conversationFields){
+        attributes.conversationFields[x].mask = "";
+        attributes.conversationFields[x].value = "";
+      }
+      //clear out search terms from the new corpus's session fields
+      for(var x in attributes.sessionFields){
+        attributes.sessionFields[x].mask = "";
+        attributes.sessionFields[x].value = "";
+      }
       window.appView.corpusNewModalView.model = new Corpus();
       //be sure internal models are parsed and built.
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
@@ -374,6 +478,10 @@ define([
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }
+      if(!couchConnection){
+        Utils.debug("Cant change corpus's couch connection");
+        return;
+      }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
         .pouch(Utils.androidApp() ? Utils.touchUrl
@@ -381,6 +489,7 @@ define([
             + couchConnection.pouchname);
       }
 
+      Utils.testPouchChromeVersions(couchConnection.pouchname);
       if (typeof callback == "function") {
         callback();
       }
@@ -414,6 +523,9 @@ define([
         }
       }else{
         this.get("couchConnection").corpusid = this.id;
+        if(!this.get("couchConnection").path){
+          this.get("couchConnection").path = "";
+        }
       }
       var oldrev = this.get("_rev");
       
@@ -445,6 +557,7 @@ define([
 //            }
             //save the corpus mask too
             var publicSelfMode = model.get("publicSelf");
+            publicSelfMode.set("corpusId", model.id);
             if(publicSelfMode.changePouch){
               publicSelfMode.changePouch( model.get("couchConnection"), function(){
                 publicSelfMode.saveAndInterConnectInApp();
@@ -580,7 +693,6 @@ define([
               
               self.makeSureCorpusHasADataList(function(){
                 self.makeSureCorpusHasASession(function(){
-                  
                   //save the internal models go to the user dashboard to to load the corpus into the dashboard
                   self.save(null, {
                     success : function(model, response) {
@@ -591,12 +703,11 @@ define([
                       alert('New Corpus save error' + e);
                     }
                   });
-                  
 
-                  //end success to create new data list
+                  //end success to create new session
                 },function(e){
                   alert("Failed to create a session. "+e);
-                });//end failure to create new data list
+                });//end failure to create new session
                 //end success to create new data list
               },function(){
                 alert("Failed to create a datalist. "+e);
@@ -633,11 +744,11 @@ define([
       var dl = new DataList({
         pouchname : this.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
       dl.set({
-        "title" : "Datalist instructions",
+        "title" : "Default Datalist - Empty",
         "dateCreated" : (new Date()).toDateString(),
-        "description" : "This list explains what datalists are and how to make them. " +
-        "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-        "export to LaTeX, or share with collaborators.",
+        "description" : "The app comes with a default datalist which is empty. " +
+        "Once you have data in your corpus, you can create a datalist using Search. Imported data will also show up as a datalist. " +
+        "Datalists can be used to create handouts, export to LaTeX, or share with collaborators.",
         "pouchname" : this.get("pouchname")
       });
       dl.set("dateCreated",JSON.stringify(new Date()));
@@ -704,6 +815,69 @@ define([
           }
         }
       });
+    },
+    /**
+     * If more views are added to corpora (or activity feeds) , add them here
+     * @returns {} an object containing valid map reduce functions
+     * TODO: add conversation search to the get_datum_fields function
+     */
+    validCouchViews : function(){
+      return {
+        "get_ids/by_date" : {
+          map: function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}
+        },
+        "get_datum_field/get_datum_fields" : {
+          map : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
+        }
+      };
+    },
+    createPouchView: function(view, callbackpouchview){
+      if(!window.validCouchViews){
+        window.validCouchViews = this.validCouchViews();
+      }
+      var viewparts = view.split("/");
+      if(viewparts.length != 2){
+        console.log("Warning "+view+ " is not a valid view name.");
+        return;
+      }
+      var corpusself = this;
+      if(!this.get("couchConnection")){
+        return;
+      }
+      this.changePouch(null, function() {
+        corpusself.pouch(function(err, db) {
+          var modelwithhardcodedid = {
+              "_id": "_design/"+viewparts[0],
+              "language": "javascript",
+              "views": {
+//                "by_id" : {
+//                      "map": "function (doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}"
+//                  }
+              }
+           };
+          modelwithhardcodedid.views[viewparts[1]] = {map : window.validCouchViews[view].map.toString()};
+          if(window.validCouchViews[view].reduce){
+            modelwithhardcodedid.views[viewparts[1]].reduce =  window.validCouchViews[view].reduce.toString();
+          }
+
+          console.log("This is what the doc will look like: ", modelwithhardcodedid);
+          db.put(modelwithhardcodedid, function(err, response) {
+            Utils.debug(response);
+            if(err){
+              Utils.debug("The "+view+" view couldn't be created.");
+            }else{
+              
+              Utils.debug("The "+view+" view was created.");
+              if(typeof callbackpouchview == "function"){
+                callbackpouchview();
+              }
+              
+              
+            }
+          });
+        });
+      });
+      
     },
     /**
      * Accepts two functions success will be called if successful,
@@ -789,7 +963,7 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
+          couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, response) {
             Utils.debug("Replicate to " + couchurl);
@@ -873,7 +1047,7 @@ define([
           if(couchConnection.port != null){
             couchurl = couchurl+":"+couchConnection.port;
           }
-          couchurl = couchurl +"/"+ couchConnection.pouchname;
+          couchurl = couchurl  +couchConnection.path+"/"+ couchConnection.pouchname;
           
           
           //We can leave the to and from replication async, and make two callbacks. 
@@ -941,6 +1115,7 @@ define([
         
       });
     },
+    
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
@@ -961,7 +1136,11 @@ define([
       if (couchConnection.port != null) {
         couchurl = couchurl + ":" + couchConnection.port;
       }
-      couchurl = couchurl + "/_session";
+      if(!couchConnection.path){
+        couchConnection.path = "";
+        this.get("couchConnection").path = "";
+      }
+      couchurl = couchurl  + couchConnection.path + "/_session";
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
@@ -969,30 +1148,29 @@ define([
         type : 'POST',
         url : couchurl ,
         data : corpusloginparams,
-        success : function(data) {
+        success : function(serverResults) {
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
           }
           if (typeof succescallback == "function") {
-            succescallback(data);
+            succescallback(serverResults);
           }
         },
-        error : function(data){
+        error : function(serverResults){
           window.setTimeout(function(){
             //try one more time 5 seconds later 
             $.ajax({
               type : 'POST',
               url : couchurl ,
-              data : corpusloginparams,
-              success : function(data) {
+              success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
                 }
                 if (typeof succescallback == "function") {
-                  succescallback(data);
+                  succescallback(serverResults);
                 }
               },
-              error : function(data){
+              error : function(serverResults){
                 if(window.appView){
                   window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
                       "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
@@ -1003,7 +1181,7 @@ define([
                 if (typeof failurecallback == "function") {
                   failurecallback("I couldn't log you into your corpus.");
                 }
-                Utils.debug(data);
+                Utils.debug(serverResults);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
             });

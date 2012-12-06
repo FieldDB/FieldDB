@@ -24,7 +24,7 @@ define([
       this.constructCollectionFromArrayOnServer(arrayOfCorpora);
     },
     constructCollectionFromArrayOnServer : function(arrayOfCorpora){
-      console.log(arrayOfCorpora);
+      Utils.debug(arrayOfCorpora);
       this.reset();
       var self = this;
       for(c in arrayOfCorpora){
@@ -33,7 +33,7 @@ define([
         if (couchConnection.port != null) {
           couchurl = couchurl + ":" + couchConnection.port;
         }
-        couchurl = couchurl +"/"+ couchConnection.pouchname+"/corpus";
+        couchurl = couchurl +couchConnection.path +"/"+ couchConnection.pouchname+"/corpus";
         
         var corpuse = new CorpusMask({
           title : "",
@@ -53,13 +53,13 @@ define([
 //          type : 'GET',
 //          url : couchurl ,
 //          success : function(data) {
-//            console.log("Got data back from the server about this corpus: ", data);
+//            Utils.debug("Got data back from the server about this corpus: ", data);
 //            var corpus = new CorpusMask(JSON.parse(data));
 //            corpus.corpusid = arrayOfCorpora[thisc].corpusid;
 //            self.unshift(corpus);
 //          },
 //          error : function(data){
-//            console.log("Got error back from the server about this corpus: ", data);
+//            Utils.debug("Got error back from the server about this corpus: ", data);
 //            var corpuse = new CorpusMask({
 //                  title : "We need to make sure you're you before showing you the latest details (click the sync button).",
 //                  pouchname : arrayOfCorpora[thisc].pouchname

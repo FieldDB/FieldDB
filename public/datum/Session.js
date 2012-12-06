@@ -125,7 +125,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-comments-alt'></i> "+goal+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
           }));
@@ -136,7 +136,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-comments-alt'></i> "+goal+"</a>",
+            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
           }));
@@ -209,7 +209,7 @@ define([
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
-                  directobjecticon : "icon-comments-alt",
+                  directobjecticon : "icon-calendar",
                   directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
@@ -220,7 +220,7 @@ define([
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
-                  directobjecticon : "icon-comments-alt",
+                  directobjecticon : "icon-calendar",
                   directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
@@ -228,14 +228,17 @@ define([
                 }));
             
             //make sure the session is in this corpus, if it is the same pouchname
-            var previousversionincorpus = window.app.get("corpus").get("sessions").getByCid(model.cid);
+//            var previousversionincorpus = window.app.get("corpus").get("sessions").getByCid(model.cid);
+            var previousversionincorpus = window.app.get("corpus").get("sessions").get(model.id);
             if( previousversionincorpus == undefined ){
               window.app.get("corpus").get("sessions").unshift(model);
 //              window.appView.addUnsavedDoc(window.app.get("corpus").id);//this is undefined the first time session is saved.
             }else{
               //overwrite new details in the corpus' version, unless they are the same, then it is unnecesary.
               if(previousversionincorpus !== model){
-                previousversionincorpus = model;
+                window.app.get("corpus").get("sessions").remove(previousversionincorpus);
+                window.app.get("corpus").get("sessions").unshift(model);
+                window.app.get("corpus").saveAndInterConnectInApp();
               }
             }
             if(window.app.get("corpus").get("sessions").length == 1){

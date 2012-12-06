@@ -24,6 +24,8 @@ define([
 
     routes : {
       "corpus/:pouchname/:id"           : "showCorpusDashboard", 
+      "corpus/:pouchname/"              : "guessCorpusIdAndShowDashboard", 
+      "render/:render"                  : "showDashboard",
       ""                                : "showDashboard"
     },
     
@@ -31,9 +33,9 @@ define([
      * Displays the dashboard view of the user loaded in authentication
      * 
      */
-    showDashboard : function() {
+    showDashboard : function(renderOrNot) {
       Utils.debug("In showDashboard: " );
-      $("#user-modal").modal("show");
+//      $("#user-modal").modal("show");
 
     },
     /**
@@ -42,6 +44,25 @@ define([
      */
     showFullscreenUser : function() {
       Utils.debug("In showFullscreenUser: " );
+    },
+    guessCorpusIdAndShowDashboard : function(pouchname){
+      var c = new Corpus();
+      c.set({
+        "pouchname" : pouchname
+      });
+      c.id = "corpus";
+      c.changePouch({pouchname: pouchname},function(){
+        
+        c.fetch({
+          success : function(model) {
+            Utils.debug("Corpus fetched successfully", model);
+            window.app.router.showCorpusDashboard(pouchname, c.get("corpusId"));
+          },
+          error : function(e, x, y ) {
+            alert("There was a problem opening your dashboard.");
+          }
+        });
+      });
     },
     
     /**
@@ -53,62 +74,66 @@ define([
     showCorpusDashboard : function(pouchname, corpusid) {
       Utils.debug("In showFullscreenCorpus: " );
       
-      var self = this;
-      if(corpusid){
-        var c = new Corpus();
-        c.set({
-          "pouchname" : pouchname
-        });
-        c.id = corpusid;
-        c.changePouch({pouchname: pouchname}, function(){
-          //fetch only after having setting the right pouch which is what changePouch does.
-          c.fetch({
-            success : function(model) {
-              Utils.debug("Corpus fetched successfully", model);
-              
-              if(c.get("dataLists").length > 0 && c.get("sessions").length > 0 ){
-                self.loadCorpusDashboard(model);
-              }else{
-                alert("Bug: Something might be wrong with this corpus. "+e);
+      /*
+       * If the corpusid is not specified, then try to guess it by re-routing us to the guess function
+       */
+      if(!corpusid){
+        window.location.href="#corpus/"+pouchname;
+      }
 
-                c.makeSureCorpusHasADataList(function(){
-                  c.makeSureCorpusHasASession(function(){
-                    self.loadCorpusDashboard(model);
-                    //end success to create new data list
-                  },function(e){
-                    alert("Failed to create a session. "+e);
-                  });//end failure to create new data list
+      var self = this;
+      var c = new Corpus();
+      c.set({
+        "pouchname" : pouchname
+      });
+      c.id = corpusid;
+      c.changePouch({pouchname: pouchname}, function(){
+        //fetch only after having setting the right pouch which is what changePouch does.
+        c.fetch({
+          success : function(model) {
+            Utils.debug("Corpus fetched successfully", model);
+
+            if(c.get("dataLists").length > 0 && c.get("sessions").length > 0 ){
+              self.loadCorpusDashboard(model);
+            }else{
+              alert("Bug: Something might be wrong with this corpus. ");
+
+              c.makeSureCorpusHasADataList(function(){
+                c.makeSureCorpusHasASession(function(){
+                  self.loadCorpusDashboard(model);
                   //end success to create new data list
                 },function(){
-                  alert("Failed to create a datalist. "+e);
+                  alert("Failed to create a session. ");
                 });//end failure to create new data list
-              }
-              
-            },
-            error : function(e, x, y ) {
-              console.log(e);
-              console.log(x);
-              console.log(y);
-              if(self.islooping){
-                return;
-              }
-              var couchConnection = window.app.get("authentication").get("userPrivate").get("corpuses")[0];
-              self.bringCorpusToThisDevice(c, function(){
-                alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
-                self.showCorpusDashboard(pouchname, corpusid);
-                self.islooping = true;
-                
-              }, function(){
-                alert("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
-              });
+                //end success to create new data list
+              },function(){
+                alert("Failed to create a datalist. ");
+              });//end failure to create new data list
             }
-          });
+
+          },
+          error : function(e, x, y ) {
+            console.log(e);
+            console.log(x);
+            console.log(y);
+            if(self.islooping){
+              return;
+            }
+            
+            self.bringCorpusToThisDevice(c, function(){
+              alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
+              self.showCorpusDashboard(pouchname, corpusid);
+              self.islooping = true;
+
+            }, function(e){
+              alert("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
+            });
+
+          }
         });
-              
-      }else{
-        alert("Cannot fetch the corpus without its id..."+e);
-      }
-      
+      });
+
+
     },
     loadCorpusDashboard: function(c){
       var mostRecentIds = {

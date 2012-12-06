@@ -133,10 +133,12 @@ define(
               "click #quick-authentication-okay-btn" : function(e) {
                 window.hub.publish("quickAuthenticationClose", "no message");
               },
-              "click .icon-home" : function() {
-                // this.model.router.showDashboard();
-                window.location.href = "#";
-                app.router.showDashboard(); // the above line wasnt working
+              "click .icon-home" : function(e) {
+                if(e){
+                  e.stopPropagation();
+                  e.preventDefault();
+                }   
+                window.location.href = "#render/true";
               },
               "click .save-dashboard" : function() {
                 window.app.saveAndInterConnectInApp();
@@ -181,9 +183,9 @@ define(
                 $(".corpus-settings").addClass("hidden");
                 $(".power-users-link").addClass("hidden");
                 
-                $(this.el).find(".locale_We_need_to_make_sure_its_you").html(chrome.i18n.getMessage("locale_We_need_to_make_sure_its_you"));
-                $(this.el).find(".locale_Password").html(chrome.i18n.getMessage("locale_Password"));
-                $(this.el).find(".locale_Yep_its_me").text(chrome.i18n.getMessage("locale_Yep_its_me"));
+                $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale["locale_We_need_to_make_sure_its_you"].message);
+                $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
+                $(this.el).find(".locale_Yep_its_me").text(Locale["locale_Yep_its_me"].message);
                 
               }
               return this;

@@ -153,8 +153,6 @@ define([
       "change .datum_state_select" : "updateDatumStates",
       "click .add-comment-datum" : 'insertNewComment',
       
-      "change" : "updatePouch",//TODO this shouldnt be happening?
-      
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "click .save-datum" : "saveButton"
@@ -209,43 +207,34 @@ define([
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
+        
         var self = this;
         window.setTimeout(function(){
-          $('.datum-field').each(function(index, item) {
-            item.classList.add( $(item).find("label").html() );
-            $(".datum_field_input").each(function(index){
-              this.addEventListener('drop', window.appView.dragUnicodeToField);
-              this.addEventListener('dragover', window.appView.handleDragOver);
-              this.addEventListener('dragleave', function(){
-                $(this).removeClass("over");
-              } );
-            });
-          });
           self.hideRareFields();
         }, 500);
             
         //localization for edit well view
-        $(this.el).find(".locale_See_Fields").attr("title", chrome.i18n.getMessage("locale_See_Fields"));
-//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", chrome.i18n.getMessage("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Add").html(chrome.i18n.getMessage("locale_Add"));
-        $(this.el).find(".locale_Save").html(chrome.i18n.getMessage("locale_Save"));
-        $(this.el).find(".locale_Insert_New_Datum").attr("title", chrome.i18n.getMessage("locale_Insert_New_Datum"));
-        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", chrome.i18n.getMessage("locale_Plain_Text_Export_Tooltip"));
-        $(this.el).find(".locale_Duplicate").attr("title", chrome.i18n.getMessage("locale_Duplicate"));
+        $(this.el).find(".locale_See_Fields").attr("title", Locale["locale_See_Fields"].message);
+//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale["locale_Add_Tags_Tooltip"].message);
+        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+        $(this.el).find(".locale_Save").html(Locale["locale_Save"].message);
+        $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale["locale_Insert_New_Datum"].message);
+        $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale["locale_Plain_Text_Export_Tooltip"].message);
+        $(this.el).find(".locale_Duplicate").attr("title", Locale["locale_Duplicate"].message);
         if(jsonToRender.confidential){
-          $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Decrypt"));
+          $(this.el).find(".locale_Encrypt").attr("title", Locale["locale_Decrypt"].message);
         }else{
-          $(this.el).find(".locale_Encrypt").attr("title", chrome.i18n.getMessage("locale_Encrypt"));
+          $(this.el).find(".locale_Encrypt").attr("title", Locale["locale_Encrypt"].message);
         }
         if(jsonToRender.decryptedMode){
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Hide_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
         }else{
-          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", chrome.i18n.getMessage("locale_Show_confidential_items_Tooltip"));
+          $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
         } 
-        $(this.el).find(".locale_LaTeX").attr("title", chrome.i18n.getMessage("locale_LaTeX"));
-        $(this.el).find(".locale_CSV_Tooltip").attr("title", chrome.i18n.getMessage("locale_CSV_Tooltip"));
+        $(this.el).find(".locale_LaTeX").attr("title", Locale["locale_LaTeX"].message);
+        $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale["locale_CSV_Tooltip"].message);
         
-        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", chrome.i18n.getMessage("locale_Drag_and_Drop_Audio_Tooltip"));
+        $(this.el).find(".locale_Drag_and_Drop_Audio_Tooltip").attr("title", Locale["locale_Drag_and_Drop_Audio_Tooltip"].message);
       }
 
       return this;
@@ -315,22 +304,12 @@ define([
 
     needsSave : false,
     
-    updatePouch : function() {
-      this.needsSave = true;
-    },
-
-    
     saveButton : function(e){
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
-      if (this.needsSave) {
-          this.saveScreen();
-      }else {
-        window.appView.toastUser("This datum "+this.model.id+"has no unsaved changes","alert-success","Saved!");
-
-      };
+      this.model.saveAndInterConnectInApp();
     },
     
     /**
@@ -431,7 +410,11 @@ define([
      * placed at the top of the datumsView, pushing off the bottom Datum, if
      * necessary.
      */
-    newDatum : function() {
+    newDatum : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       // Add a new Datum to the top of the Datum stack
       appView.datumsEditView.newDatum();
     },
@@ -440,7 +423,11 @@ define([
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function() {      
+    duplicateDatum : function(e) { 
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
       // Add it as a new Datum to the top of the Datum stack
       var d = this.model.clone();
       delete d.attributes.dateEntered;
@@ -512,6 +499,8 @@ define([
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
       this.guessGlosses($(e.currentTarget).val());
+      this.needsSave = true;
+
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {

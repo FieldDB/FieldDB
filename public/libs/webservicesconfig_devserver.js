@@ -18,10 +18,10 @@ Utils.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
  * bleeding edge url for users.
  */
 Utils.chromeClientUrl = function(){
-  if (window.location.origin != "TODOrealunstableurlgoeshere"){
+  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
     return window.location.origin;
   }else{
-    return "TODOrealunstableurlgoeshere";
+    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
   }
 };
   
@@ -29,7 +29,8 @@ Utils.defaultCouchConnection = function() {
   return {
     protocol : "https://",
     domain : "ifielddevs.iriscouch.com",
-    port : "443",
-    pouchname : "default"
+    port : "6984",
+    pouchname : "default",
+    path : ""
   }; 
 };

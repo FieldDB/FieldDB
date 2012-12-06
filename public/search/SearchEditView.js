@@ -118,10 +118,10 @@ define([
       } 
       
       //localization
-      $(this.el).find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $(this.el).find(".locale_advanced_search_explaination").html(chrome.i18n.getMessage("locale_advanced_search_explaination"));
-      $(this.el).find(".locale_AND").html(chrome.i18n.getMessage("locale_AND"));
-      $(this.el).find(".locale_OR").html(chrome.i18n.getMessage("locale_OR"));
+      $(this.el).find(".locale_Advanced_Search").html(Locale["locale_Advanced_Search"].message);
+      $(this.el).find(".locale_advanced_search_explanation").html(Locale["locale_advanced_search_explanation"].message);
+      $(this.el).find(".locale_AND").html(Locale["locale_AND"].message);
+      $(this.el).find(".locale_OR").html(Locale["locale_OR"].message);
       
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
@@ -133,9 +133,9 @@ define([
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
       //localization
-      $("#search-top").find(".locale_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Search"));
-      $("#search-top").find(".locale_Advanced_Search").html(chrome.i18n.getMessage("locale_Advanced_Search"));
-      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", chrome.i18n.getMessage("locale_Advanced_Search_Tooltip"));
+      $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale["locale_Search"].message);
+      $("#search-top").find(".locale_Advanced_Search").html(Locale["locale_Advanced_Search"].message);
+      $("#search-top").find(".locale_Advanced_Search_Tooltip").attr("title", Locale["locale_Advanced_Search_Tooltip"].message);
 
       return this;
     },
@@ -228,6 +228,7 @@ define([
      */
     searchUnion : function() {
       Utils.debug("In searchUnion");
+      window.scrollTo(0,0);
       
       // Create a query string from the search criteria
       var queryString = this.getQueryString("union");
@@ -244,7 +245,8 @@ define([
      */
     searchIntersection : function() {
       Utils.debug("In searchIntersection");
-      
+      window.scrollTo(0,0);
+
       // Create a query string from the search criteria
       var queryString = this.getQueryString("intersection");
       
@@ -318,7 +320,7 @@ define([
      * 
      * @param queryString {String} The string representing the query.
      */
-    search : function(queryString) {
+    search : function(queryString, callback) {
       // Search for Datum that match the search criteria      
       var searchself = this;
       (new Datum({"pouchname": app.get("corpus").get("pouchname")})).searchByQueryString(queryString
@@ -333,7 +335,7 @@ define([
         searchself.newTempDataList(function(){
           searchself.searchDataListView.model.set("title"
               , $("#search_box").val()
-              + " search result");
+              + " ");
           searchself.searchDataListView.model.set("description"
               ,  "This is the result of searching for : " 
               + $("#search_box").val()
@@ -348,6 +350,9 @@ define([
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
           Utils.debug("Successfully got data back from search and put it into the temp search data list");
+          if(typeof callback == "function"){
+        	  callback();
+          }
         });
       });
     },
