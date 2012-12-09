@@ -531,7 +531,7 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            window.app.get("currentCorpusTeamActivityFeed").addActivity(
+            window.app.addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon: verbicon,
@@ -542,7 +542,7 @@ define([
                   context : " via Offline App."
                 }));
             
-            window.app.get("currentUserActivityFeed").addActivity(
+            window.app.addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon: verbicon,

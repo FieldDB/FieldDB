@@ -182,7 +182,7 @@ define([
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         if(window.app.get("currentUserActivityFeed")){
-          window.app.get("currentUserActivityFeed").addActivity(
+          window.app.addActivity(
             new Activity({
               verb : "modified",
               directobject : "your private profile",
@@ -192,7 +192,7 @@ define([
             }));
         }
         if(window.app.get("currentCorpusTeamActivityFeed")){
-          window.app.get("currentCorpusTeamActivityFeed").addActivity(
+          window.app.addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
@@ -208,7 +208,7 @@ define([
           window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         });
         
-        window.app.get("currentUserActivityFeed").addActivity(
+        window.app.addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>your public profile</a>",
@@ -216,7 +216,7 @@ define([
               teamOrPersonal : "personal",
               context : "via Offline App"
             }));
-        window.app.get("currentCorpusTeamActivityFeed").addActivity(
+        window.app.addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",

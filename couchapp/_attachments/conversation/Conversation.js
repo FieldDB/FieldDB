@@ -60,7 +60,7 @@ define([
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
       
-      window.app.get("currentCorpusTeamActivityFeed").addActivity(
+      window.app.addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -71,7 +71,7 @@ define([
             context : " via Offline App."
           }));
       
-      window.app.get("currentUserActivityFeed").addActivity(
+      window.app.addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -258,7 +258,7 @@ define([
               verbicon = "icon-plus";
             }
             
-            window.app.get("currentCorpusTeamActivityFeed").addActivity(
+            window.app.addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
@@ -269,7 +269,7 @@ define([
                   context : " via Offline App."
                 }));
             
-            window.app.get("currentUserActivityFeed").addActivity(
+            window.app.addActivity(
                 new Activity({
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,

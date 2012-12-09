@@ -68,7 +68,7 @@ define([
                   userAsMask.set("status","user-permission-confirmed");
                   permisionviewself.render();
 
-                  window.app.get("currentCorpusTeamActivityFeed").addActivity(
+                  window.app.addActivity(
                       new Activity({
                         verb : "added",
                         verbicon: "icon-plus",
@@ -79,7 +79,7 @@ define([
                         context : " via Offline App."
                       }));
                   
-                  window.app.get("currentUserActivityFeed").addActivity(
+                  window.app.addActivity(
                       new Activity({
                         verb : "added",
                         verbicon: "icon-plus",
