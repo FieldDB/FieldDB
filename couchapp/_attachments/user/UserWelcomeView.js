@@ -122,6 +122,9 @@ define([
       "click .welcomepassword" : function(e) {
         return false;
       },
+      "click .welcomeauthurl" : function(e) {
+        return false;
+      },
       "keyup .welcomepassword" : function(e) {
         var code = e.keyCode || e.which;
         
@@ -167,6 +170,13 @@ define([
 //        $(this.el).find(".locale_Warning").text(Locale["locale_Warning"].message);
 //        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale["locale_Instructions_to_show_on_dashboard"].message);
 
+        $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
+          e.stopPropagation(); 
+        });
+        $(document).on('click','.dropdown-menu a',function(){
+          document.location = $(this).attr('href');
+        });
+        
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;
         OPrime.getVersion(function (ver) { 
