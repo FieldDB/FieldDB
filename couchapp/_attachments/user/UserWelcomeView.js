@@ -44,11 +44,20 @@ define([
       OPrime.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
-      if(LocaleData){
-          window.Locale = JSON.parse(LocaleData);
-        }else{
-          window.Locale = {};
-        }
+      
+      window.Locale = {};
+      window.Locale.get = function(message) {
+        return window.Locale.data[message].message;
+      };
+      if (LocaleData) {
+        window.Locale.data = JSON.parse(LocaleData);
+      } else {
+        console.log("Locales did not load.");
+        window.Locale.get = function(message) {
+          return "";
+        };
+      }
+      
       this.model.bind("change", this.render, this);
     },
 
