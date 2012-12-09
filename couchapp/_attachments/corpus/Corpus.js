@@ -1131,7 +1131,17 @@ define([
         couchConnection = this.get("couchConnection");
       }
       
-     
+      
+      if (OPrime.isAndroidApp()) {
+        OPrime
+        .debug("Not getting a session token from the users corpus server " +
+        		"since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
+        if (typeof succescallback == "function") {
+          succescallback(serverResults);
+        }
+        return;
+      }
+      
       
       var couchurl = couchConnection.protocol + couchConnection.domain;
       if (couchConnection.port != null) {
