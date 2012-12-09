@@ -1,13 +1,11 @@
 define([
     "backbone",
-    "activity/Activities",
     "hotkey/HotKey",
     "user/UserGeneric",
     "user/UserPreference",
     "libs/OPrime"
 ], function(
     Backbone, 
-    Activities,
     HotKey,
     UserGeneric,
     UserPreference
@@ -45,10 +43,6 @@ define([
         this.set("hotkeys", new HotKey());//TODO this needs to become plural
       }
       
-      //If there are not activities create a new collection
-      if (!this.get("activities")) {
-        this.set("activities", new Activities());
-      }
       this.bind("change", this.checkPrefsChanged, this);
     },
     
@@ -57,7 +51,7 @@ define([
       username : "",
       password : "",
       email : "",
-      gravatar : "./../user/user_gravatar.png",
+      gravatar : "user/user_gravatar.png",
       researchInterest : "",
       affiliation : "",
       description : "",
@@ -69,8 +63,7 @@ define([
       firstname : "",
       lastname : "",
       teams : [],
-      sessionHistory : [],
-//      activities : []
+      sessionHistory : []
     },
 
     /**

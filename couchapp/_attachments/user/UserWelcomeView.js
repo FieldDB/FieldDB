@@ -2,7 +2,6 @@ define([
     "backbone", 
     "handlebars", 
     "activity/Activity",
-    "activity/ActivityFeed",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -19,7 +18,6 @@ define([
     Backbone, 
     Handlebars, 
     Activity,
-    ActivityFeed,
     App,
     Authentication,
     Corpus,
@@ -179,12 +177,16 @@ define([
 //        $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
 //        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
 
+        /*
+         * Workaround for Bootstrap dropdowns not being clickable in android.
+         */
         $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
           e.stopPropagation(); 
         });
         $(document).on('click','.dropdown-menu a',function(){
           document.location = $(this).attr('href');
         });
+
         
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;
@@ -227,7 +229,7 @@ define([
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
-      dataToPost.gravatar = "./../user/user_gravatar.png";
+      dataToPost.gravatar = "user/user_gravatar.png";
      
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
@@ -275,89 +277,9 @@ define([
                     "couchConnection" : serverResults.user.corpuses[0],
                     "pouchname" : serverResults.user.corpuses[0].pouchname
                   });
-                  //get the right corpus into the activity feed early, now that the user auth exists, this will work
-                  a.set("currentCorpusTeamActivityFeed", new ActivityFeed());
-                  var activityCouchConnection = JSON.parse(JSON.stringify(serverResults.user.corpuses[0]));
-                  activityCouchConnection.pouchname =  serverResults.user.corpuses[0].pouchname+"-activity_feed";
-                  a.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-                  
-                  a.set("currentUserActivityFeed", new ActivityFeed());
-                  a.get("currentUserActivityFeed").changePouch(serverResults.user.activityCouchConnection);
                 
                   //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
                   c.saveAndInterConnectInApp();
-                  
-                  
-//                  var s = a.get("currentSession");
-//                  s.get("sessionFields").where({label: "user"})[0].set("mask", auth.get("userPrivate").get("username") );
-//                  s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
-//                  s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the goal of your first elicitiation session.");
-//                  s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-//                  s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a day for example: A few months ago, probably on a Monday night.");
-//                  s.set("pouchname", serverResults.user.corpuses[0].pouchname);
-//                  s.changePouch(serverResults.user.corpuses[0].pouchname);
-//                  
-//                  c.get("sessions").add(s);
-//                  
-//                  var dl = a.get("currentDataList");
-//                  dl.set({
-//                    "title" : "All Data",
-//                    "dateCreated" : (new Date()).toDateString(),
-//                    "description" : "This list contains all data in this corpus. " +
-//                    "Any new datum you create is added here. " +
-//                    "Data lists can be used to create handouts, prepare for sessions with consultants, " +
-//                    "export to LaTeX, or share with collaborators. You can create a new data list by searching.",
-//                    "pouchname" : serverResults.user.corpuses[0].pouchname
-//                  });
-//                  dl.changePouch(serverResults.user.corpuses[0].pouchname);
-//                  c.get("dataLists").add(dl);
-//                  
-//                  c.changePouch(serverResults.user.corpuses[0]);
-//                  a.saveAndInterConnectInApp(function(){
-////                    alert("save app succeeded");
-//                    //Put this corpus's id into the couchconnection in the user so that we can fetch the private view of the corpus directly
-//                    auth.get("userPrivate").get("corpuses")[0].corpusid = c.id;
-//                    auth.saveAndInterConnectInApp(function(){
-//                      localStorage.setItem("mostRecentCouchConnection",JSON.stringify(serverResults.user.corpuses[0]));
-//                      document.location.href='user.html#corpus/'+serverResults.user.corpuses[0].pouchname+"/"+c.id; //TODO test this
-//                    });
-//                  }
-//                  ,function(){
-//                    alert("Bug! save app failed.");
-//                  }
-//                  );
-                  // c.save(); //this is saving to add the corpus to the user's array of corpuses later on
-//                  window.startApp(a, function(){
-////                     auth.get("userPrivate").addCurrentCorpusToUser();
-//                    window.setTimeout(function(){
-//                      /*
-//                       * Use the corpus just created to log the user into that corpus's couch server
-//                       */
-//                      var couchConnection = serverResults.user.corpuses[0];
-//                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
-//                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
-//                        OPrime.debug("Successfully authenticated user with their corpus server.");
-//                        //Bring down the views so the user can search locally without pushing to a server.
-//                        c.replicateFromCorpus(couchConnection, function(){
-////                        appView.datumsEditView.newDatum();
-////                          appView.datumsEditView.render();
-//                        });
-//                        //save the users' first dashboard so at least they will have it if they close the app.
-//                        window.setTimeout(function(){
-//                          window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
-//                            window.app.saveAndInterConnectInApp(function(){
-//                              //replicate from both activity feeds to be sure that they have the search views
-//                              window.appView.activityFeedCorpusTeamView.model.replicateFromActivityFeed(null, function(){
-//                                window.appView.activityFeedUserView.model.replicateFromActivityFeed(null);
-//                              });
-//                            });
-//                          });
-//                        },10000);
-//                        
-//                      });
-//                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
-//                    OPrime.debug("Loadded app for a new user.");
-//                  });
                 });
 //                });
             }
