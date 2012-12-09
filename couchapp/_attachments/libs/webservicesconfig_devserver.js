@@ -1,3 +1,4 @@
+console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
@@ -34,3 +35,6 @@ OPrime.defaultCouchConnection = function() {
     path : ""
   }; 
 };
+
+OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+
