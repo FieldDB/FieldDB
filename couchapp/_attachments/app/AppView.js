@@ -267,14 +267,14 @@ define([
      * (which happens when the user authenticates so that if they were logged into another computer the can get their updated preferences.
      */
     associateCurrentUsersInternalModelsWithTheirViews : function(callback){
-      this.userPreferenceView.model = this.authView.model.get("userPrivate").get("prefs");
+      this.userPreferenceView.model = this.model.get("authentication").get("userPrivate").get("prefs");
       this.userPreferenceView.model.bind("change:skin", this.userPreferenceView.renderSkin, this.userPreferenceView);
       
-      this.insertUnicodesView.model = this.authView.model.get("userPrivate").get("prefs").get("unicodes");
+      this.insertUnicodesView.model = this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes");
       this.insertUnicodesView.changeViewsOfInternalModels();
       this.insertUnicodesView.render();
       
-      this.hotkeyEditView.model = this.authView.model.get("userPrivate").get("hotkeys");
+      this.hotkeyEditView.model = this.model.get("authentication").get("userPrivate").get("hotkeys");
       //TODO the hotkeys are probably not associated but because they are not finished, they can't be checked yet
       
       this.modalEditUserView.changeViewsOfInternalModels();
@@ -315,7 +315,7 @@ define([
 
       // Create a UserPreferenceEditView
       this.userPreferenceView = new UserPreferenceEditView({
-        model : this.authView.model.get("userPrivate").get("prefs")
+        model : this.model.get("authentication").get("userPrivate").get("prefs")
       });
       
       // Create a UserActivityView 
@@ -453,10 +453,10 @@ define([
        * that can be controlled by teh appview. which is also
        * responsible for many functions on the navbar
        */
-      "click .btn-advanced-search" : function(e){
+      "click .trigger-advanced-search" : function(e){
         window.app.router.showEmbeddedSearch();
       },
-      "click .icon-search" : function(e){
+      "click .trigger-quick-search" : function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();

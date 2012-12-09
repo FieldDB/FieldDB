@@ -110,7 +110,11 @@ var Terminal = Terminal || function(containerId) {
   var is3D_ = false;
 
   // Fire worker to return recursive snapshot of current FS tree.
-  var worker_ = new Worker('libs/terminal/worker.js');
+  if(false){
+    var worker_ = new Worker('libs/terminal/worker.js');
+  }else{
+    var worker_ = {postMessage : function(){console.log("Workers dont work in this environment.")}};
+  }
   worker_.onmessage = function(e) {
     var data = e.data;
     if (data.entries) {

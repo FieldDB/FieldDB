@@ -181,8 +181,7 @@ define([
       //It is the private self
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-        if(window.app.get("currentUserActivityFeed")){
-          window.app.addActivity(
+        window.app.addActivity(
             new Activity({
               verb : "modified",
               directobject : "your private profile",
@@ -190,9 +189,7 @@ define([
               teamOrPersonal : "personal",
               context : "via Offline App"
             }));
-        }
-        if(window.app.get("currentCorpusTeamActivityFeed")){
-          window.app.addActivity(
+        window.app.addActivity(
             new Activity({
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
@@ -200,7 +197,6 @@ define([
               teamOrPersonal : "team",
               context : "via Offline App"
             }));
-        }
       }else{
         //It is the public self
         window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
