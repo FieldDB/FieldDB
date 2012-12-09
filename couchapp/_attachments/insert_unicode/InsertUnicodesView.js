@@ -89,11 +89,11 @@ define([
         });
         
         //localization for non-minimized view
-        $(this.el).find(".locale_Hide_Unicode_Palette").attr("title", Locale["locale_Hide_Unicode_Palette"].message);
-        $(this.el).find(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", Locale["locale_Paste_Type_Unicode_Symbol_Placeholder"].message);
-        $(this.el).find(".locale_TIPA_shortcut").attr("placeholder", Locale["locale_TIPA_shortcut"].message);
-        $(this.el).find(".locale_Add_new_symbol").attr("title", Locale["locale_Add_new_symbol"].message);
-        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+        $(this.el).find(".locale_Hide_Unicode_Palette").attr("title", Locale.get("locale_Hide_Unicode_Palette"));
+        $(this.el).find(".locale_Paste_Type_Unicode_Symbol_Placeholder").attr("placeholder", Locale.get("locale_Paste_Type_Unicode_Symbol_Placeholder"));
+        $(this.el).find(".locale_TIPA_shortcut").attr("placeholder", Locale.get("locale_TIPA_shortcut"));
+        $(this.el).find(".locale_Add_new_symbol").attr("title", Locale.get("locale_Add_new_symbol"));
+        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
       
       } else if (this.format == "minimized") {
         // Display the minimized InsertUnicodesView
@@ -101,11 +101,11 @@ define([
         $(this.el).html(this.minimizedTemplate({}));
 
         //localization for minimized view
-        $(this.el).find(".locale_Show_Unicode_Palette").attr("title", Locale["locale_Show_Unicode_Palette"].message);
+        $(this.el).find(".locale_Show_Unicode_Palette").attr("title", Locale.get("locale_Show_Unicode_Palette"));
       }
       //localization for all views
-      $(this.el).find(".locale_Unicode").html(Locale["locale_Unicode"].message);
-      $(this.el).find(".locale_Drag_and_Drop").html(Locale["locale_Drag_and_Drop"].message);
+      $(this.el).find(".locale_Unicode").html(Locale.get("locale_Unicode"));
+      $(this.el).find(".locale_Drag_and_Drop").html(Locale.get("locale_Drag_and_Drop"));
 
       return this;
     },

@@ -118,15 +118,15 @@ define([
       }
 
       //localization
-      $(this.el).find(".locale_Username").html(Locale["locale_Username"].message);
-      $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
-      $(this.el).find(".locale_Log_Out").html(Locale["locale_Log_Out"].message);
-      $(this.el).find(".locale_Log_In").html(Locale["locale_Log_In"].message);
-      $(this.el).find(".locale_Private_Profile").html(Locale["locale_Private_Profile"].message);
-      $(this.el).find(".locale_User_Settings").html(Locale["locale_User_Settings"].message);
-      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale["locale_Keyboard_Shortcuts"].message);
-      $(this.el).find(".locale_Corpus_Settings").html(Locale["locale_Corpus_Settings"].message);
-      $(this.el).find(".locale_Terminal_Power_Users").html(Locale["locale_Terminal_Power_Users"].message);
+      $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
+      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+      $(this.el).find(".locale_Log_Out").html(Locale.get("locale_Log_Out"));
+      $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
+      $(this.el).find(".locale_Private_Profile").html(Locale.get("locale_Private_Profile"));
+      $(this.el).find(".locale_User_Settings").html(Locale.get("locale_User_Settings"));
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
+      $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
+      $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
       
       document.getElementById("authUrl").value = OPrime.authUrl;
 

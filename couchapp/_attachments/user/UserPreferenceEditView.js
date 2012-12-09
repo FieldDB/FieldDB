@@ -105,13 +105,13 @@ define([
         
       }
       //localization
-      $(this.el).find(".locale_User_Settings").html(Locale["locale_User_Settings"].message);
-      $(this.el).find(".locale_Skin").html(Locale["locale_Skin"].message);
-      $(this.el).find(".locale_Change_Background").html(Locale["locale_Change_Background"].message);
-      $(this.el).find(".locale_Background_on_Random").html(Locale["locale_Background_on_Random"].message);
-      $(this.el).find(".locale_Transparent_Dashboard").html(Locale["locale_Transparent_Dashboard"].message);
-      $(this.el).find(".locale_Number_Datum").html(Locale["locale_Number_Datum"].message);
-      $(this.el).find(".locale_Close").html(Locale["locale_Close"].message);  
+      $(this.el).find(".locale_User_Settings").html(Locale.get("locale_User_Settings"));
+      $(this.el).find(".locale_Skin").html(Locale.get("locale_Skin"));
+      $(this.el).find(".locale_Change_Background").html(Locale.get("locale_Change_Background"));
+      $(this.el).find(".locale_Background_on_Random").html(Locale.get("locale_Background_on_Random"));
+      $(this.el).find(".locale_Transparent_Dashboard").html(Locale.get("locale_Transparent_Dashboard"));
+      $(this.el).find(".locale_Number_Datum").html(Locale.get("locale_Number_Datum"));
+      $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));  
       return this;
     },
     

@@ -61,9 +61,9 @@ define([
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         //localization
-        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale["locale_Encrypt_if_confidential"].message);
-        $(this.el).find(".locale_Help_Text").html(Locale["locale_Help_Text"].message);
-        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale["locale_Help_Text_Placeholder"].message);
+        $(this.el).find(".locale_Encrypt_if_confidential").html(Locale.get("locale_Encrypt_if_confidential"));
+        $(this.el).find(".locale_Help_Text").html(Locale.get("locale_Help_Text"));
+        $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
         
         // Select the correct values from the model TODO is this dead code?
         $(this.el).children(".choose-field").val(this.model.get("label"));
