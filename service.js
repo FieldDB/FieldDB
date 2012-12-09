@@ -25,7 +25,6 @@ app.configure(function() {
   app.use(express.static(__dirname + '/../../public'));
 });
 
-
 /*
  * Routes
  */
@@ -50,11 +49,16 @@ app.post('/login', function(req, res) {
       console.log(new Date() + " Returning the existing user as json:\n"+util.inspect(user));
     }
     console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.send(returndata);
   });
-
 });
-
+app.get('/login',function(req,res){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.send({});
+});
 
 /**
  * Takes in the http request and response. Calls the registerNewUser function in
@@ -89,11 +93,17 @@ app.post('/register', function(req, res ) {
       returndata.info = [info.message];
       console.log(new Date() + " Returning the newly built user: "+util.inspect(user));
     }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.send(returndata);
 
   });
 });
-
+app.get('/register',function(req,res){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.send({});
+});
 
 /**
  * Responds to requests for login, if successful replies with a list of usernames 
@@ -116,9 +126,16 @@ app.post('/corpusteam', function(req, res) {
     }
     console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
     console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.send(returndata);
   });
   
+});
+app.get('/corpusteam',function(req,res){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.send({});
 });
 
 /**
@@ -154,14 +171,19 @@ app.post('/addroletouser', function(req, res) {
           console.log(new Date() + " Returning roleadded okay:\n");
         }
         console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
         res.send(returndata);
       });
       
     }
   });
-
 });
-
+app.get('/addroletouser',function(req,res){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.send({});
+});
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
 //app.listen(node_config.port);
