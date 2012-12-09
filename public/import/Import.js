@@ -518,7 +518,7 @@ define([
     readFileIntoRawText : function(index, callback){
       var self = this;
       this.readBlob(this.get("files")[index], function(){
-        self.guessFormatAndImport(0, callback); 
+        self.guessFormatAndImport(null, callback); 
       });
     },
     /**

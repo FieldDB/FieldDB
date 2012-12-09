@@ -25,7 +25,7 @@
     "message" : "Sync my data to this computer"
   },
   "locale_Welcome_to_FieldDB" : {
-    "message" : "Welcome to LingSync! <small>beta</small>"
+    "message" : "Welcome to LingSync!"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
     "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data."

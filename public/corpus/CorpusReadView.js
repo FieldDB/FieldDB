@@ -284,11 +284,11 @@ define([
       
       //Localize corpus menu for all corpus views
       $(this.el).find(".locale_New_menu").html(Locale["locale_New_menu"].message);
-      $(this.el).find(".locale_New_Datum").html(Locale["locale_New_Datum"].message);
-      $(this.el).find(".locale_New_Conversation").html(Locale["locale_New_Conversation"].message);
-      $(this.el).find(".locale_New_Data_List").html(Locale["locale_New_Data_List"].message);
-      $(this.el).find(".locale_New_Session").html(Locale["locale_New_Session"].message);
-      $(this.el).find(".locale_New_Corpus").html(Locale["locale_New_Corpus"].message);
+      $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale["locale_New_Datum"].message);
+      $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale["locale_New_Conversation"].message);
+      $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale["locale_New_Data_List"].message);
+      $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale["locale_New_Session"].message);
+      $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale["locale_New_Corpus"].message );
       $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
       $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
       $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);

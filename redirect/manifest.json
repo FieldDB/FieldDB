@@ -1,7 +1,7 @@
 {
-  "name" : "iField Beta",
-  "version" : "1.16.3.5",
-  "description" : "Moved to LingSync.org!",
+  "name" : "iCampo McGill",
+  "version" : "1.23.3",
+  "description" : "Moved to LingSync - McGill!",
   "app" : {
     "launch" : {
       "local_path" : "index.html"
