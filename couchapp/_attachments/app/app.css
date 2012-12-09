@@ -502,3 +502,9 @@ line.link {
 	width: 330px;
 	height: 435px;
 }
+
+@media (max-width: 980px) {
+  .dropdown ul.dropdown-menu {
+    display: block;
+  }
+}
