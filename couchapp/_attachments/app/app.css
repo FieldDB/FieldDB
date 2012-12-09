@@ -1,5 +1,5 @@
-body {
-	/* background-image: url('../users/skins/bamboo_garden.jpg'); */
+body { /* background-image: url('../user/skins/bamboo_garden.jpg'); */
+	background-color: #000;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
@@ -42,6 +42,14 @@ a:hover {
 	/* color: #550; */
 	/* font-size: .85em; */
 	
+}
+
+#toast-user-area {
+	font-size: .75em;
+}
+
+.brand {
+	font-size: .85em !important;
 }
 
 .timestamp,.timestamp a {
@@ -472,17 +480,17 @@ line.link {
 	text-shadow: 1px 1px #000;
 }
 
-.conversation-text-audio-wrapper{
+.conversation-text-audio-wrapper {
 	overflow: hidden;
 	top: 18px;
 	left: 0px;
 	background: transparent;
 	width: 960px;
-	height: 435px;	
+	height: 435px;
 }
 
-.conversation-text-audio-played{
-	background-color:rgba(0,0,0,0.5);
+.conversation-text-audio-played {
+	background-color: rgba(0, 0, 0, 0.5);
 	width: 750;
 }
 
@@ -492,16 +500,18 @@ line.link {
 	height: 435px;
 	cursor: pointer;
 }
+
 .jp-play-bar {
-	background: rgba(255,255,255,0.5);
+	background: rgba(255, 255, 255, 0.5);
 	content: 'comming in January-February';
-	margin:1em;
-  font-size: 2em;
-  line-height:2em;
-  text-align:center;
+	margin: 1em;
+	font-size: 2em;
+	line-height: 2em;
+	text-align: center;
 	width: 330px;
 	height: 435px;
 }
+
 
 @media (max-width: 980px) {
   .dropdown ul.dropdown-menu {
