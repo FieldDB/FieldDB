@@ -46,11 +46,20 @@ define([
       OPrime.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
-      if(LocaleData){
-          window.Locale = JSON.parse(LocaleData);
-        }else{
-          window.Locale = {};
-        }
+      
+      window.Locale = {};
+      window.Locale.get = function(message) {
+        return window.Locale.data[message].message;
+      };
+      if (LocaleData) {
+        window.Locale.data = JSON.parse(LocaleData);
+      } else {
+        console.log("Locales did not load.");
+        window.Locale.get = function(message) {
+          return "";
+        };
+      }
+      
       this.model.bind("change", this.render, this);
     },
 
@@ -153,22 +162,22 @@ define([
         this.setElement($("#user-welcome-modal"));
         $(this.el).html(this.template(this.model.toJSON()));
         $(".registerusername").focus();
-        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale["locale_Close_and_login_as_LingLlama"].message);
-        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale["locale_Close_and_login_as_LingLlama_Tooltip"].message);
-        $(this.el).find(".locale_Log_In").html(Locale["locale_Log_In"].message);
-        $(this.el).find(".locale_Username").html(Locale["locale_Username"].message);
-        $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
-        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale["locale_Sync_my_data_to_this_computer"].message);
-//        $(this.el).find(".locale_Welcome_to_FieldDB").html(Locale["locale_Welcome_to_FieldDB"].message);
-        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale["locale_An_offline_online_fieldlinguistics_database"].message);
-//        $(this.el).find(".locale_Welcome_Beta_Testers").html(Locale["locale_Welcome_Beta_Testers"].message);
-        $(this.el).find(".locale_Create_a_new_user").html(Locale["locale_Create_a_new_user"].message);
-//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(Locale["locale_What_is_your_username_going_to_be"].message);
-        $(this.el).find(".locale_New_User").text(Locale["locale_New_User"].message);
-        $(this.el).find(".locale_Confirm_Password").text(Locale["locale_Confirm_Password"].message);
-        $(this.el).find(".locale_Sign_in_with_password").text(Locale["locale_Sign_in_with_password"].message);
-//        $(this.el).find(".locale_Warning").text(Locale["locale_Warning"].message);
-//        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale["locale_Instructions_to_show_on_dashboard"].message);
+        $(this.el).find(".locale_Close_and_login_as_LingLlama").html(Locale.get("locale_Close_and_login_as_LingLlama"));
+        $(this.el).find(".locale_Close_and_login_as_LingLlama_Tooltip").attr("title", Locale.get("locale_Close_and_login_as_LingLlama_Tooltip"));
+        $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
+        $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
+        $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+        $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
+//        $(this.el).find(".locale_Welcome_to_FieldDB").html(Locale.get("locale_Welcome_to_FieldDB"));
+        $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale.get("locale_An_offline_online_fieldlinguistics_database"));
+//        $(this.el).find(".locale_Welcome_Beta_Testers").html(Locale.get("locale_Welcome_Beta_Testers"));
+        $(this.el).find(".locale_Create_a_new_user").html(Locale.get("locale_Create_a_new_user"));
+//        $(this.el).find(".locale_What_is_your_username_going_to_be").html(Locale.get("locale_What_is_your_username_going_to_be"));
+        $(this.el).find(".locale_New_User").text(Locale.get("locale_New_User"));
+        $(this.el).find(".locale_Confirm_Password").text(Locale.get("locale_Confirm_Password"));
+        $(this.el).find(".locale_Sign_in_with_password").text(Locale.get("locale_Sign_in_with_password"));
+//        $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
+//        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
 
         $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
           e.stopPropagation(); 

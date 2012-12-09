@@ -438,20 +438,20 @@ define([
       this.setTotalBackboneDocs();
       
       //localization
-      $(this.el).find(".locale_Show_Dashboard").attr("title", Locale["locale_Show_Dashboard"].message);
-      $(this.el).find(".locale_Need_save").text(Locale["locale_Need_save"].message);
-      $(this.el).find(".locale_Recent_Changes").text(Locale["locale_Recent_Changes"].message);
-      $(this.el).find(".locale_Save_on_this_Computer").attr("title", Locale["locale_Save_on_this_Computer"].message);
-      $(this.el).find(".locale_Need_sync").text(Locale["locale_Need_sync"].message);
-      $(this.el).find(".locale_Differences_with_the_central_server").text(Locale["locale_Differences_with_the_central_server"].message);
-      $(this.el).find(".locale_Sync_and_Share").attr("title", Locale["locale_Sync_and_Share"].message);
-      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", Locale["locale_View_Public_Profile_Tooltip"].message);
-//      $(this.el).find(".locale_Warning").text(Locale["locale_Warning"].message);
-      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale["locale_Instructions_to_show_on_dashboard"].message);
-      $(this.el).find(".locale_to_beta_testers").html(Locale["locale_to_beta_testers"].message);
-      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale["locale_We_need_to_make_sure_its_you"].message);
-      $(this.el).find(".locale_Password").html(Locale["locale_Password"].message);
-      $(this.el).find(".locale_Yep_its_me").text(Locale["locale_Yep_its_me"].message);
+      $(this.el).find(".locale_Show_Dashboard").attr("title", Locale.get("locale_Show_Dashboard"));
+      $(this.el).find(".locale_Need_save").text(Locale.get("locale_Need_save"));
+      $(this.el).find(".locale_Recent_Changes").text(Locale.get("locale_Recent_Changes"));
+      $(this.el).find(".locale_Save_on_this_Computer").attr("title", Locale.get("locale_Save_on_this_Computer"));
+      $(this.el).find(".locale_Need_sync").text(Locale.get("locale_Need_sync"));
+      $(this.el).find(".locale_Differences_with_the_central_server").text(Locale.get("locale_Differences_with_the_central_server"));
+      $(this.el).find(".locale_Sync_and_Share").attr("title", Locale.get("locale_Sync_and_Share"));
+      $(this.el).find(".locale_View_Public_Profile_Tooltip").attr("title", Locale.get("locale_View_Public_Profile_Tooltip"));
+//      $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
+      $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
+      $(this.el).find(".locale_to_beta_testers").html(Locale.get("locale_to_beta_testers"));
+      $(this.el).find(".locale_We_need_to_make_sure_its_you").html(Locale.get("locale_We_need_to_make_sure_its_you"));
+      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+      $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
       
       return this;
     },
@@ -674,7 +674,7 @@ define([
         alertType = "";
       }
       if(!heading){
-        heading = Locale["locale_Warning"].message;
+        heading = Locale.get("locale_Warning");
       }
       $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"

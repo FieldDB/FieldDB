@@ -122,12 +122,12 @@ define([
           $(this.el).html(this.templateSummary(jsonToRender)); 
 
           //Localization for leftSide
-          $(this.el).find(".locale_Edit_Session").attr("title", Locale["locale_Edit_Session"].message);
-          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
-          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
-          $(this.el).find(".locale_Goal").html(Locale["locale_Goal"].message);
-          $(this.el).find(".locale_Consultants").html(Locale["locale_Consultants"].message);
-          $(this.el).find(".locale_When").html(Locale["locale_When"].message);
+          $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
+          $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
+          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
+          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
+          $(this.el).find(".locale_When").html(Locale.get("locale_When"));
 
         }else if (this.format == "centerWell") {
           OPrime.debug("SESSION READ CENTERWELL render: " );
@@ -143,10 +143,10 @@ define([
           this.commentReadView.render();
           
           //Localization for centerWell
-          $(this.el).find(".locale_Edit_Session").attr("title", Locale["locale_Edit_Session"].message);
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
-          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
-          $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+          $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
           OPrime.debug("SESSION READ FULLSCREEN render: " );
@@ -161,10 +161,10 @@ define([
           this.commentReadView.render();
           
           //Localization for fullscreen
-          $(this.el).find(".locale_Edit_Session").attr("title", Locale["locale_Edit_Session"].message);
-          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
-          $(this.el).find(".locale_Elicitation_Session").html(Locale["locale_Elicitation_Session"].message);
-          $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+          $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
+          $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+          $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
+          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "link") {
           OPrime.debug("SESSION READ LINK render: " );
@@ -180,8 +180,8 @@ define([
           $(this.el).html(this.templateLink(jsonToRender));
           
           //Localization of link
-          $(this.el).find(".locale_Goal").html(Locale["locale_Goal"].message);
-          $(this.el).find(".locale_Consultants").html(Locale["locale_Consultants"].message);
+          $(this.el).find(".locale_Goal").html(Locale.get("locale_Goal"));
+          $(this.el).find(".locale_Consultants").html(Locale.get("locale_Consultants"));
           
         } else {
           throw("You have not specified a format that the SessionReadView can understand.");

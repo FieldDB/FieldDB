@@ -75,12 +75,18 @@ define([
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
 //      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
       
-      if(LocaleData){
-        window.Locale = JSON.parse(LocaleData);
-      }else{
-        window.Locale = {};
+      window.Locale = {};
+      window.Locale.get = function(message) {
+        return window.Locale.data[message].message;
+      };
+      if (LocaleData) {
+        window.Locale.data = JSON.parse(LocaleData);
+      } else {
+        console.log("Locales did not load.");
+        window.Locale.get = function(message) {
+          return "";
+        };
       }
-
     },
     
     // Internal models: used by the parse function

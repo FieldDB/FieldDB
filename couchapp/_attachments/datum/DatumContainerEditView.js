@@ -76,7 +76,7 @@ define([
         this.datumsView.render();
         
         //localization of centerWell view
-        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
+        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
         
       } else if (this.format == "fullscreen") {
         // Display the DatumContainerEditView
@@ -88,12 +88,12 @@ define([
         this.datumsView.render();
 
         //localization of fullscreen view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
 
       }
       //localization for all views
-      $(this.el).find(".locale_Data_Entry_Area").html(Locale["locale_Data_Entry_Area"].message);
-      $(this.el).find(".locale_Show_Readonly").attr("title", Locale["locale_Show_Readonly"].message);
+      $(this.el).find(".locale_Data_Entry_Area").html(Locale.get("locale_Data_Entry_Area"));
+      $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
     },
     
     /**

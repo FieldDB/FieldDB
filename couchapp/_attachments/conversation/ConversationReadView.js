@@ -252,9 +252,9 @@ define( [
             $("#data-list-quickview").find(".current-data-list-paginated-view") );
         
         //Localization of icons for quickview
-        $(this.el).find(".locale_Hide_Datalist").attr("title", Locale["locale_Hide_Datalist"].message);
-        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale["locale_Edit_Datalist"].message);
-        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale["locale_Show_Fullscreen"].message);
+        $(this.el).find(".locale_Hide_Datalist").attr("title", Locale.get("locale_Hide_Datalist"));
+        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale.get("locale_Edit_Datalist"));
+        $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
         
       } else if (this.format == "fullscreen") {
         OPrime.debug("DATALIST READ FULLSCREEN render: ");
@@ -267,8 +267,8 @@ define( [
             $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
         
         //Localization of icons for fullscreen
-        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale["locale_Edit_Datalist"].message);
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale.get("locale_Edit_Datalist"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
        
       } else if(this.format == "centerWell") {
         OPrime.debug("DATALIST READ CENTER render: ");
@@ -280,8 +280,8 @@ define( [
             $("#data-list-embedded").find(".current-data-list-paginated-view") );
        
         //Localization of icons for centerWell
-        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale["locale_Edit_Datalist"].message);
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
+        $(this.el).find(".locale_Edit_Datalist").attr("title", Locale.get("locale_Edit_Datalist"));
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
 
       } else if (this.format == "minimized") {
         OPrime.debug("DATALIST READ MINIMIZED render: ");
@@ -290,7 +290,7 @@ define( [
         $(this.el).html(this.templateMinimized(jsonToRender));
       
         //localization of the minimized data list icons
-        $(this.el).find(".locale_Show_Datalist").attr("title", Locale["locale_Show_Datalist"].message);
+        $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }
       try{
@@ -300,19 +300,19 @@ define( [
           this.commentReadView.render();
           
           //localization of data list menu
-          $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale["locale_Play_Audio_checked"].message);
-          $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale["locale_Remove_checked_from_datalist_tooltip"].message);
-          $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale["locale_Plain_Text_Export_Tooltip_checked"].message);
-          $(this.el).find(".locale_Encrypt_checked").attr("title", Locale["locale_Encrypt_checked"].message);
-          $(this.el).find(".locale_Decrypt_checked").attr("title", Locale["locale_Decrypt_checked"].message);
+          $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale.get("locale_Play_Audio_checked"));
+          $(this.el).find(".locale_Remove_checked_from_datalist_tooltip").attr("title", Locale.get("locale_Remove_checked_from_datalist_tooltip"));
+          $(this.el).find(".locale_Plain_Text_Export_Tooltip_checked").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip_checked"));
+          $(this.el).find(".locale_Encrypt_checked").attr("title", Locale.get("locale_Encrypt_checked"));
+          $(this.el).find(".locale_Decrypt_checked").attr("title", Locale.get("locale_Decrypt_checked"));
           if(jsonToRender.decryptedMode){
-            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Hide_confidential_items_Tooltip"].message);
+            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
           }else{
-            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale["locale_Show_confidential_items_Tooltip"].message);
+            $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
           }          
-          $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale["locale_Export_checked_as_LaTeX"].message);
-          $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale["locale_Export_checked_as_CSV"].message);
-          $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+          $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
+          $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
+          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
           
         }
       }catch(e){

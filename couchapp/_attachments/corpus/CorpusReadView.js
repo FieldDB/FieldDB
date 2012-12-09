@@ -176,7 +176,7 @@ define([
           this.setElement($("#corpus-quickview"));
           $(this.el).html(this.templateSummary(jsonToRender));
           
-          $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale["locale_Show_corpus_settings"].message);
+          $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
 
       } else if (this.format == "link") {
         OPrime.debug("CORPUS READ LINK render: " );
@@ -222,18 +222,18 @@ define([
         }
 
         //Localize for all fullscreen view 
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
-        $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
-        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
-        $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
-        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
-        $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
-        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
-        $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
-        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
-        $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
-        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
-        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
+        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
+        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
+        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
+        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
+        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
+        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
+        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         
       } else if (this.format == "centreWell"){
@@ -267,35 +267,35 @@ define([
 //        this.permissionsView.render();
 
         //Localize for all embedded view
-        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale["locale_Show_in_Dashboard"].message);
-        $(this.el).find(".locale_Sessions_associated").html(Locale["locale_Sessions_associated"].message);
-        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale["locale_elicitation_sessions_explanation"].message);
-        $(this.el).find(".locale_Datalists_associated").html(Locale["locale_Datalists_associated"].message);
-        $(this.el).find(".locale_datalists_explanation").html(Locale["locale_datalists_explanation"].message);
-        $(this.el).find(".locale_Permissions_associated").html(Locale["locale_Permissions_associated"].message);
-        $(this.el).find(".locale_permissions_explanation").html(Locale["locale_permissions_explanation"].message);
-        $(this.el).find(".locale_Datum_field_settings").html(Locale["locale_Datum_field_settings"].message);
-        $(this.el).find(".locale_datum_fields_explanation").html(Locale["locale_datum_fields_explanation"].message);
-        $(this.el).find(".locale_Datum_state_settings").html(Locale["locale_Datum_state_settings"].message);
-        $(this.el).find(".locale_datum_states_explanation").html(Locale["locale_datum_states_explanation"].message);
-        $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
+        $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
+        $(this.el).find(".locale_Sessions_associated").html(Locale.get("locale_Sessions_associated"));
+        $(this.el).find(".locale_elicitation_sessions_explanation").html(Locale.get("locale_elicitation_sessions_explanation"));
+        $(this.el).find(".locale_Datalists_associated").html(Locale.get("locale_Datalists_associated"));
+        $(this.el).find(".locale_datalists_explanation").html(Locale.get("locale_datalists_explanation"));
+        $(this.el).find(".locale_Permissions_associated").html(Locale.get("locale_Permissions_associated"));
+        $(this.el).find(".locale_permissions_explanation").html(Locale.get("locale_permissions_explanation"));
+        $(this.el).find(".locale_Datum_field_settings").html(Locale.get("locale_Datum_field_settings"));
+        $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
+        $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
+        $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
+        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }
       
       //Localize corpus menu for all corpus views
-      $(this.el).find(".locale_New_menu").html(Locale["locale_New_menu"].message);
-      $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale["locale_New_Datum"].message);
-      $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale["locale_New_Conversation"].message);
-      $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale["locale_New_Data_List"].message);
-      $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale["locale_New_Session"].message);
-      $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale["locale_New_Corpus"].message );
-      $(this.el).find(".locale_Data_menu").html(Locale["locale_Data_menu"].message);
-      $(this.el).find(".locale_Import_Data").html(Locale["locale_Import_Data"].message);
-      $(this.el).find(".locale_Export_Data").html(Locale["locale_Export_Data"].message);
-      $(this.el).find(".locale_All_Data").html(Locale["locale_All_Data"].message);
+      $(this.el).find(".locale_New_menu").html(Locale.get("locale_New_menu"));
+      $(this.el).find(".locale_New_Datum").html("<i class='icon-list'></i> "+Locale.get("locale_New_Datum"));
+      $(this.el).find(".locale_New_Conversation").html("<i class='icon-gift'></i>New! "+Locale.get("locale_New_Conversation"));
+      $(this.el).find(".locale_New_Data_List").html("<i class='icon-pushpin'></i> "+ Locale.get("locale_New_Data_List"));
+      $(this.el).find(".locale_New_Session").html("<i class='icon-calendar'></i> "+Locale.get("locale_New_Session"));
+      $(this.el).find(".locale_New_Corpus").html("<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") );
+      $(this.el).find(".locale_Data_menu").html(Locale.get("locale_Data_menu"));
+      $(this.el).find(".locale_Import_Data").html(Locale.get("locale_Import_Data"));
+      $(this.el).find(".locale_Export_Data").html(Locale.get("locale_Export_Data"));
+      $(this.el).find(".locale_All_Data").html(Locale.get("locale_All_Data"));
       
       //Localize corpus read only view
-      $(this.el).find(".locale_Edit_corpus").attr("title", Locale["locale_Edit_corpus"].message);
+      $(this.el).find(".locale_Edit_corpus").attr("title", Locale.get("locale_Edit_corpus"));
       
       
       return this;

@@ -42,10 +42,10 @@ define([
       $(this.el).html(this.template(this.model.toJSON()));
       
       //localization
-      $(this.el).find(".locale_LaTeX_Code").html(Locale["locale_LaTeX_Code"].message);
-      $(this.el).find(".locale_Unicode_Instructions").html(Locale["locale_Unicode_Instructions"].message);
-      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale["locale_Keyboard_Shortcuts"].message);
-      $(this.el).find(".locale_Remove_Unicode").html(Locale["locale_Remove_Unicode"].message);
+      $(this.el).find(".locale_LaTeX_Code").html(Locale.get("locale_LaTeX_Code"));
+      $(this.el).find(".locale_Unicode_Instructions").html(Locale.get("locale_Unicode_Instructions"));
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
+      $(this.el).find(".locale_Remove_Unicode").html(Locale.get("locale_Remove_Unicode"));
       
       return this;
     },
