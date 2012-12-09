@@ -2,111 +2,78 @@
 require.config({
   paths : {
     /* Bootstrap user interface javascript files */
-    "bootstrap" : "bootstrap/js/bootstrap",
-    "bootstrap-transition" : "bootstrap/js/bootstrap-transition",
-    "bootstrap-alert" : "bootstrap/js/bootstrap-alert",
-    "bootstrap-modal" : "bootstrap/js/bootstrap-modal",
-    "bootstrap-dropdown" : "bootstrap/js/bootstrap-dropdown",
-    "bootstrap-scrollspy" : "bootstrap/js/bootstrap-scrollspy",
-    "bootstrap-tab" : "bootstrap/js/bootstrap-tab",
-    "bootstrap-tooltip" : "bootstrap/js/bootstrap-tooltip",
-    "bootstrap-popover" : "bootstrap/js/bootstrap-popover",
-    "bootstrap-button" : "bootstrap/js/bootstrap-button",
-    "bootstrap-collapse" : "bootstrap/js/bootstrap-collapse",
-    "bootstrap-carousel" : "bootstrap/js/bootstrap-carousel",
-    "bootstrap-typeahead" : "bootstrap/js/bootstrap-typeahead",
-    
+    "bootstrap" : "libs/bootstrap/js/bootstrap.min",
+
     "crypto" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
     "jquery" : "libs/jquery",
-    "autosize" : "libs/jquery.autosize",
-    "hotkeys" : "libs/jquery.hotkeys",
-    
+
     /* Handlebars html templating libraries and compiled templates */
     "compiledTemplates" : "libs/compiled_handlebars",
     "handlebars" : "libs/handlebars.runtime",
-    
+
     /* Backbone Model View Controller framework and its plugins and dependencies */
     "backbone" : "libs/backbone",
     "backbone_pouchdb" : "libs/backbone-pouchdb",
     "backbone_couchdb" : "libs/backbone-couchdb",
     "pouch" : "libs/pouch.alpha",
     "underscore" : "libs/underscore",
-    
+
     "terminal" : "libs/terminal/terminal",
-    
+
     "text" : "libs/text",
-    
-    "xml2json" : "libs/xml2json"
+
+    "xml2json" : "libs/xml2json",
+
+    "oprime" : "libs/OPrime",
+    "webservicesconfig" : "libs/webservicesconfig_devserver"
   },
   shim : {
     "underscore" : {
       exports : "_"
     },
-    
+
     "jquery" : {
       exports : "$"
     },
-    
+
     "xml2json" : {
-      exports : "X2JS"
-    },
-    
-    "autosize" :{
-      deps : [ "jquery" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    "xml2json" :{
       deps : [ "jquery" ],
       exports : "X2JS"
-    },
-    "bootstrap" :{
-      deps : [ "jquery" ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "bootstrap-typeahead" :{
-      deps : [ "jquery", "bootstrap","bootstrap-transition", "bootstrap-alert",
-          "bootstrap-modal", "bootstrap-dropdown", "bootstrap-scrollspy",
-          "bootstrap-tab", "bootstrap-tooltip", "bootstrap-popover",
-          "bootstrap-button", "bootstrap-collapse", "bootstrap-carousel"
-           ],
-      exports : function($) {
-        return $;
-      }
-    },
-    
-    "pouch" :{
-      exports: "Pouch"
     },
 
+    "oprime" : {
+      exports : "OPrime"
+    },
+    "webservicesconfig" : {
+      deps : [ "oprime" ],
+      exports : "OPrime"
+    },
+
+    "bootstrap" : {
+      deps : [ "jquery" ],
+      exports : "bootstrap"
+    },
+
+    "pouch" : {
+      exports : "Pouch"
+    },
     "backbone" : {
-      deps : [ "underscore", "jquery", "compiledTemplates" ],
-      exports : function(_, $) {
-        return Backbone;
-      }
+      deps : [ "underscore", "bootstrap", "compiledTemplates" ],
+      exports : "Backbone"
     },
-    "backbone_pouchdb" :{
-      deps : ["backbone", "pouch", "backbone_couchdb"],
-      exports : function(Backbone, Pouch, backbone_couchdb) {
-        return Backbone;
-      }
+    "backbone_pouchdb" : {
+      deps : [ "backbone", "pouch", "backbone_couchdb" ],
+      exports : "Backbone"
     },
-    
-    "backbone_couchdb" :{
-      deps : ["backbone", "pouch"],
-      exports : function(Backbone, Pouch) {
-        return Backbone;
-      }
+    "backbone_couchdb" : {
+      deps : [ "backbone", "pouch" ],
+      exports : "Backbone"
     },
 
     "handlebars" : {
-      deps : ["bootstrap","jquery"],
+      deps : [ "bootstrap", "jquery" ],
       exports : "Handlebars"
     },
 
@@ -116,15 +83,14 @@ require.config({
 
     "compiledTemplates" : {
       deps : [ "handlebars" ],
-      exports : function(Handlebars) {
-        return Handlebars;
-      }
+      exports : "Handlebars"
     },
     "terminal" : {
-      deps : ["bootstrap","jquery"],
+      deps : [ "bootstrap", "jquery" ],
       exports : "Terminal"
     }
-    
+
+
   }
 });
 
@@ -143,7 +109,6 @@ require([
     "compiledTemplates",
     "backbone",
     "backbone_pouchdb",
-    "autosize",
     "xml2json",
     "libs/webservicesconfig_devserver",
     "libs/OPrime"
@@ -161,7 +126,6 @@ require([
     compiledTemplates,
     Backbone,
     forcingpouchtoloadonbackboneearly,
-    forcingautosizetobeavailible,
     forcingxml2jsontobeavilible
 ) {
   /*

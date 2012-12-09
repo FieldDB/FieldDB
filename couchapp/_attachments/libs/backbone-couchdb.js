@@ -2,11 +2,6 @@
 
 // id attribute
 // http://backbonejs.org/docs/backbone.html#section-34
-require([
-  "backbone"
-], function(
-  Backbone
-) {
   Backbone.Model.prototype.idAttribute = '_id';
   
   
@@ -81,5 +76,3 @@ require([
       oldDestroy.call(this, options);
     };
   })();
-  
-});

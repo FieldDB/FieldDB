@@ -88,9 +88,9 @@ define([
         
         var fieldself = this;
 //        This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-        window.setTimeout(function(){
-          $(fieldself.el).find(".datum_field_input").autosize();
-        },500);
+//        window.setTimeout(function(){
+//          $(fieldself.el).find(".datum_field_input").autosize();
+//        },500);
       } else if (this.format == "session") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = false;
