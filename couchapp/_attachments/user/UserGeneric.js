@@ -1,6 +1,5 @@
 define([ 
     "backbone", 
-    "activity/Activities",
     "hotkey/HotKey",
     "permission/Permission",
     "user/UserPreference",
@@ -8,7 +7,6 @@ define([
     "libs/OPrime"
 ], function(
     Backbone,
-    Activities,
     HotKey,
     Permission,
     UserPreference,
@@ -57,7 +55,6 @@ define([
       prefs : UserPreference,
       permissions : Permission, //TODO this needs to become plural
       hotkeys : HotKey, //TODO this needs to become plural
-//      activities : Activities, //@deprecated, now in a separate couch db
       publicSelf : UserMask
     },
 
