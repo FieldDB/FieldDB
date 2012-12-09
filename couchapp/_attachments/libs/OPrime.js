@@ -6,7 +6,7 @@ OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
 /**
  * The address of the TouchDB-Android database on the Android.
  */
-OPrime.touchUrl = "http://localhost:8889/";
+OPrime.touchUrl = "http://localhost:8128/";
 
 /**
  * The address of the PouchDB database on the browser.
@@ -163,7 +163,7 @@ OPrime.isAndroidApp = function() {
 if (OPrime.isAndroidApp()) {
   var debugOrNot = Android.isD();
   console.log("Setting debug mode to the Android's mode: " + debugOrNot);
-  OPrime.debugMode = debugOrNot;
+//  OPrime.debugMode = debugOrNot;
 };
 
 OPrime.isAndroid4 = function() {
