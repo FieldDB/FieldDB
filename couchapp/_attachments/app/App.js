@@ -416,6 +416,14 @@ define([
         return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
     },
+    addActivity : function(backBoneActivity) {
+      if (backBoneActivity.get("teamOrPersonal") == "team") {
+        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+      } else {
+        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+      }
+    },
+    
     /**
      * This function sequentially saves first the session, datalist and then corpus. Its success callback is called if all saves succeed, its fail is called if any fail. 
      * @param successcallback

@@ -57,6 +57,13 @@ define([
       }
       
     },
+    addActivity : function(backBoneActivity) {
+      if (backBoneActivity.get("teamOrPersonal") == "team") {
+        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+      } else {
+        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+      }
+    },
     render: function(){
       $("#user-fullscreen").html("list of corpora goes here");
       return this;

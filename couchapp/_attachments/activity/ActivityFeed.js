@@ -446,7 +446,7 @@ define([
                 
                 var numberofdashes = couchConnection.pouchname.split("-");
                 if(numberofdashes.length == 2){
-                  window.app.get("currentUserActivityFeed").addActivity(new Activity({
+                  window.app.addActivity(new Activity({
                     verb : "uploaded",
                     verbicon : "icon-arrow-up",
                     directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
@@ -456,7 +456,7 @@ define([
                   }));
                 }
                 else{
-                  window.app.get("currentCorpusTeamActivityFeed").addActivity(new Activity({
+                  window.app.addActivity(new Activity({
                     verb : "uploaded",
                     verbicon : "icon-arrow-up",
                     directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
@@ -516,7 +516,7 @@ define([
 
               var numberofdashes = couchConnection.pouchname.split("-");
               if(numberofdashes.length == 2){
-                window.app.get("currentUserActivityFeed").addActivity(new Activity({
+                window.app.addActivity(new Activity({
                   verb : "downloaded",
                   verbicon : "icon-arrow-down",
                   directobject : "your activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
@@ -526,7 +526,7 @@ define([
                 }));
               }
               else{
-                window.app.get("currentCorpusTeamActivityFeed").addActivity(new Activity({
+                window.app.addActivity(new Activity({
                   verb : "downloaded",
                   verbicon : "icon-arrow-down",
                   directobject : "their activity feed (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",

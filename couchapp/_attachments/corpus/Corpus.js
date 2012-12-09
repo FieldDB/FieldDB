@@ -386,7 +386,7 @@ define([
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
       
-      window.app.get("currentCorpusTeamActivityFeed").addActivity(
+      window.app.addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -397,7 +397,7 @@ define([
             context : " via Offline App."
           }));
       
-      window.app.get("currentUserActivityFeed").addActivity(
+      window.app.addActivity(
           new Activity({
             verb : "commented",
             verbicon: "icon-comment",
@@ -578,7 +578,7 @@ define([
               //TODO test this, this is to protect from the case wher the id of the team is not set yet.
 //              window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
 //                window.app.get("corpus").set("team", window.app.get("authentication").get("userPublic"));
-//                window.app.get("currentCorpusTeamActivityFeed").addActivity(
+//                window.app.addActivity(
 //                    new Activity({
 //                      verb : verb,
 //                      directobject : "<a href='#corpus/"+window.app.get("corpus").id+"'>corpus "+title+"</a> ",
@@ -610,7 +610,7 @@ define([
                * at least we can test the map reduce
                * function.
                */
-              window.app.get("currentUserActivityFeed").addActivity(
+              window.app.addActivity(
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -624,7 +624,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "personal"
                   }));
-              window.app.get("currentCorpusTeamActivityFeed").addActivity(
+              window.app.addActivity(
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -639,7 +639,7 @@ define([
                     teamOrPersonal : "team"
                   }));
             }else{
-              window.app.get("currentUserActivityFeed").addActivity(
+              window.app.addActivity(
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -653,7 +653,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "personal"
                   }));
-              window.app.get("currentCorpusTeamActivityFeed").addActivity(
+              window.app.addActivity(
                   new Activity({
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -986,7 +986,7 @@ define([
 //              }catch(e){
 //                OPrime.debug("Problem getting team details for the activity", e);
 //              }
-              window.app.get("currentCorpusTeamActivityFeed").addActivity(
+              window.app.addActivity(
                   new Activity({
                     verb : "uploaded",
                     verbmask : "uploaded",
@@ -1000,7 +1000,7 @@ define([
                     contextmask : "",
                     teamOrPersonal : "team"
                   }));
-              window.app.get("currentUserActivityFeed").addActivity(
+              window.app.addActivity(
                   new Activity({
                     verb : "uploaded",
                     verbmask : "uploaded",
@@ -1071,7 +1071,7 @@ define([
                 successcallback();
               }
               if(window.app.get("currentCorpusTeamActivityFeed")){
-                window.app.get("currentCorpusTeamActivityFeed").addActivity(
+                window.app.addActivity(
                   new Activity({
                     verb : "downloaded",
                     verbmask : "downloaded",
@@ -1087,7 +1087,7 @@ define([
                   }));
               }
               if(window.app.get("currentUserActivityFeed")){
-                window.app.get("currentUserActivityFeed").addActivity(
+                window.app.addActivity(
                   new Activity({
                     verb : "downloaded",
                     verbmask : "downloaded",
@@ -1130,6 +1130,8 @@ define([
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }
+      
+     
       
       var couchurl = couchConnection.protocol + couchConnection.domain;
       if (couchConnection.port != null) {
