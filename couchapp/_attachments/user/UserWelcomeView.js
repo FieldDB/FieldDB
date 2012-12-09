@@ -13,7 +13,7 @@ define([
     "datum/Session",
     "datum/Sessions",
     "user/User",
-    "text!_locales/en/messages.json",
+    "text!locales/en/messages.json",
     "libs/OPrime"
 ], function(
     Backbone, 

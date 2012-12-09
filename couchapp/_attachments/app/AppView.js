@@ -1,6 +1,5 @@
 define([ 
     "backbone", 
-    "text!_locales/en/messages.json",
     "handlebars",
     "app/App", 
     "app/AppRouter",
@@ -45,7 +44,6 @@ define([
     "libs/OPrime"
 ], function(
     Backbone, 
-    i18n,
     Handlebars,
     App, 
     AppRouter, 

@@ -12,7 +12,7 @@ define([
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
-    "text!_locales/en/messages.json",
+    "text!locales/en/messages.json",
     "libs/OPrime"
 ], function(
     Backbone, 
