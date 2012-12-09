@@ -5,7 +5,7 @@ define([
     "permission/Permission",
     "user/UserPreference",
     "user/UserMask",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone,
     Activities,
@@ -48,7 +48,7 @@ define([
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      Utils.debug("USERGENERIC init");
+      OPrime.debug("USERGENERIC init");
 
     },
       

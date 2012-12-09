@@ -70,7 +70,7 @@ Handlebars.registerHelper('if', function(context, options) {
   var type = toString.call(context);
   if(type === functionType) { context = context.call(this); }
 
-  if(!context || Handlebars.Utils.isEmpty(context)) {
+  if(!context || Handlebars.OPrime.isEmpty(context)) {
     return options.inverse(this);
   } else {
     return options.fn(this);
@@ -129,7 +129,7 @@ Handlebars.SafeString.prototype.toString = function() {
     return escape[chr] || "&amp;";
   };
 
-  Handlebars.Utils = {
+  Handlebars.OPrime = {
     escapeExpression: function(string) {
       // don't escape SafeStrings, since they're already safe
       if (string instanceof Handlebars.SafeString) {
@@ -162,7 +162,7 @@ Handlebars.VM = {
   template: function(templateSpec) {
     // Just add water
     var container = {
-      escapeExpression: Handlebars.Utils.escapeExpression,
+      escapeExpression: Handlebars.OPrime.escapeExpression,
       invokePartial: Handlebars.VM.invokePartial,
       programs: [],
       program: function(i, fn, data) {

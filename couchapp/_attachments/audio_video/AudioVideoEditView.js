@@ -104,7 +104,7 @@ define([
     },
     
     dropAudio: function(e, audio, self) {
-      Utils.debug("Recieved a drop event ");
+      OPrime.debug("Recieved a drop event ");
 //      if (e.stopPropagation) {
 //        e.stopPropagation(); // stops the browser from redirecting.
 //      }

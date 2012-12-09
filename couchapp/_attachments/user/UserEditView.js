@@ -7,7 +7,7 @@ define([
     "corpus/CorpusLinkView",
     "user/User",
     "app/UpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -35,7 +35,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER EDIT VIEW init: " + this.el);
+      OPrime.debug("USER EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
 
@@ -95,14 +95,14 @@ define([
      * Renders the UserEditView depending on its format.
      */
     render : function() {
-//      Utils.debug("USER render: " + this.el);
+//      OPrime.debug("USER render: " + this.el);
 
       if (this.model == undefined) {
-        Utils.debug("\User model was undefined");
+        OPrime.debug("\User model was undefined");
         return this;
       }
       if (this.format == "fullscreen") {
-        Utils.debug("USER EDIT FULLSCREEN render: " + this.el);
+        OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -117,7 +117,7 @@ define([
         
         
       } else if(this.format == "modal") {
-        Utils.debug("USER EDIT MODAL render: " + this.el);
+        OPrime.debug("USER EDIT MODAL render: " + this.el);
 
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
@@ -134,7 +134,7 @@ define([
         
         
       }else if (this.format == "public") {
-        Utils.debug("USER EDIT PUBLIC render: " + this.el);
+        OPrime.debug("USER EDIT PUBLIC render: " + this.el);
 
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -168,7 +168,7 @@ define([
       return this;
     },
     saveProfile : function(){
-      Utils.debug("Saving user");
+      OPrime.debug("Saving user");
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());

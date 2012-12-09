@@ -15,7 +15,7 @@ define([
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -167,10 +167,10 @@ define([
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
-      Utils.debug("DATUM render: " );
+      OPrime.debug("DATUM render: " );
       
       if(this.collection){
-        Utils.debug("This datum has a link to a collection. Removing the link.");
+        OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
@@ -180,9 +180,9 @@ define([
         jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
       }catch(e){
-        Utils.debug("There was a problem fishing out which datum state was selected.");
+        OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
-      jsonToRender.dateModified = Utils.prettyDate(jsonToRender.dateModified);
+      jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       
       if (this.format == "well") {
         // Display the DatumEditView
@@ -393,7 +393,7 @@ define([
         this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
         this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
-        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
       
       //update the view of the datum state to the new color and text without rendering the entire datum
@@ -449,7 +449,7 @@ define([
      * it updates the time, without re-rendering the datum
      */
     updateLastModifiedUI : function(){
-      $(this.el).find(".last-modified").html(Utils.prettyDate(this.model.get("dateModified")));//("0 seconds ago");
+      $(this.el).find(".last-modified").html(OPrime.prettyDate(this.model.get("dateModified")));//("0 seconds ago");
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){

@@ -55,7 +55,7 @@ define("lexicon/LexiconNodes",
               //TODO do some correction logic here if the user has corrected this node?
             }
             //put the new models info into the existing member of the collection
-            Utils.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
+            OPrime.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
             already[0].set(model.toJSON());
             return; //don't throw error, just happily return 
 //            throw new Error(["Can't add the same model to a set twice", already.id]);

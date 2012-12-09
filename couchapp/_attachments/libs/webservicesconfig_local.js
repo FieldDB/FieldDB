@@ -1,14 +1,14 @@
-/* Extends the Utils class */
-var Utils = Utils || {};
+/* Extends the OPrime class */
+var OPrime = OPrime || {};
 
-Utils.websiteUrl = "https://localhost:3182";
-Utils.authUrl = "https://localhost:3183";
-Utils.audioUrl = "https://localhost:3184";
-Utils.lexiconUrl = "https://localhost:3185";
-Utils.corpusUrl = "https://localhost:3186";
-Utils.activityUrl = "https://localhost:3187";
-Utils.widgetUrl = "https://localhost:3188";
-Utils.chromeClientUrl = function() {
+OPrime.websiteUrl = "https://localhost:3182";
+OPrime.authUrl = "https://localhost:3183";
+OPrime.audioUrl = "https://localhost:3184";
+OPrime.lexiconUrl = "https://localhost:3185";
+OPrime.corpusUrl = "https://localhost:3186";
+OPrime.activityUrl = "https://localhost:3187";
+OPrime.widgetUrl = "https://localhost:3188";
+OPrime.chromeClientUrl = function() {
   return window.location.origin;
 };
 
@@ -16,7 +16,7 @@ Utils.chromeClientUrl = function() {
  * not using secure couch because it would require extra set up for developers
  * to run locally which is unneccesary
  */
-Utils.defaultCouchConnection = function() {
+OPrime.defaultCouchConnection = function() {
   return {
     protocol : "https://",
     domain : "localhost",

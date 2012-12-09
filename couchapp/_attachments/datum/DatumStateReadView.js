@@ -4,7 +4,7 @@ define( [
     "backbone", 
     "handlebars", 
     "datum/DatumState",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -23,7 +23,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM STATE READ VIEW init");
+      OPrime.debug("DATUM STATE READ VIEW init");
       
       // Default format is "corpus" since it will be used in an UpdatingCollectionView.
       this.format = "corpus";
@@ -54,7 +54,7 @@ define( [
      * Renders the DatumStateReadView.
      */
     render : function() {
-      Utils.debug("DATUM STATE READ VIEW render");
+      OPrime.debug("DATUM STATE READ VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsReadView
@@ -71,7 +71,7 @@ define( [
      * Change the model's state.
      */
     updateState : function() {
-      Utils.debug("Updated state to " + this.$el.children(".datum_state_input").val());
+      OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
       this.model.set("state", this.$el.children(".datum_state_input").val());
     },
     
@@ -79,7 +79,7 @@ define( [
      * Change the model's color.
      */
     updateColor : function() {
-      Utils.debug("Updated color to " + this.$el.children(".color_chooser").val());
+      OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
       this.model.set("color", this.$el.children(".color_chooser").val());
     }
   });

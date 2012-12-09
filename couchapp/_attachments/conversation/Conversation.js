@@ -29,7 +29,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATALIST init");
+      OPrime.debug("DATALIST init");
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -90,7 +90,7 @@ define([
         }
       }
       if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
       if(typeof callback == "function"){
         callback();
@@ -105,7 +105,7 @@ define([
       }
       var audioVideoFiles = [];
       
-      Utils.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
+      OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToGetAudioVideo[id];
@@ -140,7 +140,7 @@ define([
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
-      Utils.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
+      OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToApplyFunction[id];
@@ -211,7 +211,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      Utils.debug("Saving the DataList");
+      OPrime.debug("Saving the DataList");
       var self = this;
 //      var idsInCollection = [];
 //      for(d in this.datumCollection.models){
@@ -239,7 +239,7 @@ define([
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
-            Utils.debug('DataList save success');
+            OPrime.debug('DataList save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
@@ -375,7 +375,7 @@ define([
             }
           });
         }catch(e){
-          Utils.debug(e);
+          OPrime.debug(e);
 //          /*TODO  putting this her so that import works of rhte presenation, but there is some bug */
 //          if (typeof successcallback == "function") {
 //            successcallback();

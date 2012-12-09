@@ -119,7 +119,7 @@ require([
     "backbone",
     "backbone_pouchdb",
     "libs/webservicesconfig_devserver",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     App,
     User,
@@ -134,7 +134,7 @@ require([
   loadFreshApp = function(){
 //    document.location.href='lingllama_corpus.html';
 
-    Utils.debug("Loading fresh app");
+    OPrime.debug("Loading fresh app");
     // Create a UserWelcomeView modal
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
@@ -175,13 +175,13 @@ require([
    * Start the pub sub hub
    */
   window.hub = {};
-  Utils.makePublisher(window.hub);
+  OPrime.makePublisher(window.hub);
  
     
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
-  var username = Utils.getCookie("username");
+  var username = OPrime.getCookie("username");
   if (username != null && username != "") {
 //    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
     var appjson = localStorage.getItem("mostRecentDashboard");
@@ -195,7 +195,7 @@ require([
       document.location.href='user.html';
       return;
     }else{
-      Utils.debug("Loading app from localStorage");
+      OPrime.debug("Loading app from localStorage");
       var pouchname = null;
       var couchConnection = null;
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
@@ -205,7 +205,7 @@ require([
       }else{
         if(!localStorage.getItem("encryptedUser")){
           alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
-          Utils.setCookie("username","");
+          OPrime.setCookie("username","");
           document.location.href='index.html';
           return;
         }else{
@@ -215,7 +215,7 @@ require([
           var u = localStorage.getItem("encryptedUser");
           auth.loadEncryptedUser(u, function(success, errors){
             if(success == null){
-              alert("We couldn't load your user."+errors.join("<br/>") + " " + Utils.contactUs);  
+              alert("We couldn't load your user."+errors.join("<br/>") + " " + OPrime.contactUs);  
               loadFreshApp();
               return;
             }else{

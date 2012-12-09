@@ -29,7 +29,7 @@ define(["backbone"], function(Backbone) {
     
     changePouch : function(pouchname, callback) {
       if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
       if (typeof callback == "function") {
         callback();

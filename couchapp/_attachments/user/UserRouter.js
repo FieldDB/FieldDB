@@ -2,7 +2,7 @@ define([
     "backbone",
     "corpus/Corpus",
     "user/User",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone,
     Corpus,
@@ -34,7 +34,7 @@ define([
      * 
      */
     showDashboard : function(renderOrNot) {
-      Utils.debug("In showDashboard: " );
+      OPrime.debug("In showDashboard: " );
 //      $("#user-modal").modal("show");
 
     },
@@ -43,7 +43,7 @@ define([
      * 
      */
     showFullscreenUser : function() {
-      Utils.debug("In showFullscreenUser: " );
+      OPrime.debug("In showFullscreenUser: " );
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
       var c = new Corpus();
@@ -55,7 +55,7 @@ define([
         
         c.fetch({
           success : function(model) {
-            Utils.debug("Corpus fetched successfully", model);
+            OPrime.debug("Corpus fetched successfully", model);
             window.app.router.showCorpusDashboard(pouchname, c.get("corpusId"));
           },
           error : function(e, x, y ) {
@@ -72,7 +72,7 @@ define([
      *          pouchname The name of the corpus this datum is from.
      */
     showCorpusDashboard : function(pouchname, corpusid) {
-      Utils.debug("In showFullscreenCorpus: " );
+      OPrime.debug("In showFullscreenCorpus: " );
       
       /*
        * If the corpusid is not specified, then try to guess it by re-routing us to the guess function
@@ -91,7 +91,7 @@ define([
         //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(model) {
-            Utils.debug("Corpus fetched successfully", model);
+            OPrime.debug("Corpus fetched successfully", model);
 
             if(c.get("dataLists").length > 0 && c.get("sessions").length > 0 ){
               self.loadCorpusDashboard(model);

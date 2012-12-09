@@ -6,7 +6,7 @@ define([
     "corpus/CorpusLinkView",
     "user/User",
     "app/UpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -32,7 +32,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER READ VIEW init: ");
+      OPrime.debug("USER READ VIEW init: ");
 //      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
       this.changeViewsOfInternalModels();
 
@@ -86,15 +86,15 @@ define([
      */
     render : function() {
       
-//      Utils.debug("USER render: ");
+//      OPrime.debug("USER render: ");
       if (this.model == undefined) {
-        Utils.debug("\User model was undefined");
+        OPrime.debug("\User model was undefined");
         return this;
       }
-//      Utils.debug("\tRendering user: " + this.model.get("username"));
+//      OPrime.debug("\tRendering user: " + this.model.get("username"));
 
       if (this.format == "fullscreen") {
-        Utils.debug("USER READ FULLSCREEN render: ");
+        OPrime.debug("USER READ FULLSCREEN render: ");
 
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -107,7 +107,7 @@ define([
         
         
       } else if (this.format == "modal") {
-        Utils.debug("USER READ MODAL render: ");
+        OPrime.debug("USER READ MODAL render: ");
 
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
@@ -126,7 +126,7 @@ define([
         
         
       } else if (this.format == "link") {
-        Utils.debug("USER READ LINK render: ");
+        OPrime.debug("USER READ LINK render: ");
 
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
         
@@ -134,7 +134,7 @@ define([
         $(this.el).find(".locale_View_Profile_Tooltip").attr("title",Locale["locale_View_Profile_Tooltip"].message);
 
       } else if (this.format == "public") {
-        Utils.debug("USER READ PUBLIC render: ");
+        OPrime.debug("USER READ PUBLIC render: ");
 
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));

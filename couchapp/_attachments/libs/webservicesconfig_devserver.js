@@ -1,14 +1,14 @@
-/* Extends the Utils class */
-var Utils = Utils || {};
+/* Extends the OPrime class */
+var OPrime = OPrime || {};
 
 
-Utils.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
-Utils.authUrl = "https://authdev.fieldlinguist.com:3183";
-Utils.audioUrl = "https://audiodev.fieldlinguist.com:3184";
-Utils.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
-Utils.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
-Utils.activityUrl = "https://activitydev.fieldlinguist.com:3187";
-Utils.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
+OPrime.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
+OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+OPrime.audioUrl = "https://audiodev.fieldlinguist.com:3184";
+OPrime.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
+OPrime.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
+OPrime.activityUrl = "https://activitydev.fieldlinguist.com:3187";
+OPrime.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
 
 /*
  * Use the current app's chrome url, assuming if its a dev, they will have their
@@ -17,7 +17,7 @@ Utils.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
  * window.location.href but this code is added to be clear that there is also a
  * bleeding edge url for users.
  */
-Utils.chromeClientUrl = function(){
+OPrime.chromeClientUrl = function(){
   if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
     return window.location.origin;
   }else{
@@ -25,7 +25,7 @@ Utils.chromeClientUrl = function(){
   }
 };
   
-Utils.defaultCouchConnection = function() {
+OPrime.defaultCouchConnection = function() {
   return {
     protocol : "https://",
     domain : "ifielddevs.iriscouch.com",

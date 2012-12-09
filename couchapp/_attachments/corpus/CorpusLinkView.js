@@ -2,7 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "corpus/CorpusMask",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS LINK init: " );
+      OPrime.debug("CORPUS LINK init: " );
    
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
       this.model.bind('change:title', function(){
@@ -43,10 +43,10 @@ define([
      * Renders the CorpusLinkView and all of its child Views.
      */
     render : function() {
-      Utils.debug("CORPUS LINK render: ");
+      OPrime.debug("CORPUS LINK render: ");
 
       if (this.model == undefined) {
-        Utils.debug("\tCorpusMask model was undefined.");
+        OPrime.debug("\tCorpusMask model was undefined.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
@@ -54,7 +54,7 @@ define([
 //      try{
 //        jsonToRender.username = this.model.get("team").get("username");
 //      }catch(e){
-//        Utils.debug("Problem getting the username of the corpus' team");
+//        OPrime.debug("Problem getting the username of the corpus' team");
 //      }
 
       $(this.el).html(this.templateLink(jsonToRender));

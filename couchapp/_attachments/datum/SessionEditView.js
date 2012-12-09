@@ -8,7 +8,7 @@ define([
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone,
     Handlebars, 
@@ -34,7 +34,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("SESSION EDIT VIEW init: " );
+      OPrime.debug("SESSION EDIT VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -127,15 +127,15 @@ define([
      * Renders the SessionEditView.
      */
     render : function() {
-      Utils.debug("SESSION EDIT render: " );
+      OPrime.debug("SESSION EDIT render: " );
       if (this.model == undefined) {
-        Utils.debug("SESSION is undefined, come back later.");
+        OPrime.debug("SESSION is undefined, come back later.");
         return this;
       }
       
       try{
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
-          Utils.debug("SESSION fields are undefined, come back later.");
+          OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
         if(this.format != "modal"){
@@ -143,7 +143,7 @@ define([
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
-          Utils.debug("SESSION EDIT  LEFTSIDE render: " );
+          OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
 
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -164,7 +164,7 @@ define([
 
           
         }if (this.format == "import") {
-          Utils.debug("SESSION EDIT  IMPORT render: " );
+          OPrime.debug("SESSION EDIT  IMPORT render: " );
 
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -183,7 +183,7 @@ define([
 
           
         } else if (this.format == "centerWell") {
-          Utils.debug("SESSION EDIT CENTERWELL render: " );
+          OPrime.debug("SESSION EDIT CENTERWELL render: " );
 
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
@@ -203,7 +203,7 @@ define([
           $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         } else if (this.format == "fullscreen") {
-          Utils.debug("SESSION EDIT FULLSCREEN render: " );
+          OPrime.debug("SESSION EDIT FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(this.model.toJSON()));
@@ -224,7 +224,7 @@ define([
 
           
         } else if (this.format == "modal") {
-          Utils.debug("SESSION EDIT MODAL render: " );
+          OPrime.debug("SESSION EDIT MODAL render: " );
 
           this.setElement("#new-session-modal");
           this.changeViewsOfInternalModels();
@@ -244,7 +244,7 @@ define([
 
         }
       } catch(e) {
-        Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
+        OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       
       return this;
@@ -275,7 +275,7 @@ define([
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         /* If it is in the modal, then it is a new session */
-        Utils.debug("Session format is "+self.format);
+        OPrime.debug("Session format is "+self.format);
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
@@ -331,7 +331,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
+      OPrime.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

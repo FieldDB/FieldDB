@@ -14,7 +14,7 @@ define([
     "datum/Sessions",
     "user/User",
     "text!_locales/en/messages.json",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -43,7 +43,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER welcome init: " );
+      OPrime.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
       if(LocaleData){
@@ -93,15 +93,15 @@ define([
         }
       },
       "click .register-twitter" : function() {
-        window.location.href = Utils.authUrl+"/auth/twitter";
+        window.location.href = OPrime.authUrl+"/auth/twitter";
       },
       "click .register-facebook" : function() {
-        window.location.href = Utils.authUrl+"/auth/facebook";
+        window.location.href = OPrime.authUrl+"/auth/facebook";
       },
 
       "click .sync-lingllama-data" : function() {
         console.log("hiding user welcome, syncing lingllama");
-        this.syncUser("lingllama","phoneme", Utils.authUrl);
+        this.syncUser("lingllama","phoneme", OPrime.authUrl);
 
 //        //This is the old logic which can still be used to load lingllama without contacting a server. DO NOT DELETE
 //        a = new App();
@@ -142,7 +142,7 @@ define([
      * Renders the UserWelcomeView and its partial.
      */
     render : function() {
-      Utils.debug("USER render: " );
+      OPrime.debug("USER render: " );
 
       if (this.model != undefined) {
         this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
@@ -169,14 +169,14 @@ define([
 
         //save the version of the app into this view so we can use it when we create a user.
         var self = this;
-        Utils.getVersion(function (ver) { 
+        OPrime.getVersion(function (ver) { 
           self.appVersion = ver;
           $(self.el).find(".welcome_version_number").html("v"+ver);
         });
-        $(this.el).find(".welcomeauthurl").val(Utils.authUrl);
+        $(this.el).find(".welcomeauthurl").val(OPrime.authUrl);
         
       } else {
-        Utils.debug("\User model was undefined");
+        OPrime.debug("\User model was undefined");
       }
 
       return this;
@@ -185,7 +185,7 @@ define([
     registerNewUser : function() {
       $(".register-new-user").addClass("disabled");
 
-      Utils.debug("Attempting to register a new user: " );
+      OPrime.debug("Attempting to register a new user: " );
       /*
        * Set defaults for new user registration here,
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
@@ -199,13 +199,13 @@ define([
       dataToPost.email = $(".registeruseremail").val().trim();
       dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"");
       dataToPost.password = $(".registerpassword").val().trim();
-      dataToPost.authUrl = Utils.authUrl;
+      dataToPost.authUrl = OPrime.authUrl;
       dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a pouchname to create
-      var corpusConnection = Utils.defaultCouchConnection();
+      var corpusConnection = OPrime.defaultCouchConnection();
       corpusConnection.pouchname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
-      var activityConnection = Utils.defaultCouchConnection();
+      var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
       dataToPost.gravatar = "./../user/user_gravatar.png";
@@ -213,7 +213,7 @@ define([
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
-        Utils.debug("User has entered an email and the passwords match. ");
+        OPrime.debug("User has entered an email and the passwords match. ");
         var a = new App();
         window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
@@ -229,11 +229,11 @@ define([
          */
         $.ajax({
           type : 'POST',
-          url : Utils.authUrl + "/register",
+          url : OPrime.authUrl + "/register",
           data : dataToPost,
           success : function(serverResults) {
             if (serverResults.userFriendlyErrors != null) {
-              $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>")+" "+Utils.contactUs );
+              $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
               $(".welcome-screen-alerts").show();
             } else if (serverResults.user) {
               
@@ -317,7 +317,7 @@ define([
 //                      var couchConnection = serverResults.user.corpuses[0];
 //                      $('#user-welcome-modal').modal("hide");//users might have unreliable pouches if they do things this early, but on web version they wont get successful callbacks from couch. TODO if and when we get CORS on iriscouch, move this back to after replicate corpus.
 //                      c.logUserIntoTheirCorpusServer(couchConnection, dataToPost.username, dataToPost.password, function() {
-//                        Utils.debug("Successfully authenticated user with their corpus server.");
+//                        OPrime.debug("Successfully authenticated user with their corpus server.");
 //                        //Bring down the views so the user can search locally without pushing to a server.
 //                        c.replicateFromCorpus(couchConnection, function(){
 ////                        appView.datumsEditView.newDatum();
@@ -337,7 +337,7 @@ define([
 //                        
 //                      });
 //                    }, 30000);//ask couch after 30 seconds (give it time to make the new user's design docs)
-//                    Utils.debug("Loadded app for a new user.");
+//                    OPrime.debug("Loadded app for a new user.");
 //                  });
                 });
 //                });
@@ -346,8 +346,8 @@ define([
           dataType : ""
         });
       } else{
-        Utils.debug("User has not entered good info. ");
-          $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + Utils.contactUs );
+        OPrime.debug("User has not entered good info. ");
+          $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs );
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
 
@@ -376,7 +376,7 @@ define([
       auth.authenticate(u, function(success, errors){
         if(success == null){
           $(".welcome-screen-alerts").html(
-              errors.join("<br/>") + " " + Utils.contactUs);
+              errors.join("<br/>") + " " + OPrime.contactUs);
 //        alert("Something went wrong, we were unable to contact the server, or something is wrong with your login info.");
           $(".welcome-screen-alerts").show();
           $(".welcome-screen-alerts").addClass("alert-error");
@@ -397,7 +397,7 @@ define([
               });
             }, function(errormessage){
               $(".welcome-screen-alerts").html(
-                  errormessage+" " + Utils.contactUs);
+                  errormessage+" " + OPrime.contactUs);
               $(".welcome-screen-alerts").show();
               $(".welcome-screen-alerts").addClass("alert-error");
             });
@@ -405,7 +405,7 @@ define([
         }
       }, function(message){
         $(".welcome-screen-alerts").html(
-            message+" Something went wrong, thats all we know. Please try again or report this to us if it does it again:  " + Utils.contactUs);
+            message+" Something went wrong, thats all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
 //      alert("Something went wrong, either we were unable to contact the server, or something is wrong with your login info.");
         $(".welcome-screen-alerts").show();
         $(".welcome-screen-alerts").addClass("alert-error");

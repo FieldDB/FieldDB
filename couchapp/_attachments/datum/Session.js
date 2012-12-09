@@ -94,7 +94,7 @@ define([
      * @constructs
      */
     initialize: function() {
-      Utils.debug("SESSION init");
+      OPrime.debug("SESSION init");
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -146,7 +146,7 @@ define([
         pouchname = this.get("pouchname");
       }
       if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
       if(typeof callback == "function"){
         callback();
@@ -165,7 +165,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      Utils.debug("Saving the Session");
+      OPrime.debug("Saving the Session");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -187,7 +187,7 @@ define([
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
-            Utils.debug('Session save success');
+            OPrime.debug('Session save success');
             var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
@@ -260,7 +260,7 @@ define([
               failurecallback();
             }else{
               alert('Session save error' + JSON.stringfy(e));
-              Utils.debug('Session save error' + JSON.stringfy(e));
+              OPrime.debug('Session save error' + JSON.stringfy(e));
             }
           }
         });

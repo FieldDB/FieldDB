@@ -33,7 +33,7 @@ define([
     "user/User",
     "user/UserReadView",
     "terminal",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars,
@@ -86,7 +86,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("APPVIEW init: " + this.el);
+      OPrime.debug("APPVIEW init: " + this.el);
 
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
@@ -113,7 +113,7 @@ define([
       this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
 
       // Create the corpus team activity view
-      Utils.debug("Setting up the team activity feed.");
+      OPrime.debug("Setting up the team activity feed.");
       if(!this.model.get("currentCorpusTeamActivityFeed")){
         this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
       }
@@ -128,7 +128,7 @@ define([
         }
       }catch(e){
 //        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
-        Utils.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
+        OPrime.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
         this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
         
         var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
@@ -244,7 +244,7 @@ define([
       });
       
       // Create a UserActivityView 
-      Utils.debug("Setting up the user activity feed.");
+      OPrime.debug("Setting up the user activity feed.");
       if(!this.model.get("currentUserActivityFeed")){
         this.model.set("currentUserActivityFeed", new ActivityFeed());
         this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
@@ -384,10 +384,10 @@ define([
      * Renders the AppView and all of its child Views.
      */
     render : function() {
-      Utils.debug("APPVIEW render: " + this.el);
+      OPrime.debug("APPVIEW render: " + this.el);
       if (this.model != undefined) {
         
-        Utils.debug("Destroying the appview, so we dont get double events. This is risky...");
+        OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
         this.currentCorpusReadView.destroy_view();
         this.currentSessionReadView.destroy_view();
         this.currentReadDataListView.destroy_view();
@@ -399,7 +399,7 @@ define([
         this.activityFeedCorpusTeamView.destroy_view();
         
         this.destroy_view();
-        Utils.debug("Done Destroying the appview, so we dont get double events.");
+        OPrime.debug("Done Destroying the appview, so we dont get double events.");
 
         // Display the AppView
         this.setElement($("#app_view"));
@@ -421,7 +421,7 @@ define([
         this.searchEditView.render();
         
         //put the version into the terminal, and into the user menu
-        Utils.getVersion(function (ver) { 
+        OPrime.getVersion(function (ver) { 
           window.appView.term.VERSION_ = ver;
           $(".fielddb-version").html(ver);
         });
@@ -431,7 +431,7 @@ define([
         
          
       } else {
-        alert("\tApp model is not defined, this is a very big bug. Refresh your browser, and let us know about this "+ Utils.contactUs);
+        alert("\tApp model is not defined, this is a very big bug. Refresh your browser, and let us know about this "+ OPrime.contactUs);
       }
       
       this.setTotalPouchDocs();
@@ -554,7 +554,7 @@ define([
      * @param e event
      */
     dragUnicodeToField : function(e) {
-      Utils.debug("Recieved a drop unicode event ");
+      OPrime.debug("Recieved a drop unicode event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -687,7 +687,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING APP VIEW ");
+      OPrime.debug("DESTROYING APP VIEW ");
       
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();

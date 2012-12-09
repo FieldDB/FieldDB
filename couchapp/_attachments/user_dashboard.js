@@ -119,7 +119,7 @@ require([
     "backbone",
     "backbone_pouchdb",
     "libs/webservicesconfig_devserver",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     UserApp,
     UserAppView,
@@ -133,12 +133,12 @@ require([
    * Start the pub sub hub
    */
   window.hub = {};
-  Utils.makePublisher(window.hub);
+  OPrime.makePublisher(window.hub);
  
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
-  var username = Utils.getCookie("username");
+  var username = OPrime.getCookie("username");
   if (username != null && username != "") {
 
     window.app = new UserApp();
@@ -146,12 +146,12 @@ require([
     var u = localStorage.getItem("encryptedUser");
     auth.loadEncryptedUser(u, function(success, errors){
       if(success == null){
-        alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
-        Utils.setCookie("username","");
+        alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);  
+        OPrime.setCookie("username","");
         document.location.href='index.html';
         return;
       }else{
-//        alert("We logged you in." + Utils.contactUs);  
+//        alert("We logged you in." + OPrime.contactUs);  
         window.appView = new UserAppView({model: window.app}); 
         window.appView.render();
         app.router = new UserRouter();

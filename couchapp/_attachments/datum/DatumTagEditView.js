@@ -2,7 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "datum/DatumTag",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(Backbone,
     Handlebars, 
     DatumTag
@@ -17,7 +17,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATUM TAG EDIT VIEW init");
+      OPrime.debug("DATUM TAG EDIT VIEW init");
     },
 
     /**
@@ -41,7 +41,7 @@ define([
      * Renders the DatumTagEditView.
      */
     render : function() {
-      Utils.debug("DATUM TAG EDIT VIEW render");
+      OPrime.debug("DATUM TAG EDIT VIEW render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       

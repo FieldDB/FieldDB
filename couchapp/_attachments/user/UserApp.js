@@ -7,7 +7,7 @@ define([
     "user/User",
     "user/UserMask",
     "text!_locales/en/messages.json",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Authentication, 
@@ -35,7 +35,7 @@ define([
      */
     initialize : function() {
       this.bind('error', function(model, error) {
-        Utils.debug("Error in App: " + error);
+        OPrime.debug("Error in App: " + error);
       });
       
       // If there's no authentication, create a new one
