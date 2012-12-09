@@ -579,7 +579,6 @@ define( [
           +this.savefailedcount+" didn't import. "
           ,"alert-success","Import successful:");
 
-      // Add the "imported" activity to the ActivityFeed
       window.app.addActivity(
           new Activity({
             verb : "imported",
@@ -589,7 +588,6 @@ define( [
             context : "via Offline App"
           }));
 
-      // Add the "imported" activity to the ActivityFeed
       window.app.addActivity(
           new Activity({
             verb : "imported",
@@ -659,7 +657,6 @@ define( [
               // Update the progress bar, one more thing is done.
               $(".import-progress").val($(".import-progress").val()+1);
               
-              // Add the "imported" activity to the ActivityFeed
               window.app.addActivity(
                   new Activity({
                     verb : "attempted to import",
@@ -669,7 +666,6 @@ define( [
                     context : "via Offline App"
                   }));
               
-              // Add the "imported" activity to the ActivityFeed
               window.app.addActivity(
                   new Activity({
                     verb : "attempted to import",
