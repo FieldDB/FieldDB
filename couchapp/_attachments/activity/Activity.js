@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("ACTIVITY init: ");
+      OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
@@ -75,7 +75,7 @@ define([
       }
       
       if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
       if(typeof callback == "function"){
         callback();
@@ -94,10 +94,10 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(activsuccesscallback, activfailurecallback){
-      Utils.debug("Saving the Activity");
+      OPrime.debug("Saving the Activity");
       var self = this;
       if(! this.isNew()){
-        Utils.debug('Activity doesnt need to be saved.');
+        OPrime.debug('Activity doesnt need to be saved.');
         if(typeof activsuccesscallback == "function"){
           activsuccesscallback();
         }
@@ -107,7 +107,7 @@ define([
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
-            Utils.debug('Activity save success');
+            OPrime.debug('Activity save success');
 
             if(typeof activsuccesscallback == "function"){
               activsuccesscallback();

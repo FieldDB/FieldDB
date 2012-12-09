@@ -1,6 +1,6 @@
 define([ 
     "backbone",
-    "libs/Utils" 
+    "libs/OPrime" 
 ], function(
     Backbone
 ) {
@@ -25,7 +25,7 @@ define([
 
     initialize : function() {
       this.on('all', function(e) {
-        Utils.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
+        OPrime.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
       });
     },
     

@@ -79,27 +79,27 @@ define([
         //ask the user to confirm their identity before syncing their activity feeds
         window.appView.authView.showQuickAuthenticateView(
         function(){
-          Utils.debug("Called by ActivityFeedView : in the authentication sucess.");
+          OPrime.debug("Called by ActivityFeedView : in the authentication sucess.");
         }, 
         //don't show local activity if they entered the wrong password, or have no connectivity
         function(){
-          Utils.debug("Called by ActivityFeedView : in the authentication failure.");
+          OPrime.debug("Called by ActivityFeedView : in the authentication failure.");
         }, 
         function(){
-          Utils.debug("Called by ActivityFeedView : in the corpus login sucess.");
+          OPrime.debug("Called by ActivityFeedView : in the corpus login sucess.");
 
           //send the command that might produce errors
           activityfeedself.replicateActivityFeed(null, function(){
-            Utils.debug("Refreshing activity feed from the servers succeeded.");
+            OPrime.debug("Refreshing activity feed from the servers succeeded.");
           },function(){
-            Utils.debug("Refreshing activity feed failed.");
+            OPrime.debug("Refreshing activity feed failed.");
           });
         }, 
         function(){
-          Utils.debug("Called by ActivityFeedView : in the corpus login failure.");
+          OPrime.debug("Called by ActivityFeedView : in the corpus login failure.");
 
           //if authentication fails only refresh locally
-          Utils.debug("Logging into the corpus server failed, trying just local activites.");
+          OPrime.debug("Logging into the corpus server failed, trying just local activites.");
           window.appView.toastUser("Logging into the corpus server failed, I can only load activities which you already have saved locally on this device.","alert-info","Showing only local activities:");
 //          self.activitiesView.clearChildViews();
           activityfeedself.saveAndInterConnectInApp(function(){
@@ -109,7 +109,7 @@ define([
 
         //Get ready to listen for ajax errors
 //        window.hub.subscribe("ajaxError", function(e){
-//          Utils.debug("Populating activity feed offline. ", e);
+//          OPrime.debug("Populating activity feed offline. ", e);
 //          
 //          //Show the contents of the activity feed from the local pouch
 //          activityfeedself.getAllIdsByDate(activityfeedself.populate);
@@ -124,7 +124,7 @@ define([
     minimizedTemplate : Handlebars.templates.activity_feed_minimized,
 
     render : function() {
-      Utils.debug("ACTIVITY FEED VIEW render");
+      OPrime.debug("ACTIVITY FEED VIEW render");
       this.destroy_view();
       
       if (this.format == "rightSideUser") {
@@ -182,7 +182,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING ACTIIVITYFEED VIEW "+ this.format);
+      OPrime.debug("DESTROYING ACTIIVITYFEED VIEW "+ this.format);
       if (this.format.indexOf("minimized") == -1){
         this.activitiesView.destroy_view();
       }

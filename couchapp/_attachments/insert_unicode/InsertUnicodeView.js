@@ -15,7 +15,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("INSERT UNICODE VIEW init");
+      OPrime.debug("INSERT UNICODE VIEW init");
 
     },
     events : {
@@ -37,7 +37,7 @@ define([
     tagName: "span",
     
     render : function() {
-      Utils.debug("INSERT UNICODE render");
+      OPrime.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       

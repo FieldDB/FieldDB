@@ -10,7 +10,7 @@ define([
     "search/Search",
     "app/UpdatingCollectionView",
     "app/PaginatedUpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -39,7 +39,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("SEARCH init: " + this.el);
+      OPrime.debug("SEARCH init: " + this.el);
       
       this.newTempDataList();
       this.changeViewsOfInternalModels();
@@ -102,7 +102,7 @@ define([
      * Renders the SearchEditView.
      */
     render : function() {
-      Utils.debug("SEARCH render: " + this.el);
+      OPrime.debug("SEARCH render: " + this.el);
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
@@ -227,7 +227,7 @@ define([
      * Perform a search that finds the union of all the criteria.
      */
     searchUnion : function() {
-      Utils.debug("In searchUnion");
+      OPrime.debug("In searchUnion");
       window.scrollTo(0,0);
       
       // Create a query string from the search criteria
@@ -244,7 +244,7 @@ define([
      * Perform a search that finds the intersection of all the criteria.
      */
     searchIntersection : function() {
-      Utils.debug("In searchIntersection");
+      OPrime.debug("In searchIntersection");
       window.scrollTo(0,0);
 
       // Create a query string from the search criteria
@@ -261,7 +261,7 @@ define([
      * Perform a search.
      */
     searchTop : function() {
-      Utils.debug("Will search for " + $("#search_box").val());
+      OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
       this.search($("#search_box").val());
@@ -310,7 +310,7 @@ define([
         queryString = searchCriteria.join(" AND ");
       }
       
-      Utils.debug("Searching for " + queryString);
+      OPrime.debug("Searching for " + queryString);
       return queryString;
     },
     
@@ -349,7 +349,7 @@ define([
           // Add search results to the data list
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
-          Utils.debug("Successfully got data back from search and put it into the temp search data list");
+          OPrime.debug("Successfully got data back from search and put it into the temp search data list");
           if(typeof callback == "function"){
         	  callback();
           }
@@ -390,7 +390,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING SEARCH EDIT VIEW ");
+      OPrime.debug("DESTROYING SEARCH EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

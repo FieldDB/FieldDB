@@ -146,7 +146,7 @@ require([
     "autosize",
     "xml2json",
     "libs/webservicesconfig_devserver",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     App,
     AppView,
@@ -184,13 +184,13 @@ require([
     Backbone.history.start();
     
     if(typeof callback == "function"){
-      Utils.debug("Calling back the startApps callback");
+      OPrime.debug("Calling back the startApps callback");
       callback();
     }
     
   };
   loadFreshApp = function(){
-    Utils.debug("Loading fresh app");
+    OPrime.debug("Loading fresh app");
     document.location.href='user.html';
   };
   /*
@@ -202,12 +202,12 @@ require([
    * Start the pub sub hub
    */
   window.hub = {};
-  Utils.makePublisher(window.hub);
+  OPrime.makePublisher(window.hub);
   
   /*
    * Check for user's cookie and the dashboard so we can load it
    */
-  var username = Utils.getCookie("username");
+  var username = OPrime.getCookie("username");
  
   if (username != null && username != "") {
 //    alert("Welcome again " + username); //Dont need to tell them this anymore, it seems perfectly stable.
@@ -222,7 +222,7 @@ require([
       loadFreshApp();
       return;
     }else{
-      Utils.debug("Loading app from localStorage");
+      OPrime.debug("Loading app from localStorage");
       var pouchname = null;
       var couchConnection = null;
       if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
@@ -242,7 +242,7 @@ require([
           var u = localStorage.getItem("encryptedUser");
           auth.loadEncryptedUser(u, function(success, errors){
             if(success == null){
-              alert("We couldnt log you in."+errors.join("<br/>") + " " + Utils.contactUs);  
+              alert("We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);  
               loadFreshApp();
               return;
             }else{

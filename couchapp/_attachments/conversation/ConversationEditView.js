@@ -40,7 +40,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      Utils.debug("DATALIST EDIT VIEW init: " + this.el);
+      OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
       
@@ -239,7 +239,7 @@ define( [
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "leftSide") {
-        Utils.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
+        OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -269,7 +269,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       } else  if (this.format == "fullscreen") {
-        Utils.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
+        OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -298,7 +298,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       } else if (this.format == "centreWell") {
-        Utils.debug("DATALIST EDIT CENTER render: " + this.el);
+        OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
         
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
@@ -327,7 +327,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
       }else if (this.format == "search") {
-        Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
+        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
 
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.searchTemplate(jsonToRender));
@@ -358,7 +358,7 @@ define( [
         //No add comment button
         
       }else if (this.format == "search-minimized") {
-        Utils.debug("DATALIST EDIT SEARCH render: " + this.el);
+        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
         
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -369,14 +369,14 @@ define( [
 
           
         }catch(e){
-          Utils.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
+          OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
 
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale["locale_Show_Datalist"].message);
 
       }else if (this.format == "import"){
-        Utils.debug("DATALIST EDIT IMPORT render: " + this.el);
+        OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-header"));
         $(this.el).html(this.importTemplate(jsonToRender));
@@ -396,7 +396,7 @@ define( [
 
         
       } else if (this.format == "minimized") {
-        Utils.debug("DATALIST EDIT MINIMIZED render: " + this.el);
+        OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -405,7 +405,7 @@ define( [
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale["locale_Show_Datalist"].message);
 
       }else{
-        Utils.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
+        OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
@@ -463,7 +463,7 @@ define( [
         this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
         appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
       }catch(e){
-        Utils.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+        OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }
     },
     resizeSmall : function(e){
@@ -557,7 +557,7 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
+      OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();

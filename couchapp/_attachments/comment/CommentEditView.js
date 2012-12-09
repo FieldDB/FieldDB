@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("COMMENT init");
+      OPrime.debug("COMMENT init");
     },
     
     /**
@@ -42,7 +42,7 @@ define([
      * Renders the DatumFieldView.
      */
     render : function() {
-      Utils.debug("COMMENT render");
+      OPrime.debug("COMMENT render");
 //      var JSONtorender = {};
 //      if ( typeof this.model != undefined){
 //    	  JSONtorender.timestamp = this.model.timestamp.toString();

@@ -14,7 +14,7 @@ define(
         "user/User",
         "user/UserEditView", 
         "user/UserReadView", 
-        "libs/Utils" ],
+        "libs/OPrime" ],
     function(
         Backbone, 
         Handlebars, 
@@ -47,7 +47,7 @@ define(
              * @constructs
              */
             initialize : function() {
-              Utils.debug("APPVIEW init: " + this.el);
+              OPrime.debug("APPVIEW init: " + this.el);
 
               this.setUpAndAssociateViewsAndModelsWithCurrentUser();
             },
@@ -163,7 +163,7 @@ define(
              * Renders the UserAppView and all of its child Views.
              */
             render : function() {
-              Utils.debug("APPVIEW render: " + this.el);
+              OPrime.debug("APPVIEW render: " + this.el);
               if (this.model != undefined) {
 
                 // Display the UserAppView
@@ -177,7 +177,7 @@ define(
                 this.renderReadonlyUserViews();
 
               //put the version into the terminal, and into the user menu
-                Utils.getVersion(function (ver) { 
+                OPrime.getVersion(function (ver) { 
                   $(".fielddb-version").html(ver);
                 });
                 $(".corpus-settings").addClass("hidden");

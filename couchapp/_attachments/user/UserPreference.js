@@ -21,7 +21,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER PREFERENCE init");
+      OPrime.debug("USER PREFERENCE init");
       if(this.get("unicodes") == undefined){
         this.set("unicodes", new InsertUnicodes());
       }//end if to set unicode

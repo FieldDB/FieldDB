@@ -260,7 +260,7 @@ define([
           $($($(this.el).find(".utterance")[0]).find(".datum_field_input")[0]).focus();
         }
       }catch(e){
-        Utils.debug("Wasnt able to put the cursor in the first datum's first field.");
+        OPrime.debug("Wasnt able to put the cursor in the first datum's first field.");
       }
     }
   });

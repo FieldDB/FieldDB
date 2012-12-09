@@ -13,7 +13,7 @@ define([
     "user/User",
     "user/UserMask",
     "text!_locales/en/messages.json",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Activity,
@@ -64,7 +64,7 @@ define([
      */
     initialize : function() {
       this.bind('error', function(model, error) {
-        Utils.debug("Error in App: " + error);
+        OPrime.debug("Error in App: " + error);
       });
       
       // If there's no authentication, create a new one
@@ -179,7 +179,7 @@ define([
         //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(model) {
-            Utils.debug("Corpus fetched successfully", model);
+            OPrime.debug("Corpus fetched successfully", model);
             window.appView.addBackboneDoc(model.id);
             window.appView.addPouchDoc(model.id);
 
@@ -190,7 +190,7 @@ define([
             s.changePouch(couchConnection.pouchname, function(){
               s.fetch({
                 success : function(model) {
-                  Utils.debug("Session fetched successfully", model);
+                  OPrime.debug("Session fetched successfully", model);
                   window.appView.addBackboneDoc(model.id);
                   window.appView.addPouchDoc(model.id);
                   
@@ -201,7 +201,7 @@ define([
                   dl.changePouch(couchConnection.pouchname, function(){
                     dl.fetch({
                       success : function(model) {
-                        Utils.debug("Data list fetched successfully", model);
+                        OPrime.debug("Data list fetched successfully", model);
                         window.appView.addBackboneDoc(model.id);
                         window.appView.addPouchDoc(model.id);
                         
@@ -261,7 +261,7 @@ define([
       $('#dashboard_loading_spinner').html("");
     },
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function(couchConnection, appids, callback) {
-      Utils.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+      OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       
       /*
        * Hide everything until it has all been loaded
@@ -284,7 +284,7 @@ define([
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-            Utils.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
            
@@ -303,7 +303,7 @@ define([
                     $(".spinner-status").html("Opened DataList...");
 
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                    Utils.debug("Data list fetched successfully", dataListModel);
+                    OPrime.debug("Data list fetched successfully", dataListModel);
                     window.appView.addBackboneDoc(dataListModel.id);
                     window.appView.addPouchDoc(dataListModel.id);
                     dl.setAsCurrentDataList(function(){
@@ -319,7 +319,7 @@ define([
                             $(".spinner-status").html("Opened Elicitation Session...");
 
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                            Utils.debug("Session fetched successfully", sessionModel);
+                            OPrime.debug("Session fetched successfully", sessionModel);
                             window.appView.addBackboneDoc(sessionModel.id);
                             window.appView.addPouchDoc(sessionModel.id);
                             s.setAsCurrentSession(function(){
@@ -327,7 +327,7 @@ define([
                               $(".spinner-status").html("Loading Elicitation Session...");
 
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
-                              Utils.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
 //                              window.appView.setUpAndAssociateViewsAndModelsWithCurrentUser(); //this didnt help, or seem to be necesary.
 //                              window.appView.renderActivityFeedViews();
@@ -439,7 +439,7 @@ define([
               //save activity feeds too
               appSelf.get("currentCorpusTeamActivityFeed").saveAndInterConnectInApp(function(){
                 appSelf.get("currentUserActivityFeed").saveAndInterConnectInApp(function(){
-                  Utils.debug("The activity feeds saved successfully.");
+                  OPrime.debug("The activity feeds saved successfully.");
                   if(typeof successcallback == "function"){
                     successcallback();
                   }

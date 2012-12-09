@@ -5,7 +5,7 @@ define([
     "user/UserGeneric",
     "permission/Permission",
     "user/UserPreference",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Activities,

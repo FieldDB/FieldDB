@@ -4,7 +4,7 @@ define([
     "hotkey/HotKey",
     "user/UserGeneric",
     "user/UserPreference",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Activities,
@@ -32,7 +32,7 @@ define([
      * @constructs
      */
     initialize: function(attributes) {
-      Utils.debug("USER init");
+      OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
       
       // If there is no prefs, create a new one

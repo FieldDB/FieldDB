@@ -4,7 +4,7 @@ define([
     "authentication/Authentication", 
     "user/User", 
     "user/UserReadView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -25,7 +25,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("AUTH EDIT init: " + this.el);
+      OPrime.debug("AUTH EDIT init: " + this.el);
       
     //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
@@ -78,9 +78,9 @@ define([
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
-      Utils.debug("AUTH EDIT render: " + this.el);
+      OPrime.debug("AUTH EDIT render: " + this.el);
       if (this.model == undefined) {
-        Utils.debug("Auth model was undefined, come back later.");
+        OPrime.debug("Auth model was undefined, come back later.");
         return this;
       }
 
@@ -97,7 +97,7 @@ define([
         $("#login").hide();
         $("#login_form").hide();
         if(this.model.get("userPublic") != undefined){
-          Utils.debug("\t rendering AuthenticationEditView's UserView");
+          OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         }else{
@@ -108,7 +108,7 @@ define([
         $("#login").show();
         $("#login_form").show();
         if(this.model.get("userPublic") != undefined){
-          Utils.debug("\t rendering AuthenticationEditView's UserView");
+          OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         }else{
@@ -128,7 +128,7 @@ define([
       $(this.el).find(".locale_Corpus_Settings").html(Locale["locale_Corpus_Settings"].message);
       $(this.el).find(".locale_Terminal_Power_Users").html(Locale["locale_Terminal_Power_Users"].message);
       
-      document.getElementById("authUrl").value = Utils.authUrl;
+      document.getElementById("authUrl").value = OPrime.authUrl;
 
       
       return this;
@@ -145,8 +145,8 @@ define([
       
 //      this.authenticateAsPublic();
       //Destropy cookies, and reload the page, it will put the user at the login page.
-      Utils.setCookie("username", undefined, -365);
-      Utils.setCookie("token", undefined, -365);
+      OPrime.setCookie("username", undefined, -365);
+      OPrime.setCookie("token", undefined, -365);
       window.location.replace("/index.html")
 
     },
@@ -156,7 +156,7 @@ define([
      * calls the view's authenticate function.
      */
     login : function() {
-      Utils.debug("LOGIN");
+      OPrime.debug("LOGIN");
       this.authenticate(document.getElementById("username").value, 
           document.getElementById("password").value,
           document.getElementById("authUrl").value
@@ -213,7 +213,7 @@ define([
         if(typeof corpusloginfailcallback == "function"){
           corpusloginfailcallback();
         }else{
-          Utils.debug('no corpusloginfailcallback was defined');
+          OPrime.debug('no corpusloginfailcallback was defined');
 
         }
       };
@@ -229,10 +229,10 @@ define([
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
-            Utils.debug('Calling corpusloginsuccesscallback');
+            OPrime.debug('Calling corpusloginsuccesscallback');
             corpusloginsuccesscallback();
           }else{
-            Utils.debug('no corpusloginsuccesscallback was defined');
+            OPrime.debug('no corpusloginsuccesscallback was defined');
           }
           //Replicate user's corpus down to pouch
           window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
@@ -263,7 +263,7 @@ define([
                 visibleids.datalistid = "";
               }
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
-                Utils.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
+                OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
                 if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
                 }else{

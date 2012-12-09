@@ -25,8 +25,8 @@ define([
         this.set("activities", new Activities());
       }
       //TODO remove this, and us the change corpus instead. by keepint htis now, it puts all activity feeds into one.
-//      this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.activityFeedTouchUrl
-//          : Utils.activityFeedPouchUrl);
+//      this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.activityFeedTouchUrl
+//          : OPrime.activityFeedPouchUrl);
       this.set("maxInMemoryCollectionSize", 20);
 
     },
@@ -50,7 +50,7 @@ define([
         return;
       }
       this.lastSavedTimeStamp = Date.now();
-      Utils.debug("Calling saveAndInterConnectInApp for "+this.get("couchConnection").pouchname);
+      OPrime.debug("Calling saveAndInterConnectInApp for "+this.get("couchConnection").pouchname);
       if(!successcallback){
         successcallback = function(){
           if(window.appView){
@@ -58,8 +58,8 @@ define([
           }
         };
       }
-      Utils.debug("successcallback",successcallback);
-      Utils.debug("failurecallback",failurecallback);
+      OPrime.debug("successcallback",successcallback);
+      OPrime.debug("failurecallback",failurecallback);
       
       var self = this;
       window.hub.unsubscribe("savedActivityToPouch", null, self);
@@ -86,7 +86,7 @@ define([
           /*
            * If we are at the final index in the activity feed
            */
-          Utils.debug("Activity feed saved.");
+          OPrime.debug("Activity feed saved.");
           
           if(typeof successcallback == "function"){
             successcallback();
@@ -108,7 +108,7 @@ define([
            */
           var next = parseInt(arg.d) - 1;
           self.saveAnActivityAndLoop(next);
-          Utils.debug("Save succeeded: "+arg.d+" Calling saveAnActivityAndLoop for "+self.get("couchConnection").pouchname);
+          OPrime.debug("Save succeeded: "+arg.d+" Calling saveAnActivityAndLoop for "+self.get("couchConnection").pouchname);
 
         }
       }, self);
@@ -135,7 +135,7 @@ define([
           /*
            * If we are at the final index in the activity feed
            */            
-          Utils.debug("Activity feed saved.");
+          OPrime.debug("Activity feed saved.");
           if(typeof successcallback == "function"){
             successcallback();
           }
@@ -152,7 +152,7 @@ define([
            */
           var next = parseInt(arg.d) - 1;
           self.saveAnActivityAndLoop(next);
-          Utils.debug("Save failed: "+arg.d+"  Calling saveAnActivityAndLoop for "+self.get("couchConnection").pouchname);
+          OPrime.debug("Save failed: "+arg.d+"  Calling saveAnActivityAndLoop for "+self.get("couchConnection").pouchname);
 
         }
         
@@ -164,7 +164,7 @@ define([
       if(self.get("activities").length > 0){
         self.saveAnActivityAndLoop(self.get("activities").length - 1);
       }else{
-        Utils.debug("Activity feed didnt need to be saved.");
+        OPrime.debug("Activity feed didnt need to be saved.");
         if(typeof successcallback == "function"){
           successcallback();
         }
@@ -177,11 +177,11 @@ define([
       
       var thatactivity = this.get("activities").models[d];
       if(thatactivity){
-        Utils.debug("thatactivity "+d,thatactivity);
+        OPrime.debug("thatactivity "+d,thatactivity);
       }else{
 //        alert("Bug in activity save, please report this! Activity number: "+d);
-//        Utils.debug("these are the activity models", this.get("activities").models);
-        Utils.debug("this is the model taht is missing: ", this.get("activities").models[d]);
+//        OPrime.debug("these are the activity models", this.get("activities").models);
+        OPrime.debug("this is the model taht is missing: ", this.get("activities").models[d]);
         thatactivity = this.get("activities").models[d];
         if(thatactivity){
           //can keep going
@@ -195,7 +195,7 @@ define([
         this.truelysaved++;
       }
       if(thatactivity.collection){
-        Utils.debug("This activity has a collection. removing it.");
+        OPrime.debug("This activity has a collection. removing it.");
         delete thatactivity.collection;
       }
       thatactivity.saveAndInterConnectInApp(function(){
@@ -220,22 +220,22 @@ define([
         this.set("couchConnection", couchConnection);
       }
       if(!couchConnection){
-        Utils.debug("Can't change activity feed's couch connection");
+        OPrime.debug("Can't change activity feed's couch connection");
         return;
       }
       //TODO test this
       if(couchConnection.pouchname.indexOf("activity_feed") == -1){
         alert("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
-        Utils.debug("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
+        OPrime.debug("this is not a well formed activity feed couch connection"+JSON.stringify(couchConnection));
       }
       if (this.pouch == undefined) {
-        Utils.debug("Defining the activity feed's pouch.",couchConnection );
+        OPrime.debug("Defining the activity feed's pouch.",couchConnection );
         this.pouch = Backbone.sync
-        .pouch(Utils.androidApp() ? Utils.touchUrl
-            + couchConnection.pouchname : Utils.pouchUrl
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
             + couchConnection.pouchname);
       }else{
-        Utils.debug("The activity feed "+couchConnection.pouchname+" pouch was defined.",couchConnection );
+        OPrime.debug("The activity feed "+couchConnection.pouchname+" pouch was defined.",couchConnection );
       }
 
       if (typeof callback == "function") {
@@ -250,16 +250,16 @@ define([
         console.warn("couchConnection was undefined on the activity feed. this is a problem");
       }
       var currentlength =  this.get("activities").length;
-      Utils.debug(name+ " checking activity feed size = "+ currentlength);
-      //Utils.debug(name+ " this is the activity that was added = ", model);
+      OPrime.debug(name+ " checking activity feed size = "+ currentlength);
+      //OPrime.debug(name+ " this is the activity that was added = ", model);
 
       if(currentlength> this.get("maxInMemoryCollectionSize")){  
-        Utils.debug("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
+        OPrime.debug("The Activities collection has grown to the maximum of "+this.get("maxInMemoryCollectionSize")+", removing some items ot make space and reduce memory consumption.");
         var modelToRemove = this.get("activities").pop(); //because activities are added by unshift
         modelToRemove.saveAndInterConnectInApp();
       }
       if(model.collection){
-        Utils.debug("This activity has a collection. removing it.");
+        OPrime.debug("This activity has a collection. removing it.");
 //        delete model.collection;
       }
       this.get("activities").unshift(model);
@@ -277,7 +277,7 @@ define([
       //can't use reset, the length isn't right or someting. this should remove the items.
       self.get("activities").each(function(model){
         self.get("activities").remove(model);
-        Utils.debug("Removing activity to repopulate the collection ", model);
+        OPrime.debug("Removing activity to repopulate the collection ", model);
       });
       
       if(!maxNumberToPopulate){
@@ -287,7 +287,7 @@ define([
       for(var row = rows.length - 1; row >=0; row--){
         var a = new Activity((new Activity()).parse(rows[row].value));
         self.get("activities").add(a);
-        Utils.debug("In the Activity feed populate: Adding activity to feed ");
+        OPrime.debug("In the Activity feed populate: Adding activity to feed ");
         populatedCount++;
         if(populatedCount > maxNumberToPopulate){
           return;
@@ -304,7 +304,7 @@ define([
      * the activity itself.
      */
     getAllIdsByDate : function(callback) {
-      Utils.debug("In the activity feed getAllIdsByDate "+this.get("couchConnection").pouchname);
+      OPrime.debug("In the activity feed getAllIdsByDate "+this.get("couchConnection").pouchname);
       var self = this;
       var couchConnection = null;
       if(couchConnection == null || couchConnection == undefined){
@@ -318,16 +318,16 @@ define([
       
       try{
         this.changePouch(couchConnection, function(){
-          Utils.debug("Changing pouch in activity feed was sucessfull.");
+          OPrime.debug("Changing pouch in activity feed was sucessfull.");
           self.pouch(function(err, db) {
             db.query("get_ids/by_date", {reduce: false}, function(err, response) {
               if ((!err) && (typeof callback == "function"))  {
-                Utils.debug("Callback with: ", response.rows);
-                Utils.debug("Activity feed search: "+self.get("couchConnection").pouchname,response.rows);
+                OPrime.debug("Callback with: ", response.rows);
+                OPrime.debug("Activity feed search: "+self.get("couchConnection").pouchname,response.rows);
                 callback(response.rows, self);
               }else{
-                Utils.debug("There was an error querying the database.",err);
-                Utils.debug("There was an error querying the database, this is the response.",response);
+                OPrime.debug("There was an error querying the database.",err);
+                OPrime.debug("There was an error querying the database, this is the response.",response);
                 
                 
                 /*
@@ -363,12 +363,12 @@ define([
 
                     console.log("This is what the doc will look like: ", modelwithhardcodedid);
                     db.put(modelwithhardcodedid, function(err, response) {
-                      Utils.debug(response);
+                      OPrime.debug(response);
                       if(err){
-                        Utils.debug("The "+view+" view couldn't be created.");
+                        OPrime.debug("The "+view+" view couldn't be created.");
                       }else{
                         
-                        Utils.debug("The "+view+" view was created.");
+                        OPrime.debug("The "+view+" view was created.");
                         activityfeedself.getAllIdsByDate(callback);
                         
                         
@@ -406,7 +406,7 @@ define([
     },
     replicateToActivityFeed : function(couchConnection, successcallback, failurecallback) {
       var self = this;
-      Utils.debug("Calling replicateToActivityFeed for "+this.get("couchConnection").pouchname);
+      OPrime.debug("Calling replicateToActivityFeed for "+this.get("couchConnection").pouchname);
 
       self.saveAndInterConnectInApp(function(){
         if(couchConnection == null || couchConnection == undefined){
@@ -429,20 +429,20 @@ define([
             }
             couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
             
-            Utils.debug("This is the url using to replicate to: "+couchurl);
+            OPrime.debug("This is the url using to replicate to: "+couchurl);
             db.replicate.to(couchurl, { continuous: false }, function(err, response) {
-              Utils.debug("Replicate to " + couchurl);
-              Utils.debug(response);
-              Utils.debug(err);
+              OPrime.debug("Replicate to " + couchurl);
+              OPrime.debug(response);
+              OPrime.debug(err);
               if(err){
                 if(typeof failurecallback == "function"){
                   failurecallback();
                 }else{
                   alert('ActivityFeed replicate to error' + JSON.stringify(err));
-                  Utils.debug('ActivityFeed replicate to error' + JSON.stringify(err));
+                  OPrime.debug('ActivityFeed replicate to error' + JSON.stringify(err));
                 }
               }else{
-                Utils.debug("ActivityFeed replicate to success", response);
+                OPrime.debug("ActivityFeed replicate to success", response);
                 
                 var numberofdashes = couchConnection.pouchname.split("-");
                 if(numberofdashes.length == 2){
@@ -469,7 +469,7 @@ define([
                 if(typeof successcallback == "function"){
                   successcallback();
                 }else{
-                  Utils.debug("ActivityFeed replicate to success");
+                  OPrime.debug("ActivityFeed replicate to success");
                 }
               }
             });
@@ -501,18 +501,18 @@ define([
           
           //We can leave the to and from replication async, and make two callbacks. 
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            Utils.debug("Replicate from " + couchurl);
-            Utils.debug(response);
-            Utils.debug(err);
+            OPrime.debug("Replicate from " + couchurl);
+            OPrime.debug(response);
+            OPrime.debug(err);
             if(err){
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('ActivityFeed replicate to error' + JSON.stringify(err));
-                Utils.debug('ActivityFeed replicate to error' + JSON.stringify(err));
+                OPrime.debug('ActivityFeed replicate to error' + JSON.stringify(err));
               }
             }else{
-              Utils.debug("ActivityFeed replicate from success", response);
+              OPrime.debug("ActivityFeed replicate from success", response);
 
               var numberofdashes = couchConnection.pouchname.split("-");
               if(numberofdashes.length == 2){

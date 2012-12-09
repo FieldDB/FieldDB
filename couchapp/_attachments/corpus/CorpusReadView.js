@@ -17,7 +17,7 @@ define([
     "datum/Sessions",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -56,7 +56,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS READ init: " );
+      OPrime.debug("CORPUS READ init: " );
       this.changeViewsOfInternalModels();
       
    // If the model's pouchname changes, chances are its a new corpus, re-render its internal models.
@@ -67,7 +67,7 @@ define([
       
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
-//        Utils.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
+//        OPrime.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
 //        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
@@ -153,24 +153,24 @@ define([
      * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
-      Utils.debug("CORPUS READ render: ");
+      OPrime.debug("CORPUS READ render: ");
       if(window.appView.currentCorpusEditView){
         window.appView.currentCorpusEditView.destroy_view();
       }
       window.appView.currentCorpusReadView.destroy_view();
       
       if (this.model == undefined) {
-        Utils.debug("\tCorpus model was undefined.");
+        OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
-        Utils.debug("Problem getting the usrname of the corpus' team");
+        OPrime.debug("Problem getting the usrname of the corpus' team");
       }
       if (this.format == "leftSide") {
-        Utils.debug("CORPUS READ LEFTSIDE render: " );
+        OPrime.debug("CORPUS READ LEFTSIDE render: " );
 
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
@@ -179,13 +179,13 @@ define([
           $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale["locale_Show_corpus_settings"].message);
 
       } else if (this.format == "link") {
-        Utils.debug("CORPUS READ LINK render: " );
+        OPrime.debug("CORPUS READ LINK render: " );
 
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(jsonToRender));
         
       } else if (this.format == "fullscreen"){
-        Utils.debug("CORPUS READ FULLSCREEN render: " );
+        OPrime.debug("CORPUS READ FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -237,7 +237,7 @@ define([
 
         
       } else if (this.format == "centreWell"){
-        Utils.debug("CORPUS READ CENTER render: " );
+        OPrime.debug("CORPUS READ CENTER render: " );
 
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(jsonToRender));
@@ -305,7 +305,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING CORPUS READ VIEW "+ this.format);
+      OPrime.debug("DESTROYING CORPUS READ VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -383,7 +383,7 @@ define([
       } 
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      Utils.debug("CLICK NEW DATUM READ CORPUS VIEW.");
+      OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
     newConversation : function(e) {
         if(e){
@@ -392,7 +392,7 @@ define([
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        Utils.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+        OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
       },
 
     newDataList : function(e) {
@@ -430,7 +430,7 @@ define([
     },
     
     resizeFullscreen : function(e){
-      Utils.debug("CORPUS READ starts to render fullscreen. " );
+      OPrime.debug("CORPUS READ starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
         e.preventDefault();

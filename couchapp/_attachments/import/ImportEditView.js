@@ -14,7 +14,7 @@ define( [
     "datum/Session",
     "datum/SessionEditView",
     "app/PaginatedUpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 
 ], function(
     Backbone,
@@ -459,7 +459,7 @@ define( [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            Utils.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         });
       }catch(e){
@@ -478,7 +478,7 @@ define( [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            Utils.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         }
       }
@@ -818,7 +818,7 @@ define( [
      * @param e
      */
     dragLabelToColumn : function(e) {
-      Utils.debug("Recieved a drop import label event ");
+      OPrime.debug("Recieved a drop import label event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -858,7 +858,7 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING IMPORT EDIT VIEW ");
+      OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

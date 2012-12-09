@@ -22,7 +22,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("ACTIVITY VIEW init");
+      OPrime.debug("ACTIVITY VIEW init");
       this.userView = new UserReadView({
         model : this.model.get("user")
       });
@@ -45,7 +45,7 @@ define([
       jsonToRender.directobject = jsonToRender.directobject.replace(/&gt;/g,">").replace(/&lt;/g,"<");
       jsonToRender.indirectobject = jsonToRender.indirectobject.replace(/&gt;/g,">").replace(/&lt;/g,"<");
       jsonToRender.context = jsonToRender.context.replace(/&gt;/g,">").replace(/&lt;/g,"<");
-      jsonToRender.timestamp = Utils.prettyTimestamp(jsonToRender.timestamp);
+      jsonToRender.timestamp = OPrime.prettyTimestamp(jsonToRender.timestamp);
       
       $(this.el).html(this.template(jsonToRender));
       

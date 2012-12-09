@@ -2,7 +2,7 @@ define([
     "backbone", 
     "handlebars", 
     "user/UserPreference",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Handlebars, 
@@ -19,7 +19,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("USER PREFERENCE VIEW init");
+      OPrime.debug("USER PREFERENCE VIEW init");
       this.model.bind("change:skin", this.renderSkin, this);
           
 //      this.model.bind("change", this.render, this);
@@ -74,7 +74,7 @@ define([
     template: Handlebars.templates.user_preference_edit_modal,
 
     render : function() {
-      Utils.debug("USERPREFERENCE render: " + this.el);
+      OPrime.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
         // Display the UserPreferenceEditView
         this.setElement($("#user-preferences-modal"));
@@ -208,7 +208,7 @@ define([
       headtg.replaceChild(newlink, oldlink);
     },
     savePrefs: function(){
-      Utils.debug("Saving preferences into encrypted user.");
+      OPrime.debug("Saving preferences into encrypted user.");
       window.app.get("authentication").saveAndInterConnectInApp();
     }
   });

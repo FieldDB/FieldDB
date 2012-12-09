@@ -3,7 +3,7 @@ define([
     "confidentiality_encryption/Confidential",
     "user/User",
     "user/UserMask",
-    "libs/Utils" 
+    "libs/OPrime" 
 ], function(
     Backbone, 
     Confidential,
@@ -31,15 +31,15 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("AUTHENTICATION INIT");
+      OPrime.debug("AUTHENTICATION INIT");
       this.bind('error', function(model, error) {
-        Utils.debug("Error in Authentication  : " + error);
+        OPrime.debug("Error in Authentication  : " + error);
       });
       if(!this.get("confidential")){
         this.set("confidential", new Confidential());
         this.get("confidential").decryptedMode = true;
-        if(Utils.getCookie("token")){
-          this.get("confidential").set("secretkey", Utils.getCookie("token")); //TODO store the token somewhere safer
+        if(OPrime.getCookie("token")){
+          this.get("confidential").set("secretkey", OPrime.getCookie("token")); //TODO store the token somewhere safer
         }
       }
     },
@@ -88,9 +88,9 @@ define([
         success : function(serverResults) {
           if (serverResults.userFriendlyErrors != null) {
             try{
-              window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + Utils.contactUs, "alert-danger","Login errors:");
+              window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
             }catch(e){
-              Utils.debug(e);
+              OPrime.debug(e);
             }
             if (typeof failcallback == "function") {
               failcallback(serverResults.userFriendlyErrors.join("<br/>"));
@@ -104,9 +104,9 @@ define([
           }
         },//end successful login
         error: function(e){
-          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+          OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
           if(window.appView){
-            window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + Utils.contactUs, "alert-danger","Connection errors:");
+            window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs, "alert-danger","Connection errors:");
           }
 
           if (typeof failcallback == "function") {
@@ -121,7 +121,7 @@ define([
      * 
      */
     saveServerResponseToUser : function(serverResults, callback){
-      Utils.debug("saveServerResponseToUser");
+      OPrime.debug("saveServerResponseToUser");
 
       this.set("state", "loggedIn");
       this.staleAuthentication = false;
@@ -184,13 +184,13 @@ define([
 //    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
-//      Utils.debug(serverResults.user);
+//      OPrime.debug(serverResults.user);
       
       if (typeof callback == "function") {
         callback("true"); //tell caller that the user succeeded to authenticate
       }
-      Utils.setCookie("username", serverResults.user.username, 365);
-      Utils.setCookie("token", serverResults.user.hash, 365);
+      OPrime.setCookie("username", serverResults.user.username, 365);
+      OPrime.setCookie("token", serverResults.user.hash, 365);
       this.get("confidential").set("secretkey", serverResults.user.hash);
       this.saveAndEncryptUserToLocalStorage();
 //      if(window.appView){
@@ -203,14 +203,14 @@ define([
 //      }
     },
     loadEncryptedUser : function(encryptedUserString, callbackload){
-      Utils.debug("loadEncryptedUser");
+      OPrime.debug("loadEncryptedUser");
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
       var data = {};
       data.user = u;
       this.saveServerResponseToUser(data, callbackload);
     },
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
-      Utils.debug("saveAndEncryptUserToLocalStorage");
+      OPrime.debug("saveAndEncryptUserToLocalStorage");
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u);
       if(window.appView){
@@ -280,7 +280,7 @@ define([
               window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") 
                   , "alert-warning","Error connecting to populate corpus permissions:");
             }catch(e){
-              Utils.debug(e);
+              OPrime.debug(e);
             }
             if (typeof failcallback == "function") {
               failcallback(serverResults.userFriendlyErrors.join("<br/>"));
@@ -294,7 +294,7 @@ define([
           }
         },//end successful fetch
         error: function(e){
-          Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
+          OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
 
           if (typeof failcallback == "function") {
             failcallback("There was an error in contacting the authentication server to get the list of users on your corpus team. Maybe you're offline?");
@@ -336,19 +336,19 @@ define([
           data : dataToPost,
           success : function(serverResults) {
             if (serverResults.userFriendlyErrors != null) {
-              Utils.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
+              OPrime.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
               if (typeof failcallback == "function") {
                 failcallback(serverResults.userFriendlyErrors.join("<br/>"));
               }
             } else if (serverResults.roleadded != null) {
-              Utils.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
+              OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
               if (typeof successcallback == "function") {
                 successcallback(userToAddToCorpus); 
               }
             }
           },//end successful fetch
           error: function(e){
-            Utils.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+            OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
 
             if (typeof failcallback == "function") {
               failcallback("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team. Maybe you're offline?");

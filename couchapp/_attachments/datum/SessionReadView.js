@@ -7,7 +7,7 @@ define([
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone,
     Handlebars, 
@@ -31,7 +31,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("SESSION READ VIEW init: " );
+      OPrime.debug("SESSION READ VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -92,15 +92,15 @@ define([
      * Renders the SessionReadView.
      */
     render : function() {
-      Utils.debug("SESSION READ render: " );
+      OPrime.debug("SESSION READ render: " );
       if (this.model == undefined) {
-        Utils.debug("SESSION is undefined, come back later.");
+        OPrime.debug("SESSION is undefined, come back later.");
         return this;
       }
       
       try {
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
-          Utils.debug("SESSION fields are undefined, come back later.");
+          OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
         if(this.format != "link"){
@@ -110,7 +110,7 @@ define([
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
-          Utils.debug("SESSION READ LEFTSIDE render: " );
+          OPrime.debug("SESSION READ LEFTSIDE render: " );
 
           var jsonToRender = {
               goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -130,7 +130,7 @@ define([
           $(this.el).find(".locale_When").html(Locale["locale_When"].message);
 
         }else if (this.format == "centerWell") {
-          Utils.debug("SESSION READ CENTERWELL render: " );
+          OPrime.debug("SESSION READ CENTERWELL render: " );
 
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
@@ -149,7 +149,7 @@ define([
           $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         } else if (this.format == "fullscreen") {
-          Utils.debug("SESSION READ FULLSCREEN render: " );
+          OPrime.debug("SESSION READ FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(this.model.toJSON()));
@@ -167,7 +167,7 @@ define([
           $(this.el).find(".locale_Add").html(Locale["locale_Add"].message);
 
         } else if (this.format == "link") {
-          Utils.debug("SESSION READ LINK render: " );
+          OPrime.debug("SESSION READ LINK render: " );
 
           $(this.el).html(this.templateLink(this.model.toJSON()));
        
@@ -187,7 +187,7 @@ define([
           throw("You have not specified a format that the SessionReadView can understand.");
         }
       } catch(e) {
-        Utils.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
+        OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       
       return this;
@@ -244,7 +244,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      Utils.debug("DESTROYING SESSION READ VIEW "+ this.format);
+      OPrime.debug("DESTROYING SESSION READ VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();

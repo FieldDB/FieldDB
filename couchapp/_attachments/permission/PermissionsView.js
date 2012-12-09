@@ -29,7 +29,7 @@ define( [
     render : function() {
       
       this._rendered = true;
-      Utils.debug("Permissions render: ");
+      OPrime.debug("Permissions render: ");
       
       this.setElement(".permissions_settings");
       var jsonToRender = {title: "Permission Settings"};

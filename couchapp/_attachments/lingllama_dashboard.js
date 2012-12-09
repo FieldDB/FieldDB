@@ -146,7 +146,7 @@ require([
     "autosize",
     "xml2json",
     "libs/webservicesconfig_devserver",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     App,
     AppView,
@@ -202,7 +202,7 @@ require([
     Backbone.history.start();
     
     if(typeof callback == "function"){
-      Utils.debug("Calling back the startApps callback");
+      OPrime.debug("Calling back the startApps callback");
       callback();
     }
   };
@@ -215,7 +215,7 @@ require([
    * Start the pub sub hub
    */
   window.hub = {};
-  Utils.makePublisher(window.hub);
+  OPrime.makePublisher(window.hub);
  
   /*
    * Loading lingllama

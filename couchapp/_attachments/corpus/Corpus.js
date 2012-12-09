@@ -22,7 +22,7 @@ define([
     "user/Users",
     "user/UserMask",
     "glosser/Glosser",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Activity,
@@ -94,7 +94,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      Utils.debug("CORPUS INIT");
+      OPrime.debug("CORPUS INIT");
       if(!this.get("confidential")){
         this.set("confidential", new Confidential() )
       }
@@ -252,8 +252,8 @@ define([
 //        this.set("couchConnection", couchConnection);
 //      }
 //      this.pouch = Backbone.sync
-//      .pouch(Utils.androidApp() ? Utils.touchUrl
-//        + couchConnection.pouchname : Utils.pouchUrl
+//      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+//        + couchConnection.pouchname : OPrime.pouchUrl
 //        + couchConnection.pouchname);
       
     },
@@ -359,7 +359,7 @@ define([
       conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || Utils.defaultCouchConnection()
+      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
     },
     
     // Internal models: used by the parse function
@@ -479,17 +479,16 @@ define([
         couchConnection = this.get("couchConnection");
       }
       if(!couchConnection){
-        Utils.debug("Cant change corpus's couch connection");
+        OPrime.debug("Cant change corpus's couch connection");
         return;
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
-        .pouch(Utils.androidApp() ? Utils.touchUrl
-            + couchConnection.pouchname : Utils.pouchUrl
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
             + couchConnection.pouchname);
       }
 
-      Utils.testPouchChromeVersions(couchConnection.pouchname);
       if (typeof callback == "function") {
         callback();
       }
@@ -507,7 +506,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      Utils.debug("Saving the Corpus");
+      OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
       if(!this.id){
@@ -540,14 +539,14 @@ define([
           }
         }
       }catch(e){
-        Utils.debug("Removing empty states work around failed some thing was wrong.",e);
+        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
       
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
-            Utils.debug('Corpus save success');
+            OPrime.debug('Corpus save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for corpus in corpus
@@ -683,7 +682,7 @@ define([
 
               if(defaultDatalist.needsSave){
 //                defaultDatalist.changePouch(null, function(){
-//                  Utils.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
+//                  OPrime.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
 //                  defaultDatalist.save();
                 //TODO uncomment this
 //                });
@@ -753,7 +752,7 @@ define([
       });
       dl.set("dateCreated",JSON.stringify(new Date()));
       dl.set("dateModified", JSON.stringify(new Date()));
-      dl.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + this.get("pouchname") : Utils.pouchUrl + this.get("pouchname"));
+      dl.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + this.get("pouchname") : OPrime.pouchUrl + this.get("pouchname"));
       dl.save(null, {
         success : function(model, response) {
           window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
@@ -762,14 +761,14 @@ define([
           if(typeof sucess == "function"){
             sucess();
           }else{
-            Utils.debug('DataList save success' + model.id);
+            OPrime.debug('DataList save success' + model.id);
           }
         },
         error : function(e) {
           if(typeof failure == "function"){
             failure();
           }else{
-            Utils.debug('DataList save error' + e);
+            OPrime.debug('DataList save error' + e);
           }
         }
       });
@@ -795,7 +794,7 @@ define([
       s.set("pouchname", this.get("pouchname"));
       s.set("dateCreated",JSON.stringify(new Date()));
       s.set("dateModified", JSON.stringify(new Date()));
-      s.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + this.get("pouchname") : Utils.pouchUrl + this.get("pouchname"));
+      s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + this.get("pouchname") : OPrime.pouchUrl + this.get("pouchname"));
       s.save(null, {
         success : function(model, response) {
           window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
@@ -804,14 +803,14 @@ define([
           if(typeof suces == "function"){
             suces();
           }else{
-            Utils.debug('Session save success' + model.id);
+            OPrime.debug('Session save success' + model.id);
           }
         },
         error : function(e) {
           if(typeof fail == "function"){
             fail();
           }else{
-            Utils.debug('Session save error' + e);
+            OPrime.debug('Session save error' + e);
           }
         }
       });
@@ -862,12 +861,12 @@ define([
 
           console.log("This is what the doc will look like: ", modelwithhardcodedid);
           db.put(modelwithhardcodedid, function(err, response) {
-            Utils.debug(response);
+            OPrime.debug(response);
             if(err){
-              Utils.debug("The "+view+" view couldn't be created.");
+              OPrime.debug("The "+view+" view couldn't be created.");
             }else{
               
-              Utils.debug("The "+view+" view was created.");
+              OPrime.debug("The "+view+" view was created.");
               if(typeof callbackpouchview == "function"){
                 callbackpouchview();
               }
@@ -966,18 +965,18 @@ define([
           couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
           
           db.replicate.to(couchurl, { continuous: false }, function(err, response) {
-            Utils.debug("Replicate to " + couchurl);
-            Utils.debug(response);
-            Utils.debug(err);
+            OPrime.debug("Replicate to " + couchurl);
+            OPrime.debug(response);
+            OPrime.debug(err);
             if(err){
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('Corpus replicate to error' + JSON.stringify(err));
-                Utils.debug('Corpus replicate to error' + JSON.stringify(err));
+                OPrime.debug('Corpus replicate to error' + JSON.stringify(err));
               }
             }else{
-              Utils.debug("Corpus replicate to success", response);
+              OPrime.debug("Corpus replicate to success", response);
               window.appView.allSyncedDoc();
 //              var teamid = "";
 //              var teamname = "";
@@ -985,7 +984,7 @@ define([
 //                teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
 //                teamname = model.get("team").get("username");
 //              }catch(e){
-//                Utils.debug("Problem getting team details for the activity", e);
+//                OPrime.debug("Problem getting team details for the activity", e);
 //              }
               window.app.get("currentCorpusTeamActivityFeed").addActivity(
                   new Activity({
@@ -1024,7 +1023,7 @@ define([
 //                  window.appView.renderActivityFeedViews();
                   replicatetosuccesscallback();
                 }else{
-                  Utils.debug("ActivityFeed Team replicate to success");
+                  OPrime.debug("ActivityFeed Team replicate to success");
                 }
               });
             }
@@ -1052,18 +1051,18 @@ define([
           
           //We can leave the to and from replication async, and make two callbacks. 
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            Utils.debug("Replicate from " + couchurl);
-            Utils.debug(response);
-            Utils.debug(err);
+            OPrime.debug("Replicate from " + couchurl);
+            OPrime.debug(response);
+            OPrime.debug(err);
             if(err){
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('Corpus replicate from error' + JSON.stringify(err));
-                Utils.debug('Corpus replicate from error' + JSON.stringify(err));
+                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             }else{
-              Utils.debug("Corpus replicate from success", response);
+              OPrime.debug("Corpus replicate from success", response);
 
               //This was a valid connection, lets save it into localstorage.
               localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
@@ -1175,13 +1174,13 @@ define([
                   window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
                       "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
                       "You also can't share your data with team members. If your computer is online and you are" +
-                      " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +Utils.contactUs+
+                      " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +OPrime.contactUs+
                       " If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
                 }
                 if (typeof failurecallback == "function") {
                   failurecallback("I couldn't log you into your corpus.");
                 }
-                Utils.debug(serverResults);
+                OPrime.debug(serverResults);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
             });

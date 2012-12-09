@@ -5,7 +5,7 @@ define([
     "datum/Session",
     "datum/SessionEditView",
     "user/UserMask",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone,
     Datum,
@@ -56,7 +56,7 @@ define([
      *          pouchname (Optional) The name of the corpus to display.
      */
     renderDashboardOrNot : function(render) {
-      Utils.debug("In renderDashboardOrNot: " );
+      OPrime.debug("In renderDashboardOrNot: " );
       if(render == undefined || render == true || render == "true"){
         window.appView.renderReadonlyDashboardViews();
         this.hideEverything();
@@ -74,7 +74,7 @@ define([
      *          pouchname (Optional) The name of the corpus to display.
      */
     showDashboard : function() {
-      Utils.debug("In showDashboard: " );
+      OPrime.debug("In showDashboard: " );
     },
     /**
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
@@ -100,7 +100,7 @@ define([
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
     showFullscreenUser : function(userid, pouchname) {
-      Utils.debug("In showFullscreenUser: " + userid);
+      OPrime.debug("In showFullscreenUser: " + userid);
 
       if(userid){
         if(!pouchname){
@@ -116,7 +116,7 @@ define([
             //fetch only after having setting the right pouch which is what changePouch does.
             userToShow.fetch({
               success : function(model) {
-                Utils.debug("Corpus member fetched successfully" +model);
+                OPrime.debug("Corpus member fetched successfully" +model);
                 window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
                 window.appView.publicReadUserView.render();
 
@@ -144,7 +144,7 @@ define([
      *          pouchname The name of the corpus this datum is from.
      */
     showFullscreenCorpus : function() {
-      Utils.debug("In showFullscreenCorpus: " );
+      OPrime.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
       if($("#corpus-fullscreen").html() == ""){
@@ -160,7 +160,7 @@ define([
      * 
      */
     showEmbeddedCorpus : function() {
-      Utils.debug("In showEmbeddedCorpus: " );
+      OPrime.debug("In showEmbeddedCorpus: " );
 
       this.hideEverything();
       $("#dashboard-view").show();
@@ -179,7 +179,7 @@ define([
      *          sessionid The ID of the session within the corpus.
      */
     showEmbeddedSession : function(sessionid, pouchname) {
-      Utils.debug("In showEmbeddedSession: " + pouchname + " *** "
+      OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -199,7 +199,7 @@ define([
             //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
-                Utils.debug("Session fetched successfully" +model);
+                OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("centerWell");
@@ -225,7 +225,7 @@ define([
      * Displays the fullscreen view of the session.
      */
     showFullscreenSession : function(sessionid, pouchname) {
-      Utils.debug("In showFullscreenSession"  + pouchname + " *** "
+      OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -245,7 +245,7 @@ define([
             //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
-                Utils.debug("Session fetched successfully" +model);
+                OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("fullscreen");
@@ -278,7 +278,7 @@ define([
      *          dataListid The ID of the datalist within the corpus.
      */
     showFullscreenDataList : function(dataListid, pouchname) {
-      Utils.debug("In showFullscreenDataList: " + pouchname + " *** "
+      OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
@@ -319,7 +319,7 @@ define([
                     //fetch only after having setting the right pouch which is what changePouch does.
                     dl.fetch({
                       success : function(e) {
-                        Utils.debug("Datalist fetched successfully" +e);
+                        OPrime.debug("Datalist fetched successfully" +e);
                         app.get("currentDataList").saveAndInterConnectInApp(function(){
                           dl.setAsCurrentDataList( function(){
                             window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
@@ -351,7 +351,7 @@ define([
               //fetch only after having setting the right pouch which is what changePouch does.
               dl.fetch({
                 success : function(e) {
-                  Utils.debug("Datalist fetched successfully" +e);
+                  OPrime.debug("Datalist fetched successfully" +e);
                   app.get("currentDataList").saveAndInterConnectInApp(function(){
                     dl.setAsCurrentDataList( function(){
                       window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
@@ -374,7 +374,7 @@ define([
     },
     
     showMiddleDataList : function(dataListid, pouchname) {
-      Utils.debug("In showMiddleDataList");
+      OPrime.debug("In showMiddleDataList");
 
       if(dataListid){
         if(!pouchname){
@@ -393,7 +393,7 @@ define([
           //fetch only after having setting the right pouch which is what changePouch does.
           dl.fetch({
             success : function(e) {
-              Utils.debug("Datalist fetched successfully" +e);
+              OPrime.debug("Datalist fetched successfully" +e);
               dl.setAsCurrentDataList( function(){
                 window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
                   window.appView.renderReadonlyDashboardViews();
@@ -459,7 +459,7 @@ define([
       },
 
     showEmbeddedDatum : function(pouchname, datumid){
-      Utils.debug("In showEmbeddedDatum"  + pouchname + " *** "
+      OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
           + datumid);
       if(datumid){
         if(!pouchname){
@@ -489,7 +489,7 @@ define([
     showEmbeddedConversation : function(pouchname, conversationid){
         $("#datums-embedded").hide();
     	$("#conversation-embedded").show();
-    	Utils.debug("In showEmbeddedConversation"  + pouchname + " *** "
+    	OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
             + conversationid);
         if(conversationid){
           if(!pouchname){
@@ -517,7 +517,7 @@ define([
       },
       
     showImport : function() {
-      Utils.debug("In import: ");
+      OPrime.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#import-fullscreen").html() == ""){
         window.appView.importView.render();
@@ -527,7 +527,7 @@ define([
     },
     
     showExport : function(pouchname) {
-      Utils.debug("In showExport: " + pouchname);
+      OPrime.debug("In showExport: " + pouchname);
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();

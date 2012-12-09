@@ -11,7 +11,7 @@ define([
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
-    "libs/Utils"
+    "libs/OPrime"
 ], function(
     Backbone, 
     Activity,
@@ -113,7 +113,7 @@ define([
         }
       }
       if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(Utils.androidApp() ? Utils.touchUrl + pouchname : Utils.pouchUrl + pouchname);
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
       if (typeof callback == "function") {
         callback();
@@ -139,7 +139,7 @@ define([
               
               if(err){
                 if(window.toldSearchtomakebydateviews){
-                  Utils.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
+                  OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
                   return;
                 }
                 /*
@@ -154,7 +154,7 @@ define([
               }
               
               if ((!err) && (typeof callback == "function"))  {
-                Utils.debug("Callback with: ", response.rows);
+                OPrime.debug("Callback with: ", response.rows);
                 callback(response.rows);
               }
             });
@@ -175,7 +175,7 @@ define([
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
         window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
       }catch(e){
-        Utils.debug("Search Analytics not working.");
+        OPrime.debug("Search Analytics not working.");
       }
       try{
         this.changePouch(this.get("pouchname"), function() {
@@ -232,7 +232,7 @@ define([
                 }
               }else{
                 if(window.toldSearchtomakeviews){
-                  Utils.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
+                  OPrime.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
                   return;
                 }
                 /*
@@ -455,7 +455,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      Utils.debug("Saving a Datum");
+      OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -490,7 +490,7 @@ define([
         this.set("session" , window.app.get("currentSession")); 
         Util.debug("Setting the session on this datum to the current one.");
       }else{
-        Utils.debug("Not setting the session on this datum.");
+        OPrime.debug("Not setting the session on this datum.");
       }
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
@@ -507,13 +507,13 @@ define([
           }
         }
       }catch(e){
-        Utils.debug("Removing empty states work around failed some thing was wrong.",e);
+        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
-            Utils.debug('Datum save success');
+            OPrime.debug('Datum save success');
             var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for datum goals in corpus
