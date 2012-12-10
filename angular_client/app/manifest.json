@@ -10,10 +10,12 @@
   },
   "offline_enabled": true,
   "permissions": [
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "https://ifielddevs.iriscouch.com/",
+    "https://widgets.twimg.com/"
   ],
    "icons": { 
   },
    "manifest_version" : 2,
-  "content_security_policy" : "default-src 'self'; "
+  "content_security_policy" : "default-src 'self' https://widgets.twimg.com ; connect-src 'self' https://ifielddevs.iriscouch.com  https://widgets.twimg.com"
 }
