@@ -2,11 +2,17 @@
 
 /* Controllers */
 
-
-function MyCtrl1() {}
+function MyCtrl1() {
+}
 MyCtrl1.$inject = [];
 
+function MyCtrl2($scope, $resource, MostRecentActivities, GetSessionToken) {
 
-function MyCtrl2() {
+  GetSessionToken.run({"name": "publicuser","password": "none"}).then(function() {
+    MostRecentActivities.async().then(function(activities) {
+      $scope.activities = activities;
+    });
+  });
+
 }
-MyCtrl2.$inject = [];
+// MyCtrl2.$inject = [];

@@ -19,7 +19,10 @@
 
     // load all of the dependencies asynchronously.
     $script([
-      'lib/angular/angular.js',
+             'lib/angular/angular.js',
+             'lib/angular/angular-resource.js',
+             'lib/oprime/services/CouchDB.js',
+             'js/couch_constants.js',
       'js/app.js',
       'js/services.js',
       'js/controllers.js',
@@ -28,5 +31,5 @@
     ], function() {
       // when all is done, execute bootstrap angular application
       angular.bootstrap(document, ['myApp']);
-      console.log("just loaded it")
+      console.log("just loaded the app.")
     });
