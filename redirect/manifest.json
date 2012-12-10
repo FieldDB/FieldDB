@@ -1,0 +1,19 @@
+{
+  "name" : "iCampo McGill",
+  "version" : "1.23.3",
+  "description" : "Moved to LingSync - McGill!",
+  "app" : {
+    "launch" : {
+      "local_path" : "index.html"
+    }
+  },
+  "offline_enabled" : true,
+  "permissions" : [ "unlimitedStorage" ],
+  "icons" : {
+    "16" : "icon16.png",
+    "48" : "icon48.png",
+    "128" : "icon128.png"
+  },
+  "manifest_version" : 2,
+  "content_security_policy" : "default-src 'self' "
+}

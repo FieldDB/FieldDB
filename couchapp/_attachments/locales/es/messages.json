@@ -1,0 +1,529 @@
+{
+  "application_title" : {
+    "message" : "iCampo beta"
+  },
+  "application_description" : {
+    "message" : "Un aplicacion de colección de datos linguisticos."
+  },
+  "locale_Close_and_login_as_LingLlama" : {
+    "message" : "Entrar como LingLlama",
+    "description" : "button"
+  },
+  "locale_Close_and_login_as_LingLlama_Tooltip" : {
+    "message" : "TODO translate You can log in as LingLlama to explore the app pre-populated with data. There are also comments left by users to explain what widgets are for and how you can use them. If you're new to FieldDB this is a great place to start after watching the videos.",
+    "description" : "tooltip"
+  },
+  "locale_Username" : {
+    "message" : "Usuario:"
+  },
+  "locale_Password" : {
+    "message" : "Contraseña:"
+  },
+  "locale_Sync_my_data_to_this_computer" : {
+    "message" : "Sincronisa mis datos con esta computadora"
+  },
+  "locale_Welcome_to_FieldDB" : {
+    "message" : "¡Bienvenido a iCampo! <small>beta</small>"
+  },
+  "locale_An_offline_online_fieldlinguistics_database" : {
+    "message" : "Un aplicacion de coleccion de datos linguisticos...gratis y OpenSource"
+  },
+  "locale_Welcome_Beta_Testers" : {
+    "message" : "¡Bienvenidos! Por favor <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>vea estos tutoriales antes de empezar de probar iCampo</a>. Dejanos notas, comentarios, sugerencias en la forma abajo."
+  },
+  "locale_Create_a_new_user" : {
+    "message" : "Crear un nuevo usuario"
+  },
+  "locale_What_is_your_username_going_to_be" : {
+    "message" : "¿Que quieres por su usuario?"
+  },
+  "locale_Confirm_Password" : {
+    "message" : "Confirme su contraseña:"
+  },
+  "locale_Sign_in_with_password" : {
+    "message" : "Registrar"
+  },
+  "locale_Warning" : {
+    "message" : "¡Aviso!"
+  },
+  "locale_Instructions_to_show_on_dashboard" : {
+    "message" : "TODO translate instructions"
+  },
+  "locale_elicitation_sessions_explanation" : {
+    "message" : "<p>TODO translate An Elicitation Session is very similar to an elicitation session in the real world. This could be a 1-hour Session with one language consultant, or a 3-hour field methods class, or data from a file import. Generally an elicitation session happens on a specific day, or across a few days, you can write a date or text in the 'dateElicited' field. Often we have a goal set out when we meet for an elicitation Session, if you want, you can put this into the 'Goal' field of the Sessions and it will appear in the Session quick links below. An Elicitation Session has many fields which you can edit by clicking on the <i class='icon-calendar'></i> icons in the app to see the details. These fields are information which is common to all datum elicited that day for example, the dialect, perhaps the language consultants present the date etc. The Session fields are copied into the Datum that were elicited during that Session, this makes it possible to search for Datum containing a particular dialect and/or speaker etc. </p>"
+  },
+  "locale_datalists_explanation" : {
+    "message" : "<p>TODO translate A Datalist is a collection of Datum that you put together for a reason, it could be to prepare  a handout, to share some of your data with someone, to export into another program or simply to keep track of similar Datum for your research. You could think of Datalists as curated search results that the app remembers for you. Datalists have titles and descriptions, their titles appear as links below. You can click on the links to see the details of the  Datalist. In the Datalist view, the Datum will appear in the colour of their current state (i.e. Checked with a consultant, To be checked, Deleted etc). You can make new states in the Datum State Settings on this page. You can create new Datalists by doing a search for what you want to be in the Datalist. You can refine the Datalist items by clicking on <i class='icon-remove-sign'></i> to remove Datum in the Datalist view. The Datalist view is normally on the left side of your dashboard, you can see it by double clicking on a Datalist in the list below. If you want to see all your data click on the 'All Data' link below, this will load all your data into a Datalist view. If you have over 200 Datum in your corpus, this can be pretty slow. If you have a large corpus you may prefer searching for a subset of your data rather than skimming all of it at once. In general, any Datalist with more than 100 Datum takes a few seconds to load and display all the Datum it contains. </p>"
+  },
+  "locale_permissions_explanation" : {
+    "message" : "<p>TODO translate Permissions are where you give your team members access to your corpus. Add users to the 'Admin' group if you want to let them add other team members. Add users to the 'Writers' group if you want to let them add comments, enter new data, change Datum State from 'to be checked to 'checked' etc. For example, if you would like to allow your language consultant to enter or check data, you can put them in the 'writers' group. Add users to the 'Readers' group if you want them to be able to see your data, but not modify it. For example, you might want to share your data with other researchers outside of your team, but you might not want them to leave comments or modify , or mass-export the data. If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, click the Public checkbox. Don't worry, if your corpus contains confidential or personal information you can, and should, encrypt the Datum containing sensitive information using the <i class=' icon-unlock'></i> buttons. Data which are encrypted are shown as 'xxx xx xx xx' to all users, including on the web. If you want to see the contents of the confidential datum you have to click on the <i class='icon-eye-open'></i>, it will prompt you for your password to make sure you are really you. This will make confidential data visible for 10 minutes.</p>"
+  },
+  "locale_datum_fields_explanation" : {
+    "message" : "<p>TODO translate Datum Fields are fields which where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. As defaults the app comes with 4 fields which it uses to create inter-linear-glossed text views (i.e. pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class='icon-list-alt '> </i> to see the rare fields. The fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a lambda calculus field, or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. Each Datum Fields can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class='icon-question-sign'></i> next to the Datum Field label in the Datum Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
+  },
+  "locale_datum_states_explanation" : {
+    "message" : "<p>TODO translate Datum States are used to keep track of whether the data is valid or invalid, for example, 'Checked' with a consultant, 'To be checked', 'Deleted' etc. Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team's data validation workflow (e.g. 'To be checked with Sophie,' 'Checked with Gradys').  You can assign colours to your Datum States, these colours will appear in your data list. You can flag a Datum as Deleted and it won't show up in search results. A Datum in a corpus is never really deleted, it remains in the database complete with its change history so that you can review it at a later date.  (In future we might add a button to allow users to 'empty the trash' and mass-delete old Datum from the system.) </p> "
+  },
+   "locale_advanced_search_explanation" : {
+    "message" : "<p>TODO translate There are two ways to access Search, you can type in your query in the search box which is always present on the top left of the screen, or you can click on the button next to it to get to the Advanced Search. Search is very important to field linguists, this is why we made the Search very powerful, and we are planning on making it more powerful in the future. You can type any string of characters in the Datum or Session Fields below. The search will look through the datum of your corpus, and find datum which contain that substring, this means you can type 'nay' and you will get morphemes 'onay' 'naya' etc. While this is not ideal for finding allomorphs, it works pretty well. Right now the search is happening on your computer, offline. In the future we will be adding a 'lexicon webservice' which will work on indexing your morphemes glosses etc to make search faster, but also smarter by build a more linguistically informed indexes of your data so that you can use linguistic constructs to search for your data as you do naturally when you search with your eyes, rather than with a database. We also have planned a 'Dream' module for phonological search that essentially uses a feature geometry ontology to let you search for minimal pairs. A search automatically creates a temporary Datalist, which appears below the Session quick view on the left side of the screen. You can choose to rename and save this Datalist if created a collection of data that you wanted. You can also leave this search data list open, if you enter new datum which matched your search query that appears in the top left corner, they will automatically appear in the search data list too. This can be handy for you to see datum around a certain phenomena while you are entering new data. If your search query is hard to formulate to get all the examples you need, you can search for nothing (leave all fields blank) and it will return all your data as a new Datalist. In general we have decided to implement search such that it errs on the side of high recall, i.e. that it finds all relevant examples, but also returns some garbage, rather than high precision, i.e. that it finds only exact examples, but misses some relevant ones. Currently the search results are not sorted by relevancy to the query. Once we have a proper 'lexicon webservice' we will have more measures of relevancy and will be able to return results and their relevancy scores. </p>"
+   },
+  "locale_New_User" : {
+    "message" : "Usuario Nuevo"
+  },
+   "locale_Activity_Feed_Your" : {
+    "message" : "TODO translate Your Canal de Actividad"
+  },
+  "locale_Activity_Feed_Team" : {
+    "message" : "TODO translate Corpus Team Canal de Actividad"
+  },
+  "locale_Refresh_Activities" : {
+    "message" : "TODO translate"
+  },
+  "locale_View_Profile_Tooltip" : {
+    "message" : "TODO translate Click to view user's page"
+  },
+  "locale_View_Public_Profile_Tooltip" : {
+    "message" : "TODO translate View/edit your public user's page"
+  },
+  "locale_Edit_User_Profile_Tooltip" : {
+    "message" : "TODO translate Click to edit your user profile"
+  },
+  "locale_Public_Profile_Instructions" : {
+    "message" : " TODO translateThis is your public profile, you can edit it to change/remove information. This is what people can see when they click on your gravatar."
+  },
+  "locale_Private_Profile_Instructions" : {
+    "message" : "TODO translate This is your private profile, only you members on your team can see it."
+  },
+  "locale_Edit_Public_User_Profile" : {
+    "message" : "TODO translate Edit My Public Profile"
+  },
+  "locale_Need_save" : {
+    "message" : "Se ocupa guadar:"
+  },
+  "locale_60_unsaved" : {
+    "message" : "<strong>60% sin guardar.</strong>"
+  },
+  "locale_Recent_Changes" : {
+    "message" : "Cambios Recientes:"
+  },
+  "locale_Need_sync" : {
+    "message" : "Se ocupa sincronisar:"
+  },
+  "locale_Differences_with_the_central_server" : {
+    "message" : "Diferencias con el servidor central:"
+  },
+  "locale_to_beta_testers" : {
+    "message" : "Estos mensajes son para comunicar con los provadores que hace la aplicación. Los mensajes se desapareserán cuando la aplicación esta mas estable. <p>Puedes cerrar los mensajes con el x.</p>"
+  },
+  "locale_We_need_to_make_sure_its_you" : {
+    "message" : "Ocupamos asegurar que es ustéd..."
+  },
+  "locale_Yep_its_me" : {
+    "message" : "¡Si, soy yo!"
+  },
+  "locale_Log_Out" : {
+    "message" : "Salir"
+  },
+  "locale_Log_In" : {
+    "message" : "Entrar"
+  },
+  "locale_User_Profile" : {
+    "message" : "Perfil de Usuario"
+  },
+  "locale_Private_Profile" : {
+    "message" : "TODO translate Perfil Privada"
+  },
+  "locale_Public_Profile" : {
+    "message" : "TODO translate Perfil Publico"
+  },
+  "locale_User_Settings" : {
+    "message" : "Configuración de Usuario"
+  },
+  "locale_Keyboard_Shortcuts" : {
+    "message" : "Funciones rápidas de teclado"
+  },
+  "locale_Corpus_Settings" : {
+    "message" : "Configuración de Corpus"
+  },
+  "locale_Terminal_Power_Users" : {
+    "message" : "Terminal"
+  },
+  "locale_New_Datum" : {
+    "message" : "Dato Nuevo"
+  },
+  "locale_New_menu" : {
+    "message" : "Nuevo"
+  },
+  "locale_New_Data_List" : {
+    "message" : "Lista de Datos Nuevo"
+  },
+  "locale_New_Session" : {
+    "message" : "Sesión Nuevo"
+  },
+  "locale_New_Corpus" : {
+    "message" : "Corpus Nuevo"
+  },
+  "locale_Data_menu" : {
+    "message" : "Datos"
+  },
+  "locale_Import_Data" : {
+    "message" : "Importe de Datos"
+  },
+  "locale_Export_Data" : {
+    "message" : "Exporte de Datos"
+  },
+  "locale_Save" : {
+    "message" : "Guadar"
+  },
+  "locale_Title" : {
+    "message" : "Título:"
+  },
+  "locale_Description" : {
+    "message" : "Descripción:"
+  },
+  "locale_Sessions_associated" : {
+    "message" : "Sesiónes de Elicitación asociados con el corpus"
+  },
+  "locale_Datalists_associated" : {
+    "message" : "Listas de datos asociados con el corpus"
+  },
+  "locale_Permissions_associated" : {
+    "message" : "Permisos asociados con el corpus"
+  },
+  "locale_Datum_field_settings" : {
+    "message" : "Configuración de los detailles de datos"
+  },
+  "locale_Encrypt_if_confidential" : {
+    "message" : "Encripta si es confidencial:"
+  },
+  "locale_Help_Text" : {
+    "message" : "Texto de Ayuda:"
+  },
+  "locale_Add" : {
+    "message" : "Añadir"
+  },
+  "locale_Datum_state_settings" : {
+    "message" : "Configuración de Estado de Datos"
+  },
+  "locale_Green" : {
+    "message" : "Verde"
+  },
+  "locale_Orange" : {
+    "message" : "Naranjado"
+  },
+  "locale_Red" : {
+    "message" : "Rojo"
+  },
+  "locale_Blue" : {
+    "message" : "Azul"
+  },
+  "locale_Teal" : {
+    "message" : "Verde Azulado"
+  },
+  "locale_Black" : {
+    "message" : "Negro"
+  },
+  "locale_Default" : {
+    "message" : "Gris"
+  },
+  "locale_Elicitation_Session" : {
+    "message" : "Sesión de Elicitación"
+  },
+  "locale_Export" : {
+    "message" : "Exportar"
+  },
+  "locale_Actions" : {
+    "message" : "Acciónes"
+  },
+  "locale_Navigation" : {
+    "message" : "Navegación"
+  },
+  "locale_Datum_Status_Checked" : {
+    "message" : "TODO translate Mark Datum status as checked/verified with language consultant"
+  },
+  "locale_Next_Datum" : {
+    "message" : "Próximo Dato"
+  },
+  "locale_Previous_Datum" : {
+    "message" : "Último Dato"
+  },
+  "locale_Data_Entry_Area" : {
+    "message" : "TODO translate Data Entry Area <small>(1-5 datum)</small>"
+  },
+  "locale_Search" : {
+    "message" : "Búzqueda"
+  },
+  "locale_Close" : {
+    "message" : "Cerrar"
+  },
+  "locale_New_Corpus_Instructions" : {
+    "message" : "Edite la forma abajo para crear un nuevo corpus, o presione ESC para entrar más datos en el corpus presente."
+  },
+  "locale_New_Corpus_Warning" : {
+    "message" : "La funcionalidad del corpus nuevo aún necesita más pruebas, este mensaje desaparecerá cuando Corpus Nuevo no es experimental."
+  },
+  "locale_Cancel" : {
+    "message" : "Cancel"
+  },
+  "locale_Next" : {
+    "message" : "Próximo"
+  },
+  "locale_Show" : {
+    "message" : "Mostrar"
+  },
+  "locale_per_page" : {
+    "message" : "por pagina"
+  },
+  "locale_New_Session_Instructions" : {
+    "message" : "<p> Edite los forma abajo para crear una sesión, o presionar ESC para entrar más datos en la sesión presente. </ p> "
+  },
+  "locale_Consultants" : {
+    "message" : "Consultor(es):"
+  },
+  "locale_Goal" : {
+    "message" : "Objectivo:"
+  },
+  "locale_When" : {
+    "message" : "Fecha:"
+  },
+  "locale_Save_And_Import" : {
+    "message" : "Guardar y Terminar de Importar"
+  },
+  "locale_Import" : {
+    "message" : "Importar"
+  },
+  "locale_percent_completed" : {
+    "message" : "% completo."
+  },
+  "locale_Import_Instructions" : {
+    "message" : " <ol> <li> Jalar y Soltar un archivo (csv, txt, tabed, xml, text) a la zona abajo..</li> <li>(Modificar su información como necesario.)</li> <li> Jalar o escribe los detailles de datos arriba de los columnos que coinciden. Las columnas se convertirán en filas de su pagina de datos. .</li> <li>Precionar el botón Intenta Importar.</li> <li>Revisa la lista de datos y averigua que su importe se ve bien. </li> <li>Modifica la tabla como necesario, oprime Intentar Importar cuando la lista esta listo, puede hacer este paso las veces que quiere. </li> <li>Cuando esta sastifecho con la lista de datos, oprime Guadar y su lista de datos serían importados a su corpus y un nuevo lista de datos será creado. </li> </ol>"
+  },
+  "locale_Drag_Fields_Instructions" : {
+    "message" : "TODO translate Drag (or type) the colored datum fields to the column headings which match, type in any additional column headings which you would like to keep as datum fields. The columns will become searchable fields in your database."
+  },
+  "locale_Add_Extra_Columns" : {
+    "message" : " Agrega Columnas Extras"
+  },
+  "locale_Attempt_Import" : {
+    "message" : "Intenta Importar"
+  },
+  "locale_LaTeX_Code" : {
+    "message" : "Codigo de LaTeX:"
+  },
+  "locale_Unicode_Instructions" : {
+    "message" : "Esto es un función rápida de teclado para entrar esta letra en un fila de datos. Para cambiar el función:"
+  },
+  "locale_Remove_Unicode" : {
+    "message" : "Quite Unicode"
+  },
+  "locale_Unicode" : {
+    "message" : "Unicode"
+  },
+  "locale_Drag_and_Drop" : {
+    "message" : "<small>Jalar y Soltar</small>"
+  },
+  "locale_AND" : {
+    "message" : "Y"
+  },
+  "locale_OR" : {
+    "message" : "O"
+  },
+  "locale_Advanced_Search" : {
+    "message" : "Búsqueda Advanzada"
+  },
+  "locale_Advanced_Search_Tooltip" : {
+    "message" : "Búsqueda Advanzada allows you to use your corpus-wide datum fields or session details to search for datum, using either AND or OR with substring match."
+  },
+  "locale_Email" : {
+    "message" : "Correo Electronico:"
+  },
+  "locale_Research_Interests" : {
+    "message" : "Intereses de Investigación"
+  },
+  "locale_Affiliation" : {
+    "message" : "Afiliación"
+  },
+  "locale_Corpora" : {
+    "message" : "Corpora"
+  },
+  "locale_Gravatar" : {
+    "message" : "Gravatar"
+  },
+  "locale_Gravatar_URL" : {
+    "message" : "Gravatar URL"
+  },
+  "locale_Firstname" : {
+    "message" : "Primer nombre:"
+  },
+  "locale_Lastname" : {
+    "message" : "Apellido:"
+  },
+  "locale_Skin" : {
+    "message" : "Foro:"
+  },
+  "locale_Background_on_Random" : {
+    "message" : "Aleatorio de Foro"
+  },
+  "locale_Transparent_Dashboard" : {
+    "message" : "Tablero Transparente"
+  },
+  "locale_Change_Background" : {
+    "message" : "Cambiar Foro"
+  },
+  "locale_Number_Datum" : {
+    "message" : "Numbero de Datos a la vez:"
+  },
+  "locale_Add_Placeholder" : {
+    "message" : "Añadir...."
+  },
+  "locale_Datalist_Description" : {
+    "message" : "Se puede usar las lista de datos para preparar para sesiones con consultantes o compartir con colaboradores."
+  },
+  "locale_Add_Tag" : {
+    "message" : "Etiqueta Nueva..."
+  },
+  "locale_locale_Help_Text" : {
+    "message" : "TODO this should be merged with locale_Help_Text?  Se puede incluir text de ayuda aqui (opcional)"
+  },
+  "locale_Drag_and_Drop_Placeholder" : {
+    "message" : "Jale y Suelta achivos o textos aqui!"
+  },
+  "locale_Paste_Type_Unicode_Symbol_Placeholder" : {
+    "message" : "Tecla o pega símbulo de unicode"
+  },
+  "locale_TIPA_shortcut" : {
+    "message" : "Función rapida de teclado"
+  },
+  "locale_Show_Activities" : {
+    "message" : "Mostrar actividades"
+  },
+  "locale_Hide_Activities" : {
+    "message" : "Esconder actividades"
+  },
+  "locale_Show_Dashboard" : {
+    "message" : "Mostrar Tablero"
+  },
+  "locale_Save_on_this_Computer" : {
+    "message" : "Guardar en la computadora"
+  },
+  "locale_Sync_and_Share" : {
+    "message" : "Sincronizar y compartir con el equipo"
+  },
+  "locale_Show_Readonly" : {
+    "message" : "Mostrar en forma para leer "
+  },
+  "locale_Show_Fullscreen" : {
+    "message" : "Mostrar en pantalla completa "
+  },
+  "locale_Add_New_Datum_Field_Tooltip" : {
+    "message" : "Añadir un nuevo detaille de dato"
+  },
+  "locale_Add_New_Datum_State_Tooltip" : {
+    "message" : "Añadir un estado de dato"
+  },
+  "locale_Show_in_Dashboard" : {
+    "message" : "Mostrar en Tablero"
+  },
+  "locale_Edit_corpus" : {
+    "message" : "Edita Corpus"
+  },
+  "locale_Show_corpus_settings" : {
+    "message" : "Mostrar Configuración de Corpus"
+  },
+  "locale_Drag_and_Drop_Audio_Tooltip" : {
+    "message" : "TODO translate Drag and drop audio over the audio player to attach an audio file. You can also drag and drop a YouTube video URL to attach a YouTube video instead."
+  },
+  "locale_Play_Audio" : {
+    "message" : "Tocar audio"
+  },
+  "locale_Plain_Text_Export_Tooltip" : {
+    "message" : "TODO translate Export as plain text/Copy to clipboard"
+  },
+  "locale_Plain_Text_Export_Tooltip_checked" : {
+    "message" : "TODO translate Export as plain text/Copy checked items to clipboard"
+  },
+  "locale_Duplicate" : {
+    "message" : "Duplicar Dato por hacer un contraste minimál"
+  },
+  "locale_Encrypt" : {
+    "message" : "Encriptar/Decriptar"
+  },
+  "locale_Encrypt_checked" : {
+    "message" : "TODO translate Make checked items confidential"
+  },
+  "locale_Decrypt_checked" : {
+    "message" : "TODO translate Remove confidentiality from checked items (Warning: this will save them as decrypted in the database). If you want them to stay confidential and just want to edit them, click on the eye instead."
+  },
+  "locale_Decrypt" : {
+    "message" : "TODO translate Remove confidentiality from this datum (Warning: this will save it as decrypted in the database). If you want it to stay confidential and just want to edit it, click on the eye instead."
+  },
+  "locale_Show_confidential_items_Tooltip" : {
+    "message" : "TODO translate Unmask confidential/encrypted items so that they can be edited and read for the next 10 minutes."
+  },
+  "locale_Hide_confidential_items_Tooltip" : {
+    "message" : "TODO translate Return to masked view of confidential/encrypted datum"
+  },
+  "locale_Edit_Datalist" : {
+    "message" : "Editar lista de datos"
+  },
+  "locale_Export_checked_as_LaTeX" : {
+    "message" : "Exportar lista de datos seleccionados en formato LaTeX"
+  },
+  "locale_Export_checked_as_CSV" : {
+    "message" : "Exportar lista de datos seleccionados en formato CSV"
+  },
+  "locale_Hide_Datalist" : {
+    "message" : "Esconder lista de datos"
+  },
+  "locale_Show_Datalist" : {
+    "message" : "Mostrar lista de datos"
+  },
+  "locale_Edit_Datum" : {
+    "message" : "Editar Datos"
+  },
+  "locale_See_Fields" : {
+    "message" : "TODO translate Hide/Show infrequent fields"
+  },
+  "locale_Add_Tags_Tooltip" : {
+    "message" : "Añadir etiquetas"
+  },
+  "locale_Edit_Session" : {
+    "message" : "Editar Sesión"
+  },
+  "locale_Show_Unicode_Palette" : {
+    "message" : "Mostrar los Unicodes"
+  },
+  "locale_Hide_Unicode_Palette" : {
+    "message" : "Esconder los Unicodes"
+  },
+  "locale_Add_new_symbol" : {
+    "message" : "Añadir un símbulo nuevo"
+  },
+  "locale_Public_or_Private" : {
+    "message" : "Publico o Privado:"
+  },
+  "locale_Play_Audio_checked" : {
+    "message" : "Tocar audio de los seleccionados"
+  },
+  "locale_Remove_checked_from_datalist_tooltip" : {
+    "message" : "TODO translate los seleccionados"
+  },
+  "locale_Insert_New_Datum" : {
+    "message" : "Insertar un nuevo dato arriba"
+  },
+  "locale_LaTeX" : {
+    "message" : "Exportar dato en formato LaTeX"
+  },
+  "locale_CSV_Tooltip" : {
+    "message" : "Exportar dato en formato CSV "
+  },
+  "locale_of" : {
+    "message" : "de"
+  },
+  "locale_pages_shown" : {
+    "message" : "pagínas mostradas"
+  },
+  "locale_More" : {
+    "message" : "Más"
+  }
+}
