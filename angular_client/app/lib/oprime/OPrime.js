@@ -1,4 +1,40 @@
-var OPrime = {};
+var OPrime = OPrime || {};
+
+OPrime.debugMode = true;
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
+
+/**
+ * The address of the TouchDB-Android database on the Android.
+ */
+OPrime.touchUrl = "http://localhost:8128/";
+
+/**
+ * The address of the PouchDB database on the browser.
+ */
+OPrime.pouchUrl = "idb://";
+
+OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+
+OPrime.debug = function(message, message2) {
+  if (navigator.appName == 'Microsoft Internet Explorer') {
+    return;
+  }
+  if (!message2) {
+    message2 = "";
+  }
+  if (this.debugMode) {
+    console.log(message, message2);
+  }
+};
+
+OPrime.bug = function(message) {
+  alert(message);
+};
+
+OPrime.warn = function(message) {
+  alert(message);
+};
+
 /*
  * Declare functions for PubSub
  */
@@ -87,25 +123,6 @@ OPrime.makePublisher = function(o) {
   };
 };
 
-OPrime.debugMode = true;
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
-
-OPrime.debug = function(message, message2) {
-  if (!message2) {
-    message2 = "";
-  }
-  if (this.debugMode) {
-    console.log(message, message2);
-  }
-};
-
-OPrime.bug = function(message) {
-  alert(message);
-};
-
-OPrime.warn = function(message) {
-  alert(message);
-};
 
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
@@ -142,10 +159,11 @@ OPrime.isAndroidApp = function() {
   return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
 };
 
+
 if (OPrime.isAndroidApp()) {
   var debugOrNot = Android.isD();
   console.log("Setting debug mode to the Android's mode: " + debugOrNot);
-  OPrime.debugMode = debugOrNot;
+//  OPrime.debugMode = debugOrNot;
 };
 
 OPrime.isAndroid4 = function() {
@@ -154,6 +172,88 @@ OPrime.isAndroid4 = function() {
 
 OPrime.isChromeApp = function() {
   return window.location.href.indexOf("chrome-extension") > -1;
+};
+
+OPrime.isCouchApp = function() {
+  return window.location.href.indexOf("_design/pages") > -1;
+};
+/**
+ * If not running offline on an android or in a chrome extension, assume we are
+ * online.
+ * 
+ * @returns {Boolean} true if not on offline Android or on a Chrome Extension
+ */
+OPrime.onlineOnly = function() {
+  return !this.isAndroidApp() && !this.chromeApp();
+};
+
+OPrime.getVersion = function(callback) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open('GET', 'manifest.json');
+  xmlhttp.onload = function(e) {
+    var manifest = JSON.parse(xmlhttp.responseText);
+    callback(manifest.version);
+  };
+  xmlhttp.send(null);
+};
+
+
+/*
+ * JavaScript Pretty Date Copyright (c) 2011 John Resig (ejohn.org) Licensed
+ * under the MIT and GPL licenses.
+ */
+
+// Takes an ISO time and returns a string representing how
+// long ago the date represents.
+// modified by FieldDB team to take in Greenwich time which is what we are using
+// for our time stamps so that users in differnt time zones will get real times,
+// not strangely futureistic times
+// we have been using JSON.stringify(new Date()) to create our timestamps
+// instead of unix epoch seconds (not sure why we werent using unix epoch), so
+// this function is modified from the original in that it expects dates that
+// were created using
+// JSON.stringify(new Date())
+OPrime.prettyDate = function(time) {
+  if (!time) {
+    return undefined;
+  }
+  time = time.replace(/"/g, "");
+  var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " "));
+  var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g, "");
+  var greenwichdate = new Date((greenwichtimenow || "").replace(/-/g, "/")
+      .replace(/[TZ]/g, " "));
+  var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
+  var day_diff = Math.floor(diff / 86400);
+
+  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+    return undefined;
+  }
+
+  return day_diff == 0
+      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
+          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
+          || diff < 7200 && "1 hour ago" || diff < 86400
+          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
+      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
+      && Math.ceil(day_diff / 7) + " weeks ago";
+};
+OPrime.prettyTimestamp = function(timestamp) {
+  var date = new Date(timestamp);
+  var greenwichtimenow = new Date();
+  var diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
+  var day_diff = Math.floor(diff / 86400);
+
+  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+    return;
+  }
+
+  return day_diff == 0
+      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
+          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
+          || diff < 7200 && "1 hour ago" || diff < 86400
+          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
+      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
+      && Math.ceil(day_diff / 7) + " weeks ago";
 };
 
 /*

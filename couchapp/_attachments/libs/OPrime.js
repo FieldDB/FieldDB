@@ -529,33 +529,6 @@ OPrime.userEncryptionToken = function() {
 
 OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
 
-OPrime.couchURL = function() {
-  if (OPrime.isAndroidApp()) {
-    return {
-      complete : "http://localhost:8889/alliedbiscuitinspections/",
-      protocol : "http://",
-      domain : "localhost",
-      port : ":8889",
-      db : "alliedbiscuitinspections/"
-    };
-  }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork && window.location.origin.indexOf("chrome-extension") != 0) {
-    return {
-      complete : "http://192.168.0.162:8889/alliedbiscuitinspections/",
-      protocol : "http://",
-      domain : "192.168.0.162",
-      port : ":8889",
-      db : "alliedbiscuitinspections/"
-    };
-  }
-  return {
-    complete : "https://wentworthinspections.iriscouch.com/alliedbiscuitinspections/",
-    protocol : "https://",
-    domain : "wentworthinspections.iriscouch.com",
-    port : "",
-    db : "alliedbiscuitinspections/"
-  };
-};
 
 OPrime.getConnectivityType = function(callingcontextself, callback) {
   this.hub.unsubscribe("connectivityType", null, callingcontextself);
