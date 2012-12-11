@@ -1,0 +1,19 @@
+<div class="span1">
+
+</div>
+<div class="span1">
+  {{#if speaker}}
+    <span class = "latex-judgement">{{speaker}}</span> 
+  {{/if}}
+</div>
+<div class="span10">
+	{{#each couplet}}
+	  <span class="glossCouplet">
+	    {{utteranceSegment}}
+	    <br />
+	    {{glossSegment}}
+	  </span>
+	{{/each}}
+	<br />
+	<span class="datum-latex-translation">{{translation}}</span>
+</div>

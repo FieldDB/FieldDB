@@ -1,0 +1,103 @@
+body {
+	background: -webkit-linear-gradient(top, #FFFFdd, #FFFF99);
+}
+
+.tile {
+	margin: 0.5em;
+	float: left;
+	width: 6em;
+	height: 6em;
+	text-align: center;
+}
+
+.tile h1 {
+	line-height: 4em;
+	vertical-align: middle;
+	font-size: 1.5em;
+	text-align: center;
+	text-shadow: 1px 1px #000;
+}
+
+.well {
+	color: #fff;
+	background-color: rgba(195, 155, 0, 0.3);
+}
+
+.well a {
+	color: #fff;
+}
+h1{
+	font-size: 1.25em;
+}
+.centered_page {
+	text-align: center;
+}
+
+/* .tile_container {
+	width: 95%;
+	margin: 0px auto;
+} */
+.end_tiles {
+	clear: both;
+}
+
+.total_progress {
+	line-height: 0em;
+	height: 0em;
+	width: 9em;
+	margin-left: -1.5em;
+}
+
+.progressBar {
+	width: 100%;
+	margin: 0em;
+	padding: 0em;
+	height: 0.5em;
+	font-size: 1px !important;
+	color: rgba(0, 0, 0, 0.3);
+}
+/* 
+progress {
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	gets rid of default border in Firefox and Opera.
+	border: solid #333 1px;
+	border-radius: 3px;
+	background-color: red !important;
+}
+
+Chrome
+progress::-webkit-progress-bar {
+	background-color: white;
+}
+
+.total_complete progress::-webkit-progress-value {
+	background-color: rgba(255, 255, 50, 0.5);
+}
+
+.total_complete progress::progress-value {
+	background-color: rgba(255, 255, 50, 0.5);
+}
+
+.correct_complete progress::-webkit-progress-value {
+	background-color: rgba(100, 200, 100, 0.5);
+}
+
+.correct_complete progress::progress-value {
+	background-color: rgba(100, 200, 100, 0.5);
+}
+ */
+
+/*jquery progress bars */
+#uploadprogressbar {
+	display: none;
+}
+
+.conversation_screen {
+	width: 50%;
+	margin: auto;
+}
+.text_grid input{
+	width:5em;
+}
