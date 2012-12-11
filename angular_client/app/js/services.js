@@ -19,7 +19,11 @@ angular.module('myApp.services', [ 'ngResource' ])
                   function(response) {
                     // + JSON.stringify(response));
                      console.log("response", response);
-                    return response.data.rows;
+                    var results = [];
+                    for (var i = 0; i < response.data.rows.length; i++) {
+                    	results.push(response.data.rows[i].value);
+                    }
+                     return results;
                   });
           return promise;
         }
