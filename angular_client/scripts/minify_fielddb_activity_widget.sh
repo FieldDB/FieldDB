@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd activity
+cd modules/activity
 rm lib/fielddb_activity_feed_widget.js
 rm lib/fielddb_activity_feed_widget.min.js
 
@@ -20,5 +20,5 @@ cat temp >> lib/fielddb_activity_feed_widget.js
 rm temp
 
 #Minify using uglify-js
-../../node_modules/uglify-js/bin/uglifyjs lib/fielddb_activity_feed_widget.js > lib/fielddb_activity_feed_widget.min.js
+../../../node_modules/uglify-js/bin/uglifyjs lib/fielddb_activity_feed_widget.js > lib/fielddb_activity_feed_widget.min.js
 date;
