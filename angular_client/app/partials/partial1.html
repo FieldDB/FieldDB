@@ -2,21 +2,30 @@
 
 
 <div class="team_activity_feed_widget">
-	<div class="header">
+	<div class="activity_feed_widget_header">
 		<a href="http://lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}">
-			<img class="gravatar-small" src="{{corpus.team.gravatar}}" border="0">
+			<img class="gravatar-small" src="{{corpus.gravatar}}" border="0" /><span
+			class="team_name" title="{{corpus.description}}">{{corpus.title}}</span>
 		</a>
 	</div>
 	<ul>
-  <li ng-repeat="activity in activities"><a
-    href="http://lingsync.org#user/{{activity.user._id}}"> <img
-      class="gravatar-small" src="{{activity.user.gravatar}}" border="0" /></a> 
-  <span class="timestamp pull-right hover_link"><i class="icon-time"></i>{{activity.timestamp | agoDate}}</span><span class="hover_text">Hover Text</span>
-    <i class="activity_verb_icon {{activity.verbicon}}"></i><span
-    class="activity_verb" ng-bind-html-unsafe="activity.verb"></span> <i
-    class="activity_direct_object_icon {{activity.directobjecticon}}"></i><span
-    class="activity_direct_object" ng-bind-html-unsafe="activity.directobject"> </span> <span
-    class="activity_indirect_object" ng-bind-html-unsafe="activity.indirectobject" > </span></li>
-</ul>
-
+		<li ng-repeat="activity in activities"><a
+			href="http://lingsync.org#user/{{activity.user._id}}"> <img
+				class="gravatar-small" src="{{activity.user.gravatar}}" border="0" /></a>
+			<span class="timestamp pull-right hover_link"><i
+				class="icon-time"></i>{{activity.timestamp | agoDate}}</span><span
+			class="hover_text">Hover Text</span> <i
+			class="activity_verb_icon {{activity.verbicon}}"></i><span
+			class="activity_verb" ng-bind-html-unsafe="activity.verb"></span> <i
+			class="activity_direct_object_icon {{activity.directobjecticon}}"></i><span
+			class="activity_direct_object"
+			ng-bind-html-unsafe="activity.directobject"> </span> <span
+			class="activity_indirect_object"
+			ng-bind-html-unsafe="activity.indirectobject"> </span></li>
+	</ul>
+	<div class="activity_feed_widget_footer">
+		<a href="http://lingsync.org"> <img class="gravatar-small"
+			src="img/icon.png" border="0">
+		</a>
+	</div>
 </div>
