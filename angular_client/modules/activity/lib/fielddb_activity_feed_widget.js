@@ -592,9 +592,9 @@ OPrime.makePublisher(OPrime.hub);
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives','CouchDBServices', 'OPrime.filters']).
+angular.module('ActivityFeed', ['ActivityFeed.filters', 'ActivityFeed.services', 'ActivityFeed.directives','CouchDBServices', 'OPrime.filters']).
   config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
+    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: TeamActivityFeedController});
     $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: UserActivityFeedController});
     $routeProvider.otherwise({redirectTo: '/view1'});
   }]);
@@ -641,7 +641,7 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives','
 
 /* Controllers */
 
-function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
+function TeamActivityFeedController($scope, $resource, MostRecentActivities, GetSessionToken) {
 
   $scope.corpus = {
     description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
@@ -663,7 +663,7 @@ function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
 
 };
 
-MyCtrl1.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
+TeamActivityFeedController.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
 
 function UserActivityFeedController($scope, $resource, MostRecentActivities, GetSessionToken) {
 
@@ -694,7 +694,7 @@ OPrime.couchURL = function() {
 /* Directives */
 
 
-angular.module('myApp.directives', []).
+angular.module('ActivityFeed.directives', []).
   directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);
@@ -704,7 +704,7 @@ angular.module('myApp.directives', []).
 
 /* Filters */
 
-angular.module('myApp.filters', []).
+angular.module('ActivityFeed.filters', []).
   filter('interpolate', ['version', function(version) {
     return function(text) {
       return String(text).replace(/\%VERSION\%/mg, version);
@@ -717,7 +717,7 @@ console.log("Loading Activity.services");
 
 // Demonstrate how to register services
 // In this case it is a simple value service.
-angular.module('myApp.services', [ 'ngResource' ])
+angular.module('ActivityFeed.services', [ 'ngResource' ])
 .value('version', '0.1')
 .factory(
     'MostRecentActivities',
@@ -735,7 +735,7 @@ angular.module('myApp.services', [ 'ngResource' ])
                     for (var i = 0; i < response.data.rows.length; i++) {
                     	results.push(response.data.rows[i].value);
                     }
-                     return results;
+                     return [{directobject: "a datum", indirectobject:"a corpus", user:{gravatar:"", _id: ""}, timestamp: 1355262965144}];
                   });
           return promise;
         }
