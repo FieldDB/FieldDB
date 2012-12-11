@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd app
+cd activity
 rm lib/fielddb_activity_feed_widget.js
 rm lib/fielddb_activity_feed_widget.min.js
 
