@@ -11,4 +11,5 @@ while read NAME ;
 		#rm "${NAME}.js" 
 	done
 
+../../node_modules/uglify-js/bin/uglifyjs lib/fielddb_activity_feed_widget.js > lib/fielddb_activity_feed_widget.min.js
 date;
