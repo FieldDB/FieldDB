@@ -28,19 +28,6 @@
 	padding: 0;
 }
 
-.hover_text {
-	background-color: #FFFF73;
-	border-radius: 10px;
-	display: none;
-	opacity: 0.9;
-	padding: 10px;
-	z-index: 100;
-}
-
-.hover_link:hover+span {
-	position: relative;
-	display: inline;
-}
 .gravatar-small{
 	height:2em;
 }
