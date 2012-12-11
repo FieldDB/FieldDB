@@ -24,7 +24,7 @@ function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
 
 };
 
-// MyCtrl1.$inject = [];
+MyCtrl1.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
 
 function MyCtrl2($scope, $resource, MostRecentActivities, GetSessionToken) {
 
@@ -38,4 +38,4 @@ function MyCtrl2($scope, $resource, MostRecentActivities, GetSessionToken) {
   });
 
 }
-// MyCtrl2.$inject = [];
+MyCtrl2.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
