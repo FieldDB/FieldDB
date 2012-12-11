@@ -2,7 +2,7 @@
 
 cd app
 rm lib/fielddb_activity_feed_widget.js
-
+rm lib/fielddb_activity_feed_widget.min.js
 find . -name '*.js' -type f | 
 while read NAME ; 
 	do 
