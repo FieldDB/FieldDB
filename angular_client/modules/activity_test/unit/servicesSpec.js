@@ -3,7 +3,7 @@
 /* jasmine specs for services go here */
 
 describe('service', function() {
-  beforeEach(module('myApp.services'));
+  beforeEach(module('ActivityFeed.services'));
 
 
   describe('version', function() {
