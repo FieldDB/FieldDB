@@ -22,6 +22,7 @@
              'lib/angular/angular.js',
              'lib/angular/angular-resource.js',
              'lib/oprime/services/CouchDB.js',
+             'lib/oprime/filters/OPrimeFilters.js',
              'js/couch_constants.js',
       'js/app.js',
       'js/services.js',
