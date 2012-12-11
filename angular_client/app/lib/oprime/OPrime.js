@@ -243,10 +243,18 @@ OPrime.prettyTimestamp = function(timestamp) {
   var diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
   var day_diff = Math.floor(diff / 86400);
 
-  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+  if (isNaN(day_diff) || day_diff < 0) {
     return;
-  }
+  };
 
+  if (day_diff >= 31) {
+	  return Math.ceil(day_diff / 30) + " months ago";
+  };
+  
+  if (day_diff >= 548) {
+	  return Math.ceil(day_diff / 365) + " years ago";
+  };
+  
   return day_diff == 0
       && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
           || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
