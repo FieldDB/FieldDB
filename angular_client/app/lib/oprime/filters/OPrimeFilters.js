@@ -9,4 +9,8 @@ angular.module('OPrime.filters', []).filter('checkmark', function() {
   return function(input) {
     return OPrime.prettyTimestamp(input);
   };
-});
+}).filter('localizedDate', function() {
+	  return function(input) {
+		    return (new Date(input)).toString();
+		  };
+		});
