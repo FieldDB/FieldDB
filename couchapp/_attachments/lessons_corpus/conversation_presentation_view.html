@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+
+
+<html>
+<head>
+<title>Learn Mi'gmaq</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css"
+	href="./../bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+	href="./../bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="./../app/app.css">
+<link rel="stylesheet" type="text/css"
+	href="lessons_prototype_style.css">
+<link rel="stylesheet" type="text/css"
+	href="./../font_awesome/css/font-awesome.css">
+
+
+<!-- END Stylesheets -->
+
+</head>
+<body class="body_background centered_page">
+	<div class="well">
+		<div class="btn-group pull-right">
+			<a href="comprehension_exercise_details_view.html"
+				class="btn btn-mini btn-success pull-right">Go to Exercises</a>
+		</div>
+		<div class="btn-group pull-left">
+			<a href="conversation_vocab_exercises_view.html"
+				class="btn btn-mini  btn-primary pull-left ">Go to Lesson Menu</a>
+		</div>
+		<h1>Conversation</h1>
+	</div>
+
+	<img src="sample_clam_sp.png" />
+
+	<h3>Play Audio:</h3>
+
+	<div class="android_audio_controls ">
+		<button id="play_stimulus_button"
+			class="btn btn-inverse icon-play"></button>
+		<button id="stop_stimulus_button"
+			class="btn btn-inverse icon-stop"></button>
+	</div>
+	<audio id="audio_stimuli_file"
+		src="/lessons_corpus/sample_conversation_clam.mp3"
+		class="datum-audio-player">
+	</audio>
+
+  <script src="./../libs/jquery.js"></script>
+	<script src="OPrime.js"></script>
+	<script src="conversation_presentation_view.js"></script>
+<script type="text/javascript" src="./libs/ga.js"></script>
+  <script type="text/javascript" src="./libs/analytics.js"></script>
+	<!-- Needs...
+  video (or static image)
+  audio 
+  	play/pause button ("play" can function as "repeat")
+  	slow button
+  	(visualization? (waveform) ) 
+  optional transcription text
+  	time-synched to audio (lights up or appears or something)
+  	button to show it or hide it
+  optional translation text
+  	not time-synched
+  	button to show it or hide it
+  "go to questions" button
+  -->
+
+</body>
+</html>

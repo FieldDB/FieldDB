@@ -1,0 +1,1 @@
+script: phantomjs tests/jasmine-1.2.0/phantomjs_jasminexml_runner.js tests/jasmine.html test-reports
