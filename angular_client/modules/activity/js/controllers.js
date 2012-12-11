@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
+function TeamActivityFeedController($scope, $resource, MostRecentActivities, GetSessionToken) {
 
   $scope.corpus = {
     description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
@@ -24,9 +24,9 @@ function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
 
 };
 
-MyCtrl1.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
+TeamActivityFeedController.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
 
-function MyCtrl2($scope, $resource, MostRecentActivities, GetSessionToken) {
+function UserActivityFeedController($scope, $resource, MostRecentActivities, GetSessionToken) {
 
   GetSessionToken.run({
     "name" : "publicuser",
@@ -38,4 +38,4 @@ function MyCtrl2($scope, $resource, MostRecentActivities, GetSessionToken) {
   });
 
 }
-MyCtrl2.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
+UserActivityFeedController.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];

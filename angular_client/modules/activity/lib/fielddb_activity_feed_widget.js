@@ -1,4735 +1,4 @@
-/*
- * This widget script is based off of the Twitter Widget script released under the Apache 2.0 license.
- * 
- * twitter-text-js 1.4.10
- *
- * Copyright 2011 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this work except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- */
-if (!window.twttr) {
-  window.twttr = {}
-}
-(function() {
-  twttr.txt = {};
-  twttr.txt.regexen = {};
-  var C = {
-    "&" : "&amp;",
-    ">" : "&gt;",
-    "<" : "&lt;",
-    '"' : "&quot;",
-    "'" : "&#39;"
-  };
-  twttr.txt.htmlEscape = function(R) {
-    return R && R.replace(/[&"'><]/g, function(S) {
-      return C[S]
-    })
-  };
-  function D(S, R) {
-    R = R || "";
-    if (typeof S !== "string") {
-      if (S.global && R.indexOf("g") < 0) {
-        R += "g"
-      }
-      if (S.ignoreCase && R.indexOf("i") < 0) {
-        R += "i"
-      }
-      if (S.multiline && R.indexOf("m") < 0) {
-        R += "m"
-      }
-      S = S.source
-    }
-    return new RegExp(S.replace(/#\{(\w+)\}/g, function(U, T) {
-      var V = twttr.txt.regexen[T] || "";
-      if (typeof V !== "string") {
-        V = V.source
-      }
-      return V
-    }), R)
-  }
-  function E(S, R) {
-    return S.replace(/#\{(\w+)\}/g, function(U, T) {
-      return R[T] || ""
-    })
-  }
-  function B(S, U, R) {
-    var T = String.fromCharCode(U);
-    if (R !== U) {
-      T += "-" + String.fromCharCode(R)
-    }
-    S.push(T);
-    return S
-  }
-  var J = String.fromCharCode;
-  var H = [ J(32), J(133), J(160), J(5760), J(6158), J(8232), J(8233),
-      J(8239), J(8287), J(12288) ];
-  B(H, 9, 13);
-  B(H, 8192, 8202);
-  twttr.txt.regexen.spaces_group = D(H.join(""));
-  twttr.txt.regexen.spaces = D("[" + H.join("") + "]");
-  twttr.txt.regexen.punct = /\!'#%&'\(\)*\+,\\\-\.\/:;<=>\?@\[\]\^_{|}~/;
-  twttr.txt.regexen.atSigns = /[@ï¼ ]/;
-  twttr.txt.regexen.extractMentions = D(/(^|[^a-zA-Z0-9_])(#{atSigns})([a-zA-Z0-9_]{1,20})(?=(.|$))/g);
-  twttr.txt.regexen.extractReply = D(/^(?:#{spaces})*#{atSigns}([a-zA-Z0-9_]{1,20})/);
-  twttr.txt.regexen.listName = /[a-zA-Z][a-zA-Z0-9_\-\u0080-\u00ff]{0,24}/;
-  twttr.txt.regexen.extractMentionsOrLists = D(/(^|[^a-zA-Z0-9_])(#{atSigns})([a-zA-Z0-9_]{1,20})(\/[a-zA-Z][a-zA-Z0-9_\-]{0,24})?(?=(.|$))/g);
-  var N = [];
-  B(N, 1024, 1279);
-  B(N, 1280, 1319);
-  B(N, 11744, 11775);
-  B(N, 42560, 42655);
-  B(N, 4352, 4607);
-  B(N, 12592, 12677);
-  B(N, 43360, 43391);
-  B(N, 44032, 55215);
-  B(N, 55216, 55295);
-  B(N, 65441, 65500);
-  B(N, 12449, 12538);
-  B(N, 12540, 12542);
-  B(N, 65382, 65439);
-  B(N, 65392, 65392);
-  B(N, 65296, 65305);
-  B(N, 65313, 65338);
-  B(N, 65345, 65370);
-  B(N, 12353, 12438);
-  B(N, 12441, 12446);
-  B(N, 13312, 19903);
-  B(N, 19968, 40959);
-  B(N, 173824, 177983);
-  B(N, 177984, 178207);
-  B(N, 194560, 195103);
-  B(N, 12293, 12293);
-  B(N, 12347, 12347);
-  twttr.txt.regexen.nonLatinHashtagChars = D(N.join(""));
-  twttr.txt.regexen.latinAccentChars = D("Ã€ÃÃ‚ÃƒÃ„Ã…Ã†Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã˜Ã™ÃšÃ›ÃœÃÃžÃŸÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã¦Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã±Ã²Ã³Ã´ÃµÃ¶Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¾ÅŸ\\303\\277");
-  twttr.txt.regexen.endScreenNameMatch = D(/^(?:#{atSigns}|[#{latinAccentChars}]|:\/\/)/);
-  twttr.txt.regexen.hashtagBoundary = D(/(?:^|$|#{spaces}|[ã€Œã€ã€‚ã€.,!ï¼?ï¼Ÿ:;"'])/);
-  twttr.txt.regexen.hashtagAlpha = D(/[a-z_#{latinAccentChars}#{nonLatinHashtagChars}]/i);
-  twttr.txt.regexen.hashtagAlphaNumeric = D(/[a-z0-9_#{latinAccentChars}#{nonLatinHashtagChars}]/i);
-  twttr.txt.regexen.autoLinkHashtags = D(/(#{hashtagBoundary})(#|ï¼ƒ)(#{hashtagAlphaNumeric}*#{hashtagAlpha}#{hashtagAlphaNumeric}*)/gi);
-  twttr.txt.regexen.autoLinkUsernamesOrLists = /(^|[^a-zA-Z0-9_]|RT:?)([@ï¼ ]+)([a-zA-Z0-9_]{1,20})(\/[a-zA-Z][a-zA-Z0-9_\-]{0,24})?/g;
-  twttr.txt.regexen.autoLinkEmoticon = /(8\-\#|8\-E|\+\-\(|\`\@|\`O|\&lt;\|:~\(|\}:o\{|:\-\[|\&gt;o\&lt;|X\-\/|\[:-\]\-I\-|\/\/\/\/Ã–\\\\\\\\|\(\|:\|\/\)|âˆ‘:\*\)|\( \| \))/g;
-  twttr.txt.regexen.validPrecedingChars = D(/(?:[^-\/"'!=A-Za-z0-9_@ï¼ \.]|^)/);
-  twttr.txt.regexen.invalidDomainChars = E("\u00A0#{punct}#{spaces_group}",
-      twttr.txt.regexen);
-  twttr.txt.regexen.validDomainChars = D(/[^#{invalidDomainChars}]/);
-  twttr.txt.regexen.validSubdomain = D(/(?:(?:#{validDomainChars}(?:[_-]|#{validDomainChars})*)?#{validDomainChars}\.)/);
-  twttr.txt.regexen.validDomainName = D(/(?:(?:#{validDomainChars}(?:-|#{validDomainChars})*)?#{validDomainChars}\.)/);
-  twttr.txt.regexen.validGTLD = D(/(?:(?:aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel)(?=[^a-zA-Z]|$))/);
-  twttr.txt.regexen.validCCTLD = D(/(?:(?:ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|za|zm|zw)(?=[^a-zA-Z]|$))/);
-  twttr.txt.regexen.validPunycode = D(/(?:xn--[0-9a-z]+)/);
-  twttr.txt.regexen.validDomain = D(/(?:#{validSubdomain}*#{validDomainName}(?:#{validGTLD}|#{validCCTLD}|#{validPunycode}))/);
-  twttr.txt.regexen.validShortDomain = D(/^#{validDomainName}#{validCCTLD}$/);
-  twttr.txt.regexen.validPortNumber = D(/[0-9]+/);
-  twttr.txt.regexen.validGeneralUrlPathChars = D(/[a-z0-9!\*';:=\+\$\/%#\[\]\-_,~|&#{latinAccentChars}]/i);
-  twttr.txt.regexen.wikipediaDisambiguation = D(/(?:\(#{validGeneralUrlPathChars}+\))/i);
-  twttr.txt.regexen.validUrlPathChars = D(/(?:#{wikipediaDisambiguation}|@#{validGeneralUrlPathChars}+\/|[\.,]?#{validGeneralUrlPathChars}?)/i);
-  twttr.txt.regexen.validUrlPathEndingChars = D(/(?:[\+\-a-z0-9=_#\/#{latinAccentChars}]|#{wikipediaDisambiguation})/i);
-  twttr.txt.regexen.validUrlQueryChars = /[a-z0-9!\*'\(\);:&=\+\$\/%#\[\]\-_\.,~|]/i;
-  twttr.txt.regexen.validUrlQueryEndingChars = /[a-z0-9_&=#\/]/i;
-  twttr.txt.regexen.extractUrl = D(
-      "((#{validPrecedingChars})((https?:\\/\\/)?(#{validDomain})(?::(#{validPortNumber}))?(\\/(?:#{validUrlPathChars}+#{validUrlPathEndingChars}|#{validUrlPathChars}+#{validUrlPathEndingChars}?|#{validUrlPathEndingChars})?)?(\\?#{validUrlQueryChars}*#{validUrlQueryEndingChars})?))",
-      "gi");
-  twttr.txt.regexen.validateUrlUnreserved = /[a-z0-9\-._~]/i;
-  twttr.txt.regexen.validateUrlPctEncoded = /(?:%[0-9a-f]{2})/i;
-  twttr.txt.regexen.validateUrlSubDelims = /[!$&'()*+,;=]/i;
-  twttr.txt.regexen.validateUrlPchar = D(
-      "(?:#{validateUrlUnreserved}|#{validateUrlPctEncoded}|#{validateUrlSubDelims}|[:|@])",
-      "i");
-  twttr.txt.regexen.validateUrlScheme = /(?:[a-z][a-z0-9+\-.]*)/i;
-  twttr.txt.regexen.validateUrlUserinfo = D(
-      "(?:#{validateUrlUnreserved}|#{validateUrlPctEncoded}|#{validateUrlSubDelims}|:)*",
-      "i");
-  twttr.txt.regexen.validateUrlDecOctet = /(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9]{2})|(?:2[0-4][0-9])|(?:25[0-5]))/i;
-  twttr.txt.regexen.validateUrlIpv4 = D(/(?:#{validateUrlDecOctet}(?:\.#{validateUrlDecOctet}){3})/i);
-  twttr.txt.regexen.validateUrlIpv6 = /(?:\[[a-f0-9:\.]+\])/i;
-  twttr.txt.regexen.validateUrlIp = D(
-      "(?:#{validateUrlIpv4}|#{validateUrlIpv6})", "i");
-  twttr.txt.regexen.validateUrlSubDomainSegment = /(?:[a-z0-9](?:[a-z0-9_\-]*[a-z0-9])?)/i;
-  twttr.txt.regexen.validateUrlDomainSegment = /(?:[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?)/i;
-  twttr.txt.regexen.validateUrlDomainTld = /(?:[a-z](?:[a-z0-9\-]*[a-z0-9])?)/i;
-  twttr.txt.regexen.validateUrlDomain = D(/(?:(?:#{validateUrlSubDomainSegment]}\.)*(?:#{validateUrlDomainSegment]}\.)#{validateUrlDomainTld})/i);
-  twttr.txt.regexen.validateUrlHost = D(
-      "(?:#{validateUrlIp}|#{validateUrlDomain})", "i");
-  twttr.txt.regexen.validateUrlUnicodeSubDomainSegment = /(?:(?:[a-z0-9]|[^\u0000-\u007f])(?:(?:[a-z0-9_\-]|[^\u0000-\u007f])*(?:[a-z0-9]|[^\u0000-\u007f]))?)/i;
-  twttr.txt.regexen.validateUrlUnicodeDomainSegment = /(?:(?:[a-z0-9]|[^\u0000-\u007f])(?:(?:[a-z0-9\-]|[^\u0000-\u007f])*(?:[a-z0-9]|[^\u0000-\u007f]))?)/i;
-  twttr.txt.regexen.validateUrlUnicodeDomainTld = /(?:(?:[a-z]|[^\u0000-\u007f])(?:(?:[a-z0-9\-]|[^\u0000-\u007f])*(?:[a-z0-9]|[^\u0000-\u007f]))?)/i;
-  twttr.txt.regexen.validateUrlUnicodeDomain = D(/(?:(?:#{validateUrlUnicodeSubDomainSegment}\.)*(?:#{validateUrlUnicodeDomainSegment}\.)#{validateUrlUnicodeDomainTld})/i);
-  twttr.txt.regexen.validateUrlUnicodeHost = D(
-      "(?:#{validateUrlIp}|#{validateUrlUnicodeDomain})", "i");
-  twttr.txt.regexen.validateUrlPort = /[0-9]{1,5}/;
-  twttr.txt.regexen.validateUrlUnicodeAuthority = D(
-      "(?:(#{validateUrlUserinfo})@)?(#{validateUrlUnicodeHost})(?::(#{validateUrlPort}))?",
-      "i");
-  twttr.txt.regexen.validateUrlAuthority = D(
-      "(?:(#{validateUrlUserinfo})@)?(#{validateUrlHost})(?::(#{validateUrlPort}))?",
-      "i");
-  twttr.txt.regexen.validateUrlPath = D(/(\/#{validateUrlPchar}*)*/i);
-  twttr.txt.regexen.validateUrlQuery = D(/(#{validateUrlPchar}|\/|\?)*/i);
-  twttr.txt.regexen.validateUrlFragment = D(/(#{validateUrlPchar}|\/|\?)*/i);
-  twttr.txt.regexen.validateUrlUnencoded = D(
-      "^(?:([^:/?#]+):\\/\\/)?([^/?#]*)([^?#]*)(?:\\?([^#]*))?(?:#(.*))?$",
-      "i");
-  var A = "tweet-url";
-  var G = "list-slug";
-  var Q = "username";
-  var M = "hashtag";
-  var O = ' rel="nofollow"';
-  function K(T) {
-    var S = {};
-    for ( var R in T) {
-      if (T.hasOwnProperty(R)) {
-        S[R] = T[R]
-      }
-    }
-    return S
-  }
-  twttr.txt.autoLink = function(S, R) {
-    R = K(R || {});
-    return twttr.txt.autoLinkUsernamesOrLists(twttr.txt.autoLinkUrlsCustom(
-        twttr.txt.autoLinkHashtags(S, R), R), R)
-  };
-  twttr.txt.autoLinkUsernamesOrLists = function(X, V) {
-    V = K(V || {});
-    V.urlClass = V.urlClass || A;
-    V.listClass = V.listClass || G;
-    V.usernameClass = V.usernameClass || Q;
-    V.usernameUrlBase = V.usernameUrlBase || "http://twitter.com/";
-    V.listUrlBase = V.listUrlBase || "http://twitter.com/";
-    if (!V.suppressNoFollow) {
-      var R = O
-    }
-    var W = "", U = twttr.txt.splitTags(X);
-    for ( var T = 0; T < U.length; T++) {
-      var S = U[T];
-      if (T !== 0) {
-        W += ((T % 2 === 0) ? ">" : "<")
-      }
-      if (T % 4 !== 0) {
-        W += S
-      } else {
-        W += S
-            .replace(
-                twttr.txt.regexen.autoLinkUsernamesOrLists,
-                function(f, i, a, e, Y, c, j) {
-                  var Z = j.slice(c + f.length);
-                  var h = {
-                    before : i,
-                    at : a,
-                    user : twttr.txt.htmlEscape(e),
-                    slashListname : twttr.txt.htmlEscape(Y),
-                    extraHtml : R,
-                    preChunk : "",
-                    chunk : twttr.txt.htmlEscape(j),
-                    postChunk : ""
-                  };
-                  for ( var b in V) {
-                    if (V.hasOwnProperty(b)) {
-                      h[b] = V[b]
-                    }
-                  }
-                  if (Y && !V.suppressLists) {
-                    var g = h.chunk = E(
-                        "#{user}#{slashListname}", h);
-                    h.list = twttr.txt.htmlEscape(g
-                        .toLowerCase());
-                    return E(
-                        '#{before}#{at}<a class="#{urlClass} #{listClass}" href="#{listUrlBase}#{list}"#{extraHtml}>#{preChunk}#{chunk}#{postChunk}</a>',
-                        h)
-                  } else {
-                    if (Z
-                        && Z
-                            .match(twttr.txt.regexen.endScreenNameMatch)) {
-                      return f
-                    } else {
-                      h.chunk = twttr.txt.htmlEscape(e);
-                      h.dataScreenName = !V.suppressDataScreenName ? E(
-                          'data-screen-name="#{chunk}" ',
-                          h)
-                          : "";
-                      return E(
-                          '#{before}#{at}<a class="#{urlClass} #{usernameClass}" #{dataScreenName}href="#{usernameUrlBase}#{chunk}"#{extraHtml}>#{preChunk}#{chunk}#{postChunk}</a>',
-                          h)
-                    }
-                  }
-                })
-      }
-    }
-    return W
-  };
-  twttr.txt.autoLinkHashtags = function(T, S) {
-    S = K(S || {});
-    S.urlClass = S.urlClass || A;
-    S.hashtagClass = S.hashtagClass || M;
-    S.hashtagUrlBase = S.hashtagUrlBase
-        || "http://twitter.com/search?q=%23";
-    if (!S.suppressNoFollow) {
-      var R = O
-    }
-    return T
-        .replace(
-            twttr.txt.regexen.autoLinkHashtags,
-            function(V, W, X, Z) {
-              var Y = {
-                before : W,
-                hash : twttr.txt.htmlEscape(X),
-                preText : "",
-                text : twttr.txt.htmlEscape(Z),
-                postText : "",
-                extraHtml : R
-              };
-              for ( var U in S) {
-                if (S.hasOwnProperty(U)) {
-                  Y[U] = S[U]
-                }
-              }
-              return E(
-                  '#{before}<a href="#{hashtagUrlBase}#{text}" title="##{text}" class="#{urlClass} #{hashtagClass}"#{extraHtml}>#{hash}#{preText}#{text}#{postText}</a>',
-                  Y)
-            })
-  };
-  twttr.txt.autoLinkUrlsCustom = function(U, S) {
-    S = K(S || {});
-    if (!S.suppressNoFollow) {
-      S.rel = "nofollow"
-    }
-    if (S.urlClass) {
-      S["class"] = S.urlClass;
-      delete S.urlClass
-    }
-    var V, T, R;
-    if (S.urlEntities) {
-      V = {};
-      for (T = 0, R = S.urlEntities.length; T < R; T++) {
-        V[S.urlEntities[T].url] = S.urlEntities[T]
-      }
-    }
-    delete S.suppressNoFollow;
-    delete S.suppressDataScreenName;
-    delete S.listClass;
-    delete S.usernameClass;
-    delete S.usernameUrlBase;
-    delete S.listUrlBase;
-    return U
-        .replace(
-            twttr.txt.regexen.extractUrl,
-            function(e, h, g, X, i, a, c, j, W) {
-              var Z;
-              if (i) {
-                var Y = "";
-                for ( var b in S) {
-                  Y += E(' #{k}="#{v}" ', {
-                    k : b,
-                    v : S[b].toString().replace(/"/,
-                        "&quot;").replace(/</, "&lt;")
-                        .replace(/>/, "&gt;")
-                  })
-                }
-                var f = {
-                  before : g,
-                  htmlAttrs : Y,
-                  url : twttr.txt.htmlEscape(X)
-                };
-                if (V && V[X] && V[X].display_url) {
-                  f.displayUrl = twttr.txt
-                      .htmlEscape(V[X].display_url)
-                } else {
-                  f.displayUrl = f.url
-                }
-                return E(
-                    '#{before}<a href="#{url}"#{htmlAttrs}>#{displayUrl}</a>',
-                    f)
-              } else {
-                return h
-              }
-            })
-  };
-  twttr.txt.extractMentions = function(U) {
-    var V = [], R = twttr.txt.extractMentionsWithIndices(U);
-    for ( var T = 0; T < R.length; T++) {
-      var S = R[T].screenName;
-      V.push(S)
-    }
-    return V
-  };
-  twttr.txt.extractMentionsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.extractMentions, function(U, Y, X, V, Z) {
-      if (!Z.match(twttr.txt.regexen.endScreenNameMatch)) {
-        var W = T.indexOf(X + V, R);
-        R = W + V.length + 1;
-        S.push({
-          screenName : V,
-          indices : [ W, R ]
-        })
-      }
-    });
-    return S
-  };
-  twttr.txt.extractMentionsOrListsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.extractMentionsOrLists, function(U, Y, X,
-        V, a, Z) {
-      if (!Z.match(twttr.txt.regexen.endScreenNameMatch)) {
-        a = a || "";
-        var W = T.indexOf(X + V + a, R);
-        R = W + V.length + a.length + 1;
-        S.push({
-          screenName : V,
-          listSlug : a,
-          indices : [ W, R ]
-        })
-      }
-    });
-    return S
-  };
-  twttr.txt.extractReplies = function(S) {
-    if (!S) {
-      return null
-    }
-    var R = S.match(twttr.txt.regexen.extractReply);
-    if (!R) {
-      return null
-    }
-    return R[1]
-  };
-  twttr.txt.extractUrls = function(U) {
-    var T = [], R = twttr.txt.extractUrlsWithIndices(U);
-    for ( var S = 0; S < R.length; S++) {
-      T.push(R[S].url)
-    }
-    return T
-  };
-  twttr.txt.extractUrlsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.extractUrl, function(Z, c, b, U, d, W, V,
-        e, a) {
-      if (!d && !e && W.match(twttr.txt.regexen.validShortDomain)) {
-        return
-      }
-      var X = T.indexOf(U, Y), Y = X + U.length;
-      S.push({
-        url : U,
-        indices : [ X, Y ]
-      })
-    });
-    return S
-  };
-  twttr.txt.extractHashtags = function(U) {
-    var T = [], S = twttr.txt.extractHashtagsWithIndices(U);
-    for ( var R = 0; R < S.length; R++) {
-      T.push(S[R].hashtag)
-    }
-    return T
-  };
-  twttr.txt.extractHashtagsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.autoLinkHashtags, function(U, X, Y, W) {
-      var V = T.indexOf(Y + W, R);
-      R = V + W.length + 1;
-      S.push({
-        hashtag : W,
-        indices : [ V, R ]
-      })
-    });
-    return S
-  };
-  twttr.txt.splitTags = function(X) {
-    var R = X.split("<"), W, V = [], U;
-    for ( var T = 0; T < R.length; T += 1) {
-      U = R[T];
-      if (!U) {
-        V.push("")
-      } else {
-        W = U.split(">");
-        for ( var S = 0; S < W.length; S += 1) {
-          V.push(W[S])
-        }
-      }
-    }
-    return V
-  };
-  twttr.txt.hitHighlight = function(c, e, U) {
-    var a = "em";
-    e = e || [];
-    U = U || {};
-    if (e.length === 0) {
-      return c
-    }
-    var T = U.tag || a, d = [ "<" + T + ">", "</" + T + ">" ], b = twttr.txt
-        .splitTags(c), f, k, h, X = "", R = 0, Y = b[0], Z = 0, S = 0, o = false, V = Y, g = [], W, l, p, n, m;
-    for (k = 0; k < e.length; k += 1) {
-      for (h = 0; h < e[k].length; h += 1) {
-        g.push(e[k][h])
-      }
-    }
-    for (W = 0; W < g.length; W += 1) {
-      l = g[W];
-      p = d[W % 2];
-      n = false;
-      while (Y != null && l >= Z + Y.length) {
-        X += V.slice(S);
-        if (o && l === Z + V.length) {
-          X += p;
-          n = true
-        }
-        if (b[R + 1]) {
-          X += "<" + b[R + 1] + ">"
-        }
-        Z += V.length;
-        S = 0;
-        R += 2;
-        Y = b[R];
-        V = Y;
-        o = false
-      }
-      if (!n && Y != null) {
-        m = l - Z;
-        X += V.slice(S, m) + p;
-        S = m;
-        if (W % 2 === 0) {
-          o = true
-        } else {
-          o = false
-        }
-      } else {
-        if (!n) {
-          n = true;
-          X += p
-        }
-      }
-    }
-    if (Y != null) {
-      if (S < V.length) {
-        X += V.slice(S)
-      }
-      for (W = R + 1; W < b.length; W += 1) {
-        X += (W % 2 === 0 ? b[W] : "<" + b[W] + ">")
-      }
-    }
-    return X
-  };
-  var F = 140;
-  var P = [ J(65534), J(65279), J(65535), J(8234), J(8235), J(8236), J(8237),
-      J(8238) ];
-  twttr.txt.isInvalidTweet = function(S) {
-    if (!S) {
-      return "empty"
-    }
-    if (S.length > F) {
-      return "too_long"
-    }
-    for ( var R = 0; R < P.length; R++) {
-      if (S.indexOf(P[R]) >= 0) {
-        return "invalid_characters"
-      }
-    }
-    return false
-  };
-  twttr.txt.isValidTweetText = function(R) {
-    return !twttr.txt.isInvalidTweet(R)
-  };
-  twttr.txt.isValidUsername = function(S) {
-    if (!S) {
-      return false
-    }
-    var R = twttr.txt.extractMentions(S);
-    return R.length === 1 && R[0] === S.slice(1)
-  };
-  var L = D(/^#{autoLinkUsernamesOrLists}$/);
-  twttr.txt.isValidList = function(S) {
-    var R = S.match(L);
-    return !!(R && R[1] == "" && R[4])
-  };
-  twttr.txt.isValidHashtag = function(S) {
-    if (!S) {
-      return false
-    }
-    var R = twttr.txt.extractHashtags(S);
-    return R.length === 1 && R[0] === S.slice(1)
-  };
-  twttr.txt.isValidUrl = function(R, W, Z) {
-    if (W == null) {
-      W = true
-    }
-    if (Z == null) {
-      Z = true
-    }
-    if (!R) {
-      return false
-    }
-    var S = R.match(twttr.txt.regexen.validateUrlUnencoded);
-    if (!S || S[0] !== R) {
-      return false
-    }
-    var T = S[1], U = S[2], Y = S[3], X = S[4], V = S[5];
-    if (!((!Z || (I(T, twttr.txt.regexen.validateUrlScheme) && T
-        .match(/^https?$/i)))
-        && I(Y, twttr.txt.regexen.validateUrlPath)
-        && I(X, twttr.txt.regexen.validateUrlQuery, true) && I(V,
-        twttr.txt.regexen.validateUrlFragment, true))) {
-      return false
-    }
-    return (W && I(U, twttr.txt.regexen.validateUrlUnicodeAuthority))
-        || (!W && I(U, twttr.txt.regexen.validateUrlAuthority))
-  };
-  function I(S, T, R) {
-    if (!R) {
-      return ((typeof S === "string") && S.match(T) && RegExp["$&"] === S)
-    }
-    return (!S || (S.match(T) && RegExp["$&"] === S))
-  }
-  if (typeof module != "undefined" && module.exports) {
-    module.exports = twttr.txt
-  }
-}());
-TWTR = window.TWTR || {};
-(function() {
-  if (TWTR && TWTR.Widget) {
-    return
-  }
-  function H(K, N, J) {
-    for ( var M = 0, L = K.length; M < L; ++M) {
-      N.call(J || window, K[M], M, K)
-    }
-  }
-  function B(J, K, L) {
-    (Array.prototype.filter || function(Q, R) {
-      var P = R || window;
-      var M = [];
-      for ( var O = 0, N = this.length; O < N; ++O) {
-        if (!Q.call(P, this[O], O, this)) {
-          continue
-        }
-        M.push(this[O])
-      }
-      return M
-    }).call(J, K, L)
-  }
-  function I(J, L, K) {
-    this.el = J;
-    this.prop = L;
-    this.from = K.from;
-    this.to = K.to;
-    this.time = K.time;
-    this.callback = K.callback;
-    this.animDiff = this.to - this.from
-  }
-  I.canTransition = function() {
-    var J = document.createElement("twitter");
-    J.style.cssText = "-webkit-transition: all .5s linear;";
-    return !!J.style.webkitTransitionProperty
-  }();
-  I.prototype._setStyle = function(J) {
-    switch (this.prop) {
-    case "opacity":
-      this.el.style[this.prop] = J;
-      this.el.style.filter = "alpha(opacity=" + J * 100 + ")";
-      break;
-    default:
-      this.el.style[this.prop] = J + "px";
-      break
-    }
-  };
-  I.prototype._animate = function() {
-    var J = this;
-    this.now = new Date();
-    this.diff = this.now - this.startTime;
-    if (this.diff > this.time) {
-      this._setStyle(this.to);
-      if (this.callback) {
-        this.callback.call(this)
-      }
-      clearInterval(this.timer);
-      return
-    }
-    this.percentage = (Math.floor((this.diff / this.time) * 100) / 100);
-    this.val = (this.animDiff * this.percentage) + this.from;
-    this._setStyle(this.val)
-  };
-  I.prototype.start = function() {
-    var J = this;
-    this.startTime = new Date();
-    this.timer = setInterval(function() {
-      J._animate.call(J)
-    }, 15)
-  };
-  TWTR.Widget = function(J) {
-    this.init(J)
-  };
-  (function() {
-    var X = window.twttr || {};
-    var V = location.protocol.match(/^https/);
-    var K = function(m) {
-      return V ? m.profile_image_url_https : m.profile_image_url
-    };
-    var l = {};
-    var j = function(n) {
-      var m = l[n];
-      if (!m) {
-        m = new RegExp("(?:^|\\s+)" + n + "(?:\\s+|$)");
-        l[n] = m
-      }
-      return m
-    };
-    var L = function(q, v, s, t) {
-      var v = v || "*";
-      var s = s || document;
-      var n = [], m = s.getElementsByTagName(v), u = j(q);
-      for ( var o = 0, p = m.length; o < p; ++o) {
-        if (u.test(m[o].className)) {
-          n[n.length] = m[o];
-          if (t) {
-            t.call(m[o], m[o])
-          }
-        }
-      }
-      return n
-    };
-    var k = function() {
-      var m = navigator.userAgent;
-      return {
-        ie : m.match(/MSIE\s([^;]*)/)
-      }
-    }();
-    var O = function(m) {
-      if (typeof m == "string") {
-        return document.getElementById(m)
-      }
-      return m
-    };
-    var c = function(m) {
-      return m.replace(/^\s+|\s+$/g, "")
-    };
-    var b = function() {
-      var m = self.innerHeight;
-      var n = document.compatMode;
-      if ((n || k.ie)) {
-        m = (n == "CSS1Compat") ? document.documentElement.clientHeight
-            : document.body.clientHeight
-      }
-      return m
-    };
-    var i = function(o, m) {
-      var n = o.target || o.srcElement;
-      return m(n)
-    };
-    var Z = function(n) {
-      try {
-        if (n && 3 == n.nodeType) {
-          return n.parentNode
-        } else {
-          return n
-        }
-      } catch (m) {
-      }
-    };
-    var a = function(n) {
-      var m = n.relatedTarget;
-      if (!m) {
-        if (n.type == "mouseout") {
-          m = n.toElement
-        } else {
-          if (n.type == "mouseover") {
-            m = n.fromElement
-          }
-        }
-      }
-      return Z(m)
-    };
-    var e = function(n, m) {
-      m.parentNode.insertBefore(n, m.nextSibling)
-    };
-    var f = function(n) {
-      try {
-        n.parentNode.removeChild(n)
-      } catch (m) {
-      }
-    };
-    var d = function(m) {
-      return m.firstChild
-    };
-    var J = function(o) {
-      var n = a(o);
-      while (n && n != this) {
-        try {
-          n = n.parentNode
-        } catch (m) {
-          n = this
-        }
-      }
-      if (n != this) {
-        return true
-      }
-      return false
-    };
-    var N = function() {
-      if (document.defaultView && document.defaultView.getComputedStyle) {
-        return function(n, q) {
-          var p = null;
-          var o = document.defaultView.getComputedStyle(n, "");
-          if (o) {
-            p = o[q]
-          }
-          var m = n.style[q] || p;
-          return m
-        }
-      } else {
-        if (document.documentElement.currentStyle && k.ie) {
-          return function(m, o) {
-            var n = m.currentStyle ? m.currentStyle[o] : null;
-            return (m.style[o] || n)
-          }
-        }
-      }
-    }();
-    var h = {
-      has : function(m, n) {
-        return new RegExp("(^|\\s)" + n + "(\\s|$)")
-            .test(O(m).className)
-      },
-      add : function(m, n) {
-        if (!this.has(m, n)) {
-          O(m).className = c(O(m).className) + " " + n
-        }
-      },
-      remove : function(m, n) {
-        if (this.has(m, n)) {
-          O(m).className = O(m).className.replace(new RegExp(
-              "(^|\\s)" + n + "(\\s|$)", "g"), "")
-        }
-      }
-    };
-    var M = {
-      add : function(o, n, m) {
-        if (o.addEventListener) {
-          o.addEventListener(n, m, false)
-        } else {
-          o.attachEvent("on" + n, function() {
-            m.call(o, window.event)
-          })
-        }
-      },
-      remove : function(o, n, m) {
-        if (o.removeEventListener) {
-          o.removeEventListener(n, m, false)
-        } else {
-          o.detachEvent("on" + n, m)
-        }
-      }
-    };
-    var U = function() {
-      function n(p) {
-        return parseInt((p).substring(0, 2), 16)
-      }
-      function m(p) {
-        return parseInt((p).substring(2, 4), 16)
-      }
-      function o(p) {
-        return parseInt((p).substring(4, 6), 16)
-      }
-      return function(p) {
-        return [ n(p), m(p), o(p) ]
-      }
-    }();
-    var P = {
-      bool : function(m) {
-        return typeof m === "boolean"
-      },
-      def : function(m) {
-        return !(typeof m === "undefined")
-      },
-      number : function(m) {
-        return typeof m === "number" && isFinite(m)
-      },
-      string : function(m) {
-        return typeof m === "string"
-      },
-      fn : function(m) {
-        return typeof m === "function"
-      },
-      array : function(m) {
-        if (m) {
-          return P.number(m.length) && P.fn(m.splice)
-        }
-        return false
-      }
-    };
-    var T = [ "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November",
-        "December" ];
-    var Y = function(p) {
-      var u = new Date(p);
-      if (k.ie) {
-        u = Date.parse(p.replace(/( \+)/, " UTC$1"))
-      }
-      var n = "";
-      var m = function() {
-        var s = u.getHours();
-        if (s > 0 && s < 13) {
-          n = "am";
-          return s
-        } else {
-          if (s < 1) {
-            n = "am";
-            return 12
-          } else {
-            n = "pm";
-            return s - 12
-          }
-        }
-      }();
-      var o = u.getMinutes();
-      var t = u.getSeconds();
-      function q() {
-        var s = new Date();
-        if (s.getDate() != u.getDate() || s.getYear() != u.getYear()
-            || s.getMonth() != u.getMonth()) {
-          return " - " + T[u.getMonth()] + " " + u.getDate() + ", "
-              + u.getFullYear()
-        } else {
-          return ""
-        }
-      }
-      return m + ":" + o + n + q()
-    };
-    var R = function(t) {
-      var v = new Date();
-      var q = new Date(t);
-      if (k.ie) {
-        q = Date.parse(t.replace(/( \+)/, " UTC$1"))
-      }
-      var u = v - q;
-      var n = 1000, o = n * 60, p = o * 60, s = p * 24, m = s * 7;
-      if (isNaN(u) || u < 0) {
-        return ""
-      }
-      if (u < n * 2) {
-        return "right now"
-      }
-      if (u < o) {
-        return Math.floor(u / n) + " seconds ago"
-      }
-      if (u < o * 2) {
-        return "about 1 minute ago"
-      }
-      if (u < p) {
-        return Math.floor(u / o) + " minutes ago"
-      }
-      if (u < p * 2) {
-        return "about 1 hour ago"
-      }
-      if (u < s) {
-        return Math.floor(u / p) + " hours ago"
-      }
-      if (u > s && u < s * 2) {
-        return "yesterday"
-      }
-      if (u < s * 365) {
-        return Math.floor(u / s) + " days ago"
-      } else {
-        return "over a year ago"
-      }
-    };
-    function g(p) {
-      var n = {};
-      for ( var m in p) {
-        if (p.hasOwnProperty(m)) {
-          n[m] = p[m]
-        }
-      }
-      return n
-    }
-    X.txt.autoLink = function(n, m) {
-      m = options_links = m || {};
-      if (m.hasOwnProperty("extraHtml")) {
-        options_links = g(m);
-        delete options_links.extraHtml
-      }
-      return X.txt.autoLinkUsernamesOrLists(X.txt.autoLinkUrlsCustom(
-          X.txt.autoLinkHashtags(n, m), options_links), m)
-    };
-    TWTR.Widget.ify = {
-      autoLink : function(m) {
-        options = {
-          extraHtml : "target=_blank",
-          target : "_blank",
-          urlEntities : []
-        };
-        if (m.needle.entities) {
-          if (m.needle.entities.urls) {
-            options.urlEntities = m.needle.entities.urls
-          }
-          if (m.needle.entities.media) {
-            options.urlEntities = options.urlEntities
-                .concat(m.needle.entities.media)
-          }
-        }
-        if (X && X.txt) {
-          return X.txt.autoLink(m.needle.text, options).replace(
-              /([@ï¼ ]+)(<[^>]*>)/g, "$2$1")
-        } else {
-          return m.needle.text
-        }
-      }
-    };
-    function W(n, o, m) {
-      this.job = n;
-      this.decayFn = o;
-      this.interval = m;
-      this.decayRate = 1;
-      this.decayMultiplier = 1.25;
-      this.maxDecayTime = 3 * 60 * 1000
-    }
-    W.prototype = {
-      start : function() {
-        this.stop().run();
-        return this
-      },
-      stop : function() {
-        if (this.worker) {
-          window.clearTimeout(this.worker)
-        }
-        return this
-      },
-      run : function() {
-        var m = this;
-        this.job(function() {
-          m.decayRate = m.decayFn() ? Math.max(1, m.decayRate
-              / m.decayMultiplier) : m.decayRate
-              * m.decayMultiplier;
-          var n = m.interval * m.decayRate;
-          n = (n >= m.maxDecayTime) ? m.maxDecayTime : n;
-          n = Math.floor(n);
-          m.worker = window.setTimeout(function() {
-            m.run.call(m)
-          }, n)
-        })
-      },
-      destroy : function() {
-        this.stop();
-        this.decayRate = 1;
-        return this
-      }
-    };
-    function Q(n, m, o) {
-      this.time = n || 6000;
-      this.loop = m || false;
-      this.repeated = 0;
-      this.callback = o;
-      this.haystack = []
-    }
-    Q.prototype = {
-      set : function(m) {
-        this.haystack = m
-      },
-      add : function(m) {
-        this.haystack.unshift(m)
-      },
-      start : function() {
-        if (this.timer) {
-          return this
-        }
-        this._job();
-        var m = this;
-        this.timer = setInterval(function() {
-          m._job.call(m)
-        }, this.time);
-        return this
-      },
-      stop : function() {
-        if (this.timer) {
-          window.clearInterval(this.timer);
-          this.timer = null
-        }
-        return this
-      },
-      _next : function() {
-        var m = this.haystack.shift();
-        if (m && this.loop) {
-          this.haystack.push(m)
-        }
-        return m || null
-      },
-      _job : function() {
-        var m = this._next();
-        if (m) {
-          this.callback(m)
-        }
-        return this
-      }
-    };
-    function S(n) {
-      var m = '<div class="twtr-tweet-wrap">         <div class="twtr-avatar">           <div class="twtr-img"><a target="_blank" href="https://twitter.com/intent/user?screen_name='
-          + n.user
-          + '"><img alt="'
-          + n.user
-          + ' profile" src="'
-          + n.avatar
-          + '"></a></div>         </div>         <div class="twtr-tweet-text">           <p>             <a target="_blank" href="https://twitter.com/intent/user?screen_name='
-          + n.user
-          + '" class="twtr-user">'
-          + n.user
-          + "</a> "
-          + n.tweet
-          + '             <em>            <a target="_blank" class="twtr-timestamp" time="'
-          + n.timestamp
-          + '" href="https://twitter.com/'
-          + n.user
-          + "/status/"
-          + n.id
-          + '">'
-          + n.created_at
-          + '</a> &middot;            <a target="_blank" class="twtr-reply" href="https://twitter.com/intent/tweet?in_reply_to='
-          + n.id
-          + '">reply</a> &middot;             <a target="_blank" class="twtr-rt" href="https://twitter.com/intent/retweet?tweet_id='
-          + n.id
-          + '">retweet</a> &middot;             <a target="_blank" class="twtr-fav" href="https://twitter.com/intent/favorite?tweet_id='
-          + n.id
-          + '">favorite</a>             </em>           </p>         </div>       </div>';
-      var o = document.createElement("div");
-      o.id = "tweet-id-" + ++S._tweetCount;
-      o.className = "twtr-tweet";
-      o.innerHTML = m;
-      this.element = o
-    }
-    S._tweetCount = 0;
-    X.loadStyleSheet = function(o, n) {
-      if (!TWTR.Widget.loadingStyleSheet) {
-        TWTR.Widget.loadingStyleSheet = true;
-        var m = document.createElement("link");
-        m.href = o;
-        m.rel = "stylesheet";
-        m.type = "text/css";
-        document.getElementsByTagName("head")[0].appendChild(m);
-        var p = setInterval(function() {
-          var q = N(n, "position");
-          if (q == "relative") {
-            clearInterval(p);
-            p = null;
-            TWTR.Widget.hasLoadedStyleSheet = true
-          }
-        }, 50)
-      }
-    };
-    (function() {
-      var m = false;
-      X.css = function(p) {
-        var o = document.createElement("style");
-        o.type = "text/css";
-        if (k.ie) {
-          o.styleSheet.cssText = p
-        } else {
-          var q = document.createDocumentFragment();
-          q.appendChild(document.createTextNode(p));
-          o.appendChild(q)
-        }
-        function n() {
-          document.getElementsByTagName("head")[0].appendChild(o)
-        }
-        if (!k.ie || m) {
-          n()
-        } else {
-          window.attachEvent("onload", function() {
-            m = true;
-            n()
-          })
-        }
-      }
-    })();
-    TWTR.Widget.isLoaded = false;
-    TWTR.Widget.loadingStyleSheet = false;
-    TWTR.Widget.hasLoadedStyleSheet = false;
-    TWTR.Widget.WIDGET_NUMBER = 0;
-    TWTR.Widget.REFRESH_MIN = 6000;
-    TWTR.Widget.ENTITY_RANGE = 100;
-    TWTR.Widget.ENTITY_PERCENTAGE = 100;
-    TWTR.Widget.matches = {
-      mentions : /^@[a-zA-Z0-9_]{1,20}\b/,
-      any_mentions : /\b@[a-zA-Z0-9_]{1,20}\b/
-    };
-    TWTR.Widget.jsonP = function(n, p) {
-      var m = document.createElement("script");
-      var o = document.getElementsByTagName("head")[0];
-      m.type = "text/javascript";
-      m.src = n;
-      o.insertBefore(m, o.firstChild);
-      p(m);
-      return m
-    };
-    TWTR.Widget.randomNumber = function(m) {
-      r = Math.floor(Math.random() * m);
-      return r
-    };
-    TWTR.Widget.SHOW_ENTITIES = TWTR.Widget
-        .randomNumber(TWTR.Widget.ENTITY_RANGE) <= TWTR.Widget.ENTITY_PERCENTAGE;
-    TWTR.Widget.prototype = function() {
-      var s = window.twttr || {};
-      var t = V ? "https://" : "http://";
-      var q = "twitter.com";
-      var n = t + "search." + q + "/search.";
-      var m = t + "api." + q + "/1/statuses/user_timeline.";
-      var p = t + "api." + q + "/1/favorites.";
-      var o = t + "api." + q + "/1/";
-      var u = 25000;
-      var v = "//widgets.twimg.com/j/1/default.gif";
-      return {
-        init : function(x) {
-          var w = this;
-          this._widgetNumber = ++TWTR.Widget.WIDGET_NUMBER;
-          TWTR.Widget["receiveCallback_" + this._widgetNumber] = function(
-              y) {
-            w._prePlay.call(w, y)
-          };
-          this._cb = "TWTR.Widget.receiveCallback_"
-              + this._widgetNumber;
-          this.opts = x;
-          this._base = n;
-          this._isRunning = false;
-          this._hasOfficiallyStarted = false;
-          this._hasNewSearchResults = false;
-          this._rendered = false;
-          this._profileImage = false;
-          this._isCreator = !!x.creator;
-          this._setWidgetType(x.type);
-          this.timesRequested = 0;
-          this.runOnce = false;
-          this.newResults = false;
-          this.results = [];
-          this.jsonMaxRequestTimeOut = 19000;
-          this.showedResults = [];
-          this.sinceId = 1;
-          this.source = "TWITTERINC_WIDGET";
-          this.id = x.id || "twtr-widget-" + this._widgetNumber;
-          this.tweets = 0;
-          this.setDimensions(x.width, x.height);
-          this.interval = x.interval ? Math.max(x.interval,
-              TWTR.Widget.REFRESH_MIN) : TWTR.Widget.REFRESH_MIN;
-          this.format = "json";
-          this.rpp = x.rpp || 50;
-          this.subject = x.subject || "";
-          this.title = x.title || "";
-          this.setFooterText(x.footer);
-          this.setSearch(x.search);
-          this._setUrl();
-          this.theme = x.theme ? x.theme : this._getDefaultTheme();
-          if (!x.id) {
-            document.write('<div class="twtr-widget" id="'
-                + this.id + '"></div>')
-          }
-          this.widgetEl = O(this.id);
-          if (x.id) {
-            h.add(this.widgetEl, "twtr-widget")
-          }
-          if (x.version >= 2 && !TWTR.Widget.hasLoadedStyleSheet) {
-            if (x.creator) {
-              s.loadStyleSheet("/stylesheets/widgets/widget.css",
-                  this.widgetEl)
-            } else {
-              s.loadStyleSheet(
-                  "//widgets.twimg.com/j/2/widget.css",
-                  this.widgetEl)
-            }
-          }
-          this.occasionalJob = new W(function(y) {
-            w.decay = y;
-            w._getResults.call(w)
-          }, function() {
-            return w._decayDecider.call(w)
-          }, u);
-          this._ready = P.fn(x.ready) ? x.ready : function() {
-          };
-          this._isRelativeTime = true;
-          this._tweetFilter = false;
-          this._avatars = true;
-          this._isFullScreen = false;
-          this._isLive = true;
-          this._isScroll = false;
-          this._loop = true;
-          this._behavior = "default";
-          this.setFeatures(this.opts.features);
-          this.intervalJob = new Q(this.interval, this._loop,
-              function(y) {
-                w._normalizeTweet(y)
-              });
-          return this
-        },
-        setDimensions : function(x, y) {
-          this.wh = (x && y) ? [ x, y ] : [ 250, 300 ];
-          if (x == "auto" || x == "100%") {
-            this.wh[0] = "100%"
-          } else {
-            this.wh[0] = ((this.wh[0] < 150) ? 150 : this.wh[0])
-                + "px"
-          }
-          this.wh[1] = ((this.wh[1] < 100) ? 100 : this.wh[1]) + "px";
-          return this
-        },
-        setRpp : function(w) {
-          var w = parseInt(w);
-          this.rpp = (P.number(w) && (w > 0 && w <= 100)) ? w : 30;
-          return this
-        },
-        _setWidgetType : function(w) {
-          this._isSearchWidget = false,
-              this._isProfileWidget = false,
-              this._isFavsWidget = false,
-              this._isListWidget = false;
-          switch (w) {
-          case "profile":
-            this._isProfileWidget = true;
-            break;
-          case "search":
-            this._isSearchWidget = true,
-                this.search = this.opts.search;
-            break;
-          case "faves":
-          case "favs":
-            this._isFavsWidget = true;
-            break;
-          case "list":
-          case "lists":
-            this._isListWidget = true;
-            break
-          }
-          return this
-        },
-        setFeatures : function(w) {
-          if (w) {
-            if (P.def(w.filters)) {
-              this._tweetFilter = w.filters
-            }
-            if (P.def(w.dateformat)) {
-              this._isRelativeTime = !!(w.dateformat !== "absolute")
-            }
-            if (P.def(w.fullscreen) && P.bool(w.fullscreen)) {
-              if (w.fullscreen) {
-                this._isFullScreen = true;
-                this.wh[0] = "100%";
-                this.wh[1] = (b() - 90) + "px";
-                var x = this;
-                M.add(window, "resize", function(z) {
-                  x.wh[1] = b();
-                  x._fullScreenResize()
-                })
-              }
-            }
-            if (P.def(w.loop) && P.bool(w.loop)) {
-              this._loop = w.loop
-            }
-            if (P.def(w.behavior) && P.string(w.behavior)) {
-              switch (w.behavior) {
-              case "all":
-                this._behavior = "all";
-                break;
-              case "preloaded":
-                this._behavior = "preloaded";
-                break;
-              default:
-                this._behavior = "default";
-                break
-              }
-            }
-            if (P.def(w.avatars) && P.bool(w.avatars)) {
-              if (!w.avatars) {
-                s
-                    .css("#"
-                        + this.id
-                        + " .twtr-avatar { display: none; } #"
-                        + this.id
-                        + " .twtr-tweet-text { margin-left: 0; }");
-                this._avatars = false
-              } else {
-                var y = (this._isFullScreen) ? "90px" : "40px";
-                s.css("#" + this.id
-                    + " .twtr-avatar { display: block; } #"
-                    + this.id
-                    + " .twtr-user { display: inline; } #"
-                    + this.id
-                    + " .twtr-tweet-text { margin-left: "
-                    + y + "; }");
-                this._avatars = true
-              }
-            } else {
-              if (this._isProfileWidget) {
-                this.setFeatures({
-                  avatars : false
-                });
-                this._avatars = false
-              } else {
-                this.setFeatures({
-                  avatars : true
-                });
-                this._avatars = true
-              }
-            }
-            if (P.def(w.live) && P.bool(w.live)) {
-              this._isLive = w.live
-            }
-            if (P.def(w.scrollbar) && P.bool(w.scrollbar)) {
-              this._isScroll = w.scrollbar
-            }
-          } else {
-            if (this._isProfileWidget || this._isFavsWidget) {
-              this._behavior = "all"
-            }
-          }
-          return this
-        },
-        _fullScreenResize : function() {
-          var w = L("twtr-timeline", "div", document.body,
-              function(x) {
-                x.style.height = (b() - 90) + "px"
-              })
-        },
-        setTweetInterval : function(w) {
-          this.interval = w;
-          return this
-        },
-        setBase : function(w) {
-          this._base = w;
-          return this
-        },
-        setUser : function(x, w) {
-          this.username = x;
-          this.realname = w || " ";
-          if (this._isFavsWidget) {
-            this.setBase(p + this.format + "?screen_name=" + x)
-          } else {
-            if (this._isProfileWidget) {
-              this.setBase(m + this.format + "?screen_name=" + x)
-            }
-          }
-          this.setSearch(" ");
-          return this
-        },
-        setList : function(x, w) {
-          this.listslug = w.replace(/ /g, "-").toLowerCase();
-          this.username = x;
-          this.setBase(o + x + "/lists/" + this.listslug
-              + "/statuses.");
-          this.setSearch(" ");
-          return this
-        },
-        setProfileImage : function(w) {
-          this._profileImage = w;
-          this.byClass("twtr-profile-img", "img").src = w;
-          this.byClass("twtr-profile-img-anchor", "a").href = "https://twitter.com/intent/user?screen_name="
-              + this.username;
-          return this
-        },
-        setTitle : function(w) {
-          this.title = s.txt.htmlEscape(w);
-          this.widgetEl.getElementsByTagName("h3")[0].innerHTML = this.title;
-          return this
-        },
-        setCaption : function(w) {
-          this.subject = w;
-          this.widgetEl.getElementsByTagName("h4")[0].innerHTML = this.subject;
-          return this
-        },
-        setFooterText : function(w) {
-          this.footerText = (P.def(w) && P.string(w)) ? w
-              : "Join the conversation";
-          if (this._rendered) {
-            this.byClass("twtr-join-conv", "a").innerHTML = this.footerText
-          }
-          return this
-        },
-        setSearch : function(x) {
-          this.searchString = x || "";
-          this.search = encodeURIComponent(this.searchString);
-          this._setUrl();
-          if (this._rendered) {
-            var w = this.byClass("twtr-join-conv", "a");
-            w.href = "https://twitter.com/" + this._getWidgetPath()
-          }
-          return this
-        },
-        _getWidgetPath : function() {
-          if (this._isProfileWidget) {
-            return this.username
-          } else {
-            if (this._isFavsWidget) {
-              return this.username + "/favorites"
-            } else {
-              if (this._isListWidget) {
-                return this.username + "/" + this.listslug
-              } else {
-                return "search/" + this.search
-              }
-            }
-          }
-        },
-        _setUrl : function() {
-          var x = this;
-          function w() {
-            return "&" + (+new Date) + "=cachebust"
-          }
-          function y() {
-            return (x.sinceId == 1) ? "" : "&since_id=" + x.sinceId
-                + "&refresh=true"
-          }
-          if (this._isProfileWidget) {
-            this.url = this._includeEntities(this._base
-                + "&callback=" + this._cb
-                + "&include_rts=true&count=" + this.rpp + y()
-                + "&clientsource=" + this.source)
-          } else {
-            if (this._isFavsWidget) {
-              this.url = this._includeEntities(this._base
-                  + "&callback=" + this._cb + y()
-                  + "&clientsource=" + this.source)
-            } else {
-              if (this._isListWidget) {
-                this.url = this._includeEntities(this._base
-                    + this.format + "?callback=" + this._cb
-                    + y() + "&clientsource=" + this.source)
-              } else {
-                this.url = this._includeEntities(this._base
-                    + this.format + "?q=" + this.search
-                    + "&callback=" + this._cb + "&rpp="
-                    + this.rpp + y() + "&clientsource="
-                    + this.source);
-                if (!this.runOnce) {
-                  this.url += "&result_type=filtered"
-                }
-              }
-            }
-          }
-          this.url += w();
-          return this
-        },
-        _includeEntities : function(w) {
-          if (TWTR.Widget.SHOW_ENTITIES) {
-            return w + "&include_entities=true"
-          }
-          return w
-        },
-        _getRGB : function(w) {
-          return U(w.substring(1, 7))
-        },
-        setTheme : function(AB, w) {
-          var z = this;
-          var x = " !important";
-          var AA = ((window.location.hostname.match(/twitter\.com/)) && (window.location.pathname
-              .match(/goodies/)));
-          if (w || AA) {
-            x = ""
-          }
-          this.theme = {
-            shell : {
-              background : function() {
-                return AB.shell.background
-                    || z._getDefaultTheme().shell.background
-              }(),
-              color : function() {
-                return AB.shell.color
-                    || z._getDefaultTheme().shell.color
-              }()
-            },
-            tweets : {
-              background : function() {
-                return AB.tweets.background
-                    || z._getDefaultTheme().tweets.background
-              }(),
-              color : function() {
-                return AB.tweets.color
-                    || z._getDefaultTheme().tweets.color
-              }(),
-              links : function() {
-                return AB.tweets.links
-                    || z._getDefaultTheme().tweets.links
-              }()
-            }
-          };
-          var y = "#" + this.id
-              + " .twtr-doc,                      #" + this.id
-              + " .twtr-hd a,                      #" + this.id
-              + " h3,                      #" + this.id
-              + " h4 {            background-color: "
-              + this.theme.shell.background + x
-              + ";            color: " + this.theme.shell.color
-              + x + ";          }          #" + this.id
-              + " .twtr-tweet a {            color: "
-              + this.theme.tweets.links + x
-              + ";          }          #" + this.id
-              + " .twtr-bd, #" + this.id
-              + " .twtr-timeline i a,           #" + this.id
-              + " .twtr-bd p {            color: "
-              + this.theme.tweets.color + x
-              + ";          }          #" + this.id
-              + " .twtr-new-results,           #" + this.id
-              + " .twtr-results-inner,           #" + this.id
-              + " .twtr-timeline {            background: "
-              + this.theme.tweets.background + x + ";          }";
-          if (k.ie) {
-            y += "#" + this.id + " .twtr-tweet { background: "
-                + this.theme.tweets.background + x + "; }"
-          }
-          s.css(y);
-          return this
-        },
-        byClass : function(z, w, x) {
-          var y = L(z, w, O(this.id));
-          return (x) ? y : y[0]
-        },
-        render : function() {
-          var y = this;
-          if (!TWTR.Widget.hasLoadedStyleSheet) {
-            window.setTimeout(function() {
-              y.render.call(y)
-            }, 50);
-            return this
-          }
-          this.setTheme(this.theme, this._isCreator);
-          if (this._isProfileWidget) {
-            h.add(this.widgetEl, "twtr-widget-profile")
-          }
-          if (this._isScroll) {
-            h.add(this.widgetEl, "twtr-scroll")
-          }
-          if (!this._isLive && !this._isScroll) {
-            this.wh[1] = "auto"
-          }
-          if (this._isSearchWidget && this._isFullScreen) {
-            document.title = "Twitter search: "
-                + escape(this.searchString)
-          }
-          this.widgetEl.innerHTML = this._getWidgetHtml();
-          var x = this.byClass("twtr-timeline", "div");
-          if (this._isLive && !this._isFullScreen) {
-            var z = function(AA) {
-              if (y._behavior === "all") {
-                return
-              }
-              if (J.call(this, AA)) {
-                y.pause.call(y)
-              }
-            };
-            var w = function(AA) {
-              if (y._behavior === "all") {
-                return
-              }
-              if (J.call(this, AA)) {
-                y.resume.call(y)
-              }
-            };
-            this.removeEvents = function() {
-              M.remove(x, "mouseover", z);
-              M.remove(x, "mouseout", w)
-            };
-            M.add(x, "mouseover", z);
-            M.add(x, "mouseout", w)
-          }
-          this._rendered = true;
-          this._ready();
-          return this
-        },
-        removeEvents : function() {
-        },
-        _getDefaultTheme : function() {
-          return {
-            shell : {
-              background : "#8ec1da",
-              color : "#ffffff"
-            },
-            tweets : {
-              background : "#ffffff",
-              color : "#444444",
-              links : "#1985b5"
-            }
-          }
-        },
-        _getWidgetHtml : function() {
-          var y = this;
-          function AA() {
-            if (y._isProfileWidget) {
-              return '<a target="_blank" href="https://twitter.com/" class="twtr-profile-img-anchor"><img alt="profile" class="twtr-profile-img" src="'
-                  + v
-                  + '"></a>                      <h3></h3>                      <h4></h4>'
-            } else {
-              if (y._isSearchWidget) {
-                return '<h3><a target="_blank" style="color:'
-                    + y.theme.shell.color
-                    + '" href="https://twitter.com/'
-                    + y._getWidgetPath()
-                    + '">'
-                    + y.title
-                    + '</a></h3>                      <h4><a target="_blank" style="color:'
-                    + y.theme.shell.color
-                    + '" href="https://twitter.com/'
-                    + y._getWidgetPath() + '">' + y.subject
-                    + "</a></h4>"
-              } else {
-                return "<h3>" + y.title + "</h3><h4>"
-                    + y.subject + "</h4>"
-              }
-            }
-          }
-          function x() {
-            return y._isFullScreen ? " twtr-fullscreen" : ""
-          }
-          var z = "//widgets.twimg.com/i/widget-logo.png";
-          if (this._isFullScreen) {
-            z = "//widgets.twimg.com/i/widget-logo-fullscreen.png"
-          }
-          var w = '<div class="twtr-doc'
-              + x()
-              + '" style="width: '
-              + this.wh[0]
-              + ';">            <div class="twtr-hd">'
-              + AA()
-              + '             </div>            <div class="twtr-bd">              <div class="twtr-timeline" style="height: '
-              + this.wh[1]
-              + ';">                <div class="twtr-tweets">                  <div class="twtr-reference-tweet"></div>                  <!-- tweets show here -->                </div>              </div>            </div>            <div class="twtr-ft">              <div><a target="_blank" href="https://twitter.com"><img alt="" src="'
-              + z
-              + '"></a>                <span><a target="_blank" class="twtr-join-conv" style="color:'
-              + this.theme.shell.color
-              + '" href="https://twitter.com/'
-              + this._getWidgetPath()
-              + '">'
-              + this.footerText
-              + "</a></span>              </div>            </div>          </div>";
-          return w
-        },
-        _appendTweet : function(w) {
-          this._insertNewResultsNumber();
-          e(w, this.byClass("twtr-reference-tweet", "div"));
-          return this
-        },
-        _slide : function(x) {
-          var y = this;
-          var w = d(x).offsetHeight;
-          if (this.runOnce) {
-            new I(x, "height", {
-              from : 0,
-              to : w,
-              time : 500,
-              callback : function() {
-                y._fade.call(y, x)
-              }
-            }).start()
-          }
-          return this
-        },
-        _fade : function(w) {
-          var x = this;
-          if (I.canTransition) {
-            w.style.webkitTransition = "opacity 0.5s ease-out";
-            w.style.opacity = 1;
-            return this
-          }
-          new I(w, "opacity", {
-            from : 0,
-            to : 1,
-            time : 500
-          }).start();
-          return this
-        },
-        _chop : function() {
-          if (this._isScroll) {
-            return this
-          }
-          var AB = this.byClass("twtr-tweet", "div", true);
-          var AC = this.byClass("twtr-new-results", "div", true);
-          if (AB.length) {
-            for ( var y = AB.length - 1; y >= 0; y--) {
-              var AA = AB[y];
-              var z = parseInt(AA.offsetTop);
-              if (z > parseInt(this.wh[1])) {
-                f(AA)
-              } else {
-                break
-              }
-            }
-            if (AC.length > 0) {
-              var w = AC[AC.length - 1];
-              var x = parseInt(w.offsetTop);
-              if (x > parseInt(this.wh[1])) {
-                f(w)
-              }
-            }
-          }
-          return this
-        },
-        _appendSlideFade : function(x) {
-          var w = x || this.tweet.element;
-          this._chop()._appendTweet(w)._slide(w);
-          return this
-        },
-        _createTweet : function(w) {
-          w.tweet = TWTR.Widget.ify.autoLink(w);
-          w.timestamp = w.created_at;
-          w.created_at = this._isRelativeTime ? R(w.created_at)
-              : Y(w.created_at);
-          this.tweet = new S(w);
-          if (this._isLive && this.runOnce) {
-            this.tweet.element.style.opacity = 0;
-            this.tweet.element.style.filter = "alpha(opacity:0)";
-            this.tweet.element.style.height = "0"
-          }
-          return this
-        },
-        _getResults : function() {
-          var w = this;
-          this.timesRequested++;
-          this.jsonRequestRunning = true;
-          this.jsonRequestTimer = window.setTimeout(function() {
-            if (w.jsonRequestRunning) {
-              clearTimeout(w.jsonRequestTimer);
-              w.jsonRequestTimer = null
-            }
-            w.jsonRequestRunning = false;
-            f(w.scriptElement);
-            w.newResults = false;
-            w.decay()
-          }, this.jsonMaxRequestTimeOut);
-          TWTR.Widget.jsonP(w.url, function(x) {
-            w.scriptElement = x
-          })
-        },
-        clear : function() {
-          var x = this.byClass("twtr-tweet", "div", true);
-          var w = this.byClass("twtr-new-results", "div", true);
-          x = x.concat(w);
-          H(x, function(y) {
-            f(y)
-          });
-          return this
-        },
-        _sortByMagic : function(w) {
-          var x = this;
-          if (this._tweetFilter) {
-            if (this._tweetFilter.negatives) {
-              w = B(w, function(y) {
-                if (!x._tweetFilter.negatives.test(y.text)) {
-                  return y
-                }
-              })
-            }
-            if (this._tweetFilter.positives) {
-              w = B(w, function(y) {
-                if (x._tweetFilter.positives.test(y.text)) {
-                  return y
-                }
-              })
-            }
-          }
-          switch (this._behavior) {
-          case "all":
-            this._sortByLatest(w);
-            break;
-          case "preloaded":
-          default:
-            this._sortByDefault(w);
-            break
-          }
-          if (this._isLive && this._behavior !== "all") {
-            this.intervalJob.set(this.results);
-            this.intervalJob.start()
-          }
-          return this
-        },
-        _sortByLatest : function(w) {
-          this.results = w;
-          this.results = this.results.slice(0, this.rpp);
-          this.results.reverse();
-          return this
-        },
-        _sortByDefault : function(x) {
-          var y = this;
-          var w = function(z) {
-            return new Date(z).getTime()
-          };
-          this.results.unshift.apply(this.results, x);
-          H(this.results, function(z) {
-            if (!z.views) {
-              z.views = 0
-            }
-          });
-          this.results.sort(function(AA, z) {
-            if (w(AA.created_at) > w(z.created_at)) {
-              return -1
-            } else {
-              if (w(AA.created_at) < w(z.created_at)) {
-                return 1
-              } else {
-                return 0
-              }
-            }
-          });
-          this.results = this.results.slice(0, this.rpp);
-          this.results = this.results.sort(function(AA, z) {
-            if (AA.views < z.views) {
-              return -1
-            } else {
-              if (AA.views > z.views) {
-                return 1
-              }
-            }
-            return 0
-          });
-          if (!this._isLive) {
-            this.results.reverse()
-          }
-        },
-        _prePlay : function(x) {
-          if (this.jsonRequestTimer) {
-            clearTimeout(this.jsonRequestTimer);
-            this.jsonRequestTimer = null
-          }
-          if (!k.ie) {
-            f(this.scriptElement)
-          }
-          if (x.error) {
-            this.newResults = false
-          } else {
-            if (x.results && x.results.length > 0) {
-              this.response = x;
-              this.newResults = true;
-              this.sinceId = x.max_id_str;
-              this._sortByMagic(x.results);
-              if (this.isRunning()) {
-                this._play()
-              }
-            } else {
-              if ((this._isProfileWidget || this._isFavsWidget || this._isListWidget)
-                  && P.array(x) && x.length) {
-                this.newResults = true;
-                if (!this._profileImage
-                    && this._isProfileWidget) {
-                  var w = x[0].user.screen_name;
-                  this.setProfileImage(K(x[0].user));
-                  this.setTitle(x[0].user.name);
-                  this
-                      .setCaption('<a target="_blank" href="https://twitter.com/intent/user?screen_name='
-                          + w + '">' + w + "</a>")
-                }
-                this.sinceId = x[0].id_str;
-                this._sortByMagic(x);
-                if (this.isRunning()) {
-                  this._play()
-                }
-              } else {
-                this.newResults = false
-              }
-            }
-          }
-          this._setUrl();
-          if (this._isLive) {
-            this.decay()
-          }
-        },
-        _play : function() {
-          var w = this;
-          if (this.runOnce) {
-            this._hasNewSearchResults = true
-          }
-          if (this._avatars) {
-            this._preloadImages(this.results)
-          }
-          if (this._isRelativeTime
-              && (this._behavior == "all" || this._behavior == "preloaded")) {
-            H(this.byClass("twtr-timestamp", "a", true),
-                function(x) {
-                  x.innerHTML = R(x.getAttribute("time"))
-                })
-          }
-          if (!this._isLive || this._behavior == "all"
-              || this._behavior == "preloaded") {
-            H(this.results, function(y) {
-              y.profile_image_url = K(y);
-              if (y.retweeted_status) {
-                y = y.retweeted_status
-              }
-              if (w._isProfileWidget || w._isFavsWidget
-                  || w._isListWidget) {
-                y.from_user = y.user.screen_name;
-                y.profile_image_url = K(y.user)
-              }
-              y.id = y.id_str;
-              w._createTweet({
-                id : y.id,
-                user : y.from_user,
-                tweet : y.text,
-                avatar : y.profile_image_url,
-                created_at : y.created_at,
-                needle : y
-              });
-              var x = w.tweet.element;
-              (w._behavior == "all") ? w._appendSlideFade(x) : w
-                  ._appendTweet(x)
-            });
-            if (this._behavior != "preloaded") {
-              return this
-            }
-          }
-          return this
-        },
-        _normalizeTweet : function(x) {
-          var w = this;
-          x.views++;
-          x.profile_image_url = K(x);
-          if (this._isProfileWidget) {
-            x.from_user = w.username;
-            x.profile_image_url = K(x.user)
-          }
-          if (this._isFavsWidget || this._isListWidget) {
-            x.from_user = x.user.screen_name;
-            x.profile_image_url = K(x.user)
-          }
-          if (this._isFullScreen) {
-            x.profile_image_url = x.profile_image_url.replace(
-                /_normal\./, "_bigger.")
-          }
-          x.id = x.id_str;
-          this._createTweet({
-            id : x.id,
-            user : x.from_user,
-            tweet : x.text,
-            avatar : x.profile_image_url,
-            created_at : x.created_at,
-            needle : x
-          })._appendSlideFade()
-        },
-        _insertNewResultsNumber : function() {
-          if (!this._hasNewSearchResults) {
-            this._hasNewSearchResults = false;
-            return
-          }
-          if (this.runOnce && this._isSearchWidget) {
-            var z = this.response.total > this.rpp ? this.response.total
-                : this.response.results.length;
-            var w = z > 1 ? "s" : "";
-            var y = (this.response.warning && this.response.warning
-                .match(/adjusted since_id/)) ? "more than" : "";
-            var x = document.createElement("div");
-            h.add(x, "twtr-new-results");
-            x.innerHTML = '<div class="twtr-results-inner"> &nbsp; </div><div class="twtr-results-hr"> &nbsp; </div><span>'
-                + y
-                + " <strong>"
-                + z
-                + "</strong> new tweet"
-                + w + "</span>";
-            e(x, this.byClass("twtr-reference-tweet", "div"));
-            this._hasNewSearchResults = false
-          }
-        },
-        _preloadImages : function(w) {
-          if (this._isProfileWidget || this._isFavsWidget
-              || this._isListWidget) {
-            H(w, function(y) {
-              var x = new Image();
-              x.src = K(y.user)
-            })
-          } else {
-            H(w, function(x) {
-              (new Image()).src = K(x)
-            })
-          }
-        },
-        _decayDecider : function() {
-          var w = false;
-          if (!this.runOnce) {
-            this.runOnce = true;
-            w = true
-          } else {
-            if (this.newResults) {
-              w = true
-            }
-          }
-          return w
-        },
-        start : function() {
-          var w = this;
-          if (!this._rendered) {
-            setTimeout(function() {
-              w.start.call(w)
-            }, 50);
-            return this
-          }
-          if (!this._isLive) {
-            this._getResults()
-          } else {
-            this.occasionalJob.start()
-          }
-          this._isRunning = true;
-          this._hasOfficiallyStarted = true;
-          return this
-        },
-        stop : function() {
-          this.occasionalJob.stop();
-          if (this.intervalJob) {
-            this.intervalJob.stop()
-          }
-          this._isRunning = false;
-          return this
-        },
-        pause : function() {
-          if (this.isRunning() && this.intervalJob) {
-            this.intervalJob.stop();
-            h.add(this.widgetEl, "twtr-paused");
-            this._isRunning = false
-          }
-          if (this._resumeTimer) {
-            clearTimeout(this._resumeTimer);
-            this._resumeTimer = null
-          }
-          return this
-        },
-        resume : function() {
-          var w = this;
-          if (!this.isRunning() && this._hasOfficiallyStarted
-              && this.intervalJob) {
-            this._resumeTimer = window.setTimeout(function() {
-              w.intervalJob.start();
-              w._isRunning = true;
-              h.remove(w.widgetEl, "twtr-paused")
-            }, 2000)
-          }
-          return this
-        },
-        isRunning : function() {
-          return this._isRunning
-        },
-        destroy : function() {
-          this.stop();
-          this.clear();
-          this.runOnce = false;
-          this._hasOfficiallyStarted = false;
-          this._profileImage = false;
-          this._isLive = true;
-          this._tweetFilter = false;
-          this._isScroll = false;
-          this.newResults = false;
-          this._isRunning = false;
-          this.sinceId = 1;
-          this.results = [];
-          this.showedResults = [];
-          this.occasionalJob.destroy();
-          if (this.jsonRequestRunning) {
-            clearTimeout(this.jsonRequestTimer)
-          }
-          h.remove(this.widgetEl, "twtr-scroll");
-          this.removeEvents();
-          return this
-        }
-      }
-    }()
-  })();
-  var F = /twitter\.com(\:\d{2,4})?\/intent\/(\w+)/, A = {
-    tweet : true,
-    retweet : true,
-    favorite : true
-  }, C = "scrollbars=yes,resizable=yes,toolbar=no,location=yes", E = screen.height, D = screen.width;
-  function G(P) {
-    if (twttr.widgets) {
-      return
-    }
-    P = P || window.event;
-    var O = P.target || P.srcElement, K, L, J, N, M;
-    while (O && O.nodeName.toLowerCase() !== "a") {
-      O = O.parentNode
-    }
-    if (O && O.nodeName.toLowerCase() === "a" && O.href) {
-      K = O.href.match(F);
-      if (K) {
-        L = 550;
-        J = (K[2] in A) ? 420 : 560;
-        N = Math.round((D / 2) - (L / 2));
-        M = 0;
-        if (E > J) {
-          M = Math.round((E / 2) - (J / 2))
-        }
-        window.open(O.href, "intent", C + ",width=" + L + ",height="
-            + J + ",left=" + N + ",top=" + M);
-        P.returnValue = false;
-        P.preventDefault && P.preventDefault()
-      }
-    }
-  }
-  if (document.addEventListener) {
-    document.addEventListener("click", G, false)
-  } else {
-    if (document.attachEvent) {
-      document.attachEvent("onclick", G)
-    }
-  }
-})();OPrime = OPrime  || {};
-OPrime.couchURL = function() {
-  
-  return {
-    complete : "https://ifielddevs.iriscouch.com/lingllama-cherokee-activity_feed/",
-    protocol : "https://",
-    domain : "ifielddevs.iriscouch.com",
-    port : "",
-    db : "lingllama-cherokee-activity_feed/"
-  };
-};
-'use strict';
-
-/* Directives */
-
-
-angular.module('myApp.directives', []).
-  directive('appVersion', ['version', function(version) {
-    return function(scope, elm, attrs) {
-      elm.text(version);
-    };
-  }]);
-'use strict';
-console.log("Loading Activity.services");
-
-/* Services */
-
-// Demonstrate how to register services
-// In this case it is a simple value service.
-angular.module('myApp.services', [ 'ngResource' ])
-.value('version', '0.1')
-.factory(
-    'MostRecentActivities',
-    function($http) {
-      return {
-        'async' : function() {
-          var promise = $http
-              .get(
-                  'https://ifielddevs.iriscouch.com/lingllama-cherokee-activity_feed/'
-                      + '_design/activities/_view/all?limit=5&decending=true').then(
-                  function(response) {
-                    // + JSON.stringify(response));
-                     console.log("response", response);
-                    var results = [];
-                    for (var i = 0; i < response.data.rows.length; i++) {
-                    	results.push(response.data.rows[i].value);
-                    }
-                     return results;
-                  });
-          return promise;
-        }
-      };
-    });'use strict';
-
-/* Filters */
-
-angular.module('myApp.filters', []).
-  filter('interpolate', ['version', function(version) {
-    return function(text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
-    }
-  }]);
-/*
- * This widget script is based off of the Twitter Widget script released under the Apache 2.0 license.
- * 
- * <script charset="utf-8" type="text/javascript" src="http://widgets.fieldlinguist.com/widget/activity.js"></script><script type="text/javascript">// <![CDATA[
-    new Fieldlinguist.Widget({
-      version: 2,
-      type: 'search',
-      search: '#lingllama',
-      interval: 30000,
-      title: 'Team Activity Feed',
-      subject: '',
-      width: 250,
-      height: 300,
-      theme: {
-        shell: {
-          background: '#Fc8',
-          color: '#ffffff'
-        },
-        tweets: {
-          background: '#333333',
-          color: '#ffffff',
-          links: '#Fc8'
-        }
-      },
-      features: {
-        scrollbar: false,
-        loop: true,
-        live: true,
-        behavior: 'default'
-      }
-    }).render().start();
-// ]]></script>
-
- * twitter-text-js 1.4.10
- *
- * Copyright 2011 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this work except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- */
-if (!window.twttr) {
-  window.twttr = {}
-}
-(function() {
-  twttr.txt = {};
-  twttr.txt.regexen = {};
-  var C = {
-    "&" : "&amp;",
-    ">" : "&gt;",
-    "<" : "&lt;",
-    '"' : "&quot;",
-    "'" : "&#39;"
-  };
-  twttr.txt.htmlEscape = function(R) {
-    return R && R.replace(/[&"'><]/g, function(S) {
-      return C[S]
-    })
-  };
-  function D(S, R) {
-    R = R || "";
-    if (typeof S !== "string") {
-      if (S.global && R.indexOf("g") < 0) {
-        R += "g"
-      }
-      if (S.ignoreCase && R.indexOf("i") < 0) {
-        R += "i"
-      }
-      if (S.multiline && R.indexOf("m") < 0) {
-        R += "m"
-      }
-      S = S.source
-    }
-    return new RegExp(S.replace(/#\{(\w+)\}/g, function(U, T) {
-      var V = twttr.txt.regexen[T] || "";
-      if (typeof V !== "string") {
-        V = V.source
-      }
-      return V
-    }), R)
-  }
-  function E(S, R) {
-    return S.replace(/#\{(\w+)\}/g, function(U, T) {
-      return R[T] || ""
-    })
-  }
-  function B(S, U, R) {
-    var T = String.fromCharCode(U);
-    if (R !== U) {
-      T += "-" + String.fromCharCode(R)
-    }
-    S.push(T);
-    return S
-  }
-  var J = String.fromCharCode;
-  var H = [ J(32), J(133), J(160), J(5760), J(6158), J(8232), J(8233),
-      J(8239), J(8287), J(12288) ];
-  B(H, 9, 13);
-  B(H, 8192, 8202);
-  twttr.txt.regexen.spaces_group = D(H.join(""));
-  twttr.txt.regexen.spaces = D("[" + H.join("") + "]");
-  twttr.txt.regexen.punct = /\!'#%&'\(\)*\+,\\\-\.\/:;<=>\?@\[\]\^_{|}~/;
-  twttr.txt.regexen.atSigns = /[@ï¼ ]/;
-  twttr.txt.regexen.extractMentions = D(/(^|[^a-zA-Z0-9_])(#{atSigns})([a-zA-Z0-9_]{1,20})(?=(.|$))/g);
-  twttr.txt.regexen.extractReply = D(/^(?:#{spaces})*#{atSigns}([a-zA-Z0-9_]{1,20})/);
-  twttr.txt.regexen.listName = /[a-zA-Z][a-zA-Z0-9_\-\u0080-\u00ff]{0,24}/;
-  twttr.txt.regexen.extractMentionsOrLists = D(/(^|[^a-zA-Z0-9_])(#{atSigns})([a-zA-Z0-9_]{1,20})(\/[a-zA-Z][a-zA-Z0-9_\-]{0,24})?(?=(.|$))/g);
-  var N = [];
-  B(N, 1024, 1279);
-  B(N, 1280, 1319);
-  B(N, 11744, 11775);
-  B(N, 42560, 42655);
-  B(N, 4352, 4607);
-  B(N, 12592, 12677);
-  B(N, 43360, 43391);
-  B(N, 44032, 55215);
-  B(N, 55216, 55295);
-  B(N, 65441, 65500);
-  B(N, 12449, 12538);
-  B(N, 12540, 12542);
-  B(N, 65382, 65439);
-  B(N, 65392, 65392);
-  B(N, 65296, 65305);
-  B(N, 65313, 65338);
-  B(N, 65345, 65370);
-  B(N, 12353, 12438);
-  B(N, 12441, 12446);
-  B(N, 13312, 19903);
-  B(N, 19968, 40959);
-  B(N, 173824, 177983);
-  B(N, 177984, 178207);
-  B(N, 194560, 195103);
-  B(N, 12293, 12293);
-  B(N, 12347, 12347);
-  twttr.txt.regexen.nonLatinHashtagChars = D(N.join(""));
-  twttr.txt.regexen.latinAccentChars = D("Ã€ÃÃ‚ÃƒÃ„Ã…Ã†Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã˜Ã™ÃšÃ›ÃœÃÃžÃŸÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã¦Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã±Ã²Ã³Ã´ÃµÃ¶Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¾ÅŸ\\303\\277");
-  twttr.txt.regexen.endScreenNameMatch = D(/^(?:#{atSigns}|[#{latinAccentChars}]|:\/\/)/);
-  twttr.txt.regexen.hashtagBoundary = D(/(?:^|$|#{spaces}|[ã€Œã€ã€‚ã€.,!ï¼?ï¼Ÿ:;"'])/);
-  twttr.txt.regexen.hashtagAlpha = D(/[a-z_#{latinAccentChars}#{nonLatinHashtagChars}]/i);
-  twttr.txt.regexen.hashtagAlphaNumeric = D(/[a-z0-9_#{latinAccentChars}#{nonLatinHashtagChars}]/i);
-  twttr.txt.regexen.autoLinkHashtags = D(/(#{hashtagBoundary})(#|ï¼ƒ)(#{hashtagAlphaNumeric}*#{hashtagAlpha}#{hashtagAlphaNumeric}*)/gi);
-  twttr.txt.regexen.autoLinkUsernamesOrLists = /(^|[^a-zA-Z0-9_]|RT:?)([@ï¼ ]+)([a-zA-Z0-9_]{1,20})(\/[a-zA-Z][a-zA-Z0-9_\-]{0,24})?/g;
-  twttr.txt.regexen.autoLinkEmoticon = /(8\-\#|8\-E|\+\-\(|\`\@|\`O|\&lt;\|:~\(|\}:o\{|:\-\[|\&gt;o\&lt;|X\-\/|\[:-\]\-I\-|\/\/\/\/Ã–\\\\\\\\|\(\|:\|\/\)|âˆ‘:\*\)|\( \| \))/g;
-  twttr.txt.regexen.validPrecedingChars = D(/(?:[^-\/"'!=A-Za-z0-9_@ï¼ \.]|^)/);
-  twttr.txt.regexen.invalidDomainChars = E("\u00A0#{punct}#{spaces_group}",
-      twttr.txt.regexen);
-  twttr.txt.regexen.validDomainChars = D(/[^#{invalidDomainChars}]/);
-  twttr.txt.regexen.validSubdomain = D(/(?:(?:#{validDomainChars}(?:[_-]|#{validDomainChars})*)?#{validDomainChars}\.)/);
-  twttr.txt.regexen.validDomainName = D(/(?:(?:#{validDomainChars}(?:-|#{validDomainChars})*)?#{validDomainChars}\.)/);
-  twttr.txt.regexen.validGTLD = D(/(?:(?:aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel)(?=[^a-zA-Z]|$))/);
-  twttr.txt.regexen.validCCTLD = D(/(?:(?:ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|za|zm|zw)(?=[^a-zA-Z]|$))/);
-  twttr.txt.regexen.validPunycode = D(/(?:xn--[0-9a-z]+)/);
-  twttr.txt.regexen.validDomain = D(/(?:#{validSubdomain}*#{validDomainName}(?:#{validGTLD}|#{validCCTLD}|#{validPunycode}))/);
-  twttr.txt.regexen.validShortDomain = D(/^#{validDomainName}#{validCCTLD}$/);
-  twttr.txt.regexen.validPortNumber = D(/[0-9]+/);
-  twttr.txt.regexen.validGeneralUrlPathChars = D(/[a-z0-9!\*';:=\+\$\/%#\[\]\-_,~|&#{latinAccentChars}]/i);
-  twttr.txt.regexen.wikipediaDisambiguation = D(/(?:\(#{validGeneralUrlPathChars}+\))/i);
-  twttr.txt.regexen.validUrlPathChars = D(/(?:#{wikipediaDisambiguation}|@#{validGeneralUrlPathChars}+\/|[\.,]?#{validGeneralUrlPathChars}?)/i);
-  twttr.txt.regexen.validUrlPathEndingChars = D(/(?:[\+\-a-z0-9=_#\/#{latinAccentChars}]|#{wikipediaDisambiguation})/i);
-  twttr.txt.regexen.validUrlQueryChars = /[a-z0-9!\*'\(\);:&=\+\$\/%#\[\]\-_\.,~|]/i;
-  twttr.txt.regexen.validUrlQueryEndingChars = /[a-z0-9_&=#\/]/i;
-  twttr.txt.regexen.extractUrl = D(
-      "((#{validPrecedingChars})((https?:\\/\\/)?(#{validDomain})(?::(#{validPortNumber}))?(\\/(?:#{validUrlPathChars}+#{validUrlPathEndingChars}|#{validUrlPathChars}+#{validUrlPathEndingChars}?|#{validUrlPathEndingChars})?)?(\\?#{validUrlQueryChars}*#{validUrlQueryEndingChars})?))",
-      "gi");
-  twttr.txt.regexen.validateUrlUnreserved = /[a-z0-9\-._~]/i;
-  twttr.txt.regexen.validateUrlPctEncoded = /(?:%[0-9a-f]{2})/i;
-  twttr.txt.regexen.validateUrlSubDelims = /[!$&'()*+,;=]/i;
-  twttr.txt.regexen.validateUrlPchar = D(
-      "(?:#{validateUrlUnreserved}|#{validateUrlPctEncoded}|#{validateUrlSubDelims}|[:|@])",
-      "i");
-  twttr.txt.regexen.validateUrlScheme = /(?:[a-z][a-z0-9+\-.]*)/i;
-  twttr.txt.regexen.validateUrlUserinfo = D(
-      "(?:#{validateUrlUnreserved}|#{validateUrlPctEncoded}|#{validateUrlSubDelims}|:)*",
-      "i");
-  twttr.txt.regexen.validateUrlDecOctet = /(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9]{2})|(?:2[0-4][0-9])|(?:25[0-5]))/i;
-  twttr.txt.regexen.validateUrlIpv4 = D(/(?:#{validateUrlDecOctet}(?:\.#{validateUrlDecOctet}){3})/i);
-  twttr.txt.regexen.validateUrlIpv6 = /(?:\[[a-f0-9:\.]+\])/i;
-  twttr.txt.regexen.validateUrlIp = D(
-      "(?:#{validateUrlIpv4}|#{validateUrlIpv6})", "i");
-  twttr.txt.regexen.validateUrlSubDomainSegment = /(?:[a-z0-9](?:[a-z0-9_\-]*[a-z0-9])?)/i;
-  twttr.txt.regexen.validateUrlDomainSegment = /(?:[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?)/i;
-  twttr.txt.regexen.validateUrlDomainTld = /(?:[a-z](?:[a-z0-9\-]*[a-z0-9])?)/i;
-  twttr.txt.regexen.validateUrlDomain = D(/(?:(?:#{validateUrlSubDomainSegment]}\.)*(?:#{validateUrlDomainSegment]}\.)#{validateUrlDomainTld})/i);
-  twttr.txt.regexen.validateUrlHost = D(
-      "(?:#{validateUrlIp}|#{validateUrlDomain})", "i");
-  twttr.txt.regexen.validateUrlUnicodeSubDomainSegment = /(?:(?:[a-z0-9]|[^\u0000-\u007f])(?:(?:[a-z0-9_\-]|[^\u0000-\u007f])*(?:[a-z0-9]|[^\u0000-\u007f]))?)/i;
-  twttr.txt.regexen.validateUrlUnicodeDomainSegment = /(?:(?:[a-z0-9]|[^\u0000-\u007f])(?:(?:[a-z0-9\-]|[^\u0000-\u007f])*(?:[a-z0-9]|[^\u0000-\u007f]))?)/i;
-  twttr.txt.regexen.validateUrlUnicodeDomainTld = /(?:(?:[a-z]|[^\u0000-\u007f])(?:(?:[a-z0-9\-]|[^\u0000-\u007f])*(?:[a-z0-9]|[^\u0000-\u007f]))?)/i;
-  twttr.txt.regexen.validateUrlUnicodeDomain = D(/(?:(?:#{validateUrlUnicodeSubDomainSegment}\.)*(?:#{validateUrlUnicodeDomainSegment}\.)#{validateUrlUnicodeDomainTld})/i);
-  twttr.txt.regexen.validateUrlUnicodeHost = D(
-      "(?:#{validateUrlIp}|#{validateUrlUnicodeDomain})", "i");
-  twttr.txt.regexen.validateUrlPort = /[0-9]{1,5}/;
-  twttr.txt.regexen.validateUrlUnicodeAuthority = D(
-      "(?:(#{validateUrlUserinfo})@)?(#{validateUrlUnicodeHost})(?::(#{validateUrlPort}))?",
-      "i");
-  twttr.txt.regexen.validateUrlAuthority = D(
-      "(?:(#{validateUrlUserinfo})@)?(#{validateUrlHost})(?::(#{validateUrlPort}))?",
-      "i");
-  twttr.txt.regexen.validateUrlPath = D(/(\/#{validateUrlPchar}*)*/i);
-  twttr.txt.regexen.validateUrlQuery = D(/(#{validateUrlPchar}|\/|\?)*/i);
-  twttr.txt.regexen.validateUrlFragment = D(/(#{validateUrlPchar}|\/|\?)*/i);
-  twttr.txt.regexen.validateUrlUnencoded = D(
-      "^(?:([^:/?#]+):\\/\\/)?([^/?#]*)([^?#]*)(?:\\?([^#]*))?(?:#(.*))?$",
-      "i");
-  var A = "tweet-url";
-  var G = "list-slug";
-  var Q = "username";
-  var M = "hashtag";
-  var O = ' rel="nofollow"';
-  function K(T) {
-    var S = {};
-    for ( var R in T) {
-      if (T.hasOwnProperty(R)) {
-        S[R] = T[R]
-      }
-    }
-    return S
-  }
-  twttr.txt.autoLink = function(S, R) {
-    R = K(R || {});
-    return twttr.txt.autoLinkUsernamesOrLists(twttr.txt.autoLinkUrlsCustom(
-        twttr.txt.autoLinkHashtags(S, R), R), R)
-  };
-  twttr.txt.autoLinkUsernamesOrLists = function(X, V) {
-    V = K(V || {});
-    V.urlClass = V.urlClass || A;
-    V.listClass = V.listClass || G;
-    V.usernameClass = V.usernameClass || Q;
-    V.usernameUrlBase = V.usernameUrlBase || "http://twitter.com/";
-    V.listUrlBase = V.listUrlBase || "http://twitter.com/";
-    if (!V.suppressNoFollow) {
-      var R = O
-    }
-    var W = "", U = twttr.txt.splitTags(X);
-    for ( var T = 0; T < U.length; T++) {
-      var S = U[T];
-      if (T !== 0) {
-        W += ((T % 2 === 0) ? ">" : "<")
-      }
-      if (T % 4 !== 0) {
-        W += S
-      } else {
-        W += S
-            .replace(
-                twttr.txt.regexen.autoLinkUsernamesOrLists,
-                function(f, i, a, e, Y, c, j) {
-                  var Z = j.slice(c + f.length);
-                  var h = {
-                    before : i,
-                    at : a,
-                    user : twttr.txt.htmlEscape(e),
-                    slashListname : twttr.txt.htmlEscape(Y),
-                    extraHtml : R,
-                    preChunk : "",
-                    chunk : twttr.txt.htmlEscape(j),
-                    postChunk : ""
-                  };
-                  for ( var b in V) {
-                    if (V.hasOwnProperty(b)) {
-                      h[b] = V[b]
-                    }
-                  }
-                  if (Y && !V.suppressLists) {
-                    var g = h.chunk = E(
-                        "#{user}#{slashListname}", h);
-                    h.list = twttr.txt.htmlEscape(g
-                        .toLowerCase());
-                    return E(
-                        '#{before}#{at}<a class="#{urlClass} #{listClass}" href="#{listUrlBase}#{list}"#{extraHtml}>#{preChunk}#{chunk}#{postChunk}</a>',
-                        h)
-                  } else {
-                    if (Z
-                        && Z
-                            .match(twttr.txt.regexen.endScreenNameMatch)) {
-                      return f
-                    } else {
-                      h.chunk = twttr.txt.htmlEscape(e);
-                      h.dataScreenName = !V.suppressDataScreenName ? E(
-                          'data-screen-name="#{chunk}" ',
-                          h)
-                          : "";
-                      return E(
-                          '#{before}#{at}<a class="#{urlClass} #{usernameClass}" #{dataScreenName}href="#{usernameUrlBase}#{chunk}"#{extraHtml}>#{preChunk}#{chunk}#{postChunk}</a>',
-                          h)
-                    }
-                  }
-                })
-      }
-    }
-    return W
-  };
-  twttr.txt.autoLinkHashtags = function(T, S) {
-    S = K(S || {});
-    S.urlClass = S.urlClass || A;
-    S.hashtagClass = S.hashtagClass || M;
-    S.hashtagUrlBase = S.hashtagUrlBase
-        || "http://twitter.com/search?q=%23";
-    if (!S.suppressNoFollow) {
-      var R = O
-    }
-    return T
-        .replace(
-            twttr.txt.regexen.autoLinkHashtags,
-            function(V, W, X, Z) {
-              var Y = {
-                before : W,
-                hash : twttr.txt.htmlEscape(X),
-                preText : "",
-                text : twttr.txt.htmlEscape(Z),
-                postText : "",
-                extraHtml : R
-              };
-              for ( var U in S) {
-                if (S.hasOwnProperty(U)) {
-                  Y[U] = S[U]
-                }
-              }
-              return E(
-                  '#{before}<a href="#{hashtagUrlBase}#{text}" title="##{text}" class="#{urlClass} #{hashtagClass}"#{extraHtml}>#{hash}#{preText}#{text}#{postText}</a>',
-                  Y)
-            })
-  };
-  twttr.txt.autoLinkUrlsCustom = function(U, S) {
-    S = K(S || {});
-    if (!S.suppressNoFollow) {
-      S.rel = "nofollow"
-    }
-    if (S.urlClass) {
-      S["class"] = S.urlClass;
-      delete S.urlClass
-    }
-    var V, T, R;
-    if (S.urlEntities) {
-      V = {};
-      for (T = 0, R = S.urlEntities.length; T < R; T++) {
-        V[S.urlEntities[T].url] = S.urlEntities[T]
-      }
-    }
-    delete S.suppressNoFollow;
-    delete S.suppressDataScreenName;
-    delete S.listClass;
-    delete S.usernameClass;
-    delete S.usernameUrlBase;
-    delete S.listUrlBase;
-    return U
-        .replace(
-            twttr.txt.regexen.extractUrl,
-            function(e, h, g, X, i, a, c, j, W) {
-              var Z;
-              if (i) {
-                var Y = "";
-                for ( var b in S) {
-                  Y += E(' #{k}="#{v}" ', {
-                    k : b,
-                    v : S[b].toString().replace(/"/,
-                        "&quot;").replace(/</, "&lt;")
-                        .replace(/>/, "&gt;")
-                  })
-                }
-                var f = {
-                  before : g,
-                  htmlAttrs : Y,
-                  url : twttr.txt.htmlEscape(X)
-                };
-                if (V && V[X] && V[X].display_url) {
-                  f.displayUrl = twttr.txt
-                      .htmlEscape(V[X].display_url)
-                } else {
-                  f.displayUrl = f.url
-                }
-                return E(
-                    '#{before}<a href="#{url}"#{htmlAttrs}>#{displayUrl}</a>',
-                    f)
-              } else {
-                return h
-              }
-            })
-  };
-  twttr.txt.extractMentions = function(U) {
-    var V = [], R = twttr.txt.extractMentionsWithIndices(U);
-    for ( var T = 0; T < R.length; T++) {
-      var S = R[T].screenName;
-      V.push(S)
-    }
-    return V
-  };
-  twttr.txt.extractMentionsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.extractMentions, function(U, Y, X, V, Z) {
-      if (!Z.match(twttr.txt.regexen.endScreenNameMatch)) {
-        var W = T.indexOf(X + V, R);
-        R = W + V.length + 1;
-        S.push({
-          screenName : V,
-          indices : [ W, R ]
-        })
-      }
-    });
-    return S
-  };
-  twttr.txt.extractMentionsOrListsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.extractMentionsOrLists, function(U, Y, X,
-        V, a, Z) {
-      if (!Z.match(twttr.txt.regexen.endScreenNameMatch)) {
-        a = a || "";
-        var W = T.indexOf(X + V + a, R);
-        R = W + V.length + a.length + 1;
-        S.push({
-          screenName : V,
-          listSlug : a,
-          indices : [ W, R ]
-        })
-      }
-    });
-    return S
-  };
-  twttr.txt.extractReplies = function(S) {
-    if (!S) {
-      return null
-    }
-    var R = S.match(twttr.txt.regexen.extractReply);
-    if (!R) {
-      return null
-    }
-    return R[1]
-  };
-  twttr.txt.extractUrls = function(U) {
-    var T = [], R = twttr.txt.extractUrlsWithIndices(U);
-    for ( var S = 0; S < R.length; S++) {
-      T.push(R[S].url)
-    }
-    return T
-  };
-  twttr.txt.extractUrlsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.extractUrl, function(Z, c, b, U, d, W, V,
-        e, a) {
-      if (!d && !e && W.match(twttr.txt.regexen.validShortDomain)) {
-        return
-      }
-      var X = T.indexOf(U, Y), Y = X + U.length;
-      S.push({
-        url : U,
-        indices : [ X, Y ]
-      })
-    });
-    return S
-  };
-  twttr.txt.extractHashtags = function(U) {
-    var T = [], S = twttr.txt.extractHashtagsWithIndices(U);
-    for ( var R = 0; R < S.length; R++) {
-      T.push(S[R].hashtag)
-    }
-    return T
-  };
-  twttr.txt.extractHashtagsWithIndices = function(T) {
-    if (!T) {
-      return []
-    }
-    var S = [], R = 0;
-    T.replace(twttr.txt.regexen.autoLinkHashtags, function(U, X, Y, W) {
-      var V = T.indexOf(Y + W, R);
-      R = V + W.length + 1;
-      S.push({
-        hashtag : W,
-        indices : [ V, R ]
-      })
-    });
-    return S
-  };
-  twttr.txt.splitTags = function(X) {
-    var R = X.split("<"), W, V = [], U;
-    for ( var T = 0; T < R.length; T += 1) {
-      U = R[T];
-      if (!U) {
-        V.push("")
-      } else {
-        W = U.split(">");
-        for ( var S = 0; S < W.length; S += 1) {
-          V.push(W[S])
-        }
-      }
-    }
-    return V
-  };
-  twttr.txt.hitHighlight = function(c, e, U) {
-    var a = "em";
-    e = e || [];
-    U = U || {};
-    if (e.length === 0) {
-      return c
-    }
-    var T = U.tag || a, d = [ "<" + T + ">", "</" + T + ">" ], b = twttr.txt
-        .splitTags(c), f, k, h, X = "", R = 0, Y = b[0], Z = 0, S = 0, o = false, V = Y, g = [], W, l, p, n, m;
-    for (k = 0; k < e.length; k += 1) {
-      for (h = 0; h < e[k].length; h += 1) {
-        g.push(e[k][h])
-      }
-    }
-    for (W = 0; W < g.length; W += 1) {
-      l = g[W];
-      p = d[W % 2];
-      n = false;
-      while (Y != null && l >= Z + Y.length) {
-        X += V.slice(S);
-        if (o && l === Z + V.length) {
-          X += p;
-          n = true
-        }
-        if (b[R + 1]) {
-          X += "<" + b[R + 1] + ">"
-        }
-        Z += V.length;
-        S = 0;
-        R += 2;
-        Y = b[R];
-        V = Y;
-        o = false
-      }
-      if (!n && Y != null) {
-        m = l - Z;
-        X += V.slice(S, m) + p;
-        S = m;
-        if (W % 2 === 0) {
-          o = true
-        } else {
-          o = false
-        }
-      } else {
-        if (!n) {
-          n = true;
-          X += p
-        }
-      }
-    }
-    if (Y != null) {
-      if (S < V.length) {
-        X += V.slice(S)
-      }
-      for (W = R + 1; W < b.length; W += 1) {
-        X += (W % 2 === 0 ? b[W] : "<" + b[W] + ">")
-      }
-    }
-    return X
-  };
-  var F = 140;
-  var P = [ J(65534), J(65279), J(65535), J(8234), J(8235), J(8236), J(8237),
-      J(8238) ];
-  twttr.txt.isInvalidTweet = function(S) {
-    if (!S) {
-      return "empty"
-    }
-    if (S.length > F) {
-      return "too_long"
-    }
-    for ( var R = 0; R < P.length; R++) {
-      if (S.indexOf(P[R]) >= 0) {
-        return "invalid_characters"
-      }
-    }
-    return false
-  };
-  twttr.txt.isValidTweetText = function(R) {
-    return !twttr.txt.isInvalidTweet(R)
-  };
-  twttr.txt.isValidUsername = function(S) {
-    if (!S) {
-      return false
-    }
-    var R = twttr.txt.extractMentions(S);
-    return R.length === 1 && R[0] === S.slice(1)
-  };
-  var L = D(/^#{autoLinkUsernamesOrLists}$/);
-  twttr.txt.isValidList = function(S) {
-    var R = S.match(L);
-    return !!(R && R[1] == "" && R[4])
-  };
-  twttr.txt.isValidHashtag = function(S) {
-    if (!S) {
-      return false
-    }
-    var R = twttr.txt.extractHashtags(S);
-    return R.length === 1 && R[0] === S.slice(1)
-  };
-  twttr.txt.isValidUrl = function(R, W, Z) {
-    if (W == null) {
-      W = true
-    }
-    if (Z == null) {
-      Z = true
-    }
-    if (!R) {
-      return false
-    }
-    var S = R.match(twttr.txt.regexen.validateUrlUnencoded);
-    if (!S || S[0] !== R) {
-      return false
-    }
-    var T = S[1], U = S[2], Y = S[3], X = S[4], V = S[5];
-    if (!((!Z || (I(T, twttr.txt.regexen.validateUrlScheme) && T
-        .match(/^https?$/i)))
-        && I(Y, twttr.txt.regexen.validateUrlPath)
-        && I(X, twttr.txt.regexen.validateUrlQuery, true) && I(V,
-        twttr.txt.regexen.validateUrlFragment, true))) {
-      return false
-    }
-    return (W && I(U, twttr.txt.regexen.validateUrlUnicodeAuthority))
-        || (!W && I(U, twttr.txt.regexen.validateUrlAuthority))
-  };
-  function I(S, T, R) {
-    if (!R) {
-      return ((typeof S === "string") && S.match(T) && RegExp["$&"] === S)
-    }
-    return (!S || (S.match(T) && RegExp["$&"] === S))
-  }
-  if (typeof module != "undefined" && module.exports) {
-    module.exports = twttr.txt
-  }
-}());
-Fieldlinguist = window.Fieldlinguist || {};
-(function() {
-  if (Fieldlinguist && Fieldlinguist.Widget) {
-    return
-  }
-  function H(K, N, J) {
-    for ( var M = 0, L = K.length; M < L; ++M) {
-      N.call(J || window, K[M], M, K)
-    }
-  }
-  function B(J, K, L) {
-    (Array.prototype.filter || function(Q, R) {
-      var P = R || window;
-      var M = [];
-      for ( var O = 0, N = this.length; O < N; ++O) {
-        if (!Q.call(P, this[O], O, this)) {
-          continue
-        }
-        M.push(this[O])
-      }
-      return M
-    }).call(J, K, L)
-  }
-  function I(J, L, K) {
-    this.el = J;
-    this.prop = L;
-    this.from = K.from;
-    this.to = K.to;
-    this.time = K.time;
-    this.callback = K.callback;
-    this.animDiff = this.to - this.from
-  }
-  I.canTransition = function() {
-    var J = document.createElement("twitter");
-    J.style.cssText = "-webkit-transition: all .5s linear;";
-    return !!J.style.webkitTransitionProperty
-  }();
-  I.prototype._setStyle = function(J) {
-    switch (this.prop) {
-    case "opacity":
-      this.el.style[this.prop] = J;
-      this.el.style.filter = "alpha(opacity=" + J * 100 + ")";
-      break;
-    default:
-      this.el.style[this.prop] = J + "px";
-      break
-    }
-  };
-  I.prototype._animate = function() {
-    var J = this;
-    this.now = new Date();
-    this.diff = this.now - this.startTime;
-    if (this.diff > this.time) {
-      this._setStyle(this.to);
-      if (this.callback) {
-        this.callback.call(this)
-      }
-      clearInterval(this.timer);
-      return
-    }
-    this.percentage = (Math.floor((this.diff / this.time) * 100) / 100);
-    this.val = (this.animDiff * this.percentage) + this.from;
-    this._setStyle(this.val)
-  };
-  I.prototype.start = function() {
-    var J = this;
-    this.startTime = new Date();
-    this.timer = setInterval(function() {
-      J._animate.call(J)
-    }, 15)
-  };
-  Fieldlinguist.Widget = function(J) {
-    this.init(J)
-  };
-  (function() {
-    var X = window.twttr || {};
-    var V = location.protocol.match(/^https/);
-    var K = function(m) {
-      return V ? m.profile_image_url_https : m.profile_image_url
-    };
-    var l = {};
-    var j = function(n) {
-      var m = l[n];
-      if (!m) {
-        m = new RegExp("(?:^|\\s+)" + n + "(?:\\s+|$)");
-        l[n] = m
-      }
-      return m
-    };
-    var L = function(q, v, s, t) {
-      var v = v || "*";
-      var s = s || document;
-      var n = [], m = s.getElementsByTagName(v), u = j(q);
-      for ( var o = 0, p = m.length; o < p; ++o) {
-        if (u.test(m[o].className)) {
-          n[n.length] = m[o];
-          if (t) {
-            t.call(m[o], m[o])
-          }
-        }
-      }
-      return n
-    };
-    var k = function() {
-      var m = navigator.userAgent;
-      return {
-        ie : m.match(/MSIE\s([^;]*)/)
-      }
-    }();
-    var O = function(m) {
-      if (typeof m == "string") {
-        return document.getElementById(m)
-      }
-      return m
-    };
-    var c = function(m) {
-      return m.replace(/^\s+|\s+$/g, "")
-    };
-    var b = function() {
-      var m = self.innerHeight;
-      var n = document.compatMode;
-      if ((n || k.ie)) {
-        m = (n == "CSS1Compat") ? document.documentElement.clientHeight
-            : document.body.clientHeight
-      }
-      return m
-    };
-    var i = function(o, m) {
-      var n = o.target || o.srcElement;
-      return m(n)
-    };
-    var Z = function(n) {
-      try {
-        if (n && 3 == n.nodeType) {
-          return n.parentNode
-        } else {
-          return n
-        }
-      } catch (m) {
-      }
-    };
-    var a = function(n) {
-      var m = n.relatedTarget;
-      if (!m) {
-        if (n.type == "mouseout") {
-          m = n.toElement
-        } else {
-          if (n.type == "mouseover") {
-            m = n.fromElement
-          }
-        }
-      }
-      return Z(m)
-    };
-    var e = function(n, m) {
-      m.parentNode.insertBefore(n, m.nextSibling)
-    };
-    var f = function(n) {
-      try {
-        n.parentNode.removeChild(n)
-      } catch (m) {
-      }
-    };
-    var d = function(m) {
-      return m.firstChild
-    };
-    var J = function(o) {
-      var n = a(o);
-      while (n && n != this) {
-        try {
-          n = n.parentNode
-        } catch (m) {
-          n = this
-        }
-      }
-      if (n != this) {
-        return true
-      }
-      return false
-    };
-    var N = function() {
-      if (document.defaultView && document.defaultView.getComputedStyle) {
-        return function(n, q) {
-          var p = null;
-          var o = document.defaultView.getComputedStyle(n, "");
-          if (o) {
-            p = o[q]
-          }
-          var m = n.style[q] || p;
-          return m
-        }
-      } else {
-        if (document.documentElement.currentStyle && k.ie) {
-          return function(m, o) {
-            var n = m.currentStyle ? m.currentStyle[o] : null;
-            return (m.style[o] || n)
-          }
-        }
-      }
-    }();
-    var h = {
-      has : function(m, n) {
-        return new RegExp("(^|\\s)" + n + "(\\s|$)")
-            .test(O(m).className)
-      },
-      add : function(m, n) {
-        if (!this.has(m, n)) {
-          O(m).className = c(O(m).className) + " " + n
-        }
-      },
-      remove : function(m, n) {
-        if (this.has(m, n)) {
-          O(m).className = O(m).className.replace(new RegExp(
-              "(^|\\s)" + n + "(\\s|$)", "g"), "")
-        }
-      }
-    };
-    var M = {
-      add : function(o, n, m) {
-        if (o.addEventListener) {
-          o.addEventListener(n, m, false)
-        } else {
-          o.attachEvent("on" + n, function() {
-            m.call(o, window.event)
-          })
-        }
-      },
-      remove : function(o, n, m) {
-        if (o.removeEventListener) {
-          o.removeEventListener(n, m, false)
-        } else {
-          o.detachEvent("on" + n, m)
-        }
-      }
-    };
-    var U = function() {
-      function n(p) {
-        return parseInt((p).substring(0, 2), 16)
-      }
-      function m(p) {
-        return parseInt((p).substring(2, 4), 16)
-      }
-      function o(p) {
-        return parseInt((p).substring(4, 6), 16)
-      }
-      return function(p) {
-        return [ n(p), m(p), o(p) ]
-      }
-    }();
-    var P = {
-      bool : function(m) {
-        return typeof m === "boolean"
-      },
-      def : function(m) {
-        return !(typeof m === "undefined")
-      },
-      number : function(m) {
-        return typeof m === "number" && isFinite(m)
-      },
-      string : function(m) {
-        return typeof m === "string"
-      },
-      fn : function(m) {
-        return typeof m === "function"
-      },
-      array : function(m) {
-        if (m) {
-          return P.number(m.length) && P.fn(m.splice)
-        }
-        return false
-      }
-    };
-    var T = [ "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November",
-        "December" ];
-    var Y = function(p) {
-      var u = new Date(p);
-      if (k.ie) {
-        u = Date.parse(p.replace(/( \+)/, " UTC$1"))
-      }
-      var n = "";
-      var m = function() {
-        var s = u.getHours();
-        if (s > 0 && s < 13) {
-          n = "am";
-          return s
-        } else {
-          if (s < 1) {
-            n = "am";
-            return 12
-          } else {
-            n = "pm";
-            return s - 12
-          }
-        }
-      }();
-      var o = u.getMinutes();
-      var t = u.getSeconds();
-      function q() {
-        var s = new Date();
-        if (s.getDate() != u.getDate() || s.getYear() != u.getYear()
-            || s.getMonth() != u.getMonth()) {
-          return " - " + T[u.getMonth()] + " " + u.getDate() + ", "
-              + u.getFullYear()
-        } else {
-          return ""
-        }
-      }
-      return m + ":" + o + n + q()
-    };
-    var R = function(t) {
-      var v = new Date();
-      var q = new Date(t);
-      if (k.ie) {
-        q = Date.parse(t.replace(/( \+)/, " UTC$1"))
-      }
-      var u = v - q;
-      var n = 1000, o = n * 60, p = o * 60, s = p * 24, m = s * 7;
-      if (isNaN(u) || u < 0) {
-        return ""
-      }
-      if (u < n * 2) {
-        return "right now"
-      }
-      if (u < o) {
-        return Math.floor(u / n) + " seconds ago"
-      }
-      if (u < o * 2) {
-        return "about 1 minute ago"
-      }
-      if (u < p) {
-        return Math.floor(u / o) + " minutes ago"
-      }
-      if (u < p * 2) {
-        return "about 1 hour ago"
-      }
-      if (u < s) {
-        return Math.floor(u / p) + " hours ago"
-      }
-      if (u > s && u < s * 2) {
-        return "yesterday"
-      }
-      if (u < s * 365) {
-        return Math.floor(u / s) + " days ago"
-      } else {
-        return "over a year ago"
-      }
-    };
-    function g(p) {
-      var n = {};
-      for ( var m in p) {
-        if (p.hasOwnProperty(m)) {
-          n[m] = p[m]
-        }
-      }
-      return n
-    }
-    X.txt.autoLink = function(n, m) {
-      m = options_links = m || {};
-      if (m.hasOwnProperty("extraHtml")) {
-        options_links = g(m);
-        delete options_links.extraHtml
-      }
-      return X.txt.autoLinkUsernamesOrLists(X.txt.autoLinkUrlsCustom(
-          X.txt.autoLinkHashtags(n, m), options_links), m)
-    };
-    Fieldlinguist.Widget.ify = {
-      autoLink : function(m) {
-        options = {
-          extraHtml : "target=_blank",
-          target : "_blank",
-          urlEntities : []
-        };
-        if (m.needle.entities) {
-          if (m.needle.entities.urls) {
-            options.urlEntities = m.needle.entities.urls
-          }
-          if (m.needle.entities.media) {
-            options.urlEntities = options.urlEntities
-                .concat(m.needle.entities.media)
-          }
-        }
-        if (X && X.txt) {
-          return X.txt.autoLink(m.needle.text, options).replace(
-              /([@ï¼ ]+)(<[^>]*>)/g, "$2$1")
-        } else {
-          return m.needle.text
-        }
-      }
-    };
-    function W(n, o, m) {
-      this.job = n;
-      this.decayFn = o;
-      this.interval = m;
-      this.decayRate = 1;
-      this.decayMultiplier = 1.25;
-      this.maxDecayTime = 3 * 60 * 1000
-    }
-    W.prototype = {
-      start : function() {
-        this.stop().run();
-        return this
-      },
-      stop : function() {
-        if (this.worker) {
-          window.clearTimeout(this.worker)
-        }
-        return this
-      },
-      run : function() {
-        var m = this;
-        this.job(function() {
-          m.decayRate = m.decayFn() ? Math.max(1, m.decayRate
-              / m.decayMultiplier) : m.decayRate
-              * m.decayMultiplier;
-          var n = m.interval * m.decayRate;
-          n = (n >= m.maxDecayTime) ? m.maxDecayTime : n;
-          n = Math.floor(n);
-          m.worker = window.setTimeout(function() {
-            m.run.call(m)
-          }, n)
-        })
-      },
-      destroy : function() {
-        this.stop();
-        this.decayRate = 1;
-        return this
-      }
-    };
-    function Q(n, m, o) {
-      this.time = n || 6000;
-      this.loop = m || false;
-      this.repeated = 0;
-      this.callback = o;
-      this.haystack = []
-    }
-    Q.prototype = {
-      set : function(m) {
-        this.haystack = m
-      },
-      add : function(m) {
-        this.haystack.unshift(m)
-      },
-      start : function() {
-        if (this.timer) {
-          return this
-        }
-        this._job();
-        var m = this;
-        this.timer = setInterval(function() {
-          m._job.call(m)
-        }, this.time);
-        return this
-      },
-      stop : function() {
-        if (this.timer) {
-          window.clearInterval(this.timer);
-          this.timer = null
-        }
-        return this
-      },
-      _next : function() {
-        var m = this.haystack.shift();
-        if (m && this.loop) {
-          this.haystack.push(m)
-        }
-        return m || null
-      },
-      _job : function() {
-        var m = this._next();
-        if (m) {
-          this.callback(m)
-        }
-        return this
-      }
-    };
-    function S(n) {
-      var m = '<div class="twtr-tweet-wrap">         <div class="twtr-avatar">           <div class="twtr-img"><a target="_blank" href="https://twitter.com/intent/user?screen_name='
-          + n.user
-          + '"><img alt="'
-          + n.user
-          + ' profile" src="'
-          + n.avatar
-          + '"></a></div>         </div>         <div class="twtr-tweet-text">           <p>             <a target="_blank" href="https://twitter.com/intent/user?screen_name='
-          + n.user
-          + '" class="twtr-user">'
-          + n.user
-          + "</a> "
-          + n.tweet
-          + '             <em>            <a target="_blank" class="twtr-timestamp" time="'
-          + n.timestamp
-          + '" href="https://twitter.com/'
-          + n.user
-          + "/status/"
-          + n.id
-          + '">'
-          + n.created_at
-          + '</a> &middot;            <a target="_blank" class="twtr-reply" href="https://twitter.com/intent/tweet?in_reply_to='
-          + n.id
-          + '">reply</a> &middot;             <a target="_blank" class="twtr-rt" href="https://twitter.com/intent/retweet?tweet_id='
-          + n.id
-          + '">retweet</a> &middot;             <a target="_blank" class="twtr-fav" href="https://twitter.com/intent/favorite?tweet_id='
-          + n.id
-          + '">favorite</a>             </em>           </p>         </div>       </div>';
-      var o = document.createElement("div");
-      o.id = "tweet-id-" + ++S._tweetCount;
-      o.className = "twtr-tweet";
-      o.innerHTML = m;
-      this.element = o
-    }
-    S._tweetCount = 0;
-    X.loadStyleSheet = function(o, n) {
-      if (!Fieldlinguist.Widget.loadingStyleSheet) {
-        Fieldlinguist.Widget.loadingStyleSheet = true;
-        var m = document.createElement("link");
-        m.href = o;
-        m.rel = "stylesheet";
-        m.type = "text/css";
-        document.getElementsByTagName("head")[0].appendChild(m);
-        var p = setInterval(function() {
-          var q = N(n, "position");
-          if (q == "relative") {
-            clearInterval(p);
-            p = null;
-            Fieldlinguist.Widget.hasLoadedStyleSheet = true
-          }
-        }, 50)
-      }
-    };
-    (function() {
-      var m = false;
-      X.css = function(p) {
-        var o = document.createElement("style");
-        o.type = "text/css";
-        if (k.ie) {
-          o.styleSheet.cssText = p
-        } else {
-          var q = document.createDocumentFragment();
-          q.appendChild(document.createTextNode(p));
-          o.appendChild(q)
-        }
-        function n() {
-          document.getElementsByTagName("head")[0].appendChild(o)
-        }
-        if (!k.ie || m) {
-          n()
-        } else {
-          window.attachEvent("onload", function() {
-            m = true;
-            n()
-          })
-        }
-      }
-    })();
-    Fieldlinguist.Widget.isLoaded = false;
-    Fieldlinguist.Widget.loadingStyleSheet = false;
-    Fieldlinguist.Widget.hasLoadedStyleSheet = false;
-    Fieldlinguist.Widget.WIDGET_NUMBER = 0;
-    Fieldlinguist.Widget.REFRESH_MIN = 6000;
-    Fieldlinguist.Widget.ENTITY_RANGE = 100;
-    Fieldlinguist.Widget.ENTITY_PERCENTAGE = 100;
-    Fieldlinguist.Widget.matches = {
-      mentions : /^@[a-zA-Z0-9_]{1,20}\b/,
-      any_mentions : /\b@[a-zA-Z0-9_]{1,20}\b/
-    };
-    Fieldlinguist.Widget.jsonP = function(n, p) {
-      var m = document.createElement("script");
-      var o = document.getElementsByTagName("head")[0];
-      m.type = "text/javascript";
-      m.src = n;
-      o.insertBefore(m, o.firstChild);
-      p(m);
-      return m
-    };
-    Fieldlinguist.Widget.randomNumber = function(m) {
-      r = Math.floor(Math.random() * m);
-      return r
-    };
-    Fieldlinguist.Widget.SHOW_ENTITIES = Fieldlinguist.Widget
-        .randomNumber(Fieldlinguist.Widget.ENTITY_RANGE) <= Fieldlinguist.Widget.ENTITY_PERCENTAGE;
-    Fieldlinguist.Widget.prototype = function() {
-      var s = window.twttr || {};
-      var t = V ? "https://" : "http://";
-      var q = "twitter.com";
-      var n = t + "search." + q + "/search.";
-      var m = t + "api." + q + "/1/statuses/user_timeline.";
-      var p = t + "api." + q + "/1/favorites.";
-      var o = t + "api." + q + "/1/";
-      var u = 25000;
-      var v = "//widgets.twimg.com/j/1/default.gif";
-      return {
-        init : function(x) {
-          var w = this;
-          this._widgetNumber = ++Fieldlinguist.Widget.WIDGET_NUMBER;
-          Fieldlinguist.Widget["receiveCallback_" + this._widgetNumber] = function(
-              y) {
-            w._prePlay.call(w, y)
-          };
-          this._cb = "Fieldlinguist.Widget.receiveCallback_"
-              + this._widgetNumber;
-          this.opts = x;
-          this._base = n;
-          this._isRunning = false;
-          this._hasOfficiallyStarted = false;
-          this._hasNewSearchResults = false;
-          this._rendered = false;
-          this._profileImage = false;
-          this._isCreator = !!x.creator;
-          this._setWidgetType(x.type);
-          this.timesRequested = 0;
-          this.runOnce = false;
-          this.newResults = false;
-          this.results = [];
-          this.jsonMaxRequestTimeOut = 19000;
-          this.showedResults = [];
-          this.sinceId = 1;
-          this.source = "TWITTERINC_WIDGET";
-          this.id = x.id || "twtr-widget-" + this._widgetNumber;
-          this.tweets = 0;
-          this.setDimensions(x.width, x.height);
-          this.interval = x.interval ? Math.max(x.interval,
-              Fieldlinguist.Widget.REFRESH_MIN) : Fieldlinguist.Widget.REFRESH_MIN;
-          this.format = "json";
-          this.rpp = x.rpp || 50;
-          this.subject = x.subject || "";
-          this.title = x.title || "";
-          this.setFooterText(x.footer);
-          this.setSearch(x.search);
-          this._setUrl();
-          this.theme = x.theme ? x.theme : this._getDefaultTheme();
-          if (!x.id) {
-            document.write('<div class="twtr-widget" id="'
-                + this.id + '"></div>')
-          }
-          this.widgetEl = O(this.id);
-          if (x.id) {
-            h.add(this.widgetEl, "twtr-widget")
-          }
-          if (x.version >= 2 && !Fieldlinguist.Widget.hasLoadedStyleSheet) {
-            if (x.creator) {
-              s.loadStyleSheet("/stylesheets/widgets/widget.css",
-                  this.widgetEl)
-            } else {
-              s.loadStyleSheet(
-                  "//widgets.twimg.com/j/2/widget.css",
-                  this.widgetEl)
-            }
-          }
-          this.occasionalJob = new W(function(y) {
-            w.decay = y;
-            w._getResults.call(w)
-          }, function() {
-            return w._decayDecider.call(w)
-          }, u);
-          this._ready = P.fn(x.ready) ? x.ready : function() {
-          };
-          this._isRelativeTime = true;
-          this._tweetFilter = false;
-          this._avatars = true;
-          this._isFullScreen = false;
-          this._isLive = true;
-          this._isScroll = false;
-          this._loop = true;
-          this._behavior = "default";
-          this.setFeatures(this.opts.features);
-          this.intervalJob = new Q(this.interval, this._loop,
-              function(y) {
-                w._normalizeTweet(y)
-              });
-          return this
-        },
-        setDimensions : function(x, y) {
-          this.wh = (x && y) ? [ x, y ] : [ 250, 300 ];
-          if (x == "auto" || x == "100%") {
-            this.wh[0] = "100%"
-          } else {
-            this.wh[0] = ((this.wh[0] < 150) ? 150 : this.wh[0])
-                + "px"
-          }
-          this.wh[1] = ((this.wh[1] < 100) ? 100 : this.wh[1]) + "px";
-          return this
-        },
-        setRpp : function(w) {
-          var w = parseInt(w);
-          this.rpp = (P.number(w) && (w > 0 && w <= 100)) ? w : 30;
-          return this
-        },
-        _setWidgetType : function(w) {
-          this._isSearchWidget = false,
-              this._isProfileWidget = false,
-              this._isFavsWidget = false,
-              this._isListWidget = false;
-          switch (w) {
-          case "profile":
-            this._isProfileWidget = true;
-            break;
-          case "search":
-            this._isSearchWidget = true,
-                this.search = this.opts.search;
-            break;
-          case "faves":
-          case "favs":
-            this._isFavsWidget = true;
-            break;
-          case "list":
-          case "lists":
-            this._isListWidget = true;
-            break
-          }
-          return this
-        },
-        setFeatures : function(w) {
-          if (w) {
-            if (P.def(w.filters)) {
-              this._tweetFilter = w.filters
-            }
-            if (P.def(w.dateformat)) {
-              this._isRelativeTime = !!(w.dateformat !== "absolute")
-            }
-            if (P.def(w.fullscreen) && P.bool(w.fullscreen)) {
-              if (w.fullscreen) {
-                this._isFullScreen = true;
-                this.wh[0] = "100%";
-                this.wh[1] = (b() - 90) + "px";
-                var x = this;
-                M.add(window, "resize", function(z) {
-                  x.wh[1] = b();
-                  x._fullScreenResize()
-                })
-              }
-            }
-            if (P.def(w.loop) && P.bool(w.loop)) {
-              this._loop = w.loop
-            }
-            if (P.def(w.behavior) && P.string(w.behavior)) {
-              switch (w.behavior) {
-              case "all":
-                this._behavior = "all";
-                break;
-              case "preloaded":
-                this._behavior = "preloaded";
-                break;
-              default:
-                this._behavior = "default";
-                break
-              }
-            }
-            if (P.def(w.avatars) && P.bool(w.avatars)) {
-              if (!w.avatars) {
-                s
-                    .css("#"
-                        + this.id
-                        + " .twtr-avatar { display: none; } #"
-                        + this.id
-                        + " .twtr-tweet-text { margin-left: 0; }");
-                this._avatars = false
-              } else {
-                var y = (this._isFullScreen) ? "90px" : "40px";
-                s.css("#" + this.id
-                    + " .twtr-avatar { display: block; } #"
-                    + this.id
-                    + " .twtr-user { display: inline; } #"
-                    + this.id
-                    + " .twtr-tweet-text { margin-left: "
-                    + y + "; }");
-                this._avatars = true
-              }
-            } else {
-              if (this._isProfileWidget) {
-                this.setFeatures({
-                  avatars : false
-                });
-                this._avatars = false
-              } else {
-                this.setFeatures({
-                  avatars : true
-                });
-                this._avatars = true
-              }
-            }
-            if (P.def(w.live) && P.bool(w.live)) {
-              this._isLive = w.live
-            }
-            if (P.def(w.scrollbar) && P.bool(w.scrollbar)) {
-              this._isScroll = w.scrollbar
-            }
-          } else {
-            if (this._isProfileWidget || this._isFavsWidget) {
-              this._behavior = "all"
-            }
-          }
-          return this
-        },
-        _fullScreenResize : function() {
-          var w = L("twtr-timeline", "div", document.body,
-              function(x) {
-                x.style.height = (b() - 90) + "px"
-              })
-        },
-        setTweetInterval : function(w) {
-          this.interval = w;
-          return this
-        },
-        setBase : function(w) {
-          this._base = w;
-          return this
-        },
-        setUser : function(x, w) {
-          this.username = x;
-          this.realname = w || " ";
-          if (this._isFavsWidget) {
-            this.setBase(p + this.format + "?screen_name=" + x)
-          } else {
-            if (this._isProfileWidget) {
-              this.setBase(m + this.format + "?screen_name=" + x)
-            }
-          }
-          this.setSearch(" ");
-          return this
-        },
-        setList : function(x, w) {
-          this.listslug = w.replace(/ /g, "-").toLowerCase();
-          this.username = x;
-          this.setBase(o + x + "/lists/" + this.listslug
-              + "/statuses.");
-          this.setSearch(" ");
-          return this
-        },
-        setProfileImage : function(w) {
-          this._profileImage = w;
-          this.byClass("twtr-profile-img", "img").src = w;
-          this.byClass("twtr-profile-img-anchor", "a").href = "https://twitter.com/intent/user?screen_name="
-              + this.username;
-          return this
-        },
-        setTitle : function(w) {
-          this.title = s.txt.htmlEscape(w);
-          this.widgetEl.getElementsByTagName("h3")[0].innerHTML = this.title;
-          return this
-        },
-        setCaption : function(w) {
-          this.subject = w;
-          this.widgetEl.getElementsByTagName("h4")[0].innerHTML = this.subject;
-          return this
-        },
-        setFooterText : function(w) {
-          this.footerText = (P.def(w) && P.string(w)) ? w
-              : "Join the conversation";
-          if (this._rendered) {
-            this.byClass("twtr-join-conv", "a").innerHTML = this.footerText
-          }
-          return this
-        },
-        setSearch : function(x) {
-          this.searchString = x || "";
-          this.search = encodeURIComponent(this.searchString);
-          this._setUrl();
-          if (this._rendered) {
-            var w = this.byClass("twtr-join-conv", "a");
-            w.href = "https://twitter.com/" + this._getWidgetPath()
-          }
-          return this
-        },
-        _getWidgetPath : function() {
-          if (this._isProfileWidget) {
-            return this.username
-          } else {
-            if (this._isFavsWidget) {
-              return this.username + "/favorites"
-            } else {
-              if (this._isListWidget) {
-                return this.username + "/" + this.listslug
-              } else {
-                return "search/" + this.search
-              }
-            }
-          }
-        },
-        _setUrl : function() {
-          var x = this;
-          function w() {
-            return "&" + (+new Date) + "=cachebust"
-          }
-          function y() {
-            return (x.sinceId == 1) ? "" : "&since_id=" + x.sinceId
-                + "&refresh=true"
-          }
-          if (this._isProfileWidget) {
-            this.url = this._includeEntities(this._base
-                + "&callback=" + this._cb
-                + "&include_rts=true&count=" + this.rpp + y()
-                + "&clientsource=" + this.source)
-          } else {
-            if (this._isFavsWidget) {
-              this.url = this._includeEntities(this._base
-                  + "&callback=" + this._cb + y()
-                  + "&clientsource=" + this.source)
-            } else {
-              if (this._isListWidget) {
-                this.url = this._includeEntities(this._base
-                    + this.format + "?callback=" + this._cb
-                    + y() + "&clientsource=" + this.source)
-              } else {
-                this.url = this._includeEntities(this._base
-                    + this.format + "?q=" + this.search
-                    + "&callback=" + this._cb + "&rpp="
-                    + this.rpp + y() + "&clientsource="
-                    + this.source);
-                if (!this.runOnce) {
-                  this.url += "&result_type=filtered"
-                }
-              }
-            }
-          }
-          this.url += w();
-          return this
-        },
-        _includeEntities : function(w) {
-          if (Fieldlinguist.Widget.SHOW_ENTITIES) {
-            return w + "&include_entities=true"
-          }
-          return w
-        },
-        _getRGB : function(w) {
-          return U(w.substring(1, 7))
-        },
-        setTheme : function(AB, w) {
-          var z = this;
-          var x = " !important";
-          var AA = ((window.location.hostname.match(/twitter\.com/)) && (window.location.pathname
-              .match(/goodies/)));
-          if (w || AA) {
-            x = ""
-          }
-          this.theme = {
-            shell : {
-              background : function() {
-                return AB.shell.background
-                    || z._getDefaultTheme().shell.background
-              }(),
-              color : function() {
-                return AB.shell.color
-                    || z._getDefaultTheme().shell.color
-              }()
-            },
-            tweets : {
-              background : function() {
-                return AB.tweets.background
-                    || z._getDefaultTheme().tweets.background
-              }(),
-              color : function() {
-                return AB.tweets.color
-                    || z._getDefaultTheme().tweets.color
-              }(),
-              links : function() {
-                return AB.tweets.links
-                    || z._getDefaultTheme().tweets.links
-              }()
-            }
-          };
-          var y = "#" + this.id
-              + " .twtr-doc,                      #" + this.id
-              + " .twtr-hd a,                      #" + this.id
-              + " h3,                      #" + this.id
-              + " h4 {            background-color: "
-              + this.theme.shell.background + x
-              + ";            color: " + this.theme.shell.color
-              + x + ";          }          #" + this.id
-              + " .twtr-tweet a {            color: "
-              + this.theme.tweets.links + x
-              + ";          }          #" + this.id
-              + " .twtr-bd, #" + this.id
-              + " .twtr-timeline i a,           #" + this.id
-              + " .twtr-bd p {            color: "
-              + this.theme.tweets.color + x
-              + ";          }          #" + this.id
-              + " .twtr-new-results,           #" + this.id
-              + " .twtr-results-inner,           #" + this.id
-              + " .twtr-timeline {            background: "
-              + this.theme.tweets.background + x + ";          }";
-          if (k.ie) {
-            y += "#" + this.id + " .twtr-tweet { background: "
-                + this.theme.tweets.background + x + "; }"
-          }
-          s.css(y);
-          return this
-        },
-        byClass : function(z, w, x) {
-          var y = L(z, w, O(this.id));
-          return (x) ? y : y[0]
-        },
-        render : function() {
-          var y = this;
-          if (!Fieldlinguist.Widget.hasLoadedStyleSheet) {
-            window.setTimeout(function() {
-              y.render.call(y)
-            }, 50);
-            return this
-          }
-          this.setTheme(this.theme, this._isCreator);
-          if (this._isProfileWidget) {
-            h.add(this.widgetEl, "twtr-widget-profile")
-          }
-          if (this._isScroll) {
-            h.add(this.widgetEl, "twtr-scroll")
-          }
-          if (!this._isLive && !this._isScroll) {
-            this.wh[1] = "auto"
-          }
-          if (this._isSearchWidget && this._isFullScreen) {
-            document.title = "Twitter search: "
-                + escape(this.searchString)
-          }
-          this.widgetEl.innerHTML = this._getWidgetHtml();
-          var x = this.byClass("twtr-timeline", "div");
-          if (this._isLive && !this._isFullScreen) {
-            var z = function(AA) {
-              if (y._behavior === "all") {
-                return
-              }
-              if (J.call(this, AA)) {
-                y.pause.call(y)
-              }
-            };
-            var w = function(AA) {
-              if (y._behavior === "all") {
-                return
-              }
-              if (J.call(this, AA)) {
-                y.resume.call(y)
-              }
-            };
-            this.removeEvents = function() {
-              M.remove(x, "mouseover", z);
-              M.remove(x, "mouseout", w)
-            };
-            M.add(x, "mouseover", z);
-            M.add(x, "mouseout", w)
-          }
-          this._rendered = true;
-          this._ready();
-          return this
-        },
-        removeEvents : function() {
-        },
-        _getDefaultTheme : function() {
-          return {
-            shell : {
-              background : "#8ec1da",
-              color : "#ffffff"
-            },
-            tweets : {
-              background : "#ffffff",
-              color : "#444444",
-              links : "#1985b5"
-            }
-          }
-        },
-        _getWidgetHtml : function() {
-          var y = this;
-          function AA() {
-            if (y._isProfileWidget) {
-              return '<a target="_blank" href="https://twitter.com/" class="twtr-profile-img-anchor"><img alt="profile" class="twtr-profile-img" src="'
-                  + v
-                  + '"></a>                      <h3></h3>                      <h4></h4>'
-            } else {
-              if (y._isSearchWidget) {
-                return '<h3><a target="_blank" style="color:'
-                    + y.theme.shell.color
-                    + '" href="https://twitter.com/'
-                    + y._getWidgetPath()
-                    + '">'
-                    + y.title
-                    + '</a></h3>                      <h4><a target="_blank" style="color:'
-                    + y.theme.shell.color
-                    + '" href="https://twitter.com/'
-                    + y._getWidgetPath() + '">' + y.subject
-                    + "</a></h4>"
-              } else {
-                return "<h3>" + y.title + "</h3><h4>"
-                    + y.subject + "</h4>"
-              }
-            }
-          }
-          function x() {
-            return y._isFullScreen ? " twtr-fullscreen" : ""
-          }
-          var z = "//widgets.twimg.com/i/widget-logo.png";
-          if (this._isFullScreen) {
-            z = "//widgets.twimg.com/i/widget-logo-fullscreen.png"
-          }
-          var w = '<div class="twtr-doc'
-              + x()
-              + '" style="width: '
-              + this.wh[0]
-              + ';">            <div class="twtr-hd">'
-              + AA()
-              + '             </div>            <div class="twtr-bd">              <div class="twtr-timeline" style="height: '
-              + this.wh[1]
-              + ';">                <div class="twtr-tweets">                  <div class="twtr-reference-tweet"></div>                  <!-- tweets show here -->                </div>              </div>            </div>            <div class="twtr-ft">              <div><a target="_blank" href="https://twitter.com"><img alt="" src="'
-              + z
-              + '"></a>                <span><a target="_blank" class="twtr-join-conv" style="color:'
-              + this.theme.shell.color
-              + '" href="https://twitter.com/'
-              + this._getWidgetPath()
-              + '">'
-              + this.footerText
-              + "</a></span>              </div>            </div>          </div>";
-          return w
-        },
-        _appendTweet : function(w) {
-          this._insertNewResultsNumber();
-          e(w, this.byClass("twtr-reference-tweet", "div"));
-          return this
-        },
-        _slide : function(x) {
-          var y = this;
-          var w = d(x).offsetHeight;
-          if (this.runOnce) {
-            new I(x, "height", {
-              from : 0,
-              to : w,
-              time : 500,
-              callback : function() {
-                y._fade.call(y, x)
-              }
-            }).start()
-          }
-          return this
-        },
-        _fade : function(w) {
-          var x = this;
-          if (I.canTransition) {
-            w.style.webkitTransition = "opacity 0.5s ease-out";
-            w.style.opacity = 1;
-            return this
-          }
-          new I(w, "opacity", {
-            from : 0,
-            to : 1,
-            time : 500
-          }).start();
-          return this
-        },
-        _chop : function() {
-          if (this._isScroll) {
-            return this
-          }
-          var AB = this.byClass("twtr-tweet", "div", true);
-          var AC = this.byClass("twtr-new-results", "div", true);
-          if (AB.length) {
-            for ( var y = AB.length - 1; y >= 0; y--) {
-              var AA = AB[y];
-              var z = parseInt(AA.offsetTop);
-              if (z > parseInt(this.wh[1])) {
-                f(AA)
-              } else {
-                break
-              }
-            }
-            if (AC.length > 0) {
-              var w = AC[AC.length - 1];
-              var x = parseInt(w.offsetTop);
-              if (x > parseInt(this.wh[1])) {
-                f(w)
-              }
-            }
-          }
-          return this
-        },
-        _appendSlideFade : function(x) {
-          var w = x || this.tweet.element;
-          this._chop()._appendTweet(w)._slide(w);
-          return this
-        },
-        _createTweet : function(w) {
-          w.tweet = Fieldlinguist.Widget.ify.autoLink(w);
-          w.timestamp = w.created_at;
-          w.created_at = this._isRelativeTime ? R(w.created_at)
-              : Y(w.created_at);
-          this.tweet = new S(w);
-          if (this._isLive && this.runOnce) {
-            this.tweet.element.style.opacity = 0;
-            this.tweet.element.style.filter = "alpha(opacity:0)";
-            this.tweet.element.style.height = "0"
-          }
-          return this
-        },
-        _getResults : function() {
-          var w = this;
-          this.timesRequested++;
-          this.jsonRequestRunning = true;
-          this.jsonRequestTimer = window.setTimeout(function() {
-            if (w.jsonRequestRunning) {
-              clearTimeout(w.jsonRequestTimer);
-              w.jsonRequestTimer = null
-            }
-            w.jsonRequestRunning = false;
-            f(w.scriptElement);
-            w.newResults = false;
-            w.decay()
-          }, this.jsonMaxRequestTimeOut);
-          Fieldlinguist.Widget.jsonP(w.url, function(x) {
-            w.scriptElement = x
-          })
-        },
-        clear : function() {
-          var x = this.byClass("twtr-tweet", "div", true);
-          var w = this.byClass("twtr-new-results", "div", true);
-          x = x.concat(w);
-          H(x, function(y) {
-            f(y)
-          });
-          return this
-        },
-        _sortByMagic : function(w) {
-          var x = this;
-          if (this._tweetFilter) {
-            if (this._tweetFilter.negatives) {
-              w = B(w, function(y) {
-                if (!x._tweetFilter.negatives.test(y.text)) {
-                  return y
-                }
-              })
-            }
-            if (this._tweetFilter.positives) {
-              w = B(w, function(y) {
-                if (x._tweetFilter.positives.test(y.text)) {
-                  return y
-                }
-              })
-            }
-          }
-          switch (this._behavior) {
-          case "all":
-            this._sortByLatest(w);
-            break;
-          case "preloaded":
-          default:
-            this._sortByDefault(w);
-            break
-          }
-          if (this._isLive && this._behavior !== "all") {
-            this.intervalJob.set(this.results);
-            this.intervalJob.start()
-          }
-          return this
-        },
-        _sortByLatest : function(w) {
-          this.results = w;
-          this.results = this.results.slice(0, this.rpp);
-          this.results.reverse();
-          return this
-        },
-        _sortByDefault : function(x) {
-          var y = this;
-          var w = function(z) {
-            return new Date(z).getTime()
-          };
-          this.results.unshift.apply(this.results, x);
-          H(this.results, function(z) {
-            if (!z.views) {
-              z.views = 0
-            }
-          });
-          this.results.sort(function(AA, z) {
-            if (w(AA.created_at) > w(z.created_at)) {
-              return -1
-            } else {
-              if (w(AA.created_at) < w(z.created_at)) {
-                return 1
-              } else {
-                return 0
-              }
-            }
-          });
-          this.results = this.results.slice(0, this.rpp);
-          this.results = this.results.sort(function(AA, z) {
-            if (AA.views < z.views) {
-              return -1
-            } else {
-              if (AA.views > z.views) {
-                return 1
-              }
-            }
-            return 0
-          });
-          if (!this._isLive) {
-            this.results.reverse()
-          }
-        },
-        _prePlay : function(x) {
-          if (this.jsonRequestTimer) {
-            clearTimeout(this.jsonRequestTimer);
-            this.jsonRequestTimer = null
-          }
-          if (!k.ie) {
-            f(this.scriptElement)
-          }
-          if (x.error) {
-            this.newResults = false
-          } else {
-            if (x.results && x.results.length > 0) {
-              this.response = x;
-              this.newResults = true;
-              this.sinceId = x.max_id_str;
-              this._sortByMagic(x.results);
-              if (this.isRunning()) {
-                this._play()
-              }
-            } else {
-              if ((this._isProfileWidget || this._isFavsWidget || this._isListWidget)
-                  && P.array(x) && x.length) {
-                this.newResults = true;
-                if (!this._profileImage
-                    && this._isProfileWidget) {
-                  var w = x[0].user.screen_name;
-                  this.setProfileImage(K(x[0].user));
-                  this.setTitle(x[0].user.name);
-                  this
-                      .setCaption('<a target="_blank" href="https://twitter.com/intent/user?screen_name='
-                          + w + '">' + w + "</a>")
-                }
-                this.sinceId = x[0].id_str;
-                this._sortByMagic(x);
-                if (this.isRunning()) {
-                  this._play()
-                }
-              } else {
-                this.newResults = false
-              }
-            }
-          }
-          this._setUrl();
-          if (this._isLive) {
-            this.decay()
-          }
-        },
-        _play : function() {
-          var w = this;
-          if (this.runOnce) {
-            this._hasNewSearchResults = true
-          }
-          if (this._avatars) {
-            this._preloadImages(this.results)
-          }
-          if (this._isRelativeTime
-              && (this._behavior == "all" || this._behavior == "preloaded")) {
-            H(this.byClass("twtr-timestamp", "a", true),
-                function(x) {
-                  x.innerHTML = R(x.getAttribute("time"))
-                })
-          }
-          if (!this._isLive || this._behavior == "all"
-              || this._behavior == "preloaded") {
-            H(this.results, function(y) {
-              y.profile_image_url = K(y);
-              if (y.retweeted_status) {
-                y = y.retweeted_status
-              }
-              if (w._isProfileWidget || w._isFavsWidget
-                  || w._isListWidget) {
-                y.from_user = y.user.screen_name;
-                y.profile_image_url = K(y.user)
-              }
-              y.id = y.id_str;
-              w._createTweet({
-                id : y.id,
-                user : y.from_user,
-                tweet : y.text,
-                avatar : y.profile_image_url,
-                created_at : y.created_at,
-                needle : y
-              });
-              var x = w.tweet.element;
-              (w._behavior == "all") ? w._appendSlideFade(x) : w
-                  ._appendTweet(x)
-            });
-            if (this._behavior != "preloaded") {
-              return this
-            }
-          }
-          return this
-        },
-        _normalizeTweet : function(x) {
-          var w = this;
-          x.views++;
-          x.profile_image_url = K(x);
-          if (this._isProfileWidget) {
-            x.from_user = w.username;
-            x.profile_image_url = K(x.user)
-          }
-          if (this._isFavsWidget || this._isListWidget) {
-            x.from_user = x.user.screen_name;
-            x.profile_image_url = K(x.user)
-          }
-          if (this._isFullScreen) {
-            x.profile_image_url = x.profile_image_url.replace(
-                /_normal\./, "_bigger.")
-          }
-          x.id = x.id_str;
-          this._createTweet({
-            id : x.id,
-            user : x.from_user,
-            tweet : x.text,
-            avatar : x.profile_image_url,
-            created_at : x.created_at,
-            needle : x
-          })._appendSlideFade()
-        },
-        _insertNewResultsNumber : function() {
-          if (!this._hasNewSearchResults) {
-            this._hasNewSearchResults = false;
-            return
-          }
-          if (this.runOnce && this._isSearchWidget) {
-            var z = this.response.total > this.rpp ? this.response.total
-                : this.response.results.length;
-            var w = z > 1 ? "s" : "";
-            var y = (this.response.warning && this.response.warning
-                .match(/adjusted since_id/)) ? "more than" : "";
-            var x = document.createElement("div");
-            h.add(x, "twtr-new-results");
-            x.innerHTML = '<div class="twtr-results-inner"> &nbsp; </div><div class="twtr-results-hr"> &nbsp; </div><span>'
-                + y
-                + " <strong>"
-                + z
-                + "</strong> new tweet"
-                + w + "</span>";
-            e(x, this.byClass("twtr-reference-tweet", "div"));
-            this._hasNewSearchResults = false
-          }
-        },
-        _preloadImages : function(w) {
-          if (this._isProfileWidget || this._isFavsWidget
-              || this._isListWidget) {
-            H(w, function(y) {
-              var x = new Image();
-              x.src = K(y.user)
-            })
-          } else {
-            H(w, function(x) {
-              (new Image()).src = K(x)
-            })
-          }
-        },
-        _decayDecider : function() {
-          var w = false;
-          if (!this.runOnce) {
-            this.runOnce = true;
-            w = true
-          } else {
-            if (this.newResults) {
-              w = true
-            }
-          }
-          return w
-        },
-        start : function() {
-          var w = this;
-          if (!this._rendered) {
-            setTimeout(function() {
-              w.start.call(w)
-            }, 50);
-            return this
-          }
-          if (!this._isLive) {
-            this._getResults()
-          } else {
-            this.occasionalJob.start()
-          }
-          this._isRunning = true;
-          this._hasOfficiallyStarted = true;
-          return this
-        },
-        stop : function() {
-          this.occasionalJob.stop();
-          if (this.intervalJob) {
-            this.intervalJob.stop()
-          }
-          this._isRunning = false;
-          return this
-        },
-        pause : function() {
-          if (this.isRunning() && this.intervalJob) {
-            this.intervalJob.stop();
-            h.add(this.widgetEl, "twtr-paused");
-            this._isRunning = false
-          }
-          if (this._resumeTimer) {
-            clearTimeout(this._resumeTimer);
-            this._resumeTimer = null
-          }
-          return this
-        },
-        resume : function() {
-          var w = this;
-          if (!this.isRunning() && this._hasOfficiallyStarted
-              && this.intervalJob) {
-            this._resumeTimer = window.setTimeout(function() {
-              w.intervalJob.start();
-              w._isRunning = true;
-              h.remove(w.widgetEl, "twtr-paused")
-            }, 2000)
-          }
-          return this
-        },
-        isRunning : function() {
-          return this._isRunning
-        },
-        destroy : function() {
-          this.stop();
-          this.clear();
-          this.runOnce = false;
-          this._hasOfficiallyStarted = false;
-          this._profileImage = false;
-          this._isLive = true;
-          this._tweetFilter = false;
-          this._isScroll = false;
-          this.newResults = false;
-          this._isRunning = false;
-          this.sinceId = 1;
-          this.results = [];
-          this.showedResults = [];
-          this.occasionalJob.destroy();
-          if (this.jsonRequestRunning) {
-            clearTimeout(this.jsonRequestTimer)
-          }
-          h.remove(this.widgetEl, "twtr-scroll");
-          this.removeEvents();
-          return this
-        }
-      }
-    }()
-  })();
-  var F = /twitter\.com(\:\d{2,4})?\/intent\/(\w+)/, A = {
-    tweet : true,
-    retweet : true,
-    favorite : true
-  }, C = "scrollbars=yes,resizable=yes,toolbar=no,location=yes", E = screen.height, D = screen.width;
-  function G(P) {
-    if (twttr.widgets) {
-      return
-    }
-    P = P || window.event;
-    var O = P.target || P.srcElement, K, L, J, N, M;
-    while (O && O.nodeName.toLowerCase() !== "a") {
-      O = O.parentNode
-    }
-    if (O && O.nodeName.toLowerCase() === "a" && O.href) {
-      K = O.href.match(F);
-      if (K) {
-        L = 550;
-        J = (K[2] in A) ? 420 : 560;
-        N = Math.round((D / 2) - (L / 2));
-        M = 0;
-        if (E > J) {
-          M = Math.round((E / 2) - (J / 2))
-        }
-        window.open(O.href, "intent", C + ",width=" + L + ",height="
-            + J + ",left=" + N + ",top=" + M);
-        P.returnValue = false;
-        P.preventDefault && P.preventDefault()
-      }
-    }
-  }
-  if (document.addEventListener) {
-    document.addEventListener("click", G, false)
-  } else {
-    if (document.attachEvent) {
-      document.attachEvent("onclick", G)
-    }
-  }
-})();'use strict';
-
-/* Controllers */
-
-function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
-
-  $scope.corpus = {
-    description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
-    gravatar : "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
-    title : "Cherokee Field Methods",
-    team : {
-      _id : "lingllama"
-    }
-  };
-
-  GetSessionToken.run({
-    "name" : "publicuser",
-    "password" : "none"
-  }).then(function() {
-    MostRecentActivities.async().then(function(activities) {
-      $scope.activities = activities;
-    });
-  });
-
-};
-
-MyCtrl1.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
-
-function MyCtrl2($scope, $resource, MostRecentActivities, GetSessionToken) {
-
-  GetSessionToken.run({
-    "name" : "publicuser",
-    "password" : "none"
-  }).then(function() {
-    MostRecentActivities.async().then(function(activities) {
-      $scope.activities = activities;
-    });
-  });
-
-}
-MyCtrl2.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
-'use strict';
-
-
-// Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives','CouchDBServices', 'OPrime.filters']).
-  config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
-    $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: MyCtrl2});
-    $routeProvider.otherwise({redirectTo: '/view1'});
-  }]);
-
-/*
- * 
- * http://ilanguage.ca/about/about-ilanguage-lab/fieldlinguistics-web-widgets/
- * 
- * http://www.html5rocks.com/en/tutorials/security/content-security-policy/
- * 
- * Sample widget minified: http://widgets.twimg.com/j/2/widget.js
- * 
- * <![CDATA[
-    new Fieldlinguist.Widget({
-      version: 2,
-      type: 'search',
-      search: '#sapir',
-      interval: 30000,
-      title: 'Team Activity Feed',
-      subject: '',
-      width: 250,
-      height: 300,
-      theme: {
-        shell: {
-          background: '#Fc8',
-          color: '#ffffff'
-        },
-        tweets: {
-          background: '#333333',
-          color: '#ffffff',
-          links: '#Fc8'
-        }
-      },
-      features: {
-        scrollbar: false,
-        loop: true,
-        live: true,
-        behavior: 'default'
-      }
-    }).render().start();
-// ]]></script>
-*/
-  // include angular loader, which allows the files to load in any order
-    /*
-     AngularJS v1.0.0rc1
-     (c) 2010-2012 AngularJS http://angularjs.org
-     License: MIT
-    */
-    'use strict';(function(i){function d(c,a,e){return c[a]||(c[a]=e())}return d(d(i,"angular",Object),"module",function(){var c={};return function(a,e,f){e&&c.hasOwnProperty(a)&&(c[a]=null);return d(c,a,function(){function b(a,b,d){return function(){c[d||"push"]([a,b,arguments]);return g}}if(!e)throw Error("No module: "+a);var c=[],d=[],h=b("$injector","invoke"),g={_invokeQueue:c,_runBlocks:d,requires:e,name:a,provider:b("$provide","provider"),factory:b("$provide","factory"),service:b("$provide","service"),
-    value:b("$provide","value"),constant:b("$provide","constant","unshift"),filter:b("$filterProvider","register"),directive:b("$compileProvider","directive"),config:h,run:function(a){d.push(a);return this}};f&&h(f);return g})}})})(window);
-
-    // include a third-party async loader library
-    /*!
-     * $script.js v1.3
-     * https://github.com/ded/script.js
-     * Copyright: @ded & @fat - Dustin Diaz, Jacob Thornton 2011
-     * Follow our software http://twitter.com/dedfat
-     * License: MIT
-     */
-    !function(a,b,c){function t(a,c){var e=b.createElement("script"),f=j;e.onload=e.onerror=e[o]=function(){e[m]&&!/^c|loade/.test(e[m])||f||(e.onload=e[o]=null,f=1,c())},e.async=1,e.src=a,d.insertBefore(e,d.firstChild)}function q(a,b){p(a,function(a){return!b(a)})}var d=b.getElementsByTagName("head")[0],e={},f={},g={},h={},i="string",j=!1,k="push",l="DOMContentLoaded",m="readyState",n="addEventListener",o="onreadystatechange",p=function(a,b){for(var c=0,d=a.length;c<d;++c)if(!b(a[c]))return j;return 1};!b[m]&&b[n]&&(b[n](l,function r(){b.removeEventListener(l,r,j),b[m]="complete"},j),b[m]="loading");var s=function(a,b,d){function o(){if(!--m){e[l]=1,j&&j();for(var a in g)p(a.split("|"),n)&&!q(g[a],n)&&(g[a]=[])}}function n(a){return a.call?a():e[a]}a=a[k]?a:[a];var i=b&&b.call,j=i?b:d,l=i?a.join(""):b,m=a.length;c(function(){q(a,function(a){h[a]?(l&&(f[l]=1),o()):(h[a]=1,l&&(f[l]=1),t(s.path?s.path+a+".js":a,o))})},0);return s};s.get=t,s.ready=function(a,b,c){a=a[k]?a:[a];var d=[];!q(a,function(a){e[a]||d[k](a)})&&p(a,function(a){return e[a]})?b():!function(a){g[a]=g[a]||[],g[a][k](b),c&&c(d)}(a.join("|"));return s};var u=a.$script;s.noConflict=function(){a.$script=u;return this},typeof module!="undefined"&&module.exports?module.exports=s:a.$script=s}(this,document,setTimeout)
-
-    // load all of the dependencies asynchronously.
-    $script([
-             'lib/angular/angular.js',
-             'lib/angular/angular-resource.js',
-             'lib/oprime/services/CouchDB.js',
-             'lib/oprime/filters/OPrimeFilters.js',
-             'js/couch_constants.js',
-      'js/app.js',
-      'js/services.js',
-      'js/controllers.js',
-      'js/filters.js',
-      'js/directives.js'
-    ], function() {
-      // when all is done, execute bootstrap angular application
-      angular.bootstrap(document, ['myApp']);
-      console.log("just loaded the app.")
-    });'use strict';
-console.log("Loading OPrime.filters");
-
-angular.module('OPrime.filters', []).filter('checkmark', function() {
-  return function(input) {
-    return input ? '\u2713' : '\u2718';
-  };
-}).filter('agoDate', function() {
-  return function(input) {
-    return OPrime.prettyTimestamp(input);
-  };
-}).filter('localizedDate', function() {
-	  return function(input) {
-		    return (new Date(input)).toString();
-		  };
-		});
-if (OPrime) {
-  OPrime.debug("Loading CouchDBServices");
-} else {
-  console.log("Loading CouchDBServices");
-}
-/*
- * http://guide.couchdb.org/draft/security.html
- * http://docs-next.angularjs.org/api/angular.module.ngCookies.$cookies
- * https://groups.google.com/forum/#!topic/angular/yc8tODmDm18
- * http://mail-archives.apache.org/mod_mbox/couchdb-user/201011.mbox/%3CAANLkTimSxUWQhwYfTTGe1vNkhkf2xnMiWmt9eriKMU8P@mail.gmail.com%3E
- * 
- */
-angular
-    .module('CouchDBServices', [ 'ngResource' ])
-    .factory(
-        "isAUser",
-        function($resource) {
-          return $resource(OPrime.couchURL().complete
-              + "_design/user/_view/isauser", {}, {
-            run : {
-              method : "POST",
-              data : {
-                name : "semisecureadmin",
-                password : "none"
-              }
-            // isArray : false
-            }
-          });
-        })
-    .factory(
-        "getUserRoles",
-        function($resource) {
-          return $resource(OPrime.couchURL().complete
-              + "_design/user/_view/roles", {}, {
-            run : {
-              method : "GET",
-              isArray : false
-            }
-          });
-        })
-    .factory(
-        'GetSessionToken',
-        function($http) {
-          OPrime.debug("Contacting the DB to log user in.");
-          if (!OPrime.useUnsecureCouchDB()) {
-            return {
-              'run' : function(dataToPost) {
-                OPrime.debug("Getting session token.");
-                var couchInfo = OPrime.couchURL();
-                var promise = $http.post(
-                    couchInfo.protocol + couchInfo.domain + couchInfo.port
-                        + '/_session', dataToPost).then(
-                    function(response, data, status, headers, config) {
-                      OPrime.debug("Session token set, probably", response);
-                      return response;
-                    });
-                return promise;
-              }
-            };
-          } else {
-            OPrime
-                .debug("Not getting session token, instead using an unsecure TouchDB.");
-            return {
-              'run' : function(dataToPost) {
-                var couchInfo = OPrime.couchURL();
-                var promise = $http
-                    .get(
-                        couchInfo.protocol + couchInfo.domain + couchInfo.port
-                            + '', dataToPost).then(
-                        function(response, data, status, headers, config) {
-                          OPrime.debug("Faking Session token set");
-                          return response;
-                        });
-                return promise;
-              }
-            };
-          }
-        });if (OPrime) {
-  OPrime.debug("Loading AuthenticationServices");
-} else {
-  console.log("Loading AuthenticationServices");
-}
-
-angular.module('AuthenticationServices', [ 'ngResource' ])
-/**
- * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
- * encoding so that it looks like a string, and can be saved as a string in the
- * corpus.
- * 
- * @param contents
- *          A UTF8 string
- * @returns Returns a base64 string prefixed with "confidential" so that the
- *          views can choose to not display the entire string for the user.
- */
-.factory("EncryptUser", function(contents) {
-  var result = CryptoJS.AES.encrypt(contents, OPrime.userEncryptionToken());
-  // return the base64 version to save it as a string in the corpus
-  return "confidential:" + btoa(result);
-})
-/**
- * Decrypt uses this object's secret key to decode its parameter using the AES
- * algorithm.
- * 
- * @param encrypted
- *          A base64 string prefixed (or not) with the word "confidential"
- * @returns Returns the encrypted result as a UTF8 string.
- */
-.factory(
-    "DecryptUser",
-    function(encrypted) {
-      encrypted = encrypted.replace("confidential:", "");
-      // decode base64
-      encrypted = atob(encrypted);
-      resultpromise = CryptoJS.AES.decrypt(encrypted,
-          OPrime.userEncryptionToken()).toString(CryptoJS.enc.Utf8);
-      return resultpromise;
-    });
-if(OPrime){
-  OPrime.debug("Loading OPrime.services");
-}else{
-  console.log("Loading  OPrime.services");
-}
-
-/* pubsub - based on https://github.com/phiggins42/bloody-jquery-plugins/blob/master/pubsub.js*/
-  angular.module("OPrime.services", []).factory('pubsub', function() {
-    var cache = {};
-    return {
-      publish: function(topic, args) { 
-        cache[topic] && $.each(cache[topic], function() {
-          this.apply(null, args || []);
-        });
-      },
-
-      subscribe: function(topic, callback) {
-        if(!cache[topic]) {
-          cache[topic] = [];
-        }
-        cache[topic].push(callback);
-        return [topic, callback]; 
-      },
-
-      unsubscribe: function(handle) {
-        var t = handle[0];
-        cache[t] && d.each(cache[t], function(idx){
-          if(this == handle[1]){
-            cache[t].splice(idx, 1);
-          }
-        });
-      }
-    };
-  });var OPrime = OPrime || {};
+var OPrime = OPrime || {};
 
 OPrime.debugMode = true;
 OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
@@ -5319,16 +588,336 @@ OPrime.useUnsecureCouchDB = function() {
  */
 OPrime.hub = {};
 OPrime.makePublisher(OPrime.hub);
+'use strict';
+
+
+// Declare app level module which depends on filters, and services
+angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives','CouchDBServices', 'OPrime.filters']).
+  config(['$routeProvider', function($routeProvider) {
+    $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: MyCtrl1});
+    $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: UserActivityFeedController});
+    $routeProvider.otherwise({redirectTo: '/view1'});
+  }]);
+
+/*
+ * 
+ * http://ilanguage.ca/about/about-ilanguage-lab/fieldlinguistics-web-widgets/
+ * 
+ * http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+ * 
+ * Sample widget minified: http://widgets.twimg.com/j/2/widget.js
+ * 
+ * <![CDATA[
+    new Fieldlinguist.Widget({
+      version: 2,
+      type: 'search',
+      search: '#sapir',
+      interval: 30000,
+      title: 'Team Activity Feed',
+      subject: '',
+      width: 250,
+      height: 300,
+      theme: {
+        shell: {
+          background: '#Fc8',
+          color: '#ffffff'
+        },
+        tweets: {
+          background: '#333333',
+          color: '#ffffff',
+          links: '#Fc8'
+        }
+      },
+      features: {
+        scrollbar: false,
+        loop: true,
+        live: true,
+        behavior: 'default'
+      }
+    }).render().start();
+// ]]></script>
+*/
+'use strict';
+
+/* Controllers */
+
+function MyCtrl1($scope, $resource, MostRecentActivities, GetSessionToken) {
+
+  $scope.corpus = {
+    description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
+    gravatar : "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
+    title : "Cherokee Field Methods",
+    team : {
+      _id : "lingllama"
+    }
+  };
+
+  GetSessionToken.run({
+    "name" : "publicuser",
+    "password" : "none"
+  }).then(function() {
+    MostRecentActivities.async().then(function(activities) {
+      $scope.activities = activities;
+    });
+  });
+
+};
+
+MyCtrl1.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
+
+function UserActivityFeedController($scope, $resource, MostRecentActivities, GetSessionToken) {
+
+  GetSessionToken.run({
+    "name" : "publicuser",
+    "password" : "none"
+  }).then(function() {
+    MostRecentActivities.async().then(function(activities) {
+      $scope.activities = activities;
+    });
+  });
+
+}
+UserActivityFeedController.$inject = ['$scope', '$resource', 'MostRecentActivities', 'GetSessionToken'];
+OPrime = OPrime  || {};
+OPrime.couchURL = function() {
+  
+  return {
+    complete : "https://ifielddevs.iriscouch.com/lingllama-cherokee-activity_feed/",
+    protocol : "https://",
+    domain : "ifielddevs.iriscouch.com",
+    port : "",
+    db : "lingllama-cherokee-activity_feed/"
+  };
+};
+'use strict';
+
+/* Directives */
+
+
+angular.module('myApp.directives', []).
+  directive('appVersion', ['version', function(version) {
+    return function(scope, elm, attrs) {
+      elm.text(version);
+    };
+  }]);
+'use strict';
+
+/* Filters */
+
+angular.module('myApp.filters', []).
+  filter('interpolate', ['version', function(version) {
+    return function(text) {
+      return String(text).replace(/\%VERSION\%/mg, version);
+    }
+  }]);
+'use strict';
+console.log("Loading Activity.services");
+
+/* Services */
+
+// Demonstrate how to register services
+// In this case it is a simple value service.
+angular.module('myApp.services', [ 'ngResource' ])
+.value('version', '0.1')
+.factory(
+    'MostRecentActivities',
+    function($http) {
+      return {
+        'async' : function() {
+          var promise = $http
+              .get(
+                  'https://ifielddevs.iriscouch.com/lingllama-cherokee-activity_feed/'
+                      + '_design/activities/_view/all?limit=5&decending=true').then(
+                  function(response) {
+                    // + JSON.stringify(response));
+                     console.log("response", response);
+                    var results = [];
+                    for (var i = 0; i < response.data.rows.length; i++) {
+                    	results.push(response.data.rows[i].value);
+                    }
+                     return results;
+                  });
+          return promise;
+        }
+      };
+    });/**
+ * @license AngularJS v1.0.2
+ * (c) 2010-2012 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name ngCookies
+ */
+
+
+angular.module('ngCookies', ['ng']).
+  /**
+   * @ngdoc object
+   * @name ngCookies.$cookies
+   * @requires $browser
+   *
+   * @description
+   * Provides read/write access to browser's cookies.
+   *
+   * Only a simple Object is exposed and by adding or removing properties to/from
+   * this object, new cookies are created/deleted at the end of current $eval.
+   *
+   * @example
+   */
+   factory('$cookies', ['$rootScope', '$browser', function ($rootScope, $browser) {
+      var cookies = {},
+          lastCookies = {},
+          lastBrowserCookies,
+          runEval = false,
+          copy = angular.copy,
+          isUndefined = angular.isUndefined;
+
+      //creates a poller fn that copies all cookies from the $browser to service & inits the service
+      $browser.addPollFn(function() {
+        var currentCookies = $browser.cookies();
+        if (lastBrowserCookies != currentCookies) { //relies on browser.cookies() impl
+          lastBrowserCookies = currentCookies;
+          copy(currentCookies, lastCookies);
+          copy(currentCookies, cookies);
+          if (runEval) $rootScope.$apply();
+        }
+      })();
+
+      runEval = true;
+
+      //at the end of each eval, push cookies
+      //TODO: this should happen before the "delayed" watches fire, because if some cookies are not
+      //      strings or browser refuses to store some cookies, we update the model in the push fn.
+      $rootScope.$watch(push);
+
+      return cookies;
+
+
+      /**
+       * Pushes all the cookies from the service to the browser and verifies if all cookies were stored.
+       */
+      function push() {
+        var name,
+            value,
+            browserCookies,
+            updated;
+
+        //delete any cookies deleted in $cookies
+        for (name in lastCookies) {
+          if (isUndefined(cookies[name])) {
+            $browser.cookies(name, undefined);
+          }
+        }
+
+        //update all cookies updated in $cookies
+        for(name in cookies) {
+          value = cookies[name];
+          if (!angular.isString(value)) {
+            if (angular.isDefined(lastCookies[name])) {
+              cookies[name] = lastCookies[name];
+            } else {
+              delete cookies[name];
+            }
+          } else if (value !== lastCookies[name]) {
+            $browser.cookies(name, value);
+            updated = true;
+          }
+        }
+
+        //verify what was actually stored
+        if (updated){
+          updated = false;
+          browserCookies = $browser.cookies();
+
+          for (name in cookies) {
+            if (cookies[name] !== browserCookies[name]) {
+              //delete or reset all cookies that the browser dropped from $cookies
+              if (isUndefined(browserCookies[name])) {
+                delete cookies[name];
+              } else {
+                cookies[name] = browserCookies[name];
+              }
+              updated = true;
+            }
+          }
+        }
+      }
+    }]).
+
+
+  /**
+   * @ngdoc object
+   * @name ngCookies.$cookieStore
+   * @requires $cookies
+   *
+   * @description
+   * Provides a key-value (string-object) storage, that is backed by session cookies.
+   * Objects put or retrieved from this storage are automatically serialized or
+   * deserialized by angular's toJson/fromJson.
+   * @example
+   */
+   factory('$cookieStore', ['$cookies', function($cookies) {
+
+      return {
+        /**
+         * @ngdoc method
+         * @name ngCookies.$cookieStore#get
+         * @methodOf ngCookies.$cookieStore
+         *
+         * @description
+         * Returns the value of given cookie key
+         *
+         * @param {string} key Id to use for lookup.
+         * @returns {Object} Deserialized cookie value.
+         */
+        get: function(key) {
+          return angular.fromJson($cookies[key]);
+        },
+
+        /**
+         * @ngdoc method
+         * @name ngCookies.$cookieStore#put
+         * @methodOf ngCookies.$cookieStore
+         *
+         * @description
+         * Sets a value for given cookie key
+         *
+         * @param {string} key Id for the `value`.
+         * @param {Object} value Value to be stored.
+         */
+        put: function(key, value) {
+          $cookies[key] = angular.toJson(value);
+        },
+
+        /**
+         * @ngdoc method
+         * @name ngCookies.$cookieStore#remove
+         * @methodOf ngCookies.$cookieStore
+         *
+         * @description
+         * Remove given cookie
+         *
+         * @param {string} key Id of the key-value pair to delete.
+         */
+        remove: function(key) {
+          delete $cookies[key];
+        }
+      };
+
+    }]);
+
+})(window, window.angular);
 /*
  AngularJS v1.0.2
  (c) 2010-2012 Google, Inc. http://angularjs.org
  License: MIT
 */
-(function(A,f,u){'use strict';f.module("ngResource",["ng"]).factory("$resource",["$http","$parse",function(v,w){function g(b,c){return encodeURIComponent(b).replace(/%40/gi,"@").replace(/%3A/gi,":").replace(/%24/g,"$").replace(/%2C/gi,",").replace(c?null:/%20/g,"+")}function l(b,c){this.template=b+="#";this.defaults=c||{};var a=this.urlParams={};j(b.split(/\W/),function(c){c&&b.match(RegExp("[^\\\\]:"+c+"\\W"))&&(a[c]=!0)});this.template=b.replace(/\\:/g,":")}function s(b,c,a){function f(d){var b=
-{};j(c||{},function(a,x){var m;a.charAt&&a.charAt(0)=="@"?(m=a.substr(1),m=w(m)(d)):m=a;b[x]=m});return b}function e(a){t(a||{},this)}var y=new l(b),a=r({},z,a);j(a,function(d,g){var l=d.method=="POST"||d.method=="PUT"||d.method=="PATCH";e[g]=function(a,b,c,g){var i={},h,k=o,p=null;switch(arguments.length){case 4:p=g,k=c;case 3:case 2:if(q(b)){if(q(a)){k=a;p=b;break}k=b;p=c}else{i=a;h=b;k=c;break}case 1:q(a)?k=a:l?h=a:i=a;break;case 0:break;default:throw"Expected between 0-4 arguments [params, data, success, error], got "+
-arguments.length+" arguments.";}var n=this instanceof e?this:d.isArray?[]:new e(h);v({method:d.method,url:y.url(r({},f(h),d.params||{},i)),data:h}).then(function(a){var b=a.data;if(b)d.isArray?(n.length=0,j(b,function(a){n.push(new e(a))})):t(b,n);(k||o)(n,a.headers)},p);return n};e.bind=function(d){return s(b,r({},c,d),a)};e.prototype["$"+g]=function(a,b,d){var c=f(this),i=o,h;switch(arguments.length){case 3:c=a;i=b;h=d;break;case 2:case 1:q(a)?(i=a,h=b):(c=a,i=b||o);case 0:break;default:throw"Expected between 1-3 arguments [params, success, error], got "+
-arguments.length+" arguments.";}e[g].call(this,c,l?this:u,i,h)}});return e}var z={get:{method:"GET"},save:{method:"POST"},query:{method:"GET",isArray:!0},remove:{method:"DELETE"},"delete":{method:"DELETE"}},o=f.noop,j=f.forEach,r=f.extend,t=f.copy,q=f.isFunction;l.prototype={url:function(b){var c=this,a=this.template,f,b=b||{};j(this.urlParams,function(e,d){f=g(b[d]||c.defaults[d]||"",!0).replace(/%26/gi,"&").replace(/%3D/gi,"=").replace(/%2B/gi,"+");a=a.replace(RegExp(":"+d+"(\\W)"),f+"$1")});var a=
-a.replace(/\/?#$/,""),e=[];j(b,function(a,b){c.urlParams[b]||e.push(g(b)+"="+g(a))});e.sort();a=a.replace(/\/*$/,"");return a+(e.length?"?"+e.join("&"):"")}};return s}])})(window,window.angular);
+(function(m,f,l){'use strict';f.module("ngCookies",["ng"]).factory("$cookies",["$rootScope","$browser",function(d,c){var b={},g={},h,i=!1,j=f.copy,k=f.isUndefined;c.addPollFn(function(){var a=c.cookies();h!=a&&(h=a,j(a,g),j(a,b),i&&d.$apply())})();i=!0;d.$watch(function(){var a,e,d;for(a in g)k(b[a])&&c.cookies(a,l);for(a in b)e=b[a],f.isString(e)?e!==g[a]&&(c.cookies(a,e),d=!0):f.isDefined(g[a])?b[a]=g[a]:delete b[a];if(d)for(a in e=c.cookies(),b)b[a]!==e[a]&&(k(e[a])?delete b[a]:b[a]=e[a])});return b}]).factory("$cookieStore",
+["$cookies",function(d){return{get:function(c){return f.fromJson(d[c])},put:function(c,b){d[c]=f.toJson(b)},remove:function(c){delete d[c]}}}])})(window,window.angular);
 /**
  * @license AngularJS v1.0.2
  * (c) 2010-2012 Google, Inc. http://angularjs.org
@@ -5605,6 +1194,13 @@ function setupModuleLoader(window) {
  */
 angular.Module;
 
+/*
+ AngularJS v1.0.2
+ (c) 2010-2012 Google, Inc. http://angularjs.org
+ License: MIT
+*/
+(function(i){'use strict';function d(c,b,e){return c[b]||(c[b]=e())}return d(d(i,"angular",Object),"module",function(){var c={};return function(b,e,f){e&&c.hasOwnProperty(b)&&(c[b]=null);return d(c,b,function(){function a(a,b,d){return function(){c[d||"push"]([a,b,arguments]);return g}}if(!e)throw Error("No module: "+b);var c=[],d=[],h=a("$injector","invoke"),g={_invokeQueue:c,_runBlocks:d,requires:e,name:b,provider:a("$provide","provider"),factory:a("$provide","factory"),service:a("$provide","service"),
+value:a("$provide","value"),constant:a("$provide","constant","unshift"),filter:a("$filterProvider","register"),controller:a("$controllerProvider","register"),directive:a("$compileProvider","directive"),config:h,run:function(a){d.push(a);return this}};f&&h(f);return g})}})})(window);
 /**
  * @license AngularJS v1.0.2
  * (c) 2010-2012 Google, Inc. http://angularjs.org
@@ -5615,167 +1211,982 @@ angular.Module;
 
 /**
  * @ngdoc overview
- * @name ngCookies
+ * @name ngResource
+ * @description
+ */
+
+ /**
+ * @ngdoc object
+ * @name ngResource.$resource
+ * @requires $http
+ *
+ * @description
+ * A factory which creates a resource object that lets you interact with
+ * [RESTful](http://en.wikipedia.org/wiki/Representational_State_Transfer) server-side data sources.
+ *
+ * The returned resource object has action methods which provide high-level behaviors without
+ * the need to interact with the low level {@link ng.$http $http} service.
+ *
+ * @param {string} url A parameterized URL template with parameters prefixed by `:` as in
+ *   `/user/:username`.
+ *
+ * @param {Object=} paramDefaults Default values for `url` parameters. These can be overridden in
+ *   `actions` methods.
+ *
+ *   Each key value in the parameter object is first bound to url template if present and then any
+ *   excess keys are appended to the url search query after the `?`.
+ *
+ *   Given a template `/path/:verb` and parameter `{verb:'greet', salutation:'Hello'}` results in
+ *   URL `/path/greet?salutation=Hello`.
+ *
+ *   If the parameter value is prefixed with `@` then the value of that parameter is extracted from
+ *   the data object (useful for non-GET operations).
+ *
+ * @param {Object.<Object>=} actions Hash with declaration of custom action that should extend the
+ *   default set of resource actions. The declaration should be created in the following format:
+ *
+ *       {action1: {method:?, params:?, isArray:?},
+ *        action2: {method:?, params:?, isArray:?},
+ *        ...}
+ *
+ *   Where:
+ *
+ *   - `action` – {string} – The name of action. This name becomes the name of the method on your
+ *     resource object.
+ *   - `method` – {string} – HTTP request method. Valid methods are: `GET`, `POST`, `PUT`, `DELETE`,
+ *     and `JSONP`
+ *   - `params` – {object=} – Optional set of pre-bound parameters for this action.
+ *   - isArray – {boolean=} – If true then the returned object for this action is an array, see
+ *     `returns` section.
+ *
+ * @returns {Object} A resource "class" object with methods for the default set of resource actions
+ *   optionally extended with custom `actions`. The default set contains these actions:
+ *
+ *       { 'get':    {method:'GET'},
+ *         'save':   {method:'POST'},
+ *         'query':  {method:'GET', isArray:true},
+ *         'remove': {method:'DELETE'},
+ *         'delete': {method:'DELETE'} };
+ *
+ *   Calling these methods invoke an {@link ng.$http} with the specified http method,
+ *   destination and parameters. When the data is returned from the server then the object is an
+ *   instance of the resource class `save`, `remove` and `delete` actions are available on it as
+ *   methods with the `$` prefix. This allows you to easily perform CRUD operations (create, read,
+ *   update, delete) on server-side data like this:
+ *   <pre>
+        var User = $resource('/user/:userId', {userId:'@id'});
+        var user = User.get({userId:123}, function() {
+          user.abc = true;
+          user.$save();
+        });
+     </pre>
+ *
+ *   It is important to realize that invoking a $resource object method immediately returns an
+ *   empty reference (object or array depending on `isArray`). Once the data is returned from the
+ *   server the existing reference is populated with the actual data. This is a useful trick since
+ *   usually the resource is assigned to a model which is then rendered by the view. Having an empty
+ *   object results in no rendering, once the data arrives from the server then the object is
+ *   populated with the data and the view automatically re-renders itself showing the new data. This
+ *   means that in most case one never has to write a callback function for the action methods.
+ *
+ *   The action methods on the class object or instance object can be invoked with the following
+ *   parameters:
+ *
+ *   - HTTP GET "class" actions: `Resource.action([parameters], [success], [error])`
+ *   - non-GET "class" actions: `Resource.action([parameters], postData, [success], [error])`
+ *   - non-GET instance actions:  `instance.$action([parameters], [success], [error])`
+ *
+ *
+ * @example
+ *
+ * # Credit card resource
+ *
+ * <pre>
+     // Define CreditCard class
+     var CreditCard = $resource('/user/:userId/card/:cardId',
+      {userId:123, cardId:'@id'}, {
+       charge: {method:'POST', params:{charge:true}}
+      });
+
+     // We can retrieve a collection from the server
+     var cards = CreditCard.query(function() {
+       // GET: /user/123/card
+       // server returns: [ {id:456, number:'1234', name:'Smith'} ];
+
+       var card = cards[0];
+       // each item is an instance of CreditCard
+       expect(card instanceof CreditCard).toEqual(true);
+       card.name = "J. Smith";
+       // non GET methods are mapped onto the instances
+       card.$save();
+       // POST: /user/123/card/456 {id:456, number:'1234', name:'J. Smith'}
+       // server returns: {id:456, number:'1234', name: 'J. Smith'};
+
+       // our custom method is mapped as well.
+       card.$charge({amount:9.99});
+       // POST: /user/123/card/456?amount=9.99&charge=true {id:456, number:'1234', name:'J. Smith'}
+     });
+
+     // we can create an instance as well
+     var newCard = new CreditCard({number:'0123'});
+     newCard.name = "Mike Smith";
+     newCard.$save();
+     // POST: /user/123/card {number:'0123', name:'Mike Smith'}
+     // server returns: {id:789, number:'01234', name: 'Mike Smith'};
+     expect(newCard.id).toEqual(789);
+ * </pre>
+ *
+ * The object returned from this function execution is a resource "class" which has "static" method
+ * for each action in the definition.
+ *
+ * Calling these methods invoke `$http` on the `url` template with the given `method` and `params`.
+ * When the data is returned from the server then the object is an instance of the resource type and
+ * all of the non-GET methods are available with `$` prefix. This allows you to easily support CRUD
+ * operations (create, read, update, delete) on server-side data.
+
+   <pre>
+     var User = $resource('/user/:userId', {userId:'@id'});
+     var user = User.get({userId:123}, function() {
+       user.abc = true;
+       user.$save();
+     });
+   </pre>
+ *
+ *     It's worth noting that the success callback for `get`, `query` and other method gets passed
+ *     in the response that came from the server as well as $http header getter function, so one
+ *     could rewrite the above example and get access to http headers as:
+ *
+   <pre>
+     var User = $resource('/user/:userId', {userId:'@id'});
+     User.get({userId:123}, function(u, getResponseHeaders){
+       u.abc = true;
+       u.$save(function(u, putResponseHeaders) {
+         //u => saved user object
+         //putResponseHeaders => $http header getter
+       });
+     });
+   </pre>
+
+ * # Buzz client
+
+   Let's look at what a buzz client created with the `$resource` service looks like:
+    <doc:example>
+      <doc:source jsfiddle="false">
+       <script>
+         function BuzzController($resource) {
+           this.userId = 'googlebuzz';
+           this.Activity = $resource(
+             'https://www.googleapis.com/buzz/v1/activities/:userId/:visibility/:activityId/:comments',
+             {alt:'json', callback:'JSON_CALLBACK'},
+             {get:{method:'JSONP', params:{visibility:'@self'}}, replies: {method:'JSONP', params:{visibility:'@self', comments:'@comments'}}}
+           );
+         }
+
+         BuzzController.prototype = {
+           fetch: function() {
+             this.activities = this.Activity.get({userId:this.userId});
+           },
+           expandReplies: function(activity) {
+             activity.replies = this.Activity.replies({userId:this.userId, activityId:activity.id});
+           }
+         };
+         BuzzController.$inject = ['$resource'];
+       </script>
+
+       <div ng-controller="BuzzController">
+         <input ng-model="userId"/>
+         <button ng-click="fetch()">fetch</button>
+         <hr/>
+         <div ng-repeat="item in activities.data.items">
+           <h1 style="font-size: 15px;">
+             <img src="{{item.actor.thumbnailUrl}}" style="max-height:30px;max-width:30px;"/>
+             <a href="{{item.actor.profileUrl}}">{{item.actor.name}}</a>
+             <a href ng-click="expandReplies(item)" style="float: right;">Expand replies: {{item.links.replies[0].count}}</a>
+           </h1>
+           {{item.object.content | html}}
+           <div ng-repeat="reply in item.replies.data.items" style="margin-left: 20px;">
+             <img src="{{reply.actor.thumbnailUrl}}" style="max-height:30px;max-width:30px;"/>
+             <a href="{{reply.actor.profileUrl}}">{{reply.actor.name}}</a>: {{reply.content | html}}
+           </div>
+         </div>
+       </div>
+      </doc:source>
+      <doc:scenario>
+      </doc:scenario>
+    </doc:example>
+ */
+angular.module('ngResource', ['ng']).
+  factory('$resource', ['$http', '$parse', function($http, $parse) {
+    var DEFAULT_ACTIONS = {
+      'get':    {method:'GET'},
+      'save':   {method:'POST'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'}
+    };
+    var noop = angular.noop,
+        forEach = angular.forEach,
+        extend = angular.extend,
+        copy = angular.copy,
+        isFunction = angular.isFunction,
+        getter = function(obj, path) {
+          return $parse(path)(obj);
+        };
+
+  /**
+   * We need our custom mehtod because encodeURIComponent is too agressive and doesn't follow
+   * http://www.ietf.org/rfc/rfc3986.txt with regards to the character set (pchar) allowed in path
+   * segments:
+   *    segment       = *pchar
+   *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+   *    pct-encoded   = "%" HEXDIG HEXDIG
+   *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+   *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+   *                     / "*" / "+" / "," / ";" / "="
+   */
+  function encodeUriSegment(val) {
+    return encodeUriQuery(val, true).
+      replace(/%26/gi, '&').
+      replace(/%3D/gi, '=').
+      replace(/%2B/gi, '+');
+  }
+
+
+  /**
+   * This method is intended for encoding *key* or *value* parts of query component. We need a custom
+   * method becuase encodeURIComponent is too agressive and encodes stuff that doesn't have to be
+   * encoded per http://tools.ietf.org/html/rfc3986:
+   *    query       = *( pchar / "/" / "?" )
+   *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+   *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+   *    pct-encoded   = "%" HEXDIG HEXDIG
+   *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+   *                     / "*" / "+" / "," / ";" / "="
+   */
+  function encodeUriQuery(val, pctEncodeSpaces) {
+    return encodeURIComponent(val).
+      replace(/%40/gi, '@').
+      replace(/%3A/gi, ':').
+      replace(/%24/g, '$').
+      replace(/%2C/gi, ',').
+      replace((pctEncodeSpaces ? null : /%20/g), '+');
+  }
+
+  function Route(template, defaults) {
+      this.template = template = template + '#';
+      this.defaults = defaults || {};
+      var urlParams = this.urlParams = {};
+      forEach(template.split(/\W/), function(param){
+        if (param && template.match(new RegExp("[^\\\\]:" + param + "\\W"))) {
+          urlParams[param] = true;
+        }
+      });
+      this.template = template.replace(/\\:/g, ':');
+    }
+
+    Route.prototype = {
+      url: function(params) {
+        var self = this,
+            url = this.template,
+            encodedVal;
+
+        params = params || {};
+        forEach(this.urlParams, function(_, urlParam){
+          encodedVal = encodeUriSegment(params[urlParam] || self.defaults[urlParam] || "");
+          url = url.replace(new RegExp(":" + urlParam + "(\\W)"), encodedVal + "$1");
+        });
+        url = url.replace(/\/?#$/, '');
+        var query = [];
+        forEach(params, function(value, key){
+          if (!self.urlParams[key]) {
+            query.push(encodeUriQuery(key) + '=' + encodeUriQuery(value));
+          }
+        });
+        query.sort();
+        url = url.replace(/\/*$/, '');
+        return url + (query.length ? '?' + query.join('&') : '');
+      }
+    };
+
+
+    function ResourceFactory(url, paramDefaults, actions) {
+      var route = new Route(url);
+
+      actions = extend({}, DEFAULT_ACTIONS, actions);
+
+      function extractParams(data){
+        var ids = {};
+        forEach(paramDefaults || {}, function(value, key){
+          ids[key] = value.charAt && value.charAt(0) == '@' ? getter(data, value.substr(1)) : value;
+        });
+        return ids;
+      }
+
+      function Resource(value){
+        copy(value || {}, this);
+      }
+
+      forEach(actions, function(action, name) {
+        var hasBody = action.method == 'POST' || action.method == 'PUT' || action.method == 'PATCH';
+        Resource[name] = function(a1, a2, a3, a4) {
+          var params = {};
+          var data;
+          var success = noop;
+          var error = null;
+          switch(arguments.length) {
+          case 4:
+            error = a4;
+            success = a3;
+            //fallthrough
+          case 3:
+          case 2:
+            if (isFunction(a2)) {
+              if (isFunction(a1)) {
+                success = a1;
+                error = a2;
+                break;
+              }
+
+              success = a2;
+              error = a3;
+              //fallthrough
+            } else {
+              params = a1;
+              data = a2;
+              success = a3;
+              break;
+            }
+          case 1:
+            if (isFunction(a1)) success = a1;
+            else if (hasBody) data = a1;
+            else params = a1;
+            break;
+          case 0: break;
+          default:
+            throw "Expected between 0-4 arguments [params, data, success, error], got " +
+              arguments.length + " arguments.";
+          }
+
+          var value = this instanceof Resource ? this : (action.isArray ? [] : new Resource(data));
+          $http({
+            method: action.method,
+            url: route.url(extend({}, extractParams(data), action.params || {}, params)),
+            data: data
+          }).then(function(response) {
+              var data = response.data;
+
+              if (data) {
+                if (action.isArray) {
+                  value.length = 0;
+                  forEach(data, function(item) {
+                    value.push(new Resource(item));
+                  });
+                } else {
+                  copy(data, value);
+                }
+              }
+              (success||noop)(value, response.headers);
+            }, error);
+
+          return value;
+        };
+
+
+        Resource.bind = function(additionalParamDefaults){
+          return ResourceFactory(url, extend({}, paramDefaults, additionalParamDefaults), actions);
+        };
+
+
+        Resource.prototype['$' + name] = function(a1, a2, a3) {
+          var params = extractParams(this),
+              success = noop,
+              error;
+
+          switch(arguments.length) {
+          case 3: params = a1; success = a2; error = a3; break;
+          case 2:
+          case 1:
+            if (isFunction(a1)) {
+              success = a1;
+              error = a2;
+            } else {
+              params = a1;
+              success = a2 || noop;
+            }
+          case 0: break;
+          default:
+            throw "Expected between 1-3 arguments [params, success, error], got " +
+              arguments.length + " arguments.";
+          }
+          var data = hasBody ? this : undefined;
+          Resource[name].call(this, params, data, success, error);
+        };
+      });
+      return Resource;
+    }
+
+    return ResourceFactory;
+  }]);
+
+})(window, window.angular);
+/*
+ AngularJS v1.0.2
+ (c) 2010-2012 Google, Inc. http://angularjs.org
+ License: MIT
+*/
+(function(A,f,u){'use strict';f.module("ngResource",["ng"]).factory("$resource",["$http","$parse",function(v,w){function g(b,c){return encodeURIComponent(b).replace(/%40/gi,"@").replace(/%3A/gi,":").replace(/%24/g,"$").replace(/%2C/gi,",").replace(c?null:/%20/g,"+")}function l(b,c){this.template=b+="#";this.defaults=c||{};var a=this.urlParams={};j(b.split(/\W/),function(c){c&&b.match(RegExp("[^\\\\]:"+c+"\\W"))&&(a[c]=!0)});this.template=b.replace(/\\:/g,":")}function s(b,c,a){function f(d){var b=
+{};j(c||{},function(a,x){var m;a.charAt&&a.charAt(0)=="@"?(m=a.substr(1),m=w(m)(d)):m=a;b[x]=m});return b}function e(a){t(a||{},this)}var y=new l(b),a=r({},z,a);j(a,function(d,g){var l=d.method=="POST"||d.method=="PUT"||d.method=="PATCH";e[g]=function(a,b,c,g){var i={},h,k=o,p=null;switch(arguments.length){case 4:p=g,k=c;case 3:case 2:if(q(b)){if(q(a)){k=a;p=b;break}k=b;p=c}else{i=a;h=b;k=c;break}case 1:q(a)?k=a:l?h=a:i=a;break;case 0:break;default:throw"Expected between 0-4 arguments [params, data, success, error], got "+
+arguments.length+" arguments.";}var n=this instanceof e?this:d.isArray?[]:new e(h);v({method:d.method,url:y.url(r({},f(h),d.params||{},i)),data:h}).then(function(a){var b=a.data;if(b)d.isArray?(n.length=0,j(b,function(a){n.push(new e(a))})):t(b,n);(k||o)(n,a.headers)},p);return n};e.bind=function(d){return s(b,r({},c,d),a)};e.prototype["$"+g]=function(a,b,d){var c=f(this),i=o,h;switch(arguments.length){case 3:c=a;i=b;h=d;break;case 2:case 1:q(a)?(i=a,h=b):(c=a,i=b||o);case 0:break;default:throw"Expected between 1-3 arguments [params, success, error], got "+
+arguments.length+" arguments.";}e[g].call(this,c,l?this:u,i,h)}});return e}var z={get:{method:"GET"},save:{method:"POST"},query:{method:"GET",isArray:!0},remove:{method:"DELETE"},"delete":{method:"DELETE"}},o=f.noop,j=f.forEach,r=f.extend,t=f.copy,q=f.isFunction;l.prototype={url:function(b){var c=this,a=this.template,f,b=b||{};j(this.urlParams,function(e,d){f=g(b[d]||c.defaults[d]||"",!0).replace(/%26/gi,"&").replace(/%3D/gi,"=").replace(/%2B/gi,"+");a=a.replace(RegExp(":"+d+"(\\W)"),f+"$1")});var a=
+a.replace(/\/?#$/,""),e=[];j(b,function(a,b){c.urlParams[b]||e.push(g(b)+"="+g(a))});e.sort();a=a.replace(/\/*$/,"");return a+(e.length?"?"+e.join("&"):"")}};return s}])})(window,window.angular);
+/**
+ * @license AngularJS v1.0.2
+ * (c) 2010-2012 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name ngSanitize
+ * @description
+ */
+
+/*
+ * HTML Parser By Misko Hevery (misko@hevery.com)
+ * based on:  HTML Parser By John Resig (ejohn.org)
+ * Original code by Erik Arvidsson, Mozilla Public License
+ * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+ *
+ * // Use like so:
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
  */
 
 
-angular.module('ngCookies', ['ng']).
-  /**
-   * @ngdoc object
-   * @name ngCookies.$cookies
-   * @requires $browser
-   *
-   * @description
-   * Provides read/write access to browser's cookies.
-   *
-   * Only a simple Object is exposed and by adding or removing properties to/from
-   * this object, new cookies are created/deleted at the end of current $eval.
-   *
-   * @example
-   */
-   factory('$cookies', ['$rootScope', '$browser', function ($rootScope, $browser) {
-      var cookies = {},
-          lastCookies = {},
-          lastBrowserCookies,
-          runEval = false,
-          copy = angular.copy,
-          isUndefined = angular.isUndefined;
+/**
+ * @ngdoc service
+ * @name ngSanitize.$sanitize
+ * @function
+ *
+ * @description
+ *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
+ *   then serialized back to properly escaped html string. This means that no unsafe input can make
+ *   it into the returned string, however, since our parser is more strict than a typical browser
+ *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+ *   browser, won't make it through the sanitizer.
+ *
+ * @param {string} html Html input.
+ * @returns {string} Sanitized html.
+ *
+ * @example
+   <doc:example module="ngSanitize">
+     <doc:source>
+       <script>
+         function Ctrl($scope) {
+           $scope.snippet =
+             '<p style="color:blue">an html\n' +
+             '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+             'snippet</p>';
+         }
+       </script>
+       <div ng-controller="Ctrl">
+          Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+           <table>
+             <tr>
+               <td>Filter</td>
+               <td>Source</td>
+               <td>Rendered</td>
+             </tr>
+             <tr id="html-filter">
+               <td>html filter</td>
+               <td>
+                 <pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre>
+               </td>
+               <td>
+                 <div ng-bind-html="snippet"></div>
+               </td>
+             </tr>
+             <tr id="escaped-html">
+               <td>no filter</td>
+               <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+               <td><div ng-bind="snippet"></div></td>
+             </tr>
+             <tr id="html-unsafe-filter">
+               <td>unsafe html filter</td>
+               <td><pre>&lt;div ng-bind-html-unsafe="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+               <td><div ng-bind-html-unsafe="snippet"></div></td>
+             </tr>
+           </table>
+         </div>
+     </doc:source>
+     <doc:scenario>
+       it('should sanitize the html snippet ', function() {
+         expect(using('#html-filter').element('div').html()).
+           toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+       });
 
-      //creates a poller fn that copies all cookies from the $browser to service & inits the service
-      $browser.addPollFn(function() {
-        var currentCookies = $browser.cookies();
-        if (lastBrowserCookies != currentCookies) { //relies on browser.cookies() impl
-          lastBrowserCookies = currentCookies;
-          copy(currentCookies, lastCookies);
-          copy(currentCookies, cookies);
-          if (runEval) $rootScope.$apply();
+       it('should escape snippet without any filter', function() {
+         expect(using('#escaped-html').element('div').html()).
+           toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+                "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+                "snippet&lt;/p&gt;");
+       });
+
+       it('should inline raw snippet if filtered as unsafe', function() {
+         expect(using('#html-unsafe-filter').element("div").html()).
+           toBe("<p style=\"color:blue\">an html\n" +
+                "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+                "snippet</p>");
+       });
+
+       it('should update', function() {
+         input('snippet').enter('new <b>text</b>');
+         expect(using('#html-filter').binding('snippet')).toBe('new <b>text</b>');
+         expect(using('#escaped-html').element('div').html()).toBe("new &lt;b&gt;text&lt;/b&gt;");
+         expect(using('#html-unsafe-filter').binding("snippet")).toBe('new <b>text</b>');
+       });
+     </doc:scenario>
+   </doc:example>
+ */
+var $sanitize = function(html) {
+  var buf = [];
+    htmlParser(html, htmlSanitizeWriter(buf));
+    return buf.join('');
+};
+
+
+// Regular Expressions for parsing tags and attributes
+var START_TAG_REGEXP = /^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,
+  END_TAG_REGEXP = /^<\s*\/\s*([\w:-]+)[^>]*>/,
+  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+  BEGIN_TAG_REGEXP = /^</,
+  BEGING_END_TAGE_REGEXP = /^<\s*\//,
+  COMMENT_REGEXP = /<!--(.*?)-->/g,
+  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+  URI_REGEXP = /^((ftp|https?):\/\/|mailto:|#)/,
+  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g; // Match everything outside of normal chars and " (quote character)
+
+
+// Good source of info about elements and attributes
+// http://dev.w3.org/html5/spec/Overview.html#semantics
+// http://simon.html5.org/html-elements
+
+// Safe Void Elements - HTML5
+// http://dev.w3.org/html5/spec/Overview.html#void-elements
+var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+// Elements that you can, intentionally, leave open (and which close themselves)
+// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+    optionalEndTagInlineElements = makeMap("rp,rt"),
+    optionalEndTagElements = angular.extend({}, optionalEndTagInlineElements, optionalEndTagBlockElements);
+
+// Safe Block Elements - HTML5
+var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article,aside," +
+        "blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,h6," +
+        "header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+// Inline Elements - HTML5
+var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b,bdi,bdo," +
+        "big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s,samp,small," +
+        "span,strike,strong,sub,sup,time,tt,u,var"));
+
+
+// Special Elements (can contain anything)
+var specialElements = makeMap("script,style");
+
+var validElements = angular.extend({}, voidElements, blockElements, inlineElements, optionalEndTagElements);
+
+//Attributes that have href and hence need to be sanitized
+var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
+var validAttrs = angular.extend({}, uriAttrs, makeMap(
+    'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
+    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
+    'scope,scrolling,shape,span,start,summary,target,title,type,'+
+    'valign,value,vspace,width'));
+
+function makeMap(str) {
+  var obj = {}, items = str.split(','), i;
+  for (i = 0; i < items.length; i++) obj[items[i]] = true;
+  return obj;
+}
+
+
+/**
+ * @example
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ * @param {string} html string
+ * @param {object} handler
+ */
+function htmlParser( html, handler ) {
+  var index, chars, match, stack = [], last = html;
+  stack.last = function() { return stack[ stack.length - 1 ]; };
+
+  while ( html ) {
+    chars = true;
+
+    // Make sure we're not in a script or style element
+    if ( !stack.last() || !specialElements[ stack.last() ] ) {
+
+      // Comment
+      if ( html.indexOf("<!--") === 0 ) {
+        index = html.indexOf("-->");
+
+        if ( index >= 0 ) {
+          if (handler.comment) handler.comment( html.substring( 4, index ) );
+          html = html.substring( index + 3 );
+          chars = false;
         }
-      })();
 
-      runEval = true;
+      // end tag
+      } else if ( BEGING_END_TAGE_REGEXP.test(html) ) {
+        match = html.match( END_TAG_REGEXP );
 
-      //at the end of each eval, push cookies
-      //TODO: this should happen before the "delayed" watches fire, because if some cookies are not
-      //      strings or browser refuses to store some cookies, we update the model in the push fn.
-      $rootScope.$watch(push);
-
-      return cookies;
-
-
-      /**
-       * Pushes all the cookies from the service to the browser and verifies if all cookies were stored.
-       */
-      function push() {
-        var name,
-            value,
-            browserCookies,
-            updated;
-
-        //delete any cookies deleted in $cookies
-        for (name in lastCookies) {
-          if (isUndefined(cookies[name])) {
-            $browser.cookies(name, undefined);
-          }
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( END_TAG_REGEXP, parseEndTag );
+          chars = false;
         }
 
-        //update all cookies updated in $cookies
-        for(name in cookies) {
-          value = cookies[name];
-          if (!angular.isString(value)) {
-            if (angular.isDefined(lastCookies[name])) {
-              cookies[name] = lastCookies[name];
-            } else {
-              delete cookies[name];
-            }
-          } else if (value !== lastCookies[name]) {
-            $browser.cookies(name, value);
-            updated = true;
-          }
-        }
+      // start tag
+      } else if ( BEGIN_TAG_REGEXP.test(html) ) {
+        match = html.match( START_TAG_REGEXP );
 
-        //verify what was actually stored
-        if (updated){
-          updated = false;
-          browserCookies = $browser.cookies();
-
-          for (name in cookies) {
-            if (cookies[name] !== browserCookies[name]) {
-              //delete or reset all cookies that the browser dropped from $cookies
-              if (isUndefined(browserCookies[name])) {
-                delete cookies[name];
-              } else {
-                cookies[name] = browserCookies[name];
-              }
-              updated = true;
-            }
-          }
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( START_TAG_REGEXP, parseStartTag );
+          chars = false;
         }
       }
-    }]).
 
+      if ( chars ) {
+        index = html.indexOf("<");
 
-  /**
-   * @ngdoc object
-   * @name ngCookies.$cookieStore
-   * @requires $cookies
-   *
-   * @description
-   * Provides a key-value (string-object) storage, that is backed by session cookies.
-   * Objects put or retrieved from this storage are automatically serialized or
-   * deserialized by angular's toJson/fromJson.
-   * @example
-   */
-   factory('$cookieStore', ['$cookies', function($cookies) {
+        var text = index < 0 ? html : html.substring( 0, index );
+        html = index < 0 ? "" : html.substring( index );
 
-      return {
-        /**
-         * @ngdoc method
-         * @name ngCookies.$cookieStore#get
-         * @methodOf ngCookies.$cookieStore
-         *
-         * @description
-         * Returns the value of given cookie key
-         *
-         * @param {string} key Id to use for lookup.
-         * @returns {Object} Deserialized cookie value.
-         */
-        get: function(key) {
-          return angular.fromJson($cookies[key]);
-        },
+        if (handler.chars) handler.chars( decodeEntities(text) );
+      }
 
-        /**
-         * @ngdoc method
-         * @name ngCookies.$cookieStore#put
-         * @methodOf ngCookies.$cookieStore
-         *
-         * @description
-         * Sets a value for given cookie key
-         *
-         * @param {string} key Id for the `value`.
-         * @param {Object} value Value to be stored.
-         */
-        put: function(key, value) {
-          $cookies[key] = angular.toJson(value);
-        },
+    } else {
+      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'), function(all, text){
+        text = text.
+          replace(COMMENT_REGEXP, "$1").
+          replace(CDATA_REGEXP, "$1");
 
-        /**
-         * @ngdoc method
-         * @name ngCookies.$cookieStore#remove
-         * @methodOf ngCookies.$cookieStore
-         *
-         * @description
-         * Remove given cookie
-         *
-         * @param {string} key Id of the key-value pair to delete.
-         */
-        remove: function(key) {
-          delete $cookies[key];
+        if (handler.chars) handler.chars( decodeEntities(text) );
+
+        return "";
+      });
+
+      parseEndTag( "", stack.last() );
+    }
+
+    if ( html == last ) {
+      throw "Parse Error: " + html;
+    }
+    last = html;
+  }
+
+  // Clean up any remaining tags
+  parseEndTag();
+
+  function parseStartTag( tag, tagName, rest, unary ) {
+    tagName = angular.lowercase(tagName);
+    if ( blockElements[ tagName ] ) {
+      while ( stack.last() && inlineElements[ stack.last() ] ) {
+        parseEndTag( "", stack.last() );
+      }
+    }
+
+    if ( optionalEndTagElements[ tagName ] && stack.last() == tagName ) {
+      parseEndTag( "", tagName );
+    }
+
+    unary = voidElements[ tagName ] || !!unary;
+
+    if ( !unary )
+      stack.push( tagName );
+
+    var attrs = {};
+
+    rest.replace(ATTR_REGEXP, function(match, name, doubleQuotedValue, singleQoutedValue, unqoutedValue) {
+      var value = doubleQuotedValue
+        || singleQoutedValue
+        || unqoutedValue
+        || '';
+
+      attrs[name] = decodeEntities(value);
+    });
+    if (handler.start) handler.start( tagName, attrs, unary );
+  }
+
+  function parseEndTag( tag, tagName ) {
+    var pos = 0, i;
+    tagName = angular.lowercase(tagName);
+    if ( tagName )
+      // Find the closest opened tag of the same type
+      for ( pos = stack.length - 1; pos >= 0; pos-- )
+        if ( stack[ pos ] == tagName )
+          break;
+
+    if ( pos >= 0 ) {
+      // Close all the open elements, up the stack
+      for ( i = stack.length - 1; i >= pos; i-- )
+        if (handler.end) handler.end( stack[ i ] );
+
+      // Remove the open elements from the stack
+      stack.length = pos;
+    }
+  }
+}
+
+/**
+ * decodes all entities into regular string
+ * @param value
+ * @returns {string} A string with decoded entities.
+ */
+var hiddenPre=document.createElement("pre");
+function decodeEntities(value) {
+  hiddenPre.innerHTML=value.replace(/</g,"&lt;");
+  return hiddenPre.innerText || hiddenPre.textContent || '';
+}
+
+/**
+ * Escapes all potentially dangerous characters, so that the
+ * resulting string can be safely inserted into attribute or
+ * element text.
+ * @param value
+ * @returns escaped text
+ */
+function encodeEntities(value) {
+  return value.
+    replace(/&/g, '&amp;').
+    replace(NON_ALPHANUMERIC_REGEXP, function(value){
+      return '&#' + value.charCodeAt(0) + ';';
+    }).
+    replace(/</g, '&lt;').
+    replace(/>/g, '&gt;');
+}
+
+/**
+ * create an HTML/XML writer which writes to buffer
+ * @param {Array} buf use buf.jain('') to get out sanitized html string
+ * @returns {object} in the form of {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * }
+ */
+function htmlSanitizeWriter(buf){
+  var ignore = false;
+  var out = angular.bind(buf, buf.push);
+  return {
+    start: function(tag, attrs, unary){
+      tag = angular.lowercase(tag);
+      if (!ignore && specialElements[tag]) {
+        ignore = tag;
+      }
+      if (!ignore && validElements[tag] == true) {
+        out('<');
+        out(tag);
+        angular.forEach(attrs, function(value, key){
+          var lkey=angular.lowercase(key);
+          if (validAttrs[lkey]==true && (uriAttrs[lkey]!==true || value.match(URI_REGEXP))) {
+            out(' ');
+            out(key);
+            out('="');
+            out(encodeEntities(value));
+            out('"');
+          }
+        });
+        out(unary ? '/>' : '>');
+      }
+    },
+    end: function(tag){
+        tag = angular.lowercase(tag);
+        if (!ignore && validElements[tag] == true) {
+          out('</');
+          out(tag);
+          out('>');
         }
-      };
+        if (tag == ignore) {
+          ignore = false;
+        }
+      },
+    chars: function(chars){
+        if (!ignore) {
+          out(encodeEntities(chars));
+        }
+      }
+  };
+}
 
-    }]);
+
+// define ngSanitize module and register $sanitize service
+angular.module('ngSanitize', []).value('$sanitize', $sanitize);
+
+/**
+ * @ngdoc directive
+ * @name ngSanitize.directive:ngBindHtml
+ *
+ * @description
+ * Creates a binding that will sanitize the result of evaluating the `expression` with the
+ * {@link ngSanitize.$sanitize $sanitize} service and innerHTML the result into the current element.
+ *
+ * See {@link ngSanitize.$sanitize $sanitize} docs for examples.
+ *
+ * @element ANY
+ * @param {expression} ngBindHtml {@link guide/expression Expression} to evaluate.
+ */
+angular.module('ngSanitize').directive('ngBindHtml', ['$sanitize', function($sanitize) {
+  return function(scope, element, attr) {
+    element.addClass('ng-binding').data('$binding', attr.ngBindHtml);
+    scope.$watch(attr.ngBindHtml, function(value) {
+      value = $sanitize(value);
+      element.html(value || '');
+    });
+  };
+}]);
+/**
+ * @ngdoc filter
+ * @name ngSanitize.filter:linky
+ * @function
+ *
+ * @description
+ *   Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+ *   plain email address links.
+ *
+ * @param {string} text Input text.
+ * @returns {string} Html-linkified text.
+ *
+ * @usage
+   <span ng-bind-html="linky_expression | linky"></span>
+ *
+ * @example
+   <doc:example module="ngSanitize">
+     <doc:source>
+       <script>
+         function Ctrl($scope) {
+           $scope.snippet =
+             'Pretty text with some links:\n'+
+             'http://angularjs.org/,\n'+
+             'mailto:us@somewhere.org,\n'+
+             'another@somewhere.org,\n'+
+             'and one more: ftp://127.0.0.1/.';
+         }
+       </script>
+       <div ng-controller="Ctrl">
+       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+       <table>
+         <tr>
+           <td>Filter</td>
+           <td>Source</td>
+           <td>Rendered</td>
+         </tr>
+         <tr id="linky-filter">
+           <td>linky filter</td>
+           <td>
+             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+           </td>
+           <td>
+             <div ng-bind-html="snippet | linky"></div>
+           </td>
+         </tr>
+         <tr id="escaped-html">
+           <td>no filter</td>
+           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+           <td><div ng-bind="snippet"></div></td>
+         </tr>
+       </table>
+     </doc:source>
+     <doc:scenario>
+       it('should linkify the snippet with urls', function() {
+         expect(using('#linky-filter').binding('snippet | linky')).
+           toBe('Pretty text with some links:&#10;' +
+                '<a href="http://angularjs.org/">http://angularjs.org/</a>,&#10;' +
+                '<a href="mailto:us@somewhere.org">us@somewhere.org</a>,&#10;' +
+                '<a href="mailto:another@somewhere.org">another@somewhere.org</a>,&#10;' +
+                'and one more: <a href="ftp://127.0.0.1/">ftp://127.0.0.1/</a>.');
+       });
+
+       it ('should not linkify snippet without the linky filter', function() {
+         expect(using('#escaped-html').binding('snippet')).
+           toBe("Pretty text with some links:\n" +
+                "http://angularjs.org/,\n" +
+                "mailto:us@somewhere.org,\n" +
+                "another@somewhere.org,\n" +
+                "and one more: ftp://127.0.0.1/.");
+       });
+
+       it('should update', function() {
+         input('snippet').enter('new http://link.');
+         expect(using('#linky-filter').binding('snippet | linky')).
+           toBe('new <a href="http://link">http://link</a>.');
+         expect(using('#escaped-html').binding('snippet')).toBe('new http://link.');
+       });
+     </doc:scenario>
+   </doc:example>
+ */
+angular.module('ngSanitize').filter('linky', function() {
+  var LINKY_URL_REGEXP = /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s\.\;\,\(\)\{\}\<\>]/,
+      MAILTO_REGEXP = /^mailto:/;
+
+  return function(text) {
+    if (!text) return text;
+    var match;
+    var raw = text;
+    var html = [];
+    // TODO(vojta): use $sanitize instead
+    var writer = htmlSanitizeWriter(html);
+    var url;
+    var i;
+    while ((match = raw.match(LINKY_URL_REGEXP))) {
+      // We can not end in these as they are sometimes found at the end of the sentence
+      url = match[0];
+      // if we did not match ftp/http/mailto then assume mailto
+      if (match[2] == match[3]) url = 'mailto:' + url;
+      i = match.index;
+      writer.chars(raw.substr(0, i));
+      writer.start('a', {href:url});
+      writer.chars(match[0].replace(MAILTO_REGEXP, ''));
+      writer.end('a');
+      raw = raw.substring(i + match[0].length);
+    }
+    writer.chars(raw);
+    return html.join('');
+  };
+});
 
 })(window, window.angular);
+/*
+ AngularJS v1.0.2
+ (c) 2010-2012 Google, Inc. http://angularjs.org
+ License: MIT
+*/
+(function(I,g){'use strict';function i(a){var d={},a=a.split(","),b;for(b=0;b<a.length;b++)d[a[b]]=!0;return d}function z(a,d){function b(a,b,c,h){b=g.lowercase(b);if(m[b])for(;f.last()&&n[f.last()];)e("",f.last());o[b]&&f.last()==b&&e("",b);(h=p[b]||!!h)||f.push(b);var j={};c.replace(A,function(a,b,d,e,c){j[b]=k(d||e||c||"")});d.start&&d.start(b,j,h)}function e(a,b){var e=0,c;if(b=g.lowercase(b))for(e=f.length-1;e>=0;e--)if(f[e]==b)break;if(e>=0){for(c=f.length-1;c>=e;c--)d.end&&d.end(f[c]);f.length=
+e}}var c,h,f=[],j=a;for(f.last=function(){return f[f.length-1]};a;){h=!0;if(!f.last()||!q[f.last()]){if(a.indexOf("<\!--")===0)c=a.indexOf("--\>"),c>=0&&(d.comment&&d.comment(a.substring(4,c)),a=a.substring(c+3),h=!1);else if(B.test(a)){if(c=a.match(r))a=a.substring(c[0].length),c[0].replace(r,e),h=!1}else if(C.test(a)&&(c=a.match(s)))a=a.substring(c[0].length),c[0].replace(s,b),h=!1;h&&(c=a.indexOf("<"),h=c<0?a:a.substring(0,c),a=c<0?"":a.substring(c),d.chars&&d.chars(k(h)))}else a=a.replace(RegExp("(.*)<\\s*\\/\\s*"+
+f.last()+"[^>]*>","i"),function(b,a){a=a.replace(D,"$1").replace(E,"$1");d.chars&&d.chars(k(a));return""}),e("",f.last());if(a==j)throw"Parse Error: "+a;j=a}e()}function k(a){l.innerHTML=a.replace(/</g,"&lt;");return l.innerText||l.textContent||""}function t(a){return a.replace(/&/g,"&amp;").replace(F,function(a){return"&#"+a.charCodeAt(0)+";"}).replace(/</g,"&lt;").replace(/>/g,"&gt;")}function u(a){var d=!1,b=g.bind(a,a.push);return{start:function(a,c,h){a=g.lowercase(a);!d&&q[a]&&(d=a);!d&&v[a]==
+!0&&(b("<"),b(a),g.forEach(c,function(a,c){var e=g.lowercase(c);if(G[e]==!0&&(w[e]!==!0||a.match(H)))b(" "),b(c),b('="'),b(t(a)),b('"')}),b(h?"/>":">"))},end:function(a){a=g.lowercase(a);!d&&v[a]==!0&&(b("</"),b(a),b(">"));a==d&&(d=!1)},chars:function(a){d||b(t(a))}}}var s=/^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,r=/^<\s*\/\s*([\w:-]+)[^>]*>/,A=/([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,C=/^</,B=/^<\s*\//,D=/<\!--(.*?)--\>/g,
+E=/<!\[CDATA\[(.*?)]]\>/g,H=/^((ftp|https?):\/\/|mailto:|#)/,F=/([^\#-~| |!])/g,p=i("area,br,col,hr,img,wbr"),x=i("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),y=i("rp,rt"),o=g.extend({},y,x),m=g.extend({},x,i("address,article,aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul")),n=g.extend({},y,i("a,abbr,acronym,b,bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s,samp,small,span,strike,strong,sub,sup,time,tt,u,var")),
+q=i("script,style"),v=g.extend({},p,m,n,o),w=i("background,cite,href,longdesc,src,usemap"),G=g.extend({},w,i("abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,scope,scrolling,shape,span,start,summary,target,title,type,valign,value,vspace,width")),l=document.createElement("pre");g.module("ngSanitize",[]).value("$sanitize",function(a){var d=[];
+z(a,u(d));return d.join("")});g.module("ngSanitize").directive("ngBindHtml",["$sanitize",function(a){return function(d,b,e){b.addClass("ng-binding").data("$binding",e.ngBindHtml);d.$watch(e.ngBindHtml,function(c){c=a(c);b.html(c||"")})}}]);g.module("ngSanitize").filter("linky",function(){var a=/((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s\.\;\,\(\)\{\}\<\>]/,d=/^mailto:/;return function(b){if(!b)return b;for(var e=b,c=[],h=u(c),f,g;b=e.match(a);)f=b[0],b[2]==b[3]&&(f="mailto:"+f),g=b.index,
+h.chars(e.substr(0,g)),h.start("a",{href:f}),h.chars(b[0].replace(d,"")),h.end("a"),e=e.substring(g+b[0].length);h.chars(e);return c.join("")}})})(window,window.angular);
 /**
  * @license AngularJS v1.0.2
  * (c) 2010-2012 Google, Inc. http://angularjs.org
@@ -20181,19 +16592,6 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  (c) 2010-2012 Google, Inc. http://angularjs.org
  License: MIT
 */
-(function(I,g){'use strict';function i(a){var d={},a=a.split(","),b;for(b=0;b<a.length;b++)d[a[b]]=!0;return d}function z(a,d){function b(a,b,c,h){b=g.lowercase(b);if(m[b])for(;f.last()&&n[f.last()];)e("",f.last());o[b]&&f.last()==b&&e("",b);(h=p[b]||!!h)||f.push(b);var j={};c.replace(A,function(a,b,d,e,c){j[b]=k(d||e||c||"")});d.start&&d.start(b,j,h)}function e(a,b){var e=0,c;if(b=g.lowercase(b))for(e=f.length-1;e>=0;e--)if(f[e]==b)break;if(e>=0){for(c=f.length-1;c>=e;c--)d.end&&d.end(f[c]);f.length=
-e}}var c,h,f=[],j=a;for(f.last=function(){return f[f.length-1]};a;){h=!0;if(!f.last()||!q[f.last()]){if(a.indexOf("<\!--")===0)c=a.indexOf("--\>"),c>=0&&(d.comment&&d.comment(a.substring(4,c)),a=a.substring(c+3),h=!1);else if(B.test(a)){if(c=a.match(r))a=a.substring(c[0].length),c[0].replace(r,e),h=!1}else if(C.test(a)&&(c=a.match(s)))a=a.substring(c[0].length),c[0].replace(s,b),h=!1;h&&(c=a.indexOf("<"),h=c<0?a:a.substring(0,c),a=c<0?"":a.substring(c),d.chars&&d.chars(k(h)))}else a=a.replace(RegExp("(.*)<\\s*\\/\\s*"+
-f.last()+"[^>]*>","i"),function(b,a){a=a.replace(D,"$1").replace(E,"$1");d.chars&&d.chars(k(a));return""}),e("",f.last());if(a==j)throw"Parse Error: "+a;j=a}e()}function k(a){l.innerHTML=a.replace(/</g,"&lt;");return l.innerText||l.textContent||""}function t(a){return a.replace(/&/g,"&amp;").replace(F,function(a){return"&#"+a.charCodeAt(0)+";"}).replace(/</g,"&lt;").replace(/>/g,"&gt;")}function u(a){var d=!1,b=g.bind(a,a.push);return{start:function(a,c,h){a=g.lowercase(a);!d&&q[a]&&(d=a);!d&&v[a]==
-!0&&(b("<"),b(a),g.forEach(c,function(a,c){var e=g.lowercase(c);if(G[e]==!0&&(w[e]!==!0||a.match(H)))b(" "),b(c),b('="'),b(t(a)),b('"')}),b(h?"/>":">"))},end:function(a){a=g.lowercase(a);!d&&v[a]==!0&&(b("</"),b(a),b(">"));a==d&&(d=!1)},chars:function(a){d||b(t(a))}}}var s=/^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,r=/^<\s*\/\s*([\w:-]+)[^>]*>/,A=/([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,C=/^</,B=/^<\s*\//,D=/<\!--(.*?)--\>/g,
-E=/<!\[CDATA\[(.*?)]]\>/g,H=/^((ftp|https?):\/\/|mailto:|#)/,F=/([^\#-~| |!])/g,p=i("area,br,col,hr,img,wbr"),x=i("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),y=i("rp,rt"),o=g.extend({},y,x),m=g.extend({},x,i("address,article,aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul")),n=g.extend({},y,i("a,abbr,acronym,b,bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s,samp,small,span,strike,strong,sub,sup,time,tt,u,var")),
-q=i("script,style"),v=g.extend({},p,m,n,o),w=i("background,cite,href,longdesc,src,usemap"),G=g.extend({},w,i("abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,scope,scrolling,shape,span,start,summary,target,title,type,valign,value,vspace,width")),l=document.createElement("pre");g.module("ngSanitize",[]).value("$sanitize",function(a){var d=[];
-z(a,u(d));return d.join("")});g.module("ngSanitize").directive("ngBindHtml",["$sanitize",function(a){return function(d,b,e){b.addClass("ng-binding").data("$binding",e.ngBindHtml);d.$watch(e.ngBindHtml,function(c){c=a(c);b.html(c||"")})}}]);g.module("ngSanitize").filter("linky",function(){var a=/((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s\.\;\,\(\)\{\}\<\>]/,d=/^mailto:/;return function(b){if(!b)return b;for(var e=b,c=[],h=u(c),f,g;b=e.match(a);)f=b[0],b[2]==b[3]&&(f="mailto:"+f),g=b.index,
-h.chars(e.substr(0,g)),h.start("a",{href:f}),h.chars(b[0].replace(d,"")),h.end("a"),e=e.substring(g+b[0].length);h.chars(e);return c.join("")}})})(window,window.angular);
-/*
- AngularJS v1.0.2
- (c) 2010-2012 Google, Inc. http://angularjs.org
- License: MIT
-*/
 (function(T,ba,p){'use strict';function m(b,a,c){var d;if(b)if(M(b))for(d in b)d!="prototype"&&d!="length"&&d!="name"&&b.hasOwnProperty(d)&&a.call(c,b[d],d);else if(b.forEach&&b.forEach!==m)b.forEach(a,c);else if(I(b)&&wa(b.length))for(d=0;d<b.length;d++)a.call(c,b[d],d);else for(d in b)b.hasOwnProperty(d)&&a.call(c,b[d],d);return b}function mb(b){var a=[],c;for(c in b)b.hasOwnProperty(c)&&a.push(c);return a.sort()}function fc(b,a,c){for(var d=mb(b),e=0;e<d.length;e++)a.call(c,b[d[e]],d[e]);return d}
 function nb(b){return function(a,c){b(c,a)}}function xa(){for(var b=Z.length,a;b;){b--;a=Z[b].charCodeAt(0);if(a==57)return Z[b]="A",Z.join("");if(a==90)Z[b]="0";else return Z[b]=String.fromCharCode(a+1),Z.join("")}Z.unshift("0");return Z.join("")}function x(b){m(arguments,function(a){a!==b&&m(a,function(a,d){b[d]=a})});return b}function G(b){return parseInt(b,10)}function ya(b,a){return x(new (x(function(){},{prototype:b})),a)}function D(){}function ma(b){return b}function J(b){return function(){return b}}
 function t(b){return typeof b=="undefined"}function u(b){return typeof b!="undefined"}function I(b){return b!=null&&typeof b=="object"}function F(b){return typeof b=="string"}function wa(b){return typeof b=="number"}function na(b){return Ta.apply(b)=="[object Date]"}function K(b){return Ta.apply(b)=="[object Array]"}function M(b){return typeof b=="function"}function oa(b){return b&&b.document&&b.location&&b.alert&&b.setInterval}function Q(b){return F(b)?b.replace(/^\s*/,"").replace(/\s*$/,""):b}function gc(b){return b&&
@@ -20347,980 +16745,760 @@ z=D.clone(),h=0,x=i.children(),E=x.length;h<E;h++)if(x[h].value==""){v=q=x.eq(h)
 bb("remove",!0),bb("empty"),bb("html")):y=P;Zb.element=y;(function(a){x(a,{bootstrap:qb,copy:U,extend:x,equals:ga,element:y,forEach:m,injector:rb,noop:D,bind:Wa,toJson:ca,fromJson:ob,identity:ma,isUndefined:t,isDefined:u,isString:F,isFunction:M,isObject:I,isNumber:wa,isElement:gc,isArray:K,version:id,isDate:na,lowercase:E,uppercase:la,callbacks:{counter:0}});ta=mc(T);try{ta("ngLocale")}catch(c){ta("ngLocale",[]).provider("$locale",Zc)}ta("ng",["ngLocale"],["$provide",function(a){a.provider("$compile",
 Cb).directive({a:jd,input:cc,textarea:cc,form:kd,script:Sd,select:Ud,style:Wd,option:Vd,ngBind:vd,ngBindHtmlUnsafe:xd,ngBindTemplate:wd,ngClass:yd,ngClassEven:Ad,ngClassOdd:zd,ngCsp:Dd,ngCloak:Bd,ngController:Cd,ngForm:ld,ngHide:Ld,ngInclude:Fd,ngInit:Gd,ngNonBindable:Hd,ngPluralize:Id,ngRepeat:Jd,ngShow:Kd,ngSubmit:Ed,ngStyle:Md,ngSwitch:Nd,ngSwitchWhen:Od,ngSwitchDefault:Pd,ngOptions:Td,ngView:Rd,ngTransclude:Qd,ngModel:qd,ngList:sd,ngChange:rd,required:dc,ngRequired:dc,ngValue:ud}).directive(lb).directive(ec);
 a.provider({$anchorScroll:vc,$browser:xc,$cacheFactory:yc,$controller:Bc,$document:Cc,$exceptionHandler:Dc,$filter:Qb,$interpolate:Ec,$http:Vc,$httpBackend:Wc,$location:Ic,$log:Jc,$parse:Nc,$route:Qc,$routeParams:Rc,$rootScope:Sc,$q:Oc,$sniffer:Tc,$templateCache:zc,$timeout:$c,$window:Uc})}])})(Zb);y(ba).ready(function(){kc(ba,qb)})})(window,document);angular.element(document).find("head").append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');
-/**
- * @license AngularJS v1.0.2
- * (c) 2010-2012 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular, undefined) {
 'use strict';
+console.log("Loading OPrime.filters");
+
+angular.module('OPrime.filters', []).filter('checkmark', function() {
+  return function(input) {
+    return input ? '\u2713' : '\u2718';
+  };
+}).filter('agoDate', function() {
+  return function(input) {
+    return OPrime.prettyTimestamp(input);
+  };
+}).filter('localizedDate', function() {
+	  return function(input) {
+		    return (new Date(input)).toString();
+		  };
+		});
+var OPrime = OPrime || {};
+
+OPrime.debugMode = true;
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
 
 /**
- * @ngdoc overview
- * @name ngResource
- * @description
+ * The address of the TouchDB-Android database on the Android.
  */
+OPrime.touchUrl = "http://localhost:8128/";
 
- /**
- * @ngdoc object
- * @name ngResource.$resource
- * @requires $http
- *
- * @description
- * A factory which creates a resource object that lets you interact with
- * [RESTful](http://en.wikipedia.org/wiki/Representational_State_Transfer) server-side data sources.
- *
- * The returned resource object has action methods which provide high-level behaviors without
- * the need to interact with the low level {@link ng.$http $http} service.
- *
- * @param {string} url A parameterized URL template with parameters prefixed by `:` as in
- *   `/user/:username`.
- *
- * @param {Object=} paramDefaults Default values for `url` parameters. These can be overridden in
- *   `actions` methods.
- *
- *   Each key value in the parameter object is first bound to url template if present and then any
- *   excess keys are appended to the url search query after the `?`.
- *
- *   Given a template `/path/:verb` and parameter `{verb:'greet', salutation:'Hello'}` results in
- *   URL `/path/greet?salutation=Hello`.
- *
- *   If the parameter value is prefixed with `@` then the value of that parameter is extracted from
- *   the data object (useful for non-GET operations).
- *
- * @param {Object.<Object>=} actions Hash with declaration of custom action that should extend the
- *   default set of resource actions. The declaration should be created in the following format:
- *
- *       {action1: {method:?, params:?, isArray:?},
- *        action2: {method:?, params:?, isArray:?},
- *        ...}
- *
- *   Where:
- *
- *   - `action` – {string} – The name of action. This name becomes the name of the method on your
- *     resource object.
- *   - `method` – {string} – HTTP request method. Valid methods are: `GET`, `POST`, `PUT`, `DELETE`,
- *     and `JSONP`
- *   - `params` – {object=} – Optional set of pre-bound parameters for this action.
- *   - isArray – {boolean=} – If true then the returned object for this action is an array, see
- *     `returns` section.
- *
- * @returns {Object} A resource "class" object with methods for the default set of resource actions
- *   optionally extended with custom `actions`. The default set contains these actions:
- *
- *       { 'get':    {method:'GET'},
- *         'save':   {method:'POST'},
- *         'query':  {method:'GET', isArray:true},
- *         'remove': {method:'DELETE'},
- *         'delete': {method:'DELETE'} };
- *
- *   Calling these methods invoke an {@link ng.$http} with the specified http method,
- *   destination and parameters. When the data is returned from the server then the object is an
- *   instance of the resource class `save`, `remove` and `delete` actions are available on it as
- *   methods with the `$` prefix. This allows you to easily perform CRUD operations (create, read,
- *   update, delete) on server-side data like this:
- *   <pre>
-        var User = $resource('/user/:userId', {userId:'@id'});
-        var user = User.get({userId:123}, function() {
-          user.abc = true;
-          user.$save();
-        });
-     </pre>
- *
- *   It is important to realize that invoking a $resource object method immediately returns an
- *   empty reference (object or array depending on `isArray`). Once the data is returned from the
- *   server the existing reference is populated with the actual data. This is a useful trick since
- *   usually the resource is assigned to a model which is then rendered by the view. Having an empty
- *   object results in no rendering, once the data arrives from the server then the object is
- *   populated with the data and the view automatically re-renders itself showing the new data. This
- *   means that in most case one never has to write a callback function for the action methods.
- *
- *   The action methods on the class object or instance object can be invoked with the following
- *   parameters:
- *
- *   - HTTP GET "class" actions: `Resource.action([parameters], [success], [error])`
- *   - non-GET "class" actions: `Resource.action([parameters], postData, [success], [error])`
- *   - non-GET instance actions:  `instance.$action([parameters], [success], [error])`
- *
- *
- * @example
- *
- * # Credit card resource
- *
- * <pre>
-     // Define CreditCard class
-     var CreditCard = $resource('/user/:userId/card/:cardId',
-      {userId:123, cardId:'@id'}, {
-       charge: {method:'POST', params:{charge:true}}
-      });
-
-     // We can retrieve a collection from the server
-     var cards = CreditCard.query(function() {
-       // GET: /user/123/card
-       // server returns: [ {id:456, number:'1234', name:'Smith'} ];
-
-       var card = cards[0];
-       // each item is an instance of CreditCard
-       expect(card instanceof CreditCard).toEqual(true);
-       card.name = "J. Smith";
-       // non GET methods are mapped onto the instances
-       card.$save();
-       // POST: /user/123/card/456 {id:456, number:'1234', name:'J. Smith'}
-       // server returns: {id:456, number:'1234', name: 'J. Smith'};
-
-       // our custom method is mapped as well.
-       card.$charge({amount:9.99});
-       // POST: /user/123/card/456?amount=9.99&charge=true {id:456, number:'1234', name:'J. Smith'}
-     });
-
-     // we can create an instance as well
-     var newCard = new CreditCard({number:'0123'});
-     newCard.name = "Mike Smith";
-     newCard.$save();
-     // POST: /user/123/card {number:'0123', name:'Mike Smith'}
-     // server returns: {id:789, number:'01234', name: 'Mike Smith'};
-     expect(newCard.id).toEqual(789);
- * </pre>
- *
- * The object returned from this function execution is a resource "class" which has "static" method
- * for each action in the definition.
- *
- * Calling these methods invoke `$http` on the `url` template with the given `method` and `params`.
- * When the data is returned from the server then the object is an instance of the resource type and
- * all of the non-GET methods are available with `$` prefix. This allows you to easily support CRUD
- * operations (create, read, update, delete) on server-side data.
-
-   <pre>
-     var User = $resource('/user/:userId', {userId:'@id'});
-     var user = User.get({userId:123}, function() {
-       user.abc = true;
-       user.$save();
-     });
-   </pre>
- *
- *     It's worth noting that the success callback for `get`, `query` and other method gets passed
- *     in the response that came from the server as well as $http header getter function, so one
- *     could rewrite the above example and get access to http headers as:
- *
-   <pre>
-     var User = $resource('/user/:userId', {userId:'@id'});
-     User.get({userId:123}, function(u, getResponseHeaders){
-       u.abc = true;
-       u.$save(function(u, putResponseHeaders) {
-         //u => saved user object
-         //putResponseHeaders => $http header getter
-       });
-     });
-   </pre>
-
- * # Buzz client
-
-   Let's look at what a buzz client created with the `$resource` service looks like:
-    <doc:example>
-      <doc:source jsfiddle="false">
-       <script>
-         function BuzzController($resource) {
-           this.userId = 'googlebuzz';
-           this.Activity = $resource(
-             'https://www.googleapis.com/buzz/v1/activities/:userId/:visibility/:activityId/:comments',
-             {alt:'json', callback:'JSON_CALLBACK'},
-             {get:{method:'JSONP', params:{visibility:'@self'}}, replies: {method:'JSONP', params:{visibility:'@self', comments:'@comments'}}}
-           );
-         }
-
-         BuzzController.prototype = {
-           fetch: function() {
-             this.activities = this.Activity.get({userId:this.userId});
-           },
-           expandReplies: function(activity) {
-             activity.replies = this.Activity.replies({userId:this.userId, activityId:activity.id});
-           }
-         };
-         BuzzController.$inject = ['$resource'];
-       </script>
-
-       <div ng-controller="BuzzController">
-         <input ng-model="userId"/>
-         <button ng-click="fetch()">fetch</button>
-         <hr/>
-         <div ng-repeat="item in activities.data.items">
-           <h1 style="font-size: 15px;">
-             <img src="{{item.actor.thumbnailUrl}}" style="max-height:30px;max-width:30px;"/>
-             <a href="{{item.actor.profileUrl}}">{{item.actor.name}}</a>
-             <a href ng-click="expandReplies(item)" style="float: right;">Expand replies: {{item.links.replies[0].count}}</a>
-           </h1>
-           {{item.object.content | html}}
-           <div ng-repeat="reply in item.replies.data.items" style="margin-left: 20px;">
-             <img src="{{reply.actor.thumbnailUrl}}" style="max-height:30px;max-width:30px;"/>
-             <a href="{{reply.actor.profileUrl}}">{{reply.actor.name}}</a>: {{reply.content | html}}
-           </div>
-         </div>
-       </div>
-      </doc:source>
-      <doc:scenario>
-      </doc:scenario>
-    </doc:example>
+/**
+ * The address of the PouchDB database on the browser.
  */
-angular.module('ngResource', ['ng']).
-  factory('$resource', ['$http', '$parse', function($http, $parse) {
-    var DEFAULT_ACTIONS = {
-      'get':    {method:'GET'},
-      'save':   {method:'POST'},
-      'query':  {method:'GET', isArray:true},
-      'remove': {method:'DELETE'},
-      'delete': {method:'DELETE'}
-    };
-    var noop = angular.noop,
-        forEach = angular.forEach,
-        extend = angular.extend,
-        copy = angular.copy,
-        isFunction = angular.isFunction,
-        getter = function(obj, path) {
-          return $parse(path)(obj);
-        };
+OPrime.pouchUrl = "idb://";
 
-  /**
-   * We need our custom mehtod because encodeURIComponent is too agressive and doesn't follow
-   * http://www.ietf.org/rfc/rfc3986.txt with regards to the character set (pchar) allowed in path
-   * segments:
-   *    segment       = *pchar
-   *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
-   *    pct-encoded   = "%" HEXDIG HEXDIG
-   *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
-   *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
-   *                     / "*" / "+" / "," / ";" / "="
-   */
-  function encodeUriSegment(val) {
-    return encodeUriQuery(val, true).
-      replace(/%26/gi, '&').
-      replace(/%3D/gi, '=').
-      replace(/%2B/gi, '+');
+OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
+
+OPrime.debug = function(message, message2) {
+  if (navigator.appName == 'Microsoft Internet Explorer') {
+    return;
   }
-
-
-  /**
-   * This method is intended for encoding *key* or *value* parts of query component. We need a custom
-   * method becuase encodeURIComponent is too agressive and encodes stuff that doesn't have to be
-   * encoded per http://tools.ietf.org/html/rfc3986:
-   *    query       = *( pchar / "/" / "?" )
-   *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
-   *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
-   *    pct-encoded   = "%" HEXDIG HEXDIG
-   *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
-   *                     / "*" / "+" / "," / ";" / "="
-   */
-  function encodeUriQuery(val, pctEncodeSpaces) {
-    return encodeURIComponent(val).
-      replace(/%40/gi, '@').
-      replace(/%3A/gi, ':').
-      replace(/%24/g, '$').
-      replace(/%2C/gi, ',').
-      replace((pctEncodeSpaces ? null : /%20/g), '+');
+  if (!message2) {
+    message2 = "";
   }
+  if (this.debugMode) {
+    console.log(message, message2);
+  }
+};
 
-  function Route(template, defaults) {
-      this.template = template = template + '#';
-      this.defaults = defaults || {};
-      var urlParams = this.urlParams = {};
-      forEach(template.split(/\W/), function(param){
-        if (param && template.match(new RegExp("[^\\\\]:" + param + "\\W"))) {
-          urlParams[param] = true;
+OPrime.bug = function(message) {
+  alert(message);
+};
+
+OPrime.warn = function(message) {
+  alert(message);
+};
+
+/*
+ * Declare functions for PubSub
+ */
+OPrime.publisher = {
+  subscribers : {
+    any : []
+  },
+  subscribe : function(type, fn, context) {
+    type = type || 'any';
+    fn = typeof fn === "function" ? fn : context[fn];
+
+    if (typeof this.subscribers[type] === "undefined") {
+      this.subscribers[type] = [];
+    }
+    this.subscribers[type].push({
+      fn : fn,
+      context : context || this
+    });
+  },
+  unsubscribe : function(type, fn, context) {
+    this.visitSubscribers('unsubscribe', type, fn, context);
+  },
+  publish : function(type, publication) {
+    this.visitSubscribers('publish', type, publication);
+  },
+  visitSubscribers : function(action, type, arg, context) {
+    var pubtype = type || 'any';
+    var subscribers = this.subscribers[pubtype];
+    if (!subscribers || subscribers.length == 0) {
+      OPrime.debug(pubtype + ": There were no subscribers.");
+      return;
+    }
+    var i;
+    var maxUnsubscribe = subscribers ? subscribers.length - 1 : 0;
+    var maxPublish = subscribers ? subscribers.length : 0;
+
+    if (action === 'publish') {
+      // count up so that older subscribers get the message first
+      for (i = 0; i < maxPublish; i++) {
+        if (subscribers[i]) {
+          // TODO there is a bug with the subscribers they are getting lost, and
+          // it is trying to call fn of undefiend. this is a workaround until we
+          // figure out why subscribers are getting lost. Update: i changed the
+          // loop to count down and remove subscribers from the ends, now the
+          // size of subscribers isnt changing such that the subscriber at index
+          // i doesnt exist.
+          subscribers[i].fn.call(subscribers[i].context, arg);
         }
-      });
-      this.template = template.replace(/\\:/g, ':');
+      }
+      OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+
+    } else {
+
+      // count down so that subscribers index exists when we remove them
+      for (i = maxUnsubscribe; i >= 0; i--) {
+        try {
+          if (!subscribers[i].context) {
+            OPrime
+                .debug("This subscriber has no context. should we remove it? "
+                    + i);
+          }
+          if (subscribers[i].context === context) {
+            var removed = subscribers.splice(i, 1);
+            OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+          } else {
+            OPrime.debug(type + " keeping subscriber " + i,
+                subscribers[i].context);
+          }
+        } catch (e) {
+          OPrime.debug("problem visiting Subscriber " + i, subscribers)
+        }
+      }
     }
-
-    Route.prototype = {
-      url: function(params) {
-        var self = this,
-            url = this.template,
-            encodedVal;
-
-        params = params || {};
-        forEach(this.urlParams, function(_, urlParam){
-          encodedVal = encodeUriSegment(params[urlParam] || self.defaults[urlParam] || "");
-          url = url.replace(new RegExp(":" + urlParam + "(\\W)"), encodedVal + "$1");
-        });
-        url = url.replace(/\/?#$/, '');
-        var query = [];
-        forEach(params, function(value, key){
-          if (!self.urlParams[key]) {
-            query.push(encodeUriQuery(key) + '=' + encodeUriQuery(value));
-          }
-        });
-        query.sort();
-        url = url.replace(/\/*$/, '');
-        return url + (query.length ? '?' + query.join('&') : '');
-      }
-    };
-
-
-    function ResourceFactory(url, paramDefaults, actions) {
-      var route = new Route(url);
-
-      actions = extend({}, DEFAULT_ACTIONS, actions);
-
-      function extractParams(data){
-        var ids = {};
-        forEach(paramDefaults || {}, function(value, key){
-          ids[key] = value.charAt && value.charAt(0) == '@' ? getter(data, value.substr(1)) : value;
-        });
-        return ids;
-      }
-
-      function Resource(value){
-        copy(value || {}, this);
-      }
-
-      forEach(actions, function(action, name) {
-        var hasBody = action.method == 'POST' || action.method == 'PUT' || action.method == 'PATCH';
-        Resource[name] = function(a1, a2, a3, a4) {
-          var params = {};
-          var data;
-          var success = noop;
-          var error = null;
-          switch(arguments.length) {
-          case 4:
-            error = a4;
-            success = a3;
-            //fallthrough
-          case 3:
-          case 2:
-            if (isFunction(a2)) {
-              if (isFunction(a1)) {
-                success = a1;
-                error = a2;
-                break;
-              }
-
-              success = a2;
-              error = a3;
-              //fallthrough
-            } else {
-              params = a1;
-              data = a2;
-              success = a3;
-              break;
-            }
-          case 1:
-            if (isFunction(a1)) success = a1;
-            else if (hasBody) data = a1;
-            else params = a1;
-            break;
-          case 0: break;
-          default:
-            throw "Expected between 0-4 arguments [params, data, success, error], got " +
-              arguments.length + " arguments.";
-          }
-
-          var value = this instanceof Resource ? this : (action.isArray ? [] : new Resource(data));
-          $http({
-            method: action.method,
-            url: route.url(extend({}, extractParams(data), action.params || {}, params)),
-            data: data
-          }).then(function(response) {
-              var data = response.data;
-
-              if (data) {
-                if (action.isArray) {
-                  value.length = 0;
-                  forEach(data, function(item) {
-                    value.push(new Resource(item));
-                  });
-                } else {
-                  copy(data, value);
-                }
-              }
-              (success||noop)(value, response.headers);
-            }, error);
-
-          return value;
-        };
-
-
-        Resource.bind = function(additionalParamDefaults){
-          return ResourceFactory(url, extend({}, paramDefaults, additionalParamDefaults), actions);
-        };
-
-
-        Resource.prototype['$' + name] = function(a1, a2, a3) {
-          var params = extractParams(this),
-              success = noop,
-              error;
-
-          switch(arguments.length) {
-          case 3: params = a1; success = a2; error = a3; break;
-          case 2:
-          case 1:
-            if (isFunction(a1)) {
-              success = a1;
-              error = a2;
-            } else {
-              params = a1;
-              success = a2 || noop;
-            }
-          case 0: break;
-          default:
-            throw "Expected between 1-3 arguments [params, success, error], got " +
-              arguments.length + " arguments.";
-          }
-          var data = hasBody ? this : undefined;
-          Resource[name].call(this, params, data, success, error);
-        };
-      });
-      return Resource;
+  }
+};
+OPrime.makePublisher = function(o) {
+  var i;
+  for (i in OPrime.publisher) {
+    if (OPrime.publisher.hasOwnProperty(i)
+        && typeof OPrime.publisher[i] === "function") {
+      o[i] = OPrime.publisher[i];
     }
-
-    return ResourceFactory;
-  }]);
-
-})(window, window.angular);
-/*
- AngularJS v1.0.2
- (c) 2010-2012 Google, Inc. http://angularjs.org
- License: MIT
-*/
-(function(m,f,l){'use strict';f.module("ngCookies",["ng"]).factory("$cookies",["$rootScope","$browser",function(d,c){var b={},g={},h,i=!1,j=f.copy,k=f.isUndefined;c.addPollFn(function(){var a=c.cookies();h!=a&&(h=a,j(a,g),j(a,b),i&&d.$apply())})();i=!0;d.$watch(function(){var a,e,d;for(a in g)k(b[a])&&c.cookies(a,l);for(a in b)e=b[a],f.isString(e)?e!==g[a]&&(c.cookies(a,e),d=!0):f.isDefined(g[a])?b[a]=g[a]:delete b[a];if(d)for(a in e=c.cookies(),b)b[a]!==e[a]&&(k(e[a])?delete b[a]:b[a]=e[a])});return b}]).factory("$cookieStore",
-["$cookies",function(d){return{get:function(c){return f.fromJson(d[c])},put:function(c,b){d[c]=f.toJson(b)},remove:function(c){delete d[c]}}}])})(window,window.angular);
-/*
- AngularJS v1.0.2
- (c) 2010-2012 Google, Inc. http://angularjs.org
- License: MIT
-*/
-(function(i){'use strict';function d(c,b,e){return c[b]||(c[b]=e())}return d(d(i,"angular",Object),"module",function(){var c={};return function(b,e,f){e&&c.hasOwnProperty(b)&&(c[b]=null);return d(c,b,function(){function a(a,b,d){return function(){c[d||"push"]([a,b,arguments]);return g}}if(!e)throw Error("No module: "+b);var c=[],d=[],h=a("$injector","invoke"),g={_invokeQueue:c,_runBlocks:d,requires:e,name:b,provider:a("$provide","provider"),factory:a("$provide","factory"),service:a("$provide","service"),
-value:a("$provide","value"),constant:a("$provide","constant","unshift"),filter:a("$filterProvider","register"),controller:a("$controllerProvider","register"),directive:a("$compileProvider","directive"),config:h,run:function(a){d.push(a);return this}};f&&h(f);return g})}})})(window);
-/**
- * @license AngularJS v1.0.2
- * (c) 2010-2012 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular, undefined) {
-'use strict';
-
-/**
- * @ngdoc overview
- * @name ngSanitize
- * @description
- */
-
-/*
- * HTML Parser By Misko Hevery (misko@hevery.com)
- * based on:  HTML Parser By John Resig (ejohn.org)
- * Original code by Erik Arvidsson, Mozilla Public License
- * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
- *
- * // Use like so:
- * htmlParser(htmlString, {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * });
- *
- */
-
-
-/**
- * @ngdoc service
- * @name ngSanitize.$sanitize
- * @function
- *
- * @description
- *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
- *   then serialized back to properly escaped html string. This means that no unsafe input can make
- *   it into the returned string, however, since our parser is more strict than a typical browser
- *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
- *   browser, won't make it through the sanitizer.
- *
- * @param {string} html Html input.
- * @returns {string} Sanitized html.
- *
- * @example
-   <doc:example module="ngSanitize">
-     <doc:source>
-       <script>
-         function Ctrl($scope) {
-           $scope.snippet =
-             '<p style="color:blue">an html\n' +
-             '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
-             'snippet</p>';
-         }
-       </script>
-       <div ng-controller="Ctrl">
-          Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-           <table>
-             <tr>
-               <td>Filter</td>
-               <td>Source</td>
-               <td>Rendered</td>
-             </tr>
-             <tr id="html-filter">
-               <td>html filter</td>
-               <td>
-                 <pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre>
-               </td>
-               <td>
-                 <div ng-bind-html="snippet"></div>
-               </td>
-             </tr>
-             <tr id="escaped-html">
-               <td>no filter</td>
-               <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-               <td><div ng-bind="snippet"></div></td>
-             </tr>
-             <tr id="html-unsafe-filter">
-               <td>unsafe html filter</td>
-               <td><pre>&lt;div ng-bind-html-unsafe="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-               <td><div ng-bind-html-unsafe="snippet"></div></td>
-             </tr>
-           </table>
-         </div>
-     </doc:source>
-     <doc:scenario>
-       it('should sanitize the html snippet ', function() {
-         expect(using('#html-filter').element('div').html()).
-           toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
-       });
-
-       it('should escape snippet without any filter', function() {
-         expect(using('#escaped-html').element('div').html()).
-           toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
-                "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
-                "snippet&lt;/p&gt;");
-       });
-
-       it('should inline raw snippet if filtered as unsafe', function() {
-         expect(using('#html-unsafe-filter').element("div").html()).
-           toBe("<p style=\"color:blue\">an html\n" +
-                "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
-                "snippet</p>");
-       });
-
-       it('should update', function() {
-         input('snippet').enter('new <b>text</b>');
-         expect(using('#html-filter').binding('snippet')).toBe('new <b>text</b>');
-         expect(using('#escaped-html').element('div').html()).toBe("new &lt;b&gt;text&lt;/b&gt;");
-         expect(using('#html-unsafe-filter').binding("snippet")).toBe('new <b>text</b>');
-       });
-     </doc:scenario>
-   </doc:example>
- */
-var $sanitize = function(html) {
-  var buf = [];
-    htmlParser(html, htmlSanitizeWriter(buf));
-    return buf.join('');
+  }
+  o.subscribers = {
+    any : []
+  };
 };
 
 
-// Regular Expressions for parsing tags and attributes
-var START_TAG_REGEXP = /^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,
-  END_TAG_REGEXP = /^<\s*\/\s*([\w:-]+)[^>]*>/,
-  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
-  BEGIN_TAG_REGEXP = /^</,
-  BEGING_END_TAGE_REGEXP = /^<\s*\//,
-  COMMENT_REGEXP = /<!--(.*?)-->/g,
-  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
-  URI_REGEXP = /^((ftp|https?):\/\/|mailto:|#)/,
-  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g; // Match everything outside of normal chars and " (quote character)
-
-
-// Good source of info about elements and attributes
-// http://dev.w3.org/html5/spec/Overview.html#semantics
-// http://simon.html5.org/html-elements
-
-// Safe Void Elements - HTML5
-// http://dev.w3.org/html5/spec/Overview.html#void-elements
-var voidElements = makeMap("area,br,col,hr,img,wbr");
-
-// Elements that you can, intentionally, leave open (and which close themselves)
-// http://dev.w3.org/html5/spec/Overview.html#optional-tags
-var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
-    optionalEndTagInlineElements = makeMap("rp,rt"),
-    optionalEndTagElements = angular.extend({}, optionalEndTagInlineElements, optionalEndTagBlockElements);
-
-// Safe Block Elements - HTML5
-var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article,aside," +
-        "blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,h6," +
-        "header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
-
-// Inline Elements - HTML5
-var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b,bdi,bdo," +
-        "big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s,samp,small," +
-        "span,strike,strong,sub,sup,time,tt,u,var"));
-
-
-// Special Elements (can contain anything)
-var specialElements = makeMap("script,style");
-
-var validElements = angular.extend({}, voidElements, blockElements, inlineElements, optionalEndTagElements);
-
-//Attributes that have href and hence need to be sanitized
-var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
-var validAttrs = angular.extend({}, uriAttrs, makeMap(
-    'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
-    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
-    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
-    'scope,scrolling,shape,span,start,summary,target,title,type,'+
-    'valign,value,vspace,width'));
-
-function makeMap(str) {
-  var obj = {}, items = str.split(','), i;
-  for (i = 0; i < items.length; i++) obj[items[i]] = true;
-  return obj;
-}
-
-
 /**
- * @example
- * htmlParser(htmlString, {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * });
- *
- * @param {string} html string
- * @param {object} handler
+ * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
+ * the cookie, and the number of days until the cookie expires.
+ * 
+ * @param c_name
+ * @param value
+ * @param exdays
  */
-function htmlParser( html, handler ) {
-  var index, chars, match, stack = [], last = html;
-  stack.last = function() { return stack[ stack.length - 1 ]; };
-
-  while ( html ) {
-    chars = true;
-
-    // Make sure we're not in a script or style element
-    if ( !stack.last() || !specialElements[ stack.last() ] ) {
-
-      // Comment
-      if ( html.indexOf("<!--") === 0 ) {
-        index = html.indexOf("-->");
-
-        if ( index >= 0 ) {
-          if (handler.comment) handler.comment( html.substring( 4, index ) );
-          html = html.substring( index + 3 );
-          chars = false;
-        }
-
-      // end tag
-      } else if ( BEGING_END_TAGE_REGEXP.test(html) ) {
-        match = html.match( END_TAG_REGEXP );
-
-        if ( match ) {
-          html = html.substring( match[0].length );
-          match[0].replace( END_TAG_REGEXP, parseEndTag );
-          chars = false;
-        }
-
-      // start tag
-      } else if ( BEGIN_TAG_REGEXP.test(html) ) {
-        match = html.match( START_TAG_REGEXP );
-
-        if ( match ) {
-          html = html.substring( match[0].length );
-          match[0].replace( START_TAG_REGEXP, parseStartTag );
-          chars = false;
-        }
-      }
-
-      if ( chars ) {
-        index = html.indexOf("<");
-
-        var text = index < 0 ? html : html.substring( 0, index );
-        html = index < 0 ? "" : html.substring( index );
-
-        if (handler.chars) handler.chars( decodeEntities(text) );
-      }
-
-    } else {
-      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'), function(all, text){
-        text = text.
-          replace(COMMENT_REGEXP, "$1").
-          replace(CDATA_REGEXP, "$1");
-
-        if (handler.chars) handler.chars( decodeEntities(text) );
-
-        return "";
-      });
-
-      parseEndTag( "", stack.last() );
+OPrime.setCookie = function(c_name, value, exdays) {
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value = escape(value)
+      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  document.cookie = c_name + "=" + c_value;
+};
+OPrime.getCookie = function(c_name) {
+  var i, x, y, ARRcookies = document.cookie.split(";");
+  for (i = 0; i < ARRcookies.length; i++) {
+    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+    x = x.replace(/^\s+|\s+$/g, "");
+    if (x == c_name) {
+      return unescape(y);
     }
+  }
+};
 
-    if ( html == last ) {
-      throw "Parse Error: " + html;
-    }
-    last = html;
+OPrime.isAndroidApp = function() {
+  // Development tablet navigator.userAgent:
+  // Mozilla/5.0 (Linux; U; Android 3.0.1; en-us; gTablet Build/HRI66)
+  // AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13
+  // this.debug("The user agent is " + navigator.userAgent);
+  return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
+};
+
+
+if (OPrime.isAndroidApp()) {
+  var debugOrNot = Android.isD();
+  console.log("Setting debug mode to the Android's mode: " + debugOrNot);
+//  OPrime.debugMode = debugOrNot;
+};
+
+OPrime.isAndroid4 = function() {
+  return navigator.userAgent.indexOf("Android 4") > -1;
+};
+
+OPrime.isChromeApp = function() {
+  return window.location.href.indexOf("chrome-extension") > -1;
+};
+
+OPrime.isCouchApp = function() {
+  return window.location.href.indexOf("_design/pages") > -1;
+};
+/**
+ * If not running offline on an android or in a chrome extension, assume we are
+ * online.
+ * 
+ * @returns {Boolean} true if not on offline Android or on a Chrome Extension
+ */
+OPrime.onlineOnly = function() {
+  return !this.isAndroidApp() && !this.chromeApp();
+};
+
+OPrime.getVersion = function(callback) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open('GET', 'manifest.json');
+  xmlhttp.onload = function(e) {
+    var manifest = JSON.parse(xmlhttp.responseText);
+    callback(manifest.version);
+  };
+  xmlhttp.send(null);
+};
+
+
+/*
+ * JavaScript Pretty Date Copyright (c) 2011 John Resig (ejohn.org) Licensed
+ * under the MIT and GPL licenses.
+ */
+
+// Takes an ISO time and returns a string representing how
+// long ago the date represents.
+// modified by FieldDB team to take in Greenwich time which is what we are using
+// for our time stamps so that users in differnt time zones will get real times,
+// not strangely futureistic times
+// we have been using JSON.stringify(new Date()) to create our timestamps
+// instead of unix epoch seconds (not sure why we werent using unix epoch), so
+// this function is modified from the original in that it expects dates that
+// were created using
+// JSON.stringify(new Date())
+OPrime.prettyDate = function(time) {
+  if (!time) {
+    return undefined;
+  }
+  time = time.replace(/"/g, "");
+  var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " "));
+  var greenwichtimenow = JSON.stringify(new Date()).replace(/"/g, "");
+  var greenwichdate = new Date((greenwichtimenow || "").replace(/-/g, "/")
+      .replace(/[TZ]/g, " "));
+  var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
+  var day_diff = Math.floor(diff / 86400);
+
+  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+    return undefined;
   }
 
-  // Clean up any remaining tags
-  parseEndTag();
+  return day_diff == 0
+      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
+          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
+          || diff < 7200 && "1 hour ago" || diff < 86400
+          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
+      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
+      && Math.ceil(day_diff / 7) + " weeks ago";
+};
+OPrime.prettyTimestamp = function(timestamp) {
+  var date = new Date(timestamp);
+  var greenwichtimenow = new Date();
+  var diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
+  var day_diff = Math.floor(diff / 86400);
 
-  function parseStartTag( tag, tagName, rest, unary ) {
-    tagName = angular.lowercase(tagName);
-    if ( blockElements[ tagName ] ) {
-      while ( stack.last() && inlineElements[ stack.last() ] ) {
-        parseEndTag( "", stack.last() );
+  if (isNaN(day_diff) || day_diff < 0) {
+    return;
+  };
+
+  if (day_diff >= 31) {
+	  return Math.ceil(day_diff / 30) + " months ago";
+  };
+  
+  if (day_diff >= 548) {
+	  return Math.ceil(day_diff / 365) + " years ago";
+  };
+  
+  return day_diff == 0
+      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
+          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
+          || diff < 7200 && "1 hour ago" || diff < 86400
+          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
+      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
+      && Math.ceil(day_diff / 7) + " weeks ago";
+};
+
+/*
+ * Audio functions
+ */
+OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
+  this.debug("Playing Audio File and subscribing to audio completion.")
+  var audiourl = document.getElementById(divid).getAttribute("src")
+  if (!callingcontext) {
+    callingcontext = window;
+  }
+  var callingcontextself = callingcontext;
+  if (!audioOffsetCallback) {
+    audioOffsetCallback = function(message) {
+      OPrime.debug("In audioOffsetCallback: " + message);
+      OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
+    }
+  }
+  this.hub.unsubscribe("playbackCompleted", null, callingcontextself);
+  this.hub.subscribe("playbackCompleted", audioOffsetCallback,
+      callingcontextself);
+
+  if (this.isAndroidApp()) {
+    this.debug("Playing Audio via Android:" + audiourl + ":");
+    Android.playAudio(audiourl);
+  } else {
+    this.debug("Playing Audio via HTML5:" + audiourl + ":");
+    document.getElementById(divid).removeEventListener('ended',
+        OPrime.audioEndListener);
+    OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
+    document.getElementById(divid).addEventListener('ended',
+        OPrime.audioEndListener);
+    document.getElementById(divid).play();
+  }
+}
+OPrime.audioEndListener = function() {
+  var audiourl = this.getAttribute("src")
+  OPrime.debug("End audio ", audiourl);
+  OPrime.hub.publish('playbackCompleted', audiourl);
+};
+OPrime.pauseAudioFile = function(divid, callingcontext) {
+  if (!callingcontext) {
+    callingcontext = window;
+  }
+  var callingcontextself = callingcontext;
+  OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
+
+  if (this.isAndroidApp()) {
+    this.debug("Pausing Audio via Android");
+    Android.pauseAudio();
+  } else {
+    this.debug("Pausing Audio via HTML5");
+    document.getElementById(divid).pause();
+    if (document.getElementById(divid).currentTime > 0.05) {
+      document.getElementById(divid).currentTime = document
+          .getElementById(divid).currentTime - 0.05;
+    }
+
+  }
+}
+OPrime.stopAudioFile = function(divid, callback, callingcontext) {
+  if (!callingcontext) {
+    callingcontext = window;
+  }
+  var callingcontextself = callingcontext;
+  OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
+
+  if (this.isAndroidApp()) {
+    this.debug("Stopping Audio via Android");
+    Android.stopAudio();
+  } else {
+    this.debug("Stopping Audio via HTML5");
+    document.getElementById(divid).pause();
+    document.getElementById(divid).currentTime = 0;
+  }
+  if (typeof callback == "function") {
+    callback();
+  }
+}
+OPrime.playingInterval = false;
+OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
+  startime = parseFloat(startime, 10);
+  endtime = parseFloat(endtime, 10);
+  if (this.isAndroidApp()) {
+    this.debug("Playing Audio via Android from " + startime + " to " + endtime);
+    startime = startime * 1000;
+    endtime = endtime * 1000;
+    var audiourl = document.getElementById(divid).getAttribute("src")
+    Android.playIntervalOfAudio(audiourl, startime, endtime);
+  } else {
+    this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
+    document.getElementById(divid).pause();
+    document.getElementById(divid).currentTime = startime;
+    OPrime.debug("Cueing audio to "
+        + document.getElementById(divid).currentTime);
+    document.getElementById(divid).play();
+    OPrime.playingInterval = true;
+    document.getElementById(divid).addEventListener("timeupdate", function() {
+      if (this.currentTime >= endtime && OPrime.playingInterval) {
+        OPrime.debug("CurrentTime: " + this.currentTime);
+        this.pause();
+        OPrime.playingInterval = false; /*
+                                         * workaround for not being able to
+                                         * remove events
+                                         */
       }
-    }
-
-    if ( optionalEndTagElements[ tagName ] && stack.last() == tagName ) {
-      parseEndTag( "", tagName );
-    }
-
-    unary = voidElements[ tagName ] || !!unary;
-
-    if ( !unary )
-      stack.push( tagName );
-
-    var attrs = {};
-
-    rest.replace(ATTR_REGEXP, function(match, name, doubleQuotedValue, singleQoutedValue, unqoutedValue) {
-      var value = doubleQuotedValue
-        || singleQoutedValue
-        || unqoutedValue
-        || '';
-
-      attrs[name] = decodeEntities(value);
     });
-    if (handler.start) handler.start( tagName, attrs, unary );
   }
-
-  function parseEndTag( tag, tagName ) {
-    var pos = 0, i;
-    tagName = angular.lowercase(tagName);
-    if ( tagName )
-      // Find the closest opened tag of the same type
-      for ( pos = stack.length - 1; pos >= 0; pos-- )
-        if ( stack[ pos ] == tagName )
-          break;
-
-    if ( pos >= 0 ) {
-      // Close all the open elements, up the stack
-      for ( i = stack.length - 1; i >= pos; i-- )
-        if (handler.end) handler.end( stack[ i ] );
-
-      // Remove the open elements from the stack
-      stack.length = pos;
-    }
+  if (typeof callback == "function") {
+    callback();
   }
 }
+OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
+    callbackRecordingCompleted, callingcontext) {
+  if (!callingcontext) {
+    callingcontext = window;
+  }
+  /*
+   * verify completed callback and subscribe it to audioRecordingCompleted
+   */
+  var callingcontextself = callingcontext;
+  if (!callbackRecordingCompleted) {
+    callbackRecordingCompleted = function(message) {
+      OPrime.debug("In callbackRecordingCompleted: " + message);
+      OPrime.hub.unsubscribe("audioRecordingCompleted", null,
+          callingcontextself);
+    };
+  }
+  this.hub.unsubscribe("audioRecordingCompleted", null, callingcontextself);
+  this.hub.subscribe("audioRecordingCompleted", callbackRecordingCompleted,
+      callingcontextself);
 
-/**
- * decodes all entities into regular string
- * @param value
- * @returns {string} A string with decoded entities.
+  /*
+   * verify started callback and subscribe it to
+   * audioRecordingSucessfullyStarted
+   */
+  if (!callbackRecordingStarted) {
+    callbackRecordingStarted = function(message) {
+      OPrime.debug("In callbackRecordingStarted: " + message);
+      OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
+          callingcontextself);
+    };
+  }
+  this.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
+      callingcontextself);
+  this.hub.subscribe("audioRecordingSucessfullyStarted",
+      callbackRecordingStarted, callingcontextself);
+
+  /* start the recording */
+  if (this.isAndroidApp()) {
+    this.debug("Recording Audio via Android");
+    Android.startAudioRecordingService(resultfilename);
+    // the android will publish if its successfully stopped, and that it
+    // completed
+  } else {
+    this.debug("Recording Audio via HTML5: " + resultfilename);
+    alert("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that it was sucessful")
+    // fake publish it was sucessfully started
+    this.hub.publish('audioRecordingSucessfullyStarted', resultfilename);
+  }
+
+};
+OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
+    callingcontext) {
+
+  /*
+   * verify started callback and subscribe it to
+   * audioRecordingSucessfullyStarted
+   */
+  var callingcontextself = callingcontext;
+  if (!callbackRecordingStopped) {
+    callbackRecordingStopped = function(message) {
+      OPrime.debug("In callbackRecordingStopped: " + message);
+      OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
+          callingcontextself);
+    };
+  }
+  this.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
+      callingcontextself);
+  this.hub.subscribe("audioRecordingSucessfullyStopped",
+      callbackRecordingStopped, callingcontextself);
+
+  /* start the recording */
+  if (this.isAndroidApp()) {
+    this.debug("Stopping Recording Audio via Android");
+    Android.stopAudioRecordingService(resultfilename);
+    // the android will publish if its successfully started
+  } else {
+    this.debug("Stopping Recording Audio via HTML5: " + resultfilename);
+    alert("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that stopped and saved sucessfully")
+    // fake publish it was sucessfully started
+    resultfilename = "chime.mp3"
+    this.hub.publish('audioRecordingSucessfullyStopped', resultfilename);
+    // fake publish it finished
+    this.hub.publish('audioRecordingCompleted', resultfilename);
+  }
+
+};
+/*
+ * Camera functions
  */
-var hiddenPre=document.createElement("pre");
-function decodeEntities(value) {
-  hiddenPre.innerHTML=value.replace(/</g,"&lt;");
-  return hiddenPre.innerText || hiddenPre.textContent || '';
+OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
+    callbackPictureCaptureCompleted, callingcontext) {
+  if (!callingcontext) {
+    callingcontext = window;
+  }
+  /*
+   * verify completed callback and subscribe it to audioRecordingCompleted
+   */
+  var callingcontextself = callingcontext;
+  if (!callbackPictureCaptureStarted) {
+    callbackPictureCaptureStarted = function(message) {
+      OPrime.debug("In callbackPictureCaptureStarted: " + message);
+      OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
+          callingcontextself);
+    };
+  }
+  if (!callbackPictureCaptureCompleted) {
+    callbackPictureCaptureCompleted = function(message) {
+      OPrime.debug("In callbackPictureCaptureCompleted: " + message);
+      OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
+          callingcontextself);
+    };
+  }
+  /*
+   * unsubscribe this context from the chanel incase the user calls it many
+   * times on teh same item, only fire the last event
+   */
+  this.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
+      callingcontextself);
+  this.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
+      callingcontextself);
+  /* subscribe the caller's functions to the channels */
+  this.hub.subscribe("pictureCaptureSucessfullyStarted",
+      callbackPictureCaptureStarted, callingcontextself);
+  this.hub.subscribe("pictureCaptureSucessfullyCompleted",
+      callbackPictureCaptureCompleted, callingcontextself);
+
+  /* start the picture taking */
+  if (this.isAndroidApp()) {
+    this.debug("Starting picture capture via Android");
+    Android.takeAPicture(resultfilename);
+    // the android will publish if its successfully started and completed
+  } else {
+    this.debug("Starting picture capture via HTML5: " + resultfilename);
+    alert("Taking a picture only works on Android, because it has a camera, and your computer might not.\n\n Faking that taken a picture and saved sucessfully");
+    // fake publish it was sucessfully started
+    resultfilename = "happyface.png";
+    this.hub.publish('pictureCaptureSucessfullyStarted', resultfilename);
+    this.hub.publish('pictureCaptureSucessfullyCompleted', resultfilename);
+  }
+};
+
+/*
+ * Initialize the debugging output, taking control from the Android side.
+ */
+OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
+    + navigator.userAgent);
+
+if (OPrime.isAndroidApp()) {
+  if (!Android.isD()) {
+    this.debugMode = false;
+    this.debug = function() {
+    };
+  } else {
+    this.debugMode = true;
+  }
 }
 
-/**
- * Escapes all potentially dangerous characters, so that the
- * resulting string can be safely inserted into attribute or
- * element text.
- * @param value
- * @returns escaped text
+OPrime.userEncryptionToken = function() {
+  return "topsecretuserencryptiontokenfortestingTODOchangethis";
+};
+
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
+
+
+OPrime.getConnectivityType = function(callingcontextself, callback) {
+  this.hub.unsubscribe("connectivityType", null, callingcontextself);
+  /* subscribe the caller's functions to the channels */
+  this.hub.subscribe("connectivityType", callback, callingcontextself);
+
+  /* Fire command which will publish the connectivity */
+  if (OPrime.isAndroidApp()) {
+    OPrime.debug("This is an Android.");
+    Android.getConectivityType();
+  } else {
+    OPrime.hub.publish('connectivityType', 'Probably Online');
+  }
+};
+
+OPrime.getHardwareInfo = function(callingcontextself, callback) {
+  this.hub.unsubscribe("hardwareDetails", null, callingcontextself);
+  /* subscribe the caller's functions to the channels */
+  this.hub.subscribe("hardwareDetails", callback, callingcontextself);
+
+  /* Fire command which will publish the connectivity */
+  if (OPrime.isAndroidApp()) {
+    OPrime.debug("This is an Android.");
+    Android.getHardwareDetails();
+  } else {
+    OPrime.hub.publish('hardwareDetails', {
+      name : 'Browser',
+      model : navigator.userAgent,
+      identifier : 'TODOgetMACAddress'
+    });
+  }
+};
+OPrime.useUnsecureCouchDB = function() {
+  if (OPrime.isAndroidApp()) {
+    /*
+     * TODO if later when TouchDB has secure databases, we can use a secure
+     * TouchDB, return false
+     */
+    return true;
+  }
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork && window.location.origin.indexOf("chrome-extension") != 0) {
+    return true;
+  }
+  return false;
+};
+
+/*
+ * Initialize pub sub
  */
-function encodeEntities(value) {
-  return value.
-    replace(/&/g, '&amp;').
-    replace(NON_ALPHANUMERIC_REGEXP, function(value){
-      return '&#' + value.charCodeAt(0) + ';';
-    }).
-    replace(/</g, '&lt;').
-    replace(/>/g, '&gt;');
+OPrime.hub = {};
+OPrime.makePublisher(OPrime.hub);
+if (OPrime) {
+  OPrime.debug("Loading AuthenticationServices");
+} else {
+  console.log("Loading AuthenticationServices");
 }
 
+angular.module('AuthenticationServices', [ 'ngResource' ])
 /**
- * create an HTML/XML writer which writes to buffer
- * @param {Array} buf use buf.jain('') to get out sanitized html string
- * @returns {object} in the form of {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * }
+ * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
+ * encoding so that it looks like a string, and can be saved as a string in the
+ * corpus.
+ * 
+ * @param contents
+ *          A UTF8 string
+ * @returns Returns a base64 string prefixed with "confidential" so that the
+ *          views can choose to not display the entire string for the user.
  */
-function htmlSanitizeWriter(buf){
-  var ignore = false;
-  var out = angular.bind(buf, buf.push);
-  return {
-    start: function(tag, attrs, unary){
-      tag = angular.lowercase(tag);
-      if (!ignore && specialElements[tag]) {
-        ignore = tag;
-      }
-      if (!ignore && validElements[tag] == true) {
-        out('<');
-        out(tag);
-        angular.forEach(attrs, function(value, key){
-          var lkey=angular.lowercase(key);
-          if (validAttrs[lkey]==true && (uriAttrs[lkey]!==true || value.match(URI_REGEXP))) {
-            out(' ');
-            out(key);
-            out('="');
-            out(encodeEntities(value));
-            out('"');
+.factory("EncryptUser", function(contents) {
+  var result = CryptoJS.AES.encrypt(contents, OPrime.userEncryptionToken());
+  // return the base64 version to save it as a string in the corpus
+  return "confidential:" + btoa(result);
+})
+/**
+ * Decrypt uses this object's secret key to decode its parameter using the AES
+ * algorithm.
+ * 
+ * @param encrypted
+ *          A base64 string prefixed (or not) with the word "confidential"
+ * @returns Returns the encrypted result as a UTF8 string.
+ */
+.factory(
+    "DecryptUser",
+    function(encrypted) {
+      encrypted = encrypted.replace("confidential:", "");
+      // decode base64
+      encrypted = atob(encrypted);
+      resultpromise = CryptoJS.AES.decrypt(encrypted,
+          OPrime.userEncryptionToken()).toString(CryptoJS.enc.Utf8);
+      return resultpromise;
+    });
+if (OPrime) {
+  OPrime.debug("Loading CouchDBServices");
+} else {
+  console.log("Loading CouchDBServices");
+}
+/*
+ * http://guide.couchdb.org/draft/security.html
+ * http://docs-next.angularjs.org/api/angular.module.ngCookies.$cookies
+ * https://groups.google.com/forum/#!topic/angular/yc8tODmDm18
+ * http://mail-archives.apache.org/mod_mbox/couchdb-user/201011.mbox/%3CAANLkTimSxUWQhwYfTTGe1vNkhkf2xnMiWmt9eriKMU8P@mail.gmail.com%3E
+ * 
+ */
+angular
+    .module('CouchDBServices', [ 'ngResource' ])
+    .factory(
+        "isAUser",
+        function($resource) {
+          return $resource(OPrime.couchURL().complete
+              + "_design/user/_view/isauser", {}, {
+            run : {
+              method : "POST",
+              data : {
+                name : "semisecureadmin",
+                password : "none"
+              }
+            // isArray : false
+            }
+          });
+        })
+    .factory(
+        "getUserRoles",
+        function($resource) {
+          return $resource(OPrime.couchURL().complete
+              + "_design/user/_view/roles", {}, {
+            run : {
+              method : "GET",
+              isArray : false
+            }
+          });
+        })
+    .factory(
+        'GetSessionToken',
+        function($http) {
+          OPrime.debug("Contacting the DB to log user in.");
+          if (!OPrime.useUnsecureCouchDB()) {
+            return {
+              'run' : function(dataToPost) {
+                OPrime.debug("Getting session token.");
+                var couchInfo = OPrime.couchURL();
+                var promise = $http.post(
+                    couchInfo.protocol + couchInfo.domain + couchInfo.port
+                        + '/_session', dataToPost).then(
+                    function(response, data, status, headers, config) {
+                      OPrime.debug("Session token set, probably", response);
+                      return response;
+                    });
+                return promise;
+              }
+            };
+          } else {
+            OPrime
+                .debug("Not getting session token, instead using an unsecure TouchDB.");
+            return {
+              'run' : function(dataToPost) {
+                var couchInfo = OPrime.couchURL();
+                var promise = $http
+                    .get(
+                        couchInfo.protocol + couchInfo.domain + couchInfo.port
+                            + '', dataToPost).then(
+                        function(response, data, status, headers, config) {
+                          OPrime.debug("Faking Session token set");
+                          return response;
+                        });
+                return promise;
+              }
+            };
+          }
+        });if(OPrime){
+  OPrime.debug("Loading OPrime.services");
+}else{
+  console.log("Loading  OPrime.services");
+}
+
+/* pubsub - based on https://github.com/phiggins42/bloody-jquery-plugins/blob/master/pubsub.js*/
+  angular.module("OPrime.services", []).factory('pubsub', function() {
+    var cache = {};
+    return {
+      publish: function(topic, args) { 
+        cache[topic] && $.each(cache[topic], function() {
+          this.apply(null, args || []);
+        });
+      },
+
+      subscribe: function(topic, callback) {
+        if(!cache[topic]) {
+          cache[topic] = [];
+        }
+        cache[topic].push(callback);
+        return [topic, callback]; 
+      },
+
+      unsubscribe: function(handle) {
+        var t = handle[0];
+        cache[t] && d.each(cache[t], function(idx){
+          if(this == handle[1]){
+            cache[t].splice(idx, 1);
           }
         });
-        out(unary ? '/>' : '>');
       }
-    },
-    end: function(tag){
-        tag = angular.lowercase(tag);
-        if (!ignore && validElements[tag] == true) {
-          out('</');
-          out(tag);
-          out('>');
-        }
-        if (tag == ignore) {
-          ignore = false;
-        }
-      },
-    chars: function(chars){
-        if (!ignore) {
-          out(encodeEntities(chars));
-        }
-      }
-  };
-}
-
-
-// define ngSanitize module and register $sanitize service
-angular.module('ngSanitize', []).value('$sanitize', $sanitize);
-
-/**
- * @ngdoc directive
- * @name ngSanitize.directive:ngBindHtml
- *
- * @description
- * Creates a binding that will sanitize the result of evaluating the `expression` with the
- * {@link ngSanitize.$sanitize $sanitize} service and innerHTML the result into the current element.
- *
- * See {@link ngSanitize.$sanitize $sanitize} docs for examples.
- *
- * @element ANY
- * @param {expression} ngBindHtml {@link guide/expression Expression} to evaluate.
- */
-angular.module('ngSanitize').directive('ngBindHtml', ['$sanitize', function($sanitize) {
-  return function(scope, element, attr) {
-    element.addClass('ng-binding').data('$binding', attr.ngBindHtml);
-    scope.$watch(attr.ngBindHtml, function(value) {
-      value = $sanitize(value);
-      element.html(value || '');
-    });
-  };
-}]);
-/**
- * @ngdoc filter
- * @name ngSanitize.filter:linky
- * @function
- *
- * @description
- *   Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
- *   plain email address links.
- *
- * @param {string} text Input text.
- * @returns {string} Html-linkified text.
- *
- * @usage
-   <span ng-bind-html="linky_expression | linky"></span>
- *
- * @example
-   <doc:example module="ngSanitize">
-     <doc:source>
-       <script>
-         function Ctrl($scope) {
-           $scope.snippet =
-             'Pretty text with some links:\n'+
-             'http://angularjs.org/,\n'+
-             'mailto:us@somewhere.org,\n'+
-             'another@somewhere.org,\n'+
-             'and one more: ftp://127.0.0.1/.';
-         }
-       </script>
-       <div ng-controller="Ctrl">
-       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-       <table>
-         <tr>
-           <td>Filter</td>
-           <td>Source</td>
-           <td>Rendered</td>
-         </tr>
-         <tr id="linky-filter">
-           <td>linky filter</td>
-           <td>
-             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
-           </td>
-           <td>
-             <div ng-bind-html="snippet | linky"></div>
-           </td>
-         </tr>
-         <tr id="escaped-html">
-           <td>no filter</td>
-           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
-           <td><div ng-bind="snippet"></div></td>
-         </tr>
-       </table>
-     </doc:source>
-     <doc:scenario>
-       it('should linkify the snippet with urls', function() {
-         expect(using('#linky-filter').binding('snippet | linky')).
-           toBe('Pretty text with some links:&#10;' +
-                '<a href="http://angularjs.org/">http://angularjs.org/</a>,&#10;' +
-                '<a href="mailto:us@somewhere.org">us@somewhere.org</a>,&#10;' +
-                '<a href="mailto:another@somewhere.org">another@somewhere.org</a>,&#10;' +
-                'and one more: <a href="ftp://127.0.0.1/">ftp://127.0.0.1/</a>.');
-       });
-
-       it ('should not linkify snippet without the linky filter', function() {
-         expect(using('#escaped-html').binding('snippet')).
-           toBe("Pretty text with some links:\n" +
-                "http://angularjs.org/,\n" +
-                "mailto:us@somewhere.org,\n" +
-                "another@somewhere.org,\n" +
-                "and one more: ftp://127.0.0.1/.");
-       });
-
-       it('should update', function() {
-         input('snippet').enter('new http://link.');
-         expect(using('#linky-filter').binding('snippet | linky')).
-           toBe('new <a href="http://link">http://link</a>.');
-         expect(using('#escaped-html').binding('snippet')).toBe('new http://link.');
-       });
-     </doc:scenario>
-   </doc:example>
- */
-angular.module('ngSanitize').filter('linky', function() {
-  var LINKY_URL_REGEXP = /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s\.\;\,\(\)\{\}\<\>]/,
-      MAILTO_REGEXP = /^mailto:/;
-
-  return function(text) {
-    if (!text) return text;
-    var match;
-    var raw = text;
-    var html = [];
-    // TODO(vojta): use $sanitize instead
-    var writer = htmlSanitizeWriter(html);
-    var url;
-    var i;
-    while ((match = raw.match(LINKY_URL_REGEXP))) {
-      // We can not end in these as they are sometimes found at the end of the sentence
-      url = match[0];
-      // if we did not match ftp/http/mailto then assume mailto
-      if (match[2] == match[3]) url = 'mailto:' + url;
-      i = match.index;
-      writer.chars(raw.substr(0, i));
-      writer.start('a', {href:url});
-      writer.chars(match[0].replace(MAILTO_REGEXP, ''));
-      writer.end('a');
-      raw = raw.substring(i + match[0].length);
-    }
-    writer.chars(raw);
-    return html.join('');
-  };
-});
-
-})(window, window.angular);
+    };
+  });
