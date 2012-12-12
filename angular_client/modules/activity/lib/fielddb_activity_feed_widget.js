@@ -749,7 +749,7 @@ angular.module('ActivityFeed.services', [ 'ngResource' ])
                     for (var i = 0; i < response.data.rows.length; i++) {
                     	results.push(response.data.rows[i].value);
                     }
-                     return [{directobject: "a datum", indirectobject:"a corpus", user:{gravatar:"", _id: ""}, timestamp: 1355262965144}];
+                     return results;
                   });
           return promise;
         }
