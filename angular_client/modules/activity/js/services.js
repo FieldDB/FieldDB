@@ -15,7 +15,7 @@ angular.module('ActivityFeed.services', [ 'ngResource' ])
           var promise = $http
               .get(
                   'https://ifielddevs.iriscouch.com/lingllama-cherokee-activity_feed/'
-                      + '_design/activities/_view/all?limit=5&decending=true').then(
+                      + '_design/activities/_view/all?limit=20&decending=true').then(
                   function(response) {
                     // + JSON.stringify(response));
                      console.log("response", response);
