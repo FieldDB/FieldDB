@@ -33,4 +33,4 @@ app.configure(function() {
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
 
-console.log(new Date()+" Node+Exress server listening on port %d", node_config.port);
+console.log(new Date()+" Node+Express server listening on port %d", node_config.port);
