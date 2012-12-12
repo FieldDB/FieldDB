@@ -17,6 +17,23 @@ a:hover {
 	width: 100%;
 }
 
+.locale_View_Public_Profile_Tooltip {
+	white-space: nowrap;
+}
+
+@font-face {
+	font-family: 'Englebert';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Englebert'), local('Englebert-Regular'),
+		url(https://themes.googleusercontent.com/static/fonts/englebert/v1/5vhE18ztcHRcsYmBaZ6CaLO3LdcAZYWl9Si6vvxL-qU.woff)
+		format('woff');
+}
+
+h1,h2,h3,h4 {
+	font-family: 'Englebert', sans-serif;
+}
+
 .gravatar-small {
 	height: 2em;
 }
@@ -512,9 +529,8 @@ line.link {
 	height: 435px;
 }
 
-
-@media (max-width: 980px) {
-  .dropdown ul.dropdown-menu {
-    display: block;
-  }
+@media ( max-width : 980px) {
+	.dropdown ul.dropdown-menu {
+		display: block;
+	}
 }
