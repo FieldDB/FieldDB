@@ -13,16 +13,12 @@
 	<div class="team_activity_feed_widget"
 		ng-controller="TeamActivityFeedController">
 		<div class="activity_feed_widget_header">
-			<a
-				href="http://lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}">
-				<img class="gravatar-small" ng-src="{{corpus.gravatar}}" border="0" /><span
-				class="team_name" title="{{corpus.description}}">{{corpus.title}}</span>
-			</a>
+			<a href="http://lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}" target="_blank"><img class="gravatar-small" ng-src="{{corpus.gravatar}}" /></a><span class="team_name" title="{{corpus.description}}"><a href="http://lingsync.org/{{corpus.team._id}}/{{corpus.pouchname}}" target="_blank">{{corpus.title}}</a></span>
 		</div>
-		<div class="activity_feed_body">
+		<div class="activity_feed_body zebra">
 			<ul>
 				<li ng-repeat="activity in activities"><a
-					href="http://lingsync.org#user/{{activity.user._id}}"> <img
+					href="http://lingsync.org#user/{{activity.user._id}}" target="_blank"> <img
 						class="gravatar-small" ng-src="{{activity.user.gravatar}}"
 						border="0"
 						title="Click here to see {{activity.user.username}}'s page" /></a> <span
