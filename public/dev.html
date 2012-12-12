@@ -86,7 +86,89 @@
 
 	</div>
 	<hr />
+	<div class="well">
+		<h1>Dec 22 2012 - Week 34 &amp; 35 - New navigation bar and many
+			bug fixes!</h1>
 
+
+		<h2>No more notifications, and a new Customize menu in the nav
+			bar</h2>
+		<p>Spurred by a kick in the butt by our favorite beta tester, we
+			fixed the nav bar. It was broken since the day it was created, back
+			in June but it never hit our top priority. We upgraded our Twitter
+			Bootstrap (a library to make user interfaces), jQuery, which made the
+			update of the navbar obligatory as it was finally visually broken.</p>
+
+		<p>We also moved all the notifications into a hidden area, where
+			you can see them if you want to, but if you dont want to they will
+			just pile up hidden from view.
+		<p>
+		<h2>Audit of the Activity creation</h2>
+
+		<p>In preparation for finally moving the activity feeds into
+			widgets (as they were originally designed), we moved all the activity
+			creation to a central function on the app, which will either make
+			offline activities if needed or post the activities directly to the
+			master couch so that the teams can get instant popups/notifications
+			other about what everyone else is doing.</p>
+
+
+		<h2>Preparation for continuous sync</h2>
+
+		<p>We designed the app so that it had a button to sync, it didn't
+			sync continuously. But if you're working in a team, in the same room
+			at the same time, and you don't have continuous sync on, you are
+			likely to get merge conflicts on sessions and datalists and corpora.
+			(and even datum if you are in the process or reviewing/cleaning
+			rather than creating). To make it easier for teams to collaborate in
+			real time we are adding a mode to the app that does continuous
+			real-time replication. This is technically possible with pouch, it
+			will just attempt to replicate, if it fails it will try again later.
+			We'll keep you posted on how it goes...</p>
+
+
+		<h2>New Activity Feed Widgets</h2>
+
+		<p>We have started some new widgets (complete with build and
+			minification, and embedability in WordPress sites). The development
+			is going great, so far we have the code running, minifing and
+			embedded into the app. Our next steps are to make the widgets
+			customizable via routers, and have them poll for new activities every
+			once in a while (most likley configurable in the routers)</p>
+
+		<p>To run a widget on an external website (outside a chrome
+			extension) the user has to simply embed an iFrame, just like they
+			would embed a youtube video. We expect to serve the iframe from the
+			users' activity feed or teams activity feed's couch were it wont face
+			CORS blocking by iriscouch. To make this happen our plan is to add a
+			checkbox in the app somewhere which says "allow public users to see
+			my/our activity feed." We will be testing the activity feed widgets
+			with the Mi'gmaq team over the coming weeks.</p>
+
+
+	</div>
+
+
+
+	<div class="well">
+		<h1>Dec 8 2012 - Week 32 &amp; 33 - New conversations</h1>
+		<p>This week we started drafting up a new conversation module, it
+			will allow you to have multiple speaker with overlapping utterances.
+			We are working a new visualization for this with a time axis and the
+			possibility to replay the conversation.</p>
+
+
+		<h2>The app runs on Android, and on IrisCouch.com!</h2>
+
+		<p>We moved the app's files around so that it is now running out
+			of a couchapp, what does this mean? It means the app is now running
+			in a users corpus, as an attachment and has full access to the user
+			data (if they log in as themselves) which means the app can
+			potentially be used offline in Chrome and Firefox, outside a Chrome
+			extension. We also tested running out of a touchdb on Android, which
+			is also working. We had to change some things in the app to get it to
+			work (font awesome icons and bootstrap dropdowns).</p>
+	</div>
 
 	<div class="well">
 		<h1>Nov 24 2012 - Week 30 &amp; 31 - Multiple users on a corpus</h1>
@@ -128,7 +210,8 @@
 
 
 	<div class="well">
-		<h1 id="bugfixfiesta">Nov 10 2012 - Week 28 &amp; 29 - Bug fixing fiesta!</h1>
+		<h1 id="bugfixfiesta">Nov 10 2012 - Week 28 &amp; 29 - Bug fixing
+			fiesta!</h1>
 		<p>On the thrusdays of these two weeks we had a bug fixing fiesta
 			to put out a new release in preparation for beta testing with a field
 			methods class in January. We closed roughly 29 bugs, and opened over
@@ -1233,7 +1316,7 @@
 		<h1>May 18 2012 - Week 5 - Documenting the modules</h1>
 		<p>
 			This week we finished the <a
-				href="http://builder.ilanguage.ca/job/Drag-and-Drop-FieldLinguistics/javadoc/?">documentation</a>
+				href="http://builder.ilanguage.ca/job/FieldDB/ws/javadoc/index.html">documentation</a>
 			for what each class (you can think of classes as module) does.
 		</p>
 		<p>
@@ -1259,7 +1342,7 @@
 		<iframe width="100%" height="300" src="http://builder.ilanguage.ca/"></iframe>
 
 		<h2>Web Widgets Server is up</h2>
-		<a href="https://auth.fieldlinguist.com">https://auth.fieldlinguist.com</a>
+		<a href="https://lingsync.org">https://lingsync.org</a>
 
 		<h2>Lexicon Server is up</h2>
 		<iframe width="100%" height="300"
