@@ -17,6 +17,10 @@ a:hover {
 	width: 100%;
 }
 
+.locale_View_Public_Profile_Tooltip {
+	white-space: nowrap;
+}
+
 @font-face {
 	font-family: 'Englebert';
 	font-style: normal;
