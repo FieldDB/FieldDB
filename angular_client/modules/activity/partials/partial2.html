@@ -1,0 +1,36 @@
+<p>This is the partial for view 2.</p>
+<p>Showing of 'interpolate' filter: {{ 'Current version is
+	v%VERSION%.' | interpolate }}</p>
+
+
+Example of a Similar widget: Twitter
+
+<script charset="utf-8" type="text/javascript" src="js/widget.js"></script><script type="text/javascript">// <![CDATA[
+    new TWTR.Widget({
+      version: 2,
+      type: 'search',
+      search: '#phonetics OR #SpyOrNot',
+      interval: 30000,
+      title: 'Phonetics',
+      subject: '',
+      width: 250,
+      height: 300,
+      theme: {
+        shell: {
+          background: '#Fc8',
+          color: '#ffffff'
+        },
+        tweets: {
+          background: '#333333',
+          color: '#ffffff',
+          links: '#Fc8'
+        }
+      },
+      features: {
+        scrollbar: false,
+        loop: true,
+        live: true,
+        behavior: 'default'
+      }
+    }).render().start();
+// ]]></script>
