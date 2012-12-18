@@ -22,7 +22,7 @@ function TeamActivityFeedController($scope, $resource, MostRecentActivities,
       $scope.activities = activities;
     });
   });
-
+  
 };
 
 TeamActivityFeedController.$inject = [ '$scope', '$resource',
