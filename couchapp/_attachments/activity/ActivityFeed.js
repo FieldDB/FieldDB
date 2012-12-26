@@ -21,12 +21,8 @@ define([
      */
     initialize : function() {
       if(!this.get("activities")) {
-//      this.set("activities", window.app.get("currentCorpusTeamActivityFeed").get("activities"));
         this.set("activities", new Activities());
       }
-      //TODO remove this, and us the change corpus instead. by keepint htis now, it puts all activity feeds into one.
-//      this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.activityFeedTouchUrl
-//          : OPrime.activityFeedPouchUrl);
       this.set("maxInMemoryCollectionSize", 20);
 
     },
@@ -44,21 +40,21 @@ define([
     savefailedindex : [],
     nextsaveactivity : 0,
     
-    saveAndInterConnectInApp : function(successcallback, failurecallback){
+    saveAndInterConnectInApp : function(activityfeedsavesuccesscallback, failurecallback){
       //work around for the activity feeds recursively saving themselves.
       if(this.lastSavedTimeStamp && Date.now() - this.lastSavedTimeStamp < 30000){
         return;
       }
       this.lastSavedTimeStamp = Date.now();
       OPrime.debug("Calling saveAndInterConnectInApp for "+this.get("couchConnection").pouchname);
-      if(!successcallback){
-        successcallback = function(){
+      if(!activityfeedsavesuccesscallback){
+        activityfeedsavesuccesscallback = function(){
           if(window.appView){
             window.appView.toastUser("Save all activities","alert-success","Saved!");
           }
         };
       }
-      OPrime.debug("successcallback",successcallback);
+      OPrime.debug("activityfeedsavesuccesscallback",activityfeedsavesuccesscallback);
       OPrime.debug("failurecallback",failurecallback);
       
       var self = this;
@@ -88,8 +84,8 @@ define([
            */
           OPrime.debug("Activity feed saved.");
           
-          if(typeof successcallback == "function"){
-            successcallback();
+          if(typeof activityfeedsavesuccesscallback == "function"){
+            activityfeedsavesuccesscallback();
           }
           var alertcolor = "alert-success";
           if(self.savefailedcount > 0){
@@ -127,8 +123,8 @@ define([
           window.hub.unsubscribe("savedActivityToPouch", null, self);
           window.hub.unsubscribe("saveActivityFailedToPouch", null, self);
          //TODO there is a problem, workaround is to call the success callback anyway.
-          if(typeof successcallback == "function"){
-            successcallback();
+          if(typeof activityfeedsavesuccesscallback == "function"){
+            activityfeedsavesuccesscallback();
           }
         }
         if( arg.d <= 0 ){
@@ -136,8 +132,8 @@ define([
            * If we are at the final index in the activity feed
            */            
           OPrime.debug("Activity feed saved.");
-          if(typeof successcallback == "function"){
-            successcallback();
+          if(typeof activityfeedsavesuccesscallback == "function"){
+            activityfeedsavesuccesscallback();
           }
           if(window.appView){
             window.appView.toastUser("Save activity feed completed, "+self.savefailedcount+" failures, "+self.truelysaved+" new." ,null,"Activities saved:");
@@ -165,8 +161,8 @@ define([
         self.saveAnActivityAndLoop(self.get("activities").length - 1);
       }else{
         OPrime.debug("Activity feed didnt need to be saved.");
-        if(typeof successcallback == "function"){
-          successcallback();
+        if(typeof activityfeedsavesuccesscallback == "function"){
+          activityfeedsavesuccesscallback();
         }
       }
       
@@ -247,7 +243,8 @@ define([
       try{
         name = this.get("couchConnection").pouchname;
       }catch(e){
-        console.warn("couchConnection was undefined on the activity feed. this is a problem");
+        console.warn("couchConnection was undefined on the activity feed. this is a problem. not saving ",model);
+        return;
       }
       var currentlength =  this.get("activities").length;
       OPrime.debug(name+ " checking activity feed size = "+ currentlength);
@@ -404,7 +401,7 @@ define([
         }
       });
     },
-    replicateToActivityFeed : function(couchConnection, successcallback, failurecallback) {
+    replicateToActivityFeed : function(couchConnection, activityfeedreplicatetosuccesscallback, failurecallback) {
       var self = this;
       OPrime.debug("Calling replicateToActivityFeed for "+this.get("couchConnection").pouchname);
 
@@ -466,8 +463,8 @@ define([
                   }));
                 }
                 
-                if(typeof successcallback == "function"){
-                  successcallback();
+                if(typeof activityfeedreplicatetosuccesscallback == "function"){
+                  activityfeedreplicatetosuccesscallback();
                 }else{
                   OPrime.debug("ActivityFeed replicate to success");
                 }
@@ -481,7 +478,7 @@ define([
     /**
      * Synchronize from server to local database.
      */
-    replicateFromActivityFeed : function(couchConnection, successcallback, failurecallback) {
+    replicateFromActivityFeed : function(couchConnection, activityfeedreplicatesuccesscallback, failurecallback) {
       var self = this;
       
       if(couchConnection == null || couchConnection == undefined){
@@ -536,9 +533,16 @@ define([
                 }));
               }
               
+              if(typeof activityfeedreplicatesuccesscallback == "function"){
+                activityfeedreplicatesuccesscallback();
+              }else{
+                OPrime.debug("ActivityFeed replicate from success");
+              }
+              
               self.getAllIdsByDate(self.populate);
               window.hub.unsubscribe("ajaxError", null, self); 
 
+              
             }
           });
         });
