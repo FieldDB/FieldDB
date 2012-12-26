@@ -9,12 +9,12 @@ define([ "angular", "OPrime", "js/controllers" ], function(angular, OPrime,
       .config([ '$routeProvider', function($routeProvider) {
         OPrime.debug("Defining routes.");
 
-        $routeProvider.when('/user/:user/corpus/:corpus', {
+        $routeProvider.when('/user/:username/corpus/:corpusid', {
           templateUrl : 'partials/activity_feed_widget.html',
           controller : ActivityFeedController
         });
         $routeProvider.otherwise({
-          redirectTo : '/user/lingllama/corpus/cherokee'
+          redirectTo : '/user/gina/corpus/urdu'
         });
       } ]);
 
