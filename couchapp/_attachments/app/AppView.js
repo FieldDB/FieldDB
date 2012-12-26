@@ -449,6 +449,12 @@ define([
         }
         window.location.href = "#render/true";
       },
+      "click .corpus-settings" : function() {
+        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info","How to find the corpus settings:");
+        window.appView.currentCorpusReadView.format = "fullscreen";
+        window.appView.currentCorpusReadView.render();
+        app.router.showFullscreenCorpus();
+      },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
