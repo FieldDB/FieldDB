@@ -3,8 +3,8 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into debug mode to see the debugging output."
-sed 's/Utils.debugMode *= *false/Utils.debugMode = true/' couchapp/_attachments/libs/Utils.js  > output
-mv output couchapp/_attachments/libs/Utils.js
+sed 's/OPrime.debugMode *= *false/OPrime.debugMode = true/' couchapp/_attachments/libs/OPrime.js  > output
+mv output couchapp/_attachments/libs/OPrime.js
 
 echo ""
 echo ""
