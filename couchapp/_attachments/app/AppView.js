@@ -151,33 +151,38 @@ define([
       // Create the corpus team activity view
       OPrime.debug("Setting up the team activity feed.");
       if(!this.model.get("currentCorpusTeamActivityFeed")){
+        OPrime.bug("Why isnt this existing?");
         this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
       }
-      try{
-        //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
-        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname.indexOf(this.model.get("corpus").get("couchConnection").pouchname == -1)){
-          this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-          
-          var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
-          activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
-          this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-        }
-      }catch(e){
-//        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
-        OPrime.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
-        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-        
-        var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
-        activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
-        this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-      }
+      
+      //TODO dont need to initialize the pouch of the activity feed here?
+//      try{
+//        //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
+//        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname.indexOf(this.model.get("corpus").get("couchConnection").pouchname == -1)){
+//          this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+//          
+//          var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
+//          activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
+//          this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
+//        }
+//      }catch(e){
+////        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
+//        OPrime.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
+//        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
+//        
+//        var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
+//        activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
+//        this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
+//      }
+      //If the feed is defined, don't re-define it
       if(this.activityFeedCorpusTeamView){
-        this.activityFeedCorpusTeamView.destroy_view();
+//        this.activityFeedCorpusTeamView.destroy_view();
+      }else{
+        this.activityFeedCorpusTeamView = new ActivityFeedView({
+          model : this.model.get("currentCorpusTeamActivityFeed")
+        }); 
+        this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
       }
-      this.activityFeedCorpusTeamView = new ActivityFeedView({
-        model : this.model.get("currentCorpusTeamActivityFeed")
-      }); 
-      this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
       
       
       //TODO not sure if we should do this here
@@ -321,16 +326,18 @@ define([
       // Create a UserActivityView 
       OPrime.debug("Setting up the user activity feed.");
       if(!this.model.get("currentUserActivityFeed")){
+        OPrime.bug("Why isnt this existing?");
         this.model.set("currentUserActivityFeed", new ActivityFeed());
         this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
       }
       if(this.activityFeedUserView){
-        this.activityFeedUserView.destroy_view(); 
+//        this.activityFeedUserView.destroy_view(); 
+      }else{
+        this.activityFeedUserView = new ActivityFeedView({
+          model : this.model.get("currentUserActivityFeed")
+        }); 
+        this.activityFeedUserView.format = "rightSideUser";
       }
-      this.activityFeedUserView = new ActivityFeedView({
-        model : this.model.get("currentUserActivityFeed")
-      }); 
-      this.activityFeedUserView.format = "rightSideUser";
       
       
       // Create an InsertUnicodesView
