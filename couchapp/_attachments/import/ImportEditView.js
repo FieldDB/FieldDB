@@ -488,7 +488,14 @@ define( [
        */
       for (a in array) {
         var d = new Datum({pouchname : window.app.get("corpus").get("pouchname")});
-        var fields = this.model.get("datumFields").clone();
+      //copy the corpus's datum fields and empty them.
+        var datumfields = app.get("corpus").get("datumFields").toJSON();
+        for(var x in datumfields){
+          datumfields[x].mask = "";
+          datumfields[x].value = "";
+        }
+        var fields = new DatumFields(datumfields);
+        this.model.set("datumFields", fields);
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
