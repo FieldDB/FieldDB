@@ -271,7 +271,14 @@ define([
       var corpusself = this;
       // load the permissions in from the server.
       window.app.get("authentication").fetchListOfUsersGroupedByPermissions(function(users){
-        var typeaheadusers = _.pluck(users.notonteam,"username") || [];
+        var typeaheadusers =  [];
+        for(var user in users.notonteam ){
+          if(users.notonteam[user].username){
+            typeaheadusers.push(users.notonteam[user].username);
+          }else{
+            OPrime.debug("This user is invalid", users.notonteam[user]);
+          }
+        }
         typeaheadusers = JSON.stringify(typeaheadusers);
         var potentialusers = users.allusers || [];
         corpusself.permissions = new Permissions();
