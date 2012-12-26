@@ -1,6 +1,6 @@
 'use strict';
 define([ "angular", "OPrime", "js/controllers" ], function(angular, OPrime,
-    TeamActivityFeedController) {
+    ActivityFeedController) {
   // Declare app level module which depends on filters, and services
   var ActivityFeed = angular.module(
       'ActivityFeed',
@@ -9,12 +9,12 @@ define([ "angular", "OPrime", "js/controllers" ], function(angular, OPrime,
       .config([ '$routeProvider', function($routeProvider) {
         OPrime.debug("Defining routes.");
 
-        $routeProvider.when('/view1', {
-          templateUrl : 'partials/partial1.html',
-          controller : TeamActivityFeedController
+        $routeProvider.when('/user/:user/corpus/:corpus', {
+          templateUrl : 'partials/activity_feed_widget.html',
+          controller : ActivityFeedController
         });
         $routeProvider.otherwise({
-          redirectTo : '/view1'
+          redirectTo : '/user/lingllama/corpus/cherokee'
         });
       } ]);
 

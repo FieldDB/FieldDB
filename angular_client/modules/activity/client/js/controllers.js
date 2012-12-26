@@ -15,9 +15,9 @@ define(
        * @param GetSessionToken
        * @returns
        */
-      var TeamActivityFeedController = function TeamActivityFeedController(
+      var ActivityFeedController = function ActivityFeedController(
           $scope, $resource, MostRecentActivities, GetSessionToken) {
-        console.log("Loading TeamActivityFeedController");
+        console.log("Loading ActivityFeedController");
         $scope.corpus = {
           description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
           gravatar : "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
@@ -38,12 +38,12 @@ define(
 
       };
 
-      TeamActivityFeedController.$inject = [ '$scope', '$resource',
+      ActivityFeedController.$inject = [ '$scope', '$resource',
           'MostRecentActivities', 'GetSessionToken' ];
 
-      OPrime.debug("Defining TeamActivityFeedController.");
+      OPrime.debug("Defining ActivityFeedController.");
 
-      return TeamActivityFeedController;
+      return ActivityFeedController;
     });
 // function UserActivityFeedController($scope, $resource, MostRecentActivities,
 // GetSessionToken) {
