@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" ng-csp >
+<head>
+<meta charset="utf-8">
+<script src="libs/require.js"></script>
+<script src="js/main.js"></script>
+
+<title>FieldDB Activity Feed</title>
+<link rel="stylesheet" href="libs/font_awesome/font-awesome.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+  <ul>
+    <li><a href="activity_feed.html#/user/lingllama">Ling Llama's Activity Feed</a></li>
+    <li><a href="activity_feed.html#/user/lingllama/corpus/cherokee">Ling Llama's Cherokee Corpus Team Feed</a></li>
+    <li><a href="activity_feed.html">Default Feed</a></li>
+    <li><a href="iframe_example.html#/user/lingllama/corpus/cherokee">ActivityFeed iFrame Example</a></li>
+  </ul>
+
+  <div ng-view></div>
+
+  <div>
+    Angular seed app: v<span app-version></span>
+  </div>
+
+</body>
+</html>

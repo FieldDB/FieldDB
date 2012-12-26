@@ -115,35 +115,33 @@ define([
         optionalpouchname == "";
       }
       if (this.get("authentication").get("userPublic") == undefined) {
-        var u = new UserMask({
+        this.get("authentication").set("userPublic", new UserMask({
           pouchname : optionalpouchname
-        });
-        this.get("authentication").set("userPublic", u);
+        }));
       }
       if (this.get("authentication").get("userPrivate") == undefined) {
-        var u2 = new User();
-        this.get("authentication").set("userPrivate", u2);
+        this.get("authentication").set("userPrivate", new User());
       }
       var c = new Corpus({
         pouchname : optionalpouchname
       });
       this.set("corpus", c);
 
-      var s = new Session({
+      this.set("currentSession", new Session({
         pouchname : optionalpouchname,
         sessionFields : c.get("sessionFields").clone()
-      });
-      this.set("currentSession", s);
+      }));
 
-      var dl = new DataList({
+      this.set("currentDataList", new DataList({
         pouchname : optionalpouchname
-      });
-      this.set("currentDataList", dl);
+      }));
 
-      var search = new Search({
+      this.set("search", new Search({
         pouchname : optionalpouchname
-      });
-      this.set("search", search);
+      }));
+
+      this.set("currentCorpusTeamActivityFeed", new ActivityFeed());
+      this.set("currentUserActivityFeed", new ActivityFeed());
 
       if (typeof callback == "function") {
         callback();
@@ -294,6 +292,16 @@ define([
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
            
+            //Set corpus team feed.
+            var activityCouchConnection = JSON.parse(JSON.stringify(couchConnection));
+            activityCouchConnection.pouchname = couchConnection.pouchname+"-activity_feed";
+            window.app.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
+            
+            //Set user activity feed
+            window.app.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
+            
+            
+            
             $(".spinner-status").html("Opened Corpus...");
             
             c.setAsCurrentCorpus(function(){
@@ -345,6 +353,7 @@ define([
 
                               window.app.stopSpinner();
 
+                              window.app.showHelpOrNot();
 //                              window.appView.renderReadonlyDashboardViews();
 //                              window.appView.datumsEditView.format = "centerWell";
 //                              window.appView.datumsEditView.render(); //this is already done in the dashboard render
@@ -392,6 +401,28 @@ define([
     },
     
     router : AppRouter,
+
+    showHelpOrNot : function() {
+      var helpShownCount = localStorage.getItem("helpShownCount") || 0;
+      var helpShownTimestamp = localStorage
+      .getItem("helpShownTimestamp") || 0;
+      var milisecondsSinceLastHelp = Date.now() - helpShownTimestamp;
+      
+      /* if its been more than 5 days, reset the help shown count to trigger the illustrated guide */
+      if (milisecondsSinceLastHelp > 432000000) {
+        helpShownCount = 0;
+        $(".help_count_reason").html("Welcome back! It's been more than 5 days since you opened the app. ");
+      }
+      if (helpShownCount > 5) {
+        // do nothing
+      } else {
+        $(".help_count_left").html(5-helpShownCount);
+        localStorage.setItem("helpShownCount", ++helpShownCount);
+        localStorage.setItem("helpShownTimestamp", Date.now());
+        window.location.href = "#help/illustratedguide";
+      }
+    },
+    
     /**
      * This function is used to save the entire app state that is needed to load when the app is re-opened.
      * http://stackoverflow.com/questions/7794301/window-onunload-is-not-working-properly-in-chrome-browser-can-any-one-help-me
@@ -449,16 +480,16 @@ define([
               
               
               //appSelf.router.showDashboard();
-              
               //save activity feeds too
-              appSelf.get("currentCorpusTeamActivityFeed").saveAndInterConnectInApp(function(){
+              var afterSavingTeamActivityFeedCallback = function(){
                 appSelf.get("currentUserActivityFeed").saveAndInterConnectInApp(function(){
                   OPrime.debug("The activity feeds saved successfully.");
                   if(typeof successcallback == "function"){
                     successcallback();
                   }
                 },failurecallback);
-              },failurecallback);
+              };
+              appSelf.get("currentCorpusTeamActivityFeed").saveAndInterConnectInApp(afterSavingTeamActivityFeedCallback,failurecallback);
               
             },failurecallback);
           },failurecallback);

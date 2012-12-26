@@ -46,6 +46,7 @@ define([
       "corpus/:pouchname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       "render/:render"                  : "renderDashboardOrNot",
+      "help/:helptype"                  : "renderHelp",
       ""                                : "showDashboard"
     },
 
@@ -95,6 +96,13 @@ define([
       		"You can vote for it in our issue tracker</a>.  " +
       		"We use the " +
       		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).","alert","Track Changes:");
+    },
+    
+    renderHelp : function(helptype){
+      if(helptype.indexOf("illustratedguide") >= 0){
+        $("#illustrated_guide_to_dash").modal("show");
+        window.location.href= "#";
+      }
     },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.

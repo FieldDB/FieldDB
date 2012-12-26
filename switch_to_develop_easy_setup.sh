@@ -3,33 +3,33 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into debug mode to see the debugging output."
-sed 's/Utils.debugMode *= *true/Utils.debugMode = false/' public/libs/Utils.js  > output
-mv output public/libs/Utils.js
+sed 's/Utils.debugMode *= *true/Utils.debugMode = false/' couchapp/_attachments/libs/Utils.js  > output
+mv output couchapp/_attachments/libs/Utils.js
 
 
 echo ""
 echo ""
 echo "Put the dev analytics code."
-sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' public/libs/analytics.js  > output
-mv output public/libs/analytics.js
+sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' couchapp/_attachments/libs/analytics.js  > output
+mv output couchapp/_attachments/libs/analytics.js
 
 echo ""
 echo ""
 echo "Tell the Chrome app to contact the dev webservices."
-sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' public/corpus_dashboard.js  > output
-mv output public/corpus_dashboard.js
-sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' public/lingllama_dashboard.js  > output
-mv output public/lingllama_dashboard.js
-sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' public/user_dashboard.js  > output
-mv output public/user_dashboard.js
-sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' public/welcome_dashboard.js  > output
-mv output public/welcome_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/corpus_dashboard.js  > output
+mv output couchapp/_attachments/corpus_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/lingllama_dashboard.js  > output
+mv output couchapp/_attachments/lingllama_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/user_dashboard.js  > output
+mv output couchapp/_attachments/user_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/welcome_dashboard.js  > output
+mv output couchapp/_attachments/welcome_dashboard.js
 
 echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the dev manifest for release into the Chrome store as the unstable bleeding egde chromeapp  for users who like to be on the bleeding edge"
-cp public/manifest_dev.json public/manifest.json
-cp public/icon128_dev.png public/icon.png
+cp couchapp/_attachments/manifest_dev.json couchapp/_attachments/manifest.json
+cp couchapp/_attachments/images/icon128_dev.png couchapp/_attachments/images/icon.png
 
 echo ""
 echo ""
