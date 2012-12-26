@@ -180,9 +180,8 @@ require([
       return;
     }else{
       OPrime.debug("Loading app from localStorage");
-      var pouchname = null;
-      var couchConnection = null;
-      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
+      var couchConnection = appjson.couchConnection;
+      if(couchConnection == "undefined" || couchConnection == undefined || couchConnection ==  null){
 //        alert("We can't accurately guess which corpus to load.");
         document.location.href='user.html';
         return;

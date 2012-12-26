@@ -238,9 +238,9 @@ require([
       return;
     }else{
       OPrime.debug("Loading app from localStorage");
-      var pouchname = null;
-      var couchConnection = null;
-      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
+      var couchConnection = appjson.couchConnection;
+      var pouchname = couchConnection.pouchname;
+      if(couchConnection == "undefined" || couchConnection == undefined || couchConnection ==  null){
 //        alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
         loadFreshApp();
         return;

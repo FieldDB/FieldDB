@@ -139,10 +139,11 @@ define([
       var mostRecentIds = {
           corpusid : c.id,
           datalistid : c.get("dataLists").models[0].id,
-          sessionid : c.get("sessions").models[0].id
+          sessionid : c.get("sessions").models[0].id,
+          couchConnection : c.get("couchConnection")
         };
-        console.log("mostRecentIds",mostRecentIds);
-        localStorage.setItem("mostRecentCouchConnection",JSON.stringify(c.get("couchConnection")));
+        console.log("mostRecentIds", mostRecentIds);
+//        localStorage.setItem("mostRecentCouchConnection",JSON.stringify(c.get("couchConnection")));
         localStorage.setItem("mostRecentDashboard", JSON.stringify(mostRecentIds));
         window.location.replace("corpus.html");
     },

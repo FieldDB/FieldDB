@@ -132,7 +132,7 @@ define([
     logout : function() {
       localStorage.removeItem("username");
       localStorage.removeItem("mostRecentDashboard");
-      localStorage.removeItem("mostRecentCouchConnection");
+//      localStorage.removeItem("mostRecentCouchConnection");
       
 //      this.authenticateAsPublic();
       //Destropy cookies, and reload the page, it will put the user at the login page.
@@ -198,7 +198,7 @@ define([
              *  Load their last corpus, session, datalist etc
              */
             var appids = self.model.get("userPrivate").get("mostRecentIds");
-            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
           }
         }
         if(typeof corpusloginfailcallback == "function"){
@@ -256,7 +256,7 @@ define([
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
                 OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
                 if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
-                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appids);
+                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
                 }else{
                   console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
                   window.app.router.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);

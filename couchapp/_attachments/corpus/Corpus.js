@@ -366,7 +366,7 @@ define([
       conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
+//      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
     },
     
     // Internal models: used by the parse function
@@ -1072,7 +1072,7 @@ define([
               OPrime.debug("Corpus replicate from success", response);
 
               //This was a valid connection, lets save it into localstorage.
-              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
+//              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
               
               if(typeof successcallback == "function"){
                 successcallback();
