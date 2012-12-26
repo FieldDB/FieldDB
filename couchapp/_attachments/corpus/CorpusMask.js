@@ -186,7 +186,7 @@ define([
 //      datumFields : DatumFields, 
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
-      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
+//      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
     },
     loadPermissions: function(){
       //TODO decide if we need this method in a corpus mask
