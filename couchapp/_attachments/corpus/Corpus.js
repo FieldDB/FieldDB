@@ -1123,7 +1123,7 @@ define([
       }
       if(!couchConnection.path){
         couchConnection.path = "";
-        this.get("couchConnection").path = "";
+//        this.get("couchConnection").path = "";
       }
       couchurl = couchurl  + couchConnection.path + "/_session";
       var corpusloginparams = {};

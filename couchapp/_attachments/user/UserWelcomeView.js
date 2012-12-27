@@ -224,6 +224,8 @@ define([
       var corpusConnection = OPrime.defaultCouchConnection();
       corpusConnection.pouchname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
+      dataToPost.mostRecentIds = {};
+      dataToPost.mostRecentIds.couchConnection = corpusConnection;
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
@@ -233,7 +235,7 @@ define([
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
         OPrime.debug("User has entered an email and the passwords match. ");
-        var a = new App();
+        var a = new App({loadTheAppForTheFirstTime: true});
         window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
         
