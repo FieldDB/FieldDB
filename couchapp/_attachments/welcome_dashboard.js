@@ -94,9 +94,10 @@ require.config({
   }
 });
 
+
 // Initialization
 require([
-    "app/App",
+    "user/UserApp",
     "user/User",
     "user/UserWelcomeView",
     "compiledTemplates",

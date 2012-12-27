@@ -144,8 +144,11 @@ define([
         };
         console.log("mostRecentIds", mostRecentIds);
 //        localStorage.setItem("mostRecentCouchConnection",JSON.stringify(c.get("couchConnection")));
-        localStorage.setItem("mostRecentDashboard", JSON.stringify(mostRecentIds));
-        window.location.replace("corpus.html");
+//        localStorage.setItem("mostRecentDashboard", JSON.stringify(mostRecentIds));
+        window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
+        window.app.get("authentication").saveAndInterConnectInApp(function(){
+          window.location.replace("corpus.html");
+        });
     },
     bringCorpusToThisDevice : function(corpus, callback) {
       for (var x in window.app.get("authentication").get("userPrivate").get("corpuses")){
