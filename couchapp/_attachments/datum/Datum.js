@@ -1,6 +1,5 @@
 define([ 
     "backbone",
-    "activity/Activity",
     "audio_video/AudioVideo", 
     "comment/Comment",
     "comment/Comments",
@@ -14,7 +13,6 @@ define([
     "libs/OPrime"
 ], function(
     Backbone, 
-    Activity,
     AudioVideo, 
     Comment,
     Comments,
@@ -532,7 +530,7 @@ define([
               verbicon = "icon-plus";
             }
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon: verbicon,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
@@ -540,10 +538,10 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon: verbicon,
                   directobject : "<a href='#corpus/"+model.get("pouchname")+"/datum/"+model.id+"'>"+utterance+"</a> ",
@@ -551,7 +549,7 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
-                }));
+                });
 //            /*
 //             * If the current data list is the default
 //             * list, render the datum there since is the "Active" copy

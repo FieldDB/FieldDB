@@ -1,13 +1,11 @@
 define([ 
          "backbone",
          "handlebars", 
-         "activity/Activity",
          "permission/Permission",
          "user/UserMask"
   ], function(
       Backbone, 
       Handlebars,
-      Activity,
       Permission,
       UserMask
 ) {
@@ -69,7 +67,7 @@ define([
                   permisionviewself.render();
 
                   window.app.addActivity(
-                      new Activity({
+                      {
                         verb : "added",
                         verbicon: "icon-plus",
                         directobjecticon : "",
@@ -77,10 +75,10 @@ define([
                         indirectobject : "as a <i class='icon-group'></i> "+permisionviewself.model.get("role")+" on <i class='icon-cloud'></i><a href='#corpus/"+window.app.get("corpus").id+"'>this corpus</a>",
                         teamOrPersonal : "team",
                         context : " via Offline App."
-                      }));
+                      });
                   
                   window.app.addActivity(
-                      new Activity({
+                      {
                         verb : "added",
                         verbicon: "icon-plus",
                         directobjecticon : "icon-group",
@@ -88,7 +86,7 @@ define([
                         indirectobject : "as a <i class='icon-group'></i> "+permisionviewself.model.get("role")+" on <i class='icon-cloud'></i><a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                         teamOrPersonal : "personal",
                         context : " via Offline App."
-                      }));
+                      });
                 }, 
                 /* failure */ function(errors){
                   window.appView.toastUser("Error adding user <strong>"

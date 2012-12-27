@@ -57,8 +57,8 @@ define([
       }
       
     },
-    addActivity : function(backBoneActivity) {
-      OPrime.debug("There is no activity feed in the user app, not saving this activity.", backBoneActivity);
+    addActivity : function(jsonActivity) {
+      OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
 //      if (backBoneActivity.get("teamOrPersonal") == "team") {
 //        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
 //      } else {

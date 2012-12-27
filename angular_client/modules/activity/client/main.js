@@ -15114,9 +15114,9 @@ define('js/controllers',
          * activity feed to display this information.
          */
         $scope.corpus = {
-          description : "",//"Data gathered during the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
-          gravatar : "user/user_gravatar.png",
-          title : "Activity Feed",
+          description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
+          gravatar : "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
+          title : "Cherokee Field Methods",
           team : {
             _id : $routeParams.username
           }
@@ -15130,11 +15130,7 @@ define('js/controllers',
         feedParams.username = $routeParams.username || "lingllama";
         feedParams.corpusid = $routeParams.corpusid;
         if (feedParams.corpusid) {
-          feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
-          $scope.corpus.title = "Corpus Activity Feed";
-        }else{
-          feedParams.corpusid = "";
-          $scope.corpus.title = "User Activity Feed";
+          feedParams.corpusid = "-" + feedParams.corpusid;
         }
 
         GetSessionToken.run({
@@ -15171,12 +15167,8 @@ define('js/app',[ "angular", "OPrime", "js/controllers" ], function(angular, OPr
           templateUrl : 'partials/activity_feed_widget.html',
           controller : ActivityFeedController
         });
-        $routeProvider.when('/user/:username', {
-          templateUrl : 'partials/activity_feed_widget.html',
-          controller : ActivityFeedController
-        });
         $routeProvider.otherwise({
-          redirectTo : '/user/:username/corpus/:corpusid'
+          redirectTo : '/user/gina/corpus/urdu'
         });
       } ]);
 

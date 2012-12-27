@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "audio_video/AudioVideoEditView",
     "comment/Comment",
     "comment/Comments",
@@ -19,7 +18,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     AudioVideoEditView,
     Comment,
     Comments,
@@ -364,7 +362,7 @@ define([
       var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -372,10 +370,10 @@ define([
             indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -383,7 +381,7 @@ define([
             indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
+          });
       
     },
     

@@ -1,12 +1,10 @@
 define([ 
     "backbone", 
-    "activity/Activity",
     "datum/Datum",
     "comment/Comment",
     "comment/Comments"
 ], function(
     Backbone, 
-    Activity,
     Datum,
     Comment,
     Comments
@@ -61,7 +59,7 @@ define([
       window.appView.addUnsavedDoc(this.id);
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -69,10 +67,10 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -80,7 +78,7 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
+          });
     },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
@@ -259,7 +257,7 @@ define([
             }
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-pushpin",
@@ -267,10 +265,10 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-pushpin",
@@ -278,7 +276,7 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
 

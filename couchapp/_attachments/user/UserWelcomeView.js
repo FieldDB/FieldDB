@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -17,7 +16,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     App,
     Authentication,
     Corpus,

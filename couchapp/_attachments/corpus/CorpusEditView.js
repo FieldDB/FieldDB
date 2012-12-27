@@ -1,7 +1,6 @@
 define([ 
     "backbone", 
     "handlebars",
-    "activity/Activity",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -26,7 +25,6 @@ define([
 ], function(
     Backbone, 
     Handlebars,
-    Activity,
     Corpus,
     Comment,
     Comments,
