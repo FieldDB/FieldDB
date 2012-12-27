@@ -173,6 +173,9 @@ define([
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
       }
+      /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
+      window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
+
 //    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
       // self.get("userPublic").save(); //TODO save this when there is
       // no problem with pouch
@@ -196,6 +199,16 @@ define([
     },
     loadEncryptedUser : function(encryptedUserString, callbackload){
       OPrime.debug("loadEncryptedUser");
+      
+//      if (!encryptedUserString) {
+//        this.authenticate(new Backbone.Model({
+//          username : "devgina",
+//          password : "test",
+//          authUrl : OPrime.authUrl
+//        }), callbackload);
+//        return;
+//      }
+      
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
       var data = {};
       data.user = u;
@@ -214,7 +227,7 @@ define([
       }
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      localStorage.setItem("mostRecentDashboard", JSON.stringify(this.get("userPrivate").get("mostRecentIds")) );
+//      localStorage.setItem("mostRecentDashboard", JSON.stringify(this.get("userPrivate").get("mostRecentIds")) );
       this.saveAndEncryptUserToLocalStorage(function(){
         if(typeof successcallback == "function"){
           successcallback();

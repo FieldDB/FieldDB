@@ -1,5 +1,6 @@
 define([
     "backbone", 
+    "app/AppView",
     "activity/Activity",
     "authentication/Authentication", 
     "corpus/Corpus",
@@ -15,6 +16,7 @@ define([
     "libs/OPrime"
 ], function(
     Backbone, 
+    AppView,
     Activity,
     Authentication, 
     Corpus,
@@ -61,17 +63,13 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.bind('error', function(model, error) {
-        OPrime.debug("Error in App: " + error);
-      });
-      
+      OPrime.debug("APP INIT");
+
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
         this.set("authentication", new Authentication());
       }
-      
-      window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
-//      window.onunload = this.saveAndInterConnectInApp; //This seems to be breaking the app, since it cannot actually do a complete save anyway, just not do it at all.
+      this.showSpinner();
       
       window.Locale = {};
       window.Locale.get = function(message) {
@@ -85,6 +83,59 @@ define([
           return "";
         };
       }
+      
+      /*
+       * Start the pub sub hub
+       */
+      window.hub = {};
+      OPrime.makePublisher(window.hub);
+      
+      /*
+       * Load the user
+       */
+      window.app = this;
+      var appself = this;
+      OPrime.debug("Loading encrypted user");
+      $(".spinner-status").html("Loading encrypted user...");
+      var u = localStorage.getItem("encryptedUser");
+      appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+
+        $(".spinner-status").html(
+        "Turning on continuous sync with your team server...");
+        appself.replicateContinuouslyWithCouch(function() {
+          /*
+           * Load the backbone objects
+           */
+          OPrime.debug("Creating backbone objects");
+          $(".spinner-status")
+          .html("Building dashboard objects...");
+          appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
+            OPrime.debug("Starting the app");
+            appself.startApp(function() {
+              /*
+               * If you know the user, load their most recent
+               * dashboard
+               */
+              OPrime.debug("Loading the backbone objects");
+              $(".spinner-status").html(
+              "Loading dashboard objects...");
+
+              appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
+                  appself.get("authentication").get(
+                  "userPrivate").get("mostRecentIds"),
+                  function() {
+                    appself.stopSpinner();
+                  });
+            });
+          });
+
+        });
+
+      });
+
+      window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
+
+      
     },
     
     // Internal models: used by the parse function
@@ -95,7 +146,30 @@ define([
       currentDataList : DataList,
       search : Search
     },
-    
+    /*
+     * This will be the only time the app should open the pouch.
+     */
+    changePouch : function(couchConnection, callback) {
+      if (!couchConnection || couchConnection == undefined) {
+        console.log("App.changePouch couchConnection must be supplied.");
+        return;
+      } else {
+        console.log("App.changePouch setting couchConnection: ", couchConnection);
+        this.set("couchConnection", couchConnection);
+      }
+
+      if (this.pouch == undefined) {
+        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+        // + couchConnection.pouchname);
+        this.pouch = Backbone.sync
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
+            + couchConnection.pouchname);
+      }
+      if (typeof callback == "function") {
+        callback();
+      }
+    },
     /**
      * This function creates the backbone objects, and links them up so that
      * they are ready to be used in the views. This function should be called on
@@ -110,7 +184,6 @@ define([
       if (optionalpouchname == null) {
         optionalpouchname == "";
       }
-      window.app.set("couchConnection", {pouchname: optionalpouchname});
 
       if (this.get("authentication").get("userPublic") == undefined) {
         this.get("authentication").set("userPublic", new UserMask({
@@ -143,109 +216,25 @@ define([
         callback();
       }
     },
-   
-    /**
-     * @Deprecated
-     * 
-     * Accepts the ids to load the app. This is a helper function which is called
-     * at the three entry points, main (if there is json in the localstorage
-     * from where the user was last working), Welcome new user has a similar
-     * function but which creates a user and their recent data, and
-     * authentication calls this function to load the users most recent work
-     * after they have authenticated (if they were the user who was logged in,
-     * they take it from local storage, if they were not then the data will have
-     * to be synced.)
-     * 
-     * Preconditions:
-     * The user must already  be authenticated with their corpus server,
-     * The corpus server has sent down (replicated) the data.
-     * @param couchConnection
-     * @param appids
-     * @param callback
-     */
-    loadBackboneObjectsById : function(couchConnection, appids, callback) {
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = this.get("corpus").get("couchConnection");
+    
+    startApp : function(callback) {
+      window.appView = new AppView({
+        model : this
+      });
+      /* Tell the app to render everything */
+      window.appView.render();
+
+      /* Tell the router to render the home screen divs */
+      this.router = new AppRouter();
+      this.router.renderDashboardOrNot(true);
+
+      Backbone.history.start();
+      if (typeof callback == "function") {
+        OPrime.debug("Calling back the startApps callback");
+        callback();
       }
-      var self = this;
-      var c = this.get("corpus");
-      c.set({
-        "pouchname" : couchConnection.pouchname,
-        couchConnection : couchConnection
-      });
-      c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
-      
-      c.changePouch(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changePouch does.
-        c.fetch({
-          success : function(model) {
-            OPrime.debug("Corpus fetched successfully", model);
-            window.appView.addBackboneDoc(model.id);
-            window.appView.addPouchDoc(model.id);
-            window.app.set("couchConnection", couchConnection);
-
-            var s = self.get("currentSession");
-            s.set({
-              "pouchname" : couchConnection.pouchname});
-            s.id = appids.sessionid; 
-            s.changePouch(couchConnection.pouchname, function(){
-              s.fetch({
-                success : function(model) {
-                  OPrime.debug("Session fetched successfully", model);
-                  window.appView.addBackboneDoc(model.id);
-                  window.appView.addPouchDoc(model.id);
-                  
-                  var dl = self.get("currentDataList");
-                  dl.set({
-                    "pouchname" : couchConnection.pouchname});
-                  dl.id = appids.datalistid; 
-                  dl.changePouch(couchConnection.pouchname, function(){
-                    dl.fetch({
-                      success : function(model) {
-                        OPrime.debug("Data list fetched successfully", model);
-                        window.appView.addBackboneDoc(model.id);
-                        window.appView.addPouchDoc(model.id);
-                        
-                        /*
-                         * After all fetches have succeeded show the pretty dashboard
-                         */
-                        //TODO turn these on, technically they should be called when we change the session's model.
-//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession();
-//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList();
-//                        window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
-                        window.appView.renderReadonlyDashboardViews();
-                        if (typeof callback == "function") {
-                          callback();
-                        }
-                        
-                      },
-                      error : function(e) {
-                        alert("There was an error fetching the data list. Loading defaults..."+e);
-                      }
-                    });
-                  });
-                },
-                error : function(e) {
-                  alert("There was an error fetching the session. Loading defaults..."+e);
-                  s.set(
-                      "sessionFields", self.get("corpus").get("sessionFields").clone()
-                  );
-                }
-              });
-            });
-          },
-          error : function(e, x, y ) {
-            console.log(e);
-            console.log(x);
-            console.log(y);
-            
-            alert("There was an error fetching corpus. Loading defaults..."+e);
-            document.location.href='user.html';
-
-          }
-        });
-      });
     },
+    
     showSpinner : function(){
         $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
         $('.spinner-image').css({
@@ -261,7 +250,224 @@ define([
     stopSpinner : function(){
       $('#dashboard_loading_spinner').html("");
     },
-    loadBackboneObjectsByIdAndSetAsCurrentDashboard : function(couchConnection, appids, callback) {
+
+    /**
+     * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
+     * "http://localhost:5984/_session";
+     * 
+     * References:
+     * http://guide.couchdb.org/draft/security.html
+     * 
+     * @param username this can come from a username field in a login, or from the User model.
+     * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
+     * @param callback A function to call upon success, it receives the data back from the post request.
+     */
+    logUserIntoTheirCorpusServer : function(couchConnection, username,
+        password, succescallback, failurecallback) {
+      if (couchConnection == null || couchConnection == undefined) {
+        couchConnection = this.get("couchConnection");
+      }
+
+      var couchurl = couchConnection.protocol + couchConnection.domain;
+      if (couchConnection.port != null) {
+        couchurl = couchurl + ":" + couchConnection.port;
+      }
+      if (!couchConnection.path) {
+        couchConnection.path = "";
+        this.get("couchConnection").path = "";
+      }
+      couchurl = couchurl + couchConnection.path + "/_session";
+      var corpusloginparams = {};
+      corpusloginparams.name = username;
+      corpusloginparams.password = password;
+      OPrime.debug("Contacting your corpus server ", couchConnection);
+
+      $
+      .ajax({
+        type : 'POST',
+        url : couchurl,
+        data : corpusloginparams,
+        success : function(serverResults) {
+          if (window.appView) {
+            window.appView
+            .toastUser(
+                "I logged you into your team server automatically, your syncs will be successful.",
+                "alert-info", "Online Mode:");
+          }
+          if (typeof succescallback == "function") {
+            succescallback(serverResults);
+          }
+        },
+        error : function(serverResults) {
+          window
+          .setTimeout(
+              function() {
+                //try one more time 5 seconds later 
+                $
+                .ajax({
+                  type : 'POST',
+                  url : couchurl,
+                  success : function(serverResults) {
+                    if (window.appView) {
+                      window.appView
+                      .toastUser(
+                          "I logged you into your team server automatically, your syncs will be successful.",
+                          "alert-info", "Online Mode:");
+                    }
+                    if (typeof succescallback == "function") {
+                      succescallback(serverResults);
+                    }
+                  },
+                  error : function(serverResults) {
+                    if (window.appView) {
+                      window.appView
+                      .toastUser(
+                          "I couldn't log you into your corpus. What does this mean? "
+                          + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
+                          + "You also can't share your data with team members. If your computer is online and you are"
+                          + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
+                          + OPrime.contactUs
+                          + " If you're offline you can ignore this warning, and sync later when you're online. ",
+                          "alert-danger",
+                      "Offline Mode:");
+                    }
+                    if (typeof failurecallback == "function") {
+                      failurecallback("I couldn't log you into your corpus.");
+                    }
+                    OPrime.debug(serverResults);
+                    window.app.get("authentication").set(
+                        "staleAuthentication", true);
+                  }
+                });
+              }, 5000);
+        }
+      });
+    },
+    /**
+     * Synchronize to server and from database.
+     */
+    replicateContinuouslyWithCouch : function(successcallback,
+        failurecallback) {
+      
+//    if(OPrime.isCouchApp()){
+      if(true){
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
+        // no need to replicate, we are in our db already.
+        return;
+      }
+      
+      var self = this;
+      var couchConnection = this.get("couchConnection");
+
+      this.logUserIntoTheirCorpusServer(couchConnection, "devgina",
+          "test", function() {
+        OPrime.debug("Logged you into your corpus ",
+            couchConnection);
+
+        self.changePouch(null, function() {
+          self.pouch(function(err, db) {
+            var couchurl = couchConnection.protocol
+            + couchConnection.domain;
+            if (couchConnection.port != null) {
+              couchurl = couchurl + ":" + couchConnection.port;
+            }
+            couchurl = couchurl + couchConnection.path + "/"
+            + couchConnection.pouchname;
+            if (err) {
+              OPrime.debug("Opening db  error", err);
+
+              if (typeof failurecallback == "function") {
+                failurecallback();
+              } else {
+                alert('Opening DB error' + JSON.stringify(err));
+                OPrime.debug('Opening DB error'
+                    + JSON.stringify(err));
+              }
+            } else {
+              OPrime.debug("Opening db  success", db);
+
+              self.replicateFromCorpus(db, couchurl, function() {
+                //turn on to regardless of fail or succeed
+                self.replicateToCorpus(db, couchurl);
+              }, function() {
+                //turn on to regardless of fail or succeed
+                self.replicateToCorpus(db, couchurl);
+              });
+
+              if (typeof successcallback == "function") {
+                successcallback();
+              }
+
+            }
+          });
+        });
+
+      });
+    },
+    replicateToCorpus : function(db, couchurl, success, failure) {
+      db.replicate.to(couchurl, {
+        continuous : true
+      }, function(err, response) {
+        OPrime.debug("Replicated to " + couchurl);
+        OPrime.debug(response);
+        OPrime.debug(err);
+        if (err) {
+          OPrime.debug("replicate to db  error", err);
+          if (typeof failure == "function") {
+            failure();
+          } else {
+            alert('Database replicate to error' + JSON.stringify(err));
+            OPrime.debug('Database replicate to error'
+                + JSON.stringify(err));
+          }
+        } else {
+          OPrime.debug("Database replicate to success", response);
+          if (typeof success == "function") {
+            success();
+          } else {
+            OPrime.debug('Database replicating'
+                + JSON.stringify(couchConnection));
+          }
+
+        }
+      });
+    },
+    replicateFromCorpus : function(db, couchurl, succes, fail) {
+      db.replicate
+      .from(couchurl, {
+        continuous : true
+      },
+      function(err, response) {
+        OPrime.debug("Replicated from " + couchurl);
+        OPrime.debug(response);
+        OPrime.debug(err);
+        if (err) {
+          OPrime.debug("replicate from db  error", err);
+          if (typeof fail == "function") {
+            fail();
+          } else {
+            alert('Database replicate from error'
+                + JSON.stringify(err));
+            OPrime.debug('Database replicate from error'
+                + JSON.stringify(err));
+          }
+        } else {
+          OPrime.debug("Database replicate from success",
+              response);
+          if (typeof succes == "function") {
+            succes();
+          } else {
+            OPrime.debug('Database replicating'
+                + JSON.stringify(couchConnection));
+          }
+
+        }
+      });
+    },
+    
+    loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
       OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       
       /*
@@ -272,9 +478,11 @@ define([
       window.app.showSpinner();
 
       
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = this.get("corpus").get("couchConnection");
-      }
+//      if(couchConnection == null || couchConnection == undefined){
+//        couchConnection = this.get("corpus").get("couchConnection");
+//      }
+      var couchConnection = appids.couchConnection;
+      
       var c = new Corpus({
         "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
@@ -288,7 +496,8 @@ define([
             OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
-           
+            window.app.set("couchConnection", couchConnection);
+
             
             $(".spinner-status").html("Opened Corpus...");
             
@@ -419,14 +628,15 @@ define([
       });
      */
     warnUserAboutSavedSyncedStateBeforeUserLeaves : function(e){
-      localStorage.setItem("saveStatus", "Saving in unload...");
       
       var returntext = "";
-      if(window.appView.totalUnsaved.length >= 1){
-        returntext = "You have unsaved changes, click cancel to save them. \n\n";
-      }
-      if(window.appView.totalUnsaved.length >= 1){
-        returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
+      if (window.appView) {
+        if(window.appView.totalUnsaved.length >= 1){
+          returntext = "You have unsaved changes, click cancel to save them. \n\n";
+        }
+        if(window.appView.totalUnsaved.length >= 1){
+          returntext = returntext+"You have unsynced changes, click cancel and then click the sync button to sync them. This is only important if you want to back up your data or if you are sharing your data with a team. \n\n";
+        }
       }
       if(returntext == ""){
         return; //don't show a pop up
@@ -435,6 +645,39 @@ define([
       }
     },
     addActivity : function(backBoneActivity) {
+//      var couchConnection = this.get("couchConnection");
+//      var couchurl = couchConnection.protocol + couchConnection.domain;
+//      if (couchConnection.port != null) {
+//        couchurl = couchurl + ":" + couchConnection.port;
+//      }
+//      if (!couchConnection.path) {
+//        couchConnection.path = "";
+//        this.get("couchConnection").path = "";
+//      }
+//      couchurl = couchurl + couchConnection.path;
+//      if (backBoneActivity.get("teamOrPersonal") == "team") {
+//        couchurl = couchurl + couchConnection.pouchname + "-activity_feed";
+//      } else {
+//        couchurl = couchurl + this.get("authentication").get("userPrivate").get(
+//        "username") + "-activity_feed";
+//      }
+//      OPrime.debug("Saving activity: ", backBoneActivity);
+//      $.ajax({
+//        url : couchurl,
+//        data : backBoneActivity.toJSON(),
+//        contentType : "application/json",
+//        type : 'POST',
+//        dataType : "json",
+//        success : function(resp) {
+//          OPrime
+//          .debug("Successfully saved activity to your activity couch.", resp);
+//        }
+//      });
+      
+      
+      
+      
+      
 //      if (backBoneActivity.get("teamOrPersonal") == "team") {
 //        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
 //      } else {
@@ -460,7 +703,7 @@ define([
             appSelf.get("authentication").saveAndInterConnectInApp(function(){
               
               appSelf.get("authentication").staleAuthentication = true;
-              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
+//              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
               if(window.appView){
                 window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.","alert-success","Exit at anytime:");
               }

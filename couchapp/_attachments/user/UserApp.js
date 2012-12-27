@@ -2,6 +2,7 @@ define([
     "backbone", 
     "authentication/Authentication", 
     "corpus/Corpus",
+    "user/UserAppView",
     "user/UserRouter",
     "confidentiality_encryption/Confidential",
     "user/User",
@@ -12,6 +13,7 @@ define([
     Backbone, 
     Authentication, 
     Corpus,
+    UserAppView,
     UserRouter,
     Confidential,
     User,
@@ -34,15 +36,27 @@ define([
      * @constructs
      */
     initialize : function() {
-      this.bind('error', function(model, error) {
-        OPrime.debug("Error in App: " + error);
-      });
-      
+      OPrime.debug("USERAPP INIT");
+
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
         this.set("authentication", new Authentication());
       }
       
+      /*
+       * Start the pub sub hub
+       */
+      window.hub = {};
+      OPrime.makePublisher(window.hub);
+      
+      /*
+       * Check for user's cookie and the dashboard so we can load it
+       */
+      var username = OPrime.getCookie("username");
+      if (username == null && username == "") {
+        // new user, take them to the index which can handle new users.
+        window.location.replace('index.html');
+      }
       window.Locale = {};
       window.Locale.get = function(message) {
         return window.Locale.data[message].message;
@@ -56,6 +70,51 @@ define([
         };
       }
       
+      window.app = this;
+      var appself = this;
+      OPrime.debug("Loading encrypted user");
+      var u = localStorage.getItem("encryptedUser");
+      appself.get("authentication").loadEncryptedUser(u, function(success, errors){
+        if(success == null){
+//          alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);  
+//          OPrime.setCookie("username","");
+//          OPrime.setCookie("token","");
+//          localStorage.removeItem("encryptedUser");
+//          window.location.replace('index.html');
+          return;
+        }else{
+          window.appView = new UserAppView({model: appself}); 
+          window.appView.render();
+          appself.router = new UserRouter();
+          Backbone.history.start();
+        }
+      });
+      
+      
+    },
+    /*
+     * This will be the only time the app should open the pouch.
+     */
+    changePouch : function(couchConnection, callback) {
+      if (!couchConnection || couchConnection == undefined) {
+        console.log("App.changePouch couchConnection must be supplied.");
+        return;
+      } else {
+        console.log("App.changePouch setting couchConnection: ", couchConnection);
+        this.set("couchConnection", couchConnection);
+      }
+
+      if (this.pouch == undefined) {
+        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+        // + couchConnection.pouchname);
+        this.pouch = Backbone.sync
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
+            + couchConnection.pouchname);
+      }
+      if (typeof callback == "function") {
+        callback();
+      }
     },
     addActivity : function(jsonActivity) {
       OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
