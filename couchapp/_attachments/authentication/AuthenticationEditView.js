@@ -131,8 +131,11 @@ define([
      */
     logout : function() {
       localStorage.removeItem("username");
-//      localStorage.removeItem("mostRecentDashboard");
-//      localStorage.removeItem("mostRecentCouchConnection");
+      localStorage.removeItem("mostRecentDashboard");
+      localStorage.removeItem("mostRecentCouchConnection");
+      localStorage.removeItem("encryptedUser");
+      localStorage.removeItem("helpShownCount");
+      localStorage.removeItem("helpShownTimestamp");
       
 //      this.authenticateAsPublic();
       //Destropy cookies, and reload the page, it will put the user at the login page.

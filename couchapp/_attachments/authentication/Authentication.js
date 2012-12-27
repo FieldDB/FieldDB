@@ -200,14 +200,14 @@ define([
     loadEncryptedUser : function(encryptedUserString, callbackload){
       OPrime.debug("loadEncryptedUser");
       
-//      if (!encryptedUserString) {
+      if (!encryptedUserString) {
 //        this.authenticate(new Backbone.Model({
 //          username : "devgina",
 //          password : "test",
 //          authUrl : OPrime.authUrl
 //        }), callbackload);
-//        return;
-//      }
+        return;
+      }
       
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
       var data = {};

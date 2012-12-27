@@ -93,45 +93,47 @@ define([
       /*
        * Load the user
        */
-      window.app = this;
-      var appself = this;
-      OPrime.debug("Loading encrypted user");
-      $(".spinner-status").html("Loading encrypted user...");
-      var u = localStorage.getItem("encryptedUser");
-      appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
-
-        $(".spinner-status").html(
-        "Turning on continuous sync with your team server...");
-        appself.replicateContinuouslyWithCouch(function() {
-          /*
-           * Load the backbone objects
-           */
-          OPrime.debug("Creating backbone objects");
-          $(".spinner-status")
-          .html("Building dashboard objects...");
-          appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
-            OPrime.debug("Starting the app");
-            appself.startApp(function() {
-              /*
-               * If you know the user, load their most recent
-               * dashboard
-               */
-              OPrime.debug("Loading the backbone objects");
-              $(".spinner-status").html(
-              "Loading dashboard objects...");
-
-              appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
-                  appself.get("authentication").get(
-                  "userPrivate").get("mostRecentIds"),
-                  function() {
-                    appself.stopSpinner();
-                  });
+      if(!this.get("loadTheAppForTheFirstTime")){
+        window.app = this;
+        var appself = this;
+        OPrime.debug("Loading encrypted user");
+        $(".spinner-status").html("Loading encrypted user...");
+        var u = localStorage.getItem("encryptedUser");
+        appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+          
+          $(".spinner-status").html(
+          "Turning on continuous sync with your team server...");
+          appself.replicateContinuouslyWithCouch(function() {
+            /*
+             * Load the backbone objects
+             */
+            OPrime.debug("Creating backbone objects");
+            $(".spinner-status")
+            .html("Building dashboard objects...");
+            appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
+              OPrime.debug("Starting the app");
+              appself.startApp(function() {
+                /*
+                 * If you know the user, load their most recent
+                 * dashboard
+                 */
+                OPrime.debug("Loading the backbone objects");
+                $(".spinner-status").html(
+                "Loading dashboard objects...");
+                
+                appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
+                    appself.get("authentication").get(
+                    "userPrivate").get("mostRecentIds"),
+                    function() {
+                      appself.stopSpinner();
+                    });
+              });
             });
+            
           });
-
+          
         });
-
-      });
+      }
 
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
 
