@@ -2,6 +2,8 @@
 
 bash scripts/build_templates.sh
 
+
+bash scripts/build_activity_feed.sh
 #cd ../AndroidFieldDB/assets
 #bash build_debug.sh
 
