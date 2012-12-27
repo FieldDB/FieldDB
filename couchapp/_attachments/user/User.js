@@ -21,7 +21,6 @@ define([
      * @property {String} lastname The user's last name.
      * @property {Array} teams This is a list of teams a user belongs to. 
      * @property {Array} sessionHistory 
-     * @property {Array} activityHistory 
      * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)   
      *
      * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 

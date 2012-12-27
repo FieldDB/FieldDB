@@ -1,5 +1,6 @@
 body {
 	margin: 0;
+	min-width: 357px;
 	height: 100%;
 	overflow: auto !important;
 	height: 100%;
@@ -20,14 +21,6 @@ body {
 		format('woff');
 }
 
-/* app css stylesheet */
-.menu {
-	list-style: none;
-	border-bottom: 0.1em solid black;
-	margin-bottom: 2em;
-	padding: 0 0 0.5em;
-}
-
 a {
 	color: #0088cc;
 	text-decoration: none !important;
@@ -35,28 +28,6 @@ a {
 
 a:hover {
 	color: #005580;
-}
-
-.menu:before {
-	content: "[";
-}
-
-.menu:after {
-	content: "]";
-}
-
-.menu>li {
-	display: inline;
-}
-
-.menu>li:before {
-	content: "|";
-	padding-right: 0.3em;
-}
-
-.menu>li:nth-child(1):before {
-	content: "";
-	padding: 0;
 }
 
 .gravatar-small {
@@ -71,11 +42,11 @@ a:hover {
 
 li {
 	list-style: none;
-	margin-left: -1.8em;
+	margin-left: -2em;
 }
 
 .activity_feed_widget_header {
-	background-color: #eee;
+	background-color: #f5f5f5;
 	color: #fff;
 	width: 100%;
 	position: fixed;
@@ -105,15 +76,22 @@ li {
 	line-height: 2em;
 }
 
-li:hover {
-	background-color: #fff;
-}
-
 .activity_feed_widget_footer {
-	background-color: #eee;
+	background-color: #f5f5f5;
 	color: #fff;
 	width: 100%;
 	position: fixed;
 	bottom: 0;
 	z-index: 999999;
+}
+
+/* .zebra ul li {
+	background-color: #eeeeee;
+} */
+.zebra ul li:nth-child(odd) {
+	background-color: #eee;
+}
+
+li:hover {
+	background-color: #fff !important;
 }

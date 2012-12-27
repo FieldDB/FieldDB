@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "activity/Activity",
-    "activity/ActivityFeed",
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
@@ -17,7 +16,6 @@ define([
 ], function(
     Backbone, 
     Activity,
-    ActivityFeed,
     Authentication, 
     Corpus,
     DataList,
@@ -95,8 +93,6 @@ define([
       authentication : Authentication,
       currentSession : Session,
       currentDataList : DataList,
-      currentCorpusTeamActivityFeed : ActivityFeed,
-      currentUserActivityFeed : ActivityFeed,
       search : Search
     },
     
@@ -114,6 +110,8 @@ define([
       if (optionalpouchname == null) {
         optionalpouchname == "";
       }
+      window.app.set("couchConnection", {pouchname: optionalpouchname});
+
       if (this.get("authentication").get("userPublic") == undefined) {
         this.get("authentication").set("userPublic", new UserMask({
           pouchname : optionalpouchname
@@ -140,8 +138,6 @@ define([
         pouchname : optionalpouchname
       }));
 
-      this.set("currentCorpusTeamActivityFeed", new ActivityFeed());
-      this.set("currentUserActivityFeed", new ActivityFeed());
 
       if (typeof callback == "function") {
         callback();
@@ -186,6 +182,7 @@ define([
             OPrime.debug("Corpus fetched successfully", model);
             window.appView.addBackboneDoc(model.id);
             window.appView.addPouchDoc(model.id);
+            window.app.set("couchConnection", couchConnection);
 
             var s = self.get("currentSession");
             s.set({
@@ -292,15 +289,6 @@ define([
             window.appView.addBackboneDoc(corpusModel.id);
             window.appView.addPouchDoc(corpusModel.id);
            
-            //Set corpus team feed.
-            var activityCouchConnection = JSON.parse(JSON.stringify(couchConnection));
-            activityCouchConnection.pouchname = couchConnection.pouchname+"-activity_feed";
-            window.app.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-            
-            //Set user activity feed
-            window.app.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
-            
-            
             
             $(".spinner-status").html("Opened Corpus...");
             
@@ -344,7 +332,6 @@ define([
                               OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
 //                              window.appView.setUpAndAssociateViewsAndModelsWithCurrentUser(); //this didnt help, or seem to be necesary.
-//                              window.appView.renderActivityFeedViews();
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
@@ -448,11 +435,11 @@ define([
       }
     },
     addActivity : function(backBoneActivity) {
-      if (backBoneActivity.get("teamOrPersonal") == "team") {
-        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
-      } else {
-        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
-      }
+//      if (backBoneActivity.get("teamOrPersonal") == "team") {
+//        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+//      } else {
+//        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+//      }
     },
     
     /**
@@ -480,17 +467,10 @@ define([
               
               
               //appSelf.router.showDashboard();
-              //save activity feeds too
-              var afterSavingTeamActivityFeedCallback = function(){
-                appSelf.get("currentUserActivityFeed").saveAndInterConnectInApp(function(){
-                  OPrime.debug("The activity feeds saved successfully.");
-                  if(typeof successcallback == "function"){
-                    successcallback();
-                  }
-                },failurecallback);
-              };
-              appSelf.get("currentCorpusTeamActivityFeed").saveAndInterConnectInApp(afterSavingTeamActivityFeedCallback,failurecallback);
-              
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+
             },failurecallback);
           },failurecallback);
         }, failurecallback);

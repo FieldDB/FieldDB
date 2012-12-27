@@ -1,6 +1,5 @@
 define([
     "backbone",
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "datum/DatumField",
@@ -10,7 +9,6 @@ define([
     "user/User",
 ], function(
     Backbone,
-    Activity,
     Comment,
     Comments,
     DatumField,
@@ -120,7 +118,7 @@ define([
       var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -128,10 +126,10 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -139,7 +137,7 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
+          });
     },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
@@ -206,7 +204,7 @@ define([
               verbicon = "icon-plus";
             }
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-calendar",
@@ -214,10 +212,10 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-calendar",
@@ -225,7 +223,7 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
-                }));
+                });
             
             //make sure the session is in this corpus, if it is the same pouchname
 //            var previousversionincorpus = window.app.get("corpus").get("sessions").getByCid(model.cid);

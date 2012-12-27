@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -12,7 +11,6 @@ define([
 ], function(
     Backbone,
     Handlebars, 
-    Activity,
     Comment,
     Comments,
     CommentReadView,

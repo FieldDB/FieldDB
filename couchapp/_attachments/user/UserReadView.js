@@ -20,8 +20,8 @@ define([
   /** @lends UserReadView.prototype */
   {
     /**
-     * @class The layout of a single User. This view is used in the activity
-     *        feeds, it is also embedable in the UserEditView.
+     * @class The layout of a single User. This view is used in the comments
+     *        , it is also embedable in the UserEditView.
      *        
      * @property {String} format Must be set when the view is initialized. Valid
      *           values are "link" "modal" "fullscreen" and "public"

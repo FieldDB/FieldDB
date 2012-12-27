@@ -1,7 +1,6 @@
 define( [ 
     "backbone",
     "handlebars",
-    "activity/Activity",
     "import/Import",
     "data_list/DataList",
     "data_list/DataListEditView",
@@ -19,7 +18,6 @@ define( [
 ], function(
     Backbone,
     Handlebars, 
-    Activity,
     Import,
     DataList,
     DataListEditView,
@@ -587,22 +585,22 @@ define( [
           ,"alert-success","Import successful:");
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
             teamOrPersonal : "team",
             context : "via Offline App"
-          }));
+          });
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
             teamOrPersonal : "personal",
             context : "via Offline App"
-          }));
+          });
 
       window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
@@ -665,22 +663,22 @@ define( [
               $(".import-progress").val($(".import-progress").val()+1);
               
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
                     teamOrPersonal : "team",
                     context : "via Offline App"
-                  }));
+                  });
               
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
                     teamOrPersonal : "personal",
                     context : "via Offline App"
-                  }));
+                  });
               
               window.hub.subscribe("savedDatumToPouch", function(arg){
                 this.savedindex[arg.d] = true;

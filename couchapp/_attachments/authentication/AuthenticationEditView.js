@@ -279,27 +279,6 @@ define([
       }, failcallback);
     },
     
-    /**
-     * Authenticate as Public simply sends "public" to the authenticate method,
-     * which contacts the server most likleyt o do things like recent activity
-     * of the "public" user etc.
-     */
-    authenticateAsPublic : function() {
-      // Load the public user
-
-      this.userView.loadPublic();
-      u = this.userView.model;
-      
-      // Save the public user in our Models
-      this.model.set({
-        user : u,
-        username : u.get("username"),
-        state : "logggedOut"
-      });
-      
-      // Save the public user in localStorage
-//      localStorage.setItem("username", u.get("username"));
-    },
     
     /**
      * AuthenticatePreviousUser is intended to be called on page load, it looks

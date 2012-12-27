@@ -1,6 +1,5 @@
 define([ 
     "backbone",
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "corpus/CorpusMask",
@@ -25,7 +24,6 @@ define([
     "libs/OPrime"
 ], function(
     Backbone, 
-    Activity,
     Comment, 
     Comments,
     CorpusMask,
@@ -394,7 +392,7 @@ define([
       window.appView.addUnsavedDoc(this.id);
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -402,10 +400,10 @@ define([
             indirectobject : "on <i class='icon-cloud'></i><a href='#corpus/"+this.id+"'>this corpus</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -413,7 +411,7 @@ define([
             indirectobject : "on <i class='icon-cloud'></i><a href='#corpus/"+this.id+"'>"+this.get('title')+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
+          });
     },
     newSession : function() {
       $("#new-session-modal").modal("show");
@@ -582,17 +580,6 @@ define([
             }
             var teamid = model.get("team").id; //Works if UserMask was saved
             if(!teamid){
-              //TODO test this, this is to protect from the case wher the id of the team is not set yet.
-//              window.app.get("authentication").get("userPublic").saveAndInterConnectInApp(function(){
-//                window.app.get("corpus").set("team", window.app.get("authentication").get("userPublic"));
-//                window.app.addActivity(
-//                    new Activity({
-//                      verb : verb,
-//                      directobject : "<a href='#corpus/"+window.app.get("corpus").id+"'>corpus "+title+"</a> ",
-//                      indirectobject : "owned by <a href='#user/"+window.app.get("corpus").get("team").id+"'>"+window.app.get("corpus").get("team").get("username")+"</a>",
-//                      context : differences+" via Offline App."
-//                    }));
-//              });
               teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
               if(!teamid){
                 if(model.get("team").get("username") == window.app.get("authentication").get("userPrivate").get("username")){
@@ -618,7 +605,7 @@ define([
                * function.
                */
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
                     verbicon : verbicon,
@@ -630,9 +617,9 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
-                  }));
+                  });
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
                     verbicon : verbicon,
@@ -644,10 +631,10 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
-                  }));
+                  });
             }else{
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
                     verbicon : verbicon,
@@ -659,9 +646,9 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
-                  }));
+                  });
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
                     verbicon : verbicon,
@@ -673,7 +660,7 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
-                  }));
+                  });
             }
             model.get("couchConnection").corpusid = model.id;
             //make sure the corpus is in the history of the user
@@ -823,7 +810,7 @@ define([
       });
     },
     /**
-     * If more views are added to corpora (or activity feeds) , add them here
+     * If more views are added to corpora, add them here
      * @returns {} an object containing valid map reduce functions
      * TODO: add conversation search to the get_datum_fields function
      */
@@ -917,10 +904,8 @@ define([
           return;
         }
         
-        //If there is a view, we should set up the corpus dashboard and render the team activity feed. TODO is this why the team activyfeed isnt working ona fresh app?
         try{
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
-            window.appView.activityFeedCorpusTeamView.render(); //this gets destroyed in the re-associating. 
             if (typeof successcallback == "function") {
               successcallback();
             }else{
@@ -985,16 +970,8 @@ define([
             }else{
               OPrime.debug("Corpus replicate to success", response);
               window.appView.allSyncedDoc();
-//              var teamid = "";
-//              var teamname = "";
-//              try{
-//                teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
-//                teamname = model.get("team").get("username");
-//              }catch(e){
-//                OPrime.debug("Problem getting team details for the activity", e);
-//              }
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "uploaded",
                     verbmask : "uploaded",
                     verbicon : "icon-arrow-up",
@@ -1006,9 +983,9 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
-                  }));
+                  });
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "uploaded",
                     verbmask : "uploaded",
                     verbicon : "icon-arrow-up",
@@ -1020,19 +997,13 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
-                  }));
+                  });
               
               
-              
-              //Replicate the team's activity feed, then call the sucess callback
-              window.appView.activityFeedCorpusTeamView.model.replicateToActivityFeed(null, function(){
-                if(typeof replicatetosuccesscallback == "function"){
-//                  window.appView.renderActivityFeedViews();
-                  replicatetosuccesscallback();
-                }else{
-                  OPrime.debug("ActivityFeed Team replicate to success");
-                }
-              });
+
+              if(typeof replicatetosuccesscallback == "function"){
+                replicatetosuccesscallback();
+              }
             }
           });
         });
@@ -1077,9 +1048,8 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }
-              if(window.app.get("currentCorpusTeamActivityFeed")){
-                window.app.addActivity(
-                  new Activity({
+              window.app.addActivity(
+                  {
                     verb : "downloaded",
                     verbmask : "downloaded",
                     verbicon : "icon-arrow-down",
@@ -1091,11 +1061,9 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
-                  }));
-              }
-              if(window.app.get("currentUserActivityFeed")){
-                window.app.addActivity(
-                  new Activity({
+                  });
+              window.app.addActivity(
+                  {
                     verb : "downloaded",
                     verbmask : "downloaded",
                     verbicon : "icon-arrow-down",
@@ -1107,9 +1075,8 @@ define([
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
-                  }));
-              }
-              
+                  });
+
               // Get the corpus' current precedence rules
               self.buildMorphologicalAnalyzerFromTeamServer(self.get("pouchname"));
               

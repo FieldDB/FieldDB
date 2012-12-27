@@ -3,8 +3,6 @@ define([
     "handlebars",
     "app/App", 
     "app/AppRouter",
-    "activity/ActivityFeed",
-    "activity/ActivityFeedView",
     "authentication/Authentication",
     "authentication/AuthenticationEditView",
     "corpus/Corpus", 
@@ -47,8 +45,6 @@ define([
     Handlebars,
     App, 
     AppRouter, 
-    ActivityFeed,
-    ActivityFeedView,
     Authentication,
     AuthenticationEditView,
     Corpus, 
@@ -147,43 +143,6 @@ define([
         });
         this.corpusNewModalView.format = "modal";
       }
-      
-      // Create the corpus team activity view
-      OPrime.debug("Setting up the team activity feed.");
-      if(!this.model.get("currentCorpusTeamActivityFeed")){
-        OPrime.bug("Why isnt this existing?");
-        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-      }
-      
-      //TODO dont need to initialize the pouch of the activity feed here?
-//      try{
-//        //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
-//        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname.indexOf(this.model.get("corpus").get("couchConnection").pouchname == -1)){
-//          this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-//          
-//          var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
-//          activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
-//          this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-//        }
-//      }catch(e){
-////        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
-//        OPrime.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
-//        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-//        
-//        var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
-//        activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
-//        this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-//      }
-      //If the feed is defined, don't re-define it
-      if(this.activityFeedCorpusTeamView){
-//        this.activityFeedCorpusTeamView.destroy_view();
-      }else{
-        this.activityFeedCorpusTeamView = new ActivityFeedView({
-          model : this.model.get("currentCorpusTeamActivityFeed")
-        }); 
-        this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
-      }
-      
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
@@ -322,22 +281,6 @@ define([
       this.userPreferenceView = new UserPreferenceEditView({
         model : this.model.get("authentication").get("userPrivate").get("prefs")
       });
-      
-      // Create a UserActivityView 
-      OPrime.debug("Setting up the user activity feed.");
-      if(!this.model.get("currentUserActivityFeed")){
-        OPrime.bug("Why isnt this existing?");
-        this.model.set("currentUserActivityFeed", new ActivityFeed());
-        this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
-      }
-      if(this.activityFeedUserView){
-//        this.activityFeedUserView.destroy_view(); 
-      }else{
-        this.activityFeedUserView = new ActivityFeedView({
-          model : this.model.get("currentUserActivityFeed")
-        }); 
-        this.activityFeedUserView.format = "rightSideUser";
-      }
       
       
       // Create an InsertUnicodesView
@@ -523,15 +466,22 @@ define([
         this.importView.destroy_view();
         this.searchEditView.destroy_view();
         
-        this.activityFeedUserView.destroy_view();
-        this.activityFeedCorpusTeamView.destroy_view();
         
         this.destroy_view();
         OPrime.debug("Done Destroying the appview, so we dont get double events.");
 
         // Display the AppView
         this.setElement($("#app_view"));
-        $(this.el).html(this.template(this.model.toJSON()));
+        
+        var jsonToRender = this.model.toJSON();
+        try{
+          jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
+          jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
+        }catch(e){
+          OPrime.debug("Problem setting the username or pouchname of the app.");
+        }
+        
+        $(this.el).html(this.template(jsonToRender));
 
         //The authView is the dropdown in the top right corner which holds all the user menus
         this.authView.render();
@@ -540,8 +490,6 @@ define([
         this.renderReadonlyUserViews();
 
         this.renderReadonlyDashboardViews();
-        this.activityFeedUserView.render();
-        this.activityFeedCorpusTeamView.render();
         this.insertUnicodesView.render();
         
         //This forces the top search to render.
@@ -597,8 +545,6 @@ define([
 //        
 //        // Display the UserPreferenceEditView
 //        
-//        //Display ActivityFeedView
-//        this.activityFeedCorpusTeamView.render();
 //        
 //        this.insertUnicodesView.render();
 //        
@@ -701,11 +647,6 @@ define([
       this.publicReadUserView.render();
       this.modalReadUserView.render();
     },
-    renderActivityFeedViews : function() {
-      this.activityFeedUserView.render();
-      this.activityFeedCorpusTeamView.render();
-    },
-    
 
     /**
      * This function triggers a sample app to load so that new users can play

@@ -154,14 +154,6 @@ define([
       var u = this.get("userPrivate");
       u.id = serverResults.user._id; //set the backbone id to be the same as the mongodb id
       //set the user AFTER setting his/her publicself if it wasnt there already
-      if(serverResults.user.activities && serverResults.user.activities[0]){
-        alert("We have made a lot of changes in the app since your user was created. " +
-        		"Your user was created before the new Team and User activity feeds were implemented. " +
-        		"If you want to keep this user acount and data, contact us at opensource@ilanguage.ca " +
-        		"and we will transition your account for you. If you were just using this account for testing and you dont mind creating a new user, " +
-        		"you should probably sign out and make a new user so you can use the " +
-        		"new Team and Activity feeds.");
-      }
       /*
        * Handle if the user got access to new corpora
        */
