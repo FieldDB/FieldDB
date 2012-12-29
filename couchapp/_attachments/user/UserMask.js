@@ -21,7 +21,7 @@ define([
       
     },
     defaults : {
-      gravatar :  "./../user/user_gravatar.png"
+      gravatar :  "user/user_gravatar.png"
     },
     changePouch : function(pouchname, callback) {
       if(!pouchname){

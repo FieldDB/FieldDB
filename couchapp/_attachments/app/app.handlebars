@@ -43,12 +43,11 @@
 							<li><a tabindex="-1" class="corpus-settings"><i
 									class=" icon-cogs"></i> <span class="locale_Corpus_Settings"></span></a></li>
 							<li class="divider"></li>
-							<li class="power-users-link"><a tabindex="-1"
-								data-toggle="modal" href="#terminal-modal"><i
-									class=" icon-magic"></i> <span
-									class="locale_Terminal_Power_Users"></span> </a></li>
+
+							<li><a tabindex="-1" href="#help/illustratedguide"><i
+									class="icon-gift"></i> New! Quick Start Illustrated Guide</a></li>
 							<li><a tabindex="-1" href="http://fieldlinguist.com"
-								target="_blank"><i class=" icon-film"></i> Help Videos and
+								target="_blank"><i class="icon-film"></i> Help Videos and
 									User Guide</a></li>
 							<li><a tabindex="-1"
 								href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ"
@@ -58,6 +57,10 @@
 								href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed"
 								target="_blank"><i class=" icon-github"></i> OpenSource v<span
 									class="fielddb-version"></span></a></li>
+							<li class="power-users-link"><a tabindex="-1"
+                data-toggle="modal" href="#terminal-modal"><i
+                  class=" icon-magic"></i> <span
+                  class="locale_Terminal_Power_Users"></span> </a></li>
 
 							<!-- <li class="divider"></li>
 							<li><a tabindex="-1" href="#"><i class="icon-trash"></i>
@@ -79,12 +82,12 @@
 
 
 
-							 <li><span class="locale_Need_save"></span><a tabindex="-1"
+							<li><span class="locale_Need_save"></span><a tabindex="-1"
 								href="#" class="locale_Save_on_this_Computer " rel="tooltip">
 									<i class="icons icon-save save-dashboard icon-white"></i>
 							</a></li>
 							<li><progress class="unsaved-changes" max="100" value="30">
-								</progress></li> 
+								</progress></li>
 
 							<li class="not-a locale_Recent_Changes"></li>
 
@@ -96,7 +99,7 @@
 									class="icons icon-sitemap  sync-everything icon-white"></i>
 							</a></li>
 							<li><progress class="unsynced-changes" max="100" value="80">
-								</progress></li> 
+								</progress></li>
 
 							<li class="not-a locale_Differences_with_the_central_server"></li>
 
@@ -197,11 +200,17 @@
 		<div class="span3">
 			<div id="insert-unicode" class="well"></div>
 			<div id="activity-feed-user" class="well"></div>
-			<iframe src="activity/activity_feed.html" width="100%" height="400" frameborder="0"></iframe>
-			
+			<!-- <div class="well">
+				<iframe
+					src="activity/activity_feed.html#/user/lingllama/corpus/cherokee"
+					width="100%" height="400" frameborder="0"></iframe>
+			</div> -->
+
 			<div id="activity-feed-corpus-team" class="well"></div>
-			<iframe src="activity/activity_feed.html" width="100%" height="400" frameborder="0"></iframe>
-			
+			<!-- <div class="well">
+				<iframe src="activity/activity_feed.html#/user/lingllama"
+					width="100%" height="400" frameborder="0"></iframe>
+			</div> -->
 		</div>
 		<!--/span-->
 	</div>
@@ -233,6 +242,16 @@
 <div id="export-modal" class="modal hide"></div>
 <div id="new-session-modal" class="modal hide"></div>
 <div id="new-corpus-modal" class="modal hide"></div>
+<div id="illustrated_guide_to_dash" class="modal hide">
+	<div class="modal-header">
+		<p>
+			<span class="help_count_reason"></span> This help will show <span
+				class="help_count_left"></span> more times.
+		</p>
+	</div>
+	<img
+		src="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918">
+</div>
 <div id="quick-authenticate-modal" data-backdrop="static"
 	data-keyboard="static" class="modal hide">
 	<div class="modal-header">

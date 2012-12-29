@@ -58,11 +58,12 @@ define([
       
     },
     addActivity : function(backBoneActivity) {
-      if (backBoneActivity.get("teamOrPersonal") == "team") {
-        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
-      } else {
-        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
-      }
+      OPrime.debug("There is no activity feed in the user app, not saving this activity.", backBoneActivity);
+//      if (backBoneActivity.get("teamOrPersonal") == "team") {
+//        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+//      } else {
+//        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+//      }
     },
     render: function(){
       $("#user-fullscreen").html("list of corpora goes here");
