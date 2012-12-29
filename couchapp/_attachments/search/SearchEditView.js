@@ -341,7 +341,7 @@ define([
               + $("#search_box").val()
               + " in " 
               + window.app.get("corpus").get("title") 
-              + " on "+ JSON.stringify(new Date()) );
+              + " on "+ new Date() );
           searchself.searchDataListView.format = "search";
           searchself.searchDataListView.render();
 //          searchself.searchPaginatedDataListDatumsView.renderInElement(
