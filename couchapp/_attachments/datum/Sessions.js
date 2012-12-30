@@ -36,7 +36,35 @@ define([
        
        internalModels : Session,
 
-       model: Session
+       model: Session,
+       
+       fetchSessions : function(suces, fail){
+         var sessionsSelf = this;
+         this.fetch({
+           error : function(model, xhr, options) {
+             OPrime.debug("There was an error loading your sessions.");
+             console.log(model,xhr,options);
+             OPrime.bug("There was an error loading your sessions.");
+             if(typeof fail == "function"){
+               fail();
+             }
+           },
+           success : function(model, response, options) {
+             for (var x in response) {
+               sessionsSelf.add(response[x]);
+             }
+             console.log("Sessions fetched ", model,response,options);
+             if (response.length == 0) {
+               OPrime.bug("You have no sessions, TODO creating a new one...");
+             }
+             if(typeof suces == "function"){
+               suces();
+             }
+           }
+         });
+
+
+       }
     });
     
     return Sessions;

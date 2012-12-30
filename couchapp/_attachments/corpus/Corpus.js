@@ -261,45 +261,6 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      if (!this.datalists) {
-        this.datalists =  new DataLists();
-        this.datalists.fetch({
-          error : function(model, xhr, options) {
-            OPrime.bug("There was an error loading your datalists.");
-            console.log(model,xhr,options);
-            OPrime.bug("There was an error loading your datalists.");
-          },
-          success : function(model, response, options) {
-//            for ( var x in response) {
-//              model.add(response[x]);
-//            }
-            console.log(model,response,options);
-            if (response.length == 0) {
-              OPrime.bug("You have no datalists, TODO creating a new one...");
-            }
-          }
-        });
-      }
-      
-      if (!this.sessions) {
-        this.sessions = new Sessions();
-        this.sessions.fetch({
-          error : function(model, xhr, options) {
-            OPrime.debug("There was an error loading your sessions.");
-            console.log(model,xhr,options);
-            OPrime.bug("There was an error loading your sessions.");
-          },
-          success : function(model, response, options) {
-//            for ( var x in response) {
-//              model.add(response[x]);
-//            }
-            console.log(model,response,options);
-            if (response.length == 0) {
-              OPrime.bug("You have no sessions, TODO creating a new one...");
-            }
-          }
-        });
-      }
 //      this.loadPermissions();
       
     },
@@ -819,9 +780,9 @@ define([
           OPrime.bug("There was an error loading your datalists.");
         },
         success : function(model, response, options) {
-//          for ( var x in response) {
-//            model.add(response[x]);
-//          }
+          for ( var x in response) {
+            model.add(response[x]);
+          }
           if (response.length > 0) {
             if(typeof sucess == "function"){
               sucess();
@@ -892,9 +853,9 @@ define([
           
         },
         success : function(model, response, options) {
-//          for ( var x in response) {
-//            model.add(response[x]);
-//          }
+          for ( var x in response) {
+            model.add(response[x]);
+          }
           if (response.length > 0) {
             if(typeof suces == "function"){
               suces();
