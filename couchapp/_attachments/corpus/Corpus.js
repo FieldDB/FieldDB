@@ -780,9 +780,6 @@ define([
           OPrime.bug("There was an error loading your datalists.");
         },
         success : function(model, response, options) {
-          for ( var x in response) {
-            model.add(response[x]);
-          }
           if (response.length > 0) {
             if(typeof sucess == "function"){
               sucess();
@@ -853,9 +850,6 @@ define([
           
         },
         success : function(model, response, options) {
-          for ( var x in response) {
-            model.add(response[x]);
-          }
           if (response.length > 0) {
             if(typeof suces == "function"){
               suces();
