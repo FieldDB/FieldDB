@@ -17,14 +17,14 @@ define([ "angular", "OPrime", "libs/oprime/services/CouchDB" ], function(
       function($http) {
         return {
           'async' : function(params) {
-            console.log("Fetching this activity feed: ", params)
+            console.log("Fetching this activity feed: ", params);
             var promise = $http.get(
-                'https://ifielddevs.iriscouch.com/' + params.username
+                window.location.origin+'/' + params.username
                     + params.corpusid + '-activity_feed/'
                     + '_design/activities/_view/all?limit=20&decending=true')
                 .then(function(response) {
                   // + JSON.stringify(response));
-                  console.log("response", response);
+//                  console.log("response", response);
                   var results = [];
                   for ( var i = 0; i < response.data.rows.length; i++) {
                     results.push(response.data.rows[i].value);

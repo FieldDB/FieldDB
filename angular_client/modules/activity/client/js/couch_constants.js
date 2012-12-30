@@ -2,9 +2,9 @@ OPrime = OPrime  || {};
 OPrime.couchURL = function() {
   
   return {
-    complete : "https://ifielddevs.iriscouch.com/lingllama-cherokee-activity_feed/",
+    complete : window.location.origin+"/lingllama-cherokee-activity_feed/",
     protocol : "https://",
-    domain : "ifielddevs.iriscouch.com",
+    domain : window.location.origin.replace("https://","").replace("http://",""),
     port : "",
     db : "lingllama-cherokee-activity_feed/"
   };
