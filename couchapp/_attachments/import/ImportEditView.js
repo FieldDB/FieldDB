@@ -485,7 +485,10 @@ define( [
        * after building an array of datumobjects, turn them into backbone objects
        */
       for (a in array) {
-        var d = new Datum({pouchname : window.app.get("corpus").get("pouchname")});
+        var d = new Datum({
+          filledWithDefaults : true,
+          pouchname : window.app.get("corpus").get("pouchname")
+        });
       //copy the corpus's datum fields and empty them.
         var datumfields = app.get("corpus").get("datumFields").toJSON();
         for(var x in datumfields){

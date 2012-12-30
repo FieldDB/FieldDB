@@ -42,7 +42,9 @@ define([
      */
     initialize : function() {
       this.set("pouchname", window.app.get("corpus").get("pouchname"));
-      
+      if(this.get("datumFields") == undefined){
+        this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
+      }
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
