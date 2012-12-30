@@ -348,7 +348,7 @@ define([
       }else{
         
         // Determine if this datum matches the first search criteria
-        thisDatumIsIn = self.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
+        thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
         
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
@@ -360,10 +360,10 @@ define([
             }
             
             // Do an intersection
-            thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
           } else {
             // Do a union
-            thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
           }
         }
       }
