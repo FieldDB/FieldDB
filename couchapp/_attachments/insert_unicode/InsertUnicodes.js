@@ -18,6 +18,7 @@ define([ "backbone",
             // TODO Handle validation errors
           });
 
+          internalModels: InsertUnicode; 
           model: InsertUnicode; 
         }
       });
