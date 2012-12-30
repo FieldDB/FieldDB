@@ -8,6 +8,8 @@ define([
     "datum/DatumFields",
     "datum/DatumState",
     "datum/DatumStates",
+    "text!/_view/datalists",
+    "text!/_view/sessions",
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
@@ -32,6 +34,8 @@ define([
     DatumFields, 
     DatumState,
     DatumStates,
+    forcingdataliststoloadearly,
+    forcingsessionstoloadearly,
     DataList,
     DataLists,
     Consultants,
@@ -93,12 +97,39 @@ define([
      */
     initialize : function() {
       OPrime.debug("CORPUS INIT");
+      
+      this.datalists =  new DataLists();
+      this.sessions =  new Sessions();
+
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+      this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
+
+//      var couchConnection = this.get("couchConnection");
+//      if(!couchConnection){
+//        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
+//        if(!localStorage.getItem("mostRecentCouchConnection")){
+//          alert("Bug, need to take you back to the users page.");
+//        }
+//        this.set("couchConnection", couchConnection);
+//      }
+//      this.pouch = Backbone.sync
+//      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+//        + couchConnection.pouchname : OPrime.pouchUrl
+//        + couchConnection.pouchname);
+      
+    },
+    fillWithDefaults : function(){
       if(!this.get("confidential")){
-        this.set("confidential", new Confidential() )
+        this.set("confidential", new Confidential({filledWithDefaults : true}) );
       }
       
       if(!this.get("publicSelf")){
         this.set("publicSelf", new CorpusMask({
+          filledWithDefaults : true,
           "couchConnection" : this.get("couchConnection"),
           "pouchname" : this.get("pouchname")
         }));
@@ -106,9 +137,8 @@ define([
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");
       }
-      this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
       
-      if(typeof(this.get("datumStates")) == "function"){
+      if( !this.get("datumStates") || this.get("datumStates").length == 0 ){
         this.set("datumStates", new DatumStates([ 
           new DatumState({
             state : "Checked",
@@ -127,7 +157,7 @@ define([
         ]));
       }//end if to set datumStates
       
-      if(typeof(this.get("datumFields")) == "function"){
+      if(!this.get("datumFields") || this.get("datumFields").length == 0){
         this.set("datumFields", new DatumFields([ 
           new DatumField({
             label : "judgement",
@@ -163,7 +193,7 @@ define([
         ]));
       }//end if to set datumFields
       
-      if(typeof(this.get("conversationFields")) == "function"){
+      if(!this.get("conversationFields") || this.get("conversationFields").length == 0 ){
           this.set("conversationFields", new DatumFields([ 
             new DatumField({
               label : "speakers",
@@ -180,7 +210,7 @@ define([
           ]));
         }
       
-      if(typeof(this.get("sessionFields")) == "function"){
+      if(!this.get("sessionFields") || this.get("sessionFields").length == 0){
         this.set("sessionFields", new DatumFields([ 
            new DatumField({
              label : "goal",
@@ -231,30 +261,58 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
-      if (!this.get("dataLists")) {
-        this.set("dataLists", new DataLists());
+      if (!this.datalists) {
+        this.datalists =  new DataLists();
+        this.datalists.fetch({
+          error : function(model, xhr, options) {
+            OPrime.bug("There was an error loading your datalists.");
+            console.log(model,xhr,options);
+            OPrime.bug("There was an error loading your datalists.");
+          },
+          success : function(model, response, options) {
+//            for ( var x in response) {
+//              model.add(response[x]);
+//            }
+            console.log(model,response,options);
+            if (response.length == 0) {
+              OPrime.bug("You have no datalists, TODO creating a new one...");
+            }
+          }
+        });
       }
       
-      if (!this.get("sessions")) {
-        this.set("sessions", new Sessions());
+      if (!this.sessions) {
+        this.sessions = new Sessions();
+        this.sessions.fetch({
+          error : function(model, xhr, options) {
+            OPrime.debug("There was an error loading your sessions.");
+            console.log(model,xhr,options);
+            OPrime.bug("There was an error loading your sessions.");
+          },
+          success : function(model, response, options) {
+//            for ( var x in response) {
+//              model.add(response[x]);
+//            }
+            console.log(model,response,options);
+            if (response.length == 0) {
+              OPrime.bug("You have no sessions, TODO creating a new one...");
+            }
+          }
+        });
       }
 //      this.loadPermissions();
       
-//      var couchConnection = this.get("couchConnection");
-//      if(!couchConnection){
-//        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-//        if(!localStorage.getItem("mostRecentCouchConnection")){
-//          alert("Bug, need to take you back to the users page.");
-//        }
-//        this.set("couchConnection", couchConnection);
-//      }
-//      this.pouch = Backbone.sync
-//      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-//        + couchConnection.pouchname : OPrime.pouchUrl
-//        + couchConnection.pouchname);
-      
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/private_corpuses",
+    
+    
     loadPermissions: function(doneLoadingPermissions){
       if (!this.get("team")){
         //If app is completed loaded use the user, otherwise put a blank user
@@ -358,17 +416,17 @@ define([
       titleAsUrl :"UntitledCorpus",
       description : "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
 //      confidential :  Confidential,
-      consultants : Consultants,
-      datumStates : DatumStates,
-      datumFields : DatumFields,
-      conversationFields : DatumFields,
-      sessionFields : DatumFields,
-      searchFields : DatumFields,
+//      consultants : Consultants,
+//      datumStates : DatumStates,
+//      datumFields : DatumFields,
+//      conversationFields : DatumFields,
+//      sessionFields : DatumFields,
+//      searchFields : DatumFields,
 //      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       confidential :  Confidential,
       consultants : Consultants,
       datumStates : DatumStates,
@@ -376,8 +434,8 @@ define([
       conversationFields : DatumFields,
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      sessions : Sessions, 
-      dataLists : DataLists, 
+//      sessions : Sessions, 
+//      dataLists : DataLists, 
       publicSelf : CorpusMask,
       comments: Comments,
       team: UserMask
@@ -420,10 +478,10 @@ define([
       window.app.get("currentSession").saveAndInterConnectInApp(function(){
         //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
         window.appView.sessionNewModalView.model = new Session({
+          comments : new Comments(),
           pouchname : self.get("pouchname"),
           sessionFields : window.app.get("currentSession").get("sessionFields").clone()
         });
-        window.appView.sessionNewModalView.model.set("comments", new Comments());
         window.appView.sessionNewModalView.render();
       });
     },
@@ -487,6 +545,14 @@ define([
         OPrime.debug("Cant change corpus's couch connection");
         return;
       }
+      
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
+      }
+      
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
@@ -671,17 +737,17 @@ define([
             /*
              * Save the default data list, in case it has changed without being saved in pouch. 
              */
-            if(model.get("dataLists").length > 0){
-              var defaultDatalist = model.get("dataLists").models[model.get("dataLists").length - 1];
-
-              if(defaultDatalist.needsSave){
-//                defaultDatalist.changePouch(null, function(){
-//                  OPrime.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
-//                  defaultDatalist.save();
-                //TODO uncomment this
-//                });
-              }
-            }
+//            if(model.datalists.length > 0){
+//              var defaultDatalist = model.datalists.models[model.datalists.length - 1];
+//
+//              if(defaultDatalist.needsSave){
+////                defaultDatalist.changePouch(null, function(){
+////                  OPrime.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
+////                  defaultDatalist.save();
+//                //TODO uncomment this
+////                });
+//              }
+//            }
             if(newModel){
               
               self.makeSureCorpusHasADataList(function(){
@@ -690,7 +756,16 @@ define([
                   self.save(null, {
                     success : function(model, response) {
                       window.app.get("authentication").saveAndInterConnectInApp(function(){
-                        window.location.replace("user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
+                        
+                        /*
+                         * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
+                         */
+                        var optionalCouchAppPath = "";
+                        if(OPrime.isCouchApp()){
+                          optionalCouchAppPath = "/"+model.get("couchConnection").pouchname+"/_design/pages";
+                        }
+                        window.location.replace(window.location.origin+optionalCouchAppPath+"/user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
+                      
                       });
                     },error : function(e) {
                       alert('New Corpus save error' + e);
@@ -726,85 +801,138 @@ define([
       });
     },
     makeSureCorpusHasADataList : function(sucess, failure){
-      if(this.get("dataLists").models.length > 0){
+      if(!this.datalists){
+        this.datalists = new DataLists();
+      }
+      if(this.datalists.length > 0){
         if (typeof sucess == "function"){
           sucess();
           return;
         }
       }
+      
       var self = this;
-    //create the first datalist for this corpus.
-      var dl = new DataList({
-        pouchname : this.get("pouchname")}); //MUST be a new model, other wise it wont save in a new pouch.
-      dl.set({
-        "title" : "Default Datalist - Empty",
-        "dateCreated" : (new Date()).toDateString(),
-        "description" : "The app comes with a default datalist which is empty. " +
-        "Once you have data in your corpus, you can create a datalist using Search. Imported data will also show up as a datalist. " +
-        "Datalists can be used to create handouts, export to LaTeX, or share with collaborators.",
-        "pouchname" : this.get("pouchname")
-      });
-      dl.set("dateCreated",JSON.stringify(new Date()));
-      dl.set("dateModified", JSON.stringify(new Date()));
-      dl.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + this.get("pouchname") : OPrime.pouchUrl + this.get("pouchname"));
-      dl.save(null, {
-        success : function(model, response) {
-          window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
-          self.get("dataLists").unshift(model);
-          
-          if(typeof sucess == "function"){
-            sucess();
-          }else{
-            OPrime.debug('DataList save success' + model.id);
-          }
+      this.datalists.fetch({
+        error : function(model, xhr, options) {
+          OPrime.bug("There was an error loading your datalists.");
+          console.log(model,xhr,options);
+          OPrime.bug("There was an error loading your datalists.");
         },
-        error : function(e) {
-          if(typeof failure == "function"){
-            failure();
+        success : function(model, response, options) {
+//          for ( var x in response) {
+//            model.add(response[x]);
+//          }
+          if (response.length > 0) {
+            if(typeof sucess == "function"){
+              sucess();
+            }else{
+              OPrime.debug('the corpus has datalists');
+            }
           }else{
-            OPrime.debug('DataList save error' + e);
+            OPrime.bug("You have no datalists, creating a new one...");
+          //create the first datalist for this corpus.
+            var dl = new DataList({
+              filledWithDefaults: true,
+              pouchname : self.get("pouchname")
+              }); //MUST be a new model, other wise it wont save in a new pouch.
+            dl.set({
+              "title" : "Default Datalist - Empty",
+              "dateCreated" : (new Date()).toDateString(),
+              "description" : "The app comes with a default datalist which is empty. " +
+              "Once you have data in your corpus, you can create a datalist using Search. Imported data will also show up as a datalist. " +
+              "Datalists can be used to create handouts, export to LaTeX, or share with collaborators.",
+              "pouchname" : self.get("pouchname")
+            });
+            dl.set("dateCreated",JSON.stringify(new Date()));
+            dl.set("dateModified", JSON.stringify(new Date()));
+            if(!OPrime.isCouchApp()){
+              dl.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
+            }
+            dl.save(null, {
+              success : function(model, response) {
+                window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+                self.datalists.unshift(model);
+                
+                if(typeof sucess == "function"){
+                  sucess();
+                }else{
+                  OPrime.debug('DataList save success' + model.id);
+                }
+              },
+              error : function(e) {
+                if(typeof failure == "function"){
+                  failure();
+                }else{
+                  OPrime.debug('DataList save error' + e);
+                }
+              }
+            });
           }
         }
       });
     },
+    
     makeSureCorpusHasASession : function(suces, fail){
-      if(this.get("sessions").models.length > 0){
+      if(!this.sessions){
+        this.sessions = new Sessions();
+      }
+      if(this.sessions.length > 0){
         if (typeof suces == "function"){
           suces();
           return;
         }
       }
       var self = this;
-      var s = new Session({
-        pouchname : this.get("pouchname"),
-        sessionFields : this.get("sessionFields").clone()
-      }); //MUST be a new model, other wise it wont save in a new pouch.
-      s.get("sessionFields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
-      s.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
-      s.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
-      s.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-      s.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period for example: A few months ago, probably on a Monday night.");
-      
-      s.set("pouchname", this.get("pouchname"));
-      s.set("dateCreated",JSON.stringify(new Date()));
-      s.set("dateModified", JSON.stringify(new Date()));
-      s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + this.get("pouchname") : OPrime.pouchUrl + this.get("pouchname"));
-      s.save(null, {
-        success : function(model, response) {
-          window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-          self.get("sessions").unshift(model);
-
-          if(typeof suces == "function"){
-            suces();
-          }else{
-            OPrime.debug('Session save success' + model.id);
-          }
+      this.sessions.fetch({
+        error : function(model, xhr, options) {
+          
+          OPrime.debug("There was an error loading your sessions.");
+          console.log(model,xhr,options);
+          OPrime.bug("There was an error loading your sessions.");
+          
         },
-        error : function(e) {
-          if(typeof fail == "function"){
-            fail();
+        success : function(model, response, options) {
+//          for ( var x in response) {
+//            model.add(response[x]);
+//          }
+          if (response.length > 0) {
+            if(typeof suces == "function"){
+              suces();
+            }else{
+              OPrime.debug('the corpus has sessions');
+            }
           }else{
-            OPrime.debug('Session save error' + e);
+            OPrime.bug("You have no sessions, creating a new one...");
+            var s = new Session({
+              sessionFields : self.get("sessionFields").clone(),
+              filledWithDefaults: true,
+              pouchname : self.get("pouchname")
+            }); //MUST be a new model, other wise it wont save in a new pouch.
+            s.set("dateCreated",JSON.stringify(new Date()));
+            s.set("dateModified", JSON.stringify(new Date()));
+            
+            if(!OPrime.isCouchApp()){
+              s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
+            }
+            s.save(null, {
+              success : function(model, response) {
+                window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+                self.sessions.unshift(model);
+
+                if(typeof suces == "function"){
+                  suces();
+                }else{
+                  OPrime.debug('Session save success' + model.id);
+                }
+              },
+              error : function(e) {
+                if(typeof fail == "function"){
+                  fail();
+                }else{
+                  OPrime.debug('Session save error' + e);
+                }
+              }
+            });
           }
         }
       });
@@ -816,10 +944,10 @@ define([
      */
     validCouchViews : function(){
       return {
-        "get_ids/by_date" : {
+        "pages/by_date" : {
           map: function(doc) {if (doc.dateModified) {emit(doc.dateModified, doc);}}
         },
-        "get_datum_field/get_datum_fields" : {
+        "pages/get_datum_fields" : {
           map : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
         }
       };
@@ -837,6 +965,14 @@ define([
       if(!this.get("couchConnection")){
         return;
       }
+      if(OPrime.isCouchApp()){
+        //TODO make the view in couchdb
+        if(typeof callbackpouchview == "function"){
+          callbackpouchview();
+        }
+        return;
+      }
+      
       this.changePouch(null, function() {
         corpusself.pouch(function(err, db) {
           var modelwithhardcodedid = {
@@ -904,7 +1040,7 @@ define([
           return;
         }
         
-        try{
+        if(window.appView){
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
             if (typeof successcallback == "function") {
               successcallback();
@@ -914,11 +1050,9 @@ define([
 //            window.appView.renderReadonlyCorpusViews();
             }
           });
-        }catch(e){
-          if (typeof failurecallback == "function") {
-            failurecallback();
-          }else{
-            alert("This is probably a bug. There was a problem rendering the current corpus's views after resetting the current session.");
+        }else{
+          if (typeof successcallback == "function") {
+            successcallback();
           }
         }
     },
@@ -948,6 +1082,13 @@ define([
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = self.get("couchConnection");
       }
+      if(OPrime.isCouchApp()){
+        if(typeof replicatetosuccesscallback == "function"){
+          replicatetosuccesscallback();
+        }
+        return;
+      }
+      
       this.changePouch(couchConnection, function(){
         self.pouch(function(err, db) {
           var couchurl = couchConnection.protocol+couchConnection.domain;
@@ -1018,6 +1159,14 @@ define([
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = self.get("couchConnection");
       }
+      
+      if(OPrime.isCouchApp()){
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+        return;
+      }
+      
       this.changePouch(couchConnection, function(){
         self.pouch(function(err, db) {
           var couchurl = couchConnection.protocol+couchConnection.domain;

@@ -324,9 +324,12 @@ define([
         childViewTagName     : 'li'
       });
       
+      if(!this.model.datalists){
+        this.model.datalists = new DataLists();
+      }
       // Create a list of DataLists
       this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.get("dataLists"),
+        collection : this.model.datalists,
         childViewConstructor : DataListReadView,
         childViewTagName     : 'li',
         childViewFormat      : "link"
@@ -348,14 +351,6 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "corpus"
       });
-      
-      // Create a DataList List
-      this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.get("dataLists"),
-        childViewConstructor : DataListReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "link"
-      });
 
 //      this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
@@ -366,9 +361,12 @@ define([
 //        childViewClass       : "breadcrumb"
 //      });
       
+      if(!this.model.sessions){
+        this.model.sessions = new Sessions();
+      }
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
-         collection : this.model.get("sessions"),
+         collection : this.model.sessions,
          childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
          childViewFormat      : "link"  

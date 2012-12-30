@@ -103,7 +103,7 @@ require([
           App,
           forcingpouchtoloadearly
       ) {
-window.app = new App();
+window.app = new App({filledWithDefaults: true});
 });
 
 //// Initialization

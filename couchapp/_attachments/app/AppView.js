@@ -5,6 +5,7 @@ define([
     "app/AppRouter",
     "authentication/Authentication",
     "authentication/AuthenticationEditView",
+    "comment/Comments",
     "corpus/Corpus", 
     "corpus/CorpusMask", 
     "corpus/CorpusEditView",
@@ -47,6 +48,7 @@ define([
     AppRouter, 
     Authentication,
     AuthenticationEditView,
+    Comments,
     Corpus, 
     CorpusMask,
     CorpusEditView,
@@ -133,13 +135,13 @@ define([
       });
       this.currentCorpusReadView.format = "leftSide";
       
-      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( this.model.get("corpus").get("publicSelf") );
 
       //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
       if(! this.corpusNewModalView){
         OPrime.debug("Creating an empty new corpus for the new Corpus modal.");
         this.corpusNewModalView = new CorpusEditView({
-          model : new Corpus()
+          model : new Corpus({filledWithDefaults: true})
         });
         this.corpusNewModalView.format = "modal";
       }
@@ -216,6 +218,7 @@ define([
         OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
+            comments : new Comments(),
             pouchname : window.app.get("corpus").get("pouchname"),
             sessionFields : window.app.get("currentSession").get("sessionFields").clone()
           })
@@ -234,6 +237,10 @@ define([
       this.userPreferenceView.model = this.model.get("authentication").get("userPrivate").get("prefs");
       this.userPreferenceView.model.bind("change:skin", this.userPreferenceView.renderSkin, this.userPreferenceView);
       
+      if(!this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")){
+        this.model.get("authentication").get("userPrivate").get("prefs").set("unicodes", new InsertUnicodes());
+        this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes").fill();
+      }
       this.insertUnicodesView.model = this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes");
       this.insertUnicodesView.changeViewsOfInternalModels();
       this.insertUnicodesView.render();
@@ -282,16 +289,19 @@ define([
         model : this.model.get("authentication").get("userPrivate").get("prefs")
       });
       
-      
+      if(!this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")){
+        this.model.get("authentication").get("userPrivate").get("prefs").set("unicodes", new InsertUnicodes());
+        this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes").fill();
+      }
       // Create an InsertUnicodesView
       this.insertUnicodesView = new InsertUnicodesView({
-        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
+        model : this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")
       });
       this.insertUnicodesView.format = "rightSide"; 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
-        model : this.authView.model.get("userPrivate").get("hotkeys")
+        model : this.model.get("authentication").get("userPrivate").get("hotkeys")
       });
       
       if(typeof callback == "function"){

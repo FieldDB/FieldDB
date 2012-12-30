@@ -130,18 +130,7 @@ define([
      * and then authenticates public into the app.
      */
     logout : function() {
-      localStorage.removeItem("username");
-      localStorage.removeItem("mostRecentDashboard");
-      localStorage.removeItem("mostRecentCouchConnection");
-      localStorage.removeItem("encryptedUser");
-      localStorage.removeItem("helpShownCount");
-      localStorage.removeItem("helpShownTimestamp");
-      
-//      this.authenticateAsPublic();
-      //Destropy cookies, and reload the page, it will put the user at the login page.
-      OPrime.setCookie("username", undefined, -365);
-      OPrime.setCookie("token", undefined, -365);
-      window.location.replace("/index.html");
+      this.model.logout();
 
     },
     

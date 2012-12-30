@@ -38,17 +38,23 @@ define([
     initialize : function() {
       OPrime.debug("USERAPP INIT");
 
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
-        this.set("authentication", new Authentication());
+        this.set("authentication", new Authentication({filledWithDefaults: true}));
       }
-      
+
       /*
        * Start the pub sub hub
        */
       window.hub = {};
       OPrime.makePublisher(window.hub);
-      
+
       /*
        * Check for user's cookie and the dashboard so we can load it
        */
@@ -69,18 +75,22 @@ define([
           return "";
         };
       }
-      
+
       window.app = this;
       var appself = this;
       OPrime.debug("Loading encrypted user");
       var u = localStorage.getItem("encryptedUser");
+      if(!u){
+        window.location.replace("index.html");
+        return;
+      }
       appself.get("authentication").loadEncryptedUser(u, function(success, errors){
         if(success == null){
-//          alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);  
-//          OPrime.setCookie("username","");
-//          OPrime.setCookie("token","");
-//          localStorage.removeItem("encryptedUser");
-//          window.location.replace('index.html');
+//        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);  
+//        OPrime.setCookie("username","");
+//        OPrime.setCookie("token","");
+//        localStorage.removeItem("encryptedUser");
+//        window.location.replace('index.html');
           return;
         }else{
           window.appView = new UserAppView({model: appself}); 
@@ -89,8 +99,6 @@ define([
           Backbone.history.start();
         }
       });
-      
-      
     },
     /*
      * This will be the only time the app should open the pouch.
@@ -102,6 +110,13 @@ define([
       } else {
         console.log("App.changePouch setting couchConnection: ", couchConnection);
         this.set("couchConnection", couchConnection);
+      }
+
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
       }
 
       if (this.pouch == undefined) {
@@ -118,11 +133,11 @@ define([
     },
     addActivity : function(jsonActivity) {
       OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
-//      if (backBoneActivity.get("teamOrPersonal") == "team") {
-//        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
-//      } else {
-//        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
-//      }
+//    if (backBoneActivity.get("teamOrPersonal") == "team") {
+//    window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+//    } else {
+//    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+//    }
     },
     render: function(){
       $("#user-fullscreen").html("list of corpora goes here");

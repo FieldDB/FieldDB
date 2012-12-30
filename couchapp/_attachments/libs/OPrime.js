@@ -1,7 +1,7 @@
 var OPrime = OPrime || {};
 
-OPrime.debugMode = true;
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
+OPrime.debugMode = false;
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = false;
 
 /**
  * The address of the TouchDB-Android database on the Android.
@@ -133,22 +133,28 @@ OPrime.makePublisher = function(o) {
  * @param exdays
  */
 OPrime.setCookie = function(c_name, value, exdays) {
-  var exdate = new Date();
-  exdate.setDate(exdate.getDate() + exdays);
-  var c_value = escape(value)
-      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-  document.cookie = c_name + "=" + c_value;
+  if(value){
+    localStorage.setItem(c_name, value);
+  }else{
+    localStorage.removeItem(c_name);
+  }
+//  var exdate = new Date();
+//  exdate.setDate(exdate.getDate() + exdays);
+//  var c_value = escape(value)
+//      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+//  document.cookie = c_name + "=" + c_value;
 };
 OPrime.getCookie = function(c_name) {
-  var i, x, y, ARRcookies = document.cookie.split(";");
-  for (i = 0; i < ARRcookies.length; i++) {
-    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-    x = x.replace(/^\s+|\s+$/g, "");
-    if (x == c_name) {
-      return unescape(y);
-    }
-  }
+  return localStorage.getItem(c_name);
+//  var i, x, y, ARRcookies = document.cookie.split(";");
+//  for (i = 0; i < ARRcookies.length; i++) {
+//    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+//    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+//    x = x.replace(/^\s+|\s+$/g, "");
+//    if (x == c_name) {
+//      return unescape(y);
+//    }
+//  }
 };
 
 OPrime.isAndroidApp = function() {
@@ -527,7 +533,6 @@ OPrime.userEncryptionToken = function() {
   return "topsecretuserencryptiontokenfortestingTODOchangethis";
 };
 
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
 
 
 OPrime.getConnectivityType = function(callingcontextself, callback) {

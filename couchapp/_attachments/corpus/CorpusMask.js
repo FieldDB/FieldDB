@@ -14,6 +14,7 @@ define([
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
+    "datum/Session",
     "datum/Sessions",
     "user/User",
     "glosser/Glosser",
@@ -34,6 +35,7 @@ define([
     Lexicon,
     Permission,
     Permissions,
+    Session,
     Sessions,
     User
 ) {
@@ -77,8 +79,14 @@ define([
     initialize : function() {
 
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
-      this.set("id", "corpus");
+//      this.set("id", "corpus");
       
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
       //TODO use these states to show what is public and what is not.
       if(!this.get("datumStates")){
         this.set("datumStates", new DatumStates());
@@ -87,73 +95,73 @@ define([
       //Keeping all items since this seems okay for public viewing if the user wants to let the public see it. 
       if(!this.get("datumFields")){
         this.set("datumFields", new DatumFields([ 
-          new DatumField({
-            label : "judgement",
-            size : "3",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
-          }),
-          new DatumField({
-            label : "utterance",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
-          }),
-          new DatumField({
-            label : "morphemes",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
-          }),
-          new DatumField({
-            label : "gloss",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
-          }),
-          new DatumField({
-            label : "translation",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
-          })
-        ]));
+                                               new DatumField({
+                                                 label : "judgement",
+                                                 size : "3",
+                                                 shouldBeEncrypted: "",
+                                                 userchooseable: "disabled",
+                                                 help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
+                                               }),
+                                               new DatumField({
+                                                 label : "utterance",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
+                                               }),
+                                               new DatumField({
+                                                 label : "morphemes",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
+                                               }),
+                                               new DatumField({
+                                                 label : "gloss",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
+                                               }),
+                                               new DatumField({
+                                                 label : "translation",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
+                                               })
+                                               ]));
       }//end if to set datumFields
       
       //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
       if(!this.get("sessionFields")){
         this.set("sessionFields", new DatumFields([ 
-          new DatumField({
-            label : "dialect",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "You can use this field to be as precise as you would like about the dialect of this session."
-          }),
-          new DatumField({
-            label : "language",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This is the langauge (or language family) if you would like to use it."
-          }),
-          new DatumField({
-            label : "dateElicited",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This is the date in which the session took place."
-          }),
-          new DatumField({
-            label : "user",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled"
-          }),
-          new DatumField({
-            label : "dateSEntered",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This is the date in which the session was entered."
-          }),
-        ]));
+                                                   new DatumField({
+                                                     label : "dialect",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "You can use this field to be as precise as you would like about the dialect of this session."
+                                                   }),
+                                                   new DatumField({
+                                                     label : "language",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "This is the langauge (or language family) if you would like to use it."
+                                                   }),
+                                                   new DatumField({
+                                                     label : "dateElicited",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "This is the date in which the session took place."
+                                                   }),
+                                                   new DatumField({
+                                                     label : "user",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled"
+                                                   }),
+                                                   new DatumField({
+                                                     label : "dateSEntered",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "This is the date in which the session was entered."
+                                                   }),
+                                                   ]));
         
       }//end if to set sessionFields
       
@@ -163,19 +171,26 @@ define([
         this.set("comments", new Comments());
       }
       
-      if (!this.get("dataLists")) {
-        this.set("dataLists", new DataLists());
+      if (!this.datalists) {
+        this.datalists =  new DataLists();
       }
       
-      if (!this.get("sessions")) {
-        this.set("sessions", new Sessions());
+      if (!this.sessions) {
+        this.sessions = new Sessions();
       }
       
       if (!this.permissions) {
         this.permissions = new Permissions();
       }
-      
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/private_corpuses",
     
     defaults : {
       title : "Private Corpus",
@@ -219,15 +234,15 @@ define([
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      sessions : Sessions, 
-      dataLists : DataLists, 
+//      sessions : Sessions, 
+//      dataLists : DataLists, 
       permissions : Permissions,
       comments: Comments
     },
@@ -238,6 +253,13 @@ define([
         couchConnection = this.get("couchConnection");
       }else{
         this.set("couchConnection", couchConnection);
+      }
+      
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
       }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync
@@ -260,9 +282,17 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       OPrime.debug("Saving the CorpusMask");
       var self = this;
+//      self.set("id","corpus");
+      self.set("_id","corpus");
       this.changePouch(null, function(){
+        if(OPrime.isCouchApp()){
+          self.save();
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+          return;
+        }
         self.pouch(function(err,db){
-          self.set("id","corpus");
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
@@ -329,6 +359,15 @@ define([
       alert("Bug: the corpusmask updatetopouch method is deprecated!");
       var self = this;
       this.changePouch(null, function(){
+
+        if(OPrime.isCouchApp()){
+          self.save();
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+          return;
+        }
+
         self.pouch(function(err,db){
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";

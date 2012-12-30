@@ -32,19 +32,23 @@ define([
       OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
       
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+      this.bind("change", this.checkPrefsChanged, this);
+    },
+    fillWithDefaults : function(){
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
-        this.set("prefs", new UserPreference());
+        this.set("prefs", new UserPreference({filledWithDefaults : true }));
       }
       
       // If there is no hotkeys, create a new one
       if (!this.get("hotkeys")) {
-        this.set("hotkeys", new HotKey());//TODO this needs to become plural
+        this.set("hotkeys", new HotKey({filledWithDefaults : true }));//TODO this needs to become plural when hotkeys get implemented
       }
-      
-      this.bind("change", this.checkPrefsChanged, this);
     },
-    
     defaults : {
       // Defaults from UserGeneric
       username : "",

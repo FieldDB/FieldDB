@@ -35,22 +35,32 @@ define([
       this.bind('error', function(model, error) {
         OPrime.debug("Error in Authentication  : " + error);
       });
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
       if(!this.get("confidential")){
-        this.set("confidential", new Confidential());
+        this.set("confidential", new Confidential({filledWithDefaults : true}));
         this.get("confidential").decryptedMode = true;
         if(OPrime.getCookie("token")){
           this.get("confidential").set("secretkey", OPrime.getCookie("token")); //TODO store the token somewhere safer
+        }else{
+          //do nothing, wait until you use the token
+//          this.logout();
+//          return;
         }
       }
     },
-
     defaults : {
       username : localStorage.getItem("username"),
       state : "loggedOut"
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       userPrivate : User,
       userPublic : UserMask,
       confidential :  Confidential
@@ -116,6 +126,21 @@ define([
         dataType : ""
       });     
     },
+    
+    logout : function(){
+      localStorage.removeItem("username");
+      localStorage.removeItem("mostRecentDashboard");
+      localStorage.removeItem("mostRecentCouchConnection");
+      localStorage.removeItem("encryptedUser");
+      localStorage.removeItem("helpShownCount");
+      localStorage.removeItem("helpShownTimestamp");
+      
+//      this.authenticateAsPublic();
+      //Destropy cookies, and reload the page, it will put the user at the login page.
+      OPrime.setCookie("username", undefined, -365);
+      OPrime.setCookie("token", undefined, -365);
+      window.location.replace("index.html");
+    },
     /**
      * This function parses the server response and injects it into the authentication's user public and user private
      * 
@@ -149,7 +174,7 @@ define([
       this.get("userPublic")._id = serverResults.user._id;
 
       if (this.get("userPrivate") == undefined) {
-        this.set("userPrivate", new User());
+        this.set("userPrivate", new User({filledWithDefaults: true}));
       }
       var u = this.get("userPrivate");
       u.id = serverResults.user._id; //set the backbone id to be the same as the mongodb id
@@ -200,12 +225,23 @@ define([
     loadEncryptedUser : function(encryptedUserString, callbackload){
       OPrime.debug("loadEncryptedUser");
       
+      /*
+       * TODO potentially could log the public  user in here.
+       */
       if (!encryptedUserString) {
 //        this.authenticate(new Backbone.Model({
 //          username : "devgina",
 //          password : "test",
 //          authUrl : OPrime.authUrl
 //        }), callbackload);
+        this.logout();
+        return;
+      }
+      /*
+       * If there is currently no token to decrypt this user, log them out.
+       */
+      if(!OPrime.getCookie("token")){
+        this.logout();
         return;
       }
       
