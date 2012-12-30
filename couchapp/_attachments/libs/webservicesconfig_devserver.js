@@ -27,13 +27,15 @@ OPrime.chromeClientUrl = function(){
 };
   
 OPrime.defaultCouchConnection = function() {
-  return {
+  var d = {
     protocol : "https://",
     domain : "ifielddevs.iriscouch.com",
     port : "443",
     pouchname : "default",
     path : ""
   }; 
+  return d; 
+
 };
 
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
