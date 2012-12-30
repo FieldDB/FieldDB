@@ -324,9 +324,6 @@ define([
         childViewTagName     : 'li'
       });
       
-      if(!this.model.datalists){
-        this.model.datalists = new DataLists();
-      }
       // Create a list of DataLists
       this.dataListsView = new UpdatingCollectionView({
         collection : this.model.datalists,
@@ -361,9 +358,6 @@ define([
 //        childViewClass       : "breadcrumb"
 //      });
       
-      if(!this.model.sessions){
-        this.model.sessions = new Sessions();
-      }
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
          collection : this.model.sessions,

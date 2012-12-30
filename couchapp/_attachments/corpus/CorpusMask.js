@@ -78,6 +78,9 @@ define([
      */
     initialize : function() {
 
+      this.datalists =  new DataLists();
+      this.sessions =  new Sessions();
+
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
 //      this.set("id", "corpus");
       

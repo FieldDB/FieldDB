@@ -26,18 +26,20 @@ define( [
      */
     initialize : function() {
       
-      if(this.get("filledWithDefaults")){
-        this.fillWithDefaults();
-        this.unset("filledWithDefaults");
-      }
-    },
-    fillWithDefaults : function(){
       var t = JSON.stringify(new Date());
       if(!this.get("timestamp")){
         this.set("timestamp", new Date(JSON.parse(t)));
         this.set("gravatar", window.appView.authView.model.get("userPublic").get("gravatar"));
         this.set("username", window.appView.authView.model.get("userPublic").get("username"));
       }
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
+      
     },
     defaults : {
       text : "",

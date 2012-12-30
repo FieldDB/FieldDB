@@ -93,6 +93,11 @@ define([
      */
     initialize: function() {
       OPrime.debug("SESSION init");
+      
+      if (!this.get("comments")) {
+        this.set("comments", new Comments());
+      }
+      
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -258,23 +263,17 @@ define([
                   context : " via Offline App."
                 });
             
-//            //make sure the session is in this corpus, if it is the same pouchname
-////            var previousversionincorpus = window.app.get("corpus").sessions.getByCid(model.cid);
-//            var previousversionincorpus = window.app.get("corpus").sessions.get(model.id);
-//            if( previousversionincorpus == undefined ){
-//              window.app.get("corpus").sessions.unshift(model);
-////              window.appView.addUnsavedDoc(window.app.get("corpus").id);//this is undefined the first time session is saved.
-//            }else{
-//              //overwrite new details in the corpus' version, unless they are the same, then it is unnecesary.
-//              if(previousversionincorpus !== model){
-//                window.app.get("corpus").sessions.remove(previousversionincorpus);
-//                window.app.get("corpus").sessions.unshift(model);
-//                window.app.get("corpus").saveAndInterConnectInApp();
-//              }
-//            }
-//            if(window.app.get("corpus").sessions.length == 1){
-//              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-//            }
+            /*
+             * make sure the session is visible in this corpus
+             */
+            var previousversionincorpus = window.app.get("corpus").sessions.get(model.id);
+            if( previousversionincorpus == undefined ){
+              window.app.get("corpus").sessions.unshift(model);
+            }else{
+                window.app.get("corpus").sessions.remove(previousversionincorpus);
+                window.app.get("corpus").sessions.unshift(model);
+            }
+              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
             //make sure the session is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);

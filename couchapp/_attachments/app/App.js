@@ -523,6 +523,12 @@ define([
             c.setAsCurrentCorpus(function(){
               $(".spinner-status").html("Loading Corpus...");
               
+              /*
+               * Fetch sessions and datalists
+               */
+              c.datalists.fetchDatalists();
+              c.sessions.fetchSessions();
+              
               var dl = new DataList({
                 "pouchname" : couchConnection.pouchname
               });
