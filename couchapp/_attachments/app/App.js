@@ -64,10 +64,16 @@ define([
      */
     initialize : function() {
       OPrime.debug("APP INIT");
-
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
-        this.set("authentication", new Authentication());
+        this.set("authentication", new Authentication({filledWithDefaults: true}));
       }
       this.showSpinner();
       
@@ -111,22 +117,24 @@ define([
             $(".spinner-status")
             .html("Building dashboard objects...");
             appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
-              OPrime.debug("Starting the app");
-              appself.startApp(function() {
-                /*
-                 * If you know the user, load their most recent
-                 * dashboard
-                 */
-                OPrime.debug("Loading the backbone objects");
-                $(".spinner-status").html(
-                "Loading dashboard objects...");
+              
+              /*
+               * If you know the user, load their most recent
+               * dashboard
+               */
+              OPrime.debug("Loading the backbone objects");
+              $(".spinner-status").html(
+              "Loading dashboard objects...");
+              appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
+                  appself.get("authentication").get(
+                  "userPrivate").get("mostRecentIds"), function() {
                 
-                appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
-                    appself.get("authentication").get(
-                    "userPrivate").get("mostRecentIds"),
-                    function() {
-                      appself.stopSpinner();
-                    });
+                OPrime.debug("Starting the app");
+                appself.startApp(function() {
+                  appself.stopSpinner();
+                  window.app.router.renderDashboardOrNot(true);
+
+                });
               });
             });
             
@@ -134,14 +142,12 @@ define([
           
         });
       }
-
-      window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
-
       
+      window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       corpus : Corpus,
       authentication : Authentication,
       currentSession : Session,
@@ -160,6 +166,13 @@ define([
         this.set("couchConnection", couchConnection);
       }
 
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
+      }
+      
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
         // + couchConnection.pouchname);
@@ -184,9 +197,15 @@ define([
      */
     createAppBackboneObjects : function(optionalpouchname, callback){
       if (optionalpouchname == null) {
-        optionalpouchname == "";
+        optionalpouchname == "default";
       }
 
+      try{
+        Backbone.couch_connector.config.db_name = optionalpouchname;
+      }catch(e){
+        OPrime.debug("Couldn't set the database name off of the pouchame.");
+      }
+      
       if (this.get("authentication").get("userPublic") == undefined) {
         this.get("authentication").set("userPublic", new UserMask({
           pouchname : optionalpouchname
@@ -202,7 +221,6 @@ define([
 
       this.set("currentSession", new Session({
         pouchname : optionalpouchname,
-        sessionFields : c.get("sessionFields").clone()
       }));
 
       this.set("currentDataList", new DataList({
@@ -368,6 +386,13 @@ define([
         OPrime.debug("Logged you into your corpus ",
             couchConnection);
 
+        if(OPrime.isCouchApp()){
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+          return;
+        }
+          
         self.changePouch(null, function() {
           self.pouch(function(err, db) {
             var couchurl = couchConnection.protocol
@@ -472,19 +497,15 @@ define([
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
       OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       
-      /*
-       * Hide everything until it has all been loaded
-       */
-      window.app.router.hideEverything();
-//      $("#dashboard-view").show();
-      window.app.showSpinner();
-
-      
 //      if(couchConnection == null || couchConnection == undefined){
 //        couchConnection = this.get("corpus").get("couchConnection");
 //      }
       var couchConnection = appids.couchConnection;
-      
+      if(!appids.corpusid){
+        alert("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
+        window.location.replace("user.html");
+        return;
+      }
       var c = new Corpus({
         "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
@@ -496,10 +517,6 @@ define([
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
-            window.appView.addBackboneDoc(corpusModel.id);
-            window.appView.addPouchDoc(corpusModel.id);
-            window.app.set("couchConnection", couchConnection);
-
             
             $(".spinner-status").html("Opened Corpus...");
             
@@ -517,8 +534,6 @@ define([
 
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                     OPrime.debug("Data list fetched successfully", dataListModel);
-                    window.appView.addBackboneDoc(dataListModel.id);
-                    window.appView.addPouchDoc(dataListModel.id);
                     dl.setAsCurrentDataList(function(){
                       $(".spinner-status").html("Loading your most recent DataList, "+dataListModel.get("datumIds").length+" entries...");
 
@@ -533,28 +548,23 @@ define([
 
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                             OPrime.debug("Session fetched successfully", sessionModel);
-                            window.appView.addBackboneDoc(sessionModel.id);
-                            window.appView.addPouchDoc(sessionModel.id);
                             s.setAsCurrentSession(function(){
                               
                               $(".spinner-status").html("Loading Elicitation Session...");
 
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
                               OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
-                              window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
-//                              window.appView.setUpAndAssociateViewsAndModelsWithCurrentUser(); //this didnt help, or seem to be necesary.
+                              if(window.appView){
+                                window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
+                              }
                               /*
                                * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods 
                                */
                               $(".spinner-status").html("Rendering Dashboard...");
-                              window.app.router.renderDashboardOrNot(true);
 
                               window.app.stopSpinner();
 
                               window.app.showHelpOrNot();
-//                              window.appView.renderReadonlyDashboardViews();
-//                              window.appView.datumsEditView.format = "centerWell";
-//                              window.appView.datumsEditView.render(); //this is already done in the dashboard render
                               
                               if (typeof callback == "function") {
                                 callback();

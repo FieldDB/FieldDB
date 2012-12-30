@@ -193,7 +193,7 @@ require([
           document.location.href='index.html';
           return;
         }else{
-          a = new App();
+          a = new App({filledWithDefaults: true});
           window.app = a;
           var auth = a.get("authentication");
           var u = localStorage.getItem("encryptedUser");

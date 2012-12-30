@@ -193,6 +193,7 @@ define([
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
+            filledWithDefaults: true,
             "pouchname" : window.app.get("corpus").get("pouchname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."

@@ -3,6 +3,7 @@ define([
     "audio_video/AudioVideo", 
     "comment/Comment",
     "comment/Comments",
+    "datum/Datums", 
     "datum/DatumField", 
     "datum/DatumFields", 
     "datum/DatumState", 
@@ -16,6 +17,7 @@ define([
     AudioVideo, 
     Comment,
     Comments,
+    Datums,
     DatumField, 
     DatumFields,
     DatumState, 
@@ -77,7 +79,13 @@ define([
 //        this.get("datumStates").models[0].set("selected", "selected");
 //      }
       
-      // If there's no audioVideo, give it a new one.
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
+   // If there's no audioVideo, give it a new one.
       if (!this.get("audioVideo")) {
         this.set("audioVideo", new AudioVideo());
       }
@@ -91,10 +99,23 @@ define([
       if (!this.get("datumTags")) {
         this.set("datumTags", new DatumTags());
       }
+      
+      if(!this.get("datumFields") || this.get("datumFields").length == 0){
+        this.set("datumFields", window.app.get("corpus").get("datumFields").clone());
+      }
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/datums",
+    
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       datumFields : DatumFields,
       audioVideo : AudioVideo,
       session : Session,
@@ -110,6 +131,13 @@ define([
           pouchname = window.app.get("corpus").get("pouchname");
         }
       }
+      
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
+      }
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
@@ -122,7 +150,7 @@ define([
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
      * @param {Function} callback A function that expects a single parameter. That
-     * parameter is the result of calling "get_ids/by_date". So it is an array
+     * parameter is the result of calling "pages/by_date". So it is an array
      * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
@@ -130,10 +158,34 @@ define([
     getAllIdsByDate : function(callback) {
       var self = this;
       
+      if(OPrime.isCouchApp()){
+        callback([]);
+        //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
+
+//        var tempDatums = new Datums();
+//        tempDatums.fetch({
+//          error : function(model, xhr, options) {
+//            OPrime.bug("There was an error loading your datums.");
+//            if(typeof callback == "function"){
+//              callback([]);
+//            }
+//          },
+//          success : function(model, response, options) {
+//            if (response.length == 0) {
+//              OPrime.bug("You have no datum...");
+//            }
+//            callback([]);
+//          }
+//        });
+//        
+        return;
+      }
+      
+      
       try{
         this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
-            db.query("get_ids/by_date", {reduce: false}, function(err, response) {
+            db.query("pages/by_date", {reduce: false}, function(err, response) {
               
               if(err){
                 if(window.toldSearchtomakebydateviews){
@@ -144,7 +196,7 @@ define([
                  * Its possible that the pouch has no by date views, create them and then try searching again.
                  */
                 window.toldSearchtomakebydateviews = true;
-                window.app.get("corpus").createPouchView("get_ids/by_date", function(){
+                window.app.get("corpus").createPouchView("pages/by_date", function(){
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
                   self.getAllIdsByDate(callback);
                 });
@@ -175,53 +227,76 @@ define([
       }catch(e){
         OPrime.debug("Search Analytics not working.");
       }
+      
+      // Process the given query string into tokens
+      var queryTokens = self.processQueryString(queryString);
+      var doGrossKeywordMatch = false;
+      if(queryString.indexOf(":") == -1){
+        doGrossKeywordMatch = true;
+        queryString = queryString.toLowerCase().replace(/\s/g,"");
+      }
+      
+      if(OPrime.isCouchApp()){
+
+      // run a custom map reduce
+        var mapFunction = function(doc) {
+          if(doc.collection != "datums"){
+            return;
+          }
+          var fields  = doc.datumFields;
+          var result = {};
+          for(var f in fields){
+            if(fields[f].label == "gloss"){
+              result.gloss = fields[f].value;
+            }else if(fields[f].label == "morphemes"){
+              result.morphemes = fields[f].value;
+            }else if(fields[f].label == "judgement"){
+              result.judgement = fields[f].value;
+            }
+          }
+          emit( result,  doc._id );
+        };
+        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
+          success: function(response) {
+            var matchIds = [];
+            console.log(response);
+            for (i in response.rows) {
+              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
+              // If the row's datum matches the given query string
+              if (thisDatumIsIn) {
+                // Keep its datum's ID, which is the value
+                matchIds.push(response.rows[i].value);
+              }
+            }
+            
+            if(typeof callback == "function"){
+              //callback with the unique members of the array
+              callback(_.unique(matchIds));
+//              callback(matchIds); //loosing my this in SearchEditView
+            }
+          },
+          error: function(status) {
+            console.log("Error quering datum",status);
+          },
+          reduce: false
+        });
+
+        return;
+      }
+        
+      
+      
       try{
         this.changePouch(this.get("pouchname"), function() {
           self.pouch(function(err, db) {
-            db.query("get_datum_field/get_datum_fields", {reduce: false}, function(err, response) {
+            db.query("pages/get_datum_fields", {reduce: false}, function(err, response) {
               var matchIds = [];
               
               if (!err) {
-                // Process the given query string into tokens
-                var queryTokens = self.processQueryString(queryString);
-                var doGrossKeywordMatch = false;
-                if(queryString.indexOf(":") == -1){
-                  doGrossKeywordMatch = true;
-                  queryString = queryString.toLowerCase().replace(/\s/g,"");
-                }
+               
                 // Go through all the rows of results
                 for (i in response.rows) {
-                  var thisDatumIsIn = false;
-                  // If the query string is null, include all datumIds
-                  if(queryString.trim() == ""){
-                    thisDatumIsIn = true;
-                  }else if(doGrossKeywordMatch){
-                      if(JSON.stringify(response.rows[i].key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
-                        thisDatumIsIn = true;
-                      }
-                  }else{
-                    
-                    // Determine if this datum matches the first search criteria
-                    thisDatumIsIn = self.matchesSingleCriteria(response.rows[i].key, queryTokens[0]);
-                    
-                    // Progressively determine whether the datum still matches based on
-                    // subsequent search criteria
-                    for (var j = 1; j < queryTokens.length; j += 2) {
-                      if (queryTokens[j] == "AND") {
-                        // Short circuit: if it's already false then it continues to be false
-                        if (!thisDatumIsIn) {
-                          break;
-                        }
-                        
-                        // Do an intersection
-                        thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
-                      } else {
-                        // Do a union
-                        thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(response.rows[i].key, queryTokens[j+1]);
-                      }
-                    }
-                  }
-                  
+                  var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
                   // If the row's datum matches the given query string
                   if (thisDatumIsIn) {
                     // Keep its datum's ID, which is the value
@@ -243,7 +318,7 @@ define([
                 		" <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>","alert-success","Search:");
                 window.toldSearchtomakeviews = true;
                 var previousquery = queryString;
-                window.app.get("corpus").createPouchView("get_datum_field/get_datum_fields", function(){
+                window.app.get("corpus").createPouchView("pages/get_datum_fields", function(){
                   window.appView.searchEditView.search(previousquery);
                 });
               }
@@ -259,7 +334,42 @@ define([
         alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
       }
     },
-    
+    isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
+      
+      
+      var thisDatumIsIn = false;
+      // If the query string is null, include all datumIds
+      if(queryString.trim() == ""){
+        thisDatumIsIn = true;
+      }else if(doGrossKeywordMatch){
+          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
+            thisDatumIsIn = true;
+          }
+      }else{
+        
+        // Determine if this datum matches the first search criteria
+        thisDatumIsIn = self.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
+        
+        // Progressively determine whether the datum still matches based on
+        // subsequent search criteria
+        for (var j = 1; j < queryTokens.length; j += 2) {
+          if (queryTokens[j] == "AND") {
+            // Short circuit: if it's already false then it continues to be false
+            if (!thisDatumIsIn) {
+              break;
+            }
+            
+            // Do an intersection
+            thisDatumIsIn = thisDatumIsIn && self.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+          } else {
+            // Do a union
+            thisDatumIsIn = thisDatumIsIn || self.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
+          }
+        }
+      }
+      return thisDatumIsIn;
+      
+    },
     /**
      * Determines whether the given object to search through matches the given
      * search criteria.
@@ -556,8 +666,8 @@ define([
 //             * that will eventually overwrite the default in the
 //             * corpus if the user saves the current data list
 //             */
-//            var defaultIndex = window.app.get("corpus").get("dataLists").length - 1;
-//            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").get("dataLists").models[defaultIndex].id){
+//            var defaultIndex = window.app.get("corpus").datalists.length - 1;
+//            if(window.appView.currentEditDataListView.model.id == window.app.get("corpus").datalists.models[defaultIndex].id){
 //              //Put it into the current data list views
 //              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was, 
 //              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
@@ -573,13 +683,13 @@ define([
 //               * Make sure the datum is at the top of the default data list which is in the corpus,
 //               * this is in case the default data list is not being displayed
 //               */
-//              var positionInDefaultDataList = window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").indexOf(model.id);
+//              var positionInDefaultDataList = window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").indexOf(model.id);
 //              if(positionInDefaultDataList != -1 ){
 //                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them. 
-//                window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+//                window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
 //              }
-//              window.app.get("corpus").get("dataLists").models[defaultIndex].get("datumIds").unshift(model.id);
-//              window.app.get("corpus").get("dataLists").models[defaultIndex].needsSave  = true;
+//              window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").unshift(model.id);
+//              window.app.get("corpus").datalists.models[defaultIndex].needsSave  = true;
 //              window.appView.addUnsavedDoc(window.app.get("corpus").id);
 //            }
             /*

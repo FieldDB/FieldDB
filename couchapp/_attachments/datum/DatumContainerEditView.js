@@ -157,10 +157,14 @@ define([
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
               if (rows[rows.length - i - 1]) {
                 var m = rows[rows.length - i - 1];
+                var value = m;
+                if(!OPrime.isCouchApp()){
+                  value = m.value;
+                }
                 //Only add datum objects to the container
-                if(m.value.jsonType == "Datum"){
+                if(value.jsonType == "Datum"){
                   var d = new Datum();
-                  d.set(d.parse(m.value));
+                  d.set(d.parse(value));
                   self.model.add(d);
                   
                 }
@@ -191,6 +195,7 @@ define([
         datumfields[x].value = "";
       }
       this.prependDatum(new Datum({
+        filledWithDefaults : true,
         datumFields : new DatumFields(datumfields),
         datumStates : app.get("corpus").get("datumStates").clone(),
         pouchname : app.get("corpus").get("pouchname"),

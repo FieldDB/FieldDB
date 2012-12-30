@@ -79,6 +79,7 @@ define([
        */
       if(!corpusid){
         window.location.href="#corpus/"+pouchname;
+        return;
       }
 
       var self = this;
@@ -93,23 +94,17 @@ define([
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
 
-            if(c.get("dataLists").length > 0 && c.get("sessions").length > 0 ){
-              self.loadCorpusDashboard(model);
-            }else{
-              alert("Bug: Something might be wrong with this corpus. ");
-
-              c.makeSureCorpusHasADataList(function(){
-                c.makeSureCorpusHasASession(function(){
-                  self.loadCorpusDashboard(model);
-                  //end success to create new data list
-                },function(){
-                  alert("Failed to create a session. ");
-                });//end failure to create new data list
+            c.makeSureCorpusHasADataList(function(){
+              c.makeSureCorpusHasASession(function(){
+                self.loadCorpusDashboard(model);
                 //end success to create new data list
               },function(){
-                alert("Failed to create a datalist. ");
+                alert("Failed to create a session. ");
               });//end failure to create new data list
-            }
+              //end success to create new data list
+            },function(){
+              alert("Failed to create a datalist. ");
+            });//end failure to create new data list
 
           },
           error : function(e, x, y ) {
@@ -138,8 +133,8 @@ define([
     loadCorpusDashboard: function(c){
       var mostRecentIds = {
           corpusid : c.id,
-          datalistid : c.get("dataLists").models[0].id,
-          sessionid : c.get("sessions").models[0].id,
+          datalistid : c.datalists.models[0].id,
+          sessionid : c.sessions.models[0].id,
           couchConnection : c.get("couchConnection")
         };
         console.log("mostRecentIds", mostRecentIds);
@@ -148,6 +143,7 @@ define([
         window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
         window.app.get("authentication").saveAndInterConnectInApp(function(){
           window.location.replace("corpus.html");
+          return;
         });
     },
     bringCorpusToThisDevice : function(corpus, callback) {

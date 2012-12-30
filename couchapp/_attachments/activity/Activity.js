@@ -37,6 +37,14 @@ define([
 //        this.saveAndInterConnectInApp();
 //      }
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/activities",
     
     defaults : {
 //      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
@@ -72,6 +80,14 @@ define([
           }
 
         }
+      }
+      
+      
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
       }
       
       if(this.pouch == undefined){
