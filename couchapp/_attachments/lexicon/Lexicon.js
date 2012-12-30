@@ -26,7 +26,7 @@ define([
 		},
 		
 		// Internal models: used by the parse function
-    model : {
+    internalModels : {
       lexiconNodes : LexiconNodes
     },
     /**

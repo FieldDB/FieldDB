@@ -17,7 +17,7 @@ define( [ "backbone",
     initialize : function() {
     },
     
-
+    internalModels : Comment,
     model: Comment,
     
     
