@@ -39,7 +39,6 @@ define([
        model: Session,
        
        fetchSessions : function(suces, fail){
-         var sessionsSelf = this;
          this.fetch({
            error : function(model, xhr, options) {
              OPrime.debug("There was an error loading your sessions.");
@@ -50,9 +49,6 @@ define([
              }
            },
            success : function(model, response, options) {
-             for (var x in response) {
-               sessionsSelf.add(response[x]);
-             }
              console.log("Sessions fetched ", model,response,options);
              if (response.length == 0) {
                OPrime.bug("You have no sessions, TODO creating a new one...");
