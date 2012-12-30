@@ -19,13 +19,23 @@ OPrime.chromeClientUrl = function() {
  * to run locally which is unneccesary
  */
 OPrime.defaultCouchConnection = function() {
-  return {
+  var d = {
     protocol : "https://",
     domain : "localhost",
     port : "6984",
     pouchname : "default",
     path : ""
   };
+  /*
+   * If its a couch app, it can only contact databases on its same origin, so modify the domain to be that origin. the
+   * chrome extension can contact any authorized server that is authorized in
+   * the chrome app's manifest
+   */
+  if(OPrime.isCouchApp()){
+    d.domain = window.location.origin.replace("https://","").replace("http://","");
+  }
+  return d; 
+
 };
 
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
