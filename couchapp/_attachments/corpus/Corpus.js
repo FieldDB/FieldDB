@@ -122,18 +122,31 @@ define([
 //        + couchConnection.pouchname);
       
     },
+    fetchPublicSelf : function(){
+      try{
+        var corpusself = this;
+        if(!this.get("publicSelf")){
+          this.set("publicSelf", new CorpusMask());
+        }
+        this.get("publicSelf").id = "corpus";
+        this.get("publicSelf").fetch({sucess: function(model, response, options){
+          OPrime.debug("Success fetching corpus' public self: ", model, response, options);
+        }, error: function(model, xhr, options){
+          OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
+          corpusself.get("publicSelf").fillWithDefaults();
+          corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
+          corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
+        }});
+      }catch(e){
+        OPrime.bug("");
+      }
+    },
     fillWithDefaults : function(){
       if(!this.get("confidential")){
         this.set("confidential", new Confidential({filledWithDefaults : true}) );
       }
+      this.fetchPublicSelf();
       
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask({
-          filledWithDefaults : true,
-          "couchConnection" : this.get("couchConnection"),
-          "pouchname" : this.get("pouchname")
-        }));
-      }
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");
       }

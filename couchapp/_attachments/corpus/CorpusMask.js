@@ -95,9 +95,10 @@ define([
         this.set("datumStates", new DatumStates());
       }//end if to set datumStates
       
-      //Keeping all items since this seems okay for public viewing if the user wants to let the public see it. 
+      //Keeping all items since this seems okay for public viewing/searching if the user wants to let the public see it. 
       if(!this.get("datumFields")){
-        this.set("datumFields", new DatumFields([ 
+        this.set("datumFields", new DatumFields(
+            [ 
                                                new DatumField({
                                                  label : "judgement",
                                                  size : "3",
@@ -129,7 +130,8 @@ define([
                                                  userchooseable: "disabled",
                                                  help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
                                                })
-                                               ]));
+                                               ]
+            ));
       }//end if to set datumFields
       
       //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
@@ -193,7 +195,7 @@ define([
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/private_corpuses",
+    url : "/corpuses",
     
     defaults : {
       title : "Private Corpus",

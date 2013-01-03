@@ -528,7 +528,8 @@ define([
                */
               c.datalists.fetchDatalists();
               c.sessions.fetchSessions();
-              
+              c.fetchPublicSelf();
+             
               var dl = new DataList({
                 "pouchname" : couchConnection.pouchname
               });
