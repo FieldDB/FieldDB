@@ -135,7 +135,7 @@ define([
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getAllIdsByDate(function(rows) {
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
@@ -160,13 +160,13 @@ define([
                 var value = m;
                 if(!OPrime.isCouchApp()){
                   value = m.value;
+                  var d = new Datum();
+                  d.set(d.parse(value));
+                  value = d;
                 }
                 //Only add datum objects to the container
                 if(value.jsonType == "Datum"){
-                  var d = new Datum();
-                  d.set(d.parse(value));
-                  self.model.add(d);
-                  
+                  self.model.add(value);
                 }
               }
             }
