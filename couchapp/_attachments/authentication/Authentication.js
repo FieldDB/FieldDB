@@ -145,7 +145,7 @@ define([
      * This function parses the server response and injects it into the authentication's user public and user private
      * 
      */
-    saveServerResponseToUser : function(serverResults, callback){
+    saveServerResponseToUser : function(serverResults, callbacksave){
       OPrime.debug("saveServerResponseToUser");
 
       this.set("state", "loggedIn");
@@ -206,8 +206,8 @@ define([
       // no problem with pouch
 //      OPrime.debug(serverResults.user);
       
-      if (typeof callback == "function") {
-        callback("true"); //tell caller that the user succeeded to authenticate
+      if (typeof callbacksave == "function") {
+        callbacksave("true"); //tell caller that the user succeeded to authenticate
       }
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
