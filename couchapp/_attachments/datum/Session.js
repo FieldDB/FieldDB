@@ -220,6 +220,7 @@ define([
       }
       var oldrev = this.get("_rev");
       this.set("dateModified", JSON.stringify(new Date()));
+      this.set("timestamp", Date.now());
       this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {

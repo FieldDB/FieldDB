@@ -287,6 +287,8 @@ define([
       var self = this;
 //      self.set("id","corpus");
       self.set("_id","corpus");
+      this.set("timestamp", Date.now());
+      
       this.changePouch(null, function(){
         if(OPrime.isCouchApp()){
           self.save();

@@ -38,7 +38,7 @@ define([
     url : "/corpuses",
     // The messages should be ordered by date
     comparator : function(doc){
-      return doc.get("_id");
+      return doc.get("timestamp");
     },
     
     
