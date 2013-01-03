@@ -574,6 +574,7 @@ define([
         OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
+      this.set("timestamp", Date.now());
       
       this.changePouch(null,function(){
         self.save(null, {
@@ -1215,7 +1216,7 @@ define([
         .debug("Not getting a session token from the users corpus server " +
         		"since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
         if (typeof succescallback == "function") {
-          succescallback(serverResults);
+          succescallback();
         }
         return;
       }
