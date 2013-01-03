@@ -26,7 +26,7 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_local"
+    "webservicesconfig" : "libs/webservicesconfig_devserver"
   },
   shim : {
     
@@ -95,7 +95,7 @@ require.config({
 require([ 
     "app/App",  
     "backbone",
-    "libs/webservicesconfig_local"
+    "libs/webservicesconfig_devserver"
     ], function(
         App,
         forcingpouchtoloadearly
