@@ -1,7 +1,7 @@
 var https = require('https')
   , express = require('express')
   , authenticationfunctions = require('./lib/userauthentication.js')
-  , node_config = require("./lib/nodeconfig_local")
+  , node_config = require("./lib/nodeconfig_devserver")
   , fs = require('fs')
   , util = require('util');
 
