@@ -286,12 +286,12 @@ define([
               successcallback();
             }
           },
-          error : function(e) {
+          error : function(e, f, g) {
+            OPrime.debug("Session save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('Session save error' + JSON.stringify(e));
-              OPrime.debug('Session save error' + JSON.stringify(e));
+              alert('Session save error: ' + f.reason);
             }
           }
         });

@@ -328,11 +328,12 @@ define([
               successcallback();
             }
           },
-          error : function(e) {
+          error : function(e, f, g) {
+            OPrime.debug("DataList save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('DataList save error' + e);
+              alert('DataList save error: ' + f.reason);
             }
           }
         });
