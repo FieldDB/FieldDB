@@ -729,8 +729,8 @@ define([
                         window.location.replace(window.location.origin+optionalCouchAppPath+"/user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
                       
                       });
-                    },error : function(e) {
-                      alert('New Corpus save error' + e);
+                    },error : function(e,f,g) {
+                      alert('New Corpus save error' + f.reason);
                     }
                   });
 
@@ -752,11 +752,12 @@ define([
               }
             }
           },
-          error : function(e) {
+          error : function(e, f, g) {
+            OPrime.debug("Corpus save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('Corpus save error' + e);
+              alert('Corpus save error: ' + f.reason);
             }
           }
         });
