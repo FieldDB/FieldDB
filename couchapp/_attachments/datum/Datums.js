@@ -15,6 +15,7 @@ define([
         * @constructs
         */
        initialize: function() {
+         this.model = Datum;
        },
        /**
         * backbone-couchdb adaptor set up
@@ -30,12 +31,34 @@ define([
        url : "/datums",
        // The messages should be ordered by date
        comparator : function(doc){
-         return doc.get("_id");
+         return doc.get("timestamp");
        },
        
        internalModels : Datum,
 
-       model: Datum
+       model: Datum,
+
+       fetchDatums : function(suces, fail){
+         this.fetch({
+           error : function(model, xhr, options) {
+             OPrime.debug("There was an error loading your datums.");
+             console.log(model,xhr,options);
+             OPrime.bug("There was an error loading your datums.");
+             if(typeof fail == "function"){
+               fail();
+             }
+           },
+           success : function(model, response, options) {
+             console.log("Datums fetched ", model,response,options);
+             if (response.length == 0) {
+               OPrime.bug("You have no datums");
+             }
+             if(typeof suces == "function"){
+               suces();
+             }
+           }
+         });
+       }
     });
     
     return Datums;

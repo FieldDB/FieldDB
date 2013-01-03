@@ -155,29 +155,28 @@ define([
      * attribute contains the Datum's dateModified and the 'value' attribute contains
      * the Datum itself.
      */
-    getAllIdsByDate : function(callback) {
+    getMostRecentIdsByDate : function(callback) {
       var self = this;
       
       if(OPrime.isCouchApp()){
-        callback([]);
         //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
-
-//        var tempDatums = new Datums();
-//        tempDatums.fetch({
-//          error : function(model, xhr, options) {
-//            OPrime.bug("There was an error loading your datums.");
-//            if(typeof callback == "function"){
-//              callback([]);
+        var tempDatums = new Datums();
+        tempDatums.model = Datum;
+        tempDatums.fetch({
+          limit: 2,
+          error : function(model, xhr, options) {
+            OPrime.bug("There was an error loading your datums.");
+            if(typeof callback == "function"){
+              callback([]);
+            }
+          },
+          success : function(model, response, options) {
+//            if (response.length >= 1) {
+//              callback([response[0]._id], [response[1]._id]);
+              callback(response);
 //            }
-//          },
-//          success : function(model, response, options) {
-//            if (response.length == 0) {
-//              OPrime.bug("You have no datum...");
-//            }
-//            callback([]);
-//          }
-//        });
-//        
+          }
+        });
         return;
       }
       
@@ -198,7 +197,7 @@ define([
                 window.toldSearchtomakebydateviews = true;
                 window.app.get("corpus").createPouchView("pages/by_date", function(){
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
-                  self.getAllIdsByDate(callback);
+                  self.getMostRecentIdsByDate(callback);
                 });
                 return;
               }
@@ -239,27 +238,30 @@ define([
       if(OPrime.isCouchApp()){
 
       // run a custom map reduce
-        var mapFunction = function(doc) {
-          if(doc.collection != "datums"){
-            return;
-          }
-          var fields  = doc.datumFields;
-          var result = {};
-          for(var f in fields){
-            if(fields[f].label == "gloss"){
-              result.gloss = fields[f].value;
-            }else if(fields[f].label == "morphemes"){
-              result.morphemes = fields[f].value;
-            }else if(fields[f].label == "judgement"){
-              result.judgement = fields[f].value;
-            }
-          }
-          emit( result,  doc._id );
-        };
-        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
+//        var mapFunction = function(doc) {
+//          if(doc.collection != "datums"){
+//            return;
+//          }
+//          var fields  = doc.datumFields;
+//          var result = {};
+//          for(var f in fields){
+//            if(fields[f].label == "gloss"){
+//              result.gloss = fields[f].value;
+//            }else if(fields[f].label == "morphemes"){
+//              result.morphemes = fields[f].value;
+//            }else if(fields[f].label == "judgement"){
+//              result.judgement = fields[f].value;
+//            }
+//          }
+//          emit( result,  doc._id );
+//        };
+//        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
+        //use the get_datum_fields view
+        $.couch.db(this.get("pouchname")).view("pages/get_datum_fields", {
           success: function(response) {
+            OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
-            console.log(response);
+//            console.log(response);
             for (i in response.rows) {
               var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
               // If the row's datum matches the given query string
@@ -592,6 +594,7 @@ define([
       this.set({
         "pouchname" : window.app.get("corpus").get("pouchname"),
         "dateModified" : JSON.stringify(new Date()),
+        "timestamp" : Date.now(),
         "jsonType" : "Datum"
       });
       if(!this.get("session")){
