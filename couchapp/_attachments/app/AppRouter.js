@@ -461,6 +461,12 @@ define([
             	window.appView.currentReadDataListView.render();
             	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
             	window.app.stopSpinner();
+            },function(){
+              window.app.stopSpinner();
+              window.location.href="#";
+              if(localStorage.getItem("username") == "public"){
+                alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+              }
             });
         });
         
