@@ -23,7 +23,14 @@ mv output couchapp/_attachments/lingllama_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/user_dashboard.js  > output
 mv output couchapp/_attachments/user_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/welcome_dashboard.js  > output
+
 mv output couchapp/_attachments/welcome_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/corpus_online_dashboard.js  > output
+mv output couchapp/_attachments/corpus_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/user_online_dashboard.js  > output
+mv output couchapp/_attachments/user_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/welcome_online_dashboard.js  > output
+mv output couchapp/_attachments/welcome_online_dashboard.js
 
 echo ""
 echo ""

@@ -25,6 +25,12 @@ mv output couchapp/_attachments/user_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/welcome_dashboard.js  > output
 mv output couchapp/_attachments/welcome_dashboard.js
 
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/corpus_online_dashboard.js  > output
+mv output couchapp/_attachments/corpus_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/user_online_dashboard.js  > output
+mv output couchapp/_attachments/user_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_devserver"/' couchapp/_attachments/welcome_online_dashboard.js  > output
+mv output couchapp/_attachments/welcome_online_dashboard.js
 echo ""
 echo ""
 echo "Putting the Chrome app's manifest into the dev manifest for release into the Chrome store as the unstable bleeding egde chromeapp  for users who like to be on the bleeding edge"
