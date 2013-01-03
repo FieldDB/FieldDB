@@ -131,6 +131,7 @@ define([
                 
                 OPrime.debug("Starting the app");
                 appself.startApp(function() {
+                  window.app.showHelpOrNot();
                   appself.stopSpinner();
                   window.app.router.renderDashboardOrNot(true);
 
@@ -238,21 +239,26 @@ define([
     },
     
     startApp : function(callback) {
-      window.appView = new AppView({
-        model : this
-      });
-      /* Tell the app to render everything */
-      window.appView.render();
-
-      /* Tell the router to render the home screen divs */
-      this.router = new AppRouter();
-      this.router.renderDashboardOrNot(true);
-
-      Backbone.history.start();
-      if (typeof callback == "function") {
-        OPrime.debug("Calling back the startApps callback");
-        callback();
+      if(!window.appView){
+        window.appView = new AppView({
+          model : this
+        });
+        /* Tell the app to render everything */
+        window.appView.render();
       }
+
+      if(typeof window.app.router == "function"){
+        /* Tell the router to render the home screen divs */
+        this.router = new AppRouter();
+        this.router.renderDashboardOrNot(true);
+        
+        Backbone.history.start();
+        if (typeof callback == "function") {
+          OPrime.debug("Calling back the startApps callback");
+          callback();
+        }
+      }
+
     },
     
     showSpinner : function(){
@@ -571,7 +577,6 @@ define([
 
                               window.app.stopSpinner();
 
-                              window.app.showHelpOrNot();
                               
                               if (typeof callback == "function") {
                                 callback();
@@ -634,7 +639,7 @@ define([
         $(".help_count_left").html(5-helpShownCount);
         localStorage.setItem("helpShownCount", ++helpShownCount);
         localStorage.setItem("helpShownTimestamp", Date.now());
-        window.location.href = "#help/illustratedguide";
+        window.app.router.navigate("help/illustratedguide", {trigger: true});
       }
     },
     
