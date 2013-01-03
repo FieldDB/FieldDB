@@ -176,6 +176,7 @@ define([
       
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
+      datumsToBePassedAround.model = Datum; //TOOD workaround for model being missing
       this.datumsEditView = new DatumContainerEditView({
         model : datumsToBePassedAround
       });
