@@ -30,9 +30,9 @@ define([
        // so that you don't have to change existing apps when you switch the sync-strategy
        url : "/datums",
        // The messages should be ordered by date
-       comparator : function(doc){
-         return doc.get("timestamp");
-       },
+//       comparator : function(doc){
+//         return doc.get("timestamp");
+//       },
        
        internalModels : Datum,
 

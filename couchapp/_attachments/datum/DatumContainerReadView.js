@@ -143,7 +143,7 @@ define([
                 }
                 //Only add datum objects to the container
                 if(value.jsonType == "Datum"){
-                  self.model.add(d);
+                  self.model.add(value);
                 }
               }
             }
