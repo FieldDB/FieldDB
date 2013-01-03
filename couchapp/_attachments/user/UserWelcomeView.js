@@ -236,7 +236,10 @@ define([
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
         OPrime.debug("User has entered an email and the passwords match. ");
-        var a = new App({loadTheAppForTheFirstTime: true});
+        var a = new App({
+          filledWithDefaults : true,
+          loadTheAppForTheFirstTime : true
+        });
         window.app = a;
         a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus", function(){
           a.get("corpus").fillWithDefaults();
