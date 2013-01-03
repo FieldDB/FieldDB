@@ -15,7 +15,7 @@ OPrime.pouchUrl = "idb://";
 
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
-OPrime.debug = function(message, message2, message3) {
+OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {
     return;
   }
@@ -27,6 +27,9 @@ OPrime.debug = function(message, message2, message3) {
     }
     if (message3) {
       console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
     }
   }
 };
