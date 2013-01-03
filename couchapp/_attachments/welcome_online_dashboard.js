@@ -26,7 +26,7 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_local"
+    "webservicesconfig" : "libs/webservicesconfig_devserver"
   },
   shim : {
     
@@ -99,7 +99,7 @@ require([
     "user/UserWelcomeView",
     "compiledTemplates",
     "backbone",
-    "libs/webservicesconfig_local",
+    "libs/webservicesconfig_devserver",
     "libs/OPrime"
 ], function(
     App,
