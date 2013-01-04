@@ -102,7 +102,12 @@ require([
       ) {
   
   try{
-    var pouchName = window.location.pathname.substring(1,window.location.pathname.replace(/^\//,"").indexOf("/")+1);
+    var pieces = window.location.pathname.replace(/^\//,"").split("/");
+    var pouchName = pieces[0];
+    //Handle McGill server which runs out of a virtual directory
+    if(pouchName == "corpus"){
+      pouchName = pieces[1];
+    }
     Backbone.couch_connector.config.db_name = pouchName;
   }catch(e){
     OPrime.debug("Couldn't set the databse name off of the url.");

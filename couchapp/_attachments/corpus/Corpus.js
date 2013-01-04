@@ -122,6 +122,81 @@ define([
 //        + couchConnection.pouchname);
       
     },
+    loadOrCreateCorpusByPouchName : function(pouchname, sucessloadingorCreatingcallback){
+      var corpusself = this;
+      if(!this.get("publicSelf")){
+        this.set("publicSelf", new CorpusMask({
+          "pouchname" : pouchname
+        }));
+      }
+      var c = this.get("publicSelf");
+      this.get("publicSelf").id = "corpus";
+      c.changePouch({pouchname: pouchname},function(){
+        c.fetch({
+          success : function(model, response, options) {
+            OPrime.debug("Success fetching corpus' public self: ", model, response, options);
+            if(!model.get("corpusid")){
+              corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
+              return;
+            }
+            corpusself.id = model.get("corpusid");
+            corpusself.changePouch({pouchname: pouchname}, function(){
+              //fetch only after having setting the right pouch which is what changePouch does.
+              corpusself.fetch({
+                success : function(model) {
+                  OPrime.debug("Corpus fetched successfully", model);
+                  $(".spinner-status").html("Loading Datalist...");
+                  corpusself.makeSureCorpusHasADataList(function(){
+                    corpusself.datalists.at(0).setAsCurrentDataList(function(){
+                      $(".spinner-status").html("Datalist loaded.");
+                    });
+                    $(".spinner-status").html("Loading Elicitation Session...");
+                    corpusself.makeSureCorpusHasASession(function(){
+                      corpusself.sessions.at(0).setAsCurrentSession(function(){
+                        $(".spinner-status").html("Session loaded.");
+                        if(typeof sucessloadingorCreatingcallback == "function"){
+                          sucessloadingorCreatingcallback();
+                        }
+                      });
+                      
+                      //end success to create new data list
+                    },function(){
+                      alert("Failed to create a session. ");
+                    });//end failure to create new data list
+                    //end success to create new data list
+                  },function(){
+                    alert("Failed to create a datalist. ");
+                  });//end failure to create new data list
+
+                },
+                error : function(model, xhr, options) {
+                  $(".spinner-status").html("Downloading Corpus...");
+
+                  OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+                  if(corpusself.islooping){
+                    OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
+                    return;
+                  }
+                  corpusself.islooping = true;
+                  OPrime.bug("Trying to download this corpus to this device one more time..."+xhr.reason);
+                  corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
+                }
+              });
+            });
+          },
+          error : function(model, xhr, options) {
+            $(".spinner-status").html("Creating Corpus...");
+
+            OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
+            OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
+            corpusself.get("publicSelf").fillWithDefaults();
+            corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
+            corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
+            corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
+          }
+        });
+      });
+    },
     fetchPublicSelf : function(){
       try{
         var corpusself = this;
@@ -141,7 +216,7 @@ define([
         OPrime.bug("");
       }
     },
-    fillWithDefaults : function(){
+    fillWithDefaults : function(donefillingcallback){
       if(!this.get("confidential")){
         this.set("confidential", new Confidential({filledWithDefaults : true}) );
       }
@@ -276,6 +351,9 @@ define([
       }
 //      this.loadPermissions();
       
+      if(typeof donefillingcallback == "function"){
+        donefillingcallback();
+      }
     },
     /**
      * backbone-couchdb adaptor set up
@@ -459,8 +537,9 @@ define([
         window.appView.sessionNewModalView.render();
       });
     },
+    /* 
+     */
     newCorpus : function(){
-     
       $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       this.saveAndInterConnectInApp();
@@ -482,10 +561,10 @@ define([
 //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
       attributes.pouchname = this.get("pouchname")+"copy";
       attributes.couchConnection.pouchname = this.get("pouchname")+"copy";
-      attributes.dataLists = [];
-      attributes.sessions = [];
+//      attributes.dataLists = [];
+//      attributes.sessions = [];
       attributes.comments = [];
-      attributes.publicSelfMode = {};
+      attributes.publicSelf = {filledWithDefaults: true};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
       //clear out search terms from the new corpus's datum fields
       for(var x in attributes.datumFields){
@@ -507,7 +586,22 @@ define([
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
       window.appView.corpusNewModalView.render();
     },
-
+    newCorpusSimple : function(){
+      $("#new-corpus-modal").modal("show");
+      //Save the current session just in case
+      this.saveAndInterConnectInApp();
+      var attributes = {};
+      attributes.title = this.get("title")+ " copy";
+      attributes.titleAsUrl = this.get("titleAsUrl")+"Copy";
+      attributes.pouchname = this.get("pouchname")+"copy";
+      attributes.couchConnection.pouchname = this.get("pouchname")+"copy";
+      attributes.publicSelf = {};
+      attributes.team = window.app.get("authentication").get("userPublic").toJSON();
+      
+      window.appView.corpusNewModalView.model = new Corpus();
+      window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
+      window.appView.corpusNewModalView.render();
+    },
     
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
@@ -519,6 +613,17 @@ define([
         OPrime.debug("Cant change corpus's couch connection");
         return;
       }
+      
+//      if(this.syncBeforeChangePouch){
+//        window.app.get("authentication").syncUserWithServer(function(){
+//          if(typeof callback == "function"){
+//            callback();
+//          }
+//        });
+//        OPrime.bug("You have to be online and login before you can create a new Corpus.");
+//        delete this.syncBeforeChangePouch;
+//        return;
+//      }
       
       if(OPrime.isCouchApp()){
         if(typeof callback == "function"){
@@ -555,16 +660,87 @@ define([
       var self = this;
       var newModel = false;
       if(!this.id){
+        /*
+         * If this is a new corpus, and we are not in it's database, ask the server to create the databse and loop until it is created, then save it.
+         */
         newModel = true;
-        
+        this.syncBeforeChangePouch = true;
+        var potentialpouchname = this.get("pouchname");
         if(!this.get("pouchname")){
-          this.set("pouchname", this.get("team").get("username")
-              +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ) ;
+          potentialpouchname = this.get("team").get("username")
+          +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
+          this.set("pouchname", potentialpouchname) ;
         }
         if(!this.get("couchConnection")){
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
+        if(OPrime.isCouchApp()){
+          if(window.location.href.indexOf(potentialpouchname) > -1){
+            this.syncBeforeChangePouch = false;
+          }
+        }
+        /* faking the date of last datum to avoid having a old session pop up */
+        this.set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
+        
+        delete this.get("couchConnection").corpusid;
+        //make sure the corpus is in the history of the user to trigger the server to create the database before we go further
+        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
+        if(pouches.indexOf(potentialpouchname) == -1){
+          window.app.get("authentication").get("userPrivate").get("corpuses").unshift(this.get("couchConnection"));
+        }
+//        window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
+//        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = "";
+//        window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = this.get("couchConnection");
+        if(this.syncBeforeChangePouch){
+          var newCorpusToBeSaved = this;
+          window.app.get("authentication").syncUserWithServer(function(){
+            
+            /*
+             * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
+             */
+            var optionalCouchAppPath = "";
+            if(OPrime.isCouchApp()){
+              optionalCouchAppPath = "/"+potentialpouchname+"/_design/pages/";
+            }
+            OPrime.checkToSeeIfCouchAppIsReady(optionalCouchAppPath+"corpus.html", function(){
+//              OPrime.bug("Attempting to save the new corpus in its database.");
+              try{
+                Backbone.couch_connector.config.db_name = potentialpouchname;
+              }catch(e){
+                OPrime.debug("Couldn't set the database name off of the pouchame.");
+              }
+              newCorpusToBeSaved.changePouch(null, function(){
+                alert("Saving new corpus.");
+                newCorpusToBeSaved.save(null, {
+                  success : function(model, response) {
+                    model.get("publicSelf").set("corpusid", model.id);
+                    window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
+                    window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                    model.get("couchConnection").corpusid = model.id;
+                    window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
+                    window.app.get("authentication").get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
+
+                    var sucessorfailcallbackforcorpusmask = function(){
+                      window.app.get("authentication").saveAndInterConnectInApp(function(){
+                        alert("Saved corpus in your user.");
+                        window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
+                      });
+                    };
+                    model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                    
+                  },error : function(e,f,g) {
+                    alert('New Corpus save error ' + f.reason);
+                  }
+                });
+              });
+            }, OPrime.checkToSeeIfCouchAppIsReady);
+            
+          });
+          OPrime.debug("Contacting the server to ask it to make a new database for you...");
+          return;
+        }
+        
       }else{
         this.get("couchConnection").corpusid = this.id;
         if(!this.get("couchConnection").path){
@@ -602,7 +778,7 @@ define([
 //            }
             //save the corpus mask too
             var publicSelfMode = model.get("publicSelf");
-            publicSelfMode.set("corpusId", model.id);
+            publicSelfMode.set("corpusid", model.id);
             if(publicSelfMode.changePouch){
               publicSelfMode.changePouch( model.get("couchConnection"), function(){
                 publicSelfMode.saveAndInterConnectInApp();
@@ -704,25 +880,14 @@ define([
                   });
             }
             model.get("couchConnection").corpusid = model.id;
-            //make sure the corpus is in the history of the user
+            //make sure the corpus is updated in the history of the user
             var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
-            if(pouches.indexOf(model.get("couchConnection").pouchname) == -1){
-              window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
+            var oldconnection = pouches.indexOf(model.get("couchConnection").pouchname);
+            if(oldconnection != -1){
+              window.app.get("authentication").get("userPrivate").get("corpuses").splice(oldconnection, 1);
             }
-            /*
-             * Save the default data list, in case it has changed without being saved in pouch. 
-             */
-//            if(model.datalists.length > 0){
-//              var defaultDatalist = model.datalists.models[model.datalists.length - 1];
-//
-//              if(defaultDatalist.needsSave){
-////                defaultDatalist.changePouch(null, function(){
-////                  OPrime.debug("Saving the default datalist because it was changed by adding datum, and it wasn't the current data list so it is was the 'active' defualt datalist.");
-////                  defaultDatalist.save();
-//                //TODO uncomment this
-////                });
-//              }
-//            }
+            window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
+            
             if(newModel){
               
               self.makeSureCorpusHasADataList(function(){
@@ -732,15 +897,6 @@ define([
                     success : function(model, response) {
                       window.app.get("authentication").saveAndInterConnectInApp(function(){
                         
-                        /*
-                         * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
-                         */
-                        var optionalCouchAppPath = "";
-                        if(OPrime.isCouchApp()){
-                          optionalCouchAppPath = "/"+model.get("couchConnection").pouchname+"/_design/pages";
-                        }
-                        window.location.replace(window.location.origin+optionalCouchAppPath+"/user.html#corpus/"+model.get("couchConnection").pouchname+"/"+model.id);
-                      
                       });
                     },error : function(e,f,g) {
                       alert('New Corpus save error' + f.reason);
@@ -765,12 +921,18 @@ define([
               }
             }
           },
-          error : function(e, f, g) {
-            OPrime.debug("Corpus save error", e, f, g);
+          error : function(model, response, options) {
+            OPrime.debug("Corpus save error", model, response, options);
+//            if(response && response.reason && response.reason == "unauthorized"){
+//              alert('Corpus save error: ' + response.reason);
+//              window.app.get("authentication").syncUserWithServer(function(){
+//              
+//              });
+//            }
+
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('Corpus save error: ' + f.reason);
             }
           }
         });
@@ -802,7 +964,7 @@ define([
               OPrime.debug('the corpus has datalists');
             }
           }else{
-            OPrime.bug("You have no datalists, creating a new one...");
+            OPrime.debug("You have no datalists, creating a new one...");
           //create the first datalist for this corpus.
             var dl = new DataList({
               filledWithDefaults: true,
@@ -872,7 +1034,7 @@ define([
               OPrime.debug('the corpus has sessions');
             }
           }else{
-            OPrime.bug("You have no sessions, creating a new one...");
+            OPrime.debug("You have no sessions, creating a new one...");
             var s = new Session({
               sessionFields : self.get("sessionFields").clone(),
               filledWithDefaults: true,
@@ -997,34 +1159,35 @@ define([
 //          alert("This is a bug, cannot load the corpus you asked for, it is not in this corpus. This will make the app reload.");
 //        }
 //        return;
-//      }else{
-        if (window.app.get("corpus").id != this.id ) {
-          window.app.set("corpus", this);
-        }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp();
-        
-        //If there is no view, we are done.
-        if(! window.appView){
-          successcallback();
-          return;
-        }
-        
-        if(window.appView){
-          window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
-            if (typeof successcallback == "function") {
-              successcallback();
-            }else{
-              window.appView.toastUser("Sucessfully connected all views up to corpus: "+ this.id,"alert-success","Connected!");
-//            window.appView.renderEditableCorpusViews();
-//            window.appView.renderReadonlyCorpusViews();
-            }
-          });
-        }else{
+//    }else{
+      if (window.app.get("corpus").id != this.id ) {
+        window.app.set("corpus", this);
+      }
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = this.get("couchConnection");
+      window.app.get("authentication").saveAndInterConnectInApp();
+
+      //If there is no view, we are done.
+      if(! window.appView){
+        successcallback();
+        return;
+      }
+
+      if(window.appView){
+        window.appView.setUpAndAssociateViewsAndModelsWithCurrentCorpus(function() {
           if (typeof successcallback == "function") {
             successcallback();
+          }else{
+            window.appView.toastUser("Sucessfully connected all views up to corpus: "+ this.id,"alert-success","Connected!");
+//          window.appView.renderEditableCorpusViews();
+//          window.appView.renderReadonlyCorpusViews();
           }
+        });
+      }else{
+        if (typeof successcallback == "function") {
+          successcallback();
         }
+      }
     },
     /**
      * Synchronize the server and local databases. First to, then from.

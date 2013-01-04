@@ -82,7 +82,7 @@ define([
       dataToPost.password = user.get("password");
       if(this.get("userPrivate") != undefined){
         //if the same user is re-authenticating, include their details to sync to the server.
-        if(user.get("username") == this.get("userPrivate").get("username")){
+        if(user.get("username") == this.get("userPrivate").get("username") && user.get("username") != "public"){
           dataToPost.syncDetails = "true";
           dataToPost.syncUserDetails = JSON.parse(JSON.stringify(this.get("userPrivate").toJSON()));
           delete dataToPost.syncUserDetails._rev;
@@ -223,13 +223,14 @@ define([
       // no problem with pouch
 //      OPrime.debug(serverResults.user);
       
-      if (typeof callbacksave == "function") {
-        callbacksave("true"); //tell caller that the user succeeded to authenticate
-      }
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
       this.get("confidential").set("secretkey", serverResults.user.hash);
-      this.saveAndEncryptUserToLocalStorage();
+      this.saveAndEncryptUserToLocalStorage(function(){
+        if (typeof callbacksave == "function") {
+          callbacksave("true"); //tell caller that the user succeeded to authenticate
+        }
+      });
 //      if(window.appView){
 //        if(! this.get("userPublic").id){
 //          this.get("userPublic").saveAndInterConnectInApp();
@@ -266,25 +267,30 @@ define([
     },
     
     loadPublicUser : function(callbackload){
-      var publicUser = localStorage.getItem("publicUser") || OPrime.publicUserStaleDetails();
-      for(var x in publicUser){
-        localStorage.setItem(x, publicUser[x]);
+      var mostRecentPublicUser = localStorage.getItem("mostRecentPublicUser") || OPrime.publicUserStaleDetails();
+      mostRecentPublicUser = JSON.parse(mostRecentPublicUser);
+      for(var x in mostRecentPublicUser){
+        localStorage.setItem(x, mostRecentPublicUser[x]);
       }
       window.location.replace("index.html");
     },
     
     savePublicUserForOfflineUse: function(){
-      var publicUser = localStorage.getItem("publicUser") || OPrime.publicUserStaleDetails();
-      for(var x in publicUser){
-        publicUser[x] = localStorage.getItem(x);
+      var mostRecentPublicUser =  {
+        token : "",
+        encryptedUser : "",
+        username : ""
+      };
+      for(var x in mostRecentPublicUser){
+        mostRecentPublicUser[x] = localStorage.getItem(x);
       }
-      localStorage.setItem("publicUser", publicUser);
+      localStorage.setItem("mostRecentPublicUser", JSON.stringify(mostRecentPublicUser));
     },
     
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
       OPrime.debug("saveAndEncryptUserToLocalStorage");
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
-      localStorage.setItem("encryptedUser", u);
+      localStorage.setItem("encryptedUser", u); 
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
         window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
@@ -294,23 +300,18 @@ define([
       }
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-//      localStorage.setItem("mostRecentDashboard", JSON.stringify(this.get("userPrivate").get("mostRecentIds")) );
-      this.saveAndEncryptUserToLocalStorage(function(){
-        if(typeof successcallback == "function"){
-          successcallback();
-        }
-      });
-      
+      this.saveAndEncryptUserToLocalStorage(successcallback);
     },
     /**
-     * This function uses the quick authentication view to get the user's
-     * password and authenticate them. The authenticate process brings
-     * down the user from the server without any extra work in this function. 
+     * This function uses the quick authentication view to get the
+     * user's password and authenticate them. The authenticate process
+     * brings down the user from the server, and also gets their sesson
+     * token from couchdb before calling the callback.
      * 
      * @param callback
      */
     syncUserWithServer : function(callback){
-      window.appView.authView.showQuickAuthenticateView( function(){
+      window.appView.authView.showQuickAuthenticateView(null, null, function(){
         //This happens after the user has been authenticated. 
         if(typeof callback == "function"){
           callback();

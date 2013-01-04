@@ -637,7 +637,7 @@ define([
       $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
       $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
       
-      
+      $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
       $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
       $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
       $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
