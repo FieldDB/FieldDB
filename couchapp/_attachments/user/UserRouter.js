@@ -46,6 +46,17 @@ define([
       OPrime.debug("In showFullscreenUser: " );
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
+      if(pouchname == "new"){
+        alert("TODO create a new corpus and direct user to its dashboard.");
+        return;
+      }
+      
+      try{
+        Backbone.couch_connector.config.db_name = pouchname;
+      }catch(e){
+        OPrime.debug("Couldn't set the database name off of the pouchame.");
+      }
+      
       var c = new Corpus();
       c.set({
         "pouchname" : pouchname
@@ -80,6 +91,12 @@ define([
       if(!corpusid){
         window.location.href="#corpus/"+pouchname;
         return;
+      }
+      
+      try{
+        Backbone.couch_connector.config.db_name = pouchname;
+      }catch(e){
+        OPrime.debug("Couldn't set the database name off of the pouchame.");
       }
 
       var self = this;
@@ -138,11 +155,13 @@ define([
           couchConnection : c.get("couchConnection")
         };
         console.log("mostRecentIds", mostRecentIds);
-//        localStorage.setItem("mostRecentCouchConnection",JSON.stringify(c.get("couchConnection")));
-//        localStorage.setItem("mostRecentDashboard", JSON.stringify(mostRecentIds));
         window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
         window.app.get("authentication").saveAndInterConnectInApp(function(){
-          window.location.replace("corpus.html");
+          var optionalCouchAppPath= "";
+          if(c.get("couchConnection").pouchname){
+             optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("couchConnection").pouchname);
+          }
+          window.location.replace(optionalCouchAppPath+"corpus.html");
           return;
         });
     },

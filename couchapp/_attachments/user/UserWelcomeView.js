@@ -175,15 +175,15 @@ define([
 //        $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
 //        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
 
-        /*
-         * Workaround for Bootstrap dropdowns not being clickable in android.
-         */
-        $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
-          e.stopPropagation(); 
-        });
-        $(document).on('click','.dropdown-menu a',function(){
-          document.location = $(this).attr('href');
-        });
+//        /*
+//         * Workaround for Bootstrap dropdowns not being clickable in android.
+//         */
+//        $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
+//          e.stopPropagation(); 
+//        });
+//        $(document).on('click','.dropdown-menu a',function(){
+//          document.location = $(this).attr('href');
+//        });
 
         
         //save the version of the app into this view so we can use it when we create a user.

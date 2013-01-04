@@ -1220,15 +1220,18 @@ define([
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
     logUserIntoTheirCorpusServer : function(couchConnection, username, password, succescallback, failurecallback) {
+      //TODO move this code to the app version of this function
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }
       
-      
-      if (OPrime.isAndroidApp()) {
+      /* if on android, turn on replication and dont get a session token */
+      if(OPrime.isTouchDBApp()){
+        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+            username, password, couchConnection.domain);
         OPrime
         .debug("Not getting a session token from the users corpus server " +
-        		"since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
+            "since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
         if (typeof succescallback == "function") {
           succescallback();
         }
@@ -1256,6 +1259,12 @@ define([
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
           }
+          
+          /* if in chrome extension, or offline, turn on replication */
+          if(OPrime.isChromeApp()){
+            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+          }
+          
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }

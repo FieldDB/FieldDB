@@ -25,7 +25,7 @@ define([
      *           "public" is logged in and used to calculate permissions.
      * @property {Boolean} staleAuthentication TODO Describe staleAuthentication.
      * @property {String} state The current state of the Authentication is either
-     *           "loggedIn" or "loggedOut".
+     *           "renderLoggedIn" (if the user is not the public user) or "renderLoggedOut" (if the user is the public user).
      * 
      * @extends Backbone.Model
      * @constructs
@@ -110,6 +110,20 @@ define([
               // authenticate
             }
           } else if (serverResults.user != null) {
+            
+            this.staleAuthentication = false;
+
+            if(OPrime.isTouchDBApp()){
+              /* if on android, turn on replication. */
+              var db = dataToPost.username + "-firstcorpus";
+              var dbServer = serverResults.user.corpuses[0].domain;
+              if(serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname ){
+                db = serverResults.user.mostRecentIds.couchConnection.pouchname;
+                dbServer = serverResults.user.mostRecentIds.couchConnection.domain;
+              }
+              Android.setCredentialsAndReplicate(db, username, password, dbServer);
+            } 
+            
             self.saveServerResponseToUser(serverResults, successcallback);
           }
         },//end successful login
@@ -148,8 +162,11 @@ define([
     saveServerResponseToUser : function(serverResults, callbacksave){
       OPrime.debug("saveServerResponseToUser");
 
-      this.set("state", "loggedIn");
-      this.staleAuthentication = false;
+      var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
+      if(serverResults.user.username == "public"){
+        renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
+      }
+      this.set("state", renderLoggedInStateDependingOnPublicUserOrNot);
 
       // Over write the public copy with any (new) username/gravatar
       // info
@@ -293,21 +310,12 @@ define([
      * @param callback
      */
     syncUserWithServer : function(callback){
-      if(this.staleAuthentication){
-        var self = this;
-        window.appView.authView.showQuickAuthenticateView( function(){
-          //This happens after the user has been authenticated. 
-          self.staleAuthentication = false;
-          if(typeof callback == "function"){
-            callback();
-          }
-        });
-      }else{
-        //the user has authenticated recently, or there are no changes in their details.
+      window.appView.authView.showQuickAuthenticateView( function(){
+        //This happens after the user has been authenticated. 
         if(typeof callback == "function"){
           callback();
         }
-      }
+      });
     },
     fetchListOfUsersGroupedByPermissions : function(successcallback, failcallback){
       var dataToPost = {};

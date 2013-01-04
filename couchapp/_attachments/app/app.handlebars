@@ -58,9 +58,9 @@
 								target="_blank"><i class=" icon-github"></i> OpenSource v<span
 									class="fielddb-version"></span></a></li>
 							<li class="power-users-link"><a tabindex="-1"
-                data-toggle="modal" href="#terminal-modal"><i
-                  class=" icon-magic"></i> <span
-                  class="locale_Terminal_Power_Users"></span> </a></li>
+								data-toggle="modal" href="#terminal-modal"><i
+									class=" icon-magic"></i> <span
+									class="locale_Terminal_Power_Users"></span> </a></li>
 
 							<!-- <li class="divider"></li>
 							<li><a tabindex="-1" href="#"><i class="icon-trash"></i>
@@ -176,8 +176,9 @@
 					<div class="conversation-text-audio-wrapper">
 						<div class="jp-load-bar" style="width: 960;">
 							<div class="jp-play-bar" style="width: 330;">
-								<i class="icon-gift"></i><strong>New!</strong><h4>'Conversations'
-								will let you have multiple speakers with overlapping speech.</h4>
+								<i class="icon-gift"></i><strong>New!</strong>
+								<h4>'Conversations' will let you have multiple speakers
+									with overlapping speech.</h4>
 							</div>
 						</div>
 					</div>
@@ -199,15 +200,15 @@
 		<div class="span3">
 			<div id="insert-unicode" class="well"></div>
 			<div class="well">
-				<iframe
-					src="activity/activity_feed.html#/user/{{username}}"
+				<iframe src="activity/activity_feed.html#/user/{{username}}"
 					width="100%" height="400" frameborder="0"></iframe>
-			</div> 
+			</div>
 
 			<div class="well">
-				<iframe src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
+				<iframe
+					src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
 					width="100%" height="400" frameborder="0"></iframe>
-			</div> 
+			</div>
 		</div>
 		<!--/span-->
 	</div>
@@ -261,5 +262,25 @@
 	<div class="modal-footer">
 		<button class="btn btn-success locale_Yep_its_me"
 			id="quick-authentication-okay-btn"></button>
+	</div>
+</div>
+<div id="login_modal" class="modal hide">
+	<div class="modal-header">
+		<h3 class="locale_Log_In"></h3>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-error hide welcome-screen-alerts"></div>
+		<label class="locale_Username"></label> <input size="16" type="text"
+			class="welcomeusername" value="" /> <label class="locale_Password "></label>
+		<input type="password" size="16" class="welcomepassword" value="" />
+		<label class="locale_authUrl">Server</label> <input type="text"
+			size="16" class="welcomeauthurl" data-provide="typeahead"
+			data-items="4"
+			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success sync-my-data"> <span
+			class="locale_Sync_my_data_to_this_computer"></span>
+		</a>
 	</div>
 </div>
