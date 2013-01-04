@@ -3,6 +3,7 @@ body { /* background-image: url('../user/skins/bamboo_garden.jpg'); */
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
+	/* margin-top: 75px; */
 }
 
 a:hover {
@@ -20,19 +21,33 @@ a:hover {
 .locale_View_Public_Profile_Tooltip {
 	white-space: nowrap;
 }
-
 @font-face {
-  font-family: 'Sue Ellen Francisco';
+  font-family: 'Waiting for the Sunrise';
   font-style: normal;
   font-weight: 400;
-  src: local('Sue Ellen Francisco '), local('SueEllenFrancisco'), url(http://themes.googleusercontent.com/static/fonts/sueellenfrancisco/v4/TwHX4vSxMUnJUdEz1JIgrpF8d1ntzT2N4Odh1kY9w00.woff) format('woff');
+  src: local('Waiting for the Sunrise'), local('WaitingfortheSunrise'), url(https://themes.googleusercontent.com/static/fonts/waitingforthesunrise/v4/eNfH7kLpF1PZWpsetF-ha8dedCtmJg55pF6dIGeWor0C1LhKU8qFLLahJuQDJSaO.woff) format('woff');
 }
 
 h1,h2,h3,h4 {
-	font-family: 'Sue Ellen Francisco', sans-serif;
+	font-family: 'Waiting for the Sunrise', sans-serif;
+	margin: 0em;
+	margin-bottom: .5em;
 }
-.datum_field_label{
-	 font-family: 'Sue Ellen Francisco', sans-serif;
+
+h1 {
+	font-size: 1.6em;
+}
+
+h2 {
+	font-size: 1.4em;
+}
+
+h3 {
+	font-size: 1.2em;
+}
+
+h4 {
+	font-size: 1em;
 }
 
 .gravatar-small {
@@ -63,11 +78,11 @@ h1,h2,h3,h4 {
 }
 
 #toast-user-area {
-	font-size: .75em;
+	font-size: .7em;
 }
 
-.brand {
-	font-size: .85em !important;
+.brand { /* font-size: .85em !important; */
+	
 }
 
 .timestamp,.timestamp a {
@@ -84,34 +99,58 @@ h1,h2,h3,h4 {
 	margin-left: 5px;
 }
 
-#login_form {
-	margin-left: 5px;
+#login_form { /* margin-left: 5px; */
+	
 }
 
 .main { /* width: 100%; */
-	height: 100%;
+	/* height: 100%;
 	clear: both;
-	position: relative;
-	top: 75px;
+	position: relative;*/
+	margin-top: 4em;
 }
 
-#corpus-quickview {
-	/* min-height: 10em;
+#corpus-quickview { /* min-height: 10em;
 	overflow: auto;  */
+	
 }
 
-.corpus-description {
-	/* float: left;
-	width: 100%; */ 
+#corpus-quickview p {
+	font-size: .8em;
+	line-height: 1.5em;
+	/* margin: -.4em; */
 }
 
-.corpusMenu {
-	/* float: left;
+#session-quickview p {
+	font-size: .8em;
+	line-height: 1.5em;
+	/* margin: -.4em; */
+}
+
+.well {
+	padding: .6em !important;
+	margin-bottom: .6em;
+}
+
+.alert {
+	font-size: .8em;
+	line-height: 1.5em;
+	padding: .6em !important;
+	margin: .2em !important;
+}
+
+.corpus-description { /* float: left;
+	width: 100%; */
+	
+}
+
+.corpusMenu { /* float: left;
 	margin: 0em;  */
+	
 }
 
-.corpusMenu button {
-	/* margin: 5px 0px 5px 0px;  */
+.corpusMenu button { /* margin: 5px 0px 5px 0px;  */
+	
 }
 
 .fullscreen {
@@ -131,10 +170,10 @@ h1,h2,h3,h4 {
 	text-align: right;
 }
 
-.icons {
-	font-size: 1.5em;
+.icons { /* font-size: 1.5em;
 	line-height: 1em !important;
-	padding-left: .25em;
+	padding-left: .25em; */
+	
 }
 
 .icon-white {
@@ -146,12 +185,7 @@ h1,h2,h3,h4 {
 }
 
 textarea {
-	width: 100%;
-}
-
-#newDatum {
-	float: right;
-	font-size: 50px;
+	width: 98%;
 }
 
 .drop-zone {

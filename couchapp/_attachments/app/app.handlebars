@@ -127,9 +127,11 @@
 					<li id="auth-menu" class="dropdown"><a href="#"
 						id="user_drop_down_trigger" role="button"
 						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
-						data-toggle="dropdown" rel="tooltip"> <span
-							id="user-quickview"> <i class="icons icon-user icon-white"></i>
-						</span> <b class="caret"></b>
+						data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
+							<button id="login_register_button" class="btn btn-success hide">Login/Register</button>
+							<span id="user-quickview"> <i
+								class="icons icon-user icon-white"></i>
+						</span>
 					</a>
 						<ul class="dropdown-menu" id="authentication-embedded" role="menu"
 							aria-labelledby="user_drop_down_trigger"></ul></li>
@@ -150,18 +152,20 @@
 	<div id="dashboard-view" class="row-fluid">
 		<!-- Elements on Lefthand side -->
 		<div class="span3">
-			<div id="corpus-quickview" class="well sidebar-nav"></div>
-			<div id="session-quickview" class="well sidebar-nav"></div>
-			<div id="search-data-list-quickview" class="  span12">
-				<div id="search-data-list-quickview-header" class=" sidebar-nav"></div>
-				<div class=" sidebar-nav ">
+			<div class=" span12 hide"></div>
+			<!-- workaround: empty div to set all span12 to line up -->
+			<div id="corpus-quickview" class="well span12"></div>
+			<div id="session-quickview" class="well span12"></div>
+			<div id="search-data-list-quickview" class="well hide span12">
+				<div id="search-data-list-quickview-header" class=" "></div>
+				<div class="  ">
 					<ul class="unstyled zebra   search-data-list-paginated-view "></ul>
 					<div class="pagination-control"></div>
 				</div>
 			</div>
 			<div id="data-list-quickview" class="well span12">
-				<div id="data-list-quickview-header" class=" sidebar-nav"></div>
-				<div class=" sidebar-nav container span12">
+				<div id="data-list-quickview-header" class=" "></div>
+				<div class="  container span12">
 					<ul class="unstyled zebra   current-data-list-paginated-view "></ul>
 					<div class="pagination-control "></div>
 				</div>
