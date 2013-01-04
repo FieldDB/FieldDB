@@ -5891,3 +5891,8 @@ a.badge:hover {
 .affix {
   position: fixed;
 }
+
+
+.typeahead {
+  z-index: 1051;
+}
