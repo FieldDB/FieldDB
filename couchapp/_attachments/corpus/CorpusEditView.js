@@ -677,9 +677,12 @@ define([
 
       }
       var self = this;
+      if(this.format == "modal"){
+        $("#new-corpus-modal").modal("hide");
+      }
       this.model.saveAndInterConnectInApp(function(){
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal("hide");
+//          $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
@@ -688,7 +691,7 @@ define([
         
       },function(){
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal( "hide");
+//          $("#new-corpus-modal").modal("hide");
           alert("There was a problem somewhere loading and saving the new corpus.");
           window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }

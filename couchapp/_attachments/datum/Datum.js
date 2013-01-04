@@ -763,24 +763,26 @@ define([
      * 
      * @param successcallback
      * @param failurecallback
+     * @deprecated
      */
     setAsCurrentDatum : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
-        if (typeof failurecallback == "function") {
-          failurecallback();
-        }else{
-          alert("This is a bug, cannot load the datum you asked for, it is not in this corpus.");
-        }
-        return;
-      }else{
-        if (window.appView.datumsEditView.datumsView.collection.models[0].id != this.id ) {
-          window.appView.datumsEditView.datumsView.prependDatum(this);
-          //TODO might not need to do it on the Read one since it is the same model?
-        }
-        if (typeof successcallback == "function") {
-          successcallback();
-        }
-      }
+      console.warn("Using deprected method setAsCurrentDatum.");
+//      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
+//        if (typeof failurecallback == "function") {
+//          failurecallback();
+//        }else{
+//          alert("This is a bug, cannot load the datum you asked for, it is not in this corpus.");
+//        }
+//        return;
+//      }else{
+//        if (window.appView.datumsEditView.datumsView.collection.models[0].id != this.id ) {
+//          window.appView.datumsEditView.datumsView.prependDatum(this);
+//          //TODO might not need to do it on the Read one since it is the same model?
+//        }
+//        if (typeof successcallback == "function") {
+//          successcallback();
+//        }
+//      }
     }
   });
 

@@ -329,7 +329,8 @@ define( [
 
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.searchTemplate(jsonToRender));
-        $("#search-data-list-quickview").addClass("well");
+//        $("#search-data-list-quickview").addClass("well");
+        $("#search-data-list-quickview").show();
 
         window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
             $("#search-data-list-quickview").find(".search-data-list-paginated-view") );

@@ -164,6 +164,8 @@ define([
       if (this.model.get("state") == "renderLoggedIn") {
         $("#logout").show();
         $("#login_form").hide();
+        $("#login_register_button").hide();
+
         if(this.model.get("userPublic") != undefined){
           OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
@@ -178,6 +180,8 @@ define([
       } else {
         $("#logout").hide();
         $("#login_form").show();
+        $("#login_register_button").show();
+
         if(this.model.get("userPublic") != undefined){
           OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
@@ -303,7 +307,7 @@ define([
           return;
         }
         if(username == "public"){
-          self.model.savePublicUserForOffline();
+          self.model.savePublicUserForOfflineUse();
         }
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
@@ -347,11 +351,11 @@ define([
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
                 }else{
                   console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-                  window.app.router.showCorpusDashboard(couchConnection.pouchName, app.get("corpus").id);
+                  window.app.router.showCorpusDashboard(couchConnection.pouchame, app.get("corpus").id);
                 }
               }
             }                    
-          });
+          }); 
         }, whattodoifcouchloginerrors);
         
         
@@ -379,16 +383,15 @@ define([
      */
     showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       var self = this;
-      if( this.model.get("userPrivate").get("username") == "lingllama" || this.model.get("userPrivate").get("username") == "public" ){
+      window.hub.unsubscribe("quickAuthenticationClose", null, this); 
+      if( this.model.get("userPrivate").get("username") == "lingllama" ){
+        / * Show the quick auth but fill in the password, to simulate a user */
         $("#quick-authenticate-modal").modal("show");
-        var preKnownPassword = "none";
-        if(this.model.get("userPrivate").get("username") == "lingllama"){
-          preKnownPassword = "phoneme";
-        }
+        var preKnownPassword = "phoneme";
         $("#quick-authenticate-password").val(preKnownPassword);
         window.hub.subscribe("quickAuthenticationClose",function(){
-          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
-              , $("#quick-authenticate-password").val()
+          window.appView.authView.authenticate("lingllama"
+              , "phoneme"
               , window.app.get("authentication").get("userPrivate").get("authUrl") 
               , authsuccesscallback
               , authfailurecallback
@@ -398,7 +401,16 @@ define([
           $("#quick-authenticate-password").val("");
           window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
         }, self);
-      }else{
+      }else if (this.model.get("userPrivate").get("username") == "public"){
+        / * Dont show the quick auth, just authenticate */
+        window.appView.authView.authenticate("public"
+            , "none"
+            , window.app.get("authentication").get("userPrivate").get("authUrl") 
+            , authsuccesscallback
+            , authfailurecallback
+            , corpusloginsuccesscallback
+            , corpusloginfailcallback );
+      }else {
         $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose",function(){
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
@@ -490,8 +502,8 @@ define([
                * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
                */
               var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(serverResults.user.corpuses[0].pouchname);
-              app.get("corpus").logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function(){
-                window.location.replace(optionalCouchAppPath+"user.html#corpus/new");
+              app.logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function(){
+                window.location.replace(optionalCouchAppPath+"corpus.html");
               });
             }
           },//end successful registration
@@ -572,16 +584,16 @@ define([
              */
             var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(serverResults.user.mostRecentIds.couchConnection.pouchname);
             
-            var previouscorpusinfo = "";
-            if(serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname && serverResults.user.mostRecentIds.couchConnection.corpusid){
-              previouscorpusinfo = "#corpus/" + serverResults.user.mostRecentIds.couchConnection.pouchname+"/"+ serverResults.user.mostRecentIds.couchConnection.corpusid;
-            }
+//            var previouscorpusinfo = "";
+//            if(serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname && serverResults.user.mostRecentIds.couchConnection.corpusid){
+//              previouscorpusinfo = "#corpus/" + serverResults.user.mostRecentIds.couchConnection.pouchname+"/"+ serverResults.user.mostRecentIds.couchConnection.corpusid;
+//            }
             app.get("corpus").logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.couchConnection, dataToPost.username, dataToPost.password, function(){
-              if(previouscorpusinfo){
+//              if(previouscorpusinfo){
                 window.location.replace(optionalCouchAppPath+"corpus.html");
-              }else{
-                window.location.replace(optionalCouchAppPath+"user.html");
-              }
+//              }else{
+//                window.location.replace(optionalCouchAppPath+"user.html");
+//              }
             });
           }
         },//end successful registration

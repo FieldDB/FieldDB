@@ -222,11 +222,11 @@ define([
               tooOld = true;
           }
         }
-        if(!this.promptedForNewSession){
+        if(!window.app.promptedForNewSession){
+          window.app.promptedForNewSession = true;
           if (tooOld && confirm("This session is getting pretty old.\n\nCreate a new session?")) {
             // Display the new Session modal
             window.app.get("corpus").newSession();
-            this.promptedForNewSession = true;
             return;
           } 
         }

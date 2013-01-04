@@ -21,7 +21,7 @@ OPrime.debug = function(message, message2, message3, message4) {
   }
   if (this.debugMode) {
     console.log(message);
-    
+
     if (message2) {
       console.log(message2);
     }
@@ -130,7 +130,6 @@ OPrime.makePublisher = function(o) {
   };
 };
 
-
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
@@ -140,28 +139,28 @@ OPrime.makePublisher = function(o) {
  * @param exdays
  */
 OPrime.setCookie = function(c_name, value, exdays) {
-  if(value){
+  if (value) {
     localStorage.setItem(c_name, value);
-  }else{
+  } else {
     localStorage.removeItem(c_name);
   }
-//  var exdate = new Date();
-//  exdate.setDate(exdate.getDate() + exdays);
-//  var c_value = escape(value)
-//      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-//  document.cookie = c_name + "=" + c_value;
+  // var exdate = new Date();
+  // exdate.setDate(exdate.getDate() + exdays);
+  // var c_value = escape(value)
+  // + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  // document.cookie = c_name + "=" + c_value;
 };
 OPrime.getCookie = function(c_name) {
   return localStorage.getItem(c_name);
-//  var i, x, y, ARRcookies = document.cookie.split(";");
-//  for (i = 0; i < ARRcookies.length; i++) {
-//    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-//    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-//    x = x.replace(/^\s+|\s+$/g, "");
-//    if (x == c_name) {
-//      return unescape(y);
-//    }
-//  }
+  // var i, x, y, ARRcookies = document.cookie.split(";");
+  // for (i = 0; i < ARRcookies.length; i++) {
+  // x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+  // y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+  // x = x.replace(/^\s+|\s+$/g, "");
+  // if (x == c_name) {
+  // return unescape(y);
+  // }
+  // }
 };
 
 OPrime.isAndroidApp = function() {
@@ -172,11 +171,10 @@ OPrime.isAndroidApp = function() {
   return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
 };
 
-
 if (OPrime.isAndroidApp()) {
   var debugOrNot = Android.isD();
   console.log("Setting debug mode to the Android's mode: " + debugOrNot);
-//  OPrime.debugMode = debugOrNot;
+  // OPrime.debugMode = debugOrNot;
 };
 
 OPrime.isAndroid4 = function() {
@@ -214,7 +212,6 @@ OPrime.getVersion = function(callback) {
   };
   xmlhttp.send(null);
 };
-
 
 /*
  * JavaScript Pretty Date Copyright (c) 2011 John Resig (ejohn.org) Licensed
@@ -545,8 +542,6 @@ OPrime.userEncryptionToken = function() {
   return "topsecretuserencryptiontokenfortestingTODOchangethis";
 };
 
-
-
 OPrime.getConnectivityType = function(callingcontextself, callback) {
   this.hub.unsubscribe("connectivityType", null, callingcontextself);
   /* subscribe the caller's functions to the channels */
@@ -586,12 +581,81 @@ OPrime.useUnsecureCouchDB = function() {
      */
     return true;
   }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork && window.location.origin.indexOf("chrome-extension") != 0) {
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork
+      && window.location.origin.indexOf("chrome-extension") != 0) {
     return true;
   }
   return false;
 };
 
+OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
+    readycallback, failcallback) {
+  if (readycallback) {
+    OPrime.checkToSeeIfCouchAppIsReadyreadycallback = readycallback;
+  }
+  if (!$) {
+    OPrime.bug("Can't check if DB is ready.");
+    console
+        .warn("Can't check if DB is ready, checkToSeeIfCouchAppIsReady function depends on JQuery at the moment...");
+    return;
+  }
+  $
+      .ajax({
+        type : 'GET',
+        url : urlIsCouchAppReady,
+        data : {},
+        beforeSend : function(xhr) {
+          // alert("before send" + JSON.stringify(xhr));
+          xhr.setRequestHeader('Accept', 'application/json');
+        },
+        complete : function(e, f, g) {
+          console.log(e, f, g);
+//          alert("Completed contacting the server.");
+        },
+        success : function(serverResults) {
+          console.log("serverResults" + JSON.stringify(serverResults));
+          alert("Your database is ready.");
+          if (typeof readycallback == "function") {
+            readycallback();
+          }
+        },// end successful fetch
+        error : function(response) {
+//          alert("Error contacting the server.");
+
+          console.log("error response." + JSON.stringify(response));
+          // alert("error response." + JSON.stringify(response));
+
+          if (response.responseText) {
+            if (response.responseText.indexOf("<html") >= 0) {
+              localStorage.setItem("urlIsCouchAppReady", urlIsCouchAppReady);
+              alert("Your database is ready.");
+              if (typeof OPrime.checkToSeeIfCouchAppIsReadyreadycallback == "function") {
+                OPrime.checkToSeeIfCouchAppIsReadyreadycallback();
+              }
+              // window.location.replace(urlIsCouchAppReady);
+              return;
+            }
+            var error = JSON.parse(response.responseText);
+            if (error.error == "unauthorized") {
+              alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
+            } else {
+              alert("Waiting for database to be created...");
+              // Loop every 2 sec waiting for the database to load
+            }
+          }
+          window.setTimeout(failcallback, 2000);
+
+          // $("#user-welcome-modal").modal("show");
+
+        },
+        dataType : "json"
+      });
+
+};
+
+OPrime.BackboneFetchSaveError = function(model, response, options){
+  OPrime.bug("Error savinging/fetching your data.", model, response, options);
+};
 /*
  * Initialize pub sub
  */

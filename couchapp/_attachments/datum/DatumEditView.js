@@ -431,7 +431,7 @@ define([
       delete d.attributes.dateEntered;
       delete d.attributes.dateModified;
       d.set("session", app.get("currentSession"));
-      appView.datumsEditView.prependDatum(d);
+      window.appView.datumsEditView.prependDatum(d);
     },
     /*
      * this function can be used to play datum automatically

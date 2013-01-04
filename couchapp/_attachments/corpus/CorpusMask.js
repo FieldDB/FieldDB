@@ -82,8 +82,13 @@ define([
       this.sessions =  new Sessions();
 
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
-//      this.set("id", "corpus");
-      
+      this.set("id", "corpus");
+      /* Upgrade to version 1.38 */
+      if(this.get("corpusId")){
+        var corpusid = this.get("corpusid")
+        this.set("corpusid", corpusid);
+        this.unset("corpusId");
+      }
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -287,7 +292,7 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       OPrime.debug("Saving the CorpusMask");
       var self = this;
-//      self.set("id","corpus");
+      self.set("id","corpus");
       self.set("_id","corpus");
       this.set("timestamp", Date.now());
       

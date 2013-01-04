@@ -25,6 +25,8 @@ define([
     routes : {
       "corpus/:pouchname/:id"           : "showCorpusDashboard", 
       "corpus/:pouchname/"              : "guessCorpusIdAndShowDashboard", 
+      "corpus/:pouchname"               : "guessCorpusIdAndShowDashboard", 
+      "login/:pouchname"                : "showQuickAuthenticateAndRedirectToDatabase",
       "render/:render"                  : "showDashboard",
       ""                                : "showDashboard"
     },
@@ -45,11 +47,36 @@ define([
     showFullscreenUser : function() {
       OPrime.debug("In showFullscreenUser: " );
     },
+    showQuickAuthenticateAndRedirectToDatabase : function(pouchname){
+      window.app.set("corpus", new Corpus()); 
+      window.app.get("authentication").syncUserWithServer(function(){
+        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(pouchname);
+        window.location.replace(optionalCouchAppPath+"corpus.html");
+    });
+    },
     guessCorpusIdAndShowDashboard : function(pouchname){
-      if(pouchname == "new"){
-        alert("TODO create a new corpus and direct user to its dashboard.");
-        return;
-      }
+//      if(pouchname == "new"){
+//        alert("Creating a new corpus and direct you to its dashboard...");
+//
+//        try{
+//          Backbone.couch_connector.config.db_name = window.app.get("authentication").get("userPrivate").get("corpuses").pouchname;
+//        }catch(e){
+//          OPrime.debug("Couldn't set the database name off of the pouchame.");
+//        }
+//        
+//        var c = new Corpus();
+//        c.set({
+//          "title" : window.app.get("authentication").get("userPrivate").get("username") + "'s Corpus",
+//          "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
+//          "team" : window.app.get("authentication").get("userPublic"),
+//          "couchConnection" : window.app.get("authentication").get("userPrivate").get("corpuses")[0],
+//          "pouchname" : window.app.get("authentication").get("userPrivate").get("corpuses").pouchname
+//        });
+//        //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
+//        c.saveAndInterConnectInApp();
+//        
+//        return;
+//      }
       
       try{
         Backbone.couch_connector.config.db_name = pouchname;
@@ -63,14 +90,28 @@ define([
       });
       c.id = "corpus";
       c.changePouch({pouchname: pouchname},function(){
-        
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
-            window.app.router.showCorpusDashboard(pouchname, c.get("corpusId"));
+            var corpusidfromCorpusMask = model.get("corpusid");
+            /* Upgrade to version 1.38 */
+            if(!corpusidfromCorpusMask){
+              corpusidfromCorpusMask = model.get("corpusId");
+            }
+            if(corpusidfromCorpusMask){
+              window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
+            }else{
+              OPrime.bug("There was a problem loading this corpus.");
+              /* TODO get the id of the only corpus in the database */
+            }
           },
           error : function(e, x, y ) {
-            alert("There was a problem opening your dashboard.");
+            OPrime.debug("Problem opening the dashboard ", e, x, y);
+            var reason = "";
+            if(x){
+              reason = x.reason;
+            }
+            alert("There was a problem opening your dashboard." + reason);
           }
         });
       });
@@ -89,14 +130,16 @@ define([
        * If the corpusid is not specified, then try to guess it by re-routing us to the guess function
        */
       if(!corpusid){
-        window.location.href="#corpus/"+pouchname;
+        window.app.router.navigate("corpus/"+pouchname, {trigger: true});
+
         return;
       }
-      
-      try{
-        Backbone.couch_connector.config.db_name = pouchname;
-      }catch(e){
-        OPrime.debug("Couldn't set the database name off of the pouchame.");
+      if(pouchname){
+        try{
+          Backbone.couch_connector.config.db_name = pouchname;
+        }catch(e){
+          OPrime.debug("Couldn't set the database name off of the pouchame.");
+        }
       }
 
       var self = this;

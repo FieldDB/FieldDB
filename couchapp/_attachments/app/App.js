@@ -515,9 +515,15 @@ define([
       if(OPrime.isCouchApp()){
         var corpusPouchName = appids.couchConnection.pouchname;
         if(window.location.href.indexOf(corpusPouchName) == -1){
-          OPrime.bug("You're not in your database. Redirecting you to the user page so you can authenticate and be taken to your database...");
-//          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
-          window.location.replace("user.html");
+          if(corpusPouchName != "public-firstcorpus"){
+            OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+          }
+          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+          window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
+
+//        window.app.get("authentication").syncUserWithServer(function(){
+//        window.location.replace(optionalCouchAppPath+"corpus.html");
+//        });
           return;
         }else{
           OPrime.debug("Seting the Backbone couch_connector's db_name to " + corpusPouchName);
@@ -526,15 +532,26 @@ define([
       }
       
       var couchConnection = appids.couchConnection;
-      if(!appids.corpusid){
+      if(!couchConnection){
         OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
         window.location.replace("user.html");
         return;
+      }
+      var corpusid = appids.corpusid;
+      if(!corpusid){
+        corpusid = couchConnection.corpusid;
       }
       var c = new Corpus({
         "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
       });
+      if(!corpusid){
+        $(".spinner-status").html("Opening/Creating Corpus...");
+        this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
+          window.app.stopSpinner();
+        });
+        return;
+      }
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
       c.changePouch(couchConnection, function(){
         //fetch only after having setting the right pouch which is what changePouch does.
@@ -631,8 +648,10 @@ define([
             OPrime.debug("There was an error fetching corpus ",model,error,options);
             alert("There was an error fetching corpus. "+error.reason);
             if(error.error = "unauthorized"){
-              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-              window.location.replace(optionalCouchAppPath+"corpus.html#login");
+              //Show quick authentication so the user can get their corpus token
+              window.app.get("authentication").syncUserWithServer();
+//              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+//              window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }
 
           }
@@ -643,22 +662,26 @@ define([
     router : AppRouter,
 
     showHelpOrNot : function() {
-      var helpShownCount = localStorage.getItem("helpShownCount") || 0;
+      var username = this.get("authentication").get("userPrivate").get("username");
+      var helpShownCount = localStorage.getItem(username+"helpShownCount") || 0;
       var helpShownTimestamp = localStorage
-      .getItem("helpShownTimestamp") || 0;
+      .getItem(username+"helpShownTimestamp") || 0;
       var milisecondsSinceLastHelp = Date.now() - helpShownTimestamp;
       
       /* if its been more than 5 days, reset the help shown count to trigger the illustrated guide */
-      if (milisecondsSinceLastHelp > 432000000) {
+      if (milisecondsSinceLastHelp > 432000000 && helpShownTimestamp != 0) {
         helpShownCount = 0;
         $(".help_count_reason").html("Welcome back! It's been more than 5 days since you opened the app. ");
+      }
+      if(helpShownTimestamp == 0){
+        $(".help_count_reason").html("Welcome!");
       }
       if (helpShownCount > 5) {
         // do nothing
       } else {
         $(".help_count_left").html(5-helpShownCount);
-        localStorage.setItem("helpShownCount", ++helpShownCount);
-        localStorage.setItem("helpShownTimestamp", Date.now());
+        localStorage.setItem(username+"helpShownCount", ++helpShownCount);
+        localStorage.setItem(username+"helpShownTimestamp", Date.now());
         window.app.router.navigate("help/illustratedguide", {trigger: true});
       }
     },
