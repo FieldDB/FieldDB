@@ -96,22 +96,22 @@ h1,h2,h3,h4 {
 }
 
 #corpus-quickview {
-	min-height: 10em;
-	overflow: auto; 
+	/* min-height: 10em;
+	overflow: auto;  */
 }
 
 .corpus-description {
-	float: left;
-	width: 100%; 
+	/* float: left;
+	width: 100%; */ 
 }
 
 .corpusMenu {
-	float: left;
-	margin: 0em; 
+	/* float: left;
+	margin: 0em;  */
 }
 
 .corpusMenu button {
-	margin: 5px 0px 5px 0px; 
+	/* margin: 5px 0px 5px 0px;  */
 }
 
 .fullscreen {
