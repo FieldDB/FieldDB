@@ -22,16 +22,17 @@ a:hover {
 }
 
 @font-face {
-	font-family: 'Englebert';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Englebert'), local('Englebert-Regular'),
-		url(https://themes.googleusercontent.com/static/fonts/englebert/v1/5vhE18ztcHRcsYmBaZ6CaLO3LdcAZYWl9Si6vvxL-qU.woff)
-		format('woff');
+  font-family: 'Sue Ellen Francisco';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Sue Ellen Francisco '), local('SueEllenFrancisco'), url(http://themes.googleusercontent.com/static/fonts/sueellenfrancisco/v4/TwHX4vSxMUnJUdEz1JIgrpF8d1ntzT2N4Odh1kY9w00.woff) format('woff');
 }
 
 h1,h2,h3,h4 {
-	font-family: 'Englebert', sans-serif;
+	font-family: 'Sue Ellen Francisco', sans-serif;
+}
+.datum_field_label{
+	 font-family: 'Sue Ellen Francisco', sans-serif;
 }
 
 .gravatar-small {
@@ -96,21 +97,21 @@ h1,h2,h3,h4 {
 
 #corpus-quickview {
 	min-height: 10em;
-	overflow: auto;
+	overflow: auto; 
 }
 
 .corpus-description {
 	float: left;
-	width: 100%;
+	width: 100%; 
 }
 
 .corpusMenu {
 	float: left;
-	margin: 0em;
+	margin: 0em; 
 }
 
 .corpusMenu button {
-	margin: 5px 0px 5px 0px;
+	margin: 5px 0px 5px 0px; 
 }
 
 .fullscreen {
