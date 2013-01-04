@@ -174,6 +174,9 @@ define([
 
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
+          if(jsonToRender.description && jsonToRender.description.length > 200){
+            jsonToRender.description = jsonToRender.description.substring(0,150)+"...";
+          }
           $(this.el).html(this.templateSummary(jsonToRender));
           
           $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
