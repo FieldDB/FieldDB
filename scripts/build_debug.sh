@@ -9,7 +9,7 @@ bash scripts/build_activity_feed.sh
 
 #cd ../../FieldDB/couchapp
 cd couchapp
-#couchapp push . https://public:none@localhost:6984/public-firstcorpus
+couchapp push . https://admin:none@localhost:6984/public-firstcorpus
 #couchapp push . https://public:none@ifielddevs.iriscouch.com/public-firstcorpus
 #couchapp push . https://public:none@corpus.lingsync.org/public-firstcorpus
 

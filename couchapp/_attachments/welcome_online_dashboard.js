@@ -1,5 +1,5 @@
-if(localStorage.getItem("username") != "public"){
-  window.location.replace("user.html");
-}else{
+//if (localStorage.getItem("username") == "public" || !localStorage.getItem("username")) {
   window.location.replace("corpus.html");
-}
+// } else {
+// window.location.replace("user.html");
+// }

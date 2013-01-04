@@ -190,6 +190,11 @@ OPrime.isChromeApp = function() {
 OPrime.isCouchApp = function() {
   return window.location.href.indexOf("_design/pages") > -1;
 };
+
+OPrime.isTouchDBApp = function() {
+  return window.location.href.indexOf("localhost:8128") > -1;
+};
+
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.
@@ -197,7 +202,7 @@ OPrime.isCouchApp = function() {
  * @returns {Boolean} true if not on offline Android or on a Chrome Extension
  */
 OPrime.onlineOnly = function() {
-  return !this.isAndroidApp() && !this.chromeApp();
+  return !this.isAndroidApp() && !this.isChromeApp();
 };
 
 OPrime.getVersion = function(callback) {

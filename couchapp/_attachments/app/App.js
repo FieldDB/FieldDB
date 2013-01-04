@@ -375,6 +375,9 @@ define([
     replicateContinuouslyWithCouch : function(successcallback,
         failurecallback) {
       
+      /*
+       * TODO decide on the status of this function. does the logic for touchdb and couch apps go here, or in the logUser in corpus function
+       */
 //    if(OPrime.isCouchApp()){
       if(true){
         if (typeof successcallback == "function") {
@@ -503,12 +506,28 @@ define([
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
       OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       
-//      if(couchConnection == null || couchConnection == undefined){
-//        couchConnection = this.get("corpus").get("couchConnection");
-//      }
+
+      /*
+       * Verify that the user is in their database, and that the
+       * backbone couch adaptor is saving to the corpus' database,
+       * not where the user currently is.
+       */
+      if(OPrime.isCouchApp()){
+        var corpusPouchName = appids.couchConnection.pouchname;
+        if(window.location.href.indexOf(corpusPouchName) == -1){
+          OPrime.bug("You're not in your database. Redirecting you to the user page so you can authenticate and be taken to your database...");
+//          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
+          window.location.replace("user.html");
+          return;
+        }else{
+          OPrime.debug("Seting the Backbone couch_connector's db_name to " + corpusPouchName);
+          Backbone.couch_connector.config.db_name = corpusPouchName;
+        }
+      }
+      
       var couchConnection = appids.couchConnection;
       if(!appids.corpusid){
-        alert("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
+        OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
         window.location.replace("user.html");
         return;
       }
@@ -585,8 +604,8 @@ define([
                               alert("Failure to set as current session in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                             });
                           },
-                          error : function(e) {
-                            alert("There was an error fetching the session. Loading defaults..."+JSON.stringify(e));
+                          error : function(model, error, options) {
+                            alert("There was an error fetching the session. "+error.reason);
                             s.set(
                                 "sessionFields", window.app.get("corpus").get("sessionFields").clone()
                             );
@@ -598,8 +617,8 @@ define([
                       alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
                     });
                   },
-                  error : function(e) {
-                    alert("There was an error fetching the data list. Loading defaults..."+JSON.stringify(e));
+                  error : function(model, error, options) {
+                    alert("There was an error fetching the data list. "+error.reason);
                   }
                 }); //end fetch data list
               });//end data list change corpus
@@ -608,12 +627,13 @@ define([
               alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             });//end setAsCurrentCorpus
           },
-          error : function(model, error, other) {
-            console.log(model);
-            console.log(error);
-            console.log(other);
-            alert("There was an error fetching corpus. Loading defaults..."+JSON.stringify(error));
-            document.location.href='user.html';
+          error : function(model, error, options) {
+            OPrime.debug("There was an error fetching corpus ",model,error,options);
+            alert("There was an error fetching corpus. "+error.reason);
+            if(error.error = "unauthorized"){
+              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+              window.location.replace(optionalCouchAppPath+"corpus.html#login");
+            }
 
           }
         }); //end corpus fetch

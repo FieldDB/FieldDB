@@ -400,6 +400,11 @@ line.link {
 	margin-left: 0px !important;
 }
 
+.wordwrap {
+	word-wrap: break-word;
+	white-space: normal;
+}
+
 .datum-state-color-success {
 	color: rgb(70, 136, 71) !important;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;

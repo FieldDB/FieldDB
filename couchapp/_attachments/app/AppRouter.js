@@ -47,6 +47,7 @@ define([
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       "render/:render"                  : "renderDashboardOrNot",
       "help/:helptype"                  : "renderHelp",
+      "login"                           : "renderlogin",
       ""                                : "showDashboard"
     },
 
@@ -144,7 +145,13 @@ define([
       window.scrollTo(0,0);
 
     },
-
+    
+    renderlogin : function(){
+      $("#login_modal").show("modal");
+      window.local.href="#";
+      //window.local.replace("#login_modal");
+    },
+    
     /**
      * Displays all of the corpus details and settings. 
      * 

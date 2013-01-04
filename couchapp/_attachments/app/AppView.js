@@ -448,7 +448,50 @@ define([
           this.searchEditView.searchTop();
         }
 //        return false;
+      },
+      "click .sync-my-data" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var authUrl = $(".welcomeauthurl").val().trim();
+        if(authUrl.indexOf("LingSync.org") >= 0){
+          authUrl = "https://auth.lingsync.org";
+        }else if(authUrl.indexOf("LingSync Testing") >= 0){
+          authUrl = "https://authdev.fieldlinguist.com:3183";
+        }else if(authUrl.indexOf("McGill ProsodyLab") >= 0){
+          if(window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0){
+            authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
+          }else{
+            var userWantsToUseMcgill = confirm("Are you sure you would like to use the McGill Prosody Lab server?");
+            if (userWantsToUseMcgill == true) {
+              window.location.replace("https://prosody.linguistics.mcgill.ca/corpus/public-firstcorpus/_design/pages/index.html");         
+            } else {
+              authUrl = "https://auth.lingsync.org";
+            }
+          }
+        }else if(authUrl.indexOf("Localhost") >= 0){
+          if(window.location.origin.indexOf("localhost") >= 0){
+            authUrl = "https://localhost:3183";
+          }else{
+            var userWantsToUseLocalhost = confirm("Are you sure you would like to use the localhost server?");
+            if (userWantsToUseLocalhost == true) {
+              window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
+            } else {
+              authUrl = "https://auth.lingsync.org";
+            }
+          }
+        }
+        this.authView.syncUser($(".welcomeusername").val().trim(),$(".welcomepassword").val().trim(), authUrl);
+      },
+      "keyup .welcomepassword" : function(e) {
+        var code = e.keyCode || e.which;
+        // code == 13 is the enter key
+        if ((code == 13) && ($(".welcomepassword").val() != "")) {
+          $(".sync-my-data").click();
+        }
       }
+      
     },
     
     /**
@@ -594,6 +637,11 @@ define([
       $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
       $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
       
+      
+      $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
+      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
+
       return this;
     },
     /**

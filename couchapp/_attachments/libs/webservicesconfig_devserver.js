@@ -47,3 +47,21 @@ OPrime.publicUserStaleDetails = function() {
     username : "public"
   };
 };
+
+OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
+  var optionalCouchAppPath = "";
+  if(OPrime.isCouchApp()){
+    var corpusURL = window.location.origin;
+    if (corpusURL.indexOf("lignsync.org") >= 0) {
+      corpusURL = "https://corpus.lingsync.org";
+    } else if (corpusURL.indexOf("authdev.fieldlinguist.com") >= 0) {
+      corpusURL = "https://ifielddevs.iriscouch.com";
+    } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
+      corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
+    } else if (corpusURL.indexOf("localhost") >= 0) {
+      // use the window origin
+    }
+    optionalCouchAppPath = corpusURL+"/"+dbname+"/_design/pages/";
+  }
+  return optionalCouchAppPath;
+};
