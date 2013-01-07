@@ -9,6 +9,16 @@ var https = require('https')
 node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
 node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
 
+/*
+ * CORS middleware
+ * Source: http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
+ */
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+};
 
 var app = express();
 
@@ -21,6 +31,7 @@ app.configure(function() {
   app.use(express.session({
     secret : 'CtlFYUMLl1VdIr35'
   }));
+  app.use(allowCrossDomain);
   app.use(app.router);
   app.use(express.static(__dirname + '/../../public'));
 });
@@ -33,7 +44,7 @@ app.configure(function() {
  * Responds to requests for login, if sucessful replies with the user's details
  * as json
  */
-app.post('/login', function(req, res) {
+app.post('/login', function(req, res, next) {
   authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
     var returndata = {};
     if (err) {
@@ -54,11 +65,11 @@ app.post('/login', function(req, res) {
     res.send(returndata);
   });
 });
-app.get('/login',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.send({});
-});
+//app.get('/login',function(req,res, next){
+//  res.header("Access-Control-Allow-Origin", "*");
+//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//  res.send({});
+//});
 
 /**
  * Takes in the http request and response. Calls the registerNewUser function in
@@ -78,7 +89,7 @@ app.get('/login',function(req,res){
  * 
  * Finally the returndata json is sent to the calling application via the response.
  */
-app.post('/register', function(req, res ) {
+app.post('/register', function(req, res, next ) {
   
   authenticationfunctions.registerNewUser('local', req, function(err, user, info) {
     var returndata = {};
@@ -99,17 +110,17 @@ app.post('/register', function(req, res ) {
 
   });
 });
-app.get('/register',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.send({});
-});
+//app.get('/register',function(req,res){
+//  res.header("Access-Control-Allow-Origin", "*");
+//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//  res.send({});
+//});
 
 /**
  * Responds to requests for login, if successful replies with a list of usernames 
  * as json
  */
-app.post('/corpusteam', function(req, res) {
+app.post('/corpusteam', function(req, res, next) {
   
   var returndata = {};
   authenticationfunctions.fetchCorpusPermissions( req, function(err, users, info) {
@@ -132,17 +143,17 @@ app.post('/corpusteam', function(req, res) {
   });
   
 });
-app.get('/corpusteam',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.send({});
-});
+//app.get('/corpusteam',function(req,res){
+//  res.header("Access-Control-Allow-Origin", "*");
+//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//  res.send({});
+//});
 
 /**
  * Responds to requests for login, if successful replies with the user's details
  * as json
  */
-app.post('/addroletouser', function(req, res) {
+app.post('/addroletouser', function(req, res, next) {
   authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
     var returndata = {};
     if (err) {
@@ -179,11 +190,11 @@ app.post('/addroletouser', function(req, res) {
     }
   });
 });
-app.get('/addroletouser',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.send({});
-});
+//app.get('/addroletouser',function(req,res, ){
+//  res.header("Access-Control-Allow-Origin", "*");
+//  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//  res.send({});
+//});
 
 https.createServer(node_config.httpsOptions, app).listen(node_config.port); 
 //app.listen(node_config.port);
