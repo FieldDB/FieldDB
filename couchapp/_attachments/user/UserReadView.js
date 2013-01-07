@@ -47,7 +47,11 @@ define([
         if(this.format == "modal"){
           window.appView.modalEditUserView.render();
         }else if(this.format == "public"){
-          window.appView.publicEditUserView.render();
+          if(window.appView.publicEditUserView.model.get("username") == window.app.get("authentication").get("userPrivate").get("username") ){
+            window.appView.publicEditUserView.render();
+          }
+        }else{
+          $(this.el).find(".icon-edit").hide();
         }
       },
       "click .view-public-profile" : function(e){

@@ -65,6 +65,18 @@ define([
       OPrime.debug("Saving the UserMask");
       var self = this;
       this.changePouch(null, function(){
+        
+        if(OPrime.isCouchApp()){
+          if(self.get("pouchname")){
+            self.unset("pouchname");
+          }
+          self.save();
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+          return;
+        }
+        
         self.pouch(function(err,db){
 //          self.set("id", this.id); //TODO might not be necessary
           var modelwithhardcodedid = self.toJSON();

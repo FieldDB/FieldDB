@@ -180,7 +180,8 @@ define([
         serverResults.user.publicSelf.gravatar = serverResults.user.gravatar;
         serverResults.user.publicSelf.authUrl = serverResults.user.authUrl;
         serverResults.user.publicSelf.id = serverResults.user._id; //this will end up as an attribute
-        serverResults.user.publicSelf.pouchname = serverResults.user.corpuses[0].pouchname;
+        serverResults.user.publicSelf._id = serverResults.user._id; //this will end up as an attribute
+//        serverResults.user.publicSelf.pouchname = serverResults.user.corpuses[0].pouchname;
       }
       
       if (this.get("userPublic") == undefined) {
@@ -294,9 +295,21 @@ define([
         window.appView.addSavedDoc(this.get("userPrivate").id);
         window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
       }
-      if(typeof callbacksaved == "function"){
-        callbacksaved();
-      }
+      this.get("userPublic").save(null, {
+        success : function(model, response) {
+          OPrime.debug('User Mask saved ' + model.id);
+          if(typeof callbacksaved == "function"){
+            callbacksaved();
+          }
+        },error : function(e,f,g) {
+          OPrime.debug(e,f,g);
+          OPrime.debug('User Mask save error ' + f.reason);
+          if(typeof callbacksaved == "function"){
+            callbacksaved();
+          }
+        }
+      });
+      
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       this.saveAndEncryptUserToLocalStorage(successcallback);
