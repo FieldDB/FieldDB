@@ -226,12 +226,11 @@ define([
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
       this.get("confidential").set("secretkey", serverResults.user.hash);
-      this.saveAndEncryptUserToLocalStorage(function(){
-        if (typeof callbacksave == "function") {
-          callbacksave("true"); //tell caller that the user succeeded to authenticate
-        }
-      });
-//      if(window.appView){
+      this.saveAndEncryptUserToLocalStorage();
+      if (typeof callbacksave == "function") {
+        callbacksave("true"); //tell caller that the user succeeded to authenticate
+      }
+//    if(window.appView){
 //        if(! this.get("userPublic").id){
 //          this.get("userPublic").saveAndInterConnectInApp();
 //        }else{
