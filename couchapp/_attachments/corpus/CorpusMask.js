@@ -180,15 +180,7 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
-      if (!this.datalists) {
-        this.datalists =  new DataLists();
-      }
-      
-      if (!this.sessions) {
-        this.sessions = new Sessions();
-      }
-      
+     
       if (!this.permissions) {
         this.permissions = new Permissions();
       }
