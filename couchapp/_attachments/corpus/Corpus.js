@@ -106,7 +106,7 @@ define([
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
-      this.bind("change:publicCorpus",this.changeCorpusPublicPrivate,this);
+      this.bind("change:publicCorpus", this.changeCorpusPublicPrivate, this);
 
 //      var couchConnection = this.get("couchConnection");
 //      if(!couchConnection){
@@ -220,7 +220,14 @@ define([
       if(!this.get("confidential")){
         this.set("confidential", new Confidential({filledWithDefaults : true}) );
       }
-      this.fetchPublicSelf();
+      
+      if(!this.get("publicSelf")){
+        this.set("publicSelf", new CorpusMask({
+          "filledWithDefaults" : true,
+          "couchConnection" : this.get("couchConnection"),
+          "pouchname" : this.get("pouchname")
+        }));
+      }
       
       if(!this.get("publicCorpus")){
         this.set("publicCorpus", "Private");

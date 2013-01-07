@@ -14,28 +14,62 @@ OPrime.chromeClientUrl = function() {
 };
 
 /*
- * not using secure couch because it would require extra set up for developers
- * to run locally which is unneccesary
+ * This function is the same in all webservicesconfig, now any couchapp can
+ * login to any server, and register on the corpus server which matches its
+ * origin.
  */
 OPrime.defaultCouchConnection = function() {
-  var d = {
-    protocol : "https://",
-    domain : "localhost",
-    port : "6984",
-    pouchname : "default",
-    path : ""
+  var localhost = {
+      protocol : "https://",
+      domain : "localhost",
+      port : "6984",
+      pouchname : "default",
+      path : ""
   };
+  var testing = {
+      protocol : "https://",
+      domain : "ifielddevs.iriscouch.com",
+      port : "443",
+      pouchname : "default",
+      path : ""
+  }; 
+  var production = {
+      protocol : "https://",
+      domain : "corpus.lingsync.org",
+      port : "443",
+      pouchname : "default",
+      path : ""
+  };
+  var mcgill = {
+      protocol : "https://",
+      domain : "prosody.linguistics.mcgill.ca",
+      port : "443",
+      pouchname : "default",
+      path : "/corpus"
+  };
+  
   /*
    * If its a couch app, it can only contact databases on its same origin, so
    * modify the domain to be that origin. the chrome extension can contact any
    * authorized server that is authorized in the chrome app's manifest
    */
+  var connection = production;
   if (OPrime.isCouchApp()) {
-    d.domain = window.location.origin.replace("https://", "").replace(
-        "http://", "");
+    if (window.location.origin.indexOf("lignsync.org") >= 0) {
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
+    } else if (window.location.origin.indexOf("authdev.fieldlinguist.com") >= 0) {
+      connection = testing;
+      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+    } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+      connection = mcgill;
+      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+    } else if (window.location.origin.indexOf("localhost") >= 0) {
+      connection = localhost;
+      OPrime.authUrl = "https://localhost:3183";
+    }    
   }
-  return d;
-
+  return connection;
 };
 
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
