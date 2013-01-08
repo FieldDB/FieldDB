@@ -6512,7 +6512,7 @@ define('hotkey/HotKey',[
 });
 var OPrime = OPrime || {};
 
-OPrime.debugMode = true;
+OPrime.debugMode = false;
 OPrime.runFromTouchDBOnAndroidInLocalNetwork = false;
 
 /**
@@ -16325,17 +16325,30 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
-OPrime.websiteUrl = "https://localhost:3182";
-OPrime.authUrl = "https://localhost:3183";
-OPrime.audioUrl = "https://localhost:3184";
-OPrime.lexiconUrl = "https://localhost:3185";
-OPrime.corpusUrl = "https://localhost:3186";
-OPrime.activityUrl = "https://localhost:3187";
-OPrime.widgetUrl = "https://localhost:3188";
-OPrime.chromeClientUrl = function() {
-  return window.location.origin;
-};
 
+OPrime.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
+OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+OPrime.audioUrl = "https://audiodev.fieldlinguist.com:3184";
+OPrime.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
+OPrime.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
+OPrime.activityUrl = "https://activitydev.fieldlinguist.com:3187";
+OPrime.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
+
+/*
+ * Use the current app's chrome url, assuming if its a dev, they will have their
+ * own url that is not from the market, and if its a bleeding edge user, they
+ * will have the market one. In both cases it is save to return the
+ * window.location.href but this code is added to be clear that there is also a
+ * bleeding edge url for users.
+ */
+OPrime.chromeClientUrl = function(){
+  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
+    return window.location.origin;
+  }else{
+    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
+  }
+};
+  
 /*
  * This function is the same in all webservicesconfig, now any couchapp can
  * login to any server, and register on the corpus server which matches its
@@ -16395,6 +16408,7 @@ OPrime.defaultCouchConnection = function() {
   return connection;
 };
 
+
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
@@ -16407,7 +16421,7 @@ OPrime.publicUserStaleDetails = function() {
 
 OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
-  if (OPrime.isCouchApp()) {
+  if(OPrime.isCouchApp()){
     var corpusURL = window.location.origin;
     if (corpusURL.indexOf("lignsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
@@ -16418,11 +16432,11 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }
-    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/pages/";
+    optionalCouchAppPath = corpusURL+"/"+dbname+"/_design/pages/";
   }
   return optionalCouchAppPath;
 };
-define("libs/webservicesconfig_local", function(){});
+define("libs/webservicesconfig_devserver", function(){});
 
 //Set the RequireJS configuration
 require.config({
@@ -16452,7 +16466,7 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_local"
+    "webservicesconfig" : "libs/webservicesconfig_devserver"
   },
   shim : {
     
@@ -16521,7 +16535,7 @@ require.config({
 require([ 
       "user/UserApp",  
       "backbone",
-      "libs/webservicesconfig_local"
+      "libs/webservicesconfig_devserver"
       ], function(
           App,
           forcingpouchtoloadearly
@@ -16552,7 +16566,7 @@ require([
 //    "compiledTemplates",
 //    "backbone",
 //    "backbone_pouchdb",
-//    "libs/webservicesconfig_local",
+//    "libs/webservicesconfig_devserver",
 //    "libs/OPrime"
 //], function(
 //    UserApp,
