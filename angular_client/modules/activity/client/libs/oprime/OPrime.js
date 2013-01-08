@@ -386,9 +386,9 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
         OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
         OPrime.playingInterval = false; /*
-                                         * workaround for not being able to
-                                         * remove events
-                                         */
+         * workaround for not being able to
+         * remove events
+         */
       }
     });
   }
@@ -589,15 +589,7 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
   }
 };
 OPrime.useUnsecureCouchDB = function() {
-  if (OPrime.isAndroidApp()) {
-    /*
-     * TODO if later when TouchDB has secure databases, we can use a secure
-     * TouchDB, return false
-     */
-    return true;
-  }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork()
-      && window.location.origin.indexOf("chrome-extension") != 0) {
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork()) {
     return true;
   }
   return false;
