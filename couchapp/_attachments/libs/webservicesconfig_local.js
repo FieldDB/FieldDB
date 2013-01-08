@@ -86,7 +86,7 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
   if (OPrime.isCouchApp()) {
     var corpusURL = window.location.origin;
-    if (corpusURL.indexOf("lignsync.org") >= 0) {
+    if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("authdev.fieldlinguist.com") >= 0) {
       corpusURL = "https://ifielddevs.iriscouch.com";
