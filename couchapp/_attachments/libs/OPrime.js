@@ -1,7 +1,14 @@
 var OPrime = OPrime || {};
 
 OPrime.debugMode = false;
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = false;
+/*
+ * Android touchdb for OPrime runs on port 8128, so if the app is running on
+ * port 8128 it is likely in a touchdb (either in the android app or in a
+ * browser)
+ */
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = function() {
+  return window.location.port == 8128;
+};
 
 /**
  * The address of the TouchDB-Android database on the Android.
@@ -258,8 +265,16 @@ OPrime.prettyTimestamp = function(timestamp) {
   var diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
   var day_diff = Math.floor(diff / 86400);
 
-  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+  if (isNaN(day_diff) || day_diff < 0) {
     return;
+  }
+
+  if (day_diff >= 31) {
+    return Math.ceil(day_diff / 30) + " months ago";
+  }
+
+  if (day_diff >= 548) {
+    return Math.ceil(day_diff / 365) + " years ago";
   }
 
   return day_diff == 0
@@ -581,7 +596,7 @@ OPrime.useUnsecureCouchDB = function() {
      */
     return true;
   }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork()
       && window.location.origin.indexOf("chrome-extension") != 0) {
     return true;
   }
@@ -610,7 +625,7 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
         },
         complete : function(e, f, g) {
           console.log(e, f, g);
-//          alert("Completed contacting the server.");
+          // alert("Completed contacting the server.");
         },
         success : function(serverResults) {
           console.log("serverResults" + JSON.stringify(serverResults));
@@ -620,7 +635,7 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
           }
         },// end successful fetch
         error : function(response) {
-//          alert("Error contacting the server.");
+          // alert("Error contacting the server.");
 
           console.log("error response." + JSON.stringify(response));
           // alert("error response." + JSON.stringify(response));
@@ -653,9 +668,6 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
 
 };
 
-OPrime.BackboneFetchSaveError = function(model, response, options){
-  OPrime.bug("Error savinging/fetching your data.", model, response, options);
-};
 /*
  * Initialize pub sub
  */
