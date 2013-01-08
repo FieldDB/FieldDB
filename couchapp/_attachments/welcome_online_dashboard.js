@@ -1,6 +1,6 @@
 //if (localStorage.getItem("username") == "public" || !localStorage.getItem("username")) {
 if(window.location.origin != "localhost"){
-  if(window.location.protocol == "http"){
+  if(window.location.protocol == "http:"){
     window.location.replace(window.location.href.replace("http","https"));
   }
 }

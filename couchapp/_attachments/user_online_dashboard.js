@@ -1,5 +1,5 @@
 if (window.location.origin != "localhost") {
-  if (window.location.protocol == "http") {
+  if (window.location.protocol == "http:") {
     window.location.replace(window.location.href.replace("http", "https"));
   }
 }
@@ -106,8 +106,6 @@ require([
           App,
           forcingpouchtoloadearly
       ) {
-  
-  
   
   try{
     var pieces = window.location.pathname.replace(/^\//,"").split("/");
