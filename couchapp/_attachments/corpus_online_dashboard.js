@@ -1,3 +1,9 @@
+if (window.location.origin != "localhost") {
+  if (window.location.protocol == "http") {
+    window.location.replace(window.location.href.replace("http", "https"));
+  }
+}
+
 //Set the RequireJS configuration
 require.config({
   paths : {

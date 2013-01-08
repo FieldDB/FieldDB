@@ -224,6 +224,9 @@ define([
         } else if (window.location.origin.indexOf("localhost") >= 0) {
           mostLikelyAuthUrl = "Localhost";
         }
+        
+        //Production ocmdknddgpmjngkhcbcofoogkommjfoj
+        
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
         
       }
