@@ -47,7 +47,7 @@ define(
         }
 
         GetSessionToken.run({
-          "name" : "publicuser",
+          "name" : "public",
           "password" : "none"
         }).then(function() {
           MostRecentActivities.async(feedParams).then(function(activities) {
