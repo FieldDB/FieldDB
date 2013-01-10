@@ -495,7 +495,6 @@ define( [
           datumfields[x].value = "";
         }
         var fields = new DatumFields(datumfields);
-        this.model.set("datumFields", fields);
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
