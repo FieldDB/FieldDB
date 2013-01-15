@@ -119,7 +119,7 @@ define([
       this.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
       this.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
       this.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-      this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period for example: A few months ago, probably on a Monday night.");
+      this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
       
     },
     /**
