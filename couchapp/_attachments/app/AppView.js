@@ -527,7 +527,11 @@ define([
         // Display the AppView
         this.setElement($("#app_view"));
         
+        /* TODO test this to se if if it reslts in users preference if yes, htne put three values in the users pref screen */
         var jsonToRender = this.model.toJSON();
+        jsonToRender.usersPreferenceLeftColumnSpan = "hidden";
+        jsonToRender.usersPreferenceCenterColumnSpan = "span6";
+        jsonToRender.usersPreferenceCenterColumnSpan = "span6";
         try{
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
