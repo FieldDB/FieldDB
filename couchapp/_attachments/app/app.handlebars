@@ -23,9 +23,9 @@
 			<div class="nav-collapse collapse">
 				<ul class="nav" role="navigation ">
 
+<!-- TODO move copus into a dropdown with session info inside -->
 
-
-					<!--  Customize dropdown -->
+					<!--  Customize dropdown TODO move back ot user dropdown -->
 					<li class="dropdown"><a id="customize_dropdown_trigger"
 						href="#" role="button" class="dropdown-toggle"
 						data-toggle="dropdown"><i class="icon-cog icon-white"></i>
@@ -151,28 +151,21 @@
 <div class="container-fluid main">
 	<div id="dashboard-view" class="row-fluid">
 		<!-- Elements on Lefthand side -->
-		<div class="span3">
-			<div class=" span12 hide"></div>
-			<!-- workaround: empty div to set all span12 to line up -->
-			<div id="corpus-quickview" class="well span12"></div>
-			<div id="session-quickview" class="well span12"></div>
-			<div id="search-data-list-quickview" class="well hide span12">
-				<div id="search-data-list-quickview-header" class=" "></div>
-				<div class="  ">
-					<ul class="unstyled zebra   search-data-list-paginated-view "></ul>
-					<div class="pagination-control"></div>
-				</div>
-			</div>
-			<div id="data-list-quickview" class="well span12">
-				<div id="data-list-quickview-header" class=" "></div>
-				<div class="  container span12">
-					<ul class="unstyled zebra   current-data-list-paginated-view "></ul>
-					<div class="pagination-control "></div>
-				</div>
-			</div>
-		</div>
+		<div class="{{usersPreferenceLeftColumnSpan}}">
+      <div id="insert-unicode" class="well"></div>
+      <div class="well">
+        <iframe src="activity/activity_feed.html#/user/{{username}}"
+          width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
+      </div>
+
+      <div class="well">
+        <iframe
+          src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
+          width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
+      </div>
+    </div>
 		<!--Elements in the middle (things that get hidden)  -->
-		<div class="span6">
+		<div class="{{usersPreferenceCenterColumnSpan}}">
 
 			<div id="datums-embedded" class="middle well"></div>
 			<div id="conversation-embedded" class="middle well">
@@ -201,19 +194,28 @@
 		</div>
 		<!--/span-->
 		<!-- right hand side -->
-		<div class="span3">
-			<div id="insert-unicode" class="well"></div>
-			<div class="well">
-				<iframe src="activity/activity_feed.html#/user/{{username}}"
-					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
-			</div>
-
-			<div class="well">
-				<iframe
-					src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
-					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
-			</div>
-		</div>
+		
+		<div class="{{usersPreferenceRightColumnSpan}}">
+      <div class=" span12 hide"></div>
+      <!-- workaround: empty div to set all span12 to line up -->
+      <div id="corpus-quickview" class="well span12"></div>
+      <div id="session-quickview" class="well span12"></div>
+      <div id="search-data-list-quickview" class="well hide span12">
+        <div id="search-data-list-quickview-header" class=" "></div>
+        <div class="  ">
+          <ul class="unstyled zebra   search-data-list-paginated-view "></ul>
+          <div class="pagination-control"></div>
+        </div>
+      </div>
+      <div id="data-list-quickview" class="well span12">
+        <div id="data-list-quickview-header" class=" "></div>
+        <div class="  container span12">
+          <ul class="unstyled zebra   current-data-list-paginated-view "></ul>
+          <div class="pagination-control "></div>
+        </div>
+      </div>
+    </div>
+		
 		<!--/span-->
 	</div>
 	<!--/row-->
@@ -248,11 +250,11 @@
 	<div class="modal-header">
 		<p>
 			<span class="help_count_reason"></span> This help will show <span
-				class="help_count_left"></span> more times.
+				class="help_count_left"></span> more times. <a href="https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit" target="_blank">Click here to open in a new tab</a>
 		</p>
 	</div><a href="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918"  target="_blank">
 	<img
-		src="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918"/></a>
+		src="https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit"/></a>
 </div>
 <div id="quick-authenticate-modal" data-backdrop="static"
 	data-keyboard="static" class="modal hide">
