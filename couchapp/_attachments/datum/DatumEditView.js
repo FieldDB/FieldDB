@@ -167,6 +167,8 @@ define([
     render : function() {
       OPrime.debug("DATUM render: " );
       
+     
+      
       if(this.collection){
         OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
@@ -206,10 +208,11 @@ define([
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
         
+        
         var self = this;
-        window.setTimeout(function(){
+        this.getFrequentFields(function(){
           self.hideRareFields();
-        }, 500);
+        });
             
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
@@ -239,13 +242,25 @@ define([
     },
     
     rareFields : [],
-    frequentFields: ["judgement","utterance","morphemes","gloss","translation"],
+    frequentFields: null,
+    getFrequentFields : function(whenfieldsareknown){
+      var self = this;
+      window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
+        self.frequentFields = fieldLabels;
+        if(typeof whenfieldsareknown == "function"){
+          whenfieldsareknown();
+        }
+      });
+    },
     hideRareFields : function(e){
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
       this.rareFields = [];
+      if(!this.frequentFields){
+        return;
+      }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
           $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();

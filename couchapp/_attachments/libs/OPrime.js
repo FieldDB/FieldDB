@@ -668,6 +668,27 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
 
 };
 
+OPrime.sum = function(list) {
+  var result = 0;
+  for (value in list) {
+    result += list[value];
+  }
+  return result;
+};
+
+OPrime.mean = function(list) {
+  return OPrime.sum(list) / list.length;
+};
+
+OPrime.standardDeviation = function(list) {
+  var totalVariance = 0;
+  var mean = OPrime.mean(list);
+  for ( var i in list) {
+    totalVariance += Math.pow(list[i] - mean, 2);
+  }
+  return Math.sqrt(totalVariance / list.length);
+};
+
 /*
  * Initialize pub sub
  */
