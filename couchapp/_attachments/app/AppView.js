@@ -456,6 +456,8 @@ define([
         }
         var authUrl = $(".welcomeauthurl").val().trim();
         if(authUrl.indexOf("LingSync.org") >= 0){
+          alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
+          return;
           authUrl = "https://auth.lingsync.org";
         }else if(authUrl.indexOf("LingSync Testing") >= 0){
           authUrl = "https://authdev.fieldlinguist.com:3183";
@@ -480,6 +482,20 @@ define([
             } else {
               authUrl = "https://auth.lingsync.org";
             }
+          }
+        }else{
+          
+          if(authUrl.indexOf("https://")  >= 0){
+            var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "+authUrl);
+            if (userWantsToUseUnknownServer == true) {
+//            window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
+            } else {
+              /* TODO change this back to the lingsync server  once the lingsync server supports 1.38 */
+              authUrl = "https://authdev.fieldlinguist.com:3183";
+            }
+          }else{
+            alert("I don't know how to connect to : "+authUrl + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
+            return;
           }
         }
         this.authView.syncUser($(".welcomeusername").val().trim(),$(".welcomepassword").val().trim(), authUrl);
