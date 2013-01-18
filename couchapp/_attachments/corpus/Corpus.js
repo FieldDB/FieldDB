@@ -1502,7 +1502,7 @@ define([
     },
     /**
      * This function takes in a pouchname, which could be different
-     * from the current corpus incase there is a master corpus wiht
+     * from the current corpus in case there is a master corpus with
      * more/better monolingual data.
      * 
      * @param pouchname
@@ -1533,6 +1533,105 @@ define([
         callback = null;
       }
       this.lexicon.buildLexiconFromCouch(pouchname,callback);
+    },
+    
+    /**
+     * This function takes in a pouchname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more representative datum 
+     * example : https://ifielddevs.iriscouch.com/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+     * 
+     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+     * 
+     * If a url is passed, it contacts the server for fresh info. 
+     * 
+     * @param pouchname
+     * @param callback
+     */
+    getFrequentDatumFields : function(jsonUrl, pouchname, callback){
+      if(!jsonUrl){
+        /* if we have already asked the server in this session, return */
+        if(this.frequentDatumFields){
+          if(typeof callback == "function"){
+            callback(this.frequentDatumFields);
+          }
+          return;
+        }
+        var couchConnection = this.get("couchConnection");
+        var couchurl = couchConnection.protocol+couchConnection.domain;
+        if(couchConnection.port != null){
+          couchurl = couchurl+":"+couchConnection.port;
+        }
+        if(!pouchname){
+          pouchname = couchConnection.pouchname;
+          /* if the user has overriden the frequent fields, use their preferences */
+          if(this.get("frequentDatumFields")){
+            if(typeof callback == "function"){
+              callback(this.get("frequentDatumFields"));
+            }
+            return;
+          }
+        }
+        jsonUrl = couchurl +couchConnection.path+"/"+ pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+      }
+     
+      var self = this;
+      $.ajax({
+        type : 'GET',
+        url : jsonUrl,
+        data : {},
+        beforeSend : function(xhr) {
+          /* Set the request header to say we want json back */
+          xhr.setRequestHeader('Accept', 'application/json');
+        },
+        complete : function(e, f, g) {
+          /* do nothing */
+          OPrime.debug(e, f, g);
+        },
+        success : function(serverResults) {
+          console.log("serverResults"
+              + JSON.stringify(serverResults));
+
+          var counts = _.pluck(serverResults.rows, "value");
+          OPrime.debug(counts);
+          var frequentFields = [];
+          try{
+            var totalDatumCount = serverResults.rows[(_.pluck(
+                serverResults.rows, "key").indexOf("datumTotal"))].value;
+            
+            for ( var field in serverResults.rows) {
+              if(serverResults.rows[field].key == "datumTotal"){
+                continue;
+              }
+              if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
+                OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
+                frequentFields.push( serverResults.rows[field].key );
+              }
+            }
+          }catch(e){
+            OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
+            frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
+          }
+          if(frequentFields == []){
+            frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
+          }
+          self.frequentDatumFields = frequentFields;
+          if (typeof callback == "function") {
+            callback(frequentFields);
+          }
+        },// end successful fetch
+        error : function(response) {
+          OPrime
+          .debug("There was a problem getting the frequent datum fields, using defaults."
+              + JSON.stringify(response));
+          if (typeof callback == "function") {
+            callback(["judgement","utterance","morphemes","gloss","translation"]);
+          }
+          
+          //end error 
+        },
+          dataType : "json"
+        });
     },
     changeCorpusPublicPrivate : function(){
 //      alert("TODO contact server to change the public private of the corpus");

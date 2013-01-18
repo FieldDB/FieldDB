@@ -3861,7 +3861,7 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n				class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n\n\n					<!--  Customize dropdown -->\n					<li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i class=\"icon-cog icon-white\"></i>\n							Customize <b class=\"caret\"></b></a>\n						<ul class=\"dropdown-menu\" role=\"menu\"\n							aria-labelledby=\"customize_dropdown_trigger\">\n\n\n							<li><a tabindex=\"-1\" data-toggle=\"modal\"\n								href=\"#user-preferences-modal\"><i class=\" icon-cog\"></i> <span\n									class=\"locale_User_Settings\"></span> </a></li>\n							<li><a tabindex=\"-1\" data-toggle=\"modal\"\n								href=\"#hotkey-settings-modal\"><i class=\" icon-hdd\"></i> <span\n									class=\"locale_Keyboard_Shortcuts\"></span></a></li>\n							<li><a tabindex=\"-1\" class=\"corpus-settings\"><i\n									class=\" icon-cogs\"></i> <span class=\"locale_Corpus_Settings\"></span></a></li>\n							<li class=\"divider\"></li>\n\n							<li><a tabindex=\"-1\" href=\"#help/illustratedguide\"><i\n									class=\"icon-gift\"></i> New! Quick Start Illustrated Guide</a></li>\n							<li><a tabindex=\"-1\" href=\"http://fieldlinguist.com\"\n								target=\"_blank\"><i class=\"icon-film\"></i> Help Videos and\n									User Guide</a></li>\n							<li><a tabindex=\"-1\"\n								href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n								target=\"_blank\"><i class=\" icon-beaker\"></i> Bug\n									Report/Contact Us</a></li>\n							<li><a tabindex=\"-1\"\n								href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n								target=\"_blank\"><i class=\" icon-github\"></i> OpenSource v<span\n									class=\"fielddb-version\"></span></a></li>\n							<li class=\"power-users-link\"><a tabindex=\"-1\"\n								data-toggle=\"modal\" href=\"#terminal-modal\"><i\n									class=\" icon-magic\"></i> <span\n									class=\"locale_Terminal_Power_Users\"></span> </a></li>\n\n							<!-- <li class=\"divider\"></li>\n							<li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n									Clear all customization</a></li> -->\n\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul class=\"dropdown-menu\" role=\"menu\"\n							aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n								href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n									<i class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider\"></li>\n\n							<li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n								href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n								</progress></li>\n\n							<li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n							<li class=\"divider\"></li>\n							<li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"user-quickview\"> <i\n								class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"corpus-quickview\" class=\"well span12\"></div>\n			<div id=\"session-quickview\" class=\"well span12\"></div>\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul class=\"unstyled zebra   search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul class=\"unstyled zebra   current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong>New!</strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n				class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n\n					<!--  Customize dropdown TODO move back ot user dropdown -->\n					<!--  Customize dropdown -->\n					<li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i class=\"icon-cog icon-white\"></i>\n							Customize <b class=\"caret\"></b></a>\n						<ul class=\"dropdown-menu\" role=\"menu\"\n							aria-labelledby=\"customize_dropdown_trigger\">\n\n\n							<li><a tabindex=\"-1\" data-toggle=\"modal\"\n								href=\"#user-preferences-modal\"><i class=\" icon-cog\"></i> <span\n									class=\"locale_User_Settings\"></span> </a></li>\n							<li><a tabindex=\"-1\" data-toggle=\"modal\"\n								href=\"#hotkey-settings-modal\"><i class=\" icon-hdd\"></i> <span\n									class=\"locale_Keyboard_Shortcuts\"></span></a></li>\n							<li><a tabindex=\"-1\" class=\"corpus-settings\"><i\n									class=\" icon-cogs\"></i> <span class=\"locale_Corpus_Settings\"></span></a></li>\n							<li class=\"divider\"></li>\n\n              <li ><a tabindex=\"-1\" href=\"#\"> <i\n                  class=\"icons icon-upload sync-everything icon-white\">\n                    Back-up your preferences </i>\n              </a></li>\n              <li class=\"divider\"></li>\n              \n							<li><a tabindex=\"-1\" href=\"#help/illustratedguide\"><i\n									class=\"icon-gift\"></i> New! Quick Start Illustrated Guide</a></li>\n							<li><a tabindex=\"-1\" href=\"http://fieldlinguist.com\"\n								target=\"_blank\"><i class=\"icon-film\"></i> Help Videos and\n									User Guide</a></li>\n							<li><a tabindex=\"-1\"\n								href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n								target=\"_blank\"><i class=\" icon-beaker\"></i> Bug\n									Report/Contact Us</a></li>\n							<li><a tabindex=\"-1\"\n								href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n								target=\"_blank\"><i class=\" icon-github\"></i> OpenSource v<span\n									class=\"fielddb-version\"></span></a></li>\n							<li class=\"power-users-link\"><a tabindex=\"-1\"\n								data-toggle=\"modal\" href=\"#terminal-modal\"><i\n									class=\" icon-magic\"></i> <span\n									class=\"locale_Terminal_Power_Users\"></span> </a></li>\n\n							\n							<!-- <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n									Clear all customization</a></li> -->\n\n							\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul class=\"dropdown-menu\" role=\"menu\"\n							aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"user-quickview\"> <i\n								class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"corpus-quickview\" class=\"well span12\"></div>\n			<div id=\"session-quickview\" class=\"well span12\"></div>\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul class=\"unstyled zebra   search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul class=\"unstyled zebra   current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong>New!</strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -3873,7 +3873,7 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\" container span12 \">\n			<ul class=\"unstyled zebra current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times.\n		</p>\n	</div><a href=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\"  target=\"_blank\">\n	<img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\"/></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4 class=\"locale_We_need_to_make_sure_its_you\"></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Sync_my_data_to_this_computer\"></span>\n		</a>\n	</div>\n</div>";
+  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\" container span12 \">\n			<ul class=\"unstyled zebra current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4 class=\"locale_We_need_to_make_sure_its_you\"></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Sync_my_data_to_this_computer\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -5777,7 +5777,7 @@ templates['user_welcome_modal'] = template(function (Handlebars,depth0,helpers,p
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"/>\n      <button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n    </span>\n    <div class=\"hide confirm-password\">\n      <label class = \"locale_Password\"></label>\n      <input class=\"registerpassword\" type=\"password\"/>\n      <label class = \"locale_Confirm_Password\"></label>\n      <input class=\"to-confirm-password\" type=\"password\"/>\n      <label class = \"\">Email:</label>\n      <input class=\"registeruseremail\" type=\"email\"/>\n      <br />\n      <button class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n      </button>\n      <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n    </div>\n    </div>\n    <div class=\" alert alert-error hide welcome-screen-alerts\"></div>\n  <div class=\"welcome_video_iframe\">\n    <iframe class=\"welcome_video_iframe\" width=\"420\" height=\"315\" src=\"https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA\" frameborder=\"0\" allowfullscreen></iframe>\n  </div>\n  <!-- <div class=\"alert alert-block\">moved here so that it can be seen on smaller screens by scrolling\n    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a>\n    <h4 class=\"alert-heading locale_Warning\"></h4>\n   <span class = \"locale_Instructions_to_show_on_dashboard\"></span>  \n  </div> -->\n</div>\n";
+  buffer += escapeExpression(stack1) + "\" type=\"text\"/>\n      <button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n    </span>\n    <div class=\"hide confirm-password\">\n      <label class = \"locale_Password\"></label>\n      <input class=\"registerpassword\" type=\"password\"/>\n      <label class = \"locale_Confirm_Password\"></label>\n      <input class=\"to-confirm-password\" type=\"password\"/>\n      <label class = \"\">Email:</label>\n      <input class=\"registeruseremail\" type=\"email\"/>\n      <br />\n      <button class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n      </button>\n      <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n    </div>\n    </div>\n    <div class=\" alert alert-error hide welcome-screen-alerts\"></div>\n  <div class=\"welcome_video_iframe\">\n    <iframe class=\"welcome_video_iframe\" width=\"420\" height=\"315\" src=\"http://www.youtube.com/embed/videoseries?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT\" frameborder=\"0\" allowfullscreen></iframe>\n  \n  </div>\n  <!-- <div class=\"alert alert-block\">moved here so that it can be seen on smaller screens by scrolling\n    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a>\n    <h4 class=\"alert-heading locale_Warning\"></h4>\n   <span class = \"locale_Instructions_to_show_on_dashboard\"></span>  \n  </div> -->\n</div>\n";
   return buffer;});
 })();
 define("compiledTemplates", ["handlebars"], (function (global) {
@@ -7178,6 +7178,27 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
         dataType : "json"
       });
 
+};
+
+OPrime.sum = function(list) {
+  var result = 0;
+  for (value in list) {
+    result += list[value];
+  }
+  return result;
+};
+
+OPrime.mean = function(list) {
+  return OPrime.sum(list) / list.length;
+};
+
+OPrime.standardDeviation = function(list) {
+  var totalVariance = 0;
+  var mean = OPrime.mean(list);
+  for ( var i in list) {
+    totalVariance += Math.pow(list[i] - mean, 2);
+  }
+  return Math.sqrt(totalVariance / list.length);
 };
 
 /*
@@ -9500,7 +9521,7 @@ define('datum/Session',[
       this.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
       this.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
       this.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-      this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period for example: A few months ago, probably on a Monday night.");
+      this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
       
     },
     /**
@@ -13635,7 +13656,7 @@ define('corpus/Corpus',[
     },
     /**
      * This function takes in a pouchname, which could be different
-     * from the current corpus incase there is a master corpus wiht
+     * from the current corpus in case there is a master corpus with
      * more/better monolingual data.
      * 
      * @param pouchname
@@ -13666,6 +13687,102 @@ define('corpus/Corpus',[
         callback = null;
       }
       this.lexicon.buildLexiconFromCouch(pouchname,callback);
+    },
+    
+    /**
+     * This function takes in a pouchname, which could be different
+     * from the current corpus incase there is a master corpus wiht
+     * more representative datum 
+     * example : https://ifielddevs.iriscouch.com/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+     * 
+     * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
+     * 
+     * If a url is passed, it contacts the server for fresh info. 
+     * 
+     * @param pouchname
+     * @param callback
+     */
+    getFrequentDatumFields : function(jsonUrl, pouchname, callback){
+      if(!jsonUrl){
+        /* if we have already asked the server in this session, return */
+        if(this.frequentDatumFields){
+          if(typeof callback == "function"){
+            callback(this.frequentDatumFields);
+          }
+          return;
+        }
+        var couchConnection = this.get("couchConnection");
+        var couchurl = couchConnection.protocol+couchConnection.domain;
+        if(couchConnection.port != null){
+          couchurl = couchurl+":"+couchConnection.port;
+        }
+        if(!pouchname){
+          pouchname = couchConnection.pouchname;
+          /* if the user has overriden the frequent fields, use their preferences */
+          if(this.get("frequentDatumFields")){
+            if(typeof callback == "function"){
+              callback(this.get("frequentDatumFields"));
+            }
+            return;
+          }
+        }
+        jsonUrl = couchurl +couchConnection.path+"/"+ pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+      }
+     
+      var self = this;
+      $.ajax({
+        type : 'GET',
+        url : jsonUrl,
+        data : {},
+        beforeSend : function(xhr) {
+          /* Set the request header to say we want json back */
+          xhr.setRequestHeader('Accept', 'application/json');
+        },
+        complete : function(e, f, g) {
+          /* do nothing */
+          OPrime.debug(e, f, g);
+        },
+        success : function(serverResults) {
+          console.log("serverResults"
+              + JSON.stringify(serverResults));
+
+          var counts = _.pluck(serverResults.rows, "value");
+          OPrime.debug(counts);
+          var frequentFields = [];
+          try{
+            var totalDatumCount = serverResults.rows[(_.pluck(
+                serverResults.rows, "key").indexOf("datumTotal"))].value;
+            
+            for ( var field in serverResults.rows) {
+              if(serverResults.rows[field].key == "datumTotal"){
+                continue;
+              }
+              if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
+                OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
+                frequentFields.push( serverResults.rows[field].key );
+              }
+            }
+          }catch(e){
+            OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
+            frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
+          }
+          self.frequentDatumFields = frequentFields;
+          if (typeof callback == "function") {
+            callback(frequentFields);
+          }
+        },// end successful fetch
+        error : function(response) {
+          OPrime
+          .debug("There was a problem getting the frequent datum fields, using defaults."
+              + JSON.stringify(response));
+          if (typeof callback == "function") {
+            callback(["judgement","utterance","morphemes","gloss","translation"]);
+          }
+          
+          //end error 
+        },
+          dataType : "json"
+        });
     },
     changeCorpusPublicPrivate : function(){
 //      alert("TODO contact server to change the public private of the corpus");
@@ -13788,7 +13905,7 @@ define('user/UserRouter',[
             if(x){
               reason = x.reason;
             }
-            alert("There was a potential problem opening your dashboard." + reason);
+            OPrime.debug("There was a potential problem opening your dashboard." + reason);
           }
         });
       });
@@ -16406,7 +16523,7 @@ OPrime.defaultCouchConnection = function() {
    */
   var connection = production;
   if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("lignsync.org") >= 0) {
+    if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("authdev.fieldlinguist.com") >= 0) {

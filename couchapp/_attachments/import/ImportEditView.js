@@ -626,6 +626,16 @@ define( [
       $(".import-progress").val( $(".import-progress").attr("max") );
       $(".approve-save").html("Finished");
       
+      /* ask the corpus to update its frequent datum fields given the new datum */
+      var couchConnection = window.app.get("corpus").get("couchConnection");
+      var couchurl = couchConnection.protocol+couchConnection.domain;
+      if(couchConnection.port != null){
+        couchurl = couchurl+":"+couchConnection.port;
+      }
+      couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+      window.app.get("corpus").getFrequentDatumFields(couchurl);
+    
+      
       // Go back to the dashboard 
       window.location.href = "#render/true";
     },
@@ -711,6 +721,7 @@ define( [
                    * If we are at the final index in the import's datum
                    */
                   this.importCompleted();
+                  
                 }else{
                   /*
                    * Save another datum when the previous fails
@@ -724,7 +735,13 @@ define( [
               /*
                * Begin the datum saving loop with the last datum 
                */
-              self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+              if(self.model.get("datumArray").length > 0){
+                self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+              }else{
+                alert("You havent imported anything. Please let us know if it does this again.");
+                this.importCompleted();
+                return;
+              }
                             
             /* end successful save of datalist and session */
             

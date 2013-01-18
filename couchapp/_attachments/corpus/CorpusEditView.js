@@ -468,7 +468,7 @@ define([
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }else{
-        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
+        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
 
         var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
         if(pouches.indexOf(newPouchName) != -1){
