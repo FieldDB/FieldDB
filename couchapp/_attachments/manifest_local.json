@@ -1,0 +1,24 @@
+{
+  "name" : "FieldDB Localhost",
+  "version" : "1.32.1",
+  "description" : "Local development version",
+  "app" : {
+    "launch" : {
+      "local_path" : "index.html"
+    }
+  },
+  "offline_enabled" : true,
+  "permissions" : [ "unlimitedStorage", "https://auth.fieldlinguist.com/*",
+      "https://corpus.fieldlinguist.com/*", "https://ifield.iriscouch.com/*",
+      "https://authdev.fieldlinguist.com:3183/*",
+      "https://corpusdev.fieldlinguist.com:6984/*",
+      "https://ifielddevs.iriscouch.com/*", "https://www.youtube.com/*",
+      "https://localhost:3183/*", "https://localhost:6984/*" ],
+  "icons" : {
+    "16" : "images/icon16_local.png",
+    "48" : "images/icon48_local.png",
+    "128" : "images/icon128_local.png"
+  },
+  "manifest_version" : 2,
+  "content_security_policy" : "style-src 'self'; img-src 'self' https://secure.gravatar.com  https://docs.google.com https://ssl.google-analytics.com  ; default-src 'self' https://themes.googleusercontent.com https://secure.gravatar.com   https://auth.lingsync.org https://corpus.lingsync.org  https://authdev.fieldlinguist.com:3183 https://corpusdev.fieldlinguist.com:3186  https://localhost:3183 https://localhost:6984    https://ifield.iriscouch.com https://ifielddevs.iriscouch.com  https://si0.twimg.com https://ssl.google-analytics.com https://www.youtube.com ; script-src 'self' https://auth.lingsync.org   https://corpus.lingsync.org    https://authdev.fieldlinguist.com:3183   https://corpusdev.fieldlinguist.com:3186    https://localhost:3183   https://localhost:6984        https://ifield.iriscouch.com   https://ifielddevs.iriscouch.com    https://si0.twimg.com   https://ssl.google-analytics.com   https://www.youtube.com ; connect-src 'self' https://auth.lingsync.org   https://corpus.lingsync.org    https://authdev.fieldlinguist.com:3183   https://corpusdev.fieldlinguist.com:3186    https://localhost:3183   https://localhost:6984        https://ifield.iriscouch.com   https://ifielddevs.iriscouch.com    https://si0.twimg.com   https://ssl.google-analytics.com   https://www.youtube.com ; object-src 'self' https://auth.lingsync.org   https://corpus.lingsync.org    https://authdev.fieldlinguist.com:3183   https://corpusdev.fieldlinguist.com:3186    https://localhost:3183   https://localhost:6984        https://ifield.iriscouch.com   https://ifielddevs.iriscouch.com    https://si0.twimg.com   https://ssl.google-analytics.com   https://www.youtube.com  "
+}
