@@ -354,12 +354,12 @@ define([
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
       morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex utterance "
+            + "\n \\ex " + utterance + 
             + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
             + "\n\t\\trans `" + translation + "'"
