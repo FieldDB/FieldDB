@@ -68,7 +68,7 @@ OPrime.defaultCouchConnection = function() {
    */
   var connection = production;
   if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("lignsync.org") >= 0) {
+    if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("authdev.fieldlinguist.com") >= 0) {
