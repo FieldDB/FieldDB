@@ -111,7 +111,7 @@ define([
             if(x){
               reason = x.reason;
             }
-            alert("There was a potential problem opening your dashboard." + reason);
+            OPrime.debug("There was a potential problem opening your dashboard." + reason);
           }
         });
       });
