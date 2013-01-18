@@ -177,49 +177,6 @@ define([
         
       }
     },
-//    /**
-//     * Create a permanent data list in the current corpus.  Deprecated! this is not being used, instead the callers are making their own data lists. TODO, decide if this should be used.
-//     * 
-//     * @param callback
-//     */
-//    newDataList : function(callback) {
-//      //save the current data list
-//      var self = this;
-//      this.saveAndInterConnectInApp(function(){
-//        //clone it
-//        var attributes = JSON.parse(JSON.stringify(self.attributes));
-//        // Clear the current data list's backbone info and info which we shouldnt clone
-//        attributes._id = undefined;
-//        attributes._rev = undefined;
-//        attributes.comments = undefined;
-//        attributes.title = self.get("title")+ " copy";
-//        attributes.description = "Copy of: "+self.get("description");
-//        attributes.pouchname = app.get("corpus").get("pouchname");
-//        attributes.dateCreated = JSON.stringify(new Date());
-//        attributes.datumIds = [];
-//        self = new DataList(attributes);
-//        
-//        //TODO see if this destroys the collection in the default data list, technically it doesn't matter because this will need to be emptied and filled,a and the collciton is just part of the view, not part of the data list.
-//        var coll = self.datumsView.collection;
-//        while (coll.length > 0) {
-//          coll.pop();
-//        }
-//        
-//        // Display the new data list
-////        appView.renderReadonlyDataListViews();
-////        appView.renderEditableDataListViews();
-//        //Why call all data lists to render?
-//        self.render();
-//        self.saveAndInterConnectInApp(function(){
-//          //TOOD check this, this is used by the import to make the final datalist
-//          self.setAsCurrentDataList(function(){
-//            if(typeof callback == "function"){
-//              callback();
-//            }
-//          });
-//        });
-//      });
-//    },
     
     /**
      * Accepts two functions to call back when save is successful or
