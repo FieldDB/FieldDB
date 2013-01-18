@@ -1,0 +1,268 @@
+<!-- Black Navigation Bar Across the Top -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container ">
+
+
+
+			<!-- Home button -->
+			<a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
+				rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
+
+			<!-- Top Search Area -->
+			<span class="navbar-search" id="search-top"> </span>
+
+			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+			<a class="btn btn-navbar" data-toggle="collapse"
+				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+				class="icon-bar"></span> <span class="icon-bar"></span>
+			</a>
+
+
+			<!-- Collapsing area if the screen is not wide enough -->
+			<div class="nav-collapse collapse">
+				<ul class="nav" role="navigation ">
+
+
+
+					<!--  Customize dropdown -->
+					<li class="dropdown"><a id="customize_dropdown_trigger"
+						href="#" role="button" class="dropdown-toggle"
+						data-toggle="dropdown"><i class="icon-cog icon-white"></i>
+							Customize <b class="caret"></b></a>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="customize_dropdown_trigger">
+
+
+							<li><a tabindex="-1" data-toggle="modal"
+								href="#user-preferences-modal"><i class=" icon-cog"></i> <span
+									class="locale_User_Settings"></span> </a></li>
+							<li><a tabindex="-1" data-toggle="modal"
+								href="#hotkey-settings-modal"><i class=" icon-hdd"></i> <span
+									class="locale_Keyboard_Shortcuts"></span></a></li>
+							<li><a tabindex="-1" class="corpus-settings"><i
+									class=" icon-cogs"></i> <span class="locale_Corpus_Settings"></span></a></li>
+							<li class="divider"></li>
+
+							<li><a tabindex="-1" href="#help/illustratedguide"><i
+									class="icon-gift"></i> New! Quick Start Illustrated Guide</a></li>
+							<li><a tabindex="-1" href="http://fieldlinguist.com"
+								target="_blank"><i class="icon-film"></i> Help Videos and
+									User Guide</a></li>
+							<li><a tabindex="-1"
+								href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ"
+								target="_blank"><i class=" icon-beaker"></i> Bug
+									Report/Contact Us</a></li>
+							<li><a tabindex="-1"
+								href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed"
+								target="_blank"><i class=" icon-github"></i> OpenSource v<span
+									class="fielddb-version"></span></a></li>
+							<li class="power-users-link"><a tabindex="-1"
+                data-toggle="modal" href="#terminal-modal"><i
+                  class=" icon-magic"></i> <span
+                  class="locale_Terminal_Power_Users"></span> </a></li>
+
+							<!-- <li class="divider"></li>
+							<li><a tabindex="-1" href="#"><i class="icon-trash"></i>
+									Clear all customization</a></li> -->
+
+
+						</ul></li>
+
+
+					<!-- Notification -->
+					<li class="dropdown"><a id="notification_dropdown_trigger"
+						href="#" role="button" class="dropdown-toggle"
+						data-toggle="dropdown"><i
+							class="icon-exclamation-sign icon-white"></i> Notifications <b
+							class="caret"></b></a>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="notification_dropdown_trigger">
+
+
+
+
+							<li><span class="locale_Need_save"></span><a tabindex="-1"
+								href="#" class="locale_Save_on_this_Computer " rel="tooltip">
+									<i class="icons icon-save save-dashboard icon-white"></i>
+							</a></li>
+							<li><progress class="unsaved-changes" max="100" value="30">
+								</progress></li>
+
+							<li class="not-a locale_Recent_Changes"></li>
+
+
+							<li class="divider"></li>
+
+							<li><span class="locale_Need_sync"></span><a tabindex="-1"
+								href="#" class="locale_Sync_and_Share " rel="tooltip"> <i
+									class="icons icon-sitemap  sync-everything icon-white"></i>
+							</a></li>
+							<li><progress class="unsynced-changes" max="100" value="80">
+								</progress></li>
+
+							<li class="not-a locale_Differences_with_the_central_server"></li>
+
+
+							<li class="divider"></li>
+							<li><a tabindex="-1" href="#"><i class="icon-remove"></i>
+									Clear all notifications</a></li>
+
+							<li><div id="toast-user-area" class="scrollable">
+									<div class="alert alert-info alert-block">
+										<a class="close" data-dismiss="alert" href="#">×</a> <strong
+											class="alert-heading ">Quick Start Instructions:</strong> <span
+											class="locale_Instructions_to_show_on_dashboard"></span> <span
+											class="locale_to_beta_testers"></span>
+									</div>
+								</div></li>
+
+						</ul></li>
+
+
+				</ul>
+				<ul class="nav pull-right">
+
+					<!--  User dropdown -->
+					<li id="auth-menu" class="dropdown"><a href="#"
+						id="user_drop_down_trigger" role="button"
+						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
+						data-toggle="dropdown" rel="tooltip"> <span
+							id="user-quickview"> <i class="icons icon-user icon-white"></i>
+						</span> <b class="caret"></b>
+					</a>
+						<ul class="dropdown-menu" id="authentication-embedded" role="menu"
+							aria-labelledby="user_drop_down_trigger"></ul></li>
+
+
+				</ul>
+
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+<!-- The rest of the page -->
+<div class="container-fluid main">
+	<div id="dashboard-view" class="row-fluid">
+		<!-- Elements on Lefthand side -->
+		<div class="span3">
+			<div id="corpus-quickview" class="well sidebar-nav"></div>
+			<div id="session-quickview" class="well sidebar-nav"></div>
+			<div id="search-data-list-quickview" class="  span12">
+				<div id="search-data-list-quickview-header" class=" sidebar-nav"></div>
+				<div class=" sidebar-nav ">
+					<ul class="unstyled zebra   search-data-list-paginated-view "></ul>
+					<div class="pagination-control"></div>
+				</div>
+			</div>
+			<div id="data-list-quickview" class="well span12">
+				<div id="data-list-quickview-header" class=" sidebar-nav"></div>
+				<div class=" sidebar-nav container span12">
+					<ul class="unstyled zebra   current-data-list-paginated-view "></ul>
+					<div class="pagination-control "></div>
+				</div>
+			</div>
+		</div>
+		<!--Elements in the middle (things that get hidden)  -->
+		<div class="span6">
+
+			<div id="datums-embedded" class="middle well"></div>
+			<div id="conversation-embedded" class="middle well">
+				<div class="scrollable">
+					<div class="conversation-text-audio-wrapper">
+						<div class="jp-load-bar" style="width: 960;">
+							<div class="jp-play-bar" style="width: 330;">
+								<i class="icon-gift"></i><strong>New!</strong>'Conversations'
+								will let you have multiple speakers with overlapping speech.
+								Elise is working on this for December...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="data-list-embedded" class="well">
+				<div id="data-list-embedded-header" class="middle "></div>
+				<div>
+					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+					<div class="pagination-control"></div>
+				</div>
+			</div>
+			<div id="session-embedded" class="middle well"></div>
+			<div id="corpus-embedded" class="middle well"></div>
+			<div id="search-embedded" class="middle well"></div>
+		</div>
+		<!--/span-->
+		<!-- right hand side -->
+		<div class="span3">
+			<div id="insert-unicode" class="well"></div>
+			<div id="activity-feed-user" class="well"></div>
+			<!-- <div class="well">
+				<iframe
+					src="activity/activity_feed.html#/user/lingllama/corpus/cherokee"
+					width="100%" height="400" frameborder="0"></iframe>
+			</div> -->
+
+			<div id="activity-feed-corpus-team" class="well"></div>
+			<!-- <div class="well">
+				<iframe src="activity/activity_feed.html#/user/lingllama"
+					width="100%" height="400" frameborder="0"></iframe>
+			</div> -->
+		</div>
+		<!--/span-->
+	</div>
+	<!--/row-->
+
+	<!-- FullScreen Views -->
+	<div id="user-fullscreen" class="well "></div>
+	<div id="public-user-page" class="well "></div>
+	<div id="corpus-fullscreen" class="well "></div>
+	<div id="session-fullscreen" class="well "></div>
+	<div id="search-fullscreen" class="well "></div>
+	<div id="data-list-fullscreen" class="well row">
+		<div id="data-list-fullscreen-header"></div>
+		<div class=" container span12 ">
+			<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+			<div class="pagination-control"></div>
+		</div>
+	</div>
+	<div id="datum-container-fullscreen" class="well"></div>
+	<div id="conversation-container-fullscreen" class="well">TODO:
+		this will be a conversation</div>
+	<div id="import-fullscreen" class=""></div>
+</div>
+
+<!-- Modals are windows which pop over the active app to take focus -->
+<div id="hotkey-settings-modal" class="modal hide"></div>
+<div id="user-modal" class="modal hide"></div>
+<div id="user-preferences-modal" class="modal hide"></div>
+<div id="export-modal" class="modal hide"></div>
+<div id="new-session-modal" class="modal hide"></div>
+<div id="new-corpus-modal" class="modal hide"></div>
+<div id="illustrated_guide_to_dash" class="modal hide">
+	<div class="modal-header">
+		<p>
+			<span class="help_count_reason"></span> This help will show <span
+				class="help_count_left"></span> more times.
+		</p>
+	</div>
+	<img
+		src="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918">
+</div>
+<div id="quick-authenticate-modal" data-backdrop="static"
+	data-keyboard="static" class="modal hide">
+	<div class="modal-header">
+		<h4 class="locale_We_need_to_make_sure_its_you"></h4>
+	</div>
+	<div class="modal-body">
+		<label class="locale_Password"></label> <input type="password"
+			id="quick-authenticate-password" />
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success locale_Yep_its_me"
+			id="quick-authentication-okay-btn"></button>
+	</div>
+</div>
