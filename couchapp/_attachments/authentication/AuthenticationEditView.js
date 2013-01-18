@@ -216,7 +216,7 @@ define([
           mostLikelyAuthUrl = "McGill ProsodyLab";
         } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
           mostLikelyAuthUrl = "McGill ProsodyLab";
-        } else if (window.location.origin.indexOf("authdev.fieldlinguist.com") >= 0) {
+        } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
           mostLikelyAuthUrl = "LingSync Testing";
         } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
           mostLikelyAuthUrl = "LingSync Testing";
