@@ -9,8 +9,8 @@
   Backbone.Model.prototype.parse = function(response) {
     // parse internal models
     if (response.ok === undefined) {
-      for (var key in this.model) {
-        var embeddedClass = this.model[key];
+      for (var key in this.internalModels) {
+        var embeddedClass = this.internalModels[key];
         var embeddedData = response[key];
         response[key] = new embeddedClass(embeddedData, {parse:true});
       }

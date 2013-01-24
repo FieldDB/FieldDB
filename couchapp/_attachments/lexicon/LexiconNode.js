@@ -29,7 +29,7 @@ define([
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       // There are no nested models
     }
   }); 

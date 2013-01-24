@@ -20,9 +20,19 @@ define([
       OPrime.debug("UserMask init", this.toJSON());
       
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/users",
+    
     defaults : {
       gravatar :  "user/user_gravatar.png"
     },
+    
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -30,6 +40,13 @@ define([
           pouchname = window.app.get("corpus").get("pouchname");
         }
       }
+      if(OPrime.isCouchApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
+      }
+      
       if(this.pouch == undefined){
         this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
@@ -48,6 +65,18 @@ define([
       OPrime.debug("Saving the UserMask");
       var self = this;
       this.changePouch(null, function(){
+        
+        if(OPrime.isCouchApp()){
+          if(self.get("pouchname")){
+            self.unset("pouchname");
+          }
+          self.save();
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+          return;
+        }
+        
         self.pouch(function(err,db){
 //          self.set("id", this.id); //TODO might not be necessary
           var modelwithhardcodedid = self.toJSON();

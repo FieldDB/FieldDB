@@ -121,7 +121,7 @@ define([
         d.set("_id", this.model.get("_id"));
         d.set("_rev", this.model.get("_rev"));
         if(window.appView.datumsEditView){
-          appView.datumsEditView.prependDatum(d);
+          window.appView.datumsEditView.prependDatum(d);
         }
       },
       "click .datum-checkboxes": function(e){

@@ -16,7 +16,8 @@ define([
      */
     initialize: function() {
     },
-   
+    internalModels : DatumTag,
+
     model: DatumTag
   });
   

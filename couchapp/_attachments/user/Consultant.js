@@ -30,13 +30,20 @@ define( [
     initialize : function(attributes) {
       Consultant.__super__.initialize.call(this, attributes);
 
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    
+    fillWithDefaults : function(){
       this.set("consultantcode" , "");
 //      this.set("birthDate", "");
       this.set("language", "");
       this.set("dialect", "");
     },
     
-    model : {
+    internalModels : {
       // There are no nested models
     },
     saveAndInterConnectInApp : function(callback){

@@ -23,9 +23,9 @@ define(
          * activity feed to display this information.
          */
         $scope.corpus = {
-          description : "Data gathered durring the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
-          gravatar : "https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87?s",
-          title : "Cherokee Field Methods",
+          description : "",//"Data gathered during the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
+          gravatar : "user/user_gravatar.png",
+          title : "Activity Feed",
           team : {
             _id : $routeParams.username
           }
@@ -39,11 +39,15 @@ define(
         feedParams.username = $routeParams.username || "lingllama";
         feedParams.corpusid = $routeParams.corpusid;
         if (feedParams.corpusid) {
-          feedParams.corpusid = "-" + feedParams.corpusid;
+          feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+          $scope.corpus.title = "Corpus Activity Feed";
+        }else{
+          feedParams.corpusid = "";
+          $scope.corpus.title = "User Activity Feed";
         }
 
         GetSessionToken.run({
-          "name" : "publicuser",
+          "name" : "public",
           "password" : "none"
         }).then(function() {
           MostRecentActivities.async(feedParams).then(function(activities) {
