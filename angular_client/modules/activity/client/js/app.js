@@ -13,8 +13,12 @@ define([ "angular", "OPrime", "js/controllers" ], function(angular, OPrime,
           templateUrl : 'partials/activity_feed_widget.html',
           controller : ActivityFeedController
         });
+        $routeProvider.when('/user/:username', {
+          templateUrl : 'partials/activity_feed_widget.html',
+          controller : ActivityFeedController
+        });
         $routeProvider.otherwise({
-          redirectTo : '/user/gina/corpus/urdu'
+          redirectTo : '/user/:username/corpus/:corpusid'
         });
       } ]);
 

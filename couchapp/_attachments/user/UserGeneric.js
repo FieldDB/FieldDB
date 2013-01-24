@@ -51,7 +51,7 @@ define([
     },
       
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       prefs : UserPreference,
       permissions : Permission, //TODO this needs to become plural
       hotkeys : HotKey, //TODO this needs to become plural

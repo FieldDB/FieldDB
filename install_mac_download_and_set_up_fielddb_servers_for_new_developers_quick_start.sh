@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# For wget using:  "curl -O --retry 999 --retry-max-time 0 -C -"
+# For wget on mac using:  "curl -O --retry 999 --retry-max-time 0 -C -"
 
 git --version || { echo 'You dont have Git installed, please install it: sudo apt-get install git or http://git-scm.com/downloads' ; exit 1; }
 #gcc --version || { echo 'You dont have a C++ compiler installed, please install it and other developer tools: sudo apt-get build-dep nodejs  or http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12' ; exit 1; }
@@ -21,8 +21,8 @@ echo "Setting the upstream of the repository so that updates are easy to do"
 git remote add upstream git@github.com:OpenSourceFieldlinguistics/FieldDB.git
 git remote rm origin
 echo "Compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
-npm install handlebars
-bash compile_handlebars.sh
+#npm install handlebars
+#bash scripts/build_templates.sh
 
 ## Webservice dependencies ###################################################
 
@@ -56,7 +56,7 @@ git remote add upstream git@github.com:OpenSourceFieldlinguistics/FieldDBWebServ
 git remote rm origin
 echo "Installing the FieldDB web server dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
-npm install
+#npm install
 
 
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
@@ -70,7 +70,7 @@ git remote add upstream git@github.com:OpenSourceFieldlinguistics/Authentication
 git remote rm origin
 echo "Installing the FieldDB auth webservice dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
-npm install
+#npm install
 
 
 echo -en '\E[47;34m'"\033[1mE" #Blue
@@ -84,7 +84,7 @@ git remote add upstream git@github.com:OpenSourceFieldlinguistics/AudioWebServic
 git remote rm origin
 echo "Installing the FieldDB audio webservice dependancies using the Node Package Manager (NPM)...."
 echo -e "\033[0m"
-npm install
+#npm install
 #TODO get local copies of dependancies ie prosody lab aligner
 
 
@@ -103,8 +103,8 @@ git remote rm origin
 ## DB service dependencies ###################################################
 
 echo "You have to turn on the Couch Database yourself, it is very easy to do. Double click on the app in $HOME/fielddbworkspace/couchdb"
-cd $HOME/fielddbworkspace
-curl -O --retry 999 --retry-max-time 0 -C - https://github.com/downloads/cloudnode/couchdbx-app/CouchDB%20Server-1.2.0-20120614.zip 
+#cd $HOME/fielddbworkspace
+#curl -O --retry 999 --retry-max-time 0 -C - https://github.com/downloads/cloudnode/couchdbx-app/CouchDB%20Server-1.2.0-20120614.zip 
 #unzip CouchDB%20Server-1.2.0-20120614.zip
 #mkdir couchdb
 #mv CouchDB\ Server.app couchdb
@@ -113,16 +113,16 @@ curl -O --retry 999 --retry-max-time 0 -C - https://github.com/downloads/cloudno
 ## Running tests to see if everything downloaded and works ###################################################
 
 echo "Testing if FieldDB WebServer will run, it should say 'Listening on 3182' "
-node $HOME/fielddbworkspace/FieldDBWebServer/server.js &
+#node $HOME/fielddbworkspace/FieldDBWebServer/server.js &
 
 echo "Testing if FieldDB AuthenticationWebService will run, it should say 'Listening on 3183' "
-node $HOME/fielddbworkspace/AuthenticationWebService/service.js &
+#node $HOME/fielddbworkspace/AuthenticationWebService/service.js &
 
 echo "Testing if FieldDB AudioWebService will run, it should say 'Listening on 3184' "
-node $HOME/fielddbworkspace/AudioWebService/service.js &
+#node $HOME/fielddbworkspace/AudioWebService/service.js &
 
 echo "Testing if FieldDB LexiconWebService will run, it should say 'Listening on 3185' "
-bash  $HOME/fielddbworkspace/LexiconWebService/service.sh &
+#bash  $HOME/fielddbworkspace/LexiconWebService/service.sh &
 
-echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
+#echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
 

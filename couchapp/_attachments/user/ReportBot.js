@@ -24,7 +24,7 @@ define(["backbone"], function(Backbone) {
     },
 
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
     },
     
     changePouch : function(pouchname, callback) {

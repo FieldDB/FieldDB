@@ -9,7 +9,7 @@ echo "Making fielddb workspace, this will contain the logs, client code and web 
 mkdir $HOME/fielddbworkspace
 cd $HOME/fielddbworkspace
 mkdir logs
-mkdir audiofiles
+#mkdir audiofiles
 
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
@@ -42,7 +42,7 @@ source ~/.profile
 cd $HOME/fielddbworkspace/FieldDB
 echo "Compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
 npm install handlebars
-bash compile_handlebars.sh
+bash scripts/build_templates.sh
 
 ## FieldDB Web services ###################################################
 

@@ -2,7 +2,6 @@
 define( [ 
     "backbone", 
     "handlebars",
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -14,7 +13,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     Comment,
     Comments,
     CommentReadView,
@@ -331,7 +329,8 @@ define( [
 
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.searchTemplate(jsonToRender));
-        $("#search-data-list-quickview").addClass("well");
+//        $("#search-data-list-quickview").addClass("well");
+        $("#search-data-list-quickview").show();
 
         window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
             $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
@@ -522,7 +521,7 @@ define( [
       });
     },
     
-    saveSearchDataList : function(e, callback){
+    saveSearchDataList : function(e, callback, failurecallback){
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -541,7 +540,7 @@ define( [
         searchself.render();
         searchself.model.setAsCurrentDataList(callback);
 //        window.location.href = "#render/true";
-      });
+      }, failurecallback);
 
     },
     saveImportDataList : function(e){

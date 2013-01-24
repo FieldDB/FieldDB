@@ -47,7 +47,7 @@ define( [
       
     },
     
-    model : {
+    internalModels : {
       // recordAudio  :  RecordAudio
       // compareAudio  :  CompareAudio
     },
