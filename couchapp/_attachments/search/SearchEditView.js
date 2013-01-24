@@ -193,6 +193,7 @@ define([
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
+            filledWithDefaults: true,
             "pouchname" : window.app.get("corpus").get("pouchname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."
@@ -341,7 +342,7 @@ define([
               + $("#search_box").val()
               + " in " 
               + window.app.get("corpus").get("title") 
-              + " on "+ JSON.stringify(new Date()) );
+              + " on "+ new Date() );
           searchself.searchDataListView.format = "search";
           searchself.searchDataListView.render();
 //          searchself.searchPaginatedDataListDatumsView.renderInElement(

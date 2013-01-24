@@ -19,6 +19,30 @@ define([
      */
     initialize : function() {
     },
+    
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    db : {
+      view : "corpuses",
+      changes : false,
+      // If you don't know what filters are in CouchDB, then read it up here:
+      // <a href="http://guide.couchdb.org/draft/notifications.html#filters">http://guide.couchdb.org/draft/notifications.html#filters</a>
+      // Look up how the filter works in `chat_example/filters/private_messages.js`.
+      // IMPORTANT: see `filters/messages.js` to see how to retrieve remove events
+      filter : Backbone.couch_connector.config.ddoc_name + "/corpuses"
+    },
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/corpuses",
+    // The messages should be ordered by date
+    comparator : function(doc){
+      return doc.get("timestamp");
+    },
+    
+    
+    internalModels : CorpusMask,
     model : CorpusMask,
     constructCollectionFromArray : function(arrayOfCorpora){
       this.constructCollectionFromArrayOnServer(arrayOfCorpora);

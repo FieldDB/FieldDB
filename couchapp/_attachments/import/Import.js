@@ -45,8 +45,16 @@ define([
       if(this.get("datumFields") == undefined){
         this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
       }
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
     },
-
+    fillWithDefaults : function(){
+      if(this.get("datumFields") == undefined){
+        this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
+      }
+    },
     // This is an list of attributes and their default values
     defaults : {
       status : "",
@@ -61,9 +69,9 @@ define([
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       dataList : DataList,
-      fields : DatumFields,
+      datumFields : DatumFields,
       session : Session
     },
 

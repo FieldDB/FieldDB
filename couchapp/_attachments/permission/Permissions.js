@@ -16,7 +16,7 @@ define([
         */
        initialize: function() {
        },
-       
+       internalModels: Permission,
        model: Permission
     });
     
