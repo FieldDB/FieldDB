@@ -3873,7 +3873,7 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\" container span12 \">\n			<ul class=\"unstyled zebra current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4 class=\"locale_We_need_to_make_sure_its_you\"></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Sync_my_data_to_this_computer\"></span>\n		</a>\n	</div>\n</div>";
+  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\" container span12 \">\n			<ul class=\"unstyled zebra current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4 class=\"locale_We_need_to_make_sure_its_you\"></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -6512,7 +6512,7 @@ define('hotkey/HotKey',[
 });
 var OPrime = OPrime || {};
 
-OPrime.debugMode = false;
+OPrime.debugMode = true;
 /*
  * Android touchdb for OPrime runs on port 8128, so if the app is running on
  * port 8128 it is likely in a touchdb (either in the android app or in a
@@ -8111,8 +8111,9 @@ define('authentication/Authentication',[
       localStorage.removeItem("mostRecentDashboard");
       localStorage.removeItem("mostRecentCouchConnection");
       localStorage.removeItem("encryptedUser","confidential:VTJGc2RHVmtYMStBTDBmMVN3NVVxRldWdWVXcXBBODJuMmxicThPN0hUSmlRYkFCclRwSXFxYVNtV2o5WFdnYkhOR2JlTVEyRjZoSnRobG4rczArdWVmbXl1K1JMaDZCY1NpVGZGTTRubm02azhGZVlhQWxwMkZGZzFVeEhONVZ2UDFicHkwU1l1azVEc0VNOHRpWEZhL0wwdThiNmd2OVhyNUVMU1UxdERPZmpLc0MxR29CUjBxejQ1QTU1c0s0QmdoempIS052YlJlYTRWVVNiTC9SeGNXeFU4eGN6NUp1Z3FQVjlJOTBPeS83ckNBNlZCdVdGYWhYU0ZzYXJhMm14NVN1dE82Yjk1enpaaitTci9CV0pKZWNXbklTNkRyRVlmYmczcGRXemVlcFMwUGRKY0NMRmhGNHp3aEpTNjBxRHU5Si9KUzNTR2dadEJaYWkyd0p2NExpdG9kOXB4YkNIYXQvR21hMTg3QnZFbkhqZmZMazQvZURySkwvTGxkRUUwTGZsdzg2VWduNnZpS3ZFOElWT1RPaXZIbFUzTEdqOFJWYTZrd2dPM3J2ci9EY2dKb24vUkxwUXBrVkZVdUlEektLeXN0WG0rSFQvSEtoZFVQQVdNdTNEWXdUcDI3SUM1NVMyNW5tQ3ZaM1FTeUxiOFk2SWQ5Q0x2dFk4d0ZQRTZVRjdqNnpEem1IRHN2QVBjU0xuQ2k3RGJPWG9BUTFqeFRpald0WW1pSkJ6WXIwNHFFb0xIMk5pN2hjaThiemFCN0Vva0t1b0Vpbm9wbGxGazBseTlkNUtEWE1ma1JncFFYWGNEaUxrQmR3YnhneThaSjlRT0Fqc0kzQXRPQndRUUJMNkVmbTZRUWg5OGFDZWRMVmxFWXQwV2VKSmhCSEJqMDlqcE9qcnkzNUVPMktTU2EwK0lTU0drN1pYd1RWci9vbGlBZHZ4TzNaWGFsWjZMMTNaUWJreU5PWVlXVlU5akJOeTNlYmFaY0NiUTdSL2tNNjFzMVZ2VjJBQmF0NFNKeXJKZkIrbTFSSC9lOE1zU3ppWng0aVZGMzhzOWZWQVV5ZFpUZUpabVM4NVEzNWlDWHpKbkVmcFJLOHFEWGdueFdxTHZtemxkZERXOVNoLzBkdjlneFNKZ05IY08xbU1aUFp0RzErMEVuNUtqbDlLZFovZGhPTGtibmVTdktTRXFZcDhvZnRNbFIzdVlxMXFoQVQ2bjNPQ3FoRmQ4Q3R4YUxTajhNaHBMeFVseEdCNjZvNkNUN2JOMk1ZbGZNV0RycG9Tak9XMUVZZGovN0lrREdVdEZsVDF4SWtIcmVYNlJsNWRQSzVLdTQrbUdGSHI4RkNDZGVINlF1M1FyTGNKR3dJY0tSTW9xYStaRndYU2gvTW1RQ1oyc3VTdVVzSkJIcmg3TFRzei9uY2pGZXZJSmdqb3hZczY3bkxMZmM4QkVrc3R5ZnNkYlJWZlRkeG9ZVitaTC9DeDFFdXlPU1pKSjZBTG9iVytlaEhxMVNFSVRHUEFhMk5RdEN6NlNrYlR6QmJtSCt5bjkzMGlwSDRUSUF1M0l3ME0xRVhrUDVCWVU5bjF0VWxXaUxBdllUVUV6OHBVenpiTUpmOGNtVTB1NWlCOFFZb1hmTW5UL2wwbk1JUm1KT1A1S3BOME9RSEZORWNmb0hmY3dScEl6ZlNVeEUvcXFTV1N3cHhqRXh5aHVEZWllcXBhNlVBbGM3RitTS1pHc21VeTRmUFA5UjMxNy92UEhHakgrWStnMEVIUmN3NUdiY1lRT3ZTMkNSdzl6bXNZL2NQUlFEbzQ4Q2hHL2VzTEhTTzJ1aTkzcURSNHI0aEw4OXRCYXE2REJiaWJSZ1dvWUs0aFdpVG50TGtZd1Z1MGExQkVDZkpsMEZWR0xpemJIalMvek5VSDdtVWh1QWhjZzc3OU0yZGNrTWhaTmZsMC9STWRqcE9aYUpESlMwbkdhTjRNZFZuY3BDZ202TWQ3c0xVcDhWUWlucGEvWGlxbXpVMG9qekpYczRxVTJ5Z0R1a1IrdnZBenAvaDhFeTUzM0NpY2paamdIS0s4a0IrU0NZQ1BaSENOSWhoMVhFVE9Od2tUbzIrVitGL0JtRGVLQWd6TWJta08xKzJ5eG9tYTJqL2E1YWgreUx1VXFNMTlJVWVINUg2cjZmL0QwZmN5RUsrRGZ0NzRhUGFUU01FYitxRFBEc1NDNVZCZ0JoRTJSa2loM3dHQVUwVTEyNU83NTVaekpMOUM3eFRyOUt5SWxjT1VrMzREamwvNkRzWmw5NzZLc1ZOV0tlaHpJSVVNVzBSSVgxTjJ4aXRoTVJVVkpodlU3OUlzT2UvWWlMZER5OFFRcHRpc214dS95ZGRlQyt2Z1BFMFdWb2xKVmprbU1HT0RMNC9YbEZkZFpncG9tMWowRkpqZnRPUHpJbElvSkwvYUVHR0puK3E2em1SZGlwcjk3Tkp3RkxUNmFUN3V4UjdMWmk2cVZxQjFmZkN3VTJVRWVVQWFJZUovQTlYZjgzTnptK1Yxb1BTSDZFSXVXZzFzVm42UEtyL3JlM2Vscks5YitpU08yeWdOTkxsb2plK0EvMlRmc0J3dmFxMThuaTFKeTh6RXVlL2E1a1krOStnSkdOQThsR3BLRUVXbEF1UFFlWDVobUR3MXNsMTJXMUtmYWc1UFRNOGFyQy9LL0FjVzltQUlFTXFpWVl6WmZJM25jUzI0MFByQ1BFRDFFQW9IMDdjbUZQQ1VycW5MRmxKZjl6blJIUmU2NmpHVjQ0SGNOcnZhSGZxMVRRQytaY056ckFxblN1ZC9wWVNDNHhLeGVoeWF4M2xDdzNsbzR0LzhlNHZVZWxwVFpjcUtOaDdXL0p0YlpwNkJrV2JmQldjc21ETEozcC9qM3ZDaG1rcXV0eWxxd0VCS3U1YnluamlrRDlFZEd3SDVwbURRQmsrQ0xoLzhXY0NveE9sT3dMV2EvTUY0VVdnQTlmOHdCUjV1T2VVMUcrUzFjSzBqKzRDbTltc2ZzbnNrZGlCQUVqdjIxbTQ5YituUEZVRkkyYURqUHdFL0Y4RmtTbFRJc1ZuK2hQVmVlMVFPVzFxU0tzZDdHUU1pNWtzSU5nNEp2ZnloMjVZaEwzdmR5VkpJTjhWdXRmQWV4aUhEZUMvbW5qcjh6Z3hkMS9Tb3FCZTluTWJTUUxCQXVlM0hZbXBSNWdBWllFcUdENmRIK0dtUURzQzJCSjVwakZEd1V0MG05ZU5KR0VTdERLZmxZUDJrTE1ReEc5a2FmVmt1SUk4bEMvZVhZNEpYWnR3Q0o4L1hKUVJ6SStQOXJHclpDYWU4Qk9qbDdwcVhkazBISnhVUUFtRkhFc0w1S0NNdWpiT0JEL1FKK25QMldYNXJib2YydWY3MUNNZ2ZaT3FFalFkSmZZblNveDlWQnFJTXFsOVh4R0lHL0RqcEttYXpmV2hneFMwb09DakRPTldKZnRYTk5FUDN5MWJaY0dhdnl0OFVnaklBa3pLRVJjNGhkaUY2ZktoRjhyN1Nhc2JyS3J6OWxHU25FWEhMTEUvcnFyVkIvS2JQLzRTRVRyR0RuZXJUZkJXeVVmd25PTzJjaFNLNmkrQmxReDgrcm5naVdlUFBzZ2ZPQlpHUDFFMWZGSjlZb3JVbnl5YnM4WHBZZDhhaXhLWTRCZndiQ2l5Mk55MXpwSDNDNE1HL0dsZWlIYi81TW9vSERkeVlTa0g4YmxHSm0zeC9mNi9VcEVJQ05LZGRVaEtkenR5Uy9YRG9jT2pUVlNnMGFadm5rMFoybU5VOSswTHVDWENNTkRyZzUvUjZWdlV6U2VhRWtPMjRQVnZiRHFIRXRTUVV0dUNqdDZDMlVaV3NkYnIySTNaVW16Y1cxeTFDQWUzS2lMT2xTU1c1dE9sc2ZLZ3FDMGxnN2VXZmZWeGdvMHlZMU5GbFhSQ3pWazVNT2tIYldSVzUrSDZxUWFaMERvWXVySHZlaVZETGNvNTl2Y3JJbFlvcDlQV0wyaE1ENEhiWGdaTzhMYzU5aUEvTzR0aUZMQm5sUXN0MjNLOWM3cUJHUG5hNVdjcU5zMTJWcHI4bXhrUDRJSzNXL1AwZEtVM2VpSnFTbG9DUUZTS0JFR3JTUGdnVm9QOEdSRVU1cXJlcnVkZzZFbTZYTlgzN1pnYWZoa2J2WWd2TmFtbDdScEpBQ3V6aDc4Q25sZGVya0pQWHJoRXFZbG9LOStpZUF5N05uemMwaU5oSVNZdGhuU2g2WDNXUllXS3BEaWdvbzRtME5zYUgraE51MExBWmZ2QjZNcVpTY2RxMkx0YnozdkdrbHZMSW9wcjlCTzRDNXRkZHFPWUg4VXFub28xdFBMSUNIb3djUG1ydHU3K1ZzL2wwK05NV0hxVWlJL3B2UUV6TVJjMStud3E2cUlZY3lVajc3NFU3VitNMVY1VzFuempYTnlZc0hOVmErRTZGMVJhazd5MkVvYmJhak5POGxVaFBqaEZ4UlhKcWVwd0NHTDM5dkJOUlRnNDl5NldXOWRjNkV5L29vNkdJRk9WWlpLUWdud1R1dktlZ2UyaWpnPQ==");
-      localStorage.removeItem("helpShownCount");
-      localStorage.removeItem("helpShownTimestamp");
+      /* keep the user's help count*/
+//      localStorage.removeItem("helpShownCount");
+//      localStorage.removeItem("helpShownTimestamp");
     
       //Destropy cookies, and load the public user
       OPrime.setCookie("username", undefined, -365);
@@ -10239,12 +10240,12 @@ define('datum/Datum',[
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
       morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex utterance "
+            + "\n \\ex " + utterance + 
             + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
             + "\n\t\\trans `" + translation + "'"
@@ -10743,49 +10744,6 @@ define('data_list/DataList',[
         
       }
     },
-//    /**
-//     * Create a permanent data list in the current corpus.  Deprecated! this is not being used, instead the callers are making their own data lists. TODO, decide if this should be used.
-//     * 
-//     * @param callback
-//     */
-//    newDataList : function(callback) {
-//      //save the current data list
-//      var self = this;
-//      this.saveAndInterConnectInApp(function(){
-//        //clone it
-//        var attributes = JSON.parse(JSON.stringify(self.attributes));
-//        // Clear the current data list's backbone info and info which we shouldnt clone
-//        attributes._id = undefined;
-//        attributes._rev = undefined;
-//        attributes.comments = undefined;
-//        attributes.title = self.get("title")+ " copy";
-//        attributes.description = "Copy of: "+self.get("description");
-//        attributes.pouchname = app.get("corpus").get("pouchname");
-//        attributes.dateCreated = JSON.stringify(new Date());
-//        attributes.datumIds = [];
-//        self = new DataList(attributes);
-//        
-//        //TODO see if this destroys the collection in the default data list, technically it doesn't matter because this will need to be emptied and filled,a and the collciton is just part of the view, not part of the data list.
-//        var coll = self.datumsView.collection;
-//        while (coll.length > 0) {
-//          coll.pop();
-//        }
-//        
-//        // Display the new data list
-////        appView.renderReadonlyDataListViews();
-////        appView.renderEditableDataListViews();
-//        //Why call all data lists to render?
-//        self.render();
-//        self.saveAndInterConnectInApp(function(){
-//          //TOOD check this, this is used by the import to make the final datalist
-//          self.setAsCurrentDataList(function(){
-//            if(typeof callback == "function"){
-//              callback();
-//            }
-//          });
-//        });
-//      });
-//    },
     
     /**
      * Accepts two functions to call back when save is successful or
@@ -13766,6 +13724,9 @@ define('corpus/Corpus',[
             OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
             frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
           }
+          if(frequentFields == []){
+            frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
+          }
           self.frequentDatumFields = frequentFields;
           if (typeof callback == "function") {
             callback(frequentFields);
@@ -14690,7 +14651,7 @@ define('authentication/AuthenticationEditView',[
           mostLikelyAuthUrl = "McGill ProsodyLab";
         } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
           mostLikelyAuthUrl = "McGill ProsodyLab";
-        } else if (window.location.origin.indexOf("authdev.fieldlinguist.com") >= 0) {
+        } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
           mostLikelyAuthUrl = "LingSync Testing";
         } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
           mostLikelyAuthUrl = "LingSync Testing";
@@ -14971,8 +14932,6 @@ define('authentication/AuthenticationEditView',[
               localStorage.removeItem("mostRecentDashboard");
               localStorage.removeItem("mostRecentCouchConnection");
               localStorage.removeItem("encryptedUser");
-              localStorage.removeItem("helpShownCount");
-              localStorage.removeItem("helpShownTimestamp");
             
               //Destropy cookies, and load the public user
               OPrime.setCookie("username", undefined, -365);
@@ -16457,30 +16416,17 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
-
-OPrime.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
-OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
-OPrime.audioUrl = "https://audiodev.fieldlinguist.com:3184";
-OPrime.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
-OPrime.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
-OPrime.activityUrl = "https://activitydev.fieldlinguist.com:3187";
-OPrime.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
-
-/*
- * Use the current app's chrome url, assuming if its a dev, they will have their
- * own url that is not from the market, and if its a bleeding edge user, they
- * will have the market one. In both cases it is save to return the
- * window.location.href but this code is added to be clear that there is also a
- * bleeding edge url for users.
- */
-OPrime.chromeClientUrl = function(){
-  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
-    return window.location.origin;
-  }else{
-    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
-  }
+OPrime.websiteUrl = "https://localhost:3182";
+OPrime.authUrl = "https://localhost:3183";
+OPrime.audioUrl = "https://localhost:3184";
+OPrime.lexiconUrl = "https://localhost:3185";
+OPrime.corpusUrl = "https://localhost:3186";
+OPrime.activityUrl = "https://localhost:3187";
+OPrime.widgetUrl = "https://localhost:3188";
+OPrime.chromeClientUrl = function() {
+  return window.location.origin;
 };
-  
+
 /*
  * This function is the same in all webservicesconfig, now any couchapp can
  * login to any server, and register on the corpus server which matches its
@@ -16540,35 +16486,34 @@ OPrime.defaultCouchConnection = function() {
   return connection;
 };
 
-
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
   return JSON.stringify({
-    token : "$2a$10$TpNxdbXtDQuFGBYW5BfnA.F7D0PUftrH1W9ERS7IdxkDdM.k7A5oy",
-    encryptedUser : "confidential:VTJGc2RHVmtYMSsrMjk1UmdHbUJocU5sRHpsSUFGZkk2U3hCSWxEYkNrZCsvWHJyWTMyZUhwL3A0bmpKWU9sSnk2ZTFBRHB0RkQ2ZUtkVTBocEwxQnhTMHRNeW9JOWc0WUhpLzFzdFRNRFpHc1dEd1ZPdlMvTkdPK2h2akl3WVhGQ3JlYWtOTHc3T21QRHE2ZWo0SnQ1UjNqcGpYODlXRkI5alY1Yng2b0ZqYnRVWUhzZUlPRnIxYTdRSXJRdkNuSHlKWFV3ZTl2MmFnRktTOXdUc2pUbUw3SDEvd1lMMFhNQmJldzlPSTFnS0E0TXhzZ1dwa2xLcjNkZzE3endkMFN3RWlLQmowTDY4Vk1TMFpQNXgwZW5BdUdlM2tmcDZpNkxhYm82bjRsdTJmbEF3Y005Zmc3UVNqOUVXSGZiWGxNTFFWRXp1VlJzT2ZXa1J6b1Nvd3NDKzN0WWwrTmRZTUZ0WE9wTTRGTHpYSmM0bStPWkUwaGw5eHpDNVRvOC96R2F3MTR1MU9veEdydkpOQi9mSUNFVnhTb3diU3hqZFI0aU41V1h1UEhwSTlQTndERjdQYVM5QjYwM2N6UURPUWRibXcvM1p6ZXJEVHcvKzdrb01MNVRuUThxNGJYR09UQXFHNVlFVG84d2l2aUhqaE5XelZUYVhmc21KRlo4WXhCRmNlZjZCS0RESlkxZ0dWRGY0QlNMRjNqbkYrZDhFUTV3eHFCZTZ6Yk5XblkzSVF1SmNWMW8rcElVR1FNUlBVemp4My9aT3VxM2tjRzB0Q3VycEU1RWhSb1REQXVxZ0dlQTk3NThXUkZ4S3BiaEpNZmk3VCtKZ28wcXUyZHNwaDdTQzZ5bFNtY3MrcHI1UldZYVNXZldJS0gxanAzNlFDaDZrTE9ySmxHN1ZTUWF6NUU5NERCN3I4ZS8yUHZOamNtUVVoUG1OR3JCd0dlend6YTNvWitPT0R6OTJWNURWKzkwWWd4L0kvNWxOcmdaeVZBT1NVaDJUZkJiMVAwYzhxbDFzTDBiTVVVWlZJNERDVTVyeCtrTlhtTElTdW5OTmZIMWNMZkxIUVRjekU0Q1pIOW9SN0FWYTdtY01rSDN1SHRaMDVGbUFnSnhrMHFOYldGR2dKQW9jRHBxMFZlRUN0bjFKQjFrODMvS1laOWdKeUw2SjZsVzRYVjFUVzhPbi9rak1ONXlzdUdDNHRodDVCNitNWjdjb24zYVJ4b2FjRGU2dmhsZ0NwVE5jOHFqVmdkNDcvNk9TMUtPODBMSWZabytYMzVyZUJFb3FSK3RMRkxuVFpYMVlJU2h1OGJHd0JZSlpvUGI2TStIV3VpS0w4VmlCYVpOR0NhY0t4OEZISktmZGdRaDUxS2thOWdDbzdsNzdJTkh4TDB5Yit4alNvYXlyVi9oUmNZSHoxR0hSRGJpQm8rVmUxWjN3ZmxtTGczdmdONDFTdWEyYUtzMnZTVW9oenNyYWZ0QnZvYTRUckE3bUs0ZkNmWFM0d1JZMmRFMEtpUEgrSE1ZdXlOamZXYmpibFMyMlJ6ZFBuYlprMldnREpIeVAvc3U1SWpyeUFhMklwMXJSeVhZcXZEVGVqeHh2NVlPT25EK3VOcGVqT2JaVXhTVGNyQVNXSkFENXNzemdobnVTTjA1b0d5V2FtelRidVZ1YWhpcG4yRlE1OXVEUWE4Z0xVK3NFckpTdnJJNGxpWnlkUVBxb0V5WERHTUFNcy9hcTZJaGVaQWpKeVhmWUpsSHVteHhPMm0zazN6U0lCNjZLalRONVBJZE9IUit1MGVqeS85RE5Ic0I2d2pWcUhDNzBWaDZBc29VaUhxQktTQzcxdU40d1pXWW81MDlaUkhkSDhpU0JjWkFPcllXcHpvMFRacnF3WUxkZmx3WGdhYmNxUEdOeFhXTEQ2eGNEUTVxODdkdTE3WHdkRno0SEYrMnduRFhsWkF2VXVDQzd6ajFLOURZNG9oejdCeStpb1UwRUYxbEI3NUpIMFZyb2hjLzV0TGFxY1czY0hTVm9WQjNwZlM5Z2VNYmt5VkorcnVpeFYxYUYva3B1Tm1NU1BXOU9oRW9GOVkvV0VNVmJSMUdyY1BiVlU5akRGRW5vMUtNZkt3R3NCQTFxNENLUGkvcXA2ajNtT3BWSG5aUEV4blBQKzhlTXRGM1VZZCtHYlpad2IyUVh2WTRhMVVIeGRmMlN1aE5VM0hIdVQ2WWczK1Zoam1GR0R6OFNLVEQvcXVDSGIyVmxjR3VIYjl2b2RiOGpCdXVsb09QaTNCOFdsWGM0ZmNBb2JtT1VkbUppa1ZSUWVLVHYrTmpxVGVlUUNzWUJPSWFUMHY2Sjg2WkM1dmlSOGlnSlNzbXFOUFVXd1dHVjRvUzg0Z1lyQmliNTlBcjhzYUFFenpWRTZYOFVMNVNOOUErZCtWK3FRVFBEb1RmL1lWRStJTlpXTW55dGc4cGRlVDlibEx2Vk5OemV4TEVYVlNIdnVvRWN0eEhMd29lV1dLTDhLeUxNRE90bExmUWpzcGkvZ3hnc0NHbnlpbGZhWGUxYVVjNGp0QVdUSW82U0Q3S2NFKzBEeGpzM3JUdzhQdzV1VFNDNFlVVXZ1ZisyaDlrZzR3UnEzeGRrWDNwWjRjM251VlNpOVBMYlR5bS9yWjJHbHN2RERKenZBdE8xRGlldW5FTGdJKzEyTWdoTDZUUi81aFp3endLYXBWM2IzbFlpdVJhNkg4RnFveUxVYW1pdE44aG84SVpHNHMxcVg5a3hURFViTk03SEJQNzFaNUUrbTd5R0c0a0lXdmRuUnRwekJqSGpjb0JodlFCL0k4dW51VFNVclhyVGJuNzdSbEZWcDRFNFdoZmhUb1RVR2dLbEs3MTBLWXJMSmpybE5zdWxaUFAxckFXeXRlZlhTRVdMVFg3ejNrLzVGMkQyaWNxbVQ4UEIvTnNYL1ZoK1F1eTlxM0hOeFk1TngwN1VGSTZJTE1iU3h1c1doRytJSEJBUlhXUXA1ckd0U29jUnJxcmprbytoSEVXZGhMZzdxRVdPRGdWSzVmc2d5SVVCMTRsVFM0Z1IwRWZvTlpHVDhRZGhiYURObTNNdStyWkZ6R09FSHZnVWU0aXViYUxNTCtDaUNBVXRycHFvc29IYk4xK0ZadkhiQUozaE9SYU1uRUxZQlgxOEZ6N2hpQitDdmdHby9TWFZBT1UrWFlubm85ZUNzdEZqLzhwK1h5QU40b3dEdnQra0RGWlJVa3laQWF6WktiRjYwa2pyajBYY1pjMzM1QVZWVDFoYnFzNmVBR0xKeVdHbXhBbEJZbjV5QnZ1dkFRTkRES3dENlVwT2grdmpsRjRFVGRLSkVDcEZMK3kzWXVGaHNTOHpQYnhERlF4OEVkTE8wNEFVWDM2ZEppTXZ6TDJiK2hiQy9vS1lnSzRQOCsxU2tkNy9BME5YaStpdy8wMWtpMXZwMW5yL1h4RHlJaWtuMCtxTitWakZOeG9JdDkrRStYOGxTdUx6YXlLaEJyWHRqYVpXVy9mZ2h6V2lZbEVNYnI3VjE3Yll4ckRlUlRiZU83QmpvcHFQUmloYjF4VXpSMUluWGwwNktuWUdTOG5UVkNIaFRqTWQydVlXODRNL1FYeTluTE02UmJUa0QxQTY5YWdqMytDVVFTQzZTempQL2FScXdNMWxxNndIVUVpL1FEUllrU3kvSEdDV3dmdVhzTnYydDNQcXh4bjFHY3ovKzB6SUdsNnZwUnJLSU5iUURZMWtIYThJUExMcFhXSFJEMWVkQUxidjlxVXVqOXRybkI0dmF3NGROR0RqVzZmdndXT08vY0ZFNzlGNUdtd1NHb0cyQS9NeU5YSGRIdlZqbkpnZlJaNFRvc1hobFNhZ1ZIUVNYYUZacFB3b2NYM0VVSk5Lc2tkWE9QeUJET3RIUHJsUnAzTW9jZnVOZ3dNV0xBOXFhOTk5QXpKYmQzc1o1OU42WUZTai9TQzVHUkFvbE9FR0ovY3BtSFcyc0RpaHRvUWpUTFEyVG5XQmFhTncxZUE0dW0zQVVMUjZjUk44S2syNkxsaFY2cXJTZjMwc3JacGovalpGeU5ZTlYvNVV5a3V2WU1QV2tKY3NTeUx3WW51Qi81SkRGMy91NU1FQ1Y2UVpKNGlQazVGVm5NcjQwdmpIV2RoVlFUQWIvN0xmWUI0VncxcXBtckxGNTg4N3g0Zk0vRUdxanBHMjVpNXh0cmQ1WWFFSjFCZnFRdXk4bVY5NkdVWi8xTzlUSzBlZk5PdlQ2MEJyMUNjUnBBa0xEZ1NURFlJMUM0TGNWaU8zVlNDMTN2TWlhaU9mZmRjRklDYldwQ1p3Tk1hanNscVB0dzNadXNMdXF0WngzT29TNnB2T1ptdVpSeFFOUFFWSE9rVnVLQmlOYi9WY2xQSGZRaStQZjl2VEF3Qk14QjVoTmtKMzN4R3MyK2JvK0JDdWduclR3TTRQTjBxeWhZbXNXMDMxdDQ2ZHRjWlNDT1hvUExCUUtQUDBJWkU3U2NXeUUzTHBFa2xrOWZRWnFydkNQbmFxb2VkYjRQRFdoMUVJcklKMisxd1FUZmYwUkYvNkJ2d016U1ZWamx1bGY4eTU2K0k4dHRseVpoWjhPME96bGFUR1BqN0JCSk03MHVvVjRaVjlkN2E2bUhmelhKUkNzZFg3Z3A3cTJ1aFN5YmFMa2lkcXBhdXYrdE1HZ2hRdEpUS1ZQQzZvSDIvTTdoeFpvNnBsUnptL3I0YU90MGFFOUVPN1NTUy9SQ0FYMXpnLzFwa3BFQkdMbktpT0lNcTJscGRjdjh3PT0=",
+    token : "$2a$10$VEzkBbg7kN5LpiEurR7HgOuBxtcgl0g2E/1RQq8OTju7LbqZb2n7S",
+    encryptedUser : "confidential:VTJGc2RHVmtYMStHUStFa0tvUXZUeC9xWXEwZEpHYlg0NEJVU2FlUUcvWlNPK1c4NFdLTGNHeEVuRFJueU9WRU50RXlTK2p5V3B5UHZaVWJlWUhoV1NZU3RrK0N4cm9obWcxUk5jdGFIMmM5NmhyazkvTTJJNnNzN1B1MVAzbTJMTUdjTWhBWXRUTitZZ1ppbjA5N3RrMERRUGFmTTZhR1ZVRG4zZmlZbjlwZHBxcTR4VUlkQzc5UG82MG1NSndVdmJKeU0zVFZYRndhNzJnSFBNR0h1RE04TmpxVVFOSnJTbldVWEJNM3RXOVRRWDVPTi83R3FRUDRzRGRzaGQ2cktDQVpmMVZPZ1NJUVRycnNGSWYyVjVJQ21PTG5aNHczK3NONC9UM1lENDZKR0c1UGhqRUpSN2RvdElqbDB3ejFURjVjK1ZLUVRTSnhkNW1XWGVFeWFEcTNSMnYzM1RjUzJkVTNhcFRGakgxTUZLVFAwZjUxWWJ6K0tHQnlONElDcTliMGxhM2dXZGRONDZkVWdoYTk5UUFJWlQwbElhQ2MwL09rV3czWmNFcEVXYmZmUExVU0VWUW5PczdvUFRvTE5aNHJDaDhMVmh4cUlEVEFTeEtQY0hGckVsd095cDJ5OG52Z3hEVGF5WFFIL080bVJjMGdCNWJTdGVRK0ozV0wxRGd2OHgvaVFwcWJSRmd0Sk9KL1JDdWFmamxweVlieGNXV2RoYXVBcDkrM2FadkNiR2kvWnM1UVZmaS9IMHN4WlR1WVh4SDJkRGxPU004MnRCMXRHVjRQUmgwMHIyWDJuU1Jpc25DdmNWWnduR3g1Umx1eHZvQmllemJjeS9vNlI1WXA1eVRLTy84dGJuK2dTWlB5RmhWOTdZdFRia1dWY3pETkdQNElKdnR4UFZFZThhc0d1dDFzaWRtQzJLVHF0WU8zdHkwUWtVaysxZS9MNm1acmlCaWRCUEQyM2lPTGpOZDZpNzY1NWlyWFlvRTJDMWpWcU40TlgvSkhRRXZEeVY2T1Bnd3FJNjEvcURMaGVCTENlMzM3UGdQYTREeE1VVFJ0d1gzMExYWVVmUVY3NmZJUUZnLzM2RWpDSEdFOFF3V3VwWlJNTVhMWG9jaDR3c1ZNL2I3bXVJOGZPbC9UM09uUWc2N0hSeVFGZGVEaktheTlmSlZjOFB6QVRzV1Z0aVRPb2NLUGlkWm41bjNrVmJoYnhhWnNFZTE4MmNCNGloME93bU9YOTQ1Y0NmNUJqdUJtZkdLNHpxM09LWURiSDRIdFRxVHZEQmp2eEU1M2htZTh5RDI4Vkh3bk9jek4xQnF5eFRIWjc2K1A1RHFybFRNM2xsMDNrYkZ0UTNJOFNVMm8wRU1SMXMzam0rNkNoVVFlN291VGxMd052VUFab3Fmd2lybTgxZE5IaG5DbUNpTUtsTGdXd2hVQ01lY2tWMzRpcG1TS1h5ZTA3UVI1UDlzNzdDSmQrQysvcURZS3VFYTZjbG5GK1h0cE1tQkhSNndoZlA0QktZRFpWejl3eE51TFdxS0JCMi9aRjE5WlZmTHZwMkU4ZnVlM1V2MHNOWndKUFRkRWhMR3BmYmJ2UzFoaFNwQzNJTGZFZGJPbUF4RkVEUWJpK2tCRS9UdUs4NGN5YkdFOHdLUGNXbHpEeUNSa2U1QzNsQVZncjZmWldCdmFYWFVLN25mREdHNmxDM2VmeEx1MkFjcVljSjA1OE9YNzNpaEk1eFZIaUJzNE9Mb3pYRlpLMkRyVUw4SlRtekFQK3ovaUtCdVdyTTA0clAzMVBHaVJ5c1c5aVQ1ZHEyU0djVGdINS9yaTluL1duc215cmJDeEVNamJLTDFGYVZVenFnTlNVekhmcTNYNTBzRDZINVRuU2VuQldYUGNiSWxSb1htL09oODVOR3ljcFdGRUt2b2hSeWtBNEJtMG1DVnBZN0kvMmlZNTczZHNoMllkN2pHeDJIYzFIYzdONkk1ekJTdHV1VmNpQ0Y1MzZWcjJXeTV3ckpVQ0srTnEyYUp2NzJ0SHhBWXV5TGZJanN3ZGQ3dEowenNGNERRZE94VU1HUWlZWXVxK0E4MnJuTjErVURmVHI2dGc0V2xzUEFkSU1HWlhOQVh6UjAxYWRyUFRRbGxnT1pzdWoyV3JFQTNmcGIvck5tbEE5dVFCVm01RDZ3UllnSzRBMVIwMitVRWJjR053ZitmZU55ZXZYYnhmMTl6bzZvRGEra3Bkajl1Mm1yYjlVSWt4YXphWnNmMHRlVzFPTDdCNWtNNWNpeVRBZ3VrMldxancyeWJNMGZ5bGlZYnJLRGFGeWFlcFlyQ1QyV3Fod1hxY0p0ZUYvZURteloxZ0JiN2dteGRuQURMSnAyVHZGZnRSWTBibnFOcjRrd3NEUHo3a2hnM2dnc3J5MFBjYU1PQlVnazdPOU1hNmF5aFlTY3pRWG5qalV0dkp6am1scjVBZ0ZabHVGZFQyM2hNVmtGQ240WkVzbUNJVGZxUm1qQ0xkTk1tSW4xem8wVEVwb3d2ZUZIbWk0dUY5UmFzSXlEVmpPczJZQUU0bnJFYTgvTEM1ZzdaWGo4M0JDbGhtc1FBWkVOMC9LZXAyNTM3UzNBQ0lzU2FDWUN0aXh2V2pPSGk1R01IRndlUFNSSzAwRndqMWt6K3FwTitmSStLdHdBQ2E0d0djL1dZbGN2RTd1NXlReXdmMWk1dVN2L2dKSnp0cHNJc3FtYXJzd29BZVMzd3VhSkxrQklnVDNOeWowdHo2QlB3OEdsSXdDYnpwenVFVG9QM1k4STk5OGpnb2JXZ094V0dNbXIrZE9jcDdaKzdOZ2FZa1pKTUt1cWM3eDdLajAwRzVOcnVzanhqWEw2UUtkRjVVa1NCUWJPQ3RsZ0xrekIvRDBoZWhSMld6SjdldCtSL0dWcVd4NnlMU21ySHhEakNwcTFRd0o1YVFNbGU3RFAyenZUSnh0WjlGa3JyZHZFeDkxM1psVzBuVEFYeFFKcVJWWHB1R2tsUXdoTHFheTVTUk1iNldKU3NlOFBKdC9rTi9vVGZ2ZlhUSHJ6TWVYZWtiSDltY2Vyc1JMUmhPZW85dDlvZU1jM3NXZ1lWOVBIR1gzbmtGOXJqOG1FTlBSMzlKNlJHeEE2bW9NUXBHUmhGWjB4dlBjYzRuWXRvVUcyYVNUVzJTTk9ONEROVWkxcE9neWd6UzgzR3NZbWNIdEQvSVJ6Uy9BRndsdSszWlJZMWRxWER6S1g3UHNQelcrdlhHNnptTnVSM0ljekVlRGFwakNqSmJNUCtLRE9PN3BVZ3ErSnJOa3NDTkxQSlpwa1lhTDN1bENwTzNNQkVHVjd5N1E4SWtzcjBmalRwK2p1NEpIN0dLZjREZzg4ZkU1Mk9MSVphMXYzNFkyaEZmbEpKM3lrWG5mNEF1N0Q5YkhMVm4yZEMwdWdzL0dpQkhMbGplV0xnaUdKanBzcnBTSUcwK04rRythMW9IUU5GOWJLV2lHdXVSM2ZQaHRoUU9vdFV4Vi9ZL3BSVWhYT2gxcnAvcUlWSUY2SnFXcTRTYmc0TkhIVWs5bXZVVjZ1Tk5oZnAzd2phbndJb3J0cFNnVlI5cTZXSzhqQ1JJUnhmdWxBZUVrb0RYZy94RUJ2c21RU1B6NGtmbFQrd3RFMDNZcEM3d2tBYVZyVnZYbDU2QW4yeVo3aVhuVnF3Ty9yZ1BnNmk5eU9yS0xac0NoK3VTbVB1OUtIdXlFY29xenFQTzNWQzMxUGpJendSZXd4UmhvUUpZR05PdUFxZ1ZHTzY4TWRwdG1yeElsRU1oMFBiY0pjRUd3eE5Wd1B5OGp2SXZ3cWxnSWcvSlRPZ1F0TnprWnlLY2ZhQlJsSiszdXhZQTA3SjBTbDlkQXRDcytWZkY5bFhVNG5EMjZsaVFKY3ZpU2FROFphSGR5Z25XNWJxellMR2dnSFhFR3hwbkpIVmJ5VnpyNHJiR0hkaGJud2tqZ2c4L0JidnFFcm1ib2REUWlaVCsyU0ZEenVlb3VuUTVzT0ppY2JqVHBIUlpjaE14OEllZ3hCTjZBdFA4b0V2aWpkVE01TDBmUW9RNDk2ZDZLTU5zRDVtOE1EUjhKZnM4RE1tTStTQjg1VndPZ3lPUFZYVzdpdmVPM0JvekMzak8wcXMwMFhxZGRpL2ZSUnlBTU9pczdOM0tBUzd2MkpOQnhJTlFncytJbS9kWE1pZ010dG1UREJiTjE5QnBjN1QwcE1DaFZmSGUzN3NzZVczeXpnbFlZeHkwdEdWcTNFZFM2eVVDdXAvV05xbVZoVS9ZcjRYbUFpbFhxbkpIcHM4ZlkwaE8vWTloeTl4dEdHN1R0WEE0cVpkK0JVQ2pPYldRK0QyVjRuUTdDaWk5bVRyblZWTHcycUpaS05ibzZDSmFrSXhwK252MVhPZWhpeXNYUnFrZGZGT0czNmxRelI5MDJlSzNVUWJlbmV5cDVKUlVCMG1vY0xxd1NpWkdMVXNvT1g3WXFxTjM5T3ZPZmRIVXdDRm1pRHRPamNIUDBNSklWR2NvLzdDMWdOU29jc1BBM1V0dFRYcjk3UVB1SzJ4TkQ2UXFyUWlUallHMlFJanc4ZHZVK2tlTW5ldU50SExwYVlxSlBIcVRhdz09",
     username : "public"
   });
 };
 
 OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
-  if(OPrime.isCouchApp()){
+  if (OPrime.isCouchApp()) {
     var corpusURL = window.location.origin;
     if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
-    } else if (corpusURL.indexOf("authdev.fieldlinguist.com") >= 0) {
+    } else if (corpusURL.indexOf("ifielddevs.iriscouch.com") >= 0) {
       corpusURL = "https://ifielddevs.iriscouch.com";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
       corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }
-    optionalCouchAppPath = corpusURL+"/"+dbname+"/_design/pages/";
+    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/pages/";
   }
   return optionalCouchAppPath;
 };
-define("libs/webservicesconfig_devserver", function(){});
+define("libs/webservicesconfig_local", function(){});
 
 if (window.location.origin != "localhost") {
   if (window.location.protocol == "http:") {
@@ -16604,7 +16549,7 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_devserver"
+    "webservicesconfig" : "libs/webservicesconfig_local"
   },
   shim : {
     
@@ -16673,7 +16618,7 @@ require.config({
 require([ 
       "user/UserApp",  
       "backbone",
-      "libs/webservicesconfig_devserver"
+      "libs/webservicesconfig_local"
       ], function(
           App,
           forcingpouchtoloadearly
@@ -16704,7 +16649,7 @@ require([
 //    "compiledTemplates",
 //    "backbone",
 //    "backbone_pouchdb",
-//    "libs/webservicesconfig_devserver",
+//    "libs/webservicesconfig_local",
 //    "libs/OPrime"
 //], function(
 //    UserApp,
