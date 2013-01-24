@@ -11733,7 +11733,7 @@ define('authentication/Authentication',[
        */
       if(serverResults.user.newCorpusConnections){
         if(window.appView){
-          window.appView.toastUser("You have have been added to a new corpus team by someone! Click here to see the corpora to which you have access.","alert-success","Added to corpus!");
+          window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
         }
         for(var x in serverResults.user.newCorpusConnections){
           if(_.pluck(serverResults.user.corpuses,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
@@ -25259,13 +25259,18 @@ define('app/AppView',[
         $("#toast-user-area").find(".close").click();
       },
       "click .dont_close_notifications_dropdown_if_user_clicks" : function(e){
-        if(e){
-          //dont close the dropdown
-          e.stopPropagation();
-          e.preventDefault();
-        }
-        if($(e.target).hasClass("close")){
-          $(e.target).parent().alert("close");
+        if($(e.target).attr("data-toggle") == "modal"){
+          //let it close the dropdown and open the modal
+        }else{
+          
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          if($(e.target).hasClass("close")){
+            $(e.target).parent().alert("close");
+          }
         }
       },
       "click .save-dashboard": function(){
@@ -25754,8 +25759,8 @@ define('app/AppView',[
       
       /* Open the notificaitons area so they can see it */
       $("#notification_dropdown_trigger").dropdown("toggle");
-      /* Close it 5 seconds later, if short text, 30 seconds if long text */
-      var numberOfMiliSecondsToWait = 5000;
+      /* Close it 3 seconds later, if short text, 30 seconds if long text */
+      var numberOfMiliSecondsToWait = 3000;
       if(message.length > 500){
         numberOfMiliSecondsToWait = 30000;
       }
