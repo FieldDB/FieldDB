@@ -417,13 +417,18 @@ define([
         $("#toast-user-area").find(".close").click();
       },
       "click .dont_close_notifications_dropdown_if_user_clicks" : function(e){
-        if(e){
-          //dont close the dropdown
-          e.stopPropagation();
-          e.preventDefault();
-        }
-        if($(e.target).hasClass("close")){
-          $(e.target).parent().alert("close");
+        if($(e.target).attr("data-toggle") == "modal"){
+          //let it close the dropdown and open the modal
+        }else{
+          
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          if($(e.target).hasClass("close")){
+            $(e.target).parent().alert("close");
+          }
         }
       },
       "click .save-dashboard": function(){
