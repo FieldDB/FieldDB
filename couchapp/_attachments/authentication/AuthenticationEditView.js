@@ -497,8 +497,6 @@ define([
               localStorage.removeItem("mostRecentDashboard");
               localStorage.removeItem("mostRecentCouchConnection");
               localStorage.removeItem("encryptedUser");
-              localStorage.removeItem("helpShownCount");
-              localStorage.removeItem("helpShownTimestamp");
             
               //Destropy cookies, and load the public user
               OPrime.setCookie("username", undefined, -365);
