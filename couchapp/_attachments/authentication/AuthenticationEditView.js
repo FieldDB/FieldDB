@@ -193,6 +193,7 @@ define([
         $("#logout").hide();
         $("#login_form").show();
         $("#login_register_button").show();
+        $("#loggedin_customize_on_auth_dropdown").hide();
 
         if(this.model.get("userPublic") != undefined){
           OPrime.debug("\t rendering AuthenticationEditView's UserView");
@@ -234,7 +235,12 @@ define([
       //localization
       $(this.el).find(".locale_Private_Profile").html(Locale.get("locale_Private_Profile"));
       $(this.el).find(".locale_An_offline_online_fieldlinguistics_database").html(Locale.get("locale_An_offline_online_fieldlinguistics_database"));
-
+      
+      $(this.el).find(".locale_User_Settings").html(Locale.get("locale_User_Settings"));
+      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
+      $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
+      $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
+      
       return this;
     },
     
@@ -497,8 +503,6 @@ define([
               localStorage.removeItem("mostRecentDashboard");
               localStorage.removeItem("mostRecentCouchConnection");
               localStorage.removeItem("encryptedUser");
-              localStorage.removeItem("helpShownCount");
-              localStorage.removeItem("helpShownTimestamp");
             
               //Destropy cookies, and load the public user
               OPrime.setCookie("username", undefined, -365);
