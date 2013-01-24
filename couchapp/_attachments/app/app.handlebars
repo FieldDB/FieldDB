@@ -24,57 +24,6 @@
 				<ul class="nav" role="navigation ">
 
 
-					<!--  Customize dropdown TODO move back ot user dropdown -->
-					<!--  Customize dropdown -->
-					<li class="dropdown"><a id="customize_dropdown_trigger"
-						href="#" role="button" class="dropdown-toggle"
-						data-toggle="dropdown"><i class="icon-cog icon-white"></i>
-							Customize <b class="caret"></b></a>
-						<ul class="dropdown-menu" role="menu"
-							aria-labelledby="customize_dropdown_trigger">
-
-
-							<li><a tabindex="-1" data-toggle="modal"
-								href="#user-preferences-modal"><i class=" icon-cog"></i> <span
-									class="locale_User_Settings"></span> </a></li>
-							<li><a tabindex="-1" data-toggle="modal"
-								href="#hotkey-settings-modal"><i class=" icon-hdd"></i> <span
-									class="locale_Keyboard_Shortcuts"></span></a></li>
-							<li><a tabindex="-1" class="corpus-settings"><i
-									class=" icon-cogs"></i> <span class="locale_Corpus_Settings"></span></a></li>
-							<li class="divider"></li>
-
-              <li ><a tabindex="-1" href="#"> <i
-                  class="icons icon-upload sync-everything icon-white">
-                    Back-up your preferences </i>
-              </a></li>
-              <li class="divider"></li>
-              
-							<li><a tabindex="-1" href="#help/illustratedguide"><i
-									class="icon-gift"></i> New! Quick Start Illustrated Guide</a></li>
-							<li><a tabindex="-1" href="http://fieldlinguist.com"
-								target="_blank"><i class="icon-film"></i> Help Videos and
-									User Guide</a></li>
-							<li><a tabindex="-1"
-								href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ"
-								target="_blank"><i class=" icon-beaker"></i> Bug
-									Report/Contact Us</a></li>
-							<li><a tabindex="-1"
-								href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed"
-								target="_blank"><i class=" icon-github"></i> OpenSource v<span
-									class="fielddb-version"></span></a></li>
-							<li class="power-users-link"><a tabindex="-1"
-								data-toggle="modal" href="#terminal-modal"><i
-									class=" icon-magic"></i> <span
-									class="locale_Terminal_Power_Users"></span> </a></li>
-
-							
-							<!-- <li><a tabindex="-1" href="#"><i class="icon-trash"></i>
-									Clear all customization</a></li> -->
-
-							
-
-						</ul></li>
 
 
 					<!-- Notification -->
@@ -137,11 +86,11 @@
 						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
 						data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
 							<button id="login_register_button" class="btn btn-success hide">Login/Register</button>
-							<span id="user-quickview"> <i
+							<span id="loggedin_customize_on_auth_dropdown">Customize</span><span id="user-quickview"> <i
 								class="icons icon-user icon-white"></i>
 						</span>
 					</a>
-						<ul class="dropdown-menu" id="authentication-embedded" role="menu"
+						<ul class="dropdown-menu scrollable min_auth_dropdown_size" id="authentication-embedded" role="menu"
 							aria-labelledby="user_drop_down_trigger"></ul></li>
 
 
