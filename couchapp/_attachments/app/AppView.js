@@ -409,6 +409,13 @@ define([
         window.appView.currentCorpusReadView.render();
         app.router.showFullscreenCorpus();
       },
+      "click .clear_all_notifications" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#toast-user-area").find(".close").click();
+      },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
