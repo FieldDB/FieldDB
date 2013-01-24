@@ -662,10 +662,36 @@ define([
     router : AppRouter,
 
     showHelpOrNot : function() {
+      
       var username = this.get("authentication").get("userPrivate").get("username");
+      if(username == "public"){
+        //Dont show the help screen for the public user
+        return;
+      }
       var helpShownCount = localStorage.getItem(username+"helpShownCount") || 0;
       var helpShownTimestamp = localStorage
       .getItem(username+"helpShownTimestamp") || 0;
+
+      /*
+       * dont show the guide immediately if they are truely a new
+       * user, let them see the dashboard before they wonder how
+       * to use it. 60 seconds later, show the help.
+       */ 
+      if(helpShownTimestamp == 0){
+        $(".help_count_reason").html("Just in case you were wondering what all those buttons are for, check out Gretchen's Illustrated Guide to your dashboard! ");
+
+        $(".help_count_left").html(3-helpShownCount);
+        localStorage.setItem(username+"helpShownCount", ++helpShownCount);
+        localStorage.setItem(username+"helpShownTimestamp", Date.now());
+        window.setTimeout(function(){
+          window.app.router.navigate("help/illustratedguide", {trigger: true});
+        },60000);
+        return;
+      }
+      
+      /*
+       * If this is not a brand new user:
+       */
       var milisecondsSinceLastHelp = Date.now() - helpShownTimestamp;
       
       /* if its been more than 5 days, reset the help shown count to trigger the illustrated guide */
@@ -673,13 +699,10 @@ define([
         helpShownCount = 0;
         $(".help_count_reason").html("Welcome back! It's been more than 5 days since you opened the app. ");
       }
-      if(helpShownTimestamp == 0){
-        $(".help_count_reason").html("Welcome!");
-      }
-      if (helpShownCount > 5) {
+      if (helpShownCount > 3) {
         // do nothing
       } else {
-        $(".help_count_left").html(5-helpShownCount);
+        $(".help_count_left").html(3-helpShownCount);
         localStorage.setItem(username+"helpShownCount", ++helpShownCount);
         localStorage.setItem(username+"helpShownTimestamp", Date.now());
         window.app.router.navigate("help/illustratedguide", {trigger: true});
