@@ -524,7 +524,12 @@ line.link {
 .scrollable {
 	overflow: auto !important;
 	height: 25em !important;
-	width: 100% !important;
+	width: 100% ;
+}
+
+.min_auth_dropdown_size {
+	width: 25em !important;
+	min-height: 35em !important;
 }
 
 #dashboard_loading_spinner {
