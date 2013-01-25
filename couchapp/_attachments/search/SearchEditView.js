@@ -123,6 +123,7 @@ define([
       $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
       $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
       
+//      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
       
@@ -132,8 +133,6 @@ define([
      //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
-      //put "grammatical" to search by default for only grammatical forms. 
-      $(this.el).find(".judgement").find("input").val("grammatical");
       
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
@@ -212,6 +211,8 @@ define([
     changeViewsOfInternalModels : function(){
       
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
+      //put "grammatical" to search by default for only grammatical forms. 
+      window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
