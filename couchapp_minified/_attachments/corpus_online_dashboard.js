@@ -9375,9 +9375,9 @@ define('datum/Datum',[
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var value = criteria.substring(delimiterIndex + 1);
-      /* handle the fact that "" means grammatical, so if user asks for grammatical specifically, give only the ones wiht empty judgemnt */
+      /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
       if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(objectToSearchThrough[label] == ""){
+        if(!objectToSearchThrough[label]){
           return true;
         }
       }
@@ -23468,6 +23468,7 @@ define('search/SearchEditView',[
       $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
       $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
       
+//      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
       
@@ -23477,8 +23478,6 @@ define('search/SearchEditView',[
      //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
-      //put "grammatical" to search by default for only grammatical forms. 
-      $(this.el).find(".judgement").find("input").val("grammatical");
       
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
@@ -23557,6 +23556,8 @@ define('search/SearchEditView',[
     changeViewsOfInternalModels : function(){
       
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
+      //put "grammatical" to search by default for only grammatical forms. 
+      window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,

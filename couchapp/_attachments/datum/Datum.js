@@ -390,9 +390,9 @@ define([
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var value = criteria.substring(delimiterIndex + 1);
-      /* handle the fact that "" means grammatical, so if user asks for grammatical specifically, give only the ones wiht empty judgemnt */
+      /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
       if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(objectToSearchThrough[label] == ""){
+        if(!objectToSearchThrough[label]){
           return true;
         }
       }
