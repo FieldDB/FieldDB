@@ -114,12 +114,14 @@ define( [
       "click .add-column" : "insertDoubleColumnsInTable",
       "blur .export-large-textarea" : "updateRawText"
     },
-    _dragOverEvent: function (e) {
-      if (e.originalEvent) e = e.originalEvent;
+    _dragOverEvent : function(e) {
+      if (e.preventDefault)
+        e.preventDefault();
+      if (e.originalEvent)
+        e = e.originalEvent;
       var data = this._getCurrentDragData(e);
 
       if (this.dragOver(data, e.dataTransfer, e) !== false) {
-        if (e.preventDefault) e.preventDefault();
         e.dataTransfer.dropEffect = 'copy'; // default
       }
     },
@@ -183,6 +185,7 @@ define( [
     drop: function (data, dataTransfer, e) {
       (function(){
         var self = window.appView.importView.model;
+        OPrime.debug("Recieved drop of files.");
         self.set("files", dataTransfer.files);
         self.readFiles();
       })();

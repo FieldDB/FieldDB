@@ -409,6 +409,28 @@ define([
         window.appView.currentCorpusReadView.render();
         app.router.showFullscreenCorpus();
       },
+      "click .clear_all_notifications" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#toast-user-area").find(".close").click();
+      },
+      "click .dont_close_notifications_dropdown_if_user_clicks" : function(e){
+        if($(e.target).attr("data-toggle") == "modal"){
+          //let it close the dropdown and open the modal
+        }else{
+          
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          if($(e.target).hasClass("close")){
+            $(e.target).parent().alert("close");
+          }
+        }
+      },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
@@ -887,11 +909,23 @@ define([
       if(!heading){
         heading = Locale.get("locale_Warning");
       }
-      $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
+      $('#toast-user-area').prepend("<div class='alert "+alertType+" alert-block fade in'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
         +"</div>");
+      
+      /* Open the notificaitons area so they can see it */
+      $("#notification_dropdown_trigger").dropdown("toggle");
+      /* Close it 3 seconds later, if short text, 30 seconds if long text */
+      var numberOfMiliSecondsToWait = 3000;
+      if(message.length > 500){
+        numberOfMiliSecondsToWait = 30000;
+      }
+      window.setTimeout(function(){
+        $("#notification_dropdown_trigger").dropdown("toggle");
+      }, numberOfMiliSecondsToWait);
+      
     },
     /**
      * 
