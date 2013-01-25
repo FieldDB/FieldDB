@@ -47,6 +47,7 @@ define([
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       "render/:render"                  : "renderDashboardOrNot",
       "help/:helptype"                  : "renderHelp",
+      "login"                           : "renderlogin",
       ""                                : "showDashboard"
     },
 
@@ -144,7 +145,13 @@ define([
       window.scrollTo(0,0);
 
     },
-
+    
+    renderlogin : function(){
+      $("#login_modal").show("modal");
+      window.local.href="#";
+      //window.local.replace("#login_modal");
+    },
+    
     /**
      * Displays all of the corpus details and settings. 
      * 
@@ -311,71 +318,28 @@ define([
           return;
         }
 
-        if(app.get("corpus").get("dataLists").length > 0){
-          /*
-           * If it is the defualt we want to fetch, which might have its
-           * mostrecent version in the corpus, we will save the corpus's
-           * default data list so that it will be the one we fetch.
-           */
-          if(dataListid == app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].id){
-            app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].changePouch(null, function(){
-              app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].save(null, {
-                success : function(model, response) {
-                  
-                  //wait until the corpus copy is saved before fetching.
-                  dl.changePouch(pouchname, function(){
-                    //fetch only after having setting the right pouch which is what changePouch does.
-                    dl.fetch({
-                      success : function(e) {
-                        OPrime.debug("Datalist fetched successfully" +e);
-                        app.get("currentDataList").saveAndInterConnectInApp(function(){
-                          dl.setAsCurrentDataList( function(){
-                            window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-//                              window.app.router.showDashboard();
-                              window.appView.renderReadonlyDataListViews("fullscreen");
-//                              window.appView.renderReadonlyDashboardViews();
-                            });
-                          });
-                        });
-                      },
-                      error : function(e) {
-                        alert("There was an error fetching the data list. Loading defaults..."+e);
-                      }
-                    });
+        /*
+         * If it isnt the default data list, just fetch it.
+         */
+        dl.changePouch(pouchname, function(){
+          //fetch only after having setting the right pouch which is what changePouch does.
+          dl.fetch({
+            success : function(e) {
+              OPrime.debug("Datalist fetched successfully" +e);
+              app.get("currentDataList").saveAndInterConnectInApp(function(){
+                dl.setAsCurrentDataList( function(){
+                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                    window.appView.renderReadonlyDataListViews("fullscreen");
                   });
-                  
-                }
-              ,error : function(){
-              }
+                });
               });
-            
-            
-            });
-          }else{
-            /*
-             * If it isnt the default data list, just fetch it.
-             */
-            dl.changePouch(pouchname, function(){
-              //fetch only after having setting the right pouch which is what changePouch does.
-              dl.fetch({
-                success : function(e) {
-                  OPrime.debug("Datalist fetched successfully" +e);
-                  app.get("currentDataList").saveAndInterConnectInApp(function(){
-                    dl.setAsCurrentDataList( function(){
-                      window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                        window.appView.renderReadonlyDataListViews("fullscreen");
-                      });
-                    });
-                  });
-                },
-                error : function(e) {
-                  alert("There was an error fetching the data list. Loading defaults..."+e);
-                }
-              });
-            });
-            
-          }
-        }
+            },
+            error : function(e) {
+              alert("There was an error fetching the data list. Loading defaults..."+e);
+            }
+          });
+        });
+
       }
      //TODO test other cases where datalist id needs to be changed
 
@@ -461,6 +425,12 @@ define([
             	window.appView.currentReadDataListView.render();
             	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
             	window.app.stopSpinner();
+            },function(){
+              window.app.stopSpinner();
+              window.location.href="#";
+              if(localStorage.getItem("username") == "public"){
+                alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+              }
             });
         });
         

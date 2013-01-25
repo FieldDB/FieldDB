@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "corpus/Corpus",
     "corpus/Corpuses",
     "corpus/CorpusLinkView",
@@ -11,7 +10,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     Corpus,
     Corpuses,
     CorpusLinkView,
@@ -182,21 +180,21 @@ define([
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "your private profile",
               indirectobject : "",
               teamOrPersonal : "personal",
               context : "via Offline App"
-            }));
+            });
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
               indirectobject : "",
               teamOrPersonal : "team",
               context : "via Offline App"
-            }));
+            });
       }else{
         //It is the public self
         window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
@@ -205,21 +203,21 @@ define([
         });
         
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>your public profile</a>",
               indirectobject : "",
               teamOrPersonal : "personal",
               context : "via Offline App"
-            }));
+            });
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
               indirectobject : "",
               teamOrPersonal : "team",
               context : "via Offline App"
-            }));
+            });
       }
       
       window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");

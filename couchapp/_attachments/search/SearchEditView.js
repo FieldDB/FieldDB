@@ -123,6 +123,7 @@ define([
       $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
       $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
       
+//      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
       
@@ -131,6 +132,7 @@ define([
 
      //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
+      
       
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
@@ -193,6 +195,7 @@ define([
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
+            filledWithDefaults: true,
             "pouchname" : window.app.get("corpus").get("pouchname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."
@@ -208,6 +211,8 @@ define([
     changeViewsOfInternalModels : function(){
       
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
+      //put "grammatical" to search by default for only grammatical forms. 
+      window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
@@ -341,7 +346,7 @@ define([
               + $("#search_box").val()
               + " in " 
               + window.app.get("corpus").get("title") 
-              + " on "+ JSON.stringify(new Date()) );
+              + " on "+ new Date() );
           searchself.searchDataListView.format = "search";
           searchself.searchDataListView.render();
 //          searchself.searchPaginatedDataListDatumsView.renderInElement(

@@ -159,6 +159,9 @@ define([
       }
       window.appView.currentCorpusReadView.destroy_view();
       
+      // Get the corpus' current precedence rules
+      this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("pouchname"));
+     
       if (this.model == undefined) {
         OPrime.debug("\tCorpus model was undefined.");
         return this;
@@ -174,6 +177,9 @@ define([
 
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
+          if(jsonToRender.description && jsonToRender.description.length > 200){
+            jsonToRender.description = jsonToRender.description.substring(0,150)+"...";
+          }
           $(this.el).html(this.templateSummary(jsonToRender));
           
           $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
@@ -326,7 +332,7 @@ define([
       
       // Create a list of DataLists
       this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.get("dataLists"),
+        collection : this.model.datalists,
         childViewConstructor : DataListReadView,
         childViewTagName     : 'li',
         childViewFormat      : "link"
@@ -348,14 +354,6 @@ define([
         childViewTagName     : 'li',
         childViewFormat      : "corpus"
       });
-      
-      // Create a DataList List
-      this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.get("dataLists"),
-        childViewConstructor : DataListReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "link"
-      });
 
 //      this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
@@ -368,7 +366,7 @@ define([
       
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
-         collection : this.model.get("sessions"),
+         collection : this.model.sessions,
          childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
          childViewFormat      : "link"  

@@ -18,7 +18,8 @@ define("lexicon/LexiconNodes",
        * @constructs
        * 
        */
-    model : LexiconNode,
+      internalModels : LexiconNode,
+      model : LexiconNode,
     /*
      * if want to do versioning on nodes, or if we want to do something
      * special with all the similar nodes. most likely this will be
