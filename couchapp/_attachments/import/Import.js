@@ -598,6 +598,8 @@ define([
         blob = file.webkitSlice(start, stop + 1);
       } else if (file.mozSlice) {
         blob = file.mozSlice(start, stop + 1);
+      }else if(file.slice){
+        blob = file.slice(start, stop + 1);
       }
       reader.readAsBinaryString(blob);
 //      reader.readAsText(file);
