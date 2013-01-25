@@ -159,6 +159,9 @@ define([
       }
       window.appView.currentCorpusReadView.destroy_view();
       
+      // Get the corpus' current precedence rules
+      this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("pouchname"));
+     
       if (this.model == undefined) {
         OPrime.debug("\tCorpus model was undefined.");
         return this;

@@ -181,6 +181,10 @@ define([
         OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
+
+      // Build the lexicon
+      this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
+      
       OPrime.debug("CORPUS EDIT render: ");
       if( this.format != "modal"){
         window.appView.currentCorpusEditView.destroy_view();
