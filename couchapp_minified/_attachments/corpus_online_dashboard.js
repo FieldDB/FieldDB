@@ -21934,6 +21934,8 @@ define('import/Import',[
         blob = file.webkitSlice(start, stop + 1);
       } else if (file.mozSlice) {
         blob = file.mozSlice(start, stop + 1);
+      }else if(file.slice){
+        blob = file.slice(start, stop + 1);
       }
       reader.readAsBinaryString(blob);
 //      reader.readAsText(file);
@@ -22058,12 +22060,14 @@ define('import/ImportEditView', [
       "click .add-column" : "insertDoubleColumnsInTable",
       "blur .export-large-textarea" : "updateRawText"
     },
-    _dragOverEvent: function (e) {
-      if (e.originalEvent) e = e.originalEvent;
+    _dragOverEvent : function(e) {
+      if (e.preventDefault)
+        e.preventDefault();
+      if (e.originalEvent)
+        e = e.originalEvent;
       var data = this._getCurrentDragData(e);
 
       if (this.dragOver(data, e.dataTransfer, e) !== false) {
-        if (e.preventDefault) e.preventDefault();
         e.dataTransfer.dropEffect = 'copy'; // default
       }
     },
@@ -22127,6 +22131,7 @@ define('import/ImportEditView', [
     drop: function (data, dataTransfer, e) {
       (function(){
         var self = window.appView.importView.model;
+        OPrime.debug("Recieved drop of files.");
         self.set("files", dataTransfer.files);
         self.readFiles();
       })();
