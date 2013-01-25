@@ -132,6 +132,9 @@ define([
      //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
       
+      //put "grammatical" to search by default for only grammatical forms. 
+      $(this.el).find(".judgement").find("input").val("grammatical");
+      
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
       $("#search-top").find(".locale_Advanced_Search").html(Locale.get("locale_Advanced_Search"));

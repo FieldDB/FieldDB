@@ -9375,8 +9375,16 @@ define('datum/Datum',[
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
       var value = criteria.substring(delimiterIndex + 1);
-      
-      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value) >= 0);
+      /* handle the fact that "" means grammatical, so if user asks for grammatical specifically, give only the ones wiht empty judgemnt */
+      if(label == "judgement" && value.toLowerCase() == "grammatical"){
+        if(objectToSearchThrough[label] == ""){
+          return true;
+        }
+      }
+//      if(!label || !value){
+//        return false;
+//      }
+      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value.toLowerCase()) >= 0);
     },
     
     /**
@@ -9406,9 +9414,10 @@ define('datum/Datum',[
           queryTokens.push(currentItem);
           currentString = "";
         } else if (currentString) {
-          currentString = currentString + " " + currentItem.toLowerCase();
+          /* toLowerCase introduces a bug in search where camel case fields loose their capitals, then cant be matched with fields in the map reduce results */
+          currentString = currentString + " " + currentItem;//.toLowerCase();  
         } else {
-          currentString = currentItem.toLowerCase();
+          currentString = currentItem;//.toLowerCase();
         }
       }
       queryTokens.push(currentString);
@@ -23467,6 +23476,9 @@ define('search/SearchEditView',[
 
      //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
+      
+      //put "grammatical" to search by default for only grammatical forms. 
+      $(this.el).find(".judgement").find("input").val("grammatical");
       
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
