@@ -3,10 +3,9 @@ define([
     "handlebars",
     "app/App", 
     "app/AppRouter",
-    "activity/ActivityFeed",
-    "activity/ActivityFeedView",
     "authentication/Authentication",
     "authentication/AuthenticationEditView",
+    "comment/Comments",
     "corpus/Corpus", 
     "corpus/CorpusMask", 
     "corpus/CorpusEditView",
@@ -47,10 +46,9 @@ define([
     Handlebars,
     App, 
     AppRouter, 
-    ActivityFeed,
-    ActivityFeedView,
     Authentication,
     AuthenticationEditView,
+    Comments,
     Corpus, 
     CorpusMask,
     CorpusEditView,
@@ -137,53 +135,16 @@ define([
       });
       this.currentCorpusReadView.format = "leftSide";
       
-      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( new CorpusMask(this.model.get("corpus").get("publicSelf")) );
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( this.model.get("corpus").get("publicSelf") );
 
       //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
       if(! this.corpusNewModalView){
         OPrime.debug("Creating an empty new corpus for the new Corpus modal.");
         this.corpusNewModalView = new CorpusEditView({
-          model : new Corpus()
+          model : new Corpus({filledWithDefaults: true})
         });
         this.corpusNewModalView.format = "modal";
       }
-      
-      // Create the corpus team activity view
-      OPrime.debug("Setting up the team activity feed.");
-      if(!this.model.get("currentCorpusTeamActivityFeed")){
-        OPrime.bug("Why isnt this existing?");
-        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed());//TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-      }
-      
-      //TODO dont need to initialize the pouch of the activity feed here?
-//      try{
-//        //If the activity feed's pouch is not the same as this corpus, create a new activity feed, and set it up with this corpus' activity feed
-//        if(this.model.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname.indexOf(this.model.get("corpus").get("couchConnection").pouchname == -1)){
-//          this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-//          
-//          var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
-//          activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
-//          this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-//        }
-//      }catch(e){
-////        alert("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus");
-//        OPrime.debug("something wasnt set in the currentCorpusTeamActivityFeed or corpus, so cant make sure that their pouches are connected. overwriting the currentCorpusTeamActivityFeed's pouch to be sure it is conencted to the corpus",e);
-//        this.model.set("currentCorpusTeamActivityFeed", new ActivityFeed()); //TODO not setting the Activities, not setting the Activities, means that it will be empty. ideally this shoudl be a new collection, fetched from the corpus team server via ajax
-//        
-//        var activityCouchConnection = JSON.parse(JSON.stringify(this.model.get("corpus").get("couchConnection")));
-//        activityCouchConnection.pouchname =  this.model.get("corpus").get("couchConnection").pouchname+"-activity_feed";
-//        this.model.get("currentCorpusTeamActivityFeed").changePouch(activityCouchConnection);
-//      }
-      //If the feed is defined, don't re-define it
-      if(this.activityFeedCorpusTeamView){
-//        this.activityFeedCorpusTeamView.destroy_view();
-      }else{
-        this.activityFeedCorpusTeamView = new ActivityFeedView({
-          model : this.model.get("currentCorpusTeamActivityFeed")
-        }); 
-        this.activityFeedCorpusTeamView.format = "rightSideCorpusTeam";
-      }
-      
       
       //TODO not sure if we should do this here
       // Create an ImportEditView
@@ -215,6 +176,7 @@ define([
       
       // Create the embedded and fullscreen DatumContainerEditView
       var datumsToBePassedAround = new Datums();
+      datumsToBePassedAround.model = Datum; //TOOD workaround for model being missing
       this.datumsEditView = new DatumContainerEditView({
         model : datumsToBePassedAround
       });
@@ -257,6 +219,7 @@ define([
         OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
+            comments : new Comments(),
             pouchname : window.app.get("corpus").get("pouchname"),
             sessionFields : window.app.get("currentSession").get("sessionFields").clone()
           })
@@ -275,6 +238,10 @@ define([
       this.userPreferenceView.model = this.model.get("authentication").get("userPrivate").get("prefs");
       this.userPreferenceView.model.bind("change:skin", this.userPreferenceView.renderSkin, this.userPreferenceView);
       
+      if(!this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")){
+        this.model.get("authentication").get("userPrivate").get("prefs").set("unicodes", new InsertUnicodes());
+        this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes").fill();
+      }
       this.insertUnicodesView.model = this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes");
       this.insertUnicodesView.changeViewsOfInternalModels();
       this.insertUnicodesView.render();
@@ -323,32 +290,19 @@ define([
         model : this.model.get("authentication").get("userPrivate").get("prefs")
       });
       
-      // Create a UserActivityView 
-      OPrime.debug("Setting up the user activity feed.");
-      if(!this.model.get("currentUserActivityFeed")){
-        OPrime.bug("Why isnt this existing?");
-        this.model.set("currentUserActivityFeed", new ActivityFeed());
-        this.model.get("currentUserActivityFeed").changePouch(window.app.get("authentication").get("userPrivate").get("activityCouchConnection"));
+      if(!this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")){
+        this.model.get("authentication").get("userPrivate").get("prefs").set("unicodes", new InsertUnicodes());
+        this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes").fill();
       }
-      if(this.activityFeedUserView){
-//        this.activityFeedUserView.destroy_view(); 
-      }else{
-        this.activityFeedUserView = new ActivityFeedView({
-          model : this.model.get("currentUserActivityFeed")
-        }); 
-        this.activityFeedUserView.format = "rightSideUser";
-      }
-      
-      
       // Create an InsertUnicodesView
       this.insertUnicodesView = new InsertUnicodesView({
-        model : this.authView.model.get("userPrivate").get("prefs").get("unicodes")
+        model : this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")
       });
       this.insertUnicodesView.format = "rightSide"; 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
-        model : this.authView.model.get("userPrivate").get("hotkeys")
+        model : this.model.get("authentication").get("userPrivate").get("hotkeys")
       });
       
       if(typeof callback == "function"){
@@ -449,6 +403,34 @@ define([
         }
         window.location.href = "#render/true";
       },
+      "click .corpus-settings" : function() {
+        window.appView.toastUser("Taking you to the corpus settings screen which is where all the corpus/database details can be found.","alert-info","How to find the corpus settings:");
+        window.appView.currentCorpusReadView.format = "fullscreen";
+        window.appView.currentCorpusReadView.render();
+        app.router.showFullscreenCorpus();
+      },
+      "click .clear_all_notifications" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#toast-user-area").find(".close").click();
+      },
+      "click .dont_close_notifications_dropdown_if_user_clicks" : function(e){
+        if($(e.target).attr("data-toggle") == "modal"){
+          //let it close the dropdown and open the modal
+        }else{
+          
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          if($(e.target).hasClass("close")){
+            $(e.target).parent().alert("close");
+          }
+        }
+      },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
@@ -488,7 +470,66 @@ define([
           this.searchEditView.searchTop();
         }
 //        return false;
+      },
+      "click .sync-my-data" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var authUrl = $(".welcomeauthurl").val().trim();
+        if(authUrl.indexOf("LingSync.org") >= 0){
+          alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
+          return;
+          authUrl = "https://auth.lingsync.org";
+        }else if(authUrl.indexOf("LingSync Testing") >= 0){
+          authUrl = "https://authdev.fieldlinguist.com:3183";
+        }else if(authUrl.indexOf("McGill ProsodyLab") >= 0){
+          if(window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0){
+            authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
+          }else{
+            var userWantsToUseMcgill = confirm("Are you sure you would like to use the McGill Prosody Lab server?");
+            if (userWantsToUseMcgill == true) {
+              window.location.replace("https://prosody.linguistics.mcgill.ca/corpus/public-firstcorpus/_design/pages/index.html");         
+            } else {
+              authUrl = "https://auth.lingsync.org";
+            }
+          }
+        }else if(authUrl.indexOf("Localhost") >= 0){
+          if(window.location.origin.indexOf("localhost") >= 0){
+            authUrl = "https://localhost:3183";
+          }else{
+            var userWantsToUseLocalhost = confirm("Are you sure you would like to use the localhost server?");
+            if (userWantsToUseLocalhost == true) {
+              window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
+            } else {
+              authUrl = "https://auth.lingsync.org";
+            }
+          }
+        }else{
+          
+          if(authUrl.indexOf("https://")  >= 0){
+            var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "+authUrl);
+            if (userWantsToUseUnknownServer == true) {
+//            window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
+            } else {
+              /* TODO change this back to the lingsync server  once the lingsync server supports 1.38 */
+              authUrl = "https://authdev.fieldlinguist.com:3183";
+            }
+          }else{
+            alert("I don't know how to connect to : "+authUrl + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
+            return;
+          }
+        }
+        this.authView.syncUser($(".welcomeusername").val().trim(),$(".welcomepassword").val().trim(), authUrl);
+      },
+      "keyup .welcomepassword" : function(e) {
+        var code = e.keyCode || e.which;
+        // code == 13 is the enter key
+        if ((code == 13) && ($(".welcomepassword").val() != "")) {
+          $(".sync-my-data").click();
+        }
       }
+      
     },
     
     /**
@@ -517,15 +558,22 @@ define([
         this.importView.destroy_view();
         this.searchEditView.destroy_view();
         
-        this.activityFeedUserView.destroy_view();
-        this.activityFeedCorpusTeamView.destroy_view();
         
         this.destroy_view();
         OPrime.debug("Done Destroying the appview, so we dont get double events.");
 
         // Display the AppView
         this.setElement($("#app_view"));
-        $(this.el).html(this.template(this.model.toJSON()));
+        
+        var jsonToRender = this.model.toJSON();
+        try{
+          jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
+          jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
+        }catch(e){
+          OPrime.debug("Problem setting the username or pouchname of the app.");
+        }
+        
+        $(this.el).html(this.template(jsonToRender));
 
         //The authView is the dropdown in the top right corner which holds all the user menus
         this.authView.render();
@@ -534,8 +582,6 @@ define([
         this.renderReadonlyUserViews();
 
         this.renderReadonlyDashboardViews();
-        this.activityFeedUserView.render();
-        this.activityFeedCorpusTeamView.render();
         this.insertUnicodesView.render();
         
         //This forces the top search to render.
@@ -591,8 +637,6 @@ define([
 //        
 //        // Display the UserPreferenceEditView
 //        
-//        //Display ActivityFeedView
-//        this.activityFeedCorpusTeamView.render();
 //        
 //        this.insertUnicodesView.render();
 //        
@@ -626,11 +670,12 @@ define([
       $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
       $(this.el).find(".locale_Yep_its_me").text(Locale.get("locale_Yep_its_me"));
       
-      $(this.el).find(".locale_User_Settings").html(Locale.get("locale_User_Settings"));
-      $(this.el).find(".locale_Keyboard_Shortcuts").html(Locale.get("locale_Keyboard_Shortcuts"));
-      $(this.el).find(".locale_Corpus_Settings").html(Locale.get("locale_Corpus_Settings"));
-      $(this.el).find(".locale_Terminal_Power_Users").html(Locale.get("locale_Terminal_Power_Users"));
       
+      $(this.el).find(".locale_Log_In").html(Locale.get("locale_Log_In"));
+      $(this.el).find(".locale_Username").html(Locale.get("locale_Username"));
+      $(this.el).find(".locale_Password").html(Locale.get("locale_Password"));
+//      $(this.el).find(".locale_Sync_my_data_to_this_computer").html(Locale.get("locale_Sync_my_data_to_this_computer"));
+
       return this;
     },
     /**
@@ -695,11 +740,6 @@ define([
       this.publicReadUserView.render();
       this.modalReadUserView.render();
     },
-    renderActivityFeedViews : function() {
-      this.activityFeedUserView.render();
-      this.activityFeedCorpusTeamView.render();
-    },
-    
 
     /**
      * This function triggers a sample app to load so that new users can play
@@ -869,11 +909,23 @@ define([
       if(!heading){
         heading = Locale.get("locale_Warning");
       }
-      $('#toast-user-area').append("<div class='alert "+alertType+" alert-block'>"
+      $('#toast-user-area').prepend("<div class='alert "+alertType+" alert-block fade in'>"
           +"<a class='close' data-dismiss='alert' href='#'>×</a>"
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
         +"</div>");
+      
+      /* Open the notificaitons area so they can see it */
+      $("#notification_dropdown_trigger").dropdown("toggle");
+      /* Close it 3 seconds later, if short text, 30 seconds if long text */
+      var numberOfMiliSecondsToWait = 3000;
+      if(message.length > 500){
+        numberOfMiliSecondsToWait = 30000;
+      }
+      window.setTimeout(function(){
+        $("#notification_dropdown_trigger").dropdown("toggle");
+      }, numberOfMiliSecondsToWait);
+      
     },
     /**
      * 

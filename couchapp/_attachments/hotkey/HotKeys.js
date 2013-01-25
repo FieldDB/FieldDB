@@ -24,9 +24,10 @@ define([ "backbone",
           this.bind('error', function(model, error) {
             // TODO Handle validation errors
           });
+        },
+        internalModels : HotKey,
 
-          model: HotKey; 
-        }
+        model: HotKey
       });
 
 

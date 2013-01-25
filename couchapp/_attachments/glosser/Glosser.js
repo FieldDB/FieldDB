@@ -152,7 +152,7 @@ Glosser.glossFinder = function(morphemesLine){
     return "";
   }
   if(! window.app.get("corpus").lexicon.get("lexiconNodes")){
-    var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
+    var corpusSize = 31; //TODO get corpus size another way. // app.get("corpus").datalists.models[app.get("corpus").datalists.models.length-1].get("datumIds").length;
     if(corpusSize > 30 && !Glosser.toastedUserToSync){
       Glosser.toastedUserToSync = true;
       window.appView.toastUser("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.","alert-success","Sync to train your auto-glosser:");

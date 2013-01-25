@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h1> <span class = "locale_New_Corpus"></span> <small class="new-corpus-pouchname">{{pouchname}}</small></h1>
+  <h1> <i class="icon-cloud"></i>  <span class = "locale_New_Corpus"></span> <small class="new-corpus-pouchname">{{pouchname}}</small></h1>
   <p class = "locale_New_Corpus_Instructions"></p>
   <p class="alert alert-danger hide">
     <strong class="locale_Warning"></strong> 
@@ -8,11 +8,11 @@
 </div>
 
 <div class="modal-body">
-	<label class = "locale_Title"></label>  <i class="icon-cloud"></i> 
+	<label class = "locale_Title"></label>  
 	<textarea class="corpus-title-input">{{title}}</textarea>
-	<label class = "locale_Description">Description:</label>
-	<textarea class="corpus-description-input">{{description}}</textarea>
-  <label class = "locale_Public_or_Private"></label>
+	<label class = " locale_Description">Description:</label>
+	<textarea class=" corpus-description-input">{{description}}</textarea>
+  <label class = " locale_Public_or_Private"></label>
   <input type="text" value="{{publicCorpus}}"  class=" public-or-private" data-provide="typeahead" data-items="4" 
         data-source="[&quot;Public&quot;,&quot;Private&quot;]"/>
 </div>

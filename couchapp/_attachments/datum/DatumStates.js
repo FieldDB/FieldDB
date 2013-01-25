@@ -18,6 +18,7 @@ define([
      */
     initialize : function() {
     },
+    internalModels : DatumState,
 
     model : DatumState,
     

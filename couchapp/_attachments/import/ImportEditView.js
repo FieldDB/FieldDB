@@ -1,7 +1,6 @@
 define( [ 
     "backbone",
     "handlebars",
-    "activity/Activity",
     "import/Import",
     "data_list/DataList",
     "data_list/DataListEditView",
@@ -19,7 +18,6 @@ define( [
 ], function(
     Backbone,
     Handlebars, 
-    Activity,
     Import,
     DataList,
     DataListEditView,
@@ -116,12 +114,14 @@ define( [
       "click .add-column" : "insertDoubleColumnsInTable",
       "blur .export-large-textarea" : "updateRawText"
     },
-    _dragOverEvent: function (e) {
-      if (e.originalEvent) e = e.originalEvent;
+    _dragOverEvent : function(e) {
+      if (e.preventDefault)
+        e.preventDefault();
+      if (e.originalEvent)
+        e = e.originalEvent;
       var data = this._getCurrentDragData(e);
 
       if (this.dragOver(data, e.dataTransfer, e) !== false) {
-        if (e.preventDefault) e.preventDefault();
         e.dataTransfer.dropEffect = 'copy'; // default
       }
     },
@@ -185,6 +185,7 @@ define( [
     drop: function (data, dataTransfer, e) {
       (function(){
         var self = window.appView.importView.model;
+        OPrime.debug("Recieved drop of files.");
         self.set("files", dataTransfer.files);
         self.readFiles();
       })();
@@ -487,7 +488,10 @@ define( [
        * after building an array of datumobjects, turn them into backbone objects
        */
       for (a in array) {
-        var d = new Datum({pouchname : window.app.get("corpus").get("pouchname")});
+        var d = new Datum({
+          filledWithDefaults : true,
+          pouchname : window.app.get("corpus").get("pouchname")
+        });
       //copy the corpus's datum fields and empty them.
         var datumfields = app.get("corpus").get("datumFields").toJSON();
         for(var x in datumfields){
@@ -587,22 +591,22 @@ define( [
           ,"alert-success","Import successful:");
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
             teamOrPersonal : "team",
             context : "via Offline App"
-          }));
+          });
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
             teamOrPersonal : "personal",
             context : "via Offline App"
-          }));
+          });
 
       window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
@@ -624,6 +628,16 @@ define( [
       
       $(".import-progress").val( $(".import-progress").attr("max") );
       $(".approve-save").html("Finished");
+      
+      /* ask the corpus to update its frequent datum fields given the new datum */
+      var couchConnection = window.app.get("corpus").get("couchConnection");
+      var couchurl = couchConnection.protocol+couchConnection.domain;
+      if(couchConnection.port != null){
+        couchurl = couchurl+":"+couchConnection.port;
+      }
+      couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+      window.app.get("corpus").getFrequentDatumFields(couchurl);
+    
       
       // Go back to the dashboard 
       window.location.href = "#render/true";
@@ -665,22 +679,22 @@ define( [
               $(".import-progress").val($(".import-progress").val()+1);
               
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
                     teamOrPersonal : "team",
                     context : "via Offline App"
-                  }));
+                  });
               
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
                     teamOrPersonal : "personal",
                     context : "via Offline App"
-                  }));
+                  });
               
               window.hub.subscribe("savedDatumToPouch", function(arg){
                 this.savedindex[arg.d] = true;
@@ -710,6 +724,7 @@ define( [
                    * If we are at the final index in the import's datum
                    */
                   this.importCompleted();
+                  
                 }else{
                   /*
                    * Save another datum when the previous fails
@@ -723,7 +738,13 @@ define( [
               /*
                * Begin the datum saving loop with the last datum 
                */
-              self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+              if(self.model.get("datumArray").length > 0){
+                self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+              }else{
+                alert("You havent imported anything. Please let us know if it does this again.");
+                this.importCompleted();
+                return;
+              }
                             
             /* end successful save of datalist and session */
             
