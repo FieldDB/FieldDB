@@ -508,10 +508,13 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
-      var result = fields.join("\n");
-      
+      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
+      var result =  utterance+"\n"
+            +gloss+"\n"
+            +translation
+            +"\n\n";
       if(showInExportModal != null){
         $("#export-type-description").html(" as text (Word)");
         $("#export-text-area").val(
