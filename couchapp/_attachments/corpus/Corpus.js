@@ -284,6 +284,18 @@ define([
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
             help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
+          }),
+          new DatumField({
+            label : "tags",
+            shouldBeEncrypted: "",
+            userchooseable: "disabled",
+            help: "Comma seperated tags for this datum."
+          }),
+          new DatumField({
+            label : "validationStates",
+            shouldBeEncrypted: "",
+            userchooseable: "disabled",
+            help: "Has the datum been checked with a language consultant, is it to be checked, deleted or any combination of these. You can create new states for your corpus."
           })
         ]));
       }//end if to set datumFields

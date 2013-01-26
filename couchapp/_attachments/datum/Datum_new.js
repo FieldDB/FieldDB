@@ -1,55 +1,35 @@
 define([ 
     "backbone",
-    "audio_video/AudioVideo", 
-    "comment/Comment",
+    "audio_video/AudioVideos", 
     "comment/Comments",
     "datum/Datums", 
     "datum/DatumField", 
     "datum/DatumFields", 
-    "datum/DatumState", 
-    "datum/DatumStates",
-    "datum/DatumTag",
-    "datum/DatumTags",
     "datum/Session",
+    "image/Images",
     "libs/OPrime"
 ], function(
     Backbone, 
-    AudioVideo, 
-    Comment,
+    AudioVideos, 
     Comments,
     Datums,
     DatumField, 
     DatumFields,
-    DatumState, 
-    DatumStates,
-    DatumTag,
-    DatumTags,
+    Images,
     Session
 ) {
   var Datum = Backbone.Model.extend(
   /** @lends Datum.prototype */
   {
     /**
-     * @class The Datum widget is the place where all linguistic data is
-     *        entered; one at a time.
+     * @class The Datum contains a single data point, with all its relevant
+     *        context (image, audio, video) as well as metadata such as fields;
+     *        one at a time.
      * 
-     * @property {DatumField} utterance The utterance field generally
-     *           corresponds to the first line in linguistic examples that can
-     *           either be written in the language's orthography or a
-     *           romanization of the language. An additional field can be added
-     *           if the language has a non-roman script.
-     * @property {DatumField} gloss The gloss field corresponds to the gloss
-     *           line in linguistic examples where the morphological details of
-     *           the words are displayed.
-     * @property {DatumField} translation The translation field corresponds to
-     *           the third line in linguistic examples where in general an
-     *           English translation. An additional field can be added if
-     *           translations into other languages is needed.
-     * @property {DatumField} judgement The judgement is the grammaticality
-     *           judgement associated with the datum, so grammatical,
-     *           ungrammatical, felicitous, unfelicitous etc.
-     * @property {AudioVisual} audioVideo Datums can be associated with an audio or video
-     *           file.
+     * @property {AudioVideos} audioVideo Datums can be associated with multiple
+     *           audio or video file.
+     * @property {Images} images Datums can be associated with multiple images,
+     *           usually to allow the data to be provided in context. *
      * @property {Session} session The session provides details about the set of
      *           data elicited. The session will contain details such as date,
      *           language, consultant etc.
@@ -57,27 +37,14 @@ define([
      *           associated with the datum, this is meant for comments like on a
      *           blog, not necessarily notes, which can be encoded in a
      *           field.(Use Case: team discussing a particular datum)
-     * @property {DatumTags} datumtags The datum tags are a collection of tags
-     *           associated with the datum. These are made completely by the
-     *           user.They are like blog tags, a way for the user to make
-     *           categories without make a hierarchical structure, and make
-     *           datum easier for search.
      * @property {Date} dateEntered The date the Datum was first saved.
      * @property {Date} dateModified The date the Datum was last saved.
      * 
-     * @description The initialize function brings up the datum widget in small
-     *              view with one set of datum fields. However, the datum widget
-     *              can contain more than datum field set and can also be viewed
-     *              in full screen mode.
      * 
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
       
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
@@ -95,11 +62,6 @@ define([
         this.set("comments", new Comments());
       }
       
-      // If there are no datumTags, give it a new one
-      if (!this.get("datumTags")) {
-        this.set("datumTags", new DatumTags());
-      }
-      
       if(!this.get("datumFields") || this.get("datumFields").length == 0){
         this.set("datumFields", window.app.get("corpus").get("datumFields").clone());
       }
@@ -107,337 +69,15 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
-    // The couchdb-connector is capable of mapping the url scheme
-    // proposed by the authors of Backbone to documents in your database,
-    // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/datums",
     
     
     // Internal models: used by the parse function
     internalModels : {
       datumFields : DatumFields,
-      audioVideo : AudioVideo,
+      audioVideos : AudioVideos,
       session : Session,
-      comments : Comments,
-      datumStates : DatumStates,
-      datumTags : DatumTags
-    },
-
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-        if(pouchname == undefined){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-      }
-      
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
-    
-    /**
-     * Gets all the DatumIds in the current Corpus sorted by their date.
-     * 
-     * @param {Function} callback A function that expects a single parameter. That
-     * parameter is the result of calling "pages/by_date". So it is an array
-     * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
-     * attribute contains the Datum's dateModified and the 'value' attribute contains
-     * the Datum itself.
-     */
-    getMostRecentIdsByDate : function(callback) {
-      var self = this;
-      
-      if(OPrime.isCouchApp()){
-        //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
-        var tempDatums = new Datums();
-        tempDatums.model = Datum;
-        tempDatums.fetch({
-          limit: 2,
-          error : function(model, xhr, options) {
-            OPrime.bug("There was an error loading your datums.");
-            if(typeof callback == "function"){
-              callback([]);
-            }
-          },
-          success : function(model, response, options) {
-//            if (response.length >= 1) {
-//              callback([response[0]._id], [response[1]._id]);
-              callback(response);
-//            }
-          }
-        });
-        return;
-      }
-      
-      
-      try{
-        this.changePouch(this.get("pouchname"),function(){
-          self.pouch(function(err, db) {
-            db.query("pages/by_date", {reduce: false}, function(err, response) {
-              
-              if(err){
-                if(window.toldSearchtomakebydateviews){
-                  OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
-                  return;
-                }
-                /*
-                 * Its possible that the pouch has no by date views, create them and then try searching again.
-                 */
-                window.toldSearchtomakebydateviews = true;
-                window.app.get("corpus").createPouchView("pages/by_date", function(){
-                  window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.","alert-success","Sort:");
-                  self.getMostRecentIdsByDate(callback);
-                });
-                return;
-              }
-              
-              if ((!err) && (typeof callback == "function"))  {
-                OPrime.debug("Callback with: ", response.rows);
-                callback(response.rows);
-              }
-            });
-          });
-        });
-        
-      }catch(e){
-//        appView.datumsEditView.newDatum();
-        appView.datumsEditView.render();
-        alert("Couldnt show the most recent datums "+JSON.stringify(e));
-        
-      }
-    },
-    
-    searchByQueryString : function(queryString, callback) {
-      var self = this;
-      try{
-        //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
-        window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
-      }catch(e){
-        OPrime.debug("Search Analytics not working.");
-      }
-      
-      // Process the given query string into tokens
-      var queryTokens = self.processQueryString(queryString);
-      var doGrossKeywordMatch = false;
-      if(queryString.indexOf(":") == -1){
-        doGrossKeywordMatch = true;
-        queryString = queryString.toLowerCase().replace(/\s/g,"");
-      }
-      
-      if(OPrime.isCouchApp()){
-
-      // run a custom map reduce
-//        var mapFunction = function(doc) {
-//          if(doc.collection != "datums"){
-//            return;
-//          }
-//          var fields  = doc.datumFields;
-//          var result = {};
-//          for(var f in fields){
-//            if(fields[f].label == "gloss"){
-//              result.gloss = fields[f].value;
-//            }else if(fields[f].label == "morphemes"){
-//              result.morphemes = fields[f].value;
-//            }else if(fields[f].label == "judgement"){
-//              result.judgement = fields[f].value;
-//            }
-//          }
-//          emit( result,  doc._id );
-//        };
-//        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
-        //use the get_datum_fields view
-        $.couch.db(this.get("pouchname")).view("pages/get_datum_fields", {
-          success: function(response) {
-            OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
-            var matchIds = [];
-//            console.log(response);
-            for (i in response.rows) {
-              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
-              // If the row's datum matches the given query string
-              if (thisDatumIsIn) {
-                // Keep its datum's ID, which is the value
-                matchIds.push(response.rows[i].value);
-              }
-            }
-            
-            if(typeof callback == "function"){
-              //callback with the unique members of the array
-              callback(_.unique(matchIds));
-//              callback(matchIds); //loosing my this in SearchEditView
-            }
-          },
-          error: function(status) {
-            console.log("Error quering datum",status);
-          },
-          reduce: false
-        });
-
-        return;
-      }
-        
-      
-      
-      try{
-        this.changePouch(this.get("pouchname"), function() {
-          self.pouch(function(err, db) {
-            db.query("pages/get_datum_fields", {reduce: false}, function(err, response) {
-              var matchIds = [];
-              
-              if (!err) {
-               
-                // Go through all the rows of results
-                for (i in response.rows) {
-                  var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
-                  // If the row's datum matches the given query string
-                  if (thisDatumIsIn) {
-                    // Keep its datum's ID, which is the value
-                    matchIds.push(response.rows[i].value);
-                  }
-                }
-              }else{
-                if(window.toldSearchtomakeviews){
-                  OPrime.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
-                  return;
-                }
-                /*
-                 * Its possible that the corpus has no search views, create them and then try searching again.
-                 */
-                window.appView.toastUser("Initializing your search functions for the first time." +
-                		" Search in LingSync is pretty powerful, " +
-                		" in fact if you're the power user type you can write your " +
-                		"own data extracting/filtering/visualization queries using " +
-                		" <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>","alert-success","Search:");
-                window.toldSearchtomakeviews = true;
-                var previousquery = queryString;
-                window.app.get("corpus").createPouchView("pages/get_datum_fields", function(){
-                  window.appView.searchEditView.search(previousquery);
-                });
-              }
-              if(typeof callback == "function"){
-                //callback with the unique members of the array
-                callback(_.unique(matchIds));
-//                callback(matchIds); //loosing my this in SearchEditView
-              }
-            });
-          });
-        });
-      }catch(e){
-        alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
-      }
-    },
-    isThisMapReduceResultInTheSearchResults : function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens){
-      
-      
-      var thisDatumIsIn = false;
-      // If the query string is null, include all datumIds
-      if(queryString.trim() == ""){
-        thisDatumIsIn = true;
-      }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
-            thisDatumIsIn = true;
-          }
-      }else{
-        
-        // Determine if this datum matches the first search criteria
-        thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
-        
-        // Progressively determine whether the datum still matches based on
-        // subsequent search criteria
-        for (var j = 1; j < queryTokens.length; j += 2) {
-          if (queryTokens[j] == "AND") {
-            // Short circuit: if it's already false then it continues to be false
-            if (!thisDatumIsIn) {
-              break;
-            }
-            
-            // Do an intersection
-            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
-          } else {
-            // Do a union
-            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(keyValuePair.key, queryTokens[j+1]);
-          }
-        }
-      }
-      return thisDatumIsIn;
-      
-    },
-    /**
-     * Determines whether the given object to search through matches the given
-     * search criteria.
-     * 
-     * @param {Object} objectToSearchThrough An object representing a datum that
-     * contains (key, value) pairs where the key is the datum field label and the
-     * value is the datum field value of that attribute.
-     * @param {String} criteria The single search criteria in the form of a string
-     * made up of a label followed by a colon followed by the value that we wish
-     * to match.
-     * 
-     * @return {Boolean} True if the given object matches the given criteria.
-     * False otherwise.
-     */
-    matchesSingleCriteria : function(objectToSearchThrough, criteria) {
-      var delimiterIndex = criteria.indexOf(":");
-      var label = criteria.substring(0, delimiterIndex);
-      var value = criteria.substring(delimiterIndex + 1);
-      /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
-      if(label == "judgement" && value.toLowerCase() == "grammatical"){
-        if(!objectToSearchThrough[label]){
-          return true;
-        }
-      }
-//      if(!label || !value){
-//        return false;
-//      }
-      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value.toLowerCase()) >= 0);
-    },
-    
-    /**
-     * Process the given string into an array of tokens where each token is
-     * either a search criteria or an operator (AND or OR). Also makes each
-     * search criteria token lowercase, so that searches will be case-
-     * insensitive.
-     * 
-     * @param {String} queryString The string to tokenize.
-     * 
-     * @return {String} The tokenized string
-     */
-    processQueryString : function(queryString) {      
-      // Split on spaces
-      var queryArray = queryString.split(" ");
-      
-      // Create an array of tokens out of the query string where each token is
-      // either a search criteria or an operator (AND or OR).
-      var queryTokens = [];
-      var currentString = "";
-      for (i in queryArray) {
-        var currentItem = queryArray[i].trim();
-        if (currentItem.length <= 0) {
-          break;
-        } else if ((currentItem == "AND") || (currentItem == "OR")) {
-          queryTokens.push(currentString);
-          queryTokens.push(currentItem);
-          currentString = "";
-        } else if (currentString) {
-          /* toLowerCase introduces a bug in search where camel case fields loose their capitals, then cant be matched with fields in the map reduce results */
-          currentString = currentString + " " + currentItem;//.toLowerCase();  
-        } else {
-          currentString = currentItem;//.toLowerCase();
-        }
-      }
-      queryTokens.push(currentString);
-      
-      return queryTokens;
+      comments : Comments
     },
     
     /**
@@ -449,32 +89,16 @@ define([
     clone : function() {
       // Create a new Datum based on the current Datum
       var datum = new Datum({
-        audioVideo : new AudioVideo(this.get("audioVideo").toJSON(), {parse: true}),
+        audioVideos : new AudioVideos(this.get("audioVideos").toJSON(), {parse: true}),
         comments : new Comments(this.get("comments").toJSON(), {parse: true}),
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
-        datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
       });
 
       return datum;
-    },
-    updateDatumState : function(selectedValue){
-      console.log("Asking to change the datum state to "+selectedValue); 
-      
-      try{
-        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
-      }
-      console.log("done"); 
-
-//      this.save();
-      //TODO save it
     },
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -491,7 +115,7 @@ define([
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex " + utterance + 
+            + "\n \\ex " + utterance 
             + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
             + "\n\t\\trans `" + translation + "'"
