@@ -530,6 +530,10 @@ define([
             context : " via Offline App."
           });
     },
+    getDefaultDatumState : function(){
+      alert("TODO test this");
+      return new DatumState(this.get("datumStates").models[0].toJSON());
+    },
     newSession : function() {
       $("#new-session-modal").modal("show");
       //Save the current session just in case

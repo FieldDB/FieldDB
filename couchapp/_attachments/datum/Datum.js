@@ -7,7 +7,6 @@ define([
     "datum/DatumField", 
     "datum/DatumFields", 
     "datum/DatumState", 
-    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -21,7 +20,6 @@ define([
     DatumField, 
     DatumFields,
     DatumState, 
-    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -74,15 +72,15 @@ define([
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
       
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+      
+//      if(!this.get("datumState")){
+//        this.updateDatumStateToVersion40();
+//      }
     },
     fillWithDefaults : function(){
    // If there's no audioVideo, give it a new one.
@@ -120,10 +118,24 @@ define([
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumStates : DatumStates,
+      datumState : DatumState,
       datumTags : DatumTags
     },
-
+    updateDatumStateToVersion40 : function() {
+      if (this.get("datumStates")) {
+        try {
+          this.set("datumState", new DatumState(
+              this.get("datumStates")[_.pluck(
+                  this.get("datumStates"), "selected").indexOf(
+                  "selected")]));
+        } catch (e) {
+          OPrime.debug(
+              "Problem finding the selected state in this datum", this);
+        }
+      }else{
+        this.set("datumState", window.app.get("corpus").getDefaultDatumState());
+      }
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -454,7 +466,7 @@ define([
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
+        datumState : new DatumState(this.get("datumState").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
@@ -463,18 +475,13 @@ define([
       return datum;
     },
     updateDatumState : function(selectedValue){
-      console.log("Asking to change the datum state to "+selectedValue); 
-      
-      try{
-        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+      OPrime.debug("Asking to change the datum state to "+selectedValue); 
+      var completeCorrespondingDatumState = window.app.get("corpus").get("datumStates").where({state : selectedValue})[0].clone();
+      if(completeCorrespondingDatumState){
+        this.set("datumState", completeCorrespondingDatumState);
+      }else{
+        alert("TODO create a new datum state.");
       }
-      console.log("done"); 
-
-//      this.save();
-      //TODO save it
     },
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -628,20 +635,6 @@ define([
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. 
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try{
-        var ds = this.get("datumStates").models;
-        for (var s in ds){
-          if(ds[s].get("state") == undefined){
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      }catch(e){
-        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
-      }
       
       this.changePouch(null,function(){
         self.save(null, {
