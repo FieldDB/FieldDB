@@ -473,7 +473,7 @@ define([
       }
       console.log("done"); 
 
-      this.save();
+//      this.save();
       //TODO save it
     },
     /**
