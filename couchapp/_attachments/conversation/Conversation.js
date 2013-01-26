@@ -152,7 +152,6 @@ define([
       }
       OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
-      window.appView.currentPaginatedDataListDatumsView.collection.models[indexInCurrentPaginatedDataListDatums][functionToAppy](functionArguments);
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToApplyFunction[id];
         obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
