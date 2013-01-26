@@ -55,7 +55,9 @@ define( [
      */
     render : function() {
       OPrime.debug("DATUM STATE READ VIEW render");
+      
       if (this.format == "corpus") {
+        // Display the DatumStateSettingsReadView
         $(this.el).html(this.templateSettings(this.model.toJSON()));
         
         // Select the correct value from the color dropdown

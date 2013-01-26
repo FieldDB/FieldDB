@@ -197,7 +197,7 @@ define([
       this.prependDatum(new Datum({
         filledWithDefaults : true,
         datumFields : new DatumFields(datumfields),
-        datumState : app.get("corpus").getDefaultDatumState(),
+        datumStates : app.get("corpus").get("datumStates").clone(),
         pouchname : app.get("corpus").get("pouchname"),
         session : app.get("currentSession")
       }));
