@@ -4051,6 +4051,24 @@ function program3(depth0,data) {
   
   return "icon-eye-open";}
 
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, foundHelper;
+  buffer += "\n          <option value=\"";
+  foundHelper = helpers.state;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\" ";
+  foundHelper = helpers.selected;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + ">";
+  foundHelper = helpers.state;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</option>\n      ";
+  return buffer;}
+
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" rel=\"tooltip\" class=\"locale_Edit_Datalist\">\n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a> \n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
   foundHelper = helpers.title;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
@@ -4071,7 +4089,19 @@ function program3(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n\n<!-- Datum states dropdown -->\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
+  foundHelper = helpers.statecolor;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+  foundHelper = helpers.datumstate;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
+  stack1 = depth0.datumStates;
+  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </select>\n\n</div>\n\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -4535,6 +4565,24 @@ function program3(depth0,data) {
   
   return "icon-eye-open";}
 
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, foundHelper;
+  buffer += "\n          <option value=\"";
+  foundHelper = helpers.state;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\" ";
+  foundHelper = helpers.selected;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + ">";
+  foundHelper = helpers.state;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</option>\n      ";
+  return buffer;}
+
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n      <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n      <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<button class=\"btn btn-success pull-left save-datalist locale_Save\" value=\"Save\"></button>\n<br>\n<br>\n <i class=\"icon-pushpin\"></i> \n<small>";
   foundHelper = helpers.datumCount;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
@@ -4555,7 +4603,19 @@ function program3(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown -->\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
+  foundHelper = helpers.statecolor;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
+  foundHelper = helpers.datumstate;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
+  stack1 = depth0.datumStates;
+  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </select>\n\n</div>\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -6309,7 +6369,7 @@ define('audio_video/AudioVideo',[
 });
 var OPrime = OPrime || {};
 
-OPrime.debugMode = false;
+OPrime.debugMode = true;
 /*
  * Android touchdb for OPrime runs on port 8128, so if the app is running on
  * port 8128 it is likely in a touchdb (either in the android app or in a
@@ -9447,7 +9507,20 @@ define('datum/Datum',[
 
       return datum;
     },
-    
+    updateDatumState : function(selectedValue){
+      console.log("Asking to change the datum state to "+selectedValue); 
+      
+      try{
+        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      }catch(e){
+        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+      }
+      console.log("done"); 
+
+//      this.save();
+      //TODO save it
+    },
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
      * (\exg. \"a) and then copies it on the export modal so that when the user
@@ -9950,15 +10023,21 @@ define('data_list/DataList',[
       }
       OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-        obj.id  = datumIdsToApplyFunction[id];
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
-          obj.fetch({
-            success : function(model, response) {
-              model[functionToAppy](functionArguments);
-            }
-          });
-        });
+        /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
+        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
+        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
+
+        
+        /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
+//        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+//        obj.id  = datumIdsToApplyFunction[id];
+//        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
+//          obj.fetch({
+//            success : function(model, response) {
+//              model[functionToAppy](functionArguments);
+//            } 
+//          });
+//        });
         
       }
     },
@@ -16634,6 +16713,8 @@ define('datum/DatumReadView',[
         model : this.model.get("session"),
         });
       this.sessionView.format = "link";
+
+      this.model.bind("change", this.render, this);
     },
 
     /**
@@ -16800,6 +16881,12 @@ define('datum/DatumReadView',[
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
         if(jsonToRender.datumstatecolor){
+          $(this.el).removeClass("datum-state-color-warning");
+          $(this.el).removeClass("datum-state-color-important");
+          $(this.el).removeClass("datum-state-color-info");
+          $(this.el).removeClass("datum-state-color-success");
+          $(this.el).removeClass("datum-state-color-inverse");
+
           $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
         }
         try{
@@ -18843,6 +18930,8 @@ define('data_list/DataListEditView', [
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
       
+      "change .datum_state_select" : "updateCheckedDatumStates",
+      
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
         if(this.format == "search"){
@@ -18990,6 +19079,28 @@ define('data_list/DataListEditView', [
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
+      /*
+       * This is to get the datum states dropdown information and render "To be checked" as a default. 
+       * If user changes the label to something else, the first item in the dropdown menu will be shown.
+       * TODO test what happens if user changes datum state settings when a datalist is open 
+       */      
+      jsonToRender.datumStates = window.app.get("corpus").get("datumStates").toJSON();
+//      var indexOfToBeChecked = _.pluck(jsonToRender.datumStates, "state").indexOf("To be checked");
+//      if(indexOfToBeChecked == -1){
+//        indexOfToBeChecked = 0;
+//      }
+//      for(var x in jsonToRender.datumStates){
+//        if(x == indexOfToBeChecked){
+//          jsonToRender.datumStates[x].selected = "selected";
+//        }else{
+////          jsonToRender.datumStates[x].selected = "";
+//        }
+//      }
+      /* TODO instead, sort the datum states in the corpus by frequency... and take the top one */
+      jsonToRender.statecolor = jsonToRender.datumStates[0].color;
+      jsonToRender.datumstate = jsonToRender.datumStates[0].state;
+
+      
       if (this.format == "leftSide") {
         OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
@@ -19305,6 +19416,27 @@ define('data_list/DataListEditView', [
       alert("TODO");
     },
    
+    updateCheckedDatumStates : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      var newState = e.target.value;
+//      $(this.el).find(".datum-state-color").find(".datum-state-value").html(newState);
+//      $(this.el).find(".datum-state-color").removeClass("label-warning");
+//      $(this.el).find(".datum-state-color").removeClass("label-imporant");
+//      $(this.el).find(".datum-state-color").removeClass("label-info");
+//      $(this.el).find(".datum-state-color").removeClass("label-success");
+//      $(this.el).find(".datum-state-color").removeClass("label-inverse");
+      
+//      var color = window.app.get("corpus").get("datumStates").models[_.pluck(window.app.get("corpus").get("datumStates").toJSON(), "state").indexOf(newState)].get("color");
+//      var datalisteditself= this;
+//      $(datalisteditself.el).find(".datum-state-color").addClass("label-"+color);
+//      
+//      this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "updateDatumState", newState);
+      return false;
+    },
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
@@ -26923,30 +27055,17 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
-
-OPrime.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
-OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
-OPrime.audioUrl = "https://audiodev.fieldlinguist.com:3184";
-OPrime.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
-OPrime.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
-OPrime.activityUrl = "https://activitydev.fieldlinguist.com:3187";
-OPrime.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
-
-/*
- * Use the current app's chrome url, assuming if its a dev, they will have their
- * own url that is not from the market, and if its a bleeding edge user, they
- * will have the market one. In both cases it is save to return the
- * window.location.href but this code is added to be clear that there is also a
- * bleeding edge url for users.
- */
-OPrime.chromeClientUrl = function(){
-  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa"){
-    return window.location.origin;
-  }else{
-    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
-  }
+OPrime.websiteUrl = "https://localhost:3182";
+OPrime.authUrl = "https://localhost:3183";
+OPrime.audioUrl = "https://localhost:3184";
+OPrime.lexiconUrl = "https://localhost:3185";
+OPrime.corpusUrl = "https://localhost:3186";
+OPrime.activityUrl = "https://localhost:3187";
+OPrime.widgetUrl = "https://localhost:3188";
+OPrime.chromeClientUrl = function() {
+  return window.location.origin;
 };
-  
+
 /*
  * This function is the same in all webservicesconfig, now any couchapp can
  * login to any server, and register on the corpus server which matches its
@@ -27006,35 +27125,34 @@ OPrime.defaultCouchConnection = function() {
   return connection;
 };
 
-
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
   return JSON.stringify({
-    token : "$2a$10$TpNxdbXtDQuFGBYW5BfnA.F7D0PUftrH1W9ERS7IdxkDdM.k7A5oy",
-    encryptedUser : "confidential:VTJGc2RHVmtYMSsrMjk1UmdHbUJocU5sRHpsSUFGZkk2U3hCSWxEYkNrZCsvWHJyWTMyZUhwL3A0bmpKWU9sSnk2ZTFBRHB0RkQ2ZUtkVTBocEwxQnhTMHRNeW9JOWc0WUhpLzFzdFRNRFpHc1dEd1ZPdlMvTkdPK2h2akl3WVhGQ3JlYWtOTHc3T21QRHE2ZWo0SnQ1UjNqcGpYODlXRkI5alY1Yng2b0ZqYnRVWUhzZUlPRnIxYTdRSXJRdkNuSHlKWFV3ZTl2MmFnRktTOXdUc2pUbUw3SDEvd1lMMFhNQmJldzlPSTFnS0E0TXhzZ1dwa2xLcjNkZzE3endkMFN3RWlLQmowTDY4Vk1TMFpQNXgwZW5BdUdlM2tmcDZpNkxhYm82bjRsdTJmbEF3Y005Zmc3UVNqOUVXSGZiWGxNTFFWRXp1VlJzT2ZXa1J6b1Nvd3NDKzN0WWwrTmRZTUZ0WE9wTTRGTHpYSmM0bStPWkUwaGw5eHpDNVRvOC96R2F3MTR1MU9veEdydkpOQi9mSUNFVnhTb3diU3hqZFI0aU41V1h1UEhwSTlQTndERjdQYVM5QjYwM2N6UURPUWRibXcvM1p6ZXJEVHcvKzdrb01MNVRuUThxNGJYR09UQXFHNVlFVG84d2l2aUhqaE5XelZUYVhmc21KRlo4WXhCRmNlZjZCS0RESlkxZ0dWRGY0QlNMRjNqbkYrZDhFUTV3eHFCZTZ6Yk5XblkzSVF1SmNWMW8rcElVR1FNUlBVemp4My9aT3VxM2tjRzB0Q3VycEU1RWhSb1REQXVxZ0dlQTk3NThXUkZ4S3BiaEpNZmk3VCtKZ28wcXUyZHNwaDdTQzZ5bFNtY3MrcHI1UldZYVNXZldJS0gxanAzNlFDaDZrTE9ySmxHN1ZTUWF6NUU5NERCN3I4ZS8yUHZOamNtUVVoUG1OR3JCd0dlend6YTNvWitPT0R6OTJWNURWKzkwWWd4L0kvNWxOcmdaeVZBT1NVaDJUZkJiMVAwYzhxbDFzTDBiTVVVWlZJNERDVTVyeCtrTlhtTElTdW5OTmZIMWNMZkxIUVRjekU0Q1pIOW9SN0FWYTdtY01rSDN1SHRaMDVGbUFnSnhrMHFOYldGR2dKQW9jRHBxMFZlRUN0bjFKQjFrODMvS1laOWdKeUw2SjZsVzRYVjFUVzhPbi9rak1ONXlzdUdDNHRodDVCNitNWjdjb24zYVJ4b2FjRGU2dmhsZ0NwVE5jOHFqVmdkNDcvNk9TMUtPODBMSWZabytYMzVyZUJFb3FSK3RMRkxuVFpYMVlJU2h1OGJHd0JZSlpvUGI2TStIV3VpS0w4VmlCYVpOR0NhY0t4OEZISktmZGdRaDUxS2thOWdDbzdsNzdJTkh4TDB5Yit4alNvYXlyVi9oUmNZSHoxR0hSRGJpQm8rVmUxWjN3ZmxtTGczdmdONDFTdWEyYUtzMnZTVW9oenNyYWZ0QnZvYTRUckE3bUs0ZkNmWFM0d1JZMmRFMEtpUEgrSE1ZdXlOamZXYmpibFMyMlJ6ZFBuYlprMldnREpIeVAvc3U1SWpyeUFhMklwMXJSeVhZcXZEVGVqeHh2NVlPT25EK3VOcGVqT2JaVXhTVGNyQVNXSkFENXNzemdobnVTTjA1b0d5V2FtelRidVZ1YWhpcG4yRlE1OXVEUWE4Z0xVK3NFckpTdnJJNGxpWnlkUVBxb0V5WERHTUFNcy9hcTZJaGVaQWpKeVhmWUpsSHVteHhPMm0zazN6U0lCNjZLalRONVBJZE9IUit1MGVqeS85RE5Ic0I2d2pWcUhDNzBWaDZBc29VaUhxQktTQzcxdU40d1pXWW81MDlaUkhkSDhpU0JjWkFPcllXcHpvMFRacnF3WUxkZmx3WGdhYmNxUEdOeFhXTEQ2eGNEUTVxODdkdTE3WHdkRno0SEYrMnduRFhsWkF2VXVDQzd6ajFLOURZNG9oejdCeStpb1UwRUYxbEI3NUpIMFZyb2hjLzV0TGFxY1czY0hTVm9WQjNwZlM5Z2VNYmt5VkorcnVpeFYxYUYva3B1Tm1NU1BXOU9oRW9GOVkvV0VNVmJSMUdyY1BiVlU5akRGRW5vMUtNZkt3R3NCQTFxNENLUGkvcXA2ajNtT3BWSG5aUEV4blBQKzhlTXRGM1VZZCtHYlpad2IyUVh2WTRhMVVIeGRmMlN1aE5VM0hIdVQ2WWczK1Zoam1GR0R6OFNLVEQvcXVDSGIyVmxjR3VIYjl2b2RiOGpCdXVsb09QaTNCOFdsWGM0ZmNBb2JtT1VkbUppa1ZSUWVLVHYrTmpxVGVlUUNzWUJPSWFUMHY2Sjg2WkM1dmlSOGlnSlNzbXFOUFVXd1dHVjRvUzg0Z1lyQmliNTlBcjhzYUFFenpWRTZYOFVMNVNOOUErZCtWK3FRVFBEb1RmL1lWRStJTlpXTW55dGc4cGRlVDlibEx2Vk5OemV4TEVYVlNIdnVvRWN0eEhMd29lV1dLTDhLeUxNRE90bExmUWpzcGkvZ3hnc0NHbnlpbGZhWGUxYVVjNGp0QVdUSW82U0Q3S2NFKzBEeGpzM3JUdzhQdzV1VFNDNFlVVXZ1ZisyaDlrZzR3UnEzeGRrWDNwWjRjM251VlNpOVBMYlR5bS9yWjJHbHN2RERKenZBdE8xRGlldW5FTGdJKzEyTWdoTDZUUi81aFp3endLYXBWM2IzbFlpdVJhNkg4RnFveUxVYW1pdE44aG84SVpHNHMxcVg5a3hURFViTk03SEJQNzFaNUUrbTd5R0c0a0lXdmRuUnRwekJqSGpjb0JodlFCL0k4dW51VFNVclhyVGJuNzdSbEZWcDRFNFdoZmhUb1RVR2dLbEs3MTBLWXJMSmpybE5zdWxaUFAxckFXeXRlZlhTRVdMVFg3ejNrLzVGMkQyaWNxbVQ4UEIvTnNYL1ZoK1F1eTlxM0hOeFk1TngwN1VGSTZJTE1iU3h1c1doRytJSEJBUlhXUXA1ckd0U29jUnJxcmprbytoSEVXZGhMZzdxRVdPRGdWSzVmc2d5SVVCMTRsVFM0Z1IwRWZvTlpHVDhRZGhiYURObTNNdStyWkZ6R09FSHZnVWU0aXViYUxNTCtDaUNBVXRycHFvc29IYk4xK0ZadkhiQUozaE9SYU1uRUxZQlgxOEZ6N2hpQitDdmdHby9TWFZBT1UrWFlubm85ZUNzdEZqLzhwK1h5QU40b3dEdnQra0RGWlJVa3laQWF6WktiRjYwa2pyajBYY1pjMzM1QVZWVDFoYnFzNmVBR0xKeVdHbXhBbEJZbjV5QnZ1dkFRTkRES3dENlVwT2grdmpsRjRFVGRLSkVDcEZMK3kzWXVGaHNTOHpQYnhERlF4OEVkTE8wNEFVWDM2ZEppTXZ6TDJiK2hiQy9vS1lnSzRQOCsxU2tkNy9BME5YaStpdy8wMWtpMXZwMW5yL1h4RHlJaWtuMCtxTitWakZOeG9JdDkrRStYOGxTdUx6YXlLaEJyWHRqYVpXVy9mZ2h6V2lZbEVNYnI3VjE3Yll4ckRlUlRiZU83QmpvcHFQUmloYjF4VXpSMUluWGwwNktuWUdTOG5UVkNIaFRqTWQydVlXODRNL1FYeTluTE02UmJUa0QxQTY5YWdqMytDVVFTQzZTempQL2FScXdNMWxxNndIVUVpL1FEUllrU3kvSEdDV3dmdVhzTnYydDNQcXh4bjFHY3ovKzB6SUdsNnZwUnJLSU5iUURZMWtIYThJUExMcFhXSFJEMWVkQUxidjlxVXVqOXRybkI0dmF3NGROR0RqVzZmdndXT08vY0ZFNzlGNUdtd1NHb0cyQS9NeU5YSGRIdlZqbkpnZlJaNFRvc1hobFNhZ1ZIUVNYYUZacFB3b2NYM0VVSk5Lc2tkWE9QeUJET3RIUHJsUnAzTW9jZnVOZ3dNV0xBOXFhOTk5QXpKYmQzc1o1OU42WUZTai9TQzVHUkFvbE9FR0ovY3BtSFcyc0RpaHRvUWpUTFEyVG5XQmFhTncxZUE0dW0zQVVMUjZjUk44S2syNkxsaFY2cXJTZjMwc3JacGovalpGeU5ZTlYvNVV5a3V2WU1QV2tKY3NTeUx3WW51Qi81SkRGMy91NU1FQ1Y2UVpKNGlQazVGVm5NcjQwdmpIV2RoVlFUQWIvN0xmWUI0VncxcXBtckxGNTg4N3g0Zk0vRUdxanBHMjVpNXh0cmQ1WWFFSjFCZnFRdXk4bVY5NkdVWi8xTzlUSzBlZk5PdlQ2MEJyMUNjUnBBa0xEZ1NURFlJMUM0TGNWaU8zVlNDMTN2TWlhaU9mZmRjRklDYldwQ1p3Tk1hanNscVB0dzNadXNMdXF0WngzT29TNnB2T1ptdVpSeFFOUFFWSE9rVnVLQmlOYi9WY2xQSGZRaStQZjl2VEF3Qk14QjVoTmtKMzN4R3MyK2JvK0JDdWduclR3TTRQTjBxeWhZbXNXMDMxdDQ2ZHRjWlNDT1hvUExCUUtQUDBJWkU3U2NXeUUzTHBFa2xrOWZRWnFydkNQbmFxb2VkYjRQRFdoMUVJcklKMisxd1FUZmYwUkYvNkJ2d016U1ZWamx1bGY4eTU2K0k4dHRseVpoWjhPME96bGFUR1BqN0JCSk03MHVvVjRaVjlkN2E2bUhmelhKUkNzZFg3Z3A3cTJ1aFN5YmFMa2lkcXBhdXYrdE1HZ2hRdEpUS1ZQQzZvSDIvTTdoeFpvNnBsUnptL3I0YU90MGFFOUVPN1NTUy9SQ0FYMXpnLzFwa3BFQkdMbktpT0lNcTJscGRjdjh3PT0=",
+    token : "$2a$10$VEzkBbg7kN5LpiEurR7HgOuBxtcgl0g2E/1RQq8OTju7LbqZb2n7S",
+    encryptedUser : "confidential:VTJGc2RHVmtYMStHUStFa0tvUXZUeC9xWXEwZEpHYlg0NEJVU2FlUUcvWlNPK1c4NFdLTGNHeEVuRFJueU9WRU50RXlTK2p5V3B5UHZaVWJlWUhoV1NZU3RrK0N4cm9obWcxUk5jdGFIMmM5NmhyazkvTTJJNnNzN1B1MVAzbTJMTUdjTWhBWXRUTitZZ1ppbjA5N3RrMERRUGFmTTZhR1ZVRG4zZmlZbjlwZHBxcTR4VUlkQzc5UG82MG1NSndVdmJKeU0zVFZYRndhNzJnSFBNR0h1RE04TmpxVVFOSnJTbldVWEJNM3RXOVRRWDVPTi83R3FRUDRzRGRzaGQ2cktDQVpmMVZPZ1NJUVRycnNGSWYyVjVJQ21PTG5aNHczK3NONC9UM1lENDZKR0c1UGhqRUpSN2RvdElqbDB3ejFURjVjK1ZLUVRTSnhkNW1XWGVFeWFEcTNSMnYzM1RjUzJkVTNhcFRGakgxTUZLVFAwZjUxWWJ6K0tHQnlONElDcTliMGxhM2dXZGRONDZkVWdoYTk5UUFJWlQwbElhQ2MwL09rV3czWmNFcEVXYmZmUExVU0VWUW5PczdvUFRvTE5aNHJDaDhMVmh4cUlEVEFTeEtQY0hGckVsd095cDJ5OG52Z3hEVGF5WFFIL080bVJjMGdCNWJTdGVRK0ozV0wxRGd2OHgvaVFwcWJSRmd0Sk9KL1JDdWFmamxweVlieGNXV2RoYXVBcDkrM2FadkNiR2kvWnM1UVZmaS9IMHN4WlR1WVh4SDJkRGxPU004MnRCMXRHVjRQUmgwMHIyWDJuU1Jpc25DdmNWWnduR3g1Umx1eHZvQmllemJjeS9vNlI1WXA1eVRLTy84dGJuK2dTWlB5RmhWOTdZdFRia1dWY3pETkdQNElKdnR4UFZFZThhc0d1dDFzaWRtQzJLVHF0WU8zdHkwUWtVaysxZS9MNm1acmlCaWRCUEQyM2lPTGpOZDZpNzY1NWlyWFlvRTJDMWpWcU40TlgvSkhRRXZEeVY2T1Bnd3FJNjEvcURMaGVCTENlMzM3UGdQYTREeE1VVFJ0d1gzMExYWVVmUVY3NmZJUUZnLzM2RWpDSEdFOFF3V3VwWlJNTVhMWG9jaDR3c1ZNL2I3bXVJOGZPbC9UM09uUWc2N0hSeVFGZGVEaktheTlmSlZjOFB6QVRzV1Z0aVRPb2NLUGlkWm41bjNrVmJoYnhhWnNFZTE4MmNCNGloME93bU9YOTQ1Y0NmNUJqdUJtZkdLNHpxM09LWURiSDRIdFRxVHZEQmp2eEU1M2htZTh5RDI4Vkh3bk9jek4xQnF5eFRIWjc2K1A1RHFybFRNM2xsMDNrYkZ0UTNJOFNVMm8wRU1SMXMzam0rNkNoVVFlN291VGxMd052VUFab3Fmd2lybTgxZE5IaG5DbUNpTUtsTGdXd2hVQ01lY2tWMzRpcG1TS1h5ZTA3UVI1UDlzNzdDSmQrQysvcURZS3VFYTZjbG5GK1h0cE1tQkhSNndoZlA0QktZRFpWejl3eE51TFdxS0JCMi9aRjE5WlZmTHZwMkU4ZnVlM1V2MHNOWndKUFRkRWhMR3BmYmJ2UzFoaFNwQzNJTGZFZGJPbUF4RkVEUWJpK2tCRS9UdUs4NGN5YkdFOHdLUGNXbHpEeUNSa2U1QzNsQVZncjZmWldCdmFYWFVLN25mREdHNmxDM2VmeEx1MkFjcVljSjA1OE9YNzNpaEk1eFZIaUJzNE9Mb3pYRlpLMkRyVUw4SlRtekFQK3ovaUtCdVdyTTA0clAzMVBHaVJ5c1c5aVQ1ZHEyU0djVGdINS9yaTluL1duc215cmJDeEVNamJLTDFGYVZVenFnTlNVekhmcTNYNTBzRDZINVRuU2VuQldYUGNiSWxSb1htL09oODVOR3ljcFdGRUt2b2hSeWtBNEJtMG1DVnBZN0kvMmlZNTczZHNoMllkN2pHeDJIYzFIYzdONkk1ekJTdHV1VmNpQ0Y1MzZWcjJXeTV3ckpVQ0srTnEyYUp2NzJ0SHhBWXV5TGZJanN3ZGQ3dEowenNGNERRZE94VU1HUWlZWXVxK0E4MnJuTjErVURmVHI2dGc0V2xzUEFkSU1HWlhOQVh6UjAxYWRyUFRRbGxnT1pzdWoyV3JFQTNmcGIvck5tbEE5dVFCVm01RDZ3UllnSzRBMVIwMitVRWJjR053ZitmZU55ZXZYYnhmMTl6bzZvRGEra3Bkajl1Mm1yYjlVSWt4YXphWnNmMHRlVzFPTDdCNWtNNWNpeVRBZ3VrMldxancyeWJNMGZ5bGlZYnJLRGFGeWFlcFlyQ1QyV3Fod1hxY0p0ZUYvZURteloxZ0JiN2dteGRuQURMSnAyVHZGZnRSWTBibnFOcjRrd3NEUHo3a2hnM2dnc3J5MFBjYU1PQlVnazdPOU1hNmF5aFlTY3pRWG5qalV0dkp6am1scjVBZ0ZabHVGZFQyM2hNVmtGQ240WkVzbUNJVGZxUm1qQ0xkTk1tSW4xem8wVEVwb3d2ZUZIbWk0dUY5UmFzSXlEVmpPczJZQUU0bnJFYTgvTEM1ZzdaWGo4M0JDbGhtc1FBWkVOMC9LZXAyNTM3UzNBQ0lzU2FDWUN0aXh2V2pPSGk1R01IRndlUFNSSzAwRndqMWt6K3FwTitmSStLdHdBQ2E0d0djL1dZbGN2RTd1NXlReXdmMWk1dVN2L2dKSnp0cHNJc3FtYXJzd29BZVMzd3VhSkxrQklnVDNOeWowdHo2QlB3OEdsSXdDYnpwenVFVG9QM1k4STk5OGpnb2JXZ094V0dNbXIrZE9jcDdaKzdOZ2FZa1pKTUt1cWM3eDdLajAwRzVOcnVzanhqWEw2UUtkRjVVa1NCUWJPQ3RsZ0xrekIvRDBoZWhSMld6SjdldCtSL0dWcVd4NnlMU21ySHhEakNwcTFRd0o1YVFNbGU3RFAyenZUSnh0WjlGa3JyZHZFeDkxM1psVzBuVEFYeFFKcVJWWHB1R2tsUXdoTHFheTVTUk1iNldKU3NlOFBKdC9rTi9vVGZ2ZlhUSHJ6TWVYZWtiSDltY2Vyc1JMUmhPZW85dDlvZU1jM3NXZ1lWOVBIR1gzbmtGOXJqOG1FTlBSMzlKNlJHeEE2bW9NUXBHUmhGWjB4dlBjYzRuWXRvVUcyYVNUVzJTTk9ONEROVWkxcE9neWd6UzgzR3NZbWNIdEQvSVJ6Uy9BRndsdSszWlJZMWRxWER6S1g3UHNQelcrdlhHNnptTnVSM0ljekVlRGFwakNqSmJNUCtLRE9PN3BVZ3ErSnJOa3NDTkxQSlpwa1lhTDN1bENwTzNNQkVHVjd5N1E4SWtzcjBmalRwK2p1NEpIN0dLZjREZzg4ZkU1Mk9MSVphMXYzNFkyaEZmbEpKM3lrWG5mNEF1N0Q5YkhMVm4yZEMwdWdzL0dpQkhMbGplV0xnaUdKanBzcnBTSUcwK04rRythMW9IUU5GOWJLV2lHdXVSM2ZQaHRoUU9vdFV4Vi9ZL3BSVWhYT2gxcnAvcUlWSUY2SnFXcTRTYmc0TkhIVWs5bXZVVjZ1Tk5oZnAzd2phbndJb3J0cFNnVlI5cTZXSzhqQ1JJUnhmdWxBZUVrb0RYZy94RUJ2c21RU1B6NGtmbFQrd3RFMDNZcEM3d2tBYVZyVnZYbDU2QW4yeVo3aVhuVnF3Ty9yZ1BnNmk5eU9yS0xac0NoK3VTbVB1OUtIdXlFY29xenFQTzNWQzMxUGpJendSZXd4UmhvUUpZR05PdUFxZ1ZHTzY4TWRwdG1yeElsRU1oMFBiY0pjRUd3eE5Wd1B5OGp2SXZ3cWxnSWcvSlRPZ1F0TnprWnlLY2ZhQlJsSiszdXhZQTA3SjBTbDlkQXRDcytWZkY5bFhVNG5EMjZsaVFKY3ZpU2FROFphSGR5Z25XNWJxellMR2dnSFhFR3hwbkpIVmJ5VnpyNHJiR0hkaGJud2tqZ2c4L0JidnFFcm1ib2REUWlaVCsyU0ZEenVlb3VuUTVzT0ppY2JqVHBIUlpjaE14OEllZ3hCTjZBdFA4b0V2aWpkVE01TDBmUW9RNDk2ZDZLTU5zRDVtOE1EUjhKZnM4RE1tTStTQjg1VndPZ3lPUFZYVzdpdmVPM0JvekMzak8wcXMwMFhxZGRpL2ZSUnlBTU9pczdOM0tBUzd2MkpOQnhJTlFncytJbS9kWE1pZ010dG1UREJiTjE5QnBjN1QwcE1DaFZmSGUzN3NzZVczeXpnbFlZeHkwdEdWcTNFZFM2eVVDdXAvV05xbVZoVS9ZcjRYbUFpbFhxbkpIcHM4ZlkwaE8vWTloeTl4dEdHN1R0WEE0cVpkK0JVQ2pPYldRK0QyVjRuUTdDaWk5bVRyblZWTHcycUpaS05ibzZDSmFrSXhwK252MVhPZWhpeXNYUnFrZGZGT0czNmxRelI5MDJlSzNVUWJlbmV5cDVKUlVCMG1vY0xxd1NpWkdMVXNvT1g3WXFxTjM5T3ZPZmRIVXdDRm1pRHRPamNIUDBNSklWR2NvLzdDMWdOU29jc1BBM1V0dFRYcjk3UVB1SzJ4TkQ2UXFyUWlUallHMlFJanc4ZHZVK2tlTW5ldU50SExwYVlxSlBIcVRhdz09",
     username : "public"
   });
 };
 
 OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
-  if(OPrime.isCouchApp()){
+  if (OPrime.isCouchApp()) {
     var corpusURL = window.location.origin;
     if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
-    } else if (corpusURL.indexOf("authdev.fieldlinguist.com") >= 0) {
+    } else if (corpusURL.indexOf("ifielddevs.iriscouch.com") >= 0) {
       corpusURL = "https://ifielddevs.iriscouch.com";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
       corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }
-    optionalCouchAppPath = corpusURL+"/"+dbname+"/_design/pages/";
+    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/pages/";
   }
   return optionalCouchAppPath;
 };
-define("libs/webservicesconfig_devserver", function(){});
+define("libs/webservicesconfig_local", function(){});
 
 if (window.location.origin != "localhost") {
   if (window.location.protocol == "http:") {
@@ -27070,7 +27188,7 @@ require.config({
     "xml2json" : "libs/xml2json",
 
     "oprime" : "libs/OPrime",
-    "webservicesconfig" : "libs/webservicesconfig_devserver"
+    "webservicesconfig" : "libs/webservicesconfig_local"
   },
   shim : {
     
@@ -27139,7 +27257,7 @@ require.config({
 require([ 
     "app/App",  
     "backbone",
-    "libs/webservicesconfig_devserver"
+    "libs/webservicesconfig_local"
     ], function(
         App,
         forcingpouchtoloadearly
