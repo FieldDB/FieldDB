@@ -88,7 +88,6 @@ define( [
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
-
       
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
@@ -236,7 +235,6 @@ define( [
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      
 
       if (this.format == "leftSide") {
         OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
@@ -443,14 +441,10 @@ define( [
 
       for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
         if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
-//          $(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].el).find(".datum-checkboxes")[0].checked = true;
           datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
         }
-//        else{
-//          $(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].el).find(".datum-checkboxes")[0].checked = false;
-//        }
       }
-//      alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+      alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
 
       return datumIdsChecked;
     },
@@ -555,7 +549,6 @@ define( [
       }
       alert("TODO");
     },
-   
     
     /**
      * 
