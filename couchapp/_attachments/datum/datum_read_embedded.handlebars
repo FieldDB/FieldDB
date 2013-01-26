@@ -30,9 +30,12 @@
     <!-- list for the tags -->
     <ul class="datum_tags_ul unstyled"></ul>
   </div>
-  <div class="datum_state span3 border-left datum_state_read_view">
-  <!-- TODO change to a single one  -->
-   
+  <div class="datum_state span3 border-left">
+    {{#each datumStates}}
+	  {{#if selected}}
+	  <span class="label label-{{color}}"><i class = " icon-flag"></i>{{state}}</span>
+	  {{/if}}
+	  {{/each}}
   </div>
 </div>
 

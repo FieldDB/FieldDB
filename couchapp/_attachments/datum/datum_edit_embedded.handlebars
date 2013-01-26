@@ -50,8 +50,14 @@
 	    </div>
 		</div>
 	</div>
-	<span class="datum_state_read_view "></span>
-  <div class="datum_state span3 border-left corpus_datum_states_view">
+  <div class="datum_state span3 border-left">
+    <span class="label label-{{statecolor}} datum-state-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datumstate}}</span></span><br/>
+		<!-- drop down for the states -->
+    <select class="datum_state_select span12 ">
+      {{#each datumStates}}
+          <option value="{{state}}" {{selected}}>{{state}}</option>
+      {{/each}}
+    </select>
   </div>
 </div>
 

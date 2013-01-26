@@ -500,7 +500,6 @@ define( [
         }
         var fields = new DatumFields(datumfields);
         this.model.set("datumFields", fields);
-        var state = window.app.get("corpus").getDefaultDatumState();
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
@@ -534,7 +533,8 @@ define( [
           }
         });
         d.set("datumFields", fields);
-        d.set("datumState", state);
+        var states = window.app.get("corpus").get("datumStates").clone();
+        d.set("datumStates", states);
         d.set("session", this.model.get("session"));
         //these are temp datums, dont save them until the user saves the data list
         this.importPaginatedDataListDatumsView.collection.add(d);

@@ -44,13 +44,11 @@ define([
         model : this.model.get("audioVideo")
       });
       
-      if(!this.model.get("datumState")){
-        this.model.updateDatumStateToVersion40();
-      }else{
-        this.datumStateView = new DatumStateReadView({
-          model : this.model.get("datumState"),
-        });
-      }
+      // Create a DatumStateReadView
+      this.stateView = new DatumStateReadView({
+        model : this.model.get("state"),
+      });
+      this.stateView.format = "datum";
       
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
@@ -58,12 +56,14 @@ define([
         childViewTagName     : 'li'
       });
       
+      // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
         childViewConstructor : DatumTagReadView,
         childViewTagName     : "li",
       }),
 
+      // Create the DatumFieldsView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldReadView,
@@ -162,6 +162,7 @@ define([
         return this;
       }
       var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "well") {        
@@ -186,11 +187,7 @@ define([
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$(".datum_fields_ul");
-        this.datumFieldsView.render(); 
-        
-        // Display the DatumStateView
-        this.datumStateView.el = this.$(".datum_state_read_view");
-        this.datumStateView.render();
+        this.datumFieldsView.render();
         
         //localization for read only well view
         if(jsonToRender.decryptedMode){
@@ -237,7 +234,12 @@ define([
           alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
           jsonToRender.translation = "bug";
         }
-        jsonToRender.datumstatecolor = this.model.get("datumState").get("color");
+        try{
+          jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        }catch(e){
+          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+//          this.model.get("datumStates").models[0].set("selected","selected");
+        }
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
         if(jsonToRender.datumstatecolor){
@@ -250,7 +252,7 @@ define([
           $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
         }
         try{
-          if(this.model.get("datumState").get("state") == "Deleted"){
+          if(this.model.get("datumStates").where({selected : "selected"})[0].get("state") == "Deleted"){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
@@ -259,6 +261,12 @@ define([
       }
       
       return this;
+    },
+    
+    renderState : function() {
+      if (this.stausview != undefined) {
+        this.stateView.render();
+      }
     },
     
     insertNewComment : function(e) {

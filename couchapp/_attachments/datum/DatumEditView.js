@@ -11,8 +11,6 @@ define([
     "datum/DatumTag",
     "datum/DatumTagEditView",
     "datum/DatumTagReadView",
-    "datum/DatumStateReadView",
-    "datum/DatumStatesReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
     "glosser/Glosser",
@@ -30,8 +28,6 @@ define([
     DatumTag,
     DatumTagEditView,
     DatumTagReadView,
-    DatumStateReadView,
-    DatumStatesReadView,
     SessionReadView,
     UpdatingCollectionView
 ) {
@@ -49,6 +45,7 @@ define([
      * @constructs
      */
     initialize : function() {
+      // Create a AudioVideoEditView
       this.audioVideoView = new AudioVideoEditView({
         model : this.model.get("audioVideo")
       });
@@ -59,29 +56,20 @@ define([
         childViewTagName     : 'li'
       });
       
+      // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
         childViewConstructor : DatumTagReadView,
         childViewTagName     : "li",
       });
 
+      // Create the DatumFieldsValueEditView
       this.datumFieldsView = new UpdatingCollectionView({
         collection           : this.model.get("datumFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
         childViewClass   : "datum-field",
         childViewFormat      : "datum"
-      });
-
-      this.datumStatesView = new DatumStatesReadView({
-        collection : app.get("corpus").get("datumStates"),
-      });
-      
-      if(!this.model.get("datumState")){
-        this.model.updateDatumStateToVersion40();
-      }
-      this.datumStateView = new DatumStateReadView({
-        model : this.model.get("datumState"),
       });
       
       this.sessionView = new SessionReadView({
@@ -160,7 +148,7 @@ define([
           this.insertNewDatumTag();
         }
       },
-      "change .datum_state_select" : "updateDatumState",
+      "change .datum_state_select" : "updateDatumStates",
       "click .add-comment-datum" : 'insertNewComment',
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
@@ -186,6 +174,14 @@ define([
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
+      jsonToRender.datumStates = this.model.get("datumStates").toJSON();
+      jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
+      try{
+        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
+      }catch(e){
+        OPrime.debug("There was a problem fishing out which datum state was selected.");
+      }
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       
       if (this.format == "well") {
@@ -212,14 +208,6 @@ define([
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
         
-        alert("todo check this");
-        // Display the DatumStatesView
-        this.datumStatesView.el = this.$(".corpus_datum_states_view");
-        this.datumStatesView.render();
-        
-        // Display the DatumStateView
-        this.datumStateView.el = this.$(".datum_state_read_view");
-        this.datumStateView.render();
         
         var self = this;
         this.getFrequentFields(function(){
@@ -412,10 +400,21 @@ define([
       
     },
     
-    updateDatumState : function() {
-      var selectedValue = $(this.el).find(".datum_state_select").val();
-      this.model.updateDatumState(selectedValue);
-      this.datumStateView.model = this.model.get("datumState");
+    updateDatumStates : function() {
+      var selectedValue = this.$el.find(".datum_state_select").val();
+      try{
+        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
+      }catch(e){
+        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+      }
+      
+      //update the view of the datum state to the new color and text without rendering the entire datum
+      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
+      $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
+      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
+      $(this.el).find(".datum-state-value").html(selectedValue);
+
       this.needsSave = true;
     },
     
