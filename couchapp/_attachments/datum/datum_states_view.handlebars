@@ -1,0 +1,14 @@
+<label class=" ">Tags:</label>
+<div>
+  <ul class="inline">
+  {{#each
+  tags}}
+    <li><span class="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{tag}}
+      </span></li>
+       {{/each}}
+  </ul>
+  <input class="tags_edit_text_area" data-provide="typeahead"
+    data-items="4" data-source='{{typeaheadtags}}'></input>
+</div>

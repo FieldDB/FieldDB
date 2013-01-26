@@ -4051,24 +4051,6 @@ function program3(depth0,data) {
   
   return "icon-eye-open";}
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1, foundHelper;
-  buffer += "\n          <option value=\"";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" ";
-  foundHelper = helpers.selected;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ">";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</option>\n      ";
-  return buffer;}
-
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" rel=\"tooltip\" class=\"locale_Edit_Datalist\">\n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a> \n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
   foundHelper = helpers.title;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
@@ -4089,19 +4071,7 @@ function program5(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n\n<!-- Datum states dropdown -->\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
-  foundHelper = helpers.statecolor;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  foundHelper = helpers.datumstate;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n\n</div>\n\n";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -4603,7 +4573,7 @@ function program5(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown -->\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
   foundHelper = helpers.statecolor;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -4615,7 +4585,7 @@ function program5(depth0,data) {
   stack1 = depth0.datumStates;
   stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n\n</div>\n";
+  buffer += "\n    </select>\n\n</div>\n -->\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -4887,24 +4857,6 @@ function program7(depth0,data) {
   
   return "icon-eye-open";}
 
-function program9(depth0,data) {
-  
-  var buffer = "", stack1, foundHelper;
-  buffer += "\n          <option value=\"";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" ";
-  foundHelper = helpers.selected;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ">";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</option>\n      ";
-  return buffer;}
-
   buffer += "<div class=\"pull-right\">\n	<button class=\"btn btn-success save-datum locale_Save pull-right\" value=\"Save\"></button><br/>\n	<span class=\"last-modified\">";
   foundHelper = helpers.dateModified;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
@@ -4925,19 +4877,7 @@ function program9(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n		<span class=\"session-link\"></span>\n	</div>\n  <div class=\"span3 border-left\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n  <div class=\"datum_state span3 border-left\">\n    <span class=\"label label-";
-  foundHelper = helpers.statecolor;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  foundHelper = helpers.datumstate;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 \">\n      ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(9, program9, data)});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n  </div>\n</div>\n\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datum\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n";
+  buffer += "\"></i>\n	    </a>\n	    <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n	      <i class=\" icon-paste\"></i></a>\n	    <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">LaTeX</i>\n	    </a>\n	    <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n	      <i class=\"\">CSV</i>\n	    </a>\n	  </div>\n	  <br/>\n		<a href=\"#\" class=\"audio_video locale_Drag_and_Drop_Audio_Tooltip\" rel=\"tooltip\"></a>\n		<span class=\"session-link\"></span>\n	</div>\n  <div class=\"span3 border-left\">\n		<!-- list for the tags -->\n		<ul class=\"datum_tags_ul unstyled\"></ul>\n		<div class=\"controls  no-margin-left\">\n			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->\n			<div class=\"input-append \">\n			  <input class=\"add_tag span6\" type=\"text\" data-provide=\"typeahead\" data-items=\"4\" \n	            data-source=\"[&quot;Passive&quot;,&quot;Nominalization&quot;]\" \n	      /><button class=\" btn btn-small btn-primary add_datum_tag\" type=\"button\">\n	        <i class=\" icon-tag\"></i>\n	        <span class=\"locale_Add\">Add</span> \n	      </button>\n	    </div>\n		</div>\n	</div>\n	<span class=\"datum_state_read_view \"></span>\n  <div class=\"datum_state span3 border-left corpus_datum_states_view\">\n  </div>\n</div>\n\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datum\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -5084,29 +5024,6 @@ function program3(depth0,data) {
   
   return "icon-eye-open";}
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n	  ";
-  stack1 = depth0.selected;
-  stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(6, program6, data)});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	  ";
-  return buffer;}
-function program6(depth0,data) {
-  
-  var buffer = "", stack1, foundHelper;
-  buffer += "\n	  <span class=\"label label-";
-  foundHelper = helpers.color;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.color; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"><i class = \" icon-flag\"></i>";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n	  ";
-  return buffer;}
-
   buffer += "<!-- list for the fields -->\n<ul class=\"datum_fields_ul unstyled\"></ul>\n<div class=\"\">\n  <i class=\" icon-save \"></i><span class=\"last-modified\">";
   foundHelper = helpers.dateModified;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
@@ -5119,11 +5036,7 @@ function program6(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled\"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left\">\n    ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </div>\n</div>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datum\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>";
+  buffer += "\"></i>\n      </a>\n      <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip btn btn-mini btn-info\" rel=\"tooltip\" >\n        <i class=\" icon-paste\"></i></a>\n      <a href=\"#\" class = \"locale_LaTeX  LaTeX btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">LaTeX</i>\n      </a>\n      <a href=\"#\" class = \"locale_CSV_Tooltip CSV btn btn-mini btn-info\" rel=\"tooltip\">\n        <i class=\"\">CSV</i>\n      </a>\n    </div>\n    <br/>\n    <div class=\"audio_video \"></div>\n  </div>\n  <div class=\"span4 border-left\">\n    <!-- list for the tags -->\n    <ul class=\"datum_tags_ul unstyled\"></ul>\n  </div>\n  <div class=\"datum_state span3 border-left datum_state_read_view\">\n  <!-- TODO change to a single one  -->\n   \n  </div>\n</div>\n\n<!-- Datum comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-datum\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -5206,6 +5119,19 @@ templates['datum_state_settings_read_embedded'] = template(function (Handlebars,
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
   buffer += escapeExpression(stack1) + "</span>\n\n";
+  return buffer;});
+})();(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['datum_states_view'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<label class=\" \">Tags:</label>\n<div>\n	<ul class=\"inline\">\n		<li><div class=\"alert\">\n				<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n				passive\n			</div></li>\n	</ul>\n	<input class=\"tags_edit_text_area\" data-provide=\"typeahead\"\n		data-items=\"4\" data-source='";
+  foundHelper = helpers.typeaheadtags;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.typeaheadtags; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "'></input>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -9843,7 +9769,6 @@ define('datum/Datum',[
     "datum/DatumField", 
     "datum/DatumFields", 
     "datum/DatumState", 
-    "datum/DatumStates",
     "datum/DatumTag",
     "datum/DatumTags",
     "datum/Session",
@@ -9857,7 +9782,6 @@ define('datum/Datum',[
     DatumField, 
     DatumFields,
     DatumState, 
-    DatumStates,
     DatumTag,
     DatumTags,
     Session
@@ -9910,15 +9834,15 @@ define('datum/Datum',[
      * @constructs
      */
     initialize : function() {
-      // Initially, the first datumState is selected
-//      if (this.get("datumStates") && (this.get("datumStates").models.length > 0)) {
-//        this.get("datumStates").models[0].set("selected", "selected");
-//      }
       
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+      
+//      if(!this.get("datumState")){
+//        this.updateDatumStateToVersion40();
+//      }
     },
     fillWithDefaults : function(){
    // If there's no audioVideo, give it a new one.
@@ -9956,10 +9880,24 @@ define('datum/Datum',[
       audioVideo : AudioVideo,
       session : Session,
       comments : Comments,
-      datumStates : DatumStates,
+      datumState : DatumState,
       datumTags : DatumTags
     },
-
+    updateDatumStateToVersion40 : function() {
+      if (this.get("datumStates")) {
+        try {
+          this.set("datumState", new DatumState(
+              this.get("datumStates")[_.pluck(
+                  this.get("datumStates"), "selected").indexOf(
+                  "selected")]));
+        } catch (e) {
+          OPrime.debug(
+              "Problem finding the selected state in this datum", this);
+        }
+      }else{
+        this.set("datumState", window.app.get("corpus").getDefaultDatumState());
+      }
+    },
     changePouch : function(pouchname, callback) {
       if(!pouchname){
         pouchname = this.get("pouchname");
@@ -10290,7 +10228,7 @@ define('datum/Datum',[
         dateEntered : this.get("dateEntered"),
         dateModified : this.get("dateModified"),
         datumFields : new DatumFields(this.get("datumFields").toJSON(), {parse: true}),
-        datumStates : new DatumStates(this.get("datumStates").toJSON(), {parse: true}),
+        datumState : new DatumState(this.get("datumState").toJSON(), {parse: true}),
         datumTags : new DatumTags(this.get("datumTags").toJSON(), {parse: true}),
         pouchname : this.get("pouchname"),
         session: this.get("session")
@@ -10299,18 +10237,13 @@ define('datum/Datum',[
       return datum;
     },
     updateDatumState : function(selectedValue){
-      console.log("Asking to change the datum state to "+selectedValue); 
-      
-      try{
-        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-        this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+      OPrime.debug("Asking to change the datum state to "+selectedValue); 
+      var completeCorrespondingDatumState = window.app.get("corpus").get("datumStates").where({state : selectedValue})[0].clone();
+      if(completeCorrespondingDatumState){
+        this.set("datumState", completeCorrespondingDatumState);
+      }else{
+        alert("TODO create a new datum state.");
       }
-      console.log("done"); 
-
-//      this.save();
-      //TODO save it
     },
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
@@ -10464,20 +10397,6 @@ define('datum/Datum',[
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
       var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it. 
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try{
-        var ds = this.get("datumStates").models;
-        for (var s in ds){
-          if(ds[s].get("state") == undefined){
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      }catch(e){
-        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
-      }
       
       this.changePouch(null,function(){
         self.save(null, {
@@ -10815,20 +10734,20 @@ define('data_list/DataList',[
       OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
         /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
-        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
-        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
+//        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
+//        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
 
         
         /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
-//        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-//        obj.id  = datumIdsToApplyFunction[id];
-//        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
-//          obj.fetch({
-//            success : function(model, response) {
-//              model[functionToAppy](functionArguments);
-//            } 
-//          });
-//        });
+        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        obj.id  = datumIdsToApplyFunction[id];
+        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              model[functionToAppy](functionArguments);
+            } 
+          });
+        });
         
       }
     },
@@ -12729,6 +12648,10 @@ define('corpus/Corpus',[
             teamOrPersonal : "personal",
             context : " via Offline App."
           });
+    },
+    getDefaultDatumState : function(){
+      alert("TODO test this");
+      return new DatumState(this.get("datumStates").models[0].toJSON());
     },
     newSession : function() {
       $("#new-session-modal").modal("show");

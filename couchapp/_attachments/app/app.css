@@ -145,7 +145,7 @@ h4 {
 	margin-bottom: .6em;
 }
 
-.alert {
+.dont_close_notifications_dropdown_if_user_clicks .alert {
 	font-size: .8em;
 	line-height: 1.5em;
 	padding: .6em !important;
