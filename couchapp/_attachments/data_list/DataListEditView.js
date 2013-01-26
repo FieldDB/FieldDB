@@ -89,6 +89,8 @@ define( [
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
       
+      "change .datum_state_select" : "updateCheckedDatumStates",
+      
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
         if(this.format == "search"){
@@ -236,6 +238,28 @@ define( [
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
+      /*
+       * This is to get the datum states dropdown information and render "To be checked" as a default. 
+       * If user changes the label to something else, the first item in the dropdown menu will be shown.
+       * TODO test what happens if user changes datum state settings when a datalist is open 
+       */      
+      jsonToRender.datumStates = window.app.get("corpus").get("datumStates").toJSON();
+//      var indexOfToBeChecked = _.pluck(jsonToRender.datumStates, "state").indexOf("To be checked");
+//      if(indexOfToBeChecked == -1){
+//        indexOfToBeChecked = 0;
+//      }
+//      for(var x in jsonToRender.datumStates){
+//        if(x == indexOfToBeChecked){
+//          jsonToRender.datumStates[x].selected = "selected";
+//        }else{
+////          jsonToRender.datumStates[x].selected = "";
+//        }
+//      }
+      /* TODO instead, sort the datum states in the corpus by frequency... and take the top one */
+      jsonToRender.statecolor = jsonToRender.datumStates[0].color;
+      jsonToRender.datumstate = jsonToRender.datumStates[0].state;
+
+      
       if (this.format == "leftSide") {
         OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
@@ -551,6 +575,27 @@ define( [
       alert("TODO");
     },
    
+    updateCheckedDatumStates : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      var newState = e.target.value;
+//      $(this.el).find(".datum-state-color").find(".datum-state-value").html(newState);
+//      $(this.el).find(".datum-state-color").removeClass("label-warning");
+//      $(this.el).find(".datum-state-color").removeClass("label-imporant");
+//      $(this.el).find(".datum-state-color").removeClass("label-info");
+//      $(this.el).find(".datum-state-color").removeClass("label-success");
+//      $(this.el).find(".datum-state-color").removeClass("label-inverse");
+      
+//      var color = window.app.get("corpus").get("datumStates").models[_.pluck(window.app.get("corpus").get("datumStates").toJSON(), "state").indexOf(newState)].get("color");
+//      var datalisteditself= this;
+//      $(datalisteditself.el).find(".datum-state-color").addClass("label-"+color);
+//      
+//      this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "updateDatumState", newState);
+      return false;
+    },
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
