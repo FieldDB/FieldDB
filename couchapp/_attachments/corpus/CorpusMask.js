@@ -264,7 +264,7 @@ define([
       self.set("_id","corpus");
       this.set("timestamp", Date.now());
       
-        if(OPrime.isCouchApp()){
+        if(OPrime.isBackboneCouchDBApp()){
           self.save();
           if(typeof successcallback == "function"){
             successcallback();
@@ -334,24 +334,8 @@ define([
      * hardcoded id, it uses pouch's API directly
      */
     updateToPouch : function(){
-      alert("Bug: the corpusmask updatetopouch method is deprecated!");
-      var self = this;
-
-        if(OPrime.isCouchApp()){
-          self.save();
-          if(typeof successcallback == "function"){
-            successcallback();
-          }
-          return;
-        }
-
-        self.pouch(function(err,db){
-          var modelwithhardcodedid = self.toJSON();
-          modelwithhardcodedid._id = "corpus";
-          db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
-          });
-        });
+      alert("Bug: the corpusmask updatetopouch method is deprecated please report this!");
+      
     },
     /**
      * This function takes in a pouchname, which could be different

@@ -641,7 +641,7 @@ define([
 //        return;
 //      }
       
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
         if(typeof callback == "function"){
           callback();
         }
@@ -691,11 +691,19 @@ define([
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
-        if(OPrime.isCouchApp()){
-          if(window.location.href.indexOf(potentialpouchname) > -1){
-            this.syncBeforeChangePouch = false;
-          }
+        
+
+        /*
+         * If its a chrome app, the user can create a new pouch
+         * offline without any problems... but they cant save to
+         * the backbone couchdb so we should still encourage
+         * them to be online when they make a new corpus.
+         */
+        if(OPrime.isChromeApp()){
+          alert("TODO test what happens when creating a new corpus in chrome app")
+//          this.syncBeforeChangePouch = false;
         }
+        
         /* faking the date of last datum to avoid having a old session pop up */
         this.set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
         
@@ -721,11 +729,15 @@ define([
             }
             OPrime.checkToSeeIfCouchAppIsReady(optionalCouchAppPath+"corpus.html", function(){
 //              OPrime.bug("Attempting to save the new corpus in its database.");
-              try{
-                Backbone.couch_connector.config.db_name = potentialpouchname;
-              }catch(e){
-                OPrime.debug("Couldn't set the database name off of the pouchame.");
-              }
+              if(OPrime.isBackboneCouchDBApp()){
+                try{
+                  Backbone.couch_connector.config.db_name = potentialpouchname;
+                }catch(e){
+                  OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
+                }
+              }else{
+                alert("TODO test what happens when not in a backbone couchdb app and creating a corpus for an existing user.");
+              } 
               newCorpusToBeSaved.prepareANewPouch(null, function(){
                 alert("Saving new corpus in new corpus menu.");
                 newCorpusToBeSaved.save(null, {
@@ -990,8 +1002,9 @@ define([
             });
             dl.set("dateCreated",JSON.stringify(new Date()));
             dl.set("dateModified", JSON.stringify(new Date()));
-            if(!OPrime.isCouchApp()){
-              dl.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
+            if(!OPrime.isBackboneCouchDBApp()){
+              alert("TODO test this setting pouch");
+//              dl.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
             }
             dl.save(null, {
               success : function(model, response) {
@@ -1053,8 +1066,9 @@ define([
             s.set("dateCreated",JSON.stringify(new Date()));
             s.set("dateModified", JSON.stringify(new Date()));
             
-            if(!OPrime.isCouchApp()){
-              s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
+            if(!OPrime.isBackboneCouchDBApp()){
+              alert("TODO test this setting pouch");
+//              s.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + self.get("pouchname") : OPrime.pouchUrl + self.get("pouchname"));
             }
             s.save(null, {
               success : function(model, response) {
@@ -1107,15 +1121,15 @@ define([
       if(!this.get("couchConnection")){
         return;
       }
-      if(OPrime.isCouchApp()){
-        //TODO make the view in couchdb
+      if(OPrime.isBackboneCouchDBApp()){
+        //TODO make the view in couchdb shouldnt be necessary since it was created in the couchapp?
         if(typeof callbackpouchview == "function"){
           callbackpouchview();
         }
         return;
       }
       if(!corpusself.pouch){
-        //TODO make the view in couchdb
+        alert("TODO test this creating a view");
         if(typeof callbackpouchview == "function"){
           callbackpouchview();
         }

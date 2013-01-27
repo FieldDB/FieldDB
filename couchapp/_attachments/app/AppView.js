@@ -113,6 +113,7 @@ define([
       // Initialize the file system of the terminal
       this.term.initFS(false, 1024 * 1024);
       
+      window.saveApp = this.backUpUser;
       // Set up a timeout event every 10sec
 //      _.bindAll(this, "saveScreen");
 //      window.setInterval(this.saveScreen, 10000);     
@@ -764,6 +765,13 @@ define([
      */
     backUpUser : function(callback) {
       var self = this;
+      /* dont back up the public user, its not necessary the server doesn't modifications anyway. */
+      if(self.model.get("authentication").get("userPrivate").get("username") == "public"){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
+      $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
       this.model.saveAndInterConnectInApp(function(){
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){

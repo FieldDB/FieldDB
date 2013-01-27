@@ -155,6 +155,58 @@ define([
       currentDataList : DataList,
       search : Search
     },
+    /*
+     * This will be the only time the app should open the pouch.
+     */
+    changePouch : function(couchConnection, callback) {
+      if (!couchConnection || couchConnection == undefined) {
+        console.log("App.changePouch couchConnection must be supplied.");
+        return;
+      } else {
+        console.log("App.changePouch setting couchConnection: ", couchConnection);
+        this.set("couchConnection", couchConnection);
+      }
+
+      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      if(OPrime.isChromeApp()){
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
+        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+      }else{
+        /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
+        try{
+          var pieces = window.location.pathname.replace(/^\//,"").split("/");
+          var pouchName = pieces[0];
+          //Handle McGill server which runs out of a virtual directory
+          if(pouchName == "corpus"){
+            pouchName = pieces[1];
+          }
+          Backbone.couch_connector.config.db_name = pouchName;
+        }catch(e){
+          OPrime.bug("Couldn't set the databse name off of the url, please report this.");
+        }
+      }
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+      return;
+      
+      
+      
+      
+      alert("TODO set/validate that the the pouch connection");
+      if (this.pouch == undefined) {
+        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+        // + couchConnection.pouchname);
+        this.pouch = Backbone.sync
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
+            + couchConnection.pouchname);
+      }
+      if (typeof callback == "function") {
+        callback();
+      }
+    },
     /**
      * This function creates the backbone objects, and links them up so that
      * they are ready to be used in the views. This function should be called on
@@ -170,10 +222,8 @@ define([
         optionalpouchname == "default";
       }
 
-      try{
-        Backbone.couch_connector.config.db_name = optionalpouchname;
-      }catch(e){
-        OPrime.debug("Couldn't set the database name off of the pouchame.");
+      if (Backbone.couch_connector.config.db_name == "default") {
+        OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
       
       if (this.get("authentication").get("userPublic") == undefined) {
@@ -279,7 +329,7 @@ define([
         return;
       }
       
-      var couchurl = this.getCouchUrl(couchConnection, "_session");
+      var couchurl = this.getCouchUrl(couchConnection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
@@ -363,8 +413,8 @@ define([
     },
     getCouchUrl : function(couchConnection, couchdbcommand) {
       if(!couchConnection){
-        OPrime.debug("Using the apps ccouchConnection");
         couchConnection = this.get("couchConnection");
+        OPrime.debug("Using the apps ccouchConnection", couchConnection);
       }else{
         OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
       }
@@ -372,9 +422,9 @@ define([
       if (couchConnection.port != null) {
         couchurl = couchurl + ":" + couchConnection.port;
       }
-      couchurl = couchurl + couchConnection.path + "/";
-      if(!couchdbcommand){
-        couchurl = couchurl + couchConnection.pouchname;
+      couchurl = couchurl + couchConnection.path;
+      if(couchdbcommand === null || couchdbcommand === undefined){
+        couchurl = couchurl + "/" + couchConnection.pouchname;
       }else{
         couchurl = couchurl + couchdbcommand;
       }
@@ -406,7 +456,7 @@ define([
           }
         } else {
           OPrime.debug("Opening db success", db);
-
+          alert("TODO check to see if  needs a slash if replicating with pouch on "+couchurl );
           self.replicateFromCorpus(db, couchurl, function() {
             //turn on to regardless of fail or succeed
             self.replicateToCorpus(db, couchurl);
@@ -506,10 +556,11 @@ define([
 //        window.location.replace(optionalCouchAppPath+"corpus.html");
 //        });
           return;
-        }else{
-          OPrime.debug("Seting the Backbone couch_connector's db_name to " + corpusPouchName);
-          Backbone.couch_connector.config.db_name = corpusPouchName;
         }
+      }
+      
+      if (Backbone.couch_connector.config.db_name == "default") {
+        OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
       
       var couchConnection = appids.couchConnection;
@@ -694,7 +745,6 @@ define([
       });
      */
     warnUserAboutSavedSyncedStateBeforeUserLeaves : function(e){
-      
       var returntext = "";
       if (window.appView) {
         if(window.appView.totalUnsaved.length >= 1){

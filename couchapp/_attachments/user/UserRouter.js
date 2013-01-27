@@ -58,11 +58,6 @@ define([
 //      if(pouchname == "new"){
 //        alert("Creating a new corpus and direct you to its dashboard...");
 //
-//        try{
-//          Backbone.couch_connector.config.db_name = window.app.get("authentication").get("userPrivate").get("corpuses").pouchname;
-//        }catch(e){
-//          OPrime.debug("Couldn't set the database name off of the pouchame.");
-//        }
 //        
 //        var c = new Corpus();
 //        c.set({
@@ -77,12 +72,15 @@ define([
 //        
 //        return;
 //      }
-      
-      try{
-        Backbone.couch_connector.config.db_name = pouchname;
-      }catch(e){
-        OPrime.debug("Couldn't set the database name off of the pouchame.");
-      }
+      if(OPrime.isBackboneCouchDBApp()){
+        try{
+          Backbone.couch_connector.config.db_name = pouchname;
+        }catch(e){
+          OPrime.bug("Couldn't set the database name off of the pouchame when loading corpus for you, please report this.");
+        }
+      }else{
+        alert("TODO test what happens when not in a backbone couchdb app and loading a corpus for a user.");
+      } 
       
       var c = new Corpus();
       c.set({

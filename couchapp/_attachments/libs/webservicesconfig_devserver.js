@@ -81,6 +81,20 @@ OPrime.defaultCouchConnection = function() {
       connection = localhost;
       OPrime.authUrl = "https://localhost:3183";
     }    
+  }else if (OPrime.isChromeApp()){
+    if(window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0){
+      connection = mcgill;
+      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+    }else if(window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0){
+      connection = testing;
+      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+    }else if(window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0){
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
+    }else {
+      /*its probably a dev's chrome extension, use the corresponding connection for this build */
+      connection = testing;
+    }
   }
   return connection;
 };

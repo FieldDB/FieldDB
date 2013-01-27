@@ -48,6 +48,7 @@ define([
       var self = this;
       OPrime.getVersion(function (ver) { 
         self.appVersion = ver;
+        self.model.get("userPrivate").set("currentAppVersion",ver);
       });
       
     },
@@ -226,7 +227,7 @@ define([
           mostLikelyAuthUrl = "Localhost";
         }
         
-        //Production ocmdknddgpmjngkhcbcofoogkommjfoj
+        //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
         
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
         
@@ -533,11 +534,16 @@ define([
               var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouchname);
               OPrime.checkToSeeIfCouchAppIsReady(optionalCouchAppPath+"corpus.html", function(){
                 window.app.logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function(){
-                  try{
-                    Backbone.couch_connector.config.db_name = potentialpouchname;
-                  }catch(e){
-                    OPrime.debug("Couldn't set the database name off of the pouchame.");
-                  }
+                  
+                  if(OPrime.isBackboneCouchDBApp()){
+                    try{
+                      Backbone.couch_connector.config.db_name = potentialpouchname;
+                    }catch(e){
+                      OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
+                    }
+                  }else{
+                    alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
+                  }          
                   var newCorpusToBeSaved = new Corpus({
                     "filledWithDefaults" : true,
                     "title" : serverResults.user.username + "'s Corpus",
