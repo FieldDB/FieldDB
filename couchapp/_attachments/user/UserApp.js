@@ -112,7 +112,7 @@ define([
         this.set("couchConnection", couchConnection);
       }
 
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
         if(typeof callback == "function"){
           callback();
         }

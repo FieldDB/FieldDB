@@ -63,6 +63,7 @@ define([
                   }
                 },
                 success : function(model, response, options) {
+                  OPrime.bug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
                   self._rev = model.get("_rev");
                   self.set("_rev", model.get("_rev"));
                   self.save();

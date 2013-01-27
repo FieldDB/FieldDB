@@ -80,6 +80,10 @@ define([
       var dataToPost = {};
       dataToPost.username = user.get("username");
       dataToPost.password = user.get("password");
+      /* if the user is currently in a chrome app, save which chrome app they used last into their user, so that we can redirect them to it if we ever need to redirect them from the website. */
+      if(OPrime.isChromeApp()){
+        this.get("userPrivate").set("preferredChromeExtension", window.location.origin);
+      }
       if(this.get("userPrivate") != undefined){
         //if the same user is re-authenticating, include their details to sync to the server.
         if(user.get("username") == this.get("userPrivate").get("username") && user.get("username") != "public"){
@@ -220,9 +224,9 @@ define([
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
       }
       /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
-      window.app.set("couchConnection", serverResults.user.mostRecentIds.couchConnection);
+      window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
 
-      this.get("userPublic").saveAndInterConnectInApp(); 
+//      this.get("userPublic").saveAndInterConnectInApp(); 
       
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
@@ -293,22 +297,9 @@ define([
       localStorage.setItem("encryptedUser", u); 
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
-        window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
+        window.appView.toastUser("Successfully saved user details.","alert-success","Saved!");
       }
-      this.get("userPublic").save(null, {
-        success : function(model, response) {
-          OPrime.debug('User Mask saved ' + model.id);
-          if(typeof callbacksaved == "function"){
-            callbacksaved();
-          }
-        },error : function(e,f,g) {
-          OPrime.debug(e,f,g);
-          OPrime.debug('User Mask save error ' + f.reason);
-          if(typeof callbacksaved == "function"){
-            callbacksaved();
-          }
-        }
-      });
+      this.get("userPublic").saveAndInterConnectInApp(callbacksaved);
       
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){

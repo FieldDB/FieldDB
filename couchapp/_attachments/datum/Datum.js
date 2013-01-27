@@ -136,12 +136,14 @@ define([
     getMostRecentIdsByDate : function(callback) {
       var self = this;
       
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
+        alert("TODO check  getMostRecentIdsByDate");
         //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
         var tempDatums = new Datums();
         tempDatums.model = Datum;
         tempDatums.fetch({
           limit: 2,
+//          decending: true,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
@@ -211,7 +213,7 @@ define([
         queryString = queryString.toLowerCase().replace(/\s/g,"");
       }
       
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
 
       // run a custom map reduce
 //        var mapFunction = function(doc) {
