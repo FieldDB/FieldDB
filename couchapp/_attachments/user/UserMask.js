@@ -44,14 +44,36 @@ define([
       OPrime.debug("Saving the UserMask");
       var self = this;
         
-        if(OPrime.isCouchApp()){
+        if(OPrime.isBackboneCouchDBApp()){
           if(self.get("pouchname")){
             self.unset("pouchname");
           }
-          self.save();
-          if(typeof successcallback == "function"){
-            successcallback();
-          }
+          self.save(null, {
+            success : function(model, response) {
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            },error : function(e,f,g) {
+              OPrime.debug('UserMask save error ' + f.reason);
+              self.fetch({
+                error : function(model, xhr, options) {
+                  OPrime.bug("There was an error fetching your UserMask in this corpus.");
+                  if(typeof successcallback == "function"){
+                    successcallback();
+                  }
+                },
+                success : function(model, response, options) {
+                  self._rev = model.get("_rev");
+                  self.set("_rev", model.get("_rev"));
+                  self.save();
+                  
+                  if(typeof successcallback == "function"){
+                    successcallback();
+                  }
+                }
+              });
+            }
+          });
           return;
         }
         
