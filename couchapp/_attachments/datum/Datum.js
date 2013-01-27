@@ -124,28 +124,6 @@ define([
       datumTags : DatumTags
     },
 
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-        if(pouchname == undefined){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-      }
-      
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
-    
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -182,7 +160,6 @@ define([
       
       
       try{
-        this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
             db.query("pages/by_date", {reduce: false}, function(err, response) {
               
@@ -208,7 +185,6 @@ define([
               }
             });
           });
-        });
         
       }catch(e){
 //        appView.datumsEditView.newDatum();
@@ -289,7 +265,6 @@ define([
       
       
       try{
-        this.changePouch(this.get("pouchname"), function() {
           self.pouch(function(err, db) {
             db.query("pages/get_datum_fields", {reduce: false}, function(err, response) {
               var matchIds = [];
@@ -330,7 +305,6 @@ define([
 //                callback(matchIds); //loosing my this in SearchEditView
               }
             });
-          });
         });
       }catch(e){
         alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
@@ -643,7 +617,6 @@ define([
         OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
-      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             OPrime.debug('Datum save success');
@@ -773,7 +746,6 @@ define([
               alert('Datum save error: ' + f.reason);
             }
           }
-        });
       });
     },
     /**

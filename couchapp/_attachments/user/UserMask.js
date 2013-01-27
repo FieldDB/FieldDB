@@ -33,27 +33,6 @@ define([
       gravatar :  "user/user_gravatar.png"
     },
     
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-        if(pouchname == undefined){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-      }
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      
-      if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if(typeof callback == "function"){
-        callback();
-      }
-    },
     /**
      * this function makes it possible to save the UserMask with a
      * hardcoded id, it uses pouch's API directly for the first save, and then backbone/pouch save for the rest
@@ -64,13 +43,11 @@ define([
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       OPrime.debug("Saving the UserMask");
       var self = this;
-      this.changePouch(null, function(){
         
         if(OPrime.isCouchApp()){
           if(self.get("pouchname")){
             self.unset("pouchname");
           }
-          
           self.save();
           if(typeof successcallback == "function"){
             successcallback();
@@ -149,7 +126,6 @@ define([
             }
           });
         });
-      });      
     }
   });
 

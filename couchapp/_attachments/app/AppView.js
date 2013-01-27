@@ -434,7 +434,7 @@ define([
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
-      "click .sync-everything" : "replicateDatabases",
+      "click .sync-everything" : "backUpUser",
       /*
        * These functions come from the top search template, it is
        * renderd by seacheditview whenever a search is renderd, but its
@@ -762,17 +762,15 @@ define([
      * 
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
-    replicateDatabases : function(callback) {
+    backUpUser : function(callback) {
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){
-          var corpusConnection = self.model.get("corpus").get("couchConnection");
-          if(self.model.get("authentication").get("userPrivate").get("corpuses").pouchname != "default" 
-            && app.get("corpus").get("couchConnection").pouchname == "default"){
-            corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+          self.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.","alert-info","Backed-up:");
+          if(typeof callback == "function"){
+            callback();
           }
-          self.model.get("corpus").replicateCorpus(corpusConnection, callback);
         });
       });
     },
@@ -917,8 +915,8 @@ define([
       
       /* Open the notificaitons area so they can see it */
       $("#notification_dropdown_trigger").dropdown("toggle");
-      /* Close it 3 seconds later, if short text, 30 seconds if long text */
-      var numberOfMiliSecondsToWait = 3000;
+      /* Close it 5 seconds later, if short text, 30 seconds if long text */
+      var numberOfMiliSecondsToWait = 5000;
       if(message.length > 500){
         numberOfMiliSecondsToWait = 30000;
       }

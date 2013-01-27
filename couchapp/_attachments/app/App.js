@@ -155,37 +155,6 @@ define([
       currentDataList : DataList,
       search : Search
     },
-    /*
-     * This will be the only time the app should open the pouch.
-     */
-    changePouch : function(couchConnection, callback) {
-      if (!couchConnection || couchConnection == undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
-        return;
-      } else {
-        console.log("App.changePouch setting couchConnection: ", couchConnection);
-        this.set("couchConnection", couchConnection);
-      }
-
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      
-      if (this.pouch == undefined) {
-        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
-        this.pouch = Backbone.sync
-        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
     /**
      * This function creates the backbone objects, and links them up so that
      * they are ready to be used in the views. This function should be called on
@@ -293,21 +262,30 @@ define([
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }
+      if (couchConnection == null || couchConnection == undefined) {
+        alert("Bug: i couldnt log you into your couch database.");
+      }
 
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
+      /* if on android, turn on replication and don't get a session token */
+      if(OPrime.isTouchDBApp()){
+        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+            username, password, couchConnection.domain);
+        OPrime
+        .debug("Not getting a session token from the users corpus server " +
+        "since this is touchdb on android which has no idea of tokens.");
+        if (typeof succescallback == "function") {
+          succescallback();
+        }
+        return;
       }
-      if (!couchConnection.path) {
-        couchConnection.path = "";
-        this.get("couchConnection").path = "";
-      }
-      couchurl = couchurl + couchConnection.path + "/_session";
+      
+      var couchurl = this.getCouchUrl(couchConnection, "_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      OPrime.debug("Contacting your corpus server ", couchConnection);
+      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
+      var appself = this;
       $
       .ajax({
         type : 'POST',
@@ -320,6 +298,14 @@ define([
                 "I logged you into your team server automatically, your syncs will be successful.",
                 "alert-info", "Online Mode:");
           }
+          
+
+          /* if in chrome extension, or offline, turn on replication */
+          if(OPrime.isChromeApp()){
+            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//            appself.replicateContinuouslyWithCouch();
+          }
+          
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
@@ -340,6 +326,12 @@ define([
                           "I logged you into your team server automatically, your syncs will be successful.",
                           "alert-info", "Online Mode:");
                     }
+                    /* if in chrome extension, or offline, turn on replication */
+                    if(OPrime.isChromeApp()){
+                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//                      appself.replicateContinuouslyWithCouch();
+                    }
+                    
                     if (typeof succescallback == "function") {
                       succescallback(serverResults);
                     }
@@ -369,78 +361,67 @@ define([
         }
       });
     },
+    getCouchUrl : function(couchConnection, couchdbcommand) {
+      if(!couchConnection){
+        OPrime.debug("Using the apps ccouchConnection");
+        couchConnection = this.get("couchConnection");
+      }else{
+        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+      }
+      var couchurl = couchConnection.protocol + couchConnection.domain;
+      if (couchConnection.port != null) {
+        couchurl = couchurl + ":" + couchConnection.port;
+      }
+      couchurl = couchurl + couchConnection.path + "/";
+      if(!couchdbcommand){
+        couchurl = couchurl + couchConnection.pouchname;
+      }else{
+        couchurl = couchurl + couchdbcommand;
+      }
+      return couchurl;
+    },
     /**
      * Synchronize to server and from database.
      */
     replicateContinuouslyWithCouch : function(successcallback,
         failurecallback) {
-      
-      /*
-       * TODO decide on the status of this function. does the logic for touchdb and couch apps go here, or in the logUser in corpus function
-       */
-//    if(OPrime.isCouchApp()){
-      if(true){
-        if (typeof successcallback == "function") {
+      var self = this;
+      if(!self.pouch){
+        OPrime.debug("Not replicating, no pouch ready.");
+        if(typeof successcallback == "function"){
           successcallback();
         }
-        // no need to replicate, we are in our db already.
         return;
       }
-      
-      var self = this;
-      var couchConnection = this.get("couchConnection");
+      self.pouch(function(err, db) {
+        var couchurl = this.getCouchUrl();
+        if (err) {
+          OPrime.debug("Opening db error", err);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Opening DB error' + JSON.stringify(err));
+            OPrime.debug('Opening DB error'
+                + JSON.stringify(err));
+          }
+        } else {
+          OPrime.debug("Opening db success", db);
 
-      this.logUserIntoTheirCorpusServer(couchConnection, "devgina",
-          "test", function() {
-        OPrime.debug("Logged you into your corpus ",
-            couchConnection);
+          self.replicateFromCorpus(db, couchurl, function() {
+            //turn on to regardless of fail or succeed
+            self.replicateToCorpus(db, couchurl);
+          }, function() {
+            //turn on to regardless of fail or succeed
+            self.replicateToCorpus(db, couchurl);
+          });
 
-        if(OPrime.isCouchApp()){
-          if(typeof successcallback == "function"){
+          if (typeof successcallback == "function") {
             successcallback();
           }
-          return;
+
         }
-          
-        self.changePouch(null, function() {
-          self.pouch(function(err, db) {
-            var couchurl = couchConnection.protocol
-            + couchConnection.domain;
-            if (couchConnection.port != null) {
-              couchurl = couchurl + ":" + couchConnection.port;
-            }
-            couchurl = couchurl + couchConnection.path + "/"
-            + couchConnection.pouchname;
-            if (err) {
-              OPrime.debug("Opening db  error", err);
-
-              if (typeof failurecallback == "function") {
-                failurecallback();
-              } else {
-                alert('Opening DB error' + JSON.stringify(err));
-                OPrime.debug('Opening DB error'
-                    + JSON.stringify(err));
-              }
-            } else {
-              OPrime.debug("Opening db  success", db);
-
-              self.replicateFromCorpus(db, couchurl, function() {
-                //turn on to regardless of fail or succeed
-                self.replicateToCorpus(db, couchurl);
-              }, function() {
-                //turn on to regardless of fail or succeed
-                self.replicateToCorpus(db, couchurl);
-              });
-
-              if (typeof successcallback == "function") {
-                successcallback();
-              }
-
-            }
-          });
-        });
-
       });
+
     },
     replicateToCorpus : function(db, couchurl, success, failure) {
       db.replicate.to(couchurl, {
@@ -537,6 +518,8 @@ define([
         window.location.replace("user.html");
         return;
       }
+      this.set("couchConnection", couchConnection);
+      
       var corpusid = appids.corpusid;
       if(!corpusid){
         corpusid = couchConnection.corpusid;
@@ -553,8 +536,6 @@ define([
         return;
       }
       c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
-      c.changePouch(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -576,7 +557,6 @@ define([
                 "pouchname" : couchConnection.pouchname
               });
               dl.id = appids.datalistid; 
-              dl.changePouch(couchConnection.pouchname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
                     $(".spinner-status").html("Opened DataList...");
@@ -590,7 +570,6 @@ define([
                         "pouchname" : couchConnection.pouchname
                       });
                       s.id = appids.sessionid; 
-                      s.changePouch(couchConnection.pouchname, function(){
                         s.fetch({
                           success : function(sessionModel) {
                             $(".spinner-status").html("Opened Elicitation Session...");
@@ -628,7 +607,6 @@ define([
                             );
                           }
                         });//end session fetch
-                      });//end session change corpus
 
                     },function(){
                       alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -638,7 +616,6 @@ define([
                     alert("There was an error fetching the data list. "+error.reason);
                   }
                 }); //end fetch data list
-              });//end data list change corpus
 
             }, function(){
               alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -656,7 +633,6 @@ define([
 
           }
         }); //end corpus fetch
-      }); //end corpus change corpus
     },
     
     router : AppRouter,

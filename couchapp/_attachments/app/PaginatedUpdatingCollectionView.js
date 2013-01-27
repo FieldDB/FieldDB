@@ -214,14 +214,12 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         var obj = new Model({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = objectIds[id];
         var self = this;
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               // Render at the bottom
               self.collection.add(model);
               self.filledBasedOnIds = true;
             }
-          });
         });
       }
     },
