@@ -131,7 +131,6 @@ define([
       }
       var c = this.get("publicSelf");
       this.get("publicSelf").id = "corpus";
-      c.changePouch({pouchname: pouchname},function(){
         c.fetch({
           success : function(model, response, options) {
             OPrime.debug("Success fetching corpus' public self: ", model, response, options);
@@ -140,8 +139,7 @@ define([
               return;
             }
             corpusself.id = model.get("corpusid");
-            corpusself.changePouch({pouchname: pouchname}, function(){
-              //fetch only after having setting the right pouch which is what changePouch does.
+            corpusself.set("pouchname", pouchname);
               corpusself.fetch({
                 success : function(model) {
                   OPrime.debug("Corpus fetched successfully", model);
@@ -182,7 +180,6 @@ define([
                   corpusself.loadOrCreateCorpusByPouchName(pouchname, sucessloadingorCreatingcallback);
                 }
               });
-            });
           },
           error : function(model, xhr, options) {
             $(".spinner-status").html("Creating Corpus...");
@@ -195,7 +192,6 @@ define([
             corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
           }
         });
-      });
     },
     fetchPublicSelf : function(){
       try{
@@ -284,6 +280,18 @@ define([
             shouldBeEncrypted: "checked",
             userchooseable: "disabled",
             help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
+          }),
+          new DatumField({
+            label : "tags",
+            shouldBeEncrypted: "",
+            userchooseable: "disabled",
+            help: "Tags for constructions or other info that you might want to use to categorize your data."
+          }),
+          new DatumField({
+            label : "validationStatus",
+            shouldBeEncrypted: "",
+            userchooseable: "disabled",
+            help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
           })
         ]));
       }//end if to set datumFields
@@ -612,7 +620,8 @@ define([
     
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    changePouch : function(couchConnection, callback) {
+    prepareANewPouch : function(couchConnection, callback) {
+      alert("TODO test this");
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }
@@ -717,8 +726,8 @@ define([
               }catch(e){
                 OPrime.debug("Couldn't set the database name off of the pouchame.");
               }
-              newCorpusToBeSaved.changePouch(null, function(){
-                alert("Saving new corpus.");
+              newCorpusToBeSaved.prepareANewPouch(null, function(){
+                alert("Saving new corpus in new corpus menu.");
                 newCorpusToBeSaved.save(null, {
                   success : function(model, response) {
                     model.get("publicSelf").set("corpusid", model.id);
@@ -772,7 +781,6 @@ define([
       
       this.set("timestamp", Date.now());
       
-      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             OPrime.debug('Corpus save success');
@@ -786,11 +794,7 @@ define([
             //save the corpus mask too
             var publicSelfMode = model.get("publicSelf");
             publicSelfMode.set("corpusid", model.id);
-            if(publicSelfMode.changePouch){
-              publicSelfMode.changePouch( model.get("couchConnection"), function(){
-                publicSelfMode.saveAndInterConnectInApp();
-              });
-            }
+            publicSelfMode.saveAndInterConnectInApp();
             
             if(window.appView){
               window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");
@@ -943,7 +947,6 @@ define([
             }
           }
         });
-      });
     },
     makeSureCorpusHasADataList : function(sucess, failure){
       if(!this.datalists){
@@ -1111,8 +1114,14 @@ define([
         }
         return;
       }
+      if(!corpusself.pouch){
+        //TODO make the view in couchdb
+        if(typeof callbackpouchview == "function"){
+          callbackpouchview();
+        }
+        return;
+      }
       
-      this.changePouch(null, function() {
         corpusself.pouch(function(err, db) {
           var modelwithhardcodedid = {
               "_id": "_design/"+viewparts[0],
@@ -1143,7 +1152,6 @@ define([
               
             }
           });
-        });
       });
       
     },
@@ -1158,15 +1166,6 @@ define([
      * @param failurecallback
      */
     setAsCurrentCorpus : function(successcallback, failurecallback){
-      //TODO think about how to switch corpuses... maybe take the most recent session and data list and set those at the same time, it should be okay.
-//      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
-//        if (typeof failurecallback == "function") {
-//          failurecallback();
-//        }else{
-//          alert("This is a bug, cannot load the corpus you asked for, it is not in this corpus. This will make the app reload.");
-//        }
-//        return;
-//    }else{
       if (window.app.get("corpus").id != this.id ) {
         window.app.set("corpus", this);
       }
@@ -1195,282 +1194,6 @@ define([
           successcallback();
         }
       }
-    },
-    /**
-     * Synchronize the server and local databases. First to, then from.
-     */
-    replicateCorpus : function(couchConnection, successcallback, failurecallback) {
-      var self = this;
-      this.replicateToCorpus(couchConnection, function(){
-        
-        //if to was successful, call the from.
-        self.replicateFromCorpus(couchConnection, successcallback, failurecallback );
-        
-      },function(){
-        alert("Replicate to corpus failure");
-        if(typeof fromcallback == "function"){
-          fromcallback();
-        }
-      });
-    },
-    /**
-     * Synchronize to server and from database.
-     */
-    replicateToCorpus : function(couchConnection, replicatetosuccesscallback, failurecallback) {
-      var self = this;
-      
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = self.get("couchConnection");
-      }
-      if(OPrime.isCouchApp()){
-        if(typeof replicatetosuccesscallback == "function"){
-          replicatetosuccesscallback();
-        }
-        return;
-      }
-      
-      this.changePouch(couchConnection, function(){
-        self.pouch(function(err, db) {
-          var couchurl = couchConnection.protocol+couchConnection.domain;
-          if(couchConnection.port != null){
-            couchurl = couchurl+":"+couchConnection.port;
-          }
-          couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname;
-          
-          db.replicate.to(couchurl, { continuous: false }, function(err, response) {
-            OPrime.debug("Replicate to " + couchurl);
-            OPrime.debug(response);
-            OPrime.debug(err);
-            if(err){
-              if(typeof failurecallback == "function"){
-                failurecallback();
-              }else{
-                alert('Corpus replicate to error' + JSON.stringify(err));
-                OPrime.debug('Corpus replicate to error' + JSON.stringify(err));
-              }
-            }else{
-              OPrime.debug("Corpus replicate to success", response);
-              window.appView.allSyncedDoc();
-              window.app.addActivity(
-                  {
-                    verb : "uploaded",
-                    verbmask : "uploaded",
-                    verbicon : "icon-arrow-up",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
-                    directobjectmask : "a corpus",
-                    directobjecticon : "icon-cloud",
-                    indirectobject : "to the team server",
-                    indirectobjectmask : "to its team server",
-                    context : " via Offline App.",
-                    contextmask : "",
-                    teamOrPersonal : "team"
-                  });
-              window.app.addActivity(
-                  {
-                    verb : "uploaded",
-                    verbmask : "uploaded",
-                    verbicon : "icon-arrow-up",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
-                    directobjectmask : "a corpus",
-                    directobjecticon : "icon-cloud",
-                    indirectobject : "to the team server",
-                    indirectobjectmask : "to its team server",
-                    context : " via Offline App.",
-                    contextmask : "",
-                    teamOrPersonal : "personal"
-                  });
-              
-              
-
-              if(typeof replicatetosuccesscallback == "function"){
-                replicatetosuccesscallback();
-              }
-            }
-          });
-        });
-      });
-    },
-    /**
-     * Synchronize from server to local database.
-     */
-    replicateFromCorpus : function(couchConnection, successcallback, failurecallback) {
-      var self = this;
-      
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = self.get("couchConnection");
-      }
-      
-      if(OPrime.isCouchApp()){
-        if(typeof successcallback == "function"){
-          successcallback();
-        }
-        return;
-      }
-      
-      this.changePouch(couchConnection, function(){
-        self.pouch(function(err, db) {
-          var couchurl = couchConnection.protocol+couchConnection.domain;
-          if(couchConnection.port != null){
-            couchurl = couchurl+":"+couchConnection.port;
-          }
-          couchurl = couchurl  +couchConnection.path+"/"+ couchConnection.pouchname;
-          
-          
-          //We can leave the to and from replication async, and make two callbacks. 
-          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            OPrime.debug("Replicate from " + couchurl);
-            OPrime.debug(response);
-            OPrime.debug(err);
-            if(err){
-              if(typeof failurecallback == "function"){
-                failurecallback();
-              }else{
-                alert('Corpus replicate from error' + JSON.stringify(err));
-                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
-              }
-            }else{
-              OPrime.debug("Corpus replicate from success", response);
-
-              //This was a valid connection, lets save it into localstorage.
-//              localStorage.setItem("mostRecentCouchConnection",JSON.stringify(couchConnection));
-              
-              if(typeof successcallback == "function"){
-                successcallback();
-              }
-              window.app.addActivity(
-                  {
-                    verb : "downloaded",
-                    verbmask : "downloaded",
-                    verbicon : "icon-arrow-down",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a>  (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
-                    directobjectmask : "a corpus",
-                    directobjecticon : "icon-cloud",
-                    indirectobject : "from the team server",
-                    indirectobjectmask : "from its team server",
-                    context : " via Offline App.",
-                    contextmask : "",
-                    teamOrPersonal : "team"
-                  });
-              window.app.addActivity(
-                  {
-                    verb : "downloaded",
-                    verbmask : "downloaded",
-                    verbicon : "icon-arrow-down",
-                    directobject : "<a href='#corpus/"+self.id+"'>"+self.get('title')+"</a> (docs read: "+response.docs_read+", docs written: "+response.docs_written+")",
-                    directobjectmask : "a corpus",
-                    directobjecticon : "icon-cloud",
-                    indirectobject : "from the team server",
-                    indirectobjectmask : "from its team server",
-                    context : " via Offline App.",
-                    contextmask : "",
-                    teamOrPersonal : "personal"
-                  });
-
-              // Get the corpus' current precedence rules
-              self.buildMorphologicalAnalyzerFromTeamServer(self.get("pouchname"));
-              
-              // Build the lexicon
-              self.buildLexiconFromTeamServer(self.get("pouchname"));
-            }
-          });
-        });
-        
-      });
-    },
-    
-    /**
-     * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
-     * "http://localhost:5984/_session";
-     * 
-     * References:
-     * http://guide.couchdb.org/draft/security.html
-     * 
-     * @param username this can come from a username field in a login, or from the User model.
-     * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
-     * @param callback A function to call upon success, it receives the data back from the post request.
-     */
-    logUserIntoTheirCorpusServer : function(couchConnection, username, password, succescallback, failurecallback) {
-      //TODO move this code to the app version of this function
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = this.get("couchConnection");
-      }
-      
-      /* if on android, turn on replication and dont get a session token */
-      if(OPrime.isTouchDBApp()){
-        Android.setCredentialsAndReplicate(couchConnection.pouchname,
-            username, password, couchConnection.domain);
-        OPrime
-        .debug("Not getting a session token from the users corpus server " +
-            "since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
-        if (typeof succescallback == "function") {
-          succescallback();
-        }
-        return;
-      }
-      
-      
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
-      }
-      if(!couchConnection.path){
-        couchConnection.path = "";
-//        this.get("couchConnection").path = "";
-      }
-      couchurl = couchurl  + couchConnection.path + "/_session";
-      var corpusloginparams = {};
-      corpusloginparams.name = username;
-      corpusloginparams.password = password;
-      $.ajax({
-        type : 'POST',
-        url : couchurl ,
-        data : corpusloginparams,
-        success : function(serverResults) {
-          if(window.appView){
-            window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-          }
-          
-          /* if in chrome extension, or offline, turn on replication */
-          if(OPrime.isChromeApp()){
-            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
-          }
-          
-          if (typeof succescallback == "function") {
-            succescallback(serverResults);
-          }
-        },
-        error : function(serverResults){
-          window.setTimeout(function(){
-            //try one more time 5 seconds later 
-            $.ajax({
-              type : 'POST',
-              url : couchurl ,
-              success : function(serverResults) {
-                if(window.appView){
-                  window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
-                }
-                if (typeof succescallback == "function") {
-                  succescallback(serverResults);
-                }
-              },
-              error : function(serverResults){
-                if(window.appView){
-                  window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
-                      "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
-                      "You also can't share your data with team members. If your computer is online and you are" +
-                      " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +OPrime.contactUs+
-                      " If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
-                }
-                if (typeof failurecallback == "function") {
-                  failurecallback("I couldn't log you into your corpus.");
-                }
-                OPrime.debug(serverResults);
-                window.app.get("authentication").set("staleAuthentication", true);
-              }
-            });
-          }, 5000);
-        }
-      });
     },
     validate: function(attrs){
       if(attrs.publicCorpus){

@@ -244,12 +244,17 @@ define([
       return this;
     },
     
+
     /**
-     * Logout removes the stringified user and the username from local storage,
-     * and then authenticates public into the app.
+     * Logout backs up the user to the central server and then
+     * removes the stringified user and the username from local
+     * storage, and then authenticates public into the app.
      */
     logout : function() {
-      this.model.logout();
+      var authself = this.model;
+      window.appView.backUpUser(function(){
+        authself.logout();
+      });
     },
     
     /**
@@ -330,7 +335,7 @@ define([
           self.model.savePublicUserForOfflineUse();
         }
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
-        window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+        window.app.logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
             OPrime.debug('Calling corpusloginsuccesscallback');
             corpusloginsuccesscallback();
@@ -543,8 +548,8 @@ define([
                     "dateOfLastDatumModifiedToCheckForOldSession" : JSON.stringify(new Date())
                   });
 
-                  newCorpusToBeSaved.changePouch(null, function(){
-                    alert("Saving new corpus.");
+                  newCorpusToBeSaved.prepareANewPouch(null, function(){
+                    alert("Saving new corpus in register.");
                     newCorpusToBeSaved.save(null, {
                       success : function(model, response) {
                         model.get("publicSelf").set("corpusid", model.id);
@@ -652,7 +657,7 @@ define([
              * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
              */
             var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(serverResults.user.mostRecentIds.couchConnection.pouchname);
-            app.get("corpus").logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.couchConnection, dataToPost.username, dataToPost.password, function(){
+            window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.couchConnection, dataToPost.username, dataToPost.password, function(){
                 window.location.replace(optionalCouchAppPath+"corpus.html");
             });
           }

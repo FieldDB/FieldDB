@@ -89,7 +89,6 @@ define([
         "pouchname" : pouchname
       });
       c.id = "corpus";
-      c.changePouch({pouchname: pouchname},function(){
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
@@ -114,7 +113,6 @@ define([
             OPrime.debug("There was a potential problem opening your dashboard." + reason);
           }
         });
-      });
     },
     
     /**
@@ -148,8 +146,6 @@ define([
         "pouchname" : pouchname
       });
       c.id = corpusid;
-      c.changePouch({pouchname: pouchname}, function(){
-        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
@@ -186,7 +182,6 @@ define([
 
           }
         });
-      });
 
 
     },

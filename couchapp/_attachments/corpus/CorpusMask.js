@@ -250,30 +250,6 @@ define([
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    changePouch : function(couchConnection, callback) {
-      if (couchConnection == null || couchConnection == undefined) {
-        couchConnection = this.get("couchConnection");
-      }else{
-        this.set("couchConnection", couchConnection);
-      }
-      
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync
-        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
-      }
-
-      if (typeof callback == "function") {
-        callback();
-      }
-    }, 
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
@@ -288,7 +264,6 @@ define([
       self.set("_id","corpus");
       this.set("timestamp", Date.now());
       
-      this.changePouch(null, function(){
         if(OPrime.isCouchApp()){
           self.save();
           if(typeof successcallback == "function"){
@@ -352,7 +327,6 @@ define([
               }
             }
           });
-        });
       });      
     },
     /**
@@ -362,7 +336,6 @@ define([
     updateToPouch : function(){
       alert("Bug: the corpusmask updatetopouch method is deprecated!");
       var self = this;
-      this.changePouch(null, function(){
 
         if(OPrime.isCouchApp()){
           self.save();
@@ -379,7 +352,6 @@ define([
             OPrime.debug(response);
           });
         });
-      });
     },
     /**
      * This function takes in a pouchname, which could be different

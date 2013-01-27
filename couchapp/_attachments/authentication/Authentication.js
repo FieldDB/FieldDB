@@ -185,19 +185,13 @@ define([
 //        serverResults.user.publicSelf.pouchname = serverResults.user.corpuses[0].pouchname;
       }
       
-      if (this.get("userPublic") == undefined) {
-        this.set("userPublic", new UserMask(serverResults.user.publicSelf));
-      }else{
-        this.get("userPublic").set(serverResults.user.publicSelf);
-      }
-      this.get("userPublic")._id = serverResults.user._id;
-
+      
       if (this.get("userPrivate") == undefined) {
         this.set("userPrivate", new User({filledWithDefaults: true}));
       }
       var u = this.get("userPrivate");
-      u.id = serverResults.user._id; //set the backbone id to be the same as the mongodb id
-      //set the user AFTER setting his/her publicself if it wasnt there already
+      u.id = serverResults.user._id; //set the backbone id to be the same as the auth id
+      //set the user AFTER setting his/her publicself if it wasn't there already
       /*
        * Handle if the user got access to new corpora
        */
@@ -214,16 +208,21 @@ define([
       }
       
       u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
+      
+      alert("TODO test this");
+      this.set("userPublic", this.get("userPrivate").get("publicSelf"));
+      this.get("userPublic")._id = serverResults.user._id;
+      this.get("userPublic").id = serverResults.user.id;
+      this.get("userPublic").set("_id", serverResults.user._id);
+
+      
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
       }
       /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
-      window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
+      window.app.set("couchConnection", serverResults.user.mostRecentIds.couchConnection);
 
-//    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
-      // self.get("userPublic").save(); //TODO save this when there is
-      // no problem with pouch
-//      OPrime.debug(serverResults.user);
+      this.get("userPublic").saveAndInterConnectInApp(); 
       
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
