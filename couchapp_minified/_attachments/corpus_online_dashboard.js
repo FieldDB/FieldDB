@@ -4051,24 +4051,6 @@ function program3(depth0,data) {
   
   return "icon-eye-open";}
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1, foundHelper;
-  buffer += "\n          <option value=\"";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" ";
-  foundHelper = helpers.selected;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.selected; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ">";
-  foundHelper = helpers.state;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.state; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</option>\n      ";
-  return buffer;}
-
   buffer += "<div class=\"pull-right\">\n  <a href=\"#\" rel=\"tooltip\" class=\"locale_Edit_Datalist\">\n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a> \n</div>\n\n<h3><i class=\"icon-pushpin\"></i> ";
   foundHelper = helpers.title;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
@@ -4089,19 +4071,7 @@ function program5(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n\n<!-- Datum states dropdown -->\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
-  foundHelper = helpers.statecolor;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " datum-state-color \"><i class = \" icon-flag\"></i><span class=\"datum-state-value\">";
-  foundHelper = helpers.datumstate;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span></span><br/>\n    <select class=\"datum_state_select pull-right\">\n      ";
-  stack1 = depth0.datumStates;
-  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n\n</div>\n\n";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div> \n\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -4603,7 +4573,7 @@ function program5(depth0,data) {
   stack1 = depth0.decryptedMode;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown -->\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
+  buffer += "\"></i></a>\n  <a  href=\"#\" class = \"locale_Plain_Text_Export_Tooltip_checked btn btn-mini btn-info\" rel=\"tooltip\" >\n    <i class=\" icon-paste\"></i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_LaTeX btn btn-mini btn-info latex-export-datalist LaTeX\" rel=\"tooltip\">\n    <i class=\"\">LaTeX</i></a>\n  <a href=\"#\" class = \"locale_Export_checked_as_CSV btn btn-mini btn-info CSV\" rel=\"tooltip\">\n    <i class=\"\">CSV</i></a>\n</div>\n\n\n<!-- Datum states dropdown\n <div class = \"datum-state span3 pull-right\">\n    <span class=\"label label-";
   foundHelper = helpers.statecolor;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.statecolor; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -4615,7 +4585,7 @@ function program5(depth0,data) {
   stack1 = depth0.datumStates;
   stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </select>\n\n</div>\n";
+  buffer += "\n    </select>\n\n</div>\n -->\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -9553,14 +9523,10 @@ define('datum/Datum',[
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var result =  utterance+"\n"
-            +gloss+"\n"
-            +translation
-            +"\n\n";
-      if(showInExportModal != null){
+      var header = _.pluck(this.get("datumFields").toJSON(), "label");
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var result = fields.join("\n");
+      if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
         $("#export-text-area").val(
             $("#export-text-area").val() + result
@@ -9572,20 +9538,24 @@ define('datum/Datum',[
     /**
      * This takes as an argument the order of fields and then creates a row of csv.
      */
-    exportAsCSV : function(showInExportModal, orderedFields, printheader) {
-      if (orderedFields == null) {
-        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
-      }
-      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-      var result = '"' + resultarray.join('","') + '"\n';
-      if (printheader) {
-        var header = '"' + orderedFields.join('","') + '"';
-        result = header + "\n" + result;
+    exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
+      
+      var header = _.pluck(this.get("datumFields").toJSON(), "label");
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var result = fields.join(",") +"\n";
+      
+//      if (orderedFields == null) {
+//        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
+//      }
+//      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
+//      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
+//      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+//      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+//      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
+//      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
+//      var result = '"' + resultarray.join('","') + '"\n';
+      if (printheaderonly) {
+        result = header.join(",") + "\n";
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
@@ -10024,20 +9994,20 @@ define('data_list/DataList',[
       OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
         /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
-        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
-        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
+//        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
+//        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
 
         
         /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
-//        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-//        obj.id  = datumIdsToApplyFunction[id];
-//        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
-//          obj.fetch({
-//            success : function(model, response) {
-//              model[functionToAppy](functionArguments);
-//            } 
-//          });
-//        });
+        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        obj.id  = datumIdsToApplyFunction[id];
+        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
+          obj.fetch({
+            success : function(model, response) {
+              model[functionToAppy](functionArguments);
+            } 
+          });
+        });
         
       }
     },
@@ -16714,7 +16684,7 @@ define('datum/DatumReadView',[
         });
       this.sessionView.format = "link";
 
-      this.model.bind("change", this.render, this);
+//      this.model.bind("change", this.render, this);
     },
 
     /**
@@ -18977,6 +18947,8 @@ define('data_list/DataListEditView', [
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
+        var datumWithAllCorpusFieldsToPrintHeader = new Datum({filledWithDefaults : true});
+        datumWithAllCorpusFieldsToPrintHeader.exportAsCSV(true, null, true);
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
       },
