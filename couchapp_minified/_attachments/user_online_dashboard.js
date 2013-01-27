@@ -4272,11 +4272,11 @@ templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li>\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <!-- modify URL -->\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
+  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li>\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <!-- modify URL -->\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
+  foundHelper = helpers.exportAllDatumURL;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/export\" class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\" class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -4366,11 +4366,11 @@ templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li>\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
+  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li>\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
+  foundHelper = helpers.exportAllDatumURL;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/export\" class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\" class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -4448,11 +4448,11 @@ templates['corpus_summary_edit_embedded'] = template(function (Handlebars,depth0
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li><!--if put corpus modal on user page user.html#corpus/new -->\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
+  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li><!--if put corpus modal on user page user.html#corpus/new -->\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
+  foundHelper = helpers.exportAllDatumURL;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/export\" class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\" class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -4489,11 +4489,11 @@ templates['corpus_summary_read_embedded'] = template(function (Handlebars,depth0
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"#corpus/";
-  foundHelper = helpers.pouchname;
+  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
+  foundHelper = helpers.exportAllDatumURL;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/export\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
+  else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -10297,7 +10297,7 @@ define('datum/Datum',[
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex " + utterance + 
+            + "\n \\ex " + utterance 
             + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
             + "\n\t\\trans `" + translation + "'"
