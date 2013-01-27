@@ -17,7 +17,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("UserMask init", this.toJSON());
+      OPrime.debug("UserMask init");
       
     },
     /**
@@ -70,6 +70,7 @@ define([
           if(self.get("pouchname")){
             self.unset("pouchname");
           }
+          
           self.save();
           if(typeof successcallback == "function"){
             successcallback();
