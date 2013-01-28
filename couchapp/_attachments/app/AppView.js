@@ -724,7 +724,7 @@ define([
     backUpUser : function(callback) {
       var self = this;
       /* dont back up the public user, its not necessary the server doesn't modifications anyway. */
-      if(self.model.get("authentication").get("userPrivate").get("username") == "public"){
+      if(self.model.get("authentication").get("userPrivate").get("username") == "public" || self.model.get("authentication").get("userPrivate").get("username") == "lingllama"){
         if(typeof callback == "function"){
           callback();
         }
