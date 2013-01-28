@@ -113,6 +113,7 @@ define([
       // Initialize the file system of the terminal
       this.term.initFS(false, 1024 * 1024);
       
+      window.saveApp = this.backUpUser;
       // Set up a timeout event every 10sec
 //      _.bindAll(this, "saveScreen");
 //      window.setInterval(this.saveScreen, 10000);     
@@ -434,7 +435,7 @@ define([
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
-      "click .sync-everything" : "replicateDatabases",
+      "click .sync-everything" : "backUpUser",
       /*
        * These functions come from the top search template, it is
        * renderd by seacheditview whenever a search is renderd, but its
@@ -477,49 +478,7 @@ define([
           e.preventDefault();
         }
         var authUrl = $(".welcomeauthurl").val().trim();
-        if(authUrl.indexOf("LingSync.org") >= 0){
-          alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
-          return;
-          authUrl = "https://auth.lingsync.org";
-        }else if(authUrl.indexOf("LingSync Testing") >= 0){
-          authUrl = "https://authdev.fieldlinguist.com:3183";
-        }else if(authUrl.indexOf("McGill ProsodyLab") >= 0){
-          if(window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0){
-            authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
-          }else{
-            var userWantsToUseMcgill = confirm("Are you sure you would like to use the McGill Prosody Lab server?");
-            if (userWantsToUseMcgill == true) {
-              window.location.replace("https://prosody.linguistics.mcgill.ca/corpus/public-firstcorpus/_design/pages/index.html");         
-            } else {
-              authUrl = "https://auth.lingsync.org";
-            }
-          }
-        }else if(authUrl.indexOf("Localhost") >= 0){
-          if(window.location.origin.indexOf("localhost") >= 0){
-            authUrl = "https://localhost:3183";
-          }else{
-            var userWantsToUseLocalhost = confirm("Are you sure you would like to use the localhost server?");
-            if (userWantsToUseLocalhost == true) {
-              window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
-            } else {
-              authUrl = "https://auth.lingsync.org";
-            }
-          }
-        }else{
-          
-          if(authUrl.indexOf("https://")  >= 0){
-            var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "+authUrl);
-            if (userWantsToUseUnknownServer == true) {
-//            window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
-            } else {
-              /* TODO change this back to the lingsync server  once the lingsync server supports 1.38 */
-              authUrl = "https://authdev.fieldlinguist.com:3183";
-            }
-          }else{
-            alert("I don't know how to connect to : "+authUrl + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
-            return;
-          }
-        }
+        authUrl = OPrime.getAuthUrl(authUrl);
         this.authView.syncUser($(".welcomeusername").val().trim(),$(".welcomepassword").val().trim(), authUrl);
       },
       "keyup .welcomepassword" : function(e) {
@@ -762,17 +721,21 @@ define([
      * 
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
-    replicateDatabases : function(callback) {
+    backUpUser : function(callback) {
       var self = this;
+      /* dont back up the public user, its not necessary the server doesn't modifications anyway. */
+      if(self.model.get("authentication").get("userPrivate").get("username") == "public" || self.model.get("authentication").get("userPrivate").get("username") == "lingllama"){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
       this.model.saveAndInterConnectInApp(function(){
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){
-          var corpusConnection = self.model.get("corpus").get("couchConnection");
-          if(self.model.get("authentication").get("userPrivate").get("corpuses").pouchname != "default" 
-            && app.get("corpus").get("couchConnection").pouchname == "default"){
-            corpusConnection = self.model.get("authentication").get("userPrivate").get("corpuses")[0];
+          self.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.","alert-info","Backed-up:");
+          if(typeof callback == "function"){
+            callback();
           }
-          self.model.get("corpus").replicateCorpus(corpusConnection, callback);
         });
       });
     },
@@ -917,8 +880,8 @@ define([
       
       /* Open the notificaitons area so they can see it */
       $("#notification_dropdown_trigger").dropdown("toggle");
-      /* Close it 3 seconds later, if short text, 30 seconds if long text */
-      var numberOfMiliSecondsToWait = 3000;
+      /* Close it 5 seconds later, if short text, 30 seconds if long text */
+      var numberOfMiliSecondsToWait = 5000;
       if(message.length > 500){
         numberOfMiliSecondsToWait = 30000;
       }

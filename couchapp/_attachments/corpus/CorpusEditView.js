@@ -190,8 +190,15 @@ define([
         window.appView.currentCorpusEditView.destroy_view();
         window.appView.currentCorpusReadView.destroy_view();
       }
-
+      var couchConnection = this.model.get("couchConnection");
+      var couchurl = couchConnection.protocol+couchConnection.domain;
+      if(couchConnection.port != null){
+        couchurl = couchurl+":"+couchConnection.port;
+      }
+      couchurl = couchurl +couchConnection.path+"/_utils/database.html?"+ couchConnection.pouchname;
+      
       var jsonToRender = this.model.toJSON();
+      jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){

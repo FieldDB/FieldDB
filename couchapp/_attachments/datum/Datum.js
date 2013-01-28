@@ -124,28 +124,6 @@ define([
       datumTags : DatumTags
     },
 
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-        if(pouchname == undefined){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-      }
-      
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
-    
     /**
      * Gets all the DatumIds in the current Corpus sorted by their date.
      * 
@@ -158,12 +136,14 @@ define([
     getMostRecentIdsByDate : function(callback) {
       var self = this;
       
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
+//        alert("TODO check  getMostRecentIdsByDate");
         //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
         var tempDatums = new Datums();
         tempDatums.model = Datum;
         tempDatums.fetch({
           limit: 2,
+//          ascending: false,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
@@ -182,7 +162,6 @@ define([
       
       
       try{
-        this.changePouch(this.get("pouchname"),function(){
           self.pouch(function(err, db) {
             db.query("pages/by_date", {reduce: false}, function(err, response) {
               
@@ -208,7 +187,6 @@ define([
               }
             });
           });
-        });
         
       }catch(e){
 //        appView.datumsEditView.newDatum();
@@ -235,7 +213,7 @@ define([
         queryString = queryString.toLowerCase().replace(/\s/g,"");
       }
       
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
 
       // run a custom map reduce
 //        var mapFunction = function(doc) {
@@ -257,7 +235,8 @@ define([
 //        };
 //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
         //use the get_datum_fields view
-        $.couch.db(this.get("pouchname")).view("pages/get_datum_fields", {
+//        alert("TODO test search in chrome extension");
+        $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
           success: function(response) {
             OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
@@ -289,7 +268,6 @@ define([
       
       
       try{
-        this.changePouch(this.get("pouchname"), function() {
           self.pouch(function(err, db) {
             db.query("pages/get_datum_fields", {reduce: false}, function(err, response) {
               var matchIds = [];
@@ -330,7 +308,6 @@ define([
 //                callback(matchIds); //loosing my this in SearchEditView
               }
             });
-          });
         });
       }catch(e){
         alert("Couldnt search the data, if you sync with the server you might get the most recent search index.");
@@ -491,7 +468,7 @@ define([
       gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
       translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
       var result = "\n \\begin{exe} "
-            + "\n \\ex " + utterance + 
+            + "\n \\ex " + utterance 
             + "\n\t \\gll " + morphemes + " \\\\"
             + "\n\t" + gloss + " \\\\"
             + "\n\t\\trans `" + translation + "'"
@@ -508,14 +485,10 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var result =  utterance+"\n"
-            +gloss+"\n"
-            +translation
-            +"\n\n";
-      if(showInExportModal != null){
+      var header = _.pluck(this.get("datumFields").toJSON(), "label");
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var result = fields.join("\n");
+      if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
         $("#export-text-area").val(
             $("#export-text-area").val() + result
@@ -527,20 +500,24 @@ define([
     /**
      * This takes as an argument the order of fields and then creates a row of csv.
      */
-    exportAsCSV : function(showInExportModal, orderedFields, printheader) {
-      if (orderedFields == null) {
-        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
-      }
-      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
-      var result = '"' + resultarray.join('","') + '"\n';
-      if (printheader) {
-        var header = '"' + orderedFields.join('","') + '"';
-        result = header + "\n" + result;
+    exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
+      
+      var header = _.pluck(this.get("datumFields").toJSON(), "label");
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var result = fields.join(",") +"\n";
+      
+//      if (orderedFields == null) {
+//        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
+//      }
+//      judgement = this.get("datumFields").where({label: "judgement"})[0].get("mask");
+//      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
+//      utterance= this.get("datumFields").where({label: "utterance"})[0].get("mask");
+//      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+//      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
+//      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
+//      var result = '"' + resultarray.join('","') + '"\n';
+      if (printheaderonly) {
+        result = header.join(",") + "\n";
       }
       if (showInExportModal != null) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
@@ -643,7 +620,6 @@ define([
         OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
-      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             OPrime.debug('Datum save success');
@@ -773,7 +749,6 @@ define([
               alert('Datum save error: ' + f.reason);
             }
           }
-        });
       });
     },
     /**
