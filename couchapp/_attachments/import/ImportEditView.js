@@ -265,16 +265,16 @@ define( [
       }
       
       //add tags
-      var x = document.createElement("span");
-      x.classList.add("pull-left");
-      x.classList.add("label");
-      x.classList.add(colors[colorindex%colors.length]);
-      x.draggable="true";
-      x.innerHTML = "datumTags";
-      x.addEventListener('dragstart', this.handleDragStart);
-      colorindex++;
-      $("#import-datum-field-labels").append(x);
-      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
+//      var x = document.createElement("span");
+//      x.classList.add("pull-left");
+//      x.classList.add("label");
+//      x.classList.add(colors[colorindex%colors.length]);
+//      x.draggable="true";
+//      x.innerHTML = "datumTags";
+//      x.addEventListener('dragstart', this.handleDragStart);
+//      colorindex++;
+//      $("#import-datum-field-labels").append(x);
+//      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
 
       //add date
       var x = document.createElement("span");
@@ -426,7 +426,7 @@ define( [
       for(f in headers){
         if (headers[f] == "" || headers[f] == undefined) {
           //do nothing
-        } else if (headers[f] == "datumTags") {
+//        } else if (headers[f] == "datumTags") {
           //do nothing
         } else{
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
@@ -503,15 +503,17 @@ define( [
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
-          } else if (index == "datumTags") {
-            var tags = value.split(" ");
-            for(g in tags){
-              var t = new DatumTag({
-                "tag" : tags[g]
-              });
-              d.get("datumTags").add(t);
-            }
-          }
+          } 
+          /* TODO removing old tag code for */
+//          else if (index == "datumTags") {
+//            var tags = value.split(" ");
+//            for(g in tags){
+//              var t = new DatumTag({
+//                "tag" : tags[g]
+//              });
+//              d.get("datumTags").add(t);
+//            }
+//          }
           //TODO turn the checkedwithconsultant into a checked, with that string as the person
 //          else if (index == "checkedWithConsultant") {
 //            var consultants = value.split(" ");

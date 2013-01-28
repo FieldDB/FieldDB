@@ -74,7 +74,7 @@ OPrime.defaultCouchConnection = function() {
    * modify the domain to be that origin. the chrome extension can contact any
    * authorized server that is authorized in the chrome app's manifest
    */
-  var connection = production;
+  var connection = testing;
   if (OPrime.isCouchApp()) {
     if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
@@ -218,6 +218,9 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   var couchurl = couchConnection.protocol + couchConnection.domain;
   if (couchConnection.port != null) {
     couchurl = couchurl + ":" + couchConnection.port;
+  }
+  if(!couchConnection.path){
+    couchConnection.path = "";
   }
   couchurl = couchurl + couchConnection.path;
   if (couchdbcommand === null || couchdbcommand === undefined) {

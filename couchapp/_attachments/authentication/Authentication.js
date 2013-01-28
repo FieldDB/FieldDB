@@ -221,6 +221,7 @@ define([
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
       }
+      
       /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
       window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
 
@@ -265,6 +266,19 @@ define([
       var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
       var data = {};
       data.user = u;
+      
+      /* Upgrade chrome app user's to v1.38+ */
+      if(OPrime.isChromeApp() && !localStorage.getItem(data.user.username+"lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama"){
+        var week = data.user.appVersionWhenCreated.split(".")[1];
+        console.log("The week this user was created: "+week);
+        if(week <= 38){
+          localStorage.setItem("username_to_update",data.user.username);
+          alert("Hi! Your account was created before version 1.38, taking you to the backup page to upgrade your account to v1.38 and greater.");
+          window.location.replace("backup_pouches.html");
+          return;
+        }
+      }
+      
       this.saveServerResponseToUser(data, callbackload);
     },
     
