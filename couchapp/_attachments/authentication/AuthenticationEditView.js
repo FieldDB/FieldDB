@@ -481,7 +481,9 @@ define([
         $(".welcome-screen-alerts").removeClass("alert-error");
         $(".register-new-user").addClass("disabled");
         $(".register-new-user").attr("disabed","disabled");
-        
+        window.app.showSpinner();
+        $(".spinner-status").html("Contacting the server...");
+
         /*
          * Contact the server and register the new user
          */
@@ -516,6 +518,7 @@ define([
               OPrime.setCookie("token", serverResults.user.hash, 365);
               var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
               localStorage.setItem("encryptedUser", u);
+              $(".spinner-status").html("Building your database for you...");
 
               /*
                * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
@@ -546,27 +549,37 @@ define([
 
                   newCorpusToBeSaved.prepareANewPouch(serverResults.user.corpuses[0], function(){
 //                    alert("Saving new corpus in register.");
-                    newCorpusToBeSaved.save(null, {
-                      success : function(model, response) {
-                        model.get("publicSelf").set("corpusid", model.id);
-                        auth.get("userPrivate").set("mostRecentIds", {});
-                        auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
-                        model.get("couchConnection").corpusid = model.id;
-                        auth.get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
-                        auth.get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
-                        var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-                        localStorage.setItem("encryptedUser", u);
-                        
-                        var sucessorfailcallbackforcorpusmask = function(){
-                          alert("Saved corpus in your user.");
-                          window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
-                        };
-                        model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                    $(".spinner-status").html("Saving a corpus in your new database ...");
 
-                      },error : function(e,f,g) {
-                        alert('New Corpus save error ' + f.reason);
-                      }
-                    });
+                    window.functionToSaveNewCorpus = function(){
+                      newCorpusToBeSaved.save(null, {
+                        success : function(model, response) {
+                          model.get("publicSelf").set("corpusid", model.id);
+                          auth.get("userPrivate").set("mostRecentIds", {});
+                          auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                          model.get("couchConnection").corpusid = model.id;
+                          auth.get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
+                          auth.get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
+                          var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+                          localStorage.setItem("encryptedUser", u);
+                          
+                          var sucessorfailcallbackforcorpusmask = function(){
+                            $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                            window.setTimeout(function(){
+                              window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
+                            },10000);
+                          };
+                          model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                          
+                        },error : function(e,f,g) {
+//                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
+                          $(".spinner-status").html("New Corpus save error " + f.reason +". The app will re-attempt to save your new corpus in 10 seconds...");
+                          window.corpusToBeSaved = newCorpusToBeSaved;
+                          window.setTimeout(window.functionToSaveNewCorpus, 10000);
+                        }
+                      });
+                    };
+                    window.functionToSaveNewCorpus();
                   });
                 });
               }, OPrime.checkToSeeIfCouchAppIsReady);
