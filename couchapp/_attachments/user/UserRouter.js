@@ -72,21 +72,14 @@ define([
 //        
 //        return;
 //      }
-      if(OPrime.isBackboneCouchDBApp()){
-        try{
-          Backbone.couch_connector.config.db_name = pouchname;
-        }catch(e){
-          OPrime.bug("Couldn't set the database name off of the pouchame when loading corpus for you, please report this.");
-        }
-      }else{
-        alert("TODO test what happens when not in a backbone couchdb app and loading a corpus for a user.");
-      } 
-      
-      var c = new Corpus();
-      c.set({
-        "pouchname" : pouchname
-      });
-      c.id = "corpus";
+      var connection = window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection;
+      connection.pouchname = pouchname;
+      window.app.changePouch(connection, function(){
+        var c = new Corpus();
+        c.set({
+          "pouchname" : pouchname
+        });
+        c.id = "corpus";
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
@@ -111,6 +104,7 @@ define([
             OPrime.debug("There was a potential problem opening your dashboard." + reason);
           }
         });
+      });
     },
     
     /**

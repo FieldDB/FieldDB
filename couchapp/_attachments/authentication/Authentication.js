@@ -213,12 +213,10 @@ define([
       
       u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
       
-      alert("TODO test this");
       this.set("userPublic", this.get("userPrivate").get("publicSelf"));
       this.get("userPublic")._id = serverResults.user._id;
       this.get("userPublic").id = serverResults.user.id;
       this.get("userPublic").set("_id", serverResults.user._id);
-
       
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
@@ -226,7 +224,7 @@ define([
       /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
       window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
 
-//      this.get("userPublic").saveAndInterConnectInApp(); 
+      this.get("userPublic").saveAndInterConnectInApp(); 
       
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
@@ -297,9 +295,13 @@ define([
       localStorage.setItem("encryptedUser", u); 
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
-        window.appView.toastUser("Successfully saved user details.","alert-success","Saved!");
+//        window.appView.toastUser("Successfully saved user details.","alert-success","Saved!");
       }
-      this.get("userPublic").saveAndInterConnectInApp(callbacksaved);
+      //Dont save the user public so often.
+//      this.get("userPublic").saveAndInterConnectInApp(callbacksaved);
+      if(typeof callbacksaved == "function"){
+        callbacksaved();
+      }
       
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){

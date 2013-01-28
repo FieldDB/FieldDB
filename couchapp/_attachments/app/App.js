@@ -166,8 +166,9 @@ define([
         console.log("App.changePouch setting couchConnection: ", couchConnection);
         this.set("couchConnection", couchConnection);
       }
+//      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
 
-      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
       if(OPrime.isChromeApp()){
         Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
         Backbone.couch_connector.config.db_name = couchConnection.pouchname;
