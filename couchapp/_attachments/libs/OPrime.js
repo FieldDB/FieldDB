@@ -1,6 +1,6 @@
 var OPrime = OPrime || {};
 
-OPrime.debugMode = true;
+OPrime.debugMode = false;
 /*
  * Android touchdb for OPrime runs on port 8128, so if the app is running on
  * port 8128 it is likely in a touchdb (either in the android app or in a
