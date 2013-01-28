@@ -213,22 +213,7 @@ define([
         $(this.el).find(".locale_Confirm_Password").text(Locale.get("locale_Confirm_Password"));
         $(this.el).find(".locale_Sign_in_with_password").text(Locale.get("locale_Sign_in_with_password"));
 
-        var mostLikelyAuthUrl = "LingSync.org";
-        if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
-          mostLikelyAuthUrl = "McGill ProsodyLab";
-        } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-          mostLikelyAuthUrl = "McGill ProsodyLab";
-        } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
-          mostLikelyAuthUrl = "LingSync Testing";
-        } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-          mostLikelyAuthUrl = "LingSync Testing";
-        } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
-        } else if (window.location.origin.indexOf("localhost") >= 0) {
-          mostLikelyAuthUrl = "Localhost";
-        }
-        
-        //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
-        
+        var mostLikelyAuthUrl = OPrime.getMostLikelyUserFriendlyAuthServerName();
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
         
       }
@@ -253,6 +238,7 @@ define([
      */
     logout : function() {
       var authself = this.model;
+      $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
       window.appView.backUpUser(function(){
         authself.logout();
       });
@@ -344,7 +330,7 @@ define([
             OPrime.debug('no corpusloginsuccesscallback was defined');
           }
           //Replicate user's corpus down to pouch
-          window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
+          window.app.replicateOnlyFromCorpus(couchConnection, function(){
             if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
               //do nothing because they have no recent ids
               alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");

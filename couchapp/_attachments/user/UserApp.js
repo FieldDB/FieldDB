@@ -150,8 +150,122 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(couchConnection, username, password, succescallback, failurecallback) {
-      //TODO move this code to the app version of this function
+    logUserIntoTheirCorpusServer : function(couchConnection, username,
+        password, succescallback, failurecallback) {
+      if (couchConnection == null || couchConnection == undefined) {
+        couchConnection = this.get("couchConnection");
+      }
+      if (couchConnection == null || couchConnection == undefined) {
+        alert("Bug: I couldnt log you into your couch database.");
+      }
+
+      /* if on android, turn on replication and don't get a session token */
+      if(OPrime.isTouchDBApp()){
+        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+            username, password, couchConnection.domain);
+        OPrime
+        .debug("Not getting a session token from the users corpus server " +
+        "since this is touchdb on android which has no idea of tokens.");
+        if (typeof succescallback == "function") {
+          succescallback();
+        }
+        return;
+      }
+      
+      var couchurl = this.getCouchUrl(couchConnection, "/_session");
+      var corpusloginparams = {};
+      corpusloginparams.name = username;
+      corpusloginparams.password = password;
+      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+
+      var appself = this;
+      $
+      .ajax({
+        type : 'POST',
+        url : couchurl,
+        data : corpusloginparams,
+        success : function(serverResults) {
+          if (window.appView) {
+            window.appView
+            .toastUser(
+                "I logged you into your team server automatically, your syncs will be successful.",
+                "alert-info", "Online Mode:");
+          }
+          
+
+          /* if in chrome extension, or offline, turn on replication */
+          if(OPrime.isChromeApp()){
+            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//            appself.replicateContinuouslyWithCouch();
+          }
+          
+          if (typeof succescallback == "function") {
+            succescallback(serverResults);
+          }
+        },
+        error : function(serverResults) {
+          window
+          .setTimeout(
+              function() {
+                //try one more time 5 seconds later 
+                $
+                .ajax({
+                  type : 'POST',
+                  url : couchurl,
+                  success : function(serverResults) {
+                    if (window.appView) {
+                      window.appView
+                      .toastUser(
+                          "I logged you into your team server automatically, your syncs will be successful.",
+                          "alert-info", "Online Mode:");
+                    }
+                    /* if in chrome extension, or offline, turn on replication */
+                    if(OPrime.isChromeApp()){
+                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//                      appself.replicateContinuouslyWithCouch();
+                    }
+                    
+                    if (typeof succescallback == "function") {
+                      succescallback(serverResults);
+                    }
+                  },
+                  error : function(serverResults) {
+                    if (window.appView) {
+                      window.appView
+                      .toastUser(
+                          "I couldn't log you into your corpus. What does this mean? "
+                          + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
+                          + "You also can't share your data with team members. If your computer is online and you are"
+                          + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
+                          + OPrime.contactUs
+                          + " If you're offline you can ignore this warning, and sync later when you're online. ",
+                          "alert-danger",
+                      "Offline Mode:");
+                    }
+                    if (typeof failurecallback == "function") {
+                      failurecallback("I couldn't log you into your corpus.");
+                    }
+                    OPrime.debug(serverResults);
+                    window.app.get("authentication").set(
+                        "staleAuthentication", true);
+                  }
+                });
+              }, 5000);
+        }
+      });
+    },
+    /**
+     * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
+     * "http://localhost:5984/_session";
+     * 
+     * References:
+     * http://guide.couchdb.org/draft/security.html
+     * 
+     * @param username this can come from a username field in a login, or from the User model.
+     * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
+     * @param callback A function to call upon success, it receives the data back from the post request.
+     */
+    logUserIntoTheirCorpusServerDeprecated : function(couchConnection, username, password, succescallback, failurecallback) {
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }

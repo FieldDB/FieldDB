@@ -208,7 +208,7 @@ define([
           window.app.set("corpus",corpus);
           window.app.get("authentication").staleAuthentication = true;
           window.app.get("authentication").syncUserWithServer(function(){
-            corpus.replicateFromCorpus(null, callback);
+            window.app.replicateOnlyFromCorpus(null, callback);
           });
           break;
         }

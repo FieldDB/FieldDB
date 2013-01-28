@@ -143,7 +143,7 @@ define([
         tempDatums.model = Datum;
         tempDatums.fetch({
           limit: 2,
-//          decending: true,
+//          ascending: false,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
