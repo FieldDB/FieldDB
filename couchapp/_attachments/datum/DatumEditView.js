@@ -201,6 +201,10 @@ define([
         this.commentReadView.render();
         
         // Display the SessionView
+        this.commentEditView.el = this.$('.add-comment'); 
+        this.commentEditView.render();
+        
+        // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
         this.sessionView.render();
         
