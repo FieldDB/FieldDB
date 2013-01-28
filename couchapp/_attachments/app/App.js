@@ -418,17 +418,10 @@ define([
       }else{
         OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
       }
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
+      if(!couchConnection){
+        OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
       }
-      couchurl = couchurl + couchConnection.path;
-      if(couchdbcommand === null || couchdbcommand === undefined){
-        couchurl = couchurl + "/" + couchConnection.pouchname;
-      }else{
-        couchurl = couchurl + couchdbcommand;
-      }
-      return couchurl;
+      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
     },
     /**
      * Synchronize to server and from database.
@@ -472,6 +465,51 @@ define([
         }
       });
 
+    },
+    /**
+     * Pull down corpus to offline pouch, if its there.
+     */
+    replicateOnlyFromCorpus : function(couchConnection, successcallback, failurecallback) {
+      var self = this;
+
+      if(!self.pouch){
+        OPrime.debug("Not replicating, no pouch ready.");
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+        return;
+      }
+
+      self.pouch(function(err, db) {
+        var couchurl = self.getCouchUrl();
+        if (err) {
+          OPrime.debug("Opening db error", err);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Opening DB error' + JSON.stringify(err));
+            OPrime.debug('Opening DB error'
+                + JSON.stringify(err));
+          }
+        } else {
+          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
+            OPrime.debug("Replicate from " + couchurl,response, err);
+            if(err){
+              if(typeof failurecallback == "function"){
+                failurecallback();
+              }else{
+                alert('Corpus replicate from error' + JSON.stringify(err));
+                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+              }
+            }else{
+              OPrime.debug("Corpus replicate from success", response);
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            }
+          });
+        }
+      });
     },
     replicateToCorpus : function(db, couchurl, success, failure) {
       db.replicate.to(couchurl, {

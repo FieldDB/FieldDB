@@ -478,49 +478,7 @@ define([
           e.preventDefault();
         }
         var authUrl = $(".welcomeauthurl").val().trim();
-        if(authUrl.indexOf("LingSync.org") >= 0){
-          alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
-          return;
-          authUrl = "https://auth.lingsync.org";
-        }else if(authUrl.indexOf("LingSync Testing") >= 0){
-          authUrl = "https://authdev.fieldlinguist.com:3183";
-        }else if(authUrl.indexOf("McGill ProsodyLab") >= 0){
-          if(window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0){
-            authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
-          }else{
-            var userWantsToUseMcgill = confirm("Are you sure you would like to use the McGill Prosody Lab server?");
-            if (userWantsToUseMcgill == true) {
-              window.location.replace("https://prosody.linguistics.mcgill.ca/corpus/public-firstcorpus/_design/pages/index.html");         
-            } else {
-              authUrl = "https://auth.lingsync.org";
-            }
-          }
-        }else if(authUrl.indexOf("Localhost") >= 0){
-          if(window.location.origin.indexOf("localhost") >= 0){
-            authUrl = "https://localhost:3183";
-          }else{
-            var userWantsToUseLocalhost = confirm("Are you sure you would like to use the localhost server?");
-            if (userWantsToUseLocalhost == true) {
-              window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
-            } else {
-              authUrl = "https://auth.lingsync.org";
-            }
-          }
-        }else{
-          
-          if(authUrl.indexOf("https://")  >= 0){
-            var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "+authUrl);
-            if (userWantsToUseUnknownServer == true) {
-//            window.location.replace("https://localhost:6984/public-firstcorpus/_design/pages/index.html");         
-            } else {
-              /* TODO change this back to the lingsync server  once the lingsync server supports 1.38 */
-              authUrl = "https://authdev.fieldlinguist.com:3183";
-            }
-          }else{
-            alert("I don't know how to connect to : "+authUrl + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
-            return;
-          }
-        }
+        authUrl = OPrime.getAuthUrl(authUrl);
         this.authView.syncUser($(".welcomeusername").val().trim(),$(".welcomepassword").val().trim(), authUrl);
       },
       "keyup .welcomepassword" : function(e) {
@@ -771,7 +729,6 @@ define([
           callback();
         }
       }
-      $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
       this.model.saveAndInterConnectInApp(function(){
         //syncUserWithServer will prompt for password, then run the corpus replication.
         self.model.get("authentication").syncUserWithServer(function(){

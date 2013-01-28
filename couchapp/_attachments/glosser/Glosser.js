@@ -319,8 +319,8 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   //A label for the current year.
   var title = svg.append("text")
     .attr("class", "vis-title")
-    .attr("dy", "2em")
-    .attr("dx", "2em")
+    .attr("dy", "1.5em")
+    .attr("dx", "1.5em")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
   
