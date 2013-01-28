@@ -142,19 +142,19 @@ define([
       }
       OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
-        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
-//      window.appView.currentPaginatedDataListDatumsView.collection.models[indexInCurrentPaginatedDataListDatums][functionToAppy](functionArguments);
-      window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
-        //TODO remove later if using the child views works
-//        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
-//        obj.id  = datumIdsToApplyFunction[id];
-//        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
-//          obj.fetch({
-//            success : function(model, response) {
-//              model[functionToAppy](functionArguments);
-//            }
-//          });
-//        });
+        /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
+//        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
+//        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
+
+        
+        /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
+        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        obj.id  = datumIdsToApplyFunction[id];
+          obj.fetch({
+            success : function(model, response) {
+              model[functionToAppy](functionArguments);
+            } 
+        });
         
       }
     },

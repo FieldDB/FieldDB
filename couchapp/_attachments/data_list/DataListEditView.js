@@ -88,8 +88,6 @@ define( [
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
-
-      "change .datum_state_select" : "updateCheckedDatumStates",
       
       "change .datum_state_select" : "updateCheckedDatumStates",
       
@@ -241,27 +239,6 @@ define( [
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      
-      /*
-       * This is to get the datum states dropdown information and render "To be checked" as a default. 
-       * If user changes the label to something else, the first item in the dropdown menu will be shown.
-       * TODO test what happens if user changes datum state settings when a datalist is open 
-       */      
-      jsonToRender.datumStates = window.app.get("corpus").get("datumStates").toJSON();
-      var indexOfToBeChecked = _.pluck(jsonToRender.datumStates, "state").indexOf("To be checked");
-      if(indexOfToBeChecked == -1){
-        indexOfToBeChecked = 0;
-      }
-      for(var x in jsonToRender.datumStates){
-        if(x == indexOfToBeChecked){
-          jsonToRender.datumStates[x].selected = "selected";
-        }else{
-          jsonToRender.datumStates[x].selected = "";
-        }
-      }
-      jsonToRender.statecolor = jsonToRender.datumStates[indexOfToBeChecked].color;
-      jsonToRender.datumstate = jsonToRender.datumStates[indexOfToBeChecked].state;
-
 
       /*
        * This is to get the datum states dropdown information and render "To be checked" as a default. 
@@ -491,14 +468,10 @@ define( [
 
       for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
         if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
-//          $(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].el).find(".datum-checkboxes")[0].checked = true;
           datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
         }
-//        else{
-//          $(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].el).find(".datum-checkboxes")[0].checked = false;
-//        }
       }
-//      alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+      alert("DATA LIST EDIT VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
 
       return datumIdsChecked;
     },

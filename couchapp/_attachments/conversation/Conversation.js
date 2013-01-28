@@ -129,7 +129,14 @@ define([
       }
       OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
-       
+        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        obj.id  = datumIdsToApplyFunction[id];
+          obj.fetch({
+            success : function(model, response) {
+              model[functionToAppy](functionArguments);
+            }
+          });
+        
       }
     },
     
