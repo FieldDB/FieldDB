@@ -100,10 +100,72 @@ define([
         }
       });
     },
+    getCouchUrl : function(couchConnection, couchdbcommand) {
+      if(!couchConnection){
+        couchConnection = this.get("couchConnection");
+        OPrime.debug("Using the apps ccouchConnection", couchConnection);
+      }else{
+        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+      }
+      if(!couchConnection){
+        OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
+      }
+      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
+    },
     /*
      * This will be the only time the app should open the pouch.
      */
     changePouch : function(couchConnection, callback) {
+      if (!couchConnection || couchConnection == undefined) {
+        console.log("App.changePouch couchConnection must be supplied.");
+        return;
+      } else {
+        console.log("App.changePouch setting couchConnection: ", couchConnection);
+        this.set("couchConnection", couchConnection);
+      }
+//      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
+
+      if(OPrime.isChromeApp()){
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
+        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+      }else{
+        /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
+        try{
+          var pieces = window.location.pathname.replace(/^\//,"").split("/");
+          var pouchName = pieces[0];
+          //Handle McGill server which runs out of a virtual directory
+          if(pouchName == "corpus"){
+            pouchName = pieces[1];
+          }
+          Backbone.couch_connector.config.db_name = pouchName;
+        }catch(e){
+          OPrime.bug("Couldn't set the databse name off of the url, please report this.");
+        }
+      }
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+      return;
+      
+      alert("TODO set/validate that the the pouch connection");
+      if (this.pouch == undefined) {
+        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+        // + couchConnection.pouchname);
+        this.pouch = Backbone.sync
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
+            + couchConnection.pouchname);
+      }
+      if (typeof callback == "function") {
+        callback();
+      }
+    },
+    /*
+     * This will be the only time the app should open the pouch.
+     */
+    changePouchDeprecated : function(couchConnection, callback) {
       if (!couchConnection || couchConnection == undefined) {
         console.log("App.changePouch couchConnection must be supplied.");
         return;

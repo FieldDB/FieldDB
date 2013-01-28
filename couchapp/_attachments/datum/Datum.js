@@ -235,7 +235,8 @@ define([
 //        };
 //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
         //use the get_datum_fields view
-        $.couch.db(this.get("pouchname")).view("pages/get_datum_fields", {
+        alert("TODO test search in chrome extension");
+        $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
           success: function(response) {
             OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
