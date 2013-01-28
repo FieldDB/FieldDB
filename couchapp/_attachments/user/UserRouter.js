@@ -1,11 +1,13 @@
 define([ 
     "backbone",
     "corpus/Corpus",
+    "corpus/CorpusMask",
     "user/User",
     "libs/OPrime"
 ], function(
     Backbone,
     Corpus,
+    CorpusMask,
     User
 ) {
   var UserRouter = Backbone.Router.extend(
@@ -55,27 +57,14 @@ define([
     });
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
-//      if(pouchname == "new"){
-//        alert("Creating a new corpus and direct you to its dashboard...");
-//
-//        
-//        var c = new Corpus();
-//        c.set({
-//          "title" : window.app.get("authentication").get("userPrivate").get("username") + "'s Corpus",
-//          "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
-//          "team" : window.app.get("authentication").get("userPublic"),
-//          "couchConnection" : window.app.get("authentication").get("userPrivate").get("corpuses")[0],
-//          "pouchname" : window.app.get("authentication").get("userPrivate").get("corpuses").pouchname
-//        });
-//        //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
-//        c.saveAndInterConnectInApp();
-//        
-//        return;
-//      }
-      var connection = window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection;
+      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
+      if(!connection){
+        return;
+      }
+      /* this assumes that the user's corpus connection for this pouch is not on a different server */
       connection.pouchname = pouchname;
       window.app.changePouch(connection, function(){
-        var c = new Corpus();
+        var c = new CorpusMask();
         c.set({
           "pouchname" : pouchname
         });
@@ -91,8 +80,12 @@ define([
             if(corpusidfromCorpusMask){
               window.app.router.showCorpusDashboard(pouchname, corpusidfromCorpusMask);
             }else{
-              OPrime.bug("There was a problem loading this corpus.");
-              /* TODO get the id of the only corpus in the database */
+              OPrime.bug("There was a problem loading this corpus. Please report this.");
+              if(OPrime.isChromeApp()){
+                OPrime.bug("There was a problem loading this corpus, maybe it is not backed up?\n\n Attempting to back it up now...");
+                /* TODO get the id of the only corpus in the database */
+                window.location.replace("backup_pouches.html");
+              }
             }
           },
           error : function(e, x, y ) {
@@ -124,20 +117,23 @@ define([
 
         return;
       }
-      if(pouchname){
-        try{
-          Backbone.couch_connector.config.db_name = pouchname;
-        }catch(e){
-          OPrime.debug("Couldn't set the database name off of the pouchame.");
-        }
+      if(!pouchname){
+        OPrime.debug("the pouchname is missing, this should never happen");
+        return;
       }
-
+      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
+      if(!connection){
+        return;
+      }
       var self = this;
-      var c = new Corpus();
-      c.set({
-        "pouchname" : pouchname
-      });
-      c.id = corpusid;
+      connection.pouchname = pouchname;
+      window.app.changePouch(connection, function(){
+
+        var c = new Corpus();
+        c.set({
+          "pouchname" : pouchname
+        });
+        c.id = corpusid;
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
@@ -162,7 +158,7 @@ define([
             if(self.islooping){
               return;
             }
-            
+
             self.bringCorpusToThisDevice(c, function(){
               alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
               self.showCorpusDashboard(pouchname, corpusid);
@@ -175,6 +171,7 @@ define([
           }
         });
 
+      });
 
     },
     loadCorpusDashboard: function(c){

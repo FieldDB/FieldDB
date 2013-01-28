@@ -738,7 +738,7 @@ define([
                 alert("TODO test what happens when not in a backbone couchdb app and creating a corpus for an existing user.");
               } 
               newCorpusToBeSaved.prepareANewPouch(window.app.get("authentication").get("userPrivate").get("corpuses")[0], function(){
-                alert("Saving new corpus in new corpus menu.");
+//                alert("Saving new corpus in new corpus menu.");
                 newCorpusToBeSaved.save(null, {
                   success : function(model, response) {
                     model.get("publicSelf").set("corpusid", model.id);
@@ -757,7 +757,55 @@ define([
                     model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
                     
                   },error : function(e,f,g) {
-                    alert('New Corpus save error ' + f.reason);
+                    alert('New Corpus save error ' + f.reason+ ' waiting 30 seconds to try again.');
+                    window.corpusToBeSaved = newCorpusToBeSaved;
+                    window.setTimeout(function(){
+                      newCorpusToBeSaved.save(null, {
+                        success : function(model, response) {
+                          model.get("publicSelf").set("corpusid", model.id);
+                          window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
+                          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                          model.get("couchConnection").corpusid = model.id;
+                          window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
+                          window.app.get("authentication").get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
+
+                          var sucessorfailcallbackforcorpusmask = function(){
+                            window.app.get("authentication").saveAndInterConnectInApp(function(){
+                              alert("Saved corpus in your user.");
+                              window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
+                            });
+                          };
+                          model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                          
+                        },error : function(e,f,g) {
+                          alert('New Corpus save error ' + f.reason+ ' waiting 30 seconds to try again.');
+                          window.setTimeout(function(){
+                            newCorpusToBeSaved.save(null, {
+                              success : function(model, response) {
+                                model.get("publicSelf").set("corpusid", model.id);
+                                window.app.get("authentication").get("userPrivate").set("mostRecentIds", {});
+                                window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                                model.get("couchConnection").corpusid = model.id;
+                                window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
+                                window.app.get("authentication").get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
+
+                                var sucessorfailcallbackforcorpusmask = function(){
+                                  window.app.get("authentication").saveAndInterConnectInApp(function(){
+                                    alert("Saved corpus in your user.");
+                                    window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
+                                  });
+                                };
+                                model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                                
+                              },error : function(e,f,g) {
+                                alert('We tried twice but we still get new Corpus save error ' + f.reason+ ' Please report this bug.');
+                              }
+                            });
+                          },30000);//second failure
+                        }
+                      });
+                      
+                    },30000);//first failure
                   }
                 });
               });
