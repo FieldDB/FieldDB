@@ -137,7 +137,7 @@ define([
       var self = this;
       
       if(OPrime.isBackboneCouchDBApp()){
-        alert("TODO check  getMostRecentIdsByDate");
+//        alert("TODO check  getMostRecentIdsByDate");
         //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
         var tempDatums = new Datums();
         tempDatums.model = Datum;
@@ -235,7 +235,7 @@ define([
 //        };
 //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
         //use the get_datum_fields view
-        alert("TODO test search in chrome extension");
+//        alert("TODO test search in chrome extension");
         $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
           success: function(response) {
             OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");

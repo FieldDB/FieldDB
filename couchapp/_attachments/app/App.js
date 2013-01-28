@@ -618,14 +618,21 @@ define([
         "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
       });
+      var selfapp = this;
       if(!corpusid){
-        $(".spinner-status").html("Opening/Creating Corpus...");
-        this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
-          window.app.stopSpinner();
-        });
-        return;
+        if(this.get("corpus").id){
+          corpusid = this.get("corpus").id;
+        }else{
+          $(".spinner-status").html("Opening/Creating Corpus...");
+          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
+            /* if the corpusid is missing, make sure there are other objects in the dashboard */
+            selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
+//          window.app.stopSpinner();
+          });
+          return;
+        }
       }
-      c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
+      c.id = corpusid; //tried setting both ids to match, and it worked!!
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
