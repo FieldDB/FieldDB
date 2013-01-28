@@ -299,8 +299,8 @@ define([
             /*
              *  Load their last corpus, session, datalist etc
              */
-            var appids = self.model.get("userPrivate").get("mostRecentIds");
-            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
+//            var appids = self.model.get("userPrivate").get("mostRecentIds");
+//            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
           }
         }
         if(typeof corpusloginfailcallback == "function"){
@@ -440,12 +440,16 @@ define([
     },
 
     registerNewUser : function(e) {
+      $(".register-new-user").attr("disabled", "disabled");
+      if(this.registering){
+        return;
+      }
+      this.registering = true;
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
-      $(".register-new-user").attr("disabled", "disabled");
-
+      var authedself = this;
       OPrime.debug("Attempting to register a new user: " );
       var dataToPost = {};
       $(".registerusername").val( $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
@@ -541,7 +545,7 @@ define([
                   });
 
                   newCorpusToBeSaved.prepareANewPouch(serverResults.user.corpuses[0], function(){
-                    alert("Saving new corpus in register.");
+//                    alert("Saving new corpus in register.");
                     newCorpusToBeSaved.save(null, {
                       success : function(model, response) {
                         model.get("publicSelf").set("corpusid", model.id);
@@ -579,6 +583,7 @@ define([
             $(".welcome-screen-alerts").show();
             $(".register-new-user").removeClass("disabled");
             $(".register-new-user").removeAttr("disabled");
+            authedself.registering = false;
 
           }
         });
@@ -648,7 +653,11 @@ define([
             /*
              * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
              */
-            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(serverResults.user.mostRecentIds.couchConnection.pouchname);
+            var potentialpouch = serverResults.user.username+"-firstcorpus";
+            if(serverResults.user.mostRecentIds.couchConnection){
+              potentialpouch= serverResults.user.mostRecentIds.couchConnection.pouchname;
+            }
+            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);
             window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.couchConnection, dataToPost.username, dataToPost.password, function(){
                 window.location.replace(optionalCouchAppPath+"corpus.html");
             });
