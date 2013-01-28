@@ -136,6 +136,8 @@ define( [
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
+        var datumWithAllCorpusFieldsToPrintHeader = new Datum({filledWithDefaults : true});
+        datumWithAllCorpusFieldsToPrintHeader.exportAsCSV(true, null, true);
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
       },

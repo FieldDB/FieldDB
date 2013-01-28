@@ -200,6 +200,9 @@ OPrime.isTouchDBApp = function() {
   return window.location.href.indexOf("localhost:8128") > -1;
 };
 
+OPrime.isBackboneCouchDBApp = function(){
+  return true;
+};
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.

@@ -100,6 +100,18 @@ define([
         }
       });
     },
+    getCouchUrl : function(couchConnection, couchdbcommand) {
+      if(!couchConnection){
+        couchConnection = this.get("couchConnection");
+        OPrime.debug("Using the apps ccouchConnection", couchConnection);
+      }else{
+        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+      }
+      if(!couchConnection){
+        OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
+      }
+      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
+    },
     /*
      * This will be the only time the app should open the pouch.
      */
@@ -111,8 +123,58 @@ define([
         console.log("App.changePouch setting couchConnection: ", couchConnection);
         this.set("couchConnection", couchConnection);
       }
+//      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
 
-      if(OPrime.isCouchApp()){
+      if(OPrime.isChromeApp()){
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
+        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+      }else{
+        /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
+        try{
+          var pieces = window.location.pathname.replace(/^\//,"").split("/");
+          var pouchName = pieces[0];
+          //Handle McGill server which runs out of a virtual directory
+          if(pouchName == "corpus"){
+            pouchName = pieces[1];
+          }
+          Backbone.couch_connector.config.db_name = pouchName;
+        }catch(e){
+          OPrime.bug("Couldn't set the databse name off of the url, please report this.");
+        }
+      }
+      
+      if(typeof callback == "function"){
+        callback();
+      }
+      return;
+      
+      alert("TODO set/validate that the the pouch connection");
+      if (this.pouch == undefined) {
+        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+        // + couchConnection.pouchname);
+        this.pouch = Backbone.sync
+        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
+            + couchConnection.pouchname : OPrime.pouchUrl
+            + couchConnection.pouchname);
+      }
+      if (typeof callback == "function") {
+        callback();
+      }
+    },
+    /*
+     * This will be the only time the app should open the pouch.
+     */
+    changePouchDeprecated : function(couchConnection, callback) {
+      if (!couchConnection || couchConnection == undefined) {
+        console.log("App.changePouch couchConnection must be supplied.");
+        return;
+      } else {
+        console.log("App.changePouch setting couchConnection: ", couchConnection);
+        this.set("couchConnection", couchConnection);
+      }
+
+      if(OPrime.isBackboneCouchDBApp()){
         if(typeof callback == "function"){
           callback();
         }
@@ -150,8 +212,122 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(couchConnection, username, password, succescallback, failurecallback) {
-      //TODO move this code to the app version of this function
+    logUserIntoTheirCorpusServer : function(couchConnection, username,
+        password, succescallback, failurecallback) {
+      if (couchConnection == null || couchConnection == undefined) {
+        couchConnection = this.get("couchConnection");
+      }
+      if (couchConnection == null || couchConnection == undefined) {
+        alert("Bug: I couldnt log you into your couch database.");
+      }
+
+      /* if on android, turn on replication and don't get a session token */
+      if(OPrime.isTouchDBApp()){
+        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+            username, password, couchConnection.domain);
+        OPrime
+        .debug("Not getting a session token from the users corpus server " +
+        "since this is touchdb on android which has no idea of tokens.");
+        if (typeof succescallback == "function") {
+          succescallback();
+        }
+        return;
+      }
+      
+      var couchurl = this.getCouchUrl(couchConnection, "/_session");
+      var corpusloginparams = {};
+      corpusloginparams.name = username;
+      corpusloginparams.password = password;
+      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+
+      var appself = this;
+      $
+      .ajax({
+        type : 'POST',
+        url : couchurl,
+        data : corpusloginparams,
+        success : function(serverResults) {
+          if (window.appView) {
+            window.appView
+            .toastUser(
+                "I logged you into your team server automatically, your syncs will be successful.",
+                "alert-info", "Online Mode:");
+          }
+          
+
+          /* if in chrome extension, or offline, turn on replication */
+          if(OPrime.isChromeApp()){
+            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//            appself.replicateContinuouslyWithCouch();
+          }
+          
+          if (typeof succescallback == "function") {
+            succescallback(serverResults);
+          }
+        },
+        error : function(serverResults) {
+          window
+          .setTimeout(
+              function() {
+                //try one more time 5 seconds later 
+                $
+                .ajax({
+                  type : 'POST',
+                  url : couchurl,
+                  success : function(serverResults) {
+                    if (window.appView) {
+                      window.appView
+                      .toastUser(
+                          "I logged you into your team server automatically, your syncs will be successful.",
+                          "alert-info", "Online Mode:");
+                    }
+                    /* if in chrome extension, or offline, turn on replication */
+                    if(OPrime.isChromeApp()){
+                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//                      appself.replicateContinuouslyWithCouch();
+                    }
+                    
+                    if (typeof succescallback == "function") {
+                      succescallback(serverResults);
+                    }
+                  },
+                  error : function(serverResults) {
+                    if (window.appView) {
+                      window.appView
+                      .toastUser(
+                          "I couldn't log you into your corpus. What does this mean? "
+                          + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
+                          + "You also can't share your data with team members. If your computer is online and you are"
+                          + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
+                          + OPrime.contactUs
+                          + " If you're offline you can ignore this warning, and sync later when you're online. ",
+                          "alert-danger",
+                      "Offline Mode:");
+                    }
+                    if (typeof failurecallback == "function") {
+                      failurecallback("I couldn't log you into your corpus.");
+                    }
+                    OPrime.debug(serverResults);
+                    window.app.get("authentication").set(
+                        "staleAuthentication", true);
+                  }
+                });
+              }, 5000);
+        }
+      });
+    },
+    /**
+     * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
+     * "http://localhost:5984/_session";
+     * 
+     * References:
+     * http://guide.couchdb.org/draft/security.html
+     * 
+     * @param username this can come from a username field in a login, or from the User model.
+     * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
+     * @param callback A function to call upon success, it receives the data back from the post request.
+     */
+    logUserIntoTheirCorpusServerDeprecated : function(couchConnection, username, password, succescallback, failurecallback) {
       if(couchConnection == null || couchConnection == undefined){
         couchConnection = this.get("couchConnection");
       }

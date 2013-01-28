@@ -135,7 +135,8 @@ define([
               if (rows[rows.length - i - 1]) {
                 var m = rows[rows.length - i - 1];
                 var value = m;
-                if(!OPrime.isCouchApp()){
+                /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
+                if(!OPrime.isBackboneCouchDBApp()){
                   value = m.value;
                   var d = new Datum();
                   d.set(d.parse(value));

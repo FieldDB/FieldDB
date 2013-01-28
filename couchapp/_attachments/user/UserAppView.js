@@ -216,7 +216,7 @@ define(
                                     "authentication").get("userPrivate").get(
                                     "corpuses")[0];
                               }
-                              self.model.get("corpus").replicateCorpus(
+                              self.model.replicateCorpus(
                                   corpusConnection, callback);
                             });
                   });
