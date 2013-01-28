@@ -540,7 +540,7 @@ define([
                     "dateOfLastDatumModifiedToCheckForOldSession" : JSON.stringify(new Date())
                   });
 
-                  newCorpusToBeSaved.prepareANewPouch(null, function(){
+                  newCorpusToBeSaved.prepareANewPouch(serverResults.user.corpuses[0], function(){
                     alert("Saving new corpus in register.");
                     newCorpusToBeSaved.save(null, {
                       success : function(model, response) {

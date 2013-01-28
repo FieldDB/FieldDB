@@ -621,40 +621,39 @@ define([
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     prepareANewPouch : function(couchConnection, callback) {
-      alert("TODO test this");
-      if (couchConnection == null || couchConnection == undefined) {
-        couchConnection = this.get("couchConnection");
-      }
-      if(!couchConnection){
-        OPrime.debug("Cant change corpus's couch connection");
+      if (!couchConnection || couchConnection == undefined) {
+        console.log("App.changePouch couchConnection must be supplied.");
         return;
+      } else {
+        console.log("prepareANewPouch setting couchConnection: ", couchConnection);
+      }
+//      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+//      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
+
+      if(OPrime.isChromeApp()){
+        Backbone.couch_connector.config.base_url = window.app.getCouchUrl(couchConnection,"");
+        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+      }else{
+        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
       }
       
-//      if(this.syncBeforeChangePouch){
-//        window.app.get("authentication").syncUserWithServer(function(){
-//          if(typeof callback == "function"){
-//            callback();
-//          }
-//        });
-//        OPrime.bug("You have to be online and login before you can create a new Corpus.");
-//        delete this.syncBeforeChangePouch;
-//        return;
-//      }
-      
-      if(OPrime.isBackboneCouchDBApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
+      if(typeof callback == "function"){
+        callback();
       }
+      return;
       
+      
+      
+      
+      alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
+        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
+        // + couchConnection.pouchname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
             + couchConnection.pouchname : OPrime.pouchUrl
             + couchConnection.pouchname);
       }
-
       if (typeof callback == "function") {
         callback();
       }
@@ -700,7 +699,7 @@ define([
          * them to be online when they make a new corpus.
          */
         if(OPrime.isChromeApp()){
-          alert("TODO test what happens when creating a new corpus in chrome app")
+//          alert("TODO test what happens when creating a new corpus in chrome app");
 //          this.syncBeforeChangePouch = false;
         }
         
@@ -738,7 +737,7 @@ define([
               }else{
                 alert("TODO test what happens when not in a backbone couchdb app and creating a corpus for an existing user.");
               } 
-              newCorpusToBeSaved.prepareANewPouch(null, function(){
+              newCorpusToBeSaved.prepareANewPouch(window.app.get("authentication").get("userPrivate").get("corpuses")[0], function(){
                 alert("Saving new corpus in new corpus menu.");
                 newCorpusToBeSaved.save(null, {
                   success : function(model, response) {
