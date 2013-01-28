@@ -98,27 +98,6 @@ define([
             context : " via Offline App."
           });
     },
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-        if(pouchname == undefined){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-      }
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      
-      if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if(typeof callback == "function"){
-        callback();
-      }
-    },
     getAllAudioAndVideoFiles : function(datumIdsToGetAudioVideo, callback){
       if(!datumIdsToGetAudioVideo){
         datumIdsToGetAudioVideo = this.get("datumIds");
@@ -133,7 +112,6 @@ define([
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToGetAudioVideo[id];
         var thisobjid = id;
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               audioVideoFiles.push(model.get("audioVideo").get("URL"));
@@ -145,7 +123,6 @@ define([
               }
             }
           });
-        });
         
       }
     },
@@ -222,7 +199,6 @@ define([
       this.set("dateModified", JSON.stringify(new Date()));
       this.set("timestamp", Date.now());
 
-      this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
             OPrime.debug('DataList save success');
@@ -298,7 +274,6 @@ define([
             }
           }
         });
-      });
     },
     /**
      * Accepts two functions success will be called if successful,

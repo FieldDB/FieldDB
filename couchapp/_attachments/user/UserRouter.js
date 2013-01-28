@@ -58,11 +58,6 @@ define([
 //      if(pouchname == "new"){
 //        alert("Creating a new corpus and direct you to its dashboard...");
 //
-//        try{
-//          Backbone.couch_connector.config.db_name = window.app.get("authentication").get("userPrivate").get("corpuses").pouchname;
-//        }catch(e){
-//          OPrime.debug("Couldn't set the database name off of the pouchame.");
-//        }
 //        
 //        var c = new Corpus();
 //        c.set({
@@ -77,19 +72,14 @@ define([
 //        
 //        return;
 //      }
-      
-      try{
-        Backbone.couch_connector.config.db_name = pouchname;
-      }catch(e){
-        OPrime.debug("Couldn't set the database name off of the pouchame.");
-      }
-      
-      var c = new Corpus();
-      c.set({
-        "pouchname" : pouchname
-      });
-      c.id = "corpus";
-      c.changePouch({pouchname: pouchname},function(){
+      var connection = window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection;
+      connection.pouchname = pouchname;
+      window.app.changePouch(connection, function(){
+        var c = new Corpus();
+        c.set({
+          "pouchname" : pouchname
+        });
+        c.id = "corpus";
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
@@ -148,8 +138,6 @@ define([
         "pouchname" : pouchname
       });
       c.id = corpusid;
-      c.changePouch({pouchname: pouchname}, function(){
-        //fetch only after having setting the right pouch which is what changePouch does.
         c.fetch({
           success : function(model) {
             OPrime.debug("Corpus fetched successfully", model);
@@ -186,7 +174,6 @@ define([
 
           }
         });
-      });
 
 
     },
@@ -215,7 +202,7 @@ define([
           window.app.set("corpus",corpus);
           window.app.get("authentication").staleAuthentication = true;
           window.app.get("authentication").syncUserWithServer(function(){
-            corpus.replicateFromCorpus(null, callback);
+            window.app.replicateOnlyFromCorpus(null, callback);
           });
           break;
         }

@@ -25,7 +25,7 @@ OPrime.chromeClientUrl = function(){
     return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
   }
 };
-  
+
 /*
  * This function is the same in all webservicesconfig, now any couchapp can
  * login to any server, and register on the corpus server which matches its
@@ -33,34 +33,42 @@ OPrime.chromeClientUrl = function(){
  */
 OPrime.defaultCouchConnection = function() {
   var localhost = {
-      protocol : "https://",
-      domain : "localhost",
-      port : "6984",
-      pouchname : "default",
-      path : ""
+    protocol : "https://",
+    domain : "localhost",
+    port : "6984",
+    pouchname : "default",
+    path : "",
+    authUrl : "https://localhost:3183",
+    userFriendlyServerName : "Localhost"
   };
   var testing = {
-      protocol : "https://",
-      domain : "ifielddevs.iriscouch.com",
-      port : "443",
-      pouchname : "default",
-      path : ""
-  }; 
+    protocol : "https://",
+    domain : "ifielddevs.iriscouch.com",
+    port : "443",
+    pouchname : "default",
+    path : "",
+    authUrl : "https://authdev.fieldlinguist.com:3183",
+    userFriendlyServerName : "LingSync Testing"
+  };
   var production = {
-      protocol : "https://",
-      domain : "corpus.lingsync.org",
-      port : "443",
-      pouchname : "default",
-      path : ""
+    protocol : "https://",
+    domain : "corpus.lingsync.org",
+    port : "443",
+    pouchname : "default",
+    path : "",
+    authUrl : "https://auth.lingsync.org",
+    userFriendlyServerName : "LingSync.org"
   };
   var mcgill = {
-      protocol : "https://",
-      domain : "prosody.linguistics.mcgill.ca",
-      port : "443",
-      pouchname : "default",
-      path : "/corpus"
+    protocol : "https://",
+    domain : "prosody.linguistics.mcgill.ca",
+    port : "443",
+    pouchname : "default",
+    path : "/corpus",
+    authUrl : "https://prosody.linguistics.mcgill.ca/auth",
+    userFriendlyServerName : "McGill ProsodyLab"
   };
-  
+  OPrime.servers = [ localhost, testing, production, mcgill ];
   /*
    * If its a couch app, it can only contact databases on its same origin, so
    * modify the domain to be that origin. the chrome extension can contact any
@@ -71,7 +79,7 @@ OPrime.defaultCouchConnection = function() {
     if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin.indexOf("authdev.fieldlinguist.com") >= 0) {
+    } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
       connection = testing;
       OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
@@ -80,9 +88,144 @@ OPrime.defaultCouchConnection = function() {
     } else if (window.location.origin.indexOf("localhost") >= 0) {
       connection = localhost;
       OPrime.authUrl = "https://localhost:3183";
-    }    
+    }
+  } else if (OPrime.isChromeApp()) {
+    if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+      connection = mcgill;
+      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
+    } else if (window.location.origin
+        .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+      connection = testing;
+      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+    } else if (window.location.origin
+        .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
+    } else {
+      /*
+       * its probably a dev's chrome extension, use the corresponding connection
+       * for this build
+       */
+      connection = testing;
+      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+    }
   }
   return connection;
+};
+OPrime.getAuthUrl = function(userFriendlyServerName) {
+  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
+  var authUrl = userFriendlyServerName;
+  if (authUrl.indexOf("LingSync.org") >= 0) {
+    alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
+    return;
+    authUrl = "https://auth.lingsync.org";
+  } else if (authUrl.indexOf("LingSync Testing") >= 0) {
+    authUrl = "https://authdev.fieldlinguist.com:3183";
+  } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
+    authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
+  } else if (authUrl.indexOf("Localhost") >= 0) {
+    authUrl = "https://localhost:3183";
+  } else {
+    if (authUrl.indexOf("https://") >= 0) {
+      var userWantsToUseUnknownServer = confirm("Are you sure you would like to use this server: "
+          + authUrl);
+      if (userWantsToUseUnknownServer == true) {
+        OPrime
+            .debug("User is using an unknown server, hope they know what they are doing...");
+      } else {
+        /*
+         * TODO change this back to the lingsync server once the lingsync server
+         * supports 1.38
+         */
+        authUrl = "https://authdev.fieldlinguist.com:3183";
+      }
+    } else {
+      alert("I don't know how to connect to : "
+          + authUrl
+          + ", I only know how to connect to https servers. Please double check the server URL and ask one of your team members for help if this does this again.");
+      return;
+    }
+  }
+  /*
+   * Make sure user uses the auth server for their corresponding couchapp or
+   * chrome extension. for now dont let them switch between servers. to do that
+   * we should do it manually to besure its safe. instead, simply take them to
+   * that couchapp and let them log in there.
+   */
+  if (authUrl != OPrime.authUrl) {
+    var userWantsToUseAMisMatchingServer = confirm("Are you sure you would like to use the "
+        + userFriendlyServerName + " server?");
+    if (userWantsToUseAMisMatchingServer == true) {
+      var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(
+          authUrl);
+      if (appropriateserver == -1) {
+        OPrime
+            .bug("We don't know which corpus server to use, so we will just let the user do what they are trying to do.");
+      } else {
+        var couchConnection = OPrime.defaultCouchConnection();
+        OPrime
+            .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
+        couchConnection = OPrime.servers[appropriateserver];
+        window.location.replace(OPrime.getCouchUrl(couchConnection, "")
+            + "/public-firstcorpus/_design/pages/index.html");
+      }
+    } else {
+      authUrl = OPrime.authUrl;
+    }
+  }
+
+  return authUrl;
+};
+
+OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
+  if (!mostLikelyAuthUrl) {
+    mostLikelyAuthUrl = "LingSync.org";
+  }
+  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
+  var authUrl = OPrime.authUrl;
+  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+    mostLikelyAuthUrl = "McGill ProsodyLab";
+  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+    mostLikelyAuthUrl = "McGill ProsodyLab";
+  } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
+    mostLikelyAuthUrl = "LingSync Testing";
+  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+    mostLikelyAuthUrl = "LingSync Testing";
+  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
+    OPrime
+        .debug("The user is in a touchdb app, not trying to reccomend their choice for an authserver");
+  } else if (window.location.origin.indexOf("localhost") >= 0) {
+    mostLikelyAuthUrl = "Localhost";
+  } else if (OPrime.isChromeApp()) {
+    OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
+    var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(authUrl);
+    if (appropriateserver == -1) {
+      OPrime.bug("This shouldn't happen. Please report this bug.");
+    } else {
+      mostLikelyAuthUrl = OPrime.servers[appropriateserver].userFriendlyServerName;
+    }
+  }
+  //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
+  
+  return mostLikelyAuthUrl;
+};
+
+OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
+  if (!couchConnection) {
+    couchConnection = OPrime.defaultCouchConnection();
+    OPrime.debug("Using the apps ccouchConnection", couchConnection);
+  }
+  var couchurl = couchConnection.protocol + couchConnection.domain;
+  if (couchConnection.port != null) {
+    couchurl = couchurl + ":" + couchConnection.port;
+  }
+  couchurl = couchurl + couchConnection.path;
+  if (couchdbcommand === null || couchdbcommand === undefined) {
+    couchurl = couchurl + "/" + couchConnection.pouchname;
+  } else {
+    couchurl = couchurl + couchdbcommand;
+  }
+  return couchurl;
 };
 
 
@@ -102,7 +245,7 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
     var corpusURL = window.location.origin;
     if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
-    } else if (corpusURL.indexOf("authdev.fieldlinguist.com") >= 0) {
+    } else if (corpusURL.indexOf("ifielddevs.iriscouch.com") >= 0) {
       corpusURL = "https://ifielddevs.iriscouch.com";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
       corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";

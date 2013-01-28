@@ -121,8 +121,6 @@ define([
             "pouchname": pouchname
           });
           userToShow.id = userid;
-          userToShow.changePouch(pouchname, function(){
-            //fetch only after having setting the right pouch which is what changePouch does.
             userToShow.fetch({
               success : function(model) {
                 OPrime.debug("Corpus member fetched successfully" +model);
@@ -133,7 +131,6 @@ define([
               error : function(e) {
                 alert("User not found in this corpus.");
               }
-            });
           });
         }
       }
@@ -210,8 +207,6 @@ define([
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
           
-          cs.changePouch(pouchname, function(){
-            //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
                 OPrime.debug("Session fetched successfully" +model);
@@ -224,7 +219,6 @@ define([
               error : function(e) {
                 alert("There was an error fetching the sessions. Loading defaults..."+e);
               }
-            });
           });      
         }
       }
@@ -256,8 +250,6 @@ define([
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
           
-          cs.changePouch(pouchname, function(){
-            //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
                 OPrime.debug("Session fetched successfully" +model);
@@ -270,7 +262,6 @@ define([
               error : function(e) {
                 alert("There was an error fetching the sessions. Loading defaults..."+e);
               }
-            });
           });      
         }
       }
@@ -321,8 +312,6 @@ define([
         /*
          * If it isnt the default data list, just fetch it.
          */
-        dl.changePouch(pouchname, function(){
-          //fetch only after having setting the right pouch which is what changePouch does.
           dl.fetch({
             success : function(e) {
               OPrime.debug("Datalist fetched successfully" +e);
@@ -337,7 +326,6 @@ define([
             error : function(e) {
               alert("There was an error fetching the data list. Loading defaults..."+e);
             }
-          });
         });
 
       }
@@ -361,8 +349,6 @@ define([
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         }
         
-        dl.changePouch(pouchname, function(){
-          //fetch only after having setting the right pouch which is what changePouch does.
           dl.fetch({
             success : function(e) {
               OPrime.debug("Datalist fetched successfully" +e);
@@ -375,7 +361,6 @@ define([
             error : function(e) {
               alert("There was an error fetching the data list. Loading defaults..."+e);
             }
-          });
         });
       }
       this.hideEverything();
@@ -451,13 +436,11 @@ define([
         }
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumid;
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               window.appView.datumsEditView.prependDatum(model);
               window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
             }
-          });
         });
       }else{
         window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
@@ -481,13 +464,11 @@ define([
           }
           var obj = new Conversation({pouchname: app.get("corpus").get("pouchname")});
           obj.id  = conversationid;
-          obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
             obj.fetch({
               success : function(model, response) {
  //               window.appView.datumsEditView.prependDatum(model); //change so relevant to Conversation
                 window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
               }
-            });
           });
         }else{
           window.location.href = "#render/true"; //TODO this is to clear the parameters in the url

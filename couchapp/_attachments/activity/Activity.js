@@ -83,7 +83,7 @@ define([
       }
       
       
-      if(OPrime.isCouchApp()){
+      if(OPrime.isBackboneCouchDBApp()){
         if(typeof callback == "function"){
           callback();
         }

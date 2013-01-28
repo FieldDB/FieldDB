@@ -80,6 +80,10 @@ define([
       var dataToPost = {};
       dataToPost.username = user.get("username");
       dataToPost.password = user.get("password");
+      /* if the user is currently in a chrome app, save which chrome app they used last into their user, so that we can redirect them to it if we ever need to redirect them from the website. */
+      if(OPrime.isChromeApp()){
+        this.get("userPrivate").set("preferredChromeExtension", window.location.origin);
+      }
       if(this.get("userPrivate") != undefined){
         //if the same user is re-authenticating, include their details to sync to the server.
         if(user.get("username") == this.get("userPrivate").get("username") && user.get("username") != "public"){
@@ -185,19 +189,13 @@ define([
 //        serverResults.user.publicSelf.pouchname = serverResults.user.corpuses[0].pouchname;
       }
       
-      if (this.get("userPublic") == undefined) {
-        this.set("userPublic", new UserMask(serverResults.user.publicSelf));
-      }else{
-        this.get("userPublic").set(serverResults.user.publicSelf);
-      }
-      this.get("userPublic")._id = serverResults.user._id;
-
+      
       if (this.get("userPrivate") == undefined) {
         this.set("userPrivate", new User({filledWithDefaults: true}));
       }
       var u = this.get("userPrivate");
-      u.id = serverResults.user._id; //set the backbone id to be the same as the mongodb id
-      //set the user AFTER setting his/her publicself if it wasnt there already
+      u.id = serverResults.user._id; //set the backbone id to be the same as the auth id
+      //set the user AFTER setting his/her publicself if it wasn't there already
       /*
        * Handle if the user got access to new corpora
        */
@@ -214,16 +212,19 @@ define([
       }
       
       u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
+      
+      this.set("userPublic", this.get("userPrivate").get("publicSelf"));
+      this.get("userPublic")._id = serverResults.user._id;
+      this.get("userPublic").id = serverResults.user.id;
+      this.get("userPublic").set("_id", serverResults.user._id);
+      
       if(window.appView){
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
       }
       /* Set up the pouch with the user's most recent couchConnection if it has not already been set up */
       window.app.changePouch(serverResults.user.mostRecentIds.couchConnection);
 
-//    self.get("userPublic").changePouch(data.user.corpuses[0].pouchname);
-      // self.get("userPublic").save(); //TODO save this when there is
-      // no problem with pouch
-//      OPrime.debug(serverResults.user);
+      this.get("userPublic").saveAndInterConnectInApp(); 
       
       OPrime.setCookie("username", serverResults.user.username, 365);
       OPrime.setCookie("token", serverResults.user.hash, 365);
@@ -294,22 +295,13 @@ define([
       localStorage.setItem("encryptedUser", u); 
       if(window.appView){
         window.appView.addSavedDoc(this.get("userPrivate").id);
-        window.appView.toastUser("Sucessfully saved user details.","alert-success","Saved!");
+//        window.appView.toastUser("Successfully saved user details.","alert-success","Saved!");
       }
-      this.get("userPublic").save(null, {
-        success : function(model, response) {
-          OPrime.debug('User Mask saved ' + model.id);
-          if(typeof callbacksaved == "function"){
-            callbacksaved();
-          }
-        },error : function(e,f,g) {
-          OPrime.debug(e,f,g);
-          OPrime.debug('User Mask save error ' + f.reason);
-          if(typeof callbacksaved == "function"){
-            callbacksaved();
-          }
-        }
-      });
+      //Dont save the user public so often.
+//      this.get("userPublic").saveAndInterConnectInApp(callbacksaved);
+      if(typeof callbacksaved == "function"){
+        callbacksaved();
+      }
       
     },
     saveAndInterConnectInApp : function(successcallback, failurecallback){
