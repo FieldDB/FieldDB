@@ -5,6 +5,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -22,6 +23,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -54,6 +56,10 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       // Create a DatumTagView
@@ -200,7 +206,7 @@ define([
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
         
-        // Display the SessionView
+        // Display the CommentEditView
         this.commentEditView.el = this.$('.add-comment'); 
         this.commentEditView.render();
         
