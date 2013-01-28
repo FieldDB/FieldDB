@@ -166,14 +166,36 @@ define([
         console.log("App.changePouch setting couchConnection: ", couchConnection);
         this.set("couchConnection", couchConnection);
       }
+//      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
 
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
+      if(OPrime.isChromeApp()){
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
+        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+      }else{
+        /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
+        try{
+          var pieces = window.location.pathname.replace(/^\//,"").split("/");
+          var pouchName = pieces[0];
+          //Handle McGill server which runs out of a virtual directory
+          if(pouchName == "corpus"){
+            pouchName = pieces[1];
+          }
+          Backbone.couch_connector.config.db_name = pouchName;
+        }catch(e){
+          OPrime.bug("Couldn't set the databse name off of the url, please report this.");
         }
-        return;
       }
       
+      if(typeof callback == "function"){
+        callback();
+      }
+      return;
+      
+      
+      
+      
+      alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
         // + couchConnection.pouchname);
@@ -201,10 +223,8 @@ define([
         optionalpouchname == "default";
       }
 
-      try{
-        Backbone.couch_connector.config.db_name = optionalpouchname;
-      }catch(e){
-        OPrime.debug("Couldn't set the database name off of the pouchame.");
+      if (Backbone.couch_connector.config.db_name == "default") {
+        OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
       
       if (this.get("authentication").get("userPublic") == undefined) {
@@ -293,21 +313,30 @@ define([
       if (couchConnection == null || couchConnection == undefined) {
         couchConnection = this.get("couchConnection");
       }
+      if (couchConnection == null || couchConnection == undefined) {
+        alert("Bug: i couldnt log you into your couch database.");
+      }
 
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
+      /* if on android, turn on replication and don't get a session token */
+      if(OPrime.isTouchDBApp()){
+        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+            username, password, couchConnection.domain);
+        OPrime
+        .debug("Not getting a session token from the users corpus server " +
+        "since this is touchdb on android which has no idea of tokens.");
+        if (typeof succescallback == "function") {
+          succescallback();
+        }
+        return;
       }
-      if (!couchConnection.path) {
-        couchConnection.path = "";
-        this.get("couchConnection").path = "";
-      }
-      couchurl = couchurl + couchConnection.path + "/_session";
+      
+      var couchurl = this.getCouchUrl(couchConnection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      OPrime.debug("Contacting your corpus server ", couchConnection);
+      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
+      var appself = this;
       $
       .ajax({
         type : 'POST',
@@ -320,6 +349,14 @@ define([
                 "I logged you into your team server automatically, your syncs will be successful.",
                 "alert-info", "Online Mode:");
           }
+          
+
+          /* if in chrome extension, or offline, turn on replication */
+          if(OPrime.isChromeApp()){
+            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//            appself.replicateContinuouslyWithCouch();
+          }
+          
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
@@ -340,6 +377,12 @@ define([
                           "I logged you into your team server automatically, your syncs will be successful.",
                           "alert-info", "Online Mode:");
                     }
+                    /* if in chrome extension, or offline, turn on replication */
+                    if(OPrime.isChromeApp()){
+                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+//                      appself.replicateContinuouslyWithCouch();
+                    }
+                    
                     if (typeof succescallback == "function") {
                       succescallback(serverResults);
                     }
@@ -369,77 +412,104 @@ define([
         }
       });
     },
+    getCouchUrl : function(couchConnection, couchdbcommand) {
+      if(!couchConnection){
+        couchConnection = this.get("couchConnection");
+        OPrime.debug("Using the apps ccouchConnection", couchConnection);
+      }else{
+        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+      }
+      if(!couchConnection){
+        OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
+      }
+      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
+    },
     /**
      * Synchronize to server and from database.
      */
     replicateContinuouslyWithCouch : function(successcallback,
         failurecallback) {
-      
-      /*
-       * TODO decide on the status of this function. does the logic for touchdb and couch apps go here, or in the logUser in corpus function
-       */
-//    if(OPrime.isCouchApp()){
-      if(true){
-        if (typeof successcallback == "function") {
+      var self = this;
+      if(!self.pouch){
+        OPrime.debug("Not replicating, no pouch ready.");
+        if(typeof successcallback == "function"){
           successcallback();
         }
-        // no need to replicate, we are in our db already.
         return;
       }
-      
-      var self = this;
-      var couchConnection = this.get("couchConnection");
+      self.pouch(function(err, db) {
+        var couchurl = this.getCouchUrl();
+        if (err) {
+          OPrime.debug("Opening db error", err);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Opening DB error' + JSON.stringify(err));
+            OPrime.debug('Opening DB error'
+                + JSON.stringify(err));
+          }
+        } else {
+          OPrime.debug("Opening db success", db);
+          alert("TODO check to see if  needs a slash if replicating with pouch on "+couchurl );
+          self.replicateFromCorpus(db, couchurl, function() {
+            //turn on to regardless of fail or succeed
+            self.replicateToCorpus(db, couchurl);
+          }, function() {
+            //turn on to regardless of fail or succeed
+            self.replicateToCorpus(db, couchurl);
+          });
 
-      this.logUserIntoTheirCorpusServer(couchConnection, "devgina",
-          "test", function() {
-        OPrime.debug("Logged you into your corpus ",
-            couchConnection);
-
-        if(OPrime.isCouchApp()){
-          if(typeof successcallback == "function"){
+          if (typeof successcallback == "function") {
             successcallback();
           }
-          return;
+
         }
-          
-        self.changePouch(null, function() {
-          self.pouch(function(err, db) {
-            var couchurl = couchConnection.protocol
-            + couchConnection.domain;
-            if (couchConnection.port != null) {
-              couchurl = couchurl + ":" + couchConnection.port;
-            }
-            couchurl = couchurl + couchConnection.path + "/"
-            + couchConnection.pouchname;
-            if (err) {
-              OPrime.debug("Opening db  error", err);
+      });
 
-              if (typeof failurecallback == "function") {
+    },
+    /**
+     * Pull down corpus to offline pouch, if its there.
+     */
+    replicateOnlyFromCorpus : function(couchConnection, successcallback, failurecallback) {
+      var self = this;
+
+      if(!self.pouch){
+        OPrime.debug("Not replicating, no pouch ready.");
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+        return;
+      }
+
+      self.pouch(function(err, db) {
+        var couchurl = self.getCouchUrl();
+        if (err) {
+          OPrime.debug("Opening db error", err);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Opening DB error' + JSON.stringify(err));
+            OPrime.debug('Opening DB error'
+                + JSON.stringify(err));
+          }
+        } else {
+          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
+            OPrime.debug("Replicate from " + couchurl,response, err);
+            if(err){
+              if(typeof failurecallback == "function"){
                 failurecallback();
-              } else {
-                alert('Opening DB error' + JSON.stringify(err));
-                OPrime.debug('Opening DB error'
-                    + JSON.stringify(err));
+              }else{
+                alert('Corpus replicate from error' + JSON.stringify(err));
+                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
               }
-            } else {
-              OPrime.debug("Opening db  success", db);
-
-              self.replicateFromCorpus(db, couchurl, function() {
-                //turn on to regardless of fail or succeed
-                self.replicateToCorpus(db, couchurl);
-              }, function() {
-                //turn on to regardless of fail or succeed
-                self.replicateToCorpus(db, couchurl);
-              });
-
-              if (typeof successcallback == "function") {
+            }else{
+              OPrime.debug("Corpus replicate from success", response);
+              if(typeof successcallback == "function"){
                 successcallback();
               }
-
             }
           });
-        });
-
+        }
       });
     },
     replicateToCorpus : function(db, couchurl, success, failure) {
@@ -525,10 +595,11 @@ define([
 //        window.location.replace(optionalCouchAppPath+"corpus.html");
 //        });
           return;
-        }else{
-          OPrime.debug("Seting the Backbone couch_connector's db_name to " + corpusPouchName);
-          Backbone.couch_connector.config.db_name = corpusPouchName;
         }
+      }
+      
+      if (Backbone.couch_connector.config.db_name == "default") {
+        OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
       
       var couchConnection = appids.couchConnection;
@@ -537,6 +608,8 @@ define([
         window.location.replace("user.html");
         return;
       }
+      this.set("couchConnection", couchConnection);
+      
       var corpusid = appids.corpusid;
       if(!corpusid){
         corpusid = couchConnection.corpusid;
@@ -545,16 +618,21 @@ define([
         "pouchname" : couchConnection.pouchname,
         "couchConnection" : couchConnection
       });
+      var selfapp = this;
       if(!corpusid){
-        $(".spinner-status").html("Opening/Creating Corpus...");
-        this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
-          window.app.stopSpinner();
-        });
-        return;
+        if(this.get("corpus").id){
+          corpusid = this.get("corpus").id;
+        }else{
+          $(".spinner-status").html("Opening/Creating Corpus...");
+          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection.pouchname, function(){
+            /* if the corpusid is missing, make sure there are other objects in the dashboard */
+            selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
+//          window.app.stopSpinner();
+          });
+          return;
+        }
       }
-      c.id = appids.corpusid; //tried setting both ids to match, and it worked!!
-      c.changePouch(couchConnection, function(){
-        //fetch only after having setting the right pouch which is what changePouch does.
+      c.id = corpusid; //tried setting both ids to match, and it worked!!
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -576,7 +654,6 @@ define([
                 "pouchname" : couchConnection.pouchname
               });
               dl.id = appids.datalistid; 
-              dl.changePouch(couchConnection.pouchname, function(){
                 dl.fetch({
                   success : function(dataListModel) {
                     $(".spinner-status").html("Opened DataList...");
@@ -590,7 +667,6 @@ define([
                         "pouchname" : couchConnection.pouchname
                       });
                       s.id = appids.sessionid; 
-                      s.changePouch(couchConnection.pouchname, function(){
                         s.fetch({
                           success : function(sessionModel) {
                             $(".spinner-status").html("Opened Elicitation Session...");
@@ -628,7 +704,6 @@ define([
                             );
                           }
                         });//end session fetch
-                      });//end session change corpus
 
                     },function(){
                       alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -638,7 +713,6 @@ define([
                     alert("There was an error fetching the data list. "+error.reason);
                   }
                 }); //end fetch data list
-              });//end data list change corpus
 
             }, function(){
               alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -656,7 +730,6 @@ define([
 
           }
         }); //end corpus fetch
-      }); //end corpus change corpus
     },
     
     router : AppRouter,
@@ -718,7 +791,6 @@ define([
       });
      */
     warnUserAboutSavedSyncedStateBeforeUserLeaves : function(e){
-      
       var returntext = "";
       if (window.appView) {
         if(window.appView.totalUnsaved.length >= 1){

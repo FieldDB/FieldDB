@@ -250,30 +250,6 @@ define([
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    changePouch : function(couchConnection, callback) {
-      if (couchConnection == null || couchConnection == undefined) {
-        couchConnection = this.get("couchConnection");
-      }else{
-        this.set("couchConnection", couchConnection);
-      }
-      
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync
-        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
-      }
-
-      if (typeof callback == "function") {
-        callback();
-      }
-    }, 
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
@@ -288,8 +264,7 @@ define([
       self.set("_id","corpus");
       this.set("timestamp", Date.now());
       
-      this.changePouch(null, function(){
-        if(OPrime.isCouchApp()){
+        if(OPrime.isBackboneCouchDBApp()){
           self.save();
           if(typeof successcallback == "function"){
             successcallback();
@@ -352,7 +327,6 @@ define([
               }
             }
           });
-        });
       });      
     },
     /**
@@ -360,26 +334,8 @@ define([
      * hardcoded id, it uses pouch's API directly
      */
     updateToPouch : function(){
-      alert("Bug: the corpusmask updatetopouch method is deprecated!");
-      var self = this;
-      this.changePouch(null, function(){
-
-        if(OPrime.isCouchApp()){
-          self.save();
-          if(typeof successcallback == "function"){
-            successcallback();
-          }
-          return;
-        }
-
-        self.pouch(function(err,db){
-          var modelwithhardcodedid = self.toJSON();
-          modelwithhardcodedid._id = "corpus";
-          db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
-          });
-        });
-      });
+      alert("Bug: the corpusmask updatetopouch method is deprecated please report this!");
+      
     },
     /**
      * This function takes in a pouchname, which could be different

@@ -1,6 +1,6 @@
 var OPrime = OPrime || {};
 
-OPrime.debugMode = false;
+OPrime.debugMode = true;
 /*
  * Android touchdb for OPrime runs on port 8128, so if the app is running on
  * port 8128 it is likely in a touchdb (either in the android app or in a
@@ -200,6 +200,9 @@ OPrime.isTouchDBApp = function() {
   return window.location.href.indexOf("localhost:8128") > -1;
 };
 
+OPrime.isBackboneCouchDBApp = function(){
+  return true;
+};
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.

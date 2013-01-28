@@ -358,9 +358,9 @@ define([
           //TODO let them choose their corpus
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
             var couchConnection = auth.get("userPrivate").get("corpuses")[0];
-            window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+            window.app.logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
               //Replicate user's corpus down to pouch
-              window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
+              window.app.replicateOnlyFromCorpus(couchConnection, function(){
                 //Must replicate before redirecting to dashboard, otherwise the pouch and corpus will be empty
                 document.location.href='corpus.html';
               });

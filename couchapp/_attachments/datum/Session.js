@@ -170,24 +170,6 @@ define([
             context : " via Offline App."
           });
     },
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-      }
-      if(OPrime.isCouchApp()){
-        if(typeof callback == "function"){
-          callback();
-        }
-        return;
-      }
-      
-      if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if(typeof callback == "function"){
-        callback();
-      }
-    },
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
@@ -221,7 +203,6 @@ define([
       var oldrev = this.get("_rev");
       this.set("dateModified", JSON.stringify(new Date()));
       this.set("timestamp", Date.now());
-      this.changePouch(null,function(){
         self.save(null, {
           success : function(model, response) {
             OPrime.debug('Session save success');
@@ -295,7 +276,6 @@ define([
             }
           }
         });
-      });
     },
     /**
      * Accepts two functions success will be called if sucessfull,
