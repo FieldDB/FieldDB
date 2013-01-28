@@ -1,5 +1,5 @@
 function(doc) {
-  if (doc.collection == "activities") {
-    emit(doc.collection, doc);
+  if (doc.collection == "activities" || doc.directobject) {
+    emit("activities", doc);
   }
 };

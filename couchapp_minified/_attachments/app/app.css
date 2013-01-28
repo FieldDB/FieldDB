@@ -32,7 +32,7 @@ a:hover {
 	font-style: normal;
 	font-weight: 400;
 	src: local('Andika'),
-		url(http://themes.googleusercontent.com/static/fonts/andika/v3/CMPCzjJE3f8UuWd5B8oprOvvDin1pK8aKteLpeZ5c0A.woff)
+		url(https://themes.googleusercontent.com/static/fonts/andika/v3/CMPCzjJE3f8UuWd5B8oprOvvDin1pK8aKteLpeZ5c0A.woff)
 		format('woff');
 }
 
@@ -346,34 +346,7 @@ progress {
  */
 
 /* All HTML5 progress enabled browsers */
-.navbar progress {
-	/* Turns off styling - not usually needed, but good to know. */
-	appearance: none;
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	/* gets rid of default border in Firefox and Opera. */
-	border: solid #333 1px;
-	border-radius: 5px;
-	/* Dimensions */
-	width: 8em;
-	height: 1em;
-}
 
-/* Chrome */
-.navbar progress::-webkit-progress-bar {
-	background: #333;
-}
-
-/*
- * Background of the progress bar value
-/* Chrome */
-.navbar progress::-webkit-progress-value {
-	border-radius: 5px;
-	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(120,
-		120, 0) ), color-stop(1, rgb(255, 255, 1) ) );
-	background-image: -webkit-linear-gradient(center bottom, rgb(120, 120, 0)
-		37%, rgb(255, 255, 1) 69% );
-}
 
 spacer {
 	size: 1em;
@@ -528,7 +501,7 @@ line.link {
 }
 
 .min_auth_dropdown_size {
-	width: 25em  !important;
+	width: 30em !important;
 	min-height: 35em !important;
 }
 

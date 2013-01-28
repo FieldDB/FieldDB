@@ -184,7 +184,7 @@ Glosser.glossFinder = function(morphemesLine){
   
   // Replace the gloss line with the guessed glosses
   return glossGroups.join(" ");
-}
+};
 /**
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
@@ -208,6 +208,13 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
   morphemeLinks = [];
   morphemes = [];
   for ( var i in rules) {
+    /* make the @ more like what a linguist recognizes for word boundaries */
+    if(rules[i].key.x == "@"){
+      rules[i].key.x = "#_"
+    }
+    if(rules[i].key.y == "@"){
+      rules[i].key.y = "_#"
+    }
     var xpos = morphemes.indexOf(rules[i].key.x);
     if (xpos < 0) {
       morphemes.push(rules[i].key.x);
@@ -218,7 +225,8 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
       morphemes.push(rules[i].key.y);
       ypos = morphemes.length - 1;
     }
-    if (rules[i].key.y != "@") {
+    //To avoid loops?
+    if (rules[i].key.y.indexOf("@") == -1) {
       morphemeLinks.push({
         source : xpos,
         target : ypos,
@@ -311,8 +319,8 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   //A label for the current year.
   var title = svg.append("text")
     .attr("class", "vis-title")
-    .attr("dy", "2em")
-    .attr("dx", "2em")
+    .attr("dy", "1.5em")
+    .attr("dx", "1.5em")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
   
