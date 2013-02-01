@@ -43,7 +43,7 @@ if (chrome.app.isInstalled) {
 
 <title>Collect, share and search your data offline and online -
 	LingSync</title>
-
+<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="/webimages/compiled.css" />
 <script type="text/javascript" src="/webimages/all.js"></script>
 
@@ -62,62 +62,6 @@ if (chrome.app.isInstalled) {
 	display: none;
 }
 
-.btn {
-	color: #ffffff;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	background-color: #006dcc;
-	background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc),
-		to(#0044cc) );
-	background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
-	background-image: -o-linear-gradient(top, #0088cc, #0044cc);
-	background-image: linear-gradient(to bottom, #0088cc, #0044cc);
-	background-repeat: repeat-x;
-	border-color: #0044cc #0044cc #002a80;
-	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	border-color: #c5c5c5;
-	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15)
-		rgba(0, 0, 0, 0.25);
-	padding: 11px 19px;
-	font-size: 17.5px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	display: inline-block;
-	padding: 4px 12px;
-	margin-bottom: 0;
-	font-size: 14px;
-	line-height: 20px;
-	color: #333333;
-	text-align: center;
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-	vertical-align: middle;
-	cursor: pointer;
-	background-color: #f5f5f5;
-	background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff),
-		to(#e6e6e6) );
-	background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
-	background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
-	background-repeat: repeat-x;
-	border: 1px solid #bbbbbb;
-	border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	border-bottom-color: #a2a2a2;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',
-		endColorstr='#ffe6e6e6', GradientType=0 );
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false );
-	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.05);
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px
-		rgba(0, 0, 0, 0.05);
-}
 </style>
 
 <script type="text/javascript">
@@ -270,53 +214,6 @@ if (chrome.app.isInstalled) {
 	         </script>
 				</div>
 				<div id="twitterBoxOld" style="margin: 1em;">
-					<script>
-            //http://code.google.com/p/chromium/issues/detail?id=81637
-            //https://twitter.com/about/resources/widgets/widget_profile?
-            //http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
-            
-            /**
-            * Fieldlinguist's tweets
-            */
-            
-             $(document).ready(function(){
-             $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
-                // dynamically add the get social sidebar
-                $('body').prepend('<div id="social"></div>'); 
-        
-                  new TWTR.Widget({
-                    version: 2,
-                    type: 'profile',
-                    id : 'twitterBoxOld',
-                    
-                    rpp: 4,
-                    interval: 30000,
-                    width: 250,
-                    height: 250,
-                    theme: {
-                      shell: {
-                        background: '#55a1ba',
-                        color: '#ffffff'
-                      },
-                      tweets: {
-                        background: '#fcf9fc',
-                        color: '#0f010f',
-                        links: '#2d61a1'
-                      }
-                    },
-                    features: {
-                      scrollbar: true,
-                      loop: false,
-                      live: true,
-                      behavior: 'all'
-                    }
-                  }).render().setUser('FieldLinguist').start();
-        
-              });
-            });
-            
-            
-           </script>
 				</div>
 			</div>
 			<div style="clear: both;"></div>
@@ -325,6 +222,13 @@ if (chrome.app.isInstalled) {
 		<img src="webimages/mulitple_devices.png"
 			style="position: absolute; top: 0px; right: 0px; z-index: 100;"
 			width=100 />
+
+<div width="100%">
+				<center>
+					<img src="images/team_at_work.jpg" width="500">
+				</center>
+			</div>
+
 		<div id="footer" class="clearfloat">
 			<ul class="">
 				<li><!-- <a target="_blank"
@@ -349,11 +253,6 @@ if (chrome.app.isInstalled) {
 						to EMELD &amp; DataOne Data Management Best Practices</a></li>
 			</ul>
 
-			<div width="100%">
-				<center>
-					<img src="images/team_at_work.jpg" width="500"/>
-				</center>
-			</div>
 
 			<ul class="">
 				<li>Interns &amp; Development Team 
