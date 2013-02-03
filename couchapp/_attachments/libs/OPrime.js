@@ -20,6 +20,30 @@ OPrime.touchUrl = "http://localhost:8128/";
  */
 OPrime.pouchUrl = "idb://";
 
+OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
+  if (!couchConnection) {
+    couchConnection = OPrime.defaultCouchConnection();
+    OPrime.debug("Using the apps ccouchConnection", couchConnection);
+  }
+
+  var couchurl = couchConnection.protocol + couchConnection.domain;
+  /* Switch user to the new dev servers if they have the old ones */
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
+  if (couchConnection.port != null && couchConnection.port != "443" && couchConnection.port != "80") {
+    couchurl = couchurl + ":" + couchConnection.port;
+  }
+  if(!couchConnection.path){
+    couchConnection.path = "";
+  }
+  couchurl = couchurl + couchConnection.path;
+  if (couchdbcommand === null || couchdbcommand === undefined) {
+    couchurl = couchurl + "/" + couchConnection.pouchname;
+  } else {
+    couchurl = couchurl + couchdbcommand;
+  }
+  return couchurl;
+};
+
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.debug = function(message, message2, message3, message4) {

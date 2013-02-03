@@ -6562,6 +6562,30 @@ OPrime.touchUrl = "http://localhost:8128/";
  */
 OPrime.pouchUrl = "idb://";
 
+OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
+  if (!couchConnection) {
+    couchConnection = OPrime.defaultCouchConnection();
+    OPrime.debug("Using the apps ccouchConnection", couchConnection);
+  }
+
+  var couchurl = couchConnection.protocol + couchConnection.domain;
+  /* Switch user to the new dev servers if they have the old ones */
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
+  if (couchConnection.port != null && couchConnection.port != "443" && couchConnection.port != "80") {
+    couchurl = couchurl + ":" + couchConnection.port;
+  }
+  if(!couchConnection.path){
+    couchConnection.path = "";
+  }
+  couchurl = couchurl + couchConnection.path;
+  if (couchdbcommand === null || couchdbcommand === undefined) {
+    couchurl = couchurl + "/" + couchConnection.pouchname;
+  } else {
+    couchurl = couchurl + couchdbcommand;
+  }
+  return couchurl;
+};
+
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.debug = function(message, message2, message3, message4) {
@@ -11177,11 +11201,11 @@ define('lexicon/Lexicon',[
     buildLexiconFromCouch : function(pouchname, callback){
       var self = this;
       var couchConnection = app.get("corpus").get("couchConnection");
-      var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port  +couchConnection.path+"/";
+      var couchurl = OPrime.getCouchUrl(couchConnection);
 
       $.ajax({
         type : 'GET',
-        url : couchurl+pouchname+"/_design/lexicon/_view/create_triples?group=true",
+        url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
@@ -11330,12 +11354,11 @@ var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
 Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
-  var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port +couchConnection.path+"/";
+  var couchurl = OPrime.getCouchUrl(couchConnection);
 
   $.ajax({
     type : 'GET',
-    url : couchurl + pouchname
-        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
       // Parse the rules from JSON into an object
       rules = JSON.parse(rules);
@@ -13391,10 +13414,7 @@ define('corpus/Corpus',[
           return;
         }
         var couchConnection = this.get("couchConnection");
-        var couchurl = couchConnection.protocol+couchConnection.domain;
-        if(couchConnection.port != null){
-          couchurl = couchurl+":"+couchConnection.port;
-        }
+        var couchurl = OPrime.getCouchUrl(couchConnection);
         if(!pouchname){
           pouchname = couchConnection.pouchname;
           /* if the user has overriden the frequent fields, use their preferences */
@@ -13405,7 +13425,7 @@ define('corpus/Corpus',[
             return;
           }
         }
-        jsonUrl = couchurl +couchConnection.path+"/"+ pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+        jsonUrl = couchurl + "/_design/pages/_view/get_frequent_fields?group=true";
       }
      
       var self = this;
@@ -13742,12 +13762,7 @@ define('corpus/Corpuses',[
       var self = this;
       for(c in arrayOfCorpora){
         var couchConnection = arrayOfCorpora[c];
-        var couchurl = couchConnection.protocol + couchConnection.domain;
-        if (couchConnection.port != null) {
-          couchurl = couchurl + ":" + couchConnection.port;
-        }
-        couchurl = couchurl +couchConnection.path +"/"+ couchConnection.pouchname+"/corpus";
-        
+
         var corpuse = new CorpusMask({
           title : "",
           pouchname : couchConnection.pouchname
@@ -13762,6 +13777,7 @@ define('corpus/Corpuses',[
          * we expect to be the normal case, therefore not usefull to
          * show it.
          */
+//        var couchurl = OPrime.getCouchUrl(couchConnection) +"/corpus";
 //        $.ajax({
 //          type : 'GET',
 //          url : couchurl ,
@@ -16244,16 +16260,8 @@ define('user/UserApp',[
         return;
       }
       
-      
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
-      }
-      if(!couchConnection.path){
-        couchConnection.path = "";
-//        this.get("couchConnection").path = "";
-      }
-      couchurl = couchurl  + couchConnection.path + "/_session";
+      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
+
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
@@ -16530,28 +16538,6 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   return mostLikelyAuthUrl;
 };
 
-OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
-  if (!couchConnection) {
-    couchConnection = OPrime.defaultCouchConnection();
-    OPrime.debug("Using the apps ccouchConnection", couchConnection);
-  }
-  var couchurl = couchConnection.protocol + couchConnection.domain;
-  if (couchConnection.port != null) {
-    couchurl = couchurl + ":" + couchConnection.port;
-  }
-  if(!couchConnection.path){
-    couchConnection.path = "";
-  }
-  couchurl = couchurl + couchConnection.path;
-  if (couchdbcommand === null || couchdbcommand === undefined) {
-    couchurl = couchurl + "/" + couchConnection.pouchname;
-  } else {
-    couchurl = couchurl + couchdbcommand;
-  }
-  return couchurl;
-};
-
-
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
@@ -16566,10 +16552,10 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
   if(OPrime.isCouchApp()){
     var corpusURL = window.location.origin;
-    if (corpusURL.indexOf("lingsync.org") >= 0) {
-      corpusURL = "https://corpus.lingsync.org";
-    } else if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
+    if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
       corpusURL = "https://corpusdev.lingsync.org";
+    } else if (corpusURL.indexOf("lingsync.org") >= 0) {
+      corpusURL = "https://corpus.lingsync.org";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
       corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     } else if (corpusURL.indexOf("localhost") >= 0) {
@@ -16581,11 +16567,22 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
 };
 define("libs/webservicesconfig_devserver", function(){});
 
+/* If they have an old link, redirect them */
+if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0 ){
+  var newTestingServerWithCORS = window.location.href.replace("ifielddevs.iriscouch.com", "corpusdev.lingsync.org");
+  if (window.location.protocol == "http:") {
+    newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
+  }
+  window.location.replace();
+}
+
+/* Make sure they use the https versions */
 if (window.location.origin != "localhost") {
   if (window.location.protocol == "http:") {
     window.location.replace(window.location.href.replace("http", "https"));
   }
 }
+
 
 //Set the RequireJS configuration
 require.config({
