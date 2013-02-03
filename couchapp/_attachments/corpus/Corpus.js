@@ -1290,7 +1290,7 @@ define([
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more representative datum 
-     * example : https://ifielddevs.iriscouch.com/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
      * 
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
      * 
