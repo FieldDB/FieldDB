@@ -262,8 +262,13 @@ define([
         this.logout();
         return;
       }
+      var userString = this.get("confidential").decrypt(encryptedUserString);
+     
+      /* Switch user to the new dev servers if they have the old ones */
+      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
+      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
       
-      var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
+      var u = JSON.parse(userString);
       var data = {};
       data.user = u;
       
@@ -305,6 +310,12 @@ define([
     
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
       OPrime.debug("saveAndEncryptUserToLocalStorage");
+      
+      /* TODO Switch user to the new dev servers if they have the old ones */
+//      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
+//      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
+      
+      
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u); 
       if(window.appView){
