@@ -39,11 +39,11 @@ define([
     buildLexiconFromCouch : function(pouchname, callback){
       var self = this;
       var couchConnection = app.get("corpus").get("couchConnection");
-      var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port  +couchConnection.path+"/";
+      var couchurl = OPrime.getCouchUrl(couchConnection);
 
       $.ajax({
         type : 'GET',
-        url : couchurl+pouchname+"/_design/lexicon/_view/create_triples?group=true",
+        url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
