@@ -210,28 +210,6 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   return mostLikelyAuthUrl;
 };
 
-OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
-  if (!couchConnection) {
-    couchConnection = OPrime.defaultCouchConnection();
-    OPrime.debug("Using the apps ccouchConnection", couchConnection);
-  }
-  var couchurl = couchConnection.protocol + couchConnection.domain;
-  if (couchConnection.port != null) {
-    couchurl = couchurl + ":" + couchConnection.port;
-  }
-  if(!couchConnection.path){
-    couchConnection.path = "";
-  }
-  couchurl = couchurl + couchConnection.path;
-  if (couchdbcommand === null || couchdbcommand === undefined) {
-    couchurl = couchurl + "/" + couchConnection.pouchname;
-  } else {
-    couchurl = couchurl + couchdbcommand;
-  }
-  return couchurl;
-};
-
-
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
