@@ -149,28 +149,28 @@ require(
           }
         }
         Pouch.replicate('idb://' + pouchname,
-            'https://ifielddevs.iriscouch.com/' + pouchname, {
+            'https://corpusdev.lingsync.org/' + pouchname, {
               complete : function() {
                 $("#dashboard_loading_spinner").append(
                     "<h2>Finished backing up " + pouchname + " to "
-                        + "https://ifielddevs.iriscouch.com/" + pouchname
+                        + "https://corpusdev.lingsync.org/" + pouchname
                         + "</h2>");
               },
               onChange : function(change) {
                 $("#dashboard_loading_spinner").append(
                     "<div>Backing up " + pouchname + " to "
-                        + "https://ifielddevs.iriscouch.com/" + pouchname
+                        + "https://corpusdev.lingsync.org/" + pouchname
                         + " Change:  " + JSON.stringify(change) + '</div>');
               }
             }, function(err, changes) {
               console.log("Backing up " + pouchname + " to "
-                  + 'https://ifielddevs.iriscouch.com/' + pouchname, err,
+                  + 'https://corpusdev.lingsync.org/' + pouchname, err,
                   changes);
               if (!err) {
                 window.actuallyReplicatedPouches.push(pouchname);
                 $("#dashboard_loading_spinner").append(
                     "<h2>Finished backing up " + pouchname + " to "
-                        + "https://ifielddevs.iriscouch.com/" + pouchname
+                        + "https://corpusdev.lingsync.org/" + pouchname
                         + "</h2>");
                 $("#dashboard_loading_spinner").append(
                     "<small>Changes " + JSON.stringify(changes) + "</small>");
@@ -202,39 +202,38 @@ require(
         password : "none"
       };
       
-//      Couch.init(function() {
-//        // execute on ready
-//        var server = new Couch.Server('https://ifielddevs.iriscouch.com', 'backupdatabases', 'none');
-//        
-////        console.log(server);
-////        server.create(server, 'testingCORSdbinchromext', function(resp) { 
-////          console.log("response",resp);
-////        });
-//
-//        
-//        console.log("in the couch init function");
-//        
-//      });
-                    window.setTimeout(window.waitForPouchesList, 1000);
+      window.setTimeout(window.waitForPouchesList, 1000);
       
 
+      $.ajax({
+            type : 'POST',
+            url : "https://corpusdev.lingsync.org/_session",
+            data : corpusloginparams,
+            success : function(serverResults) {
+              console.log("sucess",serverResults);
+            },
+            error : function(serverResults) {
+              alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
+            }
+          });
+      
 //      $.ajax({
-//            type : 'POST',
-//            url : "https://ifielddevs.iriscouch.com/_session",
-//            data : corpusloginparams,
-//            dataType:"jsonp",
-//            success : function(serverResults) {
-//              window.setTimeout(window.waitForPouchesList, 1000);
-//            },
-//            error : function(serverResults) {
-//              alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
-//            }
-//          });
+//        type : 'GET',
+//        url : "https://corpusdev.lingsync.org",
+//        data : {},
+//        success : function(serverResults) {
+//          console.log("sucess", serverResults);
+//        },
+//        error : function(serverResults) {
+//                        console.log("error");
+//
+//        }
+//      });
 
       /* http://stackoverflow.com/questions/5584923/a-cors-post-request-works-from-plain-javascript-but-why-not-with-jquery */
 //      var request = new XMLHttpRequest();
 //      var params = "name=backupdatabases&password=none";
-//      request.open('POST', "https://ifielddevs.iriscouch.com/");
+//      request.open('POST', "https://corpusdev.lingsync.org/");
 //      request.onreadystatechange = function(e, f, g) {
 //        if (request.readyState == 4)
 //          OPrime.debug("readyState", e, f, g);
@@ -247,7 +246,7 @@ require(
 
       /* http://doc.instantreality.org/tutorial/http-communication-in-ecmascript-with-xmlhttprequest/ */
       // xhr = new XMLHttpRequest();
-      // xhr.open('POST', 'https://ifielddevs.iriscouch.com/_session');
+      // xhr.open('POST', 'https://corpusdev.lingsync.org/_session');
       // // xhr.setRequestHeader("Content-type","text/plain");
       // xhr.setRequestHeader("Content-type",
       // "application/x-www-form-urlencoded");
