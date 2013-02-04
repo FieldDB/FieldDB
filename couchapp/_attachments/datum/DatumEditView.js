@@ -381,7 +381,8 @@ define([
       var m = new Comment({
         "text" : commentstring,
       });
-      this.model.get("comments").add(m);
+      //unshift adds things to the front instead of adding to the end
+      this.model.get("comments").unshift(m); 
       this.$el.find(".comment-new-text").val("");
       
       var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
