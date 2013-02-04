@@ -2,12 +2,11 @@ var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
 Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
-  var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port +couchConnection.path+"/";
+  var couchurl = OPrime.getCouchUrl(couchConnection);
 
   $.ajax({
     type : 'GET',
-    url : couchurl + pouchname
-        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
       // Parse the rules from JSON into an object
       rules = JSON.parse(rules);

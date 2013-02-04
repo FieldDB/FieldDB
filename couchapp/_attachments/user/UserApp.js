@@ -345,16 +345,8 @@ define([
         return;
       }
       
-      
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port != null) {
-        couchurl = couchurl + ":" + couchConnection.port;
-      }
-      if(!couchConnection.path){
-        couchConnection.path = "";
-//        this.get("couchConnection").path = "";
-      }
-      couchurl = couchurl  + couchConnection.path + "/_session";
+      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
+
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;

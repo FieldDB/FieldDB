@@ -337,11 +337,9 @@ define([
       OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
-      $
-      .ajax({
-        type : 'POST',
-        url : couchurl,
-        data : corpusloginparams,
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
           if (window.appView) {
             window.appView
@@ -366,10 +364,9 @@ define([
           .setTimeout(
               function() {
                 //try one more time 5 seconds later 
-                $
-                .ajax({
-                  type : 'POST',
-                  url : couchurl,
+                $.couch.login({
+                  name: username,
+                  password: password,
                   success : function(serverResults) {
                     if (window.appView) {
                       window.appView

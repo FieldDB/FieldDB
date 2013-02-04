@@ -155,7 +155,7 @@ define([
         }
       },
       "change .datum_state_select" : "updateDatumStates",
-      "click .add-comment-datum" : 'insertNewComment',
+//      "click .add-comment-datum" : 'insertNewComment',
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
@@ -372,44 +372,44 @@ define([
       return false;
     },
     
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      var commentstring = this.$el.find(".comment-new-text").val();
-      var m = new Comment({
-        "text" : commentstring,
-      });
-      //unshift adds things to the front instead of adding to the end
-      this.model.get("comments").unshift(m); 
-      this.$el.find(".comment-new-text").val("");
-      
-      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
-
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "team",
-            context : " via Offline App."
-          });
-      
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "personal",
-            context : " via Offline App."
-          });
-      
-    },
+//    insertNewComment : function(e) {
+//      if(e){
+//        e.stopPropagation();
+//        e.preventDefault();
+//      }
+//      var commentstring = this.$el.find(".comment-new-text").val();
+//      var m = new Comment({
+//        "text" : commentstring,
+//      });
+//      //unshift adds things to the front instead of adding to the end
+//      this.model.get("comments").unshift(m); 
+//      this.$el.find(".comment-new-text").val("");
+//      
+//      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+//
+//      window.app.addActivity(
+//          {
+//            verb : "commented",
+//            verbicon: "icon-comment",
+//            directobjecticon : "",
+//            directobject : "'"+commentstring+"'",
+//            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+//            teamOrPersonal : "team",
+//            context : " via Offline App."
+//          });
+//      
+//      window.app.addActivity(
+//          {
+//            verb : "commented",
+//            verbicon: "icon-comment",
+//            directobjecticon : "",
+//            directobject : "'"+commentstring+"'",
+//            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+//            teamOrPersonal : "personal",
+//            context : " via Offline App."
+//          });
+//      
+//    },
     
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
