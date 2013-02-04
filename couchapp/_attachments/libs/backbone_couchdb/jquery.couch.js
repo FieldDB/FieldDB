@@ -146,6 +146,9 @@
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
+          if(resp == ""){
+            resp = {};
+          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
