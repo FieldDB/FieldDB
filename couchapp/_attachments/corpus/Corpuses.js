@@ -53,12 +53,7 @@ define([
       var self = this;
       for(c in arrayOfCorpora){
         var couchConnection = arrayOfCorpora[c];
-        var couchurl = couchConnection.protocol + couchConnection.domain;
-        if (couchConnection.port != null) {
-          couchurl = couchurl + ":" + couchConnection.port;
-        }
-        couchurl = couchurl +couchConnection.path +"/"+ couchConnection.pouchname+"/corpus";
-        
+
         var corpuse = new CorpusMask({
           title : "",
           pouchname : couchConnection.pouchname
@@ -73,6 +68,7 @@ define([
          * we expect to be the normal case, therefore not usefull to
          * show it.
          */
+//        var couchurl = OPrime.getCouchUrl(couchConnection) +"/corpus";
 //        $.ajax({
 //          type : 'GET',
 //          url : couchurl ,

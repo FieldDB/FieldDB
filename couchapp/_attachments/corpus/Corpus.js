@@ -1290,7 +1290,7 @@ define([
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more representative datum 
-     * example : https://ifielddevs.iriscouch.com/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
      * 
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
      * 
@@ -1309,10 +1309,7 @@ define([
           return;
         }
         var couchConnection = this.get("couchConnection");
-        var couchurl = couchConnection.protocol+couchConnection.domain;
-        if(couchConnection.port != null){
-          couchurl = couchurl+":"+couchConnection.port;
-        }
+        var couchurl = OPrime.getCouchUrl(couchConnection);
         if(!pouchname){
           pouchname = couchConnection.pouchname;
           /* if the user has overriden the frequent fields, use their preferences */
@@ -1323,7 +1320,7 @@ define([
             return;
           }
         }
-        jsonUrl = couchurl +couchConnection.path+"/"+ pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+        jsonUrl = couchurl + "/_design/pages/_view/get_frequent_fields?group=true";
       }
      
       var self = this;

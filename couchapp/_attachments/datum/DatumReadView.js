@@ -114,7 +114,7 @@ define([
         $("#export-modal").modal("show");
       },
       
-      "click .add-comment-datum" : 'insertNewComment',
+//      "click .add-comment-datum" : 'insertNewComment',
 
       
       /* Read Only Menu */
@@ -279,18 +279,18 @@ define([
       }
     },
     
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-      });
-      //unshift adds things in front instead of adding to the end
-      this.model.get("comments").unshift(m);
-      this.$el.find(".comment-new-text").val("");
-    },
+//    insertNewComment : function(e) {
+//      if(e){
+//        e.stopPropagation();
+//        e.preventDefault();
+//      }
+//      var m = new Comment({
+//        "text" : this.$el.find(".comment-new-text").val(),
+//      });
+//      //unshift adds things in front instead of adding to the end
+//      this.model.get("comments").unshift(m);
+//      this.$el.find(".comment-new-text").val("");
+//    },
     /**
      * Encrypts the datum if it is confidential
      * 
