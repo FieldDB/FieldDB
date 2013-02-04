@@ -5,6 +5,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/Datum",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
@@ -19,6 +20,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     Datum,
     DatumFieldReadView,
     DatumStateReadView,
@@ -56,6 +58,10 @@ define([
         childViewTagName     : 'li'
       });
       
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
+      });
+
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
         collection           : this.model.get("datumTags"),
@@ -181,6 +187,10 @@ define([
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
         
+        // Display the CommentEditView
+        this.commentEditView.el = this.$('.add-comment'); 
+        this.commentEditView.render();
+        
         // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
         this.sessionView.render();
@@ -277,7 +287,8 @@ define([
       var m = new Comment({
         "text" : this.$el.find(".comment-new-text").val(),
       });
-      this.model.get("comments").add(m);
+      //unshift adds things in front instead of adding to the end
+      this.model.get("comments").unshift(m);
       this.$el.find(".comment-new-text").val("");
     },
     /**

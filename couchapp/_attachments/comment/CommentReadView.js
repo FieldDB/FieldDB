@@ -31,6 +31,8 @@ define([
      */
     events : {
       "blur .comment-text" : "updateComment",
+//      "click .edit-comment" : "showCommentEdit",
+//      "click .delete-comment" : "deleteComment",
     },
 
     /**
@@ -56,7 +58,17 @@ define([
      */
     updateComment : function() {
       this.model.set("value", this.$el.children(".comment-text").val());
-    }
+    }, 
+    
+//    showCommentEdit : function(){
+//        need to go to app router? 
+//    },
+    
+//    deleteComment : function(){
+//  
+//    },
+    
+    
   });
 
   return CommentReadView;
