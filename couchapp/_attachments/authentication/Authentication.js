@@ -268,6 +268,14 @@ define([
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
       
+
+      /*
+       * For debugging cors #838: Switch to use the corsproxy
+       * corpus service instead of couchdb directly
+       */
+//      userString = userString.replace(/https/g,"http").replace(/6984/g,"3186");
+
+      
       var u = JSON.parse(userString);
       var data = {};
       data.user = u;
@@ -278,7 +286,7 @@ define([
         console.log("The week this user was created: "+week);
         if(week <= 38){
           localStorage.setItem("username_to_update",data.user.username);
-          alert("Hi! Your account was created before version 1.38, taking you to the backup page to upgrade your account to v1.38 and greater.");
+          alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
           window.location.replace("backup_pouches.html");
           return;
         }
