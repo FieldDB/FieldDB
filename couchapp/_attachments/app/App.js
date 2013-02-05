@@ -296,6 +296,26 @@ define([
     stopSpinner : function(){
       $('#dashboard_loading_spinner').html("");
     },
+    backUpUser : function(callback){
+      var self = this;
+      /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
+      if(self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama"){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
+      this.saveAndInterConnectInApp(function(){
+        //syncUserWithServer will prompt for password, then run the corpus replication.
+        self.get("authentication").syncUserWithServer(function(){
+          if(window.appView){
+            window.appView.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.","alert-info","Backed-up:");
+          }
+          if(typeof callback == "function"){
+            callback();
+          }
+        });
+      });
+    },
 
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
@@ -337,9 +357,10 @@ define([
       OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
-      $.couch.login({
-        name: username,
-        password: password,
+      OPrime.makeCORSRequest({
+        type : 'GET',
+        url : couchurl,
+        data : corpusloginparams,
         success : function(serverResults) {
           if (window.appView) {
             window.appView
@@ -364,9 +385,9 @@ define([
           .setTimeout(
               function() {
                 //try one more time 5 seconds later 
-                $.couch.login({
-                  name: username,
-                  password: password,
+                OPrime.makeCORSRequest({
+                  type : 'POST',
+                  url : couchurl,
                   success : function(serverResults) {
                     if (window.appView) {
                       window.appView
