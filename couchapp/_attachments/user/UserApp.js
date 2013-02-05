@@ -201,6 +201,21 @@ define([
 //    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
 //    }
     },
+    backUpUser : function(callback){
+      var self = this;
+      /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
+      if(self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama"){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
+      //syncUserWithServer will prompt for password, then run the corpus replication.
+      self.get("authentication").syncUserWithServer(function(){
+        if(typeof callback == "function"){
+          callback();
+        }
+      });
+    },
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
@@ -316,6 +331,8 @@ define([
         }
       });
     },
+    /* TODO decide if we want this here once the pouch is ready */
+    //replicateOnlyFromCorpus
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
