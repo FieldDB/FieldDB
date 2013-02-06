@@ -4,6 +4,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldReadView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -14,6 +15,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DatumFieldReadView,
     Session,
     UpdatingCollectionView
@@ -52,17 +54,23 @@ define([
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-session" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-edit": "showEditable"
@@ -141,12 +149,15 @@ define([
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
+
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
           
           //Localization for centerWell
           $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
           OPrime.debug("SESSION READ FULLSCREEN render: " );
@@ -160,11 +171,14 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+
           //Localization for fullscreen
           $(this.el).find(".locale_Edit_Session").attr("title", Locale.get("locale_Edit_Session"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "link") {
           OPrime.debug("SESSION READ LINK render: " );
@@ -205,8 +219,11 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
-      });     
+      });
       
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
+      });
     },
     
     //functions associated with corner icons

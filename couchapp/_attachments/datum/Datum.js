@@ -416,7 +416,9 @@ define([
       
       return queryTokens;
     },
-    
+    getDisplayableFieldForActivitiesEtc : function(){
+      return  this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+    },
     /**
      * Clone the current Datum and return the clone. The clone is put in the current
      * Session, regardless of the origin Datum's Session. //TODO it doesn tlook liek this is the case below:

@@ -4,6 +4,7 @@ define( [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
 	  "data_list/DataList",
 	  "datum/Datum",
   	"datum/DatumReadView",
@@ -15,6 +16,7 @@ define( [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -60,17 +62,23 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment 
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      },  
+      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    
       "click .icon-edit" : "showEditable",
@@ -132,8 +140,7 @@ define( [
         if (r==true) {
         	this.removeDatumFromThisList(this.getAllCheckedDatums());
         	return false;
-        }
-        else {
+        }else {
         	return false;
         }
       },
@@ -295,9 +302,13 @@ define( [
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
-          // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          // Display the ReadView
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
+          
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
           
           //localization of data list menu
           $(this.el).find(".locale_Play_Audio_checked").attr("title", Locale.get("locale_Play_Audio_checked"));
@@ -312,7 +323,6 @@ define( [
           }          
           $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
           $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
           
         }
       }catch(e){
@@ -328,6 +338,10 @@ define( [
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
     },
     /**

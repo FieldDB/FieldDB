@@ -4,6 +4,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "datum/DatumFieldEditView",
     "datum/Session",
     "app/UpdatingCollectionView",
@@ -14,6 +15,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DatumFieldEditView,
     Session,
     UpdatingCollectionView
@@ -57,17 +59,23 @@ define([
       "click .btn-save-session" : "updatePouch",
       
       //Add button inserts new Comment
-      "click .add-comment-session" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+      
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
@@ -193,12 +201,15 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+          
           //Localization for centerWell
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
           OPrime.debug("SESSION EDIT FULLSCREEN render: " );
@@ -213,12 +224,15 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+          
           //Localization for fullscreen
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
           $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
           
         } else if (this.format == "modal") {
@@ -230,10 +244,15 @@ define([
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
+          
           // Display the CommentReadView
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
-          
+
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+
           //Localization for modal
           $(this.el).find(".locale_New_Session").html(Locale.get("locale_New_Session"));
           $(this.el).find(".locale_New_Session_Instructions").html(Locale.get("locale_New_Session_Instructions"));
@@ -260,6 +279,10 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
     },
     /**

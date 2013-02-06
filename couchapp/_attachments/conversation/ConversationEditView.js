@@ -65,7 +65,7 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
@@ -264,7 +264,6 @@ define( [
         }
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
         OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
@@ -293,7 +292,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
         OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -322,7 +320,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
         OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -390,7 +387,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         
       } else if (this.format == "minimized") {
