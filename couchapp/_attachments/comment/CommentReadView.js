@@ -30,8 +30,6 @@ define([
      * Events that the CommentReadView is listening to and their handlers.
      */
     events : {
-      "blur .comment-text" : "updateComment",
-      "click .add-comment-button" : 'insertNewComment',
 //    "click .edit-comment" : "showCommentEdit",
 //    "click .delete-comment" : "deleteComment",
     },
@@ -54,26 +52,6 @@ define([
       return this;
     },
     
-    /**
-     * Change the model's state.
-     */
-    updateComment : function() {
-      this.model.set("value", this.$el.children(".comment-text").val());
-    },
-
-  insertNewComment : function(e) {
-  if(e){
-    e.stopPropagation();
-    e.preventDefault();
-  }
-  var m = new Comment({
-    "text" : this.$el.find(".comment-new-text").val(),
-  });
-  //unshift adds things in front instead of adding to the end
-  this.model.get("comments").unshift(m);
-  this.$el.find(".comment-new-text").val("");
-  },
-
     
 //    showCommentEdit : function(){
 //        need to go to app router? 
