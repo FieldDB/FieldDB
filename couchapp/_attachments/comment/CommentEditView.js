@@ -30,9 +30,7 @@ define([
      * Events that the CommentEditView is listening to and their handlers.
      */
     events : {
-      "blur .comment-new-text" : "updateComment",
-      "click .add-comment-datum" : 'insertNewComment',
-      
+      "blur .comment-new-text" : "updateComment"
     },
 
     /**
@@ -45,36 +43,29 @@ define([
      */
     render : function() {
       OPrime.debug("COMMENT render");
-//      var JSONtorender = {};
-//      if ( typeof this.model != undefined){
-//    	  JSONtorender.timestamp = this.model.timestamp.toString();
-//    	  JSONtorender.username = this.model.username;
-//      }
-      $(this.el).html(this.template(this.model.toJSON()));
+      var JSONtorender = this.model.toJSON();
+      //TODO use the pretty timestamp function in OPrime
+      $(this.el).html(this.template(JSONtorender));
 
-      
+      $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
+
       return this;
     },
     
     /**
-     * Change the model's state.
+     * Add new or edit comments, put the timestamp if there isn't one
      */
-    updateComment : function() {
-      this.model.set("value", this.$el.children(".comment-new-text").val());
-    },
-    
-    insertNewComment : function(e) {
+    updateComment : function(e) {
       if(e){
-        e.stopPropagation();
+//        e.stopPropagation();
         e.preventDefault();
       }
-      var m = new Comment({
-        "text" : this.$el.find(".comment-new-text").val(),
-      });
-      //unshift adds things in front instead of adding to the end
-      this.model.get("comments").unshift(m);
-      this.$el.find(".comment-new-text").val("");
-    },
+      if(!this.model.get("timestamp")){
+        this.model.set("timestamp", new Date(JSON.stringify(new Date())));
+      }
+      this.model.edit($(this.el).find(".comment-new-text").val());
+    }
+   
 
   });
 

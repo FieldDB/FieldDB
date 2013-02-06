@@ -52,6 +52,7 @@ define([
       });
       this.stateView.format = "datum";
       
+
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
@@ -114,8 +115,32 @@ define([
         $("#export-modal").modal("show");
       },
       
-//      "click .add-comment-datum" : 'insertNewComment',
-
+      //Add button inserts new Comment
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var indirectObjectForThisComment = "on <i class='icon-list'></i><a href='"
+          + "#corpus/"
+          + this.model.get("pouchname")
+          + "/datum/"
+          + this.model.id
+          + "'>"
+          + this.model.getDisplayableFieldForActivitiesEtc()
+          + "</a> ";
+        this.commentEditView.model.commentCreatedActivity(indirectObjectForThisComment);
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
       
       /* Read Only Menu */
       "dblclick" : function(e) {
@@ -184,11 +209,11 @@ define([
         this.datumTagsView.render();
         
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
         
         // Display the CommentEditView
-        this.commentEditView.el = this.$('.add-comment'); 
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
         this.commentEditView.render();
         
         // Display the SessionView
@@ -208,7 +233,6 @@ define([
         $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
         $(this.el).find(".locale_LaTeX").attr("title", Locale.get("locale_LaTeX"));
         $(this.el).find(".locale_CSV_Tooltip").attr("title", Locale.get("locale_CSV_Tooltip"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "latex") {
         //This gets the fields necessary from the model
@@ -279,18 +303,6 @@ define([
       }
     },
     
-//    insertNewComment : function(e) {
-//      if(e){
-//        e.stopPropagation();
-//        e.preventDefault();
-//      }
-//      var m = new Comment({
-//        "text" : this.$el.find(".comment-new-text").val(),
-//      });
-//      //unshift adds things in front instead of adding to the end
-//      this.model.get("comments").unshift(m);
-//      this.$el.find(".comment-new-text").val("");
-//    },
     /**
      * Encrypts the datum if it is confidential
      * 
