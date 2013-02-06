@@ -31,7 +31,7 @@ define([
      */
     events : {
       "blur .comment-text" : "updateComment",
-      "click .add-comment-datum" : 'insertNewComment',
+      "click .add-comment-button" : 'insertNewComment',
 //    "click .edit-comment" : "showCommentEdit",
 //    "click .delete-comment" : "deleteComment",
     },

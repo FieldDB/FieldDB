@@ -155,11 +155,29 @@ define([
         }
       },
       "change .datum_state_select" : "updateDatumStates",
-//      "click .add-comment-datum" : 'insertNewComment',
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "click .save-datum" : "saveButton"
+      "click .save-datum" : "saveButton",
+
+      //Add button inserts new Comment
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      },     
+    
     },
 
     /**
@@ -207,7 +225,7 @@ define([
         this.commentReadView.render();
         
         // Display the CommentEditView
-        this.commentEditView.el = this.$('.add-comment'); 
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
         this.commentEditView.render();
         
         // Display the SessionView
@@ -227,7 +245,6 @@ define([
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
 //      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
         $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
         $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
@@ -384,31 +401,7 @@ define([
 //      //unshift adds things to the front instead of adding to the end
 //      this.model.get("comments").unshift(m); 
 //      this.$el.find(".comment-new-text").val("");
-//      
-//      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
 //
-//      window.app.addActivity(
-//          {
-//            verb : "commented",
-//            verbicon: "icon-comment",
-//            directobjecticon : "",
-//            directobject : "'"+commentstring+"'",
-//            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-//            teamOrPersonal : "team",
-//            context : " via Offline App."
-//          });
-//      
-//      window.app.addActivity(
-//          {
-//            verb : "commented",
-//            verbicon: "icon-comment",
-//            directobjecticon : "",
-//            directobject : "'"+commentstring+"'",
-//            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-//            teamOrPersonal : "personal",
-//            context : " via Offline App."
-//          });
-//      
 //    },
     
     updateDatumStates : function() {

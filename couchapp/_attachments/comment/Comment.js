@@ -25,12 +25,9 @@ define( [
      * @constructs
      */
     initialize : function() {
-      
-      var t = JSON.stringify(new Date());
       if(!this.get("timestamp")){
-        this.set("timestamp", new Date(JSON.parse(t)));
-        this.set("gravatar", window.appView.authView.model.get("userPublic").get("gravatar"));
-        this.set("username", window.appView.authView.model.get("userPublic").get("username"));
+        this.set("gravatar", window.app.get("authentication").get("userPublic").get("gravatar"));
+        this.set("username", window.app.get("authentication").get("userPublic").get("username"));
       }
       
       if(this.get("filledWithDefaults")){
@@ -72,7 +69,30 @@ define( [
     edit : function(newtext) {
       this.set("text", newtext);
     }
-    
+    ,
+    commentCreatedActivity : function(indirectObjectString) {
+      var commentstring = this.get("text");
+      window.app.addActivity({
+        verb : "commented",
+        verbicon : "icon-comment",
+        directobjecticon : "",
+        directobject : "'" + commentstring + "'",
+        indirectobject : indirectObjectString ,
+        teamOrPersonal : "team",
+        context : " via Offline App."
+      });
+
+      window.app.addActivity({
+        verb : "commented",
+        verbicon : "icon-comment",
+        directobjecticon : "",
+        directobject : "'" + commentstring + "'",
+        indirectobject : indirectObjectString ,
+        teamOrPersonal : "personal",
+        context : " via Offline App."
+      });
+
+    }
   });
 
   return Comment;
