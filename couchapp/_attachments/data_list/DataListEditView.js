@@ -5,6 +5,7 @@ define( [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -16,6 +17,7 @@ define( [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -65,17 +67,22 @@ define( [
      */
     events : {
       //Add button inserts new Comment
-      "click .add-comment-datalist" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },      
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
 
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
@@ -290,7 +297,6 @@ define( [
         }
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
         OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
@@ -319,7 +325,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
         OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
@@ -348,7 +353,6 @@ define( [
         }        
         $(this.el).find(".locale_Export_checked_as_LaTeX").attr("title", Locale.get("locale_Export_checked_as_LaTeX"));
         $(this.el).find(".locale_Export_checked_as_CSV").attr("title", Locale.get("locale_Export_checked_as_CSV"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
         OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
@@ -438,6 +442,11 @@ define( [
           this.commentReadView.el = this.$el.find(".comments");
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+          
+          
           //localization of edit data list 
           $(this.el).find(".locale_Title").html(Locale.get("locale_Title"));
           $(this.el).find(".locale_Description").html(Locale.get("locale_Description"));
@@ -452,12 +461,15 @@ define( [
     
     changeViewsOfInternalModels : function() {
    
-      // Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
-      });  
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
+      }); 
     },
     /**
      * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items. 

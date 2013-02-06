@@ -5,6 +5,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
@@ -29,6 +30,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList,
     DataLists,
     DataListReadView,
@@ -100,18 +102,25 @@ define([
      */
     events : {
       "click .icon-book": "showReadonly",
+
       //Add button inserts new Comment
-      "click .add-comment-corpus" : function(e) {
-          if(e){
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          var commentstring = this.$el.find(".comment-new-text").val();
-          
-          this.model.insertNewComment(commentstring);
-          this.$el.find(".comment-new-text").val("");
-          
-      },
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").unshift(this.commentEditView.model);
+        this.commentEditView.model = new Comment();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+
       "click .reload-corpus-team-permissions" :function(e){
         if(e){
           e.preventDefault();
@@ -209,6 +218,10 @@ define([
           this.commentReadView.el = this.$('.comments');
           this.commentReadView.render();
           
+          // Display the CommentEditView
+          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+          this.commentEditView.render();
+             
           // Display the DataListsView
          this.dataListsView.el = this.$('.datalists-updating-collection'); 
          this.dataListsView.render();
@@ -247,7 +260,6 @@ define([
           $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
           $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
           $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
           
           
@@ -277,6 +289,10 @@ define([
         // Display the CommentReadView
         this.commentReadView.el = this.$('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the DataListsView
         this.dataListsView.el = this.$('.datalists-updating-collection'); 
@@ -316,7 +332,6 @@ define([
         $(this.el).find(".locale_conversation_fields_explanation").html(Locale.get("locale_conversation_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         //Localize for only Edit view.
         $(this.el).find(".locale_Public_or_Private").html(Locale.get("locale_Public_or_Private"));
@@ -402,6 +417,10 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       if(!this.model.datalists){
