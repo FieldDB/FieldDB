@@ -7254,9 +7254,8 @@ OPrime.makeCORSRequest = function(options) {
     var text = xhr.responseText;
     OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
     if(typeof options.success == "function"){
-      var dataReturnedFromServer = e.currentTarget.responseText;
-      if(dataReturnedFromServer){
-        options.success(JSON.parse(dataReturnedFromServer));
+      if(text){
+        options.success(JSON.parse(text));
       }else{
         OPrime.bug("There was no content in the server's response text. Please report this.");
         options.error(e,f,g);
@@ -11354,8 +11353,8 @@ define('lexicon/Lexicon',[
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(pouchname+"lexiconResults", results);
-          var lexiconTriples = JSON.parse(results).rows;
+          localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          var lexiconTriples = results.rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
               morpheme : lexiconTriples[triple].key.morpheme,
@@ -11504,8 +11503,6 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
     type : 'GET',
     url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
-      // Parse the rules from JSON into an object
-      rules = JSON.parse(rules);
       localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
 
       // Reduce the rules such that rules which are found in multiple source
@@ -11526,7 +11523,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
     },
     dataType : ""
   });
-}
+};
 /**
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
@@ -12923,6 +12920,17 @@ define('corpus/Corpus',[
       OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
+      
+      /* Upgrade chrome app user corpora's to v1.38+ */
+      var oldCouchConnection = this.get("couchConnection");
+      if(oldCouchConnection){
+        if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+          oldCouchConnection.domain  = "corpusdev.lingsync.org";
+          oldCouchConnection.port = "";
+          this.set("couchConnection", oldCouchConnection);
+        }
+      }
+      
       if(!this.id){
         /*
          * If this is a new corpus, and we are not in it's database, ask the server to create the databse and loop until it is created, then save it.
@@ -12943,15 +12951,7 @@ define('corpus/Corpus',[
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
         
-        /* Upgrade chrome app user corpora's to v1.38+ */
-        var oldCouchConnection = this.get("couchConnection");
-        if(oldCouchConnection){
-          if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-            oldCouchConnection.domain  = "corpusdev.lingsync.org";
-            oldCouchConnection.port = "";
-            this.set("couchConnection", oldCouchConnection);
-          }
-        }
+        
 
         /*
          * If its a chrome app, the user can create a new pouch

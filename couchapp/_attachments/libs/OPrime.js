@@ -694,9 +694,8 @@ OPrime.makeCORSRequest = function(options) {
     var text = xhr.responseText;
     OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
     if(typeof options.success == "function"){
-      var dataReturnedFromServer = e.currentTarget.responseText;
-      if(dataReturnedFromServer){
-        options.success(JSON.parse(dataReturnedFromServer));
+      if(text){
+        options.success(JSON.parse(text));
       }else{
         OPrime.bug("There was no content in the server's response text. Please report this.");
         options.error(e,f,g);

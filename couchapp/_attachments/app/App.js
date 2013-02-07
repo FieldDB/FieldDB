@@ -628,6 +628,13 @@ define([
         window.location.replace("user.html");
         return;
       }
+      
+      /* Upgrade chrome app user corpora's to v1.38+ */
+      if(couchConnection.domain == "ifielddevs.iriscouch.com"){
+        couchConnection.domain  = "corpusdev.lingsync.org";
+        couchConnection.port = "";
+      }
+
       this.set("couchConnection", couchConnection);
       
       var corpusid = appids.corpusid;
@@ -657,6 +664,16 @@ define([
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            
+            /* Upgrade chrome app user corpora's to v1.38+ */
+            var oldCouchConnection = corpusModel.get("couchConnection");
+            if(oldCouchConnection){
+              if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+                oldCouchConnection.domain  = "corpusdev.lingsync.org";
+                oldCouchConnection.port = "";
+                corpusModel.set("couchConnection", oldCouchConnection);
+              }
+            }
             
             $(".spinner-status").html("Opened Corpus...");
             
