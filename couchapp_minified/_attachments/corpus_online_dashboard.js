@@ -7006,7 +7006,7 @@ OPrime.makeCORSRequest = function(options) {
     options.method = options.type || "GET";
   }
   if(!options.url){
-    options.url = "https://corpusdev.lingsync.org";
+    OPrime.bug("There was an error. Please report this.");
   }
   if(!options.data){
     options.data = "";
@@ -7044,21 +7044,29 @@ OPrime.makeCORSRequest = function(options) {
   if(options.method == "POST"){
     //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.setRequestHeader("Content-type","application/json");
+    xhr.withCredentials = true;
   }
   
-  xhr.onload = function() {
+  xhr.onload = function(e,f,g) {
     var text = xhr.responseText;
     OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
     if(typeof options.success == "function"){
-      options.success();
+      var dataReturnedFromServer = e.currentTarget.responseText;
+      if(dataReturnedFromServer){
+        options.success(JSON.parse(dataReturnedFromServer));
+      }else{
+        OPrime.bug("There was no content in the server's response text. Please report this.");
+        options.error(e,f,g);
+      }
     }
     OPrime.debugMode = false;
   };
 
-  xhr.onerror = function() {
+  xhr.onerror = function(e,f,g) {
+    OPrime.debug(e,f,g);
     OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
     if(typeof options.error == "function"){
-      options.error();
+      options.error(e,f,g);
     }
   };
   if (options.method == "POST") {
@@ -11721,7 +11729,7 @@ define('authentication/Authentication',[
       }
       var self= this;
       var authUrl = user.get("authUrl");
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
@@ -12024,7 +12032,7 @@ define('authentication/Authentication',[
         return;
       }
       var self= this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/corpusteam",
         data : dataToPost,
@@ -12084,7 +12092,7 @@ define('authentication/Authentication',[
         }else{
           return;
         }
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : authUrl + "/addroletouser",
           data : dataToPost,
@@ -12537,7 +12545,7 @@ define('lexicon/Lexicon',[
       var couchConnection = app.get("corpus").get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection);
 
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
@@ -12690,7 +12698,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
   var couchurl = OPrime.getCouchUrl(couchConnection);
 
-  $.ajax({
+  OPrime.makeCORSRequest({
     type : 'GET',
     url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
@@ -14125,11 +14133,23 @@ define('corpus/Corpus',[
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
           this.set("pouchname", potentialpouchname) ;
         }
+        /*
+         * TODO this code doesn tmake sense ?
+         */
         if(!this.get("couchConnection")){
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
         
+        /* Upgrade chrome app user corpora's to v1.38+ */
+        var oldCouchConnection = this.get("couchConnection");
+        if(oldCouchConnection){
+          if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+            oldCouchConnection.domain  = "corpusdev.lingsync.org";
+            oldCouchConnection.port = "";
+            this.set("couchConnection", oldCouchConnection);
+          }
+        }
 
         /*
          * If its a chrome app, the user can create a new pouch
@@ -14763,18 +14783,9 @@ define('corpus/Corpus',[
       }
      
       var self = this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : jsonUrl,
-        data : {},
-        beforeSend : function(xhr) {
-          /* Set the request header to say we want json back */
-          xhr.setRequestHeader('Accept', 'application/json');
-        },
-        complete : function(e, f, g) {
-          /* do nothing */
-          OPrime.debug(e, f, g);
-        },
         success : function(serverResults) {
           console.log("serverResults"
               + JSON.stringify(serverResults));
@@ -15675,7 +15686,7 @@ define('authentication/AuthenticationEditView',[
         /*
          * Contact the server and register the new user
          */
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
@@ -15817,7 +15828,7 @@ define('authentication/AuthenticationEditView',[
       /*
        * Contact the server and register the new user
        */
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
@@ -25513,7 +25524,7 @@ define('app/AppView',[
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
     backUpUser : function(callback) {
-      this.model.backupUser(callback);
+      this.model.backUpUser(callback);
     },
     
     saveScreen : function() {

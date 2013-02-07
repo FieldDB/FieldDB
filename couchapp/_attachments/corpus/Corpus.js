@@ -1336,18 +1336,9 @@ define([
       }
      
       var self = this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : jsonUrl,
-        data : {},
-        beforeSend : function(xhr) {
-          /* Set the request header to say we want json back */
-          xhr.setRequestHeader('Accept', 'application/json');
-        },
-        complete : function(e, f, g) {
-          /* do nothing */
-          OPrime.debug(e, f, g);
-        },
         success : function(serverResults) {
           console.log("serverResults"
               + JSON.stringify(serverResults));

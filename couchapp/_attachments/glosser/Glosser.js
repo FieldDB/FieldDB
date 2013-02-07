@@ -4,7 +4,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
   var couchurl = OPrime.getCouchUrl(couchConnection);
 
-  $.ajax({
+  OPrime.makeCORSRequest({
     type : 'GET',
     url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
