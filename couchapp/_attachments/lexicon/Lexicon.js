@@ -41,7 +41,7 @@ define([
       var couchConnection = app.get("corpus").get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection);
 
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {

@@ -644,7 +644,7 @@ OPrime.useUnsecureCouchDB = function() {
  * Functions for well formed CORS requests
  */
 OPrime.makeCORSRequest = function(options) {
-  OPrime.debugMode = true;
+  OPrime.debugMode = false;
   if(!options.method){
     options.method = options.type || "GET";
   }
