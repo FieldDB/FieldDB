@@ -722,7 +722,7 @@ define([
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
     backUpUser : function(callback) {
-      this.model.backupUser(callback);
+      this.model.backUpUser(callback);
     },
     
     saveScreen : function() {
