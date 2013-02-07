@@ -27,8 +27,6 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   }
 
   var couchurl = couchConnection.protocol + couchConnection.domain;
-  /* Switch user to the new dev servers if they have the old ones */
-  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
   if (couchConnection.port != null && couchConnection.port != "443" && couchConnection.port != "80") {
     couchurl = couchurl + ":" + couchConnection.port;
   }
@@ -41,6 +39,18 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   } else {
     couchurl = couchurl + couchdbcommand;
   }
+
+    
+  /* Switch user to the new dev servers if they have the old ones */
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,
+      "corpusdev.lingsync.org");
+
+  /*
+   * For debugging cors #838: Switch to use the corsproxy corpus service instead
+   * of couchdb directly
+   */
+  // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
+  
   return couchurl;
 };
 
@@ -629,6 +639,80 @@ OPrime.useUnsecureCouchDB = function() {
   }
   return false;
 };
+
+/*
+ * Functions for well formed CORS requests
+ */
+OPrime.makeCORSRequest = function(options) {
+  OPrime.debugMode = false;
+  if(!options.method){
+    options.method = options.type || "GET";
+  }
+  if(!options.url){
+    options.url = "https://corpusdev.lingsync.org";
+  }
+  if(!options.data){
+    options.data = "";
+  }
+  options.dataToSend = JSON.stringify(options.data).replace(/,/g,"&").replace(/:/g,"=").replace(/"/g,"").replace(/[}{]/g,"");
+
+  if(options.method == "GET" && options.data){
+    options.url = options.url + "?" + options.dataToSend;
+  }
+  /*
+   * Helper function which handles IE
+   */
+  var createCORSRequest = function(method, url){
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+      // XHR for Chrome/Firefox/Opera/Safari.
+      xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+      // XDomainRequest for IE.
+      xhr = new XDomainRequest();
+      xhr.open(method, url);
+    } else {
+      // CORS not supported.
+      xhr = null;
+    }
+    return xhr;
+  };
+  
+  var xhr = createCORSRequest(options.method, options.url);
+  if (!xhr) {
+    alert('CORS not supported, your browser is unable to contact the database.');
+    return;
+  }
+
+  if(options.method == "POST"){
+    //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type","application/json");
+  }
+  
+  xhr.onload = function() {
+    var text = xhr.responseText;
+    OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
+    if(typeof options.success == "function"){
+      options.success();
+    }
+    OPrime.debugMode = false;
+  };
+
+  xhr.onerror = function() {
+    OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
+    if(typeof options.error == "function"){
+      options.error();
+    }
+  };
+  if (options.method == "POST") {
+    xhr.send(JSON.stringify(options.data));
+  } else {
+    xhr.send();
+  }
+  
+};
+
+
 
 OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
     readycallback, failcallback) {

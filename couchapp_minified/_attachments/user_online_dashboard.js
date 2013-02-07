@@ -1216,6 +1216,9 @@ define("underscore", (function (global) {
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
@@ -1300,6 +1303,9 @@ define("underscore", (function (global) {
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
@@ -1328,6 +1334,9 @@ define("underscore", (function (global) {
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
@@ -1723,6 +1732,9 @@ define("underscore", (function (global) {
             beforeSend : beforeSend,
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
+              if(!resp){
+                resp = {};
+              }
               if (req.status == 200 || req.status == 201 || req.status == 202) {
                 doc._id = resp.id;
                 doc._rev = resp.rev;
@@ -1833,6 +1845,9 @@ define("underscore", (function (global) {
           ajaxOptions = $.extend(ajaxOptions, {
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
+              if(!resp){
+                resp = {};
+              }
               if (req.status == 201) {
                 if (options.success) options.success(resp);
               } else if (options.error) {
@@ -2096,6 +2111,9 @@ define("underscore", (function (global) {
       complete: function(req) {
         try {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
         } catch(e) {
           if (options.error) {
             options.error(req.status, req, e);
@@ -5557,7 +5575,7 @@ templates['user_app'] = template(function (Handlebars,depth0,helpers,partials,da
   
 
 
-  return "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n        class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n\n\n          <!--  Customize dropdown -->\n          <li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i class=\"icon-info-sign icon-white\"></i>\n              Information <b class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"customize_dropdown_trigger\">\n\n\n              \n              <li class=\"power-users-link\"><a tabindex=\"-1\"\n                data-toggle=\"modal\" href=\"#terminal-modal\"><i\n                  class=\" icon-magic\"></i> <span\n                  class=\"locale_Terminal_Power_Users\"></span> </a></li>\n              <li><a tabindex=\"-1\" href=\"http://fieldlinguist.com\"\n                target=\"_blank\"><i class=\"icons icon-film\"></i> Help Videos and\n                  User Guide</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n                target=\"_blank\"><i class=\"icons icon-beaker\"></i> Bug\n                  Report/Contact Us</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n                target=\"_blank\"><i class=\"icons icon-github\"></i> OpenSource v<span\n                  class=\"fielddb-version\"></span></a></li>\n\n              <!-- <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n                  Clear all customization</a></li> -->\n\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown hide\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!-- <li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n                  <i class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider\"></li>\n\n              <!-- <li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n              <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span> <b class=\"caret\"></b>\n          </a>\n            <ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n\n  <!-- FullScreen Views -->\n  <div id=\"user-fullscreen\" class=\"well \"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"quick-authenticate-modal\"  class=\"modal hide\">\n  <div class=\"modal-header\">\n    <h4 class = \"locale_We_need_to_make_sure_its_you\"></h4>\n  </div>\n  <div class=\"modal-body\">\n  <label class = \"locale_Password\"></label>\n      <input type=\"password\" id=\"quick-authenticate-password\"/>\n  </div>\n  <div class=\"modal-footer\">\n    <button class=\"btn btn-success locale_Yep_its_me\" id=\"quick-authentication-okay-btn\"></button>\n  </div>\n</div>\n";});
+  return "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n        class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n\n\n          <!--  Customize dropdown -->\n          <li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i class=\"icon-info-sign icon-white\"></i>\n              Information <b class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"customize_dropdown_trigger\">\n\n\n              \n              <li class=\"power-users-link\"><a tabindex=\"-1\"\n                data-toggle=\"modal\" href=\"#terminal-modal\"><i\n                  class=\" icon-magic\"></i> <span\n                  class=\"locale_Terminal_Power_Users\"></span> </a></li>\n              <li><a tabindex=\"-1\" href=\"http://fieldlinguist.com\"\n                target=\"_blank\"><i class=\"icons icon-film\"></i> Help Videos and\n                  User Guide</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n                target=\"_blank\"><i class=\"icons icon-beaker\"></i> Bug\n                  Report/Contact Us</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n                target=\"_blank\"><i class=\"icons icon-github\"></i> OpenSource v<span\n                  class=\"fielddb-version\"></span></a></li>\n\n              <!-- <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n                  Clear all customization</a></li> -->\n\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown hide\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!-- <li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n                  <i class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider\"></li>\n\n              <!-- <li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n              <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span> <b class=\"caret\"></b>\n          </a>\n            <ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n\n  <!-- FullScreen Views -->\n  <div id=\"user-fullscreen\" class=\"well \"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"quick-authenticate-modal\"  class=\"modal hide\">\n  <div class=\"modal-header\">\n    <h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n  </div>\n  <div class=\"modal-body\">\n  <label class = \"locale_Password\"></label>\n      <input type=\"password\" id=\"quick-authenticate-password\"/>\n  </div>\n  <div class=\"modal-footer\">\n    <button class=\"btn btn-success locale_Yep_its_me\" id=\"quick-authentication-okay-btn\"></button>\n  </div>\n</div>\n";});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -6569,8 +6587,6 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   }
 
   var couchurl = couchConnection.protocol + couchConnection.domain;
-  /* Switch user to the new dev servers if they have the old ones */
-  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
   if (couchConnection.port != null && couchConnection.port != "443" && couchConnection.port != "80") {
     couchurl = couchurl + ":" + couchConnection.port;
   }
@@ -6583,6 +6599,18 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   } else {
     couchurl = couchurl + couchdbcommand;
   }
+
+    
+  /* Switch user to the new dev servers if they have the old ones */
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,
+      "corpusdev.lingsync.org");
+
+  /*
+   * For debugging cors #838: Switch to use the corsproxy corpus service instead
+   * of couchdb directly
+   */
+  // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
+  
   return couchurl;
 };
 
@@ -7171,6 +7199,80 @@ OPrime.useUnsecureCouchDB = function() {
   }
   return false;
 };
+
+/*
+ * Functions for well formed CORS requests
+ */
+OPrime.makeCORSRequest = function(options) {
+  OPrime.debugMode = false;
+  if(!options.method){
+    options.method = options.type || "GET";
+  }
+  if(!options.url){
+    options.url = "https://corpusdev.lingsync.org";
+  }
+  if(!options.data){
+    options.data = "";
+  }
+  options.dataToSend = JSON.stringify(options.data).replace(/,/g,"&").replace(/:/g,"=").replace(/"/g,"").replace(/[}{]/g,"");
+
+  if(options.method == "GET" && options.data){
+    options.url = options.url + "?" + options.dataToSend;
+  }
+  /*
+   * Helper function which handles IE
+   */
+  var createCORSRequest = function(method, url){
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+      // XHR for Chrome/Firefox/Opera/Safari.
+      xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+      // XDomainRequest for IE.
+      xhr = new XDomainRequest();
+      xhr.open(method, url);
+    } else {
+      // CORS not supported.
+      xhr = null;
+    }
+    return xhr;
+  };
+  
+  var xhr = createCORSRequest(options.method, options.url);
+  if (!xhr) {
+    alert('CORS not supported, your browser is unable to contact the database.');
+    return;
+  }
+
+  if(options.method == "POST"){
+    //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type","application/json");
+  }
+  
+  xhr.onload = function() {
+    var text = xhr.responseText;
+    OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
+    if(typeof options.success == "function"){
+      options.success();
+    }
+    OPrime.debugMode = false;
+  };
+
+  xhr.onerror = function() {
+    OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
+    if(typeof options.error == "function"){
+      options.error();
+    }
+  };
+  if (options.method == "POST") {
+    xhr.send(JSON.stringify(options.data));
+  } else {
+    xhr.send();
+  }
+  
+};
+
+
 
 OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
     readycallback, failcallback) {
@@ -8290,6 +8392,14 @@ define('authentication/Authentication',[
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
       
+
+      /*
+       * For debugging cors #838: Switch to use the corsproxy
+       * corpus service instead of couchdb directly
+       */
+//      userString = userString.replace(/https/g,"http").replace(/6984/g,"3186");
+
+      
       var u = JSON.parse(userString);
       var data = {};
       data.user = u;
@@ -8300,7 +8410,7 @@ define('authentication/Authentication',[
         console.log("The week this user was created: "+week);
         if(week <= 38){
           localStorage.setItem("username_to_update",data.user.username);
-          alert("Hi! Your account was created before version 1.38, taking you to the backup page to upgrade your account to v1.38 and greater.");
+          alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
           window.location.replace("backup_pouches.html");
           return;
         }
@@ -8355,14 +8465,40 @@ define('authentication/Authentication',[
       this.saveAndEncryptUserToLocalStorage(successcallback);
     },
     /**
-     * This function uses the quick authentication view to get the
-     * user's password and authenticate them. The authenticate process
-     * brings down the user from the server, and also gets their sesson
-     * token from couchdb before calling the callback.
+     * This function uses the quick authentication view to get the user's
+     * password and authenticate them. The authenticate process brings down the
+     * user from the server, and also gets their sesson token from couchdb
+     * before calling the callback.
+     * 
+     * If there is no quick authentication view it takes them either to the user
+     * page (in the ChromeApp) or the public user page (in a couchapp) where
+     * they dont have to have a corpus token to see the data, and log in
      * 
      * @param callback
+     *          a success callback which is called once the user has been backed
+     *          up to the server, and their couchdb session token is ready to be
+     *          used to contact the database.
+     * @param corpusPouchName
+     *          an optional corpus pouch name to redirect the user to if they
+     *          end up geting kicked out of the corpus page
      */
-    syncUserWithServer : function(callback){
+    syncUserWithServer : function(callback, corpusPouchName){
+      if(!corpusPouchName){
+        corpusPouchName = "";
+      }
+      if(!window.appView){
+        if(OPrime.isChromeApp()){
+          /* take them to the user page, they can log in there */
+          window.location.replace("user.html#login/"+corpusPouchName);
+        }else{
+          /* take them to the public user page, they can log in there */
+          if(OPrime.isCouchApp()){
+            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+            window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
+          }
+        }
+        return;
+      }
       window.appView.authView.showQuickAuthenticateView(null, null, function(){
         //This happens after the user has been authenticated. 
         if(typeof callback == "function"){
@@ -14395,7 +14531,7 @@ define('authentication/AuthenticationEditView',[
     logout : function() {
       var authself = this.model;
       $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
-      window.appView.backUpUser(function(){
+      window.app.backUpUser(function(){
         authself.logout();
       });
     },
@@ -16116,6 +16252,21 @@ define('user/UserApp',[
 //    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
 //    }
     },
+    backUpUser : function(callback){
+      var self = this;
+      /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
+      if(self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama"){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
+      //syncUserWithServer will prompt for password, then run the corpus replication.
+      self.get("authentication").syncUserWithServer(function(){
+        if(typeof callback == "function"){
+          callback();
+        }
+      });
+    },
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
@@ -16156,11 +16307,9 @@ define('user/UserApp',[
       OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
-      $
-      .ajax({
-        type : 'POST',
-        url : couchurl,
-        data : corpusloginparams,
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
           if (window.appView) {
             window.appView
@@ -16185,10 +16334,9 @@ define('user/UserApp',[
           .setTimeout(
               function() {
                 //try one more time 5 seconds later 
-                $
-                .ajax({
-                  type : 'POST',
-                  url : couchurl,
+                $.couch.login({
+                  name: username,
+                  password: password,
                   success : function(serverResults) {
                     if (window.appView) {
                       window.appView
@@ -16231,6 +16379,53 @@ define('user/UserApp',[
         }
       });
     },
+    /* TODO decide if we want this here once the pouch is ready */
+    //replicateOnlyFromCorpus
+    /**
+     * Pull down corpus to offline pouch, if its there.
+     */
+    replicateOnlyFromCorpus : function(couchConnection, successcallback, failurecallback) {
+      var self = this;
+
+      if(!self.pouch){
+        OPrime.debug("Not replicating, no pouch ready.");
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+        return;
+      }
+
+      self.pouch(function(err, db) {
+        var couchurl = self.getCouchUrl();
+        if (err) {
+          OPrime.debug("Opening db error", err);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Opening DB error' + JSON.stringify(err));
+            OPrime.debug('Opening DB error'
+                + JSON.stringify(err));
+          }
+        } else {
+          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
+            OPrime.debug("Replicate from " + couchurl,response, err);
+            if(err){
+              if(typeof failurecallback == "function"){
+                failurecallback();
+              }else{
+                alert('Corpus replicate from error' + JSON.stringify(err));
+                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+              }
+            }else{
+              OPrime.debug("Corpus replicate from success", response);
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            }
+          });
+        }
+      });
+    },
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
@@ -16260,15 +16455,15 @@ define('user/UserApp',[
         return;
       }
       
-      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
+      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session/");
 
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      $.ajax({
-        type : 'POST',
-        url : couchurl ,
-        data : corpusloginparams,
+      
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
@@ -16286,9 +16481,9 @@ define('user/UserApp',[
         error : function(serverResults){
           window.setTimeout(function(){
             //try one more time 5 seconds later 
-            $.ajax({
-              type : 'POST',
-              url : couchurl ,
+            $.couch.login({
+              name: username,
+              password: password,
               success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
@@ -16404,12 +16599,12 @@ OPrime.defaultCouchConnection = function() {
    */
   var connection = testing;
   if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("lingsync.org") >= 0) {
-      connection = production;
-      OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = testing;
       OPrime.authUrl = "https://authdev.lingsync.org";
+    } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
       connection = mcgill;
       OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
@@ -16576,8 +16771,8 @@ if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0 ){
   window.location.replace();
 }
 
-/* Make sure they use the https versions */
-if (window.location.origin != "localhost") {
+/* Make sure they use the https versions, if they are on a couchapp */
+if (window.location.origin.indexOf("localhost") == -1) {
   if (window.location.protocol == "http:") {
     window.location.replace(window.location.href.replace("http", "https"));
   }
