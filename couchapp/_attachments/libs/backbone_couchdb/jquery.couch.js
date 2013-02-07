@@ -146,7 +146,7 @@
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
-          if(resp == ""){
+          if(!resp){
             resp = {};
           }
           if (req.status == 200) {
@@ -233,6 +233,9 @@
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
@@ -261,6 +264,9 @@
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
@@ -656,6 +662,9 @@
             beforeSend : beforeSend,
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
+              if(!resp){
+                resp = {};
+              }
               if (req.status == 200 || req.status == 201 || req.status == 202) {
                 doc._id = resp.id;
                 doc._rev = resp.rev;
@@ -766,6 +775,9 @@
           ajaxOptions = $.extend(ajaxOptions, {
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
+              if(!resp){
+                resp = {};
+              }
               if (req.status == 201) {
                 if (options.success) options.success(resp);
               } else if (options.error) {
@@ -1029,6 +1041,9 @@
       complete: function(req) {
         try {
           var resp = $.parseJSON(req.responseText);
+          if(!resp){
+            resp = {};
+          }
         } catch(e) {
           if (options.error) {
             options.error(req.status, req, e);
