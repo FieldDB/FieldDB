@@ -686,11 +686,23 @@ define([
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
           this.set("pouchname", potentialpouchname) ;
         }
+        /*
+         * TODO this code doesn tmake sense ?
+         */
         if(!this.get("couchConnection")){
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
         
+        /* Upgrade chrome app user corpora's to v1.38+ */
+        var oldCouchConnection = this.get("couchConnection");
+        if(oldCouchConnection){
+          if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+            oldCouchConnection.domain  = "corpusdev.lingsync.org";
+            oldCouchConnection.port = "";
+            this.set("couchConnection", oldCouchConnection);
+          }
+        }
 
         /*
          * If its a chrome app, the user can create a new pouch
@@ -1324,18 +1336,9 @@ define([
       }
      
       var self = this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : jsonUrl,
-        data : {},
-        beforeSend : function(xhr) {
-          /* Set the request header to say we want json back */
-          xhr.setRequestHeader('Accept', 'application/json');
-        },
-        complete : function(e, f, g) {
-          /* do nothing */
-          OPrime.debug(e, f, g);
-        },
         success : function(serverResults) {
           console.log("serverResults"
               + JSON.stringify(serverResults));

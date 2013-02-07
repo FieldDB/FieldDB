@@ -95,7 +95,7 @@ define([
       }
       var self= this;
       var authUrl = user.get("authUrl");
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
@@ -398,7 +398,7 @@ define([
         return;
       }
       var self= this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/corpusteam",
         data : dataToPost,
@@ -458,7 +458,7 @@ define([
         }else{
           return;
         }
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : authUrl + "/addroletouser",
           data : dataToPost,
