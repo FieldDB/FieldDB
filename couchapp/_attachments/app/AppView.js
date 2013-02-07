@@ -722,22 +722,7 @@ define([
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
     backUpUser : function(callback) {
-      var self = this;
-      /* dont back up the public user, its not necessary the server doesn't modifications anyway. */
-      if(self.model.get("authentication").get("userPrivate").get("username") == "public" || self.model.get("authentication").get("userPrivate").get("username") == "lingllama"){
-        if(typeof callback == "function"){
-          callback();
-        }
-      }
-      this.model.saveAndInterConnectInApp(function(){
-        //syncUserWithServer will prompt for password, then run the corpus replication.
-        self.model.get("authentication").syncUserWithServer(function(){
-          self.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.","alert-info","Backed-up:");
-          if(typeof callback == "function"){
-            callback();
-          }
-        });
-      });
+      this.model.backupUser(callback);
     },
     
     saveScreen : function() {

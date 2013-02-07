@@ -188,7 +188,7 @@ require(
       window.finishedReplicating = function() {
         localStorage.setItem(window.username + "lastUpdatedAtVersion", "1.40");
         /* Take them to the user page so they can choose a corpus */
-        alert("All your data has been backed up and is ready to be used in verison 1.38+ \n\n"
+        alert("All your data has been backed up and is ready to be used in version 1.38 and up \n\n"
             + window.actuallyReplicatedPouches.join("\n"));
         window.location.replace("user.html");
       };
@@ -204,18 +204,132 @@ require(
       
       window.setTimeout(window.waitForPouchesList, 1000);
       
-
-      $.ajax({
-            type : 'POST',
-            url : "https://corpusdev.lingsync.org/_session",
-            data : corpusloginparams,
-            success : function(serverResults) {
-              console.log("sucess",serverResults);
-            },
-            error : function(serverResults) {
-              alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
-            }
-          });
+      OPrime.makeCORSRequest({
+        type : 'POST',
+        url : "https://corpusdev.lingsync.org/_session",
+        data : corpusloginparams,
+        success : function(serverResults) {
+          console.log("success",serverResults);
+        },
+        error : function(serverResults) {
+          alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
+        }
+      });
+//      $.ajax({
+//            type : 'POST',
+//            url : "https://corpusdev.lingsync.org/_session",
+//            data : corpusloginparams,
+//            contentType : "application/json",
+//            beforeSend: function(xhr) {
+//              xhr.setRequestHeader('Accept', 'application/json');
+//            },
+//            success : function(serverResults) {
+//              console.log("sucess",serverResults);
+//            },
+//            error : function(serverResults) {
+//              alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
+//            }
+//          });
+//      $.ajax({
+//        type: "POST", 
+//        url: "https://corpusdev.lingsync.org/_session", 
+//        dataType: "json",
+//        contentType : "application/json",
+//        data: corpusloginparams,
+//        beforeSend: function(xhr) {
+//            xhr.setRequestHeader('Accept', 'application/json');
+//        },
+//        complete: function(req) {
+//          var resp = $.parseJSON(req.responseText);
+//          if (req.status == 200) {
+//            if (options.success) options.success(resp);
+//          } else if (options.error) {
+//            options.error(req.status, resp.error, resp.reason);
+//          } else {
+//            alert("An error occurred logging in: " + resp.reason);
+//          }
+//        }
+//      });
+//      $.ajax({
+//        type : 'POST',
+//        url : "https://authdev.lingsync.org/login",
+//        beforeSend: function(xhr) {
+//          xhr.setRequestHeader('Accept', 'application/json');
+//        },
+//        data : {username:"public",password:"none"},
+//        success : function(serverResults) {
+//          console.log("sucess",serverResults);
+//        },
+//        error : function(serverResults) {
+//          alert("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
+//        }
+//      });
+//      var xhr = new XMLHttpRequest();
+//      xhr.open('POST', 'https://authdev.lingsync.org');
+//      xhr.onreadystatechange = function () {
+//        if (this.status == 200 && this.readyState == 4) {
+//          console.log('response: ' + this.responseText);
+//        }
+//      };
+//      xhr.send();
+//
+//      $.ajax("http://authdev.lingsync.org/login", {
+//        type : 'POST',
+//        contentType : "application/json",
+//        success : function(data) {
+//          console.log("success!", data);
+//        },
+//        fail : function(jqxhr, statusText) {
+//          console.log("fail!", jqxhr, statusText);
+//        }
+//      });
+//      
+//   // Create the XHR object.
+//      function createCORSRequest(method, url) {
+//        var xhr = new XMLHttpRequest();
+//        if ("withCredentials" in xhr) {
+//          // XHR for Chrome/Firefox/Opera/Safari.
+//          xhr.open(method, url, true);
+//        } else if (typeof XDomainRequest != "undefined") {
+//          // XDomainRequest for IE.
+//          xhr = new XDomainRequest();
+//          xhr.open(method, url);
+//        } else {
+//          // CORS not supported.
+//          xhr = null;
+//        }
+//        return xhr;
+//      }
+//
+//      // Helper method to parse the title tag from the response.
+//      function getTitle(text) {
+//        return text.match('<title>(.*)?</title>')[1];
+//      }
+//
+//      // Make the actual CORS request.
+//      function makeCorsRequest() {
+//        // All HTML5 Rocks properties support CORS.
+//        var url = 'https://authdev.lingsync.org';
+//
+//        var xhr = createCORSRequest('GET', url);
+//        if (!xhr) {
+//          alert('CORS not supported');
+//          return;
+//        }
+//
+//        // Response handlers.
+//        xhr.onload = function() {
+//          var text = xhr.responseText;
+//          alert('Response from CORS request to ' + url + ': ' + text);
+//        };
+//
+//        xhr.onerror = function() {
+//          alert('Woops, there was an error making the request.');
+//        };
+//
+//        xhr.send();
+//      }
+      
       
 //      $.ajax({
 //        type : 'GET',

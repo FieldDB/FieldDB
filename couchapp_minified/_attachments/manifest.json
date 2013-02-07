@@ -8,9 +8,7 @@
     }
   },
   "offline_enabled" : true,
-  "permissions" : [ "unlimitedStorage",  "https://auth.lingsync.org/",
-                    "https://corpus.lingsync.org/",   "https://authdev.lingsync.org/",
-                    "https://corpusdev.lingsync.org/", "https://www.youtube.com/" ],
+  "permissions" : [ "unlimitedStorage" ],
   "icons" : {
     "16" : "images/icon16_dev.png",
     "48" : "images/icon48_dev.png",
