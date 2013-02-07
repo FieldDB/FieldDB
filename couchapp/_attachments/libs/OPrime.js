@@ -649,7 +649,7 @@ OPrime.makeCORSRequest = function(options) {
     options.method = options.type || "GET";
   }
   if(!options.url){
-    options.url = "https://corpusdev.lingsync.org";
+    OPrime.bug("There was an error. Please report this.");
   }
   if(!options.data){
     options.data = "";
@@ -687,21 +687,29 @@ OPrime.makeCORSRequest = function(options) {
   if(options.method == "POST"){
     //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.setRequestHeader("Content-type","application/json");
+    xhr.withCredentials = true;
   }
   
-  xhr.onload = function() {
+  xhr.onload = function(e,f,g) {
     var text = xhr.responseText;
     OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
     if(typeof options.success == "function"){
-      options.success();
+      var dataReturnedFromServer = e.currentTarget.responseText;
+      if(dataReturnedFromServer){
+        options.success(JSON.parse(dataReturnedFromServer));
+      }else{
+        OPrime.bug("There was no content in the server's response text. Please report this.");
+        options.error(e,f,g);
+      }
     }
     OPrime.debugMode = false;
   };
 
-  xhr.onerror = function() {
+  xhr.onerror = function(e,f,g) {
+    OPrime.debug(e,f,g);
     OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
     if(typeof options.error == "function"){
-      options.error();
+      options.error(e,f,g);
     }
   };
   if (options.method == "POST") {
