@@ -48,8 +48,8 @@ define([
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(pouchname+"lexiconResults", results);
-          var lexiconTriples = JSON.parse(results).rows;
+          localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          var lexiconTriples = results.rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
               morpheme : lexiconTriples[triple].key.morpheme,

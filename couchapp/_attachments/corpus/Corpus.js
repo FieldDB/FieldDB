@@ -674,6 +674,17 @@ define([
       OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
+      
+      /* Upgrade chrome app user corpora's to v1.38+ */
+      var oldCouchConnection = this.get("couchConnection");
+      if(oldCouchConnection){
+        if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+          oldCouchConnection.domain  = "corpusdev.lingsync.org";
+          oldCouchConnection.port = "";
+          this.set("couchConnection", oldCouchConnection);
+        }
+      }
+      
       if(!this.id){
         /*
          * If this is a new corpus, and we are not in it's database, ask the server to create the databse and loop until it is created, then save it.
@@ -694,15 +705,7 @@ define([
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
         
-        /* Upgrade chrome app user corpora's to v1.38+ */
-        var oldCouchConnection = this.get("couchConnection");
-        if(oldCouchConnection){
-          if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-            oldCouchConnection.domain  = "corpusdev.lingsync.org";
-            oldCouchConnection.port = "";
-            this.set("couchConnection", oldCouchConnection);
-          }
-        }
+        
 
         /*
          * If its a chrome app, the user can create a new pouch
