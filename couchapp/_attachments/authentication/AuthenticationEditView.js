@@ -487,7 +487,7 @@ define([
         /*
          * Contact the server and register the new user
          */
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
@@ -629,7 +629,7 @@ define([
       /*
        * Contact the server and register the new user
        */
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,

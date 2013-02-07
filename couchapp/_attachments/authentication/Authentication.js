@@ -95,7 +95,7 @@ define([
       }
       var self= this;
       var authUrl = user.get("authUrl");
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
