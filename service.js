@@ -26,14 +26,50 @@ app.configure(function() {
 });
 
 /*
- * Routes
+ * CORS support
+ * http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
  */
+var build_headers_from_request = function(req){
+  if (req.headers['access-control-request-headers']) {
+    headers = req.headers['access-control-request-headers'];
+  } else {
+    headers = 'accept, accept-charset, accept-encoding, accept-language, authorization, content-length, content-type, host, origin, proxy-connection, referer, user-agent, x-requested-with';
+    _ref = req.headers;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      header = _ref[_i];
+      if (req.indexOf('x-') === 0) {
+        headers += ", " + header;
+      }
+    }
+  }
+  headers.host = "authdev.lingsync.org";//target0.hostname;
+  var cors_headers = {
+    'access-control-allow-methods' : 'HEAD, POST, GET, PUT, PATCH, DELETE',
+    'access-control-max-age' : '86400',
+    'access-control-allow-headers' : headers,
+    'access-control-allow-credentials' : 'true',
+    'access-control-allow-origin' : req.headers.origin || '*'
+  };
+  return cors_headers;
+};
+
+app.options('*' , function(req, res, next){
+  if (req.method === 'OPTIONS') {
+    console.log('responding to OPTIONS request');
+    var cors_headers = build_headers_from_request(req);
+    for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+    }
+    res.send(200);
+ }
+});
 
 /**
  * Responds to requests for login, if sucessful replies with the user's details
  * as json
  */
-app.post('/login', function(req, res) {
+app.post('/login', function(req, res, next) {
   authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
     var returndata = {};
     if (err) {
@@ -49,15 +85,21 @@ app.post('/login', function(req, res) {
       console.log(new Date() + " Returning the existing user as json:\n"+util.inspect(user));
     }
     console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    var cors_headers = build_headers_from_request(req);
+    for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+    }
     res.send(returndata);
   });
 });
-app.get('/login',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.send({});
+app.get('/login',function(req, res, next){
+    var cors_headers = build_headers_from_request(req);
+    for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+    }
+  res.send();//{info: "Service is running normally."});
 });
 
 /**
@@ -93,15 +135,21 @@ app.post('/register', function(req, res ) {
       returndata.info = [info.message];
       console.log(new Date() + " Returning the newly built user: "+util.inspect(user));
     }
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    var cors_headers = build_headers_from_request(req);
+    for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+    }
     res.send(returndata);
 
   });
 });
-app.get('/register',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+app.get('/register',function(req, res, next){
+    var cors_headers = build_headers_from_request(req);
+    for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+  }
   res.send({});
 });
 
@@ -109,7 +157,7 @@ app.get('/register',function(req,res){
  * Responds to requests for login, if successful replies with a list of usernames 
  * as json
  */
-app.post('/corpusteam', function(req, res) {
+app.post('/corpusteam', function(req, res, next) {
   
   var returndata = {};
   authenticationfunctions.fetchCorpusPermissions( req, function(err, users, info) {
@@ -126,15 +174,21 @@ app.post('/corpusteam', function(req, res) {
     }
     console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
     console.log(new Date() + " Returning the list of users on this corpus as json:\n"+util.inspect(returndata.users));
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    var cors_headers = build_headers_from_request(req);
+    for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+    }
     res.send(returndata);
   });
   
 });
-app.get('/corpusteam',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+app.get('/corpusteam',function(req, res, next){
+  var cors_headers = build_headers_from_request(req);
+  for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+    }
   res.send({});
 });
 
@@ -142,7 +196,7 @@ app.get('/corpusteam',function(req,res){
  * Responds to requests for login, if successful replies with the user's details
  * as json
  */
-app.post('/addroletouser', function(req, res) {
+app.post('/addroletouser', function(req, res, next) {
   authenticationfunctions.authenticateUser(req.body.username, req.body.password, req, function(err, user, info) {
     var returndata = {};
     if (err) {
@@ -171,17 +225,23 @@ app.post('/addroletouser', function(req, res) {
           console.log(new Date() + " Returning roleadded okay:\n");
         }
         console.log(new Date()+ " Returning response:\n"+util.inspect(returndata));
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+       var cors_headers = build_headers_from_request(req); 
+       for (key in cors_headers) {
+          value = cors_headers[key];
+          res.setHeader(key, value);
+        }
         res.send(returndata);
       });
       
     }
   });
 });
-app.get('/addroletouser',function(req,res){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+app.get('/addroletouser',function(req, res, next){
+  var cors_headers = build_headers_from_request(req);
+  for (key in cors_headers) {
+      value = cors_headers[key];
+      res.setHeader(key, value);
+   }
   res.send({});
 });
 

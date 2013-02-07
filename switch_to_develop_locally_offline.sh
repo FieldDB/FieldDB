@@ -14,6 +14,7 @@ mv output lib/userauthentication.js
 
 sed 's/couchkeys_[^)]*)/couchkeys_local")/' lib/corpusmanagement.js  > output
 mv output lib/corpusmanagement.js
-
+sed 's/nodeconfig_[^)]*)/nodeconfig_local")/' lib/corpusmanagement.js  > output
+mv output lib/corpusmanagement.js
 echo "Now running in local/offline developer mode using the localhost."
 
