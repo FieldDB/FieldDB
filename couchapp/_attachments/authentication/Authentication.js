@@ -341,14 +341,40 @@ define([
       this.saveAndEncryptUserToLocalStorage(successcallback);
     },
     /**
-     * This function uses the quick authentication view to get the
-     * user's password and authenticate them. The authenticate process
-     * brings down the user from the server, and also gets their sesson
-     * token from couchdb before calling the callback.
+     * This function uses the quick authentication view to get the user's
+     * password and authenticate them. The authenticate process brings down the
+     * user from the server, and also gets their sesson token from couchdb
+     * before calling the callback.
+     * 
+     * If there is no quick authentication view it takes them either to the user
+     * page (in the ChromeApp) or the public user page (in a couchapp) where
+     * they dont have to have a corpus token to see the data, and log in
      * 
      * @param callback
+     *          a success callback which is called once the user has been backed
+     *          up to the server, and their couchdb session token is ready to be
+     *          used to contact the database.
+     * @param corpusPouchName
+     *          an optional corpus pouch name to redirect the user to if they
+     *          end up geting kicked out of the corpus page
      */
-    syncUserWithServer : function(callback){
+    syncUserWithServer : function(callback, corpusPouchName){
+      if(!corpusPouchName){
+        corpusPouchName = "";
+      }
+      if(!window.appView){
+        if(OPrime.isChromeApp()){
+          /* take them to the user page, they can log in there */
+          window.location.replace("user.html#login/"+corpusPouchName);
+        }else{
+          /* take them to the public user page, they can log in there */
+          if(OPrime.isCouchApp()){
+            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+            window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
+          }
+        }
+        return;
+      }
       window.appView.authView.showQuickAuthenticateView(null, null, function(){
         //This happens after the user has been authenticated. 
         if(typeof callback == "function"){

@@ -15803,12 +15803,12 @@ OPrime.couchURL = function() {
     port : "",
     db : "lingllama-cherokee-activity_feed/"
   };
-  if (corpusURL.indexOf("lingsync.org") >= 0) {
-    corpusURL = "https://corpus.lingsync.org";
-    couchConnection.domain = "corpus.lingsync.org";
-  } else if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
+  if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
     corpusURL = "https://corpusdev.lingsync.org";
     couchConnection.domain = "corpusdev.lingsync.org";
+  } else if (corpusURL.indexOf("lingsync.org") >= 0) {
+    corpusURL = "https://corpus.lingsync.org";
+    couchConnection.domain = "corpus.lingsync.org";
   } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
     corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     couchConnection.domain = "prosody.linguistics.mcgill.ca/corpus";

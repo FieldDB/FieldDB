@@ -350,18 +350,20 @@ define([
         return;
       }
       
-      var couchurl = this.getCouchUrl(couchConnection, "/_session");
+      var couchurl = this.getCouchUrl(couchConnection, "/_session/");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
       OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
-      OPrime.makeCORSRequest({
-        type : 'GET',
-        url : couchurl,
-        data : corpusloginparams,
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
+          if(!serverResults){
+            OPrime.bug("There was a problem logging you into your backup database, please report this.");
+          }
           if (window.appView) {
             window.appView
             .toastUser(
@@ -385,9 +387,9 @@ define([
           .setTimeout(
               function() {
                 //try one more time 5 seconds later 
-                OPrime.makeCORSRequest({
-                  type : 'POST',
-                  url : couchurl,
+                $.couch.login({
+                  name: username,
+                  password: password,
                   success : function(serverResults) {
                     if (window.appView) {
                       window.appView
@@ -738,10 +740,14 @@ define([
           },
           error : function(model, error, options) {
             OPrime.debug("There was an error fetching corpus ",model,error,options);
-            alert("There was an error fetching corpus. "+error.reason);
-            if(error.error = "unauthorized"){
-              //Show quick authentication so the user can get their corpus token
-              window.app.get("authentication").syncUserWithServer();
+            alert("There seems to be an error when fetching corpus: "+error.reason);
+            if(error.error.indexOf("unauthorized") >=0 ){
+              //Show quick authentication so the user can get their corpus token and get access to the data
+              var originalCallbackFromLoadBackboneApp = callback;
+              window.app.get("authentication").syncUserWithServer(function(){
+                OPrime.debug("Trying to reload the app after a session token has timed out");
+                self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+              }, couchConnection.pouchname);
 //              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
 //              window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }

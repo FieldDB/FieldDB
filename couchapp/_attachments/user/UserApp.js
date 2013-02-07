@@ -256,11 +256,9 @@ define([
       OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
-      $
-      .ajax({
-        type : 'POST',
-        url : couchurl,
-        data : corpusloginparams,
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
           if (window.appView) {
             window.appView
@@ -285,10 +283,9 @@ define([
           .setTimeout(
               function() {
                 //try one more time 5 seconds later 
-                $
-                .ajax({
-                  type : 'POST',
-                  url : couchurl,
+                $.couch.login({
+                  name: username,
+                  password: password,
                   success : function(serverResults) {
                     if (window.appView) {
                       window.appView
@@ -334,6 +331,51 @@ define([
     /* TODO decide if we want this here once the pouch is ready */
     //replicateOnlyFromCorpus
     /**
+     * Pull down corpus to offline pouch, if its there.
+     */
+    replicateOnlyFromCorpus : function(couchConnection, successcallback, failurecallback) {
+      var self = this;
+
+      if(!self.pouch){
+        OPrime.debug("Not replicating, no pouch ready.");
+        if(typeof successcallback == "function"){
+          successcallback();
+        }
+        return;
+      }
+
+      self.pouch(function(err, db) {
+        var couchurl = self.getCouchUrl();
+        if (err) {
+          OPrime.debug("Opening db error", err);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Opening DB error' + JSON.stringify(err));
+            OPrime.debug('Opening DB error'
+                + JSON.stringify(err));
+          }
+        } else {
+          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
+            OPrime.debug("Replicate from " + couchurl,response, err);
+            if(err){
+              if(typeof failurecallback == "function"){
+                failurecallback();
+              }else{
+                alert('Corpus replicate from error' + JSON.stringify(err));
+                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+              }
+            }else{
+              OPrime.debug("Corpus replicate from success", response);
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            }
+          });
+        }
+      });
+    },
+    /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
      * "http://localhost:5984/_session";
      * 
@@ -362,15 +404,15 @@ define([
         return;
       }
       
-      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
+      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session/");
 
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      $.ajax({
-        type : 'POST',
-        url : couchurl ,
-        data : corpusloginparams,
+      
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
           if(window.appView){
             window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
@@ -388,9 +430,9 @@ define([
         error : function(serverResults){
           window.setTimeout(function(){
             //try one more time 5 seconds later 
-            $.ajax({
-              type : 'POST',
-              url : couchurl ,
+            $.couch.login({
+              name: username,
+              password: password,
               success : function(serverResults) {
                 if(window.appView){
                   window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
