@@ -185,7 +185,7 @@ define( [
     drop: function (data, dataTransfer, e) {
       (function(){
         var self = window.appView.importView.model;
-        OPrime.debug("Recieved drop of files.");
+        if (OPrime.debugMode) OPrime.debug("Recieved drop of files.");
         self.set("files", dataTransfer.files);
         self.readFiles();
       })();
@@ -460,7 +460,7 @@ define( [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         });
       }catch(e){
@@ -479,7 +479,7 @@ define( [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         }
       }
@@ -840,7 +840,7 @@ define( [
      * @param e
      */
     dragLabelToColumn : function(e) {
-      OPrime.debug("Recieved a drop import label event ");
+      if (OPrime.debugMode) OPrime.debug("Recieved a drop import label event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -880,7 +880,7 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

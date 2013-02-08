@@ -15945,7 +15945,7 @@ OPrime.pouchUrl = "idb://";
 OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   if (!couchConnection) {
     couchConnection = OPrime.defaultCouchConnection();
-    OPrime.debug("Using the apps ccouchConnection", couchConnection);
+    if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
   }
 
   var couchurl = couchConnection.protocol + couchConnection.domain;
@@ -16034,7 +16034,7 @@ OPrime.publisher = {
     var pubtype = type || 'any';
     var subscribers = this.subscribers[pubtype];
     if (!subscribers || subscribers.length == 0) {
-      OPrime.debug(pubtype + ": There were no subscribers.");
+      if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
       return;
     }
     var i;
@@ -16054,7 +16054,7 @@ OPrime.publisher = {
           subscribers[i].fn.call(subscribers[i].context, arg);
         }
       }
-      OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+      if (OPrime.debugMode) OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
 
     } else {
 
@@ -16068,13 +16068,13 @@ OPrime.publisher = {
           }
           if (subscribers[i].context === context) {
             var removed = subscribers.splice(i, 1);
-            OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+            if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
           } else {
-            OPrime.debug(type + " keeping subscriber " + i,
+            if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
                 subscribers[i].context);
           }
         } catch (e) {
-          OPrime.debug("problem visiting Subscriber " + i, subscribers)
+          if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
         }
       }
     }
@@ -16257,7 +16257,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   var callingcontextself = callingcontext;
   if (!audioOffsetCallback) {
     audioOffsetCallback = function(message) {
-      OPrime.debug("In audioOffsetCallback: " + message);
+      if (OPrime.debugMode) OPrime.debug("In audioOffsetCallback: " + message);
       OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
     }
   }
@@ -16272,7 +16272,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
     this.debug("Playing Audio via HTML5:" + audiourl + ":");
     document.getElementById(divid).removeEventListener('ended',
         OPrime.audioEndListener);
-    OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
+    if (OPrime.debugMode) OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
     document.getElementById(divid).addEventListener('ended',
         OPrime.audioEndListener);
     document.getElementById(divid).play();
@@ -16280,7 +16280,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
 }
 OPrime.audioEndListener = function() {
   var audiourl = this.getAttribute("src")
-  OPrime.debug("End audio ", audiourl);
+  if (OPrime.debugMode) OPrime.debug("End audio ", audiourl);
   OPrime.hub.publish('playbackCompleted', audiourl);
 };
 OPrime.pauseAudioFile = function(divid, callingcontext) {
@@ -16336,13 +16336,13 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
     document.getElementById(divid).pause();
     document.getElementById(divid).currentTime = startime;
-    OPrime.debug("Cueing audio to "
+    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
         + document.getElementById(divid).currentTime);
     document.getElementById(divid).play();
     OPrime.playingInterval = true;
     document.getElementById(divid).addEventListener("timeupdate", function() {
       if (this.currentTime >= endtime && OPrime.playingInterval) {
-        OPrime.debug("CurrentTime: " + this.currentTime);
+        if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
         OPrime.playingInterval = false; /*
                                          * workaround for not being able to
@@ -16366,7 +16366,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
   var callingcontextself = callingcontext;
   if (!callbackRecordingCompleted) {
     callbackRecordingCompleted = function(message) {
-      OPrime.debug("In callbackRecordingCompleted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingCompleted: " + message);
       OPrime.hub.unsubscribe("audioRecordingCompleted", null,
           callingcontextself);
     };
@@ -16381,7 +16381,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
    */
   if (!callbackRecordingStarted) {
     callbackRecordingStarted = function(message) {
-      OPrime.debug("In callbackRecordingStarted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStarted: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
           callingcontextself);
     };
@@ -16415,7 +16415,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
   var callingcontextself = callingcontext;
   if (!callbackRecordingStopped) {
     callbackRecordingStopped = function(message) {
-      OPrime.debug("In callbackRecordingStopped: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStopped: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
           callingcontextself);
     };
@@ -16455,14 +16455,14 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
   var callingcontextself = callingcontext;
   if (!callbackPictureCaptureStarted) {
     callbackPictureCaptureStarted = function(message) {
-      OPrime.debug("In callbackPictureCaptureStarted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureStarted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
           callingcontextself);
     };
   }
   if (!callbackPictureCaptureCompleted) {
     callbackPictureCaptureCompleted = function(message) {
-      OPrime.debug("In callbackPictureCaptureCompleted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureCompleted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
           callingcontextself);
     };
@@ -16499,7 +16499,7 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
 /*
  * Initialize the debugging output, taking control from the Android side.
  */
-OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
+if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
     + navigator.userAgent);
 
 if (OPrime.isAndroidApp()) {
@@ -16523,7 +16523,7 @@ OPrime.getConnectivityType = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    OPrime.debug("This is an Android.");
+    if (OPrime.debugMode) OPrime.debug("This is an Android.");
     Android.getConectivityType();
   } else {
     OPrime.hub.publish('connectivityType', 'Probably Online');
@@ -16537,7 +16537,7 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    OPrime.debug("This is an Android.");
+    if (OPrime.debugMode) OPrime.debug("This is an Android.");
     Android.getHardwareDetails();
   } else {
     OPrime.hub.publish('hardwareDetails', {
@@ -16606,15 +16606,15 @@ OPrime.makeCORSRequest = function(options) {
     return;
   }
 
-  if(options.method == "POST"){
+//  if(options.method == "POST"){
     //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.setRequestHeader("Content-type","application/json");
     xhr.withCredentials = true;
-  }
+//  }
   
   xhr.onload = function(e,f,g) {
     var text = xhr.responseText;
-    OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
+    if (OPrime.debugMode) OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
     if(typeof options.success == "function"){
       if(text){
         options.success(JSON.parse(text));
@@ -16627,7 +16627,7 @@ OPrime.makeCORSRequest = function(options) {
   };
 
   xhr.onerror = function(e,f,g) {
-    OPrime.debug(e,f,g);
+    if (OPrime.debugMode) OPrime.debug(e,f,g);
     OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
     if(typeof options.error == "function"){
       options.error(e,f,g);
@@ -16756,7 +16756,7 @@ define('user/UserMask',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("UserMask init");
+      if (OPrime.debugMode) OPrime.debug("UserMask init");
       
     },
     /**
@@ -16780,7 +16780,7 @@ define('user/UserMask',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the UserMask");
+      if (OPrime.debugMode) OPrime.debug("Saving the UserMask");
       var self = this;
         
         if(OPrime.isBackboneCouchDBApp()){
@@ -16793,16 +16793,16 @@ define('user/UserMask',[
                 successcallback();
               }
             },error : function(e,f,g) {
-              OPrime.debug('UserMask save error ' + f.reason);
+              if (OPrime.debugMode) OPrime.debug('UserMask save error ' + f.reason);
               self.fetch({
                 error : function(model, xhr, options) {
-                  OPrime.debug("There was an error fetching your UserMask in this corpus.");
+                  if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
                   if(typeof successcallback == "function"){
                     successcallback();
                   }
                 },
                 success : function(model, response, options) {
-                  OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
+                  if (OPrime.debugMode) OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
                   self._rev = model.get("_rev");
                   self.set("_rev", model.get("_rev"));
                   self.save();
@@ -16825,37 +16825,37 @@ define('user/UserMask',[
             if(modelwithhardcodedid.id){
               modelwithhardcodedid._id = modelwithhardcodedid.id; //this is set by authentication when it first creates the usermask
             }else{
-              OPrime.debug("Trying to save user mask too early, before it has an _id. not saving...but pretending it worked", modelwithhardcodedid);
+              if (OPrime.debugMode) OPrime.debug("Trying to save user mask too early, before it has an _id. not saving...but pretending it worked", modelwithhardcodedid);
               if(typeof successcallback == "function"){
                 successcallback();
               }
               return;
-              OPrime.debug("bug: the user mask doesnt have an _id, it wont save properly, trying to take the id from the user "+window.app.get("authentication").get("userPrivate").id);
+              if (OPrime.debugMode) OPrime.debug("bug: the user mask doesnt have an _id, it wont save properly, trying to take the id from the user "+window.app.get("authentication").get("userPrivate").id);
               modelwithhardcodedid._id = window.app.get("authentication").get("userPrivate").id;
             }
           }
           
           db.put(modelwithhardcodedid, function(err, response) {
             if(err){
-              OPrime.debug("UserMask put error", err);
+              if (OPrime.debugMode) OPrime.debug("UserMask put error", err);
               if(err.status == "409"){
                   //find out what the rev is in the database by fetching
                   self.fetch({
                     success : function(model, response) {
-                      OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
+                      if (OPrime.debugMode) OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
                       
                       modelwithhardcodedid._rev = self.get("_rev");
-                      OPrime.debug("Usermask old version", self.toJSON());
-                      OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
+                      if (OPrime.debugMode) OPrime.debug("Usermask old version", self.toJSON());
+                      if (OPrime.debugMode) OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
                       
                       db.put(modelwithhardcodedid, function(err, response) {
                         if(err){
-                          OPrime.debug("UserMask put error, even after fetching the version number",err);
+                          if (OPrime.debugMode) OPrime.debug("UserMask put error, even after fetching the version number",err);
                           if(typeof failurecallback == "function"){
                             failurecallback();
                           }
                         }else{
-                          OPrime.debug("UserMask put success, after fetching its version number and overwriting it", response);
+                          if (OPrime.debugMode) OPrime.debug("UserMask put success, after fetching its version number and overwriting it", response);
                           //this happens on subsequent save into pouch of this usermask's id
                           if(typeof successcallback == "function"){
                             successcallback();
@@ -16866,14 +16866,14 @@ define('user/UserMask',[
                     },
                     //fetch error
                     error : function(e) {
-                      OPrime.debug('UserMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
+                      if (OPrime.debugMode) OPrime.debug('UserMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
                       if(typeof failurecallback == "function"){
                         failurecallback();
                       }
                     }
                   });
               }else{
-                OPrime.debug('UserMask put error that was not a conflict' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('UserMask put error that was not a conflict' + JSON.stringify(err));
                 //this is a real error, not a conflict error
                 if(typeof failurecallback == "function"){
                   failurecallback();
@@ -16881,7 +16881,7 @@ define('user/UserMask',[
               }
             //this happens on the first save into pouch of this usermask's id
             }else{
-              OPrime.debug("UserMask put success", response);
+              if (OPrime.debugMode) OPrime.debug("UserMask put success", response);
               if(typeof successcallback == "function"){
                 successcallback();
               }
@@ -17053,7 +17053,7 @@ define('datum/Datums',[
        fetchDatums : function(suces, fail){
          this.fetch({
            error : function(model, xhr, options) {
-             OPrime.debug("There was an error loading your datums.");
+             if (OPrime.debugMode) OPrime.debug("There was an error loading your datums.");
              console.log(model,xhr,options);
              OPrime.bug("There was an error loading your datums.");
              if(typeof fail == "function"){
@@ -18017,7 +18017,7 @@ define('user/UserPreference',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER PREFERENCE init");
+      if (OPrime.debugMode) OPrime.debug("USER PREFERENCE init");
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -18103,7 +18103,7 @@ define('user/UserGeneric',[
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      OPrime.debug("USERGENERIC init");
+      if (OPrime.debugMode) OPrime.debug("USERGENERIC init");
 
     },
       
@@ -18269,7 +18269,7 @@ define('user/User',[
      * @constructs
      */
     initialize: function(attributes) {
-      OPrime.debug("USER init");
+      if (OPrime.debugMode) OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
       
       if(this.get("filledWithDefaults")){
@@ -18435,7 +18435,7 @@ define('datum/Session',[
      * @constructs
      */
     initialize: function() {
-      OPrime.debug("SESSION init");
+      if (OPrime.debugMode) OPrime.debug("SESSION init");
       
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -18455,7 +18455,7 @@ define('datum/Session',[
         if(window.app && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
           this.set("sessionFields", window.app.get("corpus").get("sessionFields").clone());
         }else{
-          OPrime.debug("Not creating sessions fields");
+          if (OPrime.debugMode) OPrime.debug("Not creating sessions fields");
         }
       }
       this.get("sessionFields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
@@ -18526,7 +18526,7 @@ define('datum/Session',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the Session");
+      if (OPrime.debugMode) OPrime.debug("Saving the Session");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -18548,7 +18548,7 @@ define('datum/Session',[
       this.set("timestamp", Date.now());
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Session save success');
+            if (OPrime.debugMode) OPrime.debug('Session save success');
             var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
@@ -18611,7 +18611,7 @@ define('datum/Session',[
             }
           },
           error : function(e, f, g) {
-            OPrime.debug("Session save error", e, f, g);
+            if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
@@ -18863,7 +18863,7 @@ define('datum/Datum',[
               
               if(err){
                 if(window.toldSearchtomakebydateviews){
-                  OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
+                  if (OPrime.debugMode) OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
                   return;
                 }
                 /*
@@ -18878,7 +18878,7 @@ define('datum/Datum',[
               }
               
               if ((!err) && (typeof callback == "function"))  {
-                OPrime.debug("Callback with: ", response.rows);
+                if (OPrime.debugMode) OPrime.debug("Callback with: ", response.rows);
                 callback(response.rows);
               }
             });
@@ -18898,7 +18898,7 @@ define('datum/Datum',[
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
         window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
       }catch(e){
-        OPrime.debug("Search Analytics not working.");
+        if (OPrime.debugMode) OPrime.debug("Search Analytics not working.");
       }
       
       // Process the given query string into tokens
@@ -18934,7 +18934,7 @@ define('datum/Datum',[
 //        alert("TODO test search in chrome extension");
         $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
           success: function(response) {
-            OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
+            if (OPrime.debugMode) OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
 //            console.log(response);
             for (i in response.rows) {
@@ -18981,7 +18981,7 @@ define('datum/Datum',[
                 }
               }else{
                 if(window.toldSearchtomakeviews){
-                  OPrime.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
+                  if (OPrime.debugMode) OPrime.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
                   return;
                 }
                 /*
@@ -19260,7 +19260,7 @@ define('datum/Datum',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving a Datum");
+      if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -19296,7 +19296,7 @@ define('datum/Datum',[
         this.set("session" , window.app.get("currentSession")); 
         Util.debug("Setting the session on this datum to the current one.");
       }else{
-        OPrime.debug("Not setting the session on this datum.");
+        if (OPrime.debugMode) OPrime.debug("Not setting the session on this datum.");
       }
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
@@ -19313,12 +19313,12 @@ define('datum/Datum',[
           }
         }
       }catch(e){
-        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Datum save success');
+            if (OPrime.debugMode) OPrime.debug('Datum save success');
             var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for datum goals in corpus
@@ -19438,7 +19438,7 @@ define('datum/Datum',[
             }
           },
           error : function(e, f, g) {
-            OPrime.debug("Datum save error", e, f, g)
+            if (OPrime.debugMode) OPrime.debug("Datum save error", e, f, g)
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
@@ -19511,7 +19511,7 @@ define('data_list/DataList',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATALIST init");
+      if (OPrime.debugMode) OPrime.debug("DATALIST init");
       
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -19591,7 +19591,7 @@ define('data_list/DataList',[
       }
       var audioVideoFiles = [];
       
-      OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToGetAudioVideo[id];
@@ -19624,7 +19624,7 @@ define('data_list/DataList',[
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
-      OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
         /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
 //        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
@@ -19656,7 +19656,7 @@ define('data_list/DataList',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the DataList");
+      if (OPrime.debugMode) OPrime.debug("Saving the DataList");
       var self = this;
 //      var idsInCollection = [];
 //      for(d in this.datumCollection.models){
@@ -19685,7 +19685,7 @@ define('data_list/DataList',[
 
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('DataList save success');
+            if (OPrime.debugMode) OPrime.debug('DataList save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
@@ -19750,7 +19750,7 @@ define('data_list/DataList',[
             }
           },
           error : function(e, f, g) {
-            OPrime.debug("DataList save error", e, f, g);
+            if (OPrime.debugMode) OPrime.debug("DataList save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
@@ -19825,7 +19825,7 @@ define('comment/CommentReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("COMMENT init");
+      if (OPrime.debugMode) OPrime.debug("COMMENT init");
     },
     
     /**
@@ -19849,7 +19849,7 @@ define('comment/CommentReadView',[
      * Renders the DatumFieldView.
      */
     render : function() {
-      OPrime.debug("COMMENT render");
+      if (OPrime.debugMode) OPrime.debug("COMMENT render");
 
       $(this.el).html(this.template(this.model.toJSON()));
      
@@ -19892,7 +19892,7 @@ define('datum/DatumFieldEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM FIELD EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW init");
     },
     
     /**
@@ -19926,7 +19926,7 @@ define('datum/DatumFieldEditView',[
      * Renders the DatumFieldEditView.
      */
     render : function() {
-      OPrime.debug("DATUM FIELD EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
@@ -19975,7 +19975,7 @@ define('datum/DatumFieldEditView',[
      * Change the model's state.
      */
     updateFieldLabel : function() {
-      OPrime.debug("Updated label to " + this.$el.children(".choose-field").val());
+      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.children(".choose-field").val());
       this.model.set("label", this.$el.children(".choose-field").val());
     },
     
@@ -19987,14 +19987,14 @@ define('datum/DatumFieldEditView',[
       } else {
         checked = "";
       }
-      OPrime.debug("Updated shouldBeEncrypted to " + checked);
+      if (OPrime.debugMode) OPrime.debug("Updated shouldBeEncrypted to " + checked);
       this.model.set("shouldBeEncrypted", checked);
     },
     
     // TODO Add description
     updateHelp : function() {
       var help = this.$el.children(".help-text").val();
-      OPrime.debug("Updated help to " + help);
+      if (OPrime.debugMode) OPrime.debug("Updated help to " + help);
       this.model.set("help",help);
     },
          
@@ -20047,7 +20047,7 @@ var UpdatingCollectionView = Backbone.View.extend({
         this.collection.bind('add', this.add);
         this.collection.bind('remove', this.remove);
       }else{
-        OPrime.debug("The collection was not a backbone collection...");
+        if (OPrime.debugMode) OPrime.debug("The collection was not a backbone collection...");
       }
 
     },
@@ -20146,7 +20146,7 @@ define('datum/SessionEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("SESSION EDIT VIEW init: " );
+      if (OPrime.debugMode) OPrime.debug("SESSION EDIT VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -20239,15 +20239,15 @@ define('datum/SessionEditView',[
      * Renders the SessionEditView.
      */
     render : function() {
-      OPrime.debug("SESSION EDIT render: " );
+      if (OPrime.debugMode) OPrime.debug("SESSION EDIT render: " );
       if (this.model == undefined) {
-        OPrime.debug("SESSION is undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("SESSION is undefined, come back later.");
         return this;
       }
       
       try{
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
-          OPrime.debug("SESSION fields are undefined, come back later.");
+          if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
         if(this.format != "modal"){
@@ -20255,7 +20255,7 @@ define('datum/SessionEditView',[
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
-          OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
 
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -20276,7 +20276,7 @@ define('datum/SessionEditView',[
 
           
         }if (this.format == "import") {
-          OPrime.debug("SESSION EDIT  IMPORT render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: " );
 
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -20295,7 +20295,7 @@ define('datum/SessionEditView',[
 
           
         } else if (this.format == "centerWell") {
-          OPrime.debug("SESSION EDIT CENTERWELL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: " );
 
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
@@ -20315,7 +20315,7 @@ define('datum/SessionEditView',[
           $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
-          OPrime.debug("SESSION EDIT FULLSCREEN render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(this.model.toJSON()));
@@ -20336,7 +20336,7 @@ define('datum/SessionEditView',[
 
           
         } else if (this.format == "modal") {
-          OPrime.debug("SESSION EDIT MODAL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT MODAL render: " );
 
           this.setElement("#new-session-modal");
           this.changeViewsOfInternalModels();
@@ -20356,7 +20356,7 @@ define('datum/SessionEditView',[
 
         }
       } catch(e) {
-        OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       
       return this;
@@ -20387,7 +20387,7 @@ define('datum/SessionEditView',[
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         /* If it is in the modal, then it is a new session */
-        OPrime.debug("Session format is "+self.format);
+        if (OPrime.debugMode) OPrime.debug("Session format is "+self.format);
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
@@ -20443,7 +20443,7 @@ define('datum/SessionEditView',[
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -20518,7 +20518,7 @@ define('app/AppRouter',[
      *          pouchname (Optional) The name of the corpus to display.
      */
     renderDashboardOrNot : function(render) {
-      OPrime.debug("In renderDashboardOrNot: " );
+      if (OPrime.debugMode) OPrime.debug("In renderDashboardOrNot: " );
       if(render == undefined || render == true || render == "true"){
         window.appView.renderReadonlyDashboardViews();
         this.hideEverything();
@@ -20536,7 +20536,7 @@ define('app/AppRouter',[
      *          pouchname (Optional) The name of the corpus to display.
      */
     showDashboard : function() {
-      OPrime.debug("In showDashboard: " );
+      if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
     },
     /**
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
@@ -20569,7 +20569,7 @@ define('app/AppRouter',[
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
     showFullscreenUser : function(userid, pouchname) {
-      OPrime.debug("In showFullscreenUser: " + userid);
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " + userid);
 
       if(userid){
         if(!pouchname){
@@ -20583,7 +20583,7 @@ define('app/AppRouter',[
           userToShow.id = userid;
             userToShow.fetch({
               success : function(model) {
-                OPrime.debug("Corpus member fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Corpus member fetched successfully" +model);
                 window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
                 window.appView.publicReadUserView.render();
 
@@ -20616,7 +20616,7 @@ define('app/AppRouter',[
      *          pouchname The name of the corpus this datum is from.
      */
     showFullscreenCorpus : function() {
-      OPrime.debug("In showFullscreenCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
       if($("#corpus-fullscreen").html() == ""){
@@ -20632,7 +20632,7 @@ define('app/AppRouter',[
      * 
      */
     showEmbeddedCorpus : function() {
-      OPrime.debug("In showEmbeddedCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedCorpus: " );
 
       this.hideEverything();
       $("#dashboard-view").show();
@@ -20651,7 +20651,7 @@ define('app/AppRouter',[
      *          sessionid The ID of the session within the corpus.
      */
     showEmbeddedSession : function(sessionid, pouchname) {
-      OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -20669,7 +20669,7 @@ define('app/AppRouter',[
           
             cs.fetch({
               success : function(model) {
-                OPrime.debug("Session fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("centerWell");
@@ -20694,7 +20694,7 @@ define('app/AppRouter',[
      * Displays the fullscreen view of the session.
      */
     showFullscreenSession : function(sessionid, pouchname) {
-      OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -20712,7 +20712,7 @@ define('app/AppRouter',[
           
             cs.fetch({
               success : function(model) {
-                OPrime.debug("Session fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("fullscreen");
@@ -20744,7 +20744,7 @@ define('app/AppRouter',[
      *          dataListid The ID of the datalist within the corpus.
      */
     showFullscreenDataList : function(dataListid, pouchname) {
-      OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
@@ -20774,7 +20774,7 @@ define('app/AppRouter',[
          */
           dl.fetch({
             success : function(e) {
-              OPrime.debug("Datalist fetched successfully" +e);
+              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
               app.get("currentDataList").saveAndInterConnectInApp(function(){
                 dl.setAsCurrentDataList( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
@@ -20794,7 +20794,7 @@ define('app/AppRouter',[
     },
     
     showMiddleDataList : function(dataListid, pouchname) {
-      OPrime.debug("In showMiddleDataList");
+      if (OPrime.debugMode) OPrime.debug("In showMiddleDataList");
 
       if(dataListid){
         if(!pouchname){
@@ -20811,7 +20811,7 @@ define('app/AppRouter',[
         
           dl.fetch({
             success : function(e) {
-              OPrime.debug("Datalist fetched successfully" +e);
+              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
               dl.setAsCurrentDataList( function(){
                 window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
                   window.appView.renderReadonlyDashboardViews();
@@ -20882,7 +20882,7 @@ define('app/AppRouter',[
       },
 
     showEmbeddedDatum : function(pouchname, datumid){
-      OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
           + datumid);
       if(datumid){
         if(!pouchname){
@@ -20910,7 +20910,7 @@ define('app/AppRouter',[
     showEmbeddedConversation : function(pouchname, conversationid){
         $("#datums-embedded").hide();
     	$("#conversation-embedded").show();
-    	OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
+    	if (OPrime.debugMode) OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
             + conversationid);
         if(conversationid){
           if(!pouchname){
@@ -20936,7 +20936,7 @@ define('app/AppRouter',[
       },
       
     showImport : function() {
-      OPrime.debug("In import: ");
+      if (OPrime.debugMode) OPrime.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#import-fullscreen").html() == ""){
         window.appView.importView.render();
@@ -20946,7 +20946,7 @@ define('app/AppRouter',[
     },
     
     showExport : function(pouchname) {
-      OPrime.debug("In showExport: " + pouchname);
+      if (OPrime.debugMode) OPrime.debug("In showExport: " + pouchname);
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();
@@ -21077,7 +21077,7 @@ define('confidentiality_encryption/Confidential', [
      * 
      */
     initialize : function() {
-      OPrime.debug("Initializing confidentiality module");
+      if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
 
 //      var encryptedMessage = this.encrypt("hi this is a longer message.");
 //      console.log("encrypted" + encryptedMessage);
@@ -21229,9 +21229,9 @@ define('authentication/Authentication',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("AUTHENTICATION INIT");
+      if (OPrime.debugMode) OPrime.debug("AUTHENTICATION INIT");
       this.bind('error', function(model, error) {
-        OPrime.debug("Error in Authentication  : " + error);
+        if (OPrime.debugMode) OPrime.debug("Error in Authentication  : " + error);
       });
       
       if(this.get("filledWithDefaults")){
@@ -21302,7 +21302,7 @@ define('authentication/Authentication',[
             try{
               window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
             }catch(e){
-              OPrime.debug(e);
+              if (OPrime.debugMode) OPrime.debug(e);
             }
             if (typeof failcallback == "function") {
               failcallback(serverResults.userFriendlyErrors.join("<br/>"));
@@ -21330,7 +21330,7 @@ define('authentication/Authentication',[
           }
         },//end successful login
         error: function(e){
-          OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+          if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
           if(window.appView){
             window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs, "alert-danger","Connection errors:");
           }
@@ -21363,7 +21363,7 @@ define('authentication/Authentication',[
      * 
      */
     saveServerResponseToUser : function(serverResults, callbacksave){
-      OPrime.debug("saveServerResponseToUser");
+      if (OPrime.debugMode) OPrime.debug("saveServerResponseToUser");
 
       var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
       if(serverResults.user.username == "public"){
@@ -21442,7 +21442,7 @@ define('authentication/Authentication',[
 //      }
     },
     loadEncryptedUser : function(encryptedUserString, callbackload){
-      OPrime.debug("loadEncryptedUser");
+      if (OPrime.debugMode) OPrime.debug("loadEncryptedUser");
       
 
       /*
@@ -21515,7 +21515,7 @@ define('authentication/Authentication',[
     },
     
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
-      OPrime.debug("saveAndEncryptUserToLocalStorage");
+      if (OPrime.debugMode) OPrime.debug("saveAndEncryptUserToLocalStorage");
       
       /* TODO Switch user to the new dev servers if they have the old ones */
 //      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
@@ -21606,7 +21606,7 @@ define('authentication/Authentication',[
               window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") 
                   , "alert-warning","Error connecting to populate corpus permissions:");
             }catch(e){
-              OPrime.debug(e);
+              if (OPrime.debugMode) OPrime.debug(e);
             }
             if (typeof failcallback == "function") {
               failcallback(serverResults.userFriendlyErrors.join("<br/>"));
@@ -21620,7 +21620,7 @@ define('authentication/Authentication',[
           }
         },//end successful fetch
         error: function(e){
-          OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
+          if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
 
           if (typeof failcallback == "function") {
             failcallback("There was an error in contacting the authentication server to get the list of users on your corpus team. Maybe you're offline?");
@@ -21662,19 +21662,19 @@ define('authentication/Authentication',[
           data : dataToPost,
           success : function(serverResults) {
             if (serverResults.userFriendlyErrors != null) {
-              OPrime.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
+              if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
               if (typeof failcallback == "function") {
                 failcallback(serverResults.userFriendlyErrors.join("<br/>"));
               }
             } else if (serverResults.roleadded != null) {
-              OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
+              if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
               if (typeof successcallback == "function") {
                 successcallback(userToAddToCorpus); 
               }
             }
           },//end successful fetch
           error: function(e){
-            OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+            if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
 
             if (typeof failcallback == "function") {
               failcallback("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team. Maybe you're offline?");
@@ -21716,7 +21716,7 @@ define('activity/Activity',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("ACTIVITY init: ");
+      if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
@@ -21808,10 +21808,10 @@ define('activity/Activity',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(activsuccesscallback, activfailurecallback){
-      OPrime.debug("Saving the Activity");
+      if (OPrime.debugMode) OPrime.debug("Saving the Activity");
       var self = this;
       if(! this.isNew()){
-        OPrime.debug('Activity doesnt need to be saved.');
+        if (OPrime.debugMode) OPrime.debug('Activity doesnt need to be saved.');
         if(typeof activsuccesscallback == "function"){
           activsuccesscallback();
         }
@@ -21821,7 +21821,7 @@ define('activity/Activity',[
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Activity save success');
+            if (OPrime.debugMode) OPrime.debug('Activity save success');
 
             if(typeof activsuccesscallback == "function"){
               activsuccesscallback();
@@ -21886,7 +21886,7 @@ define('data_list/DataLists',[
        fetchDatalists : function(suces, fail){
          this.fetch({
            error : function(model, xhr, options) {
-             OPrime.debug("There was an error loading your sessions.");
+             if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
              console.log(model,xhr,options);
              OPrime.bug("There was an error loading your sessions.");
              if(typeof fail == "function"){
@@ -22038,7 +22038,7 @@ define("lexicon/LexiconNodes",
               //TODO do some correction logic here if the user has corrected this node?
             }
             //put the new models info into the existing member of the collection
-            OPrime.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
+            if (OPrime.debugMode) OPrime.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
             already[0].set(model.toJSON());
             return; //don't throw error, just happily return 
 //            throw new Error(["Can't add the same model to a set twice", already.id]);
@@ -22234,7 +22234,7 @@ define('datum/Sessions',[
        fetchSessions : function(suces, fail){
          this.fetch({
            error : function(model, xhr, options) {
-             OPrime.debug("There was an error loading your sessions.");
+             if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
              console.log(model,xhr,options);
              OPrime.bug("There was an error loading your sessions.");
              if(typeof fail == "function"){
@@ -22388,7 +22388,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
           .replace(/--+/g, "-")   // Ensure that there is only ever one "-" in a row
           .replace(/^-/, "")      // Remove "-" at the start of the word
           .replace(/-$/, "");     // Remove "-" at the end of the word
-      OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
+      if (OPrime.debugMode) OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
           + " is " + potentialParse);
           
       parsedWords.push(potentialParse);
@@ -22889,7 +22889,7 @@ define('corpus/CorpusMask',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the CorpusMask");
+      if (OPrime.debugMode) OPrime.debug("Saving the CorpusMask");
       var self = this;
       self.set("id","corpus");
       self.set("_id","corpus");
@@ -22906,27 +22906,27 @@ define('corpus/CorpusMask',[
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
+            if (OPrime.debugMode) OPrime.debug(response);
             if(err){
-              OPrime.debug("CorpusMask put error", err);
+              if (OPrime.debugMode) OPrime.debug("CorpusMask put error", err);
               if(err.status == "409"){
                 //find out what the rev is in the database by fetching
                 self.fetch({
                   success : function(model, response) {
-                    OPrime.debug("CorpusMask fetch revision number success, after getting a Document update conflict", response);
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask fetch revision number success, after getting a Document update conflict", response);
 
                     modelwithhardcodedid._rev = self.get("_rev");
-                    OPrime.debug("CorpusMask old version", self.toJSON());
-                    OPrime.debug("CorpusMask replaced with new version", modelwithhardcodedid );
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask old version", self.toJSON());
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask replaced with new version", modelwithhardcodedid );
 
                     db.put(modelwithhardcodedid, function(err, response) {
                       if(err){
-                        OPrime.debug("CorpusMask put error, even after fetching the version number",err);
+                        if (OPrime.debugMode) OPrime.debug("CorpusMask put error, even after fetching the version number",err);
                         if(typeof failurecallback == "function"){
                           failurecallback();
                         }
                       }else{
-                        OPrime.debug("CorpusMask put success, after fetching its version number and overwriting it", response);
+                        if (OPrime.debugMode) OPrime.debug("CorpusMask put success, after fetching its version number and overwriting it", response);
                         //this happens on subsequent save into pouch of this CorpusMask's id
                         if(typeof successcallback == "function"){
                           successcallback();
@@ -22937,14 +22937,14 @@ define('corpus/CorpusMask',[
                   },
                   //fetch error
                   error : function(e) {
-                    OPrime.debug('CorpusMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
+                    if (OPrime.debugMode) OPrime.debug('CorpusMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
                     if(typeof failurecallback == "function"){
                       failurecallback();
                     }
                   }
                 });
               }else{
-                OPrime.debug('CorpusMask put error that was not a conflict' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('CorpusMask put error that was not a conflict' + JSON.stringify(err));
                 //this is a real error, not a conflict error
                 if(typeof failurecallback == "function"){
                   failurecallback();
@@ -22954,7 +22954,7 @@ define('corpus/CorpusMask',[
               if(typeof successcallback == "function"){
                 successcallback();
               }else{
-                OPrime.debug("CorpusMask save success", response);
+                if (OPrime.debugMode) OPrime.debug("CorpusMask save success", response);
               }
             }
           });
@@ -23105,7 +23105,7 @@ define('corpus/Corpus',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CORPUS INIT");
+      if (OPrime.debugMode) OPrime.debug("CORPUS INIT");
       
       this.datalists =  new DataLists();
       this.sessions =  new Sessions();
@@ -23142,7 +23142,7 @@ define('corpus/Corpus',[
       this.get("publicSelf").id = "corpus";
         c.fetch({
           success : function(model, response, options) {
-            OPrime.debug("Success fetching corpus' public self: ", model, response, options);
+            if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
             if(!model.get("corpusid")){
               corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
               return;
@@ -23151,7 +23151,7 @@ define('corpus/Corpus',[
             corpusself.set("pouchname", pouchname);
               corpusself.fetch({
                 success : function(model) {
-                  OPrime.debug("Corpus fetched successfully", model);
+                  if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
                   $(".spinner-status").html("Loading Datalist...");
                   corpusself.makeSureCorpusHasADataList(function(){
                     corpusself.datalists.at(0).setAsCurrentDataList(function(){
@@ -23179,7 +23179,7 @@ define('corpus/Corpus',[
                 error : function(model, xhr, options) {
                   $(".spinner-status").html("Downloading Corpus...");
 
-                  OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+                  if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
                   if(corpusself.islooping){
                     OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
                     return;
@@ -23193,7 +23193,7 @@ define('corpus/Corpus',[
           error : function(model, xhr, options) {
             $(".spinner-status").html("Creating Corpus...");
 
-            OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
+            if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
             OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
             corpusself.get("publicSelf").fillWithDefaults();
             corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
@@ -23210,9 +23210,9 @@ define('corpus/Corpus',[
         }
         this.get("publicSelf").id = "corpus";
         this.get("publicSelf").fetch({sucess: function(model, response, options){
-          OPrime.debug("Success fetching corpus' public self: ", model, response, options);
+          if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
         }, error: function(model, xhr, options){
-          OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
+          if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
           corpusself.get("publicSelf").fillWithDefaults();
           corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
           corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
@@ -23408,7 +23408,7 @@ define('corpus/Corpus',[
           if(users.notonteam[user].username){
             typeaheadusers.push(users.notonteam[user].username);
           }else{
-            OPrime.debug("This user is invalid", users.notonteam[user]);
+            if (OPrime.debugMode) OPrime.debug("This user is invalid", users.notonteam[user]);
           }
         }
         typeaheadusers = JSON.stringify(typeaheadusers);
@@ -23680,7 +23680,7 @@ define('corpus/Corpus',[
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the Corpus");
+      if (OPrime.debugMode) OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
       
@@ -23803,7 +23803,7 @@ define('corpus/Corpus',[
             }, OPrime.checkToSeeIfCouchAppIsReady);
             
           });
-          OPrime.debug("Contacting the server to ask it to make a new database for you...");
+          if (OPrime.debugMode) OPrime.debug("Contacting the server to ask it to make a new database for you...");
           return;
         }
         
@@ -23826,14 +23826,14 @@ define('corpus/Corpus',[
           }
         }
       }catch(e){
-        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
       this.set("timestamp", Date.now());
       
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Corpus save success');
+            if (OPrime.debugMode) OPrime.debug('Corpus save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for corpus in corpus
@@ -23983,7 +23983,7 @@ define('corpus/Corpus',[
             }
           },
           error : function(model, response, options) {
-            OPrime.debug("Corpus save error", model, response, options);
+            if (OPrime.debugMode) OPrime.debug("Corpus save error", model, response, options);
 //            if(response && response.reason && response.reason == "unauthorized"){
 //              alert('Corpus save error: ' + response.reason);
 //              window.app.get("authentication").syncUserWithServer(function(){
@@ -24021,10 +24021,10 @@ define('corpus/Corpus',[
             if(typeof sucess == "function"){
               sucess();
             }else{
-              OPrime.debug('the corpus has datalists');
+              if (OPrime.debugMode) OPrime.debug('the corpus has datalists');
             }
           }else{
-            OPrime.debug("You have no datalists, creating a new one...");
+            if (OPrime.debugMode) OPrime.debug("You have no datalists, creating a new one...");
           //create the first datalist for this corpus.
             var dl = new DataList({
               filledWithDefaults: true,
@@ -24052,14 +24052,14 @@ define('corpus/Corpus',[
                 if(typeof sucess == "function"){
                   sucess();
                 }else{
-                  OPrime.debug('DataList save success' + model.id);
+                  if (OPrime.debugMode) OPrime.debug('DataList save success' + model.id);
                 }
               },
               error : function(e) {
                 if(typeof failure == "function"){
                   failure();
                 }else{
-                  OPrime.debug('DataList save error' + e);
+                  if (OPrime.debugMode) OPrime.debug('DataList save error' + e);
                 }
               }
             });
@@ -24082,7 +24082,7 @@ define('corpus/Corpus',[
       this.sessions.fetch({
         error : function(model, xhr, options) {
           
-          OPrime.debug("There was an error loading your sessions.");
+          if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
           console.log(model,xhr,options);
           OPrime.bug("There was an error loading your sessions.");
           
@@ -24092,10 +24092,10 @@ define('corpus/Corpus',[
             if(typeof suces == "function"){
               suces();
             }else{
-              OPrime.debug('the corpus has sessions');
+              if (OPrime.debugMode) OPrime.debug('the corpus has sessions');
             }
           }else{
-            OPrime.debug("You have no sessions, creating a new one...");
+            if (OPrime.debugMode) OPrime.debug("You have no sessions, creating a new one...");
             var s = new Session({
               sessionFields : self.get("sessionFields").clone(),
               filledWithDefaults: true,
@@ -24116,14 +24116,14 @@ define('corpus/Corpus',[
                 if(typeof suces == "function"){
                   suces();
                 }else{
-                  OPrime.debug('Session save success' + model.id);
+                  if (OPrime.debugMode) OPrime.debug('Session save success' + model.id);
                 }
               },
               error : function(e) {
                 if(typeof fail == "function"){
                   fail();
                 }else{
-                  OPrime.debug('Session save error' + e);
+                  if (OPrime.debugMode) OPrime.debug('Session save error' + e);
                 }
               }
             });
@@ -24191,12 +24191,12 @@ define('corpus/Corpus',[
 
           console.log("This is what the doc will look like: ", modelwithhardcodedid);
           db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
+            if (OPrime.debugMode) OPrime.debug(response);
             if(err){
-              OPrime.debug("The "+view+" view couldn't be created.");
+              if (OPrime.debugMode) OPrime.debug("The "+view+" view couldn't be created.");
             }else{
               
-              OPrime.debug("The "+view+" view was created.");
+              if (OPrime.debugMode) OPrime.debug("The "+view+" view was created.");
               if(typeof callbackpouchview == "function"){
                 callbackpouchview();
               }
@@ -24356,7 +24356,7 @@ define('corpus/Corpus',[
               + JSON.stringify(serverResults));
 
           var counts = _.pluck(serverResults.rows, "value");
-          OPrime.debug(counts);
+          if (OPrime.debugMode) OPrime.debug(counts);
           var frequentFields = [];
           try{
             var totalDatumCount = serverResults.rows[(_.pluck(
@@ -24367,12 +24367,12 @@ define('corpus/Corpus',[
                 continue;
               }
               if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
-                OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
+                if (OPrime.debugMode) OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
                 frequentFields.push( serverResults.rows[field].key );
               }
             }
           }catch(e){
-            OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
+            if (OPrime.debugMode) OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
             frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
           }
           if(frequentFields == []){
@@ -24454,7 +24454,7 @@ define('corpus/Corpuses',[
       this.constructCollectionFromArrayOnServer(arrayOfCorpora);
     },
     constructCollectionFromArrayOnServer : function(arrayOfCorpora){
-      OPrime.debug(arrayOfCorpora);
+      if (OPrime.debugMode) OPrime.debug(arrayOfCorpora);
       this.reset();
       var self = this;
       for(c in arrayOfCorpora){
@@ -24479,13 +24479,13 @@ define('corpus/Corpuses',[
 //          type : 'GET',
 //          url : couchurl ,
 //          success : function(data) {
-//            OPrime.debug("Got data back from the server about this corpus: ", data);
+//            if (OPrime.debugMode) OPrime.debug("Got data back from the server about this corpus: ", data);
 //            var corpus = new CorpusMask(JSON.parse(data));
 //            corpus.corpusid = arrayOfCorpora[thisc].corpusid;
 //            self.unshift(corpus);
 //          },
 //          error : function(data){
-//            OPrime.debug("Got error back from the server about this corpus: ", data);
+//            if (OPrime.debugMode) OPrime.debug("Got error back from the server about this corpus: ", data);
 //            var corpuse = new CorpusMask({
 //                  title : "We need to make sure you're you before showing you the latest details (click the sync button).",
 //                  pouchname : arrayOfCorpora[thisc].pouchname
@@ -24523,7 +24523,7 @@ define('corpus/CorpusLinkView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CORPUS LINK init: " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS LINK init: " );
    
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
       this.model.bind('change:title', function(){
@@ -24548,10 +24548,10 @@ define('corpus/CorpusLinkView',[
      * Renders the CorpusLinkView and all of its child Views.
      */
     render : function() {
-      OPrime.debug("CORPUS LINK render: ");
+      if (OPrime.debugMode) OPrime.debug("CORPUS LINK render: ");
 
       if (this.model == undefined) {
-        OPrime.debug("\tCorpusMask model was undefined.");
+        if (OPrime.debugMode) OPrime.debug("\tCorpusMask model was undefined.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
@@ -24559,7 +24559,7 @@ define('corpus/CorpusLinkView',[
 //      try{
 //        jsonToRender.username = this.model.get("team").get("username");
 //      }catch(e){
-//        OPrime.debug("Problem getting the username of the corpus' team");
+//        if (OPrime.debugMode) OPrime.debug("Problem getting the username of the corpus' team");
 //      }
 
       $(this.el).html(this.templateLink(jsonToRender));
@@ -24604,7 +24604,7 @@ define('user/UserReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER READ VIEW init: ");
+      if (OPrime.debugMode) OPrime.debug("USER READ VIEW init: ");
 //      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
       this.changeViewsOfInternalModels();
 
@@ -24662,15 +24662,15 @@ define('user/UserReadView',[
      */
     render : function() {
       
-//      OPrime.debug("USER render: ");
+//      if (OPrime.debugMode) OPrime.debug("USER render: ");
       if (this.model == undefined) {
-        OPrime.debug("\User model was undefined");
+        if (OPrime.debugMode) OPrime.debug("\User model was undefined");
         return this;
       }
-//      OPrime.debug("\tRendering user: " + this.model.get("username"));
+//      if (OPrime.debugMode) OPrime.debug("\tRendering user: " + this.model.get("username"));
 
       if (this.format == "fullscreen") {
-        OPrime.debug("USER READ FULLSCREEN render: ");
+        if (OPrime.debugMode) OPrime.debug("USER READ FULLSCREEN render: ");
 
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -24683,7 +24683,7 @@ define('user/UserReadView',[
         
         
       } else if (this.format == "modal") {
-        OPrime.debug("USER READ MODAL render: ");
+        if (OPrime.debugMode) OPrime.debug("USER READ MODAL render: ");
 
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
@@ -24702,7 +24702,7 @@ define('user/UserReadView',[
         
         
       } else if (this.format == "link") {
-        OPrime.debug("USER READ LINK render: ");
+        if (OPrime.debugMode) OPrime.debug("USER READ LINK render: ");
 
         $(this.el).html(this.linkTemplate(this.model.toJSON()));
         
@@ -24710,7 +24710,7 @@ define('user/UserReadView',[
         $(this.el).find(".locale_View_Profile_Tooltip").attr("title",Locale.get("locale_View_Profile_Tooltip"));
 
       } else if (this.format == "public") {
-        OPrime.debug("USER READ PUBLIC render: ");
+        if (OPrime.debugMode) OPrime.debug("USER READ PUBLIC render: ");
 
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -24795,7 +24795,7 @@ define('authentication/AuthenticationEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("AUTH EDIT init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("AUTH EDIT init: " + this.el);
       
     //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
@@ -24924,9 +24924,9 @@ define('authentication/AuthenticationEditView',[
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
-      OPrime.debug("AUTH EDIT render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("AUTH EDIT render: " + this.el);
       if (this.model == undefined) {
-        OPrime.debug("Auth model was undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
       }
 
@@ -24944,7 +24944,7 @@ define('authentication/AuthenticationEditView',[
         $("#login_register_button").hide();
 
         if(this.model.get("userPublic") != undefined){
-          OPrime.debug("\t rendering AuthenticationEditView's UserView");
+          if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         }else{
@@ -24961,7 +24961,7 @@ define('authentication/AuthenticationEditView',[
         $("#loggedin_customize_on_auth_dropdown").hide();
 
         if(this.model.get("userPublic") != undefined){
-          OPrime.debug("\t rendering AuthenticationEditView's UserView");
+          if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         }else{
@@ -25013,7 +25013,7 @@ define('authentication/AuthenticationEditView',[
      * calls the view's authenticate function.
      */
     login : function() {
-      OPrime.debug("LOGIN");
+      if (OPrime.debugMode) OPrime.debug("LOGIN");
       this.authenticate(document.getElementById("username").value, 
           document.getElementById("password").value,
           document.getElementById("authUrl").value
@@ -25070,7 +25070,7 @@ define('authentication/AuthenticationEditView',[
         if(typeof corpusloginfailcallback == "function"){
           corpusloginfailcallback();
         }else{
-          OPrime.debug('no corpusloginfailcallback was defined');
+          if (OPrime.debugMode) OPrime.debug('no corpusloginfailcallback was defined');
 
         }
       };
@@ -25088,10 +25088,10 @@ define('authentication/AuthenticationEditView',[
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
-            OPrime.debug('Calling corpusloginsuccesscallback');
+            if (OPrime.debugMode) OPrime.debug('Calling corpusloginsuccesscallback');
             corpusloginsuccesscallback();
           }else{
-            OPrime.debug('no corpusloginsuccesscallback was defined');
+            if (OPrime.debugMode) OPrime.debug('no corpusloginsuccesscallback was defined');
           }
           //Replicate user's corpus down to pouch
           window.app.replicateOnlyFromCorpus(couchConnection, function(){
@@ -25122,7 +25122,7 @@ define('authentication/AuthenticationEditView',[
                 visibleids.datalistid = "";
               }
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
-                OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
+                if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
                 if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
                 }else{
@@ -25214,7 +25214,7 @@ define('authentication/AuthenticationEditView',[
         e.preventDefault();
       }
       var authedself = this;
-      OPrime.debug("Attempting to register a new user: " );
+      if (OPrime.debugMode) OPrime.debug("Attempting to register a new user: " );
       var dataToPost = {};
       $(".registerusername").val( $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
       dataToPost.email = $(".registeruseremail").val().trim();
@@ -25237,7 +25237,7 @@ define('authentication/AuthenticationEditView',[
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
-        OPrime.debug("User has entered an email and the passwords match. ");
+        if (OPrime.debugMode) OPrime.debug("User has entered an email and the passwords match. ");
         
         $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>" );
         $(".welcome-screen-alerts").addClass("alert-success");
@@ -25352,7 +25352,7 @@ define('authentication/AuthenticationEditView',[
           },//end successful registration
           dataType : "",
           error : function(e,f,g){
-            OPrime.debug("Error registering user", e,f,g);
+            if (OPrime.debugMode) OPrime.debug("Error registering user", e,f,g);
             $(".welcome-screen-alerts").html(
                 " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
             $(".welcome-screen-alerts").addClass("alert-error");
@@ -25365,7 +25365,7 @@ define('authentication/AuthenticationEditView',[
           }
         });
       } else{
-        OPrime.debug("User has not entered good info. ");
+        if (OPrime.debugMode) OPrime.debug("User has not entered good info. ");
           $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs );
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
@@ -25442,7 +25442,7 @@ define('authentication/AuthenticationEditView',[
         },//end successful login
         dataType : "",
         error : function(e,f,g){
-          OPrime.debug("Error syncing user", e,f,g);
+          if (OPrime.debugMode) OPrime.debug("Error syncing user", e,f,g);
           $(".welcome-screen-alerts").html(
               " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
           $(".welcome-screen-alerts").addClass("alert-error");
@@ -25521,7 +25521,7 @@ define('datum/DatumFieldReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM FIELD READ init");
+      if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ init");
     
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -25552,7 +25552,7 @@ define('datum/DatumFieldReadView',[
      * Renders the DatumFieldReadView.
      */
     render : function() {
-      OPrime.debug("DATUM FIELD READ VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
@@ -25620,7 +25620,7 @@ define('datum/DatumStateReadView', [
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM STATE READ VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE READ VIEW init");
       
       // Default format is "corpus" since it will be used in an UpdatingCollectionView.
       this.format = "corpus";
@@ -25651,7 +25651,7 @@ define('datum/DatumStateReadView', [
      * Renders the DatumStateReadView.
      */
     render : function() {
-      OPrime.debug("DATUM STATE READ VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE READ VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsReadView
@@ -25668,7 +25668,7 @@ define('datum/DatumStateReadView', [
      * Change the model's state.
      */
     updateState : function() {
-      OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
+      if (OPrime.debugMode) OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
       this.model.set("state", this.$el.children(".datum_state_input").val());
     },
     
@@ -25676,7 +25676,7 @@ define('datum/DatumStateReadView', [
      * Change the model's color.
      */
     updateColor : function() {
-      OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
+      if (OPrime.debugMode) OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
       this.model.set("color", this.$el.children(".color_chooser").val());
     }
   });
@@ -25705,7 +25705,7 @@ define('datum/DatumTagReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW init");
     },
 
     model : DatumTag,
@@ -25717,7 +25717,7 @@ define('datum/DatumTagReadView',[
     template: Handlebars.templates.datum_tag_read_embedded,
     	
     render : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       
@@ -25768,7 +25768,7 @@ define('datum/SessionReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("SESSION READ VIEW init: " );
+      if (OPrime.debugMode) OPrime.debug("SESSION READ VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -25829,15 +25829,15 @@ define('datum/SessionReadView',[
      * Renders the SessionReadView.
      */
     render : function() {
-      OPrime.debug("SESSION READ render: " );
+      if (OPrime.debugMode) OPrime.debug("SESSION READ render: " );
       if (this.model == undefined) {
-        OPrime.debug("SESSION is undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("SESSION is undefined, come back later.");
         return this;
       }
       
       try {
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
-          OPrime.debug("SESSION fields are undefined, come back later.");
+          if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
         if(this.format != "link"){
@@ -25847,7 +25847,7 @@ define('datum/SessionReadView',[
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
-          OPrime.debug("SESSION READ LEFTSIDE render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION READ LEFTSIDE render: " );
 
           var jsonToRender = {
               goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -25867,7 +25867,7 @@ define('datum/SessionReadView',[
           $(this.el).find(".locale_When").html(Locale.get("locale_When"));
 
         }else if (this.format == "centerWell") {
-          OPrime.debug("SESSION READ CENTERWELL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION READ CENTERWELL render: " );
 
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
@@ -25886,7 +25886,7 @@ define('datum/SessionReadView',[
           $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "fullscreen") {
-          OPrime.debug("SESSION READ FULLSCREEN render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION READ FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(this.model.toJSON()));
@@ -25904,7 +25904,7 @@ define('datum/SessionReadView',[
           $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         } else if (this.format == "link") {
-          OPrime.debug("SESSION READ LINK render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION READ LINK render: " );
 
           $(this.el).html(this.templateLink(this.model.toJSON()));
        
@@ -25924,7 +25924,7 @@ define('datum/SessionReadView',[
           throw("You have not specified a format that the SessionReadView can understand.");
         }
       } catch(e) {
-        OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       
       return this;
@@ -25981,7 +25981,7 @@ define('datum/SessionReadView',[
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING SESSION READ VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING SESSION READ VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -26149,15 +26149,15 @@ define('datum/DatumReadView',[
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
+      if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
       
       if(this.collection){
-        OPrime.debug("This datum has a link to a collection. Removing the link.");
+        if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
-        OPrime.debug("DATUM fields is undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
@@ -26236,7 +26236,7 @@ define('datum/DatumReadView',[
         try{
           jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         }catch(e){
-          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
 //          this.model.get("datumStates").models[0].set("selected","selected");
         }
         // makes the top two lines into an array of words.
@@ -26255,7 +26255,7 @@ define('datum/DatumReadView',[
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
-          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
         }
       }
       
@@ -26316,7 +26316,7 @@ define('datum/DatumReadView',[
       var text = $(".datum_field_input").val() || [];
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
-      OPrime.debug(text);
+      if (OPrime.debugMode) OPrime.debug(text);
  
       return "";
 //    }, 
@@ -26368,7 +26368,7 @@ define('data_list/DataListReadView', [
      * @constructs
      */
     initialize : function(options) {
-      OPrime.debug("DATALIST READ VIEW init: ");
+      if (OPrime.debugMode) OPrime.debug("DATALIST READ VIEW init: ");
       
       this.changeViewsOfInternalModels();
       this.model.bind('change:dateCreated', function(){
@@ -26568,13 +26568,13 @@ define('data_list/DataListReadView', [
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "link") {
-        OPrime.debug("DATALIST READ LINK render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ LINK render: ");
 
         // Display the Data List
         $(this.el).html(this.templateLink(jsonToRender));
       
       } else if (this.format == "leftSide") {
-        OPrime.debug("DATALIST READ LEFTSIDE render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ LEFTSIDE render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -26588,7 +26588,7 @@ define('data_list/DataListReadView', [
         $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
         
       } else if (this.format == "fullscreen") {
-        OPrime.debug("DATALIST READ FULLSCREEN render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ FULLSCREEN render: ");
 
         // Display the Data List
         this.setElement($("#data-list-fullscreen-header"));
@@ -26602,7 +26602,7 @@ define('data_list/DataListReadView', [
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
        
       } else if(this.format == "centerWell") {
-        OPrime.debug("DATALIST READ CENTER render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ CENTER render: ");
 
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
@@ -26615,7 +26615,7 @@ define('data_list/DataListReadView', [
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
 
       } else if (this.format == "minimized") {
-        OPrime.debug("DATALIST READ MINIMIZED render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ MINIMIZED render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -26693,7 +26693,7 @@ define('data_list/DataListReadView', [
       	}
         this.model.saveAndInterConnectInApp();
       }catch(e){
-        OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }
     },
     resizeSmall : function(e){
@@ -26733,7 +26733,7 @@ define('data_list/DataListReadView', [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING DATALIST READ VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST READ VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -26773,7 +26773,7 @@ define('datum/DatumStateEditView', [
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM STATE EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE EDIT VIEW init");
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -26801,7 +26801,7 @@ define('datum/DatumStateEditView', [
      * Renders the DatumStateEditView.
      */
     render : function() {
-      OPrime.debug("DATUM STATE EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE EDIT VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsEditView
@@ -26826,7 +26826,7 @@ define('datum/DatumStateEditView', [
      * Change the model's state.
      */
     updateState : function() {
-      OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
+      if (OPrime.debugMode) OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
       this.model.set("state", this.$el.children(".datum_state_input").val());
     },
     
@@ -26834,7 +26834,7 @@ define('datum/DatumStateEditView', [
      * Change the model's color.
      */
     updateColor : function() {
-      OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
+      if (OPrime.debugMode) OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
       this.model.set("color", this.$el.children(".color_chooser").val());
     }
   });
@@ -26864,7 +26864,7 @@ define('permission/PermissionEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("PERMISSION EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("PERMISSION EDIT VIEW init");
     },
     
     /**
@@ -26956,7 +26956,7 @@ define('permission/PermissionEditView',[
      * Renders the DatumFieldView.
      */
     render : function() {
-      OPrime.debug("PERMISSION EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("PERMISSION EDIT VIEW render");
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(jsonToRender));
@@ -27040,7 +27040,7 @@ define('corpus/CorpusEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CORPUS EDIT init: " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS EDIT init: " );
       this.changeViewsOfInternalModels();
      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
@@ -27056,7 +27056,7 @@ define('corpus/CorpusEditView',[
 //      });
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
-//        OPrime.debug("Corpus edit view sessions changed. changeViewsOfInternalModels and rendering...");
+//        if (OPrime.debugMode) OPrime.debug("Corpus edit view sessions changed. changeViewsOfInternalModels and rendering...");
 //        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
@@ -27153,14 +27153,14 @@ define('corpus/CorpusEditView',[
      */
     render : function() {
       if (this.model == undefined) {
-        OPrime.debug("\tCorpus model was undefined.");
+        if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
 
       // Build the lexicon
       this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
       
-      OPrime.debug("CORPUS EDIT render: ");
+      if (OPrime.debugMode) OPrime.debug("CORPUS EDIT render: ");
       if( this.format != "modal"){
         window.appView.currentCorpusEditView.destroy_view();
         window.appView.currentCorpusReadView.destroy_view();
@@ -27172,10 +27172,10 @@ define('corpus/CorpusEditView',[
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
-        OPrime.debug("Problem getting the usrname of the corpus' team");
+        if (OPrime.debugMode) OPrime.debug("Problem getting the usrname of the corpus' team");
       }
       if (this.format == "centreWell") {
-        OPrime.debug("CORPUS Edit center render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS Edit center render: " );
           // Display the CorpusReadFullScreenView
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(jsonToRender));
@@ -27244,7 +27244,7 @@ define('corpus/CorpusEditView',[
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
       } else if (this.format == "fullscreen") {
-        OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -27312,7 +27312,7 @@ define('corpus/CorpusEditView',[
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
       } else if (this.format == "leftSide"){
-        OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(jsonToRender));
       
@@ -27320,7 +27320,7 @@ define('corpus/CorpusEditView',[
         $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
       
       }else if (this.format == "modal"){
-        OPrime.debug("CORPUS EDIT MODAL render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT MODAL render: " );
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(jsonToRender));
         
@@ -27361,7 +27361,7 @@ define('corpus/CorpusEditView',[
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING CORPUS EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING CORPUS EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -27488,7 +27488,7 @@ define('corpus/CorpusEditView',[
       }
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
+      if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },
     newConversation : function(e) {
         if(e){
@@ -27497,7 +27497,7 @@ define('corpus/CorpusEditView',[
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+        if (OPrime.debugMode) OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
       },
 
     newDataList : function(e) {
@@ -27622,7 +27622,7 @@ define('corpus/CorpusEditView',[
       window.location.href = "#render/true";
     },
     resizeFullscreen : function(e){
-      OPrime.debug("CORPUS EDIT starts to render fullscreen. " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS EDIT starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -27706,7 +27706,7 @@ define('permission/PermissionReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("PERMISSION READ VIEW init");
+      if (OPrime.debugMode) OPrime.debug("PERMISSION READ VIEW init");
     },
     
     /**
@@ -27729,7 +27729,7 @@ define('permission/PermissionReadView',[
      * Renders the DatumFieldView.
      */
     render : function() {
-      OPrime.debug("PERMISSION READ VIEW render");
+      if (OPrime.debugMode) OPrime.debug("PERMISSION READ VIEW render");
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(jsonToRender));
@@ -27804,7 +27804,7 @@ define('corpus/CorpusReadView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CORPUS READ init: " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS READ init: " );
       this.changeViewsOfInternalModels();
       
    // If the model's pouchname changes, chances are its a new corpus, re-render its internal models.
@@ -27815,7 +27815,7 @@ define('corpus/CorpusReadView',[
       
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
-//        OPrime.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
+//        if (OPrime.debugMode) OPrime.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
 //        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
@@ -27901,7 +27901,7 @@ define('corpus/CorpusReadView',[
      * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
-      OPrime.debug("CORPUS READ render: ");
+      if (OPrime.debugMode) OPrime.debug("CORPUS READ render: ");
       if(window.appView.currentCorpusEditView){
         window.appView.currentCorpusEditView.destroy_view();
       }
@@ -27911,7 +27911,7 @@ define('corpus/CorpusReadView',[
       this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("pouchname"));
      
       if (this.model == undefined) {
-        OPrime.debug("\tCorpus model was undefined.");
+        if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
       var couchConnection = this.model.get("couchConnection");
@@ -27923,10 +27923,10 @@ define('corpus/CorpusReadView',[
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
-        OPrime.debug("Problem getting the usrname of the corpus' team");
+        if (OPrime.debugMode) OPrime.debug("Problem getting the usrname of the corpus' team");
       }
       if (this.format == "leftSide") {
-        OPrime.debug("CORPUS READ LEFTSIDE render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ LEFTSIDE render: " );
 
           // Display the CorpusReadView
           this.setElement($("#corpus-quickview"));
@@ -27938,13 +27938,13 @@ define('corpus/CorpusReadView',[
           $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
 
       } else if (this.format == "link") {
-        OPrime.debug("CORPUS READ LINK render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ LINK render: " );
 
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(jsonToRender));
         
       } else if (this.format == "fullscreen"){
-        OPrime.debug("CORPUS READ FULLSCREEN render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen")); 
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -27996,7 +27996,7 @@ define('corpus/CorpusReadView',[
 
         
       } else if (this.format == "centreWell"){
-        OPrime.debug("CORPUS READ CENTER render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ CENTER render: " );
 
         this.setElement($("#corpus-embedded"));
         $(this.el).html(this.templateCentreWell(jsonToRender));
@@ -28064,7 +28064,7 @@ define('corpus/CorpusReadView',[
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING CORPUS READ VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING CORPUS READ VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -28134,7 +28134,7 @@ define('corpus/CorpusReadView',[
       } 
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
+      if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
     newConversation : function(e) {
         if(e){
@@ -28143,7 +28143,7 @@ define('corpus/CorpusReadView',[
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+        if (OPrime.debugMode) OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
       },
 
     newDataList : function(e) {
@@ -28181,7 +28181,7 @@ define('corpus/CorpusReadView',[
     },
     
     resizeFullscreen : function(e){
-      OPrime.debug("CORPUS READ starts to render fullscreen. " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS READ starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -28247,7 +28247,7 @@ define('data_list/DataListEditView', [
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
       
@@ -28472,7 +28472,7 @@ define('data_list/DataListEditView', [
 
       
       if (this.format == "leftSide") {
-        OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -28502,7 +28502,7 @@ define('data_list/DataListEditView', [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
-        OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -28531,7 +28531,7 @@ define('data_list/DataListEditView', [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
-        OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
         
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
@@ -28560,7 +28560,7 @@ define('data_list/DataListEditView', [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
-        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
 
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.searchTemplate(jsonToRender));
@@ -28592,7 +28592,7 @@ define('data_list/DataListEditView', [
         //No add comment button
         
       }else if (this.format == "search-minimized") {
-        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
         
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -28603,14 +28603,14 @@ define('data_list/DataListEditView', [
 
           
         }catch(e){
-          OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
+          if (OPrime.debugMode) OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
 
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }else if (this.format == "import"){
-        OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-header"));
         $(this.el).html(this.importTemplate(jsonToRender));
@@ -28630,7 +28630,7 @@ define('data_list/DataListEditView', [
 
         
       } else if (this.format == "minimized") {
-        OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -28639,7 +28639,7 @@ define('data_list/DataListEditView', [
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }else{
-        OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
+        if (OPrime.debugMode) OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
@@ -28697,7 +28697,7 @@ define('data_list/DataListEditView', [
         this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
         appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
       }catch(e){
-        OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }
     },
     resizeSmall : function(e){
@@ -28812,7 +28812,7 @@ define('data_list/DataListEditView', [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -28934,7 +28934,7 @@ define('audio_video/AudioVideoEditView',[
     },
     
     dropAudio: function(e, audio, self) {
-      OPrime.debug("Recieved a drop event ");
+      if (OPrime.debugMode) OPrime.debug("Recieved a drop event ");
 //      if (e.stopPropagation) {
 //        e.stopPropagation(); // stops the browser from redirecting.
 //      }
@@ -29000,7 +29000,7 @@ define('datum/DatumTagEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW init");
     },
 
     /**
@@ -29024,7 +29024,7 @@ define('datum/DatumTagEditView',[
      * Renders the DatumTagEditView.
      */
     render : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       
@@ -29208,12 +29208,12 @@ define('datum/DatumEditView',[
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
-      OPrime.debug("DATUM render: " );
+      if (OPrime.debugMode) OPrime.debug("DATUM render: " );
       
      
       
       if(this.collection){
-        OPrime.debug("This datum has a link to a collection. Removing the link.");
+        if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
@@ -29223,7 +29223,7 @@ define('datum/DatumEditView',[
         jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
       }catch(e){
-        OPrime.debug("There was a problem fishing out which datum state was selected.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       
@@ -29449,7 +29449,7 @@ define('datum/DatumEditView',[
         this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
         this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
       
       //update the view of the datum state to the new color and text without rendering the entire datum
@@ -29856,7 +29856,7 @@ define('datum/DatumContainerEditView',[
           $($($(this.el).find(".utterance")[0]).find(".datum_field_input")[0]).focus();
         }
       }catch(e){
-        OPrime.debug("Wasnt able to put the cursor in the first datum's first field.");
+        if (OPrime.debugMode) OPrime.debug("Wasnt able to put the cursor in the first datum's first field.");
       }
     }
   });
@@ -30221,7 +30221,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
    * @constructs
    */
   initialize : function(options) {
-    OPrime.debug("PAGINATED UPDATING COLLECTION INIT");
+    if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION INIT");
       _(this).bindAll('addChildView', 'removeChildView');
 
       if (!options.childViewConstructor)
@@ -30247,7 +30247,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         this.currentVisibleEnd = this.perPage - 1;
 
       }catch(e){
-        OPrime.debug("there was a problem getting the number of items per page for the user, using default of 12.");
+        if (OPrime.debugMode) OPrime.debug("there was a problem getting the number of items per page for the user, using default of 12.");
       }
       
     },
@@ -30269,7 +30269,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
     
     addChildView : function(model, collection, options) {
-      OPrime.debug("PAGINATED UPDATING COLLECTION add: " , this._childViews.length);
+      if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION add: " , this._childViews.length);
 
       //If the model is not supposed to be visible, don't run this function.
       if(this.collection.indexOf(model) > this.currentVisibleEnd){
@@ -30364,7 +30364,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
 
     render : function() {
-      OPrime.debug("PAGINATED UPDATING COLLECTION render: " , this._childViews.length);
+      if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION render: " , this._childViews.length);
 
       var that = this;
       this._rendered = true;
@@ -30514,7 +30514,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         app.get("authentication").get("userPrivate").get("prefs").set("numberOfItemsInPaginatedViews", self.perPage);
         self.currentVisibleEnd = self.perPage - 1;
       }catch(e){
-        OPrime.debug("There was a problem trying to save the number of items per page to the user's preferences.",e);
+        if (OPrime.debugMode) OPrime.debug("There was a problem trying to save the number of items per page to the user's preferences.",e);
       }
       //If the user is trying to see less, render.
       if( self.perPage < previousVisibleEnd ){
@@ -30558,7 +30558,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING PAGINATEDUPDATINGCOLLECTIONVIEW  VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING PAGINATEDUPDATINGCOLLECTIONVIEW  VIEW "+ this.format);
       
       this.collection.each(this.removeChildView);
 
@@ -31068,7 +31068,7 @@ define('import/Import',[
       var xmlParser = new X2JS();
       window.text = text;
       var jsonObj = xmlParser.xml_str2json( text );
-      OPrime.debug(jsonObj);
+      if (OPrime.debugMode) OPrime.debug(jsonObj);
        
       //add the header to the session
 //    HEADER can be put in the session and in the datalist
@@ -31151,7 +31151,7 @@ define('import/Import',[
               matrix[annotation][annotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];         
             }
           }catch(e){
-            OPrime.debug("TIER "+l+" doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            if (OPrime.debugMode) OPrime.debug("TIER "+l+" doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
           
           try{
@@ -31159,7 +31159,7 @@ define('import/Import',[
               matrix[annotation][refannotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];         
             }
           }catch(e){
-            OPrime.debug("TIER "+l+" doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            if (OPrime.debugMode) OPrime.debug("TIER "+l+" doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
           
         }
@@ -31335,7 +31335,7 @@ define('import/Import',[
     readFiles : function(){
       var filedetails = [];
       var files = this.get("files");
-      OPrime.debug(files);
+      if (OPrime.debugMode) OPrime.debug(files);
       for ( var i = 0, f; f = files[i]; i++) {
         filedetails.push( escape(f.name), ' ', f.type
             || ' n/a', ' - ', f.size, ' bytes, last modified: ',
@@ -31649,7 +31649,7 @@ define('import/ImportEditView', [
     drop: function (data, dataTransfer, e) {
       (function(){
         var self = window.appView.importView.model;
-        OPrime.debug("Recieved drop of files.");
+        if (OPrime.debugMode) OPrime.debug("Recieved drop of files.");
         self.set("files", dataTransfer.files);
         self.readFiles();
       })();
@@ -31924,7 +31924,7 @@ define('import/ImportEditView', [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         });
       }catch(e){
@@ -31943,7 +31943,7 @@ define('import/ImportEditView', [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         }
       }
@@ -32304,7 +32304,7 @@ define('import/ImportEditView', [
      * @param e
      */
     dragLabelToColumn : function(e) {
-      OPrime.debug("Recieved a drop import label event ");
+      if (OPrime.debugMode) OPrime.debug("Recieved a drop import label event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -32344,7 +32344,7 @@ define('import/ImportEditView', [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -32376,7 +32376,7 @@ define('insert_unicode/InsertUnicodeView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("INSERT UNICODE VIEW init");
+      if (OPrime.debugMode) OPrime.debug("INSERT UNICODE VIEW init");
 
     },
     events : {
@@ -32398,7 +32398,7 @@ define('insert_unicode/InsertUnicodeView',[
     tagName: "span",
     
     render : function() {
-      OPrime.debug("INSERT UNICODE render");
+      if (OPrime.debugMode) OPrime.debug("INSERT UNICODE render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       
@@ -32599,7 +32599,7 @@ define('user/UserPreferenceEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER PREFERENCE VIEW init");
+      if (OPrime.debugMode) OPrime.debug("USER PREFERENCE VIEW init");
       this.model.bind("change:skin", this.renderSkin, this);
           
 //      this.model.bind("change", this.render, this);
@@ -32654,7 +32654,7 @@ define('user/UserPreferenceEditView',[
     template: Handlebars.templates.user_preference_edit_modal,
 
     render : function() {
-      OPrime.debug("USERPREFERENCE render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
         // Display the UserPreferenceEditView
         this.setElement($("#user-preferences-modal"));
@@ -32705,25 +32705,25 @@ define('user/UserPreferenceEditView',[
      * Available backgrounds 
      */
     skins : [
-       "user/skins/bamboo_garden.jpg",
-       "user/skins/llama_wool.jpg" , 
-       "user/skins/yellow.jpg" , 
-       "user/skins/machu_picchu.jpg",
-       "user/skins/machu_picchu2.jpg",
-       "user/skins/white.jpg" , 
-       "user/skins/prague.jpg",
-       "user/skins/salcantay.jpg",
+"user/skins/black.jpg" , 
+"user/skins/Ceske_Krumlov.jpg",
+"user/skins/llama_wool.jpg" , 
+"user/skins/prague.jpg",
+//       "user/skins/bamboo_garden.jpg",
+//       "user/skins/yellow.jpg" , 
+//       "user/skins/machu_picchu.jpg",
+//       "user/skins/machu_picchu2.jpg",
+//       "user/skins/salcantay.jpg",
        "user/skins/stairs.jpg",
+       "user/skins/stbasil.jpg",
        "user/skins/stone_figurines.jpg",
 //       "user/skins/libre_office.png",
-       "user/skins/temple.jpg",
+//       "user/skins/temple.jpg",
        "user/skins/weaving.jpg",
-       "user/skins/purple.jpg" , 
-       "user/skins/sunset.jpg",
+//       "user/skins/purple.jpg" , 
+//       "user/skins/sunset.jpg",
+       "user/skins/white.jpg" , 
        "user/skins/window.jpg",
-       "user/skins/Ceske_Krumlov.jpg",
-       "user/skins/black.jpg" , 
-       "user/skins/stbasil.jpg",
      ],
      
     /**
@@ -32788,7 +32788,7 @@ define('user/UserPreferenceEditView',[
       headtg.replaceChild(newlink, oldlink);
     },
     savePrefs: function(){
-      OPrime.debug("Saving preferences into encrypted user.");
+      if (OPrime.debugMode) OPrime.debug("Saving preferences into encrypted user.");
       window.app.get("authentication").saveAndInterConnectInApp();
     }
   });
@@ -32823,7 +32823,7 @@ define('search/Search',[
 
     initialize : function() {
       this.on('all', function(e) {
-        OPrime.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
+        if (OPrime.debugMode) OPrime.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
       });
     },
     
@@ -32891,7 +32891,7 @@ define('search/SearchEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("SEARCH init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("SEARCH init: " + this.el);
       
       this.newTempDataList();
       this.changeViewsOfInternalModels();
@@ -32954,7 +32954,7 @@ define('search/SearchEditView',[
      * Renders the SearchEditView.
      */
     render : function() {
-      OPrime.debug("SEARCH render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("SEARCH render: " + this.el);
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
@@ -33084,7 +33084,7 @@ define('search/SearchEditView',[
      * Perform a search that finds the union of all the criteria.
      */
     searchUnion : function() {
-      OPrime.debug("In searchUnion");
+      if (OPrime.debugMode) OPrime.debug("In searchUnion");
       window.scrollTo(0,0);
       
       // Create a query string from the search criteria
@@ -33101,7 +33101,7 @@ define('search/SearchEditView',[
      * Perform a search that finds the intersection of all the criteria.
      */
     searchIntersection : function() {
-      OPrime.debug("In searchIntersection");
+      if (OPrime.debugMode) OPrime.debug("In searchIntersection");
       window.scrollTo(0,0);
 
       // Create a query string from the search criteria
@@ -33118,7 +33118,7 @@ define('search/SearchEditView',[
      * Perform a search.
      */
     searchTop : function() {
-      OPrime.debug("Will search for " + $("#search_box").val());
+      if (OPrime.debugMode) OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
       this.search($("#search_box").val());
@@ -33167,7 +33167,7 @@ define('search/SearchEditView',[
         queryString = searchCriteria.join(" AND ");
       }
       
-      OPrime.debug("Searching for " + queryString);
+      if (OPrime.debugMode) OPrime.debug("Searching for " + queryString);
       return queryString;
     },
     
@@ -33206,7 +33206,7 @@ define('search/SearchEditView',[
           // Add search results to the data list
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
-          OPrime.debug("Successfully got data back from search and put it into the temp search data list");
+          if (OPrime.debugMode) OPrime.debug("Successfully got data back from search and put it into the temp search data list");
           if(typeof callback == "function"){
         	  callback();
           }
@@ -33247,7 +33247,7 @@ define('search/SearchEditView',[
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING SEARCH EDIT VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING SEARCH EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -33296,7 +33296,7 @@ define('user/UserEditView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER EDIT VIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("USER EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
 
@@ -33356,14 +33356,14 @@ define('user/UserEditView',[
      * Renders the UserEditView depending on its format.
      */
     render : function() {
-//      OPrime.debug("USER render: " + this.el);
+//      if (OPrime.debugMode) OPrime.debug("USER render: " + this.el);
 
       if (this.model == undefined) {
-        OPrime.debug("\User model was undefined");
+        if (OPrime.debugMode) OPrime.debug("\User model was undefined");
         return this;
       }
       if (this.format == "fullscreen") {
-        OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -33378,7 +33378,7 @@ define('user/UserEditView',[
         
         
       } else if(this.format == "modal") {
-        OPrime.debug("USER EDIT MODAL render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("USER EDIT MODAL render: " + this.el);
 
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
@@ -33395,7 +33395,7 @@ define('user/UserEditView',[
         
         
       }else if (this.format == "public") {
-        OPrime.debug("USER EDIT PUBLIC render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("USER EDIT PUBLIC render: " + this.el);
 
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -33429,7 +33429,7 @@ define('user/UserEditView',[
       return this;
     },
     saveProfile : function(){
-      OPrime.debug("Saving user");
+      if (OPrime.debugMode) OPrime.debug("Saving user");
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
@@ -34467,7 +34467,7 @@ define('app/AppView',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("APPVIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
@@ -34507,7 +34507,7 @@ define('app/AppView',[
 
       //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
       if(! this.corpusNewModalView){
-        OPrime.debug("Creating an empty new corpus for the new Corpus modal.");
+        if (OPrime.debugMode) OPrime.debug("Creating an empty new corpus for the new Corpus modal.");
         this.corpusNewModalView = new CorpusEditView({
           model : new Corpus({filledWithDefaults: true})
         });
@@ -34584,7 +34584,7 @@ define('app/AppView',[
       
       //Only make a new session modal if it was not already created
       if(! this.sessionNewModalView){
-        OPrime.debug("Creating an empty new session for the new Session modal.");
+        if (OPrime.debugMode) OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
             comments : new Comments(),
@@ -34867,10 +34867,10 @@ define('app/AppView',[
      * Renders the AppView and all of its child Views.
      */
     render : function() {
-      OPrime.debug("APPVIEW render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
       if (this.model != undefined) {
         
-        OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
+        if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
         this.currentCorpusEditView.destroy_view();
         this.currentCorpusReadView.destroy_view();
         this.currentSessionEditView.destroy_view();
@@ -34886,7 +34886,7 @@ define('app/AppView',[
         
         
         this.destroy_view();
-        OPrime.debug("Done Destroying the appview, so we dont get double events.");
+        if (OPrime.debugMode) OPrime.debug("Done Destroying the appview, so we dont get double events.");
 
         // Display the AppView
         this.setElement($("#app_view"));
@@ -34896,7 +34896,7 @@ define('app/AppView',[
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
         }catch(e){
-          OPrime.debug("Problem setting the username or pouchname of the app.");
+          if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
         }
         
         $(this.el).html(this.template(jsonToRender));
@@ -35102,7 +35102,7 @@ define('app/AppView',[
      * @param e event
      */
     dragUnicodeToField : function(e) {
-      OPrime.debug("Recieved a drop unicode event ");
+      if (OPrime.debugMode) OPrime.debug("Recieved a drop unicode event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -35247,7 +35247,7 @@ define('app/AppView',[
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING APP VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING APP VIEW ");
       
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -35614,7 +35614,7 @@ define('app/App',[
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("APP INIT");
+      if (OPrime.debugMode) OPrime.debug("APP INIT");
       
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
@@ -35653,7 +35653,7 @@ define('app/App',[
       if(!this.get("loadTheAppForTheFirstTime")){
         window.app = this;
         var appself = this;
-        OPrime.debug("Loading encrypted user");
+        if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
         $(".spinner-status").html("Loading encrypted user...");
         var u = localStorage.getItem("encryptedUser");
         appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
@@ -35664,7 +35664,7 @@ define('app/App',[
             /*
              * Load the backbone objects
              */
-            OPrime.debug("Creating backbone objects");
+            if (OPrime.debugMode) OPrime.debug("Creating backbone objects");
             $(".spinner-status")
             .html("Building dashboard objects...");
             appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
@@ -35673,14 +35673,14 @@ define('app/App',[
                * If you know the user, load their most recent
                * dashboard
                */
-              OPrime.debug("Loading the backbone objects");
+              if (OPrime.debugMode) OPrime.debug("Loading the backbone objects");
               $(".spinner-status").html(
               "Loading dashboard objects...");
               appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
                   appself.get("authentication").get(
                   "userPrivate").get("mostRecentIds"), function() {
                 
-                OPrime.debug("Starting the app");
+                if (OPrime.debugMode) OPrime.debug("Starting the app");
                 appself.startApp(function() {
                   window.app.showHelpOrNot();
                   appself.stopSpinner();
@@ -35825,7 +35825,7 @@ define('app/App',[
         
         Backbone.history.start();
         if (typeof callback == "function") {
-          OPrime.debug("Calling back the startApps callback");
+          if (OPrime.debugMode) OPrime.debug("Calling back the startApps callback");
           callback();
         }
       }
@@ -35905,7 +35905,7 @@ define('app/App',[
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
       $.couch.login({
@@ -35974,7 +35974,7 @@ define('app/App',[
                     if (typeof failurecallback == "function") {
                       failurecallback("I couldn't log you into your corpus.");
                     }
-                    OPrime.debug(serverResults);
+                    if (OPrime.debugMode) OPrime.debug(serverResults);
                     window.app.get("authentication").set(
                         "staleAuthentication", true);
                   }
@@ -35986,9 +35986,9 @@ define('app/App',[
     getCouchUrl : function(couchConnection, couchdbcommand) {
       if(!couchConnection){
         couchConnection = this.get("couchConnection");
-        OPrime.debug("Using the apps ccouchConnection", couchConnection);
+        if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
       }else{
-        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+        if (OPrime.debugMode) OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
       }
       if(!couchConnection){
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
@@ -36002,7 +36002,7 @@ define('app/App',[
         failurecallback) {
       var self = this;
       if(!self.pouch){
-        OPrime.debug("Not replicating, no pouch ready.");
+        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
         if(typeof successcallback == "function"){
           successcallback();
         }
@@ -36011,16 +36011,16 @@ define('app/App',[
       self.pouch(function(err, db) {
         var couchurl = this.getCouchUrl();
         if (err) {
-          OPrime.debug("Opening db error", err);
+          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
           if (typeof failurecallback == "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            OPrime.debug('Opening DB error'
+            if (OPrime.debugMode) OPrime.debug('Opening DB error'
                 + JSON.stringify(err));
           }
         } else {
-          OPrime.debug("Opening db success", db);
+          if (OPrime.debugMode) OPrime.debug("Opening db success", db);
           alert("TODO check to see if  needs a slash if replicating with pouch on "+couchurl );
           self.replicateFromCorpus(db, couchurl, function() {
             //turn on to regardless of fail or succeed
@@ -36045,7 +36045,7 @@ define('app/App',[
       var self = this;
 
       if(!self.pouch){
-        OPrime.debug("Not replicating, no pouch ready.");
+        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
         if(typeof successcallback == "function"){
           successcallback();
         }
@@ -36055,26 +36055,26 @@ define('app/App',[
       self.pouch(function(err, db) {
         var couchurl = self.getCouchUrl();
         if (err) {
-          OPrime.debug("Opening db error", err);
+          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
           if (typeof failurecallback == "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            OPrime.debug('Opening DB error'
+            if (OPrime.debugMode) OPrime.debug('Opening DB error'
                 + JSON.stringify(err));
           }
         } else {
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            OPrime.debug("Replicate from " + couchurl,response, err);
+            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl,response, err);
             if(err){
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('Corpus replicate from error' + JSON.stringify(err));
-                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             }else{
-              OPrime.debug("Corpus replicate from success", response);
+              if (OPrime.debugMode) OPrime.debug("Corpus replicate from success", response);
               if(typeof successcallback == "function"){
                 successcallback();
               }
@@ -36087,24 +36087,24 @@ define('app/App',[
       db.replicate.to(couchurl, {
         continuous : true
       }, function(err, response) {
-        OPrime.debug("Replicated to " + couchurl);
-        OPrime.debug(response);
-        OPrime.debug(err);
+        if (OPrime.debugMode) OPrime.debug("Replicated to " + couchurl);
+        if (OPrime.debugMode) OPrime.debug(response);
+        if (OPrime.debugMode) OPrime.debug(err);
         if (err) {
-          OPrime.debug("replicate to db  error", err);
+          if (OPrime.debugMode) OPrime.debug("replicate to db  error", err);
           if (typeof failure == "function") {
             failure();
           } else {
             alert('Database replicate to error' + JSON.stringify(err));
-            OPrime.debug('Database replicate to error'
+            if (OPrime.debugMode) OPrime.debug('Database replicate to error'
                 + JSON.stringify(err));
           }
         } else {
-          OPrime.debug("Database replicate to success", response);
+          if (OPrime.debugMode) OPrime.debug("Database replicate to success", response);
           if (typeof success == "function") {
             success();
           } else {
-            OPrime.debug('Database replicating'
+            if (OPrime.debugMode) OPrime.debug('Database replicating'
                 + JSON.stringify(couchConnection));
           }
 
@@ -36117,26 +36117,26 @@ define('app/App',[
         continuous : true
       },
       function(err, response) {
-        OPrime.debug("Replicated from " + couchurl);
-        OPrime.debug(response);
-        OPrime.debug(err);
+        if (OPrime.debugMode) OPrime.debug("Replicated from " + couchurl);
+        if (OPrime.debugMode) OPrime.debug(response);
+        if (OPrime.debugMode) OPrime.debug(err);
         if (err) {
-          OPrime.debug("replicate from db  error", err);
+          if (OPrime.debugMode) OPrime.debug("replicate from db  error", err);
           if (typeof fail == "function") {
             fail();
           } else {
             alert('Database replicate from error'
                 + JSON.stringify(err));
-            OPrime.debug('Database replicate from error'
+            if (OPrime.debugMode) OPrime.debug('Database replicate from error'
                 + JSON.stringify(err));
           }
         } else {
-          OPrime.debug("Database replicate from success",
+          if (OPrime.debugMode) OPrime.debug("Database replicate from success",
               response);
           if (typeof succes == "function") {
             succes();
           } else {
-            OPrime.debug('Database replicating'
+            if (OPrime.debugMode) OPrime.debug('Database replicating'
                 + JSON.stringify(couchConnection));
           }
 
@@ -36145,7 +36145,7 @@ define('app/App',[
     },
     
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
-      OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+      if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       
 
       /*
@@ -36214,7 +36214,7 @@ define('app/App',[
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-            OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             
             /* Upgrade chrome app user corpora's to v1.38+ */
             var oldCouchConnection = corpusModel.get("couchConnection");
@@ -36247,7 +36247,7 @@ define('app/App',[
                     $(".spinner-status").html("Opened DataList...");
 
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                    OPrime.debug("Data list fetched successfully", dataListModel);
+                    if (OPrime.debugMode) OPrime.debug("Data list fetched successfully", dataListModel);
                     dl.setAsCurrentDataList(function(){
                       $(".spinner-status").html("Loading your most recent DataList, "+dataListModel.get("datumIds").length+" entries...");
 
@@ -36260,13 +36260,13 @@ define('app/App',[
                             $(".spinner-status").html("Opened Elicitation Session...");
 
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                            OPrime.debug("Session fetched successfully", sessionModel);
+                            if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
                             s.setAsCurrentSession(function(){
                               
                               $(".spinner-status").html("Loading Elicitation Session...");
 
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
-                              OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               if(window.appView){
                                 window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
                               }
@@ -36307,13 +36307,13 @@ define('app/App',[
             });//end setAsCurrentCorpus
           },
           error : function(model, error, options) {
-            OPrime.debug("There was an error fetching corpus ",model,error,options);
+            if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
             alert("There seems to be an error when fetching corpus: "+error.reason);
             if(error.error.indexOf("unauthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
-                OPrime.debug("Trying to reload the app after a session token has timed out");
+                if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
                 self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
               }, couchConnection.pouchname);
 //              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
@@ -36415,7 +36415,7 @@ define('app/App',[
 //        couchurl = couchurl + this.get("authentication").get("userPrivate").get(
 //        "username") + "-activity_feed";
 //      }
-//      OPrime.debug("Saving activity: ", backBoneActivity);
+//      if (OPrime.debugMode) OPrime.debug("Saving activity: ", backBoneActivity);
 //      $.ajax({
 //        url : couchurl,
 //        data : backBoneActivity.toJSON(),
@@ -36679,7 +36679,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   } else if (window.location.origin.indexOf("localhost") >= 0) {
     mostLikelyAuthUrl = "Localhost";
   } else if (OPrime.isChromeApp()) {
-    OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
+    if (OPrime.debugMode) OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
     var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(authUrl);
     if (appropriateserver == -1) {
       OPrime.bug("This shouldn't happen. Please report this bug.");

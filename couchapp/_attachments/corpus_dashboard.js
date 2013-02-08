@@ -178,13 +178,13 @@ window.app = new App({filledWithDefaults: true});
 //    Backbone.history.start();
 //    
 //    if(typeof callback == "function"){
-//      OPrime.debug("Calling back the startApps callback");
+//      if (OPrime.debugMode) OPrime.debug("Calling back the startApps callback");
 //      callback();
 //    }
 //    
 //  };
 //  loadFreshApp = function(){
-//    OPrime.debug("Loading fresh app");
+//    if (OPrime.debugMode) OPrime.debug("Loading fresh app");
 //    document.location.href='user.html';
 //  };
 //  /*
@@ -211,11 +211,11 @@ window.app = new App({filledWithDefaults: true});
 ////  });
 //  
 ////  window.hub.subscribe("ajaxError",function(e){
-////    OPrime.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
+////    if (OPrime.debugMode) OPrime.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
 ////  }, this);
 ////  
 ////  window.hub.subscribe("pouchError",function(e){
-////    OPrime.debug("Pouch Error: ", e);
+////    if (OPrime.debugMode) OPrime.debug("Pouch Error: ", e);
 ////  }, this);
 //  /*
 //   * For developers: to clear the app completely to test app load
@@ -249,7 +249,7 @@ window.app = new App({filledWithDefaults: true});
 //      loadFreshApp();
 //      return;
 //    }else{
-//      OPrime.debug("Loading app from localStorage");
+//      if (OPrime.debugMode) OPrime.debug("Loading app from localStorage");
 //      var couchConnection = appjson.couchConnection;
 //      var pouchname = couchConnection.pouchname;
 //      if(couchConnection == "undefined" || couchConnection == undefined || couchConnection ==  null){

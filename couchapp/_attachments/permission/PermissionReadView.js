@@ -17,7 +17,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("PERMISSION READ VIEW init");
+      if (OPrime.debugMode) OPrime.debug("PERMISSION READ VIEW init");
     },
     
     /**
@@ -40,7 +40,7 @@ define([
      * Renders the DatumFieldView.
      */
     render : function() {
-      OPrime.debug("PERMISSION READ VIEW render");
+      if (OPrime.debugMode) OPrime.debug("PERMISSION READ VIEW render");
       var jsonToRender = this.model.toJSON();
       jsonToRender.users = this.model.get("users").toJSON();
       $(this.el).html(this.template(jsonToRender));

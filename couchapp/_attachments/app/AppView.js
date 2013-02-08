@@ -100,7 +100,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("APPVIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
@@ -140,7 +140,7 @@ define([
 
       //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
       if(! this.corpusNewModalView){
-        OPrime.debug("Creating an empty new corpus for the new Corpus modal.");
+        if (OPrime.debugMode) OPrime.debug("Creating an empty new corpus for the new Corpus modal.");
         this.corpusNewModalView = new CorpusEditView({
           model : new Corpus({filledWithDefaults: true})
         });
@@ -217,7 +217,7 @@ define([
       
       //Only make a new session modal if it was not already created
       if(! this.sessionNewModalView){
-        OPrime.debug("Creating an empty new session for the new Session modal.");
+        if (OPrime.debugMode) OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
             comments : new Comments(),
@@ -500,10 +500,10 @@ define([
      * Renders the AppView and all of its child Views.
      */
     render : function() {
-      OPrime.debug("APPVIEW render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
       if (this.model != undefined) {
         
-        OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
+        if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
         this.currentCorpusEditView.destroy_view();
         this.currentCorpusReadView.destroy_view();
         this.currentSessionEditView.destroy_view();
@@ -519,7 +519,7 @@ define([
         
         
         this.destroy_view();
-        OPrime.debug("Done Destroying the appview, so we dont get double events.");
+        if (OPrime.debugMode) OPrime.debug("Done Destroying the appview, so we dont get double events.");
 
         // Display the AppView
         this.setElement($("#app_view"));
@@ -529,7 +529,7 @@ define([
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
         }catch(e){
-          OPrime.debug("Problem setting the username or pouchname of the app.");
+          if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
         }
         
         $(this.el).html(this.template(jsonToRender));
@@ -735,7 +735,7 @@ define([
      * @param e event
      */
     dragUnicodeToField : function(e) {
-      OPrime.debug("Recieved a drop unicode event ");
+      if (OPrime.debugMode) OPrime.debug("Recieved a drop unicode event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -880,7 +880,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING APP VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING APP VIEW ");
       
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
