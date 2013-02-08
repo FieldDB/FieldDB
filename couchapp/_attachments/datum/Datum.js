@@ -167,7 +167,7 @@ define([
               
               if(err){
                 if(window.toldSearchtomakebydateviews){
-                  OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
+                  if (OPrime.debugMode) OPrime.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
                   return;
                 }
                 /*
@@ -182,7 +182,7 @@ define([
               }
               
               if ((!err) && (typeof callback == "function"))  {
-                OPrime.debug("Callback with: ", response.rows);
+                if (OPrime.debugMode) OPrime.debug("Callback with: ", response.rows);
                 callback(response.rows);
               }
             });
@@ -202,7 +202,7 @@ define([
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
         window.pageTracker._trackPageview('/search_results.php?q='+queryString); 
       }catch(e){
-        OPrime.debug("Search Analytics not working.");
+        if (OPrime.debugMode) OPrime.debug("Search Analytics not working.");
       }
       
       // Process the given query string into tokens
@@ -238,7 +238,7 @@ define([
 //        alert("TODO test search in chrome extension");
         $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
           success: function(response) {
-            OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
+            if (OPrime.debugMode) OPrime.debug("Got "+response.length+ "datums to check for the search query locally client side.");
             var matchIds = [];
 //            console.log(response);
             for (i in response.rows) {
@@ -285,7 +285,7 @@ define([
                 }
               }else{
                 if(window.toldSearchtomakeviews){
-                  OPrime.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
+                  if (OPrime.debugMode) OPrime.debug("Told search to make views once, apparently it didnt work. Stopping it from looping.");
                   return;
                 }
                 /*
@@ -564,7 +564,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving a Datum");
+      if (OPrime.debugMode) OPrime.debug("Saving a Datum");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -600,7 +600,7 @@ define([
         this.set("session" , window.app.get("currentSession")); 
         Util.debug("Setting the session on this datum to the current one.");
       }else{
-        OPrime.debug("Not setting the session on this datum.");
+        if (OPrime.debugMode) OPrime.debug("Not setting the session on this datum.");
       }
       window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()) );
       
@@ -617,12 +617,12 @@ define([
           }
         }
       }catch(e){
-        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Datum save success');
+            if (OPrime.debugMode) OPrime.debug('Datum save success');
             var utterance = model.get("datumFields").where({label: "utterance"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for datum goals in corpus
@@ -742,7 +742,7 @@ define([
             }
           },
           error : function(e, f, g) {
-            OPrime.debug("Datum save error", e, f, g)
+            if (OPrime.debugMode) OPrime.debug("Datum save error", e, f, g)
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{

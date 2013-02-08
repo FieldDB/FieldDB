@@ -46,7 +46,7 @@ define([
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      OPrime.debug("USERGENERIC init");
+      if (OPrime.debugMode) OPrime.debug("USERGENERIC init");
 
     },
       

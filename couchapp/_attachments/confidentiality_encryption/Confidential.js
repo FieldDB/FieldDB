@@ -33,7 +33,7 @@ define( [
      * 
      */
     initialize : function() {
-      OPrime.debug("Initializing confidentiality module");
+      if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
 
 //      var encryptedMessage = this.encrypt("hi this is a longer message.");
 //      console.log("encrypted" + encryptedMessage);
