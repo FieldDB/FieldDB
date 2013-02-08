@@ -29,7 +29,7 @@ define([
      * @constructs
      */
     initialize: function(attributes) {
-      OPrime.debug("USER init");
+      if (OPrime.debugMode) OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
       
       if(this.get("filledWithDefaults")){

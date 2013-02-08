@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("ACTIVITY init: ");
+      if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
@@ -110,10 +110,10 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(activsuccesscallback, activfailurecallback){
-      OPrime.debug("Saving the Activity");
+      if (OPrime.debugMode) OPrime.debug("Saving the Activity");
       var self = this;
       if(! this.isNew()){
-        OPrime.debug('Activity doesnt need to be saved.');
+        if (OPrime.debugMode) OPrime.debug('Activity doesnt need to be saved.');
         if(typeof activsuccesscallback == "function"){
           activsuccesscallback();
         }
@@ -123,7 +123,7 @@ define([
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Activity save success');
+            if (OPrime.debugMode) OPrime.debug('Activity save success');
 
             if(typeof activsuccesscallback == "function"){
               activsuccesscallback();

@@ -26,7 +26,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CONVERSATION init");
+      if (OPrime.debugMode) OPrime.debug("CONVERSATION init");
       
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
@@ -94,7 +94,7 @@ define([
       }
       var audioVideoFiles = [];
       
-      OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToGetAudioVideo[id];
@@ -127,7 +127,7 @@ define([
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
-      OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToApplyFunction[id];
@@ -153,7 +153,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the Conversation");
+      if (OPrime.debugMode) OPrime.debug("Saving the Conversation");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -175,7 +175,7 @@ define([
 
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Conversation save success');
+            if (OPrime.debugMode) OPrime.debug('Conversation save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
