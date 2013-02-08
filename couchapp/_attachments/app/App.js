@@ -350,7 +350,7 @@ define([
         return;
       }
       
-      var couchurl = this.getCouchUrl(couchConnection, "/_session/");
+      var couchurl = this.getCouchUrl(couchConnection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
