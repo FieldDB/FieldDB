@@ -39,7 +39,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("SEARCH init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("SEARCH init: " + this.el);
       
       this.newTempDataList();
       this.changeViewsOfInternalModels();
@@ -102,7 +102,7 @@ define([
      * Renders the SearchEditView.
      */
     render : function() {
-      OPrime.debug("SEARCH render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("SEARCH render: " + this.el);
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
 
@@ -123,6 +123,7 @@ define([
       $(this.el).find(".locale_AND").html(Locale.get("locale_AND"));
       $(this.el).find(".locale_OR").html(Locale.get("locale_OR"));
       
+//      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
       
@@ -131,6 +132,7 @@ define([
 
      //this.setElement($("#search-top"));
       $("#search-top").html(this.topTemplate(this.model.toJSON()));
+      
       
       //localization
       $("#search-top").find(".locale_Search_Tooltip").attr("title", Locale.get("locale_Search"));
@@ -193,6 +195,7 @@ define([
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
+            filledWithDefaults: true,
             "pouchname" : window.app.get("corpus").get("pouchname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."
@@ -208,6 +211,8 @@ define([
     changeViewsOfInternalModels : function(){
       
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
+      //put "grammatical" to search by default for only grammatical forms. 
+      window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
         childViewConstructor : DatumFieldEditView,
@@ -227,7 +232,7 @@ define([
      * Perform a search that finds the union of all the criteria.
      */
     searchUnion : function() {
-      OPrime.debug("In searchUnion");
+      if (OPrime.debugMode) OPrime.debug("In searchUnion");
       window.scrollTo(0,0);
       
       // Create a query string from the search criteria
@@ -244,7 +249,7 @@ define([
      * Perform a search that finds the intersection of all the criteria.
      */
     searchIntersection : function() {
-      OPrime.debug("In searchIntersection");
+      if (OPrime.debugMode) OPrime.debug("In searchIntersection");
       window.scrollTo(0,0);
 
       // Create a query string from the search criteria
@@ -261,7 +266,7 @@ define([
      * Perform a search.
      */
     searchTop : function() {
-      OPrime.debug("Will search for " + $("#search_box").val());
+      if (OPrime.debugMode) OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
             // Search for Datum that match the search criteria      
       this.search($("#search_box").val());
@@ -310,7 +315,7 @@ define([
         queryString = searchCriteria.join(" AND ");
       }
       
-      OPrime.debug("Searching for " + queryString);
+      if (OPrime.debugMode) OPrime.debug("Searching for " + queryString);
       return queryString;
     },
     
@@ -341,7 +346,7 @@ define([
               + $("#search_box").val()
               + " in " 
               + window.app.get("corpus").get("title") 
-              + " on "+ JSON.stringify(new Date()) );
+              + " on "+ new Date() );
           searchself.searchDataListView.format = "search";
           searchself.searchDataListView.render();
 //          searchself.searchPaginatedDataListDatumsView.renderInElement(
@@ -349,7 +354,7 @@ define([
           // Add search results to the data list
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
-          OPrime.debug("Successfully got data back from search and put it into the temp search data list");
+          if (OPrime.debugMode) OPrime.debug("Successfully got data back from search and put it into the temp search data list");
           if(typeof callback == "function"){
         	  callback();
           }
@@ -390,7 +395,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING SEARCH EDIT VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING SEARCH EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

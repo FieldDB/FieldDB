@@ -21,7 +21,7 @@ define( [
 
     },
     
-    model : {
+    internalModels : {
       // There are all the models of a corpus, plus some more
     },
     saveAndInterConnectInApp : function(callback){

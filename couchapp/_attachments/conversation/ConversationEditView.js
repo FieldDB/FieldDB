@@ -2,7 +2,6 @@
 define( [ 
     "backbone", 
     "handlebars",
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -14,7 +13,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     Comment,
     Comments,
     CommentReadView,
@@ -40,7 +38,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
       
@@ -239,7 +237,7 @@ define( [
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "leftSide") {
-        OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -269,7 +267,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
-        OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -298,7 +296,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
-        OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
         
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
@@ -327,7 +325,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
-        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
 
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.searchTemplate(jsonToRender));
@@ -358,7 +356,7 @@ define( [
         //No add comment button
         
       }else if (this.format == "search-minimized") {
-        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
         
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -369,14 +367,14 @@ define( [
 
           
         }catch(e){
-          OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
+          if (OPrime.debugMode) OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
 
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }else if (this.format == "import"){
-        OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-header"));
         $(this.el).html(this.importTemplate(jsonToRender));
@@ -396,7 +394,7 @@ define( [
 
         
       } else if (this.format == "minimized") {
-        OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -405,7 +403,7 @@ define( [
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }else{
-        OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
+        if (OPrime.debugMode) OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
@@ -463,7 +461,7 @@ define( [
         this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
         appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
       }catch(e){
-        OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }
     },
     resizeSmall : function(e){
@@ -551,13 +549,13 @@ define( [
       }
       alert("TODO");
     },
-   
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();

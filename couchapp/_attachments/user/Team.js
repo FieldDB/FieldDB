@@ -27,6 +27,14 @@ define([
     initialize: function(attributes) {
       UserGeneric.__super__.initialize.call(this, attributes);
       
+      
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+      this.bind("change", this.checkPrefsChanged, this);
+    },
+    fillWithDefaults : function(){
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
         this.set("prefs", new UserPreference());
@@ -41,10 +49,7 @@ define([
       if (!this.get("hotkeys")) {
         this.set("hotkeys", new HotKey());//TODO this needs to become plural
       }
-      
-      this.bind("change", this.checkPrefsChanged, this);
     },
-    
     defaults : {
       // Defaults from UserGeneric
       username : "",

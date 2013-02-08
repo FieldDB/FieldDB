@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "corpus/Corpus",
     "corpus/Corpuses",
     "corpus/CorpusLinkView",
@@ -11,7 +10,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     Corpus,
     Corpuses,
     CorpusLinkView,
@@ -35,7 +33,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER EDIT VIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("USER EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
 
@@ -95,14 +93,14 @@ define([
      * Renders the UserEditView depending on its format.
      */
     render : function() {
-//      OPrime.debug("USER render: " + this.el);
+//      if (OPrime.debugMode) OPrime.debug("USER render: " + this.el);
 
       if (this.model == undefined) {
-        OPrime.debug("\User model was undefined");
+        if (OPrime.debugMode) OPrime.debug("\User model was undefined");
         return this;
       }
       if (this.format == "fullscreen") {
-        OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("USER EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -117,7 +115,7 @@ define([
         
         
       } else if(this.format == "modal") {
-        OPrime.debug("USER EDIT MODAL render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("USER EDIT MODAL render: " + this.el);
 
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(this.model.toJSON()));
@@ -134,7 +132,7 @@ define([
         
         
       }else if (this.format == "public") {
-        OPrime.debug("USER EDIT PUBLIC render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("USER EDIT PUBLIC render: " + this.el);
 
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(this.model.toJSON()));
@@ -168,7 +166,7 @@ define([
       return this;
     },
     saveProfile : function(){
-      OPrime.debug("Saving user");
+      if (OPrime.debugMode) OPrime.debug("Saving user");
       
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
@@ -182,21 +180,21 @@ define([
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "your private profile",
               indirectobject : "",
               teamOrPersonal : "personal",
               context : "via Offline App"
-            }));
+            });
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
               indirectobject : "",
               teamOrPersonal : "team",
               context : "via Offline App"
-            }));
+            });
       }else{
         //It is the public self
         window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
@@ -205,21 +203,21 @@ define([
         });
         
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>your public profile</a>",
               indirectobject : "",
               teamOrPersonal : "personal",
               context : "via Offline App"
-            }));
+            });
         window.app.addActivity(
-            new Activity({
+            {
               verb : "modified",
               directobject : "<a href='#user/"+this.model._id+"'>their profile</a>",
               indirectobject : "",
               teamOrPersonal : "team",
               context : "via Offline App"
-            }));
+            });
       }
       
       window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");

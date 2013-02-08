@@ -19,7 +19,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER PREFERENCE VIEW init");
+      if (OPrime.debugMode) OPrime.debug("USER PREFERENCE VIEW init");
       this.model.bind("change:skin", this.renderSkin, this);
           
 //      this.model.bind("change", this.render, this);
@@ -74,7 +74,7 @@ define([
     template: Handlebars.templates.user_preference_edit_modal,
 
     render : function() {
-      OPrime.debug("USERPREFERENCE render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("USERPREFERENCE render: " + this.el);
       if (this.model != undefined) {
         // Display the UserPreferenceEditView
         this.setElement($("#user-preferences-modal"));
@@ -125,25 +125,25 @@ define([
      * Available backgrounds 
      */
     skins : [
-       "user/skins/bamboo_garden.jpg",
-       "user/skins/llama_wool.jpg" , 
-       "user/skins/yellow.jpg" , 
-       "user/skins/machu_picchu.jpg",
-       "user/skins/machu_picchu2.jpg",
-       "user/skins/white.jpg" , 
-       "user/skins/prague.jpg",
-       "user/skins/salcantay.jpg",
+"user/skins/black.jpg" , 
+"user/skins/Ceske_Krumlov.jpg",
+"user/skins/llama_wool.jpg" , 
+"user/skins/prague.jpg",
+//       "user/skins/bamboo_garden.jpg",
+//       "user/skins/yellow.jpg" , 
+//       "user/skins/machu_picchu.jpg",
+//       "user/skins/machu_picchu2.jpg",
+//       "user/skins/salcantay.jpg",
        "user/skins/stairs.jpg",
+       "user/skins/stbasil.jpg",
        "user/skins/stone_figurines.jpg",
 //       "user/skins/libre_office.png",
-       "user/skins/temple.jpg",
+//       "user/skins/temple.jpg",
        "user/skins/weaving.jpg",
-       "user/skins/purple.jpg" , 
-       "user/skins/sunset.jpg",
+//       "user/skins/purple.jpg" , 
+//       "user/skins/sunset.jpg",
+       "user/skins/white.jpg" , 
        "user/skins/window.jpg",
-       "user/skins/Ceske_Krumlov.jpg",
-       "user/skins/black.jpg" , 
-       "user/skins/stbasil.jpg",
      ],
      
     /**
@@ -208,7 +208,7 @@ define([
       headtg.replaceChild(newlink, oldlink);
     },
     savePrefs: function(){
-      OPrime.debug("Saving preferences into encrypted user.");
+      if (OPrime.debugMode) OPrime.debug("Saving preferences into encrypted user.");
       window.app.get("authentication").saveAndInterConnectInApp();
     }
   });

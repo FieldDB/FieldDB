@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "app/App",
     "authentication/Authentication",
     "corpus/Corpus",
@@ -17,7 +16,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     App,
     Authentication,
     Corpus,
@@ -41,7 +39,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER welcome init: " );
+      if (OPrime.debugMode) OPrime.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
       
@@ -152,7 +150,7 @@ define([
      * Renders the UserWelcomeView and its partial.
      */
     render : function() {
-      OPrime.debug("USER render: " );
+      if (OPrime.debugMode) OPrime.debug("USER render: " );
 
       if (this.model != undefined) {
         this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
@@ -177,15 +175,15 @@ define([
 //        $(this.el).find(".locale_Warning").text(Locale.get("locale_Warning"));
 //        $(this.el).find(".locale_Instructions_to_show_on_dashboard").html(Locale.get("locale_Instructions_to_show_on_dashboard"));
 
-        /*
-         * Workaround for Bootstrap dropdowns not being clickable in android.
-         */
-        $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
-          e.stopPropagation(); 
-        });
-        $(document).on('click','.dropdown-menu a',function(){
-          document.location = $(this).attr('href');
-        });
+//        /*
+//         * Workaround for Bootstrap dropdowns not being clickable in android.
+//         */
+//        $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { 
+//          e.stopPropagation(); 
+//        });
+//        $(document).on('click','.dropdown-menu a',function(){
+//          document.location = $(this).attr('href');
+//        });
 
         
         //save the version of the app into this view so we can use it when we create a user.
@@ -197,7 +195,7 @@ define([
         $(this.el).find(".welcomeauthurl").val(OPrime.authUrl);
         
       } else {
-        OPrime.debug("\User model was undefined");
+        if (OPrime.debugMode) OPrime.debug("\User model was undefined");
       }
 
       return this;
@@ -206,7 +204,7 @@ define([
     registerNewUser : function() {
       $(".register-new-user").addClass("disabled");
 
-      OPrime.debug("Attempting to register a new user: " );
+      if (OPrime.debugMode) OPrime.debug("Attempting to register a new user: " );
       /*
        * Set defaults for new user registration here,
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
@@ -226,6 +224,9 @@ define([
       var corpusConnection = OPrime.defaultCouchConnection();
       corpusConnection.pouchname = "firstcorpus";
       dataToPost.corpuses = [corpusConnection];
+      dataToPost.mostRecentIds = {};
+      dataToPost.mostRecentIds.couchConnection = JSON.parse(JSON.stringify(corpusConnection));
+      dataToPost.mostRecentIds.couchConnection.pouchname = dataToPost.username+"-"+dataToPost.mostRecentIds.couchConnection.pouchname;
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
@@ -234,11 +235,16 @@ define([
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
-        OPrime.debug("User has entered an email and the passwords match. ");
-        var a = new App();
+        if (OPrime.debugMode) OPrime.debug("User has entered an email and the passwords match. ");
+        var a = new App({
+          filledWithDefaults : true,
+          loadTheAppForTheFirstTime : true
+        });
         window.app = a;
-        a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus");//this is the convention the server is currently using to create first corpora
-        
+        a.createAppBackboneObjects($(".registerusername").val().trim()+"-firstcorpus", function(){
+          a.get("corpus").fillWithDefaults();
+        });//this is the convention the server is currently using to create first corpora
+
         $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>" );
         $(".welcome-screen-alerts").addClass("alert-success");
         $(".welcome-screen-alerts").show();
@@ -248,7 +254,7 @@ define([
         /*
          * Contact the server and register the new user
          */
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : OPrime.authUrl + "/register",
           data : dataToPost,
@@ -264,22 +270,41 @@ define([
                * dismiss modal
                */ 
               
-//                a.createAppBackboneObjects(data.user.couchConnection.pouchname, function(){
                 // Faking a login behavior, copy pasted from authentication auth function
                 var auth  = a.get("authentication");
                 auth.saveServerResponseToUser(serverResults, function(){
-                  var c = a.get("corpus");
-                  c.set({
-                    "title" : serverResults.user.username + "'s Corpus",
-                    "dataLists" : new DataLists(),
-                    "sessions" : new Sessions(),
-                    "team" : auth.get("userPublic"),
-                    "couchConnection" : serverResults.user.corpuses[0],
-                    "pouchname" : serverResults.user.corpuses[0].pouchname
-                  });
-                
-                  //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
-                  c.saveAndInterConnectInApp();
+                  
+                  /*TOOD how to use jquery couch ot replicate the pages from public to the user, however this might require special login?
+                   * http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/
+                   */
+//                  $.couch.replicate("public", "serverResults.user.corpuses[0].pouchname", {
+//                    success: function(data) {
+//                      console.log(data);
+                      
+                      var c = a.get("corpus");
+                      c.set({
+                        "title" : serverResults.user.username + "'s Corpus",
+                        "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
+                        "team" : auth.get("userPublic"),
+                        "couchConnection" : serverResults.user.corpuses[0],
+                        "pouchname" : serverResults.user.corpuses[0].pouchname
+                      });
+                      
+                      c.logUserIntoTheirCorpusServer(null, dataToPost.username, dataToPost.password, function(){
+                        //This should trigger a redirect to the users page, which loads the corpus, and redirects to the corpus page.
+                        c.saveAndInterConnectInApp();
+                      });
+                      
+                      
+//                    },
+//                    error: function(status) {
+//                      console.log(status);
+//                    }
+//                  }, {
+//                    create_target: false
+//                  });
+
+                  
                 });
 //                });
             }
@@ -287,7 +312,7 @@ define([
           dataType : ""
         });
       } else{
-        OPrime.debug("User has not entered good info. ");
+        if (OPrime.debugMode) OPrime.debug("User has not entered good info. ");
           $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs );
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
@@ -305,7 +330,10 @@ define([
     syncUser : function(username,password, authUrl){
       console.log("hiding user welcome, syncing users data");
       var u = new User({username:username, password: password, authUrl: authUrl });
-      a = new App();
+      a = new App({
+        filledWithDefaults : true,
+        loadTheAppForTheFirstTime : true
+      });
       window.app = a;
 
       $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>" );
@@ -330,9 +358,9 @@ define([
           //TODO let them choose their corpus
           a.createAppBackboneObjects(auth.get("userPrivate").get("corpuses")[0].pouchname, function(){
             var couchConnection = auth.get("userPrivate").get("corpuses")[0];
-            window.app.get("corpus").logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
+            window.app.logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
               //Replicate user's corpus down to pouch
-              window.app.get("corpus").replicateFromCorpus(couchConnection, function(){
+              window.app.replicateOnlyFromCorpus(couchConnection, function(){
                 //Must replicate before redirecting to dashboard, otherwise the pouch and corpus will be empty
                 document.location.href='corpus.html';
               });

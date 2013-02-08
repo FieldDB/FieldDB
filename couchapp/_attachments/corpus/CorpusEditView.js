@@ -1,7 +1,6 @@
 define([ 
     "backbone", 
     "handlebars",
-    "activity/Activity",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -26,7 +25,6 @@ define([
 ], function(
     Backbone, 
     Handlebars,
-    Activity,
     Corpus,
     Comment,
     Comments,
@@ -67,7 +65,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CORPUS EDIT init: " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS EDIT init: " );
       this.changeViewsOfInternalModels();
      
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
@@ -83,7 +81,7 @@ define([
 //      });
       //TOOD if the sessions and data lists arent up-to-date, turn these on
 //      this.model.bind('change:sessions', function(){
-//        OPrime.debug("Corpus edit view sessions changed. changeViewsOfInternalModels and rendering...");
+//        if (OPrime.debugMode) OPrime.debug("Corpus edit view sessions changed. changeViewsOfInternalModels and rendering...");
 //        this.changeViewsOfInternalModels();
 //        this.render();
 //      }, this);
@@ -180,23 +178,29 @@ define([
      */
     render : function() {
       if (this.model == undefined) {
-        OPrime.debug("\tCorpus model was undefined.");
+        if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
         return this;
       }
-      OPrime.debug("CORPUS EDIT render: ");
+
+      // Build the lexicon
+      this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
+      
+      if (OPrime.debugMode) OPrime.debug("CORPUS EDIT render: ");
       if( this.format != "modal"){
         window.appView.currentCorpusEditView.destroy_view();
         window.appView.currentCorpusReadView.destroy_view();
       }
-
+      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
+      
       var jsonToRender = this.model.toJSON();
+      jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       try{
         jsonToRender.username = this.model.get("team").get("username");
       }catch(e){
-        OPrime.debug("Problem getting the usrname of the corpus' team");
+        if (OPrime.debugMode) OPrime.debug("Problem getting the usrname of the corpus' team");
       }
       if (this.format == "centreWell") {
-        OPrime.debug("CORPUS Edit center render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS Edit center render: " );
           // Display the CorpusReadFullScreenView
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(jsonToRender));
@@ -265,7 +269,7 @@ define([
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
       } else if (this.format == "fullscreen") {
-        OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
 
         this.setElement($("#corpus-fullscreen"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -333,7 +337,7 @@ define([
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
 
       } else if (this.format == "leftSide"){
-        OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
         this.setElement($("#corpus-quickview"));
         $(this.el).html(this.templateSummary(jsonToRender));
       
@@ -341,7 +345,7 @@ define([
         $(this.el).find(".locale_Show_corpus_settings").attr("title", Locale.get("locale_Show_corpus_settings"));
       
       }else if (this.format == "modal"){
-        OPrime.debug("CORPUS EDIT MODAL render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS EDIT MODAL render: " );
         this.setElement($("#new-corpus-modal"));
         $(this.el).html(this.templateNewCorpus(jsonToRender));
         
@@ -382,7 +386,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING CORPUS EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING CORPUS EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
@@ -400,9 +404,12 @@ define([
         childViewTagName     : 'li'
       });
       
+      if(!this.model.datalists){
+        this.model.datalists = new DataLists();
+      }
       // Create a DataList List
       this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.get("dataLists"),
+        collection : this.model.datalists,
         childViewConstructor : DataListReadView,
         childViewTagName     : 'li',
         childViewFormat      : "link"
@@ -417,10 +424,12 @@ define([
 //        childViewClass       : "breadcrumb row span12"
 //      });
       
-      
+      if(!this.model.sessions){
+        this.model.sessions = new Sessions();
+      }
       //Create a Sessions List 
        this.sessionsView = new UpdatingCollectionView({
-         collection : this.model.get("sessions"),
+         collection : this.model.sessions,
          childViewConstructor : SessionReadView,
          childViewTagName     : 'li',
          childViewFormat      : "link"  
@@ -465,7 +474,7 @@ define([
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }else{
-        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
+        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
 
         var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
         if(pouches.indexOf(newPouchName) != -1){
@@ -504,7 +513,7 @@ define([
       }
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
-      OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
+      if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },
     newConversation : function(e) {
         if(e){
@@ -513,7 +522,7 @@ define([
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
-        OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
+        if (OPrime.debugMode) OPrime.debug("STOPGAP FOR MAKING CONVERSATIONS.");
       },
 
     newDataList : function(e) {
@@ -638,7 +647,7 @@ define([
       window.location.href = "#render/true";
     },
     resizeFullscreen : function(e){
-      OPrime.debug("CORPUS EDIT starts to render fullscreen. " );
+      if (OPrime.debugMode) OPrime.debug("CORPUS EDIT starts to render fullscreen. " );
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -674,9 +683,12 @@ define([
 
       }
       var self = this;
+      if(this.format == "modal"){
+        $("#new-corpus-modal").modal("hide");
+      }
       this.model.saveAndInterConnectInApp(function(){
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal("hide");
+//          $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
@@ -685,7 +697,7 @@ define([
         
       },function(){
         if(this.format == "modal"){
-          $("#new-corpus-modal").modal( "hide");
+//          $("#new-corpus-modal").modal("hide");
           alert("There was a problem somewhere loading and saving the new corpus.");
           window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }

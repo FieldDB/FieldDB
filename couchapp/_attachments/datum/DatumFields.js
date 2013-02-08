@@ -18,7 +18,7 @@ define([
      */
     initialize : function() {
     },
-    
+    internalModels : DatumField,
     model : DatumField,
     
     /** 

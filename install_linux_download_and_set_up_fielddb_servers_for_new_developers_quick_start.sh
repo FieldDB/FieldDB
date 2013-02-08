@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Dependancies:
+# sudo apt-get build-dep nodejs
+# sudo apt-get install git
+# sudo apt-get build-dep couchdb
+# sudo apt-get install libcurl4-gnutls-dev libtool (ubuntu)
+# sudo apt-get install erlang-base erlang-dev erlang-eunit erlang-nox (ubuntu)
+
 # For wget using:  "curl -O --retry 999 --retry-max-time 0 -C -"
 
 git --version || { echo 'You dont have Git installed, please install it: sudo apt-get install git or http://git-scm.com/downloads' ; exit 1; }
@@ -9,7 +16,7 @@ echo "Making fielddb workspace, this will contain the logs, client code and web 
 mkdir $HOME/fielddbworkspace
 cd $HOME/fielddbworkspace
 mkdir logs
-mkdir audiofiles
+#mkdir audiofiles
 
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
@@ -35,14 +42,14 @@ echo "Next three lines give command to compile Node"
 make
 make install
 echo "Next line puts the Node binary directory to path and append it to profile so that it is permanently available for the user"
-echo "export PATH=$HOME/fielddbworkspace/node/bin:$PATH" >> ~/.profile 
-source ~/.profile
+echo "export PATH=$HOME/fielddbworkspace/node/bin:$PATH" >> ~/.bashrc
+source ~/.bashrc
 
 
 cd $HOME/fielddbworkspace/FieldDB
 echo "Compiling the FieldDB handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
 npm install handlebars
-bash compile_handlebars.sh
+bash scripts/build_templates.sh
 
 ## FieldDB Web services ###################################################
 
@@ -114,6 +121,12 @@ cd apache-couchdb-1.2.0
 make
 make install
 
+# Put couchdb on the path so you can run it by using just couchdb
+echo "export PATH=$HOME/fielddbworkspace/couchdb/bin:$PATH" >> ~/.bashrc
+source ~/.bashrc
+# Turn on couchdb
+couchdb & 
+
 ## Running tests to see if everything downloaded and works ###################################################
 
 echo "Testing if FieldDB WebServer will run, it should say 'Listening on 3182' "
@@ -129,4 +142,12 @@ echo "Testing if FieldDB LexiconWebService will run, it should say 'Listening on
 bash  $HOME/fielddbworkspace/LexiconWebService/service.sh &
 
 echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
+
+sudo apt-get install nginx
+sudo cp $HOME/fielddbworkspace/AuthenticationWebService/nginx_config /etc/nginx/conf.d/default.conf 
+mkdir fielddbworkspace/CorpusService
+cp $HOME/fielddbworkspace/AuthenticationWebService/fielddb_debug.crt $HOME/fielddbworkspace/CorpusService/fielddb_production.crt
+cp $HOME/fielddbworkspace/AuthenticationWebService/fielddb_debug.key $HOME/fielddbworkspace/CorpusService/fielddb_production.key
+sudo service nginx configtest
+sudo service nginx start
 

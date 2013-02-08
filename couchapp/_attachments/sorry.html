@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>LingSync - Corpus Dashboard</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css"
+	href="libs/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+	href="libs/bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="app/app.css">
+<link rel="stylesheet" type="text/css" href="libs/terminal/terminal.css">
+<link rel="stylesheet" type="text/css"
+	href="libs/font_awesome/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="app/app_opaque.css">
+<!-- END Stylesheets -->
+</head>
+<body id="app" class="body_background">
+	<p>.</p>
+	<div class="container well">
+		<h2>January 28th 2012</h2>
+
+		<p>
+			After 40 weeks as a Chrome app, v1.40 of LingSync now available
+			outside of the Chrome Store online at <a
+				href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html#">LingSync.org</a>
+			and soon on Android. <a
+				href="http://blog.chromium.org/2012/11/restricting-extension-apis-in-legacy.html">A
+				change in Chrome Apps for Chrome 24</a> means our testing app can no longer
+			contact our testing databases. We are working on a workaround or a
+			re-infrastructuring. We hope to have the workaround ready in a few
+			weeks depending on how busy we are this semester. For now you can
+			<a
+				href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html#">use
+				the online version</a>, or <a
+				href="https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj?utm_source=chrome-ntp-icon">the
+				stable version</a> if you want to be offline (note the stable version is
+			currently not very good at multi-user corpora).
+		</p>
+
+
+		<p>
+			If you want more details or updates you can leave comments/your vote
+			on our <a
+				href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/828">issue
+				#828</a> or complain on <a
+				href="https://groups.google.com/a/chromium.org/forum/?fromgroups=#!topic/chromium-extensions/TRgqg90L8XU">the
+				thread we created the Chrome Extension Developer's Google Group</a>. It
+			turns out <a
+				href="https://groups.google.com/a/chromium.org/forum/?fromgroups=#!searchin/chromium-apps/permission/chromium-apps/GqeR-oKopa4/SeCNZyVff0gJ">we
+				aren't the only app that has been put in limbo</a> by the transition from
+			legacy apps to packaged apps. Packaged apps are pretty awesome...they
+			look like a normal desktop app. We can't wait until they are
+			available for us to transition to...
+		</p>
+
+
+	</div>
+
+
+	<div class="hide">
+		<div id="dashboard_loading_spinner"></div>
+		<div id="app_view"></div>
+
+		<div id="terminal-modal" class="modal hide terminalbody ">
+			<div id="terminal"></div>
+		</div>
+	</div>
+
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script type="text/javascript" src="./libs/require.js"></script>
+	<script type="text/javascript" src="./backup_pouches_dashboard.js"></script>
+	<script type="text/javascript" src="./libs/d3.v2.js"></script>
+
+	<!-- <script type="text/javascript" src="./libs/ga.js"></script>
+  <script type="text/javascript" src="./libs/analytics.js"></script> -->
+
+	<!-- Javascript -->
+
+</body>
+</html>

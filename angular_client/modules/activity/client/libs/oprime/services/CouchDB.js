@@ -49,7 +49,7 @@ define(
                     'run' : function(dataToPost) {
                       OPrime.debug("Getting session token.");
                       var couchInfo = OPrime.couchURL();
-                      var promise = $http.post(
+                      var promise = $http.get(
                           couchInfo.protocol + couchInfo.domain
                               + couchInfo.port + '/_session', dataToPost).then(
                           function(response, data, status, headers, config) {
