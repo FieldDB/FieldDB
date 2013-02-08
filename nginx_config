@@ -7,8 +7,12 @@ upstream wwwserver {
         server localhost:3182;
 }
 
-upstream corpusservice {
-        server localhost:6984;
+#upstream corpusservice {
+#        server 127.0.0.1:6984;
+#}
+
+upstream corsservice {
+        server 127.0.0.1:3186;
 }
 
 log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
@@ -36,20 +40,19 @@ server {
 #http://support.cloudant.com/customer/portal/articles/359321-how-do-i-read-and-write-to-my-cloudant-database-from-the-browser-
 
      #if ($request_method = 'OPTIONS') {
-       #add_header 'Access-Control-Allow-Headers' 'Content-Type,Accept';
+       #add_header 'Access-Control-Allow-Headers' 'Content-Type,Accept,X-Requested-With, User-Agent, Origin';
        #add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE';
        #add_header 'Access-Control-Allow-Credentials' 'true';
        #add_header "Access-Control-Allow-Origin" "https://corpusdev.lingsync.org";
-       #add_header "Access-Control-Allow-Headers" "X-Requested-With";
-       #add_header "Access-Control-Allow-Headers" "User-Agent";
-       #add_header "Access-Control-Allow-Headers" "Origin";
-       proxy_pass https://authservice;
+      #}
+       proxy_pass_header  Set-Cookie;
        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
        proxy_redirect off;
        proxy_buffering off;
        proxy_set_header        Host            $host;
        proxy_set_header        X-Real-IP       $remote_addr;
        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_pass https://authservice;
     }
 
 }
@@ -90,43 +93,27 @@ server {
     listen       443;
     server_name corpusdev.lingsync.org;
     ssl on;
-    ssl_certificate /home/fielddb/fielddbworkspace/CorpusService/fielddb_production.crt;
-    ssl_certificate_key /home/fielddb/fielddbworkspace/CorpusService/fielddb_production.key;
+    ssl_certificate /home/fielddb/fielddbworkspace/CorpusWebService/fielddb_production.crt;
+    ssl_certificate_key /home/fielddb/fielddbworkspace/CorpusWebService/fielddb_production.key;
 
     #charset koi8-r;
 
     access_log  /var/log/nginx/corpuslingsync.access.log  main;
-    error_log /var/log/nginx/corpuslingsync.error.log;
+    error_log /var/log/nginx/corpuslingsync.error.log debug;
 
     location / {
-       #root   /usr/share/nginx/html;
-       #index  index.html index.htm;
-       if ($request_method = 'OPTIONS') {
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, COPY, DELETE';
-        add_header 'Access-Control-Allow-Credentials' 'true';
-        #add_header "Access-Control-Allow-Origin" "chrome-extension://fhefnccpcjghjhpnafocknnbhioieibe";
-        add_header "Access-Control-Allow-Origin" "*";
-	add_header "Access-Control-Allow-Headers" "Content-Type, Accept, X-Requested-With, User-Agent, Origin";
-	return 200;
-       }
-       #if ($request_method = 'POST') {
-       # more_set_headers 'Access-Control-Allow-Origin: *';
-       # proxy_pass http://somewhere-else;
-       #}
-       #add_header 'Allow' 'GET, POST, OPTIONS, PUT, COPY, DELETE';
-       add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, COPY, DELETE';
-       add_header 'Access-Control-Allow-Credentials' 'true';
-       #add_header "Access-Control-Allow-Origin" "chrome-extension://fhefnccpcjghjhpnafocknnbhioieibe";
-       add_header "Access-Control-Allow-Origin" "*";
-       add_header "Access-Control-Allow-Headers" "Content-Type, Accept, X-Requested-With, User-Agent, Origin";
-       proxy_pass https://corpusservice;
+       proxy_pass http://corsservice;
        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
        proxy_redirect off;
        proxy_buffering off;
+       # TODO set the domain on teh cookie to be the origin.. so that we can get a cross site cookie?
+       #proxy_cookie_domain   ";Domain=" ";Domain=lingsync.org";
+       proxy_pass_header  Set-Cookie;
        proxy_set_header        Host            $host;
        proxy_set_header        X-Real-IP       $remote_addr;
        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     }
+
 }
 
 
