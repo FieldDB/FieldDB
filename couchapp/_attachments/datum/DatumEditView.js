@@ -247,6 +247,7 @@ define([
       var self = this;
       window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
         self.frequentFields = fieldLabels;
+        window.app.get("corpus").frequentFields = fieldLabels;
         if(typeof whenfieldsareknown == "function"){
           whenfieldsareknown();
         }

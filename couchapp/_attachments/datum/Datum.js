@@ -463,21 +463,108 @@ define([
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var result = "\n \\begin{exe} "
-            + "\n \\ex " + utterance 
-            + "\n\t \\gll " + morphemes + " \\\\"
-            + "\n\t" + gloss + " \\\\"
-            + "\n\t\\trans `" + translation + "'"
-            + "\n\\end{exe}\n\n";
-      if (showInExportModal != null) {
-        $("#export-type-description").html(" as LaTeX (GB4E)");
-        $("#export-text-area").val($("#export-text-area").val() + result);
-      }
+    	//corpus's most frequent fields
+        var frequentFields = window.app.get("corpus").frequentFields;
+        //this datum/datalist's datumfields and their names 
+    	var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+    	var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+    	//setting up for IGT case...
+    	var utteranceIndex = -1;
+    	var utterance = "";
+    	var morphemesIndex = -1;
+    	var morphemes = "";
+    	var glossIndex = -1;
+    	var gloss = "";
+    	var translationIndex = -1;
+    	var translation = "";
+    	var result = "\n \\begin{exe} \n \\ex \[";
+    	//IGT case:
+    	if(this.datumIsInterlinearGlossText()){
+    		/* find the index of the key pieces for an IGT */
+    		 utteranceIndex = fieldLabels.indexOf("utterance");
+    		if(utteranceIndex >= 0){
+    			 utterance = fields[utteranceIndex];
+    			 fieldLabels.splice(utteranceIndex,1);
+    			 fields.splice(utteranceIndex,1);
+    		}
+    		morphemesIndex = fieldLabels.indexOf("morphemes");
+    		if(morphemesIndex >= 0){
+    			morphemes = fields[morphemesIndex];
+    			fieldLabels.splice(morphemesIndex,1);
+    			fields.splice(morphemesIndex,1);
+    		}
+    		glossIndex = fieldLabels.indexOf("gloss");
+    		if (glossIndex >= 0){
+    			gloss = fields[glossIndex];
+    			fieldLabels.splice(glossIndex,1);
+    			fields.splice(glossIndex,1);
+    		}
+    		translationIndex = fieldLabels.indexOf("translation");
+    		if (translationIndex >=0){
+    			translation = fields[translationIndex];
+    			fieldLabels.splice(translationIndex,1);
+    			fields.splice(translationIndex,1);
+    		}
+    		result = result + fields[0] + "\]\{" +  utterance
+    			+ "\n \\gll " + morphemes + "\\\\"
+    			+ "\n " + gloss + "\\\\"
+    			+ "\n \\trans " + translation + "\}";
+    	}
+    	if(fields)
+    		result = result + "\\begin\{description\} \n";
+    	for (var field in fields){
+    		if(fields[field]){
+    		result = result
+    		+ "\n \\item\[\\sc\{" + fieldLabels[field] + "\}\] " + fields[field] ;
+    		}
+    	}
+    	result = result + "\\end\{description\} \n";
+    	result = result
+//  	+ "\n\t \\gll " + morphemes + " \\\\"
+//  	+ "\n\t" + gloss + " \\\\"
+//  	+ "\n\t\\trans `" + translation + "'"
+    	+ "\n\\end{exe}\n\n";
+    	if (showInExportModal != null) {
+    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-text-area").val($("#export-text-area").val() + result);
+    	}
+
+//  	utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
+//      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
+//      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
+//      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
+      
+      /* 	result = "\n \\begin{exe} "
+            + "\n \\ex " + fields[1] ; */
+      
+      
       return result;
+    },
+    
+    datumIsInterlinearGlossText : function(fieldLabels) {
+    	if(!fieldLabels){
+        	fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+    	}
+    	var utteranceOrMorphemes = false;
+    	var gloss = false;
+    	var trans = false;
+    	for (var fieldLabel in fieldLabels){
+    		if(fieldLabels[fieldLabel] == "utterance" || fieldLabels[fieldLabel] == "morphemes"){
+    			utteranceOrMorphemes = true;
+    		}
+    		if (fieldLabels[fieldLabel] == "gloss"){
+    			gloss = true;
+    		}
+    		if (fieldLabels[fieldLabel] == "translation"){
+    			trans = true;
+    		}		
+    	}
+    	if (gloss || utteranceOrMorphemes || trans){
+    		return true;
+    	}
+    	else{ 
+    		return false;
+    	}
     },
     
     /**
