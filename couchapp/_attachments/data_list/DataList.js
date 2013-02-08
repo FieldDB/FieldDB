@@ -1,12 +1,10 @@
 define([ 
     "backbone", 
-    "activity/Activity",
     "datum/Datum",
     "comment/Comment",
     "comment/Comments"
 ], function(
     Backbone, 
-    Activity,
     Datum,
     Comment,
     Comments
@@ -29,7 +27,17 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATALIST init");
+      if (OPrime.debugMode) OPrime.debug("DATALIST init");
+      
+      if (!this.get("comments")) {
+        this.set("comments", new Comments());
+      }
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -39,7 +47,15 @@ define([
         this.set("dateCreated", (new Date()).toDateString());
       }
     },
-
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/datalists",
+    
     defaults : {
       title : "Untitled Data List",
       description : "",
@@ -47,7 +63,7 @@ define([
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       comments: Comments
     },
 
@@ -61,7 +77,7 @@ define([
       window.appView.addUnsavedDoc(this.id);
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -69,10 +85,10 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+         {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -80,21 +96,7 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-pushpin'></i> "+this.get('title')+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
-    },
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-        if(pouchname == undefined){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-      }
-      if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if(typeof callback == "function"){
-        callback();
-      }
+          });
     },
     getAllAudioAndVideoFiles : function(datumIdsToGetAudioVideo, callback){
       if(!datumIdsToGetAudioVideo){
@@ -105,12 +107,11 @@ define([
       }
       var audioVideoFiles = [];
       
-      OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToGetAudioVideo[id];
         var thisobjid = id;
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               audioVideoFiles.push(model.get("audioVideo").get("URL"));
@@ -122,7 +123,6 @@ define([
               }
             }
           });
-        });
         
       }
     },
@@ -140,63 +140,24 @@ define([
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
-      OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
+        /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
+//        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
+//        window.appView.currentPaginatedDataListDatumsView._childViews[indexInCurrentPaginatedDataListDatums].model[functionToAppy](functionArguments);
+
+        
+        /* this code re-opens the datum, but if its already in the child views, ths is  unnecesary */
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToApplyFunction[id];
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               model[functionToAppy](functionArguments);
-            }
-          });
+            } 
         });
         
       }
     },
-//    /**
-//     * Create a permanent data list in the current corpus.  Deprecated! this is not being used, instead the callers are making their own data lists. TODO, decide if this should be used.
-//     * 
-//     * @param callback
-//     */
-//    newDataList : function(callback) {
-//      //save the current data list
-//      var self = this;
-//      this.saveAndInterConnectInApp(function(){
-//        //clone it
-//        var attributes = JSON.parse(JSON.stringify(self.attributes));
-//        // Clear the current data list's backbone info and info which we shouldnt clone
-//        attributes._id = undefined;
-//        attributes._rev = undefined;
-//        attributes.comments = undefined;
-//        attributes.title = self.get("title")+ " copy";
-//        attributes.description = "Copy of: "+self.get("description");
-//        attributes.pouchname = app.get("corpus").get("pouchname");
-//        attributes.dateCreated = JSON.stringify(new Date());
-//        attributes.datumIds = [];
-//        self = new DataList(attributes);
-//        
-//        //TODO see if this destroys the collection in the default data list, technically it doesn't matter because this will need to be emptied and filled,a and the collciton is just part of the view, not part of the data list.
-//        var coll = self.datumsView.collection;
-//        while (coll.length > 0) {
-//          coll.pop();
-//        }
-//        
-//        // Display the new data list
-////        appView.renderReadonlyDataListViews();
-////        appView.renderEditableDataListViews();
-//        //Why call all data lists to render?
-//        self.render();
-//        self.saveAndInterConnectInApp(function(){
-//          //TOOD check this, this is used by the import to make the final datalist
-//          self.setAsCurrentDataList(function(){
-//            if(typeof callback == "function"){
-//              callback();
-//            }
-//          });
-//        });
-//      });
-//    },
     
     /**
      * Accepts two functions to call back when save is successful or
@@ -211,7 +172,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the DataList");
+      if (OPrime.debugMode) OPrime.debug("Saving the DataList");
       var self = this;
 //      var idsInCollection = [];
 //      for(d in this.datumCollection.models){
@@ -224,6 +185,7 @@ define([
       }else{
         this.set("dateCreated",JSON.stringify(new Date()));
       }
+      
       //protect against users moving dataLists from one corpus to another on purpose or accidentially
       if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
         if(typeof failurecallback == "function"){
@@ -235,11 +197,11 @@ define([
       }
       var oldrev = this.get("_rev");
       this.set("dateModified", JSON.stringify(new Date()));
+      this.set("timestamp", Date.now());
 
-      this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('DataList save success');
+            if (OPrime.debugMode) OPrime.debug('DataList save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
@@ -259,7 +221,7 @@ define([
             }
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-pushpin",
@@ -267,10 +229,10 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-pushpin",
@@ -278,41 +240,20 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
 
-//            /*
-//             * If the corpus has no data lists in it, just save this one.
-//             */
-//            if(window.app.get("corpus").get("dataLists").length == 0){
-//              window.app.get("corpus").get("dataLists").unshift(model);//TODO need to test
-////            }else if(window.app.get("corpus").get("dataLists").length > 1){
-////              var previousversionincorpus = window.app.get("corpus").get("dataLists").models[0];
-////              //Remove the corresponding datalist that is in the corpus, it will be overwritten with this save.
-////              if(previousversionincorpus !== model){//if they are the same there is no reason to overwrite them.
-////                window.app.get("corpus").get("dataLists").models[0] = model; //TODO tested
-//            }else{
-//              if(window.app.get("corpus").id) window.appView.addUnsavedDoc(window.app.get("corpus").id);//creating an attemptt o save no id at new user registaiotn.
-//              /*
-//               * If there is more than one datalist in the corpus, we need to find this one and replace it.
-//               */
-              var previousversionincorpus = window.app.get("corpus").get("dataLists").get(model.id);
-              if(previousversionincorpus == undefined ){
-                window.app.get("corpus").get("dataLists").unshift(model);
-              }else{
-//                var defaultposition = window.app.get("corpus").get("dataLists").length  - 1;
-//                if(window.app.get("corpus").get("dataLists").models[defaultposition].id == model.id){
-//                  //this is the default, put it last
-//                  window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
-//                  window.app.get("corpus").get("dataLists").add(model);
-//                }else{
-//                  //this is a normal data list, put it first
-                  window.app.get("corpus").get("dataLists").remove(previousversionincorpus);
-                  window.app.get("corpus").get("dataLists").unshift(model);
-//                }
-              }
-//            }
+            /*
+             * Make sure the data list is visible in this corpus
+             */
+            var previousversionincorpus = window.app.get("corpus").datalists.get(model.id);
+            if(previousversionincorpus == undefined ){
+              window.app.get("corpus").datalists.unshift(model);
+            }else{
+              window.app.get("corpus").datalists.remove(previousversionincorpus);
+              window.app.get("corpus").datalists.unshift(model);
+            }
             
             //make sure the dataList is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1){
@@ -324,15 +265,15 @@ define([
               successcallback();
             }
           },
-          error : function(e) {
+          error : function(e, f, g) {
+            if (OPrime.debugMode) OPrime.debug("DataList save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('DataList save error' + e);
+              alert('DataList save error: ' + f.reason);
             }
           }
         });
-      });
     },
     /**
      * Accepts two functions success will be called if successful,
@@ -358,39 +299,19 @@ define([
 //          delete window.app.attributes.currentDataList; //this seems to delte the datalist from the corpus too. :(
 //          window.app.attributes.currentDataList = this; //trying to get backbone not to notice we are switching the current data list.
           window.app.set("currentDataList", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes. 
-//          window.app.set("currentDataList", app.get("corpus").get("dataLists").get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
+//          window.app.set("currentDataList", app.get("corpus").datalists.get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
-        var self = this;
-        try{
+        if(window.appView) {
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
             if (typeof successcallback == "function") {
               successcallback();
-            }else{
-              //TODO remove this when done debugging and it is working all the time.
-//              window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
-//              window.appView.renderEditableDataListViews("leftSide"); //TODO does this need to be run?
-//              window.appView.renderReadonlyDataListViews("leftSide");
             }
           });
-        }catch(e){
-          OPrime.debug(e);
-//          /*TODO  putting this her so that import works of rhte presenation, but there is some bug */
-//          if (typeof successcallback == "function") {
-//            successcallback();
-//          }else{
-//            //TODO remove this when done debugging and it is working all the time.
-//            window.appView.toastUser("Sucessfully connected all views up to data list: "+ self.id,"alert-success","Connected!");
-//            window.appView.renderEditableDataListViews("leftSide");
-//            window.appView.renderReadonlyDataListViews("leftSide");
-//          }
-          
-          if (typeof failurecallback == "function") {
-            alert("Calling the failure callback in the set as current data list."+self.id);
-            failurecallback();
-          }else{
-            alert("This is probably a bug. There was a problem rendering the current dataList's views after resetting the current session."+self.id);
+        }else{
+          if (typeof successcallback == "function") {
+            successcallback();
           }
         }
       }

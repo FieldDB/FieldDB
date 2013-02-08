@@ -2,15 +2,12 @@ var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
 Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
-  var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port +couchConnection.path+"/";
+  var couchurl = OPrime.getCouchUrl(couchConnection);
 
-  $.ajax({
+  OPrime.makeCORSRequest({
     type : 'GET',
-    url : couchurl + pouchname
-        + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
-      // Parse the rules from JSON into an object
-      rules = JSON.parse(rules);
       localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
 
       // Reduce the rules such that rules which are found in multiple source
@@ -31,7 +28,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
     },
     dataType : ""
   });
-}
+};
 /**
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
@@ -133,7 +130,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
           .replace(/--+/g, "-")   // Ensure that there is only ever one "-" in a row
           .replace(/^-/, "")      // Remove "-" at the start of the word
           .replace(/-$/, "");     // Remove "-" at the end of the word
-      OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
+      if (OPrime.debugMode) OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
           + " is " + potentialParse);
           
       parsedWords.push(potentialParse);
@@ -152,7 +149,7 @@ Glosser.glossFinder = function(morphemesLine){
     return "";
   }
   if(! window.app.get("corpus").lexicon.get("lexiconNodes")){
-    var corpusSize = app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").models.length-1].get("datumIds").length;
+    var corpusSize = 31; //TODO get corpus size another way. // app.get("corpus").datalists.models[app.get("corpus").datalists.models.length-1].get("datumIds").length;
     if(corpusSize > 30 && !Glosser.toastedUserToSync){
       Glosser.toastedUserToSync = true;
       window.appView.toastUser("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.","alert-success","Sync to train your auto-glosser:");
@@ -184,7 +181,7 @@ Glosser.glossFinder = function(morphemesLine){
   
   // Replace the gloss line with the guessed glosses
   return glossGroups.join(" ");
-}
+};
 /**
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
@@ -208,6 +205,13 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
   morphemeLinks = [];
   morphemes = [];
   for ( var i in rules) {
+    /* make the @ more like what a linguist recognizes for word boundaries */
+    if(rules[i].key.x == "@"){
+      rules[i].key.x = "#_"
+    }
+    if(rules[i].key.y == "@"){
+      rules[i].key.y = "_#"
+    }
     var xpos = morphemes.indexOf(rules[i].key.x);
     if (xpos < 0) {
       morphemes.push(rules[i].key.x);
@@ -218,7 +222,8 @@ Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
       morphemes.push(rules[i].key.y);
       ypos = morphemes.length - 1;
     }
-    if (rules[i].key.y != "@") {
+    //To avoid loops?
+    if (rules[i].key.y.indexOf("@") == -1) {
       morphemeLinks.push({
         source : xpos,
         target : ypos,
@@ -311,8 +316,8 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
   //A label for the current year.
   var title = svg.append("text")
     .attr("class", "vis-title")
-    .attr("dy", "2em")
-    .attr("dx", "2em")
+    .attr("dy", "1.5em")
+    .attr("dx", "1.5em")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
   

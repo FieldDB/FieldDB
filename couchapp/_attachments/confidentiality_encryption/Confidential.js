@@ -33,19 +33,24 @@ define( [
      * 
      */
     initialize : function() {
-      OPrime.debug("Initializing confidentiality module");
+      if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
 
 //      var encryptedMessage = this.encrypt("hi this is a longer message.");
 //      console.log("encrypted" + encryptedMessage);
 //
 //      var decryptedMessage = this.decrypt(encryptedMessage);
 ////      console.log("decrypted:" + decryptedMessage);
-
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+      
+    },
+    fillWithDefaults : function(){
       if (this.get("secretkey") == "This should be a top secret pass phrase.") {
         this.set("secretkey", this.secretKeyGenerator());
       }
     },
-    
     defaults : {
       secretkey : "This should be a top secret pass phrase."
     },    
@@ -71,7 +76,7 @@ define( [
       }
     },
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       // There are no nested models
     },
     saveAndInterConnectInApp : function(callback){

@@ -22,7 +22,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM FIELD EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW init");
     },
     
     /**
@@ -56,7 +56,7 @@ define([
      * Renders the DatumFieldEditView.
      */
     render : function() {
-      OPrime.debug("DATUM FIELD EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
      
       if (this.format == "corpus") {
         $(this.el).html(this.templateSettings(this.model.toJSON()));
@@ -105,7 +105,7 @@ define([
      * Change the model's state.
      */
     updateFieldLabel : function() {
-      OPrime.debug("Updated label to " + this.$el.children(".choose-field").val());
+      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.children(".choose-field").val());
       this.model.set("label", this.$el.children(".choose-field").val());
     },
     
@@ -117,14 +117,14 @@ define([
       } else {
         checked = "";
       }
-      OPrime.debug("Updated shouldBeEncrypted to " + checked);
+      if (OPrime.debugMode) OPrime.debug("Updated shouldBeEncrypted to " + checked);
       this.model.set("shouldBeEncrypted", checked);
     },
     
     // TODO Add description
     updateHelp : function() {
       var help = this.$el.children(".help-text").val();
-      OPrime.debug("Updated help to " + help);
+      if (OPrime.debugMode) OPrime.debug("Updated help to " + help);
       this.model.set("help",help);
     },
          

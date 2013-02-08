@@ -1,6 +1,5 @@
 define([
     "backbone",
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "datum/DatumField",
@@ -10,7 +9,6 @@ define([
     "user/User",
 ], function(
     Backbone,
-    Activity,
     Comment,
     Comments,
     DatumField,
@@ -23,8 +21,8 @@ define([
   /** @lends Session.prototype */
   {
     /**
-     * @class The Datum widget is the place where all linguistic data is
-     *        entered; one at a time.
+     * @class The Session widget is the place where information which is generally 
+     * shared by many datum (due to being part of an elicitiation session)
      * @property {Number} sessionID The session ID is an automatically generated
      *           number which will uniquely identify the session.
      * @property {String} user The user is the person inputting the data for
@@ -94,16 +92,47 @@ define([
      * @constructs
      */
     initialize: function() {
-      OPrime.debug("SESSION init");
-      // If there are no comments, give it a new one
+      if (OPrime.debugMode) OPrime.debug("SESSION init");
+      
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
       
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
     },
+    fillWithDefaults : function(){
+      // If there are no comments, give it a new one
+      if (!this.get("comments")) {
+        this.set("comments", new Comments());
+      }
+      if(!this.get("sessionFields") || this.get("sessionFields").length == 0){
+        if(window.app && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
+          this.set("sessionFields", window.app.get("corpus").get("sessionFields").clone());
+        }else{
+          if (OPrime.debugMode) OPrime.debug("Not creating sessions fields");
+        }
+      }
+      this.get("sessionFields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
+      this.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
+      this.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
+      this.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
+      this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
+      
+    },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/sessions",
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       sessionFields : DatumFields,
       comments : Comments
     },
@@ -120,7 +149,7 @@ define([
       var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -128,10 +157,10 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -139,18 +168,7 @@ define([
             indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
-    },
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
-        pouchname = this.get("pouchname");
-      }
-      if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
-      }
-      if(typeof callback == "function"){
-        callback();
-      }
+          });
     },
     /**
      * Accepts two functions to call back when save is successful or
@@ -165,7 +183,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the Session");
+      if (OPrime.debugMode) OPrime.debug("Saving the Session");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -184,10 +202,10 @@ define([
       }
       var oldrev = this.get("_rev");
       this.set("dateModified", JSON.stringify(new Date()));
-      this.changePouch(null,function(){
+      this.set("timestamp", Date.now());
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Session save success');
+            if (OPrime.debugMode) OPrime.debug('Session save success');
             var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
@@ -206,7 +224,7 @@ define([
               verbicon = "icon-plus";
             }
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-calendar",
@@ -214,10 +232,10 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "team",
                   context : " via Offline App."
-                }));
+                });
             
             window.app.addActivity(
-                new Activity({
+                {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
                   verbicon : verbicon,
                   directobjecticon : "icon-calendar",
@@ -225,25 +243,19 @@ define([
                   indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
                   teamOrPersonal : "personal",
                   context : " via Offline App."
-                }));
+                });
             
-            //make sure the session is in this corpus, if it is the same pouchname
-//            var previousversionincorpus = window.app.get("corpus").get("sessions").getByCid(model.cid);
-            var previousversionincorpus = window.app.get("corpus").get("sessions").get(model.id);
+            /*
+             * make sure the session is visible in this corpus
+             */
+            var previousversionincorpus = window.app.get("corpus").sessions.get(model.id);
             if( previousversionincorpus == undefined ){
-              window.app.get("corpus").get("sessions").unshift(model);
-//              window.appView.addUnsavedDoc(window.app.get("corpus").id);//this is undefined the first time session is saved.
+              window.app.get("corpus").sessions.unshift(model);
             }else{
-              //overwrite new details in the corpus' version, unless they are the same, then it is unnecesary.
-              if(previousversionincorpus !== model){
-                window.app.get("corpus").get("sessions").remove(previousversionincorpus);
-                window.app.get("corpus").get("sessions").unshift(model);
-                window.app.get("corpus").saveAndInterConnectInApp();
-              }
+                window.app.get("corpus").sessions.remove(previousversionincorpus);
+                window.app.get("corpus").sessions.unshift(model);
             }
-            if(window.app.get("corpus").get("sessions").length == 1){
               window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-            }
             //make sure the session is in the history of the user
             if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
               window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
@@ -255,16 +267,15 @@ define([
               successcallback();
             }
           },
-          error : function(e) {
+          error : function(e, f, g) {
+            if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{
-              alert('Session save error' + JSON.stringfy(e));
-              OPrime.debug('Session save error' + JSON.stringfy(e));
+              alert('Session save error: ' + f.reason);
             }
           }
         });
-      });
     },
     /**
      * Accepts two functions success will be called if sucessfull,
@@ -287,13 +298,13 @@ define([
       }else{
         if (window.app.get("currentSession").id != this.id ) {
           window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-//          window.app.set("currentSession", app.get("corpus").get("sessions").get(this.id)); //this is a bad idea too, use above instead
+//          window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
 
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-        try{
+        if(window.appView) {
           window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
             if (typeof successcallback == "function") {
               successcallback();
@@ -305,11 +316,9 @@ define([
 //            window.appView.renderReadonlySessionViews("leftSide");
             }
           });
-        }catch(e){
-          if (typeof failurecallback == "function") {
-            failurecallback();
-          }else{
-            alert("This is probably a bug. There was a problem rendering the current session's views after resetting the current session.");
+        }else{
+          if (typeof successcallback == "function") {
+            successcallback();
           }
         }
       }

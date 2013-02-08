@@ -14,6 +14,7 @@ define([
     "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
+    "datum/Session",
     "datum/Sessions",
     "user/User",
     "glosser/Glosser",
@@ -34,6 +35,7 @@ define([
     Lexicon,
     Permission,
     Permissions,
+    Session,
     Sessions,
     User
 ) {
@@ -76,84 +78,100 @@ define([
      */
     initialize : function() {
 
+      this.datalists =  new DataLists();
+      this.sessions =  new Sessions();
+
       //Hard code this corpus' id so that it will be findable without an id if one knows the corpus name
       this.set("id", "corpus");
-      
+      /* Upgrade to version 1.38 */
+      if(this.get("corpusId")){
+        var corpusid = this.get("corpusid")
+        this.set("corpusid", corpusid);
+        this.unset("corpusId");
+      }
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+    },
+    fillWithDefaults : function(){
       //TODO use these states to show what is public and what is not.
       if(!this.get("datumStates")){
         this.set("datumStates", new DatumStates());
       }//end if to set datumStates
       
-      //Keeping all items since this seems okay for public viewing if the user wants to let the public see it. 
+      //Keeping all items since this seems okay for public viewing/searching if the user wants to let the public see it. 
       if(!this.get("datumFields")){
-        this.set("datumFields", new DatumFields([ 
-          new DatumField({
-            label : "judgement",
-            size : "3",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
-          }),
-          new DatumField({
-            label : "utterance",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
-          }),
-          new DatumField({
-            label : "morphemes",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
-          }),
-          new DatumField({
-            label : "gloss",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
-          }),
-          new DatumField({
-            label : "translation",
-            shouldBeEncrypted: "checked",
-            userchooseable: "disabled",
-            help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
-          })
-        ]));
+        this.set("datumFields", new DatumFields(
+            [ 
+                                               new DatumField({
+                                                 label : "judgement",
+                                                 size : "3",
+                                                 shouldBeEncrypted: "",
+                                                 userchooseable: "disabled",
+                                                 help: "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)"
+                                               }),
+                                               new DatumField({
+                                                 label : "utterance",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)"
+                                               }),
+                                               new DatumField({
+                                                 label : "morphemes",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation."
+                                               }),
+                                               new DatumField({
+                                                 label : "gloss",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. "
+                                               }),
+                                               new DatumField({
+                                                 label : "translation",
+                                                 shouldBeEncrypted: "checked",
+                                                 userchooseable: "disabled",
+                                                 help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
+                                               })
+                                               ]
+            ));
       }//end if to set datumFields
       
       //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
       if(!this.get("sessionFields")){
         this.set("sessionFields", new DatumFields([ 
-          new DatumField({
-            label : "dialect",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "You can use this field to be as precise as you would like about the dialect of this session."
-          }),
-          new DatumField({
-            label : "language",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This is the langauge (or language family) if you would like to use it."
-          }),
-          new DatumField({
-            label : "dateElicited",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This is the date in which the session took place."
-          }),
-          new DatumField({
-            label : "user",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled"
-          }),
-          new DatumField({
-            label : "dateSEntered",
-            shouldBeEncrypted: "",
-            userchooseable: "disabled",
-            help: "This is the date in which the session was entered."
-          }),
-        ]));
+                                                   new DatumField({
+                                                     label : "dialect",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "You can use this field to be as precise as you would like about the dialect of this session."
+                                                   }),
+                                                   new DatumField({
+                                                     label : "language",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "This is the langauge (or language family) if you would like to use it."
+                                                   }),
+                                                   new DatumField({
+                                                     label : "dateElicited",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "This is the date in which the session took place."
+                                                   }),
+                                                   new DatumField({
+                                                     label : "user",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled"
+                                                   }),
+                                                   new DatumField({
+                                                     label : "dateSEntered",
+                                                     shouldBeEncrypted: "",
+                                                     userchooseable: "disabled",
+                                                     help: "This is the date in which the session was entered."
+                                                   }),
+                                                   ]));
         
       }//end if to set sessionFields
       
@@ -162,20 +180,19 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
-      if (!this.get("dataLists")) {
-        this.set("dataLists", new DataLists());
-      }
-      
-      if (!this.get("sessions")) {
-        this.set("sessions", new Sessions());
-      }
-      
+     
       if (!this.permissions) {
         this.permissions = new Permissions();
       }
-      
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/corpuses",
     
     defaults : {
       title : "Private Corpus",
@@ -186,7 +203,7 @@ define([
 //      datumFields : DatumFields, 
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
-      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
+//      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
     },
     loadPermissions: function(){
       //TODO decide if we need this method in a corpus mask
@@ -219,37 +236,20 @@ define([
       return Backbone.Model.prototype.set.call( this, attributes, options ); 
     },
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
       consultants : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields, 
       sessionFields : DatumFields,
       searchFields : DatumFields,
-      sessions : Sessions, 
-      dataLists : DataLists, 
+//      sessions : Sessions, 
+//      dataLists : DataLists, 
       permissions : Permissions,
       comments: Comments
     },
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    changePouch : function(couchConnection, callback) {
-      if (couchConnection == null || couchConnection == undefined) {
-        couchConnection = this.get("couchConnection");
-      }else{
-        this.set("couchConnection", couchConnection);
-      }
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync
-        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
-      }
-
-      if (typeof callback == "function") {
-        callback();
-      }
-    }, 
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
@@ -258,35 +258,44 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the CorpusMask");
+      if (OPrime.debugMode) OPrime.debug("Saving the CorpusMask");
       var self = this;
-      this.changePouch(null, function(){
+      self.set("id","corpus");
+      self.set("_id","corpus");
+      this.set("timestamp", Date.now());
+      
+        if(OPrime.isBackboneCouchDBApp()){
+          self.save();
+          if(typeof successcallback == "function"){
+            successcallback();
+          }
+          return;
+        }
         self.pouch(function(err,db){
-          self.set("id","corpus");
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
+            if (OPrime.debugMode) OPrime.debug(response);
             if(err){
-              OPrime.debug("CorpusMask put error", err);
+              if (OPrime.debugMode) OPrime.debug("CorpusMask put error", err);
               if(err.status == "409"){
                 //find out what the rev is in the database by fetching
                 self.fetch({
                   success : function(model, response) {
-                    OPrime.debug("CorpusMask fetch revision number success, after getting a Document update conflict", response);
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask fetch revision number success, after getting a Document update conflict", response);
 
                     modelwithhardcodedid._rev = self.get("_rev");
-                    OPrime.debug("CorpusMask old version", self.toJSON());
-                    OPrime.debug("CorpusMask replaced with new version", modelwithhardcodedid );
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask old version", self.toJSON());
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask replaced with new version", modelwithhardcodedid );
 
                     db.put(modelwithhardcodedid, function(err, response) {
                       if(err){
-                        OPrime.debug("CorpusMask put error, even after fetching the version number",err);
+                        if (OPrime.debugMode) OPrime.debug("CorpusMask put error, even after fetching the version number",err);
                         if(typeof failurecallback == "function"){
                           failurecallback();
                         }
                       }else{
-                        OPrime.debug("CorpusMask put success, after fetching its version number and overwriting it", response);
+                        if (OPrime.debugMode) OPrime.debug("CorpusMask put success, after fetching its version number and overwriting it", response);
                         //this happens on subsequent save into pouch of this CorpusMask's id
                         if(typeof successcallback == "function"){
                           successcallback();
@@ -297,14 +306,14 @@ define([
                   },
                   //fetch error
                   error : function(e) {
-                    OPrime.debug('CorpusMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
+                    if (OPrime.debugMode) OPrime.debug('CorpusMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
                     if(typeof failurecallback == "function"){
                       failurecallback();
                     }
                   }
                 });
               }else{
-                OPrime.debug('CorpusMask put error that was not a conflict' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('CorpusMask put error that was not a conflict' + JSON.stringify(err));
                 //this is a real error, not a conflict error
                 if(typeof failurecallback == "function"){
                   failurecallback();
@@ -314,11 +323,10 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }else{
-                OPrime.debug("CorpusMask save success", response);
+                if (OPrime.debugMode) OPrime.debug("CorpusMask save success", response);
               }
             }
           });
-        });
       });      
     },
     /**
@@ -326,17 +334,8 @@ define([
      * hardcoded id, it uses pouch's API directly
      */
     updateToPouch : function(){
-      alert("Bug: the corpusmask updatetopouch method is deprecated!");
-      var self = this;
-      this.changePouch(null, function(){
-        self.pouch(function(err,db){
-          var modelwithhardcodedid = self.toJSON();
-          modelwithhardcodedid._id = "corpus";
-          db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
-          });
-        });
-      });
+      alert("Bug: the corpusmask updatetopouch method is deprecated please report this!");
+      
     },
     /**
      * This function takes in a pouchname, which could be different

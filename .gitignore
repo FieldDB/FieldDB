@@ -2,6 +2,8 @@
 release
 compiled_handlebars.js
 *.handlebars.js
+#couchapp_minified/_attachments/corpus_online_dashboard.js
+#couchapp_minified/_attachments/user_online_dashboard.js
 
 #ignore private config files
 *_production*
