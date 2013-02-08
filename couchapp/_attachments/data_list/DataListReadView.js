@@ -302,7 +302,7 @@ define( [
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
-          // Display the ReadView
+          // Display the commentReadView
           this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           

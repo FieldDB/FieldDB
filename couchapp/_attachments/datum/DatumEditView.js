@@ -221,7 +221,7 @@ define([
         this.datumTagsView.render();
         
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
         
         // Display the CommentEditView
