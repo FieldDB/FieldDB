@@ -684,11 +684,11 @@ OPrime.makeCORSRequest = function(options) {
     return;
   }
 
-  if(options.method == "POST"){
+//  if(options.method == "POST"){
     //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.setRequestHeader("Content-type","application/json");
     xhr.withCredentials = true;
-  }
+//  }
   
   xhr.onload = function(e,f,g) {
     var text = xhr.responseText;
