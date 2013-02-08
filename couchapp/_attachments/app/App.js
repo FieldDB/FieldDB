@@ -63,7 +63,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("APP INIT");
+      if (OPrime.debugMode) OPrime.debug("APP INIT");
       
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
@@ -102,7 +102,7 @@ define([
       if(!this.get("loadTheAppForTheFirstTime")){
         window.app = this;
         var appself = this;
-        OPrime.debug("Loading encrypted user");
+        if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
         $(".spinner-status").html("Loading encrypted user...");
         var u = localStorage.getItem("encryptedUser");
         appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
@@ -113,7 +113,7 @@ define([
             /*
              * Load the backbone objects
              */
-            OPrime.debug("Creating backbone objects");
+            if (OPrime.debugMode) OPrime.debug("Creating backbone objects");
             $(".spinner-status")
             .html("Building dashboard objects...");
             appself.createAppBackboneObjects(appself.get("couchConnection").pouchname, function() {
@@ -122,14 +122,14 @@ define([
                * If you know the user, load their most recent
                * dashboard
                */
-              OPrime.debug("Loading the backbone objects");
+              if (OPrime.debugMode) OPrime.debug("Loading the backbone objects");
               $(".spinner-status").html(
               "Loading dashboard objects...");
               appself.loadBackboneObjectsByIdAndSetAsCurrentDashboard(
                   appself.get("authentication").get(
                   "userPrivate").get("mostRecentIds"), function() {
                 
-                OPrime.debug("Starting the app");
+                if (OPrime.debugMode) OPrime.debug("Starting the app");
                 appself.startApp(function() {
                   window.app.showHelpOrNot();
                   appself.stopSpinner();
@@ -274,7 +274,7 @@ define([
         
         Backbone.history.start();
         if (typeof callback == "function") {
-          OPrime.debug("Calling back the startApps callback");
+          if (OPrime.debugMode) OPrime.debug("Calling back the startApps callback");
           callback();
         }
       }
@@ -354,7 +354,7 @@ define([
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
       $.couch.login({
@@ -423,7 +423,7 @@ define([
                     if (typeof failurecallback == "function") {
                       failurecallback("I couldn't log you into your corpus.");
                     }
-                    OPrime.debug(serverResults);
+                    if (OPrime.debugMode) OPrime.debug(serverResults);
                     window.app.get("authentication").set(
                         "staleAuthentication", true);
                   }
@@ -435,9 +435,9 @@ define([
     getCouchUrl : function(couchConnection, couchdbcommand) {
       if(!couchConnection){
         couchConnection = this.get("couchConnection");
-        OPrime.debug("Using the apps ccouchConnection", couchConnection);
+        if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
       }else{
-        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+        if (OPrime.debugMode) OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
       }
       if(!couchConnection){
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
@@ -451,7 +451,7 @@ define([
         failurecallback) {
       var self = this;
       if(!self.pouch){
-        OPrime.debug("Not replicating, no pouch ready.");
+        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
         if(typeof successcallback == "function"){
           successcallback();
         }
@@ -460,16 +460,16 @@ define([
       self.pouch(function(err, db) {
         var couchurl = this.getCouchUrl();
         if (err) {
-          OPrime.debug("Opening db error", err);
+          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
           if (typeof failurecallback == "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            OPrime.debug('Opening DB error'
+            if (OPrime.debugMode) OPrime.debug('Opening DB error'
                 + JSON.stringify(err));
           }
         } else {
-          OPrime.debug("Opening db success", db);
+          if (OPrime.debugMode) OPrime.debug("Opening db success", db);
           alert("TODO check to see if  needs a slash if replicating with pouch on "+couchurl );
           self.replicateFromCorpus(db, couchurl, function() {
             //turn on to regardless of fail or succeed
@@ -494,7 +494,7 @@ define([
       var self = this;
 
       if(!self.pouch){
-        OPrime.debug("Not replicating, no pouch ready.");
+        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
         if(typeof successcallback == "function"){
           successcallback();
         }
@@ -504,26 +504,26 @@ define([
       self.pouch(function(err, db) {
         var couchurl = self.getCouchUrl();
         if (err) {
-          OPrime.debug("Opening db error", err);
+          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
           if (typeof failurecallback == "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            OPrime.debug('Opening DB error'
+            if (OPrime.debugMode) OPrime.debug('Opening DB error'
                 + JSON.stringify(err));
           }
         } else {
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            OPrime.debug("Replicate from " + couchurl,response, err);
+            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl,response, err);
             if(err){
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('Corpus replicate from error' + JSON.stringify(err));
-                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             }else{
-              OPrime.debug("Corpus replicate from success", response);
+              if (OPrime.debugMode) OPrime.debug("Corpus replicate from success", response);
               if(typeof successcallback == "function"){
                 successcallback();
               }
@@ -536,24 +536,24 @@ define([
       db.replicate.to(couchurl, {
         continuous : true
       }, function(err, response) {
-        OPrime.debug("Replicated to " + couchurl);
-        OPrime.debug(response);
-        OPrime.debug(err);
+        if (OPrime.debugMode) OPrime.debug("Replicated to " + couchurl);
+        if (OPrime.debugMode) OPrime.debug(response);
+        if (OPrime.debugMode) OPrime.debug(err);
         if (err) {
-          OPrime.debug("replicate to db  error", err);
+          if (OPrime.debugMode) OPrime.debug("replicate to db  error", err);
           if (typeof failure == "function") {
             failure();
           } else {
             alert('Database replicate to error' + JSON.stringify(err));
-            OPrime.debug('Database replicate to error'
+            if (OPrime.debugMode) OPrime.debug('Database replicate to error'
                 + JSON.stringify(err));
           }
         } else {
-          OPrime.debug("Database replicate to success", response);
+          if (OPrime.debugMode) OPrime.debug("Database replicate to success", response);
           if (typeof success == "function") {
             success();
           } else {
-            OPrime.debug('Database replicating'
+            if (OPrime.debugMode) OPrime.debug('Database replicating'
                 + JSON.stringify(couchConnection));
           }
 
@@ -566,26 +566,26 @@ define([
         continuous : true
       },
       function(err, response) {
-        OPrime.debug("Replicated from " + couchurl);
-        OPrime.debug(response);
-        OPrime.debug(err);
+        if (OPrime.debugMode) OPrime.debug("Replicated from " + couchurl);
+        if (OPrime.debugMode) OPrime.debug(response);
+        if (OPrime.debugMode) OPrime.debug(err);
         if (err) {
-          OPrime.debug("replicate from db  error", err);
+          if (OPrime.debugMode) OPrime.debug("replicate from db  error", err);
           if (typeof fail == "function") {
             fail();
           } else {
             alert('Database replicate from error'
                 + JSON.stringify(err));
-            OPrime.debug('Database replicate from error'
+            if (OPrime.debugMode) OPrime.debug('Database replicate from error'
                 + JSON.stringify(err));
           }
         } else {
-          OPrime.debug("Database replicate from success",
+          if (OPrime.debugMode) OPrime.debug("Database replicate from success",
               response);
           if (typeof succes == "function") {
             succes();
           } else {
-            OPrime.debug('Database replicating'
+            if (OPrime.debugMode) OPrime.debug('Database replicating'
                 + JSON.stringify(couchConnection));
           }
 
@@ -594,7 +594,7 @@ define([
     },
     
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
-      OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+      if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
       
 
       /*
@@ -663,7 +663,7 @@ define([
         c.fetch({
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-            OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             
             /* Upgrade chrome app user corpora's to v1.38+ */
             var oldCouchConnection = corpusModel.get("couchConnection");
@@ -696,7 +696,7 @@ define([
                     $(".spinner-status").html("Opened DataList...");
 
 //                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                    OPrime.debug("Data list fetched successfully", dataListModel);
+                    if (OPrime.debugMode) OPrime.debug("Data list fetched successfully", dataListModel);
                     dl.setAsCurrentDataList(function(){
                       $(".spinner-status").html("Loading your most recent DataList, "+dataListModel.get("datumIds").length+" entries...");
 
@@ -709,13 +709,13 @@ define([
                             $(".spinner-status").html("Opened Elicitation Session...");
 
 //                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                            OPrime.debug("Session fetched successfully", sessionModel);
+                            if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
                             s.setAsCurrentSession(function(){
                               
                               $(".spinner-status").html("Loading Elicitation Session...");
 
 //                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
-                              OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+                              if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
                               if(window.appView){
                                 window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
                               }
@@ -756,13 +756,13 @@ define([
             });//end setAsCurrentCorpus
           },
           error : function(model, error, options) {
-            OPrime.debug("There was an error fetching corpus ",model,error,options);
+            if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
             alert("There seems to be an error when fetching corpus: "+error.reason);
             if(error.error.indexOf("unauthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
-                OPrime.debug("Trying to reload the app after a session token has timed out");
+                if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
                 self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
               }, couchConnection.pouchname);
 //              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
@@ -864,7 +864,7 @@ define([
 //        couchurl = couchurl + this.get("authentication").get("userPrivate").get(
 //        "username") + "-activity_feed";
 //      }
-//      OPrime.debug("Saving activity: ", backBoneActivity);
+//      if (OPrime.debugMode) OPrime.debug("Saving activity: ", backBoneActivity);
 //      $.ajax({
 //        url : couchurl,
 //        data : backBoneActivity.toJSON(),

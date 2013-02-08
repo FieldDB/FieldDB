@@ -92,7 +92,7 @@ define([
      * @constructs
      */
     initialize: function() {
-      OPrime.debug("SESSION init");
+      if (OPrime.debugMode) OPrime.debug("SESSION init");
       
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -112,7 +112,7 @@ define([
         if(window.app && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
           this.set("sessionFields", window.app.get("corpus").get("sessionFields").clone());
         }else{
-          OPrime.debug("Not creating sessions fields");
+          if (OPrime.debugMode) OPrime.debug("Not creating sessions fields");
         }
       }
       this.get("sessionFields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
@@ -183,7 +183,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the Session");
+      if (OPrime.debugMode) OPrime.debug("Saving the Session");
       var self = this;
       var newModel = true;
       if(this.id){
@@ -205,7 +205,7 @@ define([
       this.set("timestamp", Date.now());
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Session save success');
+            if (OPrime.debugMode) OPrime.debug('Session save success');
             var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
@@ -268,7 +268,7 @@ define([
             }
           },
           error : function(e, f, g) {
-            OPrime.debug("Session save error", e, f, g);
+            if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{

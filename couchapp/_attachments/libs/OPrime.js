@@ -23,7 +23,7 @@ OPrime.pouchUrl = "idb://";
 OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   if (!couchConnection) {
     couchConnection = OPrime.defaultCouchConnection();
-    OPrime.debug("Using the apps ccouchConnection", couchConnection);
+    if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
   }
 
   var couchurl = couchConnection.protocol + couchConnection.domain;
@@ -112,7 +112,7 @@ OPrime.publisher = {
     var pubtype = type || 'any';
     var subscribers = this.subscribers[pubtype];
     if (!subscribers || subscribers.length == 0) {
-      OPrime.debug(pubtype + ": There were no subscribers.");
+      if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
       return;
     }
     var i;
@@ -132,7 +132,7 @@ OPrime.publisher = {
           subscribers[i].fn.call(subscribers[i].context, arg);
         }
       }
-      OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+      if (OPrime.debugMode) OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
 
     } else {
 
@@ -146,13 +146,13 @@ OPrime.publisher = {
           }
           if (subscribers[i].context === context) {
             var removed = subscribers.splice(i, 1);
-            OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+            if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
           } else {
-            OPrime.debug(type + " keeping subscriber " + i,
+            if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
                 subscribers[i].context);
           }
         } catch (e) {
-          OPrime.debug("problem visiting Subscriber " + i, subscribers)
+          if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
         }
       }
     }
@@ -335,7 +335,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   var callingcontextself = callingcontext;
   if (!audioOffsetCallback) {
     audioOffsetCallback = function(message) {
-      OPrime.debug("In audioOffsetCallback: " + message);
+      if (OPrime.debugMode) OPrime.debug("In audioOffsetCallback: " + message);
       OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
     }
   }
@@ -350,7 +350,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
     this.debug("Playing Audio via HTML5:" + audiourl + ":");
     document.getElementById(divid).removeEventListener('ended',
         OPrime.audioEndListener);
-    OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
+    if (OPrime.debugMode) OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
     document.getElementById(divid).addEventListener('ended',
         OPrime.audioEndListener);
     document.getElementById(divid).play();
@@ -358,7 +358,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
 }
 OPrime.audioEndListener = function() {
   var audiourl = this.getAttribute("src")
-  OPrime.debug("End audio ", audiourl);
+  if (OPrime.debugMode) OPrime.debug("End audio ", audiourl);
   OPrime.hub.publish('playbackCompleted', audiourl);
 };
 OPrime.pauseAudioFile = function(divid, callingcontext) {
@@ -414,13 +414,13 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
     document.getElementById(divid).pause();
     document.getElementById(divid).currentTime = startime;
-    OPrime.debug("Cueing audio to "
+    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
         + document.getElementById(divid).currentTime);
     document.getElementById(divid).play();
     OPrime.playingInterval = true;
     document.getElementById(divid).addEventListener("timeupdate", function() {
       if (this.currentTime >= endtime && OPrime.playingInterval) {
-        OPrime.debug("CurrentTime: " + this.currentTime);
+        if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
         OPrime.playingInterval = false; /*
                                          * workaround for not being able to
@@ -444,7 +444,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
   var callingcontextself = callingcontext;
   if (!callbackRecordingCompleted) {
     callbackRecordingCompleted = function(message) {
-      OPrime.debug("In callbackRecordingCompleted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingCompleted: " + message);
       OPrime.hub.unsubscribe("audioRecordingCompleted", null,
           callingcontextself);
     };
@@ -459,7 +459,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
    */
   if (!callbackRecordingStarted) {
     callbackRecordingStarted = function(message) {
-      OPrime.debug("In callbackRecordingStarted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStarted: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
           callingcontextself);
     };
@@ -493,7 +493,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
   var callingcontextself = callingcontext;
   if (!callbackRecordingStopped) {
     callbackRecordingStopped = function(message) {
-      OPrime.debug("In callbackRecordingStopped: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStopped: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
           callingcontextself);
     };
@@ -533,14 +533,14 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
   var callingcontextself = callingcontext;
   if (!callbackPictureCaptureStarted) {
     callbackPictureCaptureStarted = function(message) {
-      OPrime.debug("In callbackPictureCaptureStarted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureStarted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
           callingcontextself);
     };
   }
   if (!callbackPictureCaptureCompleted) {
     callbackPictureCaptureCompleted = function(message) {
-      OPrime.debug("In callbackPictureCaptureCompleted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureCompleted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
           callingcontextself);
     };
@@ -577,7 +577,7 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
 /*
  * Initialize the debugging output, taking control from the Android side.
  */
-OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
+if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
     + navigator.userAgent);
 
 if (OPrime.isAndroidApp()) {
@@ -601,7 +601,7 @@ OPrime.getConnectivityType = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    OPrime.debug("This is an Android.");
+    if (OPrime.debugMode) OPrime.debug("This is an Android.");
     Android.getConectivityType();
   } else {
     OPrime.hub.publish('connectivityType', 'Probably Online');
@@ -615,7 +615,7 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    OPrime.debug("This is an Android.");
+    if (OPrime.debugMode) OPrime.debug("This is an Android.");
     Android.getHardwareDetails();
   } else {
     OPrime.hub.publish('hardwareDetails', {
@@ -684,15 +684,15 @@ OPrime.makeCORSRequest = function(options) {
     return;
   }
 
-  if(options.method == "POST"){
+//  if(options.method == "POST"){
     //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.setRequestHeader("Content-type","application/json");
     xhr.withCredentials = true;
-  }
+//  }
   
   xhr.onload = function(e,f,g) {
     var text = xhr.responseText;
-    OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
+    if (OPrime.debugMode) OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
     if(typeof options.success == "function"){
       if(text){
         options.success(JSON.parse(text));
@@ -705,7 +705,7 @@ OPrime.makeCORSRequest = function(options) {
   };
 
   xhr.onerror = function(e,f,g) {
-    OPrime.debug(e,f,g);
+    if (OPrime.debugMode) OPrime.debug(e,f,g);
     OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
     if(typeof options.error == "function"){
       options.error(e,f,g);

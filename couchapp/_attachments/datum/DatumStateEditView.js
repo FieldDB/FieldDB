@@ -22,7 +22,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM STATE EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE EDIT VIEW init");
       
       // If the model changes, re-render
       this.model.bind('change', this.render, this);
@@ -50,7 +50,7 @@ define( [
      * Renders the DatumStateEditView.
      */
     render : function() {
-      OPrime.debug("DATUM STATE EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM STATE EDIT VIEW render");
       
       if (this.format == "corpus") {
         // Display the DatumStateSettingsEditView
@@ -75,7 +75,7 @@ define( [
      * Change the model's state.
      */
     updateState : function() {
-      OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
+      if (OPrime.debugMode) OPrime.debug("Updated state to " + this.$el.children(".datum_state_input").val());
       this.model.set("state", this.$el.children(".datum_state_input").val());
     },
     
@@ -83,7 +83,7 @@ define( [
      * Change the model's color.
      */
     updateColor : function() {
-      OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
+      if (OPrime.debugMode) OPrime.debug("Updated color to " + this.$el.children(".color_chooser").val());
       this.model.set("color", this.$el.children(".color_chooser").val());
     }
   });

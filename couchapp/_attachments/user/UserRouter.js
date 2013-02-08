@@ -38,7 +38,7 @@ define([
      * 
      */
     showDashboard : function(renderOrNot) {
-      OPrime.debug("In showDashboard: " );
+      if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
 //      $("#user-modal").modal("show");
 
     },
@@ -47,7 +47,7 @@ define([
      * 
      */
     showFullscreenUser : function() {
-      OPrime.debug("In showFullscreenUser: " );
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " );
     },
     showQuickAuthenticateAndRedirectToDatabase : function(pouchname){
       window.app.set("corpus", new Corpus()); 
@@ -71,7 +71,7 @@ define([
         c.id = "corpus";
         c.fetch({
           success : function(model) {
-            OPrime.debug("Corpus fetched successfully", model);
+            if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
             var corpusidfromCorpusMask = model.get("corpusid");
             /* Upgrade to version 1.38 */
             if(!corpusidfromCorpusMask){
@@ -89,12 +89,12 @@ define([
             }
           },
           error : function(e, x, y ) {
-            OPrime.debug("Problem opening the dashboard ", e, x, y);
+            if (OPrime.debugMode) OPrime.debug("Problem opening the dashboard ", e, x, y);
             var reason = "";
             if(x){
               reason = x.reason;
             }
-            OPrime.debug("There was a potential problem opening your dashboard." + reason);
+            if (OPrime.debugMode) OPrime.debug("There was a potential problem opening your dashboard." + reason);
           }
         });
       });
@@ -107,7 +107,7 @@ define([
      *          pouchname The name of the corpus this datum is from.
      */
     showCorpusDashboard : function(pouchname, corpusid) {
-      OPrime.debug("In showFullscreenCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
       
       /*
        * If the corpusid is not specified, then try to guess it by re-routing us to the guess function
@@ -118,7 +118,7 @@ define([
         return;
       }
       if(!pouchname){
-        OPrime.debug("the pouchname is missing, this should never happen");
+        if (OPrime.debugMode) OPrime.debug("the pouchname is missing, this should never happen");
         return;
       }
       var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
@@ -136,7 +136,7 @@ define([
         c.id = corpusid;
         c.fetch({
           success : function(model) {
-            OPrime.debug("Corpus fetched successfully", model);
+            if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
 
             c.makeSureCorpusHasADataList(function(){
               c.makeSureCorpusHasASession(function(){

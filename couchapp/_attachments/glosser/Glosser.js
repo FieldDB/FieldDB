@@ -130,7 +130,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
           .replace(/--+/g, "-")   // Ensure that there is only ever one "-" in a row
           .replace(/^-/, "")      // Remove "-" at the start of the word
           .replace(/-$/, "");     // Remove "-" at the end of the word
-      OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
+      if (OPrime.debugMode) OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
           + " is " + potentialParse);
           
       parsedWords.push(potentialParse);
