@@ -17,7 +17,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("UserMask init");
+      if (OPrime.debugMode) OPrime.debug("UserMask init");
       
     },
     /**
@@ -41,7 +41,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the UserMask");
+      if (OPrime.debugMode) OPrime.debug("Saving the UserMask");
       var self = this;
         
         if(OPrime.isBackboneCouchDBApp()){
@@ -54,16 +54,16 @@ define([
                 successcallback();
               }
             },error : function(e,f,g) {
-              OPrime.debug('UserMask save error ' + f.reason);
+              if (OPrime.debugMode) OPrime.debug('UserMask save error ' + f.reason);
               self.fetch({
                 error : function(model, xhr, options) {
-                  OPrime.debug("There was an error fetching your UserMask in this corpus.");
+                  if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
                   if(typeof successcallback == "function"){
                     successcallback();
                   }
                 },
                 success : function(model, response, options) {
-                  OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
+                  if (OPrime.debugMode) OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
                   self._rev = model.get("_rev");
                   self.set("_rev", model.get("_rev"));
                   self.save();
@@ -86,37 +86,37 @@ define([
             if(modelwithhardcodedid.id){
               modelwithhardcodedid._id = modelwithhardcodedid.id; //this is set by authentication when it first creates the usermask
             }else{
-              OPrime.debug("Trying to save user mask too early, before it has an _id. not saving...but pretending it worked", modelwithhardcodedid);
+              if (OPrime.debugMode) OPrime.debug("Trying to save user mask too early, before it has an _id. not saving...but pretending it worked", modelwithhardcodedid);
               if(typeof successcallback == "function"){
                 successcallback();
               }
               return;
-              OPrime.debug("bug: the user mask doesnt have an _id, it wont save properly, trying to take the id from the user "+window.app.get("authentication").get("userPrivate").id);
+              if (OPrime.debugMode) OPrime.debug("bug: the user mask doesnt have an _id, it wont save properly, trying to take the id from the user "+window.app.get("authentication").get("userPrivate").id);
               modelwithhardcodedid._id = window.app.get("authentication").get("userPrivate").id;
             }
           }
           
           db.put(modelwithhardcodedid, function(err, response) {
             if(err){
-              OPrime.debug("UserMask put error", err);
+              if (OPrime.debugMode) OPrime.debug("UserMask put error", err);
               if(err.status == "409"){
                   //find out what the rev is in the database by fetching
                   self.fetch({
                     success : function(model, response) {
-                      OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
+                      if (OPrime.debugMode) OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
                       
                       modelwithhardcodedid._rev = self.get("_rev");
-                      OPrime.debug("Usermask old version", self.toJSON());
-                      OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
+                      if (OPrime.debugMode) OPrime.debug("Usermask old version", self.toJSON());
+                      if (OPrime.debugMode) OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
                       
                       db.put(modelwithhardcodedid, function(err, response) {
                         if(err){
-                          OPrime.debug("UserMask put error, even after fetching the version number",err);
+                          if (OPrime.debugMode) OPrime.debug("UserMask put error, even after fetching the version number",err);
                           if(typeof failurecallback == "function"){
                             failurecallback();
                           }
                         }else{
-                          OPrime.debug("UserMask put success, after fetching its version number and overwriting it", response);
+                          if (OPrime.debugMode) OPrime.debug("UserMask put success, after fetching its version number and overwriting it", response);
                           //this happens on subsequent save into pouch of this usermask's id
                           if(typeof successcallback == "function"){
                             successcallback();
@@ -127,14 +127,14 @@ define([
                     },
                     //fetch error
                     error : function(e) {
-                      OPrime.debug('UserMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
+                      if (OPrime.debugMode) OPrime.debug('UserMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
                       if(typeof failurecallback == "function"){
                         failurecallback();
                       }
                     }
                   });
               }else{
-                OPrime.debug('UserMask put error that was not a conflict' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('UserMask put error that was not a conflict' + JSON.stringify(err));
                 //this is a real error, not a conflict error
                 if(typeof failurecallback == "function"){
                   failurecallback();
@@ -142,7 +142,7 @@ define([
               }
             //this happens on the first save into pouch of this usermask's id
             }else{
-              OPrime.debug("UserMask put success", response);
+              if (OPrime.debugMode) OPrime.debug("UserMask put success", response);
               if(typeof successcallback == "function"){
                 successcallback();
               }

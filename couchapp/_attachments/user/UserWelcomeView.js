@@ -39,7 +39,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER welcome init: " );
+      if (OPrime.debugMode) OPrime.debug("USER welcome init: " );
       this.model = new User();
       this.model.set("username","yourusernamegoeshere");
       
@@ -150,7 +150,7 @@ define([
      * Renders the UserWelcomeView and its partial.
      */
     render : function() {
-      OPrime.debug("USER render: " );
+      if (OPrime.debugMode) OPrime.debug("USER render: " );
 
       if (this.model != undefined) {
         this.model.set("username", this.model.get("username").toLowerCase().replace(/[^0-9a-z]/g,""));
@@ -195,7 +195,7 @@ define([
         $(this.el).find(".welcomeauthurl").val(OPrime.authUrl);
         
       } else {
-        OPrime.debug("\User model was undefined");
+        if (OPrime.debugMode) OPrime.debug("\User model was undefined");
       }
 
       return this;
@@ -204,7 +204,7 @@ define([
     registerNewUser : function() {
       $(".register-new-user").addClass("disabled");
 
-      OPrime.debug("Attempting to register a new user: " );
+      if (OPrime.debugMode) OPrime.debug("Attempting to register a new user: " );
       /*
        * Set defaults for new user registration here,
        * WARNING: mongoose auth wont keep any attributes that are empty {} or [] 
@@ -235,7 +235,7 @@ define([
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
-        OPrime.debug("User has entered an email and the passwords match. ");
+        if (OPrime.debugMode) OPrime.debug("User has entered an email and the passwords match. ");
         var a = new App({
           filledWithDefaults : true,
           loadTheAppForTheFirstTime : true
@@ -312,7 +312,7 @@ define([
           dataType : ""
         });
       } else{
-        OPrime.debug("User has not entered good info. ");
+        if (OPrime.debugMode) OPrime.debug("User has not entered good info. ");
           $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs );
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");

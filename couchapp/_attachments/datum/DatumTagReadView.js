@@ -19,7 +19,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW init");
     },
 
     model : DatumTag,
@@ -31,7 +31,7 @@ define([
     template: Handlebars.templates.datum_tag_read_embedded,
     	
     render : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       

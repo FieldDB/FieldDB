@@ -96,7 +96,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("CORPUS INIT");
+      if (OPrime.debugMode) OPrime.debug("CORPUS INIT");
       
       this.datalists =  new DataLists();
       this.sessions =  new Sessions();
@@ -133,7 +133,7 @@ define([
       this.get("publicSelf").id = "corpus";
         c.fetch({
           success : function(model, response, options) {
-            OPrime.debug("Success fetching corpus' public self: ", model, response, options);
+            if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
             if(!model.get("corpusid")){
               corpusself.fillWithDefaults(sucessloadingorCreatingcallback);
               return;
@@ -142,7 +142,7 @@ define([
             corpusself.set("pouchname", pouchname);
               corpusself.fetch({
                 success : function(model) {
-                  OPrime.debug("Corpus fetched successfully", model);
+                  if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
                   $(".spinner-status").html("Loading Datalist...");
                   corpusself.makeSureCorpusHasADataList(function(){
                     corpusself.datalists.at(0).setAsCurrentDataList(function(){
@@ -170,7 +170,7 @@ define([
                 error : function(model, xhr, options) {
                   $(".spinner-status").html("Downloading Corpus...");
 
-                  OPrime.debug("Error fetching corpus  : ", model, xhr, options);
+                  if (OPrime.debugMode) OPrime.debug("Error fetching corpus  : ", model, xhr, options);
                   if(corpusself.islooping){
                     OPrime.bug("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
                     return;
@@ -184,7 +184,7 @@ define([
           error : function(model, xhr, options) {
             $(".spinner-status").html("Creating Corpus...");
 
-            OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
+            if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
             OPrime.bug("Error fetching your corpus' public view..."+xhr.reason);
             corpusself.get("publicSelf").fillWithDefaults();
             corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
@@ -201,9 +201,9 @@ define([
         }
         this.get("publicSelf").id = "corpus";
         this.get("publicSelf").fetch({sucess: function(model, response, options){
-          OPrime.debug("Success fetching corpus' public self: ", model, response, options);
+          if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
         }, error: function(model, xhr, options){
-          OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
+          if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
           corpusself.get("publicSelf").fillWithDefaults();
           corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
           corpusself.get("publicSelf").set("pouchname", corpusself.get("pouchname"));
@@ -399,7 +399,7 @@ define([
           if(users.notonteam[user].username){
             typeaheadusers.push(users.notonteam[user].username);
           }else{
-            OPrime.debug("This user is invalid", users.notonteam[user]);
+            if (OPrime.debugMode) OPrime.debug("This user is invalid", users.notonteam[user]);
           }
         }
         typeaheadusers = JSON.stringify(typeaheadusers);
@@ -671,7 +671,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the Corpus");
+      if (OPrime.debugMode) OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
       
@@ -794,7 +794,7 @@ define([
             }, OPrime.checkToSeeIfCouchAppIsReady);
             
           });
-          OPrime.debug("Contacting the server to ask it to make a new database for you...");
+          if (OPrime.debugMode) OPrime.debug("Contacting the server to ask it to make a new database for you...");
           return;
         }
         
@@ -817,14 +817,14 @@ define([
           }
         }
       }catch(e){
-        OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Removing empty states work around failed some thing was wrong.",e);
       }
       
       this.set("timestamp", Date.now());
       
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Corpus save success');
+            if (OPrime.debugMode) OPrime.debug('Corpus save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for corpus in corpus
@@ -974,7 +974,7 @@ define([
             }
           },
           error : function(model, response, options) {
-            OPrime.debug("Corpus save error", model, response, options);
+            if (OPrime.debugMode) OPrime.debug("Corpus save error", model, response, options);
 //            if(response && response.reason && response.reason == "unauthorized"){
 //              alert('Corpus save error: ' + response.reason);
 //              window.app.get("authentication").syncUserWithServer(function(){
@@ -1012,10 +1012,10 @@ define([
             if(typeof sucess == "function"){
               sucess();
             }else{
-              OPrime.debug('the corpus has datalists');
+              if (OPrime.debugMode) OPrime.debug('the corpus has datalists');
             }
           }else{
-            OPrime.debug("You have no datalists, creating a new one...");
+            if (OPrime.debugMode) OPrime.debug("You have no datalists, creating a new one...");
           //create the first datalist for this corpus.
             var dl = new DataList({
               filledWithDefaults: true,
@@ -1043,14 +1043,14 @@ define([
                 if(typeof sucess == "function"){
                   sucess();
                 }else{
-                  OPrime.debug('DataList save success' + model.id);
+                  if (OPrime.debugMode) OPrime.debug('DataList save success' + model.id);
                 }
               },
               error : function(e) {
                 if(typeof failure == "function"){
                   failure();
                 }else{
-                  OPrime.debug('DataList save error' + e);
+                  if (OPrime.debugMode) OPrime.debug('DataList save error' + e);
                 }
               }
             });
@@ -1073,7 +1073,7 @@ define([
       this.sessions.fetch({
         error : function(model, xhr, options) {
           
-          OPrime.debug("There was an error loading your sessions.");
+          if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
           console.log(model,xhr,options);
           OPrime.bug("There was an error loading your sessions.");
           
@@ -1083,10 +1083,10 @@ define([
             if(typeof suces == "function"){
               suces();
             }else{
-              OPrime.debug('the corpus has sessions');
+              if (OPrime.debugMode) OPrime.debug('the corpus has sessions');
             }
           }else{
-            OPrime.debug("You have no sessions, creating a new one...");
+            if (OPrime.debugMode) OPrime.debug("You have no sessions, creating a new one...");
             var s = new Session({
               sessionFields : self.get("sessionFields").clone(),
               filledWithDefaults: true,
@@ -1107,14 +1107,14 @@ define([
                 if(typeof suces == "function"){
                   suces();
                 }else{
-                  OPrime.debug('Session save success' + model.id);
+                  if (OPrime.debugMode) OPrime.debug('Session save success' + model.id);
                 }
               },
               error : function(e) {
                 if(typeof fail == "function"){
                   fail();
                 }else{
-                  OPrime.debug('Session save error' + e);
+                  if (OPrime.debugMode) OPrime.debug('Session save error' + e);
                 }
               }
             });
@@ -1182,12 +1182,12 @@ define([
 
           console.log("This is what the doc will look like: ", modelwithhardcodedid);
           db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
+            if (OPrime.debugMode) OPrime.debug(response);
             if(err){
-              OPrime.debug("The "+view+" view couldn't be created.");
+              if (OPrime.debugMode) OPrime.debug("The "+view+" view couldn't be created.");
             }else{
               
-              OPrime.debug("The "+view+" view was created.");
+              if (OPrime.debugMode) OPrime.debug("The "+view+" view was created.");
               if(typeof callbackpouchview == "function"){
                 callbackpouchview();
               }
@@ -1347,7 +1347,7 @@ define([
               + JSON.stringify(serverResults));
 
           var counts = _.pluck(serverResults.rows, "value");
-          OPrime.debug(counts);
+          if (OPrime.debugMode) OPrime.debug(counts);
           var frequentFields = [];
           try{
             var totalDatumCount = serverResults.rows[(_.pluck(
@@ -1358,12 +1358,12 @@ define([
                 continue;
               }
               if (serverResults.rows[field].value / totalDatumCount * 100 > 50) {
-                OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
+                if (OPrime.debugMode) OPrime.debug("Considering "+ serverResults.rows[field].key+ " as frequent (in more than 50% of datum) : "+ serverResults.rows[field].value / totalDatumCount * 100 );
                 frequentFields.push( serverResults.rows[field].key );
               }
             }
           }catch(e){
-            OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
+            if (OPrime.debugMode) OPrime.debug("There was a problem extracting the frequentFields, instead using defaults : ",e);
             frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
           }
           if(frequentFields == []){
