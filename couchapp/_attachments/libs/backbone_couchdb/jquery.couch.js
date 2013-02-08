@@ -142,20 +142,16 @@
       $.ajax({
         type: "GET", url: this.urlPrefix + "/_session",
         beforeSend: function(xhr) {
-          xhr.withCredentials = true;
             xhr.setRequestHeader('Accept', 'application/json');
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
-          if(!resp){
-            resp = {};
-          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
             options.error(req.status, resp.error, resp.reason);
           } else {
-            alert("An error occurred getting session info: " + resp.reason);
+            throw "An error occurred getting session info: " + resp.reason;
           }
         }
       });
@@ -186,35 +182,15 @@
      */
     signup: function(user_doc, password, options) {      
       options = options || {};
-      // prepare user doc based on name and password
-      user_doc = this.prepareUserDoc(user_doc, password);
+      user_doc.password = password;
+      user_doc.roles =  user_doc.roles || [];
+      user_doc.type =  user_doc.type = "user" || [];
+      var user_prefix = "org.couchdb.user:";
+      user_doc._id = user_doc._id || user_prefix + user_doc.name;
+
       $.couch.userDb(function(db) {
         db.saveDoc(user_doc, options);
       });
-    },
-
-    /**
-     * Populates a user doc with a new password.
-     * @param {Object} user_doc User details
-     * @param {String} new_password New Password
-     */
-    prepareUserDoc: function(user_doc, new_password) {
-      if (typeof hex_sha1 == "undefined") {
-        alert("creating a user doc requires sha1.js to be loaded in the page");
-        return;
-      }
-      var user_prefix = "org.couchdb.user:";
-      user_doc._id = user_doc._id || user_prefix + user_doc.name;
-      if (new_password) {
-        // handle the password crypto
-        user_doc.salt = $.couch.newUUID();
-        user_doc.password_sha = hex_sha1(new_password + user_doc.salt);
-      }
-      user_doc.type = "user";
-      if (!user_doc.roles) {
-        user_doc.roles = [];
-      }
-      return user_doc;
     },
 
     /**
@@ -230,21 +206,16 @@
         type: "POST", url: this.urlPrefix + "/_session", dataType: "json",
         data: {name: options.name, password: options.password},
         beforeSend: function(xhr) {
-          xhr.withCredentials = true;
-
             xhr.setRequestHeader('Accept', 'application/json');
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
-          if(!resp){
-            resp = {};
-          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
             options.error(req.status, resp.error, resp.reason);
           } else {
-            alert("An error occurred logging in: " + resp.reason);
+            throw 'An error occurred logging in: ' + resp.reason;
           }
         }
       });
@@ -267,15 +238,12 @@
         },
         complete: function(req) {
           var resp = $.parseJSON(req.responseText);
-          if(!resp){
-            resp = {};
-          }
           if (req.status == 200) {
             if (options.success) options.success(resp);
           } else if (options.error) {
             options.error(req.status, resp.error, resp.reason);
           } else {
-            alert("An error occurred logging out: " + resp.reason);
+            throw 'An error occurred logging out: ' + resp.reason;
           }
         }
       });
@@ -300,9 +268,7 @@
             rawDocs[doc._id].rev == doc._rev) {
           // todo: can we use commonjs require here?
           if (typeof Base64 == "undefined") {
-            alert("please include /_utils/script/base64.js in the page for " +
-                  "base64 support");
-            return false;
+            throw 'Base64 support not found.';
           } else {
             doc._attachments = doc._attachments || {};
             doc._attachments["rev-"+doc._rev.split("-")[0]] = {
@@ -588,7 +554,7 @@
               }
             });
           } else {
-            alert("Please provide an eachApp function for allApps()");
+            throw 'Please provide an eachApp function for allApps()';
           }
         },
 
@@ -665,9 +631,6 @@
             beforeSend : beforeSend,
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
-              if(!resp){
-                resp = {};
-              }
               if (req.status == 200 || req.status == 201 || req.status == 202) {
                 doc._id = resp.id;
                 doc._rev = resp.rev;
@@ -685,7 +648,7 @@
               } else if (options.error) {
                 options.error(req.status, resp.error, resp.reason);
               } else {
-                alert("The document could not be saved: " + resp.reason);
+                throw "The document could not be saved: " + resp.reason;
               }
             }
           });
@@ -778,15 +741,12 @@
           ajaxOptions = $.extend(ajaxOptions, {
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
-              if(!resp){
-                resp = {};
-              }
               if (req.status == 201) {
                 if (options.success) options.success(resp);
               } else if (options.error) {
                 options.error(req.status, resp.error, resp.reason);
               } else {
-                alert("The document could not be copied: " + resp.reason);
+                throw "The document could not be copied: " + resp.reason;
               }
             }
           });
@@ -1035,7 +995,6 @@
     $.ajax($.extend($.extend({
       type: "GET", dataType: "json", cache : !$.browser.msie,
       beforeSend: function(xhr){
-        xhr.withCredentials = true;
         if(ajaxOptions && ajaxOptions.headers){
           for (var header in ajaxOptions.headers){
             xhr.setRequestHeader(header, ajaxOptions.headers[header]);
@@ -1045,14 +1004,11 @@
       complete: function(req) {
         try {
           var resp = $.parseJSON(req.responseText);
-          if(!resp){
-            resp = {};
-          }
         } catch(e) {
           if (options.error) {
             options.error(req.status, req, e);
           } else {
-            alert(errorMessage + ": " + e);
+            throw errorMessage + ': ' + e;
           }
           return;
         }
@@ -1066,7 +1022,7 @@
           options.error(req.status, resp && resp.error ||
                         errorMessage, resp && resp.reason || "no response");
         } else {
-          alert(errorMessage + ": " + resp.reason);
+          throw errorMessage + ": " + resp.reason;
         }
       }
     }, obj), ajaxOptions));
