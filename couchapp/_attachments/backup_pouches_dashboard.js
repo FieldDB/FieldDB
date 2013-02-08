@@ -111,7 +111,7 @@ require(
       });
       window.username = localStorage.getItem("username_to_update");
 
-      window.databasesThatDontNeedReplication = "sapir-firstcorpus,sapir-activity_feed,lingllama-firstcorpus-activity_feed,lingllama-firstcorpus, lingllama-cherokee-activity_feed,lingllama-cherkoee,lingllama-activity_feed,lingllama-firstcorpus-activity_feed,null,undefined,public-firstcorpus,public-activity_feed,public-firstcorpus-activity_feed,publicuser,default,length";
+      window.databasesThatDontNeedReplication = "sapir-firstcorpus,sapir-activity_feed,lingllama-firstcorpus-activity_feed,lingllama-firstcorpus, lingllama-cherokee-activity_feed,lingllama-cherkoee,lingllama-activity_feed,lingllama-firstcorpus-activity_feed,null,undefined,public-firstcorpus,public-activity_feed,public-firstcorpus-activity_feed,publicuser,default,null,length".split(",");
       window.actuallyReplicatedPouches = [];
 
       window.waitForPouchesList = function() {
@@ -148,6 +148,8 @@ require(
             window.backupPouch(window.pouches[window.currentPouch]);
           }
         }
+        try{
+        
         Pouch.replicate('idb://' + pouchname,
             'https://corpusdev.lingsync.org/' + pouchname, {
               complete : function() {
@@ -183,6 +185,16 @@ require(
                 window.finishedReplicating();
               }
             });
+        }catch(e){
+          console.log("There was a problem reading or backing up this database. "+window.pouches[window.currentPouch]);
+          /* Go to the next pouch */
+          window.currentPouch++;
+          if (window.currentPouch < window.pouches.length) {
+            window.backupPouch(window.pouches[window.currentPouch]);
+          } else {
+            window.finishedReplicating();
+          }
+        }
       };
 
       window.finishedReplicating = function() {
