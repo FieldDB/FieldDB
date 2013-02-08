@@ -1,4 +1,2 @@
 #!/bin/bash
-
-cd ~/IMPORTANTSTUFF/fielddb
-./deploy.sh
+bash ~/IMPORTANTSTUFF/fielddb/deploy.sh

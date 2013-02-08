@@ -3,13 +3,13 @@ console.log("Loading Webservices info");
 var OPrime = OPrime || {};
 
 
-OPrime.websiteUrl = "https://wwwdev.fieldlinguist.com:3182";
-OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
-OPrime.audioUrl = "https://audiodev.fieldlinguist.com:3184";
-OPrime.lexiconUrl = "https://lexicondev.fieldlinguist.com:3185";
-OPrime.corpusUrl = "https://corpusdev.fieldlinguist.com:3186";
-OPrime.activityUrl = "https://activitydev.fieldlinguist.com:3187";
-OPrime.widgetUrl = "https://widgetdev.fieldlinguist.com:3188";
+OPrime.websiteUrl = "https://wwwdev.lingsync.org";
+OPrime.authUrl = "https://authdev.lingsync.org";
+OPrime.audioUrl = "https://audiodev.lingsync.org";
+OPrime.lexiconUrl = "https://lexicondev.lingsync.org";
+OPrime.corpusUrl = "https://corpusdev.lingsync.org";
+OPrime.activityUrl = "https://activitydev.lingsync.org";
+OPrime.widgetUrl = "https://widgetdev.lingsync.org";
 
 /*
  * Use the current app's chrome url, assuming if its a dev, they will have their
@@ -43,11 +43,11 @@ OPrime.defaultCouchConnection = function() {
   };
   var testing = {
     protocol : "https://",
-    domain : "ifielddevs.iriscouch.com",
+    domain : "corpusdev.lingsync.org",
     port : "443",
     pouchname : "default",
     path : "",
-    authUrl : "https://authdev.fieldlinguist.com:3183",
+    authUrl : "https://authdev.lingsync.org",
     userFriendlyServerName : "LingSync Testing"
   };
   var production = {
@@ -76,12 +76,12 @@ OPrime.defaultCouchConnection = function() {
    */
   var connection = testing;
   if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("lingsync.org") >= 0) {
+    if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+      connection = testing;
+      OPrime.authUrl = "https://authdev.lingsync.org";
+    } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
       connection = production;
       OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
-      connection = testing;
-      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
       connection = mcgill;
       OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
@@ -96,7 +96,7 @@ OPrime.defaultCouchConnection = function() {
     } else if (window.location.origin
         .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
       connection = testing;
-      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+      OPrime.authUrl = "https://authdev.lingsync.org";
     } else if (window.location.origin
         .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
       connection = production;
@@ -107,7 +107,7 @@ OPrime.defaultCouchConnection = function() {
        * for this build
        */
       connection = testing;
-      OPrime.authUrl = "https://authdev.fieldlinguist.com:3183";
+      OPrime.authUrl = "https://authdev.lingsync.org";
     }
   }
   return connection;
@@ -120,7 +120,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
     return;
     authUrl = "https://auth.lingsync.org";
   } else if (authUrl.indexOf("LingSync Testing") >= 0) {
-    authUrl = "https://authdev.fieldlinguist.com:3183";
+    authUrl = "https://authdev.lingsync.org";
   } else if (authUrl.indexOf("McGill ProsodyLab") >= 0) {
     authUrl = "https://prosody.linguistics.mcgill.ca/auth/";
   } else if (authUrl.indexOf("Localhost") >= 0) {
@@ -137,7 +137,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
          * TODO change this back to the lingsync server once the lingsync server
          * supports 1.38
          */
-        authUrl = "https://authdev.fieldlinguist.com:3183";
+        authUrl = "https://authdev.lingsync.org";
       }
     } else {
       alert("I don't know how to connect to : "
@@ -187,7 +187,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";
-  } else if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
+  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
     mostLikelyAuthUrl = "LingSync Testing";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
     mostLikelyAuthUrl = "LingSync Testing";
@@ -210,28 +210,6 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   return mostLikelyAuthUrl;
 };
 
-OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
-  if (!couchConnection) {
-    couchConnection = OPrime.defaultCouchConnection();
-    OPrime.debug("Using the apps ccouchConnection", couchConnection);
-  }
-  var couchurl = couchConnection.protocol + couchConnection.domain;
-  if (couchConnection.port != null) {
-    couchurl = couchurl + ":" + couchConnection.port;
-  }
-  if(!couchConnection.path){
-    couchConnection.path = "";
-  }
-  couchurl = couchurl + couchConnection.path;
-  if (couchdbcommand === null || couchdbcommand === undefined) {
-    couchurl = couchurl + "/" + couchConnection.pouchname;
-  } else {
-    couchurl = couchurl + couchdbcommand;
-  }
-  return couchurl;
-};
-
-
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.publicUserStaleDetails = function() {
@@ -246,10 +224,10 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
   if(OPrime.isCouchApp()){
     var corpusURL = window.location.origin;
-    if (corpusURL.indexOf("lingsync.org") >= 0) {
+    if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
+      corpusURL = "https://corpusdev.lingsync.org";
+    } else if (corpusURL.indexOf("lingsync.org") >= 0) {
       corpusURL = "https://corpus.lingsync.org";
-    } else if (corpusURL.indexOf("ifielddevs.iriscouch.com") >= 0) {
-      corpusURL = "https://ifielddevs.iriscouch.com";
     } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
       corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     } else if (corpusURL.indexOf("localhost") >= 0) {

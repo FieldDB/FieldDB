@@ -296,6 +296,26 @@ define([
     stopSpinner : function(){
       $('#dashboard_loading_spinner').html("");
     },
+    backUpUser : function(callback){
+      var self = this;
+      /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
+      if(self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama"){
+        if(typeof callback == "function"){
+          callback();
+        }
+      }
+      this.saveAndInterConnectInApp(function(){
+        //syncUserWithServer will prompt for password, then run the corpus replication.
+        self.get("authentication").syncUserWithServer(function(){
+          if(window.appView){
+            window.appView.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.","alert-info","Backed-up:");
+          }
+          if(typeof callback == "function"){
+            callback();
+          }
+        });
+      });
+    },
 
     /**
      * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
@@ -337,12 +357,13 @@ define([
       OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
-      $
-      .ajax({
-        type : 'POST',
-        url : couchurl,
-        data : corpusloginparams,
+      $.couch.login({
+        name: username,
+        password: password,
         success : function(serverResults) {
+          if(!serverResults){
+            OPrime.bug("There was a problem logging you into your backup database, please report this.");
+          }
           if (window.appView) {
             window.appView
             .toastUser(
@@ -366,10 +387,9 @@ define([
           .setTimeout(
               function() {
                 //try one more time 5 seconds later 
-                $
-                .ajax({
-                  type : 'POST',
-                  url : couchurl,
+                $.couch.login({
+                  name: username,
+                  password: password,
                   success : function(serverResults) {
                     if (window.appView) {
                       window.appView
@@ -608,6 +628,13 @@ define([
         window.location.replace("user.html");
         return;
       }
+      
+      /* Upgrade chrome app user corpora's to v1.38+ */
+      if(couchConnection.domain == "ifielddevs.iriscouch.com"){
+        couchConnection.domain  = "corpusdev.lingsync.org";
+        couchConnection.port = "";
+      }
+
       this.set("couchConnection", couchConnection);
       
       var corpusid = appids.corpusid;
@@ -637,6 +664,16 @@ define([
           success : function(corpusModel) {
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+            
+            /* Upgrade chrome app user corpora's to v1.38+ */
+            var oldCouchConnection = corpusModel.get("couchConnection");
+            if(oldCouchConnection){
+              if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+                oldCouchConnection.domain  = "corpusdev.lingsync.org";
+                oldCouchConnection.port = "";
+                corpusModel.set("couchConnection", oldCouchConnection);
+              }
+            }
             
             $(".spinner-status").html("Opened Corpus...");
             
@@ -720,10 +757,14 @@ define([
           },
           error : function(model, error, options) {
             OPrime.debug("There was an error fetching corpus ",model,error,options);
-            alert("There was an error fetching corpus. "+error.reason);
-            if(error.error = "unauthorized"){
-              //Show quick authentication so the user can get their corpus token
-              window.app.get("authentication").syncUserWithServer();
+            alert("There seems to be an error when fetching corpus: "+error.reason);
+            if(error.error.indexOf("unauthorized") >=0 ){
+              //Show quick authentication so the user can get their corpus token and get access to the data
+              var originalCallbackFromLoadBackboneApp = callback;
+              window.app.get("authentication").syncUserWithServer(function(){
+                OPrime.debug("Trying to reload the app after a session token has timed out");
+                self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+              }, couchConnection.pouchname);
 //              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
 //              window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }
