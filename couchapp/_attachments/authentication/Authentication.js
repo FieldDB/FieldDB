@@ -31,9 +31,9 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("AUTHENTICATION INIT");
+      if (OPrime.debugMode) OPrime.debug("AUTHENTICATION INIT");
       this.bind('error', function(model, error) {
-        OPrime.debug("Error in Authentication  : " + error);
+        if (OPrime.debugMode) OPrime.debug("Error in Authentication  : " + error);
       });
       
       if(this.get("filledWithDefaults")){
@@ -95,7 +95,7 @@ define([
       }
       var self= this;
       var authUrl = user.get("authUrl");
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
@@ -104,7 +104,7 @@ define([
             try{
               window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
             }catch(e){
-              OPrime.debug(e);
+              if (OPrime.debugMode) OPrime.debug(e);
             }
             if (typeof failcallback == "function") {
               failcallback(serverResults.userFriendlyErrors.join("<br/>"));
@@ -132,7 +132,7 @@ define([
           }
         },//end successful login
         error: function(e){
-          OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+          if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
           if(window.appView){
             window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs, "alert-danger","Connection errors:");
           }
@@ -165,7 +165,7 @@ define([
      * 
      */
     saveServerResponseToUser : function(serverResults, callbacksave){
-      OPrime.debug("saveServerResponseToUser");
+      if (OPrime.debugMode) OPrime.debug("saveServerResponseToUser");
 
       var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
       if(serverResults.user.username == "public"){
@@ -244,7 +244,7 @@ define([
 //      }
     },
     loadEncryptedUser : function(encryptedUserString, callbackload){
-      OPrime.debug("loadEncryptedUser");
+      if (OPrime.debugMode) OPrime.debug("loadEncryptedUser");
       
 
       /*
@@ -268,6 +268,14 @@ define([
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
       
+
+      /*
+       * For debugging cors #838: Switch to use the corsproxy
+       * corpus service instead of couchdb directly
+       */
+//      userString = userString.replace(/https/g,"http").replace(/6984/g,"3186");
+
+      
       var u = JSON.parse(userString);
       var data = {};
       data.user = u;
@@ -278,7 +286,7 @@ define([
         console.log("The week this user was created: "+week);
         if(week <= 38){
           localStorage.setItem("username_to_update",data.user.username);
-          alert("Hi! Your account was created before version 1.38, taking you to the backup page to upgrade your account to v1.38 and greater.");
+          alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
           window.location.replace("backup_pouches.html");
           return;
         }
@@ -309,7 +317,7 @@ define([
     },
     
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
-      OPrime.debug("saveAndEncryptUserToLocalStorage");
+      if (OPrime.debugMode) OPrime.debug("saveAndEncryptUserToLocalStorage");
       
       /* TODO Switch user to the new dev servers if they have the old ones */
 //      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
@@ -333,14 +341,40 @@ define([
       this.saveAndEncryptUserToLocalStorage(successcallback);
     },
     /**
-     * This function uses the quick authentication view to get the
-     * user's password and authenticate them. The authenticate process
-     * brings down the user from the server, and also gets their sesson
-     * token from couchdb before calling the callback.
+     * This function uses the quick authentication view to get the user's
+     * password and authenticate them. The authenticate process brings down the
+     * user from the server, and also gets their sesson token from couchdb
+     * before calling the callback.
+     * 
+     * If there is no quick authentication view it takes them either to the user
+     * page (in the ChromeApp) or the public user page (in a couchapp) where
+     * they dont have to have a corpus token to see the data, and log in
      * 
      * @param callback
+     *          a success callback which is called once the user has been backed
+     *          up to the server, and their couchdb session token is ready to be
+     *          used to contact the database.
+     * @param corpusPouchName
+     *          an optional corpus pouch name to redirect the user to if they
+     *          end up geting kicked out of the corpus page
      */
-    syncUserWithServer : function(callback){
+    syncUserWithServer : function(callback, corpusPouchName){
+      if(!corpusPouchName){
+        corpusPouchName = "";
+      }
+      if(!window.appView){
+        if(OPrime.isChromeApp()){
+          /* take them to the user page, they can log in there */
+          window.location.replace("user.html#login/"+corpusPouchName);
+        }else{
+          /* take them to the public user page, they can log in there */
+          if(OPrime.isCouchApp()){
+            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+            window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
+          }
+        }
+        return;
+      }
       window.appView.authView.showQuickAuthenticateView(null, null, function(){
         //This happens after the user has been authenticated. 
         if(typeof callback == "function"){
@@ -364,7 +398,7 @@ define([
         return;
       }
       var self= this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/corpusteam",
         data : dataToPost,
@@ -374,7 +408,7 @@ define([
               window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") 
                   , "alert-warning","Error connecting to populate corpus permissions:");
             }catch(e){
-              OPrime.debug(e);
+              if (OPrime.debugMode) OPrime.debug(e);
             }
             if (typeof failcallback == "function") {
               failcallback(serverResults.userFriendlyErrors.join("<br/>"));
@@ -388,7 +422,7 @@ define([
           }
         },//end successful fetch
         error: function(e){
-          OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
+          if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying) (or server might have crashed before replying).", e);
 
           if (typeof failcallback == "function") {
             failcallback("There was an error in contacting the authentication server to get the list of users on your corpus team. Maybe you're offline?");
@@ -424,25 +458,25 @@ define([
         }else{
           return;
         }
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : authUrl + "/addroletouser",
           data : dataToPost,
           success : function(serverResults) {
             if (serverResults.userFriendlyErrors != null) {
-              OPrime.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
+              if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" not added to the corpus as "+role);
               if (typeof failcallback == "function") {
                 failcallback(serverResults.userFriendlyErrors.join("<br/>"));
               }
             } else if (serverResults.roleadded != null) {
-              OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
+              if (OPrime.debugMode) OPrime.debug("User "+userToAddToCorpus.username+" added to the corpus as "+role);
               if (typeof successcallback == "function") {
                 successcallback(userToAddToCorpus); 
               }
             }
           },//end successful fetch
           error: function(e){
-            OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+            if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
 
             if (typeof failcallback == "function") {
               failcallback("There was an error in contacting the authentication server to add "+userToAddToCorpus.username+" on your corpus team. Maybe you're offline?");

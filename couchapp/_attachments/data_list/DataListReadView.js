@@ -39,7 +39,7 @@ define( [
      * @constructs
      */
     initialize : function(options) {
-      OPrime.debug("DATALIST READ VIEW init: ");
+      if (OPrime.debugMode) OPrime.debug("DATALIST READ VIEW init: ");
       
       this.changeViewsOfInternalModels();
       this.model.bind('change:dateCreated', function(){
@@ -244,13 +244,13 @@ define( [
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
       if (this.format == "link") {
-        OPrime.debug("DATALIST READ LINK render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ LINK render: ");
 
         // Display the Data List
         $(this.el).html(this.templateLink(jsonToRender));
       
       } else if (this.format == "leftSide") {
-        OPrime.debug("DATALIST READ LEFTSIDE render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ LEFTSIDE render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -264,7 +264,7 @@ define( [
         $(this.el).find(".locale_Show_Fullscreen").attr("title", Locale.get("locale_Show_Fullscreen"));
         
       } else if (this.format == "fullscreen") {
-        OPrime.debug("DATALIST READ FULLSCREEN render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ FULLSCREEN render: ");
 
         // Display the Data List
         this.setElement($("#data-list-fullscreen-header"));
@@ -278,7 +278,7 @@ define( [
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
        
       } else if(this.format == "centerWell") {
-        OPrime.debug("DATALIST READ CENTER render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ CENTER render: ");
 
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
@@ -291,7 +291,7 @@ define( [
         $(this.el).find(".locale_Show_in_Dashboard").attr("title", Locale.get("locale_Show_in_Dashboard"));
 
       } else if (this.format == "minimized") {
-        OPrime.debug("DATALIST READ MINIMIZED render: ");
+        if (OPrime.debugMode) OPrime.debug("DATALIST READ MINIMIZED render: ");
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -376,7 +376,7 @@ define( [
       	}
         this.model.saveAndInterConnectInApp();
       }catch(e){
-        OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }
     },
     resizeSmall : function(e){
@@ -416,7 +416,7 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING DATALIST READ VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST READ VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();

@@ -4,12 +4,10 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
   var couchConnection = app.get("corpus").get("couchConnection");
   var couchurl = OPrime.getCouchUrl(couchConnection);
 
-  $.ajax({
+  OPrime.makeCORSRequest({
     type : 'GET',
     url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
     success : function(rules) {
-      // Parse the rules from JSON into an object
-      rules = JSON.parse(rules);
       localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
 
       // Reduce the rules such that rules which are found in multiple source
@@ -30,7 +28,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, callback){
     },
     dataType : ""
   });
-}
+};
 /**
  * Takes in an utterance line and, based on our current set of precendence
  * rules, guesses what the morpheme line would be. The algorithm is
@@ -132,7 +130,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
           .replace(/--+/g, "-")   // Ensure that there is only ever one "-" in a row
           .replace(/^-/, "")      // Remove "-" at the start of the word
           .replace(/-$/, "");     // Remove "-" at the end of the word
-      OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
+      if (OPrime.debugMode) OPrime.debug("Potential parse of " + unparsedWords[word].replace(/@/g, "")
           + " is " + potentialParse);
           
       parsedWords.push(potentialParse);

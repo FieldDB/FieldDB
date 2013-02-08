@@ -76,12 +76,12 @@ OPrime.defaultCouchConnection = function() {
    */
   var connection = testing;
   if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("lingsync.org") >= 0) {
-      connection = production;
-      OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = testing;
       OPrime.authUrl = "https://authdev.lingsync.org";
+    } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
+      connection = production;
+      OPrime.authUrl = "https://auth.lingsync.org";
     } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
       connection = mcgill;
       OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
@@ -197,7 +197,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   } else if (window.location.origin.indexOf("localhost") >= 0) {
     mostLikelyAuthUrl = "Localhost";
   } else if (OPrime.isChromeApp()) {
-    OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
+    if (OPrime.debugMode) OPrime.debug("The user is using an unknown chromeApp, most likley a developer but it could be an unknown chrome app from a ling department");
     var appropriateserver = _.pluck(OPrime.servers, "authUrl").indexOf(authUrl);
     if (appropriateserver == -1) {
       OPrime.bug("This shouldn't happen. Please report this bug.");

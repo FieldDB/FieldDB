@@ -189,12 +189,12 @@ define([
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
-      OPrime.debug("DATUM render: " );
+      if (OPrime.debugMode) OPrime.debug("DATUM render: " );
       
      
       
       if(this.collection){
-        OPrime.debug("This datum has a link to a collection. Removing the link.");
+        if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
@@ -204,7 +204,7 @@ define([
         jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
       }catch(e){
-        OPrime.debug("There was a problem fishing out which datum state was selected.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       
@@ -410,7 +410,7 @@ define([
         this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
         this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
       
       //update the view of the datum state to the new color and text without rendering the entire datum

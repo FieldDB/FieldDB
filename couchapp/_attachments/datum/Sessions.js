@@ -41,7 +41,7 @@ define([
        fetchSessions : function(suces, fail){
          this.fetch({
            error : function(model, xhr, options) {
-             OPrime.debug("There was an error loading your sessions.");
+             if (OPrime.debugMode) OPrime.debug("There was an error loading your sessions.");
              console.log(model,xhr,options);
              OPrime.bug("There was an error loading your sessions.");
              if(typeof fail == "function"){

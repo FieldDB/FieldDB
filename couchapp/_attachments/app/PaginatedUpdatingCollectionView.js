@@ -15,7 +15,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
    * @constructs
    */
   initialize : function(options) {
-    OPrime.debug("PAGINATED UPDATING COLLECTION INIT");
+    if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION INIT");
       _(this).bindAll('addChildView', 'removeChildView');
 
       if (!options.childViewConstructor)
@@ -41,7 +41,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         this.currentVisibleEnd = this.perPage - 1;
 
       }catch(e){
-        OPrime.debug("there was a problem getting the number of items per page for the user, using default of 12.");
+        if (OPrime.debugMode) OPrime.debug("there was a problem getting the number of items per page for the user, using default of 12.");
       }
       
     },
@@ -63,7 +63,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
     
     addChildView : function(model, collection, options) {
-      OPrime.debug("PAGINATED UPDATING COLLECTION add: " , this._childViews.length);
+      if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION add: " , this._childViews.length);
 
       //If the model is not supposed to be visible, don't run this function.
       if(this.collection.indexOf(model) > this.currentVisibleEnd){
@@ -158,7 +158,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     },
 
     render : function() {
-      OPrime.debug("PAGINATED UPDATING COLLECTION render: " , this._childViews.length);
+      if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION render: " , this._childViews.length);
 
       var that = this;
       this._rendered = true;
@@ -308,7 +308,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         app.get("authentication").get("userPrivate").get("prefs").set("numberOfItemsInPaginatedViews", self.perPage);
         self.currentVisibleEnd = self.perPage - 1;
       }catch(e){
-        OPrime.debug("There was a problem trying to save the number of items per page to the user's preferences.",e);
+        if (OPrime.debugMode) OPrime.debug("There was a problem trying to save the number of items per page to the user's preferences.",e);
       }
       //If the user is trying to see less, render.
       if( self.perPage < previousVisibleEnd ){
@@ -352,7 +352,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING PAGINATEDUPDATINGCOLLECTIONVIEW  VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING PAGINATEDUPDATINGCOLLECTIONVIEW  VIEW "+ this.format);
       
       this.collection.each(this.removeChildView);
 

@@ -47,7 +47,7 @@ define(
              * @constructs
              */
             initialize : function() {
-              OPrime.debug("APPVIEW init: " + this.el);
+              if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
               this.setUpAndAssociateViewsAndModelsWithCurrentUser();
             },
@@ -163,7 +163,7 @@ define(
              * Renders the UserAppView and all of its child Views.
              */
             render : function() {
-              OPrime.debug("APPVIEW render: " + this.el);
+              if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
               if (this.model != undefined) {
 
                 // Display the UserAppView

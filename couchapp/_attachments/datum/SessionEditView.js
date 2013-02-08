@@ -34,7 +34,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("SESSION EDIT VIEW init: " );
+      if (OPrime.debugMode) OPrime.debug("SESSION EDIT VIEW init: " );
       
       this.changeViewsOfInternalModels();
       
@@ -133,15 +133,15 @@ define([
      * Renders the SessionEditView.
      */
     render : function() {
-      OPrime.debug("SESSION EDIT render: " );
+      if (OPrime.debugMode) OPrime.debug("SESSION EDIT render: " );
       if (this.model == undefined) {
-        OPrime.debug("SESSION is undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("SESSION is undefined, come back later.");
         return this;
       }
       
       try{
         if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
-          OPrime.debug("SESSION fields are undefined, come back later.");
+          if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
         if(this.format != "modal"){
@@ -149,7 +149,7 @@ define([
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
-          OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
 
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -170,7 +170,7 @@ define([
 
           
         }if (this.format == "import") {
-          OPrime.debug("SESSION EDIT  IMPORT render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: " );
 
           var jsonToRender = {
             goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
@@ -189,7 +189,7 @@ define([
 
           
         } else if (this.format == "centerWell") {
-          OPrime.debug("SESSION EDIT CENTERWELL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: " );
 
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(this.model.toJSON()));
@@ -212,7 +212,7 @@ define([
           $(this.el).find(".locale_Elicitation_Session").html(Locale.get("locale_Elicitation_Session"));
 
         } else if (this.format == "fullscreen") {
-          OPrime.debug("SESSION EDIT FULLSCREEN render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(this.model.toJSON()));
@@ -236,7 +236,7 @@ define([
 
           
         } else if (this.format == "modal") {
-          OPrime.debug("SESSION EDIT MODAL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT MODAL render: " );
 
           this.setElement("#new-session-modal");
           this.changeViewsOfInternalModels();
@@ -261,7 +261,7 @@ define([
 
         }
       } catch(e) {
-        OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
       
       return this;
@@ -296,7 +296,7 @@ define([
       var self = this;
       this.model.saveAndInterConnectInApp(function(){
         /* If it is in the modal, then it is a new session */
-        OPrime.debug("Session format is "+self.format);
+        if (OPrime.debugMode) OPrime.debug("Session format is "+self.format);
         if(self.format == "modal"){
           self.model.setAsCurrentSession(function(){
             $("#new-session-modal").modal("hide");
@@ -352,7 +352,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

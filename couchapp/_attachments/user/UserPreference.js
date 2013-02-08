@@ -21,7 +21,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USER PREFERENCE init");
+      if (OPrime.debugMode) OPrime.debug("USER PREFERENCE init");
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");

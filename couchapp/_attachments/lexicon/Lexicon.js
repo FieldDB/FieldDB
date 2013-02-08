@@ -41,15 +41,15 @@ define([
       var couchConnection = app.get("corpus").get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection);
 
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(pouchname+"lexiconResults", results);
-          var lexiconTriples = JSON.parse(results).rows;
+          localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          var lexiconTriples = results.rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
               morpheme : lexiconTriples[triple].key.morpheme,

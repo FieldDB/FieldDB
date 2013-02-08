@@ -1035,6 +1035,7 @@ function ajax(options, callback) {
         call(callback, true);
       }
     },
+    xhrFields: {withCredentials: true},
     headers: {
       Accept: 'application/json'
     },
@@ -1048,8 +1049,8 @@ function ajax(options, callback) {
   }
   if (options.auth) {
     options.beforeSend = function(xhr) {
-      var token = btoa(options.auth.username + ":" + options.auth.password);
-      xhr.setRequestHeader("Authorization", "Basic " + token);
+//      var token = btoa(options.auth.username + ":" + options.auth.password);
+//      xhr.setRequestHeader("Authorization", "Basic " + token); /*TODO decide if this is okay for CORS contact with couchdb */
     }
   }
   return $.ajax(options);
