@@ -258,7 +258,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the CorpusMask");
+      if (OPrime.debugMode) OPrime.debug("Saving the CorpusMask");
       var self = this;
       self.set("id","corpus");
       self.set("_id","corpus");
@@ -275,27 +275,27 @@ define([
           var modelwithhardcodedid = self.toJSON();
           modelwithhardcodedid._id = "corpus";
           db.put(modelwithhardcodedid, function(err, response) {
-            OPrime.debug(response);
+            if (OPrime.debugMode) OPrime.debug(response);
             if(err){
-              OPrime.debug("CorpusMask put error", err);
+              if (OPrime.debugMode) OPrime.debug("CorpusMask put error", err);
               if(err.status == "409"){
                 //find out what the rev is in the database by fetching
                 self.fetch({
                   success : function(model, response) {
-                    OPrime.debug("CorpusMask fetch revision number success, after getting a Document update conflict", response);
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask fetch revision number success, after getting a Document update conflict", response);
 
                     modelwithhardcodedid._rev = self.get("_rev");
-                    OPrime.debug("CorpusMask old version", self.toJSON());
-                    OPrime.debug("CorpusMask replaced with new version", modelwithhardcodedid );
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask old version", self.toJSON());
+                    if (OPrime.debugMode) OPrime.debug("CorpusMask replaced with new version", modelwithhardcodedid );
 
                     db.put(modelwithhardcodedid, function(err, response) {
                       if(err){
-                        OPrime.debug("CorpusMask put error, even after fetching the version number",err);
+                        if (OPrime.debugMode) OPrime.debug("CorpusMask put error, even after fetching the version number",err);
                         if(typeof failurecallback == "function"){
                           failurecallback();
                         }
                       }else{
-                        OPrime.debug("CorpusMask put success, after fetching its version number and overwriting it", response);
+                        if (OPrime.debugMode) OPrime.debug("CorpusMask put success, after fetching its version number and overwriting it", response);
                         //this happens on subsequent save into pouch of this CorpusMask's id
                         if(typeof successcallback == "function"){
                           successcallback();
@@ -306,14 +306,14 @@ define([
                   },
                   //fetch error
                   error : function(e) {
-                    OPrime.debug('CorpusMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
+                    if (OPrime.debugMode) OPrime.debug('CorpusMask fetch error after trying to resolve a conflict error' + JSON.stringify(err));
                     if(typeof failurecallback == "function"){
                       failurecallback();
                     }
                   }
                 });
               }else{
-                OPrime.debug('CorpusMask put error that was not a conflict' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('CorpusMask put error that was not a conflict' + JSON.stringify(err));
                 //this is a real error, not a conflict error
                 if(typeof failurecallback == "function"){
                   failurecallback();
@@ -323,7 +323,7 @@ define([
               if(typeof successcallback == "function"){
                 successcallback();
               }else{
-                OPrime.debug("CorpusMask save success", response);
+                if (OPrime.debugMode) OPrime.debug("CorpusMask save success", response);
               }
             }
           });

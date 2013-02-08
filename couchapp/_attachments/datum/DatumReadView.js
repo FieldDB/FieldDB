@@ -181,15 +181,15 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
+      if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
       
       if(this.collection){
-        OPrime.debug("This datum has a link to a collection. Removing the link.");
+        if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
-        OPrime.debug("DATUM fields is undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
@@ -271,7 +271,7 @@ define([
         try{
           jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         }catch(e){
-          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
 //          this.model.get("datumStates").models[0].set("selected","selected");
         }
         // makes the top two lines into an array of words.
@@ -290,7 +290,7 @@ define([
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
-          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
         }
       }
       
@@ -340,7 +340,7 @@ define([
       var text = $(".datum_field_input").val() || [];
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
-      OPrime.debug(text);
+      if (OPrime.debugMode) OPrime.debug(text);
  
       return "";
 //    }, 

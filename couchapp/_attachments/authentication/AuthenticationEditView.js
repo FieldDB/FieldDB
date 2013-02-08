@@ -31,7 +31,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("AUTH EDIT init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("AUTH EDIT init: " + this.el);
       
     //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
@@ -160,9 +160,9 @@ define([
      * Renders the AuthenticationEditView and all of its child Views.
      */
     render : function() {
-      OPrime.debug("AUTH EDIT render: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("AUTH EDIT render: " + this.el);
       if (this.model == undefined) {
-        OPrime.debug("Auth model was undefined, come back later.");
+        if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
       }
 
@@ -180,7 +180,7 @@ define([
         $("#login_register_button").hide();
 
         if(this.model.get("userPublic") != undefined){
-          OPrime.debug("\t rendering AuthenticationEditView's UserView");
+          if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         }else{
@@ -197,7 +197,7 @@ define([
         $("#loggedin_customize_on_auth_dropdown").hide();
 
         if(this.model.get("userPublic") != undefined){
-          OPrime.debug("\t rendering AuthenticationEditView's UserView");
+          if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         }else{
@@ -239,7 +239,7 @@ define([
     logout : function() {
       var authself = this.model;
       $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
-      window.appView.backUpUser(function(){
+      window.app.backUpUser(function(){
         authself.logout();
       });
     },
@@ -249,7 +249,7 @@ define([
      * calls the view's authenticate function.
      */
     login : function() {
-      OPrime.debug("LOGIN");
+      if (OPrime.debugMode) OPrime.debug("LOGIN");
       this.authenticate(document.getElementById("username").value, 
           document.getElementById("password").value,
           document.getElementById("authUrl").value
@@ -306,7 +306,7 @@ define([
         if(typeof corpusloginfailcallback == "function"){
           corpusloginfailcallback();
         }else{
-          OPrime.debug('no corpusloginfailcallback was defined');
+          if (OPrime.debugMode) OPrime.debug('no corpusloginfailcallback was defined');
 
         }
       };
@@ -324,10 +324,10 @@ define([
         var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
-            OPrime.debug('Calling corpusloginsuccesscallback');
+            if (OPrime.debugMode) OPrime.debug('Calling corpusloginsuccesscallback');
             corpusloginsuccesscallback();
           }else{
-            OPrime.debug('no corpusloginsuccesscallback was defined');
+            if (OPrime.debugMode) OPrime.debug('no corpusloginsuccesscallback was defined');
           }
           //Replicate user's corpus down to pouch
           window.app.replicateOnlyFromCorpus(couchConnection, function(){
@@ -358,7 +358,7 @@ define([
                 visibleids.datalistid = "";
               }
               if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
-                OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
+                if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
                 if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
                 }else{
@@ -450,7 +450,7 @@ define([
         e.preventDefault();
       }
       var authedself = this;
-      OPrime.debug("Attempting to register a new user: " );
+      if (OPrime.debugMode) OPrime.debug("Attempting to register a new user: " );
       var dataToPost = {};
       $(".registerusername").val( $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g,"") );
       dataToPost.email = $(".registeruseremail").val().trim();
@@ -473,7 +473,7 @@ define([
       if (dataToPost.username != ""
         && (dataToPost.password == $(".to-confirm-password").val().trim())
         && dataToPost.email != "") {
-        OPrime.debug("User has entered an email and the passwords match. ");
+        if (OPrime.debugMode) OPrime.debug("User has entered an email and the passwords match. ");
         
         $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>" );
         $(".welcome-screen-alerts").addClass("alert-success");
@@ -487,7 +487,7 @@ define([
         /*
          * Contact the server and register the new user
          */
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
@@ -588,7 +588,7 @@ define([
           },//end successful registration
           dataType : "",
           error : function(e,f,g){
-            OPrime.debug("Error registering user", e,f,g);
+            if (OPrime.debugMode) OPrime.debug("Error registering user", e,f,g);
             $(".welcome-screen-alerts").html(
                 " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
             $(".welcome-screen-alerts").addClass("alert-error");
@@ -601,7 +601,7 @@ define([
           }
         });
       } else{
-        OPrime.debug("User has not entered good info. ");
+        if (OPrime.debugMode) OPrime.debug("User has not entered good info. ");
           $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs );
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
@@ -629,7 +629,7 @@ define([
       /*
        * Contact the server and register the new user
        */
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
@@ -678,7 +678,7 @@ define([
         },//end successful login
         dataType : "",
         error : function(e,f,g){
-          OPrime.debug("Error syncing user", e,f,g);
+          if (OPrime.debugMode) OPrime.debug("Error syncing user", e,f,g);
           $(".welcome-screen-alerts").html(
               " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
           $(".welcome-screen-alerts").addClass("alert-error");

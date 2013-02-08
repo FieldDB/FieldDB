@@ -22,7 +22,7 @@ var UpdatingCollectionView = Backbone.View.extend({
         this.collection.bind('add', this.add);
         this.collection.bind('remove', this.remove);
       }else{
-        OPrime.debug("The collection was not a backbone collection...");
+        if (OPrime.debugMode) OPrime.debug("The collection was not a backbone collection...");
       }
 
     },

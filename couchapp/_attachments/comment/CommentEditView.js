@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("COMMENT init");
+      if (OPrime.debugMode) OPrime.debug("COMMENT init");
     },
     
     /**
@@ -43,12 +43,14 @@ define([
      * Renders the DatumFieldView.
      */
     render : function() {
-      OPrime.debug("COMMENT render");
-      var JSONtorender = this.model.toJSON();
-      //TODO use the pretty timestamp function in OPrime
-      $(this.el).html(this.template(JSONtorender));
+      if (OPrime.debugMode) OPrime.debug("COMMENT render");
+//      var JSONtorender = {};
+//      if ( typeof this.model != undefined){
+//    	  JSONtorender.timestamp = this.model.timestamp.toString();
+//    	  JSONtorender.username = this.model.username;
+//      }
+      $(this.el).html(this.template(this.model.toJSON()));
 
-      $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       return this;
     },

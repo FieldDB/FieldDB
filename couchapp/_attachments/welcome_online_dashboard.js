@@ -7,8 +7,8 @@ if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0 ){
   window.location.replace();
 }
 
-/* Make sure they use the https versions */
-if (window.location.origin != "localhost") {
+/* Make sure they use the https versions, if they are on a couchapp */
+if (window.location.origin.indexOf("localhost") == -1) {
   if (window.location.protocol == "http:") {
     window.location.replace(window.location.href.replace("http", "https"));
   }
