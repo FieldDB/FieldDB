@@ -40,7 +40,7 @@ document.getElementById("stop_stimulus_button").onclick = function(e) {
 var userHistory = localStorage.getItem("userHistory");
 if (userHistory) {
   userHistory = JSON.parse(userHistory);
-  OPrime.debug("Welcome back userid " + userHistory.id);
+  if (OPrime.debugMode) OPrime.debug("Welcome back userid " + userHistory.id);
 } else {
   userHistory = {};
   userHistory.id = Date.now();
@@ -58,7 +58,7 @@ OPrime.hub
 
 window.saveUser = function() {
   localStorage.setItem("userHistory", JSON.stringify(window.userHistory));
-  OPrime.debug(JSON.stringify(window.userHistory));
+  if (OPrime.debugMode) OPrime.debug(JSON.stringify(window.userHistory));
 };
 
 // Android WebView is not calling the onbeforeunload to save the userHistory.

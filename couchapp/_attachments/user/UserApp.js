@@ -36,7 +36,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("USERAPP INIT");
+      if (OPrime.debugMode) OPrime.debug("USERAPP INIT");
 
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
@@ -78,7 +78,7 @@ define([
 
       window.app = this;
       var appself = this;
-      OPrime.debug("Loading encrypted user");
+      if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
       var u = localStorage.getItem("encryptedUser");
       if(!u){
         window.location.replace("index.html");
@@ -103,9 +103,9 @@ define([
     getCouchUrl : function(couchConnection, couchdbcommand) {
       if(!couchConnection){
         couchConnection = this.get("couchConnection");
-        OPrime.debug("Using the apps ccouchConnection", couchConnection);
+        if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
       }else{
-        OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+        if (OPrime.debugMode) OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
       }
       if(!couchConnection){
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
@@ -194,7 +194,7 @@ define([
       }
     },
     addActivity : function(jsonActivity) {
-      OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
+      if (OPrime.debugMode) OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
 //    if (backBoneActivity.get("teamOrPersonal") == "team") {
 //    window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
 //    } else {
@@ -253,7 +253,7 @@ define([
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
 
       var appself = this;
       $.couch.login({
@@ -319,7 +319,7 @@ define([
                     if (typeof failurecallback == "function") {
                       failurecallback("I couldn't log you into your corpus.");
                     }
-                    OPrime.debug(serverResults);
+                    if (OPrime.debugMode) OPrime.debug(serverResults);
                     window.app.get("authentication").set(
                         "staleAuthentication", true);
                   }
@@ -337,7 +337,7 @@ define([
       var self = this;
 
       if(!self.pouch){
-        OPrime.debug("Not replicating, no pouch ready.");
+        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
         if(typeof successcallback == "function"){
           successcallback();
         }
@@ -347,26 +347,26 @@ define([
       self.pouch(function(err, db) {
         var couchurl = self.getCouchUrl();
         if (err) {
-          OPrime.debug("Opening db error", err);
+          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
           if (typeof failurecallback == "function") {
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            OPrime.debug('Opening DB error'
+            if (OPrime.debugMode) OPrime.debug('Opening DB error'
                 + JSON.stringify(err));
           }
         } else {
           db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            OPrime.debug("Replicate from " + couchurl,response, err);
+            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl,response, err);
             if(err){
               if(typeof failurecallback == "function"){
                 failurecallback();
               }else{
                 alert('Corpus replicate from error' + JSON.stringify(err));
-                OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
+                if (OPrime.debugMode) OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
               }
             }else{
-              OPrime.debug("Corpus replicate from success", response);
+              if (OPrime.debugMode) OPrime.debug("Corpus replicate from success", response);
               if(typeof successcallback == "function"){
                 successcallback();
               }
@@ -452,7 +452,7 @@ define([
                 if (typeof failurecallback == "function") {
                   failurecallback("I couldn't log you into your corpus.");
                 }
-                OPrime.debug(serverResults);
+                if (OPrime.debugMode) OPrime.debug(serverResults);
                 window.app.get("authentication").set("staleAuthentication", true);
               }
             });

@@ -127,7 +127,7 @@ require([
     }
     Backbone.couch_connector.config.db_name = pouchName;
   }catch(e){
-    OPrime.debug("Couldn't set the databse name off of the url.");
+    if (OPrime.debugMode) OPrime.debug("Couldn't set the databse name off of the url.");
   }
   
   

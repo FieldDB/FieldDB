@@ -362,8 +362,8 @@ require(
 //      request.open('POST', "https://corpusdev.lingsync.org/");
 //      request.onreadystatechange = function(e, f, g) {
 //        if (request.readyState == 4)
-//          OPrime.debug("readyState", e, f, g);
-//        OPrime.debug("Request", request);
+//          if (OPrime.debugMode) OPrime.debug("readyState", e, f, g);
+//        if (OPrime.debugMode) OPrime.debug("Request", request);
 //      };
 //      request.setRequestHeader("Content-type", "text/plain");
 //      request.setRequestHeader("Content-length", params.length);

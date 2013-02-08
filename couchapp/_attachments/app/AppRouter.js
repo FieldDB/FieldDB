@@ -58,7 +58,7 @@ define([
      *          pouchname (Optional) The name of the corpus to display.
      */
     renderDashboardOrNot : function(render) {
-      OPrime.debug("In renderDashboardOrNot: " );
+      if (OPrime.debugMode) OPrime.debug("In renderDashboardOrNot: " );
       if(render == undefined || render == true || render == "true"){
         window.appView.renderReadonlyDashboardViews();
         this.hideEverything();
@@ -76,7 +76,7 @@ define([
      *          pouchname (Optional) The name of the corpus to display.
      */
     showDashboard : function() {
-      OPrime.debug("In showDashboard: " );
+      if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
     },
     /**
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
@@ -109,7 +109,7 @@ define([
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
     showFullscreenUser : function(userid, pouchname) {
-      OPrime.debug("In showFullscreenUser: " + userid);
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " + userid);
 
       if(userid){
         if(!pouchname){
@@ -123,7 +123,7 @@ define([
           userToShow.id = userid;
             userToShow.fetch({
               success : function(model) {
-                OPrime.debug("Corpus member fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Corpus member fetched successfully" +model);
                 window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
                 window.appView.publicReadUserView.render();
 
@@ -156,7 +156,7 @@ define([
      *          pouchname The name of the corpus this datum is from.
      */
     showFullscreenCorpus : function() {
-      OPrime.debug("In showFullscreenCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
       if($("#corpus-fullscreen").html() == ""){
@@ -172,7 +172,7 @@ define([
      * 
      */
     showEmbeddedCorpus : function() {
-      OPrime.debug("In showEmbeddedCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedCorpus: " );
 
       this.hideEverything();
       $("#dashboard-view").show();
@@ -191,7 +191,7 @@ define([
      *          sessionid The ID of the session within the corpus.
      */
     showEmbeddedSession : function(sessionid, pouchname) {
-      OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -209,7 +209,7 @@ define([
           
             cs.fetch({
               success : function(model) {
-                OPrime.debug("Session fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("centerWell");
@@ -234,7 +234,7 @@ define([
      * Displays the fullscreen view of the session.
      */
     showFullscreenSession : function(sessionid, pouchname) {
-      OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -252,7 +252,7 @@ define([
           
             cs.fetch({
               success : function(model) {
-                OPrime.debug("Session fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("fullscreen");
@@ -284,7 +284,7 @@ define([
      *          dataListid The ID of the datalist within the corpus.
      */
     showFullscreenDataList : function(dataListid, pouchname) {
-      OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
@@ -314,7 +314,7 @@ define([
          */
           dl.fetch({
             success : function(e) {
-              OPrime.debug("Datalist fetched successfully" +e);
+              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
               app.get("currentDataList").saveAndInterConnectInApp(function(){
                 dl.setAsCurrentDataList( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
@@ -334,7 +334,7 @@ define([
     },
     
     showMiddleDataList : function(dataListid, pouchname) {
-      OPrime.debug("In showMiddleDataList");
+      if (OPrime.debugMode) OPrime.debug("In showMiddleDataList");
 
       if(dataListid){
         if(!pouchname){
@@ -351,7 +351,7 @@ define([
         
           dl.fetch({
             success : function(e) {
-              OPrime.debug("Datalist fetched successfully" +e);
+              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
               dl.setAsCurrentDataList( function(){
                 window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
                   window.appView.renderReadonlyDashboardViews();
@@ -422,7 +422,7 @@ define([
       },
 
     showEmbeddedDatum : function(pouchname, datumid){
-      OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
           + datumid);
       if(datumid){
         if(!pouchname){
@@ -450,7 +450,7 @@ define([
     showEmbeddedConversation : function(pouchname, conversationid){
         $("#datums-embedded").hide();
     	$("#conversation-embedded").show();
-    	OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
+    	if (OPrime.debugMode) OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
             + conversationid);
         if(conversationid){
           if(!pouchname){
@@ -476,7 +476,7 @@ define([
       },
       
     showImport : function() {
-      OPrime.debug("In import: ");
+      if (OPrime.debugMode) OPrime.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#import-fullscreen").html() == ""){
         window.appView.importView.render();
@@ -486,7 +486,7 @@ define([
     },
     
     showExport : function(pouchname) {
-      OPrime.debug("In showExport: " + pouchname);
+      if (OPrime.debugMode) OPrime.debug("In showExport: " + pouchname);
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();
