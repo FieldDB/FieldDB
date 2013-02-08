@@ -142,6 +142,7 @@
       $.ajax({
         type: "GET", url: this.urlPrefix + "/_session",
         beforeSend: function(xhr) {
+          xhr.withCredentials = true;
             xhr.setRequestHeader('Accept', 'application/json');
         },
         complete: function(req) {
@@ -229,6 +230,8 @@
         type: "POST", url: this.urlPrefix + "/_session", dataType: "json",
         data: {name: options.name, password: options.password},
         beforeSend: function(xhr) {
+          xhr.withCredentials = true;
+
             xhr.setRequestHeader('Accept', 'application/json');
         },
         complete: function(req) {
@@ -1032,6 +1035,7 @@
     $.ajax($.extend($.extend({
       type: "GET", dataType: "json", cache : !$.browser.msie,
       beforeSend: function(xhr){
+        xhr.withCredentials = true;
         if(ajaxOptions && ajaxOptions.headers){
           for (var header in ajaxOptions.headers){
             xhr.setRequestHeader(header, ajaxOptions.headers[header]);
