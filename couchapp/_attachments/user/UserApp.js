@@ -404,7 +404,7 @@ define([
         return;
       }
       
-      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session/");
+      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
 
       var corpusloginparams = {};
       corpusloginparams.name = username;
