@@ -239,7 +239,7 @@ define([
     logout : function() {
       var authself = this.model;
       $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
-      window.appView.backUpUser(function(){
+      window.app.backUpUser(function(){
         authself.logout();
       });
     },
@@ -487,7 +487,7 @@ define([
         /*
          * Contact the server and register the new user
          */
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
@@ -629,7 +629,7 @@ define([
       /*
        * Contact the server and register the new user
        */
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,

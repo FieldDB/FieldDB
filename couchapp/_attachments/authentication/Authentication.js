@@ -95,7 +95,7 @@ define([
       }
       var self= this;
       var authUrl = user.get("authUrl");
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/login",
         data : dataToPost,
@@ -262,8 +262,21 @@ define([
         this.logout();
         return;
       }
+      var userString = this.get("confidential").decrypt(encryptedUserString);
+     
+      /* Switch user to the new dev servers if they have the old ones */
+      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
+      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
       
-      var u = JSON.parse(this.get("confidential").decrypt(encryptedUserString));
+
+      /*
+       * For debugging cors #838: Switch to use the corsproxy
+       * corpus service instead of couchdb directly
+       */
+//      userString = userString.replace(/https/g,"http").replace(/6984/g,"3186");
+
+      
+      var u = JSON.parse(userString);
       var data = {};
       data.user = u;
       
@@ -273,7 +286,7 @@ define([
         console.log("The week this user was created: "+week);
         if(week <= 38){
           localStorage.setItem("username_to_update",data.user.username);
-          alert("Hi! Your account was created before version 1.38, taking you to the backup page to upgrade your account to v1.38 and greater.");
+          alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
           window.location.replace("backup_pouches.html");
           return;
         }
@@ -305,6 +318,12 @@ define([
     
     saveAndEncryptUserToLocalStorage : function(callbacksaved){
       OPrime.debug("saveAndEncryptUserToLocalStorage");
+      
+      /* TODO Switch user to the new dev servers if they have the old ones */
+//      userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
+//      userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpusdev.lingsync.org");
+      
+      
       var u = this.get("confidential").encrypt(JSON.stringify(this.get("userPrivate").toJSON()));
       localStorage.setItem("encryptedUser", u); 
       if(window.appView){
@@ -322,14 +341,40 @@ define([
       this.saveAndEncryptUserToLocalStorage(successcallback);
     },
     /**
-     * This function uses the quick authentication view to get the
-     * user's password and authenticate them. The authenticate process
-     * brings down the user from the server, and also gets their sesson
-     * token from couchdb before calling the callback.
+     * This function uses the quick authentication view to get the user's
+     * password and authenticate them. The authenticate process brings down the
+     * user from the server, and also gets their sesson token from couchdb
+     * before calling the callback.
+     * 
+     * If there is no quick authentication view it takes them either to the user
+     * page (in the ChromeApp) or the public user page (in a couchapp) where
+     * they dont have to have a corpus token to see the data, and log in
      * 
      * @param callback
+     *          a success callback which is called once the user has been backed
+     *          up to the server, and their couchdb session token is ready to be
+     *          used to contact the database.
+     * @param corpusPouchName
+     *          an optional corpus pouch name to redirect the user to if they
+     *          end up geting kicked out of the corpus page
      */
-    syncUserWithServer : function(callback){
+    syncUserWithServer : function(callback, corpusPouchName){
+      if(!corpusPouchName){
+        corpusPouchName = "";
+      }
+      if(!window.appView){
+        if(OPrime.isChromeApp()){
+          /* take them to the user page, they can log in there */
+          window.location.replace("user.html#login/"+corpusPouchName);
+        }else{
+          /* take them to the public user page, they can log in there */
+          if(OPrime.isCouchApp()){
+            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+            window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
+          }
+        }
+        return;
+      }
       window.appView.authView.showQuickAuthenticateView(null, null, function(){
         //This happens after the user has been authenticated. 
         if(typeof callback == "function"){
@@ -353,7 +398,7 @@ define([
         return;
       }
       var self= this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'POST',
         url : authUrl + "/corpusteam",
         data : dataToPost,
@@ -413,7 +458,7 @@ define([
         }else{
           return;
         }
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : authUrl + "/addroletouser",
           data : dataToPost,

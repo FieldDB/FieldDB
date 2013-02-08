@@ -254,7 +254,7 @@ define([
         /*
          * Contact the server and register the new user
          */
-        $.ajax({
+        OPrime.makeCORSRequest({
           type : 'POST',
           url : OPrime.authUrl + "/register",
           data : dataToPost,
