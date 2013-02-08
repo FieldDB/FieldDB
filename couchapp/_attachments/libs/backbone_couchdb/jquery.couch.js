@@ -140,7 +140,7 @@
     session: function(options) {
       options = options || {};
       $.ajax({
-        type: "GET", url: this.urlPrefix + "/_session",
+        type: "GET", url: this.urlPrefix + "/_session", xhrFields: {withCredentials: true},
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
         },
@@ -203,7 +203,7 @@
     login: function(options) {
       options = options || {};
       $.ajax({
-        type: "POST", url: this.urlPrefix + "/_session", dataType: "json",
+        type: "POST", url: this.urlPrefix + "/_session", dataType: "json", xhrFields: {withCredentials: true},
         data: {name: options.name, password: options.password},
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
@@ -231,7 +231,7 @@
     logout: function(options) {
       options = options || {};
       $.ajax({
-        type: "DELETE", url: this.urlPrefix + "/_session", dataType: "json",
+        type: "DELETE", url: this.urlPrefix + "/_session", dataType: "json", xhrFields: {withCredentials: true},
         username : "_", password : "_",
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
@@ -356,7 +356,7 @@
         create: function(options) {
           $.extend(options, {successStatus: 201});
           ajax({
-              type: "PUT", url: this.uri, contentType: "application/json",
+              type: "PUT", url: this.uri, contentType: "application/json", xhrFields: {withCredentials: true},
               data: "", processData: false
             },
             options,
@@ -504,7 +504,8 @@
           ajax({
               type: type,
               data: data,
-              url: this.uri + "_all_docs" + encodeOptions(options)
+              url: this.uri + "_all_docs" + encodeOptions(options), 
+              xhrFields: {withCredentials: true}
             },
             options,
             "An error occurred retrieving a list of all documents"
@@ -628,6 +629,7 @@
             type: method, url: uri + encodeOptions(options),
             contentType: "application/json",
             dataType: "json", data: toJSON(doc),
+            xhrFields: {withCredentials: true},
             beforeSend : beforeSend,
             complete: function(req) {
               var resp = $.parseJSON(req.responseText);
@@ -669,7 +671,8 @@
           ajax({
               type: "POST",
               url: this.uri + "_bulk_docs" + encodeOptions(options),
-              contentType: "application/json", data: toJSON(docs)
+              contentType: "application/json", data: toJSON(docs), 
+              xhrFields: {withCredentials: true}
             },
             options,
             "The documents could not be saved"
@@ -718,7 +721,8 @@
           ajax({
               type: "POST",
               url: this.uri + "_bulk_docs" + encodeOptions(options),
-              data: toJSON(docs)
+              data: toJSON(docs),
+              xhrFields: {withCredentials: true}
             },
             options,
             "The documents could not be deleted"
@@ -789,7 +793,8 @@
           ajax({
               type: "POST",
               url: this.uri + "_temp_view" + encodeOptions(options),
-              contentType: "application/json", data: toJSON(body)
+              contentType: "application/json", data: toJSON(body),
+              xhrFields: {withCredentials: true}
             },
             options,
             "An error occurred querying the database"
@@ -824,6 +829,7 @@
           ajax({
               type: type,
               data: data,
+              xhrFields: {withCredentials: true},
               url: this.uri + '_design/' + list[0] +
                    '/_list/' + list[1] + '/' + view + encodeOptions(options)
               },
@@ -857,6 +863,7 @@
           ajax({
               type: type,
               data: data,
+              xhrFields: {withCredentials: true},
               url: this.uri + "_design/" + name[0] +
                    "/_view/" + name[1] + encodeOptions(options)
             },
@@ -896,6 +903,7 @@
         setDbProperty: function(propName, propValue, options, ajaxOptions) {
           ajax({
             type: "PUT", 
+            xhrFields: {withCredentials: true},
             url: this.uri + propName + encodeOptions(options),
             data : JSON.stringify(propValue)
           },
@@ -947,6 +955,7 @@
       ajax({
           type: "POST", url: this.urlPrefix + "/_replicate",
           data: JSON.stringify(repOpts),
+          xhrFields: {withCredentials: true},
           contentType: "application/json"
         },
         ajaxOptions,
@@ -993,7 +1002,7 @@
     ajaxOptions = $.extend(defaultAjaxOpts, ajaxOptions);
     errorMessage = errorMessage || "Unknown error";
     $.ajax($.extend($.extend({
-      type: "GET", dataType: "json", cache : !$.browser.msie,
+      type: "GET", dataType: "json", xhrFields: {withCredentials: true},
       beforeSend: function(xhr){
         if(ajaxOptions && ajaxOptions.headers){
           for (var header in ajaxOptions.headers){
