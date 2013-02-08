@@ -1,7 +1,6 @@
 define([
     "backbone", 
     "handlebars", 
-    "activity/Activity",
     "audio_video/AudioVideoEditView",
     "comment/Comment",
     "comment/Comments",
@@ -19,7 +18,6 @@ define([
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     AudioVideoEditView,
     Comment,
     Comments,
@@ -167,10 +165,12 @@ define([
      * Renders the DatumEditView and all of its partials.
      */
     render : function() {
-      OPrime.debug("DATUM render: " );
+      if (OPrime.debugMode) OPrime.debug("DATUM render: " );
+      
+     
       
       if(this.collection){
-        OPrime.debug("This datum has a link to a collection. Removing the link.");
+        if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
@@ -180,7 +180,7 @@ define([
         jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
       }catch(e){
-        OPrime.debug("There was a problem fishing out which datum state was selected.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
       
@@ -208,10 +208,11 @@ define([
         this.datumFieldsView.el = this.$(".datum_fields_ul");
         this.datumFieldsView.render();
         
+        
         var self = this;
-        window.setTimeout(function(){
+        this.getFrequentFields(function(){
           self.hideRareFields();
-        }, 500);
+        });
             
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
@@ -241,13 +242,25 @@ define([
     },
     
     rareFields : [],
-    frequentFields: ["judgement","utterance","morphemes","gloss","translation"],
+    frequentFields: null,
+    getFrequentFields : function(whenfieldsareknown){
+      var self = this;
+      window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
+        self.frequentFields = fieldLabels;
+        if(typeof whenfieldsareknown == "function"){
+          whenfieldsareknown();
+        }
+      });
+    },
     hideRareFields : function(e){
       if(e){
         e.stopPropagation();
         e.preventDefault();
       }
       this.rareFields = [];
+      if(!this.frequentFields){
+        return;
+      }
       for(var f = 0; f < this.model.get("datumFields").length; f++ ){
         if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
           $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
@@ -364,7 +377,7 @@ define([
       var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -372,10 +385,10 @@ define([
             indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
             teamOrPersonal : "team",
             context : " via Offline App."
-          }));
+          });
       
       window.app.addActivity(
-          new Activity({
+          {
             verb : "commented",
             verbicon: "icon-comment",
             directobjecticon : "",
@@ -383,7 +396,7 @@ define([
             indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
             teamOrPersonal : "personal",
             context : " via Offline App."
-          }));
+          });
       
     },
     
@@ -393,7 +406,7 @@ define([
         this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
         this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
-        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
       
       //update the view of the datum state to the new color and text without rendering the entire datum
@@ -433,7 +446,7 @@ define([
       delete d.attributes.dateEntered;
       delete d.attributes.dateModified;
       d.set("session", app.get("currentSession"));
-      appView.datumsEditView.prependDatum(d);
+      window.appView.datumsEditView.prependDatum(d);
     },
     /*
      * this function can be used to play datum automatically

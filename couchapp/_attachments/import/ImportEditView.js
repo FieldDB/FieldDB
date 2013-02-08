@@ -1,7 +1,6 @@
 define( [ 
     "backbone",
     "handlebars",
-    "activity/Activity",
     "import/Import",
     "data_list/DataList",
     "data_list/DataListEditView",
@@ -19,7 +18,6 @@ define( [
 ], function(
     Backbone,
     Handlebars, 
-    Activity,
     Import,
     DataList,
     DataListEditView,
@@ -116,12 +114,14 @@ define( [
       "click .add-column" : "insertDoubleColumnsInTable",
       "blur .export-large-textarea" : "updateRawText"
     },
-    _dragOverEvent: function (e) {
-      if (e.originalEvent) e = e.originalEvent;
+    _dragOverEvent : function(e) {
+      if (e.preventDefault)
+        e.preventDefault();
+      if (e.originalEvent)
+        e = e.originalEvent;
       var data = this._getCurrentDragData(e);
 
       if (this.dragOver(data, e.dataTransfer, e) !== false) {
-        if (e.preventDefault) e.preventDefault();
         e.dataTransfer.dropEffect = 'copy'; // default
       }
     },
@@ -185,6 +185,7 @@ define( [
     drop: function (data, dataTransfer, e) {
       (function(){
         var self = window.appView.importView.model;
+        if (OPrime.debugMode) OPrime.debug("Recieved drop of files.");
         self.set("files", dataTransfer.files);
         self.readFiles();
       })();
@@ -264,16 +265,16 @@ define( [
       }
       
       //add tags
-      var x = document.createElement("span");
-      x.classList.add("pull-left");
-      x.classList.add("label");
-      x.classList.add(colors[colorindex%colors.length]);
-      x.draggable="true";
-      x.innerHTML = "datumTags";
-      x.addEventListener('dragstart', this.handleDragStart);
-      colorindex++;
-      $("#import-datum-field-labels").append(x);
-      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
+//      var x = document.createElement("span");
+//      x.classList.add("pull-left");
+//      x.classList.add("label");
+//      x.classList.add(colors[colorindex%colors.length]);
+//      x.draggable="true";
+//      x.innerHTML = "datumTags";
+//      x.addEventListener('dragstart', this.handleDragStart);
+//      colorindex++;
+//      $("#import-datum-field-labels").append(x);
+//      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
 
       //add date
       var x = document.createElement("span");
@@ -425,7 +426,7 @@ define( [
       for(f in headers){
         if (headers[f] == "" || headers[f] == undefined) {
           //do nothing
-        } else if (headers[f] == "datumTags") {
+//        } else if (headers[f] == "datumTags") {
           //do nothing
         } else{
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
@@ -459,7 +460,7 @@ define( [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         });
       }catch(e){
@@ -478,7 +479,7 @@ define( [
             array.push(datumObject);
           }else{
             //dont add blank datum
-            OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
+            if (OPrime.debugMode) OPrime.debug("Didn't add a blank row:"+ testForEmptyness+ ": ");
           }
         }
       }
@@ -487,7 +488,10 @@ define( [
        * after building an array of datumobjects, turn them into backbone objects
        */
       for (a in array) {
-        var d = new Datum({pouchname : window.app.get("corpus").get("pouchname")});
+        var d = new Datum({
+          filledWithDefaults : true,
+          pouchname : window.app.get("corpus").get("pouchname")
+        });
       //copy the corpus's datum fields and empty them.
         var datumfields = app.get("corpus").get("datumFields").toJSON();
         for(var x in datumfields){
@@ -499,15 +503,17 @@ define( [
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
-          } else if (index == "datumTags") {
-            var tags = value.split(" ");
-            for(g in tags){
-              var t = new DatumTag({
-                "tag" : tags[g]
-              });
-              d.get("datumTags").add(t);
-            }
-          }
+          } 
+          /* TODO removing old tag code for */
+//          else if (index == "datumTags") {
+//            var tags = value.split(" ");
+//            for(g in tags){
+//              var t = new DatumTag({
+//                "tag" : tags[g]
+//              });
+//              d.get("datumTags").add(t);
+//            }
+//          }
           //TODO turn the checkedwithconsultant into a checked, with that string as the person
 //          else if (index == "checkedWithConsultant") {
 //            var consultants = value.split(" ");
@@ -587,22 +593,22 @@ define( [
           ,"alert-success","Import successful:");
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
             teamOrPersonal : "team",
             context : "via Offline App"
-          }));
+          });
 
       window.app.addActivity(
-          new Activity({
+          {
             verb : "imported",
             directobject : this.savedcount + " data entries",
             indirectobject : "in "+window.app.get("corpus").get("title"),
             teamOrPersonal : "personal",
             context : "via Offline App"
-          }));
+          });
 
       window.hub.unsubscribe("savedDatumToPouch", null, window.appView.importView);
       window.hub.unsubscribe("saveDatumFailedToPouch", null, window.appView.importView);
@@ -624,6 +630,12 @@ define( [
       
       $(".import-progress").val( $(".import-progress").attr("max") );
       $(".approve-save").html("Finished");
+      
+      /* ask the corpus to update its frequent datum fields given the new datum */
+      var couchConnection = window.app.get("corpus").get("couchConnection");
+      var couchurl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/get_frequent_fields?group=true";
+      window.app.get("corpus").getFrequentDatumFields(couchurl);
+    
       
       // Go back to the dashboard 
       window.location.href = "#render/true";
@@ -665,22 +677,22 @@ define( [
               $(".import-progress").val($(".import-progress").val()+1);
               
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
                     teamOrPersonal : "team",
                     context : "via Offline App"
-                  }));
+                  });
               
               window.app.addActivity(
-                  new Activity({
+                  {
                     verb : "attempted to import",
                     directobject : self.model.get("datumArray").length + " data entries",
                     indirectobject : "in "+window.app.get("corpus").get("title"),
                     teamOrPersonal : "personal",
                     context : "via Offline App"
-                  }));
+                  });
               
               window.hub.subscribe("savedDatumToPouch", function(arg){
                 this.savedindex[arg.d] = true;
@@ -710,6 +722,7 @@ define( [
                    * If we are at the final index in the import's datum
                    */
                   this.importCompleted();
+                  
                 }else{
                   /*
                    * Save another datum when the previous fails
@@ -723,7 +736,13 @@ define( [
               /*
                * Begin the datum saving loop with the last datum 
                */
-              self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+              if(self.model.get("datumArray").length > 0){
+                self.saveADatumAndLoop(self.model.get("datumArray").length - 1);
+              }else{
+                alert("You havent imported anything. Please let us know if it does this again.");
+                this.importCompleted();
+                return;
+              }
                             
             /* end successful save of datalist and session */
             
@@ -821,7 +840,7 @@ define( [
      * @param e
      */
     dragLabelToColumn : function(e) {
-      OPrime.debug("Recieved a drop import label event ");
+      if (OPrime.debugMode) OPrime.debug("Recieved a drop import label event ");
       // this / e.target is current target element.
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
@@ -861,7 +880,7 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
+      if (OPrime.debugMode) OPrime.debug("DESTROYING IMPORT EDIT VIEW ");
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 

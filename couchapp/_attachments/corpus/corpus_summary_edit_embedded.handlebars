@@ -17,7 +17,7 @@
         <li class="new-conversation"><a href="#corpus/{{pouchname}}/conversation/new" class = "locale_New_Conversation"></a></li>
         <li class="new-data-list"><a href="#" class = "locale_New_Data_List"></a></li>
         <li class="new-session"><a href="#" class = "locale_New_Session"></a></li>
-        <li class="new-corpus"><a href="#" class = "locale_New_Corpus"></a></li>
+        <li class="new-corpus"><a href="#" class = "locale_New_Corpus"></a></li><!--if put corpus modal on user page user.html#corpus/new -->
       </ul>
     </div>
     <div class="btn-group">
@@ -26,7 +26,7 @@
       </button>
       <ul class="dropdown-menu">
         <li><a href="#import" class = "locale_Import_Data"></a></li>
-        <li><a href="#corpus/{{pouchname}}/export" class = "locale_Export_Data"></a></li>
+        <li><a href="{{exportAllDatumURL}}" target="_blank"  class = "locale_Export_Data"></a></li>
         <li><a href="#corpus/{{pouchname}}/alldata" class = "locale_All_Data"></a></li>
         
       </ul>

@@ -46,6 +46,8 @@ define([
       "corpus/:pouchname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       "render/:render"                  : "renderDashboardOrNot",
+      "help/:helptype"                  : "renderHelp",
+      "login"                           : "renderlogin",
       ""                                : "showDashboard"
     },
 
@@ -56,7 +58,7 @@ define([
      *          pouchname (Optional) The name of the corpus to display.
      */
     renderDashboardOrNot : function(render) {
-      OPrime.debug("In renderDashboardOrNot: " );
+      if (OPrime.debugMode) OPrime.debug("In renderDashboardOrNot: " );
       if(render == undefined || render == true || render == "true"){
         window.appView.renderReadonlyDashboardViews();
         this.hideEverything();
@@ -74,7 +76,7 @@ define([
      *          pouchname (Optional) The name of the corpus to display.
      */
     showDashboard : function() {
-      OPrime.debug("In showDashboard: " );
+      if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
     },
     /**
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
@@ -96,11 +98,18 @@ define([
       		"We use the " +
       		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).","alert","Track Changes:");
     },
+    
+    renderHelp : function(helptype){
+      if(helptype.indexOf("illustratedguide") >= 0){
+        $("#illustrated_guide_to_dash").modal("show");
+        window.location.href= "#";
+      }
+    },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
     showFullscreenUser : function(userid, pouchname) {
-      OPrime.debug("In showFullscreenUser: " + userid);
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " + userid);
 
       if(userid){
         if(!pouchname){
@@ -112,11 +121,9 @@ define([
             "pouchname": pouchname
           });
           userToShow.id = userid;
-          userToShow.changePouch(pouchname, function(){
-            //fetch only after having setting the right pouch which is what changePouch does.
             userToShow.fetch({
               success : function(model) {
-                OPrime.debug("Corpus member fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Corpus member fetched successfully" +model);
                 window.appView.setUpAndAssociatePublicViewsAndModelsWithCurrentUserMask(model);
                 window.appView.publicReadUserView.render();
 
@@ -124,7 +131,6 @@ define([
               error : function(e) {
                 alert("User not found in this corpus.");
               }
-            });
           });
         }
       }
@@ -136,7 +142,13 @@ define([
       window.scrollTo(0,0);
 
     },
-
+    
+    renderlogin : function(){
+      $("#login_modal").show("modal");
+      window.local.href="#";
+      //window.local.replace("#login_modal");
+    },
+    
     /**
      * Displays all of the corpus details and settings. 
      * 
@@ -144,7 +156,7 @@ define([
      *          pouchname The name of the corpus this datum is from.
      */
     showFullscreenCorpus : function() {
-      OPrime.debug("In showFullscreenCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
 
       //TODO create a public corpus mask, think of how to store it, and render that here.
       if($("#corpus-fullscreen").html() == ""){
@@ -160,7 +172,7 @@ define([
      * 
      */
     showEmbeddedCorpus : function() {
-      OPrime.debug("In showEmbeddedCorpus: " );
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedCorpus: " );
 
       this.hideEverything();
       $("#dashboard-view").show();
@@ -179,7 +191,7 @@ define([
      *          sessionid The ID of the session within the corpus.
      */
     showEmbeddedSession : function(sessionid, pouchname) {
-      OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -195,11 +207,9 @@ define([
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
           
-          cs.changePouch(pouchname, function(){
-            //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
-                OPrime.debug("Session fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("centerWell");
@@ -209,7 +219,6 @@ define([
               error : function(e) {
                 alert("There was an error fetching the sessions. Loading defaults..."+e);
               }
-            });
           });      
         }
       }
@@ -225,7 +234,7 @@ define([
      * Displays the fullscreen view of the session.
      */
     showFullscreenSession : function(sessionid, pouchname) {
-      OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
           + sessionid);
       if(sessionid){
         if(!pouchname){
@@ -241,11 +250,9 @@ define([
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
           
-          cs.changePouch(pouchname, function(){
-            //fetch only after having setting the right pouch which is what changePouch does.
             cs.fetch({
               success : function(model) {
-                OPrime.debug("Session fetched successfully" +model);
+                if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
                 cs.setAsCurrentSession( function(){
                   window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function(){
                     window.appView.renderReadonlySessionViews("fullscreen");
@@ -255,7 +262,6 @@ define([
               error : function(e) {
                 alert("There was an error fetching the sessions. Loading defaults..."+e);
               }
-            });
           });      
         }
       }
@@ -278,7 +284,7 @@ define([
      *          dataListid The ID of the datalist within the corpus.
      */
     showFullscreenDataList : function(dataListid, pouchname) {
-      OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
 
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
@@ -303,78 +309,32 @@ define([
           return;
         }
 
-        if(app.get("corpus").get("dataLists").length > 0){
-          /*
-           * If it is the defualt we want to fetch, which might have its
-           * mostrecent version in the corpus, we will save the corpus's
-           * default data list so that it will be the one we fetch.
-           */
-          if(dataListid == app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].id){
-            app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].changePouch(null, function(){
-              app.get("corpus").get("dataLists").models[app.get("corpus").get("dataLists").length - 1].save(null, {
-                success : function(model, response) {
-                  
-                  //wait until the corpus copy is saved before fetching.
-                  dl.changePouch(pouchname, function(){
-                    //fetch only after having setting the right pouch which is what changePouch does.
-                    dl.fetch({
-                      success : function(e) {
-                        OPrime.debug("Datalist fetched successfully" +e);
-                        app.get("currentDataList").saveAndInterConnectInApp(function(){
-                          dl.setAsCurrentDataList( function(){
-                            window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-//                              window.app.router.showDashboard();
-                              window.appView.renderReadonlyDataListViews("fullscreen");
-//                              window.appView.renderReadonlyDashboardViews();
-                            });
-                          });
-                        });
-                      },
-                      error : function(e) {
-                        alert("There was an error fetching the data list. Loading defaults..."+e);
-                      }
-                    });
+        /*
+         * If it isnt the default data list, just fetch it.
+         */
+          dl.fetch({
+            success : function(e) {
+              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
+              app.get("currentDataList").saveAndInterConnectInApp(function(){
+                dl.setAsCurrentDataList( function(){
+                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                    window.appView.renderReadonlyDataListViews("fullscreen");
                   });
-                  
-                }
-              ,error : function(){
-              }
+                });
               });
-            
-            
-            });
-          }else{
-            /*
-             * If it isnt the default data list, just fetch it.
-             */
-            dl.changePouch(pouchname, function(){
-              //fetch only after having setting the right pouch which is what changePouch does.
-              dl.fetch({
-                success : function(e) {
-                  OPrime.debug("Datalist fetched successfully" +e);
-                  app.get("currentDataList").saveAndInterConnectInApp(function(){
-                    dl.setAsCurrentDataList( function(){
-                      window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                        window.appView.renderReadonlyDataListViews("fullscreen");
-                      });
-                    });
-                  });
-                },
-                error : function(e) {
-                  alert("There was an error fetching the data list. Loading defaults..."+e);
-                }
-              });
-            });
-            
-          }
-        }
+            },
+            error : function(e) {
+              alert("There was an error fetching the data list. Loading defaults..."+e);
+            }
+        });
+
       }
      //TODO test other cases where datalist id needs to be changed
 
     },
     
     showMiddleDataList : function(dataListid, pouchname) {
-      OPrime.debug("In showMiddleDataList");
+      if (OPrime.debugMode) OPrime.debug("In showMiddleDataList");
 
       if(dataListid){
         if(!pouchname){
@@ -389,11 +349,9 @@ define([
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         }
         
-        dl.changePouch(pouchname, function(){
-          //fetch only after having setting the right pouch which is what changePouch does.
           dl.fetch({
             success : function(e) {
-              OPrime.debug("Datalist fetched successfully" +e);
+              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
               dl.setAsCurrentDataList( function(){
                 window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
                   window.appView.renderReadonlyDashboardViews();
@@ -403,7 +361,6 @@ define([
             error : function(e) {
               alert("There was an error fetching the data list. Loading defaults..."+e);
             }
-          });
         });
       }
       this.hideEverything();
@@ -453,13 +410,19 @@ define([
             	window.appView.currentReadDataListView.render();
             	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
             	window.app.stopSpinner();
+            },function(){
+              window.app.stopSpinner();
+              window.location.href="#";
+              if(localStorage.getItem("username") == "public"){
+                alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+              }
             });
         });
         
       },
 
     showEmbeddedDatum : function(pouchname, datumid){
-      OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
           + datumid);
       if(datumid){
         if(!pouchname){
@@ -473,13 +436,11 @@ define([
         }
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumid;
-        obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
           obj.fetch({
             success : function(model, response) {
               window.appView.datumsEditView.prependDatum(model);
               window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
             }
-          });
         });
       }else{
         window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
@@ -489,7 +450,7 @@ define([
     showEmbeddedConversation : function(pouchname, conversationid){
         $("#datums-embedded").hide();
     	$("#conversation-embedded").show();
-    	OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
+    	if (OPrime.debugMode) OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
             + conversationid);
         if(conversationid){
           if(!pouchname){
@@ -503,13 +464,11 @@ define([
           }
           var obj = new Conversation({pouchname: app.get("corpus").get("pouchname")});
           obj.id  = conversationid;
-          obj.changePouch(window.app.get("corpus").get("pouchname"), function(){
             obj.fetch({
               success : function(model, response) {
  //               window.appView.datumsEditView.prependDatum(model); //change so relevant to Conversation
                 window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
               }
-            });
           });
         }else{
           window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
@@ -517,7 +476,7 @@ define([
       },
       
     showImport : function() {
-      OPrime.debug("In import: ");
+      if (OPrime.debugMode) OPrime.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#import-fullscreen").html() == ""){
         window.appView.importView.render();
@@ -527,7 +486,7 @@ define([
     },
     
     showExport : function(pouchname) {
-      OPrime.debug("In showExport: " + pouchname);
+      if (OPrime.debugMode) OPrime.debug("In showExport: " + pouchname);
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();

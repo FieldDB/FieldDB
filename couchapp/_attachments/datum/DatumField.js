@@ -35,11 +35,11 @@ define([
       mask : "",
       encrypted : "",
       shouldBeEncrypted : "",
-      help : "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown"
+      help : "Put your team's data entry conventions here (if any)..."
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       // There are no nested models
     },
    

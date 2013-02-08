@@ -40,7 +40,7 @@ define([
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       consultant : UserMask
     },
     saveAndInterConnectInApp : function(callback){

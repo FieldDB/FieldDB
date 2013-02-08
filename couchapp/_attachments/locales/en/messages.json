@@ -22,13 +22,13 @@
     "message" : "Password:"
   },
   "locale_Sync_my_data_to_this_computer" : {
-    "message" : "Sync my data to this computer"
+    "message" : "Sync my data to this device"
   },
   "locale_Welcome_to_FieldDB" : {
     "message" : "Welcome to LingSync!"
   },
   "locale_An_offline_online_fieldlinguistics_database" : {
-    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data."
+    "message" : "LingSync is a free, open source project developed collectively by field linguists and software developers to make a modular, user-friendly app which can be used to collect, search and share data, both online and offline."
   },
   "locale_Welcome_Beta_Testers" : {
     "message" : "<p>Welcome Beta Testers! Please sit back with a cup of tea and <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>watch this play list before you begin testing LingSync</a>. Leave us notes, bugs, comments, suggestions etc in the Contact Us/Bug Report form in the User Menu. Your feedback helps us prioritize what to fix/implement next!</p>"
@@ -37,7 +37,7 @@
     "message" : "<p>Curious what this is? <a target='top' href='https://www.youtube.com/embed/videoseries?list=PL984DA79F4B314FAA'>You can watch this play list to find out.</a>. You can find help and more info in the top right menu of the Corpus Dashboard.</p>"
   },
   "locale_Create_a_new_user" : {
-    "message" : "Create a new user"
+    "message" : "Register"
   },
   "locale_What_is_your_username_going_to_be" : {
     "message" : "What is your username going to be?"
@@ -75,7 +75,7 @@
     "message" : "<p>Datum States are used to keep track of whether the data is valid or invalid, for example, 'Checked' with a consultant, 'To be checked', 'Deleted' etc. </p> <p>Datum States can be as detailed as you choose. You can create your own Datum States for your own corpus to help you manage your team's data validation workflow (e.g. 'To be checked with Sophie,' 'Checked with Gladys').  You can assign colours to your Datum States, which will appear as the background colour of the Datum in any Datalist. </p> <p> If you flag a Datum as Deleted it won't show up in search results anymore, but a Datum in a corpus is never really deleted. It remains in the database complete with its change history so that you can review it at a later date. (In future we might add a button to allow users to 'empty the trash' and mass-delete old Datum from the system.) </p> "
   },
    "locale_advanced_search_explanation" : {
-    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type 'nay' and search will find the morphemes 'onay', 'naya' etc. </p> <p>Search for nothing (leave everything blank) to see all your data. </p> <p>Search automatically creates a temporary Datalist. You can save it as \"open\", so new matching data will be added automatically, or \"closed\", so it will stay exactly the way it was when you created it. </p> <p>For now, search is offline on your computer, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"
+    "message" : "<p>Search errs on the side of including more results, rather than missing anything. </p> <p>For example, you can type 'nay' and search will find the morphemes 'onay', 'naya' etc. </p> <p>Search automatically creates a temporary list of data. If you enter new matching data, it will be added automatically this can be a handy way to see the data you have entered recently, as you enter data.. If you want to keep the list of data, click Save and a new DataList will be created. </p> <p>For now, search is offline, running on your device, but we would eventually like to have a more advanced search that works online, sorts results better, and could let you search for minimal pairs using features.</p>"
    },
   "locale_New_User" : {
     "message" : "New User"
@@ -358,7 +358,7 @@
     "message" : "User Profile"
   },
   "locale_Private_Profile" : {
-    "message" : "Private Profile"
+    "message" : "User Profile"
   },
   "locale_Public_Profile" : {
     "message" : "Public Profile"
@@ -433,7 +433,7 @@
     "message" : "Show dashboard with data entry form"
   },
   "locale_Save_on_this_Computer" : {
-    "message" : "Save on this computer."
+    "message" : "Save on this device."
   },
   "locale_Sync_and_Share" : {
     "message" : "Sync and share with team"

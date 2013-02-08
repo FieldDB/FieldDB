@@ -17,7 +17,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW init");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW init");
     },
 
     /**
@@ -41,7 +41,7 @@ define([
      * Renders the DatumTagEditView.
      */
     render : function() {
-      OPrime.debug("DATUM TAG EDIT VIEW render");
+      if (OPrime.debugMode) OPrime.debug("DATUM TAG EDIT VIEW render");
       
       $(this.el).html(this.template(this.model.toJSON()));
       
