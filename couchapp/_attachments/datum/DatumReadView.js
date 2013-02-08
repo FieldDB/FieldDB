@@ -115,7 +115,7 @@ define([
         $("#export-modal").modal("show");
       },
       
-      //Add button inserts new Comment
+      //Add button inserts new Comment that belongs to a particular Datum 
       "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
