@@ -215,7 +215,7 @@ define([
           $(this.el).html(this.templateCentreWell(jsonToRender));
 
           // Display the CommentReadView
-          this.commentReadView.el = this.$('.comments');
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
           // Display the CommentEditView
@@ -287,7 +287,7 @@ define([
         $(this.el).html(this.templateFullscreen(jsonToRender));
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
         
         // Display the CommentEditView

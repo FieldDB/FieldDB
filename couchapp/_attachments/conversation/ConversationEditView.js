@@ -5,6 +5,7 @@ define( [
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "data_list/DataList",
     "datum/Datum",
     "datum/DatumReadView",
@@ -16,6 +17,7 @@ define( [
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     DataList, 
     Datum, 
     DatumReadView,
@@ -404,7 +406,8 @@ define( [
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
           // Display the CommentReadView
-          this.commentReadView.el = this.$el.find(".comments");
+//          this.commentReadView.el = this.$el.find(".comments");
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
           //localization of edit data list 

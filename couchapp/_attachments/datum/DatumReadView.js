@@ -115,7 +115,7 @@ define([
         $("#export-modal").modal("show");
       },
       
-      //Add button inserts new Comment that belongs to a particular Datum 
+      //Add button inserts new Comment 
       "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
@@ -181,15 +181,15 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
+      OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
       
       if(this.collection){
-        if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
+        OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
       
       if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
-        if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
+        OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
       var jsonToRender = this.model.toJSON();
@@ -271,7 +271,7 @@ define([
         try{
           jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         }catch(e){
-          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
 //          this.model.get("datumStates").models[0].set("selected","selected");
         }
         // makes the top two lines into an array of words.
@@ -290,7 +290,7 @@ define([
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){
-          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+          OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
         }
       }
       
@@ -340,7 +340,7 @@ define([
       var text = $(".datum_field_input").val() || [];
      // $(".datum_fields_ul")[0].focus();
     //  $(".datum_fields_ul")[0].select();
-      if (OPrime.debugMode) OPrime.debug(text);
+      OPrime.debug(text);
  
       return "";
 //    }, 

@@ -438,8 +438,8 @@ define( [
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
-          // Display the CommentReadView
-          this.commentReadView.el = this.$el.find(".comments");
+          // Display the CommentReadView          this.commentReadView.el = this.$el.find(".comments");
+          this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
           
           // Display the CommentEditView
