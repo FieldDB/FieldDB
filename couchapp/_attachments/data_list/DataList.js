@@ -27,7 +27,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATALIST init");
+      if (OPrime.debugMode) OPrime.debug("DATALIST init");
       
       if (!this.get("comments")) {
         this.set("comments", new Comments());
@@ -107,7 +107,7 @@ define([
       }
       var audioVideoFiles = [];
       
-      OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
         var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
         obj.id  = datumIdsToGetAudioVideo[id];
@@ -140,7 +140,7 @@ define([
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
-      OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
+      if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
         /* look for the datum in the datum loaded in the view, and use that one rather than re-opening the datum */
 //        var indexInCurrentPaginatedDataListDatums = _.pluck(window.appView.currentPaginatedDataListDatumsView.collection.models, "id").indexOf(datumIdsToApplyFunction[id]);
@@ -172,7 +172,7 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
-      OPrime.debug("Saving the DataList");
+      if (OPrime.debugMode) OPrime.debug("Saving the DataList");
       var self = this;
 //      var idsInCollection = [];
 //      for(d in this.datumCollection.models){
@@ -201,7 +201,7 @@ define([
 
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('DataList save success');
+            if (OPrime.debugMode) OPrime.debug('DataList save success');
             var title = model.get("title");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for dataList in corpus
@@ -266,7 +266,7 @@ define([
             }
           },
           error : function(e, f, g) {
-            OPrime.debug("DataList save error", e, f, g);
+            if (OPrime.debugMode) OPrime.debug("DataList save error", e, f, g);
             if(typeof failurecallback == "function"){
               failurecallback();
             }else{

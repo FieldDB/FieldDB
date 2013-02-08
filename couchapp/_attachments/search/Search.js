@@ -25,7 +25,7 @@ define([
 
     initialize : function() {
       this.on('all', function(e) {
-        OPrime.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
+        if (OPrime.debugMode) OPrime.debug(this.get('searchKeywords') + " event: " + JSON.stringify(e));
       });
     },
     
