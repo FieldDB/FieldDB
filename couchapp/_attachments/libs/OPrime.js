@@ -27,7 +27,7 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   }
 
   var couchurl = couchConnection.protocol + couchConnection.domain;
-  if (couchConnection.port != null && couchConnection.port != "443" && couchConnection.port != "80") {
+  if (couchConnection.port && couchConnection.port != "443" && couchConnection.port != "80") {
     couchurl = couchurl + ":" + couchConnection.port;
   }
   if(!couchConnection.path){
