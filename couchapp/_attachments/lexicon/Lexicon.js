@@ -26,7 +26,7 @@ define([
 		},
 		
 		// Internal models: used by the parse function
-    model : {
+    internalModels : {
       lexiconNodes : LexiconNodes
     },
     /**
@@ -39,17 +39,17 @@ define([
     buildLexiconFromCouch : function(pouchname, callback){
       var self = this;
       var couchConnection = app.get("corpus").get("couchConnection");
-      var couchurl = couchConnection.protocol+couchConnection.domain+":"+couchConnection.port  +couchConnection.path+"/";
+      var couchurl = OPrime.getCouchUrl(couchConnection);
 
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
-        url : couchurl+pouchname+"/_design/lexicon/_view/create_triples?group=true",
+        url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(pouchname+"lexiconResults", results);
-          var lexiconTriples = JSON.parse(results).rows;
+          localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          var lexiconTriples = results.rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
               morpheme : lexiconTriples[triple].key.morpheme,

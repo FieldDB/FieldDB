@@ -1,7 +1,14 @@
 var OPrime = OPrime || {};
 
-OPrime.debugMode = true;
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
+OPrime.debugMode = false;
+/*
+ * Android touchdb for OPrime runs on port 8128, so if the app is running on
+ * port 8128 it is likely in a touchdb (either in the android app or in a
+ * browser)
+ */
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = function() {
+  return window.location.port == 8128;
+};
 
 /**
  * The address of the TouchDB-Android database on the Android.
@@ -13,17 +20,58 @@ OPrime.touchUrl = "http://localhost:8128/";
  */
 OPrime.pouchUrl = "idb://";
 
+OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
+  if (!couchConnection) {
+    couchConnection = OPrime.defaultCouchConnection();
+    if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
+  }
+
+  var couchurl = couchConnection.protocol + couchConnection.domain;
+  if (couchConnection.port && couchConnection.port != "443" && couchConnection.port != "80") {
+    couchurl = couchurl + ":" + couchConnection.port;
+  }
+  if(!couchConnection.path){
+    couchConnection.path = "";
+  }
+  couchurl = couchurl + couchConnection.path;
+  if (couchdbcommand === null || couchdbcommand === undefined) {
+    couchurl = couchurl + "/" + couchConnection.pouchname;
+  } else {
+    couchurl = couchurl + couchdbcommand;
+  }
+
+    
+  /* Switch user to the new dev servers if they have the old ones */
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,
+      "corpusdev.lingsync.org");
+
+  /*
+   * For debugging cors #838: Switch to use the corsproxy corpus service instead
+   * of couchdb directly
+   */
+  // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
+  
+  return couchurl;
+};
+
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
-OPrime.debug = function(message, message2) {
+OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {
     return;
   }
-  if (!message2) {
-    message2 = "";
-  }
   if (this.debugMode) {
-    console.log(message, message2);
+    console.log(message);
+
+    if (message2) {
+      console.log(message2);
+    }
+    if (message3) {
+      console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
+    }
   }
 };
 
@@ -64,7 +112,7 @@ OPrime.publisher = {
     var pubtype = type || 'any';
     var subscribers = this.subscribers[pubtype];
     if (!subscribers || subscribers.length == 0) {
-      OPrime.debug(pubtype + ": There were no subscribers.");
+      if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
       return;
     }
     var i;
@@ -84,7 +132,7 @@ OPrime.publisher = {
           subscribers[i].fn.call(subscribers[i].context, arg);
         }
       }
-      OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+      if (OPrime.debugMode) OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
 
     } else {
 
@@ -98,13 +146,13 @@ OPrime.publisher = {
           }
           if (subscribers[i].context === context) {
             var removed = subscribers.splice(i, 1);
-            OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+            if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
           } else {
-            OPrime.debug(type + " keeping subscriber " + i,
+            if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
                 subscribers[i].context);
           }
         } catch (e) {
-          OPrime.debug("problem visiting Subscriber " + i, subscribers)
+          if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
         }
       }
     }
@@ -123,7 +171,6 @@ OPrime.makePublisher = function(o) {
   };
 };
 
-
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
@@ -133,22 +180,28 @@ OPrime.makePublisher = function(o) {
  * @param exdays
  */
 OPrime.setCookie = function(c_name, value, exdays) {
-  var exdate = new Date();
-  exdate.setDate(exdate.getDate() + exdays);
-  var c_value = escape(value)
-      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-  document.cookie = c_name + "=" + c_value;
+  if (value) {
+    localStorage.setItem(c_name, value);
+  } else {
+    localStorage.removeItem(c_name);
+  }
+  // var exdate = new Date();
+  // exdate.setDate(exdate.getDate() + exdays);
+  // var c_value = escape(value)
+  // + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  // document.cookie = c_name + "=" + c_value;
 };
 OPrime.getCookie = function(c_name) {
-  var i, x, y, ARRcookies = document.cookie.split(";");
-  for (i = 0; i < ARRcookies.length; i++) {
-    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-    x = x.replace(/^\s+|\s+$/g, "");
-    if (x == c_name) {
-      return unescape(y);
-    }
-  }
+  return localStorage.getItem(c_name);
+  // var i, x, y, ARRcookies = document.cookie.split(";");
+  // for (i = 0; i < ARRcookies.length; i++) {
+  // x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+  // y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+  // x = x.replace(/^\s+|\s+$/g, "");
+  // if (x == c_name) {
+  // return unescape(y);
+  // }
+  // }
 };
 
 OPrime.isAndroidApp = function() {
@@ -159,11 +212,10 @@ OPrime.isAndroidApp = function() {
   return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
 };
 
-
 if (OPrime.isAndroidApp()) {
   var debugOrNot = Android.isD();
   console.log("Setting debug mode to the Android's mode: " + debugOrNot);
-//  OPrime.debugMode = debugOrNot;
+  // OPrime.debugMode = debugOrNot;
 };
 
 OPrime.isAndroid4 = function() {
@@ -177,6 +229,14 @@ OPrime.isChromeApp = function() {
 OPrime.isCouchApp = function() {
   return window.location.href.indexOf("_design/pages") > -1;
 };
+
+OPrime.isTouchDBApp = function() {
+  return window.location.href.indexOf("localhost:8128") > -1;
+};
+
+OPrime.isBackboneCouchDBApp = function(){
+  return true;
+};
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.
@@ -184,7 +244,7 @@ OPrime.isCouchApp = function() {
  * @returns {Boolean} true if not on offline Android or on a Chrome Extension
  */
 OPrime.onlineOnly = function() {
-  return !this.isAndroidApp() && !this.chromeApp();
+  return !this.isAndroidApp() && !this.isChromeApp();
 };
 
 OPrime.getVersion = function(callback) {
@@ -196,7 +256,6 @@ OPrime.getVersion = function(callback) {
   };
   xmlhttp.send(null);
 };
-
 
 /*
  * JavaScript Pretty Date Copyright (c) 2011 John Resig (ejohn.org) Licensed
@@ -243,8 +302,16 @@ OPrime.prettyTimestamp = function(timestamp) {
   var diff = ((greenwichtimenow.getTime() - date.getTime()) / 1000);
   var day_diff = Math.floor(diff / 86400);
 
-  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+  if (isNaN(day_diff) || day_diff < 0) {
     return;
+  }
+
+  if (day_diff >= 31) {
+    return Math.ceil(day_diff / 30) + " months ago";
+  }
+
+  if (day_diff >= 548) {
+    return Math.ceil(day_diff / 365) + " years ago";
   }
 
   return day_diff == 0
@@ -268,7 +335,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   var callingcontextself = callingcontext;
   if (!audioOffsetCallback) {
     audioOffsetCallback = function(message) {
-      OPrime.debug("In audioOffsetCallback: " + message);
+      if (OPrime.debugMode) OPrime.debug("In audioOffsetCallback: " + message);
       OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
     }
   }
@@ -283,7 +350,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
     this.debug("Playing Audio via HTML5:" + audiourl + ":");
     document.getElementById(divid).removeEventListener('ended',
         OPrime.audioEndListener);
-    OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
+    if (OPrime.debugMode) OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
     document.getElementById(divid).addEventListener('ended',
         OPrime.audioEndListener);
     document.getElementById(divid).play();
@@ -291,7 +358,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
 }
 OPrime.audioEndListener = function() {
   var audiourl = this.getAttribute("src")
-  OPrime.debug("End audio ", audiourl);
+  if (OPrime.debugMode) OPrime.debug("End audio ", audiourl);
   OPrime.hub.publish('playbackCompleted', audiourl);
 };
 OPrime.pauseAudioFile = function(divid, callingcontext) {
@@ -347,13 +414,13 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
     document.getElementById(divid).pause();
     document.getElementById(divid).currentTime = startime;
-    OPrime.debug("Cueing audio to "
+    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
         + document.getElementById(divid).currentTime);
     document.getElementById(divid).play();
     OPrime.playingInterval = true;
     document.getElementById(divid).addEventListener("timeupdate", function() {
       if (this.currentTime >= endtime && OPrime.playingInterval) {
-        OPrime.debug("CurrentTime: " + this.currentTime);
+        if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
         OPrime.playingInterval = false; /*
                                          * workaround for not being able to
@@ -377,7 +444,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
   var callingcontextself = callingcontext;
   if (!callbackRecordingCompleted) {
     callbackRecordingCompleted = function(message) {
-      OPrime.debug("In callbackRecordingCompleted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingCompleted: " + message);
       OPrime.hub.unsubscribe("audioRecordingCompleted", null,
           callingcontextself);
     };
@@ -392,7 +459,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
    */
   if (!callbackRecordingStarted) {
     callbackRecordingStarted = function(message) {
-      OPrime.debug("In callbackRecordingStarted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStarted: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
           callingcontextself);
     };
@@ -426,7 +493,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
   var callingcontextself = callingcontext;
   if (!callbackRecordingStopped) {
     callbackRecordingStopped = function(message) {
-      OPrime.debug("In callbackRecordingStopped: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStopped: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
           callingcontextself);
     };
@@ -466,14 +533,14 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
   var callingcontextself = callingcontext;
   if (!callbackPictureCaptureStarted) {
     callbackPictureCaptureStarted = function(message) {
-      OPrime.debug("In callbackPictureCaptureStarted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureStarted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
           callingcontextself);
     };
   }
   if (!callbackPictureCaptureCompleted) {
     callbackPictureCaptureCompleted = function(message) {
-      OPrime.debug("In callbackPictureCaptureCompleted: " + message);
+      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureCompleted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
           callingcontextself);
     };
@@ -510,7 +577,7 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
 /*
  * Initialize the debugging output, taking control from the Android side.
  */
-OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
+if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
     + navigator.userAgent);
 
 if (OPrime.isAndroidApp()) {
@@ -527,9 +594,6 @@ OPrime.userEncryptionToken = function() {
   return "topsecretuserencryptiontokenfortestingTODOchangethis";
 };
 
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
-
-
 OPrime.getConnectivityType = function(callingcontextself, callback) {
   this.hub.unsubscribe("connectivityType", null, callingcontextself);
   /* subscribe the caller's functions to the channels */
@@ -537,7 +601,7 @@ OPrime.getConnectivityType = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    OPrime.debug("This is an Android.");
+    if (OPrime.debugMode) OPrime.debug("This is an Android.");
     Android.getConectivityType();
   } else {
     OPrime.hub.publish('connectivityType', 'Probably Online');
@@ -551,7 +615,7 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    OPrime.debug("This is an Android.");
+    if (OPrime.debugMode) OPrime.debug("This is an Android.");
     Android.getHardwareDetails();
   } else {
     OPrime.hub.publish('hardwareDetails', {
@@ -569,10 +633,178 @@ OPrime.useUnsecureCouchDB = function() {
      */
     return true;
   }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork && window.location.origin.indexOf("chrome-extension") != 0) {
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork()
+      && window.location.origin.indexOf("chrome-extension") != 0) {
     return true;
   }
   return false;
+};
+
+/*
+ * Functions for well formed CORS requests
+ */
+OPrime.makeCORSRequest = function(options) {
+  OPrime.debugMode = false;
+  if(!options.method){
+    options.method = options.type || "GET";
+  }
+  if(!options.url){
+    OPrime.bug("There was an error. Please report this.");
+  }
+  if(!options.data){
+    options.data = "";
+  }
+  options.dataToSend = JSON.stringify(options.data).replace(/,/g,"&").replace(/:/g,"=").replace(/"/g,"").replace(/[}{]/g,"");
+
+  if(options.method == "GET" && options.data){
+    options.url = options.url + "?" + options.dataToSend;
+  }
+  /*
+   * Helper function which handles IE
+   */
+  var createCORSRequest = function(method, url){
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+      // XHR for Chrome/Firefox/Opera/Safari.
+      xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+      // XDomainRequest for IE.
+      xhr = new XDomainRequest();
+      xhr.open(method, url);
+    } else {
+      // CORS not supported.
+      xhr = null;
+    }
+    return xhr;
+  };
+  
+  var xhr = createCORSRequest(options.method, options.url);
+  if (!xhr) {
+    alert('CORS not supported, your browser is unable to contact the database.');
+    return;
+  }
+
+//  if(options.method == "POST"){
+    //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type","application/json");
+    xhr.withCredentials = true;
+//  }
+  
+  xhr.onload = function(e,f,g) {
+    var text = xhr.responseText;
+    if (OPrime.debugMode) OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
+    if(typeof options.success == "function"){
+      if(text){
+        options.success(JSON.parse(text));
+      }else{
+        OPrime.bug("There was no content in the server's response text. Please report this.");
+        options.error(e,f,g);
+      }
+    }
+    OPrime.debugMode = false;
+  };
+
+  xhr.onerror = function(e,f,g) {
+    if (OPrime.debugMode) OPrime.debug(e,f,g);
+    OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
+    if(typeof options.error == "function"){
+      options.error(e,f,g);
+    }
+  };
+  if (options.method == "POST") {
+    xhr.send(JSON.stringify(options.data));
+  } else {
+    xhr.send();
+  }
+  
+};
+
+
+
+OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
+    readycallback, failcallback) {
+  if (readycallback) {
+    OPrime.checkToSeeIfCouchAppIsReadyreadycallback = readycallback;
+  }
+  if (!$) {
+    OPrime.bug("Can't check if DB is ready.");
+    console
+        .warn("Can't check if DB is ready, checkToSeeIfCouchAppIsReady function depends on JQuery at the moment...");
+    return;
+  }
+  $
+      .ajax({
+        type : 'GET',
+        url : urlIsCouchAppReady,
+        data : {},
+        beforeSend : function(xhr) {
+          // alert("before send" + JSON.stringify(xhr));
+          xhr.setRequestHeader('Accept', 'application/json');
+        },
+        complete : function(e, f, g) {
+          console.log(e, f, g);
+          // alert("Completed contacting the server.");
+        },
+        success : function(serverResults) {
+          console.log("serverResults" + JSON.stringify(serverResults));
+          alert("Your database is ready.");
+          if (typeof readycallback == "function") {
+            readycallback();
+          }
+        },// end successful fetch
+        error : function(response) {
+          // alert("Error contacting the server.");
+
+          console.log("error response." + JSON.stringify(response));
+          // alert("error response." + JSON.stringify(response));
+
+          if (response.responseText) {
+            if (response.responseText.indexOf("<html") >= 0) {
+              localStorage.setItem("urlIsCouchAppReady", urlIsCouchAppReady);
+              alert("Your database is ready.");
+              if (typeof OPrime.checkToSeeIfCouchAppIsReadyreadycallback == "function") {
+                OPrime.checkToSeeIfCouchAppIsReadyreadycallback();
+              }
+              // window.location.replace(urlIsCouchAppReady);
+              return;
+            }
+            var error = JSON.parse(response.responseText);
+            if (error.error == "unauthorized") {
+              alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
+            } else {
+              alert("Waiting for database to be created...");
+              // Loop every 2 sec waiting for the database to load
+            }
+          }
+          window.setTimeout(failcallback, 2000);
+
+          // $("#user-welcome-modal").modal("show");
+
+        },
+        dataType : "json"
+      });
+
+};
+
+OPrime.sum = function(list) {
+  var result = 0;
+  for (value in list) {
+    result += list[value];
+  }
+  return result;
+};
+
+OPrime.mean = function(list) {
+  return OPrime.sum(list) / list.length;
+};
+
+OPrime.standardDeviation = function(list) {
+  var totalVariance = 0;
+  var mean = OPrime.mean(list);
+  for ( var i in list) {
+    totalVariance += Math.pow(list[i] - mean, 2);
+  }
+  return Math.sqrt(totalVariance / list.length);
 };
 
 /*

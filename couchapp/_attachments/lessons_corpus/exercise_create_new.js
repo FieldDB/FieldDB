@@ -12,7 +12,7 @@ document.getElementById("save_new_exercise").onclick = function(e) {
       .getElementById("audio_stimuli_transcription").value;
   newexercise.stimuli_translation = document
       .getElementById("audio_stimuli_translation").value;
-  OPrime.debug(JSON.stringify(newexercise));
+  if (OPrime.debugMode) OPrime.debug(JSON.stringify(newexercise));
   window.userHistory.userCreatedExercises.push(newexercise);
   alert("I saved your lesson to localstorage as JSON (normally I would put it in a database, but this is just a clickable prototype): "
       + JSON.stringify(newexercise));
@@ -25,7 +25,7 @@ document.getElementById("capture_image_stimuli_button").onclick = function(e) {
       + "_stimuli_" + Date.now() + ".png";
   OPrime.capturePhoto(responsefilename, /* started */null, /* completed */
       function(imageUrl) {
-        OPrime.debug("\nPicture capture successfully completed " + imageUrl);
+        if (OPrime.debugMode) OPrime.debug("\nPicture capture successfully completed " + imageUrl);
         document.getElementById("image_stimuli_file").src = imageUrl;
       });
 };
@@ -51,7 +51,7 @@ document.getElementById("record_vocab_response_button").onclick = function(e) {
   if (document.getElementById("record_vocab_response_button").classList
       .toString().indexOf("icon-stop") == -1) {
     OPrime.captureAudio(responsefilename, /* started */function(audioUrl) {
-      OPrime.debug("\nRecording successfully started " + audioUrl);
+      if (OPrime.debugMode) OPrime.debug("\nRecording successfully started " + audioUrl);
 
       // Only change the icons once.
       if (document.getElementById("record_vocab_response_button").classList
@@ -62,7 +62,7 @@ document.getElementById("record_vocab_response_button").onclick = function(e) {
       }
 
     }, /* Recording complete */function(audioUrl) {
-      OPrime.debug("Attaching sucessful recording to the result audio div "
+      if (OPrime.debugMode) OPrime.debug("Attaching sucessful recording to the result audio div "
           + audioUrl);
       document.getElementById("audio_response_file").src = audioUrl;
       document.getElementById("record_vocab_response_button").removeAttribute(
@@ -82,7 +82,7 @@ document.getElementById("record_vocab_response_button").onclick = function(e) {
             '<img src="mic_white.png" />');
       }
 
-      OPrime.debug("\nRecording successfully stopped " + audioUrl);
+      if (OPrime.debugMode) OPrime.debug("\nRecording successfully stopped " + audioUrl);
     });
   }
 };
@@ -101,7 +101,7 @@ document.getElementById("play_response_button").onclick = function(e) {
 var userHistory = localStorage.getItem("userHistory");
 if (userHistory) {
   userHistory = JSON.parse(userHistory);
-  OPrime.debug("Welcome back userid " + userHistory.id);
+  if (OPrime.debugMode) OPrime.debug("Welcome back userid " + userHistory.id);
 } else {
   userHistory = {};
   userHistory.id = Date.now();
@@ -114,7 +114,7 @@ OPrime.hub.subscribe("playbackCompleted", function(filename) {
 
 window.saveUser = function() {
   localStorage.setItem("userHistory", JSON.stringify(window.userHistory));
-  OPrime.debug(JSON.stringify(window.userHistory));
+  if (OPrime.debugMode) OPrime.debug(JSON.stringify(window.userHistory));
 };
 
 // Android WebView is not calling the onbeforeunload to save the userHistory.

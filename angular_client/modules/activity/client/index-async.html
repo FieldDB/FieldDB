@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" ng-csp ng-app="ActivityFeed">
+<head>
+<meta charset="utf-8">
+<script src="libs/angular/angular.js"></script>
+<script src="libs/fielddb_activity_feed_widget.min.js"></script>
+<title>FieldDB Activity Feed</title>
+<link rel="stylesheet" href="lib/font_awesome/font-awesome.css">
+<link rel="stylesheet" href="activity.css">
+</head>
+<body>
+	<ul class="menu">
+		<li><a href="#/view1">view1</a></li>
+		<li><a href="#/view2">view2</a></li>
+    <li><a href="activity_feed.html">ActivityFeed</a></li>
+    <li><a href="iframe_example.html">ActivityFeed iFrame Example</a></li>
+	</ul>
+
+	<div ng-view></div>
+
+	<div>
+		Angular seed app: v<span app-version></span>
+	</div>
+
+</body>
+</html>

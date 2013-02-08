@@ -45,8 +45,16 @@ define([
       if(this.get("datumFields") == undefined){
         this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
       }
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
     },
-
+    fillWithDefaults : function(){
+      if(this.get("datumFields") == undefined){
+        this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
+      }
+    },
     // This is an list of attributes and their default values
     defaults : {
       status : "",
@@ -61,9 +69,9 @@ define([
     },
     
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       dataList : DataList,
-      fields : DatumFields,
+      datumFields : DatumFields,
       session : Session
     },
 
@@ -206,7 +214,7 @@ define([
       var xmlParser = new X2JS();
       window.text = text;
       var jsonObj = xmlParser.xml_str2json( text );
-      OPrime.debug(jsonObj);
+      if (OPrime.debugMode) OPrime.debug(jsonObj);
        
       //add the header to the session
 //    HEADER can be put in the session and in the datalist
@@ -289,7 +297,7 @@ define([
               matrix[annotation][annotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].ALIGNABLE_ANNOTATION[annotationinfo[cell].elanALIGNABLE_ANNOTATION];         
             }
           }catch(e){
-            OPrime.debug("TIER "+l+" doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            if (OPrime.debugMode) OPrime.debug("TIER "+l+" doesnt seem to have a ALIGNABLE_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve ALIGNABLE_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
           
           try{
@@ -297,7 +305,7 @@ define([
               matrix[annotation][refannotationinfo[cell].FieldDBDatumFieldName] = TIER[l].ANNOTATION[annotation].REF_ANNOTATION[refannotationinfo[cell].elanREF_ANNOTATION];         
             }
           }catch(e){
-            OPrime.debug("TIER "+l+" doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
+            if (OPrime.debugMode) OPrime.debug("TIER "+l+" doesnt seem to have a REF_ANNOTATION object. We don't really knwo waht the elan file format is, or why some lines ahve REF_ANNOTATION and some dont. So we are just skipping them for this datum.");
           }
           
         }
@@ -473,7 +481,7 @@ define([
     readFiles : function(){
       var filedetails = [];
       var files = this.get("files");
-      OPrime.debug(files);
+      if (OPrime.debugMode) OPrime.debug(files);
       for ( var i = 0, f; f = files[i]; i++) {
         filedetails.push( escape(f.name), ' ', f.type
             || ' n/a', ' - ', f.size, ' bytes, last modified: ',
@@ -590,6 +598,8 @@ define([
         blob = file.webkitSlice(start, stop + 1);
       } else if (file.mozSlice) {
         blob = file.mozSlice(start, stop + 1);
+      }else if(file.slice){
+        blob = file.slice(start, stop + 1);
       }
       reader.readAsBinaryString(blob);
 //      reader.readAsText(file);

@@ -2,7 +2,6 @@
 define( [ 
     "backbone", 
     "handlebars",
-    "activity/Activity",
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
@@ -14,7 +13,6 @@ define( [
 ], function(
     Backbone, 
     Handlebars, 
-    Activity,
     Comment,
     Comments,
     CommentReadView,
@@ -40,7 +38,7 @@ define( [
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
+      if (OPrime.debugMode) OPrime.debug("DATALIST EDIT VIEW init: " + this.el);
 
       this.changeViewsOfInternalModels();
       
@@ -91,6 +89,8 @@ define( [
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",
       
+      "change .datum_state_select" : "updateCheckedDatumStates",
+      
       "click .icon-minus-sign" : function(e) {
         e.preventDefault();
         if(this.format == "search"){
@@ -136,6 +136,8 @@ define( [
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
+        var datumWithAllCorpusFieldsToPrintHeader = new Datum({filledWithDefaults : true});
+        datumWithAllCorpusFieldsToPrintHeader.exportAsCSV(true, null, true);
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
       },
@@ -238,8 +240,30 @@ define( [
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
+      /*
+       * This is to get the datum states dropdown information and render "To be checked" as a default. 
+       * If user changes the label to something else, the first item in the dropdown menu will be shown.
+       * TODO test what happens if user changes datum state settings when a datalist is open 
+       */      
+      jsonToRender.datumStates = window.app.get("corpus").get("datumStates").toJSON();
+//      var indexOfToBeChecked = _.pluck(jsonToRender.datumStates, "state").indexOf("To be checked");
+//      if(indexOfToBeChecked == -1){
+//        indexOfToBeChecked = 0;
+//      }
+//      for(var x in jsonToRender.datumStates){
+//        if(x == indexOfToBeChecked){
+//          jsonToRender.datumStates[x].selected = "selected";
+//        }else{
+////          jsonToRender.datumStates[x].selected = "";
+//        }
+//      }
+      /* TODO instead, sort the datum states in the corpus by frequency... and take the top one */
+      jsonToRender.statecolor = jsonToRender.datumStates[0].color;
+      jsonToRender.datumstate = jsonToRender.datumStates[0].state;
+
+      
       if (this.format == "leftSide") {
-        OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT LEFTSIDE render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateSummary(jsonToRender));
@@ -269,7 +293,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else  if (this.format == "fullscreen") {
-        OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT FULLSCREEN render: " + this.el);
 
         this.setElement($("#data-list-fullscreen-header"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
@@ -298,7 +322,7 @@ define( [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "centreWell") {
-        OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT CENTER render: " + this.el);
         
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
@@ -327,11 +351,12 @@ define( [
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }else if (this.format == "search") {
-        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
 
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.searchTemplate(jsonToRender));
-        $("#search-data-list-quickview").addClass("well");
+//        $("#search-data-list-quickview").addClass("well");
+        $("#search-data-list-quickview").show();
 
         window.appView.searchEditView.searchPaginatedDataListDatumsView.renderInElement(
             $("#search-data-list-quickview").find(".search-data-list-paginated-view") );
@@ -358,7 +383,7 @@ define( [
         //No add comment button
         
       }else if (this.format == "search-minimized") {
-        OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT SEARCH render: " + this.el);
         
         this.setElement($("#search-data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -369,14 +394,14 @@ define( [
 
           
         }catch(e){
-          OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
+          if (OPrime.debugMode) OPrime.debug("There was a problem minimizing the search datums view, probably it doesnt exist yet. ",e);
         }
 
         //localization of the minimized data list icons
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }else if (this.format == "import"){
-        OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT IMPORT render: " + this.el);
 
         this.setElement($("#import-data-list-header"));
         $(this.el).html(this.importTemplate(jsonToRender));
@@ -396,7 +421,7 @@ define( [
 
         
       } else if (this.format == "minimized") {
-        OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
+        if (OPrime.debugMode) OPrime.debug("DATALIST EDIT MINIMIZED render: " + this.el);
 
         this.setElement($("#data-list-quickview-header"));
         $(this.el).html(this.templateMinimized(jsonToRender));
@@ -405,7 +430,7 @@ define( [
         $(this.el).find(".locale_Show_Datalist").attr("title", Locale.get("locale_Show_Datalist"));
 
       }else{
-        OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
+        if (OPrime.debugMode) OPrime.debug("Bug: no format was specified for DataListEditView, nothing was rendered");
       }
       try{
         if (this.format && this.format.indexOf("minimized") == -1){
@@ -463,7 +488,7 @@ define( [
         this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
         appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
       }catch(e){
-        OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }
     },
     resizeSmall : function(e){
@@ -522,7 +547,7 @@ define( [
       });
     },
     
-    saveSearchDataList : function(e, callback){
+    saveSearchDataList : function(e, callback, failurecallback){
       if(e){
         e.stopPropagation();
         e.preventDefault();
@@ -541,7 +566,7 @@ define( [
         searchself.render();
         searchself.model.setAsCurrentDataList(callback);
 //        window.location.href = "#render/true";
-      });
+      }, failurecallback);
 
     },
     saveImportDataList : function(e){
@@ -552,12 +577,33 @@ define( [
       alert("TODO");
     },
    
+    updateCheckedDatumStates : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      var newState = e.target.value;
+//      $(this.el).find(".datum-state-color").find(".datum-state-value").html(newState);
+//      $(this.el).find(".datum-state-color").removeClass("label-warning");
+//      $(this.el).find(".datum-state-color").removeClass("label-imporant");
+//      $(this.el).find(".datum-state-color").removeClass("label-info");
+//      $(this.el).find(".datum-state-color").removeClass("label-success");
+//      $(this.el).find(".datum-state-color").removeClass("label-inverse");
+      
+//      var color = window.app.get("corpus").get("datumStates").models[_.pluck(window.app.get("corpus").get("datumStates").toJSON(), "state").indexOf(newState)].get("color");
+//      var datalisteditself= this;
+//      $(datalisteditself.el).find(".datum-state-color").addClass("label-"+color);
+//      
+//      this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "updateDatumState", newState);
+      return false;
+    },
+    
     /**
      * 
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST EDIT VIEW "+ this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
