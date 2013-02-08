@@ -15,7 +15,7 @@ bash scripts/build_activity_feed.sh
 cd couchapp_minified
 
 couchapp push . https://admin:none@localhost:6984/public-firstcorpus
-#couchapp push . https://public:none@ifielddevs.iriscouch.com/public-firstcorpus
+#couchapp push . https://public:none@corpusdev.lingsync.org/public-firstcorpus
 #couchapp push . https://public:none@corpus.lingsync.org/public-firstcorpus
 
 # Deploy app to the template corpus
@@ -23,7 +23,7 @@ couchapp push . https://admin:none@localhost:6984/new_corpus
 
 # Deploy app to the testing corpuses
 couchapp push . https://admin:none@localhost:6984/ginalocal4-secondcorpus
-#couchapp push . https://devgina:test@ifielddevs.iriscouch.com/devgina-secondcorpus
+#couchapp push . https://devgina:test@corpusdev.lingsync.org/devgina-secondcorpus
 
 # deploy activity feed too
 cd ../couchapp_activities

@@ -674,6 +674,17 @@ define([
       OPrime.debug("Saving the Corpus");
       var self = this;
       var newModel = false;
+      
+      /* Upgrade chrome app user corpora's to v1.38+ */
+      var oldCouchConnection = this.get("couchConnection");
+      if(oldCouchConnection){
+        if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
+          oldCouchConnection.domain  = "corpusdev.lingsync.org";
+          oldCouchConnection.port = "";
+          this.set("couchConnection", oldCouchConnection);
+        }
+      }
+      
       if(!this.id){
         /*
          * If this is a new corpus, and we are not in it's database, ask the server to create the databse and loop until it is created, then save it.
@@ -686,10 +697,14 @@ define([
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
           this.set("pouchname", potentialpouchname) ;
         }
+        /*
+         * TODO this code doesn tmake sense ?
+         */
         if(!this.get("couchConnection")){
           this.get("couchConnection").pouchname = this.get("team").get("username")
           +"-"+this.get("title").replace(/[^a-zA-Z0-9-._~ ]/g,"") ;
         }
+        
         
 
         /*
@@ -1290,7 +1305,7 @@ define([
      * This function takes in a pouchname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more representative datum 
-     * example : https://ifielddevs.iriscouch.com/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
      * 
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
      * 
@@ -1309,10 +1324,7 @@ define([
           return;
         }
         var couchConnection = this.get("couchConnection");
-        var couchurl = couchConnection.protocol+couchConnection.domain;
-        if(couchConnection.port != null){
-          couchurl = couchurl+":"+couchConnection.port;
-        }
+        var couchurl = OPrime.getCouchUrl(couchConnection);
         if(!pouchname){
           pouchname = couchConnection.pouchname;
           /* if the user has overriden the frequent fields, use their preferences */
@@ -1323,22 +1335,13 @@ define([
             return;
           }
         }
-        jsonUrl = couchurl +couchConnection.path+"/"+ pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+        jsonUrl = couchurl + "/_design/pages/_view/get_frequent_fields?group=true";
       }
      
       var self = this;
-      $.ajax({
+      OPrime.makeCORSRequest({
         type : 'GET',
         url : jsonUrl,
-        data : {},
-        beforeSend : function(xhr) {
-          /* Set the request header to say we want json back */
-          xhr.setRequestHeader('Accept', 'application/json');
-        },
-        complete : function(e, f, g) {
-          /* do nothing */
-          OPrime.debug(e, f, g);
-        },
         success : function(serverResults) {
           console.log("serverResults"
               + JSON.stringify(serverResults));

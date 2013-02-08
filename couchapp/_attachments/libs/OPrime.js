@@ -20,6 +20,40 @@ OPrime.touchUrl = "http://localhost:8128/";
  */
 OPrime.pouchUrl = "idb://";
 
+OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
+  if (!couchConnection) {
+    couchConnection = OPrime.defaultCouchConnection();
+    OPrime.debug("Using the apps ccouchConnection", couchConnection);
+  }
+
+  var couchurl = couchConnection.protocol + couchConnection.domain;
+  if (couchConnection.port && couchConnection.port != "443" && couchConnection.port != "80") {
+    couchurl = couchurl + ":" + couchConnection.port;
+  }
+  if(!couchConnection.path){
+    couchConnection.path = "";
+  }
+  couchurl = couchurl + couchConnection.path;
+  if (couchdbcommand === null || couchdbcommand === undefined) {
+    couchurl = couchurl + "/" + couchConnection.pouchname;
+  } else {
+    couchurl = couchurl + couchdbcommand;
+  }
+
+    
+  /* Switch user to the new dev servers if they have the old ones */
+  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g,
+      "corpusdev.lingsync.org");
+
+  /*
+   * For debugging cors #838: Switch to use the corsproxy corpus service instead
+   * of couchdb directly
+   */
+  // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
+  
+  return couchurl;
+};
+
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
 OPrime.debug = function(message, message2, message3, message4) {
@@ -605,6 +639,87 @@ OPrime.useUnsecureCouchDB = function() {
   }
   return false;
 };
+
+/*
+ * Functions for well formed CORS requests
+ */
+OPrime.makeCORSRequest = function(options) {
+  OPrime.debugMode = false;
+  if(!options.method){
+    options.method = options.type || "GET";
+  }
+  if(!options.url){
+    OPrime.bug("There was an error. Please report this.");
+  }
+  if(!options.data){
+    options.data = "";
+  }
+  options.dataToSend = JSON.stringify(options.data).replace(/,/g,"&").replace(/:/g,"=").replace(/"/g,"").replace(/[}{]/g,"");
+
+  if(options.method == "GET" && options.data){
+    options.url = options.url + "?" + options.dataToSend;
+  }
+  /*
+   * Helper function which handles IE
+   */
+  var createCORSRequest = function(method, url){
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+      // XHR for Chrome/Firefox/Opera/Safari.
+      xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+      // XDomainRequest for IE.
+      xhr = new XDomainRequest();
+      xhr.open(method, url);
+    } else {
+      // CORS not supported.
+      xhr = null;
+    }
+    return xhr;
+  };
+  
+  var xhr = createCORSRequest(options.method, options.url);
+  if (!xhr) {
+    alert('CORS not supported, your browser is unable to contact the database.');
+    return;
+  }
+
+//  if(options.method == "POST"){
+    //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type","application/json");
+    xhr.withCredentials = true;
+//  }
+  
+  xhr.onload = function(e,f,g) {
+    var text = xhr.responseText;
+    OPrime.debug('Response from CORS request to ' + options.url + ': ' + text);
+    if(typeof options.success == "function"){
+      if(text){
+        options.success(JSON.parse(text));
+      }else{
+        OPrime.bug("There was no content in the server's response text. Please report this.");
+        options.error(e,f,g);
+      }
+    }
+    OPrime.debugMode = false;
+  };
+
+  xhr.onerror = function(e,f,g) {
+    OPrime.debug(e,f,g);
+    OPrime.bug('There was an error making the CORS request to '+options.url+ " the app will not function normally. Please report this.");
+    if(typeof options.error == "function"){
+      options.error(e,f,g);
+    }
+  };
+  if (options.method == "POST") {
+    xhr.send(JSON.stringify(options.data));
+  } else {
+    xhr.send();
+  }
+  
+};
+
+
 
 OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
     readycallback, failcallback) {

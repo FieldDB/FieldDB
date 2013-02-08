@@ -633,11 +633,7 @@ define( [
       
       /* ask the corpus to update its frequent datum fields given the new datum */
       var couchConnection = window.app.get("corpus").get("couchConnection");
-      var couchurl = couchConnection.protocol+couchConnection.domain;
-      if(couchConnection.port != null){
-        couchurl = couchurl+":"+couchConnection.port;
-      }
-      couchurl = couchurl +couchConnection.path+"/"+ couchConnection.pouchname+ "/_design/pages/_view/get_frequent_fields?group=true";
+      var couchurl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/get_frequent_fields?group=true";
       window.app.get("corpus").getFrequentDatumFields(couchurl);
     
       
