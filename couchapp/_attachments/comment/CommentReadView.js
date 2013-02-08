@@ -30,8 +30,8 @@ define([
      * Events that the CommentReadView is listening to and their handlers.
      */
     events : {
-//    "click .edit-comment" : "showCommentEdit",
-//    "click .delete-comment" : "deleteComment",
+//    "click .edit-comment-button" : "showCommentEdit",
+//    "click .remove-comment-button" : "removeComment",
     },
 
     /**
@@ -57,7 +57,7 @@ define([
 //        need to go to app router? 
 //    },
     
-//    deleteComment : function(){
+//    reomveComment : function(){
 //  
 //    },
     

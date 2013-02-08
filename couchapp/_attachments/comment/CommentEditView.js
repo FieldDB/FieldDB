@@ -30,7 +30,8 @@ define([
      * Events that the CommentEditView is listening to and their handlers.
      */
     events : {
-      "blur .comment-new-text" : "updateComment"
+      "blur .comment-new-text" : "updateComment", 
+//      "click .remove-comment-button" : "removeComment"
     },
 
     /**
