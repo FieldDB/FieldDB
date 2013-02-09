@@ -480,7 +480,7 @@ define([
     	var result = "\n \\begin{exe} \n \\ex \[";
     	//IGT case:
     	if(this.datumIsInterlinearGlossText()){
-    		/* find the index of the key pieces for an IGT */
+    		/* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
     		 utteranceIndex = fieldLabels.indexOf("utterance");
     		if(utteranceIndex >= 0){
     			 utterance = fields[utteranceIndex];
@@ -505,13 +505,14 @@ define([
     			fieldLabels.splice(translationIndex,1);
     			fields.splice(translationIndex,1);
     		}
-    		
+    		//print the main IGT, escaping special latex chars
     		result = result + this.escapeLatexChars(fields[0]) + "\]\{" +  this.escapeLatexChars(utterance)
     			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
     			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
     			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
     			"\n\\label\{\}";
     	}
+    	//remove any empty fields from our arrays
     	for(i=fields.length-1;i>=0;i--){
     		if(!fields[i]){
     			fields.splice(i,1);
@@ -519,24 +520,47 @@ define([
     		}
     		
     	}
+    	/*throughout this next section, print frequent fields and infrequent ones differently
+    	frequent fields get latex'd as items in a description and infrequent ones are the same,
+    	but commented out.*/
     	if(fields && (fields.length>0)){
-    		result = result + "\n \\begin\{description\}";
+    		var numInfrequent = 0;
     		for (var field in fields){
-    			if(fields[field]){
+    			if(frequentFields.indexOf(fieldLabels[field])>=0){
+    				break;
+    			}
+    			numInfrequent++;
+    		}
+    		if(numInfrequent!=fieldLabels.length){
+    			result = result + "\n \\begin\{description\}";
+    		}else{
+    			result = result + "\n% \\begin\{description\}";
+    		}
+    		for (var field in fields){
+    			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
     				result = result
     				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
     				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    			} else if(fields[field]){
+    				result = result
+    				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			}
     		}
-    		result = result + "\n \\end\{description\}";
+    		if(numInfrequent!=fieldLabels.length){
+    			result = result + "\n \\end\{description\}";
+    		}else{
+    			result = result + "\n% \\end\{description\}";
+    		}
+
     	}
     	result = result + "\n\\end{exe}\n\n";
-    	
+
     	return result;
     },
     
     latexitDataList : function(showInExportModal){
-    	//printing? this version keeps previously shown latex'd data (best for datalists)
+    	//this version prints new data as well as previously shown latex'd data (best for datalists)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
     		$("#export-type-description").html(" as LaTeX (GB4E)");
@@ -546,7 +570,7 @@ define([
     },
     
     latexitDatum : function(showInExportModal){
-    	//this version deletes previously shown latex'd data (best for datums)
+    	//this version prints new data and deletes previously shown latex'd data (best for datums)
     	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
     		$("#export-type-description").html(" as LaTeX (GB4E)");
