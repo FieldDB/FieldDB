@@ -366,6 +366,12 @@ define([
     matchesSingleCriteria : function(objectToSearchThrough, criteria) {
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
+      var negate = false;
+      if (label.indexOf("!") == 0)
+      {
+    	  label = label.replace(/^!/,"");
+    	  negate  = true;
+      }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
       if(label == "judgement" && value.toLowerCase() == "grammatical"){
@@ -376,7 +382,17 @@ define([
 //      if(!label || !value){
 //        return false;
 //      }
-      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+      
+      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+
+      
+      if (negate)
+    	  {
+    	  	searchResult = !searchResult;
+    	  }
+      
+      
+      return  searchResult;
     },
     
     /**
