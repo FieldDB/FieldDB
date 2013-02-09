@@ -92,6 +92,9 @@ define( [
 
       "click .icon-book" :"showReadonly",
       
+//      Issue #797
+//      "click .trash-button" : trash,
+        
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
       "click .save-import-datalist" : "saveImportDataList",

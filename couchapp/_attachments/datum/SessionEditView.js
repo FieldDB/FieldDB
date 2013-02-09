@@ -58,6 +58,9 @@ define([
     events : {
       "click .btn-save-session" : "updatePouch",
       
+//      Issue#797
+//      "click .trash-button" : trash, 
+      
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {
         if(e){
