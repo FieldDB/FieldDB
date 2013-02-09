@@ -18,7 +18,8 @@ define("lexicon/LexiconNodes",
        * @constructs
        * 
        */
-    model : LexiconNode,
+      internalModels : LexiconNode,
+      model : LexiconNode,
     /*
      * if want to do versioning on nodes, or if we want to do something
      * special with all the similar nodes. most likely this will be
@@ -55,7 +56,7 @@ define("lexicon/LexiconNodes",
               //TODO do some correction logic here if the user has corrected this node?
             }
             //put the new models info into the existing member of the collection
-            OPrime.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
+            if (OPrime.debugMode) OPrime.debug("Updating ", already[0].toJSON(), " to ", model.toJSON());
             already[0].set(model.toJSON());
             return; //don't throw error, just happily return 
 //            throw new Error(["Can't add the same model to a set twice", already.id]);

@@ -18,7 +18,7 @@ define([
      * @constructs
      */
     initialize : function() {
-      OPrime.debug("ACTIVITY init: ");
+      if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if(!this.get("user")) {
         this.set("user", window.app.get("authentication").get("userPublic"));
@@ -37,6 +37,14 @@ define([
 //        this.saveAndInterConnectInApp();
 //      }
     },
+    /**
+     * backbone-couchdb adaptor set up
+     */
+    
+    // The couchdb-connector is capable of mapping the url scheme
+    // proposed by the authors of Backbone to documents in your database,
+    // so that you don't have to change existing apps when you switch the sync-strategy
+    url : "/activities",
     
     defaults : {
 //      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
@@ -74,6 +82,14 @@ define([
         }
       }
       
+      
+      if(OPrime.isBackboneCouchDBApp()){
+        if(typeof callback == "function"){
+          callback();
+        }
+        return;
+      }
+      
       if(this.pouch == undefined){
         this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
       }
@@ -94,10 +110,10 @@ define([
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(activsuccesscallback, activfailurecallback){
-      OPrime.debug("Saving the Activity");
+      if (OPrime.debugMode) OPrime.debug("Saving the Activity");
       var self = this;
       if(! this.isNew()){
-        OPrime.debug('Activity doesnt need to be saved.');
+        if (OPrime.debugMode) OPrime.debug('Activity doesnt need to be saved.');
         if(typeof activsuccesscallback == "function"){
           activsuccesscallback();
         }
@@ -107,7 +123,7 @@ define([
       this.changePouch(null, function(){
         self.save(null, {
           success : function(model, response) {
-            OPrime.debug('Activity save success');
+            if (OPrime.debugMode) OPrime.debug('Activity save success');
 
             if(typeof activsuccesscallback == "function"){
               activsuccesscallback();

@@ -21,7 +21,6 @@ define([
      * @property {String} lastname The user's last name.
      * @property {Array} teams This is a list of teams a user belongs to. 
      * @property {Array} sessionHistory 
-     * @property {Array} activityHistory 
      * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)   
      *
      * @description The initialize function probably checks to see if the user is existing or new and creates a new account if it is new. 
@@ -30,22 +29,26 @@ define([
      * @constructs
      */
     initialize: function(attributes) {
-      OPrime.debug("USER init");
+      if (OPrime.debugMode) OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
       
+      if(this.get("filledWithDefaults")){
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
+      }
+      this.bind("change", this.checkPrefsChanged, this);
+    },
+    fillWithDefaults : function(){
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
-        this.set("prefs", new UserPreference());
+        this.set("prefs", new UserPreference({filledWithDefaults : true }));
       }
       
       // If there is no hotkeys, create a new one
       if (!this.get("hotkeys")) {
-        this.set("hotkeys", new HotKey());//TODO this needs to become plural
+        this.set("hotkeys", new HotKey({filledWithDefaults : true }));//TODO this needs to become plural when hotkeys get implemented
       }
-      
-      this.bind("change", this.checkPrefsChanged, this);
     },
-    
     defaults : {
       // Defaults from UserGeneric
       username : "",

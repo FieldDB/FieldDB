@@ -17,10 +17,14 @@ var UpdatingCollectionView = Backbone.View.extend({
 
       this._childViews = [];
 
-      this.collection.each(this.add);
+      if(this.collection && this.collection.each){
+        this.collection.each(this.add);
+        this.collection.bind('add', this.add);
+        this.collection.bind('remove', this.remove);
+      }else{
+        if (OPrime.debugMode) OPrime.debug("The collection was not a backbone collection...");
+      }
 
-      this.collection.bind('add', this.add);
-      this.collection.bind('remove', this.remove);
     },
     
     tagName: "ul",

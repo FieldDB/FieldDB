@@ -46,12 +46,12 @@ define([
     // This is the constructor. It is called whenever you make a new
     // User.
     initialize : function() {
-      OPrime.debug("USERGENERIC init");
+      if (OPrime.debugMode) OPrime.debug("USERGENERIC init");
 
     },
       
     // Internal models: used by the parse function
-    model : {
+    internalModels : {
       prefs : UserPreference,
       permissions : Permission, //TODO this needs to become plural
       hotkeys : HotKey, //TODO this needs to become plural

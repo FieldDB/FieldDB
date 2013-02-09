@@ -112,7 +112,7 @@ define([
         
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getAllIdsByDate(function(rows) {
+      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
@@ -134,12 +134,17 @@ define([
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
               if (rows[rows.length - i - 1]) {
                 var m = rows[rows.length - i - 1];
-                //Only add datum objects to the container
-                if(m.value.jsonType == "Datum"){
+                var value = m;
+                /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
+                if(!OPrime.isBackboneCouchDBApp()){
+                  value = m.value;
                   var d = new Datum();
-                  d.set(d.parse(m.value));
-                  self.model.add(d);
-                  
+                  d.set(d.parse(value));
+                  value = d;
+                }
+                //Only add datum objects to the container
+                if(value.jsonType == "Datum"){
+                  self.model.add(value);
                 }
               }
             }
