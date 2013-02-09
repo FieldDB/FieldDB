@@ -98,7 +98,7 @@ define([
       },
       /* Menu */
       "click .LaTeX" : function(){
-        this.model.laTeXiT(true);
+        this.model.latexitDatum(true);
         $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
