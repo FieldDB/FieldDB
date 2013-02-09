@@ -508,22 +508,27 @@ define([
     		result = result + fields[0] + "\]\{" +  utterance
     			+ "\n \\gll " + morphemes + "\\\\"
     			+ "\n " + gloss + "\\\\"
-    			+ "\n \\trans " + translation + "\}";
+    			+ "\n \\trans " + translation + "\}\\label\{"
+    			+ utterance.substring(0,9) + "\}";
     	}
-    	if(fields)
-    		result = result + "\\begin\{description\} \n";
-    	for (var field in fields){
-    		if(fields[field]){
-    		result = result
-    		+ "\n \\item\[\\sc\{" + fieldLabels[field] + "\}\] " + fields[field] ;
+    	for(i=fields.length-1;i>=0;i--){
+    		if(!fields[i]){
+    			fields.splice(i,1);
+    			fieldLabels.splice(i,1);
     		}
+    		
     	}
-    	result = result + "\\end\{description\} \n";
-    	result = result
-//  	+ "\n\t \\gll " + morphemes + " \\\\"
-//  	+ "\n\t" + gloss + " \\\\"
-//  	+ "\n\t\\trans `" + translation + "'"
-    	+ "\n\\end{exe}\n\n";
+    	if(fields && (fields.length>0)){
+    		result = result + "\n \\begin\{description\}";
+    		for (var field in fields){
+    			if(fields[field]){
+    				result = result
+    				+ "\n \\item\[\\sc\{" + fieldLabels[field] + "\}\] " + fields[field] ;
+    			}
+    		}
+    		result = result + "\n \\end\{description\} \n";
+    	}
+    	result = result + "\n\\end{exe}\n\n";
     	if (showInExportModal != null) {
     		$("#export-type-description").html(" as LaTeX (GB4E)");
     		$("#export-text-area").val($("#export-text-area").val() + result);
