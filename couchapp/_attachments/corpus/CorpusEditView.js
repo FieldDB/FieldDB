@@ -163,6 +163,9 @@ define([
       "blur .corpus-description-input" : "updateDescription",
       "blur .public-or-private" : "updatePublicOrPrivate",
       "click .save-corpus" : "updatePouch",
+//      Issue #797
+//      Only Admin users can trash corpus 
+//      "click .trash-button" : "trash" 
       
     },
 

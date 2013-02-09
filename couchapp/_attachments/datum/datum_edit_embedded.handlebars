@@ -1,9 +1,15 @@
 <div class="pull-right">
-	<button class="btn btn-success save-datum locale_Save pull-right" value="Save"></button><br/>
-	<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
-	<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
-  
+	 <!-- Issue #797 -->
+	<button class="btn btn-danger delete-button">
+		<i class="icon-trash "></i>
+	</button>
+	<button class="btn btn-success save-datum locale_Save"
+		value="Save"></button>
 </div>
+
+<span class="last-modified">{{dateModified}}</span><i class=" icon-save "></i><br/>
+<span class="date-created">{{dateEntered}}</span><i class=" icon-time"></i><br/>
+
 <!-- list for the fields -->
 <ul class="datum_fields_ul unstyled"></ul>
 <a  href="#" class= "locale_See_Fields" rel="tooltip" >

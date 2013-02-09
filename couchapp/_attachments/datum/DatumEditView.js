@@ -160,6 +160,9 @@ define([
       "blur .morphemes .datum_field_input" : "morphemesBlur",
       "click .save-datum" : "saveButton",
 
+      // Issue #797
+      // "click .trash-button" : "",
+
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {
         if(e){
