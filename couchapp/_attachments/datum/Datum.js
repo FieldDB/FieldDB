@@ -505,11 +505,12 @@ define([
     			fieldLabels.splice(translationIndex,1);
     			fields.splice(translationIndex,1);
     		}
-    		result = result + fields[0] + "\]\{" +  utterance
-    			+ "\n \\gll " + morphemes + "\\\\"
-    			+ "\n " + gloss + "\\\\"
-    			+ "\n \\trans " + translation + "\}\\label\{"
-    			+ utterance.substring(0,9) + "\}";
+    		
+    		result = result + this.escapeLatexChars(fields[0]) + "\]\{" +  this.escapeLatexChars(utterance)
+    			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
+    			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
+    			"\n\\label\{\}";
     	}
     	for(i=fields.length-1;i>=0;i--){
     		if(!fields[i]){
@@ -523,27 +524,55 @@ define([
     		for (var field in fields){
     			if(fields[field]){
     				result = result
-    				+ "\n \\item\[\\sc\{" + fieldLabels[field] + "\}\] " + fields[field] ;
+    				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
     			}
     		}
-    		result = result + "\n \\end\{description\} \n";
+    		result = result + "\n \\end\{description\}";
     	}
     	result = result + "\n\\end{exe}\n\n";
+    	
+    	return result;
+    },
+    
+    latexitDataList : function(showInExportModal){
+    	//printing? this version keeps previously shown latex'd data (best for datalists)
+    	var result = this.laTeXiT(showInExportModal);
     	if (showInExportModal != null) {
     		$("#export-type-description").html(" as LaTeX (GB4E)");
     		$("#export-text-area").val($("#export-text-area").val() + result);
     	}
+    	return result;
+    },
+    
+    latexitDatum : function(showInExportModal){
+    	//this version deletes previously shown latex'd data (best for datums)
+    	var result = this.laTeXiT(showInExportModal);
+    	if (showInExportModal != null) {
+    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-text-area").val(result);
+    	}
+    	return result;
+    },
 
-//  	utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
-//      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-//      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-//      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      
-      /* 	result = "\n \\begin{exe} "
-            + "\n \\ex " + fields[1] ; */
-      
-      
-      return result;
+    escapeLatexChars : function(input){
+    	var result = input;
+    	//curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
+    	result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
+    	result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
+    	result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
+    	result = result.replace(/#/g,"\\#");
+    	result = result.replace(/\$/g,"\\$");
+    	result = result.replace(/%/g,"\\%");
+    	result = result.replace(/&/g,"\\&");
+    	result = result.replace(/_/g,"\\_");
+    	result = result.replace(/{/g,"\\{");
+    	result = result.replace(/}/g,"\\}");
+    	result = result.replace(/</g,"\\textless");
+    	result = result.replace(/>/g,"\\textgreater");
+    	
+    	result = result.replace(/CURLYBRACES/g,"{}");
+    	return result;
     },
     
     datumIsInterlinearGlossText : function(fieldLabels) {

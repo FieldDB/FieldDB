@@ -127,15 +127,15 @@ define([
       }
     },
 
-    applyFunctionToAllIds : function(datumIdsToApplyFunction, functionToAppy, functionArguments){
+    applyFunctionToAllIds : function(datumIdsToApplyFunction, functionToApply, functionArguments){
       if(!datumIdsToApplyFunction){
         datumIdsToApplyFunction = this.get("datumIds");
       }
       if(datumIdsToApplyFunction.length == 0){
         datumIdsToApplyFunction = this.get("datumIds");
       }
-      if(!functionToAppy){
-        functionToAppy = "laTeXiT";
+      if(!functionToApply){
+        functionToApply = "latexitDataList";
       }
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
@@ -152,7 +152,7 @@ define([
         obj.id  = datumIdsToApplyFunction[id];
           obj.fetch({
             success : function(model, response) {
-              model[functionToAppy](functionArguments);
+              model[functionToApply](functionArguments);
             } 
         });
         
