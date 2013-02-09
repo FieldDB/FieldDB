@@ -25,50 +25,6 @@
 
 
 
-					<!--  Customize dropdown -->
-					<li class="dropdown"><a id="customize_dropdown_trigger"
-						href="#" role="button" class="dropdown-toggle"
-						data-toggle="dropdown"><i class="icon-cog icon-white"></i>
-							Customize <b class="caret"></b></a>
-						<ul class="dropdown-menu" role="menu"
-							aria-labelledby="customize_dropdown_trigger">
-
-
-							<li><a tabindex="-1" data-toggle="modal"
-								href="#user-preferences-modal"><i class=" icon-cog"></i> <span
-									class="locale_User_Settings"></span> </a></li>
-							<li><a tabindex="-1" data-toggle="modal"
-								href="#hotkey-settings-modal"><i class=" icon-hdd"></i> <span
-									class="locale_Keyboard_Shortcuts"></span></a></li>
-							<li><a tabindex="-1" class="corpus-settings"><i
-									class=" icon-cogs"></i> <span class="locale_Corpus_Settings"></span></a></li>
-							<li class="divider"></li>
-
-							<li><a tabindex="-1" href="#help/illustratedguide"><i
-									class="icon-gift"></i> New! Quick Start Illustrated Guide</a></li>
-							<li><a tabindex="-1" href="http://fieldlinguist.com"
-								target="_blank"><i class="icon-film"></i> Help Videos and
-									User Guide</a></li>
-							<li><a tabindex="-1"
-								href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ"
-								target="_blank"><i class=" icon-beaker"></i> Bug
-									Report/Contact Us</a></li>
-							<li><a tabindex="-1"
-								href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed"
-								target="_blank"><i class=" icon-github"></i> OpenSource v<span
-									class="fielddb-version"></span></a></li>
-							<li class="power-users-link"><a tabindex="-1"
-                data-toggle="modal" href="#terminal-modal"><i
-                  class=" icon-magic"></i> <span
-                  class="locale_Terminal_Power_Users"></span> </a></li>
-
-							<!-- <li class="divider"></li>
-							<li><a tabindex="-1" href="#"><i class="icon-trash"></i>
-									Clear all customization</a></li> -->
-
-
-						</ul></li>
-
 
 					<!-- Notification -->
 					<li class="dropdown"><a id="notification_dropdown_trigger"
@@ -76,36 +32,37 @@
 						data-toggle="dropdown"><i
 							class="icon-exclamation-sign icon-white"></i> Notifications <b
 							class="caret"></b></a>
-						<ul class="dropdown-menu" role="menu"
+						<ul class="dropdown-menu dont_close_notifications_dropdown_if_user_clicks" role="menu"
 							aria-labelledby="notification_dropdown_trigger">
 
 
 
 
-							<li><span class="locale_Need_save"></span><a tabindex="-1"
-								href="#" class="locale_Save_on_this_Computer " rel="tooltip">
-									<i class="icons icon-save save-dashboard icon-white"></i>
+							<!-- 	<li class=""><span class="locale_Need_save"></span><a
+								tabindex="-1" href="#" class="locale_Save_on_this_Computer "
+								rel="tooltip"> <i
+									class="icons icon-save save-dashboard icon-white"></i>
 							</a></li>
 							<li><progress class="unsaved-changes" max="100" value="30">
 								</progress></li>
 
-							<li class="not-a locale_Recent_Changes"></li>
+							<li class="not-a   locale_Recent_Changes"></li>
 
 
-							<li class="divider"></li>
+							<li class="divider "></li>
 
-							<li><span class="locale_Need_sync"></span><a tabindex="-1"
-								href="#" class="locale_Sync_and_Share " rel="tooltip"> <i
+							<li class=""><span class="locale_Need_sync"></span><a
+								tabindex="-1" href="#" class="locale_Sync_and_Share "
+								rel="tooltip"> <i
 									class="icons icon-sitemap  sync-everything icon-white"></i>
 							</a></li>
-							<li><progress class="unsynced-changes" max="100" value="80">
-								</progress></li>
+							<li class=""><progress class="unsynced-changes"
+									max="100" value="80"> </progress></li>
 
-							<li class="not-a locale_Differences_with_the_central_server"></li>
+							<li class="not-a  locale_Differences_with_the_central_server"></li> -->
 
 
-							<li class="divider"></li>
-							<li><a tabindex="-1" href="#"><i class="icon-remove"></i>
+							<li><a tabindex="-1" href="#" class="clear_all_notifications"><i class="icon-remove"></i>
 									Clear all notifications</a></li>
 
 							<li><div id="toast-user-area" class="scrollable">
@@ -127,11 +84,13 @@
 					<li id="auth-menu" class="dropdown"><a href="#"
 						id="user_drop_down_trigger" role="button"
 						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
-						data-toggle="dropdown" rel="tooltip"> <span
-							id="user-quickview"> <i class="icons icon-user icon-white"></i>
-						</span> <b class="caret"></b>
+						data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
+							<button id="login_register_button" class="btn btn-success hide">Login/Register</button>
+							<span id="loggedin_customize_on_auth_dropdown">Customize</span><span id="user-quickview"> <i
+								class="icons icon-user icon-white"></i>
+						</span>
 					</a>
-						<ul class="dropdown-menu" id="authentication-embedded" role="menu"
+						<ul class="dropdown-menu scrollable min_auth_dropdown_size" id="authentication-embedded" role="menu"
 							aria-labelledby="user_drop_down_trigger"></ul></li>
 
 
@@ -150,19 +109,21 @@
 	<div id="dashboard-view" class="row-fluid">
 		<!-- Elements on Lefthand side -->
 		<div class="span3">
-			<div id="corpus-quickview" class="well sidebar-nav"></div>
-			<div id="session-quickview" class="well sidebar-nav"></div>
-			<div id="search-data-list-quickview" class="  span12">
-				<div id="search-data-list-quickview-header" class=" sidebar-nav"></div>
-				<div class=" sidebar-nav ">
-					<ul class="unstyled zebra   search-data-list-paginated-view "></ul>
+			<div class=" span12 hide"></div>
+			<!-- workaround: empty div to set all span12 to line up -->
+			<div id="corpus-quickview" class="well span12"></div>
+			<div id="session-quickview" class="well span12"></div>
+			<div id="search-data-list-quickview" class="well hide span12">
+				<div id="search-data-list-quickview-header" class=" "></div>
+				<div class="  ">
+					<ul class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
 					<div class="pagination-control"></div>
 				</div>
 			</div>
 			<div id="data-list-quickview" class="well span12">
-				<div id="data-list-quickview-header" class=" sidebar-nav"></div>
-				<div class=" sidebar-nav container span12">
-					<ul class="unstyled zebra   current-data-list-paginated-view "></ul>
+				<div id="data-list-quickview-header" class=" "></div>
+				<div class="  container span12">
+					<ul class="unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view "></ul>
 					<div class="pagination-control "></div>
 				</div>
 			</div>
@@ -176,9 +137,9 @@
 					<div class="conversation-text-audio-wrapper">
 						<div class="jp-load-bar" style="width: 960;">
 							<div class="jp-play-bar" style="width: 330;">
-								<i class="icon-gift"></i><strong>New!</strong>'Conversations'
-								will let you have multiple speakers with overlapping speech.
-								Elise is working on this for December...
+								<i class="icon-gift"></i><strong>New!</strong>
+								<h4>'Conversations' will let you have multiple speakers
+									with overlapping speech.</h4>
 							</div>
 						</div>
 					</div>
@@ -187,7 +148,7 @@
 			<div id="data-list-embedded" class="well">
 				<div id="data-list-embedded-header" class="middle "></div>
 				<div>
-					<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+					<ul class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
 					<div class="pagination-control"></div>
 				</div>
 			</div>
@@ -199,18 +160,16 @@
 		<!-- right hand side -->
 		<div class="span3">
 			<div id="insert-unicode" class="well"></div>
-			<div id="activity-feed-user" class="well"></div>
-			<!-- <div class="well">
-				<iframe
-					src="activity/activity_feed.html#/user/lingllama/corpus/cherokee"
-					width="100%" height="400" frameborder="0"></iframe>
-			</div> -->
+			<div class="well">
+				<iframe src="activity/activity_feed.html#/user/{{username}}"
+					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
+			</div>
 
-			<div id="activity-feed-corpus-team" class="well"></div>
-			<!-- <div class="well">
-				<iframe src="activity/activity_feed.html#/user/lingllama"
-					width="100%" height="400" frameborder="0"></iframe>
-			</div> -->
+			<div class="well">
+				<iframe
+					src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
+					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
+			</div>
 		</div>
 		<!--/span-->
 	</div>
@@ -224,8 +183,8 @@
 	<div id="search-fullscreen" class="well "></div>
 	<div id="data-list-fullscreen" class="well row">
 		<div id="data-list-fullscreen-header"></div>
-		<div class=" container span12 ">
-			<ul class="unstyled zebra current-data-list-paginated-view"></ul>
+		<div class="  container span12 ">
+			<ul class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view"></ul>
 			<div class="pagination-control"></div>
 		</div>
 	</div>
@@ -246,16 +205,20 @@
 	<div class="modal-header">
 		<p>
 			<span class="help_count_reason"></span> This help will show <span
-				class="help_count_left"></span> more times.
+				class="help_count_left"></span> more times. <a
+				href="https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit"
+				target="_blank">Click here to open the guide in a new tab</a>
 		</p>
 	</div>
-	<img
-		src="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918">
+	<a
+		href="https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit"
+		target="_blank"> <img
+		src="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918" /></a>
 </div>
 <div id="quick-authenticate-modal" data-backdrop="static"
 	data-keyboard="static" class="modal hide">
 	<div class="modal-header">
-		<h4 class="locale_We_need_to_make_sure_its_you"></h4>
+		<h4><span class="reason_why_we_need_to_make_sure_its_you"></span> <span class="locale_We_need_to_make_sure_its_you"></span></h4>
 	</div>
 	<div class="modal-body">
 		<label class="locale_Password"></label> <input type="password"
@@ -264,5 +227,25 @@
 	<div class="modal-footer">
 		<button class="btn btn-success locale_Yep_its_me"
 			id="quick-authentication-okay-btn"></button>
+	</div>
+</div>
+<div id="login_modal" class="modal hide">
+	<div class="modal-header">
+		<h3 class="locale_Log_In"></h3>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-error hide welcome-screen-alerts"></div>
+		<label class="locale_Username"></label> <input size="16" type="text"
+			class="welcomeusername" value="" /> <label class="locale_Password "></label>
+		<input type="password" size="16" class="welcomepassword" value="" />
+		<label class="locale_authUrl">Server</label> <input type="text"
+			size="16" class="welcomeauthurl" data-provide="typeahead"
+			data-items="4"
+			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn btn-success sync-my-data"> <span
+			class="locale_Log_In"></span>
+		</a>
 	</div>
 </div>

@@ -1,24 +1,24 @@
 define([
     "backbone",
-    "data_list/DataList"
+    "data_list/Conversation"
 ], function(
     Backbone, 
-    DataList
+    Conversation
 ) {
-    var DataLists = Backbone.Collection.extend(
-    /** @lends DataLists.prototype */
+    var Conversations = Backbone.Collection.extend(
+    /** @lends Conversations.prototype */
     {
        /**
-        * @class A collection of DataLists
+        * @class A collection of Conversations
         *
         * @extends Backbone.Collection
         * @constructs
         */
        initialize: function() {
        },
-       
-       model: DataList
+       internalModels : Conversation,
+       model: Conversation
     });
     
-    return DataLists;
+    return Conversations;
 });

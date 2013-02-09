@@ -1,7 +1,14 @@
 var OPrime = OPrime || {};
 
-OPrime.debugMode = true;
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
+OPrime.debugMode = false;
+/*
+ * Android touchdb for OPrime runs on port 8128, so if the app is running on
+ * port 8128 it is likely in a touchdb (either in the android app or in a
+ * browser)
+ */
+OPrime.runFromTouchDBOnAndroidInLocalNetwork = function() {
+  return window.location.port == 8128;
+};
 
 /**
  * The address of the TouchDB-Android database on the Android.
@@ -15,15 +22,22 @@ OPrime.pouchUrl = "idb://";
 
 OPrime.contactUs = "<a href='https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ' target='_blank'>Contact Us</a>";
 
-OPrime.debug = function(message, message2) {
+OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {
     return;
   }
-  if (!message2) {
-    message2 = "";
-  }
   if (this.debugMode) {
-    console.log(message, message2);
+    console.log(message);
+
+    if (message2) {
+      console.log(message2);
+    }
+    if (message3) {
+      console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
+    }
   }
 };
 
@@ -123,7 +137,6 @@ OPrime.makePublisher = function(o) {
   };
 };
 
-
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
@@ -133,22 +146,28 @@ OPrime.makePublisher = function(o) {
  * @param exdays
  */
 OPrime.setCookie = function(c_name, value, exdays) {
-  var exdate = new Date();
-  exdate.setDate(exdate.getDate() + exdays);
-  var c_value = escape(value)
-      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-  document.cookie = c_name + "=" + c_value;
+  if (value) {
+    localStorage.setItem(c_name, value);
+  } else {
+    localStorage.removeItem(c_name);
+  }
+  // var exdate = new Date();
+  // exdate.setDate(exdate.getDate() + exdays);
+  // var c_value = escape(value)
+  // + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  // document.cookie = c_name + "=" + c_value;
 };
 OPrime.getCookie = function(c_name) {
-  var i, x, y, ARRcookies = document.cookie.split(";");
-  for (i = 0; i < ARRcookies.length; i++) {
-    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-    x = x.replace(/^\s+|\s+$/g, "");
-    if (x == c_name) {
-      return unescape(y);
-    }
-  }
+  return localStorage.getItem(c_name);
+  // var i, x, y, ARRcookies = document.cookie.split(";");
+  // for (i = 0; i < ARRcookies.length; i++) {
+  // x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+  // y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+  // x = x.replace(/^\s+|\s+$/g, "");
+  // if (x == c_name) {
+  // return unescape(y);
+  // }
+  // }
 };
 
 OPrime.isAndroidApp = function() {
@@ -159,11 +178,10 @@ OPrime.isAndroidApp = function() {
   return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
 };
 
-
 if (OPrime.isAndroidApp()) {
   var debugOrNot = Android.isD();
   console.log("Setting debug mode to the Android's mode: " + debugOrNot);
-//  OPrime.debugMode = debugOrNot;
+  // OPrime.debugMode = debugOrNot;
 };
 
 OPrime.isAndroid4 = function() {
@@ -177,6 +195,11 @@ OPrime.isChromeApp = function() {
 OPrime.isCouchApp = function() {
   return window.location.href.indexOf("_design/pages") > -1;
 };
+
+OPrime.isTouchDBApp = function() {
+  return window.location.href.indexOf("localhost:8128") > -1;
+};
+
 /**
  * If not running offline on an android or in a chrome extension, assume we are
  * online.
@@ -184,7 +207,7 @@ OPrime.isCouchApp = function() {
  * @returns {Boolean} true if not on offline Android or on a Chrome Extension
  */
 OPrime.onlineOnly = function() {
-  return !this.isAndroidApp() && !this.chromeApp();
+  return !this.isAndroidApp() && !this.isChromeApp();
 };
 
 OPrime.getVersion = function(callback) {
@@ -196,7 +219,6 @@ OPrime.getVersion = function(callback) {
   };
   xmlhttp.send(null);
 };
-
 
 /*
  * JavaScript Pretty Date Copyright (c) 2011 John Resig (ejohn.org) Licensed
@@ -245,16 +267,16 @@ OPrime.prettyTimestamp = function(timestamp) {
 
   if (isNaN(day_diff) || day_diff < 0) {
     return;
-  };
+  }
 
   if (day_diff >= 31) {
-	  return Math.ceil(day_diff / 30) + " months ago";
-  };
-  
+    return Math.ceil(day_diff / 30) + " months ago";
+  }
+
   if (day_diff >= 548) {
-	  return Math.ceil(day_diff / 365) + " years ago";
-  };
-  
+    return Math.ceil(day_diff / 365) + " years ago";
+  }
+
   return day_diff == 0
       && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
           || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
@@ -364,9 +386,9 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
         OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
         OPrime.playingInterval = false; /*
-                                         * workaround for not being able to
-                                         * remove events
-                                         */
+         * workaround for not being able to
+         * remove events
+         */
       }
     });
   }
@@ -535,9 +557,6 @@ OPrime.userEncryptionToken = function() {
   return "topsecretuserencryptiontokenfortestingTODOchangethis";
 };
 
-OPrime.runFromTouchDBOnAndroidInLocalNetwork = true;
-
-
 OPrime.getConnectivityType = function(callingcontextself, callback) {
   this.hub.unsubscribe("connectivityType", null, callingcontextself);
   /* subscribe the caller's functions to the channels */
@@ -570,17 +589,75 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
   }
 };
 OPrime.useUnsecureCouchDB = function() {
-  if (OPrime.isAndroidApp()) {
-    /*
-     * TODO if later when TouchDB has secure databases, we can use a secure
-     * TouchDB, return false
-     */
-    return true;
-  }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork && window.location.origin.indexOf("chrome-extension") != 0) {
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork()) {
     return true;
   }
   return false;
+};
+
+OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady,
+    readycallback, failcallback) {
+  if (readycallback) {
+    OPrime.checkToSeeIfCouchAppIsReadyreadycallback = readycallback;
+  }
+  if (!$) {
+    OPrime.bug("Can't check if DB is ready.");
+    console
+        .warn("Can't check if DB is ready, checkToSeeIfCouchAppIsReady function depends on JQuery at the moment...");
+    return;
+  }
+  $
+      .ajax({
+        type : 'GET',
+        url : urlIsCouchAppReady,
+        data : {},
+        beforeSend : function(xhr) {
+          // alert("before send" + JSON.stringify(xhr));
+          xhr.setRequestHeader('Accept', 'application/json');
+        },
+        complete : function(e, f, g) {
+          console.log(e, f, g);
+          // alert("Completed contacting the server.");
+        },
+        success : function(serverResults) {
+          console.log("serverResults" + JSON.stringify(serverResults));
+          alert("Your database is ready.");
+          if (typeof readycallback == "function") {
+            readycallback();
+          }
+        },// end successful fetch
+        error : function(response) {
+          // alert("Error contacting the server.");
+
+          console.log("error response." + JSON.stringify(response));
+          // alert("error response." + JSON.stringify(response));
+
+          if (response.responseText) {
+            if (response.responseText.indexOf("<html") >= 0) {
+              localStorage.setItem("urlIsCouchAppReady", urlIsCouchAppReady);
+              alert("Your database is ready.");
+              if (typeof OPrime.checkToSeeIfCouchAppIsReadyreadycallback == "function") {
+                OPrime.checkToSeeIfCouchAppIsReadyreadycallback();
+              }
+              // window.location.replace(urlIsCouchAppReady);
+              return;
+            }
+            var error = JSON.parse(response.responseText);
+            if (error.error == "unauthorized") {
+              alert("CouchDB ready but you need to get a session token, this can only happen when you are online.");
+            } else {
+              alert("Waiting for database to be created...");
+              // Loop every 2 sec waiting for the database to load
+            }
+          }
+          window.setTimeout(failcallback, 2000);
+
+          // $("#user-welcome-modal").modal("show");
+
+        },
+        dataType : "json"
+      });
+
 };
 
 /*

@@ -94,6 +94,7 @@ require.config({
   }
 });
 
+
 // Initialization
 require([
     "app/App",
@@ -118,7 +119,7 @@ require([
   loadFreshApp = function(){
 //    document.location.href='lingllama_corpus.html';
 
-    OPrime.debug("Loading fresh app");
+    if (OPrime.debugMode) OPrime.debug("Loading fresh app");
     // Create a UserWelcomeView modal
     var welcomeUserView = new UserWelcomeView();
     welcomeUserView.render();
@@ -179,10 +180,9 @@ require([
       document.location.href='user.html';
       return;
     }else{
-      OPrime.debug("Loading app from localStorage");
-      var pouchname = null;
-      var couchConnection = null;
-      if(localStorage.getItem("mostRecentCouchConnection") == "undefined" || localStorage.getItem("mostRecentCouchConnection") == undefined || localStorage.getItem("mostRecentCouchConnection") ==  null){
+      if (OPrime.debugMode) OPrime.debug("Loading app from localStorage");
+      var couchConnection = appjson.couchConnection;
+      if(couchConnection == "undefined" || couchConnection == undefined || couchConnection ==  null){
 //        alert("We can't accurately guess which corpus to load.");
         document.location.href='user.html';
         return;
@@ -193,7 +193,7 @@ require([
           document.location.href='index.html';
           return;
         }else{
-          a = new App();
+          a = new App({filledWithDefaults: true});
           window.app = a;
           var auth = a.get("authentication");
           var u = localStorage.getItem("encryptedUser");

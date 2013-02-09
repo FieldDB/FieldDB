@@ -3,8 +3,8 @@
 echo ""
 echo ""
 echo "Put the Chrome app source into non debug mode to not see the debugging output. This makes the app faster."
-sed 's/Utils.debugMode *= *true/Utils.debugMode = false/' couchapp/_attachments/libs/Utils.js  > output
-mv output couchapp/_attachments/libs/Utils.js
+sed 's/OPrime.debugMode *= *true/OPrime.debugMode = false/' couchapp/_attachments/libs/OPrime.js  > output
+mv output couchapp/_attachments/libs/OPrime.js
 
 
 echo ""
@@ -23,7 +23,14 @@ mv output couchapp/_attachments/lingllama_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/user_dashboard.js  > output
 mv output couchapp/_attachments/user_dashboard.js
 sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/welcome_dashboard.js  > output
+
 mv output couchapp/_attachments/welcome_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/corpus_online_dashboard.js  > output
+mv output couchapp/_attachments/corpus_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/user_online_dashboard.js  > output
+mv output couchapp/_attachments/user_online_dashboard.js
+sed 's/webservicesconfig_[^,]*/webservicesconfig_production"/' couchapp/_attachments/welcome_online_dashboard.js  > output
+mv output couchapp/_attachments/welcome_online_dashboard.js
 
 echo ""
 echo ""
