@@ -321,7 +321,7 @@ define([
       if(queryString.trim() == ""){
         thisDatumIsIn = true;
       }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
+          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
             thisDatumIsIn = true;
           }
       }else{
@@ -376,7 +376,7 @@ define([
 //      if(!label || !value){
 //        return false;
 //      }
-      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value.toLowerCase()) >= 0);
+      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
     },
     
     /**
