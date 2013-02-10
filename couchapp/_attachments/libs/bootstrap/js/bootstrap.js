@@ -786,7 +786,20 @@
           that.$element
             .addClass('in')
             .attr('aria-hidden', false)
-
+//          that.$element.css({
+//            'width' : function() {
+//              return ($(document).width() * .8 ) + 'px' + "!important";
+//            },
+//            'height' : function() {
+//              return ($(document).height() * .8 ) + 'px' + "!important";
+//            },
+//            'margin-left' : function() {
+//              return -(that.$element.width() * .5 )+ "!important";
+//            },
+//            'margin-top' : function() {
+//              return -(that.$element.height() * .5 + "!important");
+//            }
+//          });
           that.enforceFocus()
 
           transition ?

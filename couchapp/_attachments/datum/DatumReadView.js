@@ -96,7 +96,7 @@ define([
       },
       /* Menu */
       "click .LaTeX" : function(){
-        this.model.laTeXiT(true);
+        this.model.latexitDatum(true);
         $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
@@ -210,7 +210,25 @@ define([
         var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
         var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
         
+        var additionalFields = [];
+        additionalFields.push({
+          label : "consultants",
+          mask : "Seberina"
+        },{
+          label : "context",
+          mask : "Said after a heavy rain storm."
+        });
+        
+//        var searchparams = app.get("search").get("searchKeywords");
+//        for (field in sessionFields){
+//          if(searchparams.indexOf(sessionFiels[field]) >=0){
+////            show it.
+//          }
+//        }
+
         var jsonToRender = {};
+        jsonToRender.additionalFields = additionalFields;
+
         try{
           var utteranceArray = utterance.split(' ');
           var glossArray = gloss.split(' ');

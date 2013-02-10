@@ -1,45 +1,57 @@
 <div class="modal-header">
-	<h1 class = "locale_User_Settings"></h1>
+	<button class="btn locale_Close pull-right" data-dismiss="modal"></button>
+	<h1 class="locale_User_Settings"></h1>
 </div>
 <div class="modal-body">
-  <p class="locale_user_settings_instructions">This is where you can
-		adjust settings that are mostly for you as a user, that aren't really
-		tied to a corpus. Your settings are backed up when you authenticate
-		with the server (this usually happens when the "I need to make sure its you" box pops up) so that you can get your preferences if you log in on
-		another device.</p>
+	<div class="border-bottom">
+		<p class="locale_user_settings_instructions">This is where you can
+			adjust settings that are mostly for you as a user, settings which aren't really
+			tied to a corpus. Your settings are backed up when you authenticate
+			with the server (this usually happens when the "I need to make sure
+			its you" box pops up) so that you can get your preferences if you log
+			in on another device.</p>
+	</div>
 
-  <div class="border-bottom">
-		<h5 class = "locale_Skin"> </h5>
-		<p class="locale_skin_instructions">You can use a combinations of background colors or pictures,
-			and transparency to create the entire range between high contrast, to low contrast, low eyestrain screens
+	<div class="border-bottom">
+		<h5 class="locale_Skin"></h5>
+		<p class="locale_skin_instructions">You can use a combinations of
+			background colors or pictures, and transparency to create the entire
+			range between high contrast, to low contrast, low eyestrain screens
 			to make it easier on your eyes to enter data for long periods of
 			time. You can also keep the background picture on random if you feel
 			it might help you stop procrastinating and enter your data.</p>
 		<span class="user-pref-skin-filename">{{skin}}</span>
 		<div class="control-group">
 			<button class="preference btn change-skin locale_Change_Background"></button>
-			<button class="preference btn randomize-backgound locale_Background_on_Random">	</button>
-			<button class="preference btn transparent-dashboard locale_Transparent_Dashboard">		</button>
+			<button
+				class="preference btn randomize-backgound locale_Background_on_Random">
+			</button>
+			<button
+				class="preference btn transparent-dashboard locale_Transparent_Dashboard">
+			</button>
+			<button
+        class="preference btn high-contrast-dashboard locale_High_Contrast_Dashboard">High Contrast
+      </button>
 		</div>
 	</div>
 	<div class="border-bottom">
-		<h5 class ="locale_Number_Datum"></h5>
-		<p class="locale_number_datum_instructions">You can change the number
-			of datum in the data entry area of your dashboard, if you like to
-			enter data surrounded by context (ie see the datum that you just
+		<h5 class="locale_Number_Datum"></h5>
+		<p class="locale_number_datum_instructions">You can change the
+			number of datum in the data entry area of your dashboard, if you like
+			to enter data surrounded by context (ie see the datum that you just
 			entered as you would in Word or Excel), you can set it to a high
 			number (5). This can be confusing because the datum are inserted at
 			the top, not at the bottom of the data entry area (if this annoys
-			you, let us know using the bug form, it probably woudlnt take long to make it into an option.)
-			</p>
-			<p> You can
-			also have the app show only one datum, and even make that datum full
-			screen using the arrows in its widget (if you like to enter data like
-			you would in FileMaker Pro). A pretty good middle ground is 2 datum visible. With two datum 
-			you can see when you are creating minimal pairs, or creating new datum  
-			to be checked with a language consultant, based on an existing datum.</p>
-  <label class ="locale_Number_Datum" ></label>
-		<select class="num_datum_dropdown">
+			you, let us know using the bug form, it probably woudlnt take long to
+			make it into an option.)</p>
+		<p>You can also have the app show only one datum, and even make
+			that datum full screen using the arrows in its widget (if you like to
+			enter data like you would in FileMaker Pro). A pretty good middle
+			ground is 2 datum visible. With two datum you can see when you are
+			creating minimal pairs, or creating new datum to be checked with a
+			language consultant, based on an existing datum.</p>
+		<label class="locale_Number_Datum"></label> <select
+			class="num_datum_dropdown">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3" selected>3</option>
@@ -48,24 +60,26 @@
 		</select>
 	</div>
 	<div class="border-bottom">
-    <h5 class ="locale_Font_Size">Font Size</h5>
+		<h5 class="locale_Font_Size">Font Size</h5>
 		<p class="locale_font_size_instructions">It is very easy to adjust
 			the font size in LingSync, you can use the standard browser features
 			(this is one reason we wanted to make the app in a browser).</p>
 		<h5>Larger Font</h5>
 		<ul>
-			<li>Mac: ⌘+ (Command - Shift - +) </li>
-			<li>Linux/Windows: Control - Shift - + </li>
-			<li>Android: On most Androids you can double tap the screen to zoom in and out, let us know if you figure it out.</li>
-			<li>iPad/iPhone: let us know if you figure it out</li>
+			<li>Mac: ⌘+ (Command - Shift - +)</li>
+			<li>Linux/Windows: Control - Shift - +</li>
+			<li>Android: On most Androids you can double tap the screen to
+				zoom in and out, or use your fingers to pinch zoom in and out.</li>
+			<li>iPad/iPhone: use your fingers to pinch zoom in and out as you would on any other app.</li>
 		</ul>
 		<h5>Smaller Font</h5>
-    <ul>
-      <li>Mac: ⌘- (Command -) </li>
-      <li>Linux/Windows: Control -  </li>
-      <li>Android: On most Androids you can double tap the screen to zoom in and out, let us know if you figure it out.</li>
-      <li>iPad/iPhone: let us know if you figure it out</li>
-    </ul>
+		<ul>
+			<li>Mac: ⌘- (Command -)</li>
+			<li>Linux/Windows: Control -</li>
+			<li>Android: On most Androids you can double tap the screen to
+				zoom in and out, or use your fingers to pinch zoom in and out.</li>
+			<li>iPad/iPhone: use your fingers to pinch zoom in and out as you would on any other app.</li>
+		</ul>
 	</div>
 
 	<div class="border-bottom">
@@ -91,7 +105,3 @@
 	</div>
 
 </div>
-<div class="modal-footer">
-	<a href="#" class="btn locale_Close" data-dismiss="modal"></a>
-</div>
-
