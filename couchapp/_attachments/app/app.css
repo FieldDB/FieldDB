@@ -560,6 +560,18 @@ line.link {
 	height: 435px;
 }
 
+/* in the App we override the modals dimensions ot fit on a 10inch screen. */
+/* rules for 10inch screens in landscape orientation */
+@media only screen and (device-width: 1024px) and (orientation:
+	landscape) { 
+	.modal {
+		width: 80% !important;
+		height: 80% !important;
+		margin-left: 10% !important;
+		margin-top: 10% !important;
+	}
+}
+
 @media ( max-width : 980px) {
 	.dropdown ul.dropdown-menu {
 		display: block;
