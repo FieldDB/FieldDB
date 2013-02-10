@@ -98,7 +98,7 @@ define([
       },
       /* Menu */
       "click .LaTeX" : function(){
-        this.model.laTeXiT(true);
+        this.model.latexitDatum(true);
         $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
@@ -247,6 +247,7 @@ define([
       var self = this;
       window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
         self.frequentFields = fieldLabels;
+        window.app.get("corpus").frequentFields = fieldLabels;
         if(typeof whenfieldsareknown == "function"){
           whenfieldsareknown();
         }
