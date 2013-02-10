@@ -947,7 +947,15 @@ define([
 //          successcallback();
 //        }
 //      }
-    }
+    },
+	
+	highlight: function(text, stringToHighlight, className) {
+	  className = className || 'highlight';
+	  var re = new RegExp(stringToHighlight, "g");
+	  return text.replace(re, "<span class='" + className +
+						  "'>" + stringToHighlight + "</span>");
+	}
+
   });
 
   return Datum;
