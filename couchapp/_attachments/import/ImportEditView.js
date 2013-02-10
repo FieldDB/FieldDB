@@ -767,14 +767,10 @@ define( [
                             
             /* end successful save of datalist and session */
             
-          /* Save datalist failure */
-          },function(){
-            alert("Bug: couldnt save the import datalist.");
-          });
-        /* Save session failure */
-        },function(){
-          alert("Bug! save session failed in import");
-        });
+          
+          }/* Default Save datalist failure */);
+        
+        }/*Default Save session failure */);
       });
     },
     /**

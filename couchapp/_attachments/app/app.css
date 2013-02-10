@@ -507,6 +507,7 @@ line.link {
 
 #dashboard_loading_spinner {
 	text-align: center;
+	color: #fff;
 }
 
 .user-permission-pending {
