@@ -107,6 +107,7 @@ define([
         rows = text.split("\r");
         self.set("status", self.get("status","Detected a \r line ending."));
       }
+      var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
       if( rows[0].split('","').length > 2 && rows[5].split('","').length > 2){
@@ -128,7 +129,17 @@ define([
 //          rows[l] = self.parseLineCSV(rowWithoutQuotes);
         }
       }
-      
+      /* get the first line and set it to be the header by default */
+      var header = [];
+      if(rows.length > 3){
+        if(hasQuotes){
+          header = firstrow.trim().replace(/^"/,"").replace(/"$/,"").split('","');
+        }else{
+          header = self.parseLineCSV(firstrow);
+        }
+      }
+      self.set("extractedHeader",header);
+
       self.set("asCSV", rows);
       if(typeof callback == "function"){
         callback();
@@ -203,7 +214,6 @@ define([
           j++;
         }
       }
-
       return CSV;
     },
     importXML : function(text, self, callback) {

@@ -14487,7 +14487,7 @@ OPrime.publisher = {
     var pubtype = type || 'any';
     var subscribers = this.subscribers[pubtype];
     if (!subscribers || subscribers.length == 0) {
-      if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
+      OPrime.debug(pubtype + ": There were no subscribers.");
       return;
     }
     var i;
@@ -14507,7 +14507,7 @@ OPrime.publisher = {
           subscribers[i].fn.call(subscribers[i].context, arg);
         }
       }
-      if (OPrime.debugMode) OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
+      OPrime.debug('Visited ' + subscribers.length + ' subscribers.');
 
     } else {
 
@@ -14521,13 +14521,13 @@ OPrime.publisher = {
           }
           if (subscribers[i].context === context) {
             var removed = subscribers.splice(i, 1);
-            if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
+            OPrime.debug("Removed subscriber " + i + " from " + type, removed);
           } else {
-            if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
+            OPrime.debug(type + " keeping subscriber " + i,
                 subscribers[i].context);
           }
         } catch (e) {
-          if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
+          OPrime.debug("problem visiting Subscriber " + i, subscribers)
         }
       }
     }
@@ -14707,7 +14707,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   var callingcontextself = callingcontext;
   if (!audioOffsetCallback) {
     audioOffsetCallback = function(message) {
-      if (OPrime.debugMode) OPrime.debug("In audioOffsetCallback: " + message);
+      OPrime.debug("In audioOffsetCallback: " + message);
       OPrime.hub.unsubscribe("playbackCompleted", null, callingcontextself);
     }
   }
@@ -14722,7 +14722,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
     this.debug("Playing Audio via HTML5:" + audiourl + ":");
     document.getElementById(divid).removeEventListener('ended',
         OPrime.audioEndListener);
-    if (OPrime.debugMode) OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
+    OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
     document.getElementById(divid).addEventListener('ended',
         OPrime.audioEndListener);
     document.getElementById(divid).play();
@@ -14730,7 +14730,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
 }
 OPrime.audioEndListener = function() {
   var audiourl = this.getAttribute("src")
-  if (OPrime.debugMode) OPrime.debug("End audio ", audiourl);
+  OPrime.debug("End audio ", audiourl);
   OPrime.hub.publish('playbackCompleted', audiourl);
 };
 OPrime.pauseAudioFile = function(divid, callingcontext) {
@@ -14786,13 +14786,13 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
     document.getElementById(divid).pause();
     document.getElementById(divid).currentTime = startime;
-    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
+    OPrime.debug("Cueing audio to "
         + document.getElementById(divid).currentTime);
     document.getElementById(divid).play();
     OPrime.playingInterval = true;
     document.getElementById(divid).addEventListener("timeupdate", function() {
       if (this.currentTime >= endtime && OPrime.playingInterval) {
-        if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
+        OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
         OPrime.playingInterval = false; /*
          * workaround for not being able to
@@ -14816,7 +14816,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
   var callingcontextself = callingcontext;
   if (!callbackRecordingCompleted) {
     callbackRecordingCompleted = function(message) {
-      if (OPrime.debugMode) OPrime.debug("In callbackRecordingCompleted: " + message);
+      OPrime.debug("In callbackRecordingCompleted: " + message);
       OPrime.hub.unsubscribe("audioRecordingCompleted", null,
           callingcontextself);
     };
@@ -14831,7 +14831,7 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
    */
   if (!callbackRecordingStarted) {
     callbackRecordingStarted = function(message) {
-      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStarted: " + message);
+      OPrime.debug("In callbackRecordingStarted: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
           callingcontextself);
     };
@@ -14865,7 +14865,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
   var callingcontextself = callingcontext;
   if (!callbackRecordingStopped) {
     callbackRecordingStopped = function(message) {
-      if (OPrime.debugMode) OPrime.debug("In callbackRecordingStopped: " + message);
+      OPrime.debug("In callbackRecordingStopped: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
           callingcontextself);
     };
@@ -14905,14 +14905,14 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
   var callingcontextself = callingcontext;
   if (!callbackPictureCaptureStarted) {
     callbackPictureCaptureStarted = function(message) {
-      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureStarted: " + message);
+      OPrime.debug("In callbackPictureCaptureStarted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
           callingcontextself);
     };
   }
   if (!callbackPictureCaptureCompleted) {
     callbackPictureCaptureCompleted = function(message) {
-      if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureCompleted: " + message);
+      OPrime.debug("In callbackPictureCaptureCompleted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
           callingcontextself);
     };
@@ -14949,7 +14949,7 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
 /*
  * Initialize the debugging output, taking control from the Android side.
  */
-if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
+OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
     + navigator.userAgent);
 
 if (OPrime.isAndroidApp()) {
@@ -14973,7 +14973,7 @@ OPrime.getConnectivityType = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    if (OPrime.debugMode) OPrime.debug("This is an Android.");
+    OPrime.debug("This is an Android.");
     Android.getConectivityType();
   } else {
     OPrime.hub.publish('connectivityType', 'Probably Online');
@@ -14987,7 +14987,7 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
 
   /* Fire command which will publish the connectivity */
   if (OPrime.isAndroidApp()) {
-    if (OPrime.debugMode) OPrime.debug("This is an Android.");
+    OPrime.debug("This is an Android.");
     Android.getHardwareDetails();
   } else {
     OPrime.hub.publish('hardwareDetails', {
@@ -15127,17 +15127,17 @@ define('libs/oprime/services/CouchDB',
           .factory(
               'GetSessionToken',
               function($http) {
-                if (OPrime.debugMode) OPrime.debug("Contacting the DB to log user in.");
+                OPrime.debug("Contacting the DB to log user in.");
                 if (!OPrime.useUnsecureCouchDB()) {
                   return {
                     'run' : function(dataToPost) {
-                      if (OPrime.debugMode) OPrime.debug("Getting session token.");
+                      OPrime.debug("Getting session token.");
                       var couchInfo = OPrime.couchURL();
                       var promise = $http.get(
                           couchInfo.protocol + couchInfo.domain
                               + couchInfo.port + '/_session', dataToPost).then(
                           function(response, data, status, headers, config) {
-                            if (OPrime.debugMode) OPrime.debug("Session token set, probably",
+                            OPrime.debug("Session token set, probably",
                                 response);
                             return response;
                           });
@@ -15154,7 +15154,7 @@ define('libs/oprime/services/CouchDB',
                           couchInfo.protocol + couchInfo.domain
                               + couchInfo.port + '', dataToPost).then(
                           function(response, data, status, headers, config) {
-                            if (OPrime.debugMode) OPrime.debug("Faking Session token set");
+                            OPrime.debug("Faking Session token set");
                             return response;
                           });
                       return promise;
@@ -15228,7 +15228,7 @@ define('js/controllers',
       ActivityFeedController.$inject = [ '$scope', '$routeParams', '$resource',
           'MostRecentActivities', 'GetSessionToken' ];
 
-      if (OPrime.debugMode) OPrime.debug("Defining ActivityFeedController.");
+      OPrime.debug("Defining ActivityFeedController.");
 
       return ActivityFeedController;
     });
@@ -15242,7 +15242,7 @@ define('js/app',[ "angular", "OPrime", "js/controllers" ], function(angular, OPr
       [ 'ActivityFeed.filters', 'ActivityFeed.services',
           'ActivityFeed.directives', 'CouchDBServices', 'OPrime.filters' ])
       .config([ '$routeProvider', function($routeProvider) {
-        if (OPrime.debugMode) OPrime.debug("Defining routes.");
+        OPrime.debug("Defining routes.");
 
         $routeProvider.when('/user/:username/corpus/:corpusid', {
           templateUrl : 'partials/activity_feed_widget.html',
@@ -15257,7 +15257,7 @@ define('js/app',[ "angular", "OPrime", "js/controllers" ], function(angular, OPr
         });
       } ]);
 
-  if (OPrime.debugMode) OPrime.debug("Defining ActivityFeed.");
+  OPrime.debug("Defining ActivityFeed.");
 
   return ActivityFeed;
 });
@@ -15274,7 +15274,7 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
         };
       } ]);
 
-  if (OPrime.debugMode) OPrime.debug("Defining ActivityFeedFilters.");
+  OPrime.debug("Defining ActivityFeedFilters.");
 
   return ActivityFeedFilters;
 });
@@ -15331,7 +15331,7 @@ define('js/directives',[ "angular", "OPrime" ], function(angular, OPrime) {
         };
       } ]);
   
-  if (OPrime.debugMode) OPrime.debug("Defining ActivityFeedDirectives.");
+  OPrime.debug("Defining ActivityFeedDirectives.");
 
   return ActivityFeedDirectives;
 });
@@ -15880,7 +15880,7 @@ require([ "js/app", "js/controllers", "js/filters", "js/services",
     "webservicesconfig" ], function(ActivityFeed, TeamActivityFeedController,
     ActivityFeedFilters, ActivityFeedServices, ActivityFeedDirectives,
     CouchDBServices, OPrimeFilters, angular, OPrime) {
-  if (OPrime.debugMode) OPrime.debug("Initializing the activity feed module.");
+  OPrime.debug("Initializing the activity feed module.");
 
   angular.bootstrap(document, [ 'ActivityFeed' ]);
 
