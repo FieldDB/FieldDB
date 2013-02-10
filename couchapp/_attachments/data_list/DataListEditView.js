@@ -116,7 +116,7 @@ define( [
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
-        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "laTeXiT", true);
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "latexitDataList", true);
         return false;
       },
       "click .icon-paste": function(e){
