@@ -1,12 +1,18 @@
 <div class="modal-header">
-	<a href="#" class="locale_Edit_User_Profile_Tooltip pull-right" rel="tooltip" >
-	 <i class="icons icon-edit edit-user-profile "></i> </a>
- <h1>
-    <span class="locale_User_Profile"> </span> <small>{{username}} ({{firstname}} {{lastname}}) </small>
+
+	<button class="btn locale_Close pull-right" data-dismiss="modal">
+	</button>
+
+	<a href="#" class="locale_Edit_User_Profile_Tooltip pull-right"
+		rel="tooltip"> <i class="icons icon-edit edit-user-profile "></i>
+	</a>
+	<h1>
+		<span class="locale_User_Profile"> </span> <small>{{username}}
+			({{firstname}} {{lastname}}) </small>
 	</h1>
-	<p class = "locale_Private_Profile_Instructions"></p>
-	 <a href="#" class="btn btn-primary view-public-profile locale_View_Public_Profile_Tooltip " ></a>
-  
+	<span class="locale_Private_Profile_Instructions"></span> <a href="#"
+		class=" view-public-profile locale_View_Public_Profile_Tooltip "></a>
+
 </div>
 <div class="modal-body">
 
@@ -23,13 +29,12 @@
 		<dd class="affiliation">{{affiliation}}</dd>
 		<dt class="locale_Description"></dt>
 		<dd class="description">{{description}}</dd>
-		<dt><i class="icon-cloud"></i> <span class="locale_Corpora"></span></dt>
+		<dt>
+			<i class="icon-cloud"></i> <span class="locale_Corpora"></span>
+		</dt>
 		<dd>
 			<ul class="corpuses">
 			</ul>
 		</dd>
 	</dl>
-</div>
-<div class="modal-footer">
-	 <a href="#" class="btn locale_Close" data-dismiss="modal"> </a>
 </div>
