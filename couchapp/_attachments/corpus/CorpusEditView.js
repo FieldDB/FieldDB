@@ -510,6 +510,10 @@ define([
       if(e){
 //        e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
@@ -519,6 +523,10 @@ define([
         if(e){
 //          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
           e.preventDefault(); //this stops the link from moving the page to the top
+          /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+          if($(e.target).parent().parent().hasClass("dropdown-menu")){
+            $(e.target).parent().parent().hide();
+          }
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
@@ -529,6 +537,10 @@ define([
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
@@ -539,6 +551,10 @@ define([
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       this.model.newSession();
     },
@@ -547,6 +563,10 @@ define([
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       this.model.newCorpus();
     },
