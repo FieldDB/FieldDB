@@ -65,6 +65,22 @@ define([
           this.makeDashboardTransparent();
         }
         this.savePrefs();
+      },
+      "click .high-contrast-dashboard" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if(this.model.get("highContrastDashboard") == "true"){
+          this.model.set("highContrastDashboard", "false");
+          $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
+          this.makeDashboardNonHighContrast();
+        }else{
+          this.model.set("highContrastDashboard", "true");
+          $(this.el).find(".high-contrast-dashboard").addClass("btn-success");
+          this.makeDashboardHighContrast();
+        }
+        this.savePrefs();
       }
     },
  
@@ -97,6 +113,14 @@ define([
           this.makeDashboardOpaque();
         }
         
+        if(this.model.get("highContrastDashboard") == "true"){
+          $(this.el).find(".high-contrast-dashboard").addClass("btn-success");
+          this.makeDashboardHighContrast();
+        }else{
+          $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
+          this.makeDashboardNonHighContrast();
+        }
+        
         if (this.model.get("skin") == "") {
           this.randomSkin();
         }else{
@@ -110,6 +134,7 @@ define([
       $(this.el).find(".locale_Change_Background").html(Locale.get("locale_Change_Background"));
       $(this.el).find(".locale_Background_on_Random").html(Locale.get("locale_Background_on_Random"));
       $(this.el).find(".locale_Transparent_Dashboard").html(Locale.get("locale_Transparent_Dashboard"));
+//      $(this.el).find(".locale_High_Contrast_Dashboard").html(Locale.get("locale_High_Contrast_Dashboard"));
       $(this.el).find(".locale_Number_Datum").html(Locale.get("locale_Number_Datum"));
       $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));  
       return this;
@@ -210,7 +235,34 @@ define([
     savePrefs: function(){
       if (OPrime.debugMode) OPrime.debug("Saving preferences into encrypted user.");
       window.app.get("authentication").saveAndInterConnectInApp();
+    },
+    
+    makeDashboardHighContrast : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      var oldlink = document.getElementsByTagName("link").item(6);
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "app/high_contrast.css");
+      headtg.replaceChild(newlink, oldlink);
+    },
+    
+    makeDashboardNonHighContrast : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      var oldlink = document.getElementsByTagName("link").item(6);
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "app/not_high_contrast.css");
+      headtg.replaceChild(newlink, oldlink);
     }
+    
   });
   
   return UserPreferenceEditView;
