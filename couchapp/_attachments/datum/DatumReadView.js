@@ -205,20 +205,142 @@ define([
         // This bit of code makes the datum look like its rendered by
         // latex, could be put into a function, but not sure if thats
         // necessary...
-        var judgement = this.model.get("datumFields").where({label: "judgement"})[0].get("mask");
-        var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
-        var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
-        var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
+
+        // "judgement:grammatical AND utterance:a"
+        var searchParams = app.get("search").get("searchKeywords");
+        var queryTokens = this.model.processQueryString(searchParams);
+
+        var doGrossKeywordMatch = false;
+        if(searchParams.indexOf(":") == -1){
+          doGrossKeywordMatch = true;
+          //searchParams = searchParams.toLowerCase().replace(/\s/g,"");
+          searchParams = searchParams.replace(/\s/g,"");
+        }
+
+        var self = this;
+
+        var highlightValue = function(value) {
+          if (doGrossKeywordMatch) {
+            return self.model.highlight(value, searchParams);
+          } else {
+            return value;
+          }
+        }        
+        // judgement:grammatical AND utterance:a
+        //
+
+        //for (var j = 1; j < queryTokens.length; j += 2) {
+        //  if (queryTokens[j] == "AND") {
+        //    // Short circuit: if it's already false then it continues to be false
+        //    if (!thisDatumIsIn) {
+        //      break;
+        //    }
+        //
+        //    // Do an intersection
+        //    thisDatumIsIn = thisDatumIsIn && model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+        //  } else {
+        //    // Do a union
+        //    thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
+        //  }
+        //}
         
-        var additionalFields = [];
-        additionalFields.push({
-          label : "consultants",
-          mask : "Seberina"
-        },{
-          label : "context",
-          mask : "Said after a heavy rain storm."
-        });
         
+        
+        var jsonToRender = {};
+        jsonToRender.additionalFields = [];
+
+    	//corpus's most frequent fields
+        var frequentFields = window.app.get("corpus").frequentFields ;
+        //this datum/datalist's datumfields and their names 
+    	var fields = _.pluck(this.model.get("datumFields").toJSON(), "mask");
+    	var fieldLabels = _.pluck(this.model.get("datumFields").toJSON(), "label");
+    	//setting up for IGT case...
+    	var utteranceIndex = -1;
+    	var utterance = "";
+    	var morphemesIndex = -1;
+    	var morphemes = "";
+    	var glossIndex = -1;
+    	var gloss = "";
+    	var translationIndex = -1;
+    	var translation = "";
+
+    	//IGT case:
+    	if(this.model.datumIsInterlinearGlossText()){
+          /* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
+          judgementIndex = fieldLabels.indexOf("judgement");
+          if(judgementIndex >= 0){
+            judgement = fields[judgementIndex];
+             fieldLabels.splice(judgementIndex,1);
+             fields.splice(judgementIndex,1);
+          }
+          utteranceIndex = fieldLabels.indexOf("utterance");
+          if(utteranceIndex >= 0){
+               utterance = fields[utteranceIndex];
+               fieldLabels.splice(utteranceIndex,1);
+               fields.splice(utteranceIndex,1);
+          }
+          morphemesIndex = fieldLabels.indexOf("morphemes");
+          if(morphemesIndex >= 0){
+              morphemes = fields[morphemesIndex];
+              fieldLabels.splice(morphemesIndex,1);
+              fields.splice(morphemesIndex,1);
+          }
+          glossIndex = fieldLabels.indexOf("gloss");
+          if (glossIndex >= 0){
+              gloss = fields[glossIndex];
+              fieldLabels.splice(glossIndex,1);
+              fields.splice(glossIndex,1);
+          }
+          translationIndex = fieldLabels.indexOf("translation");
+          if (translationIndex >=0){
+              translation = fields[translationIndex];
+              fieldLabels.splice(translationIndex,1);
+              fields.splice(translationIndex,1);
+          }
+
+
+          try{
+            var utteranceArray = utterance.split(' ');
+            var morphemesArray = morphemes.split(' ');
+            var glossArray = gloss.split(' ');
+
+            // Form an array of utterance and gloss segments for rendering
+            var tuple = [];
+            for (var i = 0; i < utteranceArray.length; i++) {
+              tuple.push({
+                utteranceSegment : highlightValue(utteranceArray[i]),
+                morphemeSegment : highlightValue(morphemesArray[i]),
+                glossSegment : highlightValue(glossArray[i])
+              });
+            }
+            if(translation != ""){
+              //jsonToRender.translation = "\u2018"+ highlightValue(translation) +"\u2019";
+              jsonToRender.translation = highlightValue(translation);
+            }
+            jsonToRender.tuple = tuple;
+            if (judgement !== "") {
+              jsonToRender.judgement = highlightValue(judgement);
+            }
+          }catch(e){
+            alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
+            jsonToRender.translation = "bug";
+          }
+    	}
+
+    	/*throughout this next section, print frequent fields and infrequent ones differently
+    	frequent fields get latex'd as items in a description and infrequent ones are the same,
+    	but commented out.*/
+    	if(fields && (fields.length>0)){
+          for (var field in fields){
+              if(!frequentFields || frequentFields.indexOf(fieldLabels[field])>=0){
+                if(fields[field]){
+                  jsonToRender.additionalFields.push({label: fieldLabels[field],
+                                          'value': highlightValue(fields[field])});
+                }
+              }
+          }
+    	}
+
 //        var searchparams = app.get("search").get("searchKeywords");
 //        for (field in sessionFields){
 //          if(searchparams.indexOf(sessionFiels[field]) >=0){
@@ -226,32 +348,6 @@ define([
 //          }
 //        }
 
-        var jsonToRender = {};
-        jsonToRender.additionalFields = additionalFields;
-
-        try{
-          var utteranceArray = utterance.split(' ');
-          var glossArray = gloss.split(' ');
-          
-          // Form an array of utterance and gloss segments for rendering
-          var couplet = [];
-          for (var i = 0; i < utteranceArray.length; i++) {
-            couplet.push({
-              utteranceSegment : utteranceArray[i],
-              glossSegment : glossArray[i]
-            });
-          }
-          if(translation != ""){
-            jsonToRender.translation = "'"+translation+"'";
-          }
-          jsonToRender.couplet = couplet;
-          if (judgement !== "") {
-            jsonToRender.judgement = judgement;
-          }
-        }catch(e){
-          alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
-          jsonToRender.translation = "bug";
-        }
         try{
           jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         }catch(e){

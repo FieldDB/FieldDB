@@ -7,18 +7,21 @@
   {{/if}}
 </div>
 <div class="span10">
-	{{#each couplet}}
+	{{#each tuple}}
 	  <span class="glossCouplet">
-	    {{utteranceSegment}}
+	    {{{utteranceSegment}}}
 	    <br />
-	    {{glossSegment}}
+		{{{morphemeSegment}}}
+		<br />
+	    {{{glossSegment}}}
 	  </span>
 	{{/each}}
 	<br />
 	<span class="datum-latex-translation">{{translation}}</span>
-	<ul class="unstyled">
+	<dl>
 		{{#each additionalFields}}
-		<li><strong>{{label}}</strong>: {{mask}}</li>
+		<dt>{{label}}</dt>
+		<dd>{{{value}}}</dd>
 		{{/each}}
-	</ul>
+	</dl>
 </div>
