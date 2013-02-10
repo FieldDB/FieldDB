@@ -452,7 +452,19 @@ define( [
           var datumObject = {};
           var testForEmptyness = "";
           $('td', $(this)).each(function(index, item) {
-            datumObject[headers[index]] = $(item).html();
+            var newfieldValue = $(item).html().trim();
+            /*
+             * the import sometimes inserts &nbsp into the data,
+             * often when the csv detection didnt work. This might
+             * slow import down significantly. i tested it, it looks
+             * like this isnt happening to the data anymore so i
+             * turned this off, but if we notice &nbsp in the
+             * datagain we can turn it back on . for #855
+             */
+//            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
+//              OPrime.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
+//            }
+            datumObject[headers[index]] = $(item).html().trim();
             testForEmptyness += $(item).html();
           });
           //if the table row has more than 2 non-white space characters, enter it as data
