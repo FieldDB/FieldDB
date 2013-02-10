@@ -418,7 +418,7 @@ define( [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-          headers[index] = $(item).find(".drop-label-zone").val();
+          headers[index] = $(item).find(".drop-label-zone").val().replace(/[-"'+=?.\[\]{}() ]/g,"");
       });
       /*
        * Create new datum fields for new columns
@@ -499,7 +499,6 @@ define( [
           datumfields[x].value = "";
         }
         var fields = new DatumFields(datumfields);
-        this.model.set("datumFields", fields);
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
