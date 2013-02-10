@@ -418,7 +418,7 @@ define( [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-          headers[index] = $(item).find(".drop-label-zone").val();
+          headers[index] = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
       });
       /*
        * Create new datum fields for new columns
@@ -452,7 +452,19 @@ define( [
           var datumObject = {};
           var testForEmptyness = "";
           $('td', $(this)).each(function(index, item) {
-            datumObject[headers[index]] = $(item).html();
+            var newfieldValue = $(item).html().trim();
+            /*
+             * the import sometimes inserts &nbsp into the data,
+             * often when the csv detection didnt work. This might
+             * slow import down significantly. i tested it, it looks
+             * like this isnt happening to the data anymore so i
+             * turned this off, but if we notice &nbsp in the
+             * datagain we can turn it back on . for #855
+             */
+//            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
+//              OPrime.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
+//            }
+            datumObject[headers[index]] = $(item).html().trim();
             testForEmptyness += $(item).html();
           });
           //if the table row has more than 2 non-white space characters, enter it as data
@@ -499,7 +511,6 @@ define( [
           datumfields[x].value = "";
         }
         var fields = new DatumFields(datumfields);
-        this.model.set("datumFields", fields);
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing

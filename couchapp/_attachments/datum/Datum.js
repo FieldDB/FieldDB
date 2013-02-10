@@ -321,7 +321,7 @@ define([
       if(queryString.trim() == ""){
         thisDatumIsIn = true;
       }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
+          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
             thisDatumIsIn = true;
           }
       }else{
@@ -366,6 +366,12 @@ define([
     matchesSingleCriteria : function(objectToSearchThrough, criteria) {
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
+      var negate = false;
+      if (label.indexOf("!") == 0)
+      {
+    	  label = label.replace(/^!/,"");
+    	  negate  = true;
+      }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
       if(label == "judgement" && value.toLowerCase() == "grammatical"){
@@ -376,7 +382,17 @@ define([
 //      if(!label || !value){
 //        return false;
 //      }
-      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value.toLowerCase()) >= 0);
+      
+      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+
+      
+      if (negate)
+    	  {
+    	  	searchResult = !searchResult;
+    	  }
+      
+      
+      return  searchResult;
     },
     
     /**
@@ -463,21 +479,172 @@ define([
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var result = "\n \\begin{exe} "
-            + "\n \\ex " + utterance 
-            + "\n\t \\gll " + morphemes + " \\\\"
-            + "\n\t" + gloss + " \\\\"
-            + "\n\t\\trans `" + translation + "'"
-            + "\n\\end{exe}\n\n";
-      if (showInExportModal != null) {
-        $("#export-type-description").html(" as LaTeX (GB4E)");
-        $("#export-text-area").val($("#export-text-area").val() + result);
-      }
-      return result;
+    	//corpus's most frequent fields
+        var frequentFields = window.app.get("corpus").frequentFields;
+        //this datum/datalist's datumfields and their names 
+    	var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+    	var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+    	//setting up for IGT case...
+    	var utteranceIndex = -1;
+    	var utterance = "";
+    	var morphemesIndex = -1;
+    	var morphemes = "";
+    	var glossIndex = -1;
+    	var gloss = "";
+    	var translationIndex = -1;
+    	var translation = "";
+    	var result = "\n \\begin{exe} \n \\ex \[";
+    	//IGT case:
+    	if(this.datumIsInterlinearGlossText()){
+    		/* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
+    	  judgementIndex = fieldLabels.indexOf("judgement");
+        if(judgementIndex >= 0){
+          judgement = fields[judgementIndex];
+           fieldLabels.splice(judgementIndex,1);
+           fields.splice(judgementIndex,1);
+        }
+    	  utteranceIndex = fieldLabels.indexOf("utterance");
+    		if(utteranceIndex >= 0){
+    			 utterance = fields[utteranceIndex];
+    			 fieldLabels.splice(utteranceIndex,1);
+    			 fields.splice(utteranceIndex,1);
+    		}
+    		morphemesIndex = fieldLabels.indexOf("morphemes");
+    		if(morphemesIndex >= 0){
+    			morphemes = fields[morphemesIndex];
+    			fieldLabels.splice(morphemesIndex,1);
+    			fields.splice(morphemesIndex,1);
+    		}
+    		glossIndex = fieldLabels.indexOf("gloss");
+    		if (glossIndex >= 0){
+    			gloss = fields[glossIndex];
+    			fieldLabels.splice(glossIndex,1);
+    			fields.splice(glossIndex,1);
+    		}
+    		translationIndex = fieldLabels.indexOf("translation");
+    		if (translationIndex >=0){
+    			translation = fields[translationIndex];
+    			fieldLabels.splice(translationIndex,1);
+    			fields.splice(translationIndex,1);
+    		}
+    		//print the main IGT, escaping special latex chars
+    		result = result + this.escapeLatexChars(judgement) + "\]\{" +  this.escapeLatexChars(utterance)
+    			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
+    			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
+    			"\n\\label\{\}";
+    	}
+    	//remove any empty fields from our arrays
+    	for(i=fields.length-1;i>=0;i--){
+    		if(!fields[i]){
+    			fields.splice(i,1);
+    			fieldLabels.splice(i,1);
+    		}
+    		
+    	}
+    	/*throughout this next section, print frequent fields and infrequent ones differently
+    	frequent fields get latex'd as items in a description and infrequent ones are the same,
+    	but commented out.*/
+    	if(fields && (fields.length>0)){
+    		var numInfrequent = 0;
+    		for (var field in fields){
+    			if(frequentFields.indexOf(fieldLabels[field])>=0){
+    				break;
+    			}
+    			numInfrequent++;
+    		}
+    		if(numInfrequent!=fieldLabels.length){
+    			result = result + "\n \\begin\{description\}";
+    		}else{
+    			result = result + "\n% \\begin\{description\}";
+    		}
+    		for (var field in fields){
+    			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
+    				result = result
+    				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    			} else if(fields[field]){
+    				result = result
+    				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    			}
+    		}
+    		if(numInfrequent!=fieldLabels.length){
+    			result = result + "\n \\end\{description\}";
+    		}else{
+    			result = result + "\n% \\end\{description\}";
+    		}
+
+    	}
+    	result = result + "\n\\end{exe}\n\n";
+
+    	return result;
+    },
+    
+    latexitDataList : function(showInExportModal){
+    	//this version prints new data as well as previously shown latex'd data (best for datalists)
+    	var result = this.laTeXiT(showInExportModal);
+    	if (showInExportModal != null) {
+    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-text-area").val($("#export-text-area").val() + result);
+    	}
+    	return result;
+    },
+    
+    latexitDatum : function(showInExportModal){
+    	//this version prints new data and deletes previously shown latex'd data (best for datums)
+    	var result = this.laTeXiT(showInExportModal);
+    	if (showInExportModal != null) {
+    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-text-area").val(result);
+    	}
+    	return result;
+    },
+
+    escapeLatexChars : function(input){
+    	var result = input;
+    	//curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
+    	result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
+    	result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
+    	result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
+    	result = result.replace(/#/g,"\\#");
+    	result = result.replace(/\$/g,"\\$");
+    	result = result.replace(/%/g,"\\%");
+    	result = result.replace(/&/g,"\\&");
+    	result = result.replace(/_/g,"\\_");
+    	result = result.replace(/{/g,"\\{");
+    	result = result.replace(/}/g,"\\}");
+    	result = result.replace(/</g,"\\textless");
+    	result = result.replace(/>/g,"\\textgreater");
+    	
+    	result = result.replace(/CURLYBRACES/g,"{}");
+    	return result;
+    },
+    
+    datumIsInterlinearGlossText : function(fieldLabels) {
+    	if(!fieldLabels){
+        	fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+    	}
+    	var utteranceOrMorphemes = false;
+    	var gloss = false;
+    	var trans = false;
+    	for (var fieldLabel in fieldLabels){
+    		if(fieldLabels[fieldLabel] == "utterance" || fieldLabels[fieldLabel] == "morphemes"){
+    			utteranceOrMorphemes = true;
+    		}
+    		if (fieldLabels[fieldLabel] == "gloss"){
+    			gloss = true;
+    		}
+    		if (fieldLabels[fieldLabel] == "translation"){
+    			trans = true;
+    		}		
+    	}
+    	if (gloss || utteranceOrMorphemes || trans){
+    		return true;
+    	}
+    	else{ 
+    		return false;
+    	}
     },
     
     /**
