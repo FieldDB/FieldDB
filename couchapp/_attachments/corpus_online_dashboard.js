@@ -4,7 +4,7 @@ if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0 ){
   if (window.location.protocol == "http:") {
     newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
   }
-  window.location.replace();
+  window.location.replace(newTestingServerWithCORS);
 }
 
 /* Make sure they use the https versions, if they are on a couchapp */
