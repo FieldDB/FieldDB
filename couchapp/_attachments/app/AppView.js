@@ -432,6 +432,33 @@ define([
           }
         }
       },
+      "click .dont_close_corpus_dropdown_if_user_clicks" : function(e){
+        var route = $(e.target).attr("href");
+        if($(e.target).hasClass("btn")){
+//          $(e.target).dropdown(); //This doesnt work
+          $(e.target).parent().find(".dropdown-menu").show();
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+          }
+        }else if(route){
+          $(e.target).parent().parent().parent().find(".dropdown-menu").hide();
+          if(route.indexOf("#") >=0 ){
+            window.app.router.navigate(route,{trigger: true});
+          } else {
+            window.location.open(route, "_blank");
+          }
+        }else{
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          if($(e.target).hasClass("close")){
+            $(e.target).parent().alert("close");
+          }
+        }
+      },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
@@ -525,6 +552,17 @@ define([
         this.setElement($("#app_view"));
         
         var jsonToRender = this.model.toJSON();
+        /*
+         * show the corpus title, and the current sessions goal so the
+         * user knows which corpus and elicitation they are entering
+         * data in
+         */
+        jsonToRender.corpustitle = this.model.get("corpus")
+        .get("title");
+        jsonToRender.elicitationgoal = this.model.get("currentSession")
+        .getGoal();
+        jsonToRender.elicitationgoal = jsonToRender.elicitationgoal
+        .substr(0, 30 || jsonToRender.elicitationgoal.length);
         try{
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;

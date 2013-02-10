@@ -13444,7 +13444,15 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n				class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\" role=\"menu\"\n							aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\" class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span id=\"user-quickview\"> <i\n								class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\" id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"corpus-quickview\" class=\"well span12\"></div>\n			<div id=\"session-quickview\" class=\"well span12\"></div>\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul class=\"unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong>New!</strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n				class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
+  foundHelper = helpers.corpustitle;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " - ";
+  foundHelper = helpers.elicitationgoal;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong>New!</strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -13456,7 +13464,7 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n		<button class=\"close btn\" data-dismiss=\"modal\">Close</button>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -18465,6 +18473,17 @@ define('datum/Session',[
       this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
       
     },
+    getGoal : function(){
+      var goal = "";
+      try {
+        goal = this.get("sessionFields").where({
+          label : "goal"
+        })[0].get("mask");
+      } catch (e) {
+        OPrime.debug("This session doesnt seem to have a goal.");
+      }
+      return goal;
+    },
     /**
      * backbone-couchdb adaptor set up
      */
@@ -19017,7 +19036,7 @@ define('datum/Datum',[
       if(queryString.trim() == ""){
         thisDatumIsIn = true;
       }else if(doGrossKeywordMatch){
-          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").indexOf(queryString) > -1){
+          if(JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g,"").search(queryString) > -1){
             thisDatumIsIn = true;
           }
       }else{
@@ -19062,6 +19081,12 @@ define('datum/Datum',[
     matchesSingleCriteria : function(objectToSearchThrough, criteria) {
       var delimiterIndex = criteria.indexOf(":");
       var label = criteria.substring(0, delimiterIndex);
+      var negate = false;
+      if (label.indexOf("!") == 0)
+      {
+    	  label = label.replace(/^!/,"");
+    	  negate  = true;
+      }
       var value = criteria.substring(delimiterIndex + 1);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
       if(label == "judgement" && value.toLowerCase() == "grammatical"){
@@ -19072,7 +19097,17 @@ define('datum/Datum',[
 //      if(!label || !value){
 //        return false;
 //      }
-      return objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().indexOf(value.toLowerCase()) >= 0);
+      
+      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+
+      
+      if (negate)
+    	  {
+    	  	searchResult = !searchResult;
+    	  }
+      
+      
+      return  searchResult;
     },
     
     /**
@@ -19159,21 +19194,172 @@ define('datum/Datum',[
      * GB4E.
      */
     laTeXiT : function(showInExportModal) {
-      utterance = this.get("datumFields").where({label: "utterance"})[0].get("mask");
-      morphemes = this.get("datumFields").where({label: "morphemes"})[0].get("mask");
-      gloss = this.get("datumFields").where({label: "gloss"})[0].get("mask");
-      translation= this.get("datumFields").where({label: "translation"})[0].get("mask");
-      var result = "\n \\begin{exe} "
-            + "\n \\ex " + utterance 
-            + "\n\t \\gll " + morphemes + " \\\\"
-            + "\n\t" + gloss + " \\\\"
-            + "\n\t\\trans `" + translation + "'"
-            + "\n\\end{exe}\n\n";
-      if (showInExportModal != null) {
-        $("#export-type-description").html(" as LaTeX (GB4E)");
-        $("#export-text-area").val($("#export-text-area").val() + result);
-      }
-      return result;
+    	//corpus's most frequent fields
+        var frequentFields = window.app.get("corpus").frequentFields;
+        //this datum/datalist's datumfields and their names 
+    	var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+    	var fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+    	//setting up for IGT case...
+    	var utteranceIndex = -1;
+    	var utterance = "";
+    	var morphemesIndex = -1;
+    	var morphemes = "";
+    	var glossIndex = -1;
+    	var gloss = "";
+    	var translationIndex = -1;
+    	var translation = "";
+    	var result = "\n \\begin{exe} \n \\ex \[";
+    	//IGT case:
+    	if(this.datumIsInterlinearGlossText()){
+    		/* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
+    	  judgementIndex = fieldLabels.indexOf("judgement");
+        if(judgementIndex >= 0){
+          judgement = fields[judgementIndex];
+           fieldLabels.splice(judgementIndex,1);
+           fields.splice(judgementIndex,1);
+        }
+    	  utteranceIndex = fieldLabels.indexOf("utterance");
+    		if(utteranceIndex >= 0){
+    			 utterance = fields[utteranceIndex];
+    			 fieldLabels.splice(utteranceIndex,1);
+    			 fields.splice(utteranceIndex,1);
+    		}
+    		morphemesIndex = fieldLabels.indexOf("morphemes");
+    		if(morphemesIndex >= 0){
+    			morphemes = fields[morphemesIndex];
+    			fieldLabels.splice(morphemesIndex,1);
+    			fields.splice(morphemesIndex,1);
+    		}
+    		glossIndex = fieldLabels.indexOf("gloss");
+    		if (glossIndex >= 0){
+    			gloss = fields[glossIndex];
+    			fieldLabels.splice(glossIndex,1);
+    			fields.splice(glossIndex,1);
+    		}
+    		translationIndex = fieldLabels.indexOf("translation");
+    		if (translationIndex >=0){
+    			translation = fields[translationIndex];
+    			fieldLabels.splice(translationIndex,1);
+    			fields.splice(translationIndex,1);
+    		}
+    		//print the main IGT, escaping special latex chars
+    		result = result + this.escapeLatexChars(judgement) + "\]\{" +  this.escapeLatexChars(utterance)
+    			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
+    			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
+    			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
+    			"\n\\label\{\}";
+    	}
+    	//remove any empty fields from our arrays
+    	for(i=fields.length-1;i>=0;i--){
+    		if(!fields[i]){
+    			fields.splice(i,1);
+    			fieldLabels.splice(i,1);
+    		}
+    		
+    	}
+    	/*throughout this next section, print frequent fields and infrequent ones differently
+    	frequent fields get latex'd as items in a description and infrequent ones are the same,
+    	but commented out.*/
+    	if(fields && (fields.length>0)){
+    		var numInfrequent = 0;
+    		for (var field in fields){
+    			if(frequentFields.indexOf(fieldLabels[field])>=0){
+    				break;
+    			}
+    			numInfrequent++;
+    		}
+    		if(numInfrequent!=fieldLabels.length){
+    			result = result + "\n \\begin\{description\}";
+    		}else{
+    			result = result + "\n% \\begin\{description\}";
+    		}
+    		for (var field in fields){
+    			if(fields[field] && (frequentFields.indexOf(fieldLabels[field])>=0)){
+    				result = result
+    				+ "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    			} else if(fields[field]){
+    				result = result
+    				+ "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field])
+    				+ "\}\] " + this.escapeLatexChars(fields[field]) ;
+    			}
+    		}
+    		if(numInfrequent!=fieldLabels.length){
+    			result = result + "\n \\end\{description\}";
+    		}else{
+    			result = result + "\n% \\end\{description\}";
+    		}
+
+    	}
+    	result = result + "\n\\end{exe}\n\n";
+
+    	return result;
+    },
+    
+    latexitDataList : function(showInExportModal){
+    	//this version prints new data as well as previously shown latex'd data (best for datalists)
+    	var result = this.laTeXiT(showInExportModal);
+    	if (showInExportModal != null) {
+    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-text-area").val($("#export-text-area").val() + result);
+    	}
+    	return result;
+    },
+    
+    latexitDatum : function(showInExportModal){
+    	//this version prints new data and deletes previously shown latex'd data (best for datums)
+    	var result = this.laTeXiT(showInExportModal);
+    	if (showInExportModal != null) {
+    		$("#export-type-description").html(" as LaTeX (GB4E)");
+    		$("#export-text-area").val(result);
+    	}
+    	return result;
+    },
+
+    escapeLatexChars : function(input){
+    	var result = input;
+    	//curly braces need to be escaped TO and escaped FROM, so we're using a placeholder
+    	result = result.replace(/\\/g,"\\textbackslashCURLYBRACES");
+    	result = result.replace(/\^/g,"\\textasciicircumCURLYBRACES");
+    	result = result.replace(/\~/g,"\\textasciitildeCURLYBRACES");
+    	result = result.replace(/#/g,"\\#");
+    	result = result.replace(/\$/g,"\\$");
+    	result = result.replace(/%/g,"\\%");
+    	result = result.replace(/&/g,"\\&");
+    	result = result.replace(/_/g,"\\_");
+    	result = result.replace(/{/g,"\\{");
+    	result = result.replace(/}/g,"\\}");
+    	result = result.replace(/</g,"\\textless");
+    	result = result.replace(/>/g,"\\textgreater");
+    	
+    	result = result.replace(/CURLYBRACES/g,"{}");
+    	return result;
+    },
+    
+    datumIsInterlinearGlossText : function(fieldLabels) {
+    	if(!fieldLabels){
+        	fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+    	}
+    	var utteranceOrMorphemes = false;
+    	var gloss = false;
+    	var trans = false;
+    	for (var fieldLabel in fieldLabels){
+    		if(fieldLabels[fieldLabel] == "utterance" || fieldLabels[fieldLabel] == "morphemes"){
+    			utteranceOrMorphemes = true;
+    		}
+    		if (fieldLabels[fieldLabel] == "gloss"){
+    			gloss = true;
+    		}
+    		if (fieldLabels[fieldLabel] == "translation"){
+    			trans = true;
+    		}		
+    	}
+    	if (gloss || utteranceOrMorphemes || trans){
+    		return true;
+    	}
+    	else{ 
+    		return false;
+    	}
     },
     
     /**
@@ -19611,15 +19797,15 @@ define('data_list/DataList',[
       }
     },
 
-    applyFunctionToAllIds : function(datumIdsToApplyFunction, functionToAppy, functionArguments){
+    applyFunctionToAllIds : function(datumIdsToApplyFunction, functionToApply, functionArguments){
       if(!datumIdsToApplyFunction){
         datumIdsToApplyFunction = this.get("datumIds");
       }
       if(datumIdsToApplyFunction.length == 0){
         datumIdsToApplyFunction = this.get("datumIds");
       }
-      if(!functionToAppy){
-        functionToAppy = "laTeXiT";
+      if(!functionToApply){
+        functionToApply = "latexitDataList";
       }
       if(!functionArguments){
 //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
@@ -19636,7 +19822,7 @@ define('data_list/DataList',[
         obj.id  = datumIdsToApplyFunction[id];
           obj.fetch({
             success : function(model, response) {
-              model[functionToAppy](functionArguments);
+              model[functionToApply](functionArguments);
             } 
         });
         
@@ -26095,7 +26281,7 @@ define('datum/DatumReadView',[
       },
       /* Menu */
       "click .LaTeX" : function(){
-        this.model.laTeXiT(true);
+        this.model.latexitDatum(true);
         $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
@@ -26422,7 +26608,7 @@ define('data_list/DataListReadView', [
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
-        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "laTeXiT", true);
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "latexitDataList", true);
         return false;
       },
       "click .icon-paste": function(e){
@@ -27485,6 +27671,10 @@ define('corpus/CorpusEditView',[
       if(e){
 //        e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
@@ -27494,6 +27684,10 @@ define('corpus/CorpusEditView',[
         if(e){
 //          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
           e.preventDefault(); //this stops the link from moving the page to the top
+          /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+          if($(e.target).parent().parent().hasClass("dropdown-menu")){
+            $(e.target).parent().parent().hide();
+          }
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
@@ -27504,6 +27698,10 @@ define('corpus/CorpusEditView',[
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
@@ -27514,6 +27712,10 @@ define('corpus/CorpusEditView',[
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       this.model.newSession();
     },
@@ -27522,6 +27724,10 @@ define('corpus/CorpusEditView',[
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       this.model.newCorpus();
     },
@@ -28131,6 +28337,10 @@ define('corpus/CorpusReadView',[
       if(e){
 //        e.stopPropagation(); //cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       } 
 //      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
       appView.datumsEditView.newDatum();
@@ -28140,6 +28350,10 @@ define('corpus/CorpusReadView',[
         if(e){
 //          e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
           e.preventDefault(); //this stops the link from moving the page to the top
+          /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+          if($(e.target).parent().parent().hasClass("dropdown-menu")){
+            $(e.target).parent().parent().hide();
+          }
         }
 //        app.router.showEmbeddedDatum(this.get("pouchname"), "new");
 //        appView.datumsEditView.newDatum(); //no longer applicable, need to make new Conversations
@@ -28150,6 +28364,10 @@ define('corpus/CorpusReadView',[
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       //take the user to the search so they can create a data list using the search feature.
       window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
@@ -28160,6 +28378,10 @@ define('corpus/CorpusReadView',[
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       this.model.newSession();
     },
@@ -28168,6 +28390,10 @@ define('corpus/CorpusReadView',[
       if(e){
 //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
+        /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
+        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+          $(e.target).parent().parent().hide();
+        }
       }
       this.model.newCorpus();
     },
@@ -28325,7 +28551,7 @@ define('data_list/DataListEditView', [
         }
         $("#export-modal").modal("show");
         $("#export-text-area").val("");
-        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "laTeXiT", true);
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "latexitDataList", true);
         return false;
       },
       "click .icon-paste": function(e){
@@ -29141,7 +29367,7 @@ define('datum/DatumEditView',[
       },
       /* Menu */
       "click .LaTeX" : function(){
-        this.model.laTeXiT(true);
+        this.model.latexitDatum(true);
         $("#export-modal").modal("show");
       },
       "click .icon-paste" : function(){
@@ -29290,6 +29516,7 @@ define('datum/DatumEditView',[
       var self = this;
       window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
         self.frequentFields = fieldLabels;
+        window.app.get("corpus").frequentFields = fieldLabels;
         if(typeof whenfieldsareknown == "function"){
           whenfieldsareknown();
         }
@@ -30961,6 +31188,7 @@ define('import/Import',[
         rows = text.split("\r");
         self.set("status", self.get("status","Detected a \r line ending."));
       }
+      var firstrow = rows[0];
       var hasQuotes = false;
       //If it looks like it already has quotes:
       if( rows[0].split('","').length > 2 && rows[5].split('","').length > 2){
@@ -30982,7 +31210,17 @@ define('import/Import',[
 //          rows[l] = self.parseLineCSV(rowWithoutQuotes);
         }
       }
-      
+      /* get the first line and set it to be the header by default */
+      var header = [];
+      if(rows.length > 3){
+        if(hasQuotes){
+          header = firstrow.trim().replace(/^"/,"").replace(/"$/,"").split('","');
+        }else{
+          header = self.parseLineCSV(firstrow);
+        }
+      }
+      self.set("extractedHeader",header);
+
       self.set("asCSV", rows);
       if(typeof callback == "function"){
         callback();
@@ -31057,7 +31295,6 @@ define('import/Import',[
           j++;
         }
       }
-
       return CSV;
     },
     importXML : function(text, self, callback) {
@@ -31882,7 +32119,7 @@ define('import/ImportEditView', [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-          headers[index] = $(item).find(".drop-label-zone").val();
+          headers[index] = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
       });
       /*
        * Create new datum fields for new columns
@@ -31916,7 +32153,19 @@ define('import/ImportEditView', [
           var datumObject = {};
           var testForEmptyness = "";
           $('td', $(this)).each(function(index, item) {
-            datumObject[headers[index]] = $(item).html();
+            var newfieldValue = $(item).html().trim();
+            /*
+             * the import sometimes inserts &nbsp into the data,
+             * often when the csv detection didnt work. This might
+             * slow import down significantly. i tested it, it looks
+             * like this isnt happening to the data anymore so i
+             * turned this off, but if we notice &nbsp in the
+             * datagain we can turn it back on . for #855
+             */
+//            if(newfieldValue.indexOf("&nbsp;") >= 0 ){
+//              OPrime.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
+//            }
+            datumObject[headers[index]] = $(item).html().trim();
             testForEmptyness += $(item).html();
           });
           //if the table row has more than 2 non-white space characters, enter it as data
@@ -31963,7 +32212,6 @@ define('import/ImportEditView', [
           datumfields[x].value = "";
         }
         var fields = new DatumFields(datumfields);
-        this.model.set("datumFields", fields);
         $.each(array[a], function(index, value) { 
           if(index == "" || index == undefined){
             //do nothing
@@ -34799,6 +35047,33 @@ define('app/AppView',[
           }
         }
       },
+      "click .dont_close_corpus_dropdown_if_user_clicks" : function(e){
+        var route = $(e.target).attr("href");
+        if($(e.target).hasClass("btn")){
+//          $(e.target).dropdown(); //This doesnt work
+          $(e.target).parent().find(".dropdown-menu").show();
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+          }
+        }else if(route){
+          $(e.target).parent().parent().parent().find(".dropdown-menu").hide();
+          if(route.indexOf("#") >=0 ){
+            window.app.router.navigate(route,{trigger: true});
+          } else {
+            window.location.open(route, "_blank");
+          }
+        }else{
+          if(e){
+            //dont close the dropdown
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          if($(e.target).hasClass("close")){
+            $(e.target).parent().alert("close");
+          }
+        }
+      },
       "click .save-dashboard": function(){
         window.app.saveAndInterConnectInApp();
       },
@@ -34892,6 +35167,17 @@ define('app/AppView',[
         this.setElement($("#app_view"));
         
         var jsonToRender = this.model.toJSON();
+        /*
+         * show the corpus title, and the current sessions goal so the
+         * user knows which corpus and elicitation they are entering
+         * data in
+         */
+        jsonToRender.corpustitle = this.model.get("corpus")
+        .get("title");
+        jsonToRender.elicitationgoal = this.model.get("currentSession")
+        .getGoal();
+        jsonToRender.elicitationgoal = jsonToRender.elicitationgoal
+        .substr(0, 30 || jsonToRender.elicitationgoal.length);
         try{
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
@@ -36727,7 +37013,7 @@ if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0 ){
   if (window.location.protocol == "http:") {
     newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
   }
-  window.location.replace();
+  window.location.replace(newTestingServerWithCORS);
 }
 
 /* Make sure they use the https versions, if they are on a couchapp */
