@@ -418,7 +418,7 @@ define( [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-          headers[index] = $(item).find(".drop-label-zone").val().replace(/[-"'+=?.\[\]{}() ]/g,"");
+          headers[index] = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
       });
       /*
        * Create new datum fields for new columns
