@@ -497,7 +497,13 @@ define([
     	//IGT case:
     	if(this.datumIsInterlinearGlossText()){
     		/* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
-    		 utteranceIndex = fieldLabels.indexOf("utterance");
+    	  judgementIndex = fieldLabels.indexOf("judgement");
+        if(judgementIndex >= 0){
+          judgement = fields[judgementIndex];
+           fieldLabels.splice(judgementIndex,1);
+           fields.splice(judgementIndex,1);
+        }
+    	  utteranceIndex = fieldLabels.indexOf("utterance");
     		if(utteranceIndex >= 0){
     			 utterance = fields[utteranceIndex];
     			 fieldLabels.splice(utteranceIndex,1);
@@ -522,7 +528,7 @@ define([
     			fields.splice(translationIndex,1);
     		}
     		//print the main IGT, escaping special latex chars
-    		result = result + this.escapeLatexChars(fields[0]) + "\]\{" +  this.escapeLatexChars(utterance)
+    		result = result + this.escapeLatexChars(judgement) + "\]\{" +  this.escapeLatexChars(utterance)
     			+ "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\"
     			+ "\n " + this.escapeLatexChars(gloss) + "\\\\"
     			+ "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
