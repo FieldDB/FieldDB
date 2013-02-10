@@ -418,7 +418,17 @@ define( [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-          headers[index] = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
+        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
+        if(!newDatumFieldLabel){
+          return;
+        }
+        if(headers.indexOf(newDatumFieldLabel) >= 0){
+          OPrime.bug("You seem to have some column labels that are duplicated" +
+              " (the same label on two columns). This will result in a strange " +
+              "import where only the second of the two will be used in the import. " +
+          "Is this really what you want?.");
+        }
+        headers[index] = newDatumFieldLabel;
       });
       /*
        * Create new datum fields for new columns
