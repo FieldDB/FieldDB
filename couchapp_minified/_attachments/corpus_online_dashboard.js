@@ -13439,12 +13439,12 @@ define("handlebars", ["backbonejs","jquery"], (function (global) {
 
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
-templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
+templates['app_all_the_data'] = template(function (Handlebars,depth0,helpers,partials,data) {
   helpers = helpers || Handlebars.helpers;
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n				class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n        class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n          <li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n            role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n              class=\"icon-cloud icon-white\"></i> ";
   foundHelper = helpers.corpustitle;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -13452,7 +13452,41 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   foundHelper = helpers.elicitationgoal;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong>New!</strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
+  buffer += escapeExpression(stack1) + "<b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n              <li>\n                <div id=\"corpus-quickview\" class=\"well span3\"></div>\n              </li>\n              <li>\n                <div id=\"session-quickview\" class=\"well span3\"></div>\n              </li>\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n              <li><a tabindex=\"-1\" href=\"#\"\n                class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n              <button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n              <span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span>\n          </a>\n            <ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n              id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n\n		<!-- Elements on Right hand side -->\n		<div class=\"span6\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul class=\"unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;});
+})();(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['app_compare_datalists'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n        class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n          <li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n            role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n              class=\"icon-cloud icon-white\"></i> ";
+  foundHelper = helpers.corpustitle;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " - ";
+  foundHelper = helpers.elicitationgoal;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "<b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n              <li>\n                <div id=\"corpus-quickview\" class=\"well span3\"></div>\n              </li>\n              <li>\n                <div id=\"session-quickview\" class=\"well span3\"></div>\n              </li>\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n              <li><a tabindex=\"-1\" href=\"#\"\n                class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n              <button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n              <span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span>\n          </a>\n            <ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n              id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			\n			<div id=\"data-list-quickview\" class=\"well span12\">\n        <div id=\"data-list-quickview-header\" class=\" \"></div>\n        <div class=\"  container span12\">\n          <ul class=\"unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n          <div class=\"pagination-control \"></div>\n        </div>\n      </div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n      <div id=\"conversation-embedded\" class=\"middle well\">\n        <div class=\"scrollable\">\n          <div class=\"conversation-text-audio-wrapper\">\n            <div class=\"jp-load-bar\" style=\"width: 960;\">\n              <div class=\"jp-play-bar\" style=\"width: 330;\">\n                <i class=\"icon-gift\"></i><strong></strong>\n                <h4>'Conversations' will let you have multiple speakers\n                  with overlapping speech.</h4>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n		\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n        <div id=\"search-data-list-quickview-header\" class=\" \"></div>\n        <div class=\"  \">\n          <ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n          <div class=\"pagination-control\"></div>\n        </div>\n      </div>\n      <div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;});
+})();(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['app_everything_at_once'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n	<div class=\"navbar-inner\">\n		<div class=\"container \">\n\n\n\n			<!-- Home button -->\n			<a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n				rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n			<!-- Top Search Area -->\n			<span class=\"navbar-search\" id=\"search-top\"> </span>\n\n			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n			<a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n				data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n				class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n			</a>\n\n\n			<!-- Collapsing area if the screen is not wide enough -->\n			<div class=\"nav-collapse collapse\">\n				<ul class=\"nav\" role=\"navigation \">\n\n					<li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n						role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n							class=\"icon-cloud icon-white\"></i> ";
+  foundHelper = helpers.corpustitle;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " - ";
+  foundHelper = helpers.elicitationgoal;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "<b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n							<li>\n								<div id=\"corpus-quickview\" class=\"well span3\"></div>\n							</li>\n							<li>\n								<div id=\"session-quickview\" class=\"well span3\"></div>\n							</li>\n\n						</ul></li>\n\n\n					<!-- Notification -->\n					<li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n						href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n						data-toggle=\"dropdown\"><i\n							class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n							class=\"caret\"></b></a>\n						<ul\n							class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n							role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n							<!-- 	<li class=\"\"><span class=\"locale_Need_save\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-save save-dashboard icon-white\"></i>\n							</a></li>\n							<li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n								</progress></li>\n\n							<li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n							<li class=\"divider \"></li>\n\n							<li class=\"\"><span class=\"locale_Need_sync\"></span><a\n								tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n								rel=\"tooltip\"> <i\n									class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n							</a></li>\n							<li class=\"\"><progress class=\"unsynced-changes\"\n									max=\"100\" value=\"80\"> </progress></li>\n\n							<li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n							<li><a tabindex=\"-1\" href=\"#\"\n								class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n									Clear all notifications</a></li>\n\n							<li><div id=\"toast-user-area\" class=\"scrollable\">\n									<div class=\"alert alert-info alert-block\">\n										<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n											class=\"alert-heading \">Quick Start Instructions:</strong> <span\n											class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n											class=\"locale_to_beta_testers\"></span>\n									</div>\n								</div></li>\n\n						</ul></li>\n\n\n				</ul>\n				<ul class=\"nav pull-right\">\n\n					<!--  User dropdown -->\n					<li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n						id=\"user_drop_down_trigger\" role=\"button\"\n						class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n						data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n							<button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n							<span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n							id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n						</span>\n					</a>\n						<ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n							id=\"authentication-embedded\" role=\"menu\"\n							aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n				</ul>\n\n			</div>\n\n		</div>\n	</div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!-- Elements on Lefthand side -->\n		<div class=\"span3\">\n			<div class=\" span12 hide\"></div>\n			<!-- workaround: empty div to set all span12 to line up -->\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n				<div id=\"search-data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  \">\n					<ul\n						class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"data-list-quickview\" class=\"well span12\">\n				<div id=\"data-list-quickview-header\" class=\" \"></div>\n				<div class=\"  container span12\">\n					<ul\n						class=\"unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view \"></ul>\n					<div class=\"pagination-control \"></div>\n				</div>\n			</div>\n		</div>\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul\n						class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span3\">\n			<div id=\"insert-unicode\" class=\"well\"></div>\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -13465,6 +13499,52 @@ templates['app'] = template(function (Handlebars,depth0,helpers,partials,data) {
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
   buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul\n				class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n		<button class=\"close btn\" data-dismiss=\"modal\">Close</button>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4>\n			<span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span\n				class=\"locale_We_need_to_make_sure_its_you\"></span>\n		</h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;});
+})();(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['app_just_entering'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n        class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n          <li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n            role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n              class=\"icon-cloud icon-white\"></i> ";
+  foundHelper = helpers.corpustitle;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " - ";
+  foundHelper = helpers.elicitationgoal;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "<b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n              <li>\n                <div id=\"corpus-quickview\" class=\"well span3\"></div>\n              </li>\n              <li>\n                <div id=\"session-quickview\" class=\"well span3\"></div>\n              </li>\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n              <li><a tabindex=\"-1\" href=\"#\"\n                class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n              <button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n              <span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span>\n          </a>\n            <ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n              id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"\">\n		<!--Elements in the middle (things that get hidden)  -->\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			\n			<div id=\"search-data-list-quickview\" class=\"well hide span12\">\n        <div id=\"search-data-list-quickview-header\" class=\" \"></div>\n        <div class=\"  \">\n          <ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view \"></ul>\n          <div class=\"pagination-control\"></div>\n        </div>\n      </div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n			\n			<div id=\"conversation-embedded\" class=\"middle well\">\n        <div class=\"scrollable\">\n          <div class=\"conversation-text-audio-wrapper\">\n            <div class=\"jp-load-bar\" style=\"width: 960;\">\n              <div class=\"jp-play-bar\" style=\"width: 330;\">\n                <i class=\"icon-gift\"></i><strong></strong>\n                <h4>'Conversations' will let you have multiple speakers\n                  with overlapping speech.</h4>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n      \n		</div>\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
+  return buffer;});
+})();(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['app_whats_happening'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <i class=\"icon-bar\"></i> <i\n        class=\"icon-bar\"></i> <i class=\"icon-bar\"></i>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n          <li class=\"dropdown\"><a id=\"corpus_dropdown_trigger\" href=\"#\"\n            role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i\n              class=\"icon-cloud icon-white\"></i> ";
+  foundHelper = helpers.corpustitle;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.corpustitle; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + " - ";
+  foundHelper = helpers.elicitationgoal;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.elicitationgoal; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "<b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_corpus_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"corpus_dropdown_trigger\">\n\n              <li>\n                <div id=\"corpus-quickview\" class=\"well span3\"></div>\n              </li>\n              <li>\n                <div id=\"session-quickview\" class=\"well span3\"></div>\n              </li>\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul\n              class=\"dropdown-menu dont_close_notifications_dropdown_if_user_clicks\"\n              role=\"menu\" aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!--  <li class=\"\"><span class=\"locale_Need_save\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Save_on_this_Computer \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li>\n\n              <li class=\"not-a   locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider \"></li>\n\n              <li class=\"\"><span class=\"locale_Need_sync\"></span><a\n                tabindex=\"-1\" href=\"#\" class=\"locale_Sync_and_Share \"\n                rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li class=\"\"><progress class=\"unsynced-changes\"\n                  max=\"100\" value=\"80\"> </progress></li>\n\n              <li class=\"not-a  locale_Differences_with_the_central_server\"></li> -->\n\n\n              <li><a tabindex=\"-1\" href=\"#\"\n                class=\"clear_all_notifications\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <b class=\"caret\"></b>\n              <button id=\"login_register_button\" class=\"btn btn-success hide\">Login/Register</button>\n              <span id=\"loggedin_customize_on_auth_dropdown\">Customize</span><span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span>\n          </a>\n            <ul class=\"dropdown-menu scrollable min_auth_dropdown_size\"\n              id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n	<div id=\"dashboard-view\" class=\"row-fluid\">\n		<!--Elements in the middle (things that get hidden)  -->\n		<div class=\"span6\">\n\n			<div id=\"datums-embedded\" class=\"middle well\"></div>\n			<div id=\"conversation-embedded\" class=\"middle well\">\n				<div class=\"scrollable\">\n					<div class=\"conversation-text-audio-wrapper\">\n						<div class=\"jp-load-bar\" style=\"width: 960;\">\n							<div class=\"jp-play-bar\" style=\"width: 330;\">\n								<i class=\"icon-gift\"></i><strong></strong>\n								<h4>'Conversations' will let you have multiple speakers\n									with overlapping speech.</h4>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>\n			<div id=\"data-list-embedded\" class=\"well\">\n				<div id=\"data-list-embedded-header\" class=\"middle \"></div>\n				<div>\n					<ul class=\"unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view\"></ul>\n					<div class=\"pagination-control\"></div>\n				</div>\n			</div>\n			<div id=\"session-embedded\" class=\"middle well\"></div>\n			<div id=\"corpus-embedded\" class=\"middle well\"></div>\n			<div id=\"search-embedded\" class=\"middle well\"></div>\n		</div>\n		<!--/span-->\n		<!-- right hand side -->\n		<div class=\"span6\">\n			<div class=\"well\">\n				<iframe src=\"activity/activity_feed.html#/user/";
+  foundHelper = helpers.username;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n\n			<div class=\"well\">\n				<iframe\n					src=\"activity/activity_feed.html#/user/";
+  foundHelper = helpers.username;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "/corpus/";
+  foundHelper = helpers.pouchname;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "\"\n					width=\"100%\" height=\"400\" frameborder=\"0\" ALLOWTRANSPARENCY=\"true\"></iframe>\n			</div>\n		</div>\n		<!--/span-->\n	</div>\n	<!--/row-->\n\n	<!-- FullScreen Views -->\n	<div id=\"user-fullscreen\" class=\"well \"></div>\n	<div id=\"public-user-page\" class=\"well \"></div>\n	<div id=\"corpus-fullscreen\" class=\"well \"></div>\n	<div id=\"session-fullscreen\" class=\"well \"></div>\n	<div id=\"search-fullscreen\" class=\"well \"></div>\n	<div id=\"data-list-fullscreen\" class=\"well row\">\n		<div id=\"data-list-fullscreen-header\"></div>\n		<div class=\"  container span12 \">\n			<ul class=\"unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view\"></ul>\n			<div class=\"pagination-control\"></div>\n		</div>\n	</div>\n	<div id=\"datum-container-fullscreen\" class=\"well\"></div>\n	<div id=\"conversation-container-fullscreen\" class=\"well\">TODO:\n		this will be a conversation</div>\n	<div id=\"import-fullscreen\" class=\"\"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"export-modal\" class=\"modal hide\"></div>\n<div id=\"new-session-modal\" class=\"modal hide\"></div>\n<div id=\"new-corpus-modal\" class=\"modal hide\"></div>\n<div id=\"illustrated_guide_to_dash\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<p>\n			<span class=\"help_count_reason\"></span> This help will show <span\n				class=\"help_count_left\"></span> more times. <a\n				href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n				target=\"_blank\">Click here to open the guide in a new tab</a>\n		</p>\n	</div>\n	<a\n		href=\"https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit\"\n		target=\"_blank\"> <img\n		src=\"https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918\" /></a>\n</div>\n<div id=\"quick-authenticate-modal\" data-backdrop=\"static\"\n	data-keyboard=\"static\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n	</div>\n	<div class=\"modal-body\">\n		<label class=\"locale_Password\"></label> <input type=\"password\"\n			id=\"quick-authenticate-password\" />\n	</div>\n	<div class=\"modal-footer\">\n		<button class=\"btn btn-success locale_Yep_its_me\"\n			id=\"quick-authentication-okay-btn\"></button>\n	</div>\n</div>\n<div id=\"login_modal\" class=\"modal hide\">\n	<div class=\"modal-header\">\n		<h3 class=\"locale_Log_In\"></h3>\n	</div>\n	<div class=\"modal-body\">\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n		<label class=\"locale_Username\"></label> <input size=\"16\" type=\"text\"\n			class=\"welcomeusername\" value=\"\" /> <label class=\"locale_Password \"></label>\n		<input type=\"password\" size=\"16\" class=\"welcomepassword\" value=\"\" />\n		<label class=\"locale_authUrl\">Server</label> <input type=\"text\"\n			size=\"16\" class=\"welcomeauthurl\" data-provide=\"typeahead\"\n			data-items=\"4\"\n			data-source='[&quot;LingSync.org&quot;,&quot;LingSync Testing&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />\n	</div>\n	<div class=\"modal-footer\">\n		<a href=\"#\" class=\"btn btn-success sync-my-data\"> <span\n			class=\"locale_Log_In\"></span>\n		</a>\n	</div>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -14716,6 +14796,20 @@ function program3(depth0,data) {
   buffer += escapeExpression(stack1) + "\n	  </span>\n	";
   return buffer;}
 
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, foundHelper;
+  buffer += "\n		<!-- <li><strong>";
+  foundHelper = helpers.label;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</strong>: ";
+  foundHelper = helpers.mask;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</li> -->\n		";
+  return buffer;}
+
   buffer += "<div class=\"span1\">\n  <input type=\"checkbox\" class=\"datum-checkboxes\"></input>\n</div>\n<div class=\"span1\">\n  ";
   stack1 = depth0.judgement;
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
@@ -14728,7 +14822,11 @@ function program3(depth0,data) {
   foundHelper = helpers.translation;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.translation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n</div>";
+  buffer += escapeExpression(stack1) + "</span>\n	<ul class=\"unstyled\">\n		";
+  stack1 = depth0.additionalFields;
+  stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</ul>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -15014,7 +15112,11 @@ templates['insert_unicode'] = template(function (Handlebars,depth0,helpers,parti
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<span class=\"dropdown \" id=\"menu";
+  buffer += "<button class=\"btn btn-info btn-mini\">\n	<b class=\"unicode-symbol infrequent-unicode-symbol\" draggable=\"true\">";
+  foundHelper = helpers.symbol;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</b>\n</button>\n<!-- <span class=\"dropdown \" id=\"menu";
   foundHelper = helpers.symbol;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.symbol; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -15030,7 +15132,7 @@ templates['insert_unicode'] = template(function (Handlebars,depth0,helpers,parti
   foundHelper = helpers.tipa;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.tipa; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"></li>\n		<li class = \"locale_Unicode_Instructions\"></li>\n		<li><a data-toggle=\"modal\" href=\"#hotkey-settings-modal\">\n		  <i class=\"icon-hdd\"></i>\n		  <span class = \"locale_Keyboard_Shortcuts\"></span> </a></li>\n		<li class=\"remove-unicode\"><a>\n		  <i class=\"icon-remove-sign\"></i>\n		  <span class = \"locale_Remove_Unicode\"></span></a></li>\n	</ul>\n</span>";
+  buffer += escapeExpression(stack1) + "\" type=\"text\"></li>\n		<li class = \"locale_Unicode_Instructions\"></li>\n		<li><a data-toggle=\"modal\" href=\"#hotkey-settings-modal\">\n		  <i class=\"icon-hdd\"></i>\n		  <span class = \"locale_Keyboard_Shortcuts\"></span> </a></li>\n		<li class=\"remove-unicode\"><a>\n		  <i class=\"icon-remove-sign\"></i>\n		  <span class = \"locale_Remove_Unicode\"></span></a></li>\n	</ul>\n</span> -->";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -15039,7 +15141,7 @@ templates['insert_unicodes'] = template(function (Handlebars,depth0,helpers,part
   
 
 
-  return "<div class=\"pull-right\">\n  <a href=\"#\" class =\"locale_Hide_Unicode_Palette\" rel=\"tooltip\" >\n    <i class=\"icons icon-minus-sign\"></i></a>\n</div>\n<h3><span class = \"locale_Unicode\"></span>\n<span class = \"locale_Drag_and_Drop\">\n  </span>\n</h3>\n<div id=\"unicodes\" class=\"unicode-buttons row-fluid\"></div>\n<br />\n<span class=\"like-form-inline\">\n  <input class=\"insert-unicode-input input-small locale_Paste_Type_Unicode_Symbol_Placeholder\"  type=\"text\"/>\n  <input class=\"insert-unicode-tipa-input input-small locale_TIPA_shortcut\" type=\"text\"/>\n  <a href=\"#\" class = \"locale_Add_new_symbol btn btn-primary add-unicode locale_Add\" rel=\"tooltip\">\n    </a>\n</span>";});
+  return "<div class=\"pull-right\">\n  <a href=\"#\" class =\"locale_Hide_Unicode_Palette\" rel=\"tooltip\" >\n    <i class=\"icons icon-minus-sign\"></i></a>\n</div>\n<h3><span class = \"locale_Unicode\"></span>\n<span class = \"locale_Drag_and_Drop\">\n  </span>\n</h3>\n<div id=\"unicodes\" class=\"unicode-buttons row-fluid\"></div>\n<!-- <br />\n<span class=\"like-form-inline\">\n  <input class=\"insert-unicode-input input-small locale_Paste_Type_Unicode_Symbol_Placeholder\"  type=\"text\"/>\n  <input class=\"insert-unicode-tipa-input input-small locale_TIPA_shortcut\" type=\"text\"/>\n  <a href=\"#\" class = \"locale_Add_new_symbol btn btn-primary add-unicode locale_Add\" rel=\"tooltip\">\n    </a>\n</span> -->";});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['insert_unicodes_minimized'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -15217,11 +15319,11 @@ templates['user_edit_modal'] = template(function (Handlebars,depth0,helpers,part
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"modal-header\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> \n	 <i class=\"icons icon-book pull-right\"> </i>\n	</a>\n  <h1>\n		<span class=\"locale_User_Profile\"> </span> <small>";
+  buffer += "<div class=\"modal-header\">\n\n	<button class=\"btn locale_Close pull-right\" data-dismiss=\"modal\">\n	</button>\n	\n	<button\n		class=\"btn btn-success pull-right save-user-profile locale_Save\"\n		value=\"Save\"></button>\n		\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book pull-right\"> </i>\n	</a>\n	\n	<h1>\n		<span class=\"locale_User_Profile\"> </span> <small>";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " (";
+  buffer += escapeExpression(stack1) + "\n			(";
   foundHelper = helpers.firstname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -15229,7 +15331,7 @@ templates['user_edit_modal'] = template(function (Handlebars,depth0,helpers,part
   foundHelper = helpers.lastname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ") </small>\n	</h1>\n	<p class = \"locale_Private_Profile_Instructions\"></p>\n	<button class=\"btn btn-primary edit-public-user-profile locale_Edit_Public_User_Profile \"></button>\n  \n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+  buffer += escapeExpression(stack1) + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\"edit-public-user-profile locale_Edit_Public_User_Profile \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
   foundHelper = helpers.gravatar;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -15261,7 +15363,7 @@ templates['user_edit_modal'] = template(function (Handlebars,depth0,helpers,part
   foundHelper = helpers.description;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " \n      </textarea>\n		</dd>\n    <dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n<div class=\"modal-footer\">\n	<a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"> </a>\n	<button class=\"btn btn-success pull-right save-user-profile locale_Save\"\n		value=\"Save\"></button>\n</div>";
+  buffer += escapeExpression(stack1) + " \n      </textarea>\n		</dd>\n		<dt>\n			<i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span>\n		</dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -15270,11 +15372,11 @@ templates['user_preference_edit_modal'] = template(function (Handlebars,depth0,h
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"modal-header\">\n	<h1 class = \"locale_User_Settings\"></h1>\n</div>\n<div class=\"modal-body\">\n  <p class=\"locale_user_settings_instructions\">This is where you can\n		adjust settings that are mostly for you as a user, that aren't really\n		tied to a corpus. Your settings are backed up when you authenticate\n		with the server (this usually happens when the \"I need to make sure its you\" box pops up) so that you can get your preferences if you log in on\n		another device.</p>\n\n  <div class=\"border-bottom\">\n		<h5 class = \"locale_Skin\"> </h5>\n		<p class=\"locale_skin_instructions\">You can use a combinations of background colors or pictures,\n			and transparency to create the entire range between high contrast, to low contrast, low eyestrain screens\n			to make it easier on your eyes to enter data for long periods of\n			time. You can also keep the background picture on random if you feel\n			it might help you stop procrastinating and enter your data.</p>\n		<span class=\"user-pref-skin-filename\">";
+  buffer += "<div class=\"modal-header\">\n	<button class=\"btn locale_Close pull-right\" data-dismiss=\"modal\"></button>\n	<h1 class=\"locale_User_Settings\"></h1>\n</div>\n<div class=\"modal-body\">\n	<div class=\"border-bottom\">\n		<p class=\"locale_user_settings_instructions\">This is where you can\n			adjust settings that are mostly for you as a user, settings which\n			aren't really tied to a corpus. Your settings are backed up when you\n			authenticate with the server (this usually happens when the \"I need\n			to make sure its you\" box pops up) so that you can get your\n			preferences if you log in on another device.</p>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Skin\"></h5>\n		<p class=\"locale_skin_instructions\">You can use a combinations of\n			background colors or pictures, and transparency to create the entire\n			range between high contrast, to low contrast, low eyestrain screens\n			to make it easier on your eyes to enter data for long periods of\n			time. You can also keep the background picture on random if you feel\n			it might help you stop procrastinating and enter your data.</p>\n		<span class=\"user-pref-skin-filename\">";
   foundHelper = helpers.skin;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.skin; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n		<div class=\"control-group\">\n			<button class=\"preference btn change-skin locale_Change_Background\"></button>\n			<button class=\"preference btn randomize-backgound locale_Background_on_Random\">	</button>\n			<button class=\"preference btn transparent-dashboard locale_Transparent_Dashboard\">		</button>\n		</div>\n	</div>\n	<div class=\"border-bottom\">\n		<h5 class =\"locale_Number_Datum\"></h5>\n		<p class=\"locale_number_datum_instructions\">You can change the number\n			of datum in the data entry area of your dashboard, if you like to\n			enter data surrounded by context (ie see the datum that you just\n			entered as you would in Word or Excel), you can set it to a high\n			number (5). This can be confusing because the datum are inserted at\n			the top, not at the bottom of the data entry area (if this annoys\n			you, let us know using the bug form, it probably woudlnt take long to make it into an option.)\n			</p>\n			<p> You can\n			also have the app show only one datum, and even make that datum full\n			screen using the arrows in its widget (if you like to enter data like\n			you would in FileMaker Pro). A pretty good middle ground is 2 datum visible. With two datum \n			you can see when you are creating minimal pairs, or creating new datum  \n			to be checked with a language consultant, based on an existing datum.</p>\n  <label class =\"locale_Number_Datum\" ></label>\n		<select class=\"num_datum_dropdown\">\n			<option value=\"1\">1</option>\n			<option value=\"2\">2</option>\n			<option value=\"3\" selected>3</option>\n			<option value=\"4\">4</option>\n			<option value=\"5\">5</option>\n		</select>\n	</div>\n	<div class=\"border-bottom\">\n    <h5 class =\"locale_Font_Size\">Font Size</h5>\n		<p class=\"locale_font_size_instructions\">It is very easy to adjust\n			the font size in LingSync, you can use the standard browser features\n			(this is one reason we wanted to make the app in a browser).</p>\n		<h5>Larger Font</h5>\n		<ul>\n			<li>Mac: ⌘+ (Command - Shift - +) </li>\n			<li>Linux/Windows: Control - Shift - + </li>\n			<li>Android: On most Androids you can double tap the screen to zoom in and out, let us know if you figure it out.</li>\n			<li>iPad/iPhone: let us know if you figure it out</li>\n		</ul>\n		<h5>Smaller Font</h5>\n    <ul>\n      <li>Mac: ⌘- (Command -) </li>\n      <li>Linux/Windows: Control -  </li>\n      <li>Android: On most Androids you can double tap the screen to zoom in and out, let us know if you figure it out.</li>\n      <li>iPad/iPhone: let us know if you figure it out</li>\n    </ul>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Full_Screen\">How to go fullscreen</h5>\n		<p class=\"locale_full_screen_instructions\">It is very easy to go\n			full screen and make LingSync look like a native desktop application,\n			(either with a toolbar) or in complete full screen presentation mode.</p>\n		<h5>Full screen</h5>\n		<ul>\n			<li>Mac: ⌘⇧F (Command - Shift - F)</li>\n			<li>Linux: let us know if you figure it out.</li>\n			<li>Windows: F11</li>\n			<li>Android: let us know if you figure it out.</li>\n			<li>iPad/iPhone: let us know if you figure it out</li>\n		</ul>\n		<h5>Full screen (can still see tabs)</h5>\n		<ul>\n			<li>Mac: ⌘^F (Command - Control - F)</li>\n			<li>Linux/Windows: (This how Chrome is normally)</li>\n			<li>Android: (This how Chrome is normally)</li>\n			<li>iPad/iPhone: (This how Chrome is normally)</li>\n		</ul>\n	</div>\n\n</div>\n<div class=\"modal-footer\">\n	<a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"></a>\n</div>\n\n";
+  buffer += escapeExpression(stack1) + "</span>\n		<div class=\"control-group\">\n			<button class=\"preference btn change-skin locale_Change_Background\"></button>\n			<button\n				class=\"preference btn randomize-backgound locale_Background_on_Random\">\n			</button>\n			<button\n				class=\"preference btn transparent-dashboard locale_Transparent_Dashboard\">\n			</button>\n			<button\n				class=\"preference btn high-contrast-dashboard locale_High_Contrast_Dashboard\">High\n				Contrast</button>\n		</div>\n	</div>\n\n	<div class=\"border-bottom\">\n		<!-- TODO put a title and description abotu what layouts are  here? -->\n		<div class=\"control-group\">\n			<input\n				class=\" btn  set-prefered-dashboard-layoutJustEntering gravatar-large\"\n				type=\"image\" src=\"user/layouts/layout1_just_entering.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutAllTheData gravatar-large\"\n				type=\"image\" src=\"user/layouts/layout2_all_the_data.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutWhatsHappening gravatar-large\"\n				type=\"image\" src=\"user/layouts/layout3_whats_happening.png\" /> <input\n				class=\" btn set-prefered-dashboard-layoutCompareDataLists gravatar-large\"\n				type=\"image\" src=\"user/layouts/layout4_compare_datalists.png\" /> <input\n				class=\" btn  set-prefered-dashboard-layoutEverythingAtOnce gravatar-large\"\n				type=\"image\" src=\"user/layouts/layout5_everything_at_once.png\" />\n		</div>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Number_Datum\"></h5>\n		<p class=\"locale_number_datum_instructions\">You can change the\n			number of datum in the data entry area of your dashboard, if you like\n			to enter data surrounded by context (ie see the datum that you just\n			entered as you would in Word or Excel), you can set it to a high\n			number (5). This can be confusing because the datum are inserted at\n			the top, not at the bottom of the data entry area (if this annoys\n			you, let us know using the bug form, it probably wouldn't take long\n			to make it into an option.)</p>\n		<p>You can also have the app show only one datum, and even make\n			that datum full screen using the arrows in its widget (if you like to\n			enter data like you would in FileMaker Pro). A pretty good middle\n			ground is 2 datum visible. With two datum you can see when you are\n			creating minimal pairs, or creating new datum to be checked with a\n			language consultant, based on an existing datum.</p>\n		<label class=\"locale_Number_Datum\"></label> <select\n			class=\"num_datum_dropdown\">\n			<option value=\"1\">1</option>\n			<option value=\"2\">2</option>\n			<option value=\"3\" selected>3</option>\n			<option value=\"4\">4</option>\n			<option value=\"5\">5</option>\n		</select>\n	</div>\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Font_Size\">Font Size</h5>\n		<p class=\"locale_font_size_instructions\">It is very easy to adjust\n			the font size in LingSync, you can use the standard browser features\n			(this is one reason we wanted to make the app in a browser).</p>\n		<h5>Larger Font</h5>\n		<ul>\n			<li>Mac: ⌘+ (Command - Shift - +)</li>\n			<li>Linux/Windows: Control - Shift - +</li>\n			<li>Android: On most Androids you can double tap the screen to\n				zoom in and out, or use your fingers to pinch zoom in and out.</li>\n			<li>iPad/iPhone: use your fingers to pinch zoom in and out as\n				you would on any other app.</li>\n		</ul>\n		<h5>Smaller Font</h5>\n		<ul>\n			<li>Mac: ⌘- (Command -)</li>\n			<li>Linux/Windows: Control -</li>\n			<li>Android: On most Androids you can double tap the screen to\n				zoom in and out, or use your fingers to pinch zoom in and out.</li>\n			<li>iPad/iPhone: use your fingers to pinch zoom in and out as\n				you would on any other app.</li>\n		</ul>\n	</div>\n\n	<div class=\"border-bottom\">\n		<h5 class=\"locale_Full_Screen\">How to go fullscreen</h5>\n		<p class=\"locale_full_screen_instructions\">It is very easy to go\n			full screen and make LingSync look like a native desktop application,\n			(either with a toolbar) or in complete full screen presentation mode.</p>\n		<h5>Full screen</h5>\n		<ul>\n			<li>Mac: ⌘⇧F (Command - Shift - F)</li>\n			<li>Linux: let us know if you figure it out.</li>\n			<li>Windows: F11</li>\n			<li>Android: let us know if you figure it out.</li>\n			<li>iPad/iPhone: let us know if you figure it out</li>\n		</ul>\n		<h5>Full screen (can still see tabs)</h5>\n		<ul>\n			<li>Mac: ⌘^F (Command - Control - F)</li>\n			<li>Linux/Windows: (This how Chrome is normally)</li>\n			<li>Android: (This how Chrome is normally)</li>\n			<li>iPad/iPhone: (This how Chrome is normally)</li>\n		</ul>\n	</div>\n\n</div>\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -15349,11 +15451,11 @@ templates['user_read_modal'] = template(function (Handlebars,depth0,helpers,part
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"modal-header\">\n	<a href=\"#\" class=\"locale_Edit_User_Profile_Tooltip pull-right\" rel=\"tooltip\" >\n	 <i class=\"icons icon-edit edit-user-profile \"></i> </a>\n <h1>\n    <span class=\"locale_User_Profile\"> </span> <small>";
+  buffer += "<div class=\"modal-header\">\n\n	<button class=\"btn locale_Close pull-right\" data-dismiss=\"modal\">\n	</button>\n\n	<a href=\"#\" class=\"locale_Edit_User_Profile_Tooltip pull-right\"\n		rel=\"tooltip\"> <i class=\"icons icon-edit edit-user-profile \"></i>\n	</a>\n	<h1>\n		<span class=\"locale_User_Profile\"> </span> <small>";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + " (";
+  buffer += escapeExpression(stack1) + "\n			(";
   foundHelper = helpers.firstname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.firstname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -15361,7 +15463,7 @@ templates['user_read_modal'] = template(function (Handlebars,depth0,helpers,part
   foundHelper = helpers.lastname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.lastname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + ") </small>\n	</h1>\n	<p class = \"locale_Private_Profile_Instructions\"></p>\n	 <a href=\"#\" class=\"btn btn-primary view-public-profile locale_View_Public_Profile_Tooltip \" ></a>\n  \n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
+  buffer += escapeExpression(stack1) + ") </small>\n	</h1>\n	<span class=\"locale_Private_Profile_Instructions\"></span> <a href=\"#\"\n		class=\" view-public-profile locale_View_Public_Profile_Tooltip \"></a>\n\n</div>\n<div class=\"modal-body\">\n\n	<dl>\n		<dt class=\"locale_Gravatar\"></dt>\n		<dd>\n			<img class=\"gravatar-image gravatar-large\" src=\"";
   foundHelper = helpers.gravatar;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.gravatar; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -15381,7 +15483,7 @@ templates['user_read_modal'] = template(function (Handlebars,depth0,helpers,part
   foundHelper = helpers.description;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</dd>\n		<dt><i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span></dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n<div class=\"modal-footer\">\n	 <a href=\"#\" class=\"btn locale_Close\" data-dismiss=\"modal\"> </a>\n</div>";
+  buffer += escapeExpression(stack1) + "</dd>\n		<dt>\n			<i class=\"icon-cloud\"></i> <span class=\"locale_Corpora\"></span>\n		</dt>\n		<dd>\n			<ul class=\"corpuses\">\n			</ul>\n		</dd>\n	</dl>\n</div>\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -26395,7 +26497,25 @@ define('datum/DatumReadView',[
         var gloss = this.model.get("datumFields").where({label: "gloss"})[0].get("mask");
         var translation = this.model.get("datumFields").where({label: "translation"})[0].get("mask");
         
+        var additionalFields = [];
+        additionalFields.push({
+          label : "consultants",
+          mask : "Seberina"
+        },{
+          label : "context",
+          mask : "Said after a heavy rain storm."
+        });
+        
+//        var searchparams = app.get("search").get("searchKeywords");
+//        for (field in sessionFields){
+//          if(searchparams.indexOf(sessionFiels[field]) >=0){
+////            show it.
+//          }
+//        }
+
         var jsonToRender = {};
+        jsonToRender.additionalFields = additionalFields;
+
         try{
           var utteranceArray = utterance.split(' ');
           var glossArray = gloss.split(' ');
@@ -32119,7 +32239,17 @@ define('import/ImportEditView', [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-          headers[index] = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
+        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
+        if(!newDatumFieldLabel){
+          return;
+        }
+        if(headers.indexOf(newDatumFieldLabel) >= 0){
+          OPrime.bug("You seem to have some column labels that are duplicated" +
+              " (the same label on two columns). This will result in a strange " +
+              "import where only the second of the two will be used in the import. " +
+          "Is this really what you want?.");
+        }
+        headers[index] = newDatumFieldLabel;
       });
       /*
        * Create new datum fields for new columns
@@ -32458,14 +32588,10 @@ define('import/ImportEditView', [
                             
             /* end successful save of datalist and session */
             
-          /* Save datalist failure */
-          },function(){
-            alert("Bug: couldnt save the import datalist.");
-          });
-        /* Save session failure */
-        },function(){
-          alert("Bug! save session failed in import");
-        });
+          
+          }/* Default Save datalist failure */);
+        
+        }/*Default Save session failure */);
       });
     },
     /**
@@ -32893,7 +33019,62 @@ define('user/UserPreferenceEditView',[
           this.makeDashboardTransparent();
         }
         this.savePrefs();
+      },
+      "click .high-contrast-dashboard" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if(this.model.get("highContrastDashboard") == "true"){
+          this.model.set("highContrastDashboard", "false");
+          $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
+          this.makeDashboardNonHighContrast();
+        }else{
+          this.model.set("highContrastDashboard", "true");
+          $(this.el).find(".high-contrast-dashboard").addClass("btn-success");
+          this.makeDashboardHighContrast();
+        }
+        this.savePrefs();
+      },
+      /*
+       * TODO add these classes to the buttons them selves
+       */
+      "click .set-prefered-dashboard-layoutJustEntering" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutJustEntering");
+      },
+      "click .set-prefered-dashboard-layoutAllTheData" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutAllTheData");
+      },
+      "click .set-prefered-dashboard-layoutWhatsHappening" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutWhatsHappening");
+      },
+      "click .set-prefered-dashboard-layoutCompareDataLists" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutCompareDataLists");
+      },
+      "click .set-prefered-dashboard-layoutEverythingAtOnce" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutEverythingAtOnce");
       }
+      
     },
  
     /**
@@ -32925,6 +33106,32 @@ define('user/UserPreferenceEditView',[
           this.makeDashboardOpaque();
         }
         
+        if(this.model.get("highContrastDashboard") == "true"){
+          $(this.el).find(".high-contrast-dashboard").addClass("btn-success");
+          this.makeDashboardHighContrast();
+        }else{
+          $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
+          this.makeDashboardNonHighContrast();
+        }
+        
+        /*
+         * Make all template buttons that are not the current one half opaque so
+         * the user can kind of see which is the one they are using.
+         * 
+         * TODO add these classes to the buttons them selves 
+         */
+        var templatesThatAreNotActive = "layoutJustEntering,layoutAllTheData,layoutWhatsHappening,layoutCompareDataLists,templateFile".split(",");
+        var activeTemplate = this.model.get("preferedDashboardLayout");
+        var activeTemplateIndex = templatesThatAreNotActive.indexOf(activeTemplate);
+        if(activeTemplateIndex >= 0){
+          templatesThatAreNotActive.splice(activeTemplateIndex, 1);
+        }else{
+          this.model.set("preferedDashboardLayout", "default");
+        }
+        for(var template in templatesThatAreNotActive){
+          $(this.el).find('.set-prefered-dashboard-'+templatesThatAreNotActive[template]);//.addClass("halfopacity");
+        }
+        
         if (this.model.get("skin") == "") {
           this.randomSkin();
         }else{
@@ -32938,6 +33145,7 @@ define('user/UserPreferenceEditView',[
       $(this.el).find(".locale_Change_Background").html(Locale.get("locale_Change_Background"));
       $(this.el).find(".locale_Background_on_Random").html(Locale.get("locale_Background_on_Random"));
       $(this.el).find(".locale_Transparent_Dashboard").html(Locale.get("locale_Transparent_Dashboard"));
+//      $(this.el).find(".locale_High_Contrast_Dashboard").html(Locale.get("locale_High_Contrast_Dashboard"));
       $(this.el).find(".locale_Number_Datum").html(Locale.get("locale_Number_Datum"));
       $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));  
       return this;
@@ -33038,7 +33246,43 @@ define('user/UserPreferenceEditView',[
     savePrefs: function(){
       if (OPrime.debugMode) OPrime.debug("Saving preferences into encrypted user.");
       window.app.get("authentication").saveAndInterConnectInApp();
+    },
+    
+    makeDashboardHighContrast : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      var oldlink = document.getElementsByTagName("link").item(6);
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "app/high_contrast.css");
+      headtg.replaceChild(newlink, oldlink);
+    },
+    
+    makeDashboardNonHighContrast : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      var oldlink = document.getElementsByTagName("link").item(6);
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "app/not_high_contrast.css");
+      headtg.replaceChild(newlink, oldlink);
+    },
+    
+    setPreferedDashboardTemplate : function(preferedTemplate){
+      this.model.set("preferedDashboardLayout", preferedTemplate);
+      if (confirm("Would you like to load this new dashboard layout now?")) {
+        window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
+          window.location.replace("corpus.html");
+        });
+      }
     }
+    
   });
   
   return UserPreferenceEditView;
@@ -34717,6 +34961,8 @@ define('app/AppView',[
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
+      this.format = "default";
+      
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
       this.setUpAndAssociateViewsAndModelsWithCurrentDataList();
@@ -35136,8 +35382,13 @@ define('app/AppView',[
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.templates.app,
-    
+    template : Handlebars.templates.app_everything_at_once,
+    layoutJustEntering : Handlebars.templates.app_just_entering,
+    layoutAllTheData : Handlebars.templates.app_all_the_data,
+    layoutWhatsHappening : Handlebars.templates.app_whats_happening,
+    layoutCompareDataLists : Handlebars.templates.app_compare_datalists,
+    layoutEverythingAtOnce : Handlebars.templates.app_everything_at_once,
+
     /**
      * Renders the AppView and all of its child Views.
      */
@@ -35185,7 +35436,22 @@ define('app/AppView',[
           if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
         }
         
-        $(this.el).html(this.template(jsonToRender));
+        /* Render the users prefered dashboard layout */
+        this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+        if(this.format == "default"){
+          $(this.el).html(this.template(jsonToRender));
+        }else if(this.format == "layoutJustEntering"){
+          $(this.el).html(this.layoutJustEntering(jsonToRender));
+        }else if(this.format == "layoutAllTheData"){
+          $(this.el).html(this.layoutAllTheData(jsonToRender));
+        }else if(this.format == "layoutWhatsHappening"){
+          $(this.el).html(this.layoutWhatsHappening(jsonToRender));
+        }else if(this.format == "layoutCompareDataLists"){
+          $(this.el).html(this.layoutCompareDataLists(jsonToRender));
+        }else if(this.format == "layoutEverythingAtOnce"){
+          $(this.el).html(this.layoutEverythingAtOnce(jsonToRender));
+        }
+        if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
 
         //The authView is the dropdown in the top right corner which holds all the user menus
         this.authView.render();
@@ -35842,6 +36108,7 @@ define('app/App',[
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
+    "datum/DatumField",
     "datum/DatumFields",
     "search/Search",
     "datum/Session",
@@ -35858,6 +36125,7 @@ define('app/App',[
     Authentication, 
     Corpus,
     DataList,
+    DatumField,
     DatumFields,
     Search,
     Session,
@@ -36510,6 +36778,27 @@ define('app/App',[
                 oldCouchConnection.port = "";
                 corpusModel.set("couchConnection", oldCouchConnection);
               }
+            }
+            
+            try{
+              var tags = corpusModel.get("datumFields").where({label : "tags"});
+              if(tags.length == 0){
+                /* If its missing tags, add upgrade the corpus to version v1.38+ */
+                corpusModel.get("datumFields").add(new DatumField({
+                  label : "tags",
+                  shouldBeEncrypted: "",
+                  userchooseable: "disabled",
+                  help: "Tags for constructions or other info that you might want to use to categorize your data."
+                }));
+                corpusModel.get("datumFields").add(new DatumField({
+                  label : "validationStatus",
+                  shouldBeEncrypted: "",
+                  userchooseable: "disabled",
+                  help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
+                }));
+              }
+            }catch(e){
+              OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
             }
             
             $(".spinner-status").html("Opened Corpus...");
