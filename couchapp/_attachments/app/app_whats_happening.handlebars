@@ -1,107 +1,124 @@
 <!-- Black Navigation Bar Across the Top -->
 <div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container ">
+  <div class="navbar-inner">
+    <div class="container ">
 
 
 
-			<!-- Home button -->
-			<a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
-				rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
+      <!-- Home button -->
+      <a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
+        rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
 
-			<!-- Top Search Area -->
-			<span class="navbar-search" id="search-top"> </span>
+      <!-- Top Search Area -->
+      <span class="navbar-search" id="search-top"> </span>
 
-			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-			<a class="btn btn-navbar" data-toggle="collapse"
-				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
-				class="icon-bar"></span> <span class="icon-bar"></span>
-			</a>
-
-
-			<!-- Collapsing area if the screen is not wide enough -->
-			<div class="nav-collapse collapse">
-				<ul class="nav" role="navigation ">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <a class="btn btn-navbar" data-toggle="collapse"
+        data-target=".nav-collapse"> <i class="icon-bar"></i> <i
+        class="icon-bar"></i> <i class="icon-bar"></i>
+      </a>
 
 
+      <!-- Collapsing area if the screen is not wide enough -->
+      <div class="nav-collapse collapse">
+        <ul class="nav" role="navigation ">
+
+          <li class="dropdown"><a id="corpus_dropdown_trigger" href="#"
+            role="button" class="dropdown-toggle" data-toggle="dropdown"><i
+              class="icon-cloud icon-white"></i> {{corpustitle}} - {{elicitationgoal}}<b
+              class="caret"></b></a>
+            <ul
+              class="dropdown-menu dont_close_corpus_dropdown_if_user_clicks"
+              role="menu" aria-labelledby="corpus_dropdown_trigger">
+
+              <li>
+                <div id="corpus-quickview" class="well span3"></div>
+              </li>
+              <li>
+                <div id="session-quickview" class="well span3"></div>
+              </li>
+
+            </ul></li>
 
 
-					<!-- Notification -->
-					<li class="dropdown"><a id="notification_dropdown_trigger"
-						href="#" role="button" class="dropdown-toggle"
-						data-toggle="dropdown"><i
-							class="icon-exclamation-sign icon-white"></i> Notifications <b
-							class="caret"></b></a>
-						<ul class="dropdown-menu dont_close_notifications_dropdown_if_user_clicks" role="menu"
-							aria-labelledby="notification_dropdown_trigger">
+          <!-- Notification -->
+          <li class="dropdown"><a id="notification_dropdown_trigger"
+            href="#" role="button" class="dropdown-toggle"
+            data-toggle="dropdown"><i
+              class="icon-exclamation-sign icon-white"></i> Notifications <b
+              class="caret"></b></a>
+            <ul
+              class="dropdown-menu dont_close_notifications_dropdown_if_user_clicks"
+              role="menu" aria-labelledby="notification_dropdown_trigger">
 
 
 
 
-							<!-- 	<li class=""><span class="locale_Need_save"></span><a
-								tabindex="-1" href="#" class="locale_Save_on_this_Computer "
-								rel="tooltip"> <i
-									class="icons icon-save save-dashboard icon-white"></i>
-							</a></li>
-							<li><progress class="unsaved-changes" max="100" value="30">
-								</progress></li>
+              <!--  <li class=""><span class="locale_Need_save"></span><a
+                tabindex="-1" href="#" class="locale_Save_on_this_Computer "
+                rel="tooltip"> <i
+                  class="icons icon-save save-dashboard icon-white"></i>
+              </a></li>
+              <li><progress class="unsaved-changes" max="100" value="30">
+                </progress></li>
 
-							<li class="not-a   locale_Recent_Changes"></li>
-
-
-							<li class="divider "></li>
-
-							<li class=""><span class="locale_Need_sync"></span><a
-								tabindex="-1" href="#" class="locale_Sync_and_Share "
-								rel="tooltip"> <i
-									class="icons icon-sitemap  sync-everything icon-white"></i>
-							</a></li>
-							<li class=""><progress class="unsynced-changes"
-									max="100" value="80"> </progress></li>
-
-							<li class="not-a  locale_Differences_with_the_central_server"></li> -->
+              <li class="not-a   locale_Recent_Changes"></li>
 
 
-							<li><a tabindex="-1" href="#" class="clear_all_notifications"><i class="icon-remove"></i>
-									Clear all notifications</a></li>
+              <li class="divider "></li>
 
-							<li><div id="toast-user-area" class="scrollable">
-									<div class="alert alert-info alert-block">
-										<a class="close" data-dismiss="alert" href="#">×</a> <strong
-											class="alert-heading ">Quick Start Instructions:</strong> <span
-											class="locale_Instructions_to_show_on_dashboard"></span> <span
-											class="locale_to_beta_testers"></span>
-									</div>
-								</div></li>
+              <li class=""><span class="locale_Need_sync"></span><a
+                tabindex="-1" href="#" class="locale_Sync_and_Share "
+                rel="tooltip"> <i
+                  class="icons icon-sitemap  sync-everything icon-white"></i>
+              </a></li>
+              <li class=""><progress class="unsynced-changes"
+                  max="100" value="80"> </progress></li>
 
-						</ul></li>
+              <li class="not-a  locale_Differences_with_the_central_server"></li> -->
 
 
-				</ul>
-				<ul class="nav pull-right">
+              <li><a tabindex="-1" href="#"
+                class="clear_all_notifications"><i class="icon-remove"></i>
+                  Clear all notifications</a></li>
 
-					<!--  User dropdown -->
-					<li id="auth-menu" class="dropdown"><a href="#"
-						id="user_drop_down_trigger" role="button"
-						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
-						data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
-							<button id="login_register_button" class="btn btn-success hide">Login/Register</button>
-							<span id="loggedin_customize_on_auth_dropdown">Customize</span><span id="user-quickview"> <i
-								class="icons icon-user icon-white"></i>
-						</span>
-					</a>
-						<ul class="dropdown-menu scrollable min_auth_dropdown_size" id="authentication-embedded" role="menu"
-							aria-labelledby="user_drop_down_trigger"></ul></li>
+              <li><div id="toast-user-area" class="scrollable">
+                  <div class="alert alert-info alert-block">
+                    <a class="close" data-dismiss="alert" href="#">×</a> <strong
+                      class="alert-heading ">Quick Start Instructions:</strong> <span
+                      class="locale_Instructions_to_show_on_dashboard"></span> <span
+                      class="locale_to_beta_testers"></span>
+                  </div>
+                </div></li>
+
+            </ul></li>
 
 
-				</ul>
+        </ul>
+        <ul class="nav pull-right">
 
-			</div>
+          <!--  User dropdown -->
+          <li id="auth-menu" class="dropdown"><a href="#"
+            id="user_drop_down_trigger" role="button"
+            class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
+            data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
+              <button id="login_register_button" class="btn btn-success hide">Login/Register</button>
+              <span id="loggedin_customize_on_auth_dropdown">Customize</span><span
+              id="user-quickview"> <i class="icons icon-user icon-white"></i>
+            </span>
+          </a>
+            <ul class="dropdown-menu scrollable min_auth_dropdown_size"
+              id="authentication-embedded" role="menu"
+              aria-labelledby="user_drop_down_trigger"></ul></li>
 
-		</div>
-	</div>
+
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
 </div>
-
 
 
 <!-- The rest of the page -->
