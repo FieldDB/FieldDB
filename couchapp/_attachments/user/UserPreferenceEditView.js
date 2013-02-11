@@ -81,7 +81,46 @@ define([
           this.makeDashboardHighContrast();
         }
         this.savePrefs();
+      },
+      /*
+       * TODO add these classes to the buttons them selves
+       */
+      "click .set-prefered-dashboard-templateOne" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("templateOne");
+      },
+      "click .set-prefered-dashboard-templateOne" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("templateTwo");
+      },
+      "click .set-prefered-dashboard-templateOne" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("templateThree");
+      },
+      "click .set-prefered-dashboard-templateOne" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("templateFour");
+      },
+      "click .set-prefered-dashboard-templateOne" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("templateFive");
       }
+      
     },
  
     /**
@@ -119,6 +158,24 @@ define([
         }else{
           $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
           this.makeDashboardNonHighContrast();
+        }
+        
+        /*
+         * Make all template buttons that are not the current one half opaque so
+         * the user can kind of see which is the one they are using.
+         * 
+         * TODO add these classes to the buttons them selves 
+         */
+        var templatesThatAreNotActive = "templateOne,templateTwo,templateThree,templateFour,templateFile".split(",");
+        var activeTemplate = this.model.get("preferedDashboardLayout");
+        var activeTemplateIndex = templatesThatAreNotActive.indexOf(activeTemplate);
+        if(activeTemplateIndex >= 0){
+          templatesThatAreNotActive.splice(activeTemplateIndex, 1);
+        }else{
+          this.model.set("preferedDashboardLayout", "default");
+        }
+        for(var template in templatesThatAreNotActive){
+          $(this.el).find("'."+templatesThatAreNotActive[template]+"'").addClass("halfopacity");
         }
         
         if (this.model.get("skin") == "") {
@@ -261,6 +318,15 @@ define([
       newlink.setAttribute("type", "text/css");
       newlink.setAttribute("href", "app/not_high_contrast.css");
       headtg.replaceChild(newlink, oldlink);
+    },
+    
+    setPreferedDashboardTemplate : function(preferedTemplate){
+      this.model.set("preferedDashboardLayout", preferedTemplate);
+      if (confirm("Would you like to load this new dashboard layout now?")) {
+        window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
+          window.location.replace("corpus.html");
+        });
+      }
     }
     
   });
