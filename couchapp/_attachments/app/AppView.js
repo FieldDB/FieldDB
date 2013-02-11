@@ -523,12 +523,12 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.templates.app,
-    templateOne : Handlebars.templates.app,
-    templateTwo : Handlebars.templates.app,
-    templateThree : Handlebars.templates.app,
-    templateFour : Handlebars.templates.app,
-    templateFive : Handlebars.templates.app,
+    template : Handlebars.templates.app_everything_at_once,
+    layoutJustEntering : Handlebars.templates.app_just_entering,
+    layoutAllTheData : Handlebars.templates.app_all_the_data,
+    layoutWhatsHappening : Handlebars.templates.app_whats_happening,
+    layoutCompareDataLists : Handlebars.templates.app_compare_datalists,
+    layoutEverythingAtOnce : Handlebars.templates.app_everything_at_once,
 
     /**
      * Renders the AppView and all of its child Views.
@@ -581,16 +581,16 @@ define([
         this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
         if(this.format == "default"){
           $(this.el).html(this.template(jsonToRender));
-        }else if(this.format == "templateOne"){
-          $(this.el).html(this.templateOne(jsonToRender));
-        }else if(this.format == "templateTwo"){
-          $(this.el).html(this.templateTwo(jsonToRender));
-        }else if(this.format == "templateThree"){
-          $(this.el).html(this.templateThree(jsonToRender));
-        }else if(this.format == "templateFour"){
-          $(this.el).html(this.templateFour(jsonToRender));
-        }else if(this.format == "templateFive"){
-          $(this.el).html(this.templateFive(jsonToRender));
+        }else if(this.format == "layoutJustEntering"){
+          $(this.el).html(this.layoutJustEntering(jsonToRender));
+        }else if(this.format == "layoutAllTheData"){
+          $(this.el).html(this.layoutAllTheData(jsonToRender));
+        }else if(this.format == "layoutWhatsHappening"){
+          $(this.el).html(this.layoutWhatsHappening(jsonToRender));
+        }else if(this.format == "layoutCompareDataLists"){
+          $(this.el).html(this.layoutCompareDataLists(jsonToRender));
+        }else if(this.format == "layoutEverythingAtOnce"){
+          $(this.el).html(this.layoutEverythingAtOnce(jsonToRender));
         }
         if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
 
