@@ -155,18 +155,8 @@
 		<!--/span-->
 		<!-- right hand side -->
 		<div class="span6">
-			<div class="well">
-				<iframe src="activity/activity_feed.html#/user/{{username}}"
-					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
-			</div>
-
-			<div class="well">
-				<iframe
-					src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
-					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
-			</div>
-			
-			<div id="search-data-list-quickview" class="well hide span12">
+		
+		<div id="search-data-list-quickview" class="well hide span12">
         <div id="search-data-list-quickview-header" class=" "></div>
         <div class="  ">
           <ul
@@ -182,7 +172,17 @@
           <div class="pagination-control "></div>
         </div>
       </div>
-      
+		
+			<div class="well">
+				<iframe src="activity/activity_feed.html#/user/{{username}}"
+					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
+			</div>
+
+			<div class="well">
+				<iframe
+					src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
+					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
+			</div>
 		</div>
 		<!--/span-->
 	</div>

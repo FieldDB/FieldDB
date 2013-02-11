@@ -1,60 +1,60 @@
 <!-- Black Navigation Bar Across the Top -->
 <div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container ">
+	<div class="navbar-inner">
+		<div class="container ">
 
 
 
-      <!-- Home button -->
-      <a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
-        rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
+			<!-- Home button -->
+			<a tabindex="-1" href="#" class=" brand locale_Show_Dashboard"
+				rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
 
-      <!-- Top Search Area -->
-      <span class="navbar-search" id="search-top"> </span>
+			<!-- Top Search Area -->
+			<span class="navbar-search" id="search-top"> </span>
 
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <a class="btn btn-navbar" data-toggle="collapse"
-        data-target=".nav-collapse"> <i class="icon-bar"></i> <i
-        class="icon-bar"></i> <i class="icon-bar"></i>
-      </a>
-
-
-      <!-- Collapsing area if the screen is not wide enough -->
-      <div class="nav-collapse collapse">
-        <ul class="nav" role="navigation ">
-
-          <li class="dropdown"><a id="corpus_dropdown_trigger" href="#"
-            role="button" class="dropdown-toggle" data-toggle="dropdown"><i
-              class="icon-cloud icon-white"></i> {{corpustitle}} - {{elicitationgoal}}<b
-              class="caret"></b></a>
-            <ul
-              class="dropdown-menu dont_close_corpus_dropdown_if_user_clicks"
-              role="menu" aria-labelledby="corpus_dropdown_trigger">
-
-              <li>
-                <div id="corpus-quickview" class="well span3"></div>
-              </li>
-              <li>
-                <div id="session-quickview" class="well span3"></div>
-              </li>
-
-            </ul></li>
+			<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+			<a class="btn btn-navbar" data-toggle="collapse"
+				data-target=".nav-collapse"> <i class="icon-bar"></i> <i
+				class="icon-bar"></i> <i class="icon-bar"></i>
+			</a>
 
 
-          <!-- Notification -->
-          <li class="dropdown"><a id="notification_dropdown_trigger"
-            href="#" role="button" class="dropdown-toggle"
-            data-toggle="dropdown"><i
-              class="icon-exclamation-sign icon-white"></i> Notifications <b
-              class="caret"></b></a>
-            <ul
-              class="dropdown-menu dont_close_notifications_dropdown_if_user_clicks"
-              role="menu" aria-labelledby="notification_dropdown_trigger">
+			<!-- Collapsing area if the screen is not wide enough -->
+			<div class="nav-collapse collapse">
+				<ul class="nav" role="navigation ">
+
+					<li class="dropdown"><a id="corpus_dropdown_trigger" href="#"
+						role="button" class="dropdown-toggle" data-toggle="dropdown"><i
+							class="icon-cloud icon-white"></i> {{corpustitle}} -
+							{{elicitationgoal}}<b class="caret"></b></a>
+						<ul
+							class="dropdown-menu dont_close_corpus_dropdown_if_user_clicks"
+							role="menu" aria-labelledby="corpus_dropdown_trigger">
+
+							<li>
+								<div id="corpus-quickview" class="well span3"></div>
+							</li>
+							<li>
+								<div id="session-quickview" class="well span3"></div>
+							</li>
+
+						</ul></li>
+
+
+					<!-- Notification -->
+					<li class="dropdown"><a id="notification_dropdown_trigger"
+						href="#" role="button" class="dropdown-toggle"
+						data-toggle="dropdown"><i
+							class="icon-exclamation-sign icon-white"></i> Notifications <b
+							class="caret"></b></a>
+						<ul
+							class="dropdown-menu dont_close_notifications_dropdown_if_user_clicks"
+							role="menu" aria-labelledby="notification_dropdown_trigger">
 
 
 
 
-              <!--  <li class=""><span class="locale_Need_save"></span><a
+							<!--  <li class=""><span class="locale_Need_save"></span><a
                 tabindex="-1" href="#" class="locale_Save_on_this_Computer "
                 rel="tooltip"> <i
                   class="icons icon-save save-dashboard icon-white"></i>
@@ -78,46 +78,46 @@
               <li class="not-a  locale_Differences_with_the_central_server"></li> -->
 
 
-              <li><a tabindex="-1" href="#"
-                class="clear_all_notifications"><i class="icon-remove"></i>
-                  Clear all notifications</a></li>
+							<li><a tabindex="-1" href="#"
+								class="clear_all_notifications"><i class="icon-remove"></i>
+									Clear all notifications</a></li>
 
-              <li><div id="toast-user-area" class="scrollable">
-                  <div class="alert alert-info alert-block">
-                    <a class="close" data-dismiss="alert" href="#">×</a> <strong
-                      class="alert-heading ">Quick Start Instructions:</strong> <span
-                      class="locale_Instructions_to_show_on_dashboard"></span> <span
-                      class="locale_to_beta_testers"></span>
-                  </div>
-                </div></li>
+							<li><div id="toast-user-area" class="scrollable">
+									<div class="alert alert-info alert-block">
+										<a class="close" data-dismiss="alert" href="#">×</a> <strong
+											class="alert-heading ">Quick Start Instructions:</strong> <span
+											class="locale_Instructions_to_show_on_dashboard"></span> <span
+											class="locale_to_beta_testers"></span>
+									</div>
+								</div></li>
 
-            </ul></li>
-
-
-        </ul>
-        <ul class="nav pull-right">
-
-          <!--  User dropdown -->
-          <li id="auth-menu" class="dropdown"><a href="#"
-            id="user_drop_down_trigger" role="button"
-            class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
-            data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
-              <button id="login_register_button" class="btn btn-success hide">Login/Register</button>
-              <span id="loggedin_customize_on_auth_dropdown">Customize</span><span
-              id="user-quickview"> <i class="icons icon-user icon-white"></i>
-            </span>
-          </a>
-            <ul class="dropdown-menu scrollable min_auth_dropdown_size"
-              id="authentication-embedded" role="menu"
-              aria-labelledby="user_drop_down_trigger"></ul></li>
+						</ul></li>
 
 
-        </ul>
+				</ul>
+				<ul class="nav pull-right">
 
-      </div>
+					<!--  User dropdown -->
+					<li id="auth-menu" class="dropdown"><a href="#"
+						id="user_drop_down_trigger" role="button"
+						class=" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left"
+						data-toggle="dropdown" rel="tooltip"> <b class="caret"></b>
+							<button id="login_register_button" class="btn btn-success hide">Login/Register</button>
+							<span id="loggedin_customize_on_auth_dropdown">Customize</span><span
+							id="user-quickview"> <i class="icons icon-user icon-white"></i>
+						</span>
+					</a>
+						<ul class="dropdown-menu scrollable min_auth_dropdown_size"
+							id="authentication-embedded" role="menu"
+							aria-labelledby="user_drop_down_trigger"></ul></li>
 
-    </div>
-  </div>
+
+				</ul>
+
+			</div>
+
+		</div>
+	</div>
 </div>
 
 
@@ -126,41 +126,45 @@
 <div class="container-fluid main">
 	<div id="dashboard-view" class="">
 		<!--Elements in the middle (things that get hidden)  -->
-			<div id="datums-embedded" class="middle well"></div>
-			
-			<div id="search-data-list-quickview" class="well hide span12">
-        <div id="search-data-list-quickview-header" class=" "></div>
-        <div class="  ">
-          <ul class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
-          <div class="pagination-control"></div>
-        </div>
-      </div>
-			<div id="data-list-embedded" class="well">
-				<div id="data-list-embedded-header" class="middle "></div>
-				<div>
-					<ul class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
-					<div class="pagination-control"></div>
+		<div class=" span12 hide"></div>
+		<!-- workaround: empty div to set all span12 to line up -->
+		<div id="search-data-list-quickview" class="well hide span12">
+			<div id="search-data-list-quickview-header" class=" "></div>
+			<div class="  ">
+				<ul
+					class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
+				<div class="pagination-control"></div>
+			</div>
+		</div>
+		
+		<div id="data-list-embedded" class="well">
+			<div id="data-list-embedded-header" class="middle "></div>
+			<div>
+				<ul
+					class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
+				<div class="pagination-control"></div>
+			</div>
+		</div>
+		<div id="datums-embedded" class="middle well"></div>
+		<div id="session-embedded" class="middle well"></div>
+		<div id="corpus-embedded" class="middle well"></div>
+		<div id="search-embedded" class="middle well"></div>
+
+		<div id="conversation-embedded" class="middle well">
+			<div class="scrollable">
+				<div class="conversation-text-audio-wrapper">
+					<div class="jp-load-bar" style="width: 960;">
+						<div class="jp-play-bar" style="width: 330;">
+							<i class="icon-gift"></i><strong></strong>
+							<h4>'Conversations' will let you have multiple speakers with
+								overlapping speech.</h4>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div id="session-embedded" class="middle well"></div>
-			<div id="corpus-embedded" class="middle well"></div>
-			<div id="search-embedded" class="middle well"></div>
-			
-			<div id="conversation-embedded" class="middle well">
-        <div class="scrollable">
-          <div class="conversation-text-audio-wrapper">
-            <div class="jp-load-bar" style="width: 960;">
-              <div class="jp-play-bar" style="width: 330;">
-                <i class="icon-gift"></i><strong></strong>
-                <h4>'Conversations' will let you have multiple speakers
-                  with overlapping speech.</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
 		</div>
+
+	</div>
 
 	<!-- FullScreen Views -->
 	<div id="user-fullscreen" class="well "></div>
@@ -171,7 +175,8 @@
 	<div id="data-list-fullscreen" class="well row">
 		<div id="data-list-fullscreen-header"></div>
 		<div class="  container span12 ">
-			<ul class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view"></ul>
+			<ul
+				class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view"></ul>
 			<div class="pagination-control"></div>
 		</div>
 	</div>
@@ -205,7 +210,10 @@
 <div id="quick-authenticate-modal" data-backdrop="static"
 	data-keyboard="static" class="modal hide">
 	<div class="modal-header">
-		<h4><span class="reason_why_we_need_to_make_sure_its_you"></span> <span class="locale_We_need_to_make_sure_its_you"></span></h4>
+		<h4>
+			<span class="reason_why_we_need_to_make_sure_its_you"></span> <span
+				class="locale_We_need_to_make_sure_its_you"></span>
+		</h4>
 	</div>
 	<div class="modal-body">
 		<label class="locale_Password"></label> <input type="password"
