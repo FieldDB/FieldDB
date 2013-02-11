@@ -85,40 +85,40 @@ define([
       /*
        * TODO add these classes to the buttons them selves
        */
-      "click .set-prefered-dashboard-templateOne" :function(e){
+      "click .set-prefered-dashboard-layoutJustEntering" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        this.setPreferedDashboardTemplate("templateOne");
+        this.setPreferedDashboardTemplate("layoutJustEntering");
       },
-      "click .set-prefered-dashboard-templateOne" :function(e){
+      "click .set-prefered-dashboard-layoutAllTheData" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        this.setPreferedDashboardTemplate("templateTwo");
+        this.setPreferedDashboardTemplate("layoutAllTheData");
       },
-      "click .set-prefered-dashboard-templateOne" :function(e){
+      "click .set-prefered-dashboard-layoutWhatsHappening" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        this.setPreferedDashboardTemplate("templateThree");
+        this.setPreferedDashboardTemplate("layoutWhatsHappening");
       },
-      "click .set-prefered-dashboard-templateOne" :function(e){
+      "click .set-prefered-dashboard-layoutCompareDataLists" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        this.setPreferedDashboardTemplate("templateFour");
+        this.setPreferedDashboardTemplate("layoutCompareDataLists");
       },
-      "click .set-prefered-dashboard-templateOne" :function(e){
+      "click .set-prefered-dashboard-layoutEverythingAtOnce" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        this.setPreferedDashboardTemplate("templateFive");
+        this.setPreferedDashboardTemplate("layoutEverythingAtOnce");
       }
       
     },
@@ -166,7 +166,7 @@ define([
          * 
          * TODO add these classes to the buttons them selves 
          */
-        var templatesThatAreNotActive = "templateOne,templateTwo,templateThree,templateFour,templateFile".split(",");
+        var templatesThatAreNotActive = "layoutJustEntering,layoutAllTheData,layoutWhatsHappening,layoutCompareDataLists,templateFile".split(",");
         var activeTemplate = this.model.get("preferedDashboardLayout");
         var activeTemplateIndex = templatesThatAreNotActive.indexOf(activeTemplate);
         if(activeTemplateIndex >= 0){
@@ -175,7 +175,7 @@ define([
           this.model.set("preferedDashboardLayout", "default");
         }
         for(var template in templatesThatAreNotActive){
-          $(this.el).find("'."+templatesThatAreNotActive[template]+"'").addClass("halfopacity");
+          $(this.el).find('.set-prefered-dashboard-'+templatesThatAreNotActive[template]);//.addClass("halfopacity");
         }
         
         if (this.model.get("skin") == "") {
