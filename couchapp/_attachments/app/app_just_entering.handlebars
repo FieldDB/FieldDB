@@ -126,9 +126,8 @@
 <div class="container-fluid main">
 	<div id="dashboard-view" class="">
 		<!--Elements in the middle (things that get hidden)  -->
-		<div class=" span12 hide"></div>
-		<!-- workaround: empty div to set all span12 to line up -->
-		<div id="search-data-list-quickview" class="well hide span12">
+		
+		<div id="search-data-list-quickview" class="well hide ">
 			<div id="search-data-list-quickview-header" class=" "></div>
 			<div class="  ">
 				<ul
@@ -136,19 +135,22 @@
 				<div class="pagination-control"></div>
 			</div>
 		</div>
+		<div class="clear-spacing"></div>
 		
-		<div id="data-list-embedded" class="well">
-			<div id="data-list-embedded-header" class="middle "></div>
-			<div>
-				<ul
-					class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
-				<div class="pagination-control"></div>
-			</div>
-		</div>
 		<div id="datums-embedded" class="middle well"></div>
 		<div id="session-embedded" class="middle well"></div>
 		<div id="corpus-embedded" class="middle well"></div>
 		<div id="search-embedded" class="middle well"></div>
+
+    <div id="data-list-embedded" class="well">
+      <div id="data-list-embedded-header" class="middle "></div>
+      <div>
+        <ul
+          class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
+        <div class="pagination-control"></div>
+      </div>
+    </div>
+
 
 		<div id="conversation-embedded" class="middle well">
 			<div class="scrollable">
