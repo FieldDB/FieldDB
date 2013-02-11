@@ -65,7 +65,62 @@ define([
           this.makeDashboardTransparent();
         }
         this.savePrefs();
+      },
+      "click .high-contrast-dashboard" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if(this.model.get("highContrastDashboard") == "true"){
+          this.model.set("highContrastDashboard", "false");
+          $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
+          this.makeDashboardNonHighContrast();
+        }else{
+          this.model.set("highContrastDashboard", "true");
+          $(this.el).find(".high-contrast-dashboard").addClass("btn-success");
+          this.makeDashboardHighContrast();
+        }
+        this.savePrefs();
+      },
+      /*
+       * TODO add these classes to the buttons them selves
+       */
+      "click .set-prefered-dashboard-layoutJustEntering" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutJustEntering");
+      },
+      "click .set-prefered-dashboard-layoutAllTheData" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutAllTheData");
+      },
+      "click .set-prefered-dashboard-layoutWhatsHappening" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutWhatsHappening");
+      },
+      "click .set-prefered-dashboard-layoutCompareDataLists" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutCompareDataLists");
+      },
+      "click .set-prefered-dashboard-layoutEverythingAtOnce" :function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.setPreferedDashboardTemplate("layoutEverythingAtOnce");
       }
+      
     },
  
     /**
@@ -97,6 +152,32 @@ define([
           this.makeDashboardOpaque();
         }
         
+        if(this.model.get("highContrastDashboard") == "true"){
+          $(this.el).find(".high-contrast-dashboard").addClass("btn-success");
+          this.makeDashboardHighContrast();
+        }else{
+          $(this.el).find(".high-contrast-dashboard").removeClass("btn-success");
+          this.makeDashboardNonHighContrast();
+        }
+        
+        /*
+         * Make all template buttons that are not the current one half opaque so
+         * the user can kind of see which is the one they are using.
+         * 
+         * TODO add these classes to the buttons them selves 
+         */
+        var templatesThatAreNotActive = "layoutJustEntering,layoutAllTheData,layoutWhatsHappening,layoutCompareDataLists,templateFile".split(",");
+        var activeTemplate = this.model.get("preferedDashboardLayout");
+        var activeTemplateIndex = templatesThatAreNotActive.indexOf(activeTemplate);
+        if(activeTemplateIndex >= 0){
+          templatesThatAreNotActive.splice(activeTemplateIndex, 1);
+        }else{
+          this.model.set("preferedDashboardLayout", "default");
+        }
+        for(var template in templatesThatAreNotActive){
+          $(this.el).find('.set-prefered-dashboard-'+templatesThatAreNotActive[template]);//.addClass("halfopacity");
+        }
+        
         if (this.model.get("skin") == "") {
           this.randomSkin();
         }else{
@@ -110,6 +191,7 @@ define([
       $(this.el).find(".locale_Change_Background").html(Locale.get("locale_Change_Background"));
       $(this.el).find(".locale_Background_on_Random").html(Locale.get("locale_Background_on_Random"));
       $(this.el).find(".locale_Transparent_Dashboard").html(Locale.get("locale_Transparent_Dashboard"));
+//      $(this.el).find(".locale_High_Contrast_Dashboard").html(Locale.get("locale_High_Contrast_Dashboard"));
       $(this.el).find(".locale_Number_Datum").html(Locale.get("locale_Number_Datum"));
       $(this.el).find(".locale_Close").html(Locale.get("locale_Close"));  
       return this;
@@ -210,7 +292,43 @@ define([
     savePrefs: function(){
       if (OPrime.debugMode) OPrime.debug("Saving preferences into encrypted user.");
       window.app.get("authentication").saveAndInterConnectInApp();
+    },
+    
+    makeDashboardHighContrast : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      var oldlink = document.getElementsByTagName("link").item(6);
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "app/high_contrast.css");
+      headtg.replaceChild(newlink, oldlink);
+    },
+    
+    makeDashboardNonHighContrast : function(){
+      var headtg = document.getElementsByTagName('head')[0];
+      if (!headtg) {
+          return;
+      }
+      var oldlink = document.getElementsByTagName("link").item(6);
+      var newlink = document.createElement('link');
+      newlink.setAttribute("rel", "stylesheet");
+      newlink.setAttribute("type", "text/css");
+      newlink.setAttribute("href", "app/not_high_contrast.css");
+      headtg.replaceChild(newlink, oldlink);
+    },
+    
+    setPreferedDashboardTemplate : function(preferedTemplate){
+      this.model.set("preferedDashboardLayout", preferedTemplate);
+      if (confirm("Would you like to load this new dashboard layout now?")) {
+        window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
+          window.location.replace("corpus.html");
+        });
+      }
     }
+    
   });
   
   return UserPreferenceEditView;

@@ -102,6 +102,8 @@ define([
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
+      this.format = "default";
+      
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
       this.setUpAndAssociateViewsAndModelsWithCurrentDataList();
@@ -521,8 +523,13 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.templates.app,
-    
+    template : Handlebars.templates.app_everything_at_once,
+    layoutJustEntering : Handlebars.templates.app_just_entering,
+    layoutAllTheData : Handlebars.templates.app_all_the_data,
+    layoutWhatsHappening : Handlebars.templates.app_whats_happening,
+    layoutCompareDataLists : Handlebars.templates.app_compare_datalists,
+    layoutEverythingAtOnce : Handlebars.templates.app_everything_at_once,
+
     /**
      * Renders the AppView and all of its child Views.
      */
@@ -570,7 +577,22 @@ define([
           if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
         }
         
-        $(this.el).html(this.template(jsonToRender));
+        /* Render the users prefered dashboard layout */
+        this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+        if(this.format == "default"){
+          $(this.el).html(this.template(jsonToRender));
+        }else if(this.format == "layoutJustEntering"){
+          $(this.el).html(this.layoutJustEntering(jsonToRender));
+        }else if(this.format == "layoutAllTheData"){
+          $(this.el).html(this.layoutAllTheData(jsonToRender));
+        }else if(this.format == "layoutWhatsHappening"){
+          $(this.el).html(this.layoutWhatsHappening(jsonToRender));
+        }else if(this.format == "layoutCompareDataLists"){
+          $(this.el).html(this.layoutCompareDataLists(jsonToRender));
+        }else if(this.format == "layoutEverythingAtOnce"){
+          $(this.el).html(this.layoutEverythingAtOnce(jsonToRender));
+        }
+        if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
 
         //The authView is the dropdown in the top right corner which holds all the user menus
         this.authView.render();
