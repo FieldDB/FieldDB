@@ -122,6 +122,17 @@ define([
       this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
       
     },
+    getGoal : function(){
+      var goal = "";
+      try {
+        goal = this.get("sessionFields").where({
+          label : "goal"
+        })[0].get("mask");
+      } catch (e) {
+        OPrime.debug("This session doesnt seem to have a goal.");
+      }
+      return goal;
+    },
     /**
      * backbone-couchdb adaptor set up
      */

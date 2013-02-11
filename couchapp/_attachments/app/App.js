@@ -5,6 +5,7 @@ define([
     "authentication/Authentication", 
     "corpus/Corpus",
     "data_list/DataList",
+    "datum/DatumField",
     "datum/DatumFields",
     "search/Search",
     "datum/Session",
@@ -21,6 +22,7 @@ define([
     Authentication, 
     Corpus,
     DataList,
+    DatumField,
     DatumFields,
     Search,
     Session,
@@ -673,6 +675,27 @@ define([
                 oldCouchConnection.port = "";
                 corpusModel.set("couchConnection", oldCouchConnection);
               }
+            }
+            
+            try{
+              var tags = corpusModel.get("datumFields").where({label : "tags"});
+              if(tags.length == 0){
+                /* If its missing tags, add upgrade the corpus to version v1.38+ */
+                corpusModel.get("datumFields").add(new DatumField({
+                  label : "tags",
+                  shouldBeEncrypted: "",
+                  userchooseable: "disabled",
+                  help: "Tags for constructions or other info that you might want to use to categorize your data."
+                }));
+                corpusModel.get("datumFields").add(new DatumField({
+                  label : "validationStatus",
+                  shouldBeEncrypted: "",
+                  userchooseable: "disabled",
+                  help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
+                }));
+              }
+            }catch(e){
+              OPrime.debug("Unable to add the tags and or validationStatus field to the corpus.");
             }
             
             $(".spinner-status").html("Opened Corpus...");
