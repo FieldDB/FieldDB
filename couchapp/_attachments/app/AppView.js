@@ -102,6 +102,8 @@ define([
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
+      this.format = "default";
+      
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       this.setUpAndAssociateViewsAndModelsWithCurrentSession();
       this.setUpAndAssociateViewsAndModelsWithCurrentDataList();
@@ -522,7 +524,12 @@ define([
      * The Handlebars template rendered as the AppView.
      */
     template : Handlebars.templates.app,
-    
+    templateOne : Handlebars.templates.app,
+    templateTwo : Handlebars.templates.app,
+    templateThree : Handlebars.templates.app,
+    templateFour : Handlebars.templates.app,
+    templateFive : Handlebars.templates.app,
+
     /**
      * Renders the AppView and all of its child Views.
      */
@@ -570,7 +577,22 @@ define([
           if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
         }
         
-        $(this.el).html(this.template(jsonToRender));
+        /* Render the users prefered dashboard layout */
+        this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+        if(this.format == "default"){
+          $(this.el).html(this.template(jsonToRender));
+        }else if(this.format == "templateOne"){
+          $(this.el).html(this.templateOne(jsonToRender));
+        }else if(this.format == "templateTwo"){
+          $(this.el).html(this.templateTwo(jsonToRender));
+        }else if(this.format == "templateThree"){
+          $(this.el).html(this.templateThree(jsonToRender));
+        }else if(this.format == "templateFour"){
+          $(this.el).html(this.templateFour(jsonToRender));
+        }else if(this.format == "templateFive"){
+          $(this.el).html(this.templateFive(jsonToRender));
+        }
+        if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
 
         //The authView is the dropdown in the top right corner which holds all the user menus
         this.authView.render();
