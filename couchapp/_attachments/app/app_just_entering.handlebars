@@ -25,8 +25,8 @@
 
 					<li class="dropdown"><a id="corpus_dropdown_trigger" href="#"
 						role="button" class="dropdown-toggle" data-toggle="dropdown"><i
-							class="icon-cloud icon-white"></i> {{corpustitle}} - {{elicitationgoal}}<b
-							class="caret"></b></a>
+							class="icon-cloud icon-white"></i> {{corpustitle}} -
+							{{elicitationgoal}}<b class="caret"></b></a>
 						<ul
 							class="dropdown-menu dont_close_corpus_dropdown_if_user_clicks"
 							role="menu" aria-labelledby="corpus_dropdown_trigger">
@@ -54,28 +54,28 @@
 
 
 
-							<!-- 	<li class=""><span class="locale_Need_save"></span><a
-								tabindex="-1" href="#" class="locale_Save_on_this_Computer "
-								rel="tooltip"> <i
-									class="icons icon-save save-dashboard icon-white"></i>
-							</a></li>
-							<li><progress class="unsaved-changes" max="100" value="30">
-								</progress></li>
+							<!--  <li class=""><span class="locale_Need_save"></span><a
+                tabindex="-1" href="#" class="locale_Save_on_this_Computer "
+                rel="tooltip"> <i
+                  class="icons icon-save save-dashboard icon-white"></i>
+              </a></li>
+              <li><progress class="unsaved-changes" max="100" value="30">
+                </progress></li>
 
-							<li class="not-a   locale_Recent_Changes"></li>
+              <li class="not-a   locale_Recent_Changes"></li>
 
 
-							<li class="divider "></li>
+              <li class="divider "></li>
 
-							<li class=""><span class="locale_Need_sync"></span><a
-								tabindex="-1" href="#" class="locale_Sync_and_Share "
-								rel="tooltip"> <i
-									class="icons icon-sitemap  sync-everything icon-white"></i>
-							</a></li>
-							<li class=""><progress class="unsynced-changes"
-									max="100" value="80"> </progress></li>
+              <li class=""><span class="locale_Need_sync"></span><a
+                tabindex="-1" href="#" class="locale_Sync_and_Share "
+                rel="tooltip"> <i
+                  class="icons icon-sitemap  sync-everything icon-white"></i>
+              </a></li>
+              <li class=""><progress class="unsynced-changes"
+                  max="100" value="80"> </progress></li>
 
-							<li class="not-a  locale_Differences_with_the_central_server"></li> -->
+              <li class="not-a  locale_Differences_with_the_central_server"></li> -->
 
 
 							<li><a tabindex="-1" href="#"
@@ -124,75 +124,49 @@
 
 <!-- The rest of the page -->
 <div class="container-fluid main">
-	<div id="dashboard-view" class="row-fluid">
-		<!-- Elements on Lefthand side -->
-		<div class="span3">
-			<div class=" span12 hide"></div>
-			<!-- workaround: empty div to set all span12 to line up -->
-			<div id="search-data-list-quickview" class="well hide span12">
-				<div id="search-data-list-quickview-header" class=" "></div>
-				<div class="  ">
-					<ul
-						class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
-					<div class="pagination-control"></div>
-				</div>
-			</div>
-			<div id="data-list-quickview" class="well span12">
-				<div id="data-list-quickview-header" class=" "></div>
-				<div class="  container span12">
-					<ul
-						class="unstyled zebra  datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view "></ul>
-					<div class="pagination-control "></div>
-				</div>
+	<div id="dashboard-view" class="">
+		<!--Elements in the middle (things that get hidden)  -->
+		
+		<div id="search-data-list-quickview" class="well hide ">
+			<div id="search-data-list-quickview-header" class=" "></div>
+			<div class="  ">
+				<ul
+					class="unstyled zebra datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
+				<div class="pagination-control"></div>
 			</div>
 		</div>
-		<!--Elements in the middle (things that get hidden)  -->
-		<div class="span6">
+		<div class="clear-spacing"></div>
+		
+		<div id="datums-embedded" class="middle well"></div>
+		<div id="session-embedded" class="middle well"></div>
+		<div id="corpus-embedded" class="middle well"></div>
+		<div id="search-embedded" class="middle well"></div>
 
-			<div id="datums-embedded" class="middle well"></div>
-			<div id="conversation-embedded" class="middle well">
-				<div class="scrollable">
-					<div class="conversation-text-audio-wrapper">
-						<div class="jp-load-bar" style="width: 960;">
-							<div class="jp-play-bar" style="width: 330;">
-								<i class="icon-gift"></i><strong>New!</strong>
-								<h4>'Conversations' will let you have multiple speakers
-									with overlapping speech.</h4>
-							</div>
+    <div id="data-list-embedded" class="well">
+      <div id="data-list-embedded-header" class="middle "></div>
+      <div>
+        <ul
+          class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
+        <div class="pagination-control"></div>
+      </div>
+    </div>
+
+
+		<div id="conversation-embedded" class="middle well">
+			<div class="scrollable">
+				<div class="conversation-text-audio-wrapper">
+					<div class="jp-load-bar" style="width: 960;">
+						<div class="jp-play-bar" style="width: 330;">
+							<i class="icon-gift"></i><strong></strong>
+							<h4>'Conversations' will let you have multiple speakers with
+								overlapping speech.</h4>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="data-list-embedded" class="well">
-				<div id="data-list-embedded-header" class="middle "></div>
-				<div>
-					<ul
-						class="unstyled datalist_hover_datum_views_so_they_look_clickable zebra current-data-list-paginated-view"></ul>
-					<div class="pagination-control"></div>
-				</div>
-			</div>
-			<div id="session-embedded" class="middle well"></div>
-			<div id="corpus-embedded" class="middle well"></div>
-			<div id="search-embedded" class="middle well"></div>
 		</div>
-		<!--/span-->
-		<!-- right hand side -->
-		<div class="span3">
-			<div id="insert-unicode" class="well"></div>
-			<div class="well">
-				<iframe src="activity/activity_feed.html#/user/{{username}}"
-					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
-			</div>
 
-			<div class="well">
-				<iframe
-					src="activity/activity_feed.html#/user/{{username}}/corpus/{{pouchname}}"
-					width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true"></iframe>
-			</div>
-		</div>
-		<!--/span-->
 	</div>
-	<!--/row-->
 
 	<!-- FullScreen Views -->
 	<div id="user-fullscreen" class="well "></div>
@@ -229,7 +203,6 @@
 				href="https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit"
 				target="_blank">Click here to open the guide in a new tab</a>
 		</p>
-		<button class="close btn" data-dismiss="modal">Close</button>
 	</div>
 	<a
 		href="https://docs.google.com/drawings/d/16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU/edit"
