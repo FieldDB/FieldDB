@@ -233,6 +233,7 @@ define( [
       }
       
       var jsonToRender = this.model.toJSON();
+      jsonToRender.dateCreated = OPrime.prettyDate(jsonToRender.dateCreated);
       jsonToRender.datumCount = this.model.get("datumIds").length;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
 
