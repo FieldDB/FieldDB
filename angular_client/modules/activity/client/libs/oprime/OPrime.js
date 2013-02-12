@@ -247,18 +247,40 @@ OPrime.prettyDate = function(time) {
   var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
   var day_diff = Math.floor(diff / 86400);
 
-  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+  if (isNaN(day_diff) || day_diff < 0 ) {
     return undefined;
   }
 
-  return day_diff == 0
-      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
-          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
-          || diff < 7200 && "1 hour ago" || diff < 86400
-          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
-      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
-      && Math.ceil(day_diff / 7) + " weeks ago";
+  if (day_diff >= 548) {
+    return Math.ceil(day_diff / 365) + " years ago";
+  }
+  if (day_diff >= 40) {
+    return Math.ceil(day_diff / 31) + " months ago";
+  }
+  if (day_diff >= 14) {
+    return Math.ceil(day_diff / 7) + " weeks ago";
+  }
+  if (day_diff >= 2) {
+    return Math.ceil(day_diff / 1) + " days ago";
+  }
+  if (day_diff >= 1) {
+    return "Yesterday";
+  }
+  if(diff >= 86400 ){
+    return Math.floor(diff / 3600) + " hours ago";
+  }
+//  if(diff >= 7200 ){
+//    Math.floor(diff / 3600) + " 1 hour ago";
+//  }
+  if(diff >= 3600 ){
+    return Math.floor(diff / 60) + " minutes ago";
+  }
+  if(diff >= 120 ){
+    return "1 minute ago";
+  }
+  return "just now";
 };
+
 OPrime.prettyTimestamp = function(timestamp) {
   var date = new Date(timestamp);
   var greenwichtimenow = new Date();
@@ -269,22 +291,36 @@ OPrime.prettyTimestamp = function(timestamp) {
     return;
   }
 
-  if (day_diff >= 31) {
-    return Math.ceil(day_diff / 30) + " months ago";
-  }
-
   if (day_diff >= 548) {
     return Math.ceil(day_diff / 365) + " years ago";
   }
-
-  return day_diff == 0
-      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
-          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
-          || diff < 7200 && "1 hour ago" || diff < 86400
-          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
-      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
-      && Math.ceil(day_diff / 7) + " weeks ago";
+  if (day_diff >= 40) {
+    return Math.ceil(day_diff / 31) + " months ago";
+  }
+  if (day_diff >= 14) {
+    return Math.ceil(day_diff / 7) + " weeks ago";
+  }
+  if (day_diff >= 2) {
+    return Math.ceil(day_diff / 1) + " days ago";
+  }
+  if (day_diff >= 1) {
+    return "Yesterday";
+  }
+  if(diff >= 86400 ){
+    return Math.floor(diff / 3600) + " hours ago";
+  }
+//  if(diff >= 7200 ){
+//    Math.floor(diff / 3600) + " 1 hour ago";
+//  }
+  if(diff >= 3600 ){
+    return Math.floor(diff / 60) + " minutes ago";
+  }
+  if(diff >= 120 ){
+    return "1 minute ago";
+  }
+  return "just now";
 };
+
 
 /*
  * Audio functions
