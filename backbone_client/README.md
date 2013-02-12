@@ -23,11 +23,11 @@ you will need to go to the top level folder (above this folder), do
 
 ## CouchApp
 
-If you want to deploy the app, the fastest way is to push it to a couchdb.
-You can use the couchapp_minified folder, and the minification script.
+If you want to deploy the app so that it can run online on URL, the fastest way is to push it to a couchdb.
+You can use the couchapp_dev folder and the build_debug.sh script, or the couchapp_minified folder, and the build_fielddb_minified.sh script.
 
 ## Android App
 
-If you want to run the app as an Native Android app you can use the AndroidFieldDB project combined with the build_release_android.sh script. 
+If you want to run the app as an Native Android app you can use the AndroidFieldDB project, combined with the build_release_android.sh script. 
 
 Running on Android is farely complex as it requires you to set up 5 Android libraries, 3 for TouchDB (a local http server which implements the couchdb API) and 2 for OPrime (an offline Android data management/psycholinguistics experimentation library).
