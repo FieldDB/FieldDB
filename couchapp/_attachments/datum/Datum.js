@@ -948,12 +948,14 @@ define([
 //        }
 //      }
     },
-	
+
+	/* highlight returns text with all instances of stringToHighlight enclosed
+	 * in a span.  Note that stringToHighlight is treated as a regexp.
+	 */
 	highlight: function(text, stringToHighlight, className) {
 	  className = className || 'highlight';
-	  var re = new RegExp(stringToHighlight, "g");
-	  return text.replace(re, "<span class='" + className +
-						  "'>" + stringToHighlight + "</span>");
+	  var re = new RegExp('(' + stringToHighlight + ')', "gi");
+	  return text.replace(re, "<span class='" + className + "'>$1</span>");
 	}
 
   });

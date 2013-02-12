@@ -9,15 +9,11 @@
 <div class="span10">
 	{{#each tuple}}
 	  <span class="glossCouplet">
-	    {{{utteranceSegment}}}
-	    <br />
-		{{{morphemeSegment}}}
-		<br />
-	    {{{glossSegment}}}
+	    {{{this}}}
 	  </span>
 	{{/each}}
 	<br />
-	<span class="datum-latex-translation">{{translation}}</span>
+	<span class="datum-latex-translation">{{{translation}}}</span>
 	<dl>
 		{{#each additionalFields}}
 		<dt>{{label}}</dt>
