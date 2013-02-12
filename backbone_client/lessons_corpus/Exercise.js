@@ -38,7 +38,7 @@ define( [
      * 
      */
     initialize : function() {
-      Exercise.__super__.initialize.call(this,);
+//      Exercise.__super__.initialize.call(this,);
 
 //      this.set("user", "");
       this.set("lastListened", new Date(JSON.parse(t)));
