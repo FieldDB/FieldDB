@@ -43,11 +43,10 @@ define([
      */
     render : function() {
       if (OPrime.debugMode) OPrime.debug("COMMENT render");
-
-      $(this.el).html(this.template(this.model.toJSON()));
+      var jsonToRender = this.model.toJSON();
+      jsonToRender.timestamp = OPrime.prettyTimestamp(jsonToRender.timestamp);
+      $(this.el).html(this.template(jsonToRender));
      
-
-      
       return this;
     },
     

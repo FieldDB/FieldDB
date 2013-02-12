@@ -153,6 +153,13 @@ define([
       "blur .corpus-title-input" : "updateTitle",
       "blur .corpus-description-input" : "updateDescription",
       "blur .public-or-private" : "updatePublicOrPrivate",
+      "blur .glosserURL" : function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.set("glosserURL", $(e.target).val());
+      },
       "click .save-corpus" : "updatePouch",
       
     },
@@ -193,6 +200,8 @@ define([
       var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
       
       var jsonToRender = this.model.toJSON();
+      jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
+      
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       try{
         jsonToRender.username = this.model.get("team").get("username");
