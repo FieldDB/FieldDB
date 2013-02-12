@@ -523,7 +523,7 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.templates.app_everything_at_once,
+    template : Handlebars.templates.app_whats_happening,
     layoutJustEntering : Handlebars.templates.app_just_entering,
     layoutAllTheData : Handlebars.templates.app_all_the_data,
     layoutWhatsHappening : Handlebars.templates.app_whats_happening,
