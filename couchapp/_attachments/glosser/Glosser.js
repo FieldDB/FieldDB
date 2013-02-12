@@ -1,12 +1,14 @@
 var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
-Glosser.downloadPrecedenceRules = function(pouchname, callback){
-  var couchConnection = app.get("corpus").get("couchConnection");
-  var couchurl = OPrime.getCouchUrl(couchConnection);
-
+Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
+  if(!glosserURL ||glosserURL == "default"){
+    var couchConnection = app.get("corpus").get("couchConnection");
+    var couchurl = OPrime.getCouchUrl(couchConnection);
+    glosserURL = couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true";
+  }
   OPrime.makeCORSRequest({
     type : 'GET',
-    url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    url : glosserURL,
     success : function(rules) {
       localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
 
