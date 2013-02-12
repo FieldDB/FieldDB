@@ -1281,7 +1281,7 @@ define([
       if(!callback){
         callback = null;
       }
-      Glosser.downloadPrecedenceRules(pouchname, callback);
+      Glosser.downloadPrecedenceRules(pouchname, this.get("glosserURL"), callback);
     },
     /**
      * This function takes in a pouchname, which could be different

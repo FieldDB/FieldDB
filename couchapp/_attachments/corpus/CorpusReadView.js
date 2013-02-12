@@ -170,6 +170,8 @@ define([
       var couchurl = OPrime.getCouchUrl(couchConnection);
 
       var jsonToRender = this.model.toJSON();
+      jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
+
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
 
       try{
