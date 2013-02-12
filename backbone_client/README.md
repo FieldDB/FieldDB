@@ -13,6 +13,7 @@ If you get a blank black screen, look at the developer console and if it says
 Failed to load resource chrome-extension://chpphlmbdnlddgbhiplfpolgfhpadfip/libs/compiled_handlebars.js
 
 you will need to go to the top level folder (above this folder), do
+
     $ cd FieldDB
     $ npm install handlebars
     $ bash scripts/build_templates.sh
