@@ -12,6 +12,8 @@ FieldDB beta was officially launched in English and Spanish on August 1st 2012 i
 * [Yuliya Manyakina](http://egg.auf.net/people/manyakinayuliya/) (Stony Brook)
 * [Elise McClay](https://github.com/Kedersha) (McGill)
 * [Hisako Noguchi](http://linguistics.concordia.ca/gazette.html) (Concordia)
+* [Jesse Pollak](http://jessepollak.me/) (Pomona College)
+* [Xianli Sun](http://www.myaamiaproject.org/index.html) (Miami University)
 
 
 # Funding
