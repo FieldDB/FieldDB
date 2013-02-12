@@ -7,4 +7,5 @@ You can use this folder, and the build_debug.sh  script to deploy to a local cou
 Then log in at 
 
 (this depends on a chicken and the egg, that you have a public user on your machine, which you should create using the chrome extension...)
-https://localhost:6984/public-firstcorpus/_design/pages/index.html
+
+  * https://localhost:6984/public-firstcorpus/_design/pages/index.html
