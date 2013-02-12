@@ -265,7 +265,7 @@ define([
           return;
       }
       
-      var oldlink = document.getElementsByTagName("link").item(5);
+      var oldlink = document.getElementsByTagName("link").item(1);
       
       var newlink = document.createElement('link');
       newlink.setAttribute("rel", "stylesheet");
@@ -280,7 +280,7 @@ define([
           return;
       }
       
-      var oldlink = document.getElementsByTagName("link").item(5);
+      var oldlink = document.getElementsByTagName("link").item(1);
       
       var newlink = document.createElement('link');
       newlink.setAttribute("rel", "stylesheet");
@@ -299,7 +299,7 @@ define([
       if (!headtg) {
           return;
       }
-      var oldlink = document.getElementsByTagName("link").item(6);
+      var oldlink = document.getElementsByTagName("link").item(2);
       var newlink = document.createElement('link');
       newlink.setAttribute("rel", "stylesheet");
       newlink.setAttribute("type", "text/css");
@@ -312,7 +312,7 @@ define([
       if (!headtg) {
           return;
       }
-      var oldlink = document.getElementsByTagName("link").item(6);
+      var oldlink = document.getElementsByTagName("link").item(2);
       var newlink = document.createElement('link');
       newlink.setAttribute("rel", "stylesheet");
       newlink.setAttribute("type", "text/css");
