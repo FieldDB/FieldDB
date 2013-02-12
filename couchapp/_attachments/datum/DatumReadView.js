@@ -206,28 +206,123 @@ define([
         // latex, could be put into a function, but not sure if thats
         // necessary...
 
-        // "judgement:grammatical AND utterance:a"
+        ////////////////////////////////////////////////////////////////////////
+        // Begin HIGHLIGHT SEARCH PATTERN IN DATUM functionality
+        ////////////////////////////////////////////////////////////////////////
+        // The core difficulty here is how to highlight matches that span space
+        // characters when the IGT formatting splits utterance/morpheme/gloss
+        // strings on spaces.  The solution used here is to highlight the "words"
+        // of IGT-splittable values by first wrapping them in randomly-generated strings
+        // representing the beginning and end of the highlight span tag and then
+        // replacing the random strings with the correct tag.  Note that this indirection
+        // is necessary because (a) enclosing the matches in "<span class..." would
+        // introduces spaces in the string that would wreck the IGT logic and (b)
+        // JS does not support negative lookbehind regexes (e.g., split on all spaces
+        // not preceded by "<span").
+
+        // searchParams is something like "judgement:grammatical AND utterance:chiens" or just "chiens"
         var searchParams = app.get("search").get("searchKeywords");
+
+        // queryTokens is something like ["judgement:grammatical", "AND", "utterance:chiens"] or just ["chiens"]
         var queryTokens = this.model.processQueryString(searchParams);
 
         var doGrossKeywordMatch = false;
-        if(searchParams.indexOf(":") == -1){
+        if (searchParams.indexOf(":") == -1) {
           doGrossKeywordMatch = true;
-          //searchParams = searchParams.toLowerCase().replace(/\s/g,"");
-          searchParams = searchParams.replace(/\s/g,"");
         }
 
-        var self = this;
+        // Converts lists into objects.  This is underscore 1.4's object function. 
+        // Probably this should be attached to a global object or underscore should be upgraded ...
+        var list2object = function(list, values) {
+          if (list == null) return {};
+          var result = {};
+          for (var i = 0, l = list.length; i < l; i++) {
+            if (values) {
+              result[list[i]] = values[i];
+            } else {
+              result[list[i][0]] = list[i][1];
+            }
+          }
+          return result;
+        };
 
-        var highlightValue = function(value) {
-          if (doGrossKeywordMatch) {
-            return self.model.highlight(value, searchParams);
+        // From ["judgement:grammatical", "AND", "utterance:chiens"] return {judgement: 'grammatical', utterance: 'chiens'}
+        var getLabels2patterns = function (queryTokens) {
+          return list2object(_.map(_.filter(queryTokens, function (e, i) { return i % 2 === 0; }),
+                function (s) {return s.split(':')}));
+        };
+
+        // labels2patterns is something like {judgement: 'grammatical', utterance: 'chiens'}
+        labels2patterns = getLabels2patterns(queryTokens);
+
+        var toSingleSpace = function (string) {
+          return string.replace(/\s+/g, ' ');
+        }
+
+        var getRandomString = function (len) {
+          len = len || 10
+          var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+          return _.map(_.range(len), function () {
+            return A.charAt(Math.floor(Math.random() * A.length));}).join('');
+        }
+
+        startHighlight = getRandomString();   // will be replaced by <span class='highlight'>
+        endHighlight = getRandomString();     // will be replaced by </span>
+
+        // Enclose all *words* of string in randomly generated strings representing the start
+        // and end of the highlight span tags.  These random strings will be
+        // replaced by the appropriate tags (cf. randomStrings2highlightSpans)
+        // after the string is split into words for the IGT/latex formatting below.
+        var highlightWords = function (string) {
+          return  startHighlight + toSingleSpace(string)
+              .replace(' ', endHighlight + ' ' + startHighlight) + endHighlight;
+        }
+
+        // Replace the random start/end highlight strings with appropriate span tags
+        var randomStrings2highlightSpans = function (word) {
+          var startPattern = new RegExp(startHighlight, 'g');
+          var endPattern = new RegExp(endHighlight, 'g');
+          return word.replace(startPattern, '<span class="highlight">')
+                      .replace(endPattern, '</span>');
+        }
+
+        // Enclose the entire string in highlight spans.  No cleanup required.
+        var highlightWhole = function (string) {
+          return  "<span class='highlight'>" + string + "</span>";
+        }
+
+        // Highlight all instances of the regex patternToHighlight in the string
+        // via a span.highlight tag.  Note that the regex is treated as case-insensitive.
+        // splittable is true if the text may be split on whitespace post highlighting;
+        // in this case, words are highlighted
+        var highlight = function(text, patternToHighlight, splittable) {
+          splittable = splittable || false;
+          var replacer =  splittable && highlightWords || highlightWhole;
+          var re = new RegExp(patternToHighlight, "gi");
+          return text.replace(re, replacer);
+        }
+
+        // Highlight all search pattern matches in the value.  This accomodates
+        // gross-keyword-match-type searches as well as field-specific searches.
+        // If the value is splittable, i.e., its words will be split into <spans>
+        // for IGT formatting, then splittable must be set to true.
+        var highlightMatches = function(value, label, splittable) {
+          splittable = splittable || false; 
+          if (value && searchParams) {
+            if (doGrossKeywordMatch) {
+              return highlight(value, searchParams, splittable);
+            } else if (_.has(labels2patterns, label)) {
+              return highlight(value, labels2patterns[label], splittable);
+            } else {
+              return value;
+            }
           } else {
             return value;
           }
-        }        
-        // judgement:grammatical AND utterance:a
-        //
+        }
+        ////////////////////////////////////////////////////////////////////////
+        // End HIGHLIGHT SEARCH PATTERN IN DATUM functionality
+        ////////////////////////////////////////////////////////////////////////
 
         //for (var j = 1; j < queryTokens.length; j += 2) {
         //  if (queryTokens[j] == "AND") {
@@ -243,9 +338,7 @@ define([
         //    thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j+1]);
         //  }
         //}
-        
-        
-        
+
         var jsonToRender = {};
         jsonToRender.additionalFields = [];
 
@@ -269,59 +362,60 @@ define([
           /* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
           judgementIndex = fieldLabels.indexOf("judgement");
           if(judgementIndex >= 0){
-            judgement = fields[judgementIndex];
+            judgement = highlightMatches(fields[judgementIndex], 'judgement');
              fieldLabels.splice(judgementIndex,1);
              fields.splice(judgementIndex,1);
           }
           utteranceIndex = fieldLabels.indexOf("utterance");
           if(utteranceIndex >= 0){
-               utterance = fields[utteranceIndex];
+               utterance = highlightMatches(fields[utteranceIndex], 'utterance', true);
                fieldLabels.splice(utteranceIndex,1);
                fields.splice(utteranceIndex,1);
           }
           morphemesIndex = fieldLabels.indexOf("morphemes");
           if(morphemesIndex >= 0){
-              morphemes = fields[morphemesIndex];
+              morphemes = highlightMatches(fields[morphemesIndex], 'morphemes', true);
               fieldLabels.splice(morphemesIndex,1);
               fields.splice(morphemesIndex,1);
           }
           glossIndex = fieldLabels.indexOf("gloss");
           if (glossIndex >= 0){
-              gloss = fields[glossIndex];
+              gloss = highlightMatches(fields[glossIndex], 'gloss', true);
               fieldLabels.splice(glossIndex,1);
               fields.splice(glossIndex,1);
           }
           translationIndex = fieldLabels.indexOf("translation");
           if (translationIndex >=0){
-              translation = fields[translationIndex];
+              translation = highlightMatches(fields[translationIndex], 'translation');
               fieldLabels.splice(translationIndex,1);
               fields.splice(translationIndex,1);
           }
 
+          // Return a list of strings of the form ['uw1<br />mw1<br />gw1', 'uw2<br />mw2<br />gw2']
+          // where uw1 is the first utterance word, mw1 is the first morphemes word, etc.
+          // Note that any empty strings in params are filtered out (cf. _.compact).  This allows
+          // Datums with only, say, utterance and gloss strings or only morphemes and gloss
+          // strings to be IGT-formatted.  
+          var getIGTList = function (params) {
+            return _.map(_.zip.apply(null, _.compact(_.map(params, function (p) {
+              if (p) {
+                return _.map(p.split(' '), randomStrings2highlightSpans);
+              } else {
+              return null;
+              }
+            }))), function (t) { return t.join('<br />') });
+          }
 
-          try{
-            var utteranceArray = utterance.split(' ');
-            var morphemesArray = morphemes.split(' ');
-            var glossArray = gloss.split(' ');
-
-            // Form an array of utterance and gloss segments for rendering
-            var tuple = [];
-            for (var i = 0; i < utteranceArray.length; i++) {
-              tuple.push({
-                utteranceSegment : highlightValue(utteranceArray[i]),
-                morphemeSegment : highlightValue(morphemesArray[i]),
-                glossSegment : highlightValue(glossArray[i])
-              });
-            }
-            if(translation != ""){
-              //jsonToRender.translation = "\u2018"+ highlightValue(translation) +"\u2019";
-              jsonToRender.translation = highlightValue(translation);
+          try {
+            var tuple = getIGTList([utterance, morphemes, gloss]);
+            if (translation != "") {
+              jsonToRender.translation = "\u2018"+ translation +"\u2019";
             }
             jsonToRender.tuple = tuple;
             if (judgement !== "") {
-              jsonToRender.judgement = highlightValue(judgement);
+              jsonToRender.judgement = judgement;
             }
-          }catch(e){
+          } catch(e) {
             alert("Bug: something is wrong with this datum: "+JSON.stringify(e));
             jsonToRender.translation = "bug";
           }
@@ -334,23 +428,17 @@ define([
           for (var field in fields){
               if(!frequentFields || frequentFields.indexOf(fieldLabels[field])>=0){
                 if(fields[field]){
-                  jsonToRender.additionalFields.push({label: fieldLabels[field],
-                                          'value': highlightValue(fields[field])});
+                  jsonToRender.additionalFields.push({field: fieldLabels[field],
+                    value: highlightMatches(fields[field], fieldLabels[field])});
                 }
               }
           }
     	}
 
-//        var searchparams = app.get("search").get("searchKeywords");
-//        for (field in sessionFields){
-//          if(searchparams.indexOf(sessionFiels[field]) >=0){
-////            show it.
-//          }
-//        }
-
-        try{
-          jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
-        }catch(e){
+        try {
+          jsonToRender.datumstatecolor = this.model.get("datumStates")
+                                .where({selected : "selected"})[0].get("color");
+        } catch (e) {
           if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
 //          this.model.get("datumStates").models[0].set("selected","selected");
         }
