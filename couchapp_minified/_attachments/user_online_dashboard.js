@@ -13939,31 +13939,31 @@ templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n   <a href=\"#\" class= \"locale_Show_Readonly\" rel=\"tooltip\">\n    <i class=\"icons icon-book\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n  <!-- Corpus Menu - Identical for all Corpus Handlebars -->\n  <div class=\"btn-toolbar\">\n    <div class=\"btn-group\">\n      <button class=\"btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_New_menu\"></span>  <span class=\"caret\"></span>\n      </button>\n      <!-- create new stuff in same dashboard -->\n      <ul class=\"dropdown-menu\">\n        <li class=\"new-datum\"><a href=\"#\" class = \"locale_New_Datum\"></a></li>\n        <li class=\"new-conversation\"><a href=\"#corpus/";
+  buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Show_Readonly\" rel=\"tooltip\"> <i\n		class=\"icons icon-book\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- create new stuff in same dashboard -->\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li>\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <!-- modify URL -->\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
+  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<!-- modify URL -->\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
   foundHelper = helpers.exportAllDatumURL;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"  class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
+  buffer += escapeExpression(stack1) + "\" target=\"_blank\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldata\" class = \"locale_All_Data\"></a></li>\n      </ul>\n    </div>\n	  <!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n	  <!-- Corpus Save and Toggle to Readonly - Edit View Only-->\n	  <div class=\"btn-group\">\n	    <button class=\"btn btn-success save-corpus\">\n	     <span class=\"locale_Save\"></span></button>\n	  </div>\n  </div>\n</div>\n\n	\n\n<label class = \"locale_Title\"></label> <i class=\"icon-cloud\"></i> \n<input class=\"corpus-title-input\" value=\"";
+  buffer += escapeExpression(stack1) + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n		<!-- Corpus Save and Toggle to Readonly - Edit View Only-->\n		<div class=\"btn-group\">\n			<button class=\"btn btn-success save-corpus\">\n				<span class=\"locale_Save\"></span>\n			</button>\n		</div>\n	</div>\n</div>\n\n\n\n<label class=\"locale_Title\"></label>\n<i class=\"icon-cloud\"></i>\n<input class=\"corpus-title-input\" value=\"";
   foundHelper = helpers.title;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" type=\"text\"/><small>";
+  buffer += escapeExpression(stack1) + "\" type=\"text\" />\n<small>";
   foundHelper = helpers.publicCorpus;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n\n<label class = locale_Description></label>\n<textarea class=\"corpus-description-input\">";
+  buffer += escapeExpression(stack1) + "</small>\n\n<label class=locale_Description></label>\n<textarea class=\"corpus-description-input\">";
   foundHelper = helpers.description;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n<small>Shareable URL: http://www.lingsync.org/";
+  buffer += escapeExpression(stack1) + "</textarea>\n\n<small>Shareable URL:\n	http://www.lingsync.org/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -13971,11 +13971,15 @@ templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.titleAsUrl;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n        \n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-edit-embedded\" href=\"#collapseSessionsEE\">\n        <i class=\"icon-calendar\"></i> <strong class=\"locale_Sessions_associated\"></strong>\n         </a>\n    </div>\n    <div class=\"accordion-body collapse\" id=\"collapseSessionsEE\">\n      <div class=\"accordion-inner\">\n        <span class=\"locale_elicitation_sessions_explanation\"></span>\n        <ul class = \"sessions-updating-collection unstyled\">\n                <!-- Updating Sessions Collection -->\n        </ul>\n      </div>\n    </div>\n  </div>\n  \n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatalistsEE\">\n          <i class=\"icon-pushpin\"></i> <strong class=\"locale_Datalists_associated\"></strong>\n      </a>\n    </div>\n    <div class=\"accordion-body collapse\" id=\"collapseDatalistsEE\" >\n      <div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n         <ul class = \"datalists-updating-collection unstyled\">\n                <!-- Updating DataLists Collection -->\n        </ul>\n      </div>\n    </div>\n  </div>\n  \n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"accordion-edit-embedded\" href=\"#collapsePermissionsEE\">\n				<i class=\"icon-group\"></i> <strong class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n    <div class=\"accordion-body collapse\" id=\"collapsePermissionsEE\">\n      <div class=\"accordion-inner container span12\">\n				<span class=\"locale_permissions_explanation\"></span>\n				<label class = \"locale_Public_or_Private\"></label>\n				<input type=\"text\" value=\"";
+  buffer += escapeExpression(stack1) + "</small>\n\n<div class=\"accordion\" id=\"accordion-edit-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n					glosser from any LingSync corpus, you need to have permission (ask\n					them to add you as a reader on their corpus). For example, if you\n					and your collaborators are working on Mi'gmaq, you might have a\n					master corpus with the most data that you all can use to gloss your\n					corpus. For an example url, see LingLlama's sample Quechua corpus:\n					https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true</span>\n				<br /> <span>You can also create your own glosser web\n					service or use an existing glosser/morpheme segmenter you have\n					access too as long as it is available on a URL, and uses a similar\n					data schema. <a\n					href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n					target=\"_new\">Contact us</a> if you would like more details about how to do this.\n				</span> <label>Glosser URL:</label>\n				<textarea class=\"glosserURL\">";
+  foundHelper = helpers.glosserURL;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</textarea>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseSessionsEE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseSessionsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatalistsEE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatalistsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"accordion-edit-embedded\" href=\"#collapsePermissionsEE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapsePermissionsEE\">\n			<div class=\"accordion-inner container span12\">\n				<span class=\"locale_permissions_explanation\"></span> <label\n					class=\"locale_Public_or_Private\"></label> <input type=\"text\"\n					value=\"";
   foundHelper = helpers.publicCorpus;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" class=\" public-or-private\" data-provide=\"typeahead\" data-items=\"4\" \n				        data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\"/>\n				<a href = \"http://www.lingsync.org/";
+  buffer += escapeExpression(stack1) + "\" class=\" public-or-private\"\n					data-provide=\"typeahead\" data-items=\"4\"\n					data-source=\"[&quot;Public&quot;,&quot;Private&quot;]\" /> <a\n					href=\"http://www.lingsync.org/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -13983,7 +13987,7 @@ templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.titleAsUrl;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"><i class=\" icon-link\"></i></a>\n				<small>Shareable URL: http://www.lingsync.org/";
+  buffer += escapeExpression(stack1) + "\"\n					target=\"_blank\"><i class=\" icon-link\"></i></a> <small>Shareable\n					URL: http://www.lingsync.org/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -13991,15 +13995,15 @@ templates['corpus_edit_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.titleAsUrl;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n			<p>\n				<button class=\"btn btn-inverse reload-corpus-team-permissions\"><i class=\"icon-refresh\"></i> See current team members</button>\n      </p>\n        <ul class = \"permissions-updating-collection unstyled\">\n                      <!-- Updating Permissions Collection -->\n        </ul>\n      </div>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatumFieldSettingsEE\">\n           <i class=\"icon-list\"></i> <strong class=\"locale_Datum_field_settings\"></strong>\n        </a>\n    </div>\n    <div class=\"accordion-body collapse\" id=\"collapseDatumFieldSettingsEE\">\n      <div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n        <ul class=\"datum_field_settings unstyled\"></ul>\n        <div class=\"breadcrumb\">\n          <span class=\"pull-right\"> \n            <span class=\"locale_Encrypt_if_confidential\"></span>\n            <input type=\"checkbox\" class=\"add_shouldBeEncrypted\"";
+  buffer += escapeExpression(stack1) + "</small>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumFieldSettingsEE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_shouldBeEncrypted\"";
   foundHelper = helpers.shouldBeEncrypted;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "></input>\n          </span> \n          <input type=\"text\" class=\"span3 choose_add_field\"  data-provide=\"typeahead\" data-items=\"4\" data-source=\"[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]\">\n          <label class=\"locale_Help_Text\"></label>\n          <textarea class=\"add_help locale_Help_Text_Placeholder\"></textarea>\n          <a href=\"#\" class=\"locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add\" rel=\"tooltip\">\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-edit-embedded\" href=\"#collapseDatumStateSettingsEE\">\n        <i class=\"icon-flag\"></i>  <strong class=\"locale_Datum_state_settings\"></strong>\n      </a>\n    </div>\n    <div class=\"accordion-body collapse\" id=\"collapseDatumStateSettingsEE\">\n			<span class=\"locale_datum_states_explanation\"></span>\n        <ul class=\"datum_state_settings unstyled\"></ul>\n        <input class=\"add_input locale_Add_Placeholder\" value=\"\" type=\"text\"></input>\n        <select class=\"add_color_chooser\">\n          <option value=\"success\" class = \"locale_Green\"></option>\n          <option value=\"warning\" class = \"locale_Orange\"></option>\n          <option value=\"important\" class = \"locale_Red\"></option>\n          <option value=\"info\" class = \"locale_Teal\"></option>\n          <option value=\"inverse\" class = \"locale_Black\"></option>\n          <option value=\"\" class = \"locale_Default\"></option>\n        </select>\n        <a href=\"#\" class = \"locale_Add_New_Datum_State_Tooltip btn btn-primary add-datum-state locale_Add\" rel=\"tooltip\">\n        </a>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-edit-embedded\" href=\"#collapseConversationFieldSettingsEE\">\n           <i class=\"icon-comments-alt\"></i> <strong class=\"locale_Conversation_field_settings\"></strong>\n        </a>\n    </div>\n    <div class=\"accordion-body collapse\" id=\"collapseConversationFieldSettingsEE\">\n      <div class=\"accordion-inner\">\n				<span class=\"locale_conversation_fields_explanation\"></span>\n        <ul class=\"conversation_field_settings unstyled\"></ul>\n        <div class=\"breadcrumb\">\n          <span class=\"pull-right\"> \n            <span class=\"locale_Encrypt_if_confidential\"></span>\n            <input type=\"checkbox\" class=\"add_conversationShouldBeEncrypted\"";
+  buffer += escapeExpression(stack1) + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea class=\"add_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Datum_Field_Tooltip btn btn-primary add-datum-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseDatumStateSettingsEE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseDatumStateSettingsEE\">\n			<span class=\"locale_datum_states_explanation\"></span>\n			<ul class=\"datum_state_settings unstyled\"></ul>\n			<input class=\"add_input locale_Add_Placeholder\" value=\"\" type=\"text\"></input>\n			<select class=\"add_color_chooser\">\n				<option value=\"success\" class=\"locale_Green\"></option>\n				<option value=\"warning\" class=\"locale_Orange\"></option>\n				<option value=\"important\" class=\"locale_Red\"></option>\n				<option value=\"info\" class=\"locale_Teal\"></option>\n				<option value=\"inverse\" class=\"locale_Black\"></option>\n				<option value=\"\" class=\"locale_Default\"></option>\n			</select> <a href=\"#\"\n				class=\"locale_Add_New_Datum_State_Tooltip btn btn-primary add-datum-state locale_Add\"\n				rel=\"tooltip\"> </a>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseConversationFieldSettingsEE\"> <i\n				class=\"icon-comments-alt\"></i> <strong\n				class=\"locale_Conversation_field_settings\"></strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\"\n			id=\"collapseConversationFieldSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_conversation_fields_explanation\"></span>\n				<ul class=\"conversation_field_settings unstyled\"></ul>\n				<div class=\"breadcrumb\">\n					<span class=\"pull-right\"> <span\n						class=\"locale_Encrypt_if_confidential\"></span> <input\n						type=\"checkbox\" class=\"add_conversationShouldBeEncrypted\"";
   foundHelper = helpers.shouldBeEncrypted;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.shouldBeEncrypted; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "></input>\n          </span> \n          <input type=\"text\" class=\"span3 choose_add_conversation_field\"  data-provide=\"typeahead\" data-items=\"4\" data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n          <label class=\"locale_Help_Text\"></label>\n          <textarea class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n          <a href=\"#\" class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\" rel=\"tooltip\">\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>      \n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-corpus\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>";
+  buffer += escapeExpression(stack1) + "></input>\n					</span> <input type=\"text\" class=\"span3 choose_add_conversation_field\"\n						data-provide=\"typeahead\" data-items=\"4\"\n						data-source=\"[&quot;Semantic Context&quot;,&quot;Speakers&quot;,&quot;Register&quot;,&quot;World Knowledge&quot;,&quot;External References&quot;,&quot;Location&quot;,&quot;Notes&quot;]\">\n					<label class=\"locale_Help_Text\"></label>\n					<textarea\n						class=\"add_conversation_help locale_Help_Text_Placeholder\"></textarea>\n					<a href=\"#\"\n						class=\"locale_Add_New_Conversation_Field_Tooltip btn btn-primary add-conversation-field locale_Add\"\n						rel=\"tooltip\"> </a>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n	<textarea class=\"comment-new-text\"></textarea>\n	<button class=\"btn btn-mini btn-primary add-comment-corpus\" value=\"Add\">\n		<i class=\"icon-comment\"></i> <span class=\"locale_Add\"></span>\n	</button>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -14033,19 +14037,19 @@ templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers
   var buffer = "", stack1, foundHelper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n  <a href=\"#\" class = \"locale_Edit_corpus\" rel=\"tooltip\">\n    <i class=\"icons icon-edit\"></i></a>\n  <a href=\"#\" class= \"locale_Show_in_Dashboard\" rel=\"tooltip\" >\n    <i class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n  <!-- Corpus Menu - Identical for all Corpus Handlebars -->\n  <div class=\"btn-toolbar\">\n    <div class=\"btn-group\">\n      <button class=\"btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_New_menu\"></span>  <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li class=\"new-datum\"><a href=\"#\" class = \"locale_New_Datum\"></a></li>\n        <li class=\"new-conversation\"><a href=\"#corpus/";
+  buffer += "<!-- Corpus icons - Different for all Corpus Handlebars -->\n<div class=\"pull-right\">\n	<a href=\"#\" class=\"locale_Edit_corpus\" rel=\"tooltip\"> <i\n		class=\"icons icon-edit\"></i></a> <a href=\"#\"\n		class=\"locale_Show_in_Dashboard\" rel=\"tooltip\"> <i\n		class=\"icons icon-resize-small\"></i></a>\n</div>\n<div class=\"btn-toolbar \">\n	<!-- Corpus Menu - Identical for all Corpus Handlebars -->\n	<div class=\"btn-toolbar\">\n		<div class=\"btn-group\">\n			<button class=\"btn btn-primary dropdown-toggle\"\n				data-toggle=\"dropdown\">\n				<span class=\"locale_New_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li class=\"new-datum\"><a href=\"#\" class=\"locale_New_Datum\"></a></li>\n				<li class=\"new-conversation\"><a\n					href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/conversation/new\" class = \"locale_New_Conversation\"></a></li>\n        <li class=\"new-data-list\"><a href=\"#\" class = \"locale_New_Data_List\"></a></li>\n        <li class=\"new-session\"><a href=\"#\" class = \"locale_New_Session\"></a></li>\n        <li class=\"new-corpus\"><a href=\"#\" class = \"locale_New_Corpus\"></a></li>\n      </ul>\n    </div>\n    <div class=\"btn-group\">\n      <button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class =\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n      </button>\n      <ul class=\"dropdown-menu\">\n        <li><a href=\"#import\" class = \"locale_Import_Data\"></a></li>\n        <li><a href=\"";
+  buffer += escapeExpression(stack1) + "/conversation/new\"\n					class=\"locale_New_Conversation\"></a></li>\n				<li class=\"new-data-list\"><a href=\"#\"\n					class=\"locale_New_Data_List\"></a></li>\n				<li class=\"new-session\"><a href=\"#\" class=\"locale_New_Session\"></a></li>\n				<li class=\"new-corpus\"><a href=\"#\" class=\"locale_New_Corpus\"></a></li>\n			</ul>\n		</div>\n		<div class=\"btn-group\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span class=\"locale_Data_menu\"></span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a href=\"#import\" class=\"locale_Import_Data\"></a></li>\n				<li><a href=\"";
   foundHelper = helpers.exportAllDatumURL;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.exportAllDatumURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target=\"_blank\"  class = \"locale_Export_Data\"></a></li>\n        <li><a href=\"#corpus/";
+  buffer += escapeExpression(stack1) + "\" target=\"_blank\"\n					class=\"locale_Export_Data\"></a></li>\n				<li><a href=\"#corpus/";
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "/alldata\" class = \"locale_All_Data\"></a></li>\n      </ul>\n    </div>\n    <!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n  </div>\n</div>\n\n<h2><i class=\"icon-cloud\"></i> ";
+  buffer += escapeExpression(stack1) + "/alldata\"\n					class=\"locale_All_Data\"></a></li>\n			</ul>\n		</div>\n		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->\n	</div>\n</div>\n\n<h2>\n	<i class=\"icon-cloud\"></i> ";
   foundHelper = helpers.title;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -14053,7 +14057,7 @@ templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.publicCorpus;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.publicCorpus; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small></h2>\n<a href = \"http://www.lingsync.org/";
+  buffer += escapeExpression(stack1) + "</small>\n</h2>\n<a href=\"http://www.lingsync.org/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -14061,7 +14065,7 @@ templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.titleAsUrl;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.titleAsUrl; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\" target = \"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL: http://www.lingsync.org/";
+  buffer += escapeExpression(stack1) + "\"\n	target=\"_blank\"><i class=\" icon-link\"></i></a>\n<small>Shareable URL:\n	http://www.lingsync.org/";
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -14073,7 +14077,11 @@ templates['corpus_read_embedded'] = template(function (Handlebars,depth0,helpers
   foundHelper = helpers.description;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.description; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</div>\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\" id=\"corpus-precedence-rules-visualization-fullscreen\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n        <i class=\"icon-calendar\"></i> <strong class=\"locale_Sessions_associated\"></strong>\n         </a>\n    </div>\n    <div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n      <div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class = \"sessions-updating-collection unstyled\">\n                <!-- Updating Sessions Collection -->\n        </ul>\n      </div>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n          <i class=\"icon-pushpin\"></i> <strong class=\"locale_Datalists_associated\"></strong>\n        </a>\n    </div>\n    <div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n      <div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n        <ul class = \"datalists-updating-collection unstyled\">\n                <!-- Updating DataLists Collection -->\n        </ul>\n      </div>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n        <i class=\"icon-group\"></i> <strong class=\"locale_Permissions_associated\"></strong>\n        </a>\n    </div>\n    <div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n      <div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n        <p>\n        <button class=\"btn btn-inverse reload-corpus-team-permissions\"><i class=\"icon-refresh\"></i> See current team members</button>\n        </p>\n        <ul class = \"permissions-updating-collection unstyled\">\n                      <!-- Updating Permissions Collection -->\n        </ul>\n      </div>\n    </div>\n  </div>\n  \n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n        <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-read-embedded\" href=\"#collapseDatumFieldSettingsRE\">\n          <i class=\"icon-list\"></i>  <strong class=\"locale_Datum_field_settings\"></strong>\n        </a>\n    </div>\n    <div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n      <div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n      </div>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-read-embedded\" href=\"#collapseDatumStateSettingsRE\">\n        <i class=\"icon-flag\"></i> <strong class=\"locale_Datum_state_settings\"></strong>\n        </a>\n    </div>\n    <div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n      <div class=\"accordion-inner\">\n        <span class=\"locale_datum_states_explanation\"></span>\n        <ul class=\"datum_state_settings unstyled\"></ul>\n      </div>\n    </div>\n  </div>\n  <div class=\"accordion-group\">\n    <div class=\"accordion-heading\">\n      <a class=\"accordion-toggle\" data-toggle=\"collapse\"\n        data-parent=\"#accordion-read-embedded\" href=\"#collapseLessonsSettingsRE\">\n        <i class=\"icon-gift\"></i> <strong class=\"\">New! Add Language Lessons components to this corpus</strong>\n        </a>\n    </div>\n    <div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n      <div class=\"accordion-inner\">\n        <a href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\" target=\"_blank\">See prototype</a>        \n\n      </div>\n    </div>\n  </div>\n</div> \n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n  <textarea class=\"comment-new-text\"></textarea>\n  <button class=\"btn btn-mini btn-primary add-comment-corpus\" value=\"Add\">\n    <i class=\"icon-comment\"></i>\n    <span class = \"locale_Add\"></span> \n  </button>\n</div>";
+  buffer += escapeExpression(stack1) + "</div>\n\n<!-- Force directed graph of morphemes in the corpus -->\n<div class=\"corpus-precedence-rules-visualization\"\n	id=\"corpus-precedence-rules-visualization-fullscreen\"></div>\n\n<div class=\"accordion\" id=\"accordion-read-embedded\">\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-edit-embedded\"\n				href=\"#collapseGlosserSettingsEE\"> <i class=\"icon-bar-chart\"></i>\n				<strong class=\"locale_Glosser_settings\">Semi-automatic\n					glossing and morpheme segmentation</strong>\n			</a>\n		</div>\n		<div class=\"accordion-body collapse\" id=\"collapseGlosserSettingsEE\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_glosser_explanation\">You can use a\n          glosser from any LingSync corpus, you need to have permission\n          (ask them to add you as a reader on their corpus). For example, if\n          you and your collaborators are working on Mi'gmaq, you might have a\n          master corpus with the most data that you all can use to gloss your\n          corpus. For an example url, see LingLlama's sample Quechua corpus:\n          https://corpusdev.lingsync.org/lingllama-firstcorpus/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true</span>\n        <br /> <span>You can also create your own glosser web\n          service or use an existing glosser/morpheme segmenter you have\n          access too as long as it is available on a URL and uses a similar data schema. <a\n          href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n          target=\"_new\">Contact us</a> if you would like more details.\n        </span>\n        <label>Glosser URL:</label>\n				<p class=\"glosserURL\">";
+  foundHelper = helpers.glosserURL;
+  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
+  else { stack1 = depth0.glosserURL; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  buffer += escapeExpression(stack1) + "</p>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseSessionsRE\">\n				<i class=\"icon-calendar\"></i> <strong\n				class=\"locale_Sessions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseSessionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_elicitation_sessions_explanation\"></span>\n				<ul class=\"sessions-updating-collection unstyled\">\n					<!-- Updating Sessions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapseDatalistsRE\">\n				<i class=\"icon-pushpin\"></i> <strong\n				class=\"locale_Datalists_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatalistsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datalists_explanation\"></span>\n				<ul class=\"datalists-updating-collection unstyled\">\n					<!-- Updating DataLists Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\" href=\"#collapsePermissionsRE\">\n				<i class=\"icon-group\"></i> <strong\n				class=\"locale_Permissions_associated\"></strong>\n			</a>\n		</div>\n		<div id=\"collapsePermissionsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner \">\n				<span class=\"locale_permissions_explanation\"></span>\n				<p>\n					<button class=\"btn btn-inverse reload-corpus-team-permissions\">\n						<i class=\"icon-refresh\"></i> See current team members\n					</button>\n				</p>\n				<ul class=\"permissions-updating-collection unstyled\">\n					<!-- Updating Permissions Collection -->\n				</ul>\n			</div>\n		</div>\n	</div>\n\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumFieldSettingsRE\"> <i class=\"icon-list\"></i>\n				<strong class=\"locale_Datum_field_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumFieldSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_fields_explanation\"></span>\n				<ul class=\"datum_field_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseDatumStateSettingsRE\"> <i class=\"icon-flag\"></i>\n				<strong class=\"locale_Datum_state_settings\"></strong>\n			</a>\n		</div>\n		<div id=\"collapseDatumStateSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<span class=\"locale_datum_states_explanation\"></span>\n				<ul class=\"datum_state_settings unstyled\"></ul>\n			</div>\n		</div>\n	</div>\n	<div class=\"accordion-group\">\n		<div class=\"accordion-heading\">\n			<a class=\"accordion-toggle\" data-toggle=\"collapse\"\n				data-parent=\"#accordion-read-embedded\"\n				href=\"#collapseLessonsSettingsRE\"> <i class=\"icon-gift\"></i> <strong\n				class=\"\">New! Add Language Lessons components to this\n					corpus</strong>\n			</a>\n		</div>\n		<div id=\"collapseLessonsSettingsRE\" class=\"accordion-body collapse\">\n			<div class=\"accordion-inner\">\n				<a\n					href=\"https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/lessons_corpus/index.html\"\n					target=\"_blank\">See prototype</a>\n\n			</div>\n		</div>\n	</div>\n</div>\n\n<!-- Corpus comments -->\n<ul class=\"comments unstyled\"></ul>\n<div class=\"alert alert-info\">\n	<textarea class=\"comment-new-text\"></textarea>\n	<button class=\"btn btn-mini btn-primary add-comment-corpus\" value=\"Add\">\n		<i class=\"icon-comment\"></i> <span class=\"locale_Add\"></span>\n	</button>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -14784,30 +14792,26 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = "", stack1, foundHelper;
+  var buffer = "";
   buffer += "\n	  <span class=\"glossCouplet\">\n	    ";
-  foundHelper = helpers.utteranceSegment;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.utteranceSegment; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n	    <br />\n	    ";
-  foundHelper = helpers.glossSegment;
-  if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.glossSegment; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "\n	  </span>\n	";
+  depth0 = typeof depth0 === functionType ? depth0() : depth0;
+  if(depth0 || depth0 === 0) { buffer += depth0; }
+  buffer += "\n	  </span>\n	";
   return buffer;}
 
 function program5(depth0,data) {
   
   var buffer = "", stack1, foundHelper;
-  buffer += "\n		<!-- <li><strong>";
+  buffer += "\n		<dt>";
   foundHelper = helpers.label;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</strong>: ";
-  foundHelper = helpers.mask;
+  buffer += escapeExpression(stack1) + "</dt>\n		<dd>";
+  foundHelper = helpers.value;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
-  else { stack1 = depth0.mask; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</li> -->\n		";
+  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</dd>\n		";
   return buffer;}
 
   buffer += "<div class=\"span1\">\n  <input type=\"checkbox\" class=\"datum-checkboxes\"></input>\n</div>\n<div class=\"span1\">\n  ";
@@ -14815,18 +14819,19 @@ function program5(depth0,data) {
   stack1 = helpers['if'].call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</div>\n<div class=\"span10\">\n	";
-  stack1 = depth0.couplet;
+  stack1 = depth0.tuple;
   stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(3, program3, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	<br />\n	<span class=\"datum-latex-translation\">";
   foundHelper = helpers.translation;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.translation; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span>\n	<ul class=\"unstyled\">\n		";
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</span>\n	<dl>\n		";
   stack1 = depth0.additionalFields;
   stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(5, program5, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n	</ul>\n</div>";
+  buffer += "\n	</dl>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -16519,18 +16524,40 @@ OPrime.prettyDate = function(time) {
   var diff = ((greenwichdate.getTime() - date.getTime()) / 1000);
   var day_diff = Math.floor(diff / 86400);
 
-  if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
+  if (isNaN(day_diff) || day_diff < 0 ) {
     return undefined;
   }
 
-  return day_diff == 0
-      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
-          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
-          || diff < 7200 && "1 hour ago" || diff < 86400
-          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
-      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
-      && Math.ceil(day_diff / 7) + " weeks ago";
+  if (day_diff >= 548) {
+    return Math.ceil(day_diff / 365) + " years ago";
+  }
+  if (day_diff >= 40) {
+    return Math.ceil(day_diff / 31) + " months ago";
+  }
+  if (day_diff >= 14) {
+    return Math.ceil(day_diff / 7) + " weeks ago";
+  }
+  if (day_diff >= 2) {
+    return Math.ceil(day_diff / 1) + " days ago";
+  }
+  if (day_diff >= 1) {
+    return "Yesterday";
+  }
+  if(diff >= 86400 ){
+    return Math.floor(diff / 3600) + " hours ago";
+  }
+//  if(diff >= 7200 ){
+//    Math.floor(diff / 3600) + " 1 hour ago";
+//  }
+  if(diff >= 3600 ){
+    return Math.floor(diff / 60) + " minutes ago";
+  }
+  if(diff >= 120 ){
+    return "1 minute ago";
+  }
+  return "just now";
 };
+
 OPrime.prettyTimestamp = function(timestamp) {
   var date = new Date(timestamp);
   var greenwichtimenow = new Date();
@@ -16541,21 +16568,34 @@ OPrime.prettyTimestamp = function(timestamp) {
     return;
   }
 
-  if (day_diff >= 31) {
-    return Math.ceil(day_diff / 30) + " months ago";
-  }
-
   if (day_diff >= 548) {
     return Math.ceil(day_diff / 365) + " years ago";
   }
-
-  return day_diff == 0
-      && (diff < 60 && "just now" || diff < 120 && "1 minute ago"
-          || diff < 3600 && Math.floor(diff / 60) + " minutes ago"
-          || diff < 7200 && "1 hour ago" || diff < 86400
-          && Math.floor(diff / 3600) + " hours ago") || day_diff == 1
-      && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31
-      && Math.ceil(day_diff / 7) + " weeks ago";
+  if (day_diff >= 40) {
+    return Math.ceil(day_diff / 31) + " months ago";
+  }
+  if (day_diff >= 14) {
+    return Math.ceil(day_diff / 7) + " weeks ago";
+  }
+  if (day_diff >= 2) {
+    return Math.ceil(day_diff / 1) + " days ago";
+  }
+  if (day_diff >= 1) {
+    return "Yesterday";
+  }
+  if(diff >= 86400 ){
+    return Math.floor(diff / 3600) + " hours ago";
+  }
+//  if(diff >= 7200 ){
+//    Math.floor(diff / 3600) + " 1 hour ago";
+//  }
+  if(diff >= 3600 ){
+    return Math.floor(diff / 60) + " minutes ago";
+  }
+  if(diff >= 120 ){
+    return "1 minute ago";
+  }
+  return "just now";
 };
 
 /*
@@ -20606,7 +20646,17 @@ define('datum/Datum',[
 //          successcallback();
 //        }
 //      }
-    }
+    },
+
+	/* highlight returns text with all instances of stringToHighlight enclosed
+	 * in a span.  Note that stringToHighlight is treated as a regexp.
+	 */
+	highlight: function(text, stringToHighlight, className) {
+	  className = className || 'highlight';
+	  var re = new RegExp('(' + stringToHighlight + ')', "gi");
+	  return text.replace(re, "<span class='" + className + "'>$1</span>");
+	}
+
   });
 
   return Datum;
@@ -21348,13 +21398,15 @@ define('datum/Sessions',[
 });
 var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
-Glosser.downloadPrecedenceRules = function(pouchname, callback){
-  var couchConnection = app.get("corpus").get("couchConnection");
-  var couchurl = OPrime.getCouchUrl(couchConnection);
-
+Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
+  if(!glosserURL ||glosserURL == "default"){
+    var couchConnection = app.get("corpus").get("couchConnection");
+    var couchurl = OPrime.getCouchUrl(couchConnection);
+    glosserURL = couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true";
+  }
   OPrime.makeCORSRequest({
     type : 'GET',
-    url : couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true",
+    url : glosserURL,
     success : function(rules) {
       localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
 
@@ -23380,7 +23432,7 @@ define('corpus/Corpus',[
       if(!callback){
         callback = null;
       }
-      Glosser.downloadPrecedenceRules(pouchname, callback);
+      Glosser.downloadPrecedenceRules(pouchname, this.get("glosserURL"), callback);
     },
     /**
      * This function takes in a pouchname, which could be different
