@@ -1,7 +1,7 @@
 {
   "name": "FieldDB Tests or Slides",
   "version": "1.0",
-  "description": "A way for the developers to test the FieldDB Client",
+  "description": "A way for the developers to test the FieldDB Clients",
   "app": {
     "launch": {
       "local_path": "tests/jasmine.html"
