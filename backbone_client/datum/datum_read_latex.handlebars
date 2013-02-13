@@ -1,0 +1,23 @@
+<div class="span1">
+  <input type="checkbox" class="datum-checkboxes"></input>
+</div>
+<div class="span1">
+  {{#if judgement}}
+    <span class = "latex-judgement">{{judgement}}</span> 
+  {{/if}}
+</div>
+<div class="span10">
+	{{#each tuple}}
+	  <span class="glossCouplet">
+	    {{{this}}}
+	  </span>
+	{{/each}}
+	<br />
+	<span class="datum-latex-translation">{{{translation}}}</span>
+	<dl>
+		{{#each additionalFields}}
+		<dt>{{label}}</dt>
+		<dd>{{{value}}}</dd>
+		{{/each}}
+	</dl>
+</div>

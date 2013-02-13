@@ -32,9 +32,11 @@ OPrime.couchURL = function() {
     corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     couchConnection.domain = "prosody.linguistics.mcgill.ca/corpus";
   } else {
-    corpusURL = "https://localhost:6984";
-    couchConnection.port = ":6984";
-    couchConnection.domain = "localhost";
+//    corpusURL = "https://localhost:6984";
+//    couchConnection.port = ":6984";
+//    couchConnection.domain = "localhost";
+    corpusURL = "https://corpusdev.lingsync.org";
+    couchConnection.domain = "corpusdev.lingsync.org";
   }
   couchConnection.complete = corpusURL + "/lingllama-cherokee-activity_feed/";
   return couchConnection;
