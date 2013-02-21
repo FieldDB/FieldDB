@@ -11,11 +11,11 @@
   "offline_enabled": true,
   "permissions": [
     "unlimitedStorage",
-    "https://ifielddevs.iriscouch.com/",
+    "https://corpusdev.lingsync.org/",
     "https://widgets.twimg.com/"
   ],
    "icons": { 
   },
    "manifest_version" : 2,
-  "content_security_policy" : "default-src 'self'  https://secure.gravatar.com https://themes.googleusercontent.com https://corpus.lingsync.org https://localhost:6984 https://ifielddevs.iriscouch.com  https://widgets.twimg.com"
+  "content_security_policy" : "default-src 'self'  https://secure.gravatar.com https://themes.googleusercontent.com https://corpus.lingsync.org https://localhost:6984 https://corpusdev.lingsync.org  https://widgets.twimg.com"
 }
