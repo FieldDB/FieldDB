@@ -8,12 +8,12 @@ OPrime.couchURL = function() {
     port : "",
     db : "lingllama-cherokee-activity_feed/"
   };
-  if (corpusURL.indexOf("lingsync.org") >= 0) {
+  if (corpusURL.indexOf("corpusdev.lingsync.org") >= 0) {
+    corpusURL = "https://corpusdev.lingsync.org";
+    couchConnection.domain = "corpusdev.lingsync.org";
+  } else if (corpusURL.indexOf("lingsync.org") >= 0) {
     corpusURL = "https://corpus.lingsync.org";
     couchConnection.domain = "corpus.lingsync.org";
-  } else if (corpusURL.indexOf("ifielddevs.iriscouch.com") >= 0) {
-    corpusURL = "https://ifielddevs.iriscouch.com";
-    couchConnection.domain = "ifielddevs.iriscouch.com";
   } else if (corpusURL.indexOf("prosody.linguistics.mcgill") >= 0) {
     corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     couchConnection.domain = "prosody.linguistics.mcgill.ca/corpus";
@@ -26,15 +26,17 @@ OPrime.couchURL = function() {
     corpusURL = "https://corpus.lingsync.org";
     couchConnection.domain = "corpus.lingsync.org";
   } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-    corpusURL = "https://ifielddevs.iriscouch.com";
-    couchConnection.domain = "ifielddevs.iriscouch.com";
+    corpusURL = "https://corpusdev.lingsync.org";
+    couchConnection.domain = "corpusdev.lingsync.org";
   } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
     corpusURL = "https://prosody.linguistics.mcgill.ca/corpus";
     couchConnection.domain = "prosody.linguistics.mcgill.ca/corpus";
   } else {
-    corpusURL = "https://localhost:6984";
-    couchConnection.port = ":6984";
-    couchConnection.domain = "localhost";
+//    corpusURL = "https://localhost:6984";
+//    couchConnection.port = ":6984";
+//    couchConnection.domain = "localhost";
+    corpusURL = "https://corpusdev.lingsync.org";
+    couchConnection.domain = "corpusdev.lingsync.org";
   }
   couchConnection.complete = corpusURL + "/lingllama-cherokee-activity_feed/";
   return couchConnection;
