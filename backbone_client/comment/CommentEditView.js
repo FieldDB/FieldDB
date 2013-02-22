@@ -60,12 +60,13 @@ define([
      */
     updateComment : function(e) {
       if(e){
-//        e.stopPropagation();
+        e.stopPropagation();
         e.preventDefault();
       }
-      if(!this.model.get("timestamp")){
-        this.model.set("timestamp", new Date(JSON.stringify(new Date())));
-      }
+//    This timestamp thing doesn't seem to be working       
+//      if(!this.model.get("timestamp")){
+//        this.model.set("timestamp", new Date(JSON.stringify(new Date())));
+//      }
       this.model.edit($(this.el).find(".comment-new-text").val());
     }
    

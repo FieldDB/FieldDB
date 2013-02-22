@@ -25,7 +25,10 @@ define( [
      * @constructs
      */
     initialize : function() {
+      
+      var t = JSON.stringify(new Date()); //copied from upstream code 
       if(!this.get("timestamp")){
+        this.set("timestamp", new Date(JSON.parse(t))); //copied from upstream code timestamp is back 
         this.set("gravatar", window.app.get("authentication").get("userPublic").get("gravatar"));
         this.set("username", window.app.get("authentication").get("userPublic").get("username"));
       }
@@ -39,7 +42,7 @@ define( [
       
     },
     defaults : {
-      text : "",
+      text: "",
       username: ""
     },
     
