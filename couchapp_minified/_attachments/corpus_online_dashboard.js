@@ -37131,8 +37131,8 @@ define('app/App',[
           },
           error : function(model, error, options) {
             if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
-            alert("There seems to be an error when fetching corpus: "+error.reason);
-            if(error.error.indexOf("unauthorized") >=0 ){
+            OPrime.bug("There seems to be an error when fetching corpus: "+error.reason);
+            if(error && error.error && error.error.indexOf("unauthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
@@ -37141,6 +37141,8 @@ define('app/App',[
               }, couchConnection.pouchname);
 //              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
 //              window.location.replace(optionalCouchAppPath+"corpus.html#login");
+            }else{
+              OPrime.bug("You appear to be offline.");
             }
 
           }
