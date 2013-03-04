@@ -2,82 +2,85 @@
 <html>
 <head>
 <link rel="chrome-webstore-item"
-    href="https://chrome.google.com/webstore/detail/ocmdknddgpmjngkhcbcofoogkommjfoj">
+	href="https://chrome.google.com/webstore/detail/ocmdknddgpmjngkhcbcofoogkommjfoj">
 <script>
-if (chrome.app.isInstalled) {
-  document.getElementById('install-button').display = 'none';
-}
+  if (chrome.app.isInstalled) {
+    document.getElementById('install-button').display = 'none';
+  }
 </script>
 <script type="text/javascript">
-
-
-  function getUrlVar(key){
-      var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
-      return result && unescape(result[1]) || ""; 
+  function getUrlVar(key) {
+    var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+    return result && unescape(result[1]) || "";
   }
 
-  if(getUrlVar("mobilepage") != 0 || !getUrlVar("mobilepage")) {
-    if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
-      if(getCookie("mobilepage") != "mobile") {
+  if (getUrlVar("mobilepage") != 0 || !getUrlVar("mobilepage")) {
+    if ((navigator.userAgent.match(/iPhone/i))
+        || (navigator.userAgent.match(/iPod/i))) {
+      if (getCookie("mobilepage") != "mobile") {
         //handle iPhone
       }
     }
   }
 
-  function getCookie(c_name){
-    var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++) {
-      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==c_name) {
+  function getCookie(c_name) {
+    var i, x, y, ARRcookies = document.cookie.split(";");
+    for (i = 0; i < ARRcookies.length; i++) {
+      x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+      y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+      x = x.replace(/^\s+|\s+$/g, "");
+      if (x == c_name) {
         return unescape(y);
       }
     }
   }
   window.animateOff = false;
-  </script>
+</script>
 <meta http-equiv="content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=.5" />
 <!-- Change images -->
 
 <title>Collect, share and search your data offline and online -
 	LingSync</title>
-<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="/webimages/compiled.css" />
 <script type="text/javascript" src="/webimages/all.js"></script>
 
-<script type="text/javascript" charset="utf-8"> 
-    var userLang = (navigator.language) ? navigator.language : navigator.userLanguage; 
-    //alert ("The language is: " + userLang);
-    </script>
+<script type="text/javascript" charset="utf-8">
+  var userLang = (navigator.language) ? navigator.language
+      : navigator.userLanguage;
+  //alert ("The language is: " + userLang);
+</script>
 
 
 <style>
 #shine-top {
-	display: none;
+  display: none;
 }
 
 #page-container {
-	display: none;
+  display: none;
 }
-
 </style>
 
 <script type="text/javascript">
-
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-32705284-1']);
-  _gaq.push(['_setDomainName', 'example.com']);
-  _gaq.push(['_trackPageview']);
+  _gaq.push([ '_setAccount', 'UA-32705284-1' ]);
+  _gaq.push([ '_setDomainName', 'example.com' ]);
+  _gaq.push([ '_trackPageview' ]);
 
   (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+        : 'http://www')
+        + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
   })();
-
-  </script>
+</script>
 
 </head>
 
@@ -106,8 +109,10 @@ if (chrome.app.isInstalled) {
 				</div>
 				<div class="image5 galleryimg">
 					<div id="player">
-					<iframe width="510" height="315" src="http://www.youtube.com/embed/videoseries?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
-</div>
+						<iframe width="510" height="315"
+							src="http://www.youtube.com/embed/videoseries?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT"
+							frameborder="0" allowfullscreen></iframe>
+					</div>
 				</div>
 				<div class="gallerynav">
 					<a href="#" class="nav1 bullet targetimagenav">image1</a> <a
@@ -166,55 +171,54 @@ if (chrome.app.isInstalled) {
 			<div style="float: right;">
 				<div id="twitterBox" style="margin: 1em;">
 					<script>
-	          //http://code.google.com/p/chromium/issues/detail?id=81637
-	          //https://twitter.com/about/resources/widgets/widget_profile?
-	          //http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
-	          
-	          /**
-	          * LingSync's tweets
-	          */
-	          
-	           $(document).ready(function(){
-	           $.getScript("https://widgets.twimg.com/j/2/widget.js",function(){ 
-	              // dynamically add the get social sidebar
-	              $('body').prepend('<div id="social"></div>'); 
-	      
-	                new TWTR.Widget({
-	                  version: 2,
-	                  type: 'profile',
-	                  id : 'twitterBox',
-	                  
-	                  rpp: 4,
-	                  interval: 30000,
-	                  width: 250,
-	                  height: 250,
-	                  theme: {
-	                    shell: {
-	                      background: '#55a1ba',
-	                      color: '#ffffff'
-	                    },
-	                    tweets: {
-	                      background: '#fcf9fc',
-	                      color: '#0f010f',
-	                      links: '#2d61a1'
-	                    }
-	                  },
-	                  features: {
-	                    scrollbar: true,
-	                    loop: false,
-	                    live: true,
-	                    behavior: 'all'
-	                  }
-	                }).render().setUser('LingSync').start();
-	      
-	            });
-	          });
-	          
-	          
-	         </script>
+            //http://code.google.com/p/chromium/issues/detail?id=81637
+            //https://twitter.com/about/resources/widgets/widget_profile?
+            //http://stackoverflow.com/questions/6754251/need-help-with-twitter-widget
+
+            /**
+             * LingSync's tweets
+             */
+
+            $(document).ready(
+                function() {
+                  $.getScript("https://widgets.twimg.com/j/2/widget.js",
+                      function() {
+                        // dynamically add the get social sidebar
+                        $('body').prepend('<div id="social"></div>');
+
+                        new TWTR.Widget({
+                          version : 2,
+                          type : 'profile',
+                          id : 'twitterBox',
+
+                          rpp : 4,
+                          interval : 30000,
+                          width : 250,
+                          height : 250,
+                          theme : {
+                            shell : {
+                              background : '#55a1ba',
+                              color : '#ffffff'
+                            },
+                            tweets : {
+                              background : '#fcf9fc',
+                              color : '#0f010f',
+                              links : '#2d61a1'
+                            }
+                          },
+                          features : {
+                            scrollbar : true,
+                            loop : false,
+                            live : true,
+                            behavior : 'all'
+                          }
+                        }).render().setUser('LingSync').start();
+
+                      });
+                });
+          </script>
 				</div>
-				<div id="twitterBoxOld" style="margin: 1em;">
-				</div>
+				<div id="twitterBoxOld" style="margin: 1em;"></div>
 			</div>
 			<div style="clear: both;"></div>
 		</div>
@@ -223,17 +227,25 @@ if (chrome.app.isInstalled) {
 			style="position: absolute; top: 0px; right: 0px; z-index: 100;"
 			width=100 />
 
-<div width="100%">
-				<center>
-					<img src="images/team_at_work.jpg" width="500">
-				</center>
-			</div>
+		<div width="100%">
+			<center>
+				<img src="images/team_at_work.jpg" width="500">
+			</center>
+		</div>
 
 		<div id="footer" class="clearfloat">
 			<ul class="">
-				<li id="install"><!-- <a target="_blank"
-					href="https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj">Install</a> --> <button class="btn btn-large btn-primary" onclick="chrome.webstore.install()" id="install-button">Install (Add to Chrome)</button>
-					</li>
+				<li id="install">
+					<!-- <a target="_blank"
+					href="https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj">Install</a> -->
+					<button class="btn btn-large btn-primary"
+						onclick="chrome.webstore.install()" id="install-button">Install
+						(Add to Chrome)</button> <a
+					href="https://play.google.com/store/apps/details?id=org.lingsync.fieldlinguistics">
+						<img alt="Android app on Google Play"
+						src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
+				</a>
+				</li>
 				<li><a target="_blank" href="privacy.html">Privacy Policy</a></li>
 				<li><a target="_blank"
 					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones">OpenSource</a></li>
@@ -255,7 +267,7 @@ if (chrome.app.isInstalled) {
 
 
 			<ul class="">
-				<li>Interns &amp; Development Team 
+				<li>Interns &amp; Development Team
 					<ul>
 						<li><a href="http://udel.edu/%7Emdotedot/">M.E. Cathcart
 								(U Delaware)</a></li>
@@ -284,12 +296,23 @@ if (chrome.app.isInstalled) {
 
 </body>
 <script type="text/javascript" src="/webimages/event.js"></script>
-<script type="text/javascript">document.write(unescape("%3Cscript src='" + (("https:" == document.location.protocol) ? "https://ssl-" : "http://") + "include.reinvigorate.net/re_.js' type='text/javascript'%3E%3C/script%3E"));</script>
-<script type="text/javascript">try { reinvigorate.track("502o6-jd1y52i68g"); } catch(err) {}</script>
+<script type="text/javascript">
+  document
+      .write(unescape("%3Cscript src='"
+          + (("https:" == document.location.protocol) ? "https://ssl-"
+              : "http://")
+          + "include.reinvigorate.net/re_.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  try {
+    reinvigorate.track("502o6-jd1y52i68g");
+  } catch (err) {
+  }
+</script>
 <script>
-      cookie('visited','home');
-  
-  if(getCookie('visited') != 'home') {
+  cookie('visited', 'home');
+
+  if (getCookie('visited') != 'home') {
     var cl = new CanvasLoader('loading');
     cl.setColor('#ffffff'); // default is '#000000'
     cl.setShape('spiral'); // default is 'oval'
@@ -300,61 +323,76 @@ if (chrome.app.isInstalled) {
     cl.setFPS(19); // default is 24
     //cl.show();
 
-    setTimeout("showPage()",500);
-    } else {
+    setTimeout("showPage()", 500);
+  } else {
     //alert(  getCookie('visited'));
-      $('#shine-top').css('display','block');
-      $('#page-container').css('display','block');
-      $('.logo2').css('opacity','1');
-      $('.intro').css('display','none');
-    }
-      //alert('home');
+    $('#shine-top').css('display', 'block');
+    $('#page-container').css('display', 'block');
+    $('.logo2').css('opacity', '1');
+    $('.intro').css('display', 'none');
+  }
+  //alert('home');
 
-     function cookie(visited,page) {
-          date=new Date();
-          expires=new Date(date.getTime()+date*86400000);
-          document.cookie=visited+"="+page+";expires="+expires.toGMTString();
-    }
+  function cookie(visited, page) {
+    date = new Date();
+    expires = new Date(date.getTime() + date * 86400000);
+    document.cookie = visited + "=" + page + ";expires="
+        + expires.toGMTString();
+  }
 
-        $('input, div').click(function() {
-        if($('#newsletter').is(":focus")) {
-          $('.input-wrap').css('background-position','-565px -50px');
-        } else {
-          $('.input-wrap').css('background-position','-565px 0px');
-        }
-      });
-    cookie('visited','home');
+  $('input, div').click(function() {
+    if ($('#newsletter').is(":focus")) {
+      $('.input-wrap').css('background-position', '-565px -50px');
+    } else {
+      $('.input-wrap').css('background-position', '-565px 0px');
+    }
+  });
+  cookie('visited', 'home');
 
   function getCookie(c_name) {
-    var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++) {
-      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==c_name){
+    var i, x, y, ARRcookies = document.cookie.split(";");
+    for (i = 0; i < ARRcookies.length; i++) {
+      x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+      y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+      x = x.replace(/^\s+|\s+$/g, "");
+      if (x == c_name) {
         return unescape(y);
-        }
+      }
     }
   }
 
-  if(getCookie('mobilepage')!= 'mobile') {
-    cookie('mobilepage','mobile');
+  if (getCookie('mobilepage') != 'mobile') {
+    cookie('mobilepage', 'mobile');
   }
-  
+
   function showPage() {
-    $(".logo1").delay(1200).animate({opacity:1},500).delay(900).animate({opacity:0},800,function() {
-    $(".logo2").animate({opacity:1},500,function(){     $("#loading").fadeOut(500, function () {
-          setTimeout(function () {$("#shine-top").fadeIn(500); }, 500)
-          setTimeout(function () {$("#page-container").fadeIn(500);}, 500)
-          setTimeout(function () { $(".intro").css('display','none'); }, 900);
-  
-      }); }); 
-     })
+    $(".logo1").delay(1200).animate({
+      opacity : 1
+    }, 500).delay(900).animate({
+      opacity : 0
+    }, 800, function() {
+      $(".logo2").animate({
+        opacity : 1
+      }, 500, function() {
+        $("#loading").fadeOut(500, function() {
+          setTimeout(function() {
+            $("#shine-top").fadeIn(500);
+          }, 500)
+          setTimeout(function() {
+            $("#page-container").fadeIn(500);
+          }, 500)
+          setTimeout(function() {
+            $(".intro").css('display', 'none');
+          }, 900);
+
+        });
+      });
+    })
   }
-  $(".nav5").click(function(){
+  $(".nav5").click(function() {
     window.animateOff = true;
   });
-  $(".youtubevideo").click(function(){
+  $(".youtubevideo").click(function() {
     window.animateOff = true;
   });
   /*$(".nav1").click(function(){
