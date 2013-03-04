@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en" ng-csp>
+<head>
+<title>LingSync</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Stylesheets -->
+<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="css/LingSync.css">
+<!-- END Stylesheets -->
+
+</head>
+<body id="app" class="LingSyncBody" ng-controller="LingSyncController">
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#"><h3>| LingSync |</h3></a>
+    <ul class="nav">
+      <li><a href="#/lingsync/{{template}}">Data Entry</a></li>
+      <li><a href="#/settings">Settings</a></li>
+    </ul>
+  </div>
+</div>
+
+<ng-view></ng-view>
+
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+  <script src="libs/require.js"></script>
+  <script src="js/LingSync.js"></script>
+</body>
+</html>
