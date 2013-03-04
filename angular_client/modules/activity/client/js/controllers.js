@@ -46,14 +46,15 @@ define(
           $scope.corpus.title = "User Activity Feed";
         }
 
-        GetSessionToken.run({
-          "name" : "public",
-          "password" : "none"
-        }).then(function() {
+        
+//        GetSessionToken.run({
+//          "name" : "public",
+//          "password" : "none"
+//        }).then(function() {
           MostRecentActivities.async(feedParams).then(function(activities) {
             $scope.activities = activities;
           });
-        });
+//        });
 
       };
 
