@@ -880,6 +880,11 @@ define([
      * @param bareActivityObject
      */
     addActivity : function(bareActivityObject) {
+      bareActivityObject.verb = bareActivityObject.verb.replace("href=","target='_blank' href=");
+      bareActivityObject.directobject = bareActivityObject.directobject.replace("href=","target='_blank' href=");
+      bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=","target='_blank' href=");
+      bareActivityObject.context = bareActivityObject.context.replace("href=","target='_blank' href=");
+
       if (OPrime.debugMode) OPrime.debug("Saving activity: ", bareActivityObject);
       var backboneActivity = new Activity(bareActivityObject);
       

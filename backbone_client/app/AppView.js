@@ -559,6 +559,11 @@ define([
         this.setElement($("#app_view"));
         
         var jsonToRender = this.model.toJSON();
+        jsonToRender.theme = "";
+        var makeActivityFeedTransparent = app.get("authentication").get("userPrivate").get("prefs").get("transparentDashboard");
+        if(makeActivityFeedTransparent != "false"){
+          jsonToRender.theme = "_transparent";
+        }
         /*
          * show the corpus title, and the current sessions goal so the
          * user knows which corpus and elicitation they are entering
