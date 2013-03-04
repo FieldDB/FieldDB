@@ -1,0 +1,115 @@
+<div class="row"
+	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
+	ng-click="selectRow('newEntry')"
+	ng-show="data!=undefined || loading==false">
+	<div class="span3">
+		<input class="span3" type="text" ng-model="newFieldData.field1"
+			placeholder="{{fields.field1.title}}"
+			ng-hide="fields.field1.label==''">
+	</div>
+	<div class="span3">
+		<input class="span3" type="text" ng-model="newFieldData.field2"
+			placeholder="{{fields.field2.title}}"
+			ng-hide="fields.field2.label==''">
+	</div>
+	<div class="span3">
+		<input class="span3" type="text" ng-model="newFieldData.field3"
+			placeholder="{{fields.field3.title}}"
+			ng-hide="fields.field3.label==''">
+	</div>
+	<div class="span2">
+		<input class="span2" type="text" ng-model="newFieldData.field4"
+			placeholder="{{fields.field4.title}}"
+			ng-hide="fields.field4.label==''">
+	</div>
+	<div class="span1">
+		<button ng-show="selected=='newEntry'" class="btn btn-primary"
+			ng-click="saveNew(newFieldData)">Save</button>
+	</div>
+</div>
+<div class="row" ng-show="data==undefined || loading==true">
+	<div class="span12 pagination-centered">
+		<img src="img/loading-spinner.gif">
+	</div>
+</div>
+
+<div class="row"
+	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
+	ng-repeat="datum in data | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
+	ng-click="selectRow(datum)" ng-hide="loading==true">
+
+	<!-- Show when editing -->
+	<div ng-show="selected==datum">
+		<div class="span3">
+			<input class="span3" type="text" ng-model="fieldData.field1"
+				ng-init="fieldData.field1=datum[fields.field1.label]"
+				value={{datum[fields.field1.label]}}
+				ng-hide="fields.field1.label==''">
+		</div>
+		<div class="span3">
+			<input class="span3" type="text" ng-model="fieldData.field2"
+				ng-init="fieldData.field2=datum[fields.field2.label]"
+				value={{datum[fields.field2.label]}}
+				ng-hide="fields.field2.label==''">
+		</div>
+		<div class="span3">
+			<input class="span3" type="text" ng-model="fieldData.field3"
+				ng-init="fieldData.field3=datum[fields.field3.label]"
+				value={{datum[fields.field3.label]}}
+				ng-hide="fields.field3.label==''">
+		</div>
+		<div class="span2">
+			<input class="span2" type="text" ng-model="fieldData.field4"
+				ng-init="fieldData.field4=datum[fields.field4.label]"
+				value={{datum[fields.field4.label]}}
+				ng-hide="fields.field4.label==''">
+		</div>
+		<div class="span1">
+			<button class="btn btn-primary"
+				ng-click="saveChanges(fieldData, datum.id)">Save</button>
+		</div>
+	</div>
+
+
+	<!-- Show when not editing -->
+	<div ng-show="selected!=datum">
+		<div class="span3">
+			<span class="span3" title="{{fields.field1.title}}">{{datum[fields.field1.label]
+				| neverEmpty}}</span>
+		</div>
+		<div class="span3">
+			<span class="span3" title="{{fields.field2.title}}">{{datum[fields.field2.label]
+				| neverEmpty}}</span>
+		</div>
+		<div class="span3">
+			<span class="span3" title="{{fields.field3.title}}">{{datum[fields.field3.label]
+				| neverEmpty}}</span>
+		</div>
+		<div class="span2">
+			<span class="span2" title="{{fields.field4.title}}">{{datum[fields.field4.label]
+				| neverEmpty}}</span>
+		</div>
+
+
+		<div class="span1">
+			<span title="Date modified">{{datum.dateModified | shortDate}}
+			</span>
+		</div>
+	</div>
+
+</div>
+
+<br />
+
+<div class="pagination-centered">
+    <button class="btn btn-inverse btn-mini" ng-disabled="currentResult == 0"
+      ng-click="currentResult=currentResult-1">
+      <i class="icon-white icon-arrow-left"></i>
+    </button>
+    {{currentResult+1}}/{{numberOfResultPages(data.length)}}
+    <button class="btn btn-inverse btn-mini"
+      ng-disabled="currentResult >= data.length/resultSize - 1"
+      ng-click="currentResult=currentResult+1">
+      <i class="icon-white icon-arrow-right"></i>
+    </button>
+  </div>
