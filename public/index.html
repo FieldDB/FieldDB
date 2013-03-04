@@ -223,10 +223,20 @@
 			<div style="clear: both;"></div>
 		</div>
 
-		<img src="webimages/mulitple_devices.png"
-			style="position: absolute; top: 0px; right: 0px; z-index: 100;"
-			width=100 />
-
+		<div id="install"
+			style="position: absolute; top: 0px; right: 0px; z-index: 100;">
+			<img src="webimages/mulitple_devices.png" width=100 />
+			<!-- <a target="_blank"
+          href="https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj">Install</a> -->
+			<button class="btn btn-large btn-primary"
+				onclick="chrome.webstore.install()" id="install-button">Install
+				(Add to Chrome)</button>
+			<a
+				href="https://play.google.com/store/apps/details?id=org.lingsync.fieldlinguistics">
+				<img alt="Android app on Google Play"
+				src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
+			</a>
+		</div>
 		<div width="100%">
 			<center>
 				<img src="images/team_at_work.jpg" width="500">
@@ -235,17 +245,7 @@
 
 		<div id="footer" class="clearfloat">
 			<ul class="">
-				<li id="install">
-					<!-- <a target="_blank"
-					href="https://chrome.google.com/webstore/detail/lingsync/ocmdknddgpmjngkhcbcofoogkommjfoj">Install</a> -->
-					<button class="btn btn-large btn-primary"
-						onclick="chrome.webstore.install()" id="install-button">Install
-						(Add to Chrome)</button> <a
-					href="https://play.google.com/store/apps/details?id=org.lingsync.fieldlinguistics">
-						<img alt="Android app on Google Play"
-						src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
-				</a>
-				</li>
+
 				<li><a target="_blank" href="privacy.html">Privacy Policy</a></li>
 				<li><a target="_blank"
 					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones">OpenSource</a></li>
