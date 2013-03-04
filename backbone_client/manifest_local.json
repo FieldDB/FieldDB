@@ -8,7 +8,7 @@
     }
   },
   "offline_enabled" : true,
-  "permissions" : [ "debugger","unlimitedStorage", "https://auth.lingsync.org/",
+  "permissions" : [ "debugger","unlimitedStorage", "https://localhost:3183/", "https://localhost:6984/", "https://auth.lingsync.org/",
 
                     "https://corpus.lingsync.org/",   "https://authdev.lingsync.org/",
 
