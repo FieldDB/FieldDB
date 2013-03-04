@@ -781,6 +781,9 @@ define([
           error : function(model, error, options) {
             if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
             OPrime.bug("There seems to be an error when fetching corpus: "+error.reason);
+            if(error.reason){
+              OPrime.bug("You appear to be offline. "+error.reason);
+            }
             if(error && error.error && error.error.indexOf("unauthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
@@ -788,12 +791,11 @@ define([
                 if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
                 self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
               }, couchConnection.pouchname);
-//              var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-//              window.location.replace(optionalCouchAppPath+"corpus.html#login");
+//            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+//            window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }else{
               OPrime.bug("You appear to be offline.");
             }
-
           }
         }); //end corpus fetch
     },
@@ -872,44 +874,45 @@ define([
         return "Either you haven't been using the app and Chrome wants some of its memory back, or you want to leave the app.\n\n"+returntext;
       }
     },
-    addActivity : function(backBoneActivity) {
-//      var couchConnection = this.get("couchConnection");
-//      var couchurl = couchConnection.protocol + couchConnection.domain;
-//      if (couchConnection.port != null) {
-//        couchurl = couchurl + ":" + couchConnection.port;
-//      }
-//      if (!couchConnection.path) {
-//        couchConnection.path = "";
-//        this.get("couchConnection").path = "";
-//      }
-//      couchurl = couchurl + couchConnection.path;
-//      if (backBoneActivity.get("teamOrPersonal") == "team") {
-//        couchurl = couchurl + couchConnection.pouchname + "-activity_feed";
+    /**
+     * Saves a json file via REST to a couchdb, must be online.
+     * 
+     * @param bareActivityObject
+     */
+    addActivity : function(bareActivityObject) {
+      bareActivityObject.verb = bareActivityObject.verb.replace("href=","target='_blank' href=");
+      bareActivityObject.directobject = bareActivityObject.directobject.replace("href=","target='_blank' href=");
+      bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=","target='_blank' href=");
+      bareActivityObject.context = bareActivityObject.context.replace("href=","target='_blank' href=");
+
+      if (OPrime.debugMode) OPrime.debug("Saving activity: ", bareActivityObject);
+      var backboneActivity = new Activity(bareActivityObject);
+      
+      var couchConnection = this.get("couchConnection");
+      var activitydb = couchConnection.pouchname + "-activity_feed";
+      if (bareActivityObject.teamOrPersonal != "team") {
+        activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
+      }
+      var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
+      
+      OPrime.makeCORSRequest({
+        type : 'POST',
+        url : couchurl,
+        data : backboneActivity.toJSON(),
+        success : function(resp) {
+          if (OPrime.debugMode) OPrime.debug("Successfully saved activity to your activity couch.", resp);
+        },
+        error : function(e,f,g){
+          if (OPrime.debugMode) OPrime.debug("Error saving activity", e,f,g);
+          localStorage.setItem("activity"+Date.now(), backboneActivity.toJSON());
+        }
+        });
+      
+      
+//      if (bareActivityObject.get("teamOrPersonal") == "team") {
+//        window.app.get("currentCorpusTeamActivityFeed").addActivity(bareActivityObject);
 //      } else {
-//        couchurl = couchurl + this.get("authentication").get("userPrivate").get(
-//        "username") + "-activity_feed";
-//      }
-//      if (OPrime.debugMode) OPrime.debug("Saving activity: ", backBoneActivity);
-//      $.ajax({
-//        url : couchurl,
-//        data : backBoneActivity.toJSON(),
-//        contentType : "application/json",
-//        type : 'POST',
-//        dataType : "json",
-//        success : function(resp) {
-//          OPrime
-//          .debug("Successfully saved activity to your activity couch.", resp);
-//        }
-//      });
-      
-      
-      
-      
-      
-//      if (backBoneActivity.get("teamOrPersonal") == "team") {
-//        window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
-//      } else {
-//        window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+//        window.app.get("currentUserActivityFeed").addActivity(bareActivityObject);
 //      }
     },
     

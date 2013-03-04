@@ -8,7 +8,7 @@ body {
   margin-top: 2.5em;
   /* background-color: #f5f5f5; */
   background-color: transparent;
-  color: #fff;
+  color: #333;
   font-size: .8em;
   font-family: 'Arial', sans-serif;
 }
@@ -47,8 +47,8 @@ li {
 }
 
 .activity_feed_widget_header {
-  /* background-color: #f5f5f5; */
-  background-color: rgba(0, 0, 0 , 0.4);
+  background-color: #f5f5f5;
+  /* background-color: rgba(0, 0, 0 , 0.4); */
   color: #fff;
   width: 100%;
   position: fixed;
@@ -79,8 +79,8 @@ li {
 }
 
 .activity_feed_widget_footer {
-  /* background-color: #f5f5f5; */
-  background-color: rgba(0, 0, 0 , 0.4);
+  background-color: #f5f5f5;
+  /* background-color: rgba(0, 0, 0 , 0.4); */
   color: #fff;
   width: 100%;
   position: fixed;
@@ -92,10 +92,11 @@ li {
   background-color: #eeeeee;
 } */
 .zebra ul li:nth-child(odd) {
-  /* background-color: #eee; */
-  background-color: rgba(0, 0, 0 , 0.4);
+  background-color: #eee;
+  /*  background-color: rgba(0, 0, 0 , 0.4); */
 }
 
 li:hover {
-  background-color: #000 !important;
+  background-color: #fff !important;
+  /* background-color: #000 !important; */
 }
