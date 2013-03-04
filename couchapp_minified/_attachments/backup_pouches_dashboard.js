@@ -12083,7 +12083,7 @@ define("pouch", ["jquery"], (function (global) {
 
 var OPrime = OPrime || {};
 
-OPrime.debugMode = false;
+OPrime.debugMode = true;
 /*
  * Android touchdb for OPrime runs on port 8128, so if the app is running on
  * port 8128 it is likely in a touchdb (either in the android app or in a
@@ -12762,7 +12762,7 @@ OPrime.useUnsecureCouchDB = function() {
  * Functions for well formed CORS requests
  */
 OPrime.makeCORSRequest = function(options) {
-  OPrime.debugMode = false;
+  OPrime.debugMode = true;
   if(!options.method){
     options.method = options.type || "GET";
   }
@@ -12819,7 +12819,7 @@ OPrime.makeCORSRequest = function(options) {
         options.error(e,f,g);
       }
     }
-    OPrime.debugMode = false;
+    OPrime.debugMode = true;
   };
 
   xhr.onerror = function(e,f,g) {
