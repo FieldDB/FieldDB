@@ -43,7 +43,7 @@ define([
 
       OPrime.makeCORSRequest({
         type : 'GET',
-        url : couchurl+"/_design/lexicon/_view/create_triples?group=true",
+        url : couchurl+"/_design/pages/_view/lexicon_create_tuples?group=true",
         success : function(results) {
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());

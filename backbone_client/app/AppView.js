@@ -569,12 +569,14 @@ define([
          * user knows which corpus and elicitation they are entering
          * data in
          */
-        jsonToRender.corpustitle = this.model.get("corpus")
-        .get("title");
-        jsonToRender.elicitationgoal = this.model.get("currentSession")
-        .getGoal();
-        jsonToRender.elicitationgoal = jsonToRender.elicitationgoal
-        .substr(0, 30 || jsonToRender.elicitationgoal.length);
+        jsonToRender.corpustitle = this.model.get("corpus").get("title");
+        if(jsonToRender.corpustitle.length > 20){
+          jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0,19) + "...";
+        }
+        jsonToRender.elicitationgoal = this.model.get("currentSession").getGoal();
+        if(jsonToRender.elicitationgoal.length > 20){
+          jsonToRender.elicitationgoal = jsonToRender.elicitationgoal.substr(0,19) + "...";
+        }
         try{
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
