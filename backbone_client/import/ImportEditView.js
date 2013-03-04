@@ -418,7 +418,7 @@ define( [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
+        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?./\[\]{}() ]/g,"");
         if(!newDatumFieldLabel){
           return;
         }
