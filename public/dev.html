@@ -86,6 +86,539 @@
 
 	</div>
 	<hr />
+	<!-- <div class="well">
+		<h1>April 27 2013 - Week 52 &amp; 1.1</h1>
+	</div>
+	<div class="well">
+		<h1>April 13 2013 - Week 50 &amp; 51</h1>
+	</div>
+	<div class="well">
+		<h1>March 30 2013 - Week 48 &amp; 49</h1>
+	</div>
+	<div class="well">
+		<h1>March 16 2013 - Week 46 &amp; 47</h1>
+	</div> -->
+	<div class="well">
+		<h1>March 2 2013 - Week 44 &amp; 45 - Release the results from the hackathon</h1>
+
+		<h2>Activity feeds are back</h2>
+		<p>When we converted the app to run as a couchapp we waited until
+			it was stable before turning the activity feeds back on. We hope to
+			release the activity feed as a separate Chrome extension sometime
+			this semester. The activity feeds are ready, but we still need
+			someone to make an options page so that you can decide which activity
+			feeds you want to use. Having a separate Chrome Extension allows you
+			to install the activity feeds without the app, or have a dashboard
+			without the activity feeds and have notifications in the top corner
+			of your Chrome telling you if other users have been active.</p>
+
+		<h2>Android app released</h2>
+		<p>
+			The Android app restarted in November with Elise's work to make
+			localization generic, so that it would work outside the Chrome
+			extension, as well as getting TouchDB up and running so we could have
+			an offline local database. We <a target="_blank"
+				href="https://play.google.com/store/apps/details?id=org.lingsync.fieldlinguistics">released
+				to the Google Play store</a> this week. We will be adding more
+			Android-specific features (like taking pictures, and recording
+			audio/video) as we get time or people who request them.
+		</p>
+
+		<h2>Moved all the views into the couch app</h2>
+		<p>We moved the couchDB views (queries) which generate lexicons
+			and the morpheme visualization into the pages couchapp so that its
+			code can also be in the codebase and we have less things to copy when
+			we create new users.</p>
+
+	</div>
+	<div class="well">
+		<h1>Feb 16 2013 - Week 42 &amp; 43 - Bug Fixing Fiesta!</h1>
+
+
+		<h2>OpenSource Hackathon</h2>
+		<p>
+			We invited some of our developer friends in Montreal to come join us,
+			eat pizza and code for a weekend. There are pictures on the <a
+				target="_blank"
+				href="https://plus.google.com/events/cmao810jkll44em5t54t9jbe7ps">Google
+				Plus Event</a>.
+		</p>
+
+		<a target="_blank"
+			href="https://plus.google.com/events/cmao810jkll44em5t54t9jbe7ps"><img
+			border="0"
+			src="https://lh6.googleusercontent.com/-YMZpAqMYDL4/URcqDRxPy3I/AAAAAAAAA68/go22PAM9Lr4/s545/IMG_20130209_131133.jpg" /></a>
+		<div
+			class="js-comment-body comment-body markdown-body markdown-format context-loader-overlay"
+			data-body-version="deb6f104872a749ada509aaeda88bf4c">
+			<p>
+				<a href="https://github.com/AnshuGarg" class="user-mention">@AnshuGarg</a>
+				<a href="https://github.com/sknarula" class="user-mention">@sknarula</a>
+				<a href="https://github.com/Sitwon" class="user-mention">@Sitwon</a>
+				<a href="https://github.com/DrDub" class="user-mention">@DrDub</a> <a
+					href="https://github.com/bfdoherty-2008" class="user-mention">@bfdoherty-2008</a>
+				<a href="https://github.com/geekrax" class="user-mention">@geekrax</a>
+				<a href="https://github.com/gretchenmcc" class="user-mention">@gretchenmcc</a>
+				<a href="https://github.com/Kedersha" class="user-mention">@Kedersha</a>
+				<a href="https://github.com/hisakonog" class="user-mention">@hisakonog</a>
+				<a href="https://github.com/ghazan" class="user-mention">@ghazan</a>
+				<a href="https://github.com/Danukeru" class="user-mention">@Danukeru</a>
+				<a href="https://github.com/trisapeace" class="user-mention">@trisapeace</a>
+				<a href="https://github.com/cesine" class="user-mention">@cesine</a>
+				<a href="https://github.com/orianakc" class="user-mention">@orianakc</a>
+				<a href="https://github.com/jrwdunham" class="user-mention">@jrwdunham</a>
+				<a href="https://github.com/jessicacoon" class="user-mention">@jessicacoon</a>
+				thanks for comming!
+			</p>
+
+			<p>
+				All told we <a target="_blank"
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues?milestone=37&state=closed">closed
+					46 issues</a> in 13 pull requests from the hackathon! For now we
+				deployed it all to the public user on the testing server, so you can
+				see the new stuff!
+			</p>
+
+			<p>
+				<a
+					href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html">https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html</a>
+			</p>
+		</div>
+
+		<div
+			class="js-comment-body comment-body markdown-body markdown-format context-loader-overlay"
+			data-body-version="fd7df8252bb2ba52864325c3f9680b7f">
+			<p>
+				Team <a href="https://github.com/bfdoherty-2008"
+					class="user-mention">@bfdoherty-2008</a> , <a
+					href="https://github.com/ghazan" class="user-mention">@ghazan</a> ,
+				<a href="https://github.com/hisakonog" class="user-mention">@hisakonog</a>
+				worked on search <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/853"
+					class="issue-link" title="Regex added for search string">#853</a> <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/856"
+					class="issue-link"
+					title="Not indicator added to search string label">#856</a> they
+				will probably post a screencasts later about how it works
+			</p>
+
+			<ul>
+				<li>regex search gloss:[anim|inanim]</li>
+				<li>parentheses (gloss:des AND morphemes:nay) OR gloss:IMPL</li>
+				<li>!morphemes:nay</li>
+			</ul>
+			<p>
+				<a href="https://github.com/orianakc" class="user-mention">@orianakc</a>
+				found and fixed a bug in the import headers <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/852"
+					class="issue-link"
+					title="Prevent users from putting &quot;?&quot; in their imported column header">#852</a>
+			</p>
+
+			<ul>
+				<li>if a user puts - . ? in the column headings it breaks the
+					app</li>
+				<li>she added validation to remove dangerous characters</li>
+			</ul>
+			<p>
+				<a href="https://github.com/DrDub" class="user-mention">@DrDub</a>
+				fixed the fact that the illustrated guide popup was unintuitive to
+				close, updated the readme for the couchapp <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/861"
+					class="issue-link"
+					title="Improved README for the couch app and close button to guide screen">#861</a>
+				and also worked on our external security audit <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/582"
+					class="issue-link" title=" External security audits">#582</a> and
+				brainstorm for a new auth system when we start using more cpu
+				intensive web services
+			</p>
+
+			<p>
+				Team <a href="https://github.com/Kedersha" class="user-mention">@Kedersha</a>
+				, <a href="https://github.com/trisapeace" class="user-mention">@trisapeace</a>
+				and <a href="https://github.com/jrwdunham" class="user-mention">@jrwdunham</a>
+				worked on <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/860"
+					class="issue-link" title="made LaTeXiT beautiful">#860</a> making
+				the Datum export more flexible and useful. It now exports not only
+				the Inter Linear Glossed text, if the user's data is IGT, but also
+				adds all the other fields to the export as a description list below,
+				with rare fields commented out, there but commented out. Very
+				awesome! We expect it will make <a
+					href="https://github.com/alanbale" class="user-mention">@alanbale</a>
+				<a href="https://github.com/kaitire" class="user-mention">@kaitire</a>
+				happy, given that they have context and other fields that they would
+				want to include in their examples. We did it as a descriptive list,
+				but are open to how it could be.... if you want to see the new
+				export we will make a new screencast probably next week and put it
+				into the tutorials playlist so you can see the improvements..
+			</p>
+
+			<p>
+				Team @gretchenmcc , @geekrax, @AnshuGarg worked on <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/391"
+					class="issue-link" title="Make dashboard layout customizable">#391</a>
+				<a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/688"
+					class="issue-link"
+					title="Add user option to set dashboard layout preference.">#688</a>
+				<a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/789"
+					class="issue-link" title="design 4 dashboard layouts ">#789</a> <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/868"
+					class="issue-link"
+					title="multiple dashboard layout options in handlebars">#868</a> <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/867"
+					class="issue-link"
+					title="adding images of dashboard layouts and buttons to select them as preferences ">#867</a>
+				<a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/575"
+					class="issue-link"
+					title="Show user a list of corpora rather than corpus dashboard upon app load.">#575</a>
+				making the dashboard more customizable for different user stories.
+				@gretchenmcc and @cesine will probably continue working on sunday.
+				the dashboard has become really cluttered and kind of daunting when
+				you first open the app.
+			</p>
+
+			<p>
+				@cesine moved the corpus and session quickviews out of the dashboard
+				and into a dropdown in the navbar <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/787"
+					class="issue-link"
+					title="move corpus and session quickview intoa dropdown">#787</a>
+				and made it so that if someone imports csv, it will automatically
+				use the first row as the headers <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/854"
+					class="issue-link"
+					title="Automatically detect column headers for imported data">#854</a>
+			</p>
+
+			<p>
+				On Sunday @jrwdunham @Kedersha @cesine worked on getting @Kedersha
+				and @trisapeace code to show additional fields on the datum LaTeX
+				view, especially when you search for a field that isnt in the IGT,
+				as well as even getting the seach term to highlight in yellow <a
+					href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/872"
+					class="issue-link"
+					title="Search match highlighting and changes to IGT formatting">#872</a>
+			</p>
+
+			<p>We checked the code, merged in all the changes, and deployed
+				so anyone can see the results and play with the new
+				features/improvements:</p>
+
+			<ul>
+				<li><a
+					href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html#">https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html#</a>
+				</li>
+			</ul>
+		</div>
+
+		<blockquote>
+
+
+			<div class="ZMa c-B">
+				Hi Montreal techie types, former classmates, NLP enthusiasts and
+				former interns!<br> <br>We are planning on a hackathon
+				style weekend complete with pizza and opensource fun! The idea is to
+				get together and code while volunteering on the FieldDB project
+				(McGill &amp; Concordia Ling departments) by closing bugs. It looks
+				like we have 80 tiny bugs/features that could get closed in 2 days
+				if we can get about 20 people in a room. The bugs range from
+				automatically extracting images and sound (you will learn OpenCV or
+				Praat and how to make webservices in Node.js) &nbsp;to simple
+				features that would take between 1-3 hours to implement (you would
+				learn Javascript, Backbone.js and maybe how to build clientside
+				offline apps). If you want to get into mobile development, we even
+				have some Android you can do.&nbsp;<br> <br>It's a chance
+				to do something you might never have done, we will have people on
+				hand to train you and share what they know. We will probably be
+				about 8 people who are regular committers, and our friends who just
+				want to hang out and code for a weekend.&nbsp;<br> <br>We
+				have got confirmation do the hack-together at Notman House! For
+				those who are not in Montreal we will also open up an On Air Hangout
+				so you can hack with us on the big screen! So If you're looking for
+				some good open source karma, or tend to spend your weekend coding
+				alone anyway, join us!&nbsp;<br> <br> <br> <br>----------
+				Forwarded message ----------<br>From: cesine &lt;<a
+					href="mailto:notifications@github.com" class="ot-anchor"
+					rel="nofollow">notifications@github.com</a>&gt;<br>Date: Thu,
+				Jan 17, 2013 at 9:15 AM<br>Subject: [FieldDB] Lets have a bug
+				fixing fiesta! (#798)<br>To: OpenSourceFieldlinguistics/FieldDB
+				&lt;<a href="mailto:FieldDB@noreply.github.com" class="ot-anchor"
+					rel="nofollow">FieldDB@noreply.github.com</a>&gt;<br>Cc:
+				fieldlinguist &lt;<a href="mailto:info@fieldlinguist.com"
+					class="ot-anchor" rel="nofollow">info@fieldlinguist.com</a>&gt;<br>
+				<br> <br>Hi @gretchenmcc @Kedersha @hisakonog @jessicacoon
+				@balamkej @alanbale @carolrose @fieldlinguist @senhorzinho
+				@ymanyakina<br> <br>This session the interns are focusing
+				on data entry so we don't have anyone to help close issues, which
+				means that bugs and features are piling up and are only geting done
+				whenever I have free time. If you have a friend or know anyone who
+				wants a pet project, or some experience in HTML5 or Javascript, or
+				NoSQL, and data management forward them this issue :) We have some
+				cool new features planed, including automatically generating datum
+				from images and from long audio files, split on silence into
+				utterances! We can show someone how to do this if they are excited
+				about automating image/audio processing!<br> <br>@jessicacoon
+				@alanbale what do you think about ordering pizza and organize a
+				"hackathon" on a weekend to have a bug closing sprint? we are up to
+				130 open issues, about 100 of them are tiny, mostly focused on the
+				user interface and usability and would take between 30 min of
+				explanation from me or @gretchenmcc or @Kedersha or @hisakonog and
+				then anyone could do them in about 1-2 hours...<br> <br>We
+				can maybe even get space at the Notman house or at the Ling
+				department, and set up a Google hangout and invite friends who
+				aren't in montreal to hack with us live on the big screen :) If you
+				have anyone or any of your students in mind who you think might
+				become a FieldDB power user someday, let them know. The more the
+				merrier! Even if they cant code we have issues they can work on. I
+				will also forward this around to my techie friends too, maybe they
+				are looking for some OpenSource to contribute to :)
+			</div>
+		</blockquote>
+
+
+		<h2>Myaamia Project's new Image Datum Dashboard gets a home</h2>
+		<p>
+			<a target="_blank" href="https://github.com/Yogurt1206">Xianli</a>'s
+			project this semester is to build a custom datum entry dashboard for
+			transcribing images for the Myaamia Project. He put his <a
+				href="https://chrome.google.com/webstore/search-apps/lingsync?utm_source=chrome-ntp-icon"
+				target="_blank"> new testing app in the chrome store</a> so that the
+			members of the project can see how it is going.
+		</p>
+	</div>
+	<div class="well">
+		<h1>Feb 2 2013 - Week 40 &amp; 41 - Chrome store blues</h1>
+
+		<h2>Bugs in the Chrome store</h2>
+		<p>We were among a lucky group of developers (we say this with a
+			grain of salt) who got stuck by a bug in the Chrome store. When we
+			tried to deploy the new version of the app (v1.40) for the beta
+			testers, the Chrome store gave us a warning that we had to upgrade to
+			the new Packaged app manifest, but when we upgraded it said that this
+			feature was not yet available. When we deployed without the url
+			permissions that were used to contact the database, we could no
+			longer reach the database!</p>
+
+		<h2>Setting up a CORS proxy for CouchDB</h2>
+		<p>
+			This started us on a week or so long journey to migrate our Testing
+			servers to EC2, and put a CORS proxy on them so that we didnt need
+			the url permissions in our chrome manifest. For details see the new "<a
+				target="_blank"
+				href="https://github.com/OpenSourceFieldlinguistics/CorpusWebService">Corpus
+				Web Service</a>" which is essentially just CORS proxy customized for
+			proxing only CouchDB.
+		</p>
+
+		<blockquote>
+			<div class="comment-content">
+
+				<div class="edit-comment-hide">
+					<div
+						class="js-comment-body comment-body markdown-body markdown-format context-loader-overlay"
+						data-body-version="76c42a084022b2de533897f204ef5e8f">
+						<p>
+							<a
+								href="https://groups.google.com/a/chromium.org/forum/?fromgroups=#!searchin/chromium-extensions/whitelisting/chromium-extensions/TRgqg90L8XU/NZF9wD41Jg0J">https://groups.google.com/a/chromium.org/forum/?fromgroups=#!searchin/chromium-extensions/whitelisting/chromium-extensions/TRgqg90L8XU/NZF9wD41Jg0J</a>
+						</p>
+
+						<p>Today we had a very exciting deployment of our Chrome app.</p>
+
+						<p>To get around a warning (which shouldn't apply to us? This
+							is not a "new application," we have been in the Chrome store for
+							40 weeks.)</p>
+
+						<p>An error occurred: The package is using features that are
+							no longer permitted in new applications.</p>
+
+						<p>
+							Search results mentioned we needed to do this:<br> <a
+								href="http://developer.chrome.com/stable/apps/first_app.html">http://developer.chrome.com/stable/apps/first_app.html</a>
+						</p>
+
+						<div class="highlight">
+							<pre>
+							<span class="k">new</span><span class="o">:</span>
+ <span class="s2">"app"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"background"</span><span class="o">:</span> <span
+									class="p">{</span>
+      <span class="s2">"scripts"</span><span class="o">:</span> <span
+									class="p">[</span><span class="s2">"background.js"</span><span
+									class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+
+<span class="nx">instead</span> <span class="nx">of</span> <span
+									class="nx">old</span><span class="o">:</span>
+
+<span class="s2">"app"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"launch"</span><span class="o">:</span> <span
+									class="p">{</span>
+      <span class="s2">"local_path"</span><span class="o">:</span> <span
+									class="s2">"index.html"</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+</pre>
+						</div>
+
+						<p>But when we published, the chrome store said we had to wait
+							to use the new packaged apps.</p>
+
+						<p>An error occurred: Temporarily, you are not allowed to
+							upgrade to the new packaged apps. This restriction will be lifted
+							once we enable the new packaged apps for everyone.</p>
+
+						<p>
+							So some more googling revealed this as another potential reason
+							for why we couldn't deploy: <br> <a
+								href="http://blog.chromium.org/2012/11/restricting-extension-apis-in-legacy.html">http://blog.chromium.org/2012/11/restricting-extension-apis-in-legacy.html</a>
+						</p>
+
+						<p>So we removed all urls from our permissions, and we were
+							able to deploy.</p>
+
+						<div class="highlight">
+							<pre>
+							<span class="k">new</span><span class="o">:</span>
+<span class="s2">"permissions"</span> <span class="o">:</span> <span
+									class="p">[</span> <span class="s2">"unlimitedStorage"</span> <span
+									class="p">],</span>
+
+
+<span class="nx">old</span><span class="o">:</span>
+<span class="s2">"permissions"</span> <span class="o">:</span> <span
+									class="p">[</span> <span class="s2">"unlimitedStorage"</span><span
+									class="p">,</span> <span class="s2">"https://auth.lingsync.org/*"</span><span
+									class="p">,</span>
+
+      <span class="s2">"https://corpus.lingsync.org/*"</span><span
+									class="p">,</span> <span class="s2">"https://ifield.iriscouch.com/*"</span><span
+									class="p">,</span>
+
+      <span class="s2">"https://authdev.fieldlinguist.com:3183/*"</span><span
+									class="p">,</span>
+
+      <span class="s2">"https://corpusdev.fieldlinguist.com:6984/*"</span><span
+									class="p">,</span>
+
+      <span class="s2">"https://ifielddevs.iriscouch.com/*"</span><span
+									class="p">,</span> <span class="s2">"https://www.youtube.com/*"</span> <span
+									class="p">],</span>
+</pre>
+						</div>
+
+						<p>We have sucessfully published our app, which no users can
+							use.</p>
+
+						<p>
+							They cannot contact their databases on iriscouch.com, due to no
+							white listing for CORS:<br> <a
+								href="https://chrome.google.com/webstore/detail/lingsync-testing/eeipnabdeimobhlkfaiohienhibfcfpa/related?utm_source=chrome-ntp-icon">https://chrome.google.com/webstore/detail/lingsync-testing/eeipnabdeimobhlkfaiohienhibfcfpa/related?utm_source=chrome-ntp-icon</a>
+						</p>
+
+						<p>
+							XMLHttpRequest cannot load <a
+								href="https://ifielddevs.iriscouch.com/_session">https://ifielddevs.iriscouch.com/_session</a>.
+							Origin chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa is not
+							allowed by Access-Control-Allow-Origin.
+						</p>
+
+						<p>How is whitelisting handled for the new packaged apps, if
+							we can't list hosts in the permissions? I suspect we aren't the
+							only ones in this specific CORS position, so I figured I might
+							email the list. What do you recommend fo this transition period.
+							All the docs say we can put urls...</p>
+
+						<p>
+							<a
+								href="http://developer.chrome.com/extensions/declare_permissions.html">http://developer.chrome.com/extensions/declare_permissions.html</a>
+						</p>
+
+						<div class="highlight">
+							<pre>
+							<span class="nx">old</span><span class="o">:</span>
+<span class="s2">"permissions"</span><span class="o">:</span> <span
+									class="p">[</span>
+  <span class="s2">"tabs"</span><span class="p">,</span>
+  <span class="s2">"bookmarks"</span><span class="p">,</span>
+  <span class="s2">"http://www.blogger.com/"</span><span class="p">,</span>
+  <span class="s2">"http://*.google.com/"</span><span class="p">,</span>
+  <span class="s2">"unlimitedStorage"</span>
+<span class="p">],</span>
+
+<span class="k">new</span><span class="o">:?</span>
+</pre>
+						</div>
+
+						<p>The app is useless for our users, and will remain useless
+							until we understand what is the replacement for urls in the
+							permissions. I will keep looking for a solution. If I find a
+							solution I will post back to the list, but if anyone else has
+							already figured out how to whitelist, or more importantly, if it
+							is impossible or complex, please let us know.</p>
+					</div>
+				</div>
+
+			</div>
+		</blockquote>
+	</div>
+	<div class="well">
+		<h1>Jan 19 2013 - Week 38 &amp; 39 - Testing continues</h1>
+		<h2>Testing</h2>
+		<p>We continued testing the features of the app to prepare for a
+			release on Jan 28th, when Gretchen was going to U Ottawa to give
+			training.</p>
+
+
+		<h2>Rare fields are finally in</h2>
+		<p>When we designed the app we knew that everyone's data was
+			different. We don't all have the same 6 fields that should be filled
+			in on a datum, sometimes we have over 20 fields but they aren't
+			always obligatory. To make the interface less cluttered we designed
+			it so that rare fields would get hidden in a tray under the frequent
+			ones. To do this was just a bit of statistics on which fields the
+			corpus was used most. We set it so that if the datum had the field
+			less than 50% of the time, it would be hidden. If this is too much
+			let us know, we can try hiding fields that are 30% present in the
+			data, or eventually building some fancier models to detect what the
+			goal of the datum was, and show fields based on similar datum with
+			that goal.</p>
+	</div>
+	<div class="well">
+		<h1>Jan 5 2013 - Week 36 &amp; 37 - Testing the new couchapp</h1>
+
+		<h2>Testing the app online</h2>
+		<p>Our pouchDB set up opens the database every time an object is
+			created. This was originally because we wanted to have more than one
+			corpus open so the object had to know which pouch (corpus) it would
+			go into. This makes the offline app very inefficent. In December we
+			started the work to make the app be in continuous sync, and use pouch
+			when offline (not all the time).</p>
+
+		<h2>Refactor the Corpus</h2>
+		<p>In our multi user testes we found that having sessions and
+			datalists inside the corpus were createing merge conflicts. We
+			refactored the corpus to use quieres to find sessions and datalists.
+			While inefficient on the offline version, queries on the online
+			version are cached so shouldn't slow down the dashboard building too
+			much.</p>
+
+		<h2>Bye, bye Welcome screen</h2>
+
+		<p>We always wanted the app to open with data, no need to login or
+			register to get an idea of what the app is. But, along the way from
+			beta we introduced a welcome screen that blocked you from seeing what
+			the app was, mostly because we didnt have a public user set up so
+			that if you log out, we would take you to the public user. In these
+			few weeks we started teh work to add public users on all the servers,
+			and now when you log in and log out, it is the public user's
+			dashboard that you see.</p>
+	</div>
 	<div class="well">
 		<h1>Dec 22 2012 - Week 34 &amp; 35 - New navigation bar and many
 			bug fixes!</h1>
@@ -158,7 +691,7 @@
 			possibility to replay the conversation.</p>
 
 
-		<h2>The app runs on Android, and on IrisCouch.com!</h2>
+		<h2>The app runs on Android, and Online!</h2>
 
 		<p>We moved the app's files around so that it is now running out
 			of a couchapp, what does this mean? It means the app is now running
