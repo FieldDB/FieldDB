@@ -1,0 +1,18 @@
+{
+  "name": "LingSync Angular UI",
+  "description": "Streamlined data entry for LingSync app; written in AngularJS.",
+  "version": "1.0",
+  "manifest_version" : 2,
+  "content_security_policy" : "img-src 'self' https://senhorzinho.iriscouch.com; default-src 'self' https://senhorzinho.iriscouch.com; script-src 'self' https://senhorzinho.iriscouch.com; connect-src 'self' https://senhorzinho.iriscouch.com ; object-src 'self' https://senhorzinho.iriscouch.com ; style-src 'self' https://senhorzinho.iriscouch.com;",
+  "app": {
+    "launch": {
+      "local_path" : "index.html"
+    }
+  },
+  "icons": {
+    "128": "img/icon128_dev.png"
+  },
+  "permissions": [
+    "https://senhorzinho.iriscouch.com/"
+  ]
+}

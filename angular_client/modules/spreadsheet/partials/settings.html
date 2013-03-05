@@ -1,0 +1,149 @@
+<div id="Settings">
+	<div class="row">
+		<div class="span12 pagination-centered">
+			<h1>LingSync Quick Data Entry Module Settings</h1>
+		</div>
+	</div>
+
+	<br />
+
+	<!-- Number of records to display -->
+	<div class="row settingsRow">
+		<div class="span6 offset5">
+			Number of records to display per page: <select
+				ng-model="numberOfRecordsToDisplay" ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="25" selected>25</option>
+				<option value="50">50</option>
+			</select>
+		</div>
+		<div class="span1">
+			<button class="btn btn-primary"
+				ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">Save</button>
+		</div>
+	</div>
+
+	<br />
+
+	<!-- TEMPLATE 1 -->
+
+	<div class="row settingsHeader">
+		<div class="span12 pagination-centered">
+			<h2>Template 1</h2>
+		</div>
+		<div class="span2 offset5 pagination-centered activeTemplate"
+			ng-show="template=='template1'">
+			<h3>Active</h3>
+		</div>
+	</div>
+	<div class="row settingsRow">
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field1">
+				<option value="">Empty</option>
+				<option select-dropdown1=field1 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field2">
+				<option value="">Empty</option>
+				<option select-dropdown1=field2 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span3">
+			<select class="span3" ng-model="newFieldPreferences1.field3">
+				<option value="">Empty</option>
+				<option select-dropdown1=field3 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span2">
+			<select class="span2" ng-model="newFieldPreferences1.field4">
+				<option value="">Empty</option>
+				<option select-dropdown1=field4 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+
+		<div class="span1">
+			<button class="btn btn-primary"
+				ng-click="saveNewPreferences('template1', newFieldPreferences1)">Save/Activate
+				Template</button>
+		</div>
+	</div>
+	<br />
+
+
+	<!-- TEMPLATE 2 -->
+
+	<div class="row settingsHeader">
+		<div class="span12 pagination-centered">
+			<h2>Template 2</h2>
+		</div>
+		<div class="span2 offset5 pagination-centered activeTemplate"
+			ng-show="template=='template2'">
+			<h3>Active</h3>
+		</div>
+	</div>
+	<div class="row settingsRow">
+		<div class="span4">
+			<select class="span4" ng-model="newFieldPreferences2.field1">
+				<option value="">Empty</option>
+				<option select-dropdown2=field1 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select> <select class="span4" ng-model="newFieldPreferences2.field2">
+				<option value="">Empty</option>
+				<option select-dropdown2=field2 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select> <select class="span4" ng-model="newFieldPreferences2.field3">
+				<option value="">Empty</option>
+				<option select-dropdown2=field3 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span4">
+			<select class="span4" ng-model="newFieldPreferences2.field4">
+				<option value="">Empty</option>
+				<option select-dropdown2=field4 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select> <select class="span4" multiple="multiple"
+				ng-model="newFieldPreferences2.field5">
+				<option value="">Empty</option>
+				<option select-dropdown2=field5 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+
+
+		</div>
+		<div class="span2">
+			<select class="span2" ng-model="newFieldPreferences2.field6">
+				<option value="">Empty</option>
+				<option select-dropdown2=field6 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select> <select class="span2" ng-model="newFieldPreferences2.field7">
+				<option value="">Empty</option>
+				<option select-dropdown2=field7 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select> <select class="span2" ng-model="newFieldPreferences2.field8">
+				<option value="">Empty</option>
+				<option select-dropdown2=field8 ng-repeat="field in availableFields"
+					value={{field.label}}>{{field.title}}</option>
+			</select>
+		</div>
+		<div class="span1">&nbsp;</div>
+		<div class="span1">
+			<button class="btn btn-primary"
+				ng-click="saveNewPreferences('template2', newFieldPreferences2)">Save/Activate
+				Template</button>
+		</div>
+	</div>
+
+
+	<!-- TEMPLATE 3 -->
+
+
+
+
+</div>
