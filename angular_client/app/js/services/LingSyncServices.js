@@ -51,6 +51,16 @@ define([ "angular" ], function(angular) {
                 });
                 return promise;
               },
+              'removeRecord' : function(DB, UUID, rev) {
+                  var couchInfo = "https://senhorzinho.iriscouch.com/" + DB + "/" + UUID + "?rev=" + rev;
+                  console.log("Contacting the DB to delete record. "
+                      + couchInfo);
+                  var promise = $http.delete(couchInfo).then(function(response) {
+                    return response;
+                    console.loge("response: " + JSON.stringify(response));
+                  });
+                  return promise;
+                },
               'blankTemplate' : function() {
                 var promise = $http.get('data/blank_template.json').then(function(response) {
                   return response.data;
