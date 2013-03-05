@@ -1,0 +1,149 @@
+<div class="row"
+	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
+	ng-click="selectRow('newEntry')"
+	ng-show="data!=undefined || loading==false">
+	<div class="span4">
+		<input class="span4" type="text" ng-model="newFieldData.field1"
+			placeholder="{{fields.field1.title}}"
+			ng-hide="fields.field1.label==''"> <input class="span4"
+			type="text" ng-model="newFieldData.field2"
+			placeholder="{{fields.field2.title}}"
+			ng-hide="fields.field2.label==''"> <input class="span4"
+			type="text" ng-model="newFieldData.field3"
+			placeholder="{{fields.field3.title}}"
+			ng-hide="fields.field3.label==''">
+	</div>
+	<div class="span4">
+		<input class="span4" type="text" ng-model="newFieldData.field4"
+			placeholder="{{fields.field4.title}}"
+			ng-hide="fields.field4.label==''">
+		<textarea rows="3" class="span4" ng-model="newFieldData.field5"
+			placeholder="{{fields.field5.title}}"
+			ng-hide="fields.field5.label==''"></textarea>
+	</div>
+	<div class="span2">
+		<input class="span2" type="text" ng-model="newFieldData.field6"
+			placeholder="{{fields.field6.title}}"
+			ng-hide="fields.field6.label==''"> <input class="span2"
+			type="text" ng-model="newFieldData.field7"
+			placeholder="{{fields.field7.title}}"
+			ng-hide="fields.field7.label==''"> <input class="span2"
+			type="text" ng-model="newFieldData.field8"
+			placeholder="{{fields.field8.title}}"
+			ng-hide="fields.field8.label==''">
+	</div>
+	<div class="span2">
+		<button ng-show="selected=='newEntry'" class="btn btn-primary"
+			ng-click="saveNew(newFieldData)">Save New</button>
+	</div>
+</div>
+<div class="row" ng-show="data==undefined || loading==true">
+	<div class="span12 pagination-centered">
+		<img src="img/loading-spinner.gif">
+	</div>
+</div>
+
+<div class="row"
+	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
+	ng-repeat="datum in data | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
+	ng-click="selectRow(datum)" ng-hide="loading==true">
+
+	<!-- Show when editing -->
+	<div ng-show="selected==datum">
+		<div class="span4">
+			<input class="span4" type="text" ng-model="fieldData.field1"
+				ng-init="fieldData.field1=datum[fields.field1.label]"
+				value={{datum[fields.field1.label]}}
+				ng-hide="fields.field1.label==''"> <input class="span4"
+				type="text" ng-model="fieldData.field2"
+				ng-init="fieldData.field2=datum[fields.field2.label]"
+				value={{datum[fields.field2.label]}}
+				ng-hide="fields.field2.label==''"> <input class="span4"
+				type="text" ng-model="fieldData.field3"
+				ng-init="fieldData.field3=datum[fields.field3.label]"
+				value={{datum[fields.field3.label]}}
+				ng-hide="fields.field3.label==''">
+		</div>
+		<div class="span4">
+			<input class="span4" type="text" ng-model="fieldData.field4"
+				ng-init="fieldData.field4=datum[fields.field4.label]"
+				value={{datum[fields.field4.label]}}
+				ng-hide="fields.field4.label==''">
+			<textarea rows="3" class="span4" ng-model="fieldData.field5"
+				ng-init="fieldData.field5=datum[fields.field5.label]"
+				value={{datum[fields.field5.label]}}
+				ng-hide="fields.field5.label==''"></textarea>
+		</div>
+		<div class="span2">
+			<input class="span2" type="text" ng-model="fieldData.field6"
+				ng-init="fieldData.field6=datum[fields.field6.label]"
+				value={{datum[fields.field6.label]}}
+				ng-hide="fields.field6.label==''"> <input class="span2"
+				type="text" ng-model="fieldData.field7"
+				ng-init="fieldData.field7=datum[fields.field7.label]"
+				value={{datum[fields.field7.label]}}
+				ng-hide="fields.field7.label==''"> <input class="span2"
+				type="text" ng-model="fieldData.field8"
+				ng-init="fieldData.field8=datum[fields.field8.label]"
+				value={{datum[fields.field8.label]}}
+				ng-hide="fields.field8.label==''">
+		</div>
+		<div class="span2">
+			<button class="btn btn-primary"
+				ng-click="saveChanges(fieldData, datum.id)">Save Changes</button>
+		<br />
+			<button class="btn btn-primary"
+				ng-click="deleteRecord(datum.id, datum.rev)">Delete</button>
+		</div>
+		
+	</div>
+
+
+	<!-- Show when not editing -->
+	<div ng-show="selected!=datum">
+		<div class="span4">
+			<span class="span4" title="{{fields.field1.title}}"
+				ng-hide="fields.field1.label==''">{{datum[fields.field1.label]
+				| neverEmpty}}</span><br /> <span class="span4"
+				title="{{fields.field2.title}}" ng-hide="fields.field2.label==''">{{datum[fields.field2.label]
+				| neverEmpty}}</span><br /> <span class="span4"
+				title="{{fields.field3.title}}" ng-hide="fields.field3.label==''">{{datum[fields.field3.label]
+				| neverEmpty}}</span><br />
+		</div>
+		<div class="span4">
+			<span class="span4" title="{{fields.field4.title}}"
+				ng-hide="fields.field4.label==''">{{datum[fields.field4.label]
+				| neverEmpty}}</span><br /> <span class="span4" rows="3"
+				title="{{fields.field5.title}}">{{datum[fields.field5.label]
+				| neverEmpty}}</span>
+		</div>
+		<div class="span2">
+			<span class="span2" title="{{fields.field6.title}}"
+				ng-hide="fields.field6.label==''">{{datum[fields.field6.label]
+				| neverEmpty}}</span><br /> <span class="span2"
+				title="{{fields.field7.title}}" ng-hide="fields.field7.label==''">{{datum[fields.field7.label]
+				| neverEmpty}}</span><br /> <span class="span2"
+				title="{{fields.field8.title}}" ng-hide="fields.field8.label==''">{{datum[fields.field8.label]
+				| neverEmpty}}</span><br />
+		</div>
+		<div class="span2">
+			<span title="Date modified">Last modified:<br />{{datum.dateModified
+				| standardDate}}
+			</span> <br />
+		</div>
+	</div>
+
+</div>
+<br />
+<div class="pagination-centered">
+    <button class="btn btn-inverse btn-mini" ng-disabled="currentResult == 0"
+      ng-click="currentResult=currentResult-1">
+      <i class="icon-white icon-arrow-left"></i>
+    </button>
+    {{currentResult+1}}/{{numberOfResultPages(data.length)}}
+    <button class="btn btn-inverse btn-mini"
+      ng-disabled="currentResult >= data.length/resultSize - 1"
+      ng-click="currentResult=currentResult+1">
+      <i class="icon-white icon-arrow-right"></i>
+    </button>
+  </div>
