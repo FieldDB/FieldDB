@@ -132,6 +132,7 @@ define([
       /* get the first line and set it to be the header by default */
       var header = [];
       if(rows.length > 3){
+        firstrow = firstrow.toLowerCase().replace(/[-"'+=?./\[\]{}() ]/g,"");
         if(hasQuotes){
           header = firstrow.trim().replace(/^"/,"").replace(/"$/,"").split('","');
         }else{
