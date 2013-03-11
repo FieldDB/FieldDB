@@ -523,7 +523,7 @@ define([
     /**
      * The Handlebars template rendered as the AppView.
      */
-    template : Handlebars.templates.app_whats_happening,
+    template : Handlebars.templates.app_just_entering,
     layoutJustEntering : Handlebars.templates.app_just_entering,
     layoutAllTheData : Handlebars.templates.app_all_the_data,
     layoutWhatsHappening : Handlebars.templates.app_whats_happening,
@@ -918,7 +918,7 @@ define([
         heading = Locale.get("locale_Warning");
       }
       $('#toast-user-area').prepend("<div class='alert "+alertType+" alert-block fade in'>"
-          +"<a class='close' data-dismiss='alert' href='#'>×</a>"
+          +"<a class='close' data-dismiss='alert' href='#'>��</a>"
           +"<strong class='alert-heading'>"+heading+"</strong> "
           + message
         +"</div>");
