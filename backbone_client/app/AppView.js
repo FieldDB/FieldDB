@@ -819,6 +819,7 @@ define([
           //if you want to flip the innerHTML of the draggee to the dragger
           //window.appView.importView.dragSrcEl.innerHTML = e.target.value;
           e.target.value = e.target.value + window.appView.insertUnicodesView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+          $(e.target).blur()
           //say that the unicode drag event has been handled
           window.appView.insertUnicodesView.dragSrcEl = null;
           $(this).removeClass("over");
@@ -833,7 +834,8 @@ define([
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      this.className = 'over';
+      
+      $(this).addClass('over');
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       
       return false;
