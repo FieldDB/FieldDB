@@ -220,6 +220,40 @@ define(
 					}
 					return numberOfPages;
 				};
+				
+				$scope.convertToCSV = function() {
+
+					var CSV = "";
+					var temp = {
+						"rows" : [ {
+							"key" : ":::2013-01-10",
+							"value" : 1
+						}, {
+							"key" : "elise:::2013-01-11",
+							"value" : 26
+						}, {
+							"key" : "janinemetallic:::2013-01-18",
+							"value" : 1
+						}, {
+							"key" : "migmaqresearchpartnership:::2012-12-06",
+							"value" : 23
+						}, {
+							"key" : "migmaqresearchpartnership:::2013-01-23",
+							"value" : 1
+						}, {
+							"key" : "migmaqresearchpartnership:::2013-02-06",
+							"value" : 1
+						} ]
+					}
+
+					
+					var dataSet = "Date,Value,User\n";
+					for (var i = 0; i < temp.rows.length; i++) {
+							dataSet = dataSet + temp.rows[i].key.split(':::')[1] + "," + temp.rows[i].key.split(':::')[0] + "," + temp.rows[i].value + "\n";
+					}
+					window.alert(dataSet);
+
+					};
 
 			};
 			LingSyncController.$inject = [ '$scope', '$rootScope', '$resource',
