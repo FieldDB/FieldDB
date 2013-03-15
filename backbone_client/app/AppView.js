@@ -301,7 +301,7 @@ define([
       this.insertUnicodesView = new InsertUnicodesView({
         model : this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")
       });
-      this.insertUnicodesView.format = "rightSide"; 
+      this.insertUnicodesView.format = "minimized"; 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({

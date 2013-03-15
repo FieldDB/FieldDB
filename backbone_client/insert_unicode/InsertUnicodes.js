@@ -120,7 +120,8 @@ define([ "backbone",
         this.add(new InsertUnicode({tipa: "\beta", symbol:  "β "}));
         this.add(new InsertUnicode({tipa: "\forall", symbol:  "∀"}));
         this.add(new InsertUnicode({tipa: "\exists", symbol:  "∃"}));
-        
+        this.add(new InsertUnicode({tipa: "^{\circ}", symbol:  "°"}));
+
         
         
 //

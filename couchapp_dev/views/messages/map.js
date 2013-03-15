@@ -1,5 +1,5 @@
 function(doc) {
   if (doc.collection == "messages") {
-    emit(doc.collection, doc);
+    emit(doc._id, doc);
   }
 };
