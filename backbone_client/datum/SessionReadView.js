@@ -103,6 +103,12 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
+        
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.goal = this.model.get("sessionFields").where({label: "goal"})[0].get("mask");
+        jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
+        jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
+        
         if(this.format != "link"){
           if(window.appView.currentSessionEditView){
             appView.currentSessionEditView.destroy_view();
@@ -111,12 +117,6 @@ define([
         }
         if (this.format == "leftSide") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ LEFTSIDE render: " );
-
-          var jsonToRender = {
-              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
-          };
 
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender)); 
@@ -133,7 +133,7 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION READ CENTERWELL render: " );
 
           this.setElement("#session-embedded");
-          $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+          $(this.el).html(this.templateEmbedded(jsonToRender));
           
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
@@ -152,7 +152,7 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION READ FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
-          $(this.el).html(this.templateFullscreen(this.model.toJSON()));
+          $(this.el).html(this.templateFullscreen(jsonToRender));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
@@ -169,14 +169,6 @@ define([
         } else if (this.format == "link") {
           if (OPrime.debugMode) OPrime.debug("SESSION READ LINK render: " );
 
-          $(this.el).html(this.templateLink(this.model.toJSON()));
-       
-          var jsonToRender = {
-              _id : this.model.get("_id"),
-              goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-              consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-              dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")
-            };
           $(this.el).html(this.templateLink(jsonToRender));
           
           //Localization of link

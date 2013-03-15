@@ -136,6 +136,12 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
+        var jsonToRender = this.model.toJSON();
+        jsonToRender.goal = this.model.get("sessionFields").where({label: "goal"})[0].get("mask");
+        jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
+        jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
+        
+        
         if(this.format != "modal"){
           appView.currentSessionEditView.destroy_view();
           appView.currentSessionReadView.destroy_view();
@@ -143,12 +149,6 @@ define([
         if (this.format == "leftSide") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
 
-          var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
-          };
-          
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
           
@@ -163,12 +163,6 @@ define([
           
         }if (this.format == "import") {
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: " );
-
-          var jsonToRender = {
-            goal : this.model.get("sessionFields").where({label: "goal"})[0].get("mask"),
-            consultants : this.model.get("sessionFields").where({label: "consultants"})[0].get("mask"),
-            dateElicited : this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask")//NOTE: changed this to the date elicited, they shouldnt edit the date entered.
-          };
           
           this.setElement("#import-session");
           $(this.el).html(this.templateImport(jsonToRender));
@@ -184,7 +178,7 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: " );
 
           this.setElement("#session-embedded");
-          $(this.el).html(this.templateEmbedded(this.model.toJSON()));
+          $(this.el).html(this.templateEmbedded(jsonToRender));
    
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
@@ -204,7 +198,7 @@ define([
           if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
 
           this.setElement("#session-fullscreen");
-          this.$el.html(this.templateFullscreen(this.model.toJSON()));
+          this.$el.html(this.templateFullscreen(jsonToRender));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
@@ -226,7 +220,7 @@ define([
 
           this.setElement("#new-session-modal");
           this.changeViewsOfInternalModels();
-          this.$el.html(this.templateModal(this.model.toJSON()));
+          this.$el.html(this.templateModal(jsonToRender));
           
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
