@@ -17556,7 +17556,8 @@ define('insert_unicode/InsertUnicodes',[ "backbone",
         this.add(new InsertUnicode({tipa: "\beta", symbol:  "β "}));
         this.add(new InsertUnicode({tipa: "\forall", symbol:  "∀"}));
         this.add(new InsertUnicode({tipa: "\exists", symbol:  "∃"}));
-        
+        this.add(new InsertUnicode({tipa: "^{\circ}", symbol:  "°"}));
+
         
         
 //
@@ -21078,7 +21079,10 @@ define('data_list/DataLists',[
            success : function(model, response, options) {
              console.log("Datalists fetched ",model,response,options);
              if (response.length == 0) {
-               OPrime.bug("You have no sessions, TODO creating a new one...");
+               OPrime.debug("You have no datalists, TODO creating a new one...");
+               if(window.location.href.indexOf("corpus.html") > -1){
+                 window.location.replace("user.html");
+               }
              }
              if(typeof suces == "function"){
                suces();
@@ -21426,7 +21430,10 @@ define('datum/Sessions',[
            success : function(model, response, options) {
              console.log("Sessions fetched ", model,response,options);
              if (response.length == 0) {
-               OPrime.bug("You have no sessions, TODO creating a new one...");
+               OPrime.debug("You have no sessions, TODO creating a new one...");
+               if(window.location.href.indexOf("corpus.html") > -1){
+                 window.location.replace("user.html");
+               }
              }
              if(typeof suces == "function"){
                suces();
