@@ -9,12 +9,12 @@ body { /* background-image: url('../user/skins/bamboo_garden.jpg'); */
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
-	font-family: 'Headland One', sans-serif;
+	font-family: 'Gentium Basic', sans-serif;
 	/* margin-top: 75px; */
 }
 
 input {
-	font-family: 'Headland One', sans-serif;
+	font-family: 'Gentium Basic', sans-serif;
 }
 
 a
@@ -35,15 +35,15 @@ a
 }
 
 @font-face {
-	font-family: 'Headland One';
+	font-family: 'Gentium Basic';
 	font-style: normal;
 	font-weight: 400;
-	src: local('Headland One'),
-		url(http://themes.googleusercontent.com/static/fonts/headlandone/v1/iGmBeOvQGfq9DSbjJ8jDV6RDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+	src: local('Gentium Basic'),
+		url(http://themes.googleusercontent.com/static/fonts/gentiumbasic/v4/KCktj43blvLkhOTolFn-MU3vq9dAc3DuCNWjMJNKvGE.woff) format('woff');
 }
 
 h1,h2,h3,h4 {
-	font-family: 'Headland One', sans-serif;
+	font-family: 'Gentium Basic', sans-serif;
 	margin: 0em;
 	margin-bottom: .5em;
 }
