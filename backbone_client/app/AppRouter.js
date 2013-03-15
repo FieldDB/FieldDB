@@ -33,6 +33,7 @@ define([
     },
 
     routes : {
+      "corpus/:pouchname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
       "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
       "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
       "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
@@ -396,30 +397,75 @@ define([
      * TODO: try saving it, setting it as current datalist and rendering that fullscreen
      */
     showAllData : function(pouchname) {
-//        this.hideEverything();
-//        $("#dashboard-view").show();
-    	window.app.showSpinner();
-        $(".spinner-status").html("Searching all data...");
-        window.appView.searchEditView.search("", function(){
-            window.appView.searchEditView.searchDataListView.model.set("title", "All Data as of " + new Date());
-//            window.appView.searchEditView.searchDataListView.render();
-            $(".spinner-status").html("Opening all data...");
-            window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
-                $(".spinner-status").html("Loading all data...");
-            	window.appView.currentReadDataListView.format = "fullscreen";
-            	window.appView.currentReadDataListView.render();
-            	window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
-            	window.app.stopSpinner();
-            },function(){
-              window.app.stopSpinner();
-              window.location.href="#";
-              if(localStorage.getItem("username") == "public"){
-                alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
-              }
-            });
+//    this.hideEverything();
+//    $("#dashboard-view").show();
+      window.app.showSpinner();
+      $(".spinner-status").html("Searching all data...");
+      window.appView.searchEditView.search("", function(){
+        window.appView.searchEditView.searchDataListView.model.set("title", "All Data as of " + new Date());
+//      window.appView.searchEditView.searchDataListView.render();
+        $(".spinner-status").html("Opening all data...");
+        window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
+          $(".spinner-status").html("Loading all data...");
+          window.appView.currentReadDataListView.format = "fullscreen";
+          window.appView.currentReadDataListView.render();
+          window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
+          window.app.stopSpinner();
+        },function(){
+          window.app.stopSpinner();
+          window.location.href="#";
+          if(localStorage.getItem("username") == "public"){
+            alert("Normally this creates a new list of all your data, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+          }
         });
-        
-      },
+      });
+
+    },
+   
+    /**
+     * The showAllData function gives the user a Datalist of all the Datums in
+     * this session (embedded Datalist view) it does this by calling the search
+     * method of searchEditView within appView with the goal of the session. An
+     * alternative is to use the map reduce function for this, which returns the
+     * datum in a session too (more precisely) however, we believe that it is
+     * usually the goal which the user is actually searching for, not the
+     * session itself.
+     * 
+     * @param pouchname
+     *          identifies the database to look in TODO: try saving it, setting
+     *          it as current datalist and rendering that fullscreen
+     * @param id this is the id of the session itself
+     * @param goal this is the goal of the session or what to search for. 
+     */
+    showAllDataInSession : function(pouchname, id, goal) {
+      /* this is the actual url of the map reduce result that is precisely these datum that are in this session, but really we dont htink that is what the user wants to see. */
+      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("couchConnection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
+
+//    this.hideEverything();
+//    $("#dashboard-view").show();
+      window.app.showSpinner();
+      $(".spinner-status").html("Searching all data in this Elicitation Session...");
+      $("#search_box").val("goal:" + goal);
+      window.appView.searchEditView.search("goal:" + goal, function(){
+        window.appView.searchEditView.searchDataListView.model.set("title", "All Data where the session goal was: '"+goal+"' As of today,  "+new Date());
+//      window.appView.searchEditView.searchDataListView.render();
+        $(".spinner-status").html("Opening data...");
+        window.appView.searchEditView.searchDataListView.saveSearchDataList(null,function(){
+          $(".spinner-status").html("Loading  data...");
+          window.appView.currentReadDataListView.format = "fullscreen";
+          window.appView.currentReadDataListView.render();
+          window.location.href="#data/"+ window.appView.searchEditView.searchDataListView.model.id;
+          window.app.stopSpinner();
+        },function(){
+          window.app.stopSpinner();
+          window.location.href="#";
+          if(localStorage.getItem("username") == "public"){
+            alert("Normally this creates a new list of all the data in this session, but you can't save new DataLists in the Sample Corpus. Instead, all the data are shown in a temporary Search Result below.");
+          }
+        });
+      });
+
+    },
 
     showEmbeddedDatum : function(pouchname, datumid){
       if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
