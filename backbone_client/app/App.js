@@ -783,9 +783,9 @@ define([
             
             var reason = "";
             if(error.reason){
-              reason = error.reason.message;
+              reason = error.reason.message || error.reason || "";
             };
-            if(reason.indexOf("nauthorized") >=0 ){
+            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
