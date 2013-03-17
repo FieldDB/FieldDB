@@ -652,8 +652,8 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
       var result = fields.join("\n");
       if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
@@ -669,8 +669,8 @@ define([
      */
     exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
       
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
       var result = fields.join(",") +"\n";
       
 //      if (orderedFields == null) {
