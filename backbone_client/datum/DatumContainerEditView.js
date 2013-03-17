@@ -143,8 +143,10 @@ define([
             self.model.pop();
           }
             
-          // Add a single, blank Datum
-          self.newDatum();
+          /* If there are no datum in the corpus, or currently showing, add a single, blank Datum (if the user has an empty corpus, they can stil doubleclick on an item they are importing and therefore have a non empty datum container) */
+          if(self.datumsView._childViews.length == 0){
+            self.newDatum();
+          }
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
