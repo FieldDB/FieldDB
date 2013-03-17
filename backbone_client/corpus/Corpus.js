@@ -905,8 +905,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -919,8 +919,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -934,8 +934,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -948,8 +948,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
