@@ -455,16 +455,73 @@ define([
 
       return datum;
     },
+    getValidationStatus : function(){
+      var validationStatus = "";
+      var stati = this.get("datumFields").where({"label": "validationStatus"});
+      if(stati.length > 0){
+        stati = stati[0].get("mask").split(" ");
+        if(stati.length >0){
+          validationStatus = stati[0];
+        }
+      }
+      /* Handle upgrade from previous corpora look in datum states too */
+      if(validationStatus == ""){
+        stati = this.get("datumStates").where({selected : "selected"});
+        if(stati.length > 0){
+          validationStatus = stati[0].get("state");
+        }
+      }
+      this.updateDatumState(validationStatus);
+      return validationStatus;
+    },
+    getValidationStatusColor :function(status){
+      if(!status){
+        status = this.getValidationStatus();
+      }
+      /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
+      if(status.indexOf("deleted") > -1){
+        return "danger";
+      }
+      if(status.toLowerCase().indexOf("tobechecked") > -1){
+        return "warning";
+      }
+      if(status.toLowerCase().indexOf("checked") > -1){
+        return "success";
+      }
+    },
     updateDatumState : function(selectedValue){
-      console.log("Asking to change the datum state to "+selectedValue); 
-      
+      if(!selectedValue){
+        return;
+      }
+      OPrime.debug("Asking to change the datum state to " + selectedValue); 
       try{
-        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        $.each( this.get("datumStates").where({selected : "selected"}), function(){
+          if(this.get("state") != selectedValue){
+            this.set("selected", "");
+          }
+        });
         this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
         Utils.debug("problem getting color of datum state, probaly none are selected.",e);
       }
-      console.log("done"); 
+      
+      /* prepend this state to the new validationStates as of v1.46.2 */
+      var n = this.get("datumFields").where({label: "validationStatus"})[0];
+      if(n == [] || !n){
+        n = new DatumField({
+          label : "validationStatus",
+          shouldBeEncrypted: "",
+          showToUserTypes: "all",
+          userchooseable: "disabled",
+          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
+        });
+        this.get("datumFields").add(n);
+      }
+      var validationStatus = n.get("mask") || "";
+      validationStatus = selectedValue + " " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(" "));
+      n.set("mask", uniqueStati.join(" "));
+      
 
 //      this.save();
       //TODO save it
