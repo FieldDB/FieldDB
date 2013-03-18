@@ -266,13 +266,13 @@ OPrime.prettyDate = function(time) {
   if (day_diff >= 1) {
     return "Yesterday";
   }
-  if(diff >= 86400 ){
+  if(diff >= 4000 ){
     return Math.floor(diff / 3600) + " hours ago";
   }
 //  if(diff >= 7200 ){
 //    Math.floor(diff / 3600) + " 1 hour ago";
 //  }
-  if(diff >= 3600 ){
+  if(diff >= 70 ){
     return Math.floor(diff / 60) + " minutes ago";
   }
   if(diff >= 120 ){
@@ -306,13 +306,13 @@ OPrime.prettyTimestamp = function(timestamp) {
   if (day_diff >= 1) {
     return "Yesterday";
   }
-  if(diff >= 86400 ){
+  if(diff >= 4000 ){
     return Math.floor(diff / 3600) + " hours ago";
   }
 //  if(diff >= 7200 ){
 //    Math.floor(diff / 3600) + " 1 hour ago";
 //  }
-  if(diff >= 3600 ){
+  if(diff >= 70 ){
     return Math.floor(diff / 60) + " minutes ago";
   }
   if(diff >= 120 ){
