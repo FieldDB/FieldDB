@@ -307,7 +307,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             userchooseable: "disabled",
-            help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
+            help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
           })
         ]));
       }//end if to set datumFields

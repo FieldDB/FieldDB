@@ -157,8 +157,8 @@ define([
               }
               
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              if (rows[rows.length - i - 1]) {
-                var m = rows[rows.length - i - 1];
+              if (rows[i]) {
+                var m = rows[i];
                 var value = m;
                 /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
                 if(!OPrime.isBackboneCouchDBApp()){
