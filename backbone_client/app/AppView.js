@@ -586,6 +586,15 @@ define([
         
         /* Render the users prefered dashboard layout */
         this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+        var username = "";
+        try{
+          username = window.app.get("authentication").get("userPrivate").get("username") || "";
+        }catch(e){
+          //do nothing
+        }
+        if(username == "public"){
+          this.format = "layoutEverythingAtOnce"
+        }
         if(this.format == "default"){
           $(this.el).html(this.template(jsonToRender));
         }else if(this.format == "layoutJustEntering"){

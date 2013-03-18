@@ -608,7 +608,15 @@ define([
         var corpusPouchName = appids.couchConnection.pouchname;
         if(window.location.href.indexOf(corpusPouchName) == -1){
           if(corpusPouchName != "public-firstcorpus"){
-            OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            var username = "";
+            try{
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            }catch(e){
+              //do nothing
+            }
+            if(username != "public"){
+              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
           window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
