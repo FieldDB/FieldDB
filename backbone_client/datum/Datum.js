@@ -502,7 +502,7 @@ define([
         });
         this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
-        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
       
       /* prepend this state to the new validationStates as of v1.46.2 */
