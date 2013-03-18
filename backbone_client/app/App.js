@@ -608,7 +608,15 @@ define([
         var corpusPouchName = appids.couchConnection.pouchname;
         if(window.location.href.indexOf(corpusPouchName) == -1){
           if(corpusPouchName != "public-firstcorpus"){
-            OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            var username = "";
+            try{
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            }catch(e){
+              //do nothing
+            }
+            if(username != "public"){
+              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
           window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
@@ -783,9 +791,9 @@ define([
             
             var reason = "";
             if(error.reason){
-              reason = error.reason.message;
+              reason = error.reason.message || error.reason || "";
             };
-            if(reason.indexOf("nauthorized") >=0 ){
+            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){

@@ -22,6 +22,18 @@ define([
 
     model : DatumState,
     
+    addIfNew : function(datumStateObject){
+      var newState = datumStateObject.state;
+      if(!newState){
+        return;
+      }
+      var existing = this.where({state: newState});
+      if(existing.length > 0){
+        return;
+      }
+      this.add(new DatumState(datumStateObject));
+
+    },
     /** 
      * Gets a copy DatumStates containing new (not references) DatumStates objects
      * containing the same attributes.
