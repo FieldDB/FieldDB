@@ -100,17 +100,14 @@ define([
         url : authUrl + "/login",
         data : dataToPost,
         success : function(serverResults) {
-          if (serverResults.userFriendlyErrors != null) {
-            try{
-              window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
-            }catch(e){
-              if (OPrime.debugMode) OPrime.debug(e);
-            }
+          var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+          if (userFriendlyErrors) {
+            window.appView.toastUser(userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
             if (typeof failcallback == "function") {
-              failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+              failcallback(userFriendlyErrors.join("<br/>"));
             }
             if (typeof successcallback == "function") {
-              successcallback(null, serverResults.userFriendlyErrors); // tell caller that the user failed to
+              successcallback(null, userFriendlyErrors); // tell caller that the user failed to
               // authenticate
             }
           } else if (serverResults.user != null) {
@@ -403,15 +400,12 @@ define([
         url : authUrl + "/corpusteam",
         data : dataToPost,
         success : function(serverResults) {
-          if (serverResults.userFriendlyErrors != null) {
-            try{
-              window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") 
+          var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+          if (userFriendlyErrors) {
+            window.appView.toastUser(userFriendlyErrors.join("<br/>") 
                   , "alert-warning","Error connecting to populate corpus permissions:");
-            }catch(e){
-              if (OPrime.debugMode) OPrime.debug(e);
-            }
             if (typeof failcallback == "function") {
-              failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+              failcallback(userFriendlyErrors.join("<br/>"));
             }
           } else if (serverResults.users != null) {
             if (typeof successcallback == "function") {

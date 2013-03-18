@@ -257,14 +257,14 @@ define([
 
         var toSingleSpace = function (string) {
           return string.replace(/\s+/g, ' ');
-        }
+        };
 
         var getRandomString = function (len) {
-          len = len || 10
+          len = len || 10;
           var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
           return _.map(_.range(len), function () {
             return A.charAt(Math.floor(Math.random() * A.length));}).join('');
-        }
+        };
 
         startHighlight = getRandomString();   // will be replaced by <span class='highlight'>
         endHighlight = getRandomString();     // will be replaced by </span>

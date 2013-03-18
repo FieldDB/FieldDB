@@ -460,6 +460,11 @@ define([
         }
       });
     },
+    saveAndInterConnectInApp : function(callback){
+      if(typeof callback == "function"){
+        callback();
+      }
+    },
     
     render: function(){
       $("#user-fullscreen").html("list of corpora goes here");

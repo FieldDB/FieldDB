@@ -51,7 +51,10 @@ define([
            success : function(model, response, options) {
              console.log("Sessions fetched ", model,response,options);
              if (response.length == 0) {
-               OPrime.bug("You have no sessions, TODO creating a new one...");
+               OPrime.debug("You have no sessions, TODO creating a new one...");
+               if(window.location.href.indexOf("corpus.html") > -1){
+                 window.location.replace("user.html");
+               }
              }
              if(typeof suces == "function"){
                suces();

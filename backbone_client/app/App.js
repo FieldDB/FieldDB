@@ -608,7 +608,15 @@ define([
         var corpusPouchName = appids.couchConnection.pouchname;
         if(window.location.href.indexOf(corpusPouchName) == -1){
           if(corpusPouchName != "public-firstcorpus"){
-            OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            var username = "";
+            try{
+              username = window.app.get("authentication").get("userPrivate").get("username") || "";
+            }catch(e){
+              //do nothing
+            }
+            if(username != "public"){
+              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+            }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
           window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
@@ -780,11 +788,12 @@ define([
           },
           error : function(model, error, options) {
             if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
-            OPrime.bug("There seems to be an error when fetching corpus: "+error.reason);
+            
+            var reason = "";
             if(error.reason){
-              OPrime.bug("You appear to be offline. "+error.reason);
-            }
-            if(error && error.error && error.error.indexOf("unauthorized") >=0 ){
+              reason = error.reason.message || error.reason || "";
+            };
+            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
@@ -794,7 +803,11 @@ define([
 //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
 //            window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }else{
-              OPrime.bug("You appear to be offline.");
+              if(reason.indexOf("nexpected end of input") >=0){
+                OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only. We are waiting for an upgrade in the PouchDB library (this is what makes it possible to have an offline database).");
+              }else{
+                OPrime.bug("You appear to be offline. If you are not offline, please report this.");
+              }
             }
           }
         }); //end corpus fetch
