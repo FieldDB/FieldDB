@@ -494,6 +494,13 @@ define([
         return;
       }
       OPrime.debug("Asking to change the datum state to " + selectedValue); 
+      /* make sure all the corpus states are availible in this datum */
+      thisdatumStates = this.get("datumStates");
+      window.app.get("corpus").get("datumStates").each(function(datumstate) {
+        var obj = datumstate.toJSON();
+        obj.selected = "";
+        thisdatumStates.addIfNew(obj);
+      });
       try{
         $.each( this.get("datumStates").where({selected : "selected"}), function(){
           if(this.get("state") != selectedValue){
