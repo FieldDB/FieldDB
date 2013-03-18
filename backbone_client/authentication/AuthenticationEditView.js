@@ -492,8 +492,9 @@ define([
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
           success : function(serverResults) {
-            if (serverResults.userFriendlyErrors != null) {
-              $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
+            var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+            if (userFriendlyErrors) {
+              $(".welcome-screen-alerts").html(userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
               $(".welcome-screen-alerts").show();
             } else if (serverResults.user) {
 
