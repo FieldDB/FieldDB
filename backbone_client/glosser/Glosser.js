@@ -140,7 +140,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   }
   
   return parsedWords.join(" ");
-}
+};
 Glosser.toastedUserToSync = false;
 Glosser.toastedUserToImport = 0;
 Glosser.glossFinder = function(morphemesLine){

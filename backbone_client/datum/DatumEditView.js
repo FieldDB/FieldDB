@@ -173,6 +173,7 @@ define([
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
+      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
@@ -512,6 +513,7 @@ define([
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
+      this.guessUtterance($(e.currentTarget).val());
       this.guessGlosses($(e.currentTarget).val());
       this.needsSave = true;
 
@@ -521,8 +523,8 @@ define([
         var glossLine = Glosser.glossFinder(morphemesLine);
         if (this.$el.find(".gloss .datum_field_input").val() == "") {
           // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
-//          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
-          
+//        this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+
           this.needsSave = true;
         }
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
@@ -533,11 +535,21 @@ define([
             this.$el.find(".gloss .datum_field_input").val(glossLine);
             this.needsSave = true;
             //autosize the gloss field
-//            var datumself = this;
-//            window.setTimeout(function(){
-//              $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//            },500);
+//          var datumself = this;
+//          window.setTimeout(function(){
+//          $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//          },500);
           }
+        }
+      }
+    },
+    guessUtterance : function(morphemesLine) {
+      if (morphemesLine) {
+        // If the utterance line is empty, make it a copy of the morphemes, with out the -
+        if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
+          var utteranceLine = morphemesLine.replace(/-/g,"");
+          this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
+          this.needsSave = true;
         }
       }
     }

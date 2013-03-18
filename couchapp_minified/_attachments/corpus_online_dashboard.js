@@ -13602,7 +13602,7 @@ templates['authentication_edit_embedded'] = template(function (Handlebars,depth0
   foundHelper = helpers.username;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.username; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</h4>\n	</div>\n</li>\n<li class=\"not-a\">\n	<button id=\"logout\" class=\"btn btn-inverse logout locale_Log_Out\"></button>\n</li>\n<li class=\"not-a \">\n	<div id=\"login_form\" class=\"\">\n\n		<p class=\"wordwrap\">\n			<i class=\"locale_An_offline_online_fieldlinguistics_database\"></i> <span\n				class=\"welcome_version_number\"></span>\n		</p>\n\n		<div class=\"btn-group\">\n			<a href=\"#\"\n				class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\"\n				rel=\"tooltip\"></a> <a class=\"btn btn-success \" data-toggle=\"modal\"\n				href=\"#login_modal\"> <i class=\"icon-user icon-white\"></i> <span\n				class=\"locale_Log_In\"></span> <span class=\"caret\"></span>\n			</a>\n		</div>\n\n		<hr />\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n\n		<div class=\"breadcrumb create_new_user_password \">\n			<h3 class=\"locale_Create_a_new_user\"></h3>\n			<p>\n				http://www.lingsync.org/<span class=\"potentialUsername\">yourusernamegoeshere</span>\n			</p>\n			<!-- <label class = \"locale_What_is_your_username_going_to_be\">  </label> -->\n			<span class=\"like-form-inline\"> <input\n				class=\"registerusername\" value=\"yourusernamegoeshere\" type=\"text\" />\n				<button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n			</span>\n			<div class=\"hide confirm-password\">\n				<label class=\"locale_Password\"></label> <input\n					class=\"registerpassword\" type=\"password\" /> <label\n					class=\"locale_Confirm_Password\"></label> <input\n					class=\"to-confirm-password\" type=\"password\" /> <label class=\"\">Email:</label>\n				<input class=\"registeruseremail\" type=\"email\" /> <br />\n				<button\n					class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n				</button>\n				<!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n			</div>\n		</div>\n	</div>\n</li>\n\n\n<li><a data-toggle=\"modal\" href=\"#user-modal\"><i\n		class=\" icon-user\"></i> <span class=\"locale_Private_Profile\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#help/illustratedguide\"><i\n		class=\"icon-gift\"></i> New! Quick Start Illustrated Guide</a></li>\n<li><a tabindex=\"-1\" href=\"http://fieldlinguist.com\"\n	target=\"_blank\"><i class=\"icon-film\"></i> Help Videos and User\n		Guide</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n	target=\"_blank\"><i class=\" icon-beaker\"></i> Bug Report/Contact Us</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n	target=\"_blank\"><i class=\" icon-github\"></i> OpenSource v<span\n		class=\"fielddb-version\"></span></a></li>\n<li class=\"power-users-link\"><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#terminal-modal\"><i class=\" icon-magic\"></i> <span\n		class=\"locale_Terminal_Power_Users\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#user-preferences-modal\"><i class=\" icon-cog\"></i> <span\n		class=\"locale_User_Settings\"></span> </a></li>\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#hotkey-settings-modal\"><i class=\" icon-hdd\"></i> <span\n		class=\"locale_Keyboard_Shortcuts\"></span></a></li>\n<li><a tabindex=\"-1\" class=\"corpus-settings\"><i\n		class=\" icon-cogs\"></i> <span class=\"locale_Corpus_Settings\"></span></a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#\" class=\" sync-everything\"> <i\n		class=\" icon-upload\"></i> Back-up your\n		preferences\n</a></li>\n\n\n";
+  buffer += escapeExpression(stack1) + "</h4>\n	</div>\n</li>\n<li class=\"not-a\">\n	<button id=\"logout\" class=\"btn btn-inverse logout locale_Log_Out\"></button>\n</li>\n<li class=\"not-a \">\n	<div id=\"login_form\" class=\"\">\n\n		<p class=\"wordwrap\">\n			<i class=\"locale_An_offline_online_fieldlinguistics_database\"></i> <span\n				class=\"welcome_version_number\"></span>\n		</p>\n\n		<div class=\"btn-group\">\n			<a href=\"#\"\n				class=\"btn btn-success sync-lingllama-data locale_Close_and_login_as_LingLlama locale_Close_and_login_as_LingLlama_Tooltip\"\n				rel=\"tooltip\"></a> <a class=\"btn btn-success \" data-toggle=\"modal\"\n				href=\"#login_modal\"> <i class=\"icon-user icon-white\"></i> <span\n				class=\"locale_Log_In\"></span> <span class=\"caret\"></span>\n			</a>\n		</div>\n\n		<hr />\n		<div class=\"alert alert-error hide welcome-screen-alerts\"></div>\n\n		<div class=\"breadcrumb create_new_user_password \">\n			<h3 class=\"locale_Create_a_new_user\"></h3>\n			<p>\n				http://www.lingsync.org/<span class=\"potentialUsername\">yourusernamegoeshere</span>\n			</p>\n			<!-- <label class = \"locale_What_is_your_username_going_to_be\">  </label> -->\n			<span class=\"like-form-inline\"> <input\n				class=\"registerusername\" value=\"yourusernamegoeshere\" type=\"text\" />\n				<button class=\"btn btn-primary new-user-button locale_New_User\"></button>\n			</span>\n			<div class=\"hide confirm-password\">\n				<label class=\"locale_Password\"></label> <input\n					class=\"registerpassword\" type=\"password\" /> <label\n					class=\"locale_Confirm_Password\"></label> <input\n					class=\"to-confirm-password\" type=\"password\" /> <label class=\"\">Email:</label>\n				<input class=\"registeruseremail\" type=\"email\" /> <br />\n				<button\n					class=\"btn btn-success register-new-user locale_Sign_in_with_password\">\n				</button>\n				<!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class=\"btn btn-success register-twitter\">\n        <i class=\"i icon-twitter\"></i> Sign in with Twitter\n      </button>\n      <button class=\"btn btn-success register-facebook\">\n        <i class=\"i icon-facebook\"></i> Sign in with Facebook\n      </button> -->\n			</div>\n		</div>\n	</div>\n</li>\n\n\n<li><a data-toggle=\"modal\" href=\"#user-modal\"><i\n		class=\" icon-user\"></i> <span class=\"locale_Private_Profile\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#help/illustratedguide\"><i\n		class=\"icon-gift\"></i> New! Quick Start Illustrated Guide</a></li>\n<li><a tabindex=\"-1\" href=\"http://lingsync.org\"\n	target=\"_blank\"><i class=\"icon-film\"></i> Help Videos and User\n		Guide</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n	target=\"_blank\"><i class=\" icon-beaker\"></i> Bug Report/Contact Us</a></li>\n<li><a tabindex=\"-1\"\n	href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n	target=\"_blank\"><i class=\" icon-github\"></i> OpenSource v<span\n		class=\"fielddb-version\"></span></a></li>\n<li class=\"power-users-link\"><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#terminal-modal\"><i class=\" icon-magic\"></i> <span\n		class=\"locale_Terminal_Power_Users\"></span> </a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#user-preferences-modal\"><i class=\" icon-cog\"></i> <span\n		class=\"locale_User_Settings\"></span> </a></li>\n<li><a tabindex=\"-1\" data-toggle=\"modal\"\n	href=\"#hotkey-settings-modal\"><i class=\" icon-hdd\"></i> <span\n		class=\"locale_Keyboard_Shortcuts\"></span></a></li>\n<li><a tabindex=\"-1\" class=\"corpus-settings\"><i\n		class=\" icon-cogs\"></i> <span class=\"locale_Corpus_Settings\"></span></a></li>\n\n<li class=\"divider\"></li>\n\n<li><a tabindex=\"-1\" href=\"#\" class=\" sync-everything\"> <i\n		class=\" icon-upload\"></i> Back-up your\n		preferences\n</a></li>\n\n\n";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -14598,7 +14598,7 @@ function program9(depth0,data) {
   foundHelper = helpers.datumstate;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.datumstate; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 \">\n      ";
+  buffer += escapeExpression(stack1) + "</span></span><br/>\n		<!-- drop down for the states -->\n    <select class=\"datum_state_select span12 hide\" >\n      ";
   stack1 = depth0.datumStates;
   stack1 = helpers.each.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(9, program9, data)});
   if(stack1 || stack1 === 0) { buffer += stack1; }
@@ -15142,7 +15142,7 @@ templates['import_edit_fullscreen'] = template(function (Handlebars,depth0,helpe
   foundHelper = helpers.pouchname;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.pouchname; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</small>\n			</h1>\n\n			<h5>\n				<span class=\"locale_Import_Instructions\"></span> <a\n					href=\"http://www.facebook.com/LingSyncApp\" target=\"_blank\"><i\n					class=\"icons icon-facebook\"></i></a> <a\n					href=\"https://twitter.com/followers\" target=\"_blank\"><i\n					class=\"icons icon-twitter\"></i></a>\n			</h5>\n			<div>";
+  buffer += escapeExpression(stack1) + "</small>\n			</h1>\n\n			<h5>\n				<span class=\"locale_Import_Instructions\"></span> <a\n					href=\"http://www.facebook.com/LingSyncApp\" target=\"_blank\"><i\n					class=\"icons icon-facebook\"></i></a> <a\n					href=\"https://twitter.com/lingsync\" target=\"_blank\"><i\n					class=\"icons icon-twitter\"></i></a>\n			</h5>\n			<div>";
   foundHelper = helpers.status;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.status; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
@@ -15150,7 +15150,7 @@ templates['import_edit_fullscreen'] = template(function (Handlebars,depth0,helpe
   foundHelper = helpers.rawText;
   if (foundHelper) { stack1 = foundHelper.call(depth0, {hash:{}}); }
   else { stack1 = depth0.rawText; stack1 = typeof stack1 === functionType ? stack1() : stack1; }
-  buffer += escapeExpression(stack1) + "</textarea>\n\n		<div class=\"btn-group pull-right\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span>Import from</span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a class=\"import-format\" id=\"format-csv\" tabindex=\"-1\"\n					href=\"#\">CSV</a></li>\n				<li><a class=\"import-format\" id=\"format-tabbed\" tabindex=\"-1\"\n					href=\"#\">Tabbed</a></li>\n				<li><a class=\"import-format\" id=\"format-xml\" tabindex=\"-1\"\n					href=\"#\">XML</a></li>\n				<li><a class=\"import-format\" id=\"format-elanxml\" tabindex=\"-1\"\n					href=\"#\">ElanXML</a></li>\n				<li><a class=\"import-format\" id=\"format-toolbox\" tabindex=\"-1\"\n					href=\"#\">Toolbox</a></li>\n				<li><a class=\"import-format\" id=\"format-praat\" tabindex=\"-1\"\n					href=\"#\">Praat Text Grid</a></li>\n				<li><a class=\"import-format\" id=\"format-latex\" tabindex=\"-1\"\n					href=\"#\">LaTex</a></li>\n				<li><a class=\"import-format\" id=\"format-handout\" tabindex=\"-1\"\n					href=\"#\">Handout</a></li>\n			</ul>\n		</div>\n		<span class=\"pull-right\">Did the app guess the wrong format?</span>\n	</div>\n\n	<div class=\"well hidden \" id=\"import-second-step\">\n		<span class=\"locale_Import_Second_Step\"></span>\n\n		<button\n			class=\"btn btn-info add-column pull-right hide locale_Add_Extra_Columns\"></button>\n\n		<div class=\" container span11\">\n\n			<div id=\"import-datum-field-labels\" class=\"row-fluid\"></div>\n		</div>\n\n		<div class=\"scrollable\">\n			<table id=\"csv-table-area\"\n				class=\" table table-striped table-bordered table-condensed \"></table>\n		</div>\n\n		<button\n			class=\"btn btn-success approve-import hide locale_Attempt_Import\"></button>\n\n	</div>\n\n	<div class=\"well hidden container-fluid \" id=\"import-third-step\">\n		<span class=\"locale_Import_Third_Step\"></span>\n\n		<div id=\"import-data-list\" class=\" row-fluid\">\n\n			<div id=\"import-data-list-header\" class=\" \"></div>\n			<div class=\" container span11 \">\n				<ul class=\"unstyled zebra import-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control row span11\"></div>\n			</div>\n\n		</div>\n\n\n		<div id=\"import-session\" class=\"well\"></div>\n\n		<button\n			class=\"btn btn-success approve-save disabled locale_Save_And_Import\"></button>\n\n		<progress class=\"import-progress\" max=\"5\" value=\"0\">\n			<strong class=\"locale_percent_completed\"></strong>\n		</progress>\n\n	</div>\n</div>";
+  buffer += escapeExpression(stack1) + "</textarea>\n\n		<div class=\"btn-group pull-right\">\n			<button class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\">\n				<span>Import from</span> <span class=\"caret\"></span>\n			</button>\n			<ul class=\"dropdown-menu\">\n				<li><a class=\"import-format\" id=\"format-csv\" tabindex=\"-1\"\n					href=\"#\">CSV</a></li>\n				<li><a class=\"import-format\" id=\"format-tabbed\" tabindex=\"-1\"\n					href=\"#\">Tabbed</a></li>\n				<li><a class=\"import-format\" id=\"format-xml\" tabindex=\"-1\"\n					href=\"#\">XML</a></li>\n				<li><a class=\"import-format\" id=\"format-elanxml\" tabindex=\"-1\"\n					href=\"#\">ElanXML</a></li>\n				<li><a class=\"import-format\" id=\"format-toolbox\" tabindex=\"-1\"\n					href=\"#\">Toolbox</a></li>\n				<li><a class=\"import-format\" id=\"format-praat\" tabindex=\"-1\"\n					href=\"#\">Praat Text Grid</a></li>\n				<li><a class=\"import-format\" id=\"format-latex\" tabindex=\"-1\"\n					href=\"#\">LaTex</a></li>\n				<li><a class=\"import-format\" id=\"format-handout\" tabindex=\"-1\"\n					href=\"#\">Handout</a></li>\n			</ul>\n		</div>\n		<span class=\"pull-right\">Did the app guess the wrong format?</span>\n	</div>\n\n	<div class=\"well hidden \" id=\"import-second-step\">\n		<span class=\"locale_Import_Second_Step\"></span>\n\n		<button\n			class=\"btn btn-info add-column pull-right hide locale_Add_Extra_Columns\"></button>\n\n		<div class=\" container span11\">\n\n			<div id=\"import-datum-field-labels\" class=\"row-fluid\"></div>\n		</div>\n\n		<div class=\"scrollable\">\n			<table id=\"csv-table-area\"\n				class=\" table table-striped table-bordered table-condensed \"></table>\n		</div>\n\n		<button\n			class=\"btn btn-success approve-import hide locale_Attempt_Import\"></button>\n\n	</div>\n\n	<div class=\"well hidden container-fluid \" id=\"import-third-step\">\n		<span class=\"locale_Import_Third_Step\"></span>\n\n		<div id=\"import-data-list\" class=\" row-fluid\">\n\n			<div id=\"import-data-list-header\" class=\" \"></div>\n			<div class=\" container span11 \">\n				<ul class=\"unstyled  import-data-list-paginated-view\"></ul>\n				<div class=\"pagination-control row span11\"></div>\n			</div>\n\n		</div>\n\n\n		<div id=\"import-session\" class=\"well\"></div>\n\n		<button\n			class=\"btn btn-success approve-save disabled locale_Save_And_Import\"></button>\n\n		<progress class=\"import-progress\" max=\"5\" value=\"0\">\n			<strong class=\"locale_percent_completed\"></strong>\n		</progress>\n\n	</div>\n</div>";
   return buffer;});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
@@ -15297,7 +15297,7 @@ templates['user_app'] = template(function (Handlebars,depth0,helpers,partials,da
   
 
 
-  return "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n        class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n\n\n          <!--  Customize dropdown -->\n          <li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i class=\"icon-info-sign icon-white\"></i>\n              Information <b class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"customize_dropdown_trigger\">\n\n\n              \n              <li class=\"power-users-link\"><a tabindex=\"-1\"\n                data-toggle=\"modal\" href=\"#terminal-modal\"><i\n                  class=\" icon-magic\"></i> <span\n                  class=\"locale_Terminal_Power_Users\"></span> </a></li>\n              <li><a tabindex=\"-1\" href=\"http://fieldlinguist.com\"\n                target=\"_blank\"><i class=\"icons icon-film\"></i> Help Videos and\n                  User Guide</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n                target=\"_blank\"><i class=\"icons icon-beaker\"></i> Bug\n                  Report/Contact Us</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n                target=\"_blank\"><i class=\"icons icon-github\"></i> OpenSource v<span\n                  class=\"fielddb-version\"></span></a></li>\n\n              <!-- <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n                  Clear all customization</a></li> -->\n\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown hide\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!-- <li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n                  <i class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider\"></li>\n\n              <!-- <li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n              <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span> <b class=\"caret\"></b>\n          </a>\n            <ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n\n  <!-- FullScreen Views -->\n  <div id=\"user-fullscreen\" class=\"well \"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"quick-authenticate-modal\"  class=\"modal hide\">\n  <div class=\"modal-header\">\n    <h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n  </div>\n  <div class=\"modal-body\">\n  <label class = \"locale_Password\"></label>\n      <input type=\"password\" id=\"quick-authenticate-password\"/>\n  </div>\n  <div class=\"modal-footer\">\n    <button class=\"btn btn-success locale_Yep_its_me\" id=\"quick-authentication-okay-btn\"></button>\n  </div>\n</div>\n";});
+  return "<!-- Black Navigation Bar Across the Top -->\n<div class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"navbar-inner\">\n    <div class=\"container \">\n\n\n\n      <!-- Home button -->\n      <a tabindex=\"-1\" href=\"#\" class=\" brand locale_Show_Dashboard\"\n        rel=\"tooltip\"> <i class=\"icons icon-home icon-white\"></i></a>\n\n      <!-- Top Search Area -->\n      <span class=\"navbar-search\" id=\"search-top\"> </span>\n\n      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->\n      <a class=\"btn btn-navbar\" data-toggle=\"collapse\"\n        data-target=\".nav-collapse\"> <span class=\"icon-bar\"></span> <span\n        class=\"icon-bar\"></span> <span class=\"icon-bar\"></span>\n      </a>\n\n\n      <!-- Collapsing area if the screen is not wide enough -->\n      <div class=\"nav-collapse collapse\">\n        <ul class=\"nav\" role=\"navigation \">\n\n\n\n          <!--  Customize dropdown -->\n          <li class=\"dropdown\"><a id=\"customize_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i class=\"icon-info-sign icon-white\"></i>\n              Information <b class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"customize_dropdown_trigger\">\n\n\n              \n              <li class=\"power-users-link\"><a tabindex=\"-1\"\n                data-toggle=\"modal\" href=\"#terminal-modal\"><i\n                  class=\" icon-magic\"></i> <span\n                  class=\"locale_Terminal_Power_Users\"></span> </a></li>\n              <li><a tabindex=\"-1\" href=\"http://lingsync.org\"\n                target=\"_blank\"><i class=\"icons icon-film\"></i> Help Videos and\n                  User Guide</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ\"\n                target=\"_blank\"><i class=\"icons icon-beaker\"></i> Bug\n                  Report/Contact Us</a></li>\n              <li><a tabindex=\"-1\"\n                href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed\"\n                target=\"_blank\"><i class=\"icons icon-github\"></i> OpenSource v<span\n                  class=\"fielddb-version\"></span></a></li>\n\n              <!-- <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-trash\"></i>\n                  Clear all customization</a></li> -->\n\n\n            </ul></li>\n\n\n          <!-- Notification -->\n          <li class=\"dropdown hide\"><a id=\"notification_dropdown_trigger\"\n            href=\"#\" role=\"button\" class=\"dropdown-toggle\"\n            data-toggle=\"dropdown\"><i\n              class=\"icon-exclamation-sign icon-white\"></i> Notifications <b\n              class=\"caret\"></b></a>\n            <ul class=\"dropdown-menu\" role=\"menu\"\n              aria-labelledby=\"notification_dropdown_trigger\">\n\n\n\n\n              <!-- <li><span class=\"locale_Need_save\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Save_on_this_Computer \" rel=\"tooltip\">\n                  <i class=\"icons icon-save save-dashboard icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsaved-changes\" max=\"100\" value=\"30\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Recent_Changes\"></li>\n\n\n              <li class=\"divider\"></li>\n\n              <!-- <li><span class=\"locale_Need_sync\"></span><a tabindex=\"-1\"\n                href=\"#\" class=\"locale_Sync_and_Share \" rel=\"tooltip\"> <i\n                  class=\"icons icon-sitemap  sync-everything icon-white\"></i>\n              </a></li>\n              <li><progress class=\"unsynced-changes\" max=\"100\" value=\"80\">\n                </progress></li> -->\n\n              <li class=\"not-a locale_Differences_with_the_central_server\"></li>\n\n\n              <li class=\"divider\"></li>\n              <li><a tabindex=\"-1\" href=\"#\"><i class=\"icon-remove\"></i>\n                  Clear all notifications</a></li>\n\n              <li><div id=\"toast-user-area\" class=\"scrollable\">\n                  <div class=\"alert alert-info alert-block\">\n                    <a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a> <strong\n                      class=\"alert-heading \">Quick Start Instructions:</strong> <span\n                      class=\"locale_Instructions_to_show_on_dashboard\"></span> <span\n                      class=\"locale_to_beta_testers\"></span>\n                  </div>\n                </div></li>\n\n            </ul></li>\n\n\n        </ul>\n        <ul class=\"nav pull-right\">\n\n          <!--  User dropdown -->\n          <li id=\"auth-menu\" class=\"dropdown\"><a href=\"#\"\n            id=\"user_drop_down_trigger\" role=\"button\"\n            class=\" dropdown-toggle locale_View_Public_Profile_Tooltip pull-left\"\n            data-toggle=\"dropdown\" rel=\"tooltip\"> <span\n              id=\"user-quickview\"> <i class=\"icons icon-user icon-white\"></i>\n            </span> <b class=\"caret\"></b>\n          </a>\n            <ul class=\"dropdown-menu\" id=\"authentication-embedded\" role=\"menu\"\n              aria-labelledby=\"user_drop_down_trigger\"></ul></li>\n\n\n        </ul>\n\n      </div>\n\n    </div>\n  </div>\n</div>\n\n\n\n\n<!-- The rest of the page -->\n<div class=\"container-fluid main\">\n\n  <!-- FullScreen Views -->\n  <div id=\"user-fullscreen\" class=\"well \"></div>\n</div>\n\n<!-- Modals are windows which pop over the active app to take focus -->\n<div id=\"hotkey-settings-modal\" class=\"modal hide\"></div>\n<div id=\"user-modal\" class=\"modal hide\"></div>\n<div id=\"user-preferences-modal\" class=\"modal hide\"></div>\n<div id=\"quick-authenticate-modal\"  class=\"modal hide\">\n  <div class=\"modal-header\">\n    <h4><span class=\"reason_why_we_need_to_make_sure_its_you\"></span> <span class=\"locale_We_need_to_make_sure_its_you\"></span></h4>\n  </div>\n  <div class=\"modal-body\">\n  <label class = \"locale_Password\"></label>\n      <input type=\"password\" id=\"quick-authenticate-password\"/>\n  </div>\n  <div class=\"modal-footer\">\n    <button class=\"btn btn-success locale_Yep_its_me\" id=\"quick-authentication-okay-btn\"></button>\n  </div>\n</div>\n";});
 })();(function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['user_edit_fullscreen'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -17641,6 +17641,18 @@ define('datum/DatumStates',[
 
     model : DatumState,
     
+    addIfNew : function(datumStateObject){
+      var newState = datumStateObject.state;
+      if(!newState){
+        return;
+      }
+      var existing = this.where({state: newState});
+      if(existing.length > 0){
+        return;
+      }
+      this.add(new DatumState(datumStateObject));
+
+    },
     /** 
      * Gets a copy DatumStates containing new (not references) DatumStates objects
      * containing the same attributes.
@@ -19355,16 +19367,73 @@ define('datum/Datum',[
 
       return datum;
     },
+    getValidationStatus : function(){
+      var validationStatus = "";
+      var stati = this.get("datumFields").where({"label": "validationStatus"});
+      if(stati.length > 0){
+        stati = stati[0].get("mask").split(" ");
+        if(stati.length >0){
+          validationStatus = stati[0];
+        }
+      }
+      /* Handle upgrade from previous corpora look in datum states too */
+      if(validationStatus == ""){
+        stati = this.get("datumStates").where({selected : "selected"});
+        if(stati.length > 0){
+          validationStatus = stati[0].get("state");
+        }
+      }
+      this.updateDatumState(validationStatus);
+      return validationStatus;
+    },
+    getValidationStatusColor :function(status){
+      if(!status){
+        status = this.getValidationStatus();
+      }
+      /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
+      if(status.indexOf("deleted") > -1){
+        return "danger";
+      }
+      if(status.toLowerCase().indexOf("tobechecked") > -1){
+        return "warning";
+      }
+      if(status.toLowerCase().indexOf("checked") > -1){
+        return "success";
+      }
+    },
     updateDatumState : function(selectedValue){
-      console.log("Asking to change the datum state to "+selectedValue); 
-      
+      if(!selectedValue){
+        return;
+      }
+      OPrime.debug("Asking to change the datum state to " + selectedValue); 
       try{
-        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        $.each( this.get("datumStates").where({selected : "selected"}), function(){
+          if(this.get("state") != selectedValue){
+            this.set("selected", "");
+          }
+        });
         this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
         Utils.debug("problem getting color of datum state, probaly none are selected.",e);
       }
-      console.log("done"); 
+      
+      /* prepend this state to the new validationStates as of v1.46.2 */
+      var n = this.get("datumFields").where({label: "validationStatus"})[0];
+      if(n == [] || !n){
+        n = new DatumField({
+          label : "validationStatus",
+          shouldBeEncrypted: "",
+          showToUserTypes: "all",
+          userchooseable: "disabled",
+          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
+        });
+        this.get("datumFields").add(n);
+      }
+      var validationStatus = n.get("mask") || "";
+      validationStatus = selectedValue + " " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(" "));
+      n.set("mask", uniqueStati.join(" "));
+      
 
 //      this.save();
       //TODO save it
@@ -19552,8 +19621,8 @@ define('datum/Datum',[
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
       var result = fields.join("\n");
       if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
@@ -19569,8 +19638,8 @@ define('datum/Datum',[
      */
     exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
       
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
       var result = fields.join(",") +"\n";
       
 //      if (orderedFields == null) {
@@ -21723,17 +21792,14 @@ define('authentication/Authentication',[
         url : authUrl + "/login",
         data : dataToPost,
         success : function(serverResults) {
-          if (serverResults.userFriendlyErrors != null) {
-            try{
-              window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
-            }catch(e){
-              if (OPrime.debugMode) OPrime.debug(e);
-            }
+          var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+          if (userFriendlyErrors) {
+            window.appView.toastUser(userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger","Login errors:");
             if (typeof failcallback == "function") {
-              failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+              failcallback(userFriendlyErrors.join("<br/>"));
             }
             if (typeof successcallback == "function") {
-              successcallback(null, serverResults.userFriendlyErrors); // tell caller that the user failed to
+              successcallback(null, userFriendlyErrors); // tell caller that the user failed to
               // authenticate
             }
           } else if (serverResults.user != null) {
@@ -22026,15 +22092,12 @@ define('authentication/Authentication',[
         url : authUrl + "/corpusteam",
         data : dataToPost,
         success : function(serverResults) {
-          if (serverResults.userFriendlyErrors != null) {
-            try{
-              window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") 
+          var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+          if (userFriendlyErrors) {
+            window.appView.toastUser(userFriendlyErrors.join("<br/>") 
                   , "alert-warning","Error connecting to populate corpus permissions:");
-            }catch(e){
-              if (OPrime.debugMode) OPrime.debug(e);
-            }
             if (typeof failcallback == "function") {
-              failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+              failcallback(userFriendlyErrors.join("<br/>"));
             }
           } else if (serverResults.users != null) {
             if (typeof successcallback == "function") {
@@ -22829,7 +22892,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   }
   
   return parsedWords.join(" ");
-}
+};
 Glosser.toastedUserToSync = false;
 Glosser.toastedUserToImport = 0;
 Glosser.glossFinder = function(morphemesLine){
@@ -24347,8 +24410,8 @@ define('corpus/Corpus',[
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -24361,8 +24424,8 @@ define('corpus/Corpus',[
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -24376,8 +24439,8 @@ define('corpus/Corpus',[
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -24390,8 +24453,8 @@ define('corpus/Corpus',[
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -25722,8 +25785,9 @@ define('authentication/AuthenticationEditView',[
           url : dataToPost.authUrl + "/register",
           data : dataToPost,
           success : function(serverResults) {
-            if (serverResults.userFriendlyErrors != null) {
-              $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
+            var userFriendlyErrors = serverResults.userFriendlyErrors || "";
+            if (userFriendlyErrors) {
+              $(".welcome-screen-alerts").html(userFriendlyErrors.join("<br/>")+" "+OPrime.contactUs );
               $(".welcome-screen-alerts").show();
             } else if (serverResults.user) {
 
@@ -26714,14 +26778,14 @@ define('datum/DatumReadView',[
 
         var toSingleSpace = function (string) {
           return string.replace(/\s+/g, ' ');
-        }
+        };
 
         var getRandomString = function (len) {
-          len = len || 10
+          len = len || 10;
           var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
           return _.map(_.range(len), function () {
             return A.charAt(Math.floor(Math.random() * A.length));}).join('');
-        }
+        };
 
         startHighlight = getRandomString();   // will be replaced by <span class='highlight'>
         endHighlight = getRandomString();     // will be replaced by </span>
@@ -29929,6 +29993,7 @@ define('datum/DatumEditView',[
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
+      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
@@ -30268,6 +30333,7 @@ define('datum/DatumEditView',[
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
       }
+      this.guessUtterance($(e.currentTarget).val());
       this.guessGlosses($(e.currentTarget).val());
       this.needsSave = true;
 
@@ -30277,8 +30343,8 @@ define('datum/DatumEditView',[
         var glossLine = Glosser.glossFinder(morphemesLine);
         if (this.$el.find(".gloss .datum_field_input").val() == "") {
           // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
-//          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
-          
+//        this.$el.find(".gloss .datum_field_input").val(morphemesLine);
+
           this.needsSave = true;
         }
         // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
@@ -30289,11 +30355,21 @@ define('datum/DatumEditView',[
             this.$el.find(".gloss .datum_field_input").val(glossLine);
             this.needsSave = true;
             //autosize the gloss field
-//            var datumself = this;
-//            window.setTimeout(function(){
-//              $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//            },500);
+//          var datumself = this;
+//          window.setTimeout(function(){
+//          $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
+//          },500);
           }
+        }
+      }
+    },
+    guessUtterance : function(morphemesLine) {
+      if (morphemesLine) {
+        // If the utterance line is empty, make it a copy of the morphemes, with out the -
+        if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
+          var utteranceLine = morphemesLine.replace(/-/g,"");
+          this.$el.find(".utterance").find(".datum_field_input").val(utteranceLine);
+          this.needsSave = true;
         }
       }
     }
@@ -30447,8 +30523,10 @@ define('datum/DatumContainerEditView',[
             self.model.pop();
           }
             
-          // Add a single, blank Datum
-          self.newDatum();
+          /* If there are no datum in the corpus, or currently showing, add a single, blank Datum (if the user has an empty corpus, they can stil doubleclick on an item they are importing and therefore have a non empty datum container) */
+          if(self.datumsView._childViews.length == 0){
+            self.newDatum();
+          }
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
@@ -32477,13 +32555,25 @@ define('import/ImportEditView', [
       $("#import-datum-field-labels").append(x);
       $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
       
-    //add checkedWithConsultant
+    //add CheckedWithConsultant
       var x = document.createElement("span");
       x.classList.add("pull-left");
       x.classList.add("label");
-      x.classList.add(colors[colorindex%colors.length]);
+      x.classList.add("label-success");
       x.draggable="true";
-      x.innerHTML = "checkedWithConsultant";
+      x.innerHTML = "CheckedWithConsultant";
+      x.addEventListener('dragstart', this.handleDragStart);
+      colorindex++;
+      $("#import-datum-field-labels").append(x);
+      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
+      
+    //add ToBeCheckedWithConsultant
+      var x = document.createElement("span");
+      x.classList.add("pull-left");
+      x.classList.add("label");
+      x.classList.add("label-warning");
+      x.draggable="true";
+      x.innerHTML = "ToBeCheckedWithConsultant";
       x.addEventListener('dragstart', this.handleDragStart);
       colorindex++;
       $("#import-datum-field-labels").append(x);
@@ -32607,7 +32697,7 @@ define('import/ImportEditView', [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?./\[\]{}() ]/g,"");
+        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g,"");
         if(!newDatumFieldLabel){
           return;
         }
@@ -32625,8 +32715,10 @@ define('import/ImportEditView', [
       for(f in headers){
         if (headers[f] == "" || headers[f] == undefined) {
           //do nothing
-//        } else if (headers[f] == "datumTags") {
-          //do nothing
+        } else if (headers[f] == "CheckedWithConsultant") {
+          // do nothing
+        } else if (headers[f] == "ToBeCheckedWithConsultant") {
+          // do nothing
         } else{
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
@@ -32724,22 +32816,129 @@ define('import/ImportEditView', [
 //              d.get("datumTags").add(t);
 //            }
 //          }
-          //TODO turn the checkedwithconsultant into a checked, with that string as the person
-//          else if (index == "checkedWithConsultant") {
-//            var consultants = value.split(" ");
-//            for(g in consultants){
-//              var c = new UserMask({
-//                "username" : consultants[g]
+          /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
+          else if (index.toLowerCase().indexOf("checkedwithconsultant") >-1 ) {
+            var consultants = [];
+            if (value.indexOf(",") > -1) {
+              consultants = value.split(",");
+            } else if (value.indexOf(";") > -1) {
+              consultants = value.split(";");
+            } else {
+              consultants = value.split(" ");
+            }
+            var validationStati = [];
+            for(g in consultants){
+              var consultantusername = consultants[g].toLowerCase();
+              if(!consultantusername){
+                continue;
+              }
+              var validationType = "CheckedWith";
+              var validationColor = "success";
+              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
+                validationType = "ToBeCheckedWith";
+                validationColor = "warning";
+              }
+              window.app.get("corpus").get("datumStates")
+              .addIfNew({
+                color : validationColor,
+                showInSearchResults : "checked",
+                selected : "",
+                state : validationType + consultants[g].replace(/[- _.]/g,"")
+              });
+              
+              var validationString = validationType + consultants[g].replace(/[- _.]/g,"");
+              validationStati.push(validationString);
+              var n = fields.where({label: "validationStatus"})[0];
+              if(n != undefined){
+                /* add to any exisitng validation states */
+                var validationStatus = n.get("mask") || "";
+                validationStatus = validationStatus + " ";
+                validationStatus = validationStatus + validationStati.join(" ");
+                var uniqueStati = _.unique(validationStatus.trim().split(" "));
+                n.set("mask", uniqueStati.join(" "));
+              }
+              
+//              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
+//              /* get the initials from the data */
+//              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
+//              if(consultantusername.length == 2){
+//                consultantCode = consultantusername;
+//              }
+//              if(consultantCode.length < 2){
+//                consultantCode = consultantCode+"C";
+//              }
+//              var c = new Consultant("username", consultantCode);
+//              /* use the value in the cell for the checked with state, but don't keep the spaces */
+//              var validationType = "CheckedWith";
+//              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
+//                validationType = "ToBeCheckedWith";
+//              }
+//              /*
+//               * This function uses the consultant code to create a new validation status
+//               */
+//              var onceWeGetTheConsultant = function(){
+//                var validationString = validationType+consultants[g].replace(/ /g,"");
+//                validationStati.push(validationString);
+//                var n = fields.where({label: "validationStatus"})[0];
+//                if(n != undefined){
+//                  /* add to any exisitng validation states */
+//                  var validationStatus = n.get("mask") || "";
+//                  validationStatus = validationStatus + " ";
+//                  validationStatus = validationStatus + validationStati.join(" ");
+//                  var uniqueStati = _.unique(validationStatus.trim().split(" "));
+//                  n.set("mask", uniqueStati.join(" "));
+//                }
+//              };
+//              /*
+//               * This function creates a consultant code and then calls
+//               * onceWeGetTheConsultant to create a new validation status
+//               */
+//              var callIfItsANewConsultant = function(){
+//                var dialect =  "";
+//                var language =  "";
+//                try{
+//                  dialect = fields.where({label: "dialect"})[0] || "";
+//                  language = fields.where({label: "language"})[0] || "";
+//                }catch(e){
+//                  OPrime.debug("Couldn't get this consultant's dialect or language");
+//                }
+//                c = new Consultant({filledWithDefaults: true});
+//                c.set("username", Date.now());
+//                if(dialect)
+//                  c.set("dialect", dialect);
+//                if(dialect)
+//                  c.set("language", language);
+//                
+//                onceWeGetTheConsultant();
+//              };
+//              c.fetch({
+//                success : function(model, response, options) {
+//                  onceWeGetTheConsultant();
+//                },
+//                error : function(model, xhr, options) {
+//                  callIfItsANewConsultant();
+//                }
 //              });
-//              var state = new DatumState({consultant: c});
-//              d.get("datumStates").add(state);
-//            }
-//          }
-          else{
+              
+             
+            }
+          } else if(index == "validationStatus" ) {
             var n = fields.where({label: index})[0];
             if(n != undefined){
-//              console.log(value);
-//              console.log(index);
+              /* add to any exisitng validation states */
+              var validationStatus = n.get("mask") || "";
+              validationStatus = validationStatus + " ";
+              validationStatus = validationStatus + value;
+              var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              n.set("mask", uniqueStati.join(" "));
+            }
+          } else{
+            var knownlowercasefields = "utterance,gloss,morphemes,translation".split();
+            if(knownlowercasefields.indexOf(index.toLowerCase()) > -1){
+              index = index.toLowerCase();
+            }
+            var n = fields.where({label: index})[0];
+            if(n != undefined){
               n.set("mask", value);
             }
           }
@@ -32833,7 +33032,7 @@ define('import/ImportEditView', [
       },function(){
         alert("bug: failure to save import's datalist");
       });
-//      window.appView.cur?`rentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
+//      window.appView.currentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
 //      window.appView.renderReadonlyDataListViews();
 //    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
 //    lists dont have this function, should we put it in...
@@ -32845,7 +33044,8 @@ define('import/ImportEditView', [
       var couchConnection = window.app.get("corpus").get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/get_frequent_fields?group=true";
       window.app.get("corpus").getFrequentDatumFields(couchurl);
-    
+      /* might have added new datum states, so save the corpus */
+      window.app.get("corpus").saveAndInterConnectInApp();
       
       // Go back to the dashboard 
       window.location.href = "#render/true";
@@ -37263,9 +37463,9 @@ define('app/App',[
             
             var reason = "";
             if(error.reason){
-              reason = error.reason.message;
+              reason = error.reason.message || error.reason || "";
             };
-            if(reason.indexOf("nauthorized") >=0 ){
+            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nthorized") >=0 ){
               //Show quick authentication so the user can get their corpus token and get access to the data
               var originalCallbackFromLoadBackboneApp = callback;
               window.app.get("authentication").syncUserWithServer(function(){
