@@ -172,7 +172,7 @@ define([
       "click .save-corpus" : "updatePouch",
 //      Issue #797
 //      Only Admin users can trash corpus 
-//      "click .trash-button" : "trash" 
+      "click .trash-button" : "trash" 
       
     },
 
@@ -423,6 +423,21 @@ define([
 //    this.remove();  
 //    Backbone.View.prototype.remove.call(this);
     },
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this corpus in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },    
+    
     changeViewsOfInternalModels : function(){
       //Create a CommentReadView     
       this.commentReadView = new UpdatingCollectionView({

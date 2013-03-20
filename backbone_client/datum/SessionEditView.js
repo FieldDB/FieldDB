@@ -59,7 +59,7 @@ define([
       "click .btn-save-session" : "updatePouch",
       
 //      Issue#797
-//      "click .trash-button" : trash, 
+      "click .trash-button" : putInTrash, 
       
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {
@@ -263,6 +263,20 @@ define([
       
       return this;
     },    
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this session in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },
     
     changeViewsOfInternalModels : function(){
       this.sessionFieldsView = new UpdatingCollectionView({
