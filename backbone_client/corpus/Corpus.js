@@ -523,6 +523,24 @@ define([
       comments: Comments,
       team: UserMask
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */ 
+    putInTrash : function(){
+      /* TODO contact server to delte the corpus, if the success comes back, then do this */
+      this.set("trashed", "deleted"+Date.now());
+      this.saveAndInterConnectInApp(function(){
+      window.location.href="user.html";
+      });
+    },
+        
     //This the function called by the add button, it adds a new comment state both to the collection and the model
     insertNewComment : function(commentstring) {
       var m = new Comment({
