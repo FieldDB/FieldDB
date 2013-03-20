@@ -1,4 +1,6 @@
 function(doc) {
+  /* if this document has been deleted, the ignore it and return immediately */
+  if(doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
   // If the document is a Datum
   if (doc.audioVideo) {
     // Loop over all its DatumFields
