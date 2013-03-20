@@ -161,7 +161,7 @@ define([
       "click .save-datum" : "saveButton",
 
       // Issue #797
-       "click .delete-button" : "putDatumInTrash",
+       "click .trash-button" : "putInTrash",
 
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {
@@ -466,11 +466,14 @@ define([
      * See definition in the model
      * 
      */
-    putDatumInTrash : function(e){
+    putInTrash : function(e){
       if(e){
         e.preventDefault();
       }
-      this.model.putDatumInTrash();
+      var r = confirm("Are you sure you want to put this datum in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
     },
     
     
