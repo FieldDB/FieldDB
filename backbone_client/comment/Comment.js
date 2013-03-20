@@ -26,11 +26,16 @@ define( [
      */
     initialize : function() {
       
-      var t = JSON.stringify(new Date()); //copied from upstream code 
       if(!this.get("timestamp")){
-        this.set("timestamp", new Date(JSON.parse(t))); //copied from upstream code timestamp is back 
+        this.set("timestamp", Date.now()); //copied from upstream code timestamp is back 
         this.set("gravatar", window.app.get("authentication").get("userPublic").get("gravatar"));
         this.set("username", window.app.get("authentication").get("userPublic").get("username"));
+      }else{
+        /* if the timestamp is an old one, replace it with a timestamp v 1.47 */
+        if((""+this.get("timestamp")).indexOf("Z")  > -1){
+          var olddate = new Date(this.get("timestamp"));
+          this.set("timestamp", olddate.getTime());
+        }
       }
       
       if(this.get("filledWithDefaults")){
@@ -71,6 +76,7 @@ define( [
      */
     edit : function(newtext) {
       this.set("text", newtext);
+      this.set("timestampModified", Date.now());
     }
     ,
     commentCreatedActivity : function(indirectObjectString) {
