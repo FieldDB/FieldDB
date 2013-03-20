@@ -2,6 +2,7 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
+OPrime.apptype = "myaamia";
 
 OPrime.websiteUrl = "http://myaamiacenter.org/";
 OPrime.authUrl = "https://authdev.lingsync.org";
