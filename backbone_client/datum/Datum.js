@@ -567,15 +567,15 @@ define([
     },
     
     /**
-     * Make the datum model marked as Deleted, mapreduce function will 
-     * ignore the deleted datum so that it does not show in the app, 
-     * but deleted datum remains in the database until the admin empties 
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
      * the trash.
      * 
      * Also remove it from the view so the user cant see it.
      * 
-     */
-    putDatumInTrash : function(){
+     */ 
+    putInTrash : function(){
       this.set("trashed", "deleted"+Date.now());
       this.updateDatumState("Deleted");
       this.saveAndInterConnectInApp(function(){
