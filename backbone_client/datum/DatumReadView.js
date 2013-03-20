@@ -161,10 +161,17 @@ define([
         if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
+      var validationStatus = this.model.getValidationStatus();
       var jsonToRender = this.model.toJSON();
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-
+      try{
+        jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
+      }catch(e){
+        OPrime.bug("There was a problem fishing out which datum state was selected.");
+      }
+      
       if (this.format == "well") {        
         // Display the DatumReadView
         $(this.el).html(this.template(jsonToRender));
@@ -339,7 +346,7 @@ define([
         //  }
         //}
 
-        var jsonToRender = {};
+        //var jsonToRender = {};
         jsonToRender.additionalFields = [];
 
     	//corpus's most frequent fields
@@ -401,7 +408,7 @@ define([
               if (p) {
                 return _.map(p.split(' '), randomStrings2highlightSpans);
               } else {
-              return null;
+                return null;
               }
             }))), function (t) { return t.join('<br />') });
           }
@@ -435,13 +442,7 @@ define([
           }
     	}
 
-        try {
-          jsonToRender.datumstatecolor = this.model.get("datumStates")
-                                .where({selected : "selected"})[0].get("color");
-        } catch (e) {
-          if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
-//          this.model.get("datumStates").models[0].set("selected","selected");
-        }
+       
         // makes the top two lines into an array of words.
         $(this.el).html(this.latexTemplate(jsonToRender));
         if(jsonToRender.datumstatecolor){
@@ -454,7 +455,7 @@ define([
           $(this.el).addClass("datum-state-color-"+jsonToRender.datumstatecolor);
         }
         try{
-          if(this.model.get("datumStates").where({selected : "selected"})[0].get("state") == "Deleted"){
+          if(jsonToRender.datumstate.indexOf("Deleted") > -1){
             $(this.el).find(".datum-latex-translation").html("<del>"+translation+"</del>");
           }
         }catch(e){

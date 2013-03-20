@@ -161,7 +161,7 @@ define([
       "click .save-datum" : "saveButton",
 
       // Issue #797
-      // "click .trash-button" : "",
+       "click .delete-button" : "putDatumInTrash",
 
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {
@@ -461,6 +461,19 @@ define([
       d.set("session", app.get("currentSession"));
       window.appView.datumsEditView.prependDatum(d);
     },
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putDatumInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      this.model.putDatumInTrash();
+    },
+    
+    
     /*
      * this function can be used to play datum automatically
      */
