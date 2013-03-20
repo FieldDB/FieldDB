@@ -1,12 +1,12 @@
 <div class="alert alert-info">
-<span> <img class="gravatar-small" src="{{gravatar}}"/></span>
-<span> {{username}}   </span>
-<i class="icons icon-comment"></i> 
+	<span> <img class="gravatar-small" src="{{gravatar}}" /></span> <span>
+		{{username}} </span> <i class="icons icon-comment"></i>
 
-<div class= "pull-right">  {{timestamp}}
-   <i class="icon-pencil edit-comment-button" > </i>
-   <i class="icon-remove-sign remove-comment-button" > </i>
+	<div class="pull-right">
+		<span title="{{localTime}}">{{timestamp}}</span> <i
+			class="icon-pencil edit-comment-button"> </i> <i
+			class="icon-remove-sign remove-comment-button"> </i>
+	</div>
+
+	<div class="comment-text">{{text}}</div>
 </div>
-
-<div class="comment-text">{{text}}</div>
-<div class="alert alert-info">
