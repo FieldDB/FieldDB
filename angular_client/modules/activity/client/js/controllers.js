@@ -39,7 +39,12 @@ define(
         feedParams.username = $routeParams.username || "lingllama";
         feedParams.corpusid = $routeParams.corpusid;
         if (feedParams.corpusid) {
-          feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+          /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
+          if(feedParams.corpusid.indexOf(feedParams.username) > -1){
+            feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+          }else{
+            feedParams.username = "";
+          }
           $scope.corpus.title = "Corpus Activity Feed";
         }else{
           feedParams.corpusid = "";

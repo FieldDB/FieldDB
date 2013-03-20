@@ -14675,13 +14675,13 @@ OPrime.prettyDate = function(time) {
   if (day_diff >= 1) {
     return "Yesterday";
   }
-  if(diff >= 86400 ){
+  if(diff >= 4000 ){
     return Math.floor(diff / 3600) + " hours ago";
   }
 //  if(diff >= 7200 ){
 //    Math.floor(diff / 3600) + " 1 hour ago";
 //  }
-  if(diff >= 3600 ){
+  if(diff >= 70 ){
     return Math.floor(diff / 60) + " minutes ago";
   }
   if(diff >= 120 ){
@@ -14715,13 +14715,13 @@ OPrime.prettyTimestamp = function(timestamp) {
   if (day_diff >= 1) {
     return "Yesterday";
   }
-  if(diff >= 86400 ){
+  if(diff >= 4000 ){
     return Math.floor(diff / 3600) + " hours ago";
   }
 //  if(diff >= 7200 ){
 //    Math.floor(diff / 3600) + " 1 hour ago";
 //  }
-  if(diff >= 3600 ){
+  if(diff >= 70 ){
     return Math.floor(diff / 60) + " minutes ago";
   }
   if(diff >= 120 ){
@@ -15243,7 +15243,12 @@ define('js/controllers',
         feedParams.username = $routeParams.username || "lingllama";
         feedParams.corpusid = $routeParams.corpusid;
         if (feedParams.corpusid) {
-          feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+          /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
+          if(feedParams.corpusid.indexOf(feedParams.username) > -1){
+            feedParams.corpusid =  feedParams.corpusid.replace($routeParams.username,"");
+          }else{
+            feedParams.username = "";
+          }
           $scope.corpus.title = "Corpus Activity Feed";
         }else{
           feedParams.corpusid = "";
@@ -15340,28 +15345,28 @@ define('js/services',
                   'async' : function(params) {
                     console.log("Fetching this activity feed: ", params);
                     var location = OPrime.couchURL();
-                    var promise = $http
-                        (
-                            { method: "GET",
-                              data: {},
-                              url : location.protocol
-                                  + location.domain
-                                  + location.port
-                                  + '/'
-                                  + params.username
-                                  + params.corpusid
-                                  + '-activity_feed/'
-                                  + '_design/activities/_view/activities?limit=20&decending=true',
-                              withCredentials : true
-                            }).then(function(response) {
-                          // + JSON.stringify(response));
-                          // console.log("response", response);
-                          var results = [];
-                          for ( var i = 0; i < response.data.rows.length; i++) {
-                            results.push(response.data.rows[i].value);
-                          }
-                          return results;
-                        });
+                    var promise = $http(
+                        {
+                          method : "GET",
+                          data : {},
+                          url : location.protocol
+                              + location.domain
+                              + location.port
+                              + '/'
+                              + params.username
+                              + params.corpusid
+                              + '-activity_feed/'
+                              + '_design/activities/_view/activities?descending=true&limit=20',
+                          withCredentials : true
+                        }).then(function(response) {
+                      // + JSON.stringify(response));
+                      // console.log("response", response);
+                      var results = [];
+                      for ( var i = 0; i < response.data.rows.length; i++) {
+                        results.push(response.data.rows[i].value);
+                      }
+                      return results;
+                    });
                     return promise;
                   }
                 };
