@@ -59,7 +59,7 @@ define([
       "click .btn-save-session" : "updatePouch",
       
 //      Issue#797
-      "click .trash-button" : putInTrash, 
+      "click .trash-button" : "putInTrash", 
       
       //Add button inserts new Comment
       "click .add-comment-button" : function(e) {

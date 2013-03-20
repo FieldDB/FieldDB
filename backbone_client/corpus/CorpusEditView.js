@@ -172,7 +172,7 @@ define([
       "click .save-corpus" : "updatePouch",
 //      Issue #797
 //      Only Admin users can trash corpus 
-      "click .trash-button" : "trash" 
+      "click .trash-button" : "putInTrash" 
       
     },
 
