@@ -180,17 +180,19 @@ define(
 					// Remove current contents of div
 					d3.select("svg").remove();
 
-					// add the canvas to the DOM
+					// Add the canvas to the DOM
 					var mainArea = d3.select("#bar-graph").append("svg:svg")
 							.attr("width", width + padding * 2).attr("height",
 									(height * 2) + padding * 2);
 
+					//Add group object to canvas, which will contain graph
 					var barGraph = mainArea.append("svg:g").attr("transform",
 							"translate(" + padding + "," + padding + ")");
 
 					var indexOffset = 0;
 					var duplicatesInARow = 0;
 
+					//Draw bars, checking for identical dates; if dates are identical, bars are stacked
 					barGraph
 							.selectAll("rect")
 							.data(data)
@@ -225,28 +227,27 @@ define(
 											duplicatesInARow = 0;
 											return height - y(datum.entries);
 										}
-										//TODO ADJUST HEIGHT FOR MULTIPLE DATES
 									}).attr("height", function(datum) {
 								return y(datum.entries);
 							}).attr("width", barWidth).attr("fill",
 									function(datum) {
 										return datum.color;
 									});
-
-					var testindexOffset = 0;
+					
 					// Label x axis
+					var xaxisindexOffset = 0;
+					
 					barGraph.selectAll("text.yAxis").data(data).enter().append(
 							"svg:text").attr("x", function(datum, index) {
 						if (index > 0 && datum.date == data[index - 1].date) {
-							var xvalue = x((index - 1 - testindexOffset));
-							testindexOffset++;
+							var xvalue = x((index - 1 - xaxisindexOffset));
+							xaxisindexOffset++;
 
 							return xvalue + barWidth;
 						} else {
-							return x((index - testindexOffset)) + barWidth;
+							return x((index - xaxisindexOffset)) + barWidth;
 						}
 
-						// return x(index) + barWidth;
 
 					}).attr("y", height).attr("dx", -barWidth / 2).attr(
 							"text-anchor", "middle").attr("style",
