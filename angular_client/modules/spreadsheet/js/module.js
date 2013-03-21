@@ -3,8 +3,8 @@ console.log("Loading the LingSync Angular UI module.");
 'use strict';
 define([ "angular", "js/controllers/LingSyncController", "js/controllers/SettingsController",
 		"js/directives/LingSyncDirectives", "js/filters/LingSyncFilters",
-		"js/services/LingSyncServices" ], function(angular, LingSyncController, SettingsController,
-				LingSyncDirectives, LingSyncFilters, LingSyncServices) {
+		"js/services/LingSyncServices", "js/controllers/SandboxController" ], function(angular, LingSyncController, SettingsController,
+				LingSyncDirectives, LingSyncFilters, LingSyncServices, SandboxController) {
 	/**
 	 * The main LingSync Angular UI module.
 	 * 
@@ -21,6 +21,8 @@ define([ "angular", "js/controllers/LingSyncController", "js/controllers/Setting
 				}).when('/settings', {
 					templateUrl : 'partials/settings.html',
 					controller : SettingsController
+				}).when('/sandbox', {
+					templateUrl : 'partials/sandbox.html', controller: SandboxController,
 				}).when('/lingsync/template1', {
 					templateUrl : 'partials/template1.html',
 				}).when('/lingsync/template2', {
