@@ -26,6 +26,14 @@ define([
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+      if(OPrime.apptype == "myaamia")
+      {// do some prefs for myaamia users}
+    	  /*
+    	   if(OPrime.apptype == "myaamia" && app.get("authentication").get("userPrivate").get("username") == "public"){
+       this.set("transparentDashboard", "true");
+     } 
+    	   */
+      }
     },
     fillWithDefaults : function(){
       if(this.get("unicodes") == undefined){
