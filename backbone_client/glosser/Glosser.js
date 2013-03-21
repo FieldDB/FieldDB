@@ -4,7 +4,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
   if(!glosserURL ||glosserURL == "default"){
     var couchConnection = app.get("corpus").get("couchConnection");
     var couchurl = OPrime.getCouchUrl(couchConnection);
-    glosserURL = couchurl + "/_design/get_precedence_rules_from_morphemes/_view/precedence_rules?group=true";
+    glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
   }
   OPrime.makeCORSRequest({
     type : 'GET',
@@ -140,7 +140,7 @@ Glosser.morphemefinder = function(unparsedUtterance) {
   }
   
   return parsedWords.join(" ");
-}
+};
 Glosser.toastedUserToSync = false;
 Glosser.toastedUserToImport = 0;
 Glosser.glossFinder = function(morphemesLine){
@@ -311,15 +311,15 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
     .attr('title', "Morphology Visualization for "+ pouchname)
     .attr("height", height);
   
-  var titletext = "Explore the precedence relations of morphemes in your corpus";
+  var titletext = "Morphemes in your corpus";
   if(rulesGraph.nodes.length < 3){
     titletext = "Your morpheme visualizer will appear here after you have synced.";
   }
   //A label for the current year.
   var title = svg.append("text")
     .attr("class", "vis-title")
-    .attr("dy", "1.5em")
-    .attr("dx", "1.5em")
+    .attr("dy", "1em")
+    .attr("dx", "1em")
 //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(titletext);
   

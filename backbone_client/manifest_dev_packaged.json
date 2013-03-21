@@ -1,6 +1,6 @@
 {
   "name" : "LingSync Testing",
-  "version" : "1.41.1",
+  "version" : "1.46.4",
   "description" : "A bleeding edge version, with new features faster",
   "app" : {
     "background" : {

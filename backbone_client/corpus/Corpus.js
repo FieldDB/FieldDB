@@ -254,44 +254,60 @@ define([
             label : "judgement",
             size : "3",
             shouldBeEncrypted: "",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning."
           }),
           new DatumField({
             label : "utterance",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
           }),
           new DatumField({
             label : "morphemes",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
             help: "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
           }),
           new DatumField({
             label : "gloss",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "linguist",
             userchooseable: "disabled",
-            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
+            help: "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
+          }),
+          new DatumField({
+            label : "syntacticCategory",
+            shouldBeEncrypted: "checked",
+            showToUserTypes: "machine",
+            userchooseable: "disabled",
+            help: "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish." +
+            		" It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM)," +
+            		" or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
           }),
           new DatumField({
             label : "translation",
             shouldBeEncrypted: "checked",
+            showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends"
           }),
           new DatumField({
             label : "tags",
             shouldBeEncrypted: "",
+            showToUserTypes: "all",
             userchooseable: "disabled",
             help: "Tags for constructions or other info that you might want to use to categorize your data."
           }),
           new DatumField({
             label : "validationStatus",
             shouldBeEncrypted: "",
+            showToUserTypes: "all",
             userchooseable: "disabled",
-            help: "For example: To be checked with a language consultant, Checked with Sebrina, Deleted etc..."
+            help: "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
           })
         ]));
       }//end if to set datumFields
@@ -582,6 +598,10 @@ define([
       attributes.publicSelf = {filledWithDefaults: true};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
       //clear out search terms from the new corpus's datum fields
+      /* use default datum fields if this is going to based on teh users' first practice corpus */
+      if(this.get("pouchname").indexOf("firstcorpus") > -1){
+        attributes.datumFields = [];
+      }
       for(var x in attributes.datumFields){
         attributes.datumFields[x].mask = "";
         attributes.datumFields[x].value = "";
@@ -596,9 +616,13 @@ define([
         attributes.sessionFields[x].mask = "";
         attributes.sessionFields[x].value = "";
       }
+      
+      
       window.appView.corpusNewModalView.model = new Corpus();
       //be sure internal models are parsed and built.
       window.appView.corpusNewModalView.model.set(window.appView.corpusNewModalView.model.parse(attributes));
+      /* use default datum fields if this is going to based on teh users' first practice corpus */
+      window.appView.corpusNewModalView.model.fillWithDefaults();
       window.appView.corpusNewModalView.render();
     },
     newCorpusSimple : function(){
@@ -881,8 +905,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -895,8 +919,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -910,8 +934,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -924,8 +948,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "owned by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
@@ -1369,6 +1393,15 @@ define([
           if(frequentFields == []){
             frequentFields = ["judgement","utterance","morphemes","gloss","translation"];
           }
+          
+          /*
+           * Hide machine only fields:
+           */
+          var doesThisCorpusHaveSyntacticCategory = frequentFields.indexOf("syntacticCategory");
+          if(doesThisCorpusHaveSyntacticCategory > -1){
+            frequentFields.splice(doesThisCorpusHaveSyntacticCategory, 1);
+          }
+          
           self.frequentDatumFields = frequentFields;
           if (typeof callback == "function") {
             callback(frequentFields);

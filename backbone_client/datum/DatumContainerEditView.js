@@ -143,8 +143,10 @@ define([
             self.model.pop();
           }
             
-          // Add a single, blank Datum
-          self.newDatum();
+          /* If there are no datum in the corpus, or currently showing, add a single, blank Datum (if the user has an empty corpus, they can stil doubleclick on an item they are importing and therefore have a non empty datum container) */
+          if(self.datumsView._childViews.length == 0){
+            self.newDatum();
+          }
         } else {
           // If the user has increased the number of Datum to display in the container
           if (nextNumberOfDatum > self.model.length) {
@@ -155,8 +157,8 @@ define([
               }
               
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
-              if (rows[rows.length - i - 1]) {
-                var m = rows[rows.length - i - 1];
+              if (rows[i]) {
+                var m = rows[i];
                 var value = m;
                 /* The format returned by the backbone couchdb adaptor is different (TODO re-look into this to remember what was different) than a pure couchdb result */
                 if(!OPrime.isBackboneCouchDBApp()){

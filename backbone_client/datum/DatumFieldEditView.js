@@ -23,6 +23,11 @@ define([
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW init");
+      
+      this.model.bind('change:mask', function(){
+        this.render();
+      }, this);
+      
     },
     
     /**
@@ -66,7 +71,7 @@ define([
         $(this.el).find(".locale_Help_Text_Placeholder").attr("placeholder", Locale.get("locale_Help_Text_Placeholder"));
         
         // Select the correct values from the model TODO is this dead code?
-        $(this.el).children(".choose-field").val(this.model.get("label"));
+        $(this.el).find(".choose-field").val(this.model.get("label"));
       } else if (this.format == "datum") {
         var jsonToRender = this.model.toJSON();
         jsonToRender.helpText = true;
@@ -105,13 +110,13 @@ define([
      * Change the model's state.
      */
     updateFieldLabel : function() {
-      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.children(".choose-field").val());
-      this.model.set("label", this.$el.children(".choose-field").val());
+      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.find(".choose-field").val());
+      this.model.set("label", this.$el.find(".choose-field").val());
     },
     
     // TODO Add description
     updateEncrypted : function() {
-      var checked = this.$el.children(".shouldBeEncrypted").is(':checked');
+      var checked = this.$el.find(".shouldBeEncrypted").is(':checked');
       if (checked ) {
         checked = "checked";
       } else {
@@ -123,7 +128,7 @@ define([
     
     // TODO Add description
     updateHelp : function() {
-      var help = this.$el.children(".help-text").val();
+      var help = this.$el.find(".help-text").val();
       if (OPrime.debugMode) OPrime.debug("Updated help to " + help);
       this.model.set("help",help);
     },
@@ -132,21 +137,21 @@ define([
      * Change the model's state.
      */
     updateFieldValue : function() {
-      this.model.set("mask", this.$el.children(".datum_field_input").val());
+      this.model.set("mask", this.$el.find(".datum_field_input").val());
     }, 
     
     /**
      * Show help convention in popover  
      */
     showHelpConvention : function() {
-    	this.$el.children(".help-conventions").popover("show");
+    	this.$el.find(".help-conventions").popover("show");
     },
     
     /**
      * Don't show help convention in popover if only hover 
      */
     hideHelpConvention : function() {
-        this.$el.children(".help-conventions").popover("hide");
+        this.$el.find(".help-conventions").popover("hide");
     }    
    
   });

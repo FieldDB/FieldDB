@@ -142,8 +142,8 @@ define([
         var tempDatums = new Datums();
         tempDatums.model = Datum;
         tempDatums.fetch({
-          limit: 2,
-//          ascending: false,
+          descending: true,
+          limit: 5,
           error : function(model, xhr, options) {
             OPrime.bug("There was an error loading your datums.");
             if(typeof callback == "function"){
@@ -455,16 +455,80 @@ define([
 
       return datum;
     },
+    getValidationStatus : function(){
+      var validationStatus = "";
+      var stati = this.get("datumFields").where({"label": "validationStatus"});
+      if(stati.length > 0){
+        stati = stati[0].get("mask").split(" ");
+        if(stati.length >0){
+          validationStatus = stati[0];
+        }
+      }
+      /* Handle upgrade from previous corpora look in datum states too */
+      if(validationStatus == ""){
+        stati = this.get("datumStates").where({selected : "selected"});
+        if(stati.length > 0){
+          validationStatus = stati[0].get("state");
+        }
+      }
+      this.updateDatumState(validationStatus);
+      return validationStatus;
+    },
+    getValidationStatusColor :function(status){
+      if(!status){
+        status = this.getValidationStatus();
+      }
+      /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
+      if(status.indexOf("deleted") > -1){
+        return "danger";
+      }
+      if(status.toLowerCase().indexOf("tobechecked") > -1){
+        return "warning";
+      }
+      if(status.toLowerCase().indexOf("checked") > -1){
+        return "success";
+      }
+    },
     updateDatumState : function(selectedValue){
-      console.log("Asking to change the datum state to "+selectedValue); 
-      
+      if(!selectedValue){
+        return;
+      }
+      OPrime.debug("Asking to change the datum state to " + selectedValue); 
+      /* make sure all the corpus states are availible in this datum */
+      thisdatumStates = this.get("datumStates");
+      window.app.get("corpus").get("datumStates").each(function(datumstate) {
+        var obj = datumstate.toJSON();
+        obj.selected = "";
+        thisdatumStates.addIfNew(obj);
+      });
       try{
-        this.get("datumStates").where({selected : "selected"})[0].set("selected", "");
+        $.each( this.get("datumStates").where({selected : "selected"}), function(){
+          if(this.get("state") != selectedValue){
+            this.set("selected", "");
+          }
+        });
         this.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
       }catch(e){
-        Utils.debug("problem getting color of datum state, probaly none are selected.",e);
+        OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
       }
-      console.log("done"); 
+      
+      /* prepend this state to the new validationStates as of v1.46.2 */
+      var n = this.get("datumFields").where({label: "validationStatus"})[0];
+      if(n == [] || !n){
+        n = new DatumField({
+          label : "validationStatus",
+          shouldBeEncrypted: "",
+          showToUserTypes: "all",
+          userchooseable: "disabled",
+          help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
+        });
+        this.get("datumFields").add(n);
+      }
+      var validationStatus = n.get("mask") || "";
+      validationStatus = selectedValue + " " +validationStatus ;
+      var uniqueStati = _.unique(validationStatus.trim().split(" "));
+      n.set("mask", uniqueStati.join(" "));
+      
 
 //      this.save();
       //TODO save it
@@ -652,8 +716,8 @@ define([
      * them out as plain text so the user can do as they wish.
      */
     exportAsPlainText : function(showInExportModal) {
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
       var result = fields.join("\n");
       if (showInExportModal != null) {
         $("#export-type-description").html(" as text (Word)");
@@ -669,8 +733,8 @@ define([
      */
     exportAsCSV : function(showInExportModal, orderedFields, printheaderonly) {
       
-      var header = _.pluck(this.get("datumFields").toJSON(), "label");
-      var fields = _.pluck(this.get("datumFields").toJSON(), "mask");
+      var header = _.pluck(this.get("datumFields").toJSON(), "label") || [];
+      var fields = _.pluck(this.get("datumFields").toJSON(), "mask") || [];
       var result = fields.join(",") +"\n";
       
 //      if (orderedFields == null) {

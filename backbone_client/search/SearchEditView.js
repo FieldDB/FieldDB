@@ -344,7 +344,7 @@ define([
           searchself.searchDataListView.model.set("description"
               ,  "This is the result of searching for : " 
               + $("#search_box").val()
-              + " in " 
+              + " In " 
               + window.app.get("corpus").get("title") 
               + " on "+ new Date() );
           searchself.searchDataListView.format = "search";

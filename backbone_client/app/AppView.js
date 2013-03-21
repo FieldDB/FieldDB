@@ -301,7 +301,7 @@ define([
       this.insertUnicodesView = new InsertUnicodesView({
         model : this.model.get("authentication").get("userPrivate").get("prefs").get("unicodes")
       });
-      this.insertUnicodesView.format = "rightSide"; 
+      this.insertUnicodesView.format = "minimized"; 
 
       // Create a HotKeyEditView
       this.hotkeyEditView = new HotKeyEditView({
@@ -559,17 +559,24 @@ define([
         this.setElement($("#app_view"));
         
         var jsonToRender = this.model.toJSON();
+        jsonToRender.theme = "";
+        var makeActivityFeedTransparent = app.get("authentication").get("userPrivate").get("prefs").get("transparentDashboard");
+        if(makeActivityFeedTransparent != "false"){
+          jsonToRender.theme = "_transparent";
+        }
         /*
          * show the corpus title, and the current sessions goal so the
          * user knows which corpus and elicitation they are entering
          * data in
          */
-        jsonToRender.corpustitle = this.model.get("corpus")
-        .get("title");
-        jsonToRender.elicitationgoal = this.model.get("currentSession")
-        .getGoal();
-        jsonToRender.elicitationgoal = jsonToRender.elicitationgoal
-        .substr(0, 30 || jsonToRender.elicitationgoal.length);
+        jsonToRender.corpustitle = this.model.get("corpus").get("title");
+        if(jsonToRender.corpustitle.length > 20){
+          jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0,19) + "...";
+        }
+        jsonToRender.elicitationgoal = this.model.get("currentSession").getGoal();
+        if(jsonToRender.elicitationgoal.length > 20){
+          jsonToRender.elicitationgoal = jsonToRender.elicitationgoal.substr(0,19) + "...";
+        }
         try{
           jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
           jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
@@ -579,6 +586,15 @@ define([
         
         /* Render the users prefered dashboard layout */
         this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+        var username = "";
+        try{
+          username = window.app.get("authentication").get("userPrivate").get("username") || "";
+        }catch(e){
+          //do nothing
+        }
+        if(username == "public"){
+          this.format = "layoutEverythingAtOnce"
+        }
         if(this.format == "default"){
           $(this.el).html(this.template(jsonToRender));
         }else if(this.format == "layoutJustEntering"){
@@ -812,6 +828,7 @@ define([
           //if you want to flip the innerHTML of the draggee to the dragger
           //window.appView.importView.dragSrcEl.innerHTML = e.target.value;
           e.target.value = e.target.value + window.appView.insertUnicodesView.dragSrcEl.innerHTML;//e.dataTransfer.getData('text/html');
+          $(e.target).blur()
           //say that the unicode drag event has been handled
           window.appView.insertUnicodesView.dragSrcEl = null;
           $(this).removeClass("over");
@@ -826,7 +843,8 @@ define([
       if (e.preventDefault) {
         e.preventDefault(); // Necessary. Allows us to drop.
       }
-      this.className = 'over';
+      
+      $(this).addClass('over');
       e.dataTransfer.dropEffect = 'copy';  // See the section on the DataTransfer object.
       
       return false;

@@ -288,13 +288,25 @@ define( [
       $("#import-datum-field-labels").append(x);
       $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
       
-    //add checkedWithConsultant
+    //add CheckedWithConsultant
       var x = document.createElement("span");
       x.classList.add("pull-left");
       x.classList.add("label");
-      x.classList.add(colors[colorindex%colors.length]);
+      x.classList.add("label-success");
       x.draggable="true";
-      x.innerHTML = "checkedWithConsultant";
+      x.innerHTML = "CheckedWithConsultant";
+      x.addEventListener('dragstart', this.handleDragStart);
+      colorindex++;
+      $("#import-datum-field-labels").append(x);
+      $(".import-progress").attr("max", parseInt($(".import-progress").attr("max"))+1);
+      
+    //add ToBeCheckedWithConsultant
+      var x = document.createElement("span");
+      x.classList.add("pull-left");
+      x.classList.add("label");
+      x.classList.add("label-warning");
+      x.draggable="true";
+      x.innerHTML = "ToBeCheckedWithConsultant";
       x.addEventListener('dragstart', this.handleDragStart);
       colorindex++;
       $("#import-datum-field-labels").append(x);
@@ -418,7 +430,7 @@ define( [
       this.model.set("datumArray", []);
       var headers = [];
       $("#csv-table-area").find('th').each(function(index, item) {
-        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().toLowerCase().replace(/[-"'+=?.\[\]{}() ]/g,"");
+        var newDatumFieldLabel = $(item).find(".drop-label-zone").val().replace(/[-\"'+=?.*&^%,\/\[\]{}() ]/g,"");
         if(!newDatumFieldLabel){
           return;
         }
@@ -436,8 +448,10 @@ define( [
       for(f in headers){
         if (headers[f] == "" || headers[f] == undefined) {
           //do nothing
-//        } else if (headers[f] == "datumTags") {
-          //do nothing
+        } else if (headers[f] == "CheckedWithConsultant") {
+          // do nothing
+        } else if (headers[f] == "ToBeCheckedWithConsultant") {
+          // do nothing
         } else{
           if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
@@ -535,22 +549,129 @@ define( [
 //              d.get("datumTags").add(t);
 //            }
 //          }
-          //TODO turn the checkedwithconsultant into a checked, with that string as the person
-//          else if (index == "checkedWithConsultant") {
-//            var consultants = value.split(" ");
-//            for(g in consultants){
-//              var c = new UserMask({
-//                "username" : consultants[g]
+          /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
+          else if (index.toLowerCase().indexOf("checkedwithconsultant") >-1 ) {
+            var consultants = [];
+            if (value.indexOf(",") > -1) {
+              consultants = value.split(",");
+            } else if (value.indexOf(";") > -1) {
+              consultants = value.split(";");
+            } else {
+              consultants = value.split(" ");
+            }
+            var validationStati = [];
+            for(g in consultants){
+              var consultantusername = consultants[g].toLowerCase();
+              if(!consultantusername){
+                continue;
+              }
+              var validationType = "CheckedWith";
+              var validationColor = "success";
+              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
+                validationType = "ToBeCheckedWith";
+                validationColor = "warning";
+              }
+              window.app.get("corpus").get("datumStates")
+              .addIfNew({
+                color : validationColor,
+                showInSearchResults : "checked",
+                selected : "",
+                state : validationType + consultants[g].replace(/[- _.]/g,"")
+              });
+              
+              var validationString = validationType + consultants[g].replace(/[- _.]/g,"");
+              validationStati.push(validationString);
+              var n = fields.where({label: "validationStatus"})[0];
+              if(n != undefined){
+                /* add to any exisitng validation states */
+                var validationStatus = n.get("mask") || "";
+                validationStatus = validationStatus + " ";
+                validationStatus = validationStatus + validationStati.join(" ");
+                var uniqueStati = _.unique(validationStatus.trim().split(" "));
+                n.set("mask", uniqueStati.join(" "));
+              }
+              
+//              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
+//              /* get the initials from the data */
+//              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
+//              if(consultantusername.length == 2){
+//                consultantCode = consultantusername;
+//              }
+//              if(consultantCode.length < 2){
+//                consultantCode = consultantCode+"C";
+//              }
+//              var c = new Consultant("username", consultantCode);
+//              /* use the value in the cell for the checked with state, but don't keep the spaces */
+//              var validationType = "CheckedWith";
+//              if(index.toLowerCase().indexOf("ToBeChecked") > -1){
+//                validationType = "ToBeCheckedWith";
+//              }
+//              /*
+//               * This function uses the consultant code to create a new validation status
+//               */
+//              var onceWeGetTheConsultant = function(){
+//                var validationString = validationType+consultants[g].replace(/ /g,"");
+//                validationStati.push(validationString);
+//                var n = fields.where({label: "validationStatus"})[0];
+//                if(n != undefined){
+//                  /* add to any exisitng validation states */
+//                  var validationStatus = n.get("mask") || "";
+//                  validationStatus = validationStatus + " ";
+//                  validationStatus = validationStatus + validationStati.join(" ");
+//                  var uniqueStati = _.unique(validationStatus.trim().split(" "));
+//                  n.set("mask", uniqueStati.join(" "));
+//                }
+//              };
+//              /*
+//               * This function creates a consultant code and then calls
+//               * onceWeGetTheConsultant to create a new validation status
+//               */
+//              var callIfItsANewConsultant = function(){
+//                var dialect =  "";
+//                var language =  "";
+//                try{
+//                  dialect = fields.where({label: "dialect"})[0] || "";
+//                  language = fields.where({label: "language"})[0] || "";
+//                }catch(e){
+//                  OPrime.debug("Couldn't get this consultant's dialect or language");
+//                }
+//                c = new Consultant({filledWithDefaults: true});
+//                c.set("username", Date.now());
+//                if(dialect)
+//                  c.set("dialect", dialect);
+//                if(dialect)
+//                  c.set("language", language);
+//                
+//                onceWeGetTheConsultant();
+//              };
+//              c.fetch({
+//                success : function(model, response, options) {
+//                  onceWeGetTheConsultant();
+//                },
+//                error : function(model, xhr, options) {
+//                  callIfItsANewConsultant();
+//                }
 //              });
-//              var state = new DatumState({consultant: c});
-//              d.get("datumStates").add(state);
-//            }
-//          }
-          else{
+              
+             
+            }
+          } else if(index == "validationStatus" ) {
             var n = fields.where({label: index})[0];
             if(n != undefined){
-//              console.log(value);
-//              console.log(index);
+              /* add to any exisitng validation states */
+              var validationStatus = n.get("mask") || "";
+              validationStatus = validationStatus + " ";
+              validationStatus = validationStatus + value;
+              var uniqueStati = _.unique(validationStatus.trim().split(" "));
+              n.set("mask", uniqueStati.join(" "));
+            }
+          } else{
+            var knownlowercasefields = "utterance,gloss,morphemes,translation".split();
+            if(knownlowercasefields.indexOf(index.toLowerCase()) > -1){
+              index = index.toLowerCase();
+            }
+            var n = fields.where({label: index})[0];
+            if(n != undefined){
               n.set("mask", value);
             }
           }
@@ -644,7 +765,7 @@ define( [
       },function(){
         alert("bug: failure to save import's datalist");
       });
-//      window.appView.cur?`rentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
+//      window.appView.currentEditDataListView.renderFirstPage();// TODO why not do automatically in datalist?
 //      window.appView.renderReadonlyDataListViews();
 //    window.appView.dataListReadLeftSideView.renderFirstPage(); //TODO read data
 //    lists dont have this function, should we put it in...
@@ -656,7 +777,8 @@ define( [
       var couchConnection = window.app.get("corpus").get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/get_frequent_fields?group=true";
       window.app.get("corpus").getFrequentDatumFields(couchurl);
-    
+      /* might have added new datum states, so save the corpus */
+      window.app.get("corpus").saveAndInterConnectInApp();
       
       // Go back to the dashboard 
       window.location.href = "#render/true";
