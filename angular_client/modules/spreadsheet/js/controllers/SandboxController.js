@@ -166,7 +166,7 @@ define(
 							[ 0, width ]);
 					var y = d3.scale.linear().domain(
 							[ 0, d3.max(data, function(datum) {
-								return datum.entries;
+								return maxEntries;
 							}) ]).rangeRound([ 0, height ]);
 
 					// Create array of y axis tick intervals
