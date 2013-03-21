@@ -1,26 +1,26 @@
-console.log("Loading the LingSync Angular UI module.");
+console.log("Loading the LingSync Spreadsheet module.");
 
 'use strict';
-define([ "angular", "js/controllers/LingSyncController", "js/controllers/SettingsController",
-		"js/directives/LingSyncDirectives", "js/filters/LingSyncFilters",
-		"js/services/LingSyncServices", "js/controllers/SandboxController" ], function(angular, LingSyncController, SettingsController,
-				LingSyncDirectives, LingSyncFilters, LingSyncServices, SandboxController) {
+define([ "angular", "js/controllers/LingSyncSpreadsheetController", "js/controllers/LingSyncSpreadsheetSettingsController",
+		"js/directives/LingSyncSpreadsheetDirectives", "js/filters/LingSyncSpreadsheetFilters",
+		"js/services/LingSyncSpreadsheetServices", "js/controllers/SandboxController" ], function(angular, LingSyncSpreadsheetController, LingSyncSpreadsheetSettingsController,
+				LingSyncSpreadsheetDirectives, LingSyncSpreadsheetFilters, LingSyncSpreadsheetServices, SandboxController) {
 	/**
 	 * The main LingSync Angular UI module.
 	 * 
 	 * @type {angular.Module}
 	 */
 
-	var LingSync = angular.module('LingSync',
-			[ 'LingSync.services', 'LingSync.directives', 'LingSync.filters' ]).config(
+	var LingSyncSpreadsheet = angular.module('LingSyncSpreadsheet',
+			[ 'LingSyncSpreadsheet.services', 'LingSyncSpreadsheet.directives', 'LingSyncSpreadsheet.filters' ]).config(
 			[ '$routeProvider', function($routeProvider) {
-				window.LingSyncController = LingSyncController;
-				console.log("Initializing the LingSync Angular UI module.");
-				$routeProvider.when('/lingsync', {
+				window.LingSyncSpreadsheetController = LingSyncSpreadsheetController;
+				console.log("Initializing the LingSync Spreadsheet module.");
+				$routeProvider.when('/lingsync_spreadsheet', {
 					templateUrl : 'partials/main.html',
 				}).when('/settings', {
 					templateUrl : 'partials/settings.html',
-					controller : SettingsController
+					controller : LingSyncSpreadsheetSettingsController
 				}).when('/sandbox', {
 					templateUrl : 'partials/sandbox.html', controller: SandboxController,
 				}).when('/lingsync/template1', {
@@ -28,8 +28,8 @@ define([ "angular", "js/controllers/LingSyncController", "js/controllers/Setting
 				}).when('/lingsync/template2', {
 					templateUrl : 'partials/template2.html',
 				}).otherwise({
-					redirectTo : '/lingsync'
+					redirectTo : '/lingsync_spreadsheet'
 				});
 			} ]);
-	return LingSync;
+	return LingSyncSpreadsheet;
 });

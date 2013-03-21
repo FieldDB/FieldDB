@@ -71,7 +71,7 @@ define(
 					});
 
 					if (data.length > graphQuantity) {
-						data = data.slice(0, graphQuantity);
+						data = data.slice(-graphQuantity);
 					}
 
 					console.log(JSON.stringify(data));
