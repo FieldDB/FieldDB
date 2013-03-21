@@ -160,6 +160,30 @@ define([
     },
     
     /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */    
+    putInTrash : function(){
+      this.set("trashed", "deleted"+Date.now());
+      this.saveAndInterConnectInApp(function(){
+        if(window.appView){
+          /*TODO test this*/
+          window.appView.currentCorpusReadView.model.datalists = null;
+          window.appView.currentCorpusReadView.model.makeSureCorpusHasADataList();
+          window.appView.currentCorpusReadView.changeViewsOfInternalModels();
+          window.appView.currentCorpusReadView.render();
+        }
+      });
+    },
+
+    
+    
+    /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.

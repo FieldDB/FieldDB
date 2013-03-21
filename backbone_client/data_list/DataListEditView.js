@@ -93,7 +93,7 @@ define( [
       "click .icon-book" :"showReadonly",
       
 //      Issue #797
-//      "click .trash-button" : trash,
+      "click .trash-button" : "putInTrash",
         
       "click .save-datalist" : "updatePouch",
       "click .save-search-datalist" : "saveSearchDataList",
@@ -461,7 +461,22 @@ define( [
       }
       
       return this;
+    }, 
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this datalist in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
     },
+
     
     changeViewsOfInternalModels : function() {
    
