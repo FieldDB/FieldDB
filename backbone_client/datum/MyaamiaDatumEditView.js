@@ -153,7 +153,50 @@ define([
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "click .save-datum" : "saveButton"
+      "click .save-datum" : "saveButton",
+    	  "click .show_original_details" : function(e){
+              $(this.el).find(".original_french_details").removeAttr("hidden");
+              e.preventDefault();
+            },
+      "click .hide_original_details" : function(e){
+              $(this.el).find(".original_french_details").attr("hidden","hidden");
+              e.preventDefault();
+            },
+            "click .show_cognates_details" : function(e){
+                $(this.el).find(".cognates_details").removeAttr("hidden");
+                e.preventDefault();
+              },
+        "click .hide_cognates_details" : function(e){
+                $(this.el).find(".cognates_details").attr("hidden","hidden");
+                e.preventDefault();
+              },
+              "click .show_miami_details" : function(e){
+                  $(this.el).find(".miami_details").removeAttr("hidden");
+                  e.preventDefault();
+                },
+          "click .hide_miami_details" : function(e){
+                  $(this.el).find(".miami_details").attr("hidden","hidden");
+                  e.preventDefault();
+                },
+
+                "click .show_myaamia_details" : function(e){
+                    $(this.el).find(".myaamia_details").removeAttr("hidden");
+                    e.preventDefault();
+                  },
+            "click .hide_myaamia_details" : function(e){
+                    $(this.el).find(".myaamia_details").attr("hidden","hidden");
+                    e.preventDefault();
+                  },
+
+                  "click .show_related_miami_details" : function(e){
+                      $(this.el).find(".related_miami_details").removeAttr("hidden");
+                      e.preventDefault();
+                    },
+              "click .hide_related_miami_details" : function(e){
+                      $(this.el).find(".related_miami_details").attr("hidden","hidden");
+                      e.preventDefault();
+                    },
+
     },
 
     /**
@@ -174,6 +217,12 @@ define([
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
+      jsonToRender.french_keyword = "bouger";
+      jsonToRender.document_source = "9qjx2j9qizqirqx9ij qrqjxroqi.html";
+      jsonToRender.image_src = "lessons_corpus/happyface.jpg";
+      jsonToRender.original_french = "Je sais pas.";
+      jsonToRender.original_miami = "original miami.";
+      jsonToRender.cognates = "some cognates.";
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       try{
