@@ -3,8 +3,12 @@
 		<div class="span12 pagination-centered">
 			<h1>Developer Sandbox</h1>
 			<br />
-			Maximum number of bars to display (optional): <input type="number" ng-model='graphQuantity'><br />
-			<button class="btn btn-success" ng-click="makeGraph(graphQuantity)">Generate Bar Graph</button>
+			Month to display (optional):<br />
+			<select ng-model='month'>
+				<option value="all" selected="selected">All</option>
+				<option ng-repeat="availableMonth in availableMonths" value={{availableMonth}}>{{availableMonth}}</option>
+			</select><br />
+			<button class="btn btn-success" ng-click="makeGraph(month)">Generate Bar Graph</button>
 			<br>
 			<div id="bar-graph"></div>
 		</div>

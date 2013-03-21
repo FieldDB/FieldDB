@@ -7,99 +7,86 @@ define(
 			var SandboxController = function($scope, $rootScope, $resource,
 					LingSyncData) {
 
-				// d3 Graph function
-				$scope.makeGraph = function(graphQuantity) {
-					function getData() {
-						return [ {
-							"user" : "migmaqresearchpartnership",
-							"date" : "2012-12-06",
-							"entries" : 23
-						}, {
-							"user" : "elise",
-							"date" : "2013-01-18",
-							"entries" : 18
-						}, {
-							"user" : "",
-							"date" : "2013-01-11",
-							"entries" : 10
-						}, {
-							"user" : "elise",
-							"date" : "2013-01-11",
-							"entries" : 26
-						}, {
-							"user" : "janinemetallic",
-							"date" : "2013-01-18",
-							"entries" : 13
-						}, {
-							"user" : "migmaqresearchpartnership",
-							"date" : "2013-01-18",
-							"entries" : 8
-						}, {
-							"user" : "migmaqresearchpartnership",
-							"date" : "2013-02-06",
-							"entries" : 24
-						}, {
-							"user" : "migmaqresearchpartnership",
-							"date" : "2013-02-07",
-							"entries" : 27
-						}, {
-							"user" : "elise",
-							"date" : "2013-02-08",
-							"entries" : 28
-						}, {
-							"user" : "",
-							"date" : "2013-02-09",
-							"entries" : 29
-						}, {
-							"user" : "elise",
-							"date" : "2013-02-10",
-							"entries" : 31
-						}, {
-							"user" : "migmaqresearchpartnership",
-							"date" : "2013-02-11",
-							"entries" : 50
-						} ];
+				$scope.data = getData();
+				$scope.data.sort(function(a, b) {
+					var dateA = new Date(a.date), dateB = new Date(b.date);
+					return dateA - dateB;
+				});
+
+				var availableMonths = [];
+				availableMonths.push($scope.data[0].date.substring(0,
+						$scope.data[0].date.lastIndexOf("-")));
+				var monthDay = "";
+				var previousMonthDay = "";
+				for (i in $scope.data) {
+					monthDay = $scope.data[i].date.substring(0,
+							$scope.data[i].date.lastIndexOf("-"));
+					if ($scope.data[i - 1]) {
+						previousMonthDay = $scope.data[i - 1].date.substring(0,
+								$scope.data[i - 1].date.lastIndexOf("-"));
+						if (monthDay != previousMonthDay) {
+							availableMonths.push(monthDay);
+						}
 					}
-					;
+				}
+				$scope.availableMonths = availableMonths;
 
-					var data = getData();
+				// d3 Graph function
+				$scope.makeGraph = function(yearMonth) {
 
+					var allData = getData();
+
+					var data = [];
+					var yearMonthInAllData = "";
+					if (yearMonth && yearMonth != 'all') {
+						for ( var i = 0; i < allData.length; i++) {
+							(function(index) {
+								yearMonthInAllData = allData[i].date.substring(
+										0, allData[i].date.lastIndexOf("-"));
+								if (yearMonthInAllData == yearMonth) {
+									data.push(allData[i]);
+								}
+							})(i)
+						}
+
+					} else {
+						data = allData.slice();
+					}
+					
 					// Sort data by date ascending
 					data.sort(function(a, b) {
 						var dateA = new Date(a.date), dateB = new Date(b.date);
 						return dateA - dateB;
 					});
 
-					if (data.length > graphQuantity) {
-						data = data.slice(-graphQuantity);
-					}
-
-					console.log(JSON.stringify(data));
-
 					// Find the size of the largest column
 					var maxEntries = data[0].entries;
-					var cumulativeDateEntries = data[0].entries;
-					var currentMaxValue = 0;
-					for ( var i = 0; i < data.length; i++) {
+					var maxValuesObj = {};
+					var currentDate = "";
+
+					maxValuesObj[data[0].date] = data[0].entries;
+					
+					for (var i = 0; i < data.length; i++) {
 						(function(index) {
+							currentDate = data[i].date;
+							//Test for multiple dates and add together
 							if (data[i - 1] && data[i].date == data[i - 1].date) {
-								if (cumulativeDateEntries == 0) {
-									cumulativeDateEntries = data[i - 1].entries;
-								}
-								cumulativeDateEntries = cumulativeDateEntries
-										+ data[i].entries;
-							} else if (data[i].entries < cumulativeDateEntries
-									&& cumulativeDateEntries > currentMaxValue) {
-								currentMaxValue = cumulativeDateEntries;
-								cumulativeDateEntries = 0;
-							} else if (data[i].entries > currentMaxValue) {
-								cumulativeDateEntries = 0;
-								currentMaxValue = data[i].entries;
-								maxEntries = data[i].entries;
+								maxValuesObj[currentDate] = maxValuesObj[currentDate] + data[i].entries;
 							}
-						})(i);
+							else {
+								maxValuesObj[currentDate] = data[i].entries
+							}
+						})(i)
 					}
-					maxEntries = currentMaxValue;
+					
+					for (var prop in maxValuesObj) {
+						if (maxValuesObj.hasOwnProperty(prop)) {
+							var value = maxValuesObj[prop];
+							if (value > maxEntries) {
+								maxEntries = value;
+							}
+						}
+					}
 
 					// Set colors TODO Randomize this
 					for (i in data) {
@@ -185,14 +172,15 @@ define(
 							.attr("width", width + padding * 2).attr("height",
 									(height * 2) + padding * 2);
 
-					//Add group object to canvas, which will contain graph
+					// Add group object to canvas, which will contain graph
 					var barGraph = mainArea.append("svg:g").attr("transform",
 							"translate(" + padding + "," + padding + ")");
 
 					var indexOffset = 0;
 					var duplicatesInARow = 0;
 
-					//Draw bars, checking for identical dates; if dates are identical, bars are stacked
+					// Draw bars, checking for identical dates; if dates are
+					// identical, bars are stacked
 					barGraph
 							.selectAll("rect")
 							.data(data)
@@ -233,10 +221,10 @@ define(
 									function(datum) {
 										return datum.color;
 									});
-					
+
 					// Label x axis
 					var xaxisindexOffset = 0;
-					
+
 					barGraph.selectAll("text.yAxis").data(data).enter().append(
 							"svg:text").attr("x", function(datum, index) {
 						if (index > 0 && datum.date == data[index - 1].date) {
@@ -247,7 +235,6 @@ define(
 						} else {
 							return x((index - xaxisindexOffset)) + barWidth;
 						}
-
 
 					}).attr("y", height).attr("dx", -barWidth / 2).attr(
 							"text-anchor", "middle").attr("style",
@@ -341,6 +328,60 @@ define(
 							});
 
 				};
+
+				// Return fake data
+				function getData() {
+					return [ {
+						"user" : "migmaqresearchpartnership",
+						"date" : "2012-12-06",
+						"entries" : 50
+					}, {
+						"user" : "elise",
+						"date" : "2013-01-18",
+						"entries" : 18
+					}, {
+						"user" : "",
+						"date" : "2013-01-11",
+						"entries" : 10
+					}, {
+						"user" : "elise",
+						"date" : "2013-01-11",
+						"entries" : 26
+					}, {
+						"user" : "janinemetallic",
+						"date" : "2013-01-18",
+						"entries" : 13
+					}, {
+						"user" : "migmaqresearchpartnership",
+						"date" : "2013-01-18",
+						"entries" : 8
+					}, {
+						"user" : "migmaqresearchpartnership",
+						"date" : "2013-02-06",
+						"entries" : 24
+					}, {
+						"user" : "migmaqresearchpartnership",
+						"date" : "2013-02-07",
+						"entries" : 27
+					}, {
+						"user" : "elise",
+						"date" : "2013-02-07",
+						"entries" : 6
+					}, {
+						"user" : "",
+						"date" : "2013-02-09",
+						"entries" : 29
+					}, {
+						"user" : "elise",
+						"date" : "2013-02-10",
+						"entries" : 31
+					}, {
+						"user" : "migmaqresearchpartnership",
+						"date" : "2013-02-11",
+						"entries" : 12
+					} ];
+				}
+				;
 
 			};
 			SandboxController.$inject = [ '$scope', '$rootScope', '$resource',
