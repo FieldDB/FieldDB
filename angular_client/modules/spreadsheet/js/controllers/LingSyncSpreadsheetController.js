@@ -4,8 +4,8 @@ console.log("Loading the LingSyncSpreadsheetController.");
 define(
 		[ "angular" ],
 		function(angular) {
-			var LingSyncSpreadsheetController = function($scope, $rootScope, $resource,
-					LingSyncData) {
+			var LingSyncSpreadsheetController = function($scope, $rootScope,
+					$resource, LingSyncData) {
 
 				var LingSyncPreferences = localStorage
 						.getItem('LingSyncPreferences');
@@ -79,10 +79,12 @@ define(
 				$rootScope.template = LingSyncPreferences.userTemplate;
 				$rootScope.fields = LingSyncPreferences[LingSyncPreferences.userTemplate];
 				$scope.loading = true;
-				var DB = "lingsync1";
+				var DB = "lingllama-firstcorpus";
+				$rootScope.DB = DB;
 				$scope.orderProp = "dateModified";
 				$scope.reverse = true;
 				$scope.selected = 'newEntry';
+				$scope.pword = false;
 
 				// Set data size for pagination
 				$rootScope.resultSize = LingSyncPreferences.resultSize;
@@ -94,24 +96,33 @@ define(
 							.then(
 									function(fieldData) {
 										var scopeData = [];
+										var j = 0;
 										for ( var i = 0; i < fieldData.length; i++) {
-											scopeData[i] = {};
-											var newField;
-											scopeData[i].id = fieldData[i].id;
-											scopeData[i].rev = fieldData[i].value._rev;
-											for ( var j = 0; j < fieldData[i].value.datumFields.length; j++) {
-												newField = fieldData[i].value.datumFields[j].label;
-												scopeData[i][newField] = fieldData[i].value.datumFields[j].value;
+											if (fieldData[i].value.jsonType == "Datum") {
+												scopeData[j] = {};
+												var newField;
+												scopeData[j].id = fieldData[i].id;
+												scopeData[j].rev = fieldData[i].value._rev;
+												if (fieldData[i].value.datumFields) {
+													for ( var k = 0; k < fieldData[i].value.datumFields.length; k++) {
+														newField = fieldData[i].value.datumFields[k].label;
+														scopeData[j][newField] = fieldData[i].value.datumFields[k].value;
+													}
+												}
+												scopeData[j].dateModified = fieldData[i].value.dateModified;
+												j++
 											}
-											scopeData[i].dateModified = fieldData[i].value.dateModified;
 										}
 
 										$scope.data = scopeData;
 										$scope.loading = false;
 									});
 				}
-
-				loadData();
+				$scope.setpword = function(temppword) {
+					$rootScope.temppword = temppword;
+					$scope.pword = true;
+					loadData();
+				}
 
 				$scope.saveNew = function(fieldData) {
 					$scope.loading = true;
@@ -159,7 +170,6 @@ define(
 							.async(DB, docID)
 							.then(
 									function(editedRecord) {
-
 										// Edit record with updated data
 										for (dataKey in fieldData) {
 											for (fieldKey in $scope.fields) {
@@ -220,7 +230,7 @@ define(
 					}
 					return numberOfPages;
 				};
-				
+
 				$scope.convertToCSV = function() {
 
 					var CSV = "";
@@ -246,17 +256,18 @@ define(
 						} ]
 					}
 
-					
 					var dataSet = "Date,Value,User\n";
-					for (var i = 0; i < temp.rows.length; i++) {
-							dataSet = dataSet + temp.rows[i].key.split(':::')[1] + "," + temp.rows[i].key.split(':::')[0] + "," + temp.rows[i].value + "\n";
+					for ( var i = 0; i < temp.rows.length; i++) {
+						dataSet = dataSet + temp.rows[i].key.split(':::')[1]
+								+ "," + temp.rows[i].key.split(':::')[0] + ","
+								+ temp.rows[i].value + "\n";
 					}
 					window.alert(dataSet);
 
-					};
+				};
 
 			};
-			LingSyncSpreadsheetController.$inject = [ '$scope', '$rootScope', '$resource',
-					'LingSyncData' ];
+			LingSyncSpreadsheetController.$inject = [ '$scope', '$rootScope',
+					'$resource', 'LingSyncData' ];
 			return LingSyncSpreadsheetController;
 		});

@@ -40,10 +40,16 @@ div.row {
 
 h1 {
 	color: #000000;
-	font-family: "Palatino"
+	font-family: "Palatino";
 }
 
 h2 {
 	color: #FFFFFF;
-	font-family: "Palatino"
+	font-family: "Palatino";
+}
+
+input:focus {
+	background-color: #EAFFFF;
+	outline-size: 6px; !important
+	outline: #000000; !important
 }

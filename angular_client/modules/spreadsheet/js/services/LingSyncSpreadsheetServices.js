@@ -10,7 +10,7 @@ define([ "angular" ], function(angular) {
               'async' : function(DB, UUID) {
                 var couchInfo;
                 if (UUID != undefined) {
-                  couchInfo = "https://senhorzinho.iriscouch.com/" + DB
+                  couchInfo = "https://ifielddevs.iriscouch.com/" + DB
                   + "/" + UUID;
                   console.log("Contacting the DB to get LingSync data "
                       + couchInfo);
@@ -20,7 +20,7 @@ define([ "angular" ], function(angular) {
                   });
                   return promise;
                 } else {
-                  couchInfo = "https://senhorzinho.iriscouch.com/" + DB
+                  couchInfo = "https://lingllama:phoneme@ifielddevs.iriscouch.com/" + DB
                   + "/_design/data/_view/all_data";
                   console.log("Contacting the DB to get LingSync data "
                       + couchInfo);
@@ -34,7 +34,7 @@ define([ "angular" ], function(angular) {
                 
               },
               'saveNew' : function(DB, newRecord) {
-                var couchInfo = "https://senhorzinho.iriscouch.com/" + DB;
+                var couchInfo = "https://ifielddevs.iriscouch.com/" + DB;
                 console.log("Contacting the DB to save new record. "
                     + couchInfo);
                 var promise = $http.post(couchInfo, newRecord).then(function(response) {
@@ -43,7 +43,7 @@ define([ "angular" ], function(angular) {
                 return promise;
               },
               'saveEditedRecord' : function(DB, UUID, newRecord) {
-                var couchInfo = "https://senhorzinho.iriscouch.com/" + DB + "/" + UUID;
+                var couchInfo = "https://ifielddevs.iriscouch.com/" + DB + "/" + UUID;
                 console.log("Contacting the DB to save edited record. "
                     + couchInfo);
                 var promise = $http.put(couchInfo, newRecord).then(function(response) {
@@ -52,7 +52,7 @@ define([ "angular" ], function(angular) {
                 return promise;
               },
               'removeRecord' : function(DB, UUID, rev) {
-                  var couchInfo = "https://senhorzinho.iriscouch.com/" + DB + "/" + UUID + "?rev=" + rev;
+                  var couchInfo = "https://ifielddevs.iriscouch.com/" + DB + "/" + UUID + "?rev=" + rev;
                   console.log("Contacting the DB to delete record. "
                       + couchInfo);
                   var promise = $http.delete(couchInfo).then(function(response) {
@@ -67,8 +67,9 @@ define([ "angular" ], function(angular) {
                 });
                 return promise;
               },
-              'getDatumFields' : function() {
-                var promise = $http.get('https://senhorzinho.iriscouch.com/lingsync1/_design/get_datum_fields/_view/get_datum_fields?group=true').then(function(response) {
+              'getDatumFields' : function(DB) {
+            	  console.log("Getting datum fields from server. https://ifielddevs.iriscouch.com/" + DB + "/_design/get_datum_fields/_view/get_datum_fields?group=true");
+                var promise = $http.get("https://ifielddevs.iriscouch.com/" + DB + "/_design/get_datum_fields/_view/get_datum_fields?group=true").then(function(response) {
                   return response.data.rows;
                 });
                 return promise;

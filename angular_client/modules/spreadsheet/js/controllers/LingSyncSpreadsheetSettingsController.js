@@ -14,11 +14,17 @@ define(
         var availableFields = {};
 
         LingSyncData
-            .getDatumFields()
+            .getDatumFields($rootScope.DB)
             .then(
                 function(availableDatumFields) {
                   var availableFieldsFromServer = {};
-                  for (field in availableDatumFields[0].key) {
+                  for (i in availableDatumFields) {
+                	  for (j in availableDatumFields[i].key) {
+                		  if (!availableFieldsFromServer[availableDatumFields[i].key[j]])
+                			  availableFieldsFromServer[availableDatumFields[i].key[j]] = availableDatumFields[i].key[j];
+                	  }
+                  }
+                  for (field in availableFieldsFromServer) {
                     availableFieldsFromServer[field] = {};
                     availableFieldsFromServer[field].label = field;
                     if (field == "utterance") {
