@@ -83,6 +83,7 @@ define(
         $scope.reverse = true;
         $scope.selected = 'newEntry';
         $scope.pword = false;
+        $scope.dataentry = false;
 
         // Set data size for pagination
         $rootScope.resultSize = LingSyncPreferences.resultSize;

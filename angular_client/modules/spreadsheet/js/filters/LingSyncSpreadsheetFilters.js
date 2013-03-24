@@ -41,15 +41,6 @@ define([ "angular" ], function(angular) {
         return input;
       }
     };
-  }).filter('watchPagination', function() {
-    return function(input, numberOfPages) {
-      console.log("input: " + input + "\nnumberOfPages: " + numberOfPages)
-      if ((input + 1) > numberOfPages) {
-        return 0;
-      } else {
-        return input;
-      }
-    };
   });
   return LingSyncSpreadsheetFilters;
 });

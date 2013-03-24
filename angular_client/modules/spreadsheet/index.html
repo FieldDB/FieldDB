@@ -19,14 +19,14 @@
 
 	<div class="navbar">
 		<div class="navbar-inner">
-			<a class="brand" href="#"><h3>| LingSync |</h3></a>
+			<a class="brand" href="#" ng-click="dataentry=false"><h3>| LingSync |</h3></a>
 			<ul class="nav">
-				<li><a href="#/lingsync/{{template}}">Data Entry</a></li>
-				<li><a href="#/settings">Settings</a></li>
-				<li><a href="#/sandbox">Sandbox</a></li>
+				<li><a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a></li>
+				<li><a href="#/settings" ng-click="dataentry=false">Settings</a></li>
+				<li><a href="#/sandbox" ng-click="dataentry=false">Sandbox</a></li>
 			</ul>
-			<ul class="nav pull-right">
-				<li>Filter results: <input type="text" ng-model=filterTerm ng-click="currentResult=0"></li>
+			<ul class="nav pull-right" ng-show="dataentry==true">
+				<li>Filter results: <input type="text" ng-model=filterTerm></li>
 			</ul>
 		</div>
 	</div>
