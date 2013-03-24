@@ -14,7 +14,8 @@
 <!-- END Stylesheets -->
 
 </head>
-<body id="app" class="LingSyncBody" ng-controller="LingSyncSpreadsheetController">
+<body id="app" class="LingSyncBody"
+	ng-controller="LingSyncSpreadsheetController">
 
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -23,6 +24,9 @@
 				<li><a href="#/lingsync/{{template}}">Data Entry</a></li>
 				<li><a href="#/settings">Settings</a></li>
 				<li><a href="#/sandbox">Sandbox</a></li>
+			</ul>
+			<ul class="nav pull-right">
+				<li>Filter results: <input type="text" ng-model=filterTerm ng-click="currentResult=0"></li>
 			</ul>
 		</div>
 	</div>

@@ -1,9 +1,9 @@
-<div class="row"
+<div arrow-key class="row"
 	ng-class="{selectedRow: selected=='newEntry', unselectedNewRow: selected!='newEntry'}"
 	ng-click="selectRow('newEntry')"
 	ng-show="data!=undefined || loading==false">
 	<div class="span3">
-		<input class="span3" type="text" ng-model="newFieldData.field1"
+		<input focus class="span3" type="text" ng-model="newFieldData.field1"
 			placeholder="{{fields.field1.title}}"
 			ng-hide="fields.field1.label==''">
 	</div>
@@ -33,15 +33,15 @@
 	</div>
 </div>
 
-<div class="row"
+<div arrow-key class="row"
 	ng-class="{selectedRow: selected==datum, unselectedRow: selected!=datum}"
-	ng-repeat="datum in data | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
+	ng-repeat="datum in data | filter: filterTerm | orderBy:orderProp:reverse | startFrom:currentResult*resultSize | limitTo:resultSize"
 	ng-click="selectRow(datum)" ng-hide="loading==true">
 
 	<!-- Show when editing -->
 	<div ng-show="selected==datum">
 		<div class="span3">
-			<input class="span3" type="text" ng-model="fieldData.field1"
+			<input focus class="span3" type="text" ng-model="fieldData.field1"
 				ng-init="fieldData.field1=datum[fields.field1.label]"
 				value={{datum[fields.field1.label]}}
 				ng-hide="fields.field1.label==''">
@@ -106,9 +106,9 @@
       ng-click="currentResult=currentResult-1">
       <i class="icon-white icon-arrow-left"></i>
     </button>
-    {{currentResult+1}}/{{numberOfResultPages(data.length)}}
+    {{currentResult + 1}}/{{numberOfResultPages((data | filter: filterTerm).length)}}
     <button class="btn btn-inverse btn-mini"
-      ng-disabled="currentResult >= data.length/resultSize - 1"
+      ng-disabled="currentResult >= (data | filter: filterTerm).length/resultSize - 1"
       ng-click="currentResult=currentResult+1">
       <i class="icon-white icon-arrow-right"></i>
     </button>
