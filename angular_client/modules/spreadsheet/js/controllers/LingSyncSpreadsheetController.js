@@ -119,8 +119,28 @@ define(
             $scope.authenticated = true;
             $scope.username = auth.user;
             loadData();
-            window.location.assign("#/lingsync/" + $scope.template);
+            var DBs = response.data.roles;
+            for (i in DBs) {
+            	DBs[i] = DBs[i].split("_")[0];
+            	DBs[i] = DBs[i].replace(/[\"]/g,"");
+            }
+            DBs.sort()
+            var scopeDBs = [];
+            for (var i = 0; i < DBs.length; i++) {
+            	if (DBs[i+1] != DBs[i] && DBs[i] != "fielddbuser") {
+            		scopeDBs.push(DBs[i]);
+            	}
+            }
+            $rootScope.availableDBs = scopeDBs;
+            console.log("scopeDBs: " + JSON.stringify(scopeDBs));
           });
+          
+          $scope.selectDB = function(selectedDB) {
+        	  $rootScope.DB = selectedDB;
+        	  loadData();
+            window.location.assign("#/lingsync/" + $scope.template);
+
+          };
 
         };
 
