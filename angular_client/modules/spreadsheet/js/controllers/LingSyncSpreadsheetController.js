@@ -82,7 +82,6 @@ define(
         // Set scope variables
         $rootScope.template = LingSyncPreferences.userTemplate;
         $rootScope.fields = LingSyncPreferences[LingSyncPreferences.userTemplate];
-        $scope.loading = true;
         $scope.orderProp = "dateModified";
         $scope.reverse = true;
         $scope.selected = 'newEntry';
@@ -93,6 +92,7 @@ define(
 
         // Fetch data from server and put into template scope
         function loadData() {
+            $scope.loading = true;
           LingSyncData.async($rootScope.DB).then(function(fieldData) {
             var scopeData = [];
             for ( var i = 0; i < fieldData.length; i++) {
@@ -118,13 +118,12 @@ define(
             console.log("testCookie response: " + JSON.stringify(response));
             $scope.authenticated = true;
             $scope.username = auth.user;
-            loadData();
             var DBs = response.data.roles;
             for (i in DBs) {
             	DBs[i] = DBs[i].split("_")[0];
             	DBs[i] = DBs[i].replace(/[\"]/g,"");
             }
-            DBs.sort()
+            DBs.sort();
             var scopeDBs = [];
             for (var i = 0; i < DBs.length; i++) {
             	if (DBs[i+1] != DBs[i] && DBs[i] != "fielddbuser") {
@@ -138,7 +137,7 @@ define(
           $scope.selectDB = function(selectedDB) {
         	  $rootScope.DB = selectedDB;
         	  loadData();
-            window.location.assign("#/lingsync/" + $scope.template);
+//            window.location.assign("#/lingsync/" + $scope.template);
 
           };
 

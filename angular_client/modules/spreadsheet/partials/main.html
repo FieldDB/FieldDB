@@ -16,7 +16,8 @@
 			<div ng-show="authenticated==true">Logged in as {{username}}<br>
 			Select Database:<br>
 			<select ng-click=selectDB(selectedDB) ng-model='selectedDB'>
-			<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option></select><br><br><br>
+			<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option></select><br>
+			<br><span ng-show="loading==true">Please wait while we load your data...</span><br><br><br>
 			<button class="btn btn-primary" ng-click="authenticated=!authenticated">Log in as another user</button> </div>
 		</div>
 	</div>

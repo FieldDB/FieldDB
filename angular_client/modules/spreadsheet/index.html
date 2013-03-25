@@ -21,8 +21,8 @@
 		<div class="navbar-inner">
 			<a class="brand" href="#" ng-click="dataentry=false"><h3>| LingSync |</h3></a>
 			<ul class="nav">
-				<li><a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a></li>
-				<li><a href="#/settings" ng-click="dataentry=false">Settings</a></li>
+				<li ng-hide="data==undefined"><a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a></li>
+				<li ng-hide="data==undefined"><a href="#/settings" ng-click="dataentry=false">Settings</a></li>
 				<li><a href="#/sandbox" ng-click="dataentry=false">Sandbox</a></li>
 			</ul>
 			<ul class="nav pull-right" ng-show="dataentry==true">
