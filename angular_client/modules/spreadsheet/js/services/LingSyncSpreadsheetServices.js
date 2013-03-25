@@ -12,7 +12,7 @@ define([ "angular" ], function(angular) {
                 if (UUID != undefined) {
                   couchInfo = "https://ifielddevs.iriscouch.com/" + DB
                   + "/" + UUID;
-                  console.log("Contacting the DB to get LingSync data "
+                  console.log("Contacting the DB to get LingSync record data "
                       + couchInfo);
                   var promise = $http.get(couchInfo).then(function(response) {
                     console.log("Receiving LingSync data results ");
@@ -20,9 +20,9 @@ define([ "angular" ], function(angular) {
                   });
                   return promise;
                 } else {
-                  couchInfo = "https://lingllama:phoneme@ifielddevs.iriscouch.com/" + DB
-                  + "/_design/data/_view/all_data";
-                  console.log("Contacting the DB to get LingSync data "
+                  couchInfo = "https://ifielddevs.iriscouch.com/" + DB
+                  + "/_design/get_datum_field/_view/get_datum_fields";
+                  console.log("Contacting the DB to get all LingSync corpus data for " + DB + " " 
                       + couchInfo);
                   var promise = $http.get(couchInfo).then(function(response) {
                     console.log("Receiving LingSync data results ");
@@ -32,6 +32,17 @@ define([ "angular" ], function(angular) {
                 }
                 
                 
+              },
+              'login' : function(user, password) {
+                var couchInfo = "https://ifielddevs.iriscouch.com/_session";
+                var userInfo = {
+                    "name" : user,
+                    "password" : password
+                };
+                var promise = $http.post(couchInfo, userInfo).then(function(response) {
+                  return response;
+                });
+                return promise;
               },
               'saveNew' : function(DB, newRecord) {
                 var couchInfo = "https://ifielddevs.iriscouch.com/" + DB;
@@ -64,13 +75,6 @@ define([ "angular" ], function(angular) {
               'blankTemplate' : function() {
                 var promise = $http.get('data/blank_template.json').then(function(response) {
                   return response.data;
-                });
-                return promise;
-              },
-              'getDatumFields' : function(DB) {
-            	  console.log("Getting datum fields from server. https://ifielddevs.iriscouch.com/" + DB + "/_design/get_datum_fields/_view/get_datum_fields?group=true");
-                var promise = $http.get("https://ifielddevs.iriscouch.com/" + DB + "/_design/get_datum_fields/_view/get_datum_fields?group=true").then(function(response) {
-                  return response.data.rows;
                 });
                 return promise;
               }

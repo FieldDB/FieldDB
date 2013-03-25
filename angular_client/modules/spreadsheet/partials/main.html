@@ -3,13 +3,18 @@
 		<div class="span12 pagination-centered">
 			<img src="img/lingsync.png"> <br />
 			<h1>LingSync Quick Data Entry Module</h1>
-			<div ng-show="pword==false">
-				Log in as LingLlama <input type="text" ng-model='temppword'
-					placeholder="password">
-				<button class="btn btn-primary" ng-click='setpword(temppword)'>Log
+			<div ng-show="authenticated==false">
+				Log in <br>
+				<form ng-submit='loginUser(auth)'>
+				<input type="text" ng-model='auth.user' placeholder="username"><br>
+				 <input type="password" ng-model='auth.password'
+					placeholder="password"><br>
+				<button class="btn btn-primary">Log
 					In</button>
+					</form>
 			</div>
-			<div ng-show="pword==true">Logged in as LingLlama</div>
+			<div ng-show="authenticated==true">Logged in as {{username}}<br>
+			<button class="btn btn-primary" ng-click="authenticated=!authenticated">Log in as another user</button> </div>
 		</div>
 	</div>
 </div>

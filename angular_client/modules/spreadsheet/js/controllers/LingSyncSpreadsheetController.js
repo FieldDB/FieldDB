@@ -4,8 +4,14 @@ console.log("Loading the LingSyncSpreadsheetController.");
 define(
     [ "angular" ],
     function(angular) {
-      var LingSyncSpreadsheetController = function($scope, $rootScope,
-          $resource, LingSyncData) {
+      var LingSyncSpreadsheetController = /**
+                                           * @param $scope
+                                           * @param $rootScope
+                                           * @param $resource
+                                           * @param LingSyncData
+                                           * @returns {LingSyncSpreadsheetController}
+                                           */
+      function($scope, $rootScope, $resource, LingSyncData) {
 
         var LingSyncPreferences = localStorage.getItem('LingSyncPreferences');
         if (LingSyncPreferences == undefined) {
@@ -77,91 +83,88 @@ define(
         $rootScope.template = LingSyncPreferences.userTemplate;
         $rootScope.fields = LingSyncPreferences[LingSyncPreferences.userTemplate];
         $scope.loading = true;
-        var DB = "lingllama-firstcorpus";
-        $rootScope.DB = DB;
         $scope.orderProp = "dateModified";
         $scope.reverse = true;
         $scope.selected = 'newEntry';
-        $scope.pword = false;
-        $scope.dataentry = false;
+        $scope.authenticated = false;
 
         // Set data size for pagination
         $rootScope.resultSize = LingSyncPreferences.resultSize;
 
         // Fetch data from server and put into template scope
         function loadData() {
-          LingSyncData
-              .async(DB)
-              .then(
-                  function(fieldData) {
-                    var scopeData = [];
-                    var j = 0;
-                    for ( var i = 0; i < fieldData.length; i++) {
-                      if (fieldData[i].value.jsonType == "Datum") {
-                        scopeData[j] = {};
-                        var newField;
-                        scopeData[j].id = fieldData[i].id;
-                        scopeData[j].rev = fieldData[i].value._rev;
-                        if (fieldData[i].value.datumFields) {
-                          for ( var k = 0; k < fieldData[i].value.datumFields.length; k++) {
-                            newField = fieldData[i].value.datumFields[k].label;
-                            scopeData[j][newField] = fieldData[i].value.datumFields[k].value;
-                          }
-                        }
-                        scopeData[j].dateModified = fieldData[i].value.dateModified;
-                        j++;
-                      }
-                    }
+          LingSyncData.async($rootScope.DB).then(function(fieldData) {
+            var scopeData = [];
+            for ( var i = 0; i < fieldData.length; i++) {
+              scopeData[i] = {};
+              scopeData[i].id = fieldData[i].id;
+              for (j in fieldData[i].key) {
+                scopeData[i][j] = fieldData[i].key[j];
+              }
+              if (fieldData[i].dateModified) {
+                scopeData[i].dateModified = fieldData[i].dateModified;
+              } else {
+                scopeData[i].dateModified = "TODO"; //ADD TO MAP/REDUCE; UPDATE REFERENCES ACCORDINGLY
+              }
+            }
 
-                    $scope.data = scopeData;
-                    $scope.loading = false;
-                  });
+            $scope.data = scopeData;
+            $scope.loading = false;
+          });
         }
-        $scope.setpword = function(temppword) {
-          $rootScope.temppword = temppword;
-          $scope.pword = true;
-          loadData();
+        $scope.loginUser = function(auth) {
+          $rootScope.DB = auth.user + "-firstcorpus";
+          LingSyncData.login(auth.user, auth.password).then(function(response) {
+            console.log("testCookie response: " + JSON.stringify(response));
+            $scope.authenticated = true;
+            $scope.username = auth.user;
+            loadData();
+            window.location.assign("#/lingsync/" + $scope.template);
+          });
+
         };
 
         $scope.saveNew = function(fieldData) {
           $scope.loading = true;
           // Get blank template to build new record
-          LingSyncData.blankTemplate().then(function(newRecord) {
-            for (dataKey in fieldData) {
-              for (fieldKey in $scope.fields) {
-                if (dataKey == fieldKey) {
-                  var newDataKey = $scope.fields[fieldKey].label;
-                  fieldData[newDataKey] = fieldData[dataKey];
-                  delete fieldData[dataKey];
+          LingSyncData.blankTemplate().then(
+              function(newRecord) {
+                for (dataKey in fieldData) {
+                  for (fieldKey in $scope.fields) {
+                    if (dataKey == fieldKey) {
+                      var newDataKey = $scope.fields[fieldKey].label;
+                      fieldData[newDataKey] = fieldData[dataKey];
+                      delete fieldData[dataKey];
+                    }
+                  }
                 }
-              }
-            }
 
-            // Populate new record with fields from
-            // scope
-            for ( var i = 0; i < newRecord.datumFields.length; i++) {
-              for (key in fieldData) {
-                if (newRecord.datumFields[i].label == key) {
-                  newRecord.datumFields[i].value = fieldData[key];
+                // Populate new record with fields from
+                // scope
+                for ( var i = 0; i < newRecord.datumFields.length; i++) {
+                  for (key in fieldData) {
+                    if (newRecord.datumFields[i].label == key) {
+                      newRecord.datumFields[i].mask = fieldData[key];
+                    }
+                  }
                 }
-              }
-            }
-            newRecord.dateEntered = new Date();
-            newRecord.dateModified = new Date();
-            LingSyncData.saveNew(DB, newRecord).then(function(savedRecord) {
-              // Update UI with updated
-              // corpus
-              loadData();
-            });
+                newRecord.dateEntered = new Date();
+                newRecord.dateModified = new Date();
+                LingSyncData.saveNew($rootScope.DB, newRecord).then(
+                    function(savedRecord) {
+                      // Update UI with updated
+                      // corpus
+                      loadData();
+                    });
 
-          });
+              });
         };
 
         $scope.saveChanges = function(fieldData, docID) {
           $scope.loading = true;
           $rootScope.currentResult = 0;
           // Get latest version of record from server
-          LingSyncData.async(DB, docID).then(
+          LingSyncData.async($rootScope.DB, docID).then(
               function(editedRecord) {
                 // Edit record with updated data
                 for (dataKey in fieldData) {
@@ -179,7 +182,7 @@ define(
                 for ( var i = 0; i < editedRecord.datumFields.length; i++) {
                   for (key in fieldData) {
                     if (editedRecord.datumFields[i].label == key) {
-                      editedRecord.datumFields[i].value = fieldData[key];
+                      editedRecord.datumFields[i].mask = fieldData[key];
                     }
                   }
                 }
@@ -187,19 +190,20 @@ define(
 
                 // Save edited record and refresh data
                 // in scope
-                LingSyncData.saveEditedRecord(DB, docID, editedRecord).then(
-                    function() {
-                      loadData();
-                    });
+                LingSyncData.saveEditedRecord($rootScope.DB, docID,
+                    editedRecord).then(function() {
+                  loadData();
+                });
               });
         };
 
         $scope.deleteRecord = function(id, rev) {
           var r = confirm("Are you sure you want to delete this record permanently?");
           if (r == true) {
-            LingSyncData.removeRecord(DB, id, rev).then(function(response) {
-              loadData();
-            });
+            LingSyncData.removeRecord($rootScope.DB, id, rev).then(
+                function(response) {
+                  loadData();
+                });
           }
         };
 
@@ -213,6 +217,10 @@ define(
           var numberOfPages = Math
               .ceil(numberOfRecords / $rootScope.resultSize);
           return numberOfPages;
+        };
+
+        $scope.testFunction = function() {
+          window.alert($rootScope.currentResult);
         };
 
       };

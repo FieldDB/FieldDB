@@ -4,8 +4,8 @@ console.log("Loading the LingSyncSpreadsheetSettingsController.");
 define(
     [ "angular" ],
     function(angular) {
-      var LingSyncSpreadsheetSettingsController = function($scope, $rootScope, $resource,
-          LingSyncData) {
+      var LingSyncSpreadsheetSettingsController = function($scope, $rootScope,
+          $resource, LingSyncData) {
 
         $scope.scopePreferences = JSON.parse(localStorage
             .getItem('LingSyncPreferences'));
@@ -14,16 +14,27 @@ define(
         var availableFields = {};
 
         LingSyncData
-            .getDatumFields($rootScope.DB)
+            .async($rootScope.DB)
             .then(
                 function(availableDatumFields) {
                   var availableFieldsFromServer = {};
+                  console.log(JSON.stringify(availableDatumFields));
                   for (i in availableDatumFields) {
-                	  for (j in availableDatumFields[i].key) {
-                		  if (!availableFieldsFromServer[availableDatumFields[i].key[j]])
-                			  availableFieldsFromServer[availableDatumFields[i].key[j]] = availableDatumFields[i].key[j];
-                	  }
+                    for (keyValue in availableDatumFields[i].key) {
+                      availableFieldsFromServer[keyValue] = keyValue;
+                    }
                   }
+
+                  console.log(JSON.stringify(availableFieldsFromServer));
+
+                  // for (i in availableDatumFields) {
+                  // for (j in availableDatumFields[i].key) {
+                  // if
+                  // (!availableFieldsFromServer[availableDatumFields[i].key[j]])
+                  // availableFieldsFromServer[availableDatumFields[i].key[j]] =
+                  // availableDatumFields[i].key[j];
+                  // }
+                  // }
                   for (field in availableFieldsFromServer) {
                     availableFieldsFromServer[field] = {};
                     availableFieldsFromServer[field].label = field;
@@ -47,6 +58,14 @@ define(
                       availableFieldsFromServer[field].title = "Date Elicited";
                     } else if (field == "checkedWithConsultant") {
                       availableFieldsFromServer[field].title = "Checked with consultant";
+                    } else if (field == "goal") {
+                      availableFieldsFromServer[field].title = "Goal";
+                    } else if (field == "user") {
+                      availableFieldsFromServer[field].title = "User";
+                    } else if (field == "dateSEntered") {
+                      availableFieldsFromServer[field].title = "Date entered";
+                    } else if (field == "consultants") {
+                      availableFieldsFromServer[field].title = "Consultants";
                     } else {
                       availableFieldsFromServer[field].title = field;
                     }
@@ -93,7 +112,7 @@ define(
         };
       };
 
-      LingSyncSpreadsheetSettingsController.$inject = [ '$scope', '$rootScope', '$resource',
-          'LingSyncData' ];
+      LingSyncSpreadsheetSettingsController.$inject = [ '$scope', '$rootScope',
+          '$resource', 'LingSyncData' ];
       return LingSyncSpreadsheetSettingsController;
     });
