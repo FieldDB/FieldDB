@@ -85,7 +85,7 @@ define(
         $scope.orderProp = "dateModified";
         $scope.reverse = true;
         $scope.selected = 'newEntry';
-        $scope.authenticated = false;
+        $rootScope.authenticated = false;
 
         // Set data size for pagination
         $rootScope.resultSize = LingSyncPreferences.resultSize;
@@ -116,7 +116,7 @@ define(
           $rootScope.DB = auth.user + "-firstcorpus";
           LingSyncData.login(auth.user, auth.password).then(function(response) {
             console.log("testCookie response: " + JSON.stringify(response));
-            $scope.authenticated = true;
+            $rootScope.authenticated = true;
             $scope.username = auth.user;
             var DBs = response.data.roles;
             for (i in DBs) {
@@ -131,7 +131,6 @@ define(
             	}
             }
             $rootScope.availableDBs = scopeDBs;
-            console.log("scopeDBs: " + JSON.stringify(scopeDBs));
           });
           
           $scope.selectDB = function(selectedDB) {
@@ -140,6 +139,10 @@ define(
 //            window.location.assign("#/lingsync/" + $scope.template);
 
           };
+          
+          $scope.reloadPage = function() {
+            window.location.reload();
+          }
 
         };
 

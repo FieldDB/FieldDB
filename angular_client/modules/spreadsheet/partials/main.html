@@ -3,22 +3,31 @@
 		<div class="span12 pagination-centered">
 			<img src="img/lingsync.png"> <br />
 			<h1>LingSync Quick Data Entry Module</h1>
-			<div ng-show="authenticated==false">
+			<div ng-hide="authenticated==true">
 				Log in <br>
 				<form ng-submit='loginUser(auth)'>
-				<input type="text" ng-model='auth.user' placeholder="username"><br>
-				 <input type="password" ng-model='auth.password'
-					placeholder="password"><br>
-				<button class="btn btn-primary">Log
-					In</button>
-					</form>
+					<input type="text" ng-model='auth.user' placeholder="username"><br>
+					<input type="password" ng-model='auth.password'
+						placeholder="password"><br>
+					<button class="btn btn-primary">Log In</button>
+				</form>
 			</div>
-			<div ng-show="authenticated==true">Logged in as {{username}}<br>
-			Select Database:<br>
-			<select ng-click=selectDB(selectedDB) ng-model='selectedDB'>
-			<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option></select><br>
-			<br><span ng-show="loading==true">Please wait while we load your data...</span><br><br><br>
-			<button class="btn btn-primary" ng-click="authenticated=!authenticated">Log in as another user</button> </div>
+			<div ng-show="authenticated==true">
+				Logged in as {{username}}<br> Select Database and click Access:<br>
+				<form ng-submit='selectDB(selectedDB)'>
+					<select multiple="multiple" ng-model='selectedDB'>
+						<option ng-repeat="db in availableDBs" value={{db}}>{{db}}</option>
+					</select><br>
+					<button class="btn btn-primary">Access</button>
+				</form>
+				<br>
+				<span ng-show="loading==true">Please wait while we load your
+					data...</span><span ng-show="loading==false && data!=undefined">Data loaded. Click
+					on <a href="#/lingsync/{{template}}" ng-click="dataentry=true">Data Entry</a> to begin</span><br>
+				<br>
+				<br>
+				<button class="btn btn-warning" ng-click="reloadPage()">Log out</button>
+			</div>
 		</div>
 	</div>
 </div>
