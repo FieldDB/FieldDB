@@ -62,14 +62,22 @@ define([
       "click .trash-button" : "putInTrash", 
       
       //Add button inserts new Comment
+
       "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        this.model.get("comments").unshift(this.commentEditView.model);
-        this.commentEditView.model = new Comment();
-      }, 
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
+        }, 
       //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
         if(e){
@@ -194,13 +202,13 @@ define([
           this.sessionFieldsView.el = this.$(".session-fields-ul");
           this.sessionFieldsView.render();
           
-          // Display the CommentReadView
-          this.commentReadView.el = $(this.el).find('.comments'); 
-          this.commentReadView.render();
-          
-          // Display the CommentEditView
-          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
-          this.commentEditView.render();
+//          // Display the CommentReadView
+//          this.commentReadView.el = $(this.el).find('.comments'); 
+//          this.commentReadView.render();
+//          
+//          // Display the CommentEditView
+//          this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+//          this.commentEditView.render();
           
           //Localization for centerWell
           $(this.el).find(".locale_Show_Readonly").attr("title", Locale.get("locale_Show_Readonly"));
