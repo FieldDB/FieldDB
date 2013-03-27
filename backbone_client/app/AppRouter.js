@@ -287,12 +287,8 @@ define([
     showFullscreenDataList : function(dataListid, pouchname) {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
-      if( !dataListid){
-        OPrime.debug("No data list id was specified, not rendreing anything");
-        return;
-      }
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
-      if( dataListid == app.get("currentDataList").id  ){
+      if( !dataListid || dataListid == app.get("currentDataList").id  ){
         if($("#data-list-fullscreen-header").html() == ""){
           window.appView.renderReadonlyDataListViews("fullscreen");
         }

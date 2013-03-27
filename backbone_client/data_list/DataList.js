@@ -184,9 +184,14 @@ define([
             window.app.get("corpus").datalists = null;
             window.appView.currentCorpusReadView.model
             .makeSureCorpusHasADataList(function() {
+              window.appView.currentCorpusEditView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
               window.appView.currentCorpusReadView
               .changeViewsOfInternalModels();
-              window.appView.currentCorpusReadView.render();
+//              window.appView.currentCorpusReadView.render();
+              window.app.router.navigate("render/true", {trigger: true});
+
             });
           }
         });

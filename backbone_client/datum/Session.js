@@ -191,19 +191,33 @@ define([
      * Also remove it from the view so the user cant see it.
      * 
      */    
-    putInTrash : function(){
-      this.set("trashed", "deleted"+Date.now());
+    putInTrash : function() {
+      this.set("trashed", "deleted" + Date.now());
+      var whichSessionToUse = 0;
+      if (window.app.get("corpus").sessions.models[whichSessionToUse].id == this.id) {
+        whichSessionToUse = 1;
+      }
+      
       this.saveAndInterConnectInApp(function(){
-        if(window.appView){
-          /*TODO test this*/
-          window.appView.currentCorpusReadView.model.sessions = null;
-          window.appView.currentCorpusReadView.model.makeSureCorpusHasASession();
-          window.appView.currentCorpusReadView.changeViewsOfInternalModels();
-          window.appView.currentCorpusReadView.render();
-        }
+        window.app.get("corpus").sessions.models[whichSessionToUse]
+        .setAsCurrentSession(function() {
+          if (window.appView) {
+            /* TODO test this */
+            window.app.get("corpus").sessions = null;
+            window.appView.currentCorpusReadView.model
+            .makeSureCorpusHasASession(function() {
+              window.appView.currentCorpusEditView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.appView.currentCorpusReadView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.app.router.navigate("render/true", {trigger: true});
+            });
+          }
+        });
       });
     },
-    
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert

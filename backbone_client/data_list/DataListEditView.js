@@ -252,10 +252,12 @@ define( [
     templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
 
     render : function() {
-      if(window.appView.currentEditDataListView){
-        appView.currentEditDataListView.destroy_view();
+      if (this.format && this.format.indexOf("search") == -1){
+        if(window.appView.currentEditDataListView){
+          appView.currentEditDataListView.destroy_view();
+        }
+        appView.currentReadDataListView.destroy_view();
       }
-      appView.currentReadDataListView.destroy_view();
       
       var jsonToRender = this.model.toJSON();
       jsonToRender.dateCreated = OPrime.prettyDate(jsonToRender.dateCreated);
