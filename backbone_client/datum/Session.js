@@ -329,31 +329,30 @@ define([
           alert("This is a bug, cannot load the session you asked for, it is not in this corpus.");
         }
         return;
-      }else{
-        if (window.app.get("currentSession").id != this.id ) {
-          window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-//          window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      }
+      
+      if (window.app.get("currentSession").id != this.id ) {
+        window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
+//      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      }
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
+      window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-        }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
-
-        if(window.appView) {
-          window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
-            if (typeof successcallback == "function") {
-              successcallback();
-            }else{
-              window.appView.currentSessionReadView.format = "leftSide";
-              window.appView.currentSessionReadView.render();
-              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
-//            window.appView.renderEditableSessionViews("leftSide");
-//            window.appView.renderReadonlySessionViews("leftSide");
-            }
-          });
-        }else{
+      if(window.appView) {
+        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
           if (typeof successcallback == "function") {
             successcallback();
+          }else{
+            window.appView.currentSessionReadView.format = "leftSide";
+            window.appView.currentSessionReadView.render();
+            window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
+//          window.appView.renderEditableSessionViews("leftSide");
+//          window.appView.renderReadonlySessionViews("leftSide");
           }
+        });
+      }else{
+        if (typeof successcallback == "function") {
+          successcallback();
         }
       }
     },

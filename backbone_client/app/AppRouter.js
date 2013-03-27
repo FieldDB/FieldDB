@@ -287,49 +287,55 @@ define([
     showFullscreenDataList : function(dataListid, pouchname) {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
           + dataListid);
-
-      //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
-      if(dataListid == app.get("currentDataList").id || ! dataListid ){
-    	  if($("#data-list-fullscreen-header").html() == ""){
-    	        window.appView.renderReadonlyDataListViews("fullscreen");
-    	      }
-    	      this.hideEverything();
-    	      $("#data-list-fullscreen").show();    
-    	      window.scrollTo(0,0);
-    	      return;
-      }else{
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
-        }
-        var dl = new DataList({
-          "pouchname" : pouchname});
-        dl.id = dataListid;
-        //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if(window.app.get("corpus").get("pouchname") != pouchname ){
-          alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
-          return;
-        }
-
-        /*
-         * If it isnt the default data list, just fetch it.
-         */
-          dl.fetch({
-            success : function(e) {
-              if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
-              app.get("currentDataList").saveAndInterConnectInApp(function(){
-                dl.setAsCurrentDataList( function(){
-                  window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
-                    window.appView.renderReadonlyDataListViews("fullscreen");
-                  });
-                });
-              });
-            },
-            error : function(e) {
-              alert("There was an error fetching the data list. Loading defaults..."+e);
-            }
-        });
-
+      if( !dataListid){
+        OPrime.debug("No data list id was specified, not rendreing anything");
+        return;
       }
+      //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
+      if( dataListid == app.get("currentDataList").id  ){
+        if($("#data-list-fullscreen-header").html() == ""){
+          window.appView.renderReadonlyDataListViews("fullscreen");
+        }
+        this.hideEverything();
+        $("#data-list-fullscreen").show();    
+        window.scrollTo(0,0);
+        return;
+      }
+
+      if(!pouchname){
+        pouchname = window.app.get("corpus").get("pouchname");
+      }
+      var dl = new DataList({
+        "pouchname" : pouchname});
+      dl.id = dataListid;
+      //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
+      if(window.app.get("corpus").get("pouchname") != pouchname ){
+        alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
+        return;
+      }
+
+      /*
+       * If it isnt the default data list, just fetch it.
+       */
+      dl.fetch({
+        success : function(e) {
+          if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
+          app.get("currentDataList").saveAndInterConnectInApp(function(){
+            dl.setAsCurrentDataList( function(){
+              window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
+                window.appView.renderReadonlyDataListViews("fullscreen");
+                window.app.router.hideEverything();
+                $("#data-list-fullscreen").show();    
+                window.scrollTo(0,0);
+              });
+            });
+          });
+        },
+        error : function(e) {
+          alert("There was an error fetching the data list. Loading defaults..."+e);
+        }
+      });
+
      //TODO test other cases where datalist id needs to be changed
 
     },
