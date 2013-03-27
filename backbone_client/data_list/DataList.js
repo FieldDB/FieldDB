@@ -175,18 +175,21 @@ define([
       if (window.app.get("corpus").datalists.models[whichDatalistToUse].id == this.id) {
         whichDatalistToUse = 1;
       }
-      window.app.get("corpus").datalists.models[whichDatalistToUse]
-      .setAsCurrentDataList(function() {
-        if (window.appView) {
-          /* TODO test this */
-          window.app.get("corpus").datalists = null;
-          window.appView.currentCorpusReadView.model
-          .makeSureCorpusHasADataList(function() {
-            window.appView.currentCorpusReadView
-            .changeViewsOfInternalModels();
-            window.appView.currentCorpusReadView.render();
-          });
-        }
+      
+      this.saveAndInterConnectInApp(function(){
+        window.app.get("corpus").datalists.models[whichDatalistToUse]
+        .setAsCurrentDataList(function() {
+          if (window.appView) {
+            /* TODO test this */
+            window.app.get("corpus").datalists = null;
+            window.appView.currentCorpusReadView.model
+            .makeSureCorpusHasADataList(function() {
+              window.appView.currentCorpusReadView
+              .changeViewsOfInternalModels();
+              window.appView.currentCorpusReadView.render();
+            });
+          }
+        });
       });
     },
     
@@ -324,26 +327,22 @@ define([
           alert("This is a bug, cannot load the dataList you asked for, it is not in this corpus.");
         }
         return;
-      }else{
-        if (window.app.get("currentDataList").id != this.id ) {
-          //remove reference between current dataList and the model  TODO check this..
-//          delete window.app.attributes.currentDataList; //this seems to delte the datalist from the corpus too. :(
-//          window.app.attributes.currentDataList = this; //trying to get backbone not to notice we are switching the current data list.
-          window.app.set("currentDataList", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes. 
-//          window.app.set("currentDataList", app.get("corpus").datalists.get(this.id)); //this pulls the datalist from the corpus which might not be the most recent version. instead we will trust the pouch one above.
-        }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp();
-        if(window.appView) {
-          window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
-            if (typeof successcallback == "function") {
-              successcallback();
-            }
-          });
-        }else{
+      }
+
+      if (window.app.get("currentDataList").id != this.id ) {
+        window.app.set("currentDataList", this); 
+      }
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
+      window.app.get("authentication").saveAndInterConnectInApp();
+      if(window.appView) {
+        window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function() {
           if (typeof successcallback == "function") {
             successcallback();
           }
+        });
+      }else{
+        if (typeof successcallback == "function") {
+          successcallback();
         }
       }
     }
