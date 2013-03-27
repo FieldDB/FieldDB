@@ -5,6 +5,7 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
     "confidentiality_encryption/Confidential",
     "datum/Datum",
     "datum/DatumFieldEditView",
@@ -22,6 +23,7 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
     Confidential,
     Datum,
     DatumFieldEditView,
@@ -54,6 +56,10 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       // Create a DatumTagView
@@ -149,11 +155,39 @@ define([
         }
       },
       "change .datum_state_select" : "updateDatumStates",
-      "click .add-comment-datum" : 'insertNewComment',
       
       "blur .utterance .datum_field_input" : "utteranceBlur",
       "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "click .save-datum" : "saveButton"
+      "click .save-datum" : "saveButton",
+
+      // Issue #797
+       "click .trash-button" : "putInTrash",
+
+      //Add button inserts new Comment
+      "click .add-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the datum when the comment is added, and render it*/
+        this.saveButton();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      },     
+    
     },
 
     /**
@@ -198,8 +232,12 @@ define([
         this.datumTagsView.render();
         
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the SessionView
         this.sessionView.el = this.$('.session-link'); 
@@ -218,7 +256,6 @@ define([
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
 //      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
         $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
         $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
@@ -364,43 +401,20 @@ define([
       return false;
     },
     
-    insertNewComment : function(e) {
-      if(e){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      var commentstring = this.$el.find(".comment-new-text").val();
-      var m = new Comment({
-        "text" : commentstring,
-      });
-      this.model.get("comments").add(m);
-      this.$el.find(".comment-new-text").val("");
-      
-      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
-
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "team",
-            context : " via Offline App."
-          });
-      
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "personal",
-            context : " via Offline App."
-          });
-      
-    },
+//    insertNewComment : function(e) {
+//      if(e){
+//        e.stopPropagation();
+//        e.preventDefault();
+//      }
+//      var commentstring = this.$el.find(".comment-new-text").val();
+//      var m = new Comment({
+//        "text" : commentstring,
+//      });
+//      //unshift adds things to the front instead of adding to the end
+//      this.model.get("comments").unshift(m); 
+//      this.$el.find(".comment-new-text").val("");
+//
+//    },
     
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
@@ -450,6 +464,22 @@ define([
       d.set("session", app.get("currentSession"));
       window.appView.datumsEditView.prependDatum(d);
     },
+    
+    /**
+     * See definition in the model
+     * 
+     */
+    putInTrash : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to put this datum in the trash?");
+      if (r == true) {
+        this.model.putInTrash();
+      }
+    },
+    
+    
     /*
      * this function can be used to play datum automatically
      */

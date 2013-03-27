@@ -40,6 +40,9 @@ define([
      */
     events : {
       "blur .choose-field" : "updateFieldLabel",
+      // issue #797
+      // Only Admin users can trash datum fields
+      //      "click .trash-button" : "",
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",

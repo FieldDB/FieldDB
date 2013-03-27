@@ -40,11 +40,12 @@
 		</div>
 		<!-- /Corpus Menu - Identical for all Corpus Handlebars -->
 		<!-- Corpus Save and Toggle to Readonly - Edit View Only-->
-		<div class="btn-group">
+
 			<button class="btn btn-success save-corpus">
-				<span class="locale_Save"></span>
-			</button>
-		</div>
+				<span class="locale_Save"></span></button>
+		<!-- Issue #797 -->
+      <button class="btn btn-danger trash-button">
+       <i class="icon-trash "></i> </button>	
 	</div>
 </div>
 
@@ -242,10 +243,5 @@
 </div>
 
 <!-- Corpus comments -->
+<div class="new-comment-area "></div> 
 <ul class="comments unstyled"></ul>
-<div class="alert alert-info">
-	<textarea class="comment-new-text"></textarea>
-	<button class="btn btn-mini btn-primary add-comment-corpus" value="Add">
-		<i class="icon-comment"></i> <span class="locale_Add"></span>
-	</button>
-</div>
