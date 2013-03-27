@@ -401,21 +401,6 @@ define([
       return false;
     },
     
-//    insertNewComment : function(e) {
-//      if(e){
-//        e.stopPropagation();
-//        e.preventDefault();
-//      }
-//      var commentstring = this.$el.find(".comment-new-text").val();
-//      var m = new Comment({
-//        "text" : commentstring,
-//      });
-//      //unshift adds things to the front instead of adding to the end
-//      this.model.get("comments").unshift(m); 
-//      this.$el.find(".comment-new-text").val("");
-//
-//    },
-    
     updateDatumStates : function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
       try{
