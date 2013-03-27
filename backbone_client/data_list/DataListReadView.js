@@ -73,6 +73,8 @@ define( [
         this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
         /* empty the comment edit view. */
         this.commentEditView.clearCommentForReuse();
+        this.updatePouch();
+        this.commentReadView.render();
         
 //        this.model.get("comments").unshift(this.commentEditView.model);
 //        this.commentEditView.model = new Comment();
@@ -434,7 +436,29 @@ define( [
       //Remove view from DOM
 //      this.remove();  
 //      Backbone.View.prototype.remove.call(this);
+      },
+
+      /* ReadView is supposed to save no change but we want the comments to
+       * be saved. This function saves the change/addition/deletion of the comments. 
+       * Changes in other parts of Datalist is taken care of the server according to 
+       * users' permissions. */
+      updatePouch : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var self = this;
+        if(this.format == "modal"){
+          $("#new-corpus-modal").modal("hide");
+        }
+        this.model.saveAndInterConnectInApp(function(){
+          self.render();
+        },function(){
+          self.render();
+        });
       }
+      
+      
   });
 
   return DataListReadView;

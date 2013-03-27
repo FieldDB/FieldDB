@@ -59,8 +59,14 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        this.model.get("comments").unshift(this.commentEditView.model);
-        this.commentEditView.model = new Comment();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        this.updatePouch();
+        this.commentReadView.render();
       }, 
       //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
@@ -264,7 +270,28 @@ define([
       //Remove view from DOM
 //      this.remove();  
 //      Backbone.View.prototype.remove.call(this);
+      },
+      /* ReadView is supposed to save no change but we want the comments to
+       * be saved. This function saves the change/addition/deletion of the comments. 
+       * Changes in other parts of Session is taken care of the server according to 
+       * users' permissions. */
+      updatePouch : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        var self = this;
+        if(this.format == "modal"){
+          $("#new-corpus-modal").modal("hide");
+        }
+        this.model.saveAndInterConnectInApp(function(){
+          self.render();
+        },function(){
+          self.render();
+        });
       }
+
+    
   });
   
   return SessionReadView;

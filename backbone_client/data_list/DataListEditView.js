@@ -78,6 +78,10 @@ define( [
         this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
         /* empty the comment edit view. */
         this.commentEditView.clearCommentForReuse();
+        /* save the state of the datalist when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
+        
         
 //        this.model.get("comments").unshift(this.commentEditView.model);
 //        this.commentEditView.model = new Comment();
