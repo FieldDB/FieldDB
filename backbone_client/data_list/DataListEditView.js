@@ -594,6 +594,8 @@ define( [
         e.stopPropagation();
         e.preventDefault();
       }
+      
+     
 //      var self = this;
 //      this.model.saveAndInterConnectInApp(function(){
 //          self.format = "search-minimized";
@@ -603,6 +605,14 @@ define( [
 //      });
       
       var searchself = appView.searchEditView.searchDataListView; //TODO this was because the wrong tempalte was in the serach data list.for some reason the model is a function here when i click on the save button on the temp serach data list. this is a workaround.
+
+      /* if there is no call back, make this the full screen data list. */
+      if(!callback){
+        callback = function(){
+          window.appView.currentReadDataListView.format = "leftSide";
+          window.appView.currentReadDataListView.render();
+        };
+      }
       searchself.model.saveAndInterConnectInApp(function(){
         searchself.format = "search-minimized";
         searchself.render();
