@@ -534,6 +534,8 @@ define([
      * 
      */ 
     putInTrash : function(){
+      OPrime.bug("Sorry deleting corpora is not available right now. Too risky... ");
+      return;
       /* TODO contact server to delte the corpus, if the success comes back, then do this */
       this.set("trashed", "deleted"+Date.now());
       this.saveAndInterConnectInApp(function(){
