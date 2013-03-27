@@ -31,6 +31,11 @@ define( [ "backbone",
 //        return newCollection;
 //      }
     
+    insertNewCommentFromObject : function(commentObject){
+      commentObject.timestamp = Date.now();
+      this.unshift(new Comment(commentObject));
+    }
+    
   });
 
   return Comments;

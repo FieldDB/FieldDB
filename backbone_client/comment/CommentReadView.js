@@ -30,7 +30,8 @@ define([
      * Events that the CommentReadView is listening to and their handlers.
      */
     events : {
-      "blur .comment-text" : "updateComment",
+    "click .edit-comment-button" : "showHideCommentEdit",
+    "click .remove-comment-button" : "removeComment",
     },
 
     /**
@@ -50,12 +51,33 @@ define([
       return this;
     },
     
-    /**
-     * Change the model's state.
-     */
-    updateComment : function() {
-      this.model.set("value", this.$el.children(".comment-text").val());
-    }
+    
+    showHideCommentEdit : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      if($(this.el).find(".comment-text").attr("contenteditable")){
+        $(this.el).find(".comment-text").removeAttr("contenteditable");
+        $(this.el).find(".comment-text").removeClass("thisIsEditable");
+        $(this.el).find(".icon-save").toggleClass("icon-pencil icon-save");
+      }else{
+        $(this.el).find(".comment-text").attr("contenteditable","true");
+        $(this.el).find(".comment-text").addClass("thisIsEditable");
+        $(this.el).find(".icon-pencil").toggleClass("icon-save icon-pencil");
+      }
+    },
+    
+    removeComment : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to remove this comment?");
+      if (r == true) {
+        this.model.destroy();
+      }
+    },
+    
+    
   });
 
   return CommentReadView;
