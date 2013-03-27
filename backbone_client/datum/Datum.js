@@ -432,7 +432,9 @@ define([
       
       return queryTokens;
     },
-    
+    getDisplayableFieldForActivitiesEtc : function(){
+      return  this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+    },
     /**
      * Clone the current Datum and return the clone. The clone is put in the current
      * Session, regardless of the origin Datum's Session. //TODO it doesn tlook liek this is the case below:
@@ -455,6 +457,14 @@ define([
 
       return datum;
     },
+    
+    /**
+     * This function is used to get the most prominent datumstate (now called
+     * ValidationStatus) eg "CheckedWithSeberina" or "Deleted" or "ToBeChecked"
+     * 
+     * @returns {String} a string which is the first item in the
+     *          validationSatuts field
+     */
     getValidationStatus : function(){
       var validationStatus = "";
       var stati = this.get("datumFields").where({"label": "validationStatus"});
@@ -474,12 +484,24 @@ define([
       this.updateDatumState(validationStatus);
       return validationStatus;
     },
+    /**
+     * This function is used to colour a datum background to make
+     * visually salient the validation status of the datum.
+     * 
+     * @param status
+     *            This is an optional string which is used to find the
+     *            colour for a particular DatumState. If the string is
+     *            not provided it gets the first element from the
+     *            validation status field.
+     * @returns {String} This is the colour using Bootstrap (warning is
+     *          Orange, success Green etc.)
+     */
     getValidationStatusColor :function(status){
       if(!status){
         status = this.getValidationStatus();
       }
       /* TODO once the new ValidationStatus pattern is in the corpus proper, dont hard code the colors */
-      if(status.indexOf("deleted") > -1){
+      if(status.toLowerCase().indexOf("deleted") > -1){
         return "danger";
       }
       if(status.toLowerCase().indexOf("tobechecked") > -1){
@@ -489,6 +511,16 @@ define([
         return "success";
       }
     },
+    
+
+    /**
+     * This function is used to set the primary status of the datum,
+     * eg. put Deleted as the first item in the validation status.
+     * 
+     * @param selectedValue
+     *            This is a string which is the validation status
+     *            you want the datum to be
+     */
     updateDatumState : function(selectedValue){
       if(!selectedValue){
         return;
@@ -533,6 +565,28 @@ define([
 //      this.save();
       //TODO save it
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */ 
+    putInTrash : function(){
+      this.set("trashed", "deleted"+Date.now());
+      this.updateDatumState("Deleted");
+      this.saveAndInterConnectInApp(function(){
+        /* This actually removes it from the database */
+        //thisdatum.destroy();
+        if(window.appView){
+          window.appView.datumsEditView.showMostRecentDatum();
+        }
+      });
+    },
+    
     /**
      * The LaTeXiT function automatically mark-ups an example in LaTeX code
      * (\exg. \"a) and then copies it on the export modal so that when the user

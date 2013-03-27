@@ -181,6 +181,43 @@ define([
             context : " via Offline App."
           });
     },
+    
+    /**
+     * Make the  model marked as Deleted, mapreduce function will 
+     * ignore the deleted models so that it does not show in the app, 
+     * but deleted model remains in the database until the admin empties 
+     * the trash.
+     * 
+     * Also remove it from the view so the user cant see it.
+     * 
+     */    
+    putInTrash : function() {
+      this.set("trashed", "deleted" + Date.now());
+      var whichSessionToUse = 0;
+      if (window.app.get("corpus").sessions.models[whichSessionToUse].id == this.id) {
+        whichSessionToUse = 1;
+      }
+      
+      this.saveAndInterConnectInApp(function(){
+        window.app.get("corpus").sessions.models[whichSessionToUse]
+        .setAsCurrentSession(function() {
+          if (window.appView) {
+            /* TODO test this */
+            window.app.get("corpus").sessions = null;
+            window.appView.currentCorpusReadView.model
+            .makeSureCorpusHasASession(function() {
+              window.appView.currentCorpusEditView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.appView.currentCorpusReadView
+              .changeViewsOfInternalModels();
+//              window.appView.currentCorpusReadView.render();
+              window.app.router.navigate("render/true", {trigger: true});
+            });
+          }
+        });
+      });
+    },
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
@@ -306,31 +343,30 @@ define([
           alert("This is a bug, cannot load the session you asked for, it is not in this corpus.");
         }
         return;
-      }else{
-        if (window.app.get("currentSession").id != this.id ) {
-          window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-//          window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      }
+      
+      if (window.app.get("currentSession").id != this.id ) {
+        window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
+//      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      }
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
+      window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-        }
-        window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
-        window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
-
-        if(window.appView) {
-          window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
-            if (typeof successcallback == "function") {
-              successcallback();
-            }else{
-              window.appView.currentSessionReadView.format = "leftSide";
-              window.appView.currentSessionReadView.render();
-              window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
-//            window.appView.renderEditableSessionViews("leftSide");
-//            window.appView.renderReadonlySessionViews("leftSide");
-            }
-          });
-        }else{
+      if(window.appView) {
+        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
           if (typeof successcallback == "function") {
             successcallback();
+          }else{
+            window.appView.currentSessionReadView.format = "leftSide";
+            window.appView.currentSessionReadView.render();
+            window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
+//          window.appView.renderEditableSessionViews("leftSide");
+//          window.appView.renderReadonlySessionViews("leftSide");
           }
+        });
+      }else{
+        if (typeof successcallback == "function") {
+          successcallback();
         }
       }
     },
