@@ -175,6 +175,9 @@ define([
         this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
         /* empty the comment edit view. */
         this.commentEditView.clearCommentForReuse();
+        /* save the state of the datum when the comment is added, and render it*/
+        this.saveButton();
+        this.commentReadView.render();
       }, 
       //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
