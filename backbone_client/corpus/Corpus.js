@@ -1385,7 +1385,7 @@ define([
         type : 'GET',
         url : jsonUrl,
         success : function(serverResults) {
-          console.log("serverResults"
+          OPrime.debug("serverResults"
               + JSON.stringify(serverResults));
 
           var counts = _.pluck(serverResults.rows, "value");
