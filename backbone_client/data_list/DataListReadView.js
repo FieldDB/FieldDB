@@ -67,17 +67,24 @@ define( [
           e.stopPropagation();
           e.preventDefault();
         }
-        this.model.get("comments").unshift(this.commentEditView.model);
-        this.commentEditView.model = new Comment();
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        
+//        this.model.get("comments").unshift(this.commentEditView.model);
+//        this.commentEditView.model = new Comment();
       }, 
-      //Delete button remove a comment 
+      //Delete button remove a comment
       "click .remove-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
-      },  
+      }, 
       
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",    

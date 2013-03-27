@@ -168,20 +168,27 @@ define([
      * Also remove it from the view so the user cant see it.
      * 
      */    
-    putInTrash : function(){
-      this.set("trashed", "deleted"+Date.now());
-      this.saveAndInterConnectInApp(function(){
-        if(window.appView){
-          /*TODO test this*/
-          window.appView.currentCorpusReadView.model.datalists = null;
-          window.appView.currentCorpusReadView.model.makeSureCorpusHasADataList();
-          window.appView.currentCorpusReadView.changeViewsOfInternalModels();
-          window.appView.currentCorpusReadView.render();
+
+    putInTrash : function() {
+      this.set("trashed", "deleted" + Date.now());
+      var whichDatalistToUse = 0;
+      if (window.app.get("corpus").datalists.models[whichDatalistToUse].id == this.id) {
+        whichDatalistToUse = 1;
+      }
+      window.app.get("corpus").datalists.models[whichDatalistToUse]
+      .setAsCurrentDataList(function() {
+        if (window.appView) {
+          /* TODO test this */
+          window.app.get("corpus").datalists = null;
+          window.appView.currentCorpusReadView.model
+          .makeSureCorpusHasADataList(function() {
+            window.appView.currentCorpusReadView
+            .changeViewsOfInternalModels();
+            window.appView.currentCorpusReadView.render();
+          });
         }
       });
     },
-
-    
     
     /**
      * Accepts two functions to call back when save is successful or
