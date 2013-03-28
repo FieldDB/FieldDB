@@ -298,6 +298,7 @@ define([
           $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
           $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
           $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+          $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT FULLSCREEN render: " );
@@ -369,6 +370,7 @@ define([
         $(this.el).find(".locale_Default").html(Locale.get("locale_Default"));
         $(this.el).find(".locale_Add_New_Datum_State_Tooltip").attr("title", Locale.get("locale_Add_New_Datum_State_Tooltip"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
+        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       } else if (this.format == "leftSide"){
         if (OPrime.debugMode) OPrime.debug("CORPUS EDIT LEFTSIDE render: " );
