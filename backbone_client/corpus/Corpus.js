@@ -815,7 +815,7 @@ define([
 
                       var sucessorfailcallbackforcorpusmask = function(){
                         window.app.get("authentication").saveAndInterConnectInApp(function(){
-                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus...");
+                          $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                           window.setTimeout(function(){
                             window.location.replace(optionalCouchAppPath+ "user.html#/corpus/"+potentialpouchname+"/"+model.id);
                           },10000);
