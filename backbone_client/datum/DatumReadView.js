@@ -169,7 +169,7 @@ define([
         jsonToRender.datumstatecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
         jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
       }catch(e){
-        OPrime.bug("There was a problem fishing out which datum state was selected.");
+        if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
       
       if (this.format == "well") {        
