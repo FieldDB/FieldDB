@@ -2,6 +2,9 @@ console.log("Loading Webservices info");
 /* Extends the OPrime class */
 var OPrime = OPrime || {};
 
+OPrime.apptype = "localhost";
+
+
 OPrime.websiteUrl = "https://localhost:3182";
 OPrime.authUrl = "https://localhost:3183";
 OPrime.audioUrl = "https://localhost:3184";

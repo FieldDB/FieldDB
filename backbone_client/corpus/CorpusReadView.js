@@ -5,6 +5,8 @@ define([
     "comment/Comment",
     "comment/Comments",
     "comment/CommentReadView",
+    "comment/CommentEditView",
+    "data_list/DataList",
     "data_list/DataLists",
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
@@ -25,6 +27,8 @@ define([
     Comment,
     Comments,
     CommentReadView,
+    CommentEditView,
+    DataList,
     DataLists,
     DataListReadView,
     DatumFieldReadView,
@@ -81,17 +85,30 @@ define([
       "click .resize-full" : "resizeFullscreen",
       
       //Add button inserts new Comment
-      "click .add-comment-corpus" : function(e) {
+      "click .add-comment-button" : function(e) {
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
-        var commentstring = this.$el.find(".comment-new-text").val();
-        
-        this.model.insertNewComment(commentstring);
-        this.$el.find(".comment-new-text").val("");
-        
-      },   
+        /* Ask the comment edit view to get it's current text */
+        this.commentEditView.updateComment();
+        /* Ask the collection to put a copy of the comment into the collection */
+        this.model.get("comments").insertNewCommentFromObject(this.commentEditView.model.toJSON());
+        /* empty the comment edit view. */
+        this.commentEditView.clearCommentForReuse();
+        /* save the state of the datum when the comment is added, and render it*/
+        this.updatePouch();
+        this.commentReadView.render();
+      }, 
+      //Delete button remove a comment
+      "click .remove-comment-button" : function(e) {
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.get("comments").remove(this.commentEditView.model);
+      }, 
+      
       "click .reload-corpus-team-permissions" :function(e){
         if(e){
           e.preventDefault();
@@ -205,9 +222,13 @@ define([
         
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
  
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
+        
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
@@ -246,7 +267,6 @@ define([
         $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
         
       } else if (this.format == "centreWell"){
@@ -256,8 +276,12 @@ define([
         $(this.el).html(this.templateCentreWell(jsonToRender));
 
         // Display the CommentReadView
-        this.commentReadView.el = this.$('.comments');
+        this.commentReadView.el = $(this.el).find('.comments');
         this.commentReadView.render();
+        
+        // Display the CommentEditView
+        this.commentEditView.el = $(this.el).find('.new-comment-area'); 
+        this.commentEditView.render();
         
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -291,7 +315,6 @@ define([
         $(this.el).find(".locale_datum_fields_explanation").html(Locale.get("locale_datum_fields_explanation"));
         $(this.el).find(".locale_Datum_state_settings").html(Locale.get("locale_Datum_state_settings"));
         $(this.el).find(".locale_datum_states_explanation").html(Locale.get("locale_datum_states_explanation"));
-        $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
 
       }
       
@@ -335,6 +358,10 @@ define([
         collection           : this.model.get("comments"),
         childViewConstructor : CommentReadView,
         childViewTagName     : 'li'
+      });
+      
+      this.commentEditView = new CommentEditView({
+        model : new Comment(),
       });
       
       // Create a list of DataLists
@@ -475,7 +502,29 @@ define([
         window.appView.currentCorpusEditView.format = this.format;
         window.appView.currentCorpusEditView.render();
       }
+    },
+    
+    /* ReadView is supposed to save no change but we want the comments to
+     * be saved. This function saves the change/addition/deletion of the comments. 
+     * Changes in other parts of Corpus is taken care of the server according to 
+     * users' permissions. */
+    updatePouch : function(e) {
+      if(e){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      var self = this;
+      if(this.format == "modal"){
+        $("#new-corpus-modal").modal("hide");
+      }
+      this.model.saveAndInterConnectInApp(function(){
+        self.render();
+      },function(){
+        self.render();
+      });
     }
+    
+    
   });
 
   return CorpusReadView;
