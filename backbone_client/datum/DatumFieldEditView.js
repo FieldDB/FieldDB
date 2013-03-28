@@ -41,15 +41,27 @@ define([
     events : {
       "blur .choose-field" : "updateFieldLabel",
       // issue #797
-      // Only Admin users can trash datum fields
-      //      "click .trash-button" : "",
+      "click .remove-datum-field" : "removeDatumField",
       "click .shouldBeEncrypted" : "updateEncrypted",
       "blur .help-text" : "updateHelp",
       "blur .datum_field_input" : "updateFieldValue",
       "click .icon-question-sign" : "showHelpConvention",
       "hover .icon-question-sign" : "hideHelpConvention"  
     },
-
+    
+    /*
+     * TODO Only Admin users can trash datum fields?
+     * 
+     */
+    removeDatumField : function(e){
+      if(e){
+        e.preventDefault();
+      }
+      var r = confirm("Are you sure you want to remove this DatumField? (It won't be listed in the Advanced Search anymore, but any Datum which have it will keep it).");
+      if (r == true) {
+        this.model.destroy();
+      }
+    },
     /**
      * The Handlebars template rendered as the DatumFieldSettingsEditView.
      */
