@@ -1,15 +1,12 @@
-<span class="pull-right {{label}}">
+<span class="pull-right {{label}}"> <span
+	class="locale_Encrypt_if_confidential"></span> <input type="checkbox"
+	class="shouldBeEncrypted "{{shouldBeEncrypted}}></input> <!-- Issue #797 -->
+	<i class="remove-datum-field icon-remove-sign"></i></span>
 
-<span class ="locale_Encrypt_if_confidential"></span>
-  <input type="checkbox" class="shouldBeEncrypted " {{shouldBeEncrypted}}></input>
-</span>
-
-<input class="choose-field " {{userchooseable}} value="{{label}}" type="text"/>
-
-<!-- Issue #797 -->
-<button class="btn btn-mini btn-danger trash-datum-field-button">
-<i class="icon-trash "></i> </button>
+<input class="choose-field " {{userchooseable}} value="{{label}}"
+	type="text" />
 
 
-<label class = "locale_Help_Text"></label>
+
+<label class="locale_Help_Text"></label>
 <textarea class="help-text locale_Help_Text_Placeholder">{{help}}</textarea>
