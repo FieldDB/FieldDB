@@ -1,0 +1,7 @@
+{
+  "env" : {
+     "lingsyncspreadsheet" : {
+      "db" : "http://admin:none@senhorzinho.iriscouch.com/lingsyncspreadsheet"
+    }
+  }
+}
