@@ -187,8 +187,11 @@ h3 {
 
 h3.listIntroText {
 	font-style: italic;
-	font-size: 1.0em;
+	font-size: 1.2em;
 	font-weight: 600;
+	margin-left: 100px;
+	margin-right: 100px;
+	text-align: center;
 }
 
 .bulletSection {
@@ -227,9 +230,8 @@ h3.listIntroText {
 	border: #000 1px dotted;
 	border-style: none none dotted;
 	color: #74C2E1;
-	width: 70%;	
+	width: 70%;
 	margin-top: 0px;
-	
 }
 /* { */
 /* 	color: #74C2E1; */
