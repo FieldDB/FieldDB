@@ -13,38 +13,36 @@
 		<div class="mainHeader">
 			<div id="header_container">
 				<div id="mainHeader-logo">
-					<img src="img/lingsync-logo.png">
-					<h3 class="headerTagLine">An App for Field Linguistics</h3>
+					<img src="img/lingsync-logo.png"><br /> <span
+						id="headerTagLine">An App for Field Linguistics</span>
 				</div>
 				<div id="mainHeader-button">
 					<a href="https://chrome.google.com/webstore/search-apps/lingsync"
 						class="download_button">Get LingSync for Chrome</a>
 				</div>
-				<div class="clear"></div>
 			</div>
 		</div>
 		<div class="navbar">
 			<div class="wrapper">
-				<div class="navbar_container">
-					<ul class="menu">
+				<div class="container">
+					<ul class="menu" rel="sam1">
 						<li><a href="index.html">Home</a></li>
 						<li><a href="technology.html">Technology</a></li>
-						<li><a href="people.html">People</a></li>
+						<li class="active"><a href="#">People</a></li>
 						<li><a href="https://www.lingsync.org/dev.html">Developer
 								Blog</a></li>
-						<li><a href="tutorials.html">Tutorials</a></li>
-						<li><a href="https://www.facebook.com/LingSyncApp">Facebook</a></li>
-						<li class="active"><a href="projects.html">Projects</a>
+						<li><a href="comingsoon.html">Video Tutorials</a></li>
+						<li><a href="comingsoon.html">Facebook Community</a></li>
+						<li><a href="projects.html">Projects</a>
 					</ul>
 				</div>
 			</div>
 		</div>
-		<div id="mainBody_container">
 
-				<div class="bulletSectionHeader nonfloatHeader">
-					<h3>Projects</h3>
-				</div>
-				<div class="bulletSection nonfloat">
+		<div id="body_container">
+			<div id="mainBody">
+				<h1>Projects</h1>
+				<div class="bulletSection">
 					<ul>
 						<li><a href="http://migmaq.org/">Mi’gmaq Language
 								Revitalization Partnership</a> has been implementing LingSync to
@@ -52,10 +50,30 @@
 						<hr>
 						<li>A field linguistics course at the University of Ottawa
 							has been using LingSync to store and share their data.</li>
+
 					</ul>
 				</div>
+			</div>
+			<div id="rightSideBar">
+				<input class="searchBox" type="text" placeholder="Search">
+				<p>
+					<a class="twitter-timeline" width="240"
+						href="https://twitter.com/LingSync"
+						data-widget-id="319577406446903296">Tweets by @LingSync</a>
+					<script>
+						!function(d, s, id) {
+							var js, fjs = d.getElementsByTagName(s)[0];
+							if (!d.getElementById(id)) {
+								js = d.createElement(s);
+								js.id = id;
+								js.src = "//platform.twitter.com/widgets.js";
+								fjs.parentNode.insertBefore(js, fjs);
+							}
+						}(document, "script", "twitter-wjs");
+					</script>
+			</div>
+			<div class="clear"></div>
 		</div>
 	</div>
 </body>
 </html>
-
