@@ -13,65 +13,94 @@
 		<div class="mainHeader">
 			<div id="header_container">
 				<div id="mainHeader-logo">
-					<img src="img/lingsync-logo.png"><br /> <span
-						id="headerTagLine">An App for Field Linguistics</span>
+					<img src="img/lingsync-logo.png">
+					<h3 class="headerTagLine">An App for Field Linguistics</h3>
 				</div>
 				<div id="mainHeader-button">
 					<a href="https://chrome.google.com/webstore/search-apps/lingsync"
 						class="download_button">Get LingSync for Chrome</a>
 				</div>
+				<div class="clear"></div>
 			</div>
 		</div>
 		<div class="navbar">
 			<div class="wrapper">
-				<div class="container">
-					<ul class="menu" rel="sam1">
+				<div class="navbar_container">
+					<ul class="menu">
 						<li><a href="index.html">Home</a></li>
-						<li class="active"><a href="#">Technology</a></li>
+						<li class="active"><a href="technology.html">Technology</a></li>
 						<li><a href="people.html">People</a></li>
-						<li><a href="https://www.lingsync.org/dev.html">Developer Blog</a></li>
-						<li><a href="comingsoon.html">Video Tutorials</a></li>
-						<li><a href="comingsoon.html">Facebook Community</a></li>
+						<li><a href="https://www.lingsync.org/dev.html">Developer
+								Blog</a></li>
+						<li><a href="tutorials.html">Tutorials</a></li>
+						<li><a href="https://www.facebook.com/LingSyncApp">Facebook</a></li>
 						<li><a href="projects.html">Projects</a>
 					</ul>
 				</div>
 			</div>
 		</div>
-
-		<div id="body_container">
-			<div id="mainBody">
-				<h1>Technology</h1>
-				<div class="bulletSection">
-					<h3>Principles of LingSync</h3>
-					<hr>
-					<ul>
-						<li>We designed LingSync from the ground up to be
-							user-friendly, but also to conform to <a
-							href="http://emeld.org/school/what.html">EMELD</a> and <a
-							href="http://www.dataone.org/sites/all/documents/DataONE_BP_Primer_020212.pdf">DataOne</a>
-							best practices on formatting, archiving, open access, and
-							security.
-						</li>
-						<hr>
-						<li>LingSync uses Unicode and XML, which are open standards,
-							and follows Leipzig glossing conventions</li>
-						<hr>
-						<li>For more information, see the data management sections of
-							<a
-							href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">our
-								white paper</a>.
-						</li>
-						<hr>
-						<li>We vow never to use your private data -- you can find out
-							more in <a href="https://www.lingsync.org/privacy.html">our
-								privacy policy</a>.
-						</li>
-					</ul>
+		<div id="mainBody_container">
+				<div class="float_container">
+					<div class="floatLeft">
+						<div class="bulletSectionHeader">
+							<h3>Principles of LingSync</h3>
+						</div>
+						<div class="bulletSection">
+							<ul>
+								<li>We designed LingSync from the ground up to be
+									user-friendly, but also to conform to <a
+									href="http://emeld.org/school/what.html">EMELD</a> and <a
+									href="http://www.dataone.org/sites/all/documents/DataONE_BP_Primer_020212.pdf">DataOne</a>
+									best practices on formatting, archiving, open access, and
+									security.
+								</li>
+								<hr>
+								<li>LingSync uses Unicode and XML, which are open
+									standards, and follows Leipzig glossing conventions</li>
+								<hr>
+								<li>For more information, see the data management sections
+									of <a
+									href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">our
+										white paper</a>.
+								</li>
+								<hr>
+								<li>We vow never to use your private data -- you can find
+									out more in <a href="https://www.lingsync.org/privacy.html">our
+										privacy policy</a>.
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="floatRight">
+						<div class="bulletSectionHeader">
+							<h3>Works with Your Data</h3>
+						</div>
+						<div class="bulletSection">
+							<ul>
+								<li>LingSync uses machine learning and computational
+									linguistics to adapt to your existing organization of the data
+									you import, and predict how to gloss it.</li>
+								<hr>
+								<li>Add custom fields for extra transcription styles,
+									additional languages of translation, semantic representations,
+									audio timestamps, etc.</li>
+								<hr>
+								<li>LingSync already supports import and export of many
+									common formats, including ELAN, Praat, Toolbox, FLEx, Filemaker
+									Pro, LaTeX, xml, csv and more, but if you have another format
+									you'd like to import or export, <a
+									href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ">Contact
+										Us</a>.
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
-				<div class="spacingDiv"></div>
-				<div class="bulletSection">
+				<div class="clear"></div>
+				<div class="bulletSectionHeader nonfloatHeader">
 					<h3>Open Source</h3>
-					<hr>
+				</div>
+				<div class="bulletSection nonfloat">
 					<ul>
 						<li>All our code is available on <a
 							href="https://github.com/OpenSourceFieldlinguistics/FieldDB">our
@@ -84,49 +113,8 @@
 							visualize, or mass-edit lots of data.</li>
 					</ul>
 				</div>
-				<div class="spacingDiv"></div>
-				<div class="bulletSection">
-					<h3>Works with Your Data</h3>
-					<hr>
-					<ul>
-						<li>LingSync uses machine learning and computational
-							linguistics to adapt to your existing organization of the data
-							you import, and predict how to gloss it.</li>
-						<hr>
-						<li>Add custom fields for extra transcription styles,
-							additional languages of translation, semantic representations,
-							audio timestamps, etc.</li>
-						<hr>
-						<li>LingSync already supports import and export of many
-							common formats, including ELAN, Praat, Toolbox, FLEx, Filemaker
-							Pro, LaTeX, xml, csv and more, but if you have another format
-							you'd like to import or export, <a
-							href="https://docs.google.com/spreadsheet/viewform?formkey=dGFyREp4WmhBRURYNzFkcWZMTnpkV2c6MQ">Contact
-								Us</a>.
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div id="rightSideBar">
-				<input class="searchBox" type="text" placeholder="Search">
-				<p>
-				<a class="twitter-timeline" width="240"
-					href="https://twitter.com/LingSync"
-					data-widget-id="319577406446903296">Tweets by @LingSync</a>
-				<script>
-					!function(d, s, id) {
-						var js, fjs = d.getElementsByTagName(s)[0];
-						if (!d.getElementById(id)) {
-							js = d.createElement(s);
-							js.id = id;
-							js.src = "//platform.twitter.com/widgets.js";
-							fjs.parentNode.insertBefore(js, fjs);
-						}
-					}(document, "script", "twitter-wjs");
-				</script>
-			</div>
-			<div class="clear"></div>
 		</div>
 	</div>
 </body>
 </html>
+
