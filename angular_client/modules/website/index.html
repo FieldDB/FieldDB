@@ -38,13 +38,13 @@
 		<div class="span10 offset1 menubar">
 			<div class="row">
 				<div class="span10 pagination-centered">
-					<span><a href="#">Home</a></span> <span><a
-						href="#/technology">Technology</a></span> <span><a
-						href="#/people">People</a></span> <span><a
+					<span><a href="#" ng-click="activePage='home'" ng-class="{'active': activePage=='home'}">Home</a></span> <span><a
+						href="#/technology" ng-click="activePage='technology'" ng-class="{'active': activePage=='technology'}">Technology</a></span> <span><a
+						href="#/people" ng-click="activePage='people'" ng-class="{'active': activePage=='people'}">People</a></span> <span><a
 						href="https://www.lingsync.org/dev.html">Developer Blog</a></span> <span><a
-						href="#/tutorials">Tutorials</a></span> <span><a
+						href="#/tutorials" ng-click="activePage='tutorials'" ng-class="{'active': activePage=='tutorials'}">Tutorials</a></span> <span><a
 						href="https://www.facebook.com/LingSyncApp">Facebook</a></span> <span><a
-						href="#/projects">Projects</a></span>
+						href="#/projects" ng-click="activePage='projects'" ng-class="{'active': activePage=='projects'}">Projects</a></span>
 				</div>
 			</div>
 		</div>

@@ -9,7 +9,7 @@
 @import url(../bootstrap/css/bootstrap-responsive.css);
 
 a {
-	color: #74C2E1;
+	color: #5F1BF2;
 }
 
 h1 {
@@ -83,10 +83,6 @@ span.headerTagLine {
 }
 
 .menubar span {
-	background: -webkit-gradient(radial, 50% 100%, 10, 50% 50%, 40, from(#CDFFFF),
-		to(#74C2E1) );
-	background: -moz-radial-gradient(center 80px 45deg, circle cover, #CDFFFF 0%,
-		#74C2E1 100%);
 	margin-top: 0;
 	padding: 0;
 	text-align: center;
@@ -100,19 +96,14 @@ span.headerTagLine {
 	line-height: 40px;
 	color: #000000;
 	text-transform: uppercase;
-	line-height: 40px;
 	font-size: 1.1em;
 	font-weight: 900;
 	padding: 0 20px;
 	background: #74C2E1;
-	-webkit-transition-property: background;
-	-webkit-transition-duration: 400ms;
-	-moz-transition-property: background;
-	-moz-transition-duration: 400ms;
 }
 
 .menubar a:hover {
-	background: transparent none;
+	color: #5100FF;
 }
 
 .mainContentDiv {
@@ -146,20 +137,13 @@ span.headerTagLine {
 	color: #000000;
 }
 
-.listIntroText {
-	font-size: 1.2em;
-	font-weight: 600;
-	text-align: center;
-	margin-top: 20px;
-}
-
 .bulletSectionHeader {
 	background-color: #D2EAFA;
-	height: 40px;
+	min-height: 30px;
 	border-radius: 10px;
 	border: 1px solid #DEDEDE;
 	box-shadow: 3px 3px 1px #DEDEDE;
-	margin-top: 20px;
+	margin-top: 15px;
 }
 
 .bulletSectionHeader h3 {
@@ -171,13 +155,16 @@ span.headerTagLine {
 	margin-left: 15px;
 	text-transform: uppercase;
 	margin-top: 0px;
+	margin-bottom: 0px;
 }
-
+.bulletSectionHeader h3:hover {
+	color: #5100FF;
+}
 .bulletSection {
 	background-color: #FFFFFF;
 	border-radius: 10px;
 	margin-left: 30px;
-	margin-top: 10px;
+	margin-top: 20px;
 	margin-right: 25px;
 }
 
